@@ -93,16 +93,17 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
             $scope.scopeModel.gridMenuActions = function (dataItem) {
                 var menu = [];
                 if (routeTableViewType != NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value)
-                menu.push({
-                    name: 'Edit',
-                    clicked: editRouteTable,
-                    haspermission: hasUpdateRouteTablePermission
-                });
+                    menu.push({
+                        name: 'Edit',
+                        clicked: editRouteTable,
+                        haspermission: hasUpdateRouteTablePermission
+                    });
 
                 function hasUpdateRouteTablePermission() {
                     return NP_IVSwitch_RouteTableAPIService.HasUpdateRouteTablePermission();
                 }
 
+                if (routeTableViewType != NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value)
                 menu.push({
                     name: "Delete",
                     clicked: deleteRoute,
@@ -114,7 +115,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 }
                 return menu;
             };
-           
+
         }
 
         function editRouteTable(routeTableEntity) {
@@ -135,9 +136,10 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 if (response) {
                     var RouteTableId = routeTable.RouteTableId;
                     var RouteTableViewType = (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value) ? NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value : NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value;
-                    NP_IVSwitch_RouteTableAPIService.DeleteRouteTable(RouteTableId, routeTableViewType).then(function () {
-                        gridApi.itemDeleted({ RouteTableId: RouteTableId, Name: routeTable.Name, Description: routeTable.Description });
-
+                    NP_IVSwitch_RouteTableAPIService.DeleteRouteTable(RouteTableId, routeTableViewType).then(function (response) {
+                        if (VRNotificationService.notifyOnItemDeleted("Route Table", response, "Name")) {
+                            gridApi.itemDeleted({ RouteTableId: RouteTableId, Name: routeTable.Name, Description: routeTable.Description });
+                        }
 
                     });
 

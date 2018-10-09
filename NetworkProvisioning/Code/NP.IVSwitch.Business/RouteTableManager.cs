@@ -202,17 +202,28 @@ namespace NP.IVSwitch.Business
             RouteTableRouteManager routeTableRouteManager = new RouteTableRouteManager();
             DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
             deleteOperationOutput.Result = DeleteOperationResult.Failed;
-            IRouteTableDataManager routeTableDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableDataManager>();
-            Helper.SetSwitchConfig(routeTableDataManager);
-
-            RuntimeEditorEntity runTimeEditorEntity = GetRouteTableById(routeTableId, routeTableViewType);
-            endPointManager.EndPointAclUpdate(runTimeEditorEntity.RouteTableInput.EndPoints.MapRecords(x => x.EndPointId), 0, routeTableViewType); //update the access_list items related to this route table
-            routeTableRouteManager.DropRouteTableRoute(routeTableId);          //Delete the routes of the route table
-            bool deleted = routeTableDataManager.DeleteRouteTable(routeTableId);  //Delete the route table
-            if (deleted)
+            if (routeTableViewType != RouteTableViewType.BNumber)
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                IRouteTableDataManager routeTableDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableDataManager>();
+                Helper.SetSwitchConfig(routeTableDataManager);
+
+                RuntimeEditorEntity runTimeEditorEntity = GetRouteTableById(routeTableId, routeTableViewType);
+                endPointManager.EndPointAclUpdate(runTimeEditorEntity.RouteTableInput.EndPoints.MapRecords(x => x.EndPointId), 0, routeTableViewType); //update the access_list items related to this route table
+                routeTableRouteManager.DropRouteTableRoute(routeTableId);          //Delete the routes of the route table
+                bool deleted = routeTableDataManager.DeleteRouteTable(routeTableId);  //Delete the route table
+                if (deleted)
+                {
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                }
+                else
+                    deleteOperationOutput.Message = "Route table doesn't exist.";
+
+            }
+            else
+            {
+                deleteOperationOutput.Message = "Route table cannot be deleted for BNumber.";
+                deleteOperationOutput.ShowExactMessage = true;
             }
             return deleteOperationOutput;
         }

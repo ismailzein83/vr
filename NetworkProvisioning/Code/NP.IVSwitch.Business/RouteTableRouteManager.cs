@@ -368,6 +368,11 @@ namespace NP.IVSwitch.Business
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
 
             }
+            else
+            {
+                deleteOperationOutput.Message = "Destination code doesn't exist";
+                deleteOperationOutput.ShowExactMessage = true;
+            }
             return deleteOperationOutput;
 
         }

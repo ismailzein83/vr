@@ -161,8 +161,10 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
 
             VRNotificationService.showDeleteConfirmation().then(function (response) {
                 if (response) {
-                    NP_IVSwitch_RouteTableRouteAPIService.DeleteRouteTableRoute(routeTableId, routeTable.Destination).then(function () {
-                        gridAPI.itemDeleted({ RouteOptionsDetailId: routeTable.RouteOptionsDetailId, Destination: routeTable.Destination, TechPrefix: routeTable.TechPrefix, Options: routeTable.Options });
+                    NP_IVSwitch_RouteTableRouteAPIService.DeleteRouteTableRoute(routeTableId, routeTable.Destination).then(function (response) {
+                        if (VRNotificationService.notifyOnItemDeleted("Route Table Route", response, "Name")) {
+                            gridAPI.itemDeleted({ RouteOptionsDetailId: routeTable.RouteOptionsDetailId, Destination: routeTable.Destination, TechPrefix: routeTable.TechPrefix, Options: routeTable.Options });
+                        }
 
                     });
                 }
