@@ -131,14 +131,17 @@ app.directive("businessprocessBpDefinitionManagementGrid", ["UtilsService", "VRN
 
                             if (currentBPDefition.Entity.BPDefinitionID == bpDefinitionSummary.BPDefinitionID) {
                                 currentBPDefition.RunningProcessNumber = bpDefinitionSummary.RunningProcessNumber;
-                                currentBPDefition.LastProcessCreatedTime = bpDefinitionSummary.LastProcessCreatedTime;
+                                currentBPDefition.PendingInstanceTime = bpDefinitionSummary.PendingInstanceTime;
+                                currentBPDefition.NextInstanceTime = bpDefinitionSummary.NextInstanceTime;
+
                                 isFound = true;
                                 continue;
                             }
                         }
                         if (!isFound) {
                             currentBPDefition.RunningProcessNumber = undefined;
-                            currentBPDefition.LastProcessCreatedTime = undefined;
+                            currentBPDefition.PendingInstanceTime = undefined;
+                            currentBPDefition.NextInstanceTime = undefined;
                         }
                     }
                 }

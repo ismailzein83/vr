@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Runtime.Business;
+using Vanrise.Runtime.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 
@@ -333,6 +336,23 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstanceDataManager;
         }
 
+        private List<Guid> GetFilteredTaskIdsByBPDefinitionId(Guid bpDefinitionID)
+        {
+            SchedulerTaskFilter filter = new SchedulerTaskFilter()
+            {
+                Filters = new List<ISchedulerTaskFilter>()
+                {
+                    new WFTaskBPDefinitionFilter(){
+                        BPDefinitionId = bpDefinitionID
+                    }
+                },
+                Status = SchedulerTaskFilterStatus.OnlyEnabled
+            };
+            List<Guid> taskIds = new SchedulerTaskManager().GetTasksInfo(filter, null).Select(x => x.TaskId).ToList();
+
+            return taskIds;
+        }
+
         #endregion
 
         #region Private Classes
@@ -441,10 +461,46 @@ namespace Vanrise.BusinessProcess.Business
             }
         }
 
-        public List<BPDefinitionSummary> GetBPDefinitionSummary()
+        public List<BPDefinitionSummaryDetail> GetBPDefinitionSummary()
         {
+            Dictionary<Guid, BPDefinitionSummaryDetail> bpDefinitionSummaryDetails = new Dictionary<Guid, BPDefinitionSummaryDetail>();
             IBPInstanceDataManager bpInstanceDataManager = GetBPInstanceDataManager();
-            return bpInstanceDataManager.GetBPDefinitionSummary(BPInstanceStatusAttribute.GetNonClosedStatuses());
+            var bpDefinitionSummaries = bpInstanceDataManager.GetBPDefinitionSummary(BPInstanceStatusAttribute.GetNonClosedStatuses());
+            foreach (var bpSummary in bpDefinitionSummaries)
+            {
+                BPDefinitionSummaryDetail bpDefinitionSummaryDetail = new BPDefinitionSummaryDetail()
+                {
+                    BPDefinitionID = bpSummary.BPDefinitionID,
+                    RunningProcessNumber = bpSummary.RunningProcessNumber,
+                    PendingInstanceTime = bpSummary.PendingInstanceTime
+                };
+                var taskIds = GetFilteredTaskIdsByBPDefinitionId(bpSummary.BPDefinitionID);
+                List<SchedulerTaskState> schedulerTaskStates = new SchedulerTaskStateManager().GetSchedulerTaskStateByTaskIds(taskIds);
+                if (schedulerTaskStates != null && schedulerTaskStates.Count > 0)
+                    bpDefinitionSummaryDetail.NextInstanceTime = schedulerTaskStates.Select(x => x.NextRunTime).Min();
+                bpDefinitionSummaryDetails.Add(bpDefinitionSummaryDetail.BPDefinitionID, bpDefinitionSummaryDetail);
+            }
+
+            var bpDefinitions = new BPDefinitionManager().GetCachedBPDefinitions();
+            foreach (var bp in bpDefinitions.Values)
+            {
+                if (bpDefinitionSummaryDetails.GetRecord(bp.BPDefinitionID) == null)
+                {
+                    var taskIds = GetFilteredTaskIdsByBPDefinitionId(bp.BPDefinitionID);
+                    List<SchedulerTaskState> schedulerTaskStates = new SchedulerTaskStateManager().GetSchedulerTaskStateByTaskIds(taskIds);
+                    if (schedulerTaskStates != null && schedulerTaskStates.Count > 0)
+                    {
+                        BPDefinitionSummaryDetail bpDefinitionSummaryDetail = new BPDefinitionSummaryDetail()
+                        {
+                            BPDefinitionID = bp.BPDefinitionID,
+                            NextInstanceTime = schedulerTaskStates.Select(x => x.NextRunTime).Min()
+                        };
+                        if (bpDefinitionSummaryDetail.NextInstanceTime.HasValue)
+                            bpDefinitionSummaryDetails.Add(bpDefinitionSummaryDetail.BPDefinitionID, bpDefinitionSummaryDetail);
+                    }
+                }
+            }
+            return bpDefinitionSummaryDetails.Values.ToList();
         }
 
         #endregion

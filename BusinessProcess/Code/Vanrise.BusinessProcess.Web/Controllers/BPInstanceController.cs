@@ -71,7 +71,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 
         [HttpGet]
         [Route("GetBPDefinitionSummary")]
-        public List<BPDefinitionSummary> GetBPDefinitionSummary()
+        public List<BPDefinitionSummaryDetail> GetBPDefinitionSummary()
         {
             BPInstanceManager manager = new BPInstanceManager();
             return manager.GetBPDefinitionSummary();

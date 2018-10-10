@@ -13,6 +13,21 @@ namespace Vanrise.BusinessProcess.Entities
 
         public int RunningProcessNumber { get; set; }
 
-        public DateTime LastProcessCreatedTime { get; set; }
+        public DateTime PendingInstanceTime { get; set; }
     }
+
+
+    public class BPDefinitionSummaryDetail
+    {
+
+        public Guid BPDefinitionID { get; set; }
+
+        public int? RunningProcessNumber { get; set; }
+
+        public DateTime? PendingInstanceTime { get; set; }
+
+        public DateTime? NextInstanceTime { get; set; }
+    }
+
+
 }

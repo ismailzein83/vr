@@ -346,7 +346,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         public List<BPDefinitionSummary> GetBPDefinitionSummary(IEnumerable<BPInstanceStatus> executionStatus)
         {
             StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.Append("SELECT bp.[DefinitionID],count(*) as RunningProcessNumber , max(bp.CreatedTime) as LastProcessCreatedTime FROM [BP].[BPInstance] bp WITH(NOLOCK) WHERE 1=1 AND ");
+            queryBuilder.Append("SELECT bp.[DefinitionID],count(*) as RunningProcessNumber , max(bp.CreatedTime) as PendingInstanceTime FROM [BP].[BPInstance] bp WITH(NOLOCK) WHERE 1=1 AND ");
             queryBuilder.Append(BuildStatusesFilter(executionStatus));
             queryBuilder.Append(" GROUP BY [DefinitionID] ");
             return GetItemsText(queryBuilder.ToString(), BPDefinitionSummaryMapper, null);
@@ -553,7 +553,7 @@ JOIN #InstancesToArchive instancesToArchive ON bp.ID = instancesToArchive.ID
             return new BPDefinitionSummary()
             {
                 RunningProcessNumber = GetReaderValue<int>(reader, "RunningProcessNumber"),
-                LastProcessCreatedTime = GetReaderValue<DateTime>(reader, "LastProcessCreatedTime"),
+                PendingInstanceTime = GetReaderValue<DateTime>(reader, "PendingInstanceTime"),
                 BPDefinitionID = GetReaderValue<Guid>(reader, "DefinitionID")
             };
         }
