@@ -38,15 +38,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             NonEmptyRecordFilter nonEmptyFilter = context.InitialFilter as NonEmptyRecordFilter;
             if (nonEmptyFilter != null)
                 return null;
-            StringRecordFilter stringRecordFilter = context.InitialFilter as StringRecordFilter;
-            if (stringRecordFilter != null)
+            BooleanRecordFilter booleanRecordFilter = context.InitialFilter as BooleanRecordFilter;
+            if (booleanRecordFilter != null)
             {
-                var fieldValue = stringRecordFilter.Value;
+                Guid defaultSecurityProviderId = new ConfigManager().GetDefaultSecurityProviderId();
                 return new StringRecordFilter()
                 {
                     FieldName = FieldName,
-                    Value = fieldValue,
-                    CompareOperator = StringRecordFilterOperator.Equals
+                    Value = defaultSecurityProviderId.ToString(),
+                    CompareOperator = booleanRecordFilter.IsTrue ? StringRecordFilterOperator.Equals : StringRecordFilterOperator.NotEquals
                 };
             }
             throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));

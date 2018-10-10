@@ -80,7 +80,7 @@ namespace Vanrise.Security.Business
                 var defaultSecurityProviderId = configManager.GetDefaultSecurityProviderId();
                 if (defaultSecurityProviderId == securityProviderId)
                 {
-                    updateOperationOutput.Message = "Security provider id does not match the default one!";
+                    updateOperationOutput.Message = "Security provider id does not match the default one";
                     return updateOperationOutput;
                 }
 
@@ -88,7 +88,7 @@ namespace Vanrise.Security.Business
                 var records = users.FindAllRecords(user => user.SecurityProviderId == securityProviderId);
                 if (records.Count() > 0)
                 {
-                    updateOperationOutput.Message = "User security provider id already exist!";
+                    updateOperationOutput.Message = "User security provider id already exists";
                     return updateOperationOutput;
                 }
 
