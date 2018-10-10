@@ -89,7 +89,11 @@ namespace Vanrise.Integration.MainExtensions.BusinessObjectDataStore
                 dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbInvalidBatches"), dataSourceSummary.NbInvalidBatch);
                 dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbEmptyBatches"), dataSourceSummary.NbEmptyBatch);
                 dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbOfMinutesSinceLastBatch"), now.Subtract(dataSourceSummary.LastImportedBatchTime).TotalMinutes);
-
+                if (dataSourceSummary.MinBatchStart.HasValue)
+                {
+                    dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbOfMinutesSinceFirstBatchStarted"), now.Subtract(dataSourceSummary.MinBatchStart.Value).TotalMinutes);
+                    dataSourceSummaryObject.Add(string.Concat(interval.Prefix, "NbOfHoursSinceFirstBatchStarted"), now.Subtract(dataSourceSummary.MinBatchStart.Value).TotalHours);
+                }
             }
 
             return new DataRecordObject(new Guid("3BD1FED8-44C7-4F33-93FD-D8276FBE07AD"), dataSourceSummaryObject);

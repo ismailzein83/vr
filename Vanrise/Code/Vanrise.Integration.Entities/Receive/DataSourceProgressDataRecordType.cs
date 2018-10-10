@@ -14,5 +14,6 @@ namespace Vanrise.Integration.Entities
         public decimal? MinBatchSize { get; set; }
         public int NbInvalidBatch { get; set; }
         public int NbEmptyBatch { get; set; }
+        public DateTime? MinBatchStart { get; set; }
     }
 }

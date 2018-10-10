@@ -15,9 +15,9 @@ namespace Vanrise.Integration.Data.SQL
 
         }
 
-        public long InsertEntry(Guid dataSourceId, string batchDescription, decimal? batchSize, int recordCounts, Entities.MappingResult result, string mapperMessage, string queueItemsIds, string logEntryTime)
+        public long InsertEntry(Guid dataSourceId, string batchDescription, decimal? batchSize, int recordCounts, Entities.MappingResult result, string mapperMessage, string queueItemsIds, string logEntryTime, DateTime? batchStart, DateTime? batchEnd)
         {
-            return (long)ExecuteScalarSP("integration.sp_DataSourceImportedBatch_Insert", dataSourceId, batchDescription, batchSize, recordCounts, result, mapperMessage, queueItemsIds, logEntryTime);
+            return (long)ExecuteScalarSP("integration.sp_DataSourceImportedBatch_Insert", dataSourceId, batchDescription, batchSize, recordCounts, result, mapperMessage, queueItemsIds, logEntryTime, batchStart, batchEnd);
         }
 
         public Vanrise.Entities.BigResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
@@ -68,7 +68,9 @@ namespace Vanrise.Integration.Data.SQL
                 MappingResult = (MappingResult)reader["MappingResult"],
                 MapperMessage = reader["MapperMessage"] as string,
                 QueueItemIds = reader["QueueItemIds"] as string,
-                LogEntryTime = (DateTime)reader["LogEntryTime"]
+                LogEntryTime = (DateTime)reader["LogEntryTime"],
+                BatchStart = GetReaderValue<DateTime?>(reader, "BatchStart"),
+                BatchEnd = GetReaderValue<DateTime?>(reader, "BatchEnd")
             };
 
             return dataSourceImportedBatch;
@@ -104,7 +106,8 @@ namespace Vanrise.Integration.Data.SQL
                 MaxBatchSize = GetReaderValue<decimal?>(reader, "MaxBatchSize"),
                 MinBatchSize = GetReaderValue<decimal?>(reader, "MinBatchSize"),
                 NbInvalidBatch = (int)reader["NbInvalidBatch"],
-                NbEmptyBatch = (int)reader["NbEmptyBatch"]
+                NbEmptyBatch = (int)reader["NbEmptyBatch"],
+                MinBatchStart = GetReaderValue<DateTime?>(reader, "MinBatchStart")
             };
         }
     }

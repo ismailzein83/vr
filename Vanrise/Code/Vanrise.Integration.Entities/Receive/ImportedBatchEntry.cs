@@ -22,5 +22,8 @@ namespace Vanrise.Integration.Entities
 
         public string QueueItemsIds { get; set; }
 
+        public DateTime? BatchStart { get; set; }
+
+        public DateTime? BatchEnd { get; set; }
     }
 }

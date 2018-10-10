@@ -114,6 +114,8 @@ namespace Vanrise.Integration.Business
                     data.OnDisposed();
 
                 bool logImportedBatchEntry = true;
+                DateTime? minBatchStart = null;
+                DateTime? maxBatchEnd = null;
 
                 ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
                 importedBatchEntry.BatchSize = data.BatchSize;
@@ -145,6 +147,15 @@ namespace Vanrise.Integration.Business
 
                                 queueItemsIds.Add(queueItemId);
                                 totalRecordsCount += currentBatchItemsCount;
+
+                                var batchStart = outputItem.Item.GetBatchStart();
+                                if (!minBatchStart.HasValue || batchStart < minBatchStart.Value)
+                                    minBatchStart = batchStart;
+
+                                var batchEnd = outputItem.Item.GetBatchEnd();
+                                if (!maxBatchEnd.HasValue || batchEnd > maxBatchEnd)
+                                    maxBatchEnd = batchEnd;
+
                             }
                             catch (Exception ex)
                             {
@@ -152,6 +163,9 @@ namespace Vanrise.Integration.Business
                                 throw;
                             }
                         }
+
+                        importedBatchEntry.BatchStart = minBatchStart;
+                        importedBatchEntry.BatchEnd = maxBatchEnd;
                     }
                     else
                     {
