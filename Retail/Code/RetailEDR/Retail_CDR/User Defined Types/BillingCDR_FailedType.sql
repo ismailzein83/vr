@@ -6,6 +6,7 @@
     [DisconnectDateTime]      DATETIME         NULL,
     [DurationInSeconds]       DECIMAL (20, 4)  NULL,
     [DisconnectReason]        VARCHAR (100)    NULL,
+    [IsDelivered]             BIT              NULL,
     [CallProgressState]       VARCHAR (100)    NULL,
     [SubscriberAccountTypeId] UNIQUEIDENTIFIER NULL,
     [SubscriberAccountId]     BIGINT           NULL,
@@ -29,6 +30,8 @@
     [Extension]               VARCHAR (20)     NULL,
     [NationalCallType]        INT              NULL,
     [QueueItemId]             BIGINT           NULL);
+
+
 
 
 

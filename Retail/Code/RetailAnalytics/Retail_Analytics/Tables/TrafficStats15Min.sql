@@ -1,4 +1,4 @@
-CREATE TABLE [Retail_Analytics].[TrafficStats15Min] (
+﻿CREATE TABLE [Retail_Analytics].[TrafficStats15Min] (
     [Id]                      BIGINT           NULL,
     [BatchStart]              DATETIME         NULL,
     [SubscriberAccountTypeId] UNIQUEIDENTIFIER NULL,
@@ -19,12 +19,15 @@ CREATE TABLE [Retail_Analytics].[TrafficStats15Min] (
     [SaleCurrencyId]          INT              NULL,
     [IsCharged]               BIT              NULL,
     [NumberOfCDRs]            INT              NULL,
+    [NumberOfDeliveredCDRs]   INT              NULL,
     [SuccessfulCalls]         INT              NULL,
     [TotalDuration]           DECIMAL (20, 4)  NULL,
     [TotalSaleDuration]       DECIMAL (20, 4)  NULL,
     [TotalSaleAmount]         DECIMAL (26, 10) NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

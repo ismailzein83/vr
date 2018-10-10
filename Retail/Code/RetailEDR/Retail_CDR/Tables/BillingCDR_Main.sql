@@ -1,4 +1,4 @@
-CREATE TABLE [Retail_CDR].[BillingCDR_Main] (
+﻿CREATE TABLE [Retail_CDR].[BillingCDR_Main] (
     [CDRID]                    BIGINT           NULL,
     [Call_Id]                  VARCHAR (200)    NULL,
     [AttemptDateTime]          DATETIME         NULL,
@@ -43,8 +43,11 @@ CREATE TABLE [Retail_CDR].[BillingCDR_Main] (
     [Profit]                   DECIMAL (22, 6)  NULL,
     [ProfitStatus]             INT              NULL,
     [Extension]                VARCHAR (20)     NULL,
-    [QueueItemId]              BIGINT           NULL
+    [QueueItemId]              BIGINT           NULL,
+    [IsDelivered]              BIT              NULL
 );
+
+
 
 
 

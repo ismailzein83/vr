@@ -1,4 +1,4 @@
-CREATE TABLE [Retail_CDR].[BillingCDR_Invalid] (
+﻿CREATE TABLE [Retail_CDR].[BillingCDR_Invalid] (
     [CDRID]                    BIGINT           NULL,
     [Call_Id]                  VARCHAR (200)    NULL,
     [AttemptDateTime]          DATETIME         NULL,
@@ -36,8 +36,11 @@ CREATE TABLE [Retail_CDR].[BillingCDR_Invalid] (
     [SaleTariffRuleId]         INT              NULL,
     [SaleExtraChargeRuleId]    INT              NULL,
     [Extension]                VARCHAR (20)     NULL,
-    [QueueItemId]              BIGINT           NULL
+    [QueueItemId]              BIGINT           NULL,
+    [IsDelivered]              BIT              NULL
 );
+
+
 
 
 

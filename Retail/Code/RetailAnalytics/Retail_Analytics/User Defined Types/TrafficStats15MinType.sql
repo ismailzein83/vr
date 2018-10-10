@@ -19,10 +19,13 @@
     [SaleCurrencyId]          INT              NULL,
     [IsCharged]               BIT              NULL,
     [NumberOfCDRs]            INT              NULL,
+    [NumberOfDeliveredCDRs]   INT              NULL,
     [SuccessfulCalls]         INT              NULL,
     [TotalDuration]           DECIMAL (20, 4)  NULL,
     [TotalSaleDuration]       DECIMAL (20, 4)  NULL,
     [TotalSaleAmount]         DECIMAL (26, 10) NULL);
+
+
 
 
 
