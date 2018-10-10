@@ -55,7 +55,9 @@
     <Compile Include="BE360Degree\BE360DegreeNodeType.cs" />
     <Compile Include="BigData\BigDataService.cs" />
     <Compile Include="BusinessManagerFactory.cs" />
-    <Compile Include="CacheRefreshHandle.cs" />
+    <Compile Include="CacheRefreshHandle\CacheRefreshHandleDetail.cs" />
+    <Compile Include="CacheRefreshHandle\CacheRefreshHandleQuery.cs" />
+    <Compile Include="CacheRefreshHandle\CacheRefreshHandle.cs" />
     <Compile Include="City\CityInfo.cs" />
     <Compile Include="City\City.cs" />
     <Compile Include="City\CityDetail.cs">

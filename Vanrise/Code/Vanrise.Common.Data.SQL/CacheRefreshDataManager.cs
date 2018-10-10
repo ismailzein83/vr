@@ -41,6 +41,7 @@ namespace Vanrise.Common.Data.SQL
             return new CacheRefreshHandle
             {
                 TypeName = reader["CacheTypeName"] as string,
+                LastUpdateTime =  GetReaderValue<DateTime?>(reader, "LastUpdateTime"),
                 LastUpdateInfo = (byte[])reader["timestamp"]
             };
         }

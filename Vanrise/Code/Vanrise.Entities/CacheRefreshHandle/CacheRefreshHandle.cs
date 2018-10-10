@@ -10,6 +10,8 @@ namespace Vanrise.Entities
     {
         public string TypeName { get; set; }
 
+        public DateTime? LastUpdateTime { get; set; }
+
         public object LastUpdateInfo { get; set; }
     }
 }

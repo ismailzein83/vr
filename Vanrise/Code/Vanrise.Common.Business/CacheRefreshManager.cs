@@ -10,6 +10,13 @@ namespace Vanrise.Common.Business
 {
     public class CacheRefreshManager : ICacheRefreshManager
     {
+        public IDataRetrievalResult<CacheRefreshHandleDetail> GetFilteredCacheRefreshHandles(DataRetrievalInput<CacheRefreshHandleQuery> input)
+        {
+            var allCacheHandles = this.GetAllCacheHandles();
+            Func<CacheRefreshHandle, bool> filterExpression = (x) => (input.Query.TypeName == null || x.TypeName.ToLower().Contains(input.Query.TypeName.ToLower()));
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCacheHandles.ToBigResult(input, filterExpression, CacheRefreshHandleDetailMapper));
+        }
+
         static ICacheRefreshDataManager s_dataManager = CommonDataManagerFactory.GetDataManager<ICacheRefreshDataManager>();
         public bool ShouldRefreshCacheManager(string cacheTypeName, ref object updateHandle)
         {
@@ -51,5 +58,19 @@ namespace Vanrise.Common.Business
             }
             return s_handles;
         }
+
+        #region Mappers
+
+        public CacheRefreshHandleDetail CacheRefreshHandleDetailMapper(CacheRefreshHandle cacheRefreshHandle)
+        {
+            CacheRefreshHandleDetail cacheRefreshHandleDetail = new CacheRefreshHandleDetail()
+            {
+                TypeName = cacheRefreshHandle.TypeName,
+                LastUpdateTime = cacheRefreshHandle.LastUpdateTime
+            };
+            return cacheRefreshHandleDetail;
+        }
+
+        #endregion
     }
 }

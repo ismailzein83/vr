@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
+    <Compile Include="Controllers\CacheRefreshController.cs" />
     <Compile Include="Controllers\VRCommentController.cs" />
     <Compile Include="Controllers\DBReplicationDefinitionController.cs" />
     <Compile Include="Controllers\ExcelFileParserController.cs" />
@@ -232,6 +233,8 @@
     <Content Include="Common\Constant\TextFilterTypeEnum.js" />
     <Content Include="Common\Constant\TimeOffsetEnum.js" />
     <Content Include="Common\Constant\TimeunitEnum.js" />
+    <Content Include="Common\Directives\CacheRefreshHandle\Templates\CacheRefreshHandleGridTemplate.html" />
+    <Content Include="Common\Directives\CacheRefreshHandle\vr-common-cacherefreshhandle-grid.js" />
     <Content Include="Common\Directives\DBReplication\DBReplicationDefinition\Templates\DBReplicationDatabaseDefinitionEditorTemplate.html" />
     <Content Include="Common\Directives\DBReplication\DBReplicationDefinition\Templates\DBReplicationDefinitionSettingsTemplate.html" />
     <Content Include="Common\Directives\DBReplication\DBReplicationDefinition\Templates\DBReplicationTableDefinitionGridTemplate.html" />
@@ -547,6 +550,7 @@
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objecttype-selective.js" />
     <Content Include="Common\Directives\VRObjectVariable\vr-common-objectvariable-management.js" />
     <Content Include="Common\ModuleInitialization.js" />
+    <Content Include="Common\Services\APIServices\CacheRefresHandleAPIService .js" />
     <Content Include="Common\Services\APIServices\VRCommentAPIService.js" />
     <Content Include="Common\Services\APIServices\ActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\ActionAuditLKUPAPIService.js" />
@@ -657,6 +661,8 @@
     <Content Include="Common\Views\CurrencyExchangeRate\ConnectionEditorController.js" />
     <Content Include="Common\Views\ExcelFileUploader\ExcelFileUploaderEditor.html" />
     <Content Include="Common\Views\ExcelFileUploader\ExcelFileUploaderEditorController.js" />
+    <Content Include="Common\Views\CacheRefreshHandle\CacheRefreshHandleManagement.html" />
+    <Content Include="Common\Views\CacheRefreshHandle\CacheRefreshHandleManagementController.js" />
     <Content Include="Common\Views\Region\RegionEditor.html" />
     <Content Include="Common\Views\Region\RegionEditorController.js" />
     <Content Include="Common\Views\Region\RegionManagement.html" />
