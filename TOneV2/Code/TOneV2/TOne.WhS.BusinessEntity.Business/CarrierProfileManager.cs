@@ -81,6 +81,17 @@ namespace TOne.WhS.BusinessEntity.Business
             carrierProfile.Settings.Contacts.ThrowIfNull("carrierProfile.Settings.Contacts", carrierProfileId);
             return carrierProfile.Settings.Contacts.FindRecord(x => x.Type == contactType);
         }
+        public string GetAccountManagerName(int accountId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var carrierProfileId = carrierAccountManager.GetCarrierProfileId(accountId);
+            if (carrierProfileId.HasValue)
+            {
+                var accountManagerContact = GetCarrierContact(carrierProfileId.Value, CarrierContactType.AccountManagerContact);
+                return accountManagerContact != null ? accountManagerContact.Description : null;
+            }
+            return null;
+        }
         public InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
         {
             ValidateCarrierProfileToAdd(carrierProfile);

@@ -28,11 +28,5 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return _faultTicketManager.GetSupplierFaultTicketDetails(supplierFaultTicketInput);
         }
 
-        [HttpGet]
-        [Route("GetAccountManagerName")]
-        public string GetAccountManagerName(int accountId)
-        {
-           return _faultTicketManager.GetAccountManagerName(accountId);
-        }
     }
 }

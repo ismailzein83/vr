@@ -76,5 +76,12 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierProfileManager manager = new CarrierProfileManager();
             return manager.GetCarrierProfileTicketContactsInfo(ticketContactInfoFilter);
         }
+        [HttpGet]
+        [Route("GetAccountManagerName")]
+        public string GetAccountManagerName(int accountId)
+        {
+            CarrierProfileManager manager = new CarrierProfileManager();
+            return manager.GetAccountManagerName(accountId);
+        }
     }
 }
