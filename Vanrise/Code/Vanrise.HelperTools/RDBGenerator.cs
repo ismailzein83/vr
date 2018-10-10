@@ -126,16 +126,25 @@ namespace Vanrise.HelperTools
             dataManagerConstructor.AppendLine();
             dataManagerConstructor.Append(string.Format("\t \t Columns = columns,", table.Name));
             dataManagerConstructor.AppendLine();
+
             if (identifierColumn != null)
             {
                 dataManagerConstructor.Append(string.Format("\t \t IdColumnName = COL_{0},", identifierColumn.Name));
                 dataManagerConstructor.AppendLine();
             }
+
             if (table.Columns["CreatedTime"] != null)
             {
                 dataManagerConstructor.Append(string.Format("\t \t CreatedTimeColumnName = COL_CreatedTime"));
                 dataManagerConstructor.AppendLine();
             }
+
+            if (table.Columns["LastModifiedTime"] != null)
+            {
+                dataManagerConstructor.Append(string.Format("\t \t ModifiedTimeColumnName = COL_LastModifiedTime"));
+                dataManagerConstructor.AppendLine();
+            }          
+
             dataManagerConstructor.Append(string.Format("\t }});"));
             dataManagerConstructor.AppendLine();
             dataManagerConstructor.Append(string.Format("}}"));
