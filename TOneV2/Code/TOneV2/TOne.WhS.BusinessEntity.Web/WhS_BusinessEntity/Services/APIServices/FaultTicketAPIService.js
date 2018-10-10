@@ -10,11 +10,14 @@
         function GetSupplierFaultTicketDetails(supplierFaultTicketInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSupplierFaultTicketDetails"), supplierFaultTicketInput);
         }
-       
+        function GetAccountManagerName(accountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetAccountManagerName"), { accountId: accountId });
+        }
     
     return ({
         GetCustomerFaultTicketDetails: GetCustomerFaultTicketDetails,
-        GetSupplierFaultTicketDetails: GetSupplierFaultTicketDetails
+        GetSupplierFaultTicketDetails: GetSupplierFaultTicketDetails,
+        GetAccountManagerName: GetAccountManagerName
     });
 }
     appControllers.service("WhS_BE_FaultTicketAPIService", faultTicketAPIService);

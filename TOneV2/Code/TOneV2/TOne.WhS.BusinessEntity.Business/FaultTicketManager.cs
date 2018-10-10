@@ -71,6 +71,18 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return supplierFaultTicketDetail;
         }
+        public string GetAccountManagerName(int accountId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var carrierProfileId = carrierAccountManager.GetCarrierProfileId(accountId);
+            if (carrierProfileId.HasValue)
+            {
+                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                var accountManagerContact = carrierProfileManager.GetCarrierContact(carrierProfileId.Value, CarrierContactType.AccountManagerContact);
+                return accountManagerContact != null ? accountManagerContact.Description : null;
+            }
+            return null;
+        }
 
     }
 }

@@ -13,19 +13,26 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "FaultTicket")]
     public class FaultTicketController : Vanrise.Web.Base.BaseAPIController
     {
+        FaultTicketManager _faultTicketManager = new FaultTicketManager();
+
         [HttpPost]
         [Route("GetCustomerFaultTicketDetails")]
         public CustomerFaultTicketSettingsDetails GetCustomerFaultTicketDetails(CustomerFaultTicketSettingsInput customerFaultTicketInput)
         {
-            FaultTicketManager faultTicketManager = new FaultTicketManager();
-            return faultTicketManager.GetCustomerFaultTicketDetails(customerFaultTicketInput);
+            return _faultTicketManager.GetCustomerFaultTicketDetails(customerFaultTicketInput);
         }
         [HttpPost]
         [Route("GetSupplierFaultTicketDetails")]
         public SupplierFaultTicketSettingsDetails GetSupplierFaultTicketDetails(SupplierFaultTicketSettingsInput supplierFaultTicketInput)
         {
-            FaultTicketManager faultTicketManager = new FaultTicketManager();
-            return faultTicketManager.GetSupplierFaultTicketDetails(supplierFaultTicketInput);
+            return _faultTicketManager.GetSupplierFaultTicketDetails(supplierFaultTicketInput);
+        }
+
+        [HttpGet]
+        [Route("GetAccountManagerName")]
+        public string GetAccountManagerName(int accountId)
+        {
+           return _faultTicketManager.GetAccountManagerName(accountId);
         }
     }
 }

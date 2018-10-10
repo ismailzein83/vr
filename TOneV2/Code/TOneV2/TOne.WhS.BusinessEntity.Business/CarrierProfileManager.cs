@@ -72,6 +72,15 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetCachedCarrierProfiles().MapRecords(CarrierProfileInfoMapper).OrderBy(x => x.Name);
         }
+
+        public CarrierContact GetCarrierContact(int carrierProfileId, CarrierContactType contactType)
+        {
+            var carrierProfile = GetCarrierProfile(carrierProfileId);
+            carrierProfile.ThrowIfNull("carrierProfile", carrierProfileId);
+            carrierProfile.Settings.ThrowIfNull("carrierProfile.Settings", carrierProfileId);
+            carrierProfile.Settings.Contacts.ThrowIfNull("carrierProfile.Settings.Contacts", carrierProfileId);
+            return carrierProfile.Settings.Contacts.FindRecord(x => x.Type == contactType);
+        }
         public InsertOperationOutput<CarrierProfileDetail> AddCarrierProfile(CarrierProfile carrierProfile)
         {
             ValidateCarrierProfileToAdd(carrierProfile);
