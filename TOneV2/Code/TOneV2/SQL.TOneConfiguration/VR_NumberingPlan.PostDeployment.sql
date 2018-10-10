@@ -35,7 +35,7 @@ END
 
 
 delete from [bp].[BPBusinessRuleAction] where BusinessRuleDefinitionId IN ('D468D1B7-CED3-4CAC-A88E-3512586DD908')
-delete from [bp].[BPBusinessRuleDefinition] where ID IN ('607C3FE1-63AF-4AE8-963A-0E5523FDE4E0')
+delete from [bp].[BPBusinessRuleDefinition] where ID IN ('D468D1B7-CED3-4CAC-A88E-3512586DD908')
 
 --[bp].[BPBusinessRuleDefinition]-------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
