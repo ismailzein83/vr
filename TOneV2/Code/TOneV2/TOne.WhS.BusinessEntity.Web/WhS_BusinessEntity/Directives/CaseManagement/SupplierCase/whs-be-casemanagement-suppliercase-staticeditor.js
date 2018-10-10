@@ -199,7 +199,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                                 }
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, ticketContactSelectorAPI, selectorPayload, setLoader);
-
+                            getAccountManager(value.CarrierAccountId);
                             $scope.scopeModel.contactName = undefined;
                             $scope.scopeModel.email = undefined;
                             $scope.scopeModel.phoneNumber = undefined;
@@ -239,6 +239,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                             $scope.scopeModel.notes = selectedValues.Notes;
                             $scope.scopeModel.zoneName = selectedValues.SupplierZoneName;
                             $scope.scopeModel.notes = selectedValues.Notes;
+                            $scope.scopeModel.accountManager = selectedValues.AccountManager;
                         }
                         if ($scope.scopeModel.isEditMode) {
                             getZoneName();
@@ -303,6 +304,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     caseManagementObject.ContactName = $scope.scopeModel.contactName;
                     caseManagementObject.ContactEmails = $scope.scopeModel.email;
                     caseManagementObject.PhoneNumber = $scope.scopeModel.phoneNumber;
+                    caseManagementObject.AccountManager = $scope.scopeModel.accountManager;
                 };
 
                 if (ctrl.onReady != null)
@@ -486,6 +488,11 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 return codeList;
             }
 
+            function getAccountManager(carrierAccountId) {
+                WhS_BE_FaultTicketAPIService.GetAccountManagerName(carrierAccountId).then(function (response) {
+                    $scope.scopeModel.accountManager = response;
+                });
+            }
             function loadCodeNumberListData() {
                 var codeList = [];
                 if (faultTicketDescriptionSettingEntity != undefined) {
