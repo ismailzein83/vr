@@ -11,8 +11,13 @@ namespace Vanrise.Runtime.Entities
         bool IsMatched(SchedulerTask task);
     }
 
+
+    public enum SchedulerTaskFilterStatus { All = 0, OnlyEnabled = 1, OnlyDisabled = 2 }
+    
     public class SchedulerTaskFilter
     {
         public List<ISchedulerTaskFilter> Filters { get; set; }
+
+        public SchedulerTaskFilterStatus Status { get; set; }
     }
 }

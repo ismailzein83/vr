@@ -80,6 +80,13 @@ namespace Vanrise.Runtime.Business
 
                 if (filter != null)
                 {
+                    switch (filter.Status)
+                    {
+                        case SchedulerTaskFilterStatus.OnlyEnabled: if (!itm.IsEnabled) return false; break;
+                        case SchedulerTaskFilterStatus.OnlyDisabled: if (itm.IsEnabled) return false; break;
+                        default: break;
+                    }
+
                     if (filter.Filters != null)
                     {
                         foreach (ISchedulerTaskFilter schedulerTaskFilter in filter.Filters)
