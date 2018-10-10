@@ -154,7 +154,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                                 }
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, ticketContactSelectorAPI, selectorPayload, setLoader);
-                             
+                            getAccountManager(value.CarrierAccountId);
                             $scope.scopeModel.contactName = undefined;
                             $scope.scopeModel.email = undefined;
                             $scope.scopeModel.phoneNumber = undefined;
@@ -237,7 +237,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                             $scope.scopeModel.name = selectedValues.Name;
 
                             $scope.scopeModel.notes = selectedValues.Notes;
-
+                            $scope.scopeModel.accountManager = selectedValues.AccountManager;
                             if ($scope.scopeModel.carrierReference != undefined) {
                                 $scope.scopeModel.carrierReferenceHasValue = true;
                             }
@@ -295,6 +295,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
                     caseManagementObject.SendEmail = $scope.scopeModel.sendEmail;
                     caseManagementObject.Notes = $scope.scopeModel.notes;
+                    caseManagementObject.AccountManager = $scope.scopeModel.accountManager;
                 };
 
                 if (ctrl.onReady != null)
@@ -374,6 +375,11 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                         $scope.scopeModel.zoneName = response;
                     }
 
+                });
+            }
+            function getAccountManager(carrierAccountId) {
+                WhS_BE_FaultTicketAPIService.GetAccountManagerName(carrierAccountId).then(function (response) {
+                    $scope.scopeModel.accountManager = response;
                 });
             }
 
