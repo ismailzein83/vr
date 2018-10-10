@@ -5,6 +5,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Queueing;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.BP.Activities
 {
@@ -12,7 +13,7 @@ namespace Vanrise.GenericData.BP.Activities
 
     public class DeleteRecordsFromStorageInput
     {
-        public BaseQueue<DeleteRecordsBatch> InputQueue { get; set; }
+        public MemoryQueue<DeleteRecordsBatch> InputQueue { get; set; }
 
         public Guid DataRecordStorageId { get; set; }
 
@@ -31,7 +32,7 @@ namespace Vanrise.GenericData.BP.Activities
     public sealed class DeleteRecordsFromStorage : DependentAsyncActivity<DeleteRecordsFromStorageInput, DeleteRecordsFromStorageOutput>
     {
         [RequiredArgument]
-        public InArgument<BaseQueue<DeleteRecordsBatch>> InputQueue { get; set; }
+        public InArgument<MemoryQueue<DeleteRecordsBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<Guid> DataRecordStorageId { get; set; }
@@ -58,8 +59,8 @@ namespace Vanrise.GenericData.BP.Activities
                             inputArgument.IdFieldName, inputArgument.DateTimeFieldName);
 
                         double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
-                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete batch CDRs is done. Events Count: {0}. ElapsedTime: {1} (s)",
-                            deleteRecordBatch.IdsToDelete.Count, elapsedTime.ToString());
+                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete batch CDRs is done. Events Count: {0}. ElapsedTime: {1} (s), {2} Pending Batches",
+                            deleteRecordBatch.IdsToDelete.Count, elapsedTime.ToString(), inputArgument.InputQueue.Count);
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });

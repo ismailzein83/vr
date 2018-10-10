@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.BP.Activities
 
         public BaseQueue<CDRCorrelationBatch> InputQueueToInsert { get; set; }
 
-        public BaseQueue<DeleteRecordsBatch> OutputQueueToDelete { get; set; }
+        public MemoryQueue<DeleteRecordsBatch> OutputQueueToDelete { get; set; }
     }
 
     public class InsertCorrelatedCDRsOutput
@@ -35,7 +35,7 @@ namespace Vanrise.GenericData.BP.Activities
         public InOutArgument<BaseQueue<CDRCorrelationBatch>> InputQueueToInsert { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<DeleteRecordsBatch>> OutputQueueToDelete { get; set; }
+        public InOutArgument<MemoryQueue<DeleteRecordsBatch>> OutputQueueToDelete { get; set; }
 
         protected override InsertCorrelatedCDRsOutput DoWorkWithResult(InsertCorrelatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
