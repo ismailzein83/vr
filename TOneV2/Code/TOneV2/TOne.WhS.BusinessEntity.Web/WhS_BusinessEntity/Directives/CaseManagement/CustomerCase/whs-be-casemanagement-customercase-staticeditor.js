@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_FaultTicketAPIService',
-    function (UtilsService, VRUIUtilsService, VRDateTimeService, WhS_BE_SaleZoneAPIService, WhS_BE_FaultTicketAPIService) {
+app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_FaultTicketAPIService', 'WhS_BE_CarrierProfileAPIService',
+    function (UtilsService, VRUIUtilsService, VRDateTimeService, WhS_BE_SaleZoneAPIService, WhS_BE_FaultTicketAPIService, WhS_BE_CarrierProfileAPIService) {
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -378,7 +378,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 });
             }
             function getAccountManager(carrierAccountId) {
-                WhS_BE_FaultTicketAPIService.GetAccountManagerName(carrierAccountId).then(function (response) {
+                WhS_BE_CarrierProfileAPIService.GetAccountManagerName(carrierAccountId).then(function (response) {
                     $scope.scopeModel.accountManager = response;
                 });
             }
