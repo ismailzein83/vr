@@ -935,7 +935,8 @@ end
 delete from [bp].[BPBusinessRuleAction] where BusinessRuleDefinitionId IN(	'607C3FE1-63AF-4AE8-963A-0E5523FDE4E0','EA918FFF-BB6C-4438-86D6-76E10C5979D3','80726E97-ECA2-4734-BA15-BAE6C390B9AC','7DC98BFC-6C28-467D-A090-1E68234034DB',
 																			'5FDE31EE-2BCA-40E4-9225-C2AB25A49FFA','C8BFDD51-5530-4FF8-A1F1-4FB6487E4452','863F1968-95B2-4249-9ABF-2E1607A1BD99','3DDA09C8-36A2-4C81-BB44-D9C8D4CCA20A',
 																			'C3B6B019-1256-4B0E-B416-156C8E867A17','59769DFF-D9FF-4C0A-ABDA-D529297C8AC4','441E16F5-A868-4708-8D5E-4A11D7C4451A','1CB4AEA1-7D22-40E5-A886-FC1198C49485',
-																			'90443255-7DA9-47CA-AB62-DB4A3DCE96C5','0311788C-17D6-492D-8ED7-ADE758BA1E41','78105251-98FA-4225-9329-FEE68F574407','8D677A0E-CD1C-448C-856B-7DBC6528E878','F5B95111-480E-4714-95D0-C781FA5E3F38')
+																			'90443255-7DA9-47CA-AB62-DB4A3DCE96C5','0311788C-17D6-492D-8ED7-ADE758BA1E41','78105251-98FA-4225-9329-FEE68F574407','8D677A0E-CD1C-448C-856B-7DBC6528E878',
+																			'F5B95111-480E-4714-95D0-C781FA5E3F38','4225F45A-9EA9-4779-A5E7-E3B226663AB9')
 --[bp].[BPBusinessRuleAction]-----------------------------------------------------------------------
 begin
 set nocount on;
@@ -1023,8 +1024,7 @@ as (select * from (values
 ('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.WarningItemAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"fbfe2b36-12f6-40c1-8163-26cfe2d23501"}}','A8BF52B3-FE5E-4228-ACD7-D00F2FB3D9E3'),
 ('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"715f7f90-2c23-4185-aeb8-eda947de3978"}}','A16D55B8-3010-4F9B-B900-32B70177F8F5'),
 ('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"715f7f90-2c23-4185-aeb8-eda947de3978"}}','3C0BDCD2-FDC8-451A-A53B-389DE8A63937'),
-('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"715f7f90-2c23-4185-aeb8-eda947de3978"}}','95CB2C4A-1E79-4F00-846D-352F70229C7C')
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+('{"$type":"Vanrise.BusinessProcess.Entities.BPBusinessRuleActionSettings, Vanrise.BusinessProcess.Entities","Action":{"$type":"Vanrise.BusinessProcess.StopExecutionAction, Vanrise.BusinessProcess","BPBusinessRuleActionTypeId":"715f7f90-2c23-4185-aeb8-eda947de3978"}}','95CB2C4A-1E79-4F00-846D-352F70229C7C')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Settings],[BusinessRuleDefinitionId]))
 merge	[bp].[BPBusinessRuleAction] as t
 using	cte_data as s
@@ -1040,8 +1040,9 @@ end
 
 delete from [bp].[BPBusinessRuleDefinition] where ID IN (	'607C3FE1-63AF-4AE8-963A-0E5523FDE4E0','EA918FFF-BB6C-4438-86D6-76E10C5979D3',
 															'80726E97-ECA2-4734-BA15-BAE6C390B9AC','7DC98BFC-6C28-467D-A090-1E68234034DB','5FDE31EE-2BCA-40E4-9225-C2AB25A49FFA','C8BFDD51-5530-4FF8-A1F1-4FB6487E4452',
-															'863F1968-95B2-4249-9ABF-2E1607A1BD99','C3B6B019-1256-4B0E-B416-156C8E867A17','59769DFF-D9FF-4C0A-ABDA-D529297C8AC4','441E16F5-A868-4708-8D5E-4A11D7C4451A','1CB4AEA1-7D22-40E5-A886-FC1198C49485',
-															'90443255-7DA9-47CA-AB62-DB4A3DCE96C5','0311788C-17D6-492D-8ED7-ADE758BA1E41','78105251-98FA-4225-9329-FEE68F574407','8D677A0E-CD1C-448C-856B-7DBC6528E878','F5B95111-480E-4714-95D0-C781FA5E3F38')
+															'863F1968-95B2-4249-9ABF-2E1607A1BD99','C3B6B019-1256-4B0E-B416-156C8E867A17','59769DFF-D9FF-4C0A-ABDA-D529297C8AC4','441E16F5-A868-4708-8D5E-4A11D7C4451A',
+															'1CB4AEA1-7D22-40E5-A886-FC1198C49485','90443255-7DA9-47CA-AB62-DB4A3DCE96C5','0311788C-17D6-492D-8ED7-ADE758BA1E41','78105251-98FA-4225-9329-FEE68F574407',
+															'8D677A0E-CD1C-448C-856B-7DBC6528E878','F5B95111-480E-4714-95D0-C781FA5E3F38''4225F45A-9EA9-4779-A5E7-E3B226663AB9')
 begin
 --[bp].[BPBusinessRuleDefinition]-------------------------------------------------------------------
 set nocount on;
