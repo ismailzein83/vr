@@ -107,7 +107,8 @@ namespace Vanrise.Integration.Data.SQL
                 MinBatchSize = GetReaderValue<decimal?>(reader, "MinBatchSize"),
                 NbInvalidBatch = (int)reader["NbInvalidBatch"],
                 NbEmptyBatch = (int)reader["NbEmptyBatch"],
-                MinBatchStart = GetReaderValue<DateTime?>(reader, "MinBatchStart")
+                MinBatchStart = GetReaderValue<DateTime?>(reader, "MinBatchStart"),
+                MaxBatchEnd = GetReaderValue<DateTime?>(reader, "MaxBatchEnd")
             };
         }
     }

@@ -15,5 +15,7 @@ namespace Vanrise.Integration.Entities
         public int NbInvalidBatch { get; set; }
         public int NbEmptyBatch { get; set; }
         public DateTime? MinBatchStart { get; set; }
+        public DateTime? MaxBatchEnd { get; set; }
+
     }
 }
