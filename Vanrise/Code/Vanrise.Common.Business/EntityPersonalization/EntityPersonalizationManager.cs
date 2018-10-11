@@ -120,6 +120,8 @@ namespace Vanrise.Common.Business
         {
             IEntityPersonalizationDataManager dataManager = CommonDataManagerFactory.GetDataManager<IEntityPersonalizationDataManager>();
             bool saveActionSucc = dataManager.Save(entity);
+            if (saveActionSucc)
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             return saveActionSucc;
         }
 
