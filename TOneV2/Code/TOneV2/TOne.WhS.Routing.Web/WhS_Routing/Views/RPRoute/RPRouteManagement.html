@@ -36,7 +36,9 @@
 
                 <vr-whs-routing-routestatus-selector ng-show="advancedSelected" on-ready="onRouteStatusDirectiveReady" normal-col-num="2"></vr-whs-routing-routestatus-selector>
 
-                <vr-whs-be-customer-selector ng-show="advancedSelected" on-ready="onCustomerSelectorReady" normal-col-num="2" selectedvalues="selectedCustomer"></vr-whs-be-customer-selector>
+                <vr-span vr-loader="isLoadingCustomerSelector">
+                    <vr-whs-be-customer-selector ng-show="advancedSelected" on-ready="onCustomerSelectorReady" normal-col-num="2" selectedvalues="selectedCustomer"></vr-whs-be-customer-selector>
+                </vr-span>
 
                 <vr-columns colnum="2" ng-show="selectedCustomer!=undefined && advancedSelected">
                     <vr-switch label="Show In System Currency" value="showInSystemCurrency"></vr-switch>

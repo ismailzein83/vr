@@ -96,6 +96,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
             var selectorApi;
             var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var onSellingNumberPlanSelectionChanged;
 
             function initializeController() {
 
@@ -114,11 +115,13 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                 };
 
                 saleZoneSelectorCtrl.onSellingNumberPlanSelectionchanged = function (selectedItem) {
-
                     if (selectedItem != undefined && selectorApi != undefined) {
                         selectorApi.clearDataSource();
                         sellingNumberPlanId = selectedItem.SellingNumberPlanId;
                     }
+
+                    if (onSellingNumberPlanSelectionChanged != undefined && typeof (onSellingNumberPlanSelectionChanged) == 'function')
+                        onSellingNumberPlanSelectionChanged(selectedItem);
                 };
 
                 saleZoneSelectorCtrl.ondeselectSNP = function (deselectedItem) {
@@ -171,7 +174,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
 
                 api.load = function (payload) {
                     selectorApi.clearDataSource();
-
                     var selectedIds;
                     var showSellingNumberPlanIfMultiple;
 
@@ -183,6 +185,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                         excludedZoneIds = payload.excludedZoneIds;
                         genericUIContext = payload.genericUIContext;
                         showSellingNumberPlanIfMultiple = payload.showSellingNumberPlanIfMultiple;
+                        onSellingNumberPlanSelectionChanged = payload.onSellingNumberPlanSelectionChanged;
                     }
 
                     if (payloadSellingNumberPlanId != undefined) {

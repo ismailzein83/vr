@@ -1069,6 +1069,7 @@ namespace TOne.WhS.Routing.Business
         public int RoutingProductFilter { get; set; }
         public List<int> RoutingProductIds { get; set; }
         public int? SimulatedRoutingProductId { get; set; }
+        public int? SellingNumberPlanId { get; set; }
         public List<int> SaleZoneIds { get; set; }
         public int? RouteStatus { get; set; }
         public int LimitResult { get; set; }
