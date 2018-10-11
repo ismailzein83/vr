@@ -22,5 +22,8 @@
     [LastModifiedTime]  DATETIME         NULL,
     [TicketDetails]     NVARCHAR (MAX)   NULL,
     [SendEmail]         BIT              NULL,
-    [SystemReference]   NVARCHAR (1000)  NULL);
+    [SystemReference]   NVARCHAR (1000)  NULL,
+    [AccountManager]    NVARCHAR (255)   NULL);
+
+
 
