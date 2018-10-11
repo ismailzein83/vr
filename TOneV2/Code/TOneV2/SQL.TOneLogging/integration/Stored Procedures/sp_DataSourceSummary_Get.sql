@@ -1,10 +1,10 @@
-﻿CREATE PROCEDURE [integration].[sp_DataSourceSummary_Get]
+﻿
+CREATE PROCEDURE [integration].[sp_DataSourceSummary_Get]
 	@DataSourceIDs varchar(max),
 	@FromTime DateTime
 
 AS
 BEGIN
-
 		DECLARE @EnabledDataSourcesTable TABLE (EnabledDataSourceID uniqueidentifier)
 		INSERT INTO @EnabledDataSourcesTable (EnabledDataSourceID)
 		select Convert(uniqueidentifier, ParsedString) from [integration].[ParseStringList](@DataSourceIDs)
@@ -19,7 +19,8 @@ BEGIN
 				MIN([BatchSize]) as MinBatchSize,
 				SUM(CASE WHEN [MappingResult] = 2 THEN 1 ELSE 0 END) as NbInvalidBatch,
 				SUM(CASE WHEN [MappingResult] = 3 THEN 1 ELSE 0 END) as NbEmptyBatch,
-				MIN([BatchStart]) as MinBatchStart
+				MIN([BatchStart]) as MinBatchStart,
+				Max([BatchEnd]) as MaxBatchEnd
 					
 	FROM [integration].[DataSourceImportedBatch] DSImportedBatch
 
