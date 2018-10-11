@@ -8,8 +8,12 @@
     [MapperMessage]    NVARCHAR (MAX)   NULL,
     [QueueItemIds]     VARCHAR (255)    NULL,
     [LogEntryTime]     DATETIME         NOT NULL,
+    [BatchStart]       DATETIME         NULL,
+    [BatchEnd]         DATETIME         NULL,
     CONSTRAINT [IX_DataSourceImportedBatch_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

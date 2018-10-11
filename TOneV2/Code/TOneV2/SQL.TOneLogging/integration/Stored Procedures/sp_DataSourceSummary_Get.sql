@@ -18,7 +18,8 @@ BEGIN
 				MAX([BatchSize]) as MaxBatchSize,
 				MIN([BatchSize]) as MinBatchSize,
 				SUM(CASE WHEN [MappingResult] = 2 THEN 1 ELSE 0 END) as NbInvalidBatch,
-				SUM(CASE WHEN [MappingResult] = 3 THEN 1 ELSE 0 END) as NbEmptyBatch
+				SUM(CASE WHEN [MappingResult] = 3 THEN 1 ELSE 0 END) as NbEmptyBatch,
+				MIN([BatchStart]) as MinBatchStart
 					
 	FROM [integration].[DataSourceImportedBatch] DSImportedBatch
 

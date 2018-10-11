@@ -27,7 +27,9 @@ BEGIN
 			[MappingResult],
 			[MapperMessage],
 			[QueueItemIds],
-			[LogEntryTime]
+			[LogEntryTime],
+			[BatchStart],
+			[BatchEnd]
 			INTO #RESULT
 			FROM [integration].[DataSourceImportedBatch] WITH(NOLOCK) 
 			WHERE 
