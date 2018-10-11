@@ -69,15 +69,20 @@ namespace BPMExtended.Main.Business
                 var entity3 = esqResult3.GetEntity(connection, requestId);
                 object servicesJson = entity3.GetColumnValue("StServices");
 
-                List<Service> services = JsonConvert.DeserializeObject<List<Service>>(servicesJson.ToString());
+                if (servicesJson.ToString() != "" && servicesJson != null && servicesJson.ToString() != "\"\"")
+                { 
 
-                foreach (Service service in services)
-                {
-                    if (service.Id == "EE85D0BC-CE96-441A-A0FD-3179026423F5")
-                    {
-                        hasCallBaring = true;
-                        break;
-                    }
+                        List<Service> services = JsonConvert.DeserializeObject<List<Service>>(servicesJson.ToString());
+
+                        foreach (Service service in services)
+                        {
+                            if (service.Id == "EE85D0BC-CE96-441A-A0FD-3179026423F5")
+                            {
+                                hasCallBaring = true;
+                                break;
+                            }
+                        }
+
                 }
 
             }
