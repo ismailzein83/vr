@@ -159,6 +159,7 @@ namespace Vanrise.Invoice.BP.Activities
                             var generatedInvoice = generatedInvoices[i];
                             if (generatedInvoice.IsSucceeded)
                             {
+                                succeededInvoices++;
                                 context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Information, "Invoice generated for '{0}' from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Remaining Invoices: {3}", partnerInvoiceGenerationDraft.PartnerName, generatedInvoice.FromDate, generatedInvoice.ToDate, remainingInvoices - (i + 1));
                                 if (isAutomatic)
                                 {
