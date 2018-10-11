@@ -34,10 +34,8 @@ namespace Vanrise.Fzero.Bypass
                     email.DestinationEmail = toEmail;
                     email.Subject = "FM_BYPASS_ALERT";
                     email.CC = string.Empty;
-
-
                     foreach (var i in CLIs)
-                        CLIConcatenated += "<br />" + i + "<br />";
+                        CLIConcatenated +=  i + " <br>";
 
                     email.Body = template.MessageBody.Replace("%CLIs%", CLIConcatenated).Replace("%Total%", CLIs.Count.ToString());
                     Email.SendMailWithAttachement(email, string.Empty, profile_name);
