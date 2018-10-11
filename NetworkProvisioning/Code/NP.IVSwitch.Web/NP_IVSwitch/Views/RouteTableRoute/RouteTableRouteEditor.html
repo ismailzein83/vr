@@ -8,7 +8,7 @@
                             <vr-textbox readonly value="scopeModel.routeTableRouteName" label="{{scopeModel.labelName}}"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModel.bNumber" label="BNumber" ng-show="scopeModel.isANumber"></vr-textbox>
+                            <vr-textbox value="scopeModel.bNumber" label="BNumber" maxlength="20" ng-show="scopeModel.isANumber"></vr-textbox>
                         </vr-columns>
                     </vr-row>
                     <div ng-show="scopeModel.addMode">
