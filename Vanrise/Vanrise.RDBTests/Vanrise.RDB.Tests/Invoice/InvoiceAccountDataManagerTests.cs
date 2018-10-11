@@ -91,8 +91,8 @@ namespace Vanrise.RDB.Tests.Invoice
         {
             long sqlAccountId;
             long rdbAccountId;
-            UTAssert.ObjectsAreEqual(_sqlDataManager.InsertInvoiceAccount(account, out sqlAccountId), _rdbDataManager.InsertInvoiceAccount(account, out rdbAccountId));
-            UTAssert.ObjectsAreEqual(sqlAccountId, rdbAccountId);
+            UTUtilities.AssertValuesAreEqual(_sqlDataManager.InsertInvoiceAccount(account, out sqlAccountId), _rdbDataManager.InsertInvoiceAccount(account, out rdbAccountId));
+            UTUtilities.AssertValuesAreEqual(sqlAccountId, rdbAccountId);
             account.InvoiceAccountId = rdbAccountId;
 
             AssertAllAccountsAreSimilar();
@@ -100,7 +100,7 @@ namespace Vanrise.RDB.Tests.Invoice
 
         private void TestUpdateAccountStatus(Guid invoiceTypeId, string accountId, VRAccountStatus status, bool isDeleted)
         {
-            UTAssert.ObjectsAreEqual(_sqlDataManager.TryUpdateInvoiceAccountStatus(invoiceTypeId, accountId, status, isDeleted),
+            UTUtilities.AssertValuesAreEqual(_sqlDataManager.TryUpdateInvoiceAccountStatus(invoiceTypeId, accountId, status, isDeleted),
             _rdbDataManager.TryUpdateInvoiceAccountStatus(invoiceTypeId, accountId, status, isDeleted));
 
             AssertAllAccountsAreSimilar();
@@ -108,7 +108,7 @@ namespace Vanrise.RDB.Tests.Invoice
 
         private void TestUpdateAccountEffectiveDate(Guid invoiceTypeId, string accountId, DateTime? bed, DateTime? eed)
         {
-            UTAssert.ObjectsAreEqual(_sqlDataManager.TryUpdateInvoiceAccountEffectiveDate(invoiceTypeId, accountId, bed, eed),
+            UTUtilities.AssertValuesAreEqual(_sqlDataManager.TryUpdateInvoiceAccountEffectiveDate(invoiceTypeId, accountId, bed, eed),
             _rdbDataManager.TryUpdateInvoiceAccountEffectiveDate(invoiceTypeId, accountId, bed, eed));
 
             AssertAllAccountsAreSimilar();
@@ -119,7 +119,7 @@ namespace Vanrise.RDB.Tests.Invoice
             var sqlAccounts = _sqlDataManager.GetInvoiceAccountsByPartnerIds(invoiceTypeId, partnerIds);
             var rdbAccounts = _rdbDataManager.GetInvoiceAccountsByPartnerIds(invoiceTypeId, partnerIds);
 
-            UTAssert.ObjectsAreSimilar(sqlAccounts, rdbAccounts);
+            UTUtilities.AssertObjectsAreSimilar(sqlAccounts, rdbAccounts);
         }
 
         private void AssertAllAccountsAreSimilar()

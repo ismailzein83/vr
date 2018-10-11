@@ -30,14 +30,14 @@ namespace Vanrise.RDB.Tests.Invoice
         void GetNextSequenceValue(string sequenceGroup, string sequenceKey, int initialValue)
         {
             Guid invoiceTypeId = Guid.NewGuid();
-            UTAssert.ObjectsAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
+            UTUtilities.AssertValuesAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
             UTUtilities.AssertDBTablesAreSimilar(Constants.CONNSTRING_NAME_CONFIG, Constants.DBSCHEMA_NAME_INVOICE, DBTABLE_NAME_INVOICESEQUENCE);
-            UTAssert.ObjectsAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
+            UTUtilities.AssertValuesAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
             UTUtilities.AssertDBTablesAreSimilar(Constants.CONNSTRING_NAME_CONFIG, Constants.DBSCHEMA_NAME_INVOICE, DBTABLE_NAME_INVOICESEQUENCE);
-            UTAssert.ObjectsAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
-            UTAssert.ObjectsAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
-            UTAssert.ObjectsAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
-            UTAssert.ObjectsAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
+            UTUtilities.AssertValuesAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
+            UTUtilities.AssertValuesAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
+            UTUtilities.AssertValuesAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
+            UTUtilities.AssertValuesAreEqual(_sqlDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue), _rdbDataManager.GetNextSequenceValue(sequenceGroup, invoiceTypeId, sequenceKey, initialValue));
             UTUtilities.AssertDBTablesAreSimilar(Constants.CONNSTRING_NAME_CONFIG, Constants.DBSCHEMA_NAME_INVOICE, DBTABLE_NAME_INVOICESEQUENCE);
         }
     }

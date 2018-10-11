@@ -60,6 +60,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\Code\Resources\DLLs\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Vanrise.AccountBalance.Data">
@@ -119,6 +122,10 @@
   <ItemGroup>
     <Compile Include="AccountBalance\BillingTransactionTypeDataManagerTests.cs" />
     <Compile Include="AccountBalance\LiveBalanceDataManagerTests.cs" />
+    <Compile Include="AccountBalance\BillingTransactionDataManagerTests.cs" />
+    <Compile Include="AccountBalance\AccountUsageDataManagerTests.cs" />
+    <Compile Include="AccountBalance\AccountUsageOverrideDataManagerTests.cs" />
+    <Compile Include="AccountBalance\BalanceUsageQueueDataManagerTests.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Invoice\InvoiceBulkActionsDraftDataManagerTests.cs" />
     <Compile Include="Invoice\InvoiceDataManagerTests.cs" />

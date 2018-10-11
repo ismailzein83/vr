@@ -67,7 +67,7 @@ namespace Vanrise.RDBTests.Common
         {
             var rdbAllEntities = GetAllEntities(_rdbDataManager);
             var sqlAllEntities = GetAllEntities(_sqlDataManager);
-            UTAssert.ObjectsAreSimilar(sqlAllEntities, rdbAllEntities);
+            UTUtilities.AssertObjectsAreSimilar(sqlAllEntities, rdbAllEntities);
 
             UTUtilities.AssertDBTablesAreSimilar(this.DBConnStringName, this.DBSchemaName, this.DBTableName);
         }
@@ -87,12 +87,12 @@ namespace Vanrise.RDBTests.Common
 
         private void InsertEntity(T entity)
         {            
-            UTAssert.ObjectsAreEqual(InsertEntity(new EntityMainOperationTesterInsertEntityContext<T, Q>(entity, _sqlDataManager)), InsertEntity(new EntityMainOperationTesterInsertEntityContext<T, Q>(entity, _rdbDataManager)));
+            UTUtilities.AssertValuesAreEqual(InsertEntity(new EntityMainOperationTesterInsertEntityContext<T, Q>(entity, _sqlDataManager)), InsertEntity(new EntityMainOperationTesterInsertEntityContext<T, Q>(entity, _rdbDataManager)));
         }
 
         private void UpdateEntity(T entity)
         {
-            UTAssert.ObjectsAreEqual(UpdateEntity(new EntityMainOperationTesterUpdateEntityContext<T, Q>(entity, _sqlDataManager)), UpdateEntity(new EntityMainOperationTesterUpdateEntityContext<T, Q>(entity, _rdbDataManager)));
+            UTUtilities.AssertValuesAreEqual(UpdateEntity(new EntityMainOperationTesterUpdateEntityContext<T, Q>(entity, _sqlDataManager)), UpdateEntity(new EntityMainOperationTesterUpdateEntityContext<T, Q>(entity, _rdbDataManager)));
         }
 
         private void GenerateNewEntityId(T entityCopy)

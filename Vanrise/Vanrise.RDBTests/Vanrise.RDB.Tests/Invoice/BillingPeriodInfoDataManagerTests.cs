@@ -44,7 +44,7 @@ namespace Vanrise.RDB.Tests.Invoice
         private void InsertOrUpdateBillingPeriodAndAssertSimilar(BillingPeriodInfo billingPeriod)
         {
             _sqlDataManager.InsertOrUpdateBillingPeriodInfo(billingPeriod);
-            UTAssert.ObjectsAreEqual(true, _rdbDataManager.InsertOrUpdateBillingPeriodInfo(billingPeriod));
+            UTUtilities.AssertValuesAreEqual(true, _rdbDataManager.InsertOrUpdateBillingPeriodInfo(billingPeriod));
             AssertBillingPeriodTablesAreSimilar();
         }
 

@@ -96,15 +96,15 @@ namespace Vanrise.RDB.Tests.Invoice
             {
                 long sqlId;
                 long rdbId;
-                UTAssert.ObjectsAreEqual(_sqlDataManager.InsertInvoiceGenerationDraft(draft, out sqlId), _rdbDataManager.InsertInvoiceGenerationDraft(draft, out rdbId));
-                UTAssert.ObjectsAreEqual(sqlId, rdbId);
+                UTUtilities.AssertValuesAreEqual(_sqlDataManager.InsertInvoiceGenerationDraft(draft, out sqlId), _rdbDataManager.InsertInvoiceGenerationDraft(draft, out rdbId));
+                UTUtilities.AssertValuesAreEqual(sqlId, rdbId);
                 draft.InvoiceGenerationDraftId = rdbId;
                 AssertDraftsAreSimilar(draftUniqueIdentifier);
             }
 
             foreach(var draft in drafts)
             {
-                UTAssert.ObjectsAreSimilar(_sqlDataManager.GetInvoiceGenerationDraft(draft.InvoiceGenerationDraftId), _rdbDataManager.GetInvoiceGenerationDraft(draft.InvoiceGenerationDraftId));
+                UTUtilities.AssertObjectsAreSimilar(_sqlDataManager.GetInvoiceGenerationDraft(draft.InvoiceGenerationDraftId), _rdbDataManager.GetInvoiceGenerationDraft(draft.InvoiceGenerationDraftId));
             }
 
             foreach (var draft in drafts)
@@ -117,7 +117,7 @@ namespace Vanrise.RDB.Tests.Invoice
                     IsSelected = true,
                     To = draft.To.AddDays(54)
                 };
-                UTAssert.ObjectsAreEqual(_sqlDataManager.UpdateInvoiceGenerationDraft(draftToEdit), _rdbDataManager.UpdateInvoiceGenerationDraft(draftToEdit));
+                UTUtilities.AssertValuesAreEqual(_sqlDataManager.UpdateInvoiceGenerationDraft(draftToEdit), _rdbDataManager.UpdateInvoiceGenerationDraft(draftToEdit));
                 AssertDraftsAreSimilar(draftUniqueIdentifier);
             }
 
@@ -151,12 +151,12 @@ namespace Vanrise.RDB.Tests.Invoice
             var sqlDrafts = _sqlDataManager.GetInvoiceGenerationDrafts(draftUniqueIdentifier);
             var rdbDrafts = _rdbDataManager.GetInvoiceGenerationDrafts(draftUniqueIdentifier);
             
-            UTAssert.ObjectsAreSimilar(sqlDrafts, rdbDrafts);
+            UTUtilities.AssertObjectsAreSimilar(sqlDrafts, rdbDrafts);
 
             var sqlSummary = _sqlDataManager.GetInvoiceGenerationDraftsSummary(draftUniqueIdentifier);
             var rdbSummary = _rdbDataManager.GetInvoiceGenerationDraftsSummary(draftUniqueIdentifier);
 
-            UTAssert.ObjectsAreSimilar(sqlSummary, rdbSummary);
+            UTUtilities.AssertObjectsAreSimilar(sqlSummary, rdbSummary);
         }
 
         private void AssertAllDraftsAreSimilar()

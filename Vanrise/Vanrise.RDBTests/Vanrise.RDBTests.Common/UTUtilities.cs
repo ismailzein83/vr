@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -12,6 +13,23 @@ namespace Vanrise.RDBTests.Common
 {
     public static class UTUtilities
     {
+        public static void AssertValuesAreEqual<T>(T obj1, T obj2) where T : struct
+        {
+            Assert.AreEqual(obj1, obj2);
+        }
+
+        public static void AssertObjectsAreSimilar<T>(T obj1, T obj2)
+        {
+            string serializedObj1 = Serializer.Serialize(obj1);
+            string serializedObj2 = Serializer.Serialize(obj2);
+            Assert.AreEqual(serializedObj1, serializedObj2);
+        }
+
+        public static void AssertNotNullObject(Object obj)
+        {
+            Assert.IsNotNull(obj);
+        }
+
         public static void TruncateTable(string connStringName, string schemaName, string tableName)
         {
             string sqlConnString;
@@ -28,7 +46,16 @@ namespace Vanrise.RDBTests.Common
             GetConnStringsWithValidate(connStringName, out sqlConnString, out rdbConnString);
             DataTable sqlTable = FillDBTable(sqlConnString, schemaName, tableName);
             DataTable rdbTable = FillDBTable(rdbConnString, schemaName, tableName);
-            UTAssert.ObjectsAreSimilar(sqlTable, rdbTable);
+            UTUtilities.AssertObjectsAreSimilar(sqlTable, rdbTable);
+        }
+
+        public static void ExecuteDBNonQuery(string connStringName, string queryText)
+        {
+            string sqlConnString;
+            string rdbConnString;
+            GetConnStringsWithValidate(connStringName, out sqlConnString, out rdbConnString);
+            ExecuteDBNonQuery_Private(sqlConnString, queryText);
+            ExecuteDBNonQuery_Private(rdbConnString, queryText);
         }
 
         private static DataTable FillDBTable(string connString, string schemaName, string tableName)
@@ -51,10 +78,10 @@ namespace Vanrise.RDBTests.Common
         private static void TruncateTableInOneDB(string connString, string schemaName, string tableName)
         {
             string queryText = string.Format("Truncate Table {0}", GetTableName(schemaName, tableName));
-            ExecuteDBNonQuery(connString, queryText);
+            ExecuteDBNonQuery_Private(connString, queryText);
         }
 
-        private static void ExecuteDBNonQuery(string connString, string queryText)
+        private static void ExecuteDBNonQuery_Private(string connString, string queryText)
         {
             using (var conn = new SqlConnection(connString))
             {
@@ -162,22 +189,7 @@ namespace Vanrise.RDBTests.Common
             }
         }
 
-
-
-        public static List<DateTime> GetDateTimeListsForTesting()
-        {
-            return new List<DateTime> { DateTime.Now, DateTime.Today, DateTime.Now.AddDays(-5), DateTime.Now.AddDays(-15), DateTime.Now.AddDays(5), DateTime.Now.AddDays(-150), DateTime.Now.AddDays(150) };
-        }
-
-        public static List<DateTime?> GetNullableDateTimeListsForTesting()
-        {
-            var dateTimeList = GetDateTimeListsForTesting();
-            List<DateTime?> lst = new List<DateTime?>();
-            lst.Add(null);
-            lst.AddRange(dateTimeList.Cast<DateTime?>());
-            return lst;
-        }
-
+        
         public static List<bool> GetBoolListForTesting()
         {
             return new List<bool> { true, false };
@@ -186,6 +198,17 @@ namespace Vanrise.RDBTests.Common
         public static List<bool?> GetNullableBoolListForTesting()
         {
             return new List<bool?> { null, true, false };
+        }
+        
+        public static List<T> GetEnumListForTesting<T>()
+        {
+            bool isNullable = Nullable.GetUnderlyingType(typeof(T)) != null;
+            Type enumType = isNullable ? Nullable.GetUnderlyingType(typeof(T)) : typeof(T);
+            List<T> lst = new List<T>();
+            lst.AddRange(Enum.GetValues(enumType).Cast<T>());
+            if (isNullable)
+                lst.Add(default(T));
+            return lst;
         }
     }
 }
