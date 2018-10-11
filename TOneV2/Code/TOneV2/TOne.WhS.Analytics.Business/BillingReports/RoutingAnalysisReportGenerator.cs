@@ -13,7 +13,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
     {
         private class TopZone
         {
-            public long id{ get; set; }
+            public long id { get; set; }
             public decimal duration { get; set; }
         }
         public Dictionary<string, System.Collections.IEnumerable> GenerateDataSources(ReportParameters parameters)
@@ -24,20 +24,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             List<long> topZoneIds = new List<long>();
             List<TopZone> topZones = new List<TopZone>();
             List<TopZone> topZonesOrdered = new List<TopZone>();
-            DataRetrievalInput<AnalyticQuery> topNSaleZoneQuery = new DataRetrievalInput<AnalyticQuery>
+            var topNSaleZoneQuery = new AnalyticQuery
             {
-                Query = new AnalyticQuery
-                {
-                    DimensionFields = new List<string> { "SaleZone" },
-                    MeasureFields = new List<string> { "DurationNet" },
-                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                    FromTime = parameters.FromTime,
-                    ToTime = parameters.ToTime,
-                    CurrencyId = parameters.CurrencyId,
-                    ParentDimensions = new List<string>(),
-                    Filters = new List<DimensionFilter>()
-                },
-                SortByColumnName = "DimensionValues[0].Name"
+                DimensionFields = new List<string> { "SaleZone" },
+                MeasureFields = new List<string> { "DurationNet" },
+                TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                FromTime = parameters.FromTime,
+                ToTime = parameters.ToTime,
+                CurrencyId = parameters.CurrencyId,
+                ParentDimensions = new List<string>(),
+                Filters = new List<DimensionFilter>(),
+                OrderType = AnalyticQueryOrderType.ByAllDimensions
             };
             if (!String.IsNullOrEmpty(parameters.CustomersId))
             {
@@ -46,7 +43,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Customer",
                     FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                topNSaleZoneQuery.Query.Filters.Add(dimensionFilter);
+                topNSaleZoneQuery.Filters.Add(dimensionFilter);
             }
 
             if (!String.IsNullOrEmpty(parameters.SuppliersId))
@@ -56,15 +53,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "Supplier",
                     FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
                 };
-                topNSaleZoneQuery.Query.Filters.Add(dimensionFilter);
+                topNSaleZoneQuery.Filters.Add(dimensionFilter);
             }
 
-            var resultN = analyticManager.GetFilteredRecords(topNSaleZoneQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+            var resultN = analyticManager.GetAllFilteredRecords(topNSaleZoneQuery);
             List<RoutingAnalysisFormatted> listRoutingAnalysisFormatteds = new List<RoutingAnalysisFormatted>();
 
             if (resultN != null)
             {
-                foreach (var analyticRecord in resultN.Data)
+                foreach (var analyticRecord in resultN)
                 {
                     var zoneValue = analyticRecord.DimensionValues[0];
                     if (zoneValue != null)
@@ -74,7 +71,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                         topZones.Add(new TopZone()
                         {
-                            id = (long) zoneValue.Value,
+                            id = (long)zoneValue.Value,
                             duration = Convert.ToDecimal(duration.Value ?? 0.0)
                         });
                     }
@@ -84,20 +81,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {
                     topZoneIds.Add(zone.id);
                 }
-                DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>
+                var analyticQuery = new AnalyticQuery
                 {
-                    Query = new AnalyticQuery
-                    {
-                        DimensionFields = new List<string> { "SaleZone", "Supplier" },
-                        MeasureFields = new List<string> { "DurationNet", "TotalCostNet", "TotalSaleNet", "Profit" },
-                        TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
-                        FromTime = parameters.FromTime,
-                        ToTime = parameters.ToTime,
-                        CurrencyId = parameters.CurrencyId,
-                        ParentDimensions = new List<string>(),
-                        Filters = new List<DimensionFilter>()
-                    },
-                    SortByColumnName = "DimensionValues[0].Name"
+                    DimensionFields = new List<string> { "SaleZone", "Supplier" },
+                    MeasureFields = new List<string> { "DurationNet", "TotalCostNet", "TotalSaleNet", "Profit", "SaleRate_DurAvg", "CostRate_DurAvg" },
+                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                    FromTime = parameters.FromTime,
+                    ToTime = parameters.ToTime,
+                    CurrencyId = parameters.CurrencyId,
+                    ParentDimensions = new List<string>(),
+                    Filters = new List<DimensionFilter>(),
+                    OrderType = AnalyticQueryOrderType.ByAllDimensions
                 };
                 if (!String.IsNullOrEmpty(parameters.CustomersId))
                 {
@@ -106,7 +100,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         Dimension = "Customer",
                         FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
                     };
-                    analyticQuery.Query.Filters.Add(dimensionFilter);
+                    analyticQuery.Filters.Add(dimensionFilter);
                 }
 
                 if (!String.IsNullOrEmpty(parameters.SuppliersId))
@@ -116,7 +110,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         Dimension = "Supplier",
                         FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
                     };
-                    analyticQuery.Query.Filters.Add(dimensionFilter);
+                    analyticQuery.Filters.Add(dimensionFilter);
                 }
 
                 DimensionFilter zoneFilter = new DimensionFilter
@@ -124,28 +118,25 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Dimension = "SaleZone",
                     FilterValues = topZoneIds.Cast<object>().ToList()
                 };
-                analyticQuery.Query.Filters.Add(zoneFilter);
+                analyticQuery.Filters.Add(zoneFilter);
 
             #endregion
                 #region TrafficStats
 
-                DataRetrievalInput<AnalyticQuery> trafficDataRetrievalInput = new DataRetrievalInput<AnalyticQuery>
+                var trafficDataRetrievalInput = new AnalyticQuery
                 {
-                    Query = new AnalyticQuery
-                    {
-                        DimensionFields = new List<string> { "SaleZone", "Supplier" },
-                        MeasureFields = new List<string> { "DurationInMinutes", "ASR", "ACD", "NER" },
-                        TableId = Guid.Parse("58DD0497-498D-40F2-8687-08F8356C63CC"),
-                        FromTime = parameters.FromTime,
-                        ToTime = parameters.ToTime,
-                        CurrencyId = parameters.CurrencyId,
-                        ParentDimensions = new List<string>(),
-                        Filters = new List<DimensionFilter>()
-                    },
-                    SortByColumnName = "DimensionValues[0].Name"
+                    DimensionFields = new List<string> { "SaleZone", "Supplier" },
+                    MeasureFields = new List<string> { "DurationInMinutes", "ASR", "ACD", "NER" },
+                    TableId = Guid.Parse("58DD0497-498D-40F2-8687-08F8356C63CC"),
+                    FromTime = parameters.FromTime,
+                    ToTime = parameters.ToTime,
+                    CurrencyId = parameters.CurrencyId,
+                    ParentDimensions = new List<string>(),
+                    Filters = new List<DimensionFilter>(),
+                    OrderType = AnalyticQueryOrderType.ByAllDimensions
                 };
 
-                trafficDataRetrievalInput.Query.Filters.Add(zoneFilter);
+                trafficDataRetrievalInput.Filters.Add(zoneFilter);
                 #endregion
 
 
@@ -155,9 +146,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 double TotalSale = 0;
                 double TotalCost = 0;
                 double TotalProfit = 0;
-                var result = analyticManager.GetFilteredRecords(analyticQuery) as AnalyticSummaryBigResult<AnalyticRecord>;
+                var result = analyticManager.GetAllFilteredRecords(analyticQuery);
                 if (result != null)
-                    foreach (var analyticRecord in result.Data)
+                    foreach (var analyticRecord in result)
                     {
                         RoutingAnalysisFormatted routingAnalysis = new RoutingAnalysisFormatted();
 
@@ -191,19 +182,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         routingAnalysis.Profit = Convert.ToDouble(profit.Value ?? 0.0);
                         routingAnalysis.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.Profit);
 
-                        routingAnalysis.AVGCost = (routingAnalysis.Duration == 0 || routingAnalysis.CostNet == 0)
-                            ? 0
-                            : (routingAnalysis.CostNet / (double)routingAnalysis.Duration);
-                        routingAnalysis.AVGCostFormatted = routingAnalysis.AVGCost == 0
-                            ? "0"
-                            : ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGCost);
+                        MeasureValue costRate;
+                        analyticRecord.MeasureValues.TryGetValue("CostRate_DurAvg", out costRate);
+                        routingAnalysis.AVGCost = Convert.ToDouble(costRate.Value ?? 0.0);
+                        routingAnalysis.AVGCostFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGCost);
 
-                        routingAnalysis.AVGSale = (routingAnalysis.Duration == 0 || routingAnalysis.SaleNet == 0)
-                            ? 0
-                            : (routingAnalysis.SaleNet / (double)routingAnalysis.Duration);
-                        routingAnalysis.AVGSaleFormatted = routingAnalysis.AVGSale == 0
-                            ? "0"
-                            : ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGSale);
+                        MeasureValue saleRate;
+                        analyticRecord.MeasureValues.TryGetValue("SaleRate_DurAvg", out saleRate);
+                        routingAnalysis.AVGSale = Convert.ToDouble(saleRate.Value ?? 0.0);
+                        routingAnalysis.AVGSaleFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGSale);
+
+                        
 
                         if (!routingAnalysisFormatteds.ContainsKey(routingAnalysis.SaleZone + routingAnalysis.Supplier))
                             routingAnalysisFormatteds[routingAnalysis.SaleZone + routingAnalysis.Supplier] = routingAnalysis;
@@ -220,10 +209,10 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 parameters.TotalCost = TotalCost;
                 parameters.TotalProfit = TotalProfit;
 
-                result = analyticManager.GetFilteredRecords(trafficDataRetrievalInput) as AnalyticSummaryBigResult<AnalyticRecord>;
+                result = analyticManager.GetAllFilteredRecords(trafficDataRetrievalInput);
 
                 if (result != null)
-                    foreach (var analyticRecord in result.Data)
+                    foreach (var analyticRecord in result)
                     {
                         RoutingAnalysisFormatted routingAnalysis;
                         string zoneName = "", supplierName = "";
