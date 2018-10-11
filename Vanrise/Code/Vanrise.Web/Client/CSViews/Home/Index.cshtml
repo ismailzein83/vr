@@ -207,7 +207,12 @@
                 <!-- Page Content -->
                 <div id="page-content-wrapper">
                     <div class="container-fluid vr-container">
-                        <div class="col-lg-12" ng-view id="mainNgView"></div>
+                        <div class="col-lg-12" ng-view id="mainNgView" ng-if="$root.mainViewReady"></div>
+                        <div class="col-lg-12"  ng-if="$root.mainViewError">
+                            <div class="alert alert-danger" style="position:absolute;margin-top: 50px;left: 50%;transform: translate(-50%,0%);">
+                                An error has occurred while initializing , please refresh the page.
+                            </div>
+                        </div>
                     </div>
                     <!-- /#page-content-wrapper -->
                 </div>

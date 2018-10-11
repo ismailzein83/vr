@@ -537,11 +537,15 @@ angular.module('mainModule')
 app.run(function ($rootScope, $window, UISettingsService) {
     if (!UISettingsService.isUISettingsHasValue()) {
         UISettingsService.loadUISettings().then(function () {
+            $rootScope.mainViewReady = true;
             registerToGoogleAccount();
+        }).catch(function () {
+            $rootScope.mainViewError = true;
         });
     }
     else {
-        registerToGoogleAccount();
+         $rootScope.mainViewReady = true;
+         registerToGoogleAccount();
     }
     function registerToGoogleAccount() {
         var account = UISettingsService.getGoogleTrackingAccount();
