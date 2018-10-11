@@ -67,7 +67,20 @@ namespace Vanrise.GenericData.Business
         public GenericBEOnAfterSaveHandler OnAfterSaveHandler { get; set; }
         public GenericBEOnBeforeGetFilteredHandler OnBeforeGetFilteredHandler { get; set; }
         public GenericBEExtendedSettings ExtendedSettings { get; set; }
+        public List<GenericBEBulkAction> GenericBEBulkActions { get; set; }
+
      
+    }
+    public class GenericBEBulkAction
+    {
+        public Guid GenericBEBulkActionId { get; set; }
+        public string Title { get; set; }
+        public GenericBEBulkActionSettings Settings { get; set; }
+    }
+    public abstract class GenericBEBulkActionSettings
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract string RuntimeEditor { get; }
     }
     public abstract class GenericBEExtendedSettings
     {
