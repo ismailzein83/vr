@@ -130,14 +130,16 @@ namespace Vanrise.AccountBalance.Data.RDB
                 {
                     accountUsageFound = true;
                     accountUsageInfo.AccountUsageId = reader.GetLong(COL_ID);
-                    accountUsageInfo.IsOverridden = reader.GetBooleanWithNullHandling(COL_IsOverridden);
+                    //accountUsageInfo.IsOverridden = reader.GetBooleanWithNullHandling(COL_IsOverridden);
                 }
             });
 
+            AccountUsageOverrideDataManager accountUsageOverrideDataManager = new AccountUsageOverrideDataManager();
+            accountUsageInfo.IsOverridden = accountUsageOverrideDataManager.IsAccountOverriddenInPeriod(accountTypeId, transactionTypeId, accountId, periodStart, periodEnd);
+
             if (!accountUsageFound)
             {
-                AccountUsageOverrideDataManager accountUsageOverrideDataManager = new AccountUsageOverrideDataManager();
-                accountUsageInfo.IsOverridden = accountUsageOverrideDataManager.IsAccountOverriddenInPeriod(accountTypeId, transactionTypeId, accountId, periodStart, periodEnd);                
+                
 
                 queryContext = new RDBQueryContext(GetDataProvider());
                 var insertQuery = queryContext.AddInsertQuery();
@@ -151,9 +153,11 @@ namespace Vanrise.AccountBalance.Data.RDB
                 insertQuery.Column(COL_PeriodStart).Value(periodStart);
                 insertQuery.Column(COL_PeriodEnd).Value(periodEnd);
                 insertQuery.Column(COL_UsageBalance).Value(usageBalance);
-                insertQuery.Column(COL_IsOverridden).Value(accountUsageInfo.IsOverridden);
                 if (accountUsageInfo.IsOverridden)
+                {
+                    insertQuery.Column(COL_IsOverridden).Value(true);
                     insertQuery.Column(COL_OverriddenAmount).Value(0);
+                }
 
                 accountUsageInfo.AccountUsageId = queryContext.ExecuteScalar().LongValue;
             }
@@ -169,8 +173,7 @@ namespace Vanrise.AccountBalance.Data.RDB
 
             var where = selectQuery.Where();
             where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
-            if (accountIds != null && accountIds.Count > 0)
-                where.ListCondition(COL_AccountID, RDBListConditionOperator.IN, accountIds);
+            where.ListCondition(COL_AccountID, RDBListConditionOperator.IN, accountIds);
             where.EqualsCondition(COL_PeriodStart).Value(datePeriod);
             where.EqualsCondition(COL_TransactionTypeID).Value(transactionTypeId);
 
@@ -206,9 +209,9 @@ namespace Vanrise.AccountBalance.Data.RDB
 
             var where = selectQuery.Where();
             where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
-            if (accountIds != null && accountIds.Count > 0)
+            if (accountIds != null)
                 where.ListCondition(COL_AccountID, RDBListConditionOperator.IN, accountIds);
-            if (transactionTypeIds != null && transactionTypeIds.Count > 0)
+            if (transactionTypeIds != null)
                 where.ListCondition(COL_TransactionTypeID, RDBListConditionOperator.IN, transactionTypeIds);
             where.GreaterOrEqualCondition(COL_PeriodStart).Value(fromTime);
             if (toTime.HasValue)
@@ -336,6 +339,9 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public IEnumerable<AccountUsage> GetAccountUsagesByTransactionTypes(Guid accountTypeId, List<AccountUsageByTime> accountUsagesByTime, List<Guid> transactionTypeIds)
         {
+            if (accountUsagesByTime == null || accountUsagesByTime.Count == 0)
+                return null;
+
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var tempTableQuery = queryContext.CreateTempTable();
@@ -410,8 +416,10 @@ namespace Vanrise.AccountBalance.Data.RDB
             var usageBalanceExpressionContext = updateQuery.Column(COL_UsageBalance).ArithmeticExpression(RDBArithmeticExpressionOperator.Add);
             usageBalanceExpressionContext.Expression1().Column("au", COL_UsageBalance);
             usageBalanceExpressionContext.Expression2().Column("auToUpdate", "UpdateValue");
-            if(correctionProcessId.HasValue)
+            if (correctionProcessId.HasValue)
                 updateQuery.Column(COL_CorrectionProcessID).Value(correctionProcessId.Value);
+            else
+                updateQuery.Column(COL_CorrectionProcessID).Null();
         }
     }
 }

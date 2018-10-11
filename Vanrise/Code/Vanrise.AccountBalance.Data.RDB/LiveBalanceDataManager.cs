@@ -432,9 +432,12 @@ namespace Vanrise.AccountBalance.Data.RDB
             selectQuery.From(TABLE_NAME, "lb", 1);
             selectQuery.SelectColumns().Column(COL_ID);
 
-            var whereOrCondition = selectQuery.Where();
-            AddLiveBalanceToAlertCondition(whereOrCondition, "lb");
-            AddLiveBalanceToClearAlertCondition(whereOrCondition, "lb");
+            var where = selectQuery.Where();
+            where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
+            where.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
+            var orCondition = where.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            AddLiveBalanceToAlertCondition(orCondition, "lb");
+            AddLiveBalanceToClearAlertCondition(orCondition, "lb");
 
             return queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
@@ -556,7 +559,8 @@ namespace Vanrise.AccountBalance.Data.RDB
         }
         private void AddLiveBalanceToClearAlertCondition(RDBConditionContext conditionContext, string liveBalanceAlias)
         {
-            conditionContext.GreaterThanCondition(COL_CurrentBalance).Column(liveBalanceAlias, COL_LastExecutedActionThreshold);
+            var andCondition = conditionContext.ChildConditionGroup();
+            andCondition.GreaterThanCondition(COL_CurrentBalance).Column(liveBalanceAlias, COL_LastExecutedActionThreshold);
         }
 
     }

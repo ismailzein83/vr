@@ -152,6 +152,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
             AddBillingTransactionsToUpdateBalanceCondition(where);
 
+            selectQuery.Sort().ByColumn(COL_AccountID, RDBSortDirection.ASC);
             queryContext.ExecuteReader((reader) =>
             {
                 while (reader.Read())
@@ -198,6 +199,8 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByTransactionTypes(Guid accountTypeId, List<BillingTransactionByTime> billingTransactionsByTime, List<Guid> transactionTypeIds)
         {
+            if (billingTransactionsByTime == null || billingTransactionsByTime.Count == 0)
+                return null;
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var btAccountTimesTempTableQuery = queryContext.CreateTempTable();
@@ -267,7 +270,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
                 where.ListCondition(COL_TransactionTypeID, RDBListConditionOperator.IN, transactionTypeIds);
             where.GreaterOrEqualCondition(COL_TransactionTime).Value(fromDate);
-            if (!toDate.HasValue)
+            if (toDate.HasValue)
                 where.LessOrEqualCondition(COL_TransactionTime).Value(toDate.Value);
 
             return queryContext.GetItems(BillingTransactionMapper);
@@ -303,6 +306,20 @@ namespace Vanrise.AccountBalance.Data.RDB
             AddBillingTransactionsToUpdateBalanceCondition(where);
 
             return queryContext.ExecuteScalar().NullableLongValue.HasValue; 
+        }
+
+        public BillingTransaction GetBillingTransactionById(long billingTransactionId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "bt", null, true);
+            selectQuery.SelectColumns().AllTableColumns("bt");
+
+            var where = selectQuery.Where();
+            where.EqualsCondition(COL_ID).Value(billingTransactionId);
+            where.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
+
+            return queryContext.GetItem(BillingTransactionMapper);
         }
 
         #endregion
@@ -371,9 +388,5 @@ namespace Vanrise.AccountBalance.Data.RDB
             where.EqualsCondition(COL_CreatedByInvoiceID).Value(invoiceId);
         }
 
-        public BillingTransaction GetBillingTransactionById(long billingTransactionId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
