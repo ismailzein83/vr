@@ -26,11 +26,16 @@ namespace Vanrise.Common.Data.SQL
             return GetItemsSP("[common].[sp_CacheRefreshHandle_GetAll]", CacheRefreshHandleMapper);
         }
 
+        public Entities.CacheRefreshHandle GetByCacheTypeName(string cacheTypeName)
+        {
+            return GetItemSP("[common].[sp_CacheRefreshHandle_GetByCacheTypeName]", CacheRefreshHandleMapper, cacheTypeName);
+        }
+
         public bool AreUpdateHandlesEqual(ref object updateHandle, object newUpdateHandle)
         {
             return !base.IsDataUpdated(ref updateHandle, newUpdateHandle);
         }
-
+        
         public void UpdateCacheTypeHandle(string cacheTypeName)
         {
             ExecuteNonQuerySP("[common].[sp_CacheRefreshHandle_Update]", cacheTypeName);
@@ -41,7 +46,7 @@ namespace Vanrise.Common.Data.SQL
             return new CacheRefreshHandle
             {
                 TypeName = reader["CacheTypeName"] as string,
-                LastUpdateTime =  GetReaderValue<DateTime?>(reader, "LastUpdateTime"),
+                LastUpdateTime = GetReaderValue<DateTime?>(reader, "LastUpdateTime"),
                 LastUpdateInfo = (byte[])reader["timestamp"]
             };
         }

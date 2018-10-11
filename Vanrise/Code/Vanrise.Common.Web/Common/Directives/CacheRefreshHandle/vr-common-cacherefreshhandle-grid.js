@@ -27,25 +27,25 @@ function (UtilsService, VRNotificationService, VRCommon_CacheRefreshhandleAPISer
             $scope.cacheRefreshHandles = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
 
                 function getDirectiveAPI() {
-                   
+
                     var directiveAPI = {};
 
-                    directiveAPI.loadGrid = function (query) {                        
-                           
+                    directiveAPI.loadGrid = function (query) {
+
                         return gridAPI.retrieveData(query);
                     };
-                   
+
                     return directiveAPI;
                 }
             };
-            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {                
+            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_CacheRefreshhandleAPIService.GetFilteredCacheRefreshHandles(dataRetrievalInput)
-                    .then(function (response) {                        
+                    .then(function (response) {
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -55,7 +55,7 @@ function (UtilsService, VRNotificationService, VRCommon_CacheRefreshhandleAPISer
             defineMenuActions();
         }
 
-        
+
 
         function defineMenuActions() {
             $scope.gridMenuActions = [{
@@ -66,8 +66,16 @@ function (UtilsService, VRNotificationService, VRCommon_CacheRefreshhandleAPISer
         }
 
         function setCacheExpired(dataItem) {
-            VRCommon_CacheRefreshhandleAPIService.SetCacheExpired(dataItem.TypeName).then(function () {
-                VRNotificationService.showSuccess(dataItem.TypeName + " Cache Expired. ");
+            gridAPI.showLoader();
+            var onItemUpdated = function (updatedObject) {                
+                gridAPI.itemUpdated(updatedObject);
+            };
+            return VRCommon_CacheRefreshhandleAPIService.SetCacheExpired(dataItem.TypeName).then(function (response) {               
+                if (VRNotificationService.notifyOnItemAdded("Cache Refresh Handle", response)) {
+                    onItemUpdated(response.UpdatedObject);                    
+                }
+            }).finally(function () {
+                gridAPI.hideLoader();
             });
         }
 

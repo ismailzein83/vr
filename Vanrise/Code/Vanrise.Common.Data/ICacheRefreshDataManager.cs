@@ -14,5 +14,7 @@ namespace Vanrise.Common.Data
         bool AreUpdateHandlesEqual(ref object updateHandle, object newUpdateHandle);
 
         void UpdateCacheTypeHandle(string cacheTypeName);
+
+        CacheRefreshHandle GetByCacheTypeName(string cacheTypeName);
     }
 }

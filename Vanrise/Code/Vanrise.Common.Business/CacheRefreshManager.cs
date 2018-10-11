@@ -17,6 +17,16 @@ namespace Vanrise.Common.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCacheHandles.ToBigResult(input, filterExpression, CacheRefreshHandleDetailMapper));
         }
 
+        public Vanrise.Entities.UpdateOperationOutput<CacheRefreshHandleDetail> SetCacheExpired(string cacheTypeName)
+        {
+            TriggerCacheExpiration(cacheTypeName);
+            Vanrise.Entities.UpdateOperationOutput<CacheRefreshHandleDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CacheRefreshHandleDetail>();
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            var record = s_dataManager.GetByCacheTypeName(cacheTypeName);
+            updateOperationOutput.UpdatedObject = CacheRefreshHandleDetailMapper(record);            
+            return updateOperationOutput;
+        }
+
         static ICacheRefreshDataManager s_dataManager = CommonDataManagerFactory.GetDataManager<ICacheRefreshDataManager>();
         public bool ShouldRefreshCacheManager(string cacheTypeName, ref object updateHandle)
         {

@@ -24,10 +24,10 @@ namespace Vanrise.Common.Web.Controllers
 
         [HttpGet]
         [Route("SetCacheExpired")]
-        public void SetCacheExpired(string typeName)
+        public Vanrise.Entities.UpdateOperationOutput<CacheRefreshHandleDetail> SetCacheExpired(string typeName)
         {
             CacheRefreshManager manager = new CacheRefreshManager();
-            manager.TriggerCacheExpiration(typeName);
+            return manager.SetCacheExpired(typeName);
         }
     }
 }
