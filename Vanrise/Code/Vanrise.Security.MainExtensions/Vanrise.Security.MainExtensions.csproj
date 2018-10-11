@@ -48,6 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataRecordFieldFormulas\IsDefaultSecurityProviderFieldFormula.cs" />
     <Compile Include="GenericBEActions\SecurityProviderStatusAction.cs" />
     <Compile Include="GenericBEOnBeforeInsertHandlers\SecurityProviderOnBeforeInsertHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

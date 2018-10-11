@@ -133,6 +133,8 @@
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpage-grid.js" />
     <Content Include="Security\Directives\DynamicPage\vr-sec-dynamicpageviewer.js" />
     <Content Include="Security\Directives\Email\vr-sec-email-remoteselector.js" />
+    <Content Include="Security\Directives\MainExtensions\DataRecordFieldFormulas\Templates\IsDefaultSecurityProviderFieldFormulaTemplate.html" />
+    <Content Include="Security\Directives\MainExtensions\DataRecordFieldFormulas\vr-sec-datarecordtypefields-formula-isdefaultsecurityprovider.js" />
     <Content Include="Security\Directives\MainExtensions\Group\vr-sec-group-static.js" />
     <Content Include="Security\Directives\MainExtensions\SecurityProvider\CustomObject\vr-sec-providersettings-customobjectsettings.js" />
     <Content Include="Security\Directives\MainExtensions\SecurityProvider\FindUser\Templates\RemoteProviderTemplate.html" />

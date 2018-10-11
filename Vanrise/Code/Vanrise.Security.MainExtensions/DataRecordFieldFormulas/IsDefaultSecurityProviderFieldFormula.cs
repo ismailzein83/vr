@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 using Vanrise.Security.Business;
 
-namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
+namespace Vanrise.Security.MainExtensions.DataRecordFieldFormulas
 {
     public class IsDefaultSecurityProviderFieldFormula : DataRecordFieldFormula
     {

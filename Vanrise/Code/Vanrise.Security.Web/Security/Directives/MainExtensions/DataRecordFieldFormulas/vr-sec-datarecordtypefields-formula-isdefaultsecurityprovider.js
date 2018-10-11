@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataDatarecordtypefieldsFormulaIsdefaultsecurityprovider', ['UtilsService', 
+app.directive('vrSecDatarecordtypefieldsFormulaIsdefaultsecurityprovider', ['UtilsService',
     function (UtilsService) {
 
         var directiveDefinitionObject = {
@@ -23,7 +23,7 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaIsdefaultsecurityprovider
                 };
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/VR_GenericData/Directives/MainExtensions/DataRecordFieldFormulas/Templates/IsDefaultSecurityProviderFieldFormulaTemplate.html';
+                return '/Client/Modules/Security/Directives/MainExtensions/DataRecordFieldFormulas/Templates/IsDefaultSecurityProviderFieldFormulaTemplate.html';
             }
         };
 
@@ -51,7 +51,7 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaIsdefaultsecurityprovider
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas.IsDefaultSecurityProviderFieldFormula, Vanrise.GenericData.MainExtensions",
+                        $type: "Vanrise.Security.MainExtensions.DataRecordFieldFormulas.IsDefaultSecurityProviderFieldFormula, Vanrise.Security.MainExtensions",
                         FieldName: $scope.scopeModel.fieldName,
                     };
                 };
