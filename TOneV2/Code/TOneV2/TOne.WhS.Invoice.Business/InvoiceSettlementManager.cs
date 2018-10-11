@@ -371,7 +371,7 @@ namespace TOne.WhS.Invoice.Business
                     }
                     var selectedInvoiceIds = availableCustomerInvoices.MapRecords(x => new SelectedInvoiceItem { InvoiceId = x.InvoiceId, CurrencyId = x.CurrencyId }, x => x.IsSelected).ToList();
 
-                    if (!TryGetCustomerAmountByCurrency(invoiceTypeId, customerInvoices,customerInvoiceItems, selectedInvoiceIds, fromDate, toDate, normalPrecisionValue, getAllCurrencies, out customerAmountByCurrency, out  errorMessage))
+                    if (!TryGetCustomerAmountByCurrency(invoiceTypeId, partnerCustomerInvoices, customerInvoiceItems, selectedInvoiceIds, fromDate, toDate, normalPrecisionValue, getAllCurrencies, out customerAmountByCurrency, out  errorMessage))
                     {
                         return null;
                     }
@@ -381,11 +381,11 @@ namespace TOne.WhS.Invoice.Business
             return availableCustomerInvoices;
         }
 
-        private bool TryGetCustomerAmountByCurrency(Guid invoiceTypeId, List<Vanrise.Invoice.Entities.Invoice> customerInvoices,List<InvoiceItem> customerInvoiceItems, List<SelectedInvoiceItem> selectedInvoices, DateTime fromDate, DateTime toDate, int normalPrecisionValue, bool getAllCurrencies, out Dictionary<string, decimal> customerAmountByCurrency, out string errorMessage)
+        private bool TryGetCustomerAmountByCurrency(Guid invoiceTypeId, IEnumerable<Vanrise.Invoice.Entities.Invoice> customerInvoices,List<InvoiceItem> customerInvoiceItems, List<SelectedInvoiceItem> selectedInvoices, DateTime fromDate, DateTime toDate, int normalPrecisionValue, bool getAllCurrencies, out Dictionary<string, decimal> customerAmountByCurrency, out string errorMessage)
         {
             errorMessage = null;
             customerAmountByCurrency = null;
-            if (customerInvoices != null && customerInvoices.Count > 0)
+            if (customerInvoices != null && customerInvoices.Count() > 0)
             {
                 if (!ValidateInvoicesDates(customerInvoices, fromDate, toDate, out errorMessage))
                     return false;
@@ -458,7 +458,7 @@ namespace TOne.WhS.Invoice.Business
                     }
 
                     Dictionary<string, decimal> amountsByCurrency = null;
-                    if (!TryGetSupplierAmountByCurrency(invoiceTypeId, supplierInvoices, supplierInvoiceItems, selectedInvoiceIds, fromDate, toDate, normalPrecisionValue, getAllCurrencies, out amountsByCurrency, out  errorMessage))
+                    if (!TryGetSupplierAmountByCurrency(invoiceTypeId, partnerSupplierInvoices, supplierInvoiceItems, selectedInvoiceIds, fromDate, toDate, normalPrecisionValue, getAllCurrencies, out amountsByCurrency, out  errorMessage))
                     {
                         return null;
                     }
@@ -482,11 +482,11 @@ namespace TOne.WhS.Invoice.Business
             return availableSupplierInvoices;
         }
 
-        private bool TryGetSupplierAmountByCurrency(Guid invoiceTypeId, List<Vanrise.Invoice.Entities.Invoice> supplierInvoices,List<InvoiceItem> supplierInvoiceItems, List<SelectedInvoiceItem> selectedInvoices, DateTime fromDate, DateTime toDate, int normalPrecisionValue, bool getAllCurrencies, out Dictionary<string, decimal> supplierAmountByCurrency, out string errorMessage)
+        private bool TryGetSupplierAmountByCurrency(Guid invoiceTypeId, IEnumerable<Vanrise.Invoice.Entities.Invoice> supplierInvoices,List<InvoiceItem> supplierInvoiceItems, List<SelectedInvoiceItem> selectedInvoices, DateTime fromDate, DateTime toDate, int normalPrecisionValue, bool getAllCurrencies, out Dictionary<string, decimal> supplierAmountByCurrency, out string errorMessage)
         {
             errorMessage = null;
             supplierAmountByCurrency = null;
-            if (supplierInvoices != null && supplierInvoices.Count > 0)
+            if (supplierInvoices != null && supplierInvoices.Count() > 0)
             {
                 if (!ValidateInvoicesDates(supplierInvoices, fromDate, toDate, out errorMessage))
                     return false;
