@@ -77,35 +77,19 @@ app.directive('npIvswitchRoutetableRouteGrid', ['NP_IVSwitch_RouteTableRouteAPIS
 
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return NP_IVSwitch_RouteTableRouteAPIService.GetFilteredRouteTableRoutes(dataRetrievalInput).then(function (response) {
-                    var updatedResponse = {};
-                    updatedResponse.$type = response.$type;
-                    updatedResponse.ResultKey = response.ResultKey;
-                    updatedResponse.TotalCount = response.TotalCount;
-                    updatedResponse.Data = [];
-                    if (response != undefined && response.Data != undefined && response.Data.length > 0)
+                    if (response != undefined && response.Data != undefined && response.Data.length > 0) {
                         for (var i = 0; i < response.Data.length; i++) {
-                            var item = response.Data[i];
-                            if ($scope.scopeModel.isANumber == true)
-                            var dataItem = {
-                                RouteOptionsDetailId: "RouteOptionsDetailId" + (i + 1),
-                                Destination: item.Destination,
-                                TechPrefix: item.TechPrefix,
-                                Options: item.RouteOptionsDetails,
-                                Description: 'Origination Number'
-                            };
-
-                            else
-                                var dataItem = {
-                                    RouteOptionsDetailId: "RouteOptionsDetailId" + (i + 1),
-                                    Destination: item.Destination,
-                                    Options: item.RouteOptionsDetails,
-                                    Description: 'Destination Number'
-                                };
-
-                            updatedResponse.Data.push(dataItem);
+                            if ($scope.scopeModel.isANumber == true) {
+                                response.Data[i].RouteOptionsDetailId = "RouteOptionsDetailId" + (i + 1);
+                                response.Data[i].Description = 'Origination Number';
+                            }
+                            else {
+                                response.Data[i].RouteOptionsDetailId = "RouteOptionsDetailId" + (i + 1),
+                                response.Data[i].Description = 'Destination Number';
+                            }
                         }
-                    onResponseReady(updatedResponse);
-
+                    }
+                    onResponseReady(response);
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });

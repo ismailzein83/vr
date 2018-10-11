@@ -21,7 +21,7 @@ namespace NP.IVSwitch.Web.Controllers
         [Route("GetFilteredRouteTables")]
         public object GetFilteredRouteTables(Vanrise.Entities.DataRetrievalInput<RouteTableQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredRouteTables(input));
+            return GetWebResponse(input, _manager.GetFilteredRouteTables(input),"Route Tables");
         }
 
         [HttpPost]

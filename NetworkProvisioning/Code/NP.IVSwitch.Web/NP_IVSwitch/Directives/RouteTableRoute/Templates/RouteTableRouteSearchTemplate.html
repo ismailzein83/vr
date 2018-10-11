@@ -2,10 +2,10 @@
     <vr-columns colnum="2" ng-if="scopeModel.isANumber">
         <vr-textbox value="scopeModel.aNumber" label="ANumber"></vr-textbox>
     </vr-columns>
-    <vr-columns colnum="2" ng-if="scopeModel.isANumber || scopeModel.isWhitelist">
+    <vr-columns colnum="2" ng-if=" scopeModel.isWhitelist">
         <vr-textbox value="scopeModel.whiteliste" label="Whitelist"> ></vr-textbox>
     </vr-columns>
-    <vr-columns colnum="2" ng-if="scopeModel.isBNumber">
+    <vr-columns colnum="2" ng-if="scopeModel.isANumber ||scopeModel.isBNumber">
         <vr-textbox value="scopeModel.bNumber" label="BNumber"> ></vr-textbox>
 
     </vr-columns>

@@ -45,14 +45,13 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Update(RouteTableInput routeTableInput)
         {
             String cmdText = @"UPDATE route_tables
-	                             SET route_table_name = @route_table_name, description = @description,p_score=@p_score 
+	                             SET route_table_name = @route_table_name, description = @description
                                  WHERE  route_table_id = @route_table_id and  NOT EXISTS(SELECT 1 FROM  route_tables WHERE  route_table_id != @route_table_id and route_table_name = @route_table_name);";
 
             int recordsEffected = ExecuteNonQueryText(cmdText, cmd =>
             {
                 cmd.Parameters.AddWithValue("@route_table_name", routeTableInput.RouteTable.Name);
                 cmd.Parameters.AddWithValue("@description", routeTableInput.RouteTable.Description);
-                cmd.Parameters.AddWithValue("@p_score", routeTableInput.RouteTable.PScore);
                 cmd.Parameters.AddWithValue("@route_table_id", routeTableInput.RouteTable.RouteTableId);
 
             }
@@ -73,8 +72,6 @@ namespace NP.IVSwitch.Data.Postgres
             var routeTableId = reader["route_table_id"];
             var name = reader["route_table_name"];
             var description = reader["description"];
-            var pScore = reader["p_score"];
-
             if (routeTableId != DBNull.Value)
             {
                 routeTable.RouteTableId = (int)routeTableId;
@@ -87,10 +84,7 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 routeTable.Description = (string)description;
             }
-            if (pScore != DBNull.Value)
-            {
-                routeTable.PScore = (int?)pScore;
-            }
+
 
             return routeTable;
         }

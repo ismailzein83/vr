@@ -426,7 +426,6 @@ namespace NP.IVSwitch.Business
                 RouteTableId = routeTable.RouteTableId,
                 Name = routeTable.Name,
                 Description = routeTable.Description,
-                PScore = routeTable.PScore
             };
         }
 

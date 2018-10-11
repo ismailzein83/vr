@@ -119,7 +119,7 @@ namespace NP.IVSwitch.Data.Postgres
             switch (routeTableViewType)
             {
                 case RouteTableViewType.ANumber:
-                    search = string.Format("((destination is NULL or destination Like '%{0}%') {1} and (tech_prefix is NULL or tech_prefix LIKE '%{2}%'))", aNumber, routeIds == null ? "" : string.Format(" and route_id in({0})", string.Join<int>(",", routeIds)), whitelist);
+                    search = string.Format("((destination is NULL or destination Like '%{0}%') {1} and (tech_prefix is NULL or tech_prefix LIKE '%{2}%'))", aNumber, routeIds == null ? "" : string.Format(" and route_id in({0})", string.Join<int>(",", routeIds)), bNumber);
                     break;
                 case RouteTableViewType.Whitelist:
                     search = string.Format("((destination is NULL or destination Like '%{0}%') {1})", whitelist, routeIds == null ? "" : string.Format(" and route_id in({0})", string.Join<int>(",", routeIds)));

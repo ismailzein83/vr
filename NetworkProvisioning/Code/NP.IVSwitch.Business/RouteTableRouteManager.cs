@@ -12,6 +12,7 @@ using Vanrise.Rules;
 using Vanrise.Caching;
 using Vanrise.Common.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using NP.IVSwitch.Entities;
 
 namespace NP.IVSwitch.Business
 {
@@ -56,7 +57,7 @@ namespace NP.IVSwitch.Business
 
                     foreach (var code in codes)
                     {
-                        if(code.Length>20)
+                        if (code.Length > 20)
                         {
                             insertOperationOutput.Message = "The length of code must be less than 20";
                             return insertOperationOutput;
@@ -376,14 +377,14 @@ namespace NP.IVSwitch.Business
             return deleteOperationOutput;
 
         }
-         public bool CheckIfCodesExist(RouteTableRoutesToAdd routeTableRouteItems)
+        public bool CheckIfCodesExist(RouteTableRoutesToAdd routeTableRouteItems)
         {
             IRouteTableRouteDataManager routeTableRouteDataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteTableRouteDataManager>();
             Helper.SetSwitchConfig(routeTableRouteDataManager);
             List<string> codes = routeTableRouteItems.CodeListResolver.Settings.GetCodeList(new CodeListResolverContext());
-             if(codes!=null)
+             if (codes != null)
             return routeTableRouteDataManager.CheckIfCodesExist(codes, routeTableRouteItems.RouteTableId);
-             return false;
+            return false;
         }
         #endregion
 
@@ -566,21 +567,21 @@ namespace NP.IVSwitch.Business
 
                         }
                         else
-                        if (routeOption.Huntstop == 1 && !firstBackup)
-                        {
-                            routeTableRouteOptionDetails.BackupsOptionsDetails.Add(new BackupRouteOptionDetail
+                            if (routeOption.Huntstop == 1 && !firstBackup)
                             {
+                                routeTableRouteOptionDetails.BackupsOptionsDetails.Add(new BackupRouteOptionDetail
+                                {
 
 
-                                SupplierName = _manager.GetRouteCarrierAccountName(routeOption.RouteId),
-                                RouteName = _manager.GetRouteDescription(routeOption.RouteId),
-                                Percentage = routeOption.Percentage,
-                                Preference = routeOption.Preference,
+                                    SupplierName = _manager.GetRouteCarrierAccountName(routeOption.RouteId),
+                                    RouteName = _manager.GetRouteDescription(routeOption.RouteId),
+                                    Percentage = routeOption.Percentage,
+                                    Preference = routeOption.Preference,
 
-                            });
-                            routeTableRouteDetail.RouteOptionsDetails.Add(routeTableRouteOptionDetails);
-                            firstBackup = true;
-                        }
+                                });
+                                routeTableRouteDetail.RouteOptionsDetails.Add(routeTableRouteOptionDetails);
+                                firstBackup = true;
+                            }
 
 
 
@@ -607,8 +608,109 @@ namespace NP.IVSwitch.Business
                         return null;
                     input.Query.RouteIds = routeIds;
                 }
-                return routeTableDataManager.GetRouteTablesRoutes(input.Query.RouteTableViewType,input.Query.RouteTableId, input.Query.Limit, input.Query.ANumber, input.Query.BNumber,input.Query.Whitelist, input.Query.RouteIds);
+                return routeTableDataManager.GetRouteTablesRoutes(input.Query.RouteTableViewType, input.Query.RouteTableId, input.Query.Limit, input.Query.ANumber, input.Query.BNumber, input.Query.Whitelist, input.Query.RouteIds);
             }
+
+            protected override ResultProcessingHandler<RouteTableRouteDetail> GetResultProcessingHandler(DataRetrievalInput<RouteTableRouteQuery> input, BigResult<RouteTableRouteDetail> bigResult)
+            {
+                return new ResultProcessingHandler<RouteTableRouteDetail>
+                {
+                    ExportExcelHandler = new RouteTableRouteDetailExportExcelHandler()
+                };
+            }
+            private class RouteTableRouteDetailExportExcelHandler : ExcelExportHandler<RouteTableRouteDetail>
+            {
+                public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RouteTableRouteDetail> context)
+                {
+                    var dataRetrieval = context.Input.CastWithValidate<DataRetrievalInput<RouteTableRouteQuery>>("context.Input");
+                    var query = dataRetrieval.Query;
+
+                    var sheet = new ExportExcelSheet()
+                    {
+                        SheetName = "Route Table Routes",
+                        Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                    };
+                    switch (query.RouteTableViewType)
+                    {
+                        case RouteTableViewType.ANumber:
+                            sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ANumber" });
+                            sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BNumber" });
+                            sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Options" });
+                            break;
+                        case RouteTableViewType.BNumber:
+                            sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BNumber" });
+                            sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Options" });
+                            break;
+                        case RouteTableViewType.Whitelist:
+                            sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Whitelist" });
+                            sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Options" });
+                            break;
+
+
+
+                    }
+
+
+
+                    sheet.Rows = new List<ExportExcelRow>();
+                    if (context.BigResult != null && context.BigResult.Data != null)
+                    {
+                        foreach (var record in context.BigResult.Data)
+                        {
+                            if (record != null)
+                            {
+                                var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                                StringBuilder options = new StringBuilder();
+                                foreach (var option in record.RouteOptionsDetails)
+                                {
+                                    options.Append(option.SupplierName);
+                                    options.Append(' ', 5);
+                                    options.Append(option.RouteName);
+                                    if(option.BackupsOptionsDetails!=null && option.BackupsOptionsDetails.Count>0)
+                                    {
+                                        options.Append("<");
+                                        foreach(var backup in option.BackupsOptionsDetails)
+                                        {
+                                            options.Append(backup.SupplierName);
+                                            options.Append(' ',5);
+                                            options.Append(backup.RouteName);
+                                            options.Append(",");
+
+                                        }
+                                        options.Append(">");
+                                    }
+                                    options.Append(' ', 10);
+                                        
+
+                                }
+                                switch (query.RouteTableViewType)
+                                {
+                                    case RouteTableViewType.ANumber:
+                                        row.Cells.Add(new ExportExcelCell() { Value = record.Destination });
+                                        row.Cells.Add(new ExportExcelCell() { Value = record.TechPrefix });
+                                        row.Cells.Add(new ExportExcelCell() { Value = options.ToString() });
+                                        break;
+                                    case RouteTableViewType.BNumber:
+                                        row.Cells.Add(new ExportExcelCell() { Value = record.Destination });
+                                        row.Cells.Add(new ExportExcelCell() { Value = options.ToString() });
+                                        break;
+                                    case RouteTableViewType.Whitelist:
+                                        row.Cells.Add(new ExportExcelCell() { Value = record.Destination });
+                                        row.Cells.Add(new ExportExcelCell() { Value = options.ToString() });
+                                        break;
+
+
+
+                                }
+                                sheet.Rows.Add(row);
+                            }
+                        }
+                    }
+
+                    context.MainSheet = sheet;
+                }
+            }
+
         }
 
         #endregion
