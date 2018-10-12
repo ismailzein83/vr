@@ -29,7 +29,8 @@ namespace Vanrise.HelperTools
           {SqlDataType.UniqueIdentifier,"UniqueIdentifier"},
           {SqlDataType.Bit,"Boolean"},
           {SqlDataType.VarBinary,"VarBinary"},
-          {SqlDataType.VarBinaryMax,"VarBinary"}
+          {SqlDataType.VarBinaryMax,"VarBinary"},
+          {SqlDataType.TinyInt, "Int"}
         };
         public RDBGenerator()
         {
