@@ -202,12 +202,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         MeasureValue costRate;
                         analyticRecord.MeasureValues.TryGetValue("CostRate_DurAvg", out costRate);
                         routingAnalysis.AVGCost = Convert.ToDouble(costRate.Value ?? 0.0);
-                        routingAnalysis.AVGCostFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGCost);
+                        routingAnalysis.AVGCostFormatted = ReportHelpers.FormatLongNumberDigit(routingAnalysis.AVGCost);
 
                         MeasureValue saleRate;
                         analyticRecord.MeasureValues.TryGetValue("SaleRate_DurAvg", out saleRate);
                         routingAnalysis.AVGSale = Convert.ToDouble(saleRate.Value ?? 0.0);
-                        routingAnalysis.AVGSaleFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.AVGSale);
+                        routingAnalysis.AVGSaleFormatted = ReportHelpers.FormatLongNumberDigit(routingAnalysis.AVGSale);
 
                         
 
