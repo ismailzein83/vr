@@ -13,7 +13,6 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
         {
             get { return new Guid("A1D0F08B-B8F7-4B9C-9C83-49DABD2A68D5"); }
         }
-        public int Day { get; set; }
         public override void Execute(IRecurringChargePeriodSettingsContext context)
         {
             List<RecurringChargePeriodOutput> periodsList = new List<RecurringChargePeriodOutput>();
@@ -21,13 +20,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
             {
                 if (context.FromDate.Month == context.ToDate.Month)
                 {
-                    if (this.Day >= context.FromDate.Day && this.Day <= context.ToDate.Day)
+                    if (context.FromDate.Day == 1)
                     {
-                        int daysInMonth = DateTime.DaysInMonth(context.FromDate.Year, context.FromDate.Month);
-                        int day = this.Day;
-                        if (day > daysInMonth)
-                            day = daysInMonth;
-                        var fromDate = new DateTime(context.FromDate.Year, context.FromDate.Month, day);
+                        var fromDate = new DateTime(context.FromDate.Year, context.FromDate.Month, 1);
                         var toDate = fromDate.AddMonths(1).AddDays(-1);
                         periodsList.Add(new RecurringChargePeriodOutput
                         {
@@ -38,25 +33,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                 }
                 else
                 {
-                    for (var i = context.FromDate.Month; i < context.ToDate.Month; i++)
+                    for (var i = context.FromDate.Month; i <= context.ToDate.Month; i++)
                     {
-                        if(i==context.FromDate.Month && this.Day < context.FromDate.Day)
+                        if (context.FromDate.Month == i && context.FromDate.Day != 1)
                         {
                             continue;
                         }
-                        int daysInMonth = DateTime.DaysInMonth(context.FromDate.Year, i);
-                        int day = this.Day;
-                        if (day > daysInMonth)
-                            day = daysInMonth;
-                        var fromDate = new DateTime(context.FromDate.Year, i, day);
+                        var fromDate = new DateTime(context.FromDate.Year, i, 1);
                         var toDate = fromDate.AddMonths(1).AddDays(-1);
-                        if (i == context.ToDate.Month - 1)
-                        {
-                            if (toDate.Month==context.ToDate.Month && toDate.Day > context.ToDate.Day)
-                            {
-                                break;
-                            }
-                        }
                         periodsList.Add(new RecurringChargePeriodOutput
                         {
                             From = fromDate,
@@ -73,15 +57,11 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                     if (currentYear == context.FromDate.Year)
                     {
                         int currentMonth = context.FromDate.Month;
-                        if (this.Day < context.FromDate.Day)
+                        if (context.FromDate.Day != 1)
                             currentMonth++;
                         while (currentMonth <= 12)
                         {
-                            int daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
-                            int day = this.Day;
-                            if (day > daysInMonth)
-                                day = daysInMonth;
-                            var fromDate = new DateTime(currentYear, currentMonth, day);
+                            var fromDate = new DateTime(currentYear, currentMonth, 1);
                             var toDate = fromDate.AddMonths(1).AddDays(-1);
                             periodsList.Add(new RecurringChargePeriodOutput
                             {
@@ -94,25 +74,10 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                     else if (currentYear == context.ToDate.Year)
                     {
                         int currentMonth = 1;
-                        int lastMonth = context.ToDate.Month;
-                        if (this.Day > context.ToDate.Day)
-                            lastMonth--;
-                        while (currentMonth < lastMonth)
+                        while (currentMonth <= context.ToDate.Month)
                         {
-                            int daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
-                            int day = this.Day;
-                            if (day > daysInMonth)
-                                day = daysInMonth;
-
-                            var fromDate = new DateTime(currentYear, currentMonth, day);
+                            var fromDate = new DateTime(currentYear, currentMonth, 1);
                             var toDate = fromDate.AddMonths(1).AddDays(-1);
-                            if (currentMonth == lastMonth - 1)
-                            {
-                                if (toDate.Month==context.ToDate.Month && toDate.Day > context.ToDate.Day)
-                                {
-                                    break;
-                                }
-                            }
                             periodsList.Add(new RecurringChargePeriodOutput
                             {
                                 From = fromDate,
@@ -126,12 +91,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                         int currentMonth = 1;
                         while (currentMonth <= 12)
                         {
-                            int daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
-                            int day = this.Day;
-                            if (day > daysInMonth)
-                                day = daysInMonth;
-
-                            var fromDate = new DateTime(currentYear, currentMonth, day);
+                            var fromDate = new DateTime(currentYear, currentMonth, 1);
                             var toDate = fromDate.AddMonths(1).AddDays(-1);
                             periodsList.Add(new RecurringChargePeriodOutput
                             {

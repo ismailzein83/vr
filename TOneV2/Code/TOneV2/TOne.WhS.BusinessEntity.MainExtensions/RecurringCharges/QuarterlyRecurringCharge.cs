@@ -21,31 +21,31 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
             {
                 if (context.FromDate.Month == context.ToDate.Month)
                 {
-                    var fromDate = new DateTime(context.FromDate.Year, context.FromDate.Month, 1);
-                    var toDate = fromDate.AddMonths(3).AddDays(-1);
-                    periodsList.Add(new RecurringChargePeriodOutput
+                    if (context.FromDate.Day == 1)
                     {
-                        From = fromDate,
-                        To = toDate,
-                    });
+                        var fromDate = new DateTime(context.FromDate.Year, context.FromDate.Month, 1);
+                        var toDate = fromDate.AddMonths(3).AddDays(-1);
+                        periodsList.Add(new RecurringChargePeriodOutput
+                        {
+                            From = fromDate,
+                            To = toDate,
+                        });
+                    }
                 }
                 else
                 {
-                    for (var i = context.FromDate.Month; i <= context.ToDate.Month; i+=3)
+                    for (var i = context.FromDate.Month; i <= context.ToDate.Month; i += 3)
                     {
-                        if (i == context.FromDate.Month && 1 < context.FromDate.Day)
+                        if (context.FromDate.Month == i && context.FromDate.Day != 1)
                         {
                             continue;
                         }
                         var fromDate = new DateTime(context.FromDate.Year, i, 1);
-                        var toDate = fromDate.AddMonths(3).AddDays(-1);
-                        if (i == context.ToDate.Month)
+                        if (fromDate > context.ToDate)
                         {
-                            if (toDate.Month == context.ToDate.Month && toDate.Day > context.ToDate.Day)
-                            {
-                                break;
-                            }
+                            break;
                         }
+                        var toDate = fromDate.AddMonths(3).AddDays(-1);
                         periodsList.Add(new RecurringChargePeriodOutput
                         {
                             From = fromDate,
@@ -62,50 +62,57 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                     if (currentYear == context.FromDate.Year)
                     {
                         int currentMonth = context.FromDate.Month;
-                        if (1 < context.FromDate.Day)
+                        if (context.FromDate.Day != 1)
                             currentMonth += 3;
-
                         while (currentMonth <= 12)
                         {
                             var fromDate = new DateTime(currentYear, currentMonth, 1);
+                            if (fromDate > context.ToDate)
+                            {
+                                break;
+                            }
                             var toDate = fromDate.AddMonths(3).AddDays(-1);
                             periodsList.Add(new RecurringChargePeriodOutput
                             {
                                 From = fromDate,
                                 To = toDate,
                             });
-                            currentMonth+=3;
+                            currentMonth += 3;
                         }
                     }
                     else if (currentYear == context.ToDate.Year)
                     {
-                        int currentMonth = 1;
+                        int currentMonth = periodsList != null && periodsList.Count > 0 ? periodsList.Last().To.Month + 1 : context.FromDate.Month + 3;
+                        if (currentMonth > 12)
+                            currentMonth -= 12;
                         while (currentMonth <= context.ToDate.Month)
                         {
                             var fromDate = new DateTime(currentYear, currentMonth, 1);
-                            var toDate = fromDate.AddMonths(3).AddDays(-1);
-                            if (currentMonth == context.ToDate.Month)
+                            if (fromDate > context.ToDate)
                             {
-                                if (toDate.Month == context.ToDate.Month && toDate.Day > context.ToDate.Day)
-                                {
-                                    break;
-                                }
+                                break;
                             }
+                            var toDate = fromDate.AddMonths(3).AddDays(-1);
                             periodsList.Add(new RecurringChargePeriodOutput
                             {
                                 From = fromDate,
                                 To = toDate,
                             });
                             currentMonth += 3;
-
                         }
                     }
                     else
                     {
-                        int currentMonth = 1;
+                        int currentMonth = periodsList != null && periodsList.Count > 0 ? periodsList.Last().To.Month + 1 : context.FromDate.Month + 3;
+                        if (currentMonth > 12)
+                            currentMonth -= 12;
                         while (currentMonth <= 12)
                         {
                             var fromDate = new DateTime(currentYear, currentMonth, 1);
+                            if (fromDate > context.ToDate)
+                            {
+                                break;
+                            }
                             var toDate = fromDate.AddMonths(3).AddDays(-1);
                             periodsList.Add(new RecurringChargePeriodOutput
                             {
