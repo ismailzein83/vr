@@ -115,7 +115,7 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                             }
                         }
 
-                        if (payload.onLoadRoutingDatabaseInfo != undefined && typeof (payload.onLoadRoutingDatabaseInfo) == 'function') {
+                        if (payload != undefined && payload.onLoadRoutingDatabaseInfo != undefined && typeof (payload.onLoadRoutingDatabaseInfo) == 'function') {
                             payload.onLoadRoutingDatabaseInfo(ctrl.selectedvalues);
                         }
                     });
