@@ -27,9 +27,9 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
             foreach (IRouteOptionOrderTarget option in context.Options)
             {
                 if (option.SupplierZoneId.HasValue)
-                    supplierTQI = this.GetCustomerRouteQualityValue(option.SupplierZoneId.Value, manager, context.RoutingDatabase, defaultRouteRuleQualityConfiguration);
+                    supplierTQI = manager.GetCustomerRouteQualityValue(option.SupplierZoneId.Value, context.RoutingDatabase, defaultRouteRuleQualityConfiguration, this.QualityConfigurationId);
                 else
-                    supplierTQI = this.GetRoutingProductQualityValue(option.SaleZoneId.Value, option.SupplierId, manager, context.RoutingDatabase, defaultRouteRuleQualityConfiguration);
+                    supplierTQI = manager.GetRoutingProductQualityValue(option.SaleZoneId, option.SupplierId, context.RoutingDatabase, defaultRouteRuleQualityConfiguration, this.QualityConfigurationId);
 
                 if (supplierTQI.HasValue)
                 {
@@ -47,62 +47,6 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
                 foreach (IRouteOptionOrderTarget option in suppliersNotFound)
                     option.OptionWeight = maxTQI;
             }
-        }
-
-        private decimal? GetCustomerRouteQualityValue(long supplierZoneId, QualityConfigurationManager manager, RoutingDatabase routingDatabase, RouteRuleQualityConfiguration defaultRouteRuleQualityConfiguration)
-        {
-            Dictionary<long, List<CustomerRouteQualityConfigurationData>> customerRouteQualityConfigurationData = manager.GetCachedCustomerRouteQualityConfigurationData(routingDatabase);
-            if (customerRouteQualityConfigurationData == null)
-                return null;
-
-            List<CustomerRouteQualityConfigurationData> customerRouteQualityConfigurationsData;
-            if (!customerRouteQualityConfigurationData.TryGetValue(supplierZoneId, out customerRouteQualityConfigurationsData) || customerRouteQualityConfigurationsData.Count == 0)
-                return null;
-
-            foreach (var itm in customerRouteQualityConfigurationsData)
-            {
-                if (!this.QualityConfigurationId.HasValue)
-                {
-                    if (itm.QualityConfigurationId == defaultRouteRuleQualityConfiguration.QualityConfigurationId)
-                        return itm.QualityData;
-                }
-                else
-                {
-                    if (itm.QualityConfigurationId == this.QualityConfigurationId.Value)
-                        return itm.QualityData;
-                }
-            }
-
-            return null;
-        }
-
-        private decimal? GetRoutingProductQualityValue(long saleZoneId, int supplierId, QualityConfigurationManager manager, RoutingDatabase routingDatabase, RouteRuleQualityConfiguration defaultRouteRuleQualityConfiguration)
-        {
-            Dictionary<SaleZoneSupplier, List<RPQualityConfigurationData>> rpQualityConfigurationData = manager.GetCachedRPQualityConfigurationData(routingDatabase);
-            if (rpQualityConfigurationData == null)
-                return null;
-
-            SaleZoneSupplier saleZoneSupplier = new SaleZoneSupplier() { SaleZoneId = saleZoneId, SupplierId = supplierId };
-
-            List<RPQualityConfigurationData> rpQualityConfigurationsData;
-            if (!rpQualityConfigurationData.TryGetValue(saleZoneSupplier, out rpQualityConfigurationsData) || rpQualityConfigurationsData.Count == 0)
-                return null;
-
-            foreach (var itm in rpQualityConfigurationsData)
-            {
-                if (!this.QualityConfigurationId.HasValue)
-                {
-                    if (itm.QualityConfigurationId == defaultRouteRuleQualityConfiguration.QualityConfigurationId)
-                        return itm.QualityData;
-                }
-                else
-                {
-                    if (itm.QualityConfigurationId == this.QualityConfigurationId.Value)
-                        return itm.QualityData;
-                }
-            }
-
-            return null;
         }
     }
 }

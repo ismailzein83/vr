@@ -180,6 +180,7 @@
     <Content Include="WhS_Routing\Constant\RoutingProcessTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingSaleZoneRangeOptions.js" />
     <Content Include="WhS_Routing\Constant\TOneRouteRangeType.js" />
+    <Content Include="WhS_Routing\Constant\QualityOptionTypeEnum.js" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteDetailTemplate.html" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\CustomerRoute\Templates\CustomerRouteSettingsTemplate.html" />
@@ -216,8 +217,10 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\BackupOption\Templates\RouteRuleSpecialRequestBackupOptionTemplate.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\BackupOption\vr-whs-routing-fixed-backupoption.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByRateDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByQualityDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RouteRuleFilterDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByServiceDirective.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-quality.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-rate.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-service.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter.js" />

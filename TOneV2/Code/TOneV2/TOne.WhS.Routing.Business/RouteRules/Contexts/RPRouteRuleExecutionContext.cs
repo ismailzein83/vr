@@ -48,7 +48,7 @@ namespace TOne.WhS.Routing.Business
             return true;
         }
 
-        public void CreateSupplierZoneOptionsForRP(RouteRuleTarget target, Action<HashSet<int>, RouteRuleTarget, BaseRouteOptionRuleTarget> filterOption,
+        public void CreateSupplierZoneOptionsForRP(RouteRuleTarget target, Action<HashSet<int>, RouteRuleTarget, BaseRouteOptionRuleTarget, RoutingDatabase> filterOption,
             IRouteOptionSettings optionSettings, List<IRouteBackupOptionSettings> backupsSettings, HashSet<int> addedSuppliers)
         {
             bool optionAdded = false;
@@ -68,7 +68,7 @@ namespace TOne.WhS.Routing.Business
                 foreach (var supplierCodeMatch in optionSupplierCodeMatches)
                 {
                     var option = Helper.CreateRouteOptionRuleTarget(target, supplierCodeMatch, optionSettings);
-                    filterOption(SaleZoneServiceIds, target, option);
+                    filterOption(SaleZoneServiceIds, target, option, this.RoutingDatabase);
                     if (option.FilterOption)
                         continue;
 
@@ -103,7 +103,7 @@ namespace TOne.WhS.Routing.Business
                 foreach (var supplierCodeMatch in backupSupplierCodeMatches)
                 {
                     var backupOption = Helper.CreateRouteOptionRuleTarget(target, supplierCodeMatch, backup, optionSettings.Percentage);
-                    filterOption(SaleZoneServiceIds, target, backupOption);
+                    filterOption(SaleZoneServiceIds, target, backupOption, this.RoutingDatabase);
                     if (backupOption.FilterOption)
                         continue;
 

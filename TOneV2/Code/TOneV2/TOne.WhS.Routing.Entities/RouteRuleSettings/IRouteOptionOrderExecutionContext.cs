@@ -15,7 +15,7 @@ namespace TOne.WhS.Routing.Entities
 
         int SupplierId { get; set; }
 
-        long? SaleZoneId { get; }
+        long SaleZoneId { get; }
 
         long? SupplierZoneId { get; }
 

@@ -195,9 +195,9 @@ namespace TOne.WhS.Routing.Business
             return CreateOptions(context, target);
         }
 
-        public override void CheckOptionFilter(ISaleEntityRouteRuleExecutionContext context, TOne.WhS.Routing.Entities.RouteRuleTarget target, BaseRouteOptionRuleTarget option)
+        public override void CheckOptionFilter(ISaleEntityRouteRuleExecutionContext context, TOne.WhS.Routing.Entities.RouteRuleTarget target, BaseRouteOptionRuleTarget option, RoutingDatabase routingDatabase)
         {
-            FilterOption(context.SaleZoneServiceList, target, option);
+            FilterOption(context.SaleZoneServiceList, target, option, routingDatabase);
         }
 
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
@@ -353,7 +353,7 @@ namespace TOne.WhS.Routing.Business
             return options;
         }
 
-        private void FilterOption(HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option)
+        private void FilterOption(HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option, RoutingDatabase routingDatabase)
         {
             ISpecialRequestRouteOptionSettings specialRequestOption = option.OptionSettings as ISpecialRequestRouteOptionSettings;
             if (specialRequestOption == null)

@@ -24,5 +24,9 @@ namespace TOne.WhS.Routing.Entities
         bool FilterOption { get; set; }
 
         int SupplierId { get; set; }
+
+        long SupplierZoneId { get; }
+
+        RoutingDatabase RoutingDatabase { get; }
     }
 }

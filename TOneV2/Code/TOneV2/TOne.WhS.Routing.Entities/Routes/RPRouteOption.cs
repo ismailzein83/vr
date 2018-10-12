@@ -33,7 +33,7 @@ namespace TOne.WhS.Routing.Entities
 
         public bool IsForced { get; set; }
 
-        long? IRouteOptionOrderTarget.SaleZoneId { get { return this.SaleZoneId; } }
+        long IRouteOptionOrderTarget.SaleZoneId { get { return this.SaleZoneId; } }
 
         long? IRouteOptionOrderTarget.SupplierZoneId { get { return null; } }
     }

@@ -313,7 +313,7 @@ namespace TOne.WhS.Routing.Business
                             if (customer != null && supplier.CarrierProfileId == customer.CarrierProfileId)
                                 return false;
 
-                            routeRule.Settings.CheckOptionFilter(routeRuleExecutionContext, routeRuleTarget, optionTarget);
+                            routeRule.Settings.CheckOptionFilter(routeRuleExecutionContext, routeRuleTarget, optionTarget, routingDatabase);
                             if (optionTarget.FilterOption)
                                 return false;
 

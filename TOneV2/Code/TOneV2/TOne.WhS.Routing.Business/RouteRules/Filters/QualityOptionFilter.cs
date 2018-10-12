@@ -1,34 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
 using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business.RouteRules.Filters
 {
-    public enum QualityOption { GreaterThan = 0, GreaterThanOrEqual = 1, LessThan = 2, LessThanOrEqual = 3, Equal = 4, Different = 5 }
+    public enum QualityOptionType { Equal = 0, Different = 1, GreaterThan = 2, GreaterThanOrEqual = 3, LessThan = 4, LessThanOrEqual = 5, }
     public class QualityOptionFilter : RouteOptionFilterSettings
     {
-        public override Guid ConfigId { get { return new Guid("A4CC3BEC-B983-4283-8C82-1C354BBE103C"); } }
-        public QualityOption QualityOption { get; set; }
+        public static Guid s_ConfigId { get { return new Guid("A4CC3BEC-B983-4283-8C82-1C354BBE103C"); } }
+        public override Guid ConfigId { get { return s_ConfigId; } }
+
+        public QualityOptionType QualityOptionType { get; set; }
         public decimal QualityOptionValue { get; set; }
+        public Guid? QualityConfigurationId { get; set; }
+
         public override void Execute(IRouteOptionFilterExecutionContext context)
         {
-            return;
-            //if (!context.SaleRate.HasValue)
-            //    return;
+            decimal? supplierTQI;
 
-            //decimal qualityValue = 0;
+            var defaultRouteRuleQualityConfiguration = new ConfigManager().GetDefaultRouteRuleQualityConfiguration();
+            QualityConfigurationManager manager = new QualityConfigurationManager();
 
+            supplierTQI = manager.GetCustomerRouteQualityValue(context.SupplierZoneId, context.RoutingDatabase, defaultRouteRuleQualityConfiguration, this.QualityConfigurationId);
 
-            //decimal valueLimit = 0;
-            //switch (QualityOption)
-            //{
-            //    case Filters.QualityOption.GreaterThan: valueLimit =  QualityOptionValue; break;
-            //    case Filters.QualityOption.LessThan: valueLimit = (-1) * QualityOptionValue; break;
-            //}
-
-            //if (qualityValue < valueLimit)
-            //{
-            //    context.FilterOption = true;
-            //}
+            if (supplierTQI.HasValue)
+            {
+                switch (QualityOptionType)
+                {
+                    case Filters.QualityOptionType.Equal: context.FilterOption = supplierTQI.Value != QualityOptionValue; break;
+                    case Filters.QualityOptionType.Different: context.FilterOption = supplierTQI.Value == QualityOptionValue; break;
+                    case Filters.QualityOptionType.GreaterThan: context.FilterOption = supplierTQI.Value <= QualityOptionValue; break;
+                    case Filters.QualityOptionType.GreaterThanOrEqual: context.FilterOption = supplierTQI.Value < QualityOptionValue; break;
+                    case Filters.QualityOptionType.LessThan: context.FilterOption = supplierTQI.Value >= QualityOptionValue; break;
+                    case Filters.QualityOptionType.LessThanOrEqual: context.FilterOption = supplierTQI.Value > QualityOptionValue; break;
+                }
+            }
         }
     }
 }

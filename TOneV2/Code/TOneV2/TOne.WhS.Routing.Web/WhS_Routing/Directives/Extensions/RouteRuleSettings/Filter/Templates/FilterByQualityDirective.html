@@ -1,0 +1,12 @@
+﻿<vr-row removeline>
+
+    <vr-whs-routing-qualityconfiguration-selector on-ready="scopeModel.onQualityConfigurationSelectorReady" normal-col-num="4" hidelabel></vr-whs-routing-qualityconfiguration-selector>
+
+    <vr-columns width="1/3row">
+        <vr-select entityname="Quality Option Type" datatextfield="description" datavaluefield="value"
+                   datasource="qualityOptionTypes" selectedvalues="scopeModel.qualityOptionType" isrequired="true"></vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.qualityOptionValue" isrequired="true" type="number" minvalue="0"></vr-textbox>
+    </vr-columns>
+</vr-row>

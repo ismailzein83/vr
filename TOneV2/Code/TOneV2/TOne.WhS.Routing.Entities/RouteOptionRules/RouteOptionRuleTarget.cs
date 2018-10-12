@@ -56,7 +56,7 @@ namespace TOne.WhS.Routing.Entities
 
         long? IRuleSupplierZoneTarget.SupplierZoneId { get { return this.SupplierZoneId; } }
 
-        long? IRouteOptionOrderTarget.SaleZoneId { get { return this.RouteTarget.SaleZoneId; } }
+        long IRouteOptionOrderTarget.SaleZoneId { get { return this.RouteTarget.SaleZoneId; } }
 
         int? IRuleCountryTarget.CountryId { get { return this.RouteTarget.CountryId; } }
 

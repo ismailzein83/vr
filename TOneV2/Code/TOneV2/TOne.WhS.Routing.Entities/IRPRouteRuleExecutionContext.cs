@@ -17,7 +17,7 @@ namespace TOne.WhS.Routing.Entities
 
         List<SupplierCodeMatchWithRate> GetAllSuppliersCodeMatches();
 
-        void CreateSupplierZoneOptionsForRP(RouteRuleTarget target, Action<HashSet<int>, RouteRuleTarget, BaseRouteOptionRuleTarget> filterOption,
+        void CreateSupplierZoneOptionsForRP(RouteRuleTarget target, Action<HashSet<int>, RouteRuleTarget, BaseRouteOptionRuleTarget, RoutingDatabase> filterOption,
             IRouteOptionSettings optionSettings, List<IRouteBackupOptionSettings> backupsSettings, HashSet<int> addedSuppliers);
     }
 }

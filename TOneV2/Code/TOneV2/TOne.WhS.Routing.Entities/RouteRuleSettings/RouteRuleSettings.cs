@@ -21,7 +21,7 @@ namespace TOne.WhS.Routing.Entities
         {
         }
 
-        public virtual void CheckOptionFilter(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target, BaseRouteOptionRuleTarget option)
+        public virtual void CheckOptionFilter(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target, BaseRouteOptionRuleTarget option, RoutingDatabase RoutingDatabase)
         {
         }
 

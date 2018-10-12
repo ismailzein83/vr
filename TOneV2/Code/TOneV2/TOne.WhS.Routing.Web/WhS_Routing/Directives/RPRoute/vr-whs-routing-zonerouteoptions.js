@@ -101,7 +101,7 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
                 var supplierZoneName = routeOption.SupplierZoneName;
                 var services = routeOption.SupplierServicesNames;
 
-                var result = percentage ? percentage + '% ' + supplierName : supplierName;
+                var result = percentage || percentage == 0 ? percentage + '% ' + supplierName : supplierName;
                 if (asr) {
                     result = result + ', ASR:' + asr;
                 }

@@ -176,6 +176,62 @@ namespace TOne.WhS.Routing.Business
                 });
         }
 
+        public decimal? GetCustomerRouteQualityValue(long supplierZoneId, RoutingDatabase routingDatabase, RouteRuleQualityConfiguration defaultRouteRuleQualityConfiguration, Guid? qualityConfigurationId)
+        {
+            Dictionary<long, List<CustomerRouteQualityConfigurationData>> customerRouteQualityConfigurationData = GetCachedCustomerRouteQualityConfigurationData(routingDatabase);
+            if (customerRouteQualityConfigurationData == null)
+                return null;
+
+            List<CustomerRouteQualityConfigurationData> customerRouteQualityConfigurationsData;
+            if (!customerRouteQualityConfigurationData.TryGetValue(supplierZoneId, out customerRouteQualityConfigurationsData) || customerRouteQualityConfigurationsData.Count == 0)
+                return null;
+
+            foreach (var itm in customerRouteQualityConfigurationsData)
+            {
+                if (!qualityConfigurationId.HasValue)
+                {
+                    if (itm.QualityConfigurationId == defaultRouteRuleQualityConfiguration.QualityConfigurationId)
+                        return itm.QualityData;
+                }
+                else
+                {
+                    if (itm.QualityConfigurationId == qualityConfigurationId.Value)
+                        return itm.QualityData;
+                }
+            }
+
+            return null;
+        }
+
+        public decimal? GetRoutingProductQualityValue(long saleZoneId, int supplierId, RoutingDatabase routingDatabase, RouteRuleQualityConfiguration defaultRouteRuleQualityConfiguration, Guid? qualityConfigurationId)
+        {
+            Dictionary<SaleZoneSupplier, List<RPQualityConfigurationData>> rpQualityConfigurationData = GetCachedRPQualityConfigurationData(routingDatabase);
+            if (rpQualityConfigurationData == null)
+                return null;
+
+            SaleZoneSupplier saleZoneSupplier = new SaleZoneSupplier() { SaleZoneId = saleZoneId, SupplierId = supplierId };
+
+            List<RPQualityConfigurationData> rpQualityConfigurationsData;
+            if (!rpQualityConfigurationData.TryGetValue(saleZoneSupplier, out rpQualityConfigurationsData) || rpQualityConfigurationsData.Count == 0)
+                return null;
+
+            foreach (var itm in rpQualityConfigurationsData)
+            {
+                if (!qualityConfigurationId.HasValue)
+                {
+                    if (itm.QualityConfigurationId == defaultRouteRuleQualityConfiguration.QualityConfigurationId)
+                        return itm.QualityData;
+                }
+                else
+                {
+                    if (itm.QualityConfigurationId == qualityConfigurationId.Value)
+                        return itm.QualityData;
+                }
+            }
+
+            return null;
+        }
+
         #endregion
 
         #region Private Methods

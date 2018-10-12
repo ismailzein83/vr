@@ -54,7 +54,6 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                 for (var x = 0; x < ctrl.optionFilterSettingsGroupTemplates.length; x++) {
                     if (ctrl.optionFilterSettingsGroupTemplates[x].ExtensionConfigurationId == itemAdded.ExtensionConfigurationId) {
                         existingItems.push(ctrl.optionFilterSettingsGroupTemplates[x]);
-                        ctrl.optionFilterSettingsGroupTemplates.splice(x, 1);
                         break;
                     }
                 }
@@ -70,7 +69,6 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
             ctrl.datasource.splice(ctrl.datasource.indexOf(dataItem), 1);
             for (var x = 0; x < existingItems.length; x++) {
                 if (existingItems[x].ExtensionConfigurationId == configId) {
-                    ctrl.optionFilterSettingsGroupTemplates.push(existingItems[x]);
                     existingItems.splice(x, 1);
                     break;
                 }
@@ -129,7 +127,6 @@ function (WhS_Routing_RoutRuleSettingsAPIService, UtilsService, VRUIUtilsService
                             for (var j = 0; j < ctrl.optionFilterSettingsGroupTemplates.length; j++) {
                                 if (ctrl.datasource[x].configId == ctrl.optionFilterSettingsGroupTemplates[j].ExtensionConfigurationId) {
                                     existingItems.push(ctrl.optionFilterSettingsGroupTemplates[j]);
-                                    ctrl.optionFilterSettingsGroupTemplates.splice(j, 1);
                                     itemFound = true;
                                     break;
                                 }

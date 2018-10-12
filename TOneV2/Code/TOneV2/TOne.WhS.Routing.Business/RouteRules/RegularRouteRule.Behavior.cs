@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Business.RouteRules.Filters;
 using TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups;
 using TOne.WhS.Routing.Business.RouteRules.Orders;
 using TOne.WhS.Routing.Entities;
@@ -73,13 +74,28 @@ namespace TOne.WhS.Routing.Business
                     }
                 }
             }
+            if (OptionFilters != null)
+            {
+                foreach (var optionFilter in OptionFilters)
+                {
+                    if (optionFilter.ConfigId == QualityOptionFilter.s_ConfigId)
+                    {
+                        QualityOptionFilter qualityOptionFilter = optionFilter.CastWithValidate<QualityOptionFilter>("qualityOptionFilter");
+                        if (!qualityOptionFilter.QualityConfigurationId.HasValue)
+                            context.IsDefault = true;
+                        else
+                            qualityConfigurationIds.Add(qualityOptionFilter.QualityConfigurationId.Value);
+
+                    }
+                }
+            }
 
             context.QualityConfigurationIds = qualityConfigurationIds.Count > 0 ? qualityConfigurationIds : null;
         }
 
-        public override void CheckOptionFilter(ISaleEntityRouteRuleExecutionContext context, TOne.WhS.Routing.Entities.RouteRuleTarget target, BaseRouteOptionRuleTarget option)
+        public override void CheckOptionFilter(ISaleEntityRouteRuleExecutionContext context, TOne.WhS.Routing.Entities.RouteRuleTarget target, BaseRouteOptionRuleTarget option, RoutingDatabase routingDatabase)
         {
-            FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.SaleZoneServiceList, target, option);
+            FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.SaleZoneServiceList, target, option, routingDatabase);
         }
 
         public override void ApplyOptionsPercentage(IRouteRuleApplyOptionsPercentageContext context)
@@ -158,7 +174,7 @@ namespace TOne.WhS.Routing.Business
                             foreach (var supplierCodeMatch in optionSupplierCodeMatches)
                             {
                                 var option = CreateOption(target, supplierCodeMatch, optionSettings.Percentage);
-                                FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option);
+                                FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option, context.RoutingDatabase);
                                 if (!option.FilterOption)
                                     context.TryAddSupplierZoneOption(option);
                             }
@@ -174,7 +190,7 @@ namespace TOne.WhS.Routing.Business
                     foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                     {
                         var option = CreateOption(target, supplierCodeMatch, null);
-                        FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option);
+                        FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option, context.RoutingDatabase);
                         if (!option.FilterOption)
                             context.TryAddSupplierZoneOption(option);
                     }
@@ -544,7 +560,7 @@ namespace TOne.WhS.Routing.Business
             return optionOrderContext;
         }
 
-        private void FilterOption(SupplierCodeMatchWithRate supplierCodeMatchWithRate, HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option)
+        private void FilterOption(SupplierCodeMatchWithRate supplierCodeMatchWithRate, HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option, RoutingDatabase routingDatabase)
         {
             if (this.OptionFilters != null)
             {
@@ -556,7 +572,9 @@ namespace TOne.WhS.Routing.Business
                         SaleRate = target.SaleRate,
                         CustomerServices = customerServiceIds,
                         SupplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null,
-                        SupplierId = option.SupplierId
+                        SupplierId = option.SupplierId,
+                        RoutingDatabase = routingDatabase,
+                        SupplierZoneId = option.SupplierZoneId
                     };
                     optionFilter.Execute(routeOptionFilterExecutionContext);
                     if (routeOptionFilterExecutionContext.FilterOption)

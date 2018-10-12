@@ -24,7 +24,7 @@
                 </vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Percentage'" ng-show="scopeModel.showPercentage()" widthfactor="4" disablesorting="true">
                     <div>
-                        <vr-textbox value="dataItem.percentageValue" type="number" maxvalue="100" isrequired="true" tonextinput></vr-textbox>
+                        <vr-textbox value="dataItem.percentageValue" type="number" minvalue="0" maxvalue="100" isrequired="true" tonextinput></vr-textbox>
                     </div>
                 </vr-datagridcolumn>
             </vr-datagrid>

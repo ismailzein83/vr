@@ -19,8 +19,9 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public void WriteRecordToStream(RPQualityConfigurationData record, object dbApplyStream)
         {
+            decimal qualityData = record.QualityData >= 0 ? decimal.Round(record.QualityData, 8) : 0;
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.QualityConfigurationId, record.SaleZoneId, record.SupplierId, decimal.Round(record.QualityData, 8));
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.QualityConfigurationId, record.SaleZoneId, record.SupplierId, qualityData);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)

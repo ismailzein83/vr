@@ -20,5 +20,9 @@ namespace TOne.WhS.Routing.Business
         public bool FilterOption { get; set; }
 
         public int SupplierId { get; set; }
+
+        public long SupplierZoneId { get; set; }
+
+        public RoutingDatabase RoutingDatabase { get; set; }
     }
 }
