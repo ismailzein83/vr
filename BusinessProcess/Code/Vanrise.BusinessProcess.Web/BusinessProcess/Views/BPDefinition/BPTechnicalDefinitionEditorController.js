@@ -2,17 +2,20 @@
 
     "use strict";
 
-    BPTechnicalDefinitionEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'BusinessProcess_BPDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    BPTechnicalDefinitionEditorController.$inject = ['$scope', 'VRNavigationService', 'VRNotificationService', 'BusinessProcess_BPDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'BusinessProcess_VRWorkflowAPIService'];
 
-    function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNotificationService, BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService) {
+    function BPTechnicalDefinitionEditorController($scope, VRNavigationService, VRNotificationService, BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService, BusinessProcess_VRWorkflowAPIService) {
 
         var isEditMode;
+        var vrWorkflowArguments;
+        var validationMessages;
 
         var businessProcessDefinitionId;
         var businessProcessDefinitionEntity;
 
         var vrWorkflowSelectorAPI;
         var vrWorkflowSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var vrWorkflowSelectorSelectionChangedDeferred;
 
         var viewPermissionAPI;
         var viewPermissionReadyDeferred = UtilsService.createPromiseDeferred();
@@ -68,6 +71,30 @@
                 bpInstanceInsertHandlerSettingsReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onVRWorkflowSelectionChanged = function (selectedVRWorkflow) {
+                validationMessages = undefined;
+                if (selectedVRWorkflow != undefined) {
+
+                    if (vrWorkflowSelectorSelectionChangedDeferred != undefined) {
+                        vrWorkflowSelectorSelectionChangedDeferred.resolve();
+                    }
+                    else {
+                        $scope.scopeModel.isLoadingArguments = true;
+                        getVRWorkflowArguments(selectedVRWorkflow.VRWorkflowId).then(function () {
+                            $scope.scopeModel.processTitle = "";
+                            $scope.scopeModel.isLoadingArguments = false;
+                        }).catch(function () {
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
+                            $scope.scopeModel.isLoadingArguments = false;
+                        });
+                    }
+                }
+            };
+
+            $scope.scopeModel.getVRWorkflowArguments = function () {
+                return vrWorkflowArguments;
+            };
+
             $scope.saveBPDefinition = function () {
                 if (isEditMode) {
                     return update();
@@ -78,7 +105,28 @@
             };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
+            };
+
+            $scope.scopeModel.onCompileClick = function () {
+                $scope.scopeModel.isLoadingArguments = true;
+                return tryCompile().then(function (response) {
+                    $scope.scopeModel.isLoadingArguments = false;
+                    if (response)
+                        VRNotificationService.showSuccess("Custom Code compiled successfully.");
+                });
+            };
+
+            $scope.scopeModel.isTitleValid = function () {
+                if (validationMessages == undefined || validationMessages.length == 0)
+                    return;
+                else {
+                    var errorMessage = '';
+                    for (var i = 0; i < validationMessages.length; i++) {
+                        errorMessage += (i + 1) + ') ' + validationMessages[i] + '\n';
+                    }
+                    return errorMessage;
+                }
             };
         }
         function load() {
@@ -106,6 +154,12 @@
             });
         }
 
+        function getVRWorkflowArguments(vrWorkflowId) {
+            return BusinessProcess_VRWorkflowAPIService.GetVRWorkflowArguments(vrWorkflowId).then(function (response) {
+                vrWorkflowArguments = response;
+            });
+        }
+
         function loadAllControls() {
 
             function setTitle() {
@@ -123,6 +177,7 @@
                 $scope.scopeModel.title = businessProcessDefinitionEntity.Title;
                 $scope.scopeModel.MaxConcurrentWorkflows = businessProcessDefinitionEntity.Configuration.MaxConcurrentWorkflows;
                 $scope.scopeModel.NotVisibleInManagementScreen = businessProcessDefinitionEntity.Configuration.NotVisibleInManagementScreen;
+                $scope.scopeModel.processTitle = businessProcessDefinitionEntity.Configuration.ProcessTitle;
             }
             function loadVRWorkflowSelector() {
                 if (!$scope.scopeModel.loadVRWorklowSelector)
@@ -134,8 +189,11 @@
 
                     var vrWorkflowSelectorPayload;
                     if (businessProcessDefinitionEntity != undefined && businessProcessDefinitionEntity.VRWorkflowId) {
-                        vrWorkflowSelectorPayload = { selectedIds: businessProcessDefinitionEntity.VRWorkflowId };
+                        vrWorkflowSelectorPayload = {
+                            selectedIds: businessProcessDefinitionEntity.VRWorkflowId
+                        };
                     }
+
                     VRUIUtilsService.callDirectiveLoad(vrWorkflowSelectorAPI, vrWorkflowSelectorPayload, vrWorkflowLoadDeferred);
                 });
 
@@ -206,9 +264,29 @@
                 return bpInstanceInsertHandlerSettingsLoadPromiseDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRWorkflowSelector, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission,
-                loadScheduleTaskRequiredPermission, loadBPInstanceInsertHandlerSettings]).then(function () {
+            function GetVRWorkflowArguments() {
+                if (!isEditMode || businessProcessDefinitionEntity.VRWorkflowId == undefined)
+                    return;
 
+                var getVRWorkflowArgumentsLoadDeferred = UtilsService.createPromiseDeferred();
+                vrWorkflowSelectorSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+
+                getVRWorkflowArguments(businessProcessDefinitionEntity.VRWorkflowId).then(function () {
+                    getVRWorkflowArgumentsLoadDeferred.resolve();
+                }).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    getVRWorkflowArgumentsLoadDeferred.reject();
+                });
+
+                vrWorkflowSelectorSelectionChangedDeferred.promise.then(function () {
+                    vrWorkflowSelectorSelectionChangedDeferred = undefined;
+                });
+
+                return getVRWorkflowArgumentsLoadDeferred.promise;
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRWorkflowSelector, GetVRWorkflowArguments, loadViewRequiredPermission, loadStartNewInstanceRequiredPermission,
+                loadScheduleTaskRequiredPermission, loadBPInstanceInsertHandlerSettings]).then(function () {
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
@@ -216,35 +294,65 @@
                 });
         }
 
+        function tryCompile() {
+            return BusinessProcess_BPDefinitionAPIService.TryCompileProcessTitle(buildBPEntityObjFromScope()).then(function (response) {
+                validationMessages = response.ErrorMessages;
+            });
+        }
+
         function insert() {
             $scope.scopeModel.isLoading = true;
+            validationMessages = undefined;
 
-            return BusinessProcess_BPDefinitionAPIService.AddBPDefinition(buildBPEntityObjFromScope()).then(function (response) {
+            var insertBPDefintionPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            BusinessProcess_BPDefinitionAPIService.AddBPDefinition(buildBPEntityObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('BP Definition', response, 'Title')) {
                     if ($scope.onBPDefenitionAdded != undefined)
                         $scope.onBPDefenitionAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
+
+                    insertBPDefintionPromiseDeferred.resolve();
+                }
+                else {
+                    validationMessages = response.ValidationMessages;
+                    insertBPDefintionPromiseDeferred.reject();
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+                insertBPDefintionPromiseDeferred.reject();
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
+
+            return insertBPDefintionPromiseDeferred.promise;
         }
         function update() {
             $scope.scopeModel.isLoading = true;
+            validationMessages = undefined;
 
-            return BusinessProcess_BPDefinitionAPIService.UpdateBPDefinition(buildBPEntityObjFromScope()).then(function (response) {
+            var updateBPDefintionPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            BusinessProcess_BPDefinitionAPIService.UpdateBPDefinition(buildBPEntityObjFromScope()).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('BP Definition', response, 'Title')) {
                     if ($scope.onBPDefenitionUpdated != undefined)
                         $scope.onBPDefenitionUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
+
+                    updateBPDefintionPromiseDeferred.resolve();
+                }
+                else {
+                    validationMessages = response.ValidationMessages;
+                    updateBPDefintionPromiseDeferred.reject();
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
+                updateBPDefintionPromiseDeferred.reject();
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
+
+            return updateBPDefintionPromiseDeferred.promise;
         }
 
         function buildBPEntityObjFromScope() {
@@ -253,11 +361,14 @@
             if (isEditMode) {
                 obj = businessProcessDefinitionEntity;
             } else {
-                obj = { Configuration: {} };
-            };
+                obj = {
+                    Configuration: {}
+                };
+            }
 
             obj.Title = $scope.scopeModel.title;
             obj.VRWorkflowId = $scope.scopeModel.loadVRWorklowSelector ? vrWorkflowSelectorAPI.getSelectedIds() : null;
+            obj.Configuration.ProcessTitle = $scope.scopeModel.loadVRWorklowSelector ? $scope.scopeModel.processTitle : null;
             obj.Configuration.MaxConcurrentWorkflows = $scope.scopeModel.MaxConcurrentWorkflows;
             obj.Configuration.NotVisibleInManagementScreen = $scope.scopeModel.NotVisibleInManagementScreen;
             obj.Configuration.BPInstanceInsertHandler = bpInstanceInsertHandlerSettingsAPI.getData();
@@ -266,7 +377,6 @@
                 StartNewInstance: startNewInstancePermissionAPI.getData(),
                 ScheduleTask: scheduleTaskPermissionAPI.getData()
             };
-
             return obj;
         }
     }

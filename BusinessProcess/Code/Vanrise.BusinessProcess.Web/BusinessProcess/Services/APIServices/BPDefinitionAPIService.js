@@ -49,6 +49,10 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", ['UpdateBPDefinition']));
         }
 
+        function TryCompileProcessTitle(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPDefinition", 'TryCompileProcessTitle'), input);
+        }
+
         return ({
             GetFilteredBPDefinitions: GetFilteredBPDefinitions,
             GetFilteredBPDefinitionsForTechnical:GetFilteredBPDefinitionsForTechnical,
@@ -58,7 +62,8 @@
             AddBPDefinition: AddBPDefinition,
             UpdateBPDefinition: UpdateBPDefinition,
             HasAddBPDefinitionPermission: HasAddBPDefinitionPermission,
-            HasUpdateBPDefinitionPermission: HasUpdateBPDefinitionPermission
+            HasUpdateBPDefinitionPermission: HasUpdateBPDefinitionPermission,
+            TryCompileProcessTitle: TryCompileProcessTitle
         });
     }
 

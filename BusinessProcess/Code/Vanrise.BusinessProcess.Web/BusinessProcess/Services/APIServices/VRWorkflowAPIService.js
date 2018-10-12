@@ -19,6 +19,10 @@
 			return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowName"), { vrWorkflowId: vrWorkflowId });
 		}
 
+		function GetVRWorkflowArguments(vrWorkflowId) {
+		    return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowArguments"), { vrWorkflowId: vrWorkflowId });
+		}
+
 		function GetVRWorkflowVariablesTypeDescription(variables) {
 			return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowVariablesTypeDescription"), variables);
 		}
@@ -30,7 +34,7 @@
 		function GetVRWorkflowActivityExtensionConfigs() {
 			return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowActivityExtensionConfigs"), {});
 		}
-
+        
 		function GetVRWorkflowArgumentTypeDescription(vrWorkflowArgumentType) {
 			return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, controllerName, "GetVRWorkflowArgumentTypeDescription"), vrWorkflowArgumentType);
 		}
@@ -76,6 +80,7 @@
 			GetFilteredVRWorkflows: GetFilteredVRWorkflows,
 			GetVRWorkflowEditorRuntime: GetVRWorkflowEditorRuntime,
 			GetVRWorkflowName: GetVRWorkflowName,
+			GetVRWorkflowArguments: GetVRWorkflowArguments,
 			GetVRWorkflowVariablesTypeDescription: GetVRWorkflowVariablesTypeDescription,
 			GetVRWorkflowVariableTypeExtensionConfigs: GetVRWorkflowVariableTypeExtensionConfigs,
 			GetVRWorkflowActivityExtensionConfigs: GetVRWorkflowActivityExtensionConfigs,

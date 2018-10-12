@@ -122,4 +122,11 @@ namespace Vanrise.BusinessProcess.Entities
         public RequiredPermissionSettings StartNewInstance { get; set; }
         public RequiredPermissionSettings ScheduleTask { get; set; }
     }
+
+    public class BPDefinitionTitleCompilationOutput
+    {
+        public bool IsSucceeded { get; set; }
+
+        public List<string> ErrorMessages { get; set; }
+    }
 }

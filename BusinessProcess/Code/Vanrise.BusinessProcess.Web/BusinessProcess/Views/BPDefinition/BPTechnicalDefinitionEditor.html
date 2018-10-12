@@ -14,7 +14,22 @@
                             <vr-textbox typeof="number" decimalprecision="0" value="scopeModel.MaxConcurrentWorkflows" label="Max Instances Per Runtime"></vr-textbox>
                         </vr-columns>
                         <span ng-if="scopeModel.loadVRWorklowSelector">
-                            <businessprocess-vr-workflow-selector on-ready="scopeModel.onVRWorkflowSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon></businessprocess-vr-workflow-selector>
+                            <businessprocess-vr-workflow-selector on-ready="scopeModel.onVRWorkflowSelectorReady"
+                                                                  onselectionchanged="scopeModel.onVRWorkflowSelectionChanged"
+                                                                  normal-col-num="4" isrequired="true" hideremoveicon></businessprocess-vr-workflow-selector>
+                        </span>
+                        <span ng-if="scopeModel.loadVRWorklowSelector">
+                            <vr-columns colnum="11">
+                                <span vr-loader="scopeModel.isLoadingArguments">
+                                    <vr-validator validate="scopeModel.isTitleValid()">
+                                        <businessprocess-vr-workflow-activity-expressionbuilder getworkflowarguments="scopeModel.getVRWorkflowArguments"
+                                                                                                label="Process Title" value="scopeModel.processTitle" nb-of-rows="2"></businessprocess-vr-workflow-activity-expressionbuilder>
+                                    </vr-validator>
+                                </span>
+                            </vr-columns>
+                            <vr-columns colnum="1" haschildcolumns>
+                                <a style="cursor:pointer;font-size:11px" ng-click="scopeModel.onCompileClick()">Compile</a>
+                            </vr-columns>
                         </span>
                     </vr-row>
                 </vr-tab>

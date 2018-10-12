@@ -34,6 +34,13 @@ namespace Vanrise.BusinessProcess.Web.Controllers
 			return _manager.GetVRWorkflowNameById(vrWorkflowId);
 		}
 
+        [HttpGet]
+        [Route("GetVRWorkflowArguments")]
+        public VRWorkflowArgumentCollection GetVRWorkflowArguments(Guid vrWorkflowId)
+        {
+            return _manager.GetVRWorkflowArgumentsById(vrWorkflowId);
+        }
+
 		[HttpPost]
 		[Route("GetVRWorkflowVariablesTypeDescription")]
 		public Dictionary<Guid, string> GetVRWorkflowVariablesTypeDescription(IEnumerable<VRWorkflowVariable> variables)

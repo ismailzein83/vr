@@ -63,5 +63,12 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             BPDefinitionInfoFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<BPDefinitionInfoFilter>(serializedFilter) : null;
             return manager.GetBPDefinitions(filter);
         }
+
+        [HttpPost]
+        [Route("TryCompileProcessTitle")]
+        public BPDefinitionTitleCompilationOutput TryCompileProcessTitle(BPDefinition bPDefinition)
+        {
+            return manager.TryCompileProcessTitle(bPDefinition);
+        }
     }
 }

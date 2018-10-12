@@ -60,6 +60,8 @@
   <ItemGroup>
     <Compile Include="ActionTypeFilter.cs" />
     <Compile Include="ActionTypesInfoFilter.cs" />
+    <Compile Include="BPDefinition\InsertBPDefinitionOperationOutput.cs" />
+    <Compile Include="BPDefinition\UpdateBPDefinitionOperationOutput.cs" />
     <Compile Include="BPInstance\BPInstanceInsertHandler.cs" />
     <Compile Include="BPInstance\BPInstanceInsertHandlerConfig.cs" />
     <Compile Include="BPInputArgument\BaseProcessInputArgument.cs" />

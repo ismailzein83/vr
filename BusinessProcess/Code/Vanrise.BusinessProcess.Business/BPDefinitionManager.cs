@@ -63,52 +63,70 @@ namespace Vanrise.BusinessProcess.Business
 
         public InsertOperationOutput<BPDefinitionDetail> AddBPDefinition(BPDefinition bpDefinition)
         {
-            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<BPDefinitionDetail>();
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
+            var insertBPDefinitionOperationOutput = new InsertBPDefinitionOperationOutput();
+            insertBPDefinitionOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertBPDefinitionOperationOutput.InsertedObject = null;
 
-            IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
+            List<string> errorMessages = null;
+            if (bpDefinition.VRWorkflowId.HasValue)
+                errorMessages = CompileProcessTitle(bpDefinition);
 
-            bpDefinition.BPDefinitionID = Guid.NewGuid();
-            bpDefinition.Name = string.Concat("VRWorkflowInputArgument_", bpDefinition.BPDefinitionID.ToString("N"));
-
-            if (dataManager.InsertBPDefinition(bpDefinition))
+            if (errorMessages == null)
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                VRActionLogger.Current.TrackAndLogObjectAdded(BPDefinitionLoggableEntity.Instance, bpDefinition);
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = BPDefinitionDetailMapper(bpDefinition);
+                IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
+
+                bpDefinition.BPDefinitionID = Guid.NewGuid();
+                bpDefinition.Name = string.Concat("VRWorkflowInputArgument_", bpDefinition.BPDefinitionID.ToString("N"));
+
+                if (dataManager.InsertBPDefinition(bpDefinition))
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    VRActionLogger.Current.TrackAndLogObjectAdded(BPDefinitionLoggableEntity.Instance, bpDefinition);
+                    insertBPDefinitionOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    insertBPDefinitionOperationOutput.InsertedObject = BPDefinitionDetailMapper(bpDefinition);
+                }
+                else
+                {
+                    insertBPDefinitionOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                }
             }
             else
-            {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-            }
+                insertBPDefinitionOperationOutput.ValidationMessages = errorMessages;
 
-            return insertOperationOutput;
+            return insertBPDefinitionOperationOutput;
         }
 
         public UpdateOperationOutput<BPDefinitionDetail> UpdateBPDefinition(BPDefinition bPDefinition)
         {
-            UpdateOperationOutput<BPDefinitionDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<BPDefinitionDetail>();
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
+            var updateBPDefinitionOperationOutput = new UpdateBPDefinitionOperationOutput();
+            updateBPDefinitionOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateBPDefinitionOperationOutput.UpdatedObject = null;
 
-            IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
-            bool updateActionSucc = dataManager.UpdateBPDefinition(bPDefinition);
+            List<string> errorMessages = null;
+            if (bPDefinition.VRWorkflowId.HasValue)
+                errorMessages = CompileProcessTitle(bPDefinition);
 
-            if (updateActionSucc)
+            if (errorMessages == null)
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                VRActionLogger.Current.TrackAndLogObjectUpdated(BPDefinitionLoggableEntity.Instance, bPDefinition);
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = BPDefinitionDetailMapper(bPDefinition);
+                IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
+                bool updateActionSucc = dataManager.UpdateBPDefinition(bPDefinition);
+
+                if (updateActionSucc)
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(BPDefinitionLoggableEntity.Instance, bPDefinition);
+                    updateBPDefinitionOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    updateBPDefinitionOperationOutput.UpdatedObject = BPDefinitionDetailMapper(bPDefinition);
+                }
+                else
+                {
+                    updateBPDefinitionOperationOutput.Result = UpdateOperationResult.SameExists;
+                }
             }
             else
-            {
-                updateOperationOutput.Result = UpdateOperationResult.SameExists;
-            }
+                updateBPDefinitionOperationOutput.ValidationMessages = errorMessages;
 
-            return updateOperationOutput;
+            return updateBPDefinitionOperationOutput;
         }
 
         public IEnumerable<BPDefinition> GetBPDefinitions()
@@ -200,11 +218,29 @@ namespace Vanrise.BusinessProcess.Business
                        if (!bpDefinition.VRWorkflowId.HasValue)
                            continue;
 
-                       inputArgumentTypeByDefinitionId.Add(bpDefinition.BPDefinitionID, Helper.GetInputArgumentType(bpDefinition));
+                       List<string> errorMessages;
+                       inputArgumentTypeByDefinitionId.Add(bpDefinition.BPDefinitionID, Helper.GetInputArgumentType(bpDefinition, true, out errorMessages));
                    }
 
                    return inputArgumentTypeByDefinitionId;
                });
+        }
+
+        List<string> CompileProcessTitle(BPDefinition bPDefinition)
+        {
+            List<string> errorMessages;
+            Helper.GetInputArgumentType(bPDefinition, false, out errorMessages);
+            return errorMessages;
+        }
+
+        public BPDefinitionTitleCompilationOutput TryCompileProcessTitle(BPDefinition bPDefinition)
+        {
+            List<string> errorMessages = CompileProcessTitle(bPDefinition);
+            return new BPDefinitionTitleCompilationOutput()
+            {
+                ErrorMessages = errorMessages,
+                IsSucceeded = errorMessages == null || errorMessages.Count == 0
+            };
         }
 
         #region Security

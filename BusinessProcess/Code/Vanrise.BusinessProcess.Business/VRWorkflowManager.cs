@@ -136,6 +136,15 @@ namespace Vanrise.BusinessProcess.Business
 			return (vrWorkflow != null) ? vrWorkflow.Name : null;
 		}
 
+        public VRWorkflowArgumentCollection GetVRWorkflowArgumentsById(Guid vrWorkflowId)
+        {
+            VRWorkflow vrWorkflow = GetVRWorkflow(vrWorkflowId);
+            vrWorkflow.ThrowIfNull("vrWorkflow", vrWorkflow.VRWorkflowId);
+            vrWorkflow.Settings.ThrowIfNull("vrWorkflow.Settings", vrWorkflow.VRWorkflowId);
+
+            return vrWorkflow.Settings.Arguments;
+        }
+
 		public VRWorkflowEditorRuntime GetVRWorkflowEditorRuntime(Guid vrWorkflowId)
 		{
 			VRWorkflow vrWorkflow = GetVRWorkflow(vrWorkflowId);

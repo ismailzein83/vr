@@ -10,8 +10,9 @@ namespace Vanrise.BusinessProcess.Business
 {
     public static class Helper
     {
-        public static Type GetInputArgumentType(BPDefinition bpDefinition)
+        public static Type GetInputArgumentType(BPDefinition bpDefinition, bool throwExceptionIfError, out List<string> errorMessages)
         {
+            errorMessages = null;
             StringBuilder sb_CustomController = new StringBuilder(@"using System;
                         using System.Collections.Generic;
                         using System.Linq;
@@ -34,12 +35,15 @@ namespace Vanrise.BusinessProcess.Business
             Common.CSharpCompilationOutput output;
             if (!Common.CSharpCompiler.TryCompileClass(sb_CustomController.ToString(), out output))
             {
-                StringBuilder errorsBuilder = new StringBuilder();
-                foreach (var errorMessage in output.ErrorMessages)
-                    errorsBuilder.AppendLine(errorMessage);
+                errorMessages = new List<string>();
+                foreach (var error in output.Errors)
+                    errorMessages.Add(error.ErrorText);
 
-                throw new Exception(String.Format("Compile Error when building VRWorkflowInputArgument for BPDefinition Id '{0}'. Errors: {1}",
-                    bpDefinition.BPDefinitionID, errorsBuilder));
+                if (throwExceptionIfError)
+                    throw new Exception(String.Format("Compile Error when building VRWorkflowInputArgument for BPDefinition Id '{0}'. Errors: {1}",
+                        bpDefinition.BPDefinitionID, string.Join<string>(". ", errorMessages)));
+
+                return null;
             }
 
             return output.OutputAssembly.GetType(string.Format("{0}.{1}", inputArgumentClassNamespace, inputArgumentClassName));
