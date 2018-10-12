@@ -5,28 +5,33 @@
     StyleDefinitionService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService'];
 
     function StyleDefinitionService(VRModalService, VRCommon_ObjectTrackingService) {
-        var drillDownDefinitions = [];
-        function addStyleDefinition(onStyleDefinitionAdded) {
-            var settings = {};
 
+        var drillDownDefinitions = [];
+
+        function addStyleDefinition(onStyleDefinitionAdded) {
+
+            var settings = {};
             settings.onScopeReady = function (modalScope) {
                 modalScope.onStyleDefinitionAdded = onStyleDefinitionAdded
             };
+
             VRModalService.showModal('/Client/Modules/Common/Views/StyleDefinition/StyleDefinitionEditor.html', null, settings);
-        };
+        }
 
         function editStyleDefinition(styleDefinitionId, onStyleDefinitionUpdated) {
-            var settings = {};
 
             var parameters = {
                 styleDefinitionId: styleDefinitionId,
             };
 
+            var settings = {};
             settings.onScopeReady = function (modalScope) {
                 modalScope.onStyleDefinitionUpdated = onStyleDefinitionUpdated;
             };
+
             VRModalService.showModal('/Client/Modules/Common/Views/StyleDefinition/StyleDefinitionEditor.html', parameters, settings);
         }
+
         function getEntityUniqueName() {
             return "VR_Common_StyleDefinition";
         }
@@ -51,6 +56,7 @@
             addDrillDownDefinition(drillDownDefinition);
 
         }
+
         function addDrillDownDefinition(drillDownDefinition) {
 
             drillDownDefinitions.push(drillDownDefinition);
@@ -69,5 +75,4 @@
     }
 
     appControllers.service('VRCommon_StyleDefinitionService', StyleDefinitionService);
-
 })(appControllers);
