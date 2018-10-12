@@ -340,6 +340,8 @@ namespace TOne.WhS.BusinessEntity.Business
             ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
             dataManager.SaveCodeGroupToDB(importedCodeGroup);
 
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+
             MemoryStream memoryStream = new MemoryStream();
             memoryStream = returnedExcel.SaveToStream();
 
@@ -447,14 +449,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICodeGroupDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
+            protected override bool UseCentralizedCacheRefresher
             {
-                return _dataManager.AreCodeGroupUpdated(ref _updateHandle);
+                get
+                {
+                    return true;
+                }
             }
         }
+
         private CodeIterator<CodeGroup> GetCodeIterator()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCodeIterator",
