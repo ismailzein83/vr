@@ -383,6 +383,11 @@ namespace Vanrise.Common
         {
             return (!entity.EED.HasValue || entity.EED.Value > date);
         }
+        public static bool IsFuture(this IDateEffectiveSettings entity, DateTime date)
+        {
+            return (!entity.EED.HasValue|| entity.BED > date);
+        }
+
 
         public static bool IsOverlappedWith(this IDateEffectiveSettings entity, IDateEffectiveSettings target)
         {
@@ -404,6 +409,8 @@ namespace Vanrise.Common
                     return IsEffectiveOrFuture(entity, date);
                 case EntityFilterEffectiveMode.All:
                     return true;
+                case EntityFilterEffectiveMode.Future:
+                    return IsFuture(entity, date);
                 default:
                     throw new ArgumentException(string.Format("EntityFilterEffectiveMode '{0}' is not valid", effectiveMode));
             }

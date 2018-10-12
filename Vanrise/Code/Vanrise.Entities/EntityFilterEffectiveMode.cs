@@ -10,6 +10,7 @@ namespace Vanrise.Entities
     {
         Current = 0,
         CurrentAndFuture = 1,
-        All = 2
+        All = 2,
+        Future = 3
     }
 }
