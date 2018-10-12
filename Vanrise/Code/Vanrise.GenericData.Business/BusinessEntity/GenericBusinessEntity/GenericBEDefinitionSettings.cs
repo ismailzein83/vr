@@ -69,8 +69,17 @@ namespace Vanrise.GenericData.Business
         public GenericBEExtendedSettings ExtendedSettings { get; set; }
         public List<GenericBEBulkAction> GenericBEBulkActions { get; set; }
 
-     
+        public bool ShowUpload { get; set; }
+        public List<GenericBEUploadField> UploadFields { get; set; }
+
     }
+
+    public class GenericBEUploadField
+    {
+        public string FieldName { get; set; }
+
+    }
+
     public class GenericBEBulkAction
     {
         public Guid GenericBEBulkActionId { get; set; }
