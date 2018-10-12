@@ -5,29 +5,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
 {
     public class FTPAdapterArgument : BaseAdapterArgument
     {
-        public enum Actions
-        {
-            NoAction = -1,
-            Rename = 0,
-            Delete = 1,
-            Move = 2,// Move to Folder
-            Copy = 3 // Copy To Folder and Keep the original file,
-        }
-
-        public enum FileCheckCriteriaEnum
-        {
-            DateAndNameCheck = 0,
-            NameCheck = 1,
-            None = 2
-        }
-
-        public enum CompressionTypes
-        {
-            GZip,
-            Zip
-        }
-
         #region Properties
+
         public string Extension { get; set; }
         public string Mask { get; set; }
         public string Directory { get; set; }
@@ -36,6 +15,11 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
         public string Password { get; set; }
         public string DirectorytoMoveFile { get; set; }
         public int? ActionAfterImport { get; set; }
+        public string LastImportedFile { get; set; }
+        public bool CompressedFiles { get; set; }
+        public CompressionTypes CompressionType { get; set; }
+        public short? NumberOfFiles { get; set; }
+        public string InvalidFilesDirectory { get; set; }
 
         FileCheckCriteriaEnum _fileCheckCriteria = FileCheckCriteriaEnum.DateAndNameCheck;
         public FileCheckCriteriaEnum FileCheckCriteria
@@ -49,10 +33,6 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
                 _fileCheckCriteria = value;
             }
         }
-        public string LastImportedFile { get; set; }
-        public bool CompressedFiles { get; set; }
-        public CompressionTypes CompressionType { get; set; }
-        public short? NumberOfFiles { get; set; }
 
         short? _fileCompletenessCheckInterval = 5;
 
@@ -71,9 +51,29 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
             }
         }
 
-        public string InvalidFilesDirectory { get; set; }
+        #endregion
 
-        # endregion
+        public enum Actions
+        {
+            NoAction = -1,
+            Rename = 0,
+            Delete = 1,
+            Move = 2, // Move to Folder
+            Copy = 3  // Copy To Folder and Keep the original file
+        }
+
+        public enum FileCheckCriteriaEnum
+        {
+            DateAndNameCheck = 0,
+            NameCheck = 1,
+            None = 2
+        }
+
+        public enum CompressionTypes
+        {
+            GZip,
+            Zip
+        }
     }
 
     public class FTPAdapterState : BaseAdapterState
