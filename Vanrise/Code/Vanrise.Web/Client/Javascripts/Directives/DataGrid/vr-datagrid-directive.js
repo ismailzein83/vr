@@ -169,7 +169,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            };
 	            ctrl.hidePagingInfo = ($attrs.hidepaginginfo != undefined);
 	            ctrl.rotateHeader = true;
-	            ctrl.cellLayoutStyle = $attrs.normalcell != undefined ? { 'white-space': 'normal' } : { 'white-space': 'nowrap' };
+	            ctrl.cellLayoutStyle = $attrs.normalcell != undefined ? { 'white-space': 'normal' } : { 'white-space': 'pre' };
 
 	            if ($attrs.rotate == undefined) {
 	                ctrl.rotateHeader = false;
