@@ -143,7 +143,7 @@ namespace Vanrise.BusinessProcess
                             EventTime = DateTime.Now
                         });
                         runningInstance.BPInstance.Status = BPInstanceStatus.Cancelling;
-                        runningInstance.BPInstance.LastMessage = "Process is cancelled";
+                        runningInstance.BPInstance.LastMessage = "Process is canceled";
                         UpdateProcessStatus(runningInstance.BPInstance, false);
                         runningInstance.WFApplication.Cancel();
                     }
@@ -163,11 +163,11 @@ namespace Vanrise.BusinessProcess
                         EventTime = DateTime.Now
                     });
                     bpInstance.Status = BPInstanceStatus.Cancelled;
-                    bpInstance.LastMessage = "Process is cancelled";
+                    bpInstance.LastMessage = "Process is canceled";
                     UpdateProcessStatus(bpInstance, false);
                     string logEventType = bpInstance.InputArgument.GetDefinitionTitle();
                     string processTitle = bpInstance.Title;
-                    LoggerFactory.GetLogger().WriteEntry(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), LogEntryType.Error, "Process '{0}' cancelled", processTitle);
+                    LoggerFactory.GetLogger().WriteEntry(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), LogEntryType.Error, "Process '{0}' canceled", processTitle);
                 }
             }
         }
@@ -314,14 +314,14 @@ namespace Vanrise.BusinessProcess
                 if (bpInstance.Status == BPInstanceStatus.Cancelling)
                 {
                     bpInstance.Status = BPInstanceStatus.Cancelled;
-                    LoggerFactory.GetLogger().WriteEntry(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), LogEntryType.Error, "Process '{0}' cancelled", processTitle);
+                    LoggerFactory.GetLogger().WriteEntry(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), LogEntryType.Error, "Process '{0}' canceled", processTitle);
                 }
                 else
                 {
                     bpInstance.Status = BPInstanceStatus.Aborted;
                     terminationException = Utilities.WrapException(e.TerminationException, String.Format("Process '{0}' failed", processTitle));
                     BPTrackingChannel.Current.WriteException(bpInstance.ProcessInstanceID, bpInstance.ParentProcessID, terminationException);
-                    bpInstance.LastMessage = String.Format("Workflow Finished Unsuccessfully. Status: {0}. Error: {1}", e.CompletionState, e.TerminationException);
+                    bpInstance.LastMessage = String.Format("Workflow finished unsuccessfully. Status: {0}. Error: {1}", e.CompletionState, e.TerminationException);
                     LoggerFactory.GetExceptionLogger().WriteException(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), terminationException);
                 }
                 UpdateProcessStatus(bpInstance, false);
@@ -404,7 +404,7 @@ namespace Vanrise.BusinessProcess
             {
                 ProcessInstanceId = runningInstance.BPInstance.ProcessInstanceID,
                 ParentProcessId = runningInstance.BPInstance.ParentProcessID,
-                TrackingMessage = String.Format("Event '{0}' triggerred", bpEvent.Bookmark),
+                TrackingMessage = String.Format("Event '{0}' triggered", bpEvent.Bookmark),
                 Severity = LogEntryType.Verbose,
                 EventTime = DateTime.Now
             });
