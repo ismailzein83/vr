@@ -91,15 +91,32 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                         serializedFilter = UtilsService.serializetoJson(filter);
 
                     return WhS_Routing_RoutingDatabaseAPIService.GetRoutingDatabaseInfo(serializedFilter).then(function (response) {
+                        var hasCurrentDB = false;
                         angular.forEach(response, function (itm) {
+                            if (itm.Type == WhS_Routing_RoutingDatabaseTypeEnum.Current.value)
+                                hasCurrentDB = true;
                             ctrl.datasource.push(itm);
                         });
+
                         if (selectedIds != undefined)
                             VRUIUtilsService.setSelectedValues(selectedIds, 'RoutingDatabaseId', $attrs, ctrl);
                         else {
                             var currentRoutingDBTypeValue = WhS_Routing_RoutingDatabaseTypeEnum.Current.value;
-                            var defaultSelectedIds = ($attrs.ismultipleselection != undefined) ? [currentRoutingDBTypeValue] : currentRoutingDBTypeValue;
-                            VRUIUtilsService.setSelectedValues(defaultSelectedIds, 'Type', $attrs, ctrl);
+                            var currentDBSelectedIds = ($attrs.ismultipleselection != undefined) ? [currentRoutingDBTypeValue] : currentRoutingDBTypeValue;
+                            if (hasCurrentDB) {
+                                VRUIUtilsService.setSelectedValues(currentDBSelectedIds, 'Type', $attrs, ctrl);
+                            }
+                            else {
+                                if (ctrl.datasource.length > 0) {
+                                    var firstItem = ctrl.datasource[0];
+                                    var defaultSelectedIds = ($attrs.ismultipleselection != undefined) ? [firstItem.Type] : firstItem.Type;
+                                    VRUIUtilsService.setSelectedValues(defaultSelectedIds, 'Type', $attrs, ctrl);
+                                }
+                            }
+                        }
+
+                        if (payload.onLoadRoutingDatabaseInfo != undefined && typeof (payload.onLoadRoutingDatabaseInfo) == 'function') {
+                            payload.onLoadRoutingDatabaseInfo(ctrl.selectedvalues);
                         }
                     });
                 };

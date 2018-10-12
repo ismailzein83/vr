@@ -2,9 +2,9 @@
 
     "use strict";
 
-    customerRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
+    customerRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Routing_RoutingDatabaseTypeEnum'];
 
-    function customerRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
+    function customerRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Routing_RoutingDatabaseTypeEnum) {
 
         var parametersCustomersIds;
         var parametersZoneIds;
@@ -25,9 +25,14 @@
         var routeStatusSelectorAPI;
         var routeStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var routingDatabaseSelectPromiseDeferred = UtilsService.createPromiseDeferred();
+        var routingDatabaseLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
+
+        var selectedRoutingDatabaseObject;
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -102,6 +107,18 @@
             $scope.isLoading = true;
             $scope.includeBlockedSuppliers = true;
 
+            $scope.onRoutingDatabaseSelectionChanged = function (selectedItem) {
+                if (selectedItem != undefined) {
+                    if (routingDatabaseSelectPromiseDeferred != undefined) {
+                        routingDatabaseSelectPromiseDeferred.resolve();
+                    } else {
+                        var databaseType = getDatabaseEffectiveType(selectedItem);
+                        var payload = { effectiveMode: databaseType };
+                        saleZoneSelectorAPI.reLoadSaleZoneSelector(payload);
+                    }
+                }
+            };
+
             var promiseDeferred = UtilsService.createPromiseDeferred();
 
             UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadSaleZoneSection, loadCustomersSection, loadRouteStatusSelector]).then(function () {
@@ -117,26 +134,40 @@
 
             return promiseDeferred.promise.then(function () {
                 $scope.isLoading = false;
+                routingDatabaseSelectPromiseDeferred = undefined;
             });
         }
+
 
         function loadRoutingDatabaseSelector() {
             var loadRoutingDatabasePromiseDeferred = UtilsService.createPromiseDeferred();
 
             routingDatabaseReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(routingDatabaseSelectorAPI, undefined, loadRoutingDatabasePromiseDeferred);
+                var routingDatabaseSelectorPayload = { onLoadRoutingDatabaseInfo: onLoadRoutingDatabaseInfo };
+                VRUIUtilsService.callDirectiveLoad(routingDatabaseSelectorAPI, routingDatabaseSelectorPayload, loadRoutingDatabasePromiseDeferred);
             });
 
             return loadRoutingDatabasePromiseDeferred.promise;
         }
+
+        function onLoadRoutingDatabaseInfo(selectedObject) {
+            selectedRoutingDatabaseObject = selectedObject;
+            routingDatabaseLoadPromiseDeferred.resolve();
+        };
+
         function loadSaleZoneSection() {
             var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var payload;
-            if (parametersZoneIds != null)
-                payload = { selectedIds: parametersZoneIds };
+            var payload = {};
 
-            saleZoneReadyPromiseDeferred.promise.then(function () {
+            if (parametersZoneIds != null)
+                payload.selectedIds = parametersZoneIds;
+
+            UtilsService.waitMultiplePromises([routingDatabaseLoadPromiseDeferred.promise, saleZoneReadyPromiseDeferred.promise]).then(function () {
+                var databaseType = getDatabaseEffectiveType(selectedRoutingDatabaseObject);
+                if (databaseType != undefined)
+                    payload.filter = { EffectiveMode: databaseType };
+
                 VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, payload, loadSaleZonePromiseDeferred);
             });
 
@@ -163,6 +194,19 @@
             });
 
             return loadRouteStatusPromiseDeferred.promise;
+        }
+
+        function getDatabaseEffectiveType(selectedObject) {
+            if (selectedObject == undefined) {
+                return undefined;
+            }
+
+            if (selectedObject.Type == WhS_Routing_RoutingDatabaseTypeEnum.Current.value) {
+                return VRCommon_EntityFilterEffectiveModeEnum.Current.value;
+            }
+            if (selectedObject.Type == WhS_Routing_RoutingDatabaseTypeEnum.Future.value) {
+                return VRCommon_EntityFilterEffectiveModeEnum.Future.value;
+            }
         }
     }
 

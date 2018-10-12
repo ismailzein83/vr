@@ -1,10 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
+    rpRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RoutingProductFilterEnum', 'WhS_Routing_RouteFilterEnum', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Routing_RoutingDatabaseTypeEnum'];
 
-    rpRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RoutingProductFilterEnum', 'WhS_Routing_RouteFilterEnum'];
-
-    function rpRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RoutingProductFilterEnum, WhS_Routing_RouteFilterEnum) {
+    function rpRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RoutingProductFilterEnum, WhS_Routing_RouteFilterEnum, VRCommon_EntityFilterEffectiveModeEnum, WhS_Routing_RoutingDatabaseTypeEnum) {
 
         var filterSettingsData;
         //var gridSettingsData;
@@ -40,6 +39,11 @@
         var customerSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var loadRoutePolicyDataPromiseDeferred;
+
+        var routingDatabaseSelectPromiseDeferred = UtilsService.createPromiseDeferred();
+        var routingDatabaseLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var selectedRoutingDatabaseObject;
 
         var enableSNPSelctionChanged = true;
 
@@ -108,7 +112,7 @@
             $scope.onRouteFilterSelectorReady = function (api) {
             };
 
-            $scope.onRoutingDatabaseSelectorChange = function () {
+            $scope.onRoutingDatabaseSelectorChange = function (selectedItem) {
                 var selectedId = routingDatabaseSelectorAPI.getSelectedIds();
 
                 if (selectedId == undefined)
@@ -129,6 +133,16 @@
                 $scope.isLoadingFilterData = true;
                 VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, policySelectorPayload, loadRoutePolicyDataPromiseDeferred);
                 loadRoutePolicyDataPromiseDeferred.promise.then(function () { $scope.isLoadingFilterData = false; });
+
+                if (selectedItem != undefined) {
+                    if (routingDatabaseSelectPromiseDeferred != undefined) {
+                        routingDatabaseSelectPromiseDeferred.resolve();
+                    } else {
+                        var databaseType = getDatabaseEffectiveType(selectedItem);
+                        var payload = { effectiveMode: databaseType };
+                        saleZoneSelectorAPI.reLoadSaleZoneSelector(payload);
+                    }
+                }
             };
 
             $scope.searchClicked = function () {
@@ -178,6 +192,7 @@
 				    VRNotificationService.notifyExceptionWithClose(error, $scope);
 				})
 				.finally(function () {
+				    routingDatabaseSelectPromiseDeferred = undefined;
 				    $scope.isLoading = false;
 				});
         }
@@ -248,11 +263,17 @@
             var loadRoutingDatabasePromiseDeferred = UtilsService.createPromiseDeferred();
 
             routingDatabaseReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(routingDatabaseSelectorAPI, undefined, loadRoutingDatabasePromiseDeferred);
+                var routingDatabaseSelectorPayload = { onLoadRoutingDatabaseInfo: onLoadRoutingDatabaseInfo };
+                VRUIUtilsService.callDirectiveLoad(routingDatabaseSelectorAPI, routingDatabaseSelectorPayload, loadRoutingDatabasePromiseDeferred);
             });
 
             return loadRoutingDatabasePromiseDeferred.promise;
         }
+
+        function onLoadRoutingDatabaseInfo(selectedObject) {
+            selectedRoutingDatabaseObject = selectedObject;
+            routingDatabaseLoadPromiseDeferred.resolve();
+        };
 
         function loadRouteFilters() {
 
@@ -335,10 +356,9 @@
             return loadRoutingProductPromiseDeferred.promise;
         }
         function loadSaleZoneSection() {
-
             var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
-            saleZoneReadyPromiseDeferred.promise.then(function () {
+            UtilsService.waitMultiplePromises([routingDatabaseLoadPromiseDeferred.promise, saleZoneReadyPromiseDeferred.promise]).then(function () {
 
                 var payload = {
                     onSellingNumberPlanSelectionChanged: onSellingNumberPlanSelectionchanged
@@ -348,11 +368,17 @@
                     if (filterSettingsData.SaleZoneIds != undefined && filterSettingsData.SaleZoneIds.length > 0)
                         enableSNPSelctionChanged = false;
                 }
+
+                var databaseType = getDatabaseEffectiveType(selectedRoutingDatabaseObject);
+                if (databaseType != undefined)
+                    payload.filter = { EffectiveMode: databaseType };
+
                 VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, payload, loadSaleZonePromiseDeferred);
             });
 
             return loadSaleZonePromiseDeferred.promise;
         }
+
         function loadRouteStatusSelector() {
 
             var loadRouteStatusPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -369,6 +395,20 @@
 
             return loadRouteStatusPromiseDeferred.promise;
         }
+
+        function getDatabaseEffectiveType(selectedObject) {
+            if (selectedObject == undefined) {
+                return undefined;
+            }
+
+            if (selectedObject.Type == WhS_Routing_RoutingDatabaseTypeEnum.Current.value) {
+                return VRCommon_EntityFilterEffectiveModeEnum.Current.value;
+            }
+            if (selectedObject.Type == WhS_Routing_RoutingDatabaseTypeEnum.Future.value) {
+                return VRCommon_EntityFilterEffectiveModeEnum.Future.value;
+            }
+        }
+
         function loadCustomerSelector() {
 
             var loadCustomerPromiseDeferred = UtilsService.createPromiseDeferred();

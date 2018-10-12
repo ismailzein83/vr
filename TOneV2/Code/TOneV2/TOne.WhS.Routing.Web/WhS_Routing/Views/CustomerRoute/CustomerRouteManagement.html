@@ -4,7 +4,8 @@
             <div ng-hide="filterSectionCollapsed">
                 <vr-row removeline>
                     <vr-columns colnum="2">
-                        <vr-whs-routing-routingdatabase-selector getcustomerroutes on-ready="onRoutingDatabaseSelectorReady" isrequired></vr-whs-routing-routingdatabase-selector>
+                        <vr-whs-routing-routingdatabase-selector getcustomerroutes on-ready="onRoutingDatabaseSelectorReady" onselectionchanged="onRoutingDatabaseSelectionChanged" hideremoveicon isrequired
+                                                                 selectedvalues="selectedRoutingDatabase"></vr-whs-routing-routingdatabase-selector>
                     </vr-columns>
                     <vr-whs-be-salezone-selector on-ready="onSaleZoneSelectorReady" normal-col-num="2" ismultipleselection></vr-whs-be-salezone-selector>
                     <vr-columns colnum="2">

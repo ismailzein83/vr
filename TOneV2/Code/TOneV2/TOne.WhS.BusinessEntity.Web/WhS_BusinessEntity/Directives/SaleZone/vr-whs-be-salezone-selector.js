@@ -392,6 +392,20 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                     return sellingNumberPlanId;
                 };
 
+                api.reLoadSaleZoneSelector = function (payload) {
+                    if (selectorApi != undefined)
+                        selectorApi.clearDataSource();
+
+                    if (filter == undefined)
+                        filter = {};
+
+                    if (payload != undefined)
+                        filter.EffectiveMode = payload.effectiveMode;
+
+                    if (filter.EffectiveMode == undefined)
+                        filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.Current.value;
+                };
+
                 if (saleZoneSelectorCtrl.onReady != null)
                     saleZoneSelectorCtrl.onReady(api);
 
