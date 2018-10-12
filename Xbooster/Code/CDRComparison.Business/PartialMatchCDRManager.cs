@@ -34,7 +34,14 @@ namespace CDRComparison.Business
             partialMatchCDRBigResult.Summary.PartnerDurationInSec = partnerDurationInSeconds;
             partialMatchCDRBigResult.Summary.DurationDifferenceInSec = differenceDurationInSeconds;
 
-            var resultProcessingHandler = new ResultProcessingHandler<PartialMatchCDR>()
+            foreach (PartialMatchCDR cdr in bigResult.Data)
+            {
+                decimal durationDifference = cdr.PartnerDurationInSec - cdr.SystemDurationInSec;
+                cdr.DurationDifferenceInSec = Math.Abs(durationDifference);
+                if (cdr.SystemDurationInSec > 0)
+                    cdr.DurationDifferencePercentageOfPartner = (durationDifference * 100) / cdr.SystemDurationInSec;
+            }
+                var resultProcessingHandler = new ResultProcessingHandler<PartialMatchCDR>()
             {
                 ExportExcelHandler = new PartialMatchCDRExportExcelHandler()
             };
