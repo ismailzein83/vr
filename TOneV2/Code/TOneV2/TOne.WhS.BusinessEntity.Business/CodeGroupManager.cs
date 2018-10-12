@@ -449,12 +449,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
+            ICodeGroupDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
             {
-                get
-                {
-                    return true;
-                }
+                return _dataManager.AreCodeGroupUpdated(ref _updateHandle);
             }
         }
 
