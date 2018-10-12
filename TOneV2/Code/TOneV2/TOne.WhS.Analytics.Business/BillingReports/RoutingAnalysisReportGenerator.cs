@@ -139,6 +139,27 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                 trafficDataRetrievalInput.Filters.Add(zoneFilter);
 
+                if (!String.IsNullOrEmpty(parameters.CustomersId))
+                {
+                    DimensionFilter dimensionFilter = new DimensionFilter
+                    {
+                        Dimension = "Customer",
+                        FilterValues = parameters.CustomersId.Split(',').ToList().Cast<object>().ToList()
+                    };
+                    trafficDataRetrievalInput.Filters.Add(dimensionFilter);
+                }
+
+                if (!String.IsNullOrEmpty(parameters.SuppliersId))
+                {
+                    DimensionFilter dimensionFilter = new DimensionFilter
+                    {
+                        Dimension = "Supplier",
+                        FilterValues = parameters.SuppliersId.Split(',').ToList().Cast<object>().ToList()
+                    };
+                    trafficDataRetrievalInput.Filters.Add(dimensionFilter);
+                }
+
+
                 RecordFilterGroup interAndInvalidInterRecordFilterGroup = new RecordFilterGroup
                 {
                     Filters = new List<RecordFilter>()
