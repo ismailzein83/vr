@@ -6,6 +6,7 @@ using TOne.WhS.Analytics.Entities.BillingReport.RoutingAnalysis;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.Analytics.Business.BillingReports
 {
@@ -137,6 +138,22 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 };
 
                 trafficDataRetrievalInput.Filters.Add(zoneFilter);
+
+                RecordFilterGroup interAndInvalidInterRecordFilterGroup = new RecordFilterGroup
+                {
+                    Filters = new List<RecordFilter>()
+                    {
+                        new NumberListRecordFilter(){
+                            FieldName = "CDRType",
+                            CompareOperator = ListRecordFilterOperator.NotIn,
+                            Values = new List<decimal>(){5,6}
+                        }
+                    },
+                    LogicalOperator = RecordQueryLogicalOperator.And
+                };
+
+                trafficDataRetrievalInput.FilterGroup = interAndInvalidInterRecordFilterGroup;
+
                 #endregion
 
 
