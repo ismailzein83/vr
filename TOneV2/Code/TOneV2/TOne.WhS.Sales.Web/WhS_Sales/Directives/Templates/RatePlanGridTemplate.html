@@ -301,7 +301,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div style="display:inline-flex;width:50px" ng-init="::addColumnFixedAndRecalculate('currentRate', 50,'C.Rate',true)">
+                                <div style="display:inline-flex;width:60px" ng-init="::addColumnFixedAndRecalculate('currentRate', 60,'C.Rate',true)">
                                     <div class="vr-datagrid-header-cell vr-datagrid-celltext">
                                         <div col-index="renderIndex" style="width:100%">
                                             <div class="vr-datagrid-celltext" style="overflow: hidden;text-align:right" ng-click="sortZones(columnsConfig.currentRate)">
@@ -736,11 +736,11 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div ng-if="!ratePlanGridCtrl.isMobile" style="display:inline-flex;vertical-align:top;" ng-style="{'width':'50px' }" class="vr-datagrid-cell-container">
+                                                                <div ng-if="!ratePlanGridCtrl.isMobile" style="display:inline-flex;vertical-align:top;" ng-style="{'width':'60px' }" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <div style="text-align: right">
-                                                                                <vr-label isvalue="true">{{::dataItem.CurrentRate | number: longPrecision }}</vr-label>
+                                                                                <vr-label style="width: calc(100% - 7px);display: inline-block;text-overflow: ellipsis;overflow: hidden;" isvalue="true">{{::dataItem.CurrentRate | number: longPrecision }}</vr-label>
                                                                                 <span ng-if="::(dataItem.FutureNormalRate != null)"
                                                                                       style="cursor: pointer; text-decoration: underline"
                                                                                       ng-click="::onCurrentRateClicked(dataItem)">*</span>
