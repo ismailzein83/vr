@@ -38,13 +38,18 @@ namespace TOne.WhS.Invoice.Entities
         public Decimal? ProviderAmount { get; set; }
         public Decimal? SystemCalls { get; set; }
         public Decimal? ProviderCalls { get; set; }
+        public decimal? DiffCallsPercentage { get; set; }
 
         public decimal? DiffCalls { get; set; }
         public Vanrise.Entities.LabelColor? DiffCallsColor { get; set; }
         public decimal? DiffDuration { get; set; }
+        public decimal? DiffDurationPercentage { get; set; }
+
         public Vanrise.Entities.LabelColor? DiffDurationColor { get; set; }
 
         public decimal? DiffAmount { get; set; }
+        public decimal? DiffAmountPercentage { get; set; }
+
         public Vanrise.Entities.LabelColor? DiffAmountColor { get; set; }
 
         public ComparisonResult Result { get; set; }

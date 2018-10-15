@@ -421,14 +421,18 @@ namespace TOne.WhS.Invoice.Business
                         invoiceComparisonResult.ResultColor = LabelColor.Error;
                     }
 
+                    invoiceComparisonResult.DiffCallsPercentage = CalculateDiffPercentageValue(invoiceComparisonResult.SystemCalls, invoiceComparisonResult.ProviderCalls);
                     invoiceComparisonResult.DiffCalls = CalculateDiffValue(invoiceComparisonResult.SystemCalls, invoiceComparisonResult.ProviderCalls);
-                    invoiceComparisonResult.DiffCallsColor = GetDiffLabelColor(invoiceComparisonResult.DiffCalls, threshold);
+                    invoiceComparisonResult.DiffCallsColor = GetDiffLabelColor(invoiceComparisonResult.DiffCallsPercentage, threshold);
 
+                    invoiceComparisonResult.DiffAmountPercentage = CalculateDiffPercentageValue(invoiceComparisonResult.SystemAmount, invoiceComparisonResult.ProviderAmount);
+                    invoiceComparisonResult.DiffAmountColor = GetDiffLabelColor(invoiceComparisonResult.DiffAmountPercentage, threshold);
                     invoiceComparisonResult.DiffAmount = CalculateDiffValue(invoiceComparisonResult.SystemAmount, invoiceComparisonResult.ProviderAmount);
-                    invoiceComparisonResult.DiffAmountColor = GetDiffLabelColor(invoiceComparisonResult.DiffAmount, threshold);
 
+                    invoiceComparisonResult.DiffDurationPercentage = CalculateDiffPercentageValue(invoiceComparisonResult.SystemDuration, invoiceComparisonResult.ProviderDuration);
+                    invoiceComparisonResult.DiffDurationColor = GetDiffLabelColor(invoiceComparisonResult.DiffDurationPercentage, threshold);
                     invoiceComparisonResult.DiffDuration = CalculateDiffValue(invoiceComparisonResult.SystemDuration, invoiceComparisonResult.ProviderDuration);
-                    invoiceComparisonResult.DiffDurationColor = GetDiffLabelColor(invoiceComparisonResult.DiffDuration, threshold);
+
 
                     invoiceComparisonResults.Add(invoiceComparisonResult);
                 }
@@ -864,7 +868,7 @@ namespace TOne.WhS.Invoice.Business
             }
             return null;
         }
-        private decimal? CalculateDiffValue(decimal? sysVal, decimal? provideVal)
+        private decimal? CalculateDiffPercentageValue(decimal? sysVal, decimal? provideVal)
         {
             if (sysVal.HasValue && sysVal.Value != 0 && provideVal.HasValue && provideVal.Value != 0)
             {
@@ -872,7 +876,14 @@ namespace TOne.WhS.Invoice.Business
             }
             return null;
         }
-
+        private decimal? CalculateDiffValue(decimal? sysVal, decimal? provideVal)
+        {
+            if (sysVal.HasValue && sysVal.Value != 0 && provideVal.HasValue && provideVal.Value != 0)
+            {
+                return (sysVal.Value - provideVal.Value);
+            }
+            return null;
+        }
         private struct ComparisonKey
         {
             public string Destination { get; set; }
@@ -998,6 +1009,10 @@ namespace TOne.WhS.Invoice.Business
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
+                    Title = "Diff. Calls",
+                });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell
+                {
                     Title = "Diff. Calls %",
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
@@ -1010,6 +1025,10 @@ namespace TOne.WhS.Invoice.Business
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
+                    Title = "Diff. Duration",
+                });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell
+                {
                     Title = "Diff. Duration %",
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
@@ -1019,6 +1038,10 @@ namespace TOne.WhS.Invoice.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
                     Title = string.Format("{0} Amount", invoiceActionSettings.PartnerLabel),
+                });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell
+                {
+                    Title = "Diff. Amount",
                 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
@@ -1055,11 +1078,27 @@ namespace TOne.WhS.Invoice.Business
                                     Color = item.Entity.DiffCallsColor
                                 }
                             });
+                            row.Cells.Add(new ExportExcelCell
+                            {
+                                Value = item.Entity.DiffCallsPercentage,
+                                Style = new ExcelCellStyle
+                                {
+                                    Color = item.Entity.DiffCallsColor
+                                }
+                            });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.SystemDuration });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.ProviderDuration });
                             row.Cells.Add(new ExportExcelCell
                             {
                                 Value = item.Entity.DiffDuration,
+                                Style = new ExcelCellStyle
+                                {
+                                    Color = item.Entity.DiffDurationColor
+                                }
+                            });
+                            row.Cells.Add(new ExportExcelCell
+                            {
+                                Value = item.Entity.DiffDurationPercentage,
                                 Style = new ExcelCellStyle
                                 {
                                     Color = item.Entity.DiffDurationColor
@@ -1075,7 +1114,14 @@ namespace TOne.WhS.Invoice.Business
                                     Color = item.Entity.DiffAmountColor
                                 }
                             });
-
+                            row.Cells.Add(new ExportExcelCell
+                            {
+                                Value = item.Entity.DiffAmountPercentage,
+                                Style = new ExcelCellStyle
+                                {
+                                    Color = item.Entity.DiffAmountColor
+                                }
+                            });
 
                             ExcelCellStyle resultStyle = new ExcelCellStyle();
 
