@@ -46,6 +46,7 @@
             $scope.scopeModel = {};
             $scope.scopeModel.cancelActionClicked = false;
             $scope.scopeModel.allowCancel = false;
+            $scope.scopeModel.showCloseMessage = false;
             $scope.scopeModel.onInstanceTrackingMonitorGridReady = function (api) {
                 instanceTrackingMonitorGridAPI = api;
                 instanceTrackingMonitorGridReadyDeferred.resolve();
@@ -292,6 +293,8 @@
                 bpInstanceStatusValue = response.Status;
                 if (bpInstanceStatusValue == BPInstanceStatusEnum.Cancelling.value)
                     $scope.scopeModel.allowCancel = false;
+                if (bpInstanceStatusValue == BPInstanceStatusEnum.Completed.value)
+                    $scope.scopeModel.showCloseMessage = true;
                 if (context != undefined && context.automaticCloseWhenCompleted && response.Status == BPInstanceStatusEnum.Completed.value) {
                     $scope.modalContext.closeModal();
                 }
