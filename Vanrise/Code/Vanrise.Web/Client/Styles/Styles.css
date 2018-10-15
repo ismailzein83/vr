@@ -4559,6 +4559,15 @@ span.option-marketprice {
     cursor: pointer !important;
     color: #00adef;
 }
-
 /*end vr-expandable-content*/
 
+/*hide print highchart*/
+
+vr-chart .highcharts-menu > div:first-child {
+    display: none !important;
+}
+
+vr-chart .highcharts-menu > hr {
+    display: none !important;
+    margin: unset;
+}
