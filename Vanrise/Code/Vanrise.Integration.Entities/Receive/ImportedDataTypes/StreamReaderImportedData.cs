@@ -19,6 +19,16 @@ namespace Vanrise.Integration.Entities
 
         public object Type { get; set; }
 
+        public bool IsEmpty { get; set; }
+
+        public bool IsFile { get { return true; } }
+
+        public bool IsMultipleReadings { get { return false; } }
+
+        public string Description { get { return this.Name; } }
+
+        public long? BatchSize { get { return Size; } }
+
         StreamReader _streamReader;
         public StreamReader StreamReader
         {
@@ -30,43 +40,12 @@ namespace Vanrise.Integration.Entities
             }
         }
 
-        public string Description
-        {
-            get { return this.Name; }
-        }
-
-
-        public long? BatchSize
-        {
-            get { return Size; }
-        }
-
-
         public void OnDisposed()
         {
             if (this.StreamReader != null)
             {
                 this.StreamReader.Close();
                 this.StreamReader.Dispose();
-            }
-        }
-
-
-        public bool IsMultipleReadings
-        {
-            get { return false; }
-        }
-
-        public bool IsEmpty
-        {
-            get;
-            set;
-        }
-        public bool IsFile
-        {
-            get
-            {
-                return true;
             }
         }
     }
