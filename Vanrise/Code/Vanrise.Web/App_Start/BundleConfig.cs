@@ -32,7 +32,6 @@ namespace Vanrise.Web
                "~/Client/Libraries/Bower/angular-sanitize/angular-sanitize.js",
                "~/Client/Libraries/Bower/angular-strap/dist/angular-strap.js",
                "~/Client/Libraries/Bower/angular-strap/dist/angular-strap.tpl.js",
-               "~/Client/Libraries/Bower/angular-ui-switch/angular-ui-switch.js",
                "~/Client/Libraries/Bower/angular-notify/dist/angular-notify.js",
                "~/Client/Libraries/Bower/angular-ivh-treeview/dist/ivh-treeview.js",
                "~/Client/Libraries/Bower/Sortable/Sortable.js",
