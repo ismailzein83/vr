@@ -833,6 +833,7 @@ namespace TOne.WhS.Routing.Business
         private RPRouteOptionByCodeDetail BuildRPRouteOptionByCodeDetail(RouteOption option, decimal convertedSupplierRate, string currencySymbol, bool isLossy, int? systemCurrencyId,
             int? toCurrencyId, DateTime effectiveDate, decimal? effectiveRateValue, bool includeBlockedSuppliers, int optionOrder, Dictionary<long, SupplierZoneDetail> supplierZoneDetailsByZoneId)
         {
+            ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
 
@@ -852,7 +853,8 @@ namespace TOne.WhS.Routing.Business
                 SupplierZoneId = option.SupplierZoneId,
                 SupplierZoneName = supplierZoneManager.GetSupplierZoneName(option.SupplierZoneId),
                 OptionOrder = optionOrder,
-                SupplierZoneMatchHasClosedRate = supplierZoneDetail.SupplierRateEED.HasValue
+                SupplierZoneMatchHasClosedRate = supplierZoneDetail.SupplierRateEED.HasValue,
+                ExactSupplierServiceSymbols = supplierZoneDetail.ExactSupplierServiceIds != null ? zoneServiceConfigManager.GetZoneServicesNames(supplierZoneDetail.ExactSupplierServiceIds) : string.Empty
             };
 
             if (option.Backups != null)
@@ -897,6 +899,8 @@ namespace TOne.WhS.Routing.Business
             SaleZoneDefintion saleZoneDefintion = new SaleZoneDefintion() { SaleZoneId = rpRoute.SaleZoneId, SellingNumberPlanId = rpRoute.SellingNumberPlanID };
             CustomerZoneDetailData customerZoneDetailData = new CustomerZoneDetailData() { CustomerId = customerId, EffectiveRateValue = rpRoute.Rate, SaleZoneId = rpRoute.SaleZoneId, SaleZoneServiceIds = rpRoute.SaleZoneServiceIds };
             RouteRule routeRule = new RouteRuleManager().GetRule(rpRoute.ExecutedRuleId.Value);
+            if (routeRule == null)
+                throw new NullReferenceException(string.Format("Route Rule {0} doesn't exist; Please Run Product Cost Generation Process", rpRoute.ExecutedRuleId.Value));
 
             List<SupplierCodeMatchWithRate> supplierCodeMatchWithRates = new List<SupplierCodeMatchWithRate>();
             SupplierCodeMatchWithRateBySupplier supplierCodeMatchWithRateBySupplier = new Entities.SupplierCodeMatchWithRateBySupplier();

@@ -42,6 +42,7 @@ namespace TOne.WhS.Routing.Entities
     }
     public class RPRouteOptionByCodeDetail : BaseRPRouteOptionByCodeDetail
     {
+        public string ExactSupplierServiceSymbols { get; set; }
         public int OptionOrder { get; set; }
         public int? Percentage { get; set; }
         public List<RPRouteBackupOptionByCodeDetail> Backups { get; set; }

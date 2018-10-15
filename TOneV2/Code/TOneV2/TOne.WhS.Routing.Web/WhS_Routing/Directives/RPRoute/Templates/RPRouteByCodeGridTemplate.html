@@ -25,10 +25,12 @@
             <div class="responsive-container" style="white-space: normal;">
                 <span ng-repeat="routeOption in dataItem.RouteOptionsDetails" title="{{::routeOption.title}}"
                       style="font-size: 11px; cursor: pointer; display: inline-block; padding: 0 10px 0 0; color: {{routeOption.Color}};">
+                    <span class="option bold-label" ng-class="details.EvaluatedStatusCssClass" title="Zone: {{routeOption.SupplierZoneName}} , Services: {{routeOption.ExactSupplierServiceSymbols}}">
 
-                    <span style="display: inline-block; width: 190px;">
-                        <span class="option" ng-class="routeOption.EvaluatedStatusCssClass">{{::routeOption.titleToDisplay}}</span>
-                        <span style="color:#FFA500; font-weight:bold;" ng-if="::routeOption.SupplierZoneMatchHasClosedRate">*</span>
+                        <span style="display: inline-block; width: 190px;">
+                            <span class="option" ng-class="routeOption.EvaluatedStatusCssClass">{{::routeOption.titleToDisplay}}</span>
+                            <span style="color:#FFA500; font-weight:bold;" ng-if="::routeOption.SupplierZoneMatchHasClosedRate">*</span>
+                        </span>
                     </span>
                 </span>
             </div>
