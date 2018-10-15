@@ -23,7 +23,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.86924in</Top>
+        <Top>1.44723in</Top>
         <Left>5.14119in</Left>
         <Height>0.20833in</Height>
         <Width>1.10388in</Width>
@@ -57,7 +57,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.86924in</Top>
+        <Top>1.44723in</Top>
         <Left>6.26222in</Left>
         <Height>0.20833in</Height>
         <Width>1.34027in</Width>
@@ -323,7 +323,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value EvaluationMode="Constant">Amount(Parameters!Currency.Value)</Value>
+                              <Value>="Ammount ("+Parameters!Currency.Value+")"</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -996,6 +996,7 @@
           <TablixMembers>
             <TablixMember>
               <KeepWithGroup>After</KeepWithGroup>
+              <RepeatOnNewPage>true</RepeatOnNewPage>
             </TablixMember>
             <TablixMember>
               <Group Name="Details2" />
@@ -1008,7 +1009,7 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.63542in</Top>
+        <Top>2.21341in</Top>
         <Left>0.15163in</Left>
         <Height>0.71875in</Height>
         <Width>7.45086in</Width>
@@ -1043,7 +1044,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.28056in</Top>
+        <Top>0.85855in</Top>
         <Left>3.17433in</Left>
         <Height>0.375in</Height>
         <Width>1.5in</Width>
@@ -1076,7 +1077,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
-        <Top>3.4675in</Top>
+        <Top>3.04549in</Top>
         <Left>2.60799in</Left>
         <Height>0.11458in</Height>
         <Width>4.9945in</Width>
@@ -1097,63 +1098,6 @@
   </Body>
   <Width>19.37947cm</Width>
   <Page>
-    <PageFooter>
-      <Height>1.13505cm</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <ReportItems>
-        <Textbox Name="Textbox24">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=string.Format("{0} of {1}",Globals!PageNumber ,Globals!TotalPages)</Value>
-                  <Style>
-                    <FontFamily>Verdana</FontFamily>
-                    <FontSize>9pt</FontSize>
-                    <FontWeight>Bold</FontWeight>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>Textbox24</rd:DefaultName>
-          <Top>0.12031in</Top>
-          <Left>6.07229in</Left>
-          <Height>0.20625in</Height>
-          <Width>1.13542in</Width>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Line Name="Line1">
-          <Top>0.08594in</Top>
-          <Left>0.05751in</Left>
-          <Height>0in</Height>
-          <Width>7.16498in</Width>
-          <ZIndex>1</ZIndex>
-          <Style>
-            <Border>
-              <Style>Solid</Style>
-            </Border>
-          </Style>
-        </Line>
-      </ReportItems>
-      <Style>
-        <Border>
-          <Style>None</Style>
-        </Border>
-      </Style>
-    </PageFooter>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
     <InteractiveHeight>0in</InteractiveHeight>

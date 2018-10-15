@@ -23,8 +23,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.95484in</Top>
-        <Left>2.30727in</Left>
+        <Top>1.35415in</Top>
+        <Left>2.28851in</Left>
         <Height>0.20833in</Height>
         <Width>0.89699in</Width>
         <Style>
@@ -39,8 +39,8 @@
       </Textbox>
       <Rectangle Name="Rectangle6">
         <KeepTogether>true</KeepTogether>
-        <Top>1.85242in</Top>
-        <Left>2.28851in</Left>
+        <Top>1.25173in</Top>
+        <Left>2.26975in</Left>
         <Height>0.02083in</Height>
         <Width>5.71764in</Width>
         <ZIndex>1</ZIndex>
@@ -748,6 +748,7 @@
           <TablixMembers>
             <TablixMember>
               <KeepWithGroup>After</KeepWithGroup>
+              <RepeatOnNewPage>true</RepeatOnNewPage>
             </TablixMember>
             <TablixMember>
               <Group Name="Details2" />
@@ -757,8 +758,8 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>SupplierInvoiceItemDetails</DataSetName>
-        <Top>1.342in</Top>
-        <Left>0.08134in</Left>
+        <Top>0.74131in</Top>
+        <Left>0.06258in</Left>
         <Height>0.46875in</Height>
         <Width>7.92481in</Width>
         <ZIndex>2</ZIndex>
@@ -790,8 +791,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.95484in</Top>
-        <Left>3.55897in</Left>
+        <Top>1.35415in</Top>
+        <Left>3.54021in</Left>
         <Height>0.20833in</Height>
         <Width>0.9877in</Width>
         <ZIndex>3</ZIndex>
@@ -825,8 +826,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.95484in</Top>
-        <Left>4.75688in</Left>
+        <Top>1.35415in</Top>
+        <Left>4.73812in</Left>
         <Height>0.20833in</Height>
         <Width>0.88398in</Width>
         <ZIndex>4</ZIndex>
@@ -860,8 +861,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.95484in</Top>
-        <Left>6.97328in</Left>
+        <Top>1.35415in</Top>
+        <Left>6.95452in</Left>
         <Height>0.20833in</Height>
         <Width>1.03287in</Width>
         <ZIndex>5</ZIndex>
@@ -946,8 +947,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>SupplierInvoiceItemDetails</DataSetName>
-        <Top>1.02256in</Top>
-        <Left>0.08134in</Left>
+        <Top>0.42187in</Top>
+        <Left>0.06258in</Left>
         <Height>0.25in</Height>
         <Width>7.92481in</Width>
         <ZIndex>6</ZIndex>
@@ -963,63 +964,6 @@
   </Body>
   <Width>20.43384cm</Width>
   <Page>
-    <PageFooter>
-      <Height>1.41154cm</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <ReportItems>
-        <Textbox Name="Textbox24">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=string.Format("{0} of {1}",Globals!PageNumber ,Globals!TotalPages)</Value>
-                  <Style>
-                    <FontFamily>Verdana</FontFamily>
-                    <FontSize>9pt</FontSize>
-                    <FontWeight>Bold</FontWeight>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>Textbox24</rd:DefaultName>
-          <Top>0.15538in</Top>
-          <Left>6.85073in</Left>
-          <Height>0.20625in</Height>
-          <Width>1.13542in</Width>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Line Name="Line1">
-          <Top>0.08594in</Top>
-          <Left>0.12001in</Left>
-          <Height>0in</Height>
-          <Width>7.86614in</Width>
-          <ZIndex>1</ZIndex>
-          <Style>
-            <Border>
-              <Style>Solid</Style>
-            </Border>
-          </Style>
-        </Line>
-      </ReportItems>
-      <Style>
-        <Border>
-          <Style>None</Style>
-        </Border>
-      </Style>
-    </PageFooter>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
     <InteractiveHeight>0in</InteractiveHeight>

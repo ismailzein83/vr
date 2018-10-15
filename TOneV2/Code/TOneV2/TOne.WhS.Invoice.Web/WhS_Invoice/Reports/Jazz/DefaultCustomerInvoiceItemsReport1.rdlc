@@ -22,7 +22,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.86924in</Top>
+        <Top>1.44575in</Top>
         <Left>0.15163in</Left>
         <Height>0.20833in</Height>
         <Width>0.90277in</Width>
@@ -56,7 +56,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.86924in</Top>
+        <Top>1.44575in</Top>
         <Left>5.14119in</Left>
         <Height>0.20833in</Height>
         <Width>1.10388in</Width>
@@ -90,7 +90,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.86924in</Top>
+        <Top>1.44575in</Top>
         <Left>1.08218in</Left>
         <Height>0.20833in</Height>
         <Width>2.159in</Width>
@@ -124,7 +124,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.86924in</Top>
+        <Top>1.44575in</Top>
         <Left>6.26222in</Left>
         <Height>0.20833in</Height>
         <Width>1.34027in</Width>
@@ -819,6 +819,7 @@
           <TablixMembers>
             <TablixMember>
               <KeepWithGroup>After</KeepWithGroup>
+              <RepeatOnNewPage>true</RepeatOnNewPage>
             </TablixMember>
             <TablixMember>
               <Group Name="Details2" />
@@ -831,7 +832,7 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.22917in</Top>
+        <Top>1.80568in</Top>
         <Left>0.15163in</Left>
         <Height>0.83333in</Height>
         <Width>7.45086in</Width>
@@ -867,7 +868,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox10</rd:DefaultName>
-        <Top>8.21942cm</Top>
+        <Top>7.14375cm</Top>
         <Left>7.47381cm</Left>
         <Height>0.36189cm</Height>
         <Width>11.83651cm</Width>
@@ -883,68 +884,11 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>3.70833in</Height>
+    <Height>3.23958in</Height>
     <Style />
   </Body>
   <Width>7.69624in</Width>
   <Page>
-    <PageFooter>
-      <Height>0.44687in</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <ReportItems>
-        <Textbox Name="Textbox24">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=string.Format("{0} of {1}",Globals!PageNumber ,Globals!TotalPages)</Value>
-                  <Style>
-                    <FontFamily>Verdana</FontFamily>
-                    <FontSize>9pt</FontSize>
-                    <FontWeight>Bold</FontWeight>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>Textbox24</rd:DefaultName>
-          <Top>0.12031in</Top>
-          <Left>6.07229in</Left>
-          <Height>0.20625in</Height>
-          <Width>1.13542in</Width>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Line Name="Line1">
-          <Top>0.08594in</Top>
-          <Left>0.05751in</Left>
-          <Height>0in</Height>
-          <Width>7.16498in</Width>
-          <ZIndex>1</ZIndex>
-          <Style>
-            <Border>
-              <Style>Solid</Style>
-            </Border>
-          </Style>
-        </Line>
-      </ReportItems>
-      <Style>
-        <Border>
-          <Style>None</Style>
-        </Border>
-      </Style>
-    </PageFooter>
     <PageHeight>11.69in</PageHeight>
     <PageWidth>8.27in</PageWidth>
     <InteractiveHeight>0in</InteractiveHeight>
