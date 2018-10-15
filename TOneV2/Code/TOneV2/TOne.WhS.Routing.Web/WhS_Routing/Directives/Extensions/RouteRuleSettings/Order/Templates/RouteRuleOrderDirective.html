@@ -8,7 +8,7 @@
                                                              ng-show="ctrl.datasource.length > 0"
                                                              onselectionchanged="scopeModel.onOrderTypeSelectionChange"
                                                              vr-loader="scopeModel.isLoadingOrderType"
-                                                             hideremoveicon isrequired="true">
+                                                             hideremoveicon isrequired="ctrl.datasource.length > 0">
         </vr-whs-routing-routerulesettings-ordertype-selector>
     </vr-columns>
 </vr-row>

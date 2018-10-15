@@ -56,6 +56,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                 $scope.optionPercentageSettingsGroupTemplates = [];
 
                 $scope.scopeModel.showPercentage = true;
+                $scope.scopeModel.showPercentageSettings = true;
 
                 $scope.onOptionSettingsGroupDirectiveReady = function (api) {
                     routeOptionSettingsGroupDirectiveAPI = api;

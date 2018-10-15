@@ -71,7 +71,7 @@ function (WhS_Routing_RoutRuleSettingsAPIService, WhS_Routing_OrderTypeEnum, Uti
                 return result;
             }
 
-            if (ctrl.datasource.length < 2)
+            if (ctrl.datasource.length < 1)
                 return null;
 
             if ($scope.scopeModel.selectedRouteRuleSettingsOrderType != undefined) {

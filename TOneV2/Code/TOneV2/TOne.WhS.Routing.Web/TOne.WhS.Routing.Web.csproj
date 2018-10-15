@@ -167,7 +167,6 @@
     <Content Include="WhS_Routing\Constant\OrderTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\FixedOptionLossTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteOptionEvaluatedStatusEnum.js" />
-    <Content Include="WhS_Routing\Constant\RouteOptionRuleSettingsTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteFilterEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingProductFilterEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteRuleCriteriaTypeEnum.js" />
@@ -229,7 +228,6 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-excluded.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\OrderByQualityDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderDirective.html" />
-    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderTypeSelector.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byquality.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byservice.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RoutingExcludedDestinations\Templates\RoutingExcludedCodesTemplate.html" />
