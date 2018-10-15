@@ -122,10 +122,28 @@ namespace BPMExtended.Main.Business
 
             return services;
         }
-        
+
+        public List<ServiceDetail> checkIfSwitchSupportedServices(string services, string switchId)
+        {
+            List<ServiceDetail> servicesList = null;
+            List<ServiceDetail> nonSupportedServices =new List<ServiceDetail>();
+
+            //
+            servicesList = JsonConvert.DeserializeObject<List<ServiceDetail>>(services);
+
+            //TODO:check if these services are  supported or not by the switch
+
+            return nonSupportedServices;
+        }
+
         public List<ServiceDetail> GetAllCoreServices()
         {
             return RatePlanMockDataGenerator.GetAllServices().FindAllRecords(x => x.IsCore).MapRecords(ServiceMapper).ToList();
+        }
+
+        public List<ServiceDetail> GetAllOptionalServices()
+        {
+            return RatePlanMockDataGenerator.GetAllServices().FindAllRecords(x => x.IsCore != true).MapRecords(ServiceMapper).ToList();
         }
 
         public List<ServiceDetail> GetOptionalServicesByContractId(string telephonycontractid)

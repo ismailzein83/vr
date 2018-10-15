@@ -107,6 +107,7 @@ namespace BPMExtended.Main.Business
                 
             };
         }
+
         public DeportedNumberReservation GetDeportedNumberReservation(string phoneNumber)
         {
             return new DeportedNumberReservation
@@ -120,6 +121,7 @@ namespace BPMExtended.Main.Business
                 DPPort = "005"
             };
         }
+
         public bool ReserveDSLAMPort(string portId, string username)
         {
             //TODO: reserve port 
@@ -150,6 +152,7 @@ namespace BPMExtended.Main.Business
                 Name = r.Name
             }).ToList();
         }
+
         public List<PortItemDetail> GetCabinetPrimaryPorts(string cabinetId)
         {
             List<PortItem> apiResult;
@@ -164,6 +167,7 @@ namespace BPMExtended.Main.Business
                 Name = r.Name
             }).ToList();
         }
+
         public List<PortItemDetail> GetCabinetSecondaryPorts(string cabinetId)
         {
             List<PortItem> apiResult;
@@ -178,6 +182,7 @@ namespace BPMExtended.Main.Business
                 Name = r.Name
             }).ToList();
         }
+
         public List<DPPortItemDetail> GetDPPorts(string dpPortId)
         {
             List<DPPortItem> apiResult;
@@ -192,6 +197,7 @@ namespace BPMExtended.Main.Business
                 Name = r.Name
             }).ToList();
         }
+
         public List<PhoneNumberDetail> GetAvailablePhoneNumbers(string cabinetPort, string dpPort, bool isGold, bool isISDN, string startsWith)
         {
             List<PhoneNumberDetail> result = new List<PhoneNumberDetail>();
@@ -317,6 +323,7 @@ namespace BPMExtended.Main.Business
 
             return phoneitem.SwitchId == pilotPhoneItem.SwitchId ? true : false;
         }
+
         public bool IsManualSwitch(string contractId)
         {
 
@@ -330,6 +337,7 @@ namespace BPMExtended.Main.Business
             }
             return  item;
         }
+
         public string ReserveTelephonyNumber(string phoneNumber, string pathType, string phoneNumberID, string deviceID, string mDFPortID, string dPPortID, string primaryPort, string secondaryPort)
         {
             string objectlist = phoneNumberID + "," + deviceID + "," + mDFPortID + "," + primaryPort + "," + secondaryPort + "," + dPPortID;
@@ -343,6 +351,7 @@ namespace BPMExtended.Main.Business
             }
             return item;
         }
+        
         public List<ISPInfo> GetISPs()
         {
             return RatePlanMockDataGenerator.GetAllISPInfo();

@@ -254,6 +254,8 @@ namespace BPMExtended.Main.Common
 
         const string SRV_OPT_TL_5 = "91297D55-F29D-4E29-A13D-78F94545D063";
 
+        const string SRV_OPT_TL_6 = "A75C1111-5953-46DB-B024-68CF8A34ECD3";
+
         const string SRV_OPT_LL_1 = "450BBD16-E948-4333-B027-130FEB3A7672";
 
         const string SRV_OPT_LL_2 = "B9E6A499-8086-4647-8ED9-FFB88FCE2420";
@@ -1070,6 +1072,7 @@ namespace BPMExtended.Main.Common
                     Description = "ADSL Subscription",
                     SubscriptionFee = 1500,
                     AccessFee = 1000,
+                    IsCore = true,
                     PackageId = PCKG_CORE_ADSL_1
                 },
                 new SOM.Main.Entities.Service
@@ -1079,6 +1082,7 @@ namespace BPMExtended.Main.Common
                     Description = "War Taxes",
                     SubscriptionFee = 2500,
                     AccessFee = 150,
+                    IsCore = true,
                     PackageId = PCKG_CORE_ADSL_1
                 },
                 new SOM.Main.Entities.Service
@@ -1126,12 +1130,20 @@ namespace BPMExtended.Main.Common
                 },
                 new SOM.Main.Entities.Service
                 {
-                    ServiceId = SRV_OPT_ADSL_1,
+                    ServiceId = SRV_OPT_ADSL_2,
                     Name = "Paternal Control",
                     Description = "Paternal Control",
                     AccessFee = 200,
                     PackageId = PCKG_OPT_ADSL_2
                 },
+                 new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_OPT_TL_6,
+                    Name = "ISP ADSL",
+                    Description = "ISP ADSL",
+                    AccessFee = 200,
+                    PackageId = PCKG_OPT_TL_1
+                }
             };
         }
 

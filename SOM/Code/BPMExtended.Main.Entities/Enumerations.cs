@@ -41,5 +41,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.ADSL)]
         ADSLLineTermination = 9,
 
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        TelephonyLineMovingNewSwitch = 10,
+
     }
 }
