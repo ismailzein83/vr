@@ -4571,3 +4571,11 @@ vr-chart .highcharts-menu > hr {
     display: none !important;
     margin: unset;
 }
+vr-chart .highcharts-contextmenu > div > div:first-child {
+    display: none !important;
+}
+
+vr-chart .highcharts-contextmenu > div > hr {
+    display: none !important;
+    margin: unset;
+}
