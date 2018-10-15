@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -12,30 +13,43 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return target is ImportedCountry;
+            return target is AllImportedCountries;
         }
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
-            var importedCountry = context.Target as ImportedCountry;
-            var invalidCodes = new HashSet<string>();
+            CountryManager countryManager = new CountryManager();
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
+            bool isValid = true;
+            var contextMessages = new List<string>();
+            var allImportedCountries = context.Target as AllImportedCountries;
+            string retroactiveDateString = importSPLContext.RetroactiveDate.ToString(importSPLContext.DateFormat);
+            var invalidCodesByCountryname = new List<string>();
 
-            foreach (var importedCode in importedCountry.ImportedCodes)
+            foreach (var importedCountry in allImportedCountries.ImportedCountries)
             {
-                if (importedCode.BED < importSPLContext.RetroactiveDate && (importedCode.ChangeType == CodeChangeType.New || importedCode.ChangeType == CodeChangeType.Moved))
+                var invalidCodes = new HashSet<string>();
+            
+                foreach (var importedCode in importedCountry.ImportedCodes)
                 {
-                    invalidCodes.Add(importedCode.Code);
+                    if (importedCode.BED < importSPLContext.RetroactiveDate && (importedCode.ChangeType == CodeChangeType.New || importedCode.ChangeType == CodeChangeType.Moved))
+                    {
+                        invalidCodes.Add(importedCode.Code);
+                    }
+                }
+                if(invalidCodes.Count()>0)
+                {
+                    string countryName = countryManager.GetCountryName(importedCountry.CountryId);
+                    invalidCodesByCountryname.Add(string.Format("'{0} : {1}'",countryName, string.Join(",", invalidCodes)));
                 }
             }
 
-            if (invalidCodes.Count > 0)
+            if (invalidCodesByCountryname.Count > 0)
             {
-                string retroactiveDateString = importSPLContext.RetroactiveDate.ToString(importSPLContext.DateFormat);
-                context.Message = string.Format("Adding or moving codes with BED less than the retroactive date '{0}'. Violated code(s): ({1}).", retroactiveDateString, string.Join(", ", invalidCodes));
-                return false;
+                context.Message = string.Format("Adding or moving codes with BED less than retroactive date '{0}'. Violated codes : '{1}'", retroactiveDateString, string.Join(" ; ", invalidCodesByCountryname));
+                isValid = false;
             }
 
-            return true;
+            return isValid;
         }
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {

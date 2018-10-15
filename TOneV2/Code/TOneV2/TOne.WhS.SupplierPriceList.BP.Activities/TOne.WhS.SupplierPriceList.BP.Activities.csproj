@@ -109,12 +109,14 @@
     <Compile Include="GetExistingCodes.cs" />
     <Compile Include="GetExistingRates.cs" />
     <Compile Include="GetExistingZones.cs" />
+    <Compile Include="GetCountriesData.cs" />
     <Compile Include="GetSupplierSettings.cs" />
     <Compile Include="LoadSupplierPriceListData.cs" />
     <Compile Include="PrepareChangedCodesToDB.cs" />
     <Compile Include="PrepareChangedZonesServicesToDB.cs" />
     <Compile Include="PrepareChangedRatesToDB.cs" />
     <Compile Include="PrepareChangedZonesToDB.cs" />
+    <Compile Include="PrepareDataForWhileProcessingBusinessRules.cs" />
     <Compile Include="PrepareExistingZonesServices.cs" />
     <Compile Include="PrepareNewZonesServicesForDBApply.cs" />
     <Compile Include="PreparePreviewOtherRatesForDBApply.cs" />
@@ -128,6 +130,7 @@
     <Compile Include="PreparePreviewZonesRatesForDBApply.cs" />
     <Compile Include="PrepareNewZonesForDBApply.cs" />
     <Compile Include="ProcessCountryCodes.cs" />
+    <Compile Include="ProcessCountryDataInfo.cs" />
     <Compile Include="ProcessCountryZonesServices.cs" />
     <Compile Include="ProcessCountryRates.cs" />
     <Compile Include="ProcessCountryZones.cs" />

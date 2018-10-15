@@ -192,6 +192,11 @@
           <mca:CSharpValue x:TypeArguments="scg:List(vbe:BPValidationMessage)">new List&lt;Vanrise.BusinessProcess.Entities.BPValidationMessage&gt;();</mca:CSharpValue>
         </Variable.Default>
       </Variable>
+      <Variable x:TypeArguments="scg:Dictionary(x:Int32, twse:ProcessedCountryDataInfo)" Name="CountryDataByCountryId" />
+      <Variable x:TypeArguments="x:Int32" Name="ProcessingCountryCompleted" />
+      <Variable x:TypeArguments="scg:Dictionary(x:Int32, twse:CountryNotImportedCodes)" Name="CountriesNotImportedCodes" />
+      <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="CountriesToValidate" />
+      <Variable x:TypeArguments="scg:List(twse:CountryNotImportedCodes)" Name="CountriesAllNotImportedCodes" />
     </Sequence.Variables>
     <If sap2010:WorkflowViewState.IdRef="If_6">
       <If.Condition>
@@ -731,568 +736,389 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_10">
-      <Parallel.Variables>
-        <Variable x:TypeArguments="x:Int32" Name="ProcessingCountryCompleted" />
-      </Parallel.Variables>
-      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
-        <ForEach x:TypeArguments="twses:ImportedCountry" DisplayName="ForEach&lt;ImportedCountry&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_4">
-          <ForEach.Values>
-            <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCountry)">
-              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedCountry)">ImportedCountries</mca:CSharpValue>
-            </InArgument>
-          </ForEach.Values>
-          <ActivityAction x:TypeArguments="twses:ImportedCountry">
-            <ActivityAction.Argument>
-              <DelegateInArgument x:TypeArguments="twses:ImportedCountry" Name="country" />
-            </ActivityAction.Argument>
-            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_16">
-              <If sap2010:WorkflowViewState.IdRef="If_4">
-                <If.Condition>
-                  <InArgument x:TypeArguments="x:Boolean">
-                    <mca:CSharpValue x:TypeArguments="x:Boolean">country.ImportedZones.Count &gt; 0 || Input.SupplierPricelistType == BusinessEntity.Entities.SupplierPricelistType.Full</mca:CSharpValue>
-                  </InArgument>
-                </If.Condition>
-                <If.Then>
-                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_17">
-                    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_14">
-                      <Sequence DisplayName="ProcessData" sap2010:WorkflowViewState.IdRef="Sequence_15">
-                        <Sequence.Variables>
-                          <Variable x:TypeArguments="twses:ZonesByName" Name="NewAndExistingZones" />
-                          <Variable x:TypeArguments="twses:ExistingCodesByCodeValue" Name="ExistingCodesByCodeValue" />
-                        </Sequence.Variables>
-                        <twsba1:PrepareExistingZones sap2010:WorkflowViewState.IdRef="PrepareExistingZones_4">
-                          <twsba1:PrepareExistingZones.CountryId>
-                            <InArgument x:TypeArguments="x:Int32">
-                              <mca:CSharpValue x:TypeArguments="x:Int32">country.CountryId</mca:CSharpValue>
-                            </InArgument>
-                          </twsba1:PrepareExistingZones.CountryId>
-                          <twsba1:PrepareExistingZones.ExistingZoneEntities>
-                            <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierZone)">
-                              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierZone)">ExistingZoneEntities</mca:CSharpValue>
-                            </InArgument>
-                          </twsba1:PrepareExistingZones.ExistingZoneEntities>
-                          <twsba1:PrepareExistingZones.ExistingZonesByZoneId>
-                            <OutArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
-                              <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpReference>
-                            </OutArgument>
-                          </twsba1:PrepareExistingZones.ExistingZonesByZoneId>
-                        </twsba1:PrepareExistingZones>
-                        <Sequence DisplayName="Sequence" sap2010:WorkflowViewState.IdRef="Sequence_14">
-                          <Parallel DisplayName="PrepareExistingCodesAndRates" sap2010:WorkflowViewState.IdRef="Parallel_12">
-                            <twsba1:PrepareExistingCodes sap2010:WorkflowViewState.IdRef="PrepareExistingCodes_4">
-                              <twsba1:PrepareExistingCodes.ExistingCodeEntities>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">ExistingCodeEntities</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:PrepareExistingCodes.ExistingCodeEntities>
-                              <twsba1:PrepareExistingCodes.ExistingCodes>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">ExistingCodes</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:PrepareExistingCodes.ExistingCodes>
-                              <twsba1:PrepareExistingCodes.ExistingZonesByZoneId>
-                                <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:PrepareExistingCodes.ExistingZonesByZoneId>
-                            </twsba1:PrepareExistingCodes>
-                            <twsba1:PrepareExistingRates sap2010:WorkflowViewState.IdRef="PrepareExistingRates_2">
-                              <twsba1:PrepareExistingRates.CurrencyId>
-                                <InArgument x:TypeArguments="x:Int32">
-                                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:PrepareExistingRates.CurrencyId>
-                              <twsba1:PrepareExistingRates.ExistingRateEntities>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierRate)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierRate)">ExistingRateEntities</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:PrepareExistingRates.ExistingRateEntities>
-                              <twsba1:PrepareExistingRates.ExistingRates>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">ExistingRates</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:PrepareExistingRates.ExistingRates>
-                              <twsba1:PrepareExistingRates.ExistingZonesByZoneId>
-                                <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:PrepareExistingRates.ExistingZonesByZoneId>
-                            </twsba1:PrepareExistingRates>
-                            <twsba1:PrepareExistingZonesServices sap2010:WorkflowViewState.IdRef="PrepareExistingZonesServices_2">
-                              <twsba1:PrepareExistingZonesServices.ExistingZoneServiceEntities>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierZoneService)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierZoneService)">ExistingZoneServiceEntities</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:PrepareExistingZonesServices.ExistingZoneServiceEntities>
-                              <twsba1:PrepareExistingZonesServices.ExistingZonesByZoneId>
-                                <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:PrepareExistingZonesServices.ExistingZonesByZoneId>
-                              <twsba1:PrepareExistingZonesServices.ExistingZonesServices>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:ExistingZoneService)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ExistingZoneService)">ExistingZonesServices</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:PrepareExistingZonesServices.ExistingZonesServices>
-                            </twsba1:PrepareExistingZonesServices>
-                          </Parallel>
-                          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_13">
-                            <Sequence.Variables>
-                              <Variable x:TypeArguments="x:String" Name="variable1" />
-                            </Sequence.Variables>
-                            <twsba1:ProcessCountryCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCountryCodes_2">
-                              <twsba1:ProcessCountryCodes.ChangedCodes>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">ChangedCodes</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:ProcessCountryCodes.ChangedCodes>
-                              <twsba1:ProcessCountryCodes.ChangedZones>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">ChangedZones</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:ProcessCountryCodes.ChangedZones>
-                              <twsba1:ProcessCountryCodes.CountryId>
-                                <InArgument x:TypeArguments="x:Int32">
-                                  <mca:CSharpValue x:TypeArguments="x:Int32">country.CountryId</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryCodes.CountryId>
-                              <twsba1:ProcessCountryCodes.ExistingCodes>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">ExistingCodes</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryCodes.ExistingCodes>
-                              <twsba1:ProcessCountryCodes.ExistingZonesByZoneId>
-                                <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryCodes.ExistingZonesByZoneId>
-                              <twsba1:ProcessCountryCodes.ImportedCodes>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">country.ImportedCodes</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryCodes.ImportedCodes>
-                              <twsba1:ProcessCountryCodes.ImportedZones>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">country.ImportedZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryCodes.ImportedZones>
-                              <twsba1:ProcessCountryCodes.NewAndExistingZones>
-                                <OutArgument x:TypeArguments="twses:ZonesByName">
-                                  <mca:CSharpReference x:TypeArguments="twses:ZonesByName">NewAndExistingZones</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:ProcessCountryCodes.NewAndExistingZones>
-                              <twsba1:ProcessCountryCodes.NewCodes>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:NewCode)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NewCode)">NewCodes</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:ProcessCountryCodes.NewCodes>
-                              <twsba1:ProcessCountryCodes.NewZones>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:NewZone)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NewZone)">NewZones</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:ProcessCountryCodes.NewZones>
-                              <twsba1:ProcessCountryCodes.NotImportedCodes>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">NotImportedCodes</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:ProcessCountryCodes.NotImportedCodes>
-                              <twsba1:ProcessCountryCodes.PriceListDate>
-                                <InArgument x:TypeArguments="s:DateTime">
-                                  <mca:CSharpValue x:TypeArguments="s:DateTime">Input.PriceListDate</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryCodes.PriceListDate>
-                              <twsba1:ProcessCountryCodes.SupplierPriceListType>
-                                <InArgument x:TypeArguments="twbe:SupplierPricelistType">
-                                  <mca:CSharpValue x:TypeArguments="twbe:SupplierPricelistType">Input.SupplierPricelistType</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryCodes.SupplierPriceListType>
-                            </twsba1:ProcessCountryCodes>
-                            <twsba1:ProcessCountryZones Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCountryZones_2">
-                              <twsba1:ProcessCountryZones.AllNotImportedZones>
-                                <InArgument x:TypeArguments="scg:List(twses:NotImportedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:List(twses:NotImportedZone)">AllNotImportedZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZones.AllNotImportedZones>
-                              <twsba1:ProcessCountryZones.ExistingZones>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingZone)">ExistingZonesByZoneId.Values</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZones.ExistingZones>
-                              <twsba1:ProcessCountryZones.ImportedZones>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">country.ImportedZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZones.ImportedZones>
-                              <twsba1:ProcessCountryZones.NewAndExistingZones>
-                                <InArgument x:TypeArguments="twses:ZonesByName">
-                                  <mca:CSharpValue x:TypeArguments="twses:ZonesByName">NewAndExistingZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZones.NewAndExistingZones>
-                              <twsba1:ProcessCountryZones.NotImportedZones>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">NotImportedZones</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:ProcessCountryZones.NotImportedZones>
-                            </twsba1:ProcessCountryZones>
-                            <twsba1:ProcessCountryRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCountryRates_2">
-                              <twsba1:ProcessCountryRates.ChangedRates>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">ChangedRates</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:ProcessCountryRates.ChangedRates>
-                              <twsba1:ProcessCountryRates.ExistingRates>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">ExistingRates</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryRates.ExistingRates>
-                              <twsba1:ProcessCountryRates.ExistingZonesByZoneId>
-                                <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryRates.ExistingZonesByZoneId>
-                              <twsba1:ProcessCountryRates.ImportedRateTypeIds>
-                                <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">ImportedRateTypeIds</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryRates.ImportedRateTypeIds>
-                              <twsba1:ProcessCountryRates.ImportedZones>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">country.ImportedZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryRates.ImportedZones>
-                              <twsba1:ProcessCountryRates.NewAndExistingZones>
-                                <InArgument x:TypeArguments="twses:ZonesByName">
-                                  <mca:CSharpValue x:TypeArguments="twses:ZonesByName">NewAndExistingZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryRates.NewAndExistingZones>
-                              <twsba1:ProcessCountryRates.NewRates>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:NewRate)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NewRate)">NewRates</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:ProcessCountryRates.NewRates>
-                              <twsba1:ProcessCountryRates.NotImportedZones>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">NotImportedZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryRates.NotImportedZones>
-                              <twsba1:ProcessCountryRates.PriceListDate>
-                                <InArgument x:TypeArguments="s:DateTime">
-                                  <mca:CSharpValue x:TypeArguments="s:DateTime">Input.PriceListDate</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryRates.PriceListDate>
-                            </twsba1:ProcessCountryRates>
-                            <twsba1:ProcessCountryZonesServices Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCountryZonesServices_2">
-                              <twsba1:ProcessCountryZonesServices.ChangedZonesServices>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)">ChangedZonesServices</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:ProcessCountryZonesServices.ChangedZonesServices>
-                              <twsba1:ProcessCountryZonesServices.ExistingZonesByZoneId>
-                                <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZonesServices.ExistingZonesByZoneId>
-                              <twsba1:ProcessCountryZonesServices.ExistingZonesServices>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingZoneService)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingZoneService)">ExistingZonesServices</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZonesServices.ExistingZonesServices>
-                              <twsba1:ProcessCountryZonesServices.ImportedServiceTypeIds>
-                                <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">ImportedServiceTypeIds</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZonesServices.ImportedServiceTypeIds>
-                              <twsba1:ProcessCountryZonesServices.ImportedZones>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">country.ImportedZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZonesServices.ImportedZones>
-                              <twsba1:ProcessCountryZonesServices.IncludeServices>
-                                <InArgument x:TypeArguments="x:Boolean">
-                                  <mca:CSharpValue x:TypeArguments="x:Boolean">IncludeServices</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZonesServices.IncludeServices>
-                              <twsba1:ProcessCountryZonesServices.MinimumDate>
-                                <InArgument x:TypeArguments="s:DateTime">
-                                  <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZonesServices.MinimumDate>
-                              <twsba1:ProcessCountryZonesServices.NewAndExistingZones>
-                                <InArgument x:TypeArguments="twses:ZonesByName">
-                                  <mca:CSharpValue x:TypeArguments="twses:ZonesByName">NewAndExistingZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZonesServices.NewAndExistingZones>
-                              <twsba1:ProcessCountryZonesServices.NewZonesServices>
-                                <OutArgument x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">
-                                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">NewZonesServices</mca:CSharpReference>
-                                </OutArgument>
-                              </twsba1:ProcessCountryZonesServices.NewZonesServices>
-                              <twsba1:ProcessCountryZonesServices.NotImportedZones>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">NotImportedZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZonesServices.NotImportedZones>
-                              <twsba1:ProcessCountryZonesServices.PriceListDate>
-                                <InArgument x:TypeArguments="s:DateTime">
-                                  <mca:CSharpValue x:TypeArguments="s:DateTime">Input.PriceListDate</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZonesServices.PriceListDate>
-                              <twsba1:ProcessCountryZonesServices.SupplierId>
-                                <InArgument x:TypeArguments="x:Int32">
-                                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:ProcessCountryZonesServices.SupplierId>
-                            </twsba1:ProcessCountryZonesServices>
-                          </Sequence>
-                          <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_7">
-                            <vbw:CombineLists.InputLists>
-                              <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
-                                <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)" xml:space="preserve">new List&lt;System.Collections.IEnumerable&gt;()
-{
-    country.ImportedZones,
-    country.ImportedCodes,
-    NotImportedCodes,
-    country.ImportedRates,
-    NotImportedZones,
-    new List&lt;Vanrise.BusinessProcess.Entities.IRuleTarget&gt;() { country },
-    new List&lt;Vanrise.BusinessProcess.Entities.IRuleTarget&gt;()
-    {
-        new CountryNotImportedCodes() { CountryId = country.CountryId, NotImportedCodes = NotImportedCodes }
-    },
-    new List&lt;Vanrise.BusinessProcess.Entities.IRuleTarget&gt;()
-    {
-        new CountryNotImportedZones() { CountryId = country.CountryId, NotImportedZones = NotImportedZones }
-    },
-      new List&lt;Vanrise.BusinessProcess.Entities.IRuleTarget&gt;()
-    {
-       AllImportedZones
-    },
-     new List&lt;Vanrise.BusinessProcess.Entities.IRuleTarget&gt;()
-    {
-        new AllZones() 
-        {            
-            ImportedZones = new AllImportedZones { Zones= country.ImportedZones },
-            NotImportedZones = NotImportedZones 
-        }
-    },
-};</mca:CSharpValue>
+    <twsba1:GetCountriesData sap2010:WorkflowViewState.IdRef="GetCountriesData_1">
+      <twsba1:GetCountriesData.CountryDataByCountryId>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:Int32, twse:ProcessedCountryDataInfo)">
+          <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:Int32, twse:ProcessedCountryDataInfo)">CountryDataByCountryId</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:GetCountriesData.CountryDataByCountryId>
+      <twsba1:GetCountriesData.ImportedCountries>
+        <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCountry)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedCountry)">ImportedCountries</mca:CSharpValue>
+        </InArgument>
+      </twsba1:GetCountriesData.ImportedCountries>
+    </twsba1:GetCountriesData>
+    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+      <ForEach x:TypeArguments="twses:ImportedCountry" DisplayName="ForEach&lt;ImportedCountry&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_4">
+        <ForEach.Values>
+          <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCountry)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedCountry)">ImportedCountries</mca:CSharpValue>
+          </InArgument>
+        </ForEach.Values>
+        <ActivityAction x:TypeArguments="twses:ImportedCountry">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="twses:ImportedCountry" Name="country" />
+          </ActivityAction.Argument>
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_16">
+            <If sap2010:WorkflowViewState.IdRef="If_4">
+              <If.Condition>
+                <InArgument x:TypeArguments="x:Boolean">
+                  <mca:CSharpValue x:TypeArguments="x:Boolean">country.ImportedZones.Count &gt; 0 || Input.SupplierPricelistType == BusinessEntity.Entities.SupplierPricelistType.Full</mca:CSharpValue>
+                </InArgument>
+              </If.Condition>
+              <If.Then>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_17">
+                  <Parallel sap2010:WorkflowViewState.IdRef="Parallel_14">
+                    <Sequence DisplayName="ProcessData" sap2010:WorkflowViewState.IdRef="Sequence_15">
+                      <Sequence.Variables>
+                        <Variable x:TypeArguments="twses:ZonesByName" Name="NewAndExistingZones" />
+                        <Variable x:TypeArguments="twses:ExistingCodesByCodeValue" Name="ExistingCodesByCodeValue" />
+                      </Sequence.Variables>
+                      <twsba1:PrepareExistingZones sap2010:WorkflowViewState.IdRef="PrepareExistingZones_4">
+                        <twsba1:PrepareExistingZones.CountryId>
+                          <InArgument x:TypeArguments="x:Int32">
+                            <mca:CSharpValue x:TypeArguments="x:Int32">country.CountryId</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:PrepareExistingZones.CountryId>
+                        <twsba1:PrepareExistingZones.ExistingZoneEntities>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierZone)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierZone)">ExistingZoneEntities</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:PrepareExistingZones.ExistingZoneEntities>
+                        <twsba1:PrepareExistingZones.ExistingZonesByZoneId>
+                          <OutArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
+                            <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpReference>
+                          </OutArgument>
+                        </twsba1:PrepareExistingZones.ExistingZonesByZoneId>
+                      </twsba1:PrepareExistingZones>
+                      <Sequence DisplayName="Sequence" sap2010:WorkflowViewState.IdRef="Sequence_14">
+                        <Parallel DisplayName="PrepareExistingCodesAndRates" sap2010:WorkflowViewState.IdRef="Parallel_12">
+                          <twsba1:PrepareExistingCodes sap2010:WorkflowViewState.IdRef="PrepareExistingCodes_4">
+                            <twsba1:PrepareExistingCodes.ExistingCodeEntities>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierCode)">ExistingCodeEntities</mca:CSharpValue>
                               </InArgument>
-                            </vbw:CombineLists.InputLists>
-                            <vbw:CombineLists.OutputList>
-                              <OutArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
-                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">AfterProcessingDataToValidate</mca:CSharpReference>
+                            </twsba1:PrepareExistingCodes.ExistingCodeEntities>
+                            <twsba1:PrepareExistingCodes.ExistingCodes>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">ExistingCodes</mca:CSharpReference>
                               </OutArgument>
-                            </vbw:CombineLists.OutputList>
-                          </vbw:CombineLists>
-                          <local:ExecuteImportSupplierPricelistRules BusinessRulesKey="SPL_ValidateCountryWhileProcessing" sap2010:WorkflowViewState.IdRef="ExecuteImportSupplierPricelistRules_5">
-                            <local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
-                              <InOutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
-                                <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpReference>
-                              </InOutArgument>
-                            </local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
-                            <local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
-                              <InArgument x:TypeArguments="s:Nullable(x:Int32)">
-                                <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">BPBusinessRuleSetId</mca:CSharpValue>
+                            </twsba1:PrepareExistingCodes.ExistingCodes>
+                            <twsba1:PrepareExistingCodes.ExistingZonesByZoneId>
+                              <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
                               </InArgument>
-                            </local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
-                            <local:ExecuteImportSupplierPricelistRules.ImportedDataToValidate>
-                              <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
-                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">AfterProcessingDataToValidate</mca:CSharpValue>
+                            </twsba1:PrepareExistingCodes.ExistingZonesByZoneId>
+                          </twsba1:PrepareExistingCodes>
+                          <twsba1:PrepareExistingRates sap2010:WorkflowViewState.IdRef="PrepareExistingRates_2">
+                            <twsba1:PrepareExistingRates.CurrencyId>
+                              <InArgument x:TypeArguments="x:Int32">
+                                <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
                               </InArgument>
-                            </local:ExecuteImportSupplierPricelistRules.ImportedDataToValidate>
-                            <local:ExecuteImportSupplierPricelistRules.IsAutoImport>
+                            </twsba1:PrepareExistingRates.CurrencyId>
+                            <twsba1:PrepareExistingRates.ExistingRateEntities>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierRate)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierRate)">ExistingRateEntities</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:PrepareExistingRates.ExistingRateEntities>
+                            <twsba1:PrepareExistingRates.ExistingRates>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">ExistingRates</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:PrepareExistingRates.ExistingRates>
+                            <twsba1:PrepareExistingRates.ExistingZonesByZoneId>
+                              <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:PrepareExistingRates.ExistingZonesByZoneId>
+                          </twsba1:PrepareExistingRates>
+                          <twsba1:PrepareExistingZonesServices sap2010:WorkflowViewState.IdRef="PrepareExistingZonesServices_2">
+                            <twsba1:PrepareExistingZonesServices.ExistingZoneServiceEntities>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twbe:SupplierZoneService)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SupplierZoneService)">ExistingZoneServiceEntities</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:PrepareExistingZonesServices.ExistingZoneServiceEntities>
+                            <twsba1:PrepareExistingZonesServices.ExistingZonesByZoneId>
+                              <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:PrepareExistingZonesServices.ExistingZonesByZoneId>
+                            <twsba1:PrepareExistingZonesServices.ExistingZonesServices>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:ExistingZoneService)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ExistingZoneService)">ExistingZonesServices</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:PrepareExistingZonesServices.ExistingZonesServices>
+                          </twsba1:PrepareExistingZonesServices>
+                        </Parallel>
+                        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_13">
+                          <Sequence.Variables>
+                            <Variable x:TypeArguments="x:String" Name="variable1" />
+                          </Sequence.Variables>
+                          <twsba1:ProcessCountryCodes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCountryCodes_2">
+                            <twsba1:ProcessCountryCodes.ChangedCodes>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">ChangedCodes</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:ProcessCountryCodes.ChangedCodes>
+                            <twsba1:ProcessCountryCodes.ChangedZones>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">ChangedZones</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:ProcessCountryCodes.ChangedZones>
+                            <twsba1:ProcessCountryCodes.CountryId>
+                              <InArgument x:TypeArguments="x:Int32">
+                                <mca:CSharpValue x:TypeArguments="x:Int32">country.CountryId</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryCodes.CountryId>
+                            <twsba1:ProcessCountryCodes.ExistingCodes>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingCode)">ExistingCodes</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryCodes.ExistingCodes>
+                            <twsba1:ProcessCountryCodes.ExistingZonesByZoneId>
+                              <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryCodes.ExistingZonesByZoneId>
+                            <twsba1:ProcessCountryCodes.ImportedCodes>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">country.ImportedCodes</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryCodes.ImportedCodes>
+                            <twsba1:ProcessCountryCodes.ImportedZones>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">country.ImportedZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryCodes.ImportedZones>
+                            <twsba1:ProcessCountryCodes.NewAndExistingZones>
+                              <OutArgument x:TypeArguments="twses:ZonesByName">
+                                <mca:CSharpReference x:TypeArguments="twses:ZonesByName">NewAndExistingZones</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:ProcessCountryCodes.NewAndExistingZones>
+                            <twsba1:ProcessCountryCodes.NewCodes>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:NewCode)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NewCode)">NewCodes</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:ProcessCountryCodes.NewCodes>
+                            <twsba1:ProcessCountryCodes.NewZones>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:NewZone)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NewZone)">NewZones</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:ProcessCountryCodes.NewZones>
+                            <twsba1:ProcessCountryCodes.NotImportedCodes>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">NotImportedCodes</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:ProcessCountryCodes.NotImportedCodes>
+                            <twsba1:ProcessCountryCodes.PriceListDate>
+                              <InArgument x:TypeArguments="s:DateTime">
+                                <mca:CSharpValue x:TypeArguments="s:DateTime">Input.PriceListDate</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryCodes.PriceListDate>
+                            <twsba1:ProcessCountryCodes.SupplierPriceListType>
+                              <InArgument x:TypeArguments="twbe:SupplierPricelistType">
+                                <mca:CSharpValue x:TypeArguments="twbe:SupplierPricelistType">Input.SupplierPricelistType</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryCodes.SupplierPriceListType>
+                          </twsba1:ProcessCountryCodes>
+                          <twsba1:ProcessCountryZones Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCountryZones_2">
+                            <twsba1:ProcessCountryZones.AllNotImportedZones>
+                              <InArgument x:TypeArguments="scg:List(twses:NotImportedZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:List(twses:NotImportedZone)">AllNotImportedZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZones.AllNotImportedZones>
+                            <twsba1:ProcessCountryZones.ExistingZones>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingZone)">ExistingZonesByZoneId.Values</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZones.ExistingZones>
+                            <twsba1:ProcessCountryZones.ImportedZones>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">country.ImportedZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZones.ImportedZones>
+                            <twsba1:ProcessCountryZones.NewAndExistingZones>
+                              <InArgument x:TypeArguments="twses:ZonesByName">
+                                <mca:CSharpValue x:TypeArguments="twses:ZonesByName">NewAndExistingZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZones.NewAndExistingZones>
+                            <twsba1:ProcessCountryZones.NotImportedZones>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">NotImportedZones</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:ProcessCountryZones.NotImportedZones>
+                          </twsba1:ProcessCountryZones>
+                          <twsba1:ProcessCountryRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCountryRates_2">
+                            <twsba1:ProcessCountryRates.ChangedRates>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">ChangedRates</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:ProcessCountryRates.ChangedRates>
+                            <twsba1:ProcessCountryRates.ExistingRates>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingRate)">ExistingRates</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryRates.ExistingRates>
+                            <twsba1:ProcessCountryRates.ExistingZonesByZoneId>
+                              <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryRates.ExistingZonesByZoneId>
+                            <twsba1:ProcessCountryRates.ImportedRateTypeIds>
+                              <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">ImportedRateTypeIds</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryRates.ImportedRateTypeIds>
+                            <twsba1:ProcessCountryRates.ImportedZones>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">country.ImportedZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryRates.ImportedZones>
+                            <twsba1:ProcessCountryRates.NewAndExistingZones>
+                              <InArgument x:TypeArguments="twses:ZonesByName">
+                                <mca:CSharpValue x:TypeArguments="twses:ZonesByName">NewAndExistingZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryRates.NewAndExistingZones>
+                            <twsba1:ProcessCountryRates.NewRates>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:NewRate)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NewRate)">NewRates</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:ProcessCountryRates.NewRates>
+                            <twsba1:ProcessCountryRates.NotImportedZones>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">NotImportedZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryRates.NotImportedZones>
+                            <twsba1:ProcessCountryRates.PriceListDate>
+                              <InArgument x:TypeArguments="s:DateTime">
+                                <mca:CSharpValue x:TypeArguments="s:DateTime">Input.PriceListDate</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryRates.PriceListDate>
+                          </twsba1:ProcessCountryRates>
+                          <twsba1:ProcessCountryZonesServices Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCountryZonesServices_2">
+                            <twsba1:ProcessCountryZonesServices.ChangedZonesServices>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)">ChangedZonesServices</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:ProcessCountryZonesServices.ChangedZonesServices>
+                            <twsba1:ProcessCountryZonesServices.ExistingZonesByZoneId>
+                              <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twses:ExistingZone)">ExistingZonesByZoneId</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZonesServices.ExistingZonesByZoneId>
+                            <twsba1:ProcessCountryZonesServices.ExistingZonesServices>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ExistingZoneService)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ExistingZoneService)">ExistingZonesServices</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZonesServices.ExistingZonesServices>
+                            <twsba1:ProcessCountryZonesServices.ImportedServiceTypeIds>
+                              <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">ImportedServiceTypeIds</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZonesServices.ImportedServiceTypeIds>
+                            <twsba1:ProcessCountryZonesServices.ImportedZones>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">country.ImportedZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZonesServices.ImportedZones>
+                            <twsba1:ProcessCountryZonesServices.IncludeServices>
                               <InArgument x:TypeArguments="x:Boolean">
-                                <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
+                                <mca:CSharpValue x:TypeArguments="x:Boolean">IncludeServices</mca:CSharpValue>
                               </InArgument>
-                            </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
-                            <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
-                              <InOutArgument x:TypeArguments="x:Boolean">
-                                <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
-                              </InOutArgument>
-                            </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
-                            <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
-                              <InArgument x:TypeArguments="s:Nullable(x:Int32)">
-                                <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+                            </twsba1:ProcessCountryZonesServices.IncludeServices>
+                            <twsba1:ProcessCountryZonesServices.MinimumDate>
+                              <InArgument x:TypeArguments="s:DateTime">
+                                <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
                               </InArgument>
-                            </local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
-                          </local:ExecuteImportSupplierPricelistRules>
-                          <twsba1:ReserveIdsForNewEntities Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ReserveIdsForNewEntities_4">
-                            <twsba1:ReserveIdsForNewEntities.NewCodes>
+                            </twsba1:ProcessCountryZonesServices.MinimumDate>
+                            <twsba1:ProcessCountryZonesServices.NewAndExistingZones>
+                              <InArgument x:TypeArguments="twses:ZonesByName">
+                                <mca:CSharpValue x:TypeArguments="twses:ZonesByName">NewAndExistingZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZonesServices.NewAndExistingZones>
+                            <twsba1:ProcessCountryZonesServices.NewZonesServices>
+                              <OutArgument x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">
+                                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">NewZonesServices</mca:CSharpReference>
+                              </OutArgument>
+                            </twsba1:ProcessCountryZonesServices.NewZonesServices>
+                            <twsba1:ProcessCountryZonesServices.NotImportedZones>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">NotImportedZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZonesServices.NotImportedZones>
+                            <twsba1:ProcessCountryZonesServices.PriceListDate>
+                              <InArgument x:TypeArguments="s:DateTime">
+                                <mca:CSharpValue x:TypeArguments="s:DateTime">Input.PriceListDate</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZonesServices.PriceListDate>
+                            <twsba1:ProcessCountryZonesServices.SupplierId>
+                              <InArgument x:TypeArguments="x:Int32">
+                                <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryZonesServices.SupplierId>
+                          </twsba1:ProcessCountryZonesServices>
+                          <twsba1:ProcessCountryDataInfo sap2010:WorkflowViewState.IdRef="ProcessCountryDataInfo_1">
+                            <twsba1:ProcessCountryDataInfo.ChangedCodes>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">ChangedCodes</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryDataInfo.ChangedCodes>
+                            <twsba1:ProcessCountryDataInfo.ChangedRates>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">ChangedRates</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryDataInfo.ChangedRates>
+                            <twsba1:ProcessCountryDataInfo.ChangedZoneServices>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)">ChangedZonesServices</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryDataInfo.ChangedZoneServices>
+                            <twsba1:ProcessCountryDataInfo.ChangedZones>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">ChangedZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryDataInfo.ChangedZones>
+                            <twsba1:ProcessCountryDataInfo.CountryDataByCountryId>
+                              <InArgument x:TypeArguments="scg:Dictionary(x:Int32, twse:ProcessedCountryDataInfo)">
+                                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int32, twse:ProcessedCountryDataInfo)">CountryDataByCountryId</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryDataInfo.CountryDataByCountryId>
+                            <twsba1:ProcessCountryDataInfo.CountryId>
+                              <InArgument x:TypeArguments="x:Int32">
+                                <mca:CSharpValue x:TypeArguments="x:Int32">country.CountryId</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryDataInfo.CountryId>
+                            <twsba1:ProcessCountryDataInfo.NewCodes>
                               <InArgument x:TypeArguments="scg:IEnumerable(twses:NewCode)">
                                 <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewCode)">NewCodes</mca:CSharpValue>
                               </InArgument>
-                            </twsba1:ReserveIdsForNewEntities.NewCodes>
-                            <twsba1:ReserveIdsForNewEntities.NewRates>
+                            </twsba1:ProcessCountryDataInfo.NewCodes>
+                            <twsba1:ProcessCountryDataInfo.NewRates>
                               <InArgument x:TypeArguments="scg:IEnumerable(twses:NewRate)">
                                 <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewRate)">NewRates</mca:CSharpValue>
                               </InArgument>
-                            </twsba1:ReserveIdsForNewEntities.NewRates>
-                            <twsba1:ReserveIdsForNewEntities.NewZones>
-                              <InArgument x:TypeArguments="scg:IEnumerable(twses:NewZone)">
-                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewZone)">NewZones</mca:CSharpValue>
-                              </InArgument>
-                            </twsba1:ReserveIdsForNewEntities.NewZones>
-                            <twsba1:ReserveIdsForNewEntities.NewZonesServices>
+                            </twsba1:ProcessCountryDataInfo.NewRates>
+                            <twsba1:ProcessCountryDataInfo.NewZoneServices>
                               <InArgument x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">
                                 <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">NewZonesServices</mca:CSharpValue>
                               </InArgument>
-                            </twsba1:ReserveIdsForNewEntities.NewZonesServices>
-                          </twsba1:ReserveIdsForNewEntities>
-                          <Parallel DisplayName="Parallel_PrepareQueuesForDBApplyProcess" sap2010:WorkflowViewState.IdRef="Parallel_13">
-                            <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:NewZone)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_9">
-                              <vbw:EnqueueItem.Item>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:NewZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewZone)">NewZones</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Item>
-                              <vbw:EnqueueItem.Queue>
-                                <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZone))">
-                                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZone))">NewZonesQueue</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Queue>
-                            </vbw:EnqueueItem>
-                            <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:NewCode)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_10">
-                              <vbw:EnqueueItem.Item>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:NewCode)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewCode)">NewCodes</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Item>
-                              <vbw:EnqueueItem.Queue>
-                                <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewCode))">
-                                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewCode))">NewCodesQueue</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Queue>
-                            </vbw:EnqueueItem>
-                            <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:NewRate)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_11">
-                              <vbw:EnqueueItem.Item>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:NewRate)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewRate)">NewRates</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Item>
-                              <vbw:EnqueueItem.Queue>
-                                <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewRate))">
-                                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewRate))">NewRatesQueue</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Queue>
-                            </vbw:EnqueueItem>
-                            <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:NewZoneService)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_12">
-                              <vbw:EnqueueItem.Item>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">NewZonesServices</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Item>
-                              <vbw:EnqueueItem.Queue>
-                                <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZoneService))">
-                                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZoneService))">NewZonesServicesQueue</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Queue>
-                            </vbw:EnqueueItem>
-                            <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:ChangedZone)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_13">
-                              <vbw:EnqueueItem.Item>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">ChangedZones</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Item>
-                              <vbw:EnqueueItem.Queue>
-                                <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZone))">
-                                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZone))">ChangedZonesQueue</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Queue>
-                            </vbw:EnqueueItem>
-                            <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:ChangedCode)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_14">
-                              <vbw:EnqueueItem.Item>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">ChangedCodes</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Item>
-                              <vbw:EnqueueItem.Queue>
-                                <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">
-                                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">ChangedCodesQueue</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Queue>
-                            </vbw:EnqueueItem>
-                            <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:ChangedRate)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_15">
-                              <vbw:EnqueueItem.Item>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">ChangedRates</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Item>
-                              <vbw:EnqueueItem.Queue>
-                                <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedRate))">
-                                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedRate))">ChangedRatesQueue</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Queue>
-                            </vbw:EnqueueItem>
-                            <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_16">
-                              <vbw:EnqueueItem.Item>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)">ChangedZonesServices</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Item>
-                              <vbw:EnqueueItem.Queue>
-                                <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZoneService))">
-                                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZoneService))">ChangedZonesServicesQueue</mca:CSharpValue>
-                                </InArgument>
-                              </vbw:EnqueueItem.Queue>
-                            </vbw:EnqueueItem>
-                            <twsba1:GenerateZonesRatesPreview sap2010:WorkflowViewState.IdRef="GenerateZonesRatesPreview_2">
-                              <twsba1:GenerateZonesRatesPreview.CountryId>
-                                <InArgument x:TypeArguments="x:Int32">
-                                  <mca:CSharpValue x:TypeArguments="x:Int32">country.CountryId</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:GenerateZonesRatesPreview.CountryId>
-                              <twsba1:GenerateZonesRatesPreview.ImportedZones>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">country.ImportedZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:GenerateZonesRatesPreview.ImportedZones>
-                              <twsba1:GenerateZonesRatesPreview.NotImportedZones>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">NotImportedZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:GenerateZonesRatesPreview.NotImportedZones>
-                              <twsba1:GenerateZonesRatesPreview.PreviewZonesRatesQueue>
-                                <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:ZoneRatePreview))">
-                                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:ZoneRatePreview))">PreviewZonesRatesQueue</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:GenerateZonesRatesPreview.PreviewZonesRatesQueue>
-                            </twsba1:GenerateZonesRatesPreview>
-                            <twsba1:GenerateCodesPreview sap2010:WorkflowViewState.IdRef="GenerateCodesPreview_2">
-                              <twsba1:GenerateCodesPreview.ImportedCodes>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">country.ImportedCodes</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:GenerateCodesPreview.ImportedCodes>
-                              <twsba1:GenerateCodesPreview.NotImportedCodes>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">NotImportedCodes</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:GenerateCodesPreview.NotImportedCodes>
-                              <twsba1:GenerateCodesPreview.PreviewCodeQueue>
-                                <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:CodePreview))">
-                                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:CodePreview))">PreviewCodesQueue</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:GenerateCodesPreview.PreviewCodeQueue>
-                            </twsba1:GenerateCodesPreview>
-                            <twsba1:GenerateOtherRatesPreview sap2010:WorkflowViewState.IdRef="GenerateOtherRatesPreview_2">
-                              <twsba1:GenerateOtherRatesPreview.ImportedZones>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">country.ImportedZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:GenerateOtherRatesPreview.ImportedZones>
-                              <twsba1:GenerateOtherRatesPreview.NotImportedZones>
-                                <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
-                                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">NotImportedZones</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:GenerateOtherRatesPreview.NotImportedZones>
-                              <twsba1:GenerateOtherRatesPreview.PreviewOtherRatesQueue>
-                                <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:OtherRatePreview))">
-                                  <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:OtherRatePreview))">PreviewOtherRatesQueue</mca:CSharpValue>
-                                </InArgument>
-                              </twsba1:GenerateOtherRatesPreview.PreviewOtherRatesQueue>
-                            </twsba1:GenerateOtherRatesPreview>
-                          </Parallel>
+                            </twsba1:ProcessCountryDataInfo.NewZoneServices>
+                            <twsba1:ProcessCountryDataInfo.NewZones>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:NewZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewZone)">NewZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryDataInfo.NewZones>
+                            <twsba1:ProcessCountryDataInfo.NotImportedCodes>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">NotImportedCodes</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryDataInfo.NotImportedCodes>
+                            <twsba1:ProcessCountryDataInfo.NotImportedZones>
+                              <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
+                                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">NotImportedZones</mca:CSharpValue>
+                              </InArgument>
+                            </twsba1:ProcessCountryDataInfo.NotImportedZones>
+                          </twsba1:ProcessCountryDataInfo>
                           <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
                             <Assign.To>
                               <OutArgument x:TypeArguments="x:Int32">
@@ -1319,27 +1145,288 @@
                           </vbw:WriteTrackingMessage>
                         </Sequence>
                       </Sequence>
+                    </Sequence>
+                  </Parallel>
+                </Sequence>
+              </If.Then>
+            </If>
+          </Sequence>
+        </ActivityAction>
+      </ForEach>
+      <twsba1:PrepareDataForWhileProcessingBusinessRules sap2010:WorkflowViewState.IdRef="PrepareDataForWhileProcessingBusinessRules_1">
+        <twsba1:PrepareDataForWhileProcessingBusinessRules.CountriesAllNotImportedCodes>
+          <OutArgument x:TypeArguments="scg:List(twse:CountryNotImportedCodes)">
+            <mca:CSharpReference x:TypeArguments="scg:List(twse:CountryNotImportedCodes)">CountriesAllNotImportedCodes</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:PrepareDataForWhileProcessingBusinessRules.CountriesAllNotImportedCodes>
+        <twsba1:PrepareDataForWhileProcessingBusinessRules.CountryDataByCountryId>
+          <InArgument x:TypeArguments="scg:Dictionary(x:Int32, twse:ProcessedCountryDataInfo)">
+            <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int32, twse:ProcessedCountryDataInfo)">CountryDataByCountryId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:PrepareDataForWhileProcessingBusinessRules.CountryDataByCountryId>
+      </twsba1:PrepareDataForWhileProcessingBusinessRules>
+      <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_7">
+        <vbw:CombineLists.InputLists>
+          <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
+            <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)" xml:space="preserve">new List&lt;System.Collections.IEnumerable&gt;() 
+            {new List&lt;AllImportedCountries&gt;(){new  AllImportedCountries{ImportedCountries=ImportedCountries},},
+                 new List&lt;AllCountriesNotImportedCodes&gt;(){ new AllCountriesNotImportedCodes {CountriesNotImportedCodes=CountriesAllNotImportedCodes}}
+            };</mca:CSharpValue>
+          </InArgument>
+        </vbw:CombineLists.InputLists>
+        <vbw:CombineLists.OutputList>
+          <OutArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">CountriesToValidate</mca:CSharpReference>
+          </OutArgument>
+        </vbw:CombineLists.OutputList>
+      </vbw:CombineLists>
+      <local:ExecuteImportSupplierPricelistRules BusinessRulesKey="SPL_ValidateCountryWhileProcessing" sap2010:WorkflowViewState.IdRef="ExecuteImportSupplierPricelistRules_5">
+        <local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
+          <InOutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+            <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpReference>
+          </InOutArgument>
+        </local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
+        <local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
+          <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">BPBusinessRuleSetId</mca:CSharpValue>
+          </InArgument>
+        </local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
+        <local:ExecuteImportSupplierPricelistRules.ImportedDataToValidate>
+          <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">CountriesToValidate</mca:CSharpValue>
+          </InArgument>
+        </local:ExecuteImportSupplierPricelistRules.ImportedDataToValidate>
+        <local:ExecuteImportSupplierPricelistRules.IsAutoImport>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
+          </InArgument>
+        </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
+        <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
+          <InOutArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
+          </InOutArgument>
+        </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
+        <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
+          <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+          </InArgument>
+        </local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
+      </local:ExecuteImportSupplierPricelistRules>
+      <Parallel sap2010:WorkflowViewState.IdRef="Parallel_15">
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_23">
+          <ForEach x:TypeArguments="twse:ProcessedCountryDataInfo" DisplayName="ForEach&lt;ProcessedCountryDataInfo&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_6">
+            <ForEach.Values>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:ProcessedCountryDataInfo)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ProcessedCountryDataInfo)">CountryDataByCountryId.Values</mca:CSharpValue>
+              </InArgument>
+            </ForEach.Values>
+            <ActivityAction x:TypeArguments="twse:ProcessedCountryDataInfo">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="twse:ProcessedCountryDataInfo" Name="item" />
+              </ActivityAction.Argument>
+              <If sap2010:WorkflowViewState.IdRef="If_12">
+                <If.Condition>
+                  <InArgument x:TypeArguments="x:Boolean">
+                    <mca:CSharpValue x:TypeArguments="x:Boolean">item.ImportedZones.Count() &gt; 0 || Input.SupplierPricelistType == BusinessEntity.Entities.SupplierPricelistType.Full</mca:CSharpValue>
+                  </InArgument>
+                </If.Condition>
+                <If.Then>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_22">
+                    <twsba1:ReserveIdsForNewEntities Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ReserveIdsForNewEntities_4">
+                      <twsba1:ReserveIdsForNewEntities.NewCodes>
+                        <InArgument x:TypeArguments="scg:IEnumerable(twses:NewCode)">
+                          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewCode)">item.NewCodes</mca:CSharpValue>
+                        </InArgument>
+                      </twsba1:ReserveIdsForNewEntities.NewCodes>
+                      <twsba1:ReserveIdsForNewEntities.NewRates>
+                        <InArgument x:TypeArguments="scg:IEnumerable(twses:NewRate)">
+                          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewRate)">item.NewRates</mca:CSharpValue>
+                        </InArgument>
+                      </twsba1:ReserveIdsForNewEntities.NewRates>
+                      <twsba1:ReserveIdsForNewEntities.NewZones>
+                        <InArgument x:TypeArguments="scg:IEnumerable(twses:NewZone)">
+                          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewZone)">item.NewZones</mca:CSharpValue>
+                        </InArgument>
+                      </twsba1:ReserveIdsForNewEntities.NewZones>
+                      <twsba1:ReserveIdsForNewEntities.NewZonesServices>
+                        <InArgument x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">
+                          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">item.NewZonesServices</mca:CSharpValue>
+                        </InArgument>
+                      </twsba1:ReserveIdsForNewEntities.NewZonesServices>
+                    </twsba1:ReserveIdsForNewEntities>
+                    <Parallel DisplayName="Parallel_PrepareQueuesForDBApplyProcess" sap2010:WorkflowViewState.IdRef="Parallel_13">
+                      <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:NewZone)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_9">
+                        <vbw:EnqueueItem.Item>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:NewZone)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewZone)">item.NewZones</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Item>
+                        <vbw:EnqueueItem.Queue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZone))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZone))">NewZonesQueue</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Queue>
+                      </vbw:EnqueueItem>
+                      <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:NewCode)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_10">
+                        <vbw:EnqueueItem.Item>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:NewCode)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewCode)">item.NewCodes</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Item>
+                        <vbw:EnqueueItem.Queue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewCode))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewCode))">NewCodesQueue</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Queue>
+                      </vbw:EnqueueItem>
+                      <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:NewRate)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_11">
+                        <vbw:EnqueueItem.Item>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:NewRate)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewRate)">item.NewRates</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Item>
+                        <vbw:EnqueueItem.Queue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewRate))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewRate))">NewRatesQueue</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Queue>
+                      </vbw:EnqueueItem>
+                      <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:NewZoneService)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_12">
+                        <vbw:EnqueueItem.Item>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NewZoneService)">item.NewZonesServices</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Item>
+                        <vbw:EnqueueItem.Queue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZoneService))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZoneService))">NewZonesServicesQueue</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Queue>
+                      </vbw:EnqueueItem>
+                      <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:ChangedZone)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_13">
+                        <vbw:EnqueueItem.Item>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedZone)">item.ChangedZones</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Item>
+                        <vbw:EnqueueItem.Queue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZone))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZone))">ChangedZonesQueue</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Queue>
+                      </vbw:EnqueueItem>
+                      <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:ChangedCode)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_14">
+                        <vbw:EnqueueItem.Item>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedCode)">item.ChangedCodes</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Item>
+                        <vbw:EnqueueItem.Queue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">ChangedCodesQueue</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Queue>
+                      </vbw:EnqueueItem>
+                      <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:ChangedRate)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_15">
+                        <vbw:EnqueueItem.Item>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedRate)">item.ChangedRates</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Item>
+                        <vbw:EnqueueItem.Queue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedRate))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedRate))">ChangedRatesQueue</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Queue>
+                      </vbw:EnqueueItem>
+                      <vbw:EnqueueItem x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)" sap2010:WorkflowViewState.IdRef="EnqueueItem`1_16">
+                        <vbw:EnqueueItem.Item>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ChangedZoneService)">item.ChangedZoneServices</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Item>
+                        <vbw:EnqueueItem.Queue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZoneService))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZoneService))">ChangedZonesServicesQueue</mca:CSharpValue>
+                          </InArgument>
+                        </vbw:EnqueueItem.Queue>
+                      </vbw:EnqueueItem>
+                      <twsba1:GenerateZonesRatesPreview sap2010:WorkflowViewState.IdRef="GenerateZonesRatesPreview_2">
+                        <twsba1:GenerateZonesRatesPreview.CountryId>
+                          <InArgument x:TypeArguments="x:Int32">
+                            <mca:CSharpValue x:TypeArguments="x:Int32">item.CountryId</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:GenerateZonesRatesPreview.CountryId>
+                        <twsba1:GenerateZonesRatesPreview.ImportedZones>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">item.ImportedZones</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:GenerateZonesRatesPreview.ImportedZones>
+                        <twsba1:GenerateZonesRatesPreview.NotImportedZones>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">item.NotImportedZones</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:GenerateZonesRatesPreview.NotImportedZones>
+                        <twsba1:GenerateZonesRatesPreview.PreviewZonesRatesQueue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:ZoneRatePreview))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:ZoneRatePreview))">PreviewZonesRatesQueue</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:GenerateZonesRatesPreview.PreviewZonesRatesQueue>
+                      </twsba1:GenerateZonesRatesPreview>
+                      <twsba1:GenerateCodesPreview sap2010:WorkflowViewState.IdRef="GenerateCodesPreview_2">
+                        <twsba1:GenerateCodesPreview.ImportedCodes>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedCode)">item.ImportedCodes</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:GenerateCodesPreview.ImportedCodes>
+                        <twsba1:GenerateCodesPreview.NotImportedCodes>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedCode)">item.NotImportedCodes</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:GenerateCodesPreview.NotImportedCodes>
+                        <twsba1:GenerateCodesPreview.PreviewCodeQueue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:CodePreview))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:CodePreview))">PreviewCodesQueue</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:GenerateCodesPreview.PreviewCodeQueue>
+                      </twsba1:GenerateCodesPreview>
+                      <twsba1:GenerateOtherRatesPreview sap2010:WorkflowViewState.IdRef="GenerateOtherRatesPreview_2">
+                        <twsba1:GenerateOtherRatesPreview.ImportedZones>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:ImportedZone)">item.ImportedZones</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:GenerateOtherRatesPreview.ImportedZones>
+                        <twsba1:GenerateOtherRatesPreview.NotImportedZones>
+                          <InArgument x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twses:NotImportedZone)">item.NotImportedZones</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:GenerateOtherRatesPreview.NotImportedZones>
+                        <twsba1:GenerateOtherRatesPreview.PreviewOtherRatesQueue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:OtherRatePreview))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:OtherRatePreview))">PreviewOtherRatesQueue</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:GenerateOtherRatesPreview.PreviewOtherRatesQueue>
+                      </twsba1:GenerateOtherRatesPreview>
                     </Parallel>
                   </Sequence>
                 </If.Then>
               </If>
-            </Sequence>
-          </ActivityAction>
-        </ForEach>
-        <local:ExecuteImportSupplierPricelistRules BusinessRulesKey="ValidateAfterProcessing" sap2010:WorkflowViewState.IdRef="ExecuteImportSupplierPricelistRules_6">
-          <local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
-            <InOutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
-              <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpReference>
-            </InOutArgument>
-          </local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
-          <local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
-            <InArgument x:TypeArguments="s:Nullable(x:Int32)">
-              <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">BPBusinessRuleSetId</mca:CSharpValue>
-            </InArgument>
-          </local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
-          <local:ExecuteImportSupplierPricelistRules.ImportedDataToValidate>
-            <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
-              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" xml:space="preserve">new List&lt;Vanrise.BusinessProcess.Entities.IRuleTarget&gt;()
+            </ActivityAction>
+          </ForEach>
+          <local:ExecuteImportSupplierPricelistRules BusinessRulesKey="ValidateAfterProcessing" sap2010:WorkflowViewState.IdRef="ExecuteImportSupplierPricelistRules_6">
+            <local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
+              <InOutArgument x:TypeArguments="scg:List(vbe:BPValidationMessage)">
+                <mca:CSharpReference x:TypeArguments="scg:List(vbe:BPValidationMessage)">AllWarningMessages</mca:CSharpReference>
+              </InOutArgument>
+            </local:ExecuteImportSupplierPricelistRules.AllWarningMessages>
+            <local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
+              <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">BPBusinessRuleSetId</mca:CSharpValue>
+              </InArgument>
+            </local:ExecuteImportSupplierPricelistRules.BPBusinessRuleSetId>
+            <local:ExecuteImportSupplierPricelistRules.ImportedDataToValidate>
+              <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" xml:space="preserve">new List&lt;Vanrise.BusinessProcess.Entities.IRuleTarget&gt;()
     {
         new AllZones() 
         {            
@@ -1347,103 +1434,104 @@
             NotImportedZones = AllNotImportedZones 
         }
     }</mca:CSharpValue>
+              </InArgument>
+            </local:ExecuteImportSupplierPricelistRules.ImportedDataToValidate>
+            <local:ExecuteImportSupplierPricelistRules.IsAutoImport>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
+              </InArgument>
+            </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
+            <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
+              <InOutArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
+              </InOutArgument>
+            </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
+            <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
+              <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+              </InArgument>
+            </local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
+          </local:ExecuteImportSupplierPricelistRules>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpReference x:TypeArguments="x:Boolean">CountriesProcessingStatus.IsComplete</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+        <local:ApplyEntitiesToDBProcess sap2010:WorkflowViewState.IdRef="ApplyEntitiesToDBProcess_1">
+          <local:ApplyEntitiesToDBProcess.ChangedCodesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">ChangedCodesQueue</mca:CSharpValue>
             </InArgument>
-          </local:ExecuteImportSupplierPricelistRules.ImportedDataToValidate>
-          <local:ExecuteImportSupplierPricelistRules.IsAutoImport>
-            <InArgument x:TypeArguments="x:Boolean">
-              <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutoImport</mca:CSharpValue>
+          </local:ApplyEntitiesToDBProcess.ChangedCodesQueue>
+          <local:ApplyEntitiesToDBProcess.ChangedRatesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedRate))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedRate))">ChangedRatesQueue</mca:CSharpValue>
             </InArgument>
-          </local:ExecuteImportSupplierPricelistRules.IsAutoImport>
-          <local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
-            <InOutArgument x:TypeArguments="x:Boolean">
-              <mca:CSharpReference x:TypeArguments="x:Boolean">ProcessNeedsConfirmation</mca:CSharpReference>
-            </InOutArgument>
-          </local:ExecuteImportSupplierPricelistRules.ProcessNeedsConfirmation>
-          <local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
-            <InArgument x:TypeArguments="s:Nullable(x:Int32)">
-              <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.ReceivedPricelistRecordId</mca:CSharpValue>
+          </local:ApplyEntitiesToDBProcess.ChangedRatesQueue>
+          <local:ApplyEntitiesToDBProcess.ChangedZonesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZone))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZone))">ChangedZonesQueue</mca:CSharpValue>
             </InArgument>
-          </local:ExecuteImportSupplierPricelistRules.ReceivedPricelistRecordId>
-        </local:ExecuteImportSupplierPricelistRules>
-        <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
-          <Assign.To>
-            <OutArgument x:TypeArguments="x:Boolean">
-              <mca:CSharpReference x:TypeArguments="x:Boolean">CountriesProcessingStatus.IsComplete</mca:CSharpReference>
-            </OutArgument>
-          </Assign.To>
-          <Assign.Value>
-            <InArgument x:TypeArguments="x:Boolean">True</InArgument>
-          </Assign.Value>
-        </Assign>
-      </Sequence>
-      <local:ApplyEntitiesToDBProcess sap2010:WorkflowViewState.IdRef="ApplyEntitiesToDBProcess_1">
-        <local:ApplyEntitiesToDBProcess.ChangedCodesQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedCode))">ChangedCodesQueue</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.ChangedCodesQueue>
-        <local:ApplyEntitiesToDBProcess.ChangedRatesQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedRate))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedRate))">ChangedRatesQueue</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.ChangedRatesQueue>
-        <local:ApplyEntitiesToDBProcess.ChangedZonesQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZone))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZone))">ChangedZonesQueue</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.ChangedZonesQueue>
-        <local:ApplyEntitiesToDBProcess.ChangedZonesServicesQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZoneService))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZoneService))">ChangedZonesServicesQueue</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.ChangedZonesServicesQueue>
-        <local:ApplyEntitiesToDBProcess.ImportSupplierPriceListMainProcessStatus>
-          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CountriesProcessingStatus</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.ImportSupplierPriceListMainProcessStatus>
-        <local:ApplyEntitiesToDBProcess.NewCodesQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewCode))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewCode))">NewCodesQueue</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.NewCodesQueue>
-        <local:ApplyEntitiesToDBProcess.NewRatesQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewRate))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewRate))">NewRatesQueue</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.NewRatesQueue>
-        <local:ApplyEntitiesToDBProcess.NewZonesQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZone))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZone))">NewZonesQueue</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.NewZonesQueue>
-        <local:ApplyEntitiesToDBProcess.NewZonesServicesQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZoneService))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZoneService))">NewZonesServicesQueue</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.NewZonesServicesQueue>
-        <local:ApplyEntitiesToDBProcess.PreviewCodesQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:CodePreview))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:CodePreview))">PreviewCodesQueue</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.PreviewCodesQueue>
-        <local:ApplyEntitiesToDBProcess.PreviewOtherRatesQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:OtherRatePreview))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:OtherRatePreview))">PreviewOtherRatesQueue</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.PreviewOtherRatesQueue>
-        <local:ApplyEntitiesToDBProcess.PreviewZonesRatesQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:ZoneRatePreview))">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:ZoneRatePreview))">PreviewZonesRatesQueue</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.PreviewZonesRatesQueue>
-        <local:ApplyEntitiesToDBProcess.SupplierId>
-          <InArgument x:TypeArguments="x:Int32">
-            <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
-          </InArgument>
-        </local:ApplyEntitiesToDBProcess.SupplierId>
-      </local:ApplyEntitiesToDBProcess>
-    </Parallel>
+          </local:ApplyEntitiesToDBProcess.ChangedZonesQueue>
+          <local:ApplyEntitiesToDBProcess.ChangedZonesServicesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZoneService))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:ChangedZoneService))">ChangedZonesServicesQueue</mca:CSharpValue>
+            </InArgument>
+          </local:ApplyEntitiesToDBProcess.ChangedZonesServicesQueue>
+          <local:ApplyEntitiesToDBProcess.ImportSupplierPriceListMainProcessStatus>
+            <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CountriesProcessingStatus</mca:CSharpValue>
+            </InArgument>
+          </local:ApplyEntitiesToDBProcess.ImportSupplierPriceListMainProcessStatus>
+          <local:ApplyEntitiesToDBProcess.NewCodesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewCode))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewCode))">NewCodesQueue</mca:CSharpValue>
+            </InArgument>
+          </local:ApplyEntitiesToDBProcess.NewCodesQueue>
+          <local:ApplyEntitiesToDBProcess.NewRatesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewRate))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewRate))">NewRatesQueue</mca:CSharpValue>
+            </InArgument>
+          </local:ApplyEntitiesToDBProcess.NewRatesQueue>
+          <local:ApplyEntitiesToDBProcess.NewZonesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZone))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZone))">NewZonesQueue</mca:CSharpValue>
+            </InArgument>
+          </local:ApplyEntitiesToDBProcess.NewZonesQueue>
+          <local:ApplyEntitiesToDBProcess.NewZonesServicesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZoneService))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twses:NewZoneService))">NewZonesServicesQueue</mca:CSharpValue>
+            </InArgument>
+          </local:ApplyEntitiesToDBProcess.NewZonesServicesQueue>
+          <local:ApplyEntitiesToDBProcess.PreviewCodesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:CodePreview))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:CodePreview))">PreviewCodesQueue</mca:CSharpValue>
+            </InArgument>
+          </local:ApplyEntitiesToDBProcess.PreviewCodesQueue>
+          <local:ApplyEntitiesToDBProcess.PreviewOtherRatesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:OtherRatePreview))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:OtherRatePreview))">PreviewOtherRatesQueue</mca:CSharpValue>
+            </InArgument>
+          </local:ApplyEntitiesToDBProcess.PreviewOtherRatesQueue>
+          <local:ApplyEntitiesToDBProcess.PreviewZonesRatesQueue>
+            <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:ZoneRatePreview))">
+              <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twse:ZoneRatePreview))">PreviewZonesRatesQueue</mca:CSharpValue>
+            </InArgument>
+          </local:ApplyEntitiesToDBProcess.PreviewZonesRatesQueue>
+          <local:ApplyEntitiesToDBProcess.SupplierId>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">Input.SupplierAccountId</mca:CSharpValue>
+            </InArgument>
+          </local:ApplyEntitiesToDBProcess.SupplierId>
+        </local:ApplyEntitiesToDBProcess>
+      </Parallel>
+    </Sequence>
     <twsba1:GetImportSPLContext sap2010:WorkflowViewState.IdRef="GetImportSPLContext_1">
       <twsba1:GetImportSPLContext.ProcessHasChanges>
         <OutArgument x:TypeArguments="x:Boolean">
@@ -1503,7 +1591,7 @@
                 CurrencyId = Input.CurrencyId,
                 FileId = Input.FileId,
                 SupplierId =Input.SupplierAccountId
-            }</mca:CSharpValue>
+        }</mca:CSharpValue>
                         </InArgument>
                       </vbw:AssignTask.TaskData>
                       <vbw:AssignTask.TaskExecutionInformation>
@@ -1735,35 +1823,35 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlN1cHBsaWVyUHJpY2VMaXN0LkJQXEltcG9ydFN1cHBsaWVyUHJpY2VMaXN0LnhhbWyXA0wDow4OAgEBYgticAMBgwdnC2fIAQMBwwZsC2zIAQMBgwZxC3HIAQMBwwV2C3bQAQMBgwV7C3vQAQMBwwSAAQuAAdABAwGDBIUBC4UBywEDAcMDiwELiwG6AQMBgwOTAQuTAdMBAwHDApwBC5wB1gEDAYMCpgELpgGuAQMBwwGrAQurAbYBAwGDAa4BNa4BPAMBggG5AQu5AYEBAgFCwAELwAGpAQIBAskBBdgBCgQBn48B2QEF5AEiBAGejgHlAQX6ASIEAZ2MAfsBBccCKAQB3IQByAIF5wIXBAHbgQHoAgXzAhgEAdqAAfQCBZMDMQMB2H2UAwWzAyMDAdd6tAMFxAMYAwHWecUDBeQDMQMB1HblAwX1AyUDAZN19gMFhQQYAwGSdIYEBaUEMQMBkHGmBAXrBBADAYtr7AQFiwUhAwGKaIwFBZwFJwMByWadBQWoBRgDAchlqQUFyAUxAwHGYskFBc8FIAMBhGLQBQXWBSQDAcNh1wUF4gUgAwHCYOMFBe4FHwMBwV/vBQX+CxADAe4a/wsFhQwiAwGtGoYMBZIOCgMByAiTDgWZDiADAYYImg4Fmg5dAwGFCJsOBaEOIAMBwwfMAQvMAVwEAaCPAdABCdYBMAQB4I8B4QEL4QFfBAHfjgHcAQvcAW8EAZ+OAfIBC/IBdgQB3o0B9wEL9wFfBAGejQHtAQvtAV4EAd6MAegBC+gBWAQBnowBoQILoQJ3BAHdiwGwAguwAlwEAZ2LAboCC7oCXgQB3YoBgwILgwJYBAGdigG1Agu1Al4EAd2JAcQCC8QCaQQBnYkBjQILjQKBAQQB3YgB/gEL/gFvBAGdiAGmAgumAogBBAHdhwGcAgucAnkEAZ2HAYgCC4gCVAQB3YYBlwILlwJ0BAGdhgG/Agu/AnMEAd2FAZICC5ICeQQBnYUBqwILqwJhBAHdhAHkAgvkAl8EAZyEAdoCC9oCVgQB3IMB3wIL3wJeBAGcgwHVAgvVAoABBAHcggHQAgvQAnEEAZyCAcsCC8sCcQQB3IEB6wIL6wLgAQQBm4EB8AIL8AKFAQQB24ABhgMLhgNcBAGagAH0AkH0AlUEAZmAAYEDC4EDfQMB2X/3Agv3AnwDAZl//AIL/AJnAwHZfpADC5ADcwMBmX6LAwuLA2oDAdl9lwMLlwN4AwGYfZwDC5wDeQMB2HymAwumA4QBAwGYfLADC7ADgAEDAdh7qwMLqwNxAwGYe6EDC6EDcQMB2Hq3Awu8AxUDAZd6wQMLwQN/AwHXedcDC9cDXAMBlnnFA0HFA1ADAZV50gML0gN3AwHVeMgDC8gDfAMBlXjNAwvNA2cDAdV34QML4QNzAwGVd9wDC9wDagMB1XbyAwvyA3kDAZR27QML7QN8AwHUdegDC+gDbwMBlHX5Awv9AyEDAdN0ggQLggSAAQMBk3SYBAuYBFwDAdJzhgRBhgRcAwHRc5MEC5MEeAMBkXOJBAuJBHwDAdFyjgQLjgRnAwGRcqIEC6IEcwMB0XGdBAudBGoDAZFxpwQHtwQhAwHPb7gEB8gEIQMBjm7JBAfZBCEDAc1s2gQH6gQpAwGMa+8EC+8EdwMBy2r0BAv0BHcDAYtqiAULiAVxAwHLaYMFC4MFcQMBi2n5BAv5BIUBAwHLaP4EC/4EcQMBi2iPBQuPBXcDAcpnlAULlAWAAQMBimeZBQuZBXEDAcpmoAULoAWgAQMBiWalBQulBYQBAwHJZbsFC7sFXAMBiGWpBUGpBVQDAYdltgULtgV8AwHHZKwFC6wFfAMBh2SxBQuxBWcDAcdjxQULxQVzAwGHY8AFC8AFagMBx2LMBQvMBYUBAwGGYskFYMkFfAMBhWLTBQvTBVsDAcRh3wUL3wWFAQMBg2HaBQvaBZMCAwHDYOsFC+sFeAMBgmDmBQvmBZUBAwHCX/AFB4MJEQMBqTqECQePCTsDAag5kAkHngkaAwGnOJ8JB74JMwMBpTW/CQf9CxIDAe8aggwLggxjAwGuGokMC4kMWwMByQiNDAn1DRQDAc4K+A0JkA4UAwGJCZYOC5YOhQEDAYgIkw5hkw6DAQMBhwieDgueDoUBAwHFB5sOYZsOhAEDAcQH0wEP0wF3BAHhjwGqBA2qBIEBAwHQcLQEDbQEYQMBkHCvBA2vBFgDAdBvuwQNuwSBAQMBj2/FBA3FBGEDAc9uwAQNwARYAwGPbtYEDdYEYQMBzm3MBA3MBIEBAwGObdEEDdEEWAMBzmznBA3nBGEDAY1s4gQN4gRYAwHNa90EDd0EjwEDAY1r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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="SetReceivedPricelistAsStarted_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1530,210">
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="3289,210">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GetSupplierSettings_1" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="SetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="LoadSupplierPriceListData_1" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="ShifTime_1" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_5" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_1" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_2" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="StructureImportedZones_1" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_6" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_3" sap:VirtualizedContainerService.HintSize="1530,22" />
+      <sap2010:ViewStateData Id="GetSupplierSettings_1" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="SetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="LoadSupplierPriceListData_1" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="ShifTime_1" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_5" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_1" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="StructureDataByZones_1" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_1" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_2" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="StructureImportedZones_1" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_6" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_3" sap:VirtualizedContainerService.HintSize="3289,22" />
       <sap2010:ViewStateData Id="GetExistingZones_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingCodes_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingRates_3" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetExistingZonesServices_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="1530,86">
+      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="3289,86">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
@@ -1771,18 +1859,19 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="UpdateImportedBEDs_1" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="StructureDataByCountries_2" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="CombineLists`1_2" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_4" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="ReserveIdForPriceList_3" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="PrepareExistingZones_4" sap:VirtualizedContainerService.HintSize="264,22" />
+      <sap2010:ViewStateData Id="UpdateImportedBEDs_1" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="StructureDataByCountries_2" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_2" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_4" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="ReserveIdForPriceList_3" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="GetCountriesData_1" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="PrepareExistingZones_4" sap:VirtualizedContainerService.HintSize="286,22" />
       <sap2010:ViewStateData Id="PrepareExistingCodes_4" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareExistingRates_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareExistingZonesServices_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_12" sap:VirtualizedContainerService.HintSize="242,51">
+      <sap2010:ViewStateData Id="Parallel_12" sap:VirtualizedContainerService.HintSize="264,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -1790,43 +1879,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ProcessCountryCodes_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ProcessCountryZones_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ProcessCountryRates_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ProcessCountryZonesServices_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_13" sap:VirtualizedContainerService.HintSize="242,332">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CombineLists`1_7" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_5" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="ReserveIdsForNewEntities_4" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="EnqueueItem`1_9" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="EnqueueItem`1_10" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="EnqueueItem`1_11" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="EnqueueItem`1_12" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="EnqueueItem`1_13" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="EnqueueItem`1_14" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="EnqueueItem`1_15" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="EnqueueItem`1_16" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GenerateZonesRatesPreview_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GenerateCodesPreview_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="GenerateOtherRatesPreview_2" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_13" sap:VirtualizedContainerService.HintSize="242,51">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ProcessCountryCodes_2" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="ProcessCountryZones_2" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="ProcessCountryRates_2" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="ProcessCountryZonesServices_2" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="ProcessCountryDataInfo_1" sap:VirtualizedContainerService.HintSize="242,22" />
       <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_13" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="264,988">
+      <sap2010:ViewStateData Id="Sequence_13" sap:VirtualizedContainerService.HintSize="264,558">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1834,7 +1894,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_15" sap:VirtualizedContainerService.HintSize="286,1174">
+      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="286,773">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1842,14 +1902,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Parallel_14" sap:VirtualizedContainerService.HintSize="400,1220">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_17" sap:VirtualizedContainerService.HintSize="422,1344">
+      <sap2010:ViewStateData Id="Sequence_15" sap:VirtualizedContainerService.HintSize="308,959">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1857,22 +1910,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="547,1494">
+      <sap2010:ViewStateData Id="Parallel_14" sap:VirtualizedContainerService.HintSize="422,1005">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_16" sap:VirtualizedContainerService.HintSize="569,1618">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_4" sap:VirtualizedContainerService.HintSize="599,1768">
+      <sap2010:ViewStateData Id="Sequence_17" sap:VirtualizedContainerService.HintSize="444,1129">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1880,9 +1925,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_6" sap:VirtualizedContainerService.HintSize="599,22" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="599,62" />
-      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="621,2056">
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="569,1279">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_16" sap:VirtualizedContainerService.HintSize="591,1403">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1890,16 +1940,87 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,2056" />
-      <sap2010:ViewStateData Id="Parallel_10" sap:VirtualizedContainerService.HintSize="1530,2102">
+      <sap2010:ViewStateData Id="ForEach`1_4" sap:VirtualizedContainerService.HintSize="3267,1553">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="PrepareDataForWhileProcessingBusinessRules_1" sap:VirtualizedContainerService.HintSize="3267,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_7" sap:VirtualizedContainerService.HintSize="3267,22" />
+      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_5" sap:VirtualizedContainerService.HintSize="3267,22" />
+      <sap2010:ViewStateData Id="ReserveIdsForNewEntities_4" sap:VirtualizedContainerService.HintSize="2714,22" />
+      <sap2010:ViewStateData Id="EnqueueItem`1_9" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="EnqueueItem`1_10" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="EnqueueItem`1_11" sap:VirtualizedContainerService.HintSize="200,55" />
+      <sap2010:ViewStateData Id="EnqueueItem`1_12" sap:VirtualizedContainerService.HintSize="200,55" />
+      <sap2010:ViewStateData Id="EnqueueItem`1_13" sap:VirtualizedContainerService.HintSize="200,55" />
+      <sap2010:ViewStateData Id="EnqueueItem`1_14" sap:VirtualizedContainerService.HintSize="200,55" />
+      <sap2010:ViewStateData Id="EnqueueItem`1_15" sap:VirtualizedContainerService.HintSize="200,55" />
+      <sap2010:ViewStateData Id="EnqueueItem`1_16" sap:VirtualizedContainerService.HintSize="200,55" />
+      <sap2010:ViewStateData Id="GenerateZonesRatesPreview_2" sap:VirtualizedContainerService.HintSize="200,55" />
+      <sap2010:ViewStateData Id="GenerateCodesPreview_2" sap:VirtualizedContainerService.HintSize="200,55" />
+      <sap2010:ViewStateData Id="GenerateOtherRatesPreview_2" sap:VirtualizedContainerService.HintSize="200,55" />
+      <sap2010:ViewStateData Id="Parallel_13" sap:VirtualizedContainerService.HintSize="2714,101">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_22" sap:VirtualizedContainerService.HintSize="2736,287">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_12" sap:VirtualizedContainerService.HintSize="2861,437">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="997,22" />
+      <sap2010:ViewStateData Id="ForEach`1_6" sap:VirtualizedContainerService.HintSize="2891,587">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExecuteImportSupplierPricelistRules_6" sap:VirtualizedContainerService.HintSize="2891,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="2891,62" />
+      <sap2010:ViewStateData Id="Sequence_23" sap:VirtualizedContainerService.HintSize="2913,875">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="200,875" />
+      <sap2010:ViewStateData Id="Parallel_15" sap:VirtualizedContainerService.HintSize="3267,921">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="3289,2824">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetImportSPLContext_1" sap:VirtualizedContainerService.HintSize="3289,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="736,22" />
       <sap2010:ViewStateData Id="SetReceivedPricelistAsWaitingConfirmation_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="AssignTask`1_3" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_19" sap:VirtualizedContainerService.HintSize="222,208">
@@ -1927,10 +2048,11 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_10" sap:VirtualizedContainerService.HintSize="997,508">
+      <sap2010:ViewStateData Id="If_10" sap:VirtualizedContainerService.HintSize="736,508">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
@@ -1940,7 +2062,7 @@
       <sap2010:ViewStateData Id="SyncImportedDataWithDB_3" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="SetReceivedPricelistAsCompleted_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="464,212">
+      <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="464,210">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
@@ -1948,7 +2070,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="486,646">
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="486,644">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1957,7 +2079,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="SetReceivedPricelistAsRejected_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="464,212">
+      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="464,210">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
@@ -1965,22 +2087,22 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_7" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="Sequence_20" sap:VirtualizedContainerService.HintSize="486,398">
+      <sap2010:ViewStateData Id="Sequence_20" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="736,794">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="997,796">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="1019,1530">
+      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="758,1528">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -1998,32 +2120,32 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_18" sap:VirtualizedContainerService.HintSize="486,396">
+      <sap2010:ViewStateData Id="Sequence_18" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="3289,1678">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsPinned">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="1530,1680">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsPinned">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_11" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="CleanTemporaryTables_2" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_12" sap:VirtualizedContainerService.HintSize="1530,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1552,5748">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_11" sap:VirtualizedContainerService.HintSize="3164,22" />
+      <sap2010:ViewStateData Id="CleanTemporaryTables_2" sap:VirtualizedContainerService.HintSize="3164,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_12" sap:VirtualizedContainerService.HintSize="3164,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="3311,6530">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="1592,5828">
+      <sap2010:ViewStateData Id="TOne.WhS.SupplierPriceList.BP.ImportSupplierPriceList_1" sap:VirtualizedContainerService.HintSize="3351,6610">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>

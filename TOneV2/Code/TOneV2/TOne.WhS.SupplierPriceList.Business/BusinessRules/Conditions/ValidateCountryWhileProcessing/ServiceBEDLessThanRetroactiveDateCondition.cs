@@ -17,31 +17,44 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target is ImportedCountry;
+            return target is AllImportedCountries;
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var importedCountry = context.Target as ImportedCountry;
-
-            var invalidZoneNames = new HashSet<string>();
+            CountryManager countryManager = new CountryManager();
+            bool isValid = true;
+            var allImportedCountries = context.Target as AllImportedCountries;
+            var contextMessages = new List<string>();
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
+            var invalidZonesByCountryName = new List<string>();
+            string retroactiveDateString = importSPLContext.RetroactiveDate.ToString(importSPLContext.DateFormat);
 
-            foreach (ImportedZone zoneData in importedCountry.ImportedZones)
+            foreach (var importedCountry in allImportedCountries.ImportedCountries)
             {
-                if (zoneData.ImportedZoneServiceGroup != null && zoneData.ImportedZoneServiceGroup.BED < importSPLContext.RetroactiveDate && zoneData.ImportedZoneServiceGroup.ChangeType == ZoneServiceChangeType.New)
+                var invalidZoneNames = new HashSet<string>();
+            
+
+                foreach (ImportedZone zoneData in importedCountry.ImportedZones)
                 {
-                    invalidZoneNames.Add(zoneData.ZoneName);
+                    if (zoneData.ImportedZoneServiceGroup != null && zoneData.ImportedZoneServiceGroup.BED < importSPLContext.RetroactiveDate && zoneData.ImportedZoneServiceGroup.ChangeType == ZoneServiceChangeType.New)
+                    {
+                        invalidZoneNames.Add(zoneData.ZoneName);
+                    }
+                }
+                if (invalidZoneNames.Count > 0)
+                {
+                    string countryName = countryManager.GetCountryName(importedCountry.CountryId);
+                    invalidZonesByCountryName.Add(string.Format("'{0} : {1}'", countryName, string.Join(",", invalidZoneNames)));
                 }
             }
 
-            if (invalidZoneNames.Count > 0)
+            if (invalidZonesByCountryName.Count > 0)
             {
-                string retroactiveDateString = importSPLContext.RetroactiveDate.ToString(importSPLContext.DateFormat);
-                context.Message = string.Format("Adding services in dates less than retroactive date {0} for the following zone(s): {1}.", retroactiveDateString, string.Join(", ", invalidZoneNames));
-                return false;
+                context.Message = string.Format("Adding services in dates less than retroactive date '{0}' for the following zone(s): '{1}'", retroactiveDateString, string.Join(" ; ", invalidZonesByCountryName));
+                isValid = false;
             }
 
-            return true;
+            return isValid;
         }
         public override string GetMessage(IRuleTarget target)
         {

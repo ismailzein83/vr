@@ -77,6 +77,7 @@
     <Compile Include="PriceListTemplate\SupplierPriceListTemplate.cs" />
     <Compile Include="PriceListTemplate\SupplierPriceListTemplateFilter.cs" />
     <Compile Include="PriceListTemplate\SupplierPriceListTemplateInfo.cs" />
+    <Compile Include="ProcessedCountryDataInfo.cs" />
     <Compile Include="ReceivedPricelistDetail.cs" />
     <Compile Include="ReceivedPricelist.cs" />
     <Compile Include="ReceivedPricelistQuery.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="SPL\ChangedData\ChangedRate.cs" />
     <Compile Include="SPL\ChangedData\ChangedZone.cs" />
     <Compile Include="SPL\CodeValidation.cs" />
+    <Compile Include="SPL\AllCountriesNotImportedCodes.cs" />
     <Compile Include="SPL\CountryNotImportedZones.cs" />
     <Compile Include="SPL\ExistingCode.cs" />
     <Compile Include="SPL\ExistingRate.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="SPL\ExistingRateGroup.cs" />
     <Compile Include="SPL\ExistingZoneService.cs" />
     <Compile Include="SPL\ImportedData\AllImportedCodes.cs" />
+    <Compile Include="SPL\ImportedData\AllImportedCountries.cs" />
     <Compile Include="SPL\ImportedData\AllImportedDataByZone.cs" />
     <Compile Include="SPL\CountryNotImportedCodes.cs" />
     <Compile Include="SPL\ImportedData\AllImportedZones.cs" />

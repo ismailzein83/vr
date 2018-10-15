@@ -16,50 +16,61 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedCountry != null);
+            return (target as AllImportedCountries != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedCountry country = context.Target as ImportedCountry;
+            bool isValid = true;
+            CountryManager countryManager = new CountryManager();
+            var contextMessages = new List<string>();
+            var allImportedCountries = context.Target as AllImportedCountries;
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
             var supplierPriceListType = importSPLContext.SupplierPricelistType;
-            List<string> newZones = new List<string>();
+            var zonesWithoutCodeGroup = new List<string>();
 
-            if (supplierPriceListType != SupplierPricelistType.RateChange)
+            foreach (var importedCountry in allImportedCountries.ImportedCountries)
             {
-                bool codeGroupExist = false;
-                IEnumerable<CodeGroup> codeGroupCodes = new CodeGroupManager().GetCountryCodeGroups(country.CountryId);
-                var importedCodes = country.ImportedCodes;
-                if (importedCodes.Count() > 0)
+                List<string> newZones = new List<string>();
+
+                if (supplierPriceListType != SupplierPricelistType.RateChange)
                 {
-                    foreach (var codeGroup in codeGroupCodes)
+                    bool codeGroupExist = false;
+                    IEnumerable<CodeGroup> codeGroupCodes = new CodeGroupManager().GetCountryCodeGroups(importedCountry.CountryId);
+                    var importedCodes = importedCountry.ImportedCodes;
+                    if (importedCodes.Count() > 0)
                     {
-                        if (importedCodes.Any(x => x.Code == codeGroup.Code))
+                        foreach (var codeGroup in codeGroupCodes)
                         {
-                            codeGroupExist = true;
-                            break;
+                            if (importedCodes.Any(x => x.Code == codeGroup.Code))
+                            {
+                                codeGroupExist = true;
+                                break;
+                            }
+                        }
+                        if (codeGroupExist == false)
+                        {
+                            foreach (var importedZone in importedCountry.ImportedZones)
+                            {
+                                if (importedZone.ChangeType == ZoneChangeType.New)
+                                    newZones.Add(importedZone.ZoneName);
+                            }
                         }
                     }
-                    if (codeGroupExist == false)
-                    {
-                        foreach (var importedZone in country.ImportedZones)
-                        {
-                            if (importedZone.ChangeType == ZoneChangeType.New)
-                                newZones.Add(importedZone.ZoneName);
-                        }
-                    }
-                }
 
+                }
+                if (newZones.Count > 0)
+                {
+                    string countryName = countryManager.GetCountryName(importedCountry.CountryId);
+                    zonesWithoutCodeGroup.Add(string.Format("'{0} : {1}'",countryName, string.Join(",", newZones)));
+                }
             }
-            if (newZones.Count > 0)
+            if (zonesWithoutCodeGroup.Count > 0)
             {
-                CountryManager countryManager = new CountryManager();
-                string countryName = countryManager.GetCountryName(country.CountryId);
-                context.Message = string.Format("For country '{0}' zone(s) : '{1}' are added without code group", countryName, string.Join(",", newZones));
-                return false;
+                context.Message = string.Format("Following zone(s) are added without code group: '{0}'", string.Join(" ; ", zonesWithoutCodeGroup));
+                isValid = false;
             }
-            return true;
+            return isValid;
         }
 
         public override string GetMessage(IRuleTarget target)

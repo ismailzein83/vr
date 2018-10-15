@@ -14,49 +14,55 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target is ImportedCountry;
+            return target is AllImportedCountries;
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var importedCountry = context.Target as ImportedCountry;
-
-            if (importedCountry.ImportedRates == null || importedCountry.ImportedRates.Count == 0)
-                return true;
-
             var configManager = new ConfigManager();
             int acceptableIncreaseRatePercentage = configManager.GetPurchaseAcceptableIncreasedRate();
-            var zonesWithIncreasedRatesAboveAcceptable = new List<string>();
             int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
-            var numberOfAcceptableincreasedRate = 0;
-
-            foreach (ImportedRate importedRate in importedCountry.ImportedRates)
+            bool isValid = true;
+            var contextMessages = new List<string>();
+            var allImportedCountries = context.Target as AllImportedCountries;
+            foreach (var importedCountry in allImportedCountries.ImportedCountries)
             {
-                if (importedRate.ChangeType == RateChangeType.Increase)
+                if (importedCountry.ImportedRates == null || importedCountry.ImportedRates.Count == 0)
+                    continue;
+               
+                var zonesWithIncreasedRatesAboveAcceptable = new List<string>();
+              
+                var numberOfAcceptableincreasedRate = 0;
+
+                foreach (ImportedRate importedRate in importedCountry.ImportedRates)
                 {
-                    importedRate.ProcessInfo.RecentExistingRate.ThrowIfNull("RecentExistingRate");
-
-                    var recentRate = importedRate.ProcessInfo.RecentExistingRate.ConvertedRate;
-                    var newRate = importedRate.Rate;
-                    var recentRateFormatted = Decimal.Round(recentRate, longPrecision);
-                    var newRateFormatted = Decimal.Round(newRate, longPrecision);
-
-                    var increasePercentage = ((1 - recentRate / newRate) * 100);
-
-                    if (acceptableIncreaseRatePercentage < increasePercentage)
+                    if (importedRate.ChangeType == RateChangeType.Increase)
                     {
-                        numberOfAcceptableincreasedRate++;
-                        zonesWithIncreasedRatesAboveAcceptable.Add(string.Format("Rate increase on zone '{0}' from '{1}' to '{2}' at a percentage higher than the specified acceptable increase rate percentage '{3}%'", importedRate.ZoneName, recentRateFormatted, newRateFormatted, acceptableIncreaseRatePercentage));
+                        importedRate.ProcessInfo.RecentExistingRate.ThrowIfNull("RecentExistingRate");
+
+                        var recentRate = importedRate.ProcessInfo.RecentExistingRate.ConvertedRate;
+                        var newRate = importedRate.Rate;
+                        var recentRateFormatted = Decimal.Round(recentRate, longPrecision);
+                        var newRateFormatted = Decimal.Round(newRate, longPrecision);
+
+                        var increasePercentage = ((1 - recentRate / newRate) * 100);
+
+                        if (acceptableIncreaseRatePercentage < increasePercentage)
+                        {
+                            numberOfAcceptableincreasedRate++;
+                            zonesWithIncreasedRatesAboveAcceptable.Add(string.Format("Rate increase on zone '{0}' from '{1}' to '{2}' at a percentage higher than the specified acceptable increase rate percentage '{3}%'", importedRate.ZoneName, recentRateFormatted, newRateFormatted, acceptableIncreaseRatePercentage));
+                        }
                     }
                 }
+                if (zonesWithIncreasedRatesAboveAcceptable.Count() > 0)
+                contextMessages.Add(string.Format("{0} rate(s) above acceptable increase rate percentage, following rate(s) are: {1}", numberOfAcceptableincreasedRate, string.Join(", ", zonesWithIncreasedRatesAboveAcceptable)));
             }
 
-            if (zonesWithIncreasedRatesAboveAcceptable.Any())
+            if (contextMessages.Any())
             {
-                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(importedCountry.CountryId);
-                context.Message = string.Format("{0} rate(s) above acceptable increase rate percentage, following rate(s) are: {1}", numberOfAcceptableincreasedRate, string.Join(", ", zonesWithIncreasedRatesAboveAcceptable));
-                return false;
+                context.Message = string.Join(";", contextMessages);
+                isValid =  false;
             }
-            return true;
+            return isValid;
         }
         public override string GetMessage(IRuleTarget target)
         {

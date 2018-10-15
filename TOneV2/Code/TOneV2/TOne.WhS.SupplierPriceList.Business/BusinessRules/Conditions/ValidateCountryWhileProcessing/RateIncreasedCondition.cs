@@ -12,42 +12,53 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target is ImportedCountry;
+            return target is AllImportedCountries;
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var importedCountry = context.Target as ImportedCountry;
-
-            if (importedCountry.ImportedRates == null || importedCountry.ImportedRates.Count == 0)
-                return true;
-
-            var numberOfIncreasedRates = 0;
-            List<string> zonesWithIncreasedRates = new List<string>();
+            bool isValid = true;
+            var allImportedCountries = context.Target as AllImportedCountries;
+            var contextMessages = new List<string>();
             var longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
             string codeEffectiveDateString = importSPLContext.CodeEffectiveDate.ToString(importSPLContext.DateFormat);
-            foreach (ImportedRate importedRate in importedCountry.ImportedRates)
+
+            foreach (var importedCountry in allImportedCountries.ImportedCountries)
             {
-                if (importedRate.ChangeType == RateChangeType.Increase)
+                if (importedCountry.ImportedRates == null || importedCountry.ImportedRates.Count == 0)
+                    continue;
+
+                var numberOfIncreasedRates = 0;
+                List<string> zonesWithIncreasedRates = new List<string>();
+              
+                foreach (ImportedRate importedRate in importedCountry.ImportedRates)
                 {
-                    numberOfIncreasedRates++;
-                    if (importedRate.BED < importSPLContext.CodeEffectiveDate)
+                    if (importedRate.ChangeType == RateChangeType.Increase)
                     {
-                        importedRate.ProcessInfo.RecentExistingRate.ThrowIfNull("RecentExistingRate");
-                        var recentRate = Decimal.Round(importedRate.ProcessInfo.RecentExistingRate.ConvertedRate, longPrecision);
-                        var currentRate = Decimal.Round(importedRate.Rate, longPrecision);
-                        zonesWithIncreasedRates.Add(string.Format("Rate increase on zone '{0}' from '{1}' to '{2}' effective on '{3}' should be on '{4}'", importedRate.ZoneName, recentRate, currentRate, importedRate.BED.ToString(importSPLContext.DateFormat), codeEffectiveDateString));
+                        numberOfIncreasedRates++;
+                        if (importedRate.BED < importSPLContext.CodeEffectiveDate)
+                        {
+                            importedRate.ProcessInfo.RecentExistingRate.ThrowIfNull("RecentExistingRate");
+                            var recentRate = Decimal.Round(importedRate.ProcessInfo.RecentExistingRate.ConvertedRate, longPrecision);
+                            var currentRate = Decimal.Round(importedRate.Rate, longPrecision);
+                            zonesWithIncreasedRates.Add(string.Format("Rate increase on zone '{0}' from '{1}' to '{2}' effective on '{3}' should be on '{4}'", importedRate.ZoneName, recentRate, currentRate, importedRate.BED.ToString(importSPLContext.DateFormat), codeEffectiveDateString));
+                        }
                     }
+                }
+                if (numberOfIncreasedRates > 0)
+                {
+                    string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(importedCountry.CountryId);
+                    contextMessages.Add(string.Format("{0} increased rate(s) in country '{1}'. {2}", numberOfIncreasedRates, countryName, string.Join(", ", zonesWithIncreasedRates)));
                 }
             }
 
-            if (numberOfIncreasedRates > 0)
+            if (contextMessages.Count > 0)
             {
-                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(importedCountry.CountryId);
-                context.Message = string.Format("{0} increased rate(s) in country '{1}'. {2}", numberOfIncreasedRates, countryName, string.Join(", ", zonesWithIncreasedRates));
-                return false;
+
+                context.Message = string.Join(";", contextMessages);
+                isValid = false;
             }
-            return true;
+            return isValid;
         }
         public override string GetMessage(IRuleTarget target)
         {
