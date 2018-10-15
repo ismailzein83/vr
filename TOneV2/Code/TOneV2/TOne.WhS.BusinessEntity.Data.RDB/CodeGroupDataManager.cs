@@ -38,12 +38,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             });
         }
 
-        #endregion
-
         BaseRDBDataProvider GetDataProvider()
         {
             return RDBDataProviderFactory.CreateProvider("TOneWhS_BE_CodeGroup", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
+
+        #endregion
 
         #region ICodeGroupDataManager Members
 
