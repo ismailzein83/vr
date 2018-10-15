@@ -979,7 +979,7 @@ namespace Vanrise.Invoice.Business
                         case InvoiceField.FromDate:
                         case InvoiceField.ToDate:
                             cell.CellType = ExcelCellType.DateTime;
-                            cell.DateTimeType = DateTimeType.DateTime;
+                            cell.DateTimeType = DateTimeType.Date;
                             break;
                         case InvoiceField.DueDate:
                         case InvoiceField.IssueDate:
@@ -1048,7 +1048,7 @@ namespace Vanrise.Invoice.Business
                                     case InvoiceField.SerialNumber: value = item.Entity.SerialNumber;
                                         break;
 
-                                    case InvoiceField.ToDate: value = item.Entity.ToDate;
+                                    case InvoiceField.ToDate: value = item.Entity.ToDate.Date;
                                         break;
                                     case InvoiceField.UserId: value = item.UserName;
                                         break;
