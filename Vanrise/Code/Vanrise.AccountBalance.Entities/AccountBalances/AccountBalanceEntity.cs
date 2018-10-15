@@ -10,6 +10,7 @@ namespace Vanrise.AccountBalance.Entities
     {
         public long AccountBalanceId { get; set; }
         public string AccountId { get; set; }
+        public decimal CurrentBalance { get; set; }
         public Dictionary<string, AccountBalanceDetailObject> Items { get; set; }
     }
     public class AccountBalanceDetailObject

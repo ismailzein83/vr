@@ -105,6 +105,7 @@ namespace Vanrise.AccountBalance.Business
                     {
                         AccountBalanceId = accountBalance.AccountBalanceId,
                         AccountId = accountBalance.AccountId,
+                        CurrentBalance = accountBalance.CurrentBalance,
                         Items = new Dictionary<string, AccountBalanceDetailObject>()
                     };
                     if (accountTypeSettings != null && accountTypeSettings.AccountBalanceGridSettings != null && accountTypeSettings.AccountBalanceGridSettings.GridColumns != null)

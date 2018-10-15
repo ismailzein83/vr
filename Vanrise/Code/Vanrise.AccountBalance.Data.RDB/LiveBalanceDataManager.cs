@@ -172,7 +172,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             AddLiveBalanceActiveAndEffectiveCondition(where, "lb", query.Status, query.EffectiveDate, query.IsEffectiveInFuture);
 
             var sortContext = selectQuery.Sort();
-            sortContext.ByColumn(COL_CurrentBalance, query.OrderBy == "ASC" ? RDBSortDirection.ASC : RDBSortDirection.DESC);
+            sortContext.ByColumn(COL_CurrentBalance,  RDBSortDirection.ASC);
 
             return queryContext.GetItems(AccountBalanceMapper);
         }

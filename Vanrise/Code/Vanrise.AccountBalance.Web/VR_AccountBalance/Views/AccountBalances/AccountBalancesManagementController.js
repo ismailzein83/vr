@@ -63,9 +63,9 @@
 
             $scope.scopeModel.signs = [{ text: '>', value: '>', signValue: 0 }, { text: '>=', value: '>=', signValue: 1 }, { text: '<', value: '<', signValue: 2 }, { text: '<=', value: '<=', signValue: 3 }];
 
-            $scope.scopeModel.orderByOptions = UtilsService.getArrayEnum(VR_AccountBalance_BalanceOrderByEnum);
+          //  $scope.scopeModel.orderByOptions = UtilsService.getArrayEnum(VR_AccountBalance_BalanceOrderByEnum);
 
-            $scope.scopeModel.orderBy = $scope.scopeModel.orderByOptions[0];
+           // $scope.scopeModel.orderBy = $scope.scopeModel.orderByOptions[0];
 
             $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
                 accountTypeAPI = api;
@@ -234,7 +234,7 @@
                     AccountsIds: accountsIds,
                     Sign: $scope.scopeModel.sign != undefined ? $scope.scopeModel.sign.value : undefined,
                     Balance: $scope.scopeModel.sign != undefined ? $scope.scopeModel.balance : undefined,
-                    OrderBy: $scope.scopeModel.orderBy.value,
+                   // OrderBy: $scope.scopeModel.orderBy.value,
                     Status: accountStatusObj != undefined ? accountStatusObj.Status : undefined,
                     EffectiveDate: accountStatusObj != undefined ? accountStatusObj.EffectiveDate : undefined,
                     IsEffectiveInFuture: accountStatusObj != undefined ? accountStatusObj.IsEffectiveInFuture : undefined,

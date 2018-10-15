@@ -57,7 +57,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             {
                 cmd.Parameters.Add(new SqlParameter("@Top", query.Top));
                 cmd.Parameters.Add(new SqlParameter("@AccountTypeID", query.AccountTypeId));
-                cmd.Parameters.Add(new SqlParameter("@OrderBy", query.OrderBy));
+               // cmd.Parameters.Add(new SqlParameter("@OrderBy", query.OrderBy));
                 if (query.EffectiveDate.HasValue)
                     cmd.Parameters.Add(new SqlParameter("@EffectiveDate", query.EffectiveDate.Value));
             });
@@ -368,13 +368,13 @@ namespace Vanrise.AccountBalance.Data.SQL
             StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lb.ID , lb.AccountTypeID , lb.AccountID , lb.CurrencyID , lb.InitialBalance, lb.CurrentBalance ,lb.AlertRuleID ,lb.BED,lb.EED,lb.[Status]
                                                                     FROM [VR_AccountBalance].[LiveBalance] as lb
                                                                     WHERE  (#WHEREPART#) AND ISNULL(IsDeleted,0) = 0
-                                                                    ORDER BY  lb.CurrentBalance #ORDERDIRECTION#
+                                                                    ORDER BY  lb.CurrentBalance ASC
                                                                     ");
 
 
             queryBuilder.Replace("#WHEREPART#", whereBuilder.ToString());
 
-            queryBuilder.Replace("#ORDERDIRECTION#", query.OrderBy);
+         //   queryBuilder.Replace("#ORDERDIRECTION#", query.OrderBy);
 
             return queryBuilder.ToString();
         }

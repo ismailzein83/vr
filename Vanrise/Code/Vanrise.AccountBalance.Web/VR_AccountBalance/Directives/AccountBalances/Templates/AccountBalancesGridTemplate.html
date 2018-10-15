@@ -3,7 +3,7 @@
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions"
              datasource="scopeModel.accountBalances"
-             defaultsortbyfieldname="'Entity.AccountBalanceId'" defaultsortdirection="ctrl.orderBy" enableautoexport="true">
+             defaultsortbyfieldname="'Entity.CurrentBalance'" defaultsortdirection="ctrl.orderBy" enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.AccountBalanceId'" widthfactor="10" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field">
     </vr-datagridcolumn>
