@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace Vanrise.Integration.Entities
 {
     public abstract class BaseReceiveAdapter
     {        
-        //public abstract bool IsCredentialsAvailable(string connectionString);
-        public abstract void ImportData(IAdapterImportDataContext context);
-
         private IDataSourceLogger _logger;
         private IDataSourceManager _dataSourceManager;
+
+        public abstract void ImportData(IAdapterImportDataContext context);
+
+        //public abstract bool IsCredentialsAvailable(string connectionString);
 
         public void SetLogger(IDataSourceLogger logger)
         {
