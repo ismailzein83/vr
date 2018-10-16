@@ -12,6 +12,16 @@ namespace Vanrise.Integration.Entities
 
         public Object LastImportedId { get; set; }
 
+        public Object MapperStateObj { get; set; }
+
+        public long? BatchSize { get { return null; } }
+
+        public bool IsMultipleReadings { get { return true; } }
+
+        public bool IsEmpty { get; set; }
+
+        public bool IsFile { get { return false; } }
+
         public string Description
         {
             get
@@ -29,39 +39,12 @@ namespace Vanrise.Integration.Entities
             }
         }
 
-        public Object MapperStateObj { get; set; }
-
-        public long? BatchSize
-        {
-            get { return null; }
-        }
-
-
         public void OnDisposed()
         {
             if (this.Reader != null && !Reader.IsClosed)
             {
                 Reader.Close();
                 Reader.Dispose();
-            }
-        }
-
-
-        public bool IsMultipleReadings
-        {
-            get { return true; }
-        }
-
-        public bool IsEmpty
-        {
-            get;
-            set;
-        }
-        public bool IsFile
-        {
-            get
-            {
-                return false;
             }
         }
     }
