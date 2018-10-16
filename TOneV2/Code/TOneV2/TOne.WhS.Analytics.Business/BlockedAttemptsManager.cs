@@ -91,8 +91,8 @@ namespace TOne.WhS.Analytics.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Blocked Attempts" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Source" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "First Attempt" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Attempt" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "First Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Caller Number" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Dialed Number" });
 
