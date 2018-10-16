@@ -251,8 +251,95 @@ namespace TOne.WhS.BusinessEntity.Business
 
 			public override IEnumerable<CustomerRatePreview> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<CustomerRatePreviewQuery> input)
 			{
+				var result = new List<CustomerRatePreview>();
 				var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
-				return dataManager.GetCustomerRatePreviews(input.Query);
+				var carrierAccountManager = new CarrierAccountManager();
+				var includedZoneOwnerPairs = new List<ZoneCustomerPair>();
+
+				var customerNormalRatePreviews = dataManager.GetCustomerRatePreviews(input.Query);
+				if (customerNormalRatePreviews != null && customerNormalRatePreviews.Any())
+				{
+					result.AddRange(customerNormalRatePreviews);
+					includedZoneOwnerPairs.AddRange(customerNormalRatePreviews.Where(item => item.ZoneId.HasValue)
+						.Select(item => new ZoneCustomerPair { CustomerId = item.CustomerId, ZoneId = item.ZoneId }));
+				}
+
+				var otherRateZoneOwnerPairs = dataManager.GetCustomerRatePreviewZonePairs(input.Query).ToList();
+				var currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Now));
+				var saleZoneManager = new SaleZoneManager();
+
+				foreach (var otherRateZoneOwner in otherRateZoneOwnerPairs)
+				{
+					if (!otherRateZoneOwner.ZoneId.HasValue || includedZoneOwnerPairs.Any(item => item.CustomerId == otherRateZoneOwner.CustomerId && item.ZoneId == otherRateZoneOwner.ZoneId))
+						continue;
+					var zoneId = otherRateZoneOwner.ZoneId.Value;
+					var customerId = otherRateZoneOwner.CustomerId;
+					var sellingProductId = carrierAccountManager.GetSellingProductId(customerId);
+					var rate = currentRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
+					var countryId = saleZoneManager.GetSaleZoneCountryId(zoneId);
+					if (countryId == null)
+						throw new DataIntegrityValidationException(string.Format("There is no country for zone with Id '{0}'.", zoneId));
+					result.Add(new CustomerRatePreview
+					{
+						BED = rate.Rate.BED,
+						EED = rate.Rate.EED,
+						RecentRate = rate.Rate.Rate,
+						RecentRateConverted = rate.Rate.Rate,
+						CurrencyId = rate.Rate.CurrencyId,
+						RecentCurrencyId = rate.Rate.CurrencyId,
+						PricelistId = rate.Rate.PriceListId,
+						ZoneId = zoneId,
+						CustomerId = customerId,
+						CountryId = countryId.Value,
+						//RoutingProductId = otherRatePreview.RoutingProductId,
+						ZoneName = saleZoneManager.GetSaleZoneName(zoneId)
+					});
+					includedZoneOwnerPairs.Add(new ZoneCustomerPair { CustomerId = customerId, ZoneId = zoneId });
+				}
+				return result;
+
+
+				/*var result = new List<CustomerRatePreview>();
+				var currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(DateTime.Now));
+				var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+				var includedZoneIds = new List<long>();
+
+				var customerNormalRatePreviews = dataManager.GetCustomerRatePreviews(input.Query).ToList();
+				if (customerNormalRatePreviews != null && customerNormalRatePreviews.Count > 0)
+				{
+					result.AddRange(customerNormalRatePreviews);
+					includedZoneIds.AddRange(customerNormalRatePreviews.Where(item => item.ZoneId.HasValue).Select(item => item.ZoneId.Value));
+				}
+
+				//Get all other rates previews
+				var otherRatePreviews = dataManager.GetCustomerOtherRatePreviews(input.Query);
+
+				var carrierAccountManager = new CarrierAccountManager();
+				foreach (var otherRatePreview in otherRatePreviews)
+				{
+					if (otherRatePreview.ZoneId.HasValue && !includedZoneIds.Contains(otherRatePreview.ZoneId.Value))
+					{
+						var sellingProductId = carrierAccountManager.GetSellingProductId(otherRatePreview.CustomerId);
+						var rate = currentRateLocator.GetCustomerZoneRate(otherRatePreview.CustomerId, sellingProductId, otherRatePreview.ZoneId.Value);
+						result.Add(new CustomerRatePreview
+						{
+							ZoneId = otherRatePreview.ZoneId,
+							BED = rate.Rate.BED,
+							EED = rate.Rate.EED,
+							RecentRate = rate.Rate.Rate,
+							RecentRateConverted = (otherRatePreview.CurrencyId != otherRatePreview.RecentCurrencyId) ? 0 : rate.Rate.Rate,
+							CountryId = otherRatePreview.CountryId,
+							CurrencyId = otherRatePreview.CurrencyId,
+							CustomerId = otherRatePreview.CustomerId,
+							PricelistId = rate.Rate.PriceListId,
+							RecentCurrencyId = otherRatePreview.RecentCurrencyId,
+							RoutingProductId = otherRatePreview.RoutingProductId,
+							ZoneName = otherRatePreview.ZoneName
+						});
+						includedZoneIds.Add(otherRatePreview.ZoneId.Value);
+					}
+				}
+				return result;*/
 			}
 		}
 

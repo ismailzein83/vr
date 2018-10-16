@@ -18,29 +18,30 @@ namespace TOne.WhS.Sales.Business
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var allZoneData = context.Target as AllDataByZone;
-            var ratePlanContext = context.GetExtension<IRatePlanContext>();
-            if (ratePlanContext.OwnerType == SalePriceListOwnerType.Customer)
-            {
-                List<string> zoneWithOtherRateChangeOnly = new List<string>();
-                foreach (var zoneData in allZoneData.DataByZoneList)
-                {
-                    var rateTypeIds = Helper.GetRateTypeIds(ratePlanContext.OwnerId,zoneData.ZoneId, DateTime.Now);
-                    foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
-                    {
-                        if (rateTypeIds.Contains(otherRateToChange.RateTypeId.Value) && zoneData.OtherRatesToChange.Count > 0 && zoneData.NormalRateToChange == null )
-                        {
-                            zoneWithOtherRateChangeOnly.Add(zoneData.ZoneName);
-                            break;
-                        }
-                    }
-                }
-                if (zoneWithOtherRateChangeOnly.Count() > 0)
-                {
-                    context.Message = string.Format("Zone(s): '{0}' have other rates changes without normal rate changes", string.Join(",", zoneWithOtherRateChangeOnly));
-                    return false;
-                }
-            }
+			// Validate if there is only other rate changes
+            //var allZoneData = context.Target as AllDataByZone;
+            //var ratePlanContext = context.GetExtension<IRatePlanContext>();
+            //if (ratePlanContext.OwnerType == SalePriceListOwnerType.Customer)
+            //{
+            //    List<string> zoneWithOtherRateChangeOnly = new List<string>();
+            //    foreach (var zoneData in allZoneData.DataByZoneList)
+            //    {
+            //        var rateTypeIds = Helper.GetRateTypeIds(ratePlanContext.OwnerId,zoneData.ZoneId, DateTime.Now);
+            //        foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
+            //        {
+            //            if (rateTypeIds.Contains(otherRateToChange.RateTypeId.Value) && zoneData.OtherRatesToChange.Count > 0 && zoneData.NormalRateToChange == null )
+            //            {
+            //                zoneWithOtherRateChangeOnly.Add(zoneData.ZoneName);
+            //                break;
+            //            }
+            //        }
+            //    }
+            //    if (zoneWithOtherRateChangeOnly.Count() > 0)
+            //    {
+            //        context.Message = string.Format("Zone(s): '{0}' have other rates changes without normal rate changes", string.Join(",", zoneWithOtherRateChangeOnly));
+            //        return false;
+            //    }
+            //}
             return true;
         }
         public override string GetMessage(IRuleTarget target)

@@ -302,7 +302,7 @@ namespace TOne.WhS.Sales.BP.Activities
             foreach (var kvp in newRatesByZoneId)
             {
                 var zoneId = kvp.Key;
-                if (otherRatesBEDsWithoutNormalRateByZoneId.ContainsKey(zoneId))
+                /*if (otherRatesBEDsWithoutNormalRateByZoneId.ContainsKey(zoneId))
                 {
                     var currentRate = locator.GetCustomerZoneRate(customerId, sellingProductId, zoneChanges.ZoneId);
                     if (currentRate == null)
@@ -320,7 +320,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         BED = zoneChanges.NewOtherRateBED.Value,
                         EED = null
                     });
-                }
+                }*/
 
                 foreach (var draftRateToChange in kvp.Value)
                 {

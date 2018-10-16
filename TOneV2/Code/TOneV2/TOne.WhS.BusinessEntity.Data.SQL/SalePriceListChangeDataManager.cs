@@ -80,6 +80,21 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 				strcustomerIds = string.Join(",", query.CustomerIds);
 			return GetItemsSP("TOneWhS_BE.sp_SalePriceListRateChangeNew_GetCustomerRatePreviews", CustomerRatePreviewMapper, query.ProcessInstanceId, strcustomerIds);
 		}
+		public IEnumerable<CustomerRatePreview> GetCustomerOtherRatePreviews(CustomerRatePreviewQuery query)
+		{
+			string strcustomerIds = null;
+			if (query.CustomerIds != null && query.CustomerIds.Any())
+				strcustomerIds = string.Join(",", query.CustomerIds);
+			return GetItemsSP("TOneWhS_BE.sp_SalePriceListRateChangeNew_GetCustomerOtherRatePreviews", CustomerRatePreviewMapper, query.ProcessInstanceId, strcustomerIds);
+		}
+
+		public IEnumerable<ZoneCustomerPair> GetCustomerRatePreviewZonePairs(CustomerRatePreviewQuery query)
+		{
+			string strcustomerIds = null;
+			if (query.CustomerIds != null && query.CustomerIds.Any())
+				strcustomerIds = string.Join(",", query.CustomerIds);
+			return GetItemsSP("TOneWhS_BE.sp_SalePriceListRateChangeNew_GetCustomerRatePreviewZonePairs", CustomerRatePreviewZonePairsMapper, query.ProcessInstanceId, strcustomerIds);
+		}
 
 		public IEnumerable<RoutingProductPreview> GetRoutingProductPreviews(RoutingProductPreviewQuery query)
 		{
@@ -394,6 +409,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 				BED = GetReaderValue<DateTime>(reader, "BED"),
 				EED = GetReaderValue<DateTime?>(reader, "EED"),
 				CurrencyId = GetReaderValue<int?>(reader, "CurrencyID"),
+				CustomerId = GetReaderValue<int>(reader, "OwnerID")
+			};
+		}
+		private ZoneCustomerPair CustomerRatePreviewZonePairsMapper(IDataReader reader)
+		{
+			return new ZoneCustomerPair()
+			{
+				ZoneId = GetReaderValue<long?>(reader, "ZoneID"),
 				CustomerId = GetReaderValue<int>(reader, "OwnerID")
 			};
 		}

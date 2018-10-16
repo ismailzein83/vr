@@ -19,7 +19,11 @@ namespace TOne.WhS.BusinessEntity.Data
         List<Entities.SalePriceListNew> GetTemporaryPriceLists(TemporarySalePriceListQuery query);
         List<SalePricelistRateChange> GetNotSentRatechanges(IEnumerable<int> customerIds);
         IEnumerable<CustomerRatePreview> GetCustomerRatePreviews(CustomerRatePreviewQuery query);
-        IEnumerable<RoutingProductPreview> GetRoutingProductPreviews(RoutingProductPreviewQuery query);
+
+		IEnumerable<CustomerRatePreview> GetCustomerOtherRatePreviews(CustomerRatePreviewQuery query);
+		IEnumerable<ZoneCustomerPair> GetCustomerRatePreviewZonePairs(CustomerRatePreviewQuery query);
+
+		IEnumerable<RoutingProductPreview> GetRoutingProductPreviews(RoutingProductPreviewQuery query);
         IEnumerable<int> GetAffectedCustomerIdsRPChangesByProcessInstanceId(long ProcessInstanceId);
         IEnumerable<int> GetAffectedCustomerIdsNewCountryChangesByProcessInstanceId(long ProcessInstanceId);
         IEnumerable<int> GetAffectedCustomerIdsChangedCountryChangesByProcessInstanceId(long ProcessInstanceId);

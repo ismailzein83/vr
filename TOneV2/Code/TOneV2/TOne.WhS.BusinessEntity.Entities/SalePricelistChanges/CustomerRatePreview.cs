@@ -19,4 +19,10 @@ namespace TOne.WhS.BusinessEntity.Entities.SalePricelistChanges
 		public int? CurrencyId { get; set; }
 		public int CustomerId { get; set; }
 	}
+
+	public class ZoneCustomerPair
+	{
+		public long? ZoneId { get; set; }
+		public int CustomerId { get; set; }
+	}
 }
