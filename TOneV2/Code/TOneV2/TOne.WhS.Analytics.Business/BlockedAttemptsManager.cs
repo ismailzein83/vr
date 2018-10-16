@@ -80,6 +80,10 @@ namespace TOne.WhS.Analytics.Business
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<BlockedAttemptDetail> context)
             {
+                Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery> input = context.Input as Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery>;
+
+                input.ThrowIfNull("input");
+
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
                     SheetName = "Blocked Attempts",
@@ -91,10 +95,15 @@ namespace TOne.WhS.Analytics.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Blocked Attempts" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Source" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "First Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Caller Number" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Dialed Number" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "First Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                if (input.Query.Filter.GroupByNumber)
+                {
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Caller Number" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Dialed Number" });
+                }
+
+               
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -112,8 +121,12 @@ namespace TOne.WhS.Analytics.Business
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseSource });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.FirstAttempt });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastAttempt });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CGPN });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CDPN });
+                            if (input.Query.Filter.GroupByNumber)
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.CGPN });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.CDPN });
+                            }
+                           
                         }
                     }
                 }
