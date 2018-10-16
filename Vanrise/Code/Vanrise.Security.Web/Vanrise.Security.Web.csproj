@@ -26,6 +26,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -158,7 +160,9 @@
     <Content Include="Security\Directives\MainExtensions\SecurityProvider\AuthenticateUser\Templates\EmailPasswordTemplate.html" />
     <Content Include="Security\Directives\MainExtensions\SecurityProvider\AuthenticateUser\vr-sec-securityprovider-authenticateuser-emailpassword.js" />
     <Content Include="Security\Directives\SecurityProvider\MainExtensions\Templates\SecurityProviderStatusActionTemplate.html" />
+    <Content Include="Security\Directives\SecurityProvider\MainExtensions\Templates\SetDefaultSecurityProviderActionTemplate.html" />
     <Content Include="Security\Directives\SecurityProvider\MainExtensions\vr-sec-securityprovider-securityproviderstatus.js" />
+    <Content Include="Security\Directives\SecurityProvider\MainExtensions\vr-sec-securityprovider-setdefaultsecurityprovider.js" />
     <Content Include="Security\Directives\SecurityProvider\Templates\SecurityProviderSettingsTemplate.html" />
     <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovider-settings-selector.js" />
     <Content Include="Security\Directives\SecurityProvider\vr-sec-securityprovider-remoteselector.js" />
