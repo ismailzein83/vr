@@ -781,7 +781,7 @@ namespace TOne.WhS.Routing.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
             List<RPRouteOptionByCodeDetail> details = null;
-            if (rpRouteByCode.Options != null)
+            if (rpRouteByCode.Options != null && rpRouteByCode.SupplierZoneDetails != null)
             {
                 Dictionary<long, SupplierZoneDetail> supplierZoneDetailsByZoneId = rpRouteByCode.SupplierZoneDetails.ToDictionary(itm => itm.SupplierZoneId, itm => itm);
                 details = new List<RPRouteOptionByCodeDetail>();
