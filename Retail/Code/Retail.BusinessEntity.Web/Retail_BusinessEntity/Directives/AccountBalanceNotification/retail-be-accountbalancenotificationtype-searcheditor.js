@@ -20,15 +20,15 @@ app.directive('retailBeAccountbalancenotificationtypeSearcheditor', ['UtilsServi
         function AccountBalanceNotificationTypeSearchEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var accountSelectorDirectiveAPI;
-            var accountSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var financialAccountSelectorDirectiveAPI;
+            var financialAccountSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onAccountSelectorReady = function (api) {
-                    accountSelectorDirectiveAPI = api;
-                    accountSelectorReadyPromiseDeferred.resolve();
+                $scope.scopeModel.onFinancialAccountSelectorReady = function (api) {
+                    financialAccountSelectorDirectiveAPI = api;
+                    financialAccountSelectorReadyPromiseDeferred.resolve();
                 };
 
                 defineAPI();
@@ -47,25 +47,25 @@ app.directive('retailBeAccountbalancenotificationtypeSearcheditor', ['UtilsServi
                     }
 
                     //Loading Account Selector
-                    var accountSelectorLoadPromise = getAccountSelectorLoadPromise();
-                    promises.push(accountSelectorLoadPromise);
+                    var financialAccountSelectorLoadPromise = getFinancialAccountSelectorLoadPromise();
+                    promises.push(financialAccountSelectorLoadPromise);
 
 
-                    function getAccountSelectorLoadPromise() {
-                        var accountSelectorLoadPromise = UtilsService.createPromiseDeferred();
+                    function getFinancialAccountSelectorLoadPromise() {
+                        var financialAccountSelectorLoadPromise = UtilsService.createPromiseDeferred();
 
-                        accountSelectorReadyPromiseDeferred.promise.then(function () {
+                        financialAccountSelectorReadyPromiseDeferred.promise.then(function () {
 
-                            var accountSelectorPayload;
+                            var financialAccountSelectorPayload;
                             if (accountBalanceNotificationTypeExtendedSettings != undefined) {
-                                accountSelectorPayload = {
+                                financialAccountSelectorPayload = {
                                     AccountBEDefinitionId: accountBalanceNotificationTypeExtendedSettings.AccountBEDefinitionId
                                 };
                             }
-                            VRUIUtilsService.callDirectiveLoad(accountSelectorDirectiveAPI, accountSelectorPayload, accountSelectorLoadPromise);
+                            VRUIUtilsService.callDirectiveLoad(financialAccountSelectorDirectiveAPI, financialAccountSelectorPayload, financialAccountSelectorLoadPromise);
                         });
 
-                        return accountSelectorLoadPromise.promise;
+                        return financialAccountSelectorLoadPromise.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -75,7 +75,7 @@ app.directive('retailBeAccountbalancenotificationtypeSearcheditor', ['UtilsServi
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.Business.RetailAccountBalanceNotificationExtendedQuery, Retail.BusinessEntity.Business",
-                        AccountIds: accountSelectorDirectiveAPI.getSelectedIds()
+                        AccountIds: financialAccountSelectorDirectiveAPI.getSelectedIds()
                     };
                 };
 
