@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace Vanrise.Integration.Entities
 {
     public class ExcelFileImportedData : IImportedData
@@ -7,36 +8,19 @@ namespace Vanrise.Integration.Entities
 
         public long Size { get; set; }
 
-        public string Description
-        {
-            get { return null; }
-        }
-        public long? BatchSize
-        {
-            get { return this.Size; }
-        }
-        
+        public string Description { get { return null; } }
+
+        public long? BatchSize { get { return this.Size; } }
+
+        public bool IsEmpty { get; set; }
+
+        public bool IsFile { get { return true; } }
+
+        public bool IsMultipleReadings { get { return false; } }
+
         public void OnDisposed()
         {
-            
-        }
-        
-        public bool IsMultipleReadings
-        {
-            get { return false; }
-        }
 
-        public bool IsEmpty
-        {
-            get;
-            set;
-        }
-        public bool IsFile
-        {
-            get
-            {
-                return true;
-            }
         }
     }
 }
