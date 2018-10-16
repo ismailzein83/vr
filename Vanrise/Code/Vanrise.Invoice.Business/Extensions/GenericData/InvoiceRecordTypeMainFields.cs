@@ -25,7 +25,7 @@ namespace Vanrise.Invoice.Business
             extraFields.Add(new GenericData.Entities.DataRecordField
             {
                 Name = "ID",
-                Title = "ID",
+                Title = "Invoice ID",
                 Type = new FieldNumberType { DataType = FieldNumberDataType.BigInt }
             });
             extraFields.Add(new GenericData.Entities.DataRecordField
