@@ -24,7 +24,7 @@ namespace Vanrise.Security.Business
             SecurityProvider securityProvider = cachedSecurityProviders.GetRecord(securityProviderId);
             if (securityProvider == null)
                 return null;
-
+            
             return SecurityProviderInfoMapper(securityProvider);
         }
 
@@ -47,7 +47,6 @@ namespace Vanrise.Security.Business
         public UpdateOperationOutput<GenericBusinessEntityDetail> ChangeSecurityProviderStatus(Guid securityProviderId, bool isEnabled)
         {
             UserManager userManager = new UserManager();
-            ConfigManager configManager = new ConfigManager();
             var genericBusinessEntityToUpdate = new GenericBusinessEntityToUpdate();
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
 
@@ -77,7 +76,7 @@ namespace Vanrise.Security.Business
             }
             else
             {
-                var defaultSecurityProviderId = configManager.GetDefaultSecurityProviderId();
+                var defaultSecurityProviderId = GetDefaultSecurityProviderId();
                 if (defaultSecurityProviderId == securityProviderId)
                 {
                     updateOperationOutput.Message = "Security provider id does not match the default one";
@@ -113,15 +112,33 @@ namespace Vanrise.Security.Business
 
         }
 
+        public UpdateOperationOutput<GenericBusinessEntityDetail> SetDefaultSecurityProvider(Guid securityProviderId)
+        {
+            UpdateOperationOutput<GenericBusinessEntityDetail> updateOperationOutput = new UpdateOperationOutput<GenericBusinessEntityDetail>();
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            ISecurityProviderDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ISecurityProviderDataManager>();
+            if (dataManager.SetDefaultSecurityProvider(securityProviderId))
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = genericBusinessEntityManager.GetGenericBusinessEntityDetail(securityProviderId, beDefinitionId);
+            };
+            return updateOperationOutput;
+        }
+
         public SecurityProvider GetDefaultSecurityProvider()
         {
-            Guid defaultSecurityProviderId = new ConfigManager().GetDefaultSecurityProviderId();
-            return GetSecurityProviderbyId(defaultSecurityProviderId);
+            ISecurityProviderDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ISecurityProviderDataManager>();
+            return dataManager.GetDefaultSecurityProvider();
         }
 
         public Guid GetDefaultSecurityProviderId()
         {
-            return new ConfigManager().GetDefaultSecurityProviderId();
+            ISecurityProviderDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ISecurityProviderDataManager>();
+            var defaultSecurityProvider = dataManager.GetDefaultSecurityProvider();
+            return defaultSecurityProvider!=null ? defaultSecurityProvider.SecurityProviderId : new ConfigManager().GetDefaultSecurityProviderId();
         }
 
         public IEnumerable<SecurityProvider> GetSecurityProviders()

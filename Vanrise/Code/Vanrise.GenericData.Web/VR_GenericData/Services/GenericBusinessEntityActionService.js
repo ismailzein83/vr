@@ -52,6 +52,9 @@
                             },
                             onItemDeleted: function () {
                                 gridAPI.itemDeleted(selectedGenericBusinessEntity);
+                            },
+                            refreshGrid: function(){
+                                gridAPI.refreshGrid();
                             }
                         };
                         var promise = actionType.ExecuteAction(payload);

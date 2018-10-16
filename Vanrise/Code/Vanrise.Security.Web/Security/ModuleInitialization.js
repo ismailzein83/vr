@@ -6,4 +6,5 @@
     VR_Sec_UserService.registerHistoryViewAction();
     VR_Sec_GroupService.registerHistoryViewAction();
     VR_Sec_SecurityProviderStatusService.changeSecurityProviderStatus();
+    VR_Sec_SecurityProviderStatusService.registerSetDefaultSecurityProviderAction();
 }]);

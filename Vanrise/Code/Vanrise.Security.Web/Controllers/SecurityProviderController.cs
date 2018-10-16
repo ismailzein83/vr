@@ -59,6 +59,13 @@ namespace Vanrise.Security.Web.Controllers
         }
 
         [HttpGet]
+        [Route("SetDefaultSecurityProvider")]
+        public UpdateOperationOutput<GenericBusinessEntityDetail> SetDefaultSecurityProvider(Guid securityProviderId)
+        {
+            return _manager.SetDefaultSecurityProvider(securityProviderId);
+        }
+
+        [HttpGet]
         [Route("GetSecurityProviderConfigs")]
         public IEnumerable<SecurityProviderConfigs> GetSecurityProviderConfigs()
         {

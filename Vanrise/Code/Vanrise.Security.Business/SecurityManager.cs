@@ -93,7 +93,7 @@ namespace Vanrise.Security.Business
         public AuthenticateOperationOutput<AuthenticationToken> Authenticate(string email, string password)
         {
             EmailPasswordSecurityProviderAuthenticationPayload payload = new EmailPasswordSecurityProviderAuthenticationPayload() { Email = email, Password = password };
-            Guid defaultSecurityProviderId = new Security.Business.ConfigManager().GetDefaultSecurityProviderId();
+            Guid defaultSecurityProviderId = new Security.Business.SecurityProviderManager().GetDefaultSecurityProviderId();
             return Authenticate(defaultSecurityProviderId, payload);
         }
 

@@ -21,7 +21,7 @@ namespace Vanrise.Security.MainExtensions.DataRecordFieldFormulas
 
         public override dynamic CalculateValue(IDataRecordFieldFormulaCalculateValueContext context)
         {
-            Guid defaultSecurityProviderId = new ConfigManager().GetDefaultSecurityProviderId();
+            Guid defaultSecurityProviderId = new SecurityProviderManager().GetDefaultSecurityProviderId();
             var securityProviderId = context.GetFieldValue(FieldName);
             return securityProviderId == defaultSecurityProviderId;
         }
@@ -41,7 +41,7 @@ namespace Vanrise.Security.MainExtensions.DataRecordFieldFormulas
             BooleanRecordFilter booleanRecordFilter = context.InitialFilter as BooleanRecordFilter;
             if (booleanRecordFilter != null)
             {
-                Guid defaultSecurityProviderId = new ConfigManager().GetDefaultSecurityProviderId();
+                Guid defaultSecurityProviderId = new SecurityProviderManager().GetDefaultSecurityProviderId();
                 return new StringRecordFilter()
                 {
                     FieldName = FieldName,
