@@ -39,7 +39,12 @@ namespace Vanrise.Analytic.Business
                 return true;
             };
             bool doesUserHaveEditPermission = DoesUserHaveManageAccess();
-            return DataRetrievalManager.Instance.ProcessResult(input, allVRReportGenerations.ToBigResult(input, filterExpression, (vRReportGeneration) => { return VRReportGenerationDetailMapper(vRReportGeneration, doesUserHaveEditPermission); }));
+
+            ResultProcessingHandler<VRReportGenerationDetail> handler = new ResultProcessingHandler<VRReportGenerationDetail>()
+            {
+                ExportExcelHandler = new VRReportGenerationExcelExportHandler()
+            };
+            return DataRetrievalManager.Instance.ProcessResult(input, allVRReportGenerations.ToBigResult(input, filterExpression, (vRReportGeneration) => { return VRReportGenerationDetailMapper(vRReportGeneration, doesUserHaveEditPermission); }), handler);
 
         }
         public bool DoesUserHaveManageAccess()
@@ -195,6 +200,45 @@ namespace Vanrise.Analytic.Business
             {
                 VRReportGeneration vRReportGeneration = context.Object.CastWithValidate<VRReportGeneration>("context.Object");
                 return s_vRReportGeneration.GetVRReportGenerationName(vRReportGeneration.ReportId);
+            }
+        }
+
+        private class VRReportGenerationExcelExportHandler : ExcelExportHandler<VRReportGenerationDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<VRReportGenerationDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Report Generations",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Access Level" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created By" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created Time",CellType = ExcelCellType.DateTime,DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Modified By" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Modified Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+                        row.Cells.Add(new ExportExcelCell { Value = record.ReportId });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Name });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Description });
+                        row.Cells.Add(new ExportExcelCell { Value = record.AccessLevel });
+                        row.Cells.Add(new ExportExcelCell { Value = record.CreatedByDescription });
+                        row.Cells.Add(new ExportExcelCell { Value = record.CreatedTime });
+                        row.Cells.Add(new ExportExcelCell { Value = record.LastModifiedByDescription });
+                        row.Cells.Add(new ExportExcelCell { Value = record.LastModifiedTime });
+                    }
+                }
+                context.MainSheet = sheet;
             }
         }
 
