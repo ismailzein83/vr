@@ -812,6 +812,7 @@
     <Build Include="bp\Stored Procedures\sp_ProcessSynchronisation_SetDisable.sql" />
     <Build Include="bp\Stored Procedures\sp_ProcessSynchronisation_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_ProcessSynchronisation_GetAll.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_GetById.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
