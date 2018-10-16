@@ -103,7 +103,7 @@ namespace TOne.WhS.Analytics.Business
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Dialed Number" });
                 }
 
-               
+
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -119,14 +119,14 @@ namespace TOne.WhS.Analytics.Business
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.BlockedAttempts });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseCode });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseSource });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.FirstAttempt });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastAttempt });
+                            row.Cells.Add(new ExportExcelCell { Value = Utilities.ConvertToExcelDateTime(record.Entity.FirstAttempt) });
+                            row.Cells.Add(new ExportExcelCell { Value = Utilities.ConvertToExcelDateTime(record.Entity.LastAttempt) });
                             if (input.Query.Filter.GroupByNumber)
                             {
                                 row.Cells.Add(new ExportExcelCell { Value = record.Entity.CGPN });
                                 row.Cells.Add(new ExportExcelCell { Value = record.Entity.CDPN });
                             }
-                           
+
                         }
                     }
                 }
