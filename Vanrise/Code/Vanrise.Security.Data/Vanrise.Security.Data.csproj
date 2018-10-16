@@ -54,6 +54,7 @@
     <Compile Include="IPermissionDataManager.cs" />
     <Compile Include="IGroupDataManager.cs" />
     <Compile Include="IRequiredPermissionSetDataManager.cs" />
+    <Compile Include="ISecurityProviderDataManager.cs" />
     <Compile Include="ISystemActionDataManager.cs" />
     <Compile Include="ITenantDataManager.cs" />
     <Compile Include="IUserDataManager.cs" />
