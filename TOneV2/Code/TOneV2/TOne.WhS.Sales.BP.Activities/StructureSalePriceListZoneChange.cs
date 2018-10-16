@@ -278,12 +278,12 @@ namespace TOne.WhS.Sales.BP.Activities
 					int increasedRatesCounter = 0;
 					int decreasedRatesCounter = 0;
 
-                    int newOtherRatesCounter = 0;
-                    int increasedOtherRatesCounter = 0;
-                    int decreasedOtherRatesCounter = 0;
-                    int closedOtherRatesCounter = 0;
+					int newOtherRatesCounter = 0;
+					int increasedOtherRatesCounter = 0;
+					int decreasedOtherRatesCounter = 0;
+					int closedOtherRatesCounter = 0;
 
-                    foreach (CountryChange countryChange in pricelist.CountryChanges)
+					foreach (CountryChange countryChange in pricelist.CountryChanges)
 					{
 						if (customerCountriesToAdd.Where(item => item.CountryId == countryChange.CountryId && item.CustomerId == customerChange.CustomerId).Count() > 0)
 							newCountriesCounter++;
@@ -294,37 +294,37 @@ namespace TOne.WhS.Sales.BP.Activities
 						{
 
 
-                            foreach(SalePricelistRateChange otherRateChange in zoneChange.OtherRateChanges)
-                            {
-                                if (otherRateChange == null)
-                                    continue;
+							foreach (SalePricelistRateChange otherRateChange in zoneChange.OtherRateChanges)
+							{
+								if (otherRateChange == null)
+									continue;
 
-                                if (otherRateChange.ChangeType == RateChangeType.New)
-                                    newOtherRatesCounter++;
-                                else if (otherRateChange.ChangeType == RateChangeType.Increase)
-                                    increasedOtherRatesCounter++;
-                                else if (otherRateChange.ChangeType == RateChangeType.Decrease)
-                                    decreasedOtherRatesCounter++;
-                                else if (otherRateChange.ChangeType == RateChangeType.Deleted)
-                                    closedOtherRatesCounter++;
-                            }
-                            if (zoneChange.RateChange == null)
-                                continue;
+								if (otherRateChange.ChangeType == RateChangeType.New)
+									newOtherRatesCounter++;
+								else if (otherRateChange.ChangeType == RateChangeType.Increase)
+									increasedOtherRatesCounter++;
+								else if (otherRateChange.ChangeType == RateChangeType.Decrease)
+									decreasedOtherRatesCounter++;
+								else if (otherRateChange.ChangeType == RateChangeType.Deleted)
+									closedOtherRatesCounter++;
+							}
+							if (zoneChange.RateChange == null)
+								continue;
 
-                            if (zoneChange.RateChange.ChangeType == RateChangeType.New)
-                                newRatesCounter++;
-                            else if (zoneChange.RateChange.ChangeType == RateChangeType.Increase)
-                                increasedRatesCounter++;
-                            else if (zoneChange.RateChange.ChangeType == RateChangeType.Decrease)
-                                decreasedRatesCounter++;
-                        }
+							if (zoneChange.RateChange.ChangeType == RateChangeType.New)
+								newRatesCounter++;
+							else if (zoneChange.RateChange.ChangeType == RateChangeType.Increase)
+								increasedRatesCounter++;
+							else if (zoneChange.RateChange.ChangeType == RateChangeType.Decrease)
+								decreasedRatesCounter++;
+						}
 					}
 					pricelist.PriceList.Description = GetPricelistDescriptionString(newCountriesCounter, closedCountriesCounter, newRatesCounter, increasedRatesCounter, decreasedRatesCounter, newOtherRatesCounter, increasedOtherRatesCounter, decreasedOtherRatesCounter, closedOtherRatesCounter);
 				}
 			}
 		}
 
-		private string GetPricelistDescriptionString(int newCountriesCounter, int closedCountriesCounter, int newRatesCounter, int increasedRatesCounter, int decreasedRatesCounter, int newOtherRatesCounter, int increasedOtherRatesCounter,int decreasedOtherRatesCounter,int closedOtherRatesCounter)
+		private string GetPricelistDescriptionString(int newCountriesCounter, int closedCountriesCounter, int newRatesCounter, int increasedRatesCounter, int decreasedRatesCounter, int newOtherRatesCounter, int increasedOtherRatesCounter, int decreasedOtherRatesCounter, int closedOtherRatesCounter)
 		{
 			string result = "";
 			if (newCountriesCounter != 0)
@@ -337,15 +337,15 @@ namespace TOne.WhS.Sales.BP.Activities
 				result = string.Format(result + "Increased Rates : {0} ", increasedRatesCounter);
 			if (decreasedRatesCounter != 0)
 				result = string.Format(result + "Decreased Rates : {0} ", decreasedRatesCounter);
-            if(newOtherRatesCounter!=0)
-                result = string.Format(result + "New Other Rates : {0} ", newOtherRatesCounter);
-            if (increasedOtherRatesCounter != 0)
-                result = string.Format(result + "Increased Other Rates : {0} ", increasedOtherRatesCounter);
-            if (decreasedOtherRatesCounter != 0)
-                result = string.Format(result + "Decreased Other Rates : {0} ", decreasedOtherRatesCounter);
-            if (closedOtherRatesCounter != 0)
-                result = string.Format(result + "Closed Other Rates : {0} ", closedOtherRatesCounter);
-            return result;
+			if (newOtherRatesCounter != 0)
+				result = string.Format(result + "New Other Rates : {0} ", newOtherRatesCounter);
+			if (increasedOtherRatesCounter != 0)
+				result = string.Format(result + "Increased Other Rates : {0} ", increasedOtherRatesCounter);
+			if (decreasedOtherRatesCounter != 0)
+				result = string.Format(result + "Decreased Other Rates : {0} ", decreasedOtherRatesCounter);
+			if (closedOtherRatesCounter != 0)
+				result = string.Format(result + "Closed Other Rates : {0} ", closedOtherRatesCounter);
+			return result;
 		}
 		#endregion
 
@@ -519,11 +519,11 @@ namespace TOne.WhS.Sales.BP.Activities
 					//These are the rates that are added explicitly for this customer after selling the country
 					foreach (var rate in explicitRates)
 					{
-						zoneIdsWithExplicitRates.Add(rate.ZoneId);
 
 						var explicitNormalRate = rate.NormalRate;
 						if (explicitNormalRate != null)
 						{
+							zoneIdsWithExplicitRates.Add(rate.ZoneId);
 							SalePricelistRateChange salePricelistRateChange = CreateSalePricelistRateChange(explicitNormalRate, countryToAdd.CountryId);
 							salePricelistRateChange.BED = explicitNormalRate.BED;
 							salePricelistRateChange.EED = explicitNormalRate.EED;
