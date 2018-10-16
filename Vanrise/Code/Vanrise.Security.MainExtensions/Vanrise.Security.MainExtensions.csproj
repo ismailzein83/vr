@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="DataRecordFieldFormulas\IsDefaultSecurityProviderFieldFormula.cs" />
     <Compile Include="GenericBEActions\SecurityProviderStatusAction.cs" />
+    <Compile Include="GenericBEActions\SetDefaultSecurityProviderAction.cs" />
     <Compile Include="GenericBEOnBeforeInsertHandlers\SecurityProviderOnBeforeInsertHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityProvider\RemoteSecurityProvider.cs" />
