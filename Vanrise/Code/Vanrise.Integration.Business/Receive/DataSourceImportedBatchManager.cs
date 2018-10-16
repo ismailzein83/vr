@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
-using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
@@ -13,15 +12,9 @@ namespace Vanrise.Integration.Business
 {
     public class DataSourceImportedBatchManager
     {
-        public long WriteEntry(Entities.ImportedBatchEntry entry, Guid dataSourceId, string logEntryTime)
-        {
-            IDataSourceImportedBatchDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
-            return manager.InsertEntry(dataSourceId, entry.BatchDescription, entry.BatchSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds, logEntryTime, entry.BatchStart, entry.BatchEnd);
-        }
-
         public Vanrise.Entities.IDataRetrievalResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
         {
-            var maxTop = new ConfigManager().GetMaxSearchRecordCount();
+            var maxTop = new Vanrise.Common.Business.ConfigManager().GetMaxSearchRecordCount();
             if (input.Query.Top > maxTop)
                 throw new VRBusinessException(string.Format("Top record count cannot be greater than {0}", maxTop));
 
@@ -70,7 +63,14 @@ namespace Vanrise.Integration.Business
             return dataManager.GetDataSourcesSummary(fromTime, dataSourcesIds);
         }
 
+        public long WriteEntry(Entities.ImportedBatchEntry entry, Guid dataSourceId, string logEntryTime)
+        {
+            IDataSourceImportedBatchDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
+            return manager.InsertEntry(dataSourceId, entry.BatchDescription, entry.BatchSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds, logEntryTime, entry.BatchStart, entry.BatchEnd);
+        }
+
         #region Private Classes
+
         private class DataSourceImportedBatchExcelExportHandler : ExcelExportHandler<DataSourceImportedBatch>
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DataSourceImportedBatch> context)
@@ -110,6 +110,7 @@ namespace Vanrise.Integration.Business
                 context.MainSheet = sheet;
             }
         }
+
         #endregion
     }
 }
