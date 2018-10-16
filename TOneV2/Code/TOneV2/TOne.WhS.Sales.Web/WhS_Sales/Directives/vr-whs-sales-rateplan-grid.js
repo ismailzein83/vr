@@ -1512,7 +1512,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 	                if ($scope.routeOptionNumber.value > rpRouteDetail.RouteOptionsDetails.length)
 	                    return false;
 	                var routeOption = rpRouteDetail.RouteOptionsDetails[$scope.routeOptionNumber.value - 1];
-	                return comparisonOptionFilter(routeOption.ConvertedSupplierRate, $scope.routeOptionFilterValue, $scope.routeOptionComparisonOption);
+	                return comparisonOptionFilter($filter('vrtextOrNumber')(routeOption.ConvertedSupplierRate, $scope.longPrecision), $scope.routeOptionFilterValue, $scope.routeOptionComparisonOption);
 	            }
 	            function costsFilter(costValues) {
 	                for (var i = 0; i < $scope.costCalculationMethods.length; i++) {
@@ -1524,6 +1524,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 	                }
 	                return true;
 	            }
+
 	            function marginFilter(marginValue) {
 	                return comparisonOptionFilter(marginValue, $scope.marginFilterValue, $scope.marginComparisonOption);
 	            }

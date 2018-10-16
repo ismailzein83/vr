@@ -740,7 +740,7 @@
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <div style="text-align: right">
-                                                                                <vr-label style="width: calc(100% - 7px);display: inline-block;text-overflow: ellipsis;overflow: hidden;" isvalue="true">{{::dataItem.CurrentRate | number: longPrecision }}</vr-label>
+                                                                                <vr-label style="width: calc(100% - 7px);display: inline-block;text-overflow: ellipsis;overflow: hidden;" isvalue="true" title="{{::dataItem.CurrentRate | number: longPrecision}}">{{::dataItem.CurrentRate | number: longPrecision }}</vr-label>
                                                                                 <span ng-if="::(dataItem.FutureNormalRate != null)"
                                                                                       style="cursor: pointer; text-decoration: underline"
                                                                                       ng-click="::onCurrentRateClicked(dataItem)">*</span>
