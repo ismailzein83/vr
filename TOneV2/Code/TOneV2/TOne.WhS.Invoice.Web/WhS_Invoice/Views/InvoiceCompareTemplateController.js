@@ -206,8 +206,8 @@
                 if (invoiceAccountEntity != undefined) {
                 }
                 for (var prop in WhS_Invoice_ComparisonResultEnum) {
-                    var enumObj = WhS_Invoice_ComparisonResultEnum[prop];
-                    if (enumObj == WhS_Invoice_ComparisonResultEnum.MissingProvider) {
+                    var enumObj = UtilsService.cloneObject(WhS_Invoice_ComparisonResultEnum[prop]);
+                    if (enumObj.value == WhS_Invoice_ComparisonResultEnum.MissingProvider.value) {
                         enumObj.description = enumObj.description + $scope.scopeModel.partnerLabel;
                     }
                     $scope.scopeModel.comparisonResult.push(enumObj);
