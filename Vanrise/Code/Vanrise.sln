@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common", "Vanrise.Common\Vanrise.Common.csproj", "{1A350B7C-28EA-4824-B9A0-C60AD25F0EA9}"
 EndProject
@@ -433,9 +433,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.BP.Argu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.Data.RDB", "Vanrise.GenericData.Data.RDB\Vanrise.GenericData.Data.RDB.csproj", "{93106D20-6446-4278-BFB0-889BBFF760D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Notification.Data.RDB", "Vanrise.Notification.Data.RDB\Vanrise.Notification.Data.RDB.csproj", "{33908411-96AB-4864-B3DD-81B4908A436B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common.Data.RDB", "Vanrise.Common.Data.RDB\Vanrise.Common.Data.RDB.csproj", "{EC2BEDC2-B4E7-4739-B703-C0008ACA1795}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 185
+		SccNumberOfProjects = 187
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1175,6 +1179,14 @@ Global
 		SccProjectTopLevelParentUniqueName184 = Vanrise.sln
 		SccProjectName184 = Vanrise.GenericData.Data.RDB
 		SccLocalPath184 = Vanrise.GenericData.Data.RDB
+		SccProjectUniqueName185 = Vanrise.Notification.Data.RDB\\Vanrise.Notification.Data.RDB.csproj
+		SccProjectTopLevelParentUniqueName185 = Vanrise.sln
+		SccProjectName185 = Vanrise.Notification.Data.RDB
+		SccLocalPath185 = Vanrise.Notification.Data.RDB
+		SccProjectUniqueName186 = Vanrise.Common.Data.RDB\\Vanrise.Common.Data.RDB.csproj
+		SccProjectTopLevelParentUniqueName186 = Vanrise.sln
+		SccProjectName186 = Vanrise.Common.Data.RDB
+		SccLocalPath186 = Vanrise.Common.Data.RDB
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2679,6 +2691,22 @@ Global
 		{93106D20-6446-4278-BFB0-889BBFF760D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{93106D20-6446-4278-BFB0-889BBFF760D5}.Release|x64.ActiveCfg = Release|Any CPU
 		{93106D20-6446-4278-BFB0-889BBFF760D5}.Release|x86.ActiveCfg = Release|Any CPU
+		{33908411-96AB-4864-B3DD-81B4908A436B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33908411-96AB-4864-B3DD-81B4908A436B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33908411-96AB-4864-B3DD-81B4908A436B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{33908411-96AB-4864-B3DD-81B4908A436B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{33908411-96AB-4864-B3DD-81B4908A436B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33908411-96AB-4864-B3DD-81B4908A436B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33908411-96AB-4864-B3DD-81B4908A436B}.Release|x64.ActiveCfg = Release|Any CPU
+		{33908411-96AB-4864-B3DD-81B4908A436B}.Release|x86.ActiveCfg = Release|Any CPU
+		{EC2BEDC2-B4E7-4739-B703-C0008ACA1795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC2BEDC2-B4E7-4739-B703-C0008ACA1795}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC2BEDC2-B4E7-4739-B703-C0008ACA1795}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EC2BEDC2-B4E7-4739-B703-C0008ACA1795}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EC2BEDC2-B4E7-4739-B703-C0008ACA1795}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC2BEDC2-B4E7-4739-B703-C0008ACA1795}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC2BEDC2-B4E7-4739-B703-C0008ACA1795}.Release|x64.ActiveCfg = Release|Any CPU
+		{EC2BEDC2-B4E7-4739-B703-C0008ACA1795}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2873,6 +2901,8 @@ Global
 		{C682734F-519F-497C-9291-29FCC2D09E15} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
 		{2EAEB708-B10D-4BED-B056-2688514E8BC8} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
 		{93106D20-6446-4278-BFB0-889BBFF760D5} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
+		{33908411-96AB-4864-B3DD-81B4908A436B} = {E6F0D0C0-23BD-4814-8D34-E14AEA50D756}
+		{EC2BEDC2-B4E7-4739-B703-C0008ACA1795} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A6C2049-65DE-477B-B7A1-CD4DBAC577AF}
