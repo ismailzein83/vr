@@ -32,7 +32,9 @@ namespace TOne.WhS.BusinessEntity.Business
                     var companySettings = new CarrierAccountManager().GetCompanySetting(customerId);
                     companySettings.ThrowIfNull("companySettings");
                     return companySettings;
-
+                case "Customer":
+                    var carrierAccountId = Convert.ToInt32(context.GenericBusinessEntity.FieldValues.GetRecord("CustomerId"));
+                    return new CarrierAccountManager().GetCarrierAccount(carrierAccountId);
                 case "TicketDetails":
                     DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
                     var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(context.DefinitionSettings.DataRecordTypeId);

@@ -7,5 +7,6 @@
     PricingContact: { value: 5, description: "Pricing Contact" },
     AlertingSMSPhoneNumbers: { value: 6, description: "SMS Phone Numbers" },
     SubjectCode: { value: 7, description: "Subject Code" },
-    SupportEmail: { value: 8, description: "Support Email" }
+    SupportEmail: { value: 8, description: "Support Email" },
+    TimeZone: { value: 9, description: "Time Zone" }
 });

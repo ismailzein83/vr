@@ -2,11 +2,12 @@
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public enum SupplierField { SupplierName = 0, BillingEmail = 1, PricingEmail = 2, AccountManagerEmail = 3, BillingContact = 4, PricingContact = 5, AlertingSMSPhoneNumbers = 6, SupportEmail = 8 }
+    public enum SupplierField { SupplierName = 0, BillingEmail = 1, PricingEmail = 2, AccountManagerEmail = 3, BillingContact = 4, PricingContact = 5, AlertingSMSPhoneNumbers = 6, SupportEmail = 8, TimeZone = 9 }
 
     public class SupplierPropertyEvaluator : VRObjectPropertyEvaluator
     {
@@ -42,6 +43,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     return this.GetCarrierContactDescritpion(supplier.CarrierProfileId, CarrierContactType.AlertingSMSPhoneNumbers);
                 case MainExtensions.SupplierField.SupportEmail:
                     return this.GetCarrierContactDescritpion(supplier.CarrierProfileId, CarrierContactType.SupportEmail);
+                case SupplierField.TimeZone:
+                    var timeZoneId = new CarrierAccountManager().GetSupplierTimeZoneId(supplier.CarrierAccountId);
+                    return new VRTimeZoneManager().GetVRTimeZoneName(timeZoneId);
             }
 
             return null;
