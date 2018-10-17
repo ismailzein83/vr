@@ -41,6 +41,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Analytic.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -91,6 +95,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\DealDAProfCalcAlertRuleFilter.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\DealDAProfCalcAlertRuleFilterDefinition.cs" />
     <Compile Include="DealRateEvaluator\SaleRateEvaluator\DiscountSaleRateEvaluator.cs" />
     <Compile Include="DealRateEvaluator\SaleRateEvaluator\FixedSaleRateEvaluator.cs" />
     <Compile Include="DealRateEvaluator\SupplierRateEvaluator\DiscountSupplierRateEvaluator.cs" />
