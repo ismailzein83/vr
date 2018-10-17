@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public interface IRouteRuleIsSupplierIncludedContext
+    public interface IRouteOptionAreSuppliersIncludedContext
     {
         IEnumerable<int> SupplierIds { get; }
     }
-    public class RouteRuleIsSupplierIncludedContext : IRouteRuleIsSupplierIncludedContext
+    public class RouteOptionAreSuppliersIncludedContext : IRouteOptionAreSuppliersIncludedContext
     {
         public IEnumerable<int> SupplierIds { get; set; }
     }

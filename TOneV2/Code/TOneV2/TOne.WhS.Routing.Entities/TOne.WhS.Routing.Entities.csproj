@@ -65,6 +65,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticMeasureInfo.cs" />
+    <Compile Include="IRouteOptionAreSuppliersIncludedContext.cs" />
+    <Compile Include="IRouteRuleSupplierIncludedContext.cs" />
     <Compile Include="RouteRuleApplyOptionsPercentageContext.cs" />
     <Compile Include="BusinessManagers\IRoutingDatabaseManager.cs" />
     <Compile Include="BusinessManagers\ISwitchSyncDataManager.cs" />
