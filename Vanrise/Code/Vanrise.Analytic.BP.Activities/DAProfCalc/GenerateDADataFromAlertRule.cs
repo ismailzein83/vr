@@ -6,6 +6,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
 using System.Linq;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 {
@@ -92,6 +93,10 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                     if (alertRulePeriodInMinutes > maxPeriodInMinutes || alertRulePeriodInMinutes <= minPeriodInMinutes)
                         continue;
 
+                    RecordFilterGroup alertRuleTypeRecordFilter = null;
+                    if (daProfCalcAlertRuleSettings.DAProfCalcAlertRuleFilter != null)
+                        alertRuleTypeRecordFilter = daProfCalcAlertRuleSettings.DAProfCalcAlertRuleFilter.GetRecordFilterGroup(new DAProfCalcGetRecordFilterGroupContext());
+
                     maxAlertRulePeriodInMinutes = Math.Max(maxAlertRulePeriodInMinutes, alertRulePeriodInMinutes);
                     DAProfCalcExecInput daProfCalcExecInput = new DAProfCalcExecInput()
                         {
@@ -101,7 +106,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                                 AlertRuleIds = new List<long>() { alertRule.VRAlertRuleId },
                                 AlertRuleTypeId = alertRuleTypeId
                             },
-                            DataAnalysisRecordFilter = daProfCalcAlertRuleSettings.DataAnalysisFilterGroup,
+                            DataAnalysisRecordFilter = BuildDataAnalysisRecordFilter(alertRuleTypeRecordFilter, daProfCalcAlertRuleSettings.DataAnalysisFilterGroup),
                             GroupingFieldNames = daProfCalcAlertRuleSettings.GroupingFieldNames,
                             DAProfCalcAnalysisPeriod = daProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod
                         };
@@ -130,6 +135,23 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             SourceRecordStorageIds.Set(context, sourceRecordStorageIds);
 
             context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Data Analysis Profiling and Calculation Execution Inputs loaded.", null);
+        }
+
+        private RecordFilterGroup BuildDataAnalysisRecordFilter(RecordFilterGroup alertRuleTypeRecordFilter, RecordFilterGroup alertRuleRecordFilter)
+        {
+            if (alertRuleTypeRecordFilter == null)
+                return alertRuleRecordFilter;
+
+            if (alertRuleRecordFilter == null)
+                return alertRuleTypeRecordFilter;
+
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup()
+            {
+                Filters = new List<RecordFilter>() { alertRuleTypeRecordFilter, alertRuleRecordFilter },
+                LogicalOperator = RecordQueryLogicalOperator.And
+            };
+
+            return recordFilterGroup;
         }
 
         private bool AreDAProfCalcExecInputMatching(DAProfCalcExecInput firstDAProfCalcExexInput, DAProfCalcExecInput secondDAProfCalcExexInput)

@@ -8,9 +8,6 @@
                                                                  selectedvalues="scopeModel.selectedDataAnalysisDefinition" isrequired="true">
                     </vr-analytic-dataanalysisdefinition-selector>
                 </vr-columns>
-                <vr-columns width="1/3row">
-                    <vr-textbox value="scopeModel.rawRecordFilterLabel" type="text" label="Raw Record Filter Label" isrequired="true"></vr-textbox>
-                </vr-columns>
                 <vr-columns width="1/3row" ng-if="scopeModel.selectedDataAnalysisDefinition!=undefined">
                     <vr-span vr-loader="scopeModel.isLoadingSourceDataRecordStorage">
                         <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onSourceDataRecordStorageSelectorReady" selectedvalues="selectedSourceDataRecordStorages"
@@ -35,6 +32,12 @@
                     </vr-datagrid>
                 </vr-columns>
             </vr-row>
+            <vr-section title="Filter">
+                <vr-columns width="1/3row">
+                    <vr-textbox value="scopeModel.rawRecordFilterLabel" type="text" label="Raw Record Filter Label" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-analytic-daprofcalc-alertrulefilterdefinition on-ready="scopeModel.onDAProfCalcAlertRuleFilterDefinitionReady" normal-col-num="4"></vr-analytic-daprofcalc-alertrulefilterdefinition>
+            </vr-section>
         </vr-tab>
         <vr-tab header="'Security'">
             <vr-row>
@@ -53,5 +56,4 @@
             </vr-row>
         </vr-tab>
     </vr-tabs>
-  
 </vr-tab>

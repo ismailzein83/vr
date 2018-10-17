@@ -30,6 +30,9 @@
             var sourceDataRecordStorageSelectorAPI;
             var sourceDataRecordStorageSelectorReadyDeferred;
 
+            var daProfCalcAlertRuleFilterDefinitionDirectiveAPI;
+            var daProfCalcAlertRuleFilterDefinitionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             var daProfCalcGridAPI;
 
             var viewPermissionAPI;
@@ -46,14 +49,6 @@
                     dataAnalysisDefinitionSelectorAPI = api;
                     dataAnalysisDefinitionSelectoReadyDeferred.resolve();
                 };
-                $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
-                    viewPermissionAPI = api;
-                    viewPermissionReadyDeferred.resolve();
-                };
-                $scope.scopeModel.onStartInstanceRequiredPermissionReady = function (api) {
-                    startInstancePermissionAPI = api;
-                    startInstancePermissionReadyDeferred.resolve();
-                };
                 $scope.scopeModel.onSourceDataRecordStorageSelectorReady = function (api) {
                     sourceDataRecordStorageSelectorAPI = api;
 
@@ -67,15 +62,27 @@
                     var payload = {
                         filters: filters
                     };
-
                     var setSourceLoader = function (value) {
                         $scope.scopeModel.isLoadingSourceDataRecordStorage = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceDataRecordStorageSelectorAPI, payload, setSourceLoader, sourceDataRecordStorageSelectorReadyDeferred);
                 };
 
+                $scope.scopeModel.onDAProfCalcAlertRuleFilterDefinitionReady = function (api) {
+                    daProfCalcAlertRuleFilterDefinitionDirectiveAPI = api;
+                    daProfCalcAlertRuleFilterDefinitionDirectiveReadyDeferred.resolve();
+                };
+
                 $scope.scopeModel.onDAProfCalcGridReady = function (api) {
                     daProfCalcGridAPI = api;
+                };
+                $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
+                    viewPermissionAPI = api;
+                    viewPermissionReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onStartInstanceRequiredPermissionReady = function (api) {
+                    startInstancePermissionAPI = api;
+                    startInstancePermissionReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onDataAnalysisDefinitionSelectionChanged = function (dataItem) {
@@ -162,18 +169,12 @@
                     }
 
                     //Loading DataAnalysisDefinition Selector
-                    var dataAnalysisDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    dataAnalysisDefinitionSelectoReadyDeferred.promise.then(function () {
-                        
-                        var dataAnalysisDefinitionSelectorPayload;
-                        if (vrAlertRuleTypeSettings != undefined) {
-                            var dataAnalysisDefinitionSelectorPayload = {
-                                selectedIds: vrAlertRuleTypeSettings.DataAnalysisDefinitionId
-                            };
-                        }
-                        VRUIUtilsService.callDirectiveLoad(dataAnalysisDefinitionSelectorAPI, dataAnalysisDefinitionSelectorPayload, dataAnalysisDefinitionSelectorLoadDeferred);
-                    });
-                    promises.push(dataAnalysisDefinitionSelectorLoadDeferred.promise);
+                    var loadDataAnalysisDefinitionSelectorPromise = loadDataAnalysisDefinitionSelector();
+                    promises.push(loadDataAnalysisDefinitionSelectorPromise);
+
+                    //Loading DAProfCalcAlertRuleFilterDefinition Directive
+                    var loadDAProfCalcAlertRuleFilterDefinitionDirectivePromise = loadDAProfCalcAlertRuleFilterDefinitionDirective();
+                    promises.push(loadDAProfCalcAlertRuleFilterDefinitionDirectivePromise);
 
                     if (vrAlertRuleTypeSettings != undefined) {
                         var filters = [];
@@ -240,34 +241,62 @@
 
                         var loadStartInstanceRequiredPermissionPromise = loadStartInstanceRequiredPermission();
                         promises.push(loadStartInstanceRequiredPermissionPromise);
-
                     }
 
+                    function loadDataAnalysisDefinitionSelector() {
+                        var dataAnalysisDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        dataAnalysisDefinitionSelectoReadyDeferred.promise.then(function () {
+
+                            var dataAnalysisDefinitionSelectorPayload;
+                            if (vrAlertRuleTypeSettings != undefined) {
+                                dataAnalysisDefinitionSelectorPayload = { selectedIds: vrAlertRuleTypeSettings.DataAnalysisDefinitionId };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(dataAnalysisDefinitionSelectorAPI, dataAnalysisDefinitionSelectorPayload, dataAnalysisDefinitionSelectorLoadDeferred);
+                        });
+
+                        return dataAnalysisDefinitionSelectorLoadDeferred.promise;
+                    }
+                    function loadDAProfCalcAlertRuleFilterDefinitionDirective() {
+                        var daProfCalcAlertRuleFilterDefinitionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        daProfCalcAlertRuleFilterDefinitionDirectiveReadyDeferred.promise.then(function () {
+
+                            var daProfCalcAlertRuleFilterDefinitionPayload;
+                            if (vrAlertRuleTypeSettings != undefined) {
+                                daProfCalcAlertRuleFilterDefinitionPayload = {
+                                    daProfCalcAlertRuleFilterDefinition: vrAlertRuleTypeSettings.DAProfCalcAlertRuleFilterDefinition
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(daProfCalcAlertRuleFilterDefinitionDirectiveAPI, daProfCalcAlertRuleFilterDefinitionPayload, daProfCalcAlertRuleFilterDefinitionLoadDeferred);
+                        });
+
+                        return daProfCalcAlertRuleFilterDefinitionLoadDeferred.promise;
+                    }
                     function loadViewRequiredPermission() {
                         var viewSettingPermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
                         viewPermissionReadyDeferred.promise.then(function () {
                             var dataPayload = {
-                                data: vrAlertRuleTypeSettings  && vrAlertRuleTypeSettings.DAProfCalcSecurity && vrAlertRuleTypeSettings.DAProfCalcSecurity.ViewPermission || undefined
+                                data: vrAlertRuleTypeSettings && vrAlertRuleTypeSettings.DAProfCalcSecurity && vrAlertRuleTypeSettings.DAProfCalcSecurity.ViewPermission || undefined
                             };
-
                             VRUIUtilsService.callDirectiveLoad(viewPermissionAPI, dataPayload, viewSettingPermissionLoadDeferred);
                         });
+
                         return viewSettingPermissionLoadDeferred.promise;
                     }
-
-
                     function loadStartInstanceRequiredPermission() {
                         var startInstancePermissionLoadDeferred = UtilsService.createPromiseDeferred();
+
                         startInstancePermissionReadyDeferred.promise.then(function () {
                             var dataPayload = {
-                                data: vrAlertRuleTypeSettings  && vrAlertRuleTypeSettings.DAProfCalcSecurity && vrAlertRuleTypeSettings.DAProfCalcSecurity.StartInstancePermission || undefined
+                                data: vrAlertRuleTypeSettings && vrAlertRuleTypeSettings.DAProfCalcSecurity && vrAlertRuleTypeSettings.DAProfCalcSecurity.StartInstancePermission || undefined
                             };
-
                             VRUIUtilsService.callDirectiveLoad(startInstancePermissionAPI, dataPayload, startInstancePermissionLoadDeferred);
                         });
+
                         return startInstancePermissionLoadDeferred.promise;
                     }
-
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -275,12 +304,13 @@
                 api.getData = function () {
                     var data = {
                         $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleTypeSettings, Vanrise.Analytic.Entities",
+                        RawRecordFilterLabel: $scope.scopeModel.rawRecordFilterLabel,
                         DataAnalysisDefinitionId: dataAnalysisDefinitionSelectorAPI.getSelectedIds(),
                         SourceRecordStorages: buildSourceRecordStorages(),
                         DAProfCalcItemNotifications: buildDAProfCalcItemNotifications(),
-                        RawRecordFilterLabel: $scope.scopeModel.rawRecordFilterLabel,
+                        DAProfCalcAlertRuleFilterDefinition: daProfCalcAlertRuleFilterDefinitionDirectiveAPI.getData(),
                         DAProfCalcSecurity: {
-                            ViewPermission:viewPermissionAPI.getData(),
+                            ViewPermission: viewPermissionAPI.getData(),
                             StartInstancePermission: startInstancePermissionAPI.getData()
                         }
                     };

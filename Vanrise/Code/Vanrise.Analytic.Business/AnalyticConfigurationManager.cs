@@ -67,5 +67,15 @@ namespace Vanrise.Analytic.Business
         {
             return _templateConfigManager.GetExtensionConfigurations<MeasureMappingRuleSettingConfig>(MeasureMappingRuleSettingConfig.EXTENSION_TYPE);
         }
+
+        public IEnumerable<DAProfCalcAlertRuleFilterDefinitionConfig> GetDAProfCalcAlertRuleFilterDefinitionConfigs()
+        {
+            return _templateConfigManager.GetExtensionConfigurations<DAProfCalcAlertRuleFilterDefinitionConfig>(DAProfCalcAlertRuleFilterDefinitionConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<DAProfCalcAlertRuleFilterConfig> GetDAProfCalcAlertRuleFilterConfigs()
+        {
+            return _templateConfigManager.GetExtensionConfigurations<DAProfCalcAlertRuleFilterConfig>(DAProfCalcAlertRuleFilterConfig.EXTENSION_TYPE);
+        }
     }
 }

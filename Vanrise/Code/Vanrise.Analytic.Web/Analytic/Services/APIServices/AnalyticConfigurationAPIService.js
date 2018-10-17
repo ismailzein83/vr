@@ -52,7 +52,15 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasureMappingRuleSettingConfigs"));
         }
 
-        return ({
+        function GetDAProfCalcAlertRuleFilterDefinitionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDAProfCalcAlertRuleFilterDefinitionConfigs"));
+        }
+
+        function GetDAProfCalcAlertRuleFilterConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDAProfCalcAlertRuleFilterConfigs"));
+        }
+
+        return {
             GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs,
             GetWidgetsTemplateConfigs: GetWidgetsTemplateConfigs,
             GetRealTimeReportSettingsTemplateConfigs: GetRealTimeReportSettingsTemplateConfigs,
@@ -63,8 +71,10 @@
             GetDRSearchPageSubviewDefinitionSettingsConfigs: GetDRSearchPageSubviewDefinitionSettingsConfigs,
             GetMeasureExternalSourceExtendedSettingConfigs: GetMeasureExternalSourceExtendedSettingConfigs,
             GetDimensionMappingRuleSettingConfigs: GetDimensionMappingRuleSettingConfigs,
-            GetMeasureMappingRuleSettingConfigs: GetMeasureMappingRuleSettingConfigs
-        });
+            GetMeasureMappingRuleSettingConfigs: GetMeasureMappingRuleSettingConfigs,
+            GetDAProfCalcAlertRuleFilterDefinitionConfigs: GetDAProfCalcAlertRuleFilterDefinitionConfigs,
+            GetDAProfCalcAlertRuleFilterConfigs: GetDAProfCalcAlertRuleFilterConfigs
+        };
     }
 
     appControllers.service('VR_Analytic_AnalyticConfigurationAPIService', AnalyticConfigurationAPIService);

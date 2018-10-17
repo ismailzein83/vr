@@ -67,6 +67,7 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             return _manager.GetDRSearchPageSubviewDefinitionSettingsConfigs();
         }
+
         //[HttpGet]
         //[Route("GetMeasureExternalSourceTemplateConfigs")]
         //public IEnumerable<MeasureExternalSourceSetting> GetMeasureExternalSourceTemplateConfigs()
@@ -80,6 +81,7 @@ namespace Vanrise.Analytic.Web.Controllers
         //{
         //    return _manager.GetDimensionMappingRuleTemplateConfigs();
         //}
+
         //[HttpGet]
         //[Route("GetMeasureMappingRuleTemplateConfigs")]
         //public IEnumerable<MeasureMappingRuleSettingConfig> GetMeasureMappingRuleTemplateConfigs()
@@ -106,6 +108,20 @@ namespace Vanrise.Analytic.Web.Controllers
         public IEnumerable<MeasureExternalSourceSettingConfig> GetMeasureExternalSourceExtendedSettingConfigs()
         {
             return _manager.GetMeasureExternalSourceExtendedSettingConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetDAProfCalcAlertRuleFilterDefinitionConfigs")]
+        public IEnumerable<DAProfCalcAlertRuleFilterDefinitionConfig> GetDAProfCalcAlertRuleFilterDefinitionConfigs()
+        {
+            return _manager.GetDAProfCalcAlertRuleFilterDefinitionConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetDAProfCalcAlertRuleFilterConfigs")]
+        public IEnumerable<DAProfCalcAlertRuleFilterConfig> GetDAProfCalcAlertRuleFilterConfigs()
+        {
+            return _manager.GetDAProfCalcAlertRuleFilterConfigs();
         }
     }
 }

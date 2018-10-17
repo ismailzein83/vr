@@ -7,7 +7,7 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -114,7 +114,8 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                         GroupingFieldNames: criteria.GroupingFieldNames,
                         Settings: dataRecordAlertRuleSettingsAPI.getData(),
                         MinNotificationInterval: criteria.MinNotificationInterval,
-                        DAProfCalcAnalysisPeriod: criteria.DAProfCalcAnalysisPeriod
+                        DAProfCalcAnalysisPeriod: criteria.DAProfCalcAnalysisPeriod,
+                        DAProfCalcAlertRuleFilter: criteria.DAProfCalcAlertRuleFilter
                     };
                 };
 
@@ -126,7 +127,11 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                 var loadCriteriaSectionPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 criteriaDirectiveReadyPromiseDeferred.promise.then(function () {
-                    var criteriapayload = { dataAnalysisDefinitionId: alertTypeSettings.DataAnalysisDefinitionId, rawRecordFilterLabel: alertTypeSettings.RawRecordFilterLabel };
+                    var criteriapayload = {
+                        dataAnalysisDefinitionId: alertTypeSettings.DataAnalysisDefinitionId,
+                        rawRecordFilterLabel: alertTypeSettings.RawRecordFilterLabel,
+                        daProfCalcAlertRuleFilterDefinition: alertTypeSettings.DAProfCalcAlertRuleFilterDefinition
+                    };
 
                     if (alertExtendedSettings != undefined) {
                         criteriapayload.criteria = {
@@ -134,11 +139,11 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                             MinNotificationInterval: alertExtendedSettings.MinNotificationInterval,
                             DataAnalysisFilterGroup: alertExtendedSettings.DataAnalysisFilterGroup,
                             GroupingFieldNames: alertExtendedSettings.GroupingFieldNames,
-                            DAProfCalcAnalysisPeriod: alertExtendedSettings.DAProfCalcAnalysisPeriod
+                            DAProfCalcAnalysisPeriod: alertExtendedSettings.DAProfCalcAnalysisPeriod,
+                            DAProfCalcAlertRuleFilter: alertExtendedSettings.DAProfCalcAlertRuleFilter
                         };
                         $scope.scopeModel.selectedAnalysisTypeId = alertExtendedSettings.OutputItemDefinitionId;
                     }
-
                     VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, criteriapayload, loadCriteriaSectionPromiseDeferred);
                 });
 

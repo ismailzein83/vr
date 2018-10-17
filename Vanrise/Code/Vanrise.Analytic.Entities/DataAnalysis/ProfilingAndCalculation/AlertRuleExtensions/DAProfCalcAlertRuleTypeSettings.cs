@@ -30,15 +30,15 @@ namespace Vanrise.Analytic.Entities
 
         public Guid DataAnalysisDefinitionId { get; set; }
 
+        public string RawRecordFilterLabel { get; set; }
+
         public List<DAProfCalcAlertRuleRecordStorage> SourceRecordStorages { get; set; }
 
         public List<DAProfCalcItemNotification> DAProfCalcItemNotifications { get; set; }
 
-        public DAProfCalcAlertRuleTypeSecurity DAProfCalcSecurity { get; set; }
-
         public DAProfCalcAlertRuleFilterDefinition DAProfCalcAlertRuleFilterDefinition { get; set; }
 
-        public string RawRecordFilterLabel { get; set; }
+        public DAProfCalcAlertRuleTypeSecurity DAProfCalcSecurity { get; set; }
     }
 
     public class DAProfCalcAlertRuleRecordStorage
