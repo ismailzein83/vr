@@ -19,5 +19,7 @@ namespace Vanrise.Analytic.Entities
         public TimeSpan MinNotificationInterval { get; set; }
 
         public DAProfCalcAnalysisPeriod DAProfCalcAnalysisPeriod { get; set; }
+
+        public DAProfCalcAlertRuleFilter DAProfCalcAlertRuleFilter { get; set; }
     }
 }

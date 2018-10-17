@@ -36,6 +36,8 @@ namespace Vanrise.Analytic.Entities
 
         public DAProfCalcAlertRuleTypeSecurity DAProfCalcSecurity { get; set; }
 
+        public DAProfCalcAlertRuleFilterDefinition DAProfCalcAlertRuleFilterDefinition { get; set; }
+
         public string RawRecordFilterLabel { get; set; }
     }
 
