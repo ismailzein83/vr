@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 
@@ -11,6 +13,32 @@ namespace TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups
         public List<RouteOptionSettings> Options { get; set; }
 
         public Dictionary<int, List<RouteOptionFilterSettings>> Filters { get; set; }
+
+        public override bool AreSuppliersIncluded(IRouteRuleAreSuppliersIncludedContext context)
+        {
+            if (context.SupplierIds == null || context.SupplierIds.Count == 0)
+                return true;
+
+            if (Options == null || Options.Count == 0)
+                return false;
+
+            foreach (var supplierId in context.SupplierIds)
+                if (Options.Any(item => item.SupplierId == supplierId))
+                    return true;
+
+            return false;
+        }
+
+        public override string GetDescription()
+        {
+            if (Options == null || Options.Count == 0)
+                return null;
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            IEnumerable<string> supplierNames = Options.Select(item => carrierAccountManager.GetCarrierAccountName(item.SupplierId));
+
+            return string.Join(", ", supplierNames);
+        }
 
         public override IEnumerable<RouteOptionSettings> GetOptionSettings(IRouteOptionSettingsContext context)
         {

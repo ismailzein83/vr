@@ -7,8 +7,11 @@
     function routeRuleManagementController($scope, WhS_Routing_RouteRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteRuleAPIService, VRDateTimeService, WhS_Routing_RouteRuleCriteriaTypeEnum) {
         var gridAPI;
 
-        var carrierAccountDirectiveAPI;
-        var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var carrierAccountCustomersDirectiveAPI;
+        var carrierAccountCustomersReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var carrierAccountSuppliersDirectiveAPI;
+        var carrierAccountSuppliersReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -25,9 +28,13 @@
         function defineScope() {
             $scope.routeRuleTypeTemplates = [];
 
-            $scope.onCarrierAccountDirectiveReady = function (api) {
-                carrierAccountDirectiveAPI = api;
-                carrierAccountReadyPromiseDeferred.resolve();
+            $scope.onCarrierAccountCustomersDirectiveReady = function (api) {
+                carrierAccountCustomersDirectiveAPI = api;
+                carrierAccountCustomersReadyPromiseDeferred.resolve();
+            };
+            $scope.onCarrierAccountSuppliersDirectiveReady = function (api) {
+                carrierAccountSuppliersDirectiveAPI = api;
+                carrierAccountSuppliersReadyPromiseDeferred.resolve();
             };
 
             $scope.onSaleZoneDirectiveReady = function (api) {
@@ -81,7 +88,8 @@
                 var query = {
                     Name: $scope.name,
                     Code: $scope.selectedRouteRuleCriteriaType.value == 'Code' ? $scope.code : undefined,
-                    CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
+                    CustomerIds: carrierAccountCustomersDirectiveAPI.getSelectedIds(),
+                    SupplierIds: carrierAccountSuppliersDirectiveAPI.getSelectedIds(),
                     SaleZoneIds: $scope.selectedRouteRuleCriteriaType.value == 'SaleZone' ? saleZoneDirectiveAPI.getSelectedIds() : undefined,
                     CountryIds: $scope.selectedRouteRuleCriteriaType.value == 'Country' ? countryDirectiveAPI.getSelectedIds() : undefined,
                     EffectiveOn: $scope.effectiveOn,
@@ -99,19 +107,29 @@
             $scope.isLoadingFilterData = true;
             $scope.effectiveOn = VRDateTimeService.getNowDateTime();
 
-            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection, loadRouteRuleTypeSelector, loadCountrySection])
-                    .catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    }).finally(function () {
-                        $scope.isLoadingFilterData = false;
-                    });
+            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSuppliersSection, loadSellingNumberPlanSection, loadRouteRuleTypeSelector, loadCountrySection])
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.isLoadingFilterData = false;
+                });
         }
 
         function loadCustomersSection() {
             var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            carrierAccountReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, undefined, loadCarrierAccountPromiseDeferred);
+            carrierAccountCustomersReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(carrierAccountCustomersDirectiveAPI, undefined, loadCarrierAccountPromiseDeferred);
+            });
+
+            return loadCarrierAccountPromiseDeferred.promise;
+        }
+
+        function loadSuppliersSection() {
+            var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            carrierAccountSuppliersReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(carrierAccountSuppliersDirectiveAPI, undefined, loadCarrierAccountPromiseDeferred);
             });
 
             return loadCarrierAccountPromiseDeferred.promise;

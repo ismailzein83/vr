@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.Routing.Entities;
+using System.Linq;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -27,6 +28,19 @@ namespace TOne.WhS.Routing.Business
         public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
         {
             return new BlockRouteRule();
+        }
+
+        public override bool AreSuppliersIncluded(IRouteRuleAreSuppliersIncludedContext context)
+        {
+            if (context.SupplierIds == null || context.SupplierIds.Count == 0)
+                return true;
+
+            return false;
+        }
+
+        public override string GetSuppliersDescription()
+        {
+            return null;
         }
     }
 

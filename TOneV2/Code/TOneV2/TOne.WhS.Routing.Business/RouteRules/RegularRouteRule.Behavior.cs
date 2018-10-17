@@ -242,6 +242,22 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
+        public override bool AreSuppliersIncluded(IRouteRuleAreSuppliersIncludedContext context)
+        {
+            if (context.SupplierIds == null || context.SupplierIds.Count == 0 || OptionsSettingsGroup == null)
+                return true;
+
+            return OptionsSettingsGroup.AreSuppliersIncluded(context);
+        }
+
+        public override string GetSuppliersDescription()
+        {
+            if (OptionsSettingsGroup == null)
+                return "All Suppliers";
+
+            return OptionsSettingsGroup.GetDescription();
+        }
+
         #endregion
 
         #region Private Methods
@@ -588,13 +604,13 @@ namespace TOne.WhS.Routing.Business
             if (this.OptionsSettingsGroup != null)
             {
                 var routeOptionFilterExecutionContext = new RouteOptionFilterExecutionContext()
-                    {
-                        Option = option,
-                        SaleRate = target.SaleRate,
-                        CustomerServices = customerServiceIds,
-                        SupplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null,
-                        SupplierId = option.SupplierId
-                    };
+                {
+                    Option = option,
+                    SaleRate = target.SaleRate,
+                    CustomerServices = customerServiceIds,
+                    SupplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null,
+                    SupplierId = option.SupplierId
+                };
 
                 if (this.OptionsSettingsGroup.IsOptionFiltered(routeOptionFilterExecutionContext))
                 {

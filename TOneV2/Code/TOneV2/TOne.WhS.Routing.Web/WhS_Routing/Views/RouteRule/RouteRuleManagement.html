@@ -34,7 +34,10 @@
 
                         <vr-common-country-selector on-ready="onCountrySelectorReady" ismultipleselection normal-col-num="2" ng-show="advancedSelected && selectedRouteRuleCriteriaType.value == 'Country'"></vr-common-country-selector>
 
-                        <vr-whs-be-carrieraccount-selector ng-show="advancedSelected" normal-col-num="2" ismultipleselection getcustomers on-ready="onCarrierAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+                        <vr-whs-be-carrieraccount-selector ng-show="advancedSelected" normal-col-num="2" ismultipleselection getcustomers on-ready="onCarrierAccountCustomersDirectiveReady"></vr-whs-be-carrieraccount-selector>
+
+                        <vr-whs-be-carrieraccount-selector ng-show="advancedSelected" normal-col-num="2" ismultipleselection getsuppliers on-ready="onCarrierAccountSuppliersDirectiveReady"></vr-whs-be-carrieraccount-selector>
+
                     </vr-row>
                 </vr-columns>
             </vr-row>

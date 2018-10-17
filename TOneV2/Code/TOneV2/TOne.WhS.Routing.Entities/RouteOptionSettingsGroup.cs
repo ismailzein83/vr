@@ -16,5 +16,8 @@ namespace TOne.WhS.Routing.Entities
         {
             return false;
         }
+        public abstract bool AreSuppliersIncluded(IRouteRuleAreSuppliersIncludedContext context);
+
+        public abstract string GetDescription();
     }
 }

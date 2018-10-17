@@ -11,9 +11,9 @@ namespace TOne.WhS.Routing.Entities
 
         public string RouteRuleSettingsTypeName { get; set; }
 
-		public string LastModifiedByUserName { get; set; }
-		
-		public string Destinations
+        public string LastModifiedByUserName { get; set; }
+
+        public string Destinations
         {
             get
             {
@@ -78,5 +78,7 @@ namespace TOne.WhS.Routing.Entities
                 return routingExcludedDestinations.GetDescription();
             }
         }
+
+        public string Suppliers { get; set; }
     }
 }

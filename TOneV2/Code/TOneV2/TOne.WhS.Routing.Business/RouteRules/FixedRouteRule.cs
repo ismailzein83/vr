@@ -51,6 +51,71 @@ namespace TOne.WhS.Routing.Business
         }
 
         #endregion
+        #region Public Methods
+        public override bool AreSuppliersIncluded(IRouteRuleAreSuppliersIncludedContext context)
+        {
+            if (context.SupplierIds == null || context.SupplierIds.Count == 0)
+                return true;
+
+            if (Options == null || Options.Count == 0)
+                return false;
+
+            foreach (var supplierId in context.SupplierIds)
+            {
+                foreach (var option in Options)
+                {
+                    if (option.SupplierId == supplierId)
+                        return true;
+
+                    if (option.Backups != null && option.Backups.Count > 0)
+                    {
+                        foreach (var backup in option.Backups)
+                        {
+                            if (backup.SupplierId == supplierId)
+                                return true;
+                        }
+                    }
+                }
+
+                if (OverallBackupOptions != null && OverallBackupOptions.Count > 0)
+                {
+                    foreach (var overallbackup in OverallBackupOptions)
+                    {
+                        if (overallbackup.SupplierId == supplierId)
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public override string GetSuppliersDescription()
+        {
+            if (Options == null || Options.Count == 0)
+                return null;
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            List<string> suppliersWithBackups = new List<string>();
+
+            foreach (var option in Options)
+            {
+                string optionDescription = carrierAccountManager.GetCarrierAccountName(option.SupplierId);
+                if (option.Backups != null && option.Backups.Count > 0)
+                {
+                    IEnumerable<string> backupsNames = option.Backups.Select(item => carrierAccountManager.GetCarrierAccountName(item.SupplierId));
+                    optionDescription = string.Concat(optionDescription, String.Format("<{0}>", string.Join(", ", backupsNames)));
+                }
+                suppliersWithBackups.Add(optionDescription);
+            }
+
+            string overallBackups = string.Empty;
+            if (OverallBackupOptions != null && OverallBackupOptions.Count > 0)
+                overallBackups = string.Concat(". Overall Backups: ", string.Join(", ", OverallBackupOptions.Select(item => carrierAccountManager.GetCarrierAccountName(item.SupplierId))));
+
+            return string.Concat(string.Join<string>(", ", suppliersWithBackups), overallBackups);
+        }
+
+        #endregion
 
         #region SaleEntity Execution
 

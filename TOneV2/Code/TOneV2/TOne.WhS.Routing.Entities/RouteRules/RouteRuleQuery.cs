@@ -16,6 +16,8 @@ namespace TOne.WhS.Routing.Entities
 
         public IEnumerable<int> CustomerIds { get; set; }
 
+        public IEnumerable<int> SupplierIds { get; set; }
+
         public IEnumerable<long> SaleZoneIds { get; set; }
 
         public IEnumerable<int> CountryIds { get; set; }

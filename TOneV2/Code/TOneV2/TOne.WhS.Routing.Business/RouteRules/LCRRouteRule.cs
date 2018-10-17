@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business
@@ -87,6 +88,36 @@ namespace TOne.WhS.Routing.Business
             if (options != null)
                 options = ApplyOptionsOrder(options);
         }
+
+        #endregion
+
+        #region Public Methods
+
+        public override bool AreSuppliersIncluded(IRouteRuleAreSuppliersIncludedContext context)
+        {
+            if (context.SupplierIds == null || context.SupplierIds.Count == 0 || ExcludedOptions == null || ExcludedOptions.Count == 0)
+                return true;
+
+            foreach (var supplierId in context.SupplierIds)
+            {
+                if (!ExcludedOptions.Any(item => item.SupplierId == supplierId))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public override string GetSuppliersDescription()
+        {
+            if (ExcludedOptions == null || ExcludedOptions.Count == 0)
+                return "All Suppliers";
+
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            IEnumerable<string> supplierNames = ExcludedOptions.Select(item => carrierAccountManager.GetCarrierAccountName(item.SupplierId));
+
+            return String.Format("All Suppliers Except: {0}", string.Join(", ", supplierNames));
+        }
+
 
         #endregion
 
