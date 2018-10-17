@@ -205,7 +205,7 @@ namespace TOne.WhS.Sales.Business
 				if (newRate.BED == minRateActionDate)
 					continue;
 
-				IEnumerable<SaleRateHistoryRecord> zoneRateHistory = GetCustomerZoneRateHistory(ratePlanContext.OwnerId, sellingProductId, newRate.ZoneName, newRate.RateTypeId, countryData.CountryId, targetCurrencyId, ratePlanContext.LongPrecision, ratePlanContext.CustomerZoneRateHistoryReader, null);
+				IEnumerable<SaleRateHistoryRecord> zoneRateHistory = GetCustomerZoneRateHistory(ratePlanContext.OwnerId, sellingProductId, newRate.ZoneName, null, countryData.CountryId, targetCurrencyId, ratePlanContext.LongPrecision, ratePlanContext.CustomerZoneRateHistoryReader, null);
 
 				if (zoneRateHistory == null || zoneRateHistory.Count() == 0)
 					throw new Vanrise.Entities.DataIntegrityValidationException("zoneRateHistory");
