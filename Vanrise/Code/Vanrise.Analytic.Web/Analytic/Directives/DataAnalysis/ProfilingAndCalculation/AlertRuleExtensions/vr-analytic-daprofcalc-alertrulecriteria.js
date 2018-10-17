@@ -5,6 +5,7 @@
     DAProfCalcAlertRuleCriteriaDirective.$inject = ["VR_Analytic_DAProfCalcOutputSettingsAPIService", "UtilsService", 'VRUIUtilsService', 'VRNotificationService', 'VR_Analytic_DAProfCalcOutputFieldTypeEnum', 'VR_Analytic_DataAnalysisDefinitionAPIService', 'VR_Analytic_DAProfCalcTimeUnitEnum'];
 
     function DAProfCalcAlertRuleCriteriaDirective(VR_Analytic_DAProfCalcOutputSettingsAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Analytic_DAProfCalcOutputFieldTypeEnum, VR_Analytic_DataAnalysisDefinitionAPIService, VR_Analytic_DAProfCalcTimeUnitEnum) {
+
         return {
             restrict: "E",
             scope: {
@@ -14,18 +15,20 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var daProfCalcAlertRuleCriteria = new DAProfCalcAlertRuleCriteria($scope, ctrl, $attrs);
-                daProfCalcAlertRuleCriteria.initializeController();
+                var ctor = new DAProfCalcAlertRuleCriteriaCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
             templateUrl: "/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/AlertRuleExtensions/Templates/DAProfCalcAlertRuleCriteriaTemplate.html"
         };
-        function DAProfCalcAlertRuleCriteria($scope, ctrl, $attrs) {
+
+        function DAProfCalcAlertRuleCriteriaCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
             var selectedOutputFields = [];
             var daProfCalcOutputItemDefinitionId;
-            var dataAnalysisItemOutputFields;
+            var dataAnalysisItemObj;
 
             var dataAnalysisRecordFilterDirectiveAPI;
             var dataAnalysisRecordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -39,8 +42,6 @@
 
             var dataAnalysisPeriodDirectiveAPI;
             var dataAnalysisPeriodDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-            var dataAnalysisItemObj;
 
             function initializeController() {
                 var promises = [dataAnalysisItemDefinitionSelectoReadyDeferred.promise, dataAnalysisRecordFilterDirectiveReadyDeferred.promise, groupingOutputFiledsReadyDeferred.promise];
@@ -59,7 +60,6 @@
                     groupingOutputFiledsAPI = api;
                     groupingOutputFiledsReadyDeferred.resolve();
                 };
-
                 $scope.scopeModel.onDataAnalysisPeriodDirectiveReady = function (api) {
                     dataAnalysisPeriodDirectiveAPI = api;
                     dataAnalysisPeriodDirectiveReadyDeferred.resolve();
@@ -146,8 +146,9 @@
                     var criteria;
 
                     if (payload != undefined) {
-                        dataAnalysisDefinitionId = payload.dataAnalysisDefinitionId;
                         $scope.scopeModel.rawRecordFilterLabel = payload.rawRecordFilterLabel;
+
+                        dataAnalysisDefinitionId = payload.dataAnalysisDefinitionId;
                         criteria = payload.criteria;
 
                         if (criteria != undefined) {
@@ -164,6 +165,7 @@
                             $scope.scopeModel.minNotificationInterval = '0.01:00:00';
                         }
                     }
+
                     //Loading Data Analysis Period Directive
                     var dataAnalysisPeriodDirectiveLoadPromise = getDataAnalysisPeriodDirectiveLoadPromise();
                     promises.push(dataAnalysisPeriodDirectiveLoadPromise);
@@ -238,6 +240,7 @@
 
                         return dataAnalysisItemDefinitionSelectorLoadDeferred.promise;
                     }
+
                     function getGroupingOutputFieldsPromise() {
                         var groupingOutputFieldsLoadDeferred = UtilsService.createPromiseDeferred();
 
