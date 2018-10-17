@@ -36,7 +36,8 @@ namespace TOne.WhS.Sales.Business
 				if ((zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Count() > 0) ||
 					(zoneData.OtherRatesToClose != null && zoneData.OtherRatesToClose.Count() > 0))
 				{
-					matchRule = GetMatchRule(ratePlanContext.OwnerId, zoneData.ZoneId, DateTime.Now);
+					matchRule = GetMatchRule(ratePlanContext.OwnerId, zoneData.ZoneId, ratePlanContext.EffectiveDate);
+
 					ruleBED = matchRule.BeginEffectiveTime.Date;
 					if (matchRule.EndEffectiveTime.HasValue)
 						ruleEED = matchRule.EndEffectiveTime.Value.Date;

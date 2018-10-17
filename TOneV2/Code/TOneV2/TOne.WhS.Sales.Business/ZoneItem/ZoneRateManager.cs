@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
@@ -33,6 +31,7 @@ namespace TOne.WhS.Sales.Business
 
 		private Guid _rateTypeRuleDefinitionId;
 		private IEnumerable<RateType> _rateTypes;
+		private List<int> _ownerZoneRateTypes = new List<int>();
 		private Vanrise.GenericData.Pricing.RateTypeRuleManager _rateTypeRuleManager;
 
 		private CurrencyManager _currencyManager;
@@ -73,6 +72,8 @@ namespace TOne.WhS.Sales.Business
 			SaleEntityZoneRate rate = (_ownerType == SalePriceListOwnerType.SellingProduct) ?
 				_rateLocator.GetSellingProductZoneRate(_ownerId, zoneItem.ZoneId) :
 				_rateLocator.GetCustomerZoneRate(_ownerId, (int)_sellingProductId, zoneItem.ZoneId);
+			_ownerZoneRateTypes = new List<int>();
+			SetZoneRateTypes(zoneItem);
 
 			if (rate != null)
 			{
@@ -94,16 +95,18 @@ namespace TOne.WhS.Sales.Business
 					{
 						SalePriceListOwnerType otherRateSource;
 						rate.SourcesByRateType.TryGetValue(kvp.Key, out otherRateSource);
-
-						zoneItem.CurrentOtherRates.Add(kvp.Key, new OtherRate()
+						if (_ownerZoneRateTypes != null && _ownerZoneRateTypes.Contains(kvp.Key))
 						{
-							RateTypeId = kvp.Key,
-							Rate = ConvertToCurrencyAndRound(kvp.Value),
-							CurrencyId = _saleRateManager.GetCurrencyId(kvp.Value),
-							IsRateEditable = otherRateSource == _ownerType,
-							BED = kvp.Value.BED,
-							EED = kvp.Value.EED
-						});
+							zoneItem.CurrentOtherRates.Add(kvp.Key, new OtherRate()
+							{
+								RateTypeId = kvp.Key,
+								Rate = ConvertToCurrencyAndRound(kvp.Value),
+								CurrencyId = _saleRateManager.GetCurrencyId(kvp.Value),
+								IsRateEditable = otherRateSource == _ownerType,
+								BED = kvp.Value.BED,
+								EED = kvp.Value.EED
+							});
+						}
 					}
 				}
 			}
@@ -113,7 +116,6 @@ namespace TOne.WhS.Sales.Business
 				SetFutureRates(zoneItem);
 
 			SetZoneRateChanges(zoneItem);
-			SetZoneRateTypes(zoneItem);
 		}
 
 		#endregion
@@ -156,16 +158,19 @@ namespace TOne.WhS.Sales.Business
 						SalePriceListOwnerType fututreOtherRateSource;
 						futureRate.SourcesByRateType.TryGetValue(kvp.Key, out fututreOtherRateSource);
 
-						if (kvp.Value.BED.Date > _effectiveOn.Date)
+						if (_ownerZoneRateTypes != null && _ownerZoneRateTypes.Contains(kvp.Key))
 						{
-							zoneItem.FutureOtherRates.Add(kvp.Key, new FutureRate()
+							if (kvp.Value.BED.Date > _effectiveOn.Date)
 							{
-								RateTypeId = kvp.Value.RateTypeId,
-								Rate = ConvertToCurrencyAndRound(kvp.Value),
-								IsRateEditable = fututreOtherRateSource == _ownerType,
-								BED = kvp.Value.BED,
-								EED = kvp.Value.EED
-							});
+								zoneItem.FutureOtherRates.Add(kvp.Key, new FutureRate()
+								{
+									RateTypeId = kvp.Value.RateTypeId,
+									Rate = ConvertToCurrencyAndRound(kvp.Value),
+									IsRateEditable = fututreOtherRateSource == _ownerType,
+									BED = kvp.Value.BED,
+									EED = kvp.Value.EED
+								});
+							}
 						}
 					}
 				}
@@ -256,13 +261,19 @@ namespace TOne.WhS.Sales.Business
 		private void SetZoneRateTypes(ZoneItem zoneItem)
 		{
 			if (_ownerType == SalePriceListOwnerType.SellingProduct)
+			{
 				zoneItem.RateTypes = _rateTypes.ToList();
+				_ownerZoneRateTypes = _rateTypes.Select(item => item.RateTypeId).ToList();
+			}
 			else
 			{
 				Vanrise.GenericData.Entities.GenericRuleTarget target = GetTarget(zoneItem.ZoneId, DateTime.Now);
 				IEnumerable<int> rateTypeIds = _rateTypeRuleManager.GetRateTypes(_rateTypeRuleDefinitionId, target);
 				if (rateTypeIds != null)
+				{
+					_ownerZoneRateTypes = rateTypeIds.ToList();
 					zoneItem.RateTypes = _rateTypes.FindAllRecords(x => rateTypeIds.Contains(x.RateTypeId)).ToList();
+				}
 			}
 		}
 

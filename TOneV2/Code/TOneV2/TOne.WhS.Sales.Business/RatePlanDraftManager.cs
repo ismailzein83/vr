@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business.Reader;
@@ -10,297 +8,314 @@ using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.GenericData.Pricing;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class RatePlanDraftManager
-    {
-        public Changes GetDraft(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
-        }
-        public bool DoesDraftExist(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            Changes draft = ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+	public class RatePlanDraftManager
+	{
+		public Changes GetDraft(SalePriceListOwnerType ownerType, int ownerId)
+		{
+			IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+			return ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+		}
+		public bool DoesDraftExist(SalePriceListOwnerType ownerType, int ownerId)
+		{
+			var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+			Changes draft = ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
 
-            if (draft == null)
-                return false;
+			if (draft == null)
+				return false;
 
-            if (draft.CountryChanges != null)
-                return true;
+			if (draft.CountryChanges != null)
+				return true;
 
-            if (draft.ZoneChanges != null)
-                return true;
+			if (draft.ZoneChanges != null)
+				return true;
 
-            if (draft.DefaultChanges != null)
-                if (draft.DefaultChanges.NewDefaultRoutingProduct != null || draft.DefaultChanges.DefaultRoutingProductChange != null)
-                    return true;
+			if (draft.DefaultChanges != null)
+				if (draft.DefaultChanges.NewDefaultRoutingProduct != null || draft.DefaultChanges.DefaultRoutingProductChange != null)
+					return true;
 
-            return false;
-        }
-        public CountryChanges GetCountryChanges(int customerId)
-        {
-            Changes draft = GetDraft(SalePriceListOwnerType.Customer, customerId);
-            if (draft != null)
-                return draft.CountryChanges;
-            return null;
-        }
+			return false;
+		}
+		public CountryChanges GetCountryChanges(int customerId)
+		{
+			Changes draft = GetDraft(SalePriceListOwnerType.Customer, customerId);
+			if (draft != null)
+				return draft.CountryChanges;
+			return null;
+		}
 
-        #region Save Draft
+		#region Save Draft
 
-        public void SaveDraft(SalePriceListOwnerType ownerType, int ownerId, Changes newChanges)
-        {
-            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+		public void SaveDraft(SalePriceListOwnerType ownerType, int ownerId, Changes newChanges)
+		{
+			var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
 
-            Changes existingChanges = ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
-            Changes allChanges = MergeChanges(existingChanges, newChanges);
+			Changes existingChanges = ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
+			Changes allChanges = MergeChanges(existingChanges, newChanges);
 
-            if (allChanges != null)
-                ratePlanDataManager.InsertOrUpdateChanges(ownerType, ownerId, allChanges, RatePlanStatus.Draft);
-        }
-        private Changes MergeChanges(Changes existingChanges, Changes newChanges)
-        {
-            return Merge(existingChanges, newChanges, () =>
-            {
-                Changes allChanges = new Changes();
+			if (allChanges != null)
+				ratePlanDataManager.InsertOrUpdateChanges(ownerType, ownerId, allChanges, RatePlanStatus.Draft);
+		}
+		private Changes MergeChanges(Changes existingChanges, Changes newChanges)
+		{
+			return Merge(existingChanges, newChanges, () =>
+			{
+				Changes allChanges = new Changes();
 
-                allChanges.CurrencyId = newChanges.CurrencyId;
-                allChanges.DefaultChanges = newChanges.DefaultChanges == null ? existingChanges.DefaultChanges : newChanges.DefaultChanges;
+				allChanges.CurrencyId = newChanges.CurrencyId;
+				allChanges.DefaultChanges = newChanges.DefaultChanges == null ? existingChanges.DefaultChanges : newChanges.DefaultChanges;
 
-                IEnumerable<DraftNewCountry> existingCountries = (existingChanges.CountryChanges != null) ? existingChanges.CountryChanges.NewCountries : null;
-                IEnumerable<DraftNewCountry> newCountries = (newChanges.CountryChanges != null) ? newChanges.CountryChanges.NewCountries : null;
-                IEnumerable<int> removedCountryIds = GetRemovedCountryIds(existingCountries, newCountries);
-                allChanges.CountryChanges = newChanges.CountryChanges;
-                allChanges.SubscriberOwnerEntities = newChanges.SubscriberOwnerEntities;
-                allChanges.ZoneChanges = MergeZoneChanges(existingChanges.ZoneChanges, newChanges.ZoneChanges, removedCountryIds);
+				IEnumerable<DraftNewCountry> existingCountries = (existingChanges.CountryChanges != null) ? existingChanges.CountryChanges.NewCountries : null;
+				IEnumerable<DraftNewCountry> newCountries = (newChanges.CountryChanges != null) ? newChanges.CountryChanges.NewCountries : null;
+				IEnumerable<int> removedCountryIds = GetRemovedCountryIds(existingCountries, newCountries);
+				allChanges.CountryChanges = newChanges.CountryChanges;
+				allChanges.SubscriberOwnerEntities = newChanges.SubscriberOwnerEntities;
+				allChanges.ZoneChanges = MergeZoneChanges(existingChanges.ZoneChanges, newChanges.ZoneChanges, removedCountryIds);
 
-                return allChanges;
-            });
-        }
-        private IEnumerable<int> GetRemovedCountryIds(IEnumerable<DraftNewCountry> existingCountries, IEnumerable<DraftNewCountry> newCountries)
-        {
-            if (existingCountries == null)
-                return null;
+				return allChanges;
+			});
+		}
+		private IEnumerable<int> GetRemovedCountryIds(IEnumerable<DraftNewCountry> existingCountries, IEnumerable<DraftNewCountry> newCountries)
+		{
+			if (existingCountries == null)
+				return null;
 
-            if (newCountries == null)
-                return existingCountries.MapRecords(x => x.CountryId);
+			if (newCountries == null)
+				return existingCountries.MapRecords(x => x.CountryId);
 
-            IEnumerable<int> existingCountryIds = existingCountries.MapRecords(x => x.CountryId);
-            IEnumerable<int> newCountryIds = newCountries.MapRecords(x => x.CountryId);
-            return existingCountryIds.FindAllRecords(x => !newCountryIds.Contains(x));
-        }
-        private List<ZoneChanges> MergeZoneChanges(List<ZoneChanges> existingZoneChanges, List<ZoneChanges> newZoneChanges, IEnumerable<int> removedCountryIds)
-        {
-            return Merge(existingZoneChanges, newZoneChanges, () =>
-            {
-                foreach (ZoneChanges existingZoneDraft in existingZoneChanges)
-                {
-                    if (!newZoneChanges.Any(x => x.ZoneId == existingZoneDraft.ZoneId))
-                        newZoneChanges.Add(existingZoneDraft);
-                }
-                if (removedCountryIds != null)
-                    return newZoneChanges.FindAll(x => !removedCountryIds.Contains(x.CountryId));
-                else
-                    return newZoneChanges;
-            });
-        }
-        private T Merge<T>(T existingChanges, T newChanges, Func<T> mergeLogic) where T : class
-        {
-            if (existingChanges != null && newChanges != null)
-                return mergeLogic();
-            return existingChanges != null ? existingChanges : newChanges;
-        }
+			IEnumerable<int> existingCountryIds = existingCountries.MapRecords(x => x.CountryId);
+			IEnumerable<int> newCountryIds = newCountries.MapRecords(x => x.CountryId);
+			return existingCountryIds.FindAllRecords(x => !newCountryIds.Contains(x));
+		}
+		private List<ZoneChanges> MergeZoneChanges(List<ZoneChanges> existingZoneChanges, List<ZoneChanges> newZoneChanges, IEnumerable<int> removedCountryIds)
+		{
+			return Merge(existingZoneChanges, newZoneChanges, () =>
+			{
+				foreach (ZoneChanges existingZoneDraft in existingZoneChanges)
+				{
+					if (!newZoneChanges.Any(x => x.ZoneId == existingZoneDraft.ZoneId))
+						newZoneChanges.Add(existingZoneDraft);
+				}
+				if (removedCountryIds != null)
+					return newZoneChanges.FindAll(x => !removedCountryIds.Contains(x.CountryId));
+				else
+					return newZoneChanges;
+			});
+		}
+		private T Merge<T>(T existingChanges, T newChanges, Func<T> mergeLogic) where T : class
+		{
+			if (existingChanges != null && newChanges != null)
+				return mergeLogic();
+			return existingChanges != null ? existingChanges : newChanges;
+		}
 
-        #endregion
+		#endregion
 
-        public bool DeleteDraft(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return ratePlanDataManager.CancelRatePlanChanges(ownerType, ownerId);
-        }
-        public int? GetDraftCurrencyId(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            Changes draft = GetDraft(ownerType, ownerId);
-            if (draft != null)
-                return draft.CurrencyId;
-            return null;
-        }
+		public bool DeleteDraft(SalePriceListOwnerType ownerType, int ownerId)
+		{
+			var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+			return ratePlanDataManager.CancelRatePlanChanges(ownerType, ownerId);
+		}
+		public int? GetDraftCurrencyId(SalePriceListOwnerType ownerType, int ownerId)
+		{
+			Changes draft = GetDraft(ownerType, ownerId);
+			if (draft != null)
+				return draft.CurrencyId;
+			return null;
+		}
 
-        public List<SubscriberOwnerEntity> GetDraftSubscriberOwnerEntities(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            Changes draft = GetDraft(ownerType, ownerId);
-            if (draft != null)
-                return draft.SubscriberOwnerEntities;
-            return null;
-        }
+		public List<SubscriberOwnerEntity> GetDraftSubscriberOwnerEntities(SalePriceListOwnerType ownerType, int ownerId)
+		{
+			Changes draft = GetDraft(ownerType, ownerId);
+			if (draft != null)
+				return draft.SubscriberOwnerEntities;
+			return null;
+		}
 
-        public SellingZonesWithDefaultRatesTaskData GetSellingZonesWithDefaultRatesTaskData(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return ratePlanDataManager.GetDraftTaskData(ownerType, ownerId, RatePlanStatus.Draft).SellingZonesWithDefaultRatesTaskData;
-        }
-        public void InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status)
-        {
-            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-             ratePlanDataManager.InsertOrUpdateDraftTaskData(ownerType, ownerId, draftTaskData, RatePlanStatus.Draft);
-        }
+		public SellingZonesWithDefaultRatesTaskData GetSellingZonesWithDefaultRatesTaskData(SalePriceListOwnerType ownerType, int ownerId)
+		{
+			IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+			return ratePlanDataManager.GetDraftTaskData(ownerType, ownerId, RatePlanStatus.Draft).SellingZonesWithDefaultRatesTaskData;
+		}
+		public void InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status)
+		{
+			var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+			ratePlanDataManager.InsertOrUpdateDraftTaskData(ownerType, ownerId, draftTaskData, RatePlanStatus.Draft);
+		}
 
-        #region Define New Rates Converted To Currency
+		#region Define New Rates Converted To Currency
 
-        public void DefineNewRatesConvertedToCurrency(DefineNewRatesConvertedToCurrencyInput input)
-        {
-            var ratePlanManager = new RatePlanManager();
+		public void DefineNewRatesConvertedToCurrency(DefineNewRatesConvertedToCurrencyInput input)
+		{
+			var ratePlanManager = new RatePlanManager();
 
-            Changes draft = GetDraft(SalePriceListOwnerType.Customer, input.CustomerId);
-            IEnumerable<SaleZone> allZones = ratePlanManager.GetSaleZones(SalePriceListOwnerType.Customer, input.CustomerId, input.EffectiveOn, true);
+			Changes draft = GetDraft(SalePriceListOwnerType.Customer, input.CustomerId);
+			IEnumerable<SaleZone> allZones = ratePlanManager.GetSaleZones(SalePriceListOwnerType.Customer, input.CustomerId, input.EffectiveOn, true);
 
-            var updatedZoneDrafts = new List<ZoneChanges>();
-            var zoneDraftsByZoneId = new Dictionary<long, ZoneChanges>();
+			var updatedZoneDrafts = new List<ZoneChanges>();
+			var zoneDraftsByZoneId = new Dictionary<long, ZoneChanges>();
 
-            if (draft != null)
-            {
-                draft.CurrencyId = input.NewCurrencyId;
+			if (draft != null)
+			{
+				draft.CurrencyId = input.NewCurrencyId;
 
-                if (draft.ZoneChanges != null)
-                    zoneDraftsByZoneId = draft.ZoneChanges.ToDictionary(x => x.ZoneId);
-            }
-            else
-            {
-                draft = new Changes();
-                draft.CurrencyId = input.NewCurrencyId;
-                draft.ZoneChanges = new List<ZoneChanges>();
-            }
+				if (draft.ZoneChanges != null)
+					zoneDraftsByZoneId = draft.ZoneChanges.ToDictionary(x => x.ZoneId);
+			}
+			else
+			{
+				draft = new Changes();
+				draft.CurrencyId = input.NewCurrencyId;
+				draft.ZoneChanges = new List<ZoneChanges>();
+			}
 
-            if (allZones != null)
-            {
-                IEnumerable<long> filteredZoneIds;
-                IEnumerable<SaleZone> filteredZones = GetFilteredZones(allZones, input.NewCountryIds, out filteredZoneIds);
+			if (allZones != null)
+			{
+				IEnumerable<long> filteredZoneIds;
+				IEnumerable<SaleZone> filteredZones = GetFilteredZones(allZones, input.NewCountryIds, out filteredZoneIds);
 
-                int sellingProductId = new CarrierAccountManager().GetSellingProductId(input.CustomerId);
-                Dictionary<int, DateTime> countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(input.CustomerId, input.EffectiveOn, true);
-                Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(filteredZones, countryBEDsByCountryId);
-                var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadRPChanges(input.CustomerId, sellingProductId, filteredZoneIds, DateTime.Today, zoneEffectiveDatesByZoneId));
+				int sellingProductId = new CarrierAccountManager().GetSellingProductId(input.CustomerId);
+				Dictionary<int, DateTime> countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(input.CustomerId, input.EffectiveOn, true);
+				Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(filteredZones, countryBEDsByCountryId);
+				var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadRPChanges(input.CustomerId, sellingProductId, filteredZoneIds, DateTime.Today, zoneEffectiveDatesByZoneId));
 
-                int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+				int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
 
-                var saleRateManager = new SaleRateManager();
-                var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+				var saleRateManager = new SaleRateManager();
+				var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
-                foreach (SaleZone zone in filteredZones)
-                {
-                    SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(input.CustomerId, sellingProductId, zone.SaleZoneId);
+				RateTypeRuleManager rateTypeRuleManager = new RateTypeRuleManager();
 
-                    if (zoneRate != null && zoneRate.Rate != null && saleRateManager.GetCurrencyId(zoneRate.Rate) != input.NewCurrencyId)
-                    {
-                        ZoneChanges zoneDraft = zoneDraftsByZoneId.GetOrCreateItem(zone.SaleZoneId, () =>
-                        {
-                            return new ZoneChanges()
-                            {
-                                ZoneId = zone.SaleZoneId,
-                                ZoneName = zone.Name,
-                                CountryId = zone.CountryId
-                            };
-                        });
+				foreach (SaleZone zone in filteredZones)
+				{
+					Vanrise.GenericData.Entities.GenericRuleTarget target = GetTarget(zone.SaleZoneId, input.CustomerId, DateTime.Now);
+					IEnumerable<int> rateTypeIds = rateTypeRuleManager.GetRateTypes(new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B"), target);
 
-                        var newRates = new List<DraftRateToChange>();
+					SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(input.CustomerId, sellingProductId, zone.SaleZoneId);
 
-                        DateTime newRateBED;
+					if (zoneRate != null && zoneRate.Rate != null && saleRateManager.GetCurrencyId(zoneRate.Rate) != input.NewCurrencyId)
+					{
+						ZoneChanges zoneDraft = zoneDraftsByZoneId.GetOrCreateItem(zone.SaleZoneId, () =>
+						{
+							return new ZoneChanges()
+							{
+								ZoneId = zone.SaleZoneId,
+								ZoneName = zone.Name,
+								CountryId = zone.CountryId
+							};
+						});
 
-                        if (draft!=null && draft.CountryChanges!=null && draft.CountryChanges.NewCountries!=null && draft.CountryChanges.NewCountries.Any(item => item.CountryId == zone.CountryId))
-                        {
-                            if (!countryBEDsByCountryId.TryGetValue(zone.CountryId, out newRateBED))
-                                throw new DataIntegrityValidationException(string.Format("The effective date of zone '{0}' was not found", zone.Name));
-                            newRateBED = Utilities.Max(newRateBED, zone.BED);
-                        }
-                        else
-                        {
-                            if (!zoneEffectiveDatesByZoneId.TryGetValue(zone.SaleZoneId, out newRateBED))
-                                throw new DataIntegrityValidationException(string.Format("The effective date of zone '{0}' was not found", zone.Name));
-                        }
+						var newRates = new List<DraftRateToChange>();
 
-                        newRates.Add(new DraftRateToChange()
-                        {
-                            RateTypeId = null,
-                            ZoneId = zone.SaleZoneId,
-                            Rate = ConvertToCurrencyAndRound(zoneRate.Rate.Rate, saleRateManager.GetCurrencyId(zoneRate.Rate), input.NewCurrencyId, input.EffectiveOn, longPrecision, currencyExchangeRateManager),
-                            CurrencyId = input.NewCurrencyId,
-                            BED = newRateBED,
-                            EED = null
-                        });
+						DateTime newRateBED;
 
-                        if (zoneRate.RatesByRateType != null)
-                        {
-                            foreach (SaleRate otherRate in zoneRate.RatesByRateType.Values)
-                            {
-                                newRates.Add(new DraftRateToChange()
-                                {
-                                    RateTypeId = otherRate.RateTypeId,
-                                    ZoneId = zone.SaleZoneId,
-                                    Rate = ConvertToCurrencyAndRound(otherRate.Rate, saleRateManager.GetCurrencyId(otherRate), input.NewCurrencyId, input.EffectiveOn, longPrecision, currencyExchangeRateManager),
-                                    CurrencyId = input.NewCurrencyId,
-                                    BED = newRateBED,
-                                    EED = null
-                                });
-                            }
-                        }
+						if (draft != null && draft.CountryChanges != null && draft.CountryChanges.NewCountries != null && draft.CountryChanges.NewCountries.Any(item => item.CountryId == zone.CountryId))
+						{
+							if (!countryBEDsByCountryId.TryGetValue(zone.CountryId, out newRateBED))
+								throw new DataIntegrityValidationException(string.Format("The effective date of zone '{0}' was not found", zone.Name));
+							newRateBED = Utilities.Max(newRateBED, zone.BED);
+						}
+						else
+						{
+							if (!zoneEffectiveDatesByZoneId.TryGetValue(zone.SaleZoneId, out newRateBED))
+								throw new DataIntegrityValidationException(string.Format("The effective date of zone '{0}' was not found", zone.Name));
+						}
 
-                        zoneDraft.NewRates = newRates;
-                        updatedZoneDrafts.Add(zoneDraft);
-                    }
-                    else
-                    {
-                        ZoneChanges zoneDraft = zoneDraftsByZoneId.GetRecord(zone.SaleZoneId);
+						newRates.Add(new DraftRateToChange()
+						{
+							RateTypeId = null,
+							ZoneId = zone.SaleZoneId,
+							Rate = ConvertToCurrencyAndRound(zoneRate.Rate.Rate, saleRateManager.GetCurrencyId(zoneRate.Rate), input.NewCurrencyId, input.EffectiveOn, longPrecision, currencyExchangeRateManager),
+							CurrencyId = input.NewCurrencyId,
+							BED = newRateBED,
+							EED = null
+						});
 
-                        if (zoneDraft != null)
-                        {
-                            zoneDraft.NewRates = null;
-                            updatedZoneDrafts.Add(zoneDraft);
-                        }
-                    }
-                }
-            }
+						if (zoneRate.RatesByRateType != null)
+						{
+							foreach (SaleRate otherRate in zoneRate.RatesByRateType.Values)
+							{
+								if (rateTypeIds != null && rateTypeIds.Any(item => item == otherRate.RateTypeId))
+								{
+									newRates.Add(new DraftRateToChange()
+									{
+										RateTypeId = otherRate.RateTypeId,
+										ZoneId = zone.SaleZoneId,
+										Rate = ConvertToCurrencyAndRound(otherRate.Rate, saleRateManager.GetCurrencyId(otherRate), input.NewCurrencyId, input.EffectiveOn, longPrecision, currencyExchangeRateManager),
+										CurrencyId = input.NewCurrencyId,
+										BED = newRateBED,
+										EED = null
+									});
+								}
+							}
+						}
 
-            draft.ZoneChanges = updatedZoneDrafts;
-            SaveDraft(SalePriceListOwnerType.Customer, input.CustomerId, draft);
-        }
-        private IEnumerable<SaleZone> GetFilteredZones(IEnumerable<SaleZone> zones, IEnumerable<int> newCountryIds, out IEnumerable<long> filteredZoneIds)
-        {
-            var filteredZones = new List<SaleZone>();
-            var filteredZoneIdsValue = new List<long>();
+						zoneDraft.NewRates = newRates;
+						updatedZoneDrafts.Add(zoneDraft);
+					}
+					else
+					{
+						ZoneChanges zoneDraft = zoneDraftsByZoneId.GetRecord(zone.SaleZoneId);
 
-            bool doNewCountriesExist = (newCountryIds != null && newCountryIds.Count() > 0);
+						if (zoneDraft != null)
+						{
+							zoneDraft.NewRates = null;
+							updatedZoneDrafts.Add(zoneDraft);
+						}
+					}
+				}
+			}
 
-            foreach (SaleZone zone in zones)
-            {
-                if (!doNewCountriesExist || newCountryIds.Contains(zone.CountryId))
-                {
-                    filteredZones.Add(zone);
-                    filteredZoneIdsValue.Add(zone.SaleZoneId);
-                }
-            }
+			draft.ZoneChanges = updatedZoneDrafts;
+			SaveDraft(SalePriceListOwnerType.Customer, input.CustomerId, draft);
+		}
+		private IEnumerable<SaleZone> GetFilteredZones(IEnumerable<SaleZone> zones, IEnumerable<int> newCountryIds, out IEnumerable<long> filteredZoneIds)
+		{
+			var filteredZones = new List<SaleZone>();
+			var filteredZoneIdsValue = new List<long>();
 
-            filteredZoneIds = filteredZoneIdsValue;
-            return filteredZones;
-        }
+			bool doNewCountriesExist = (newCountryIds != null && newCountryIds.Count() > 0);
 
-        #endregion
+			foreach (SaleZone zone in zones)
+			{
+				if (!doNewCountriesExist || newCountryIds.Contains(zone.CountryId))
+				{
+					filteredZones.Add(zone);
+					filteredZoneIdsValue.Add(zone.SaleZoneId);
+				}
+			}
 
-        #region Private Methods
+			filteredZoneIds = filteredZoneIdsValue;
+			return filteredZones;
+		}
 
-        private decimal ConvertToCurrencyAndRound(decimal rate, int fromCurrencyId, int toCurrencyId, DateTime exchangeRateDate, int decimalPrecision, Vanrise.Common.Business.CurrencyExchangeRateManager exchangeRateManager)
-        {
-            return UtilitiesManager.ConvertToCurrencyAndRound(rate, fromCurrencyId, toCurrencyId, exchangeRateDate, decimalPrecision, exchangeRateManager);
-        }
+		#endregion
 
-        #endregion
-    }
+		#region Private Methods
 
-    public class SaveCountryChangesInput
-    {
-        public SalePriceListOwnerType OwnerType { get; set; }
-        public int OwnerId { get; set; }
-        public CountryChanges CountryChanges { get; set; }
-    }
+		private decimal ConvertToCurrencyAndRound(decimal rate, int fromCurrencyId, int toCurrencyId, DateTime exchangeRateDate, int decimalPrecision, Vanrise.Common.Business.CurrencyExchangeRateManager exchangeRateManager)
+		{
+			return UtilitiesManager.ConvertToCurrencyAndRound(rate, fromCurrencyId, toCurrencyId, exchangeRateDate, decimalPrecision, exchangeRateManager);
+		}
+		private Vanrise.GenericData.Entities.GenericRuleTarget GetTarget(long zoneId, int customerId, DateTime? effectiveDate)
+		{
+			var target = new Vanrise.GenericData.Entities.GenericRuleTarget();
+			target.TargetFieldValues = new Dictionary<string, object>();
+			target.TargetFieldValues.Add("CustomerId", customerId);
+			target.TargetFieldValues.Add("SaleZoneId", zoneId);
+			target.EffectiveOn = effectiveDate;
+			return target;
+		}
+		#endregion
+	}
+
+	public class SaveCountryChangesInput
+	{
+		public SalePriceListOwnerType OwnerType { get; set; }
+		public int OwnerId { get; set; }
+		public CountryChanges CountryChanges { get; set; }
+	}
 }

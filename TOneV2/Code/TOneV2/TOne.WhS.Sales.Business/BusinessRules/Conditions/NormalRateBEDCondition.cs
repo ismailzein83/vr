@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
@@ -19,7 +18,6 @@ namespace TOne.WhS.Sales.Business
 		public override bool Validate(IBusinessRuleConditionValidateContext context)
 		{
 			var ratePlanContext = context.GetExtension<IRatePlanContext>();
-			//TODO: Throw a new data integrity validation exception
 
 			if (ratePlanContext.OwnerType == SalePriceListOwnerType.Customer)
 			{
@@ -40,7 +38,7 @@ namespace TOne.WhS.Sales.Business
 
 						if (lastCustomerRate == null)
 							throw new VRBusinessException(string.Format("Zone {0} has no rates set neither for customer nor for selling product", zoneData.ZoneName));
-						if (lastCustomerRate.RatesByRateType != null && lastCustomerRate.RatesByRateType.Values.Any())
+						if (lastCustomerRate.RatesByRateType != null && lastCustomerRate.RatesByRateType.Values.Count > 0)
 						{
 							var max = lastCustomerRate.RatesByRateType.Values.MaxBy(item => item.BED).BED;
 							if (zoneData.NormalRateToChange.BED < max)
@@ -50,10 +48,10 @@ namespace TOne.WhS.Sales.Business
 				}
 
 				if (zoneWithNormalBEDLessThanOtherRatesBED.Count > 0)
-                {
-                    context.Message = string.Format("Zone(s) '{0}' are having new normal rate with BED less than the BED of existing other rates", string.Join(",", zoneWithNormalBEDLessThanOtherRatesBED));
-                    return false;
-                }
+				{
+					context.Message = string.Format("Zone(s) '{0}' are having new normal rate with BED less than the BED of existing other rates", string.Join(",", zoneWithNormalBEDLessThanOtherRatesBED));
+					return false;
+				}
 			}
 			return true;
 		}

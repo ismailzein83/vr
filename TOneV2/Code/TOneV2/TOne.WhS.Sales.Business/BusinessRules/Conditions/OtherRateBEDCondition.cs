@@ -45,11 +45,15 @@ namespace TOne.WhS.Sales.Business
 
 						if (lastCustomerRate == null)
 							throw new VRBusinessException(string.Format("Zone {0} has no rates set neither for customer nor for selling product", zoneData.ZoneName));
-						if (lastCustomerRate.RatesByRateType != null && lastCustomerRate.RatesByRateType.Values.Any())
+						if (lastCustomerRate.RatesByRateType != null && lastCustomerRate.RatesByRateType.Values.Count > 0)
 						{
 							var max = lastCustomerRate.RatesByRateType.Values.MaxBy(item => item.BED).BED;
 							if (zoneData.OtherRatesToChange.First().BED < max)
 								zoneWithInvalidOtherRateBED.Add(zoneData.ZoneName);
+						}
+						if (zoneData.OtherRatesToChange.First().BED < lastCustomerRate.Rate.BED && zoneData.NormalRateToChange == null)
+						{
+							zoneWithInvalidBED.Add(zoneData.ZoneName);
 						}
 						if (zoneData.OtherRatesToChange.First().BED < lastCustomerRate.Rate.BED && (zoneData.NormalRateToChange != null && currentCustomerRate != null && zoneData.OtherRatesToChange.First().BED < zoneData.NormalRateToChange.BED))
 						{
