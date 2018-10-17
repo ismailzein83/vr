@@ -1,28 +1,123 @@
-﻿<Activity x:Class="TestCallAnalysis.BP.CDRCorrelationAndAnalysisProcess" 
-          xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" 
-          mc:Ignorable="sap2010"
-          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-          sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#"
-          xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
-          xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"   
-          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"> 
-    <TextExpression.NamespacesForImplementation>
-        <sco:Collection x:TypeArguments="x:String">
-            <x:String>System</x:String>
-            <x:String>System.Collections.Generic</x:String>
-            <x:String>System.Data</x:String>
-            <x:String>System.Linq</x:String>
-            <x:String>System.Text</x:String>
-        </sco:Collection>
-    </TextExpression.NamespacesForImplementation>
-    <TextExpression.ReferencesForImplementation>
-        <sco:Collection x:TypeArguments="AssemblyReference">
-            <AssemblyReference>mscorlib</AssemblyReference>
-            <AssemblyReference>System</AssemblyReference>
-            <AssemblyReference>System.Core</AssemblyReference>
-            <AssemblyReference>System.Data</AssemblyReference>
-            <AssemblyReference>System.ServiceModel</AssemblyReference>
-            <AssemblyReference>System.Xml</AssemblyReference>
-        </sco:Collection>
-    </TextExpression.ReferencesForImplementation>
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TestCallAnalysis.BP.CDRCorrelationAndAnalysisProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:tba="clr-namespace:TestCallAnalysis.BP.Arguments;assembly=TestCallAnalysis.BP.Arguments"
+ xmlns:tba1="clr-namespace:TestCallAnalysis.BP.Activities;assembly=TestCallAnalysis.BP.Activities"
+ xmlns:te="clr-namespace:TestCallAnalysis.Entities;assembly=TestCallAnalysis.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(tba:CDRCorrelationAndAnalysisProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TestCallAnalysis.BP.CDRCorrelationAndAnalysisProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TestCallAnalysis.BP.Arguments</x:String>
+      <x:String>TestCallAnalysis.Entities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TestCallAnalysis.BP.Activities</AssemblyReference>
+      <AssemblyReference>TestCallAnalysis.Entities</AssemblyReference>
+      <AssemblyReference>TestCallAnalysis.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TestCallAnalysis.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="s:Nullable(x:Int64)" Name="lastImportedId" />
+      <Variable x:TypeArguments="x:Boolean" Name="newDataImported" />
+      <Variable x:TypeArguments="scg:List(te:CDRCorrelationFilterGroup)" Name="cdrCorrelationFilterGroups" />
+      <Variable x:TypeArguments="te:CDRCorrelationProcessState" Name="CDRCorrelationProcessState" />
+    </Sequence.Variables>
+    <tba1:BuildCDRCorrelationFilterGroup sap2010:WorkflowViewState.IdRef="BuildCDRCorrelationFilterGroup_1">
+      <tba1:BuildCDRCorrelationFilterGroup.BatchIntervalTime>
+        <InArgument x:TypeArguments="x:TimeSpan">
+          <mca:CSharpValue x:TypeArguments="x:TimeSpan">DateTime.Now.TimeOfDay</mca:CSharpValue>
+        </InArgument>
+      </tba1:BuildCDRCorrelationFilterGroup.BatchIntervalTime>
+      <tba1:BuildCDRCorrelationFilterGroup.CDRCorrelationFilterGroups>
+        <OutArgument x:TypeArguments="scg:List(te:CDRCorrelationFilterGroup)">
+          <mca:CSharpReference x:TypeArguments="scg:List(te:CDRCorrelationFilterGroup)">cdrCorrelationFilterGroups</mca:CSharpReference>
+        </OutArgument>
+      </tba1:BuildCDRCorrelationFilterGroup.CDRCorrelationFilterGroups>
+      <tba1:BuildCDRCorrelationFilterGroup.CDRCorrelationProcessState>
+        <InArgument x:TypeArguments="te:CDRCorrelationProcessState">
+          <mca:CSharpValue x:TypeArguments="te:CDRCorrelationProcessState">CDRCorrelationProcessState</mca:CSharpValue>
+        </InArgument>
+      </tba1:BuildCDRCorrelationFilterGroup.CDRCorrelationProcessState>
+      <tba1:BuildCDRCorrelationFilterGroup.DateTimeMargin>
+        <InArgument x:TypeArguments="x:TimeSpan">
+          <mca:CSharpValue x:TypeArguments="x:TimeSpan">Input.DateTimeMargin</mca:CSharpValue>
+        </InArgument>
+      </tba1:BuildCDRCorrelationFilterGroup.DateTimeMargin>
+      <tba1:BuildCDRCorrelationFilterGroup.LastImportedId>
+        <OutArgument x:TypeArguments="s:Nullable(x:Int64)">
+          <mca:CSharpReference x:TypeArguments="s:Nullable(x:Int64)">lastImportedId</mca:CSharpReference>
+        </OutArgument>
+      </tba1:BuildCDRCorrelationFilterGroup.LastImportedId>
+      <tba1:BuildCDRCorrelationFilterGroup.NewDataImported>
+        <OutArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpReference x:TypeArguments="x:Boolean">newDataImported</mca:CSharpReference>
+        </OutArgument>
+      </tba1:BuildCDRCorrelationFilterGroup.NewDataImported>
+    </tba1:BuildCDRCorrelationFilterGroup>
+    <If sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">newDataImported</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Sequence DisplayName="CorrelateCDRsSequence" sap2010:WorkflowViewState.IdRef="Sequence_2" />
+      </If.Then>
+    </If>
+    <sads:DebugSymbol.Symbol>d0xDOlxURlNcUmV0YWlsXENvZGVcVGVzdENhbGxBbmFseXNpcy5CUFxDRFJDb3JyZWxhdGlvbkFuZEFuYWx5c2lzUHJvY2Vzcy54YW1sCzMDZQ4CAQE6BVkrAgEKWgVjCgIBAj0LPWECASlCC0KJAQIBI0cLR3gCAR1RC1FqAgEXVgtWYQIBEUwLTF8CAQtdC11ZAgEDYQlhZgIBCQ==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="BuildCDRCorrelationFilterGroup_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="200,99">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,249" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,435">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TestCallAnalysis.BP.CDRCorrelationAndAnalysisProcess_1" sap:VirtualizedContainerService.HintSize="526,515" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -47,6 +47,16 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.WFActivities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,6 +66,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TestCallAnalysis.BP.Activities\TestCallAnalysis.BP.Activities.csproj">
+      <Project>{9569C863-FAA1-49AF-95A9-4C295FC9F206}</Project>
+      <Name>TestCallAnalysis.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCallAnalysis.BP.Arguments\TestCallAnalysis.BP.Arguments.csproj">
+      <Project>{cffa10a5-a267-460f-9f33-30e41284a02c}</Project>
+      <Name>TestCallAnalysis.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCallAnalysis.Entities\TestCallAnalysis.Entities.csproj">
+      <Project>{7247a3c2-23b2-42f9-aced-2e2884953be3}</Project>
+      <Name>TestCallAnalysis.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
