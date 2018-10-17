@@ -857,6 +857,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
             int parameterIndex = 0;
             string tableName = GetTableNameWithSchema();
+            var idColumn = GetIdColumn();
 
             StringBuilder ifNotExistsQueryBuilder = new StringBuilder();
             StringBuilder columnNamesBuilder = new StringBuilder();
@@ -879,11 +880,14 @@ namespace Vanrise.GenericData.SQLDataStorage
 
                 if (sqlDataRecordStorageColumn.IsUnique)
                 {
-                    if (ifNotExistsQueryBuilder.Length > 0)
+                    if (idColumn.Name != fieldValue.Key)
                     {
-                        ifNotExistsQueryBuilder.Append(" AND ");
+                        if (ifNotExistsQueryBuilder.Length > 0)
+                        {
+                            ifNotExistsQueryBuilder.Append(" AND ");
+                        }
+                        ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
                     }
-                    ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
                 }
                 if (parameterIndex != 1)
                 {
@@ -893,7 +897,6 @@ namespace Vanrise.GenericData.SQLDataStorage
                 columnNamesBuilder.AppendFormat(@" {0} ", sqlDataRecordStorageColumn.ColumnName);
                 valuesQuery.AppendFormat(@" {0} ", parameter);
             }
-            var idColumn = GetIdColumn();
             if (idColumn != null)
             {
                 withOutParameter = true;
@@ -1139,26 +1142,28 @@ namespace Vanrise.GenericData.SQLDataStorage
 
                 if (sqlDataRecordStorageColumn.IsUnique)
                 {
+                    if(idColumn.Name!=fieldValue.Key)
+                    {
+                        if (ifNotExistsQueryBuilder.Length > 0)
+                        {
+                            ifNotExistsQueryBuilder.Append(" AND ");
+                        }
+                        shouldAddIfExist = true;
+                        ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                    }
+                }
+                if (idColumn.Name == fieldValue.Key)
+                {
                     if (ifNotExistsQueryBuilder.Length > 0)
                     {
                         ifNotExistsQueryBuilder.Append(" AND ");
                     }
-                    if (idColumn.Name == fieldValue.Key)
-                    {
-                        ifNotExistsQueryBuilder.AppendFormat("{0} != {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
-                        if (whereQuery.Length != 0)
-                            whereQuery.Append(" AND ");
-                        whereQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
-                    }
-                    else
-                    {
-                        shouldAddIfExist = true;
-                        ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
-                    }
-
-
+                    ifNotExistsQueryBuilder.AppendFormat("{0} != {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                    if (whereQuery.Length != 0)
+                        whereQuery.Append(" AND ");
+                    whereQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
                 }
-                if (idColumn.Name != fieldValue.Key)
+                else
                 {
                     if (valuesQuery.Length != 0)
                         valuesQuery.Append(",");
