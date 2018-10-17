@@ -651,5 +651,6 @@
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfExcludedCountries.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfImportedZoneRates.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfImportedCodes.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListRateChangeNew_GetCustomerRatePreviewZonePairs.sql" />
   </ItemGroup>
 </Project>

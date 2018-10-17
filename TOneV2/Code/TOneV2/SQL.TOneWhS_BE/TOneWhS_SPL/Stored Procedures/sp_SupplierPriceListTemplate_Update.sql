@@ -13,7 +13,7 @@ AS
 BEGIN
 
 	UPDATE [TOneWhS_SPL].SupplierPriceListTemplate
-	SET  SupplierID = @SupplierId, ConfigDetails = @ConfigDetails , Draft = @Draft
-	WHERE ID = @ID
+	SET  ConfigDetails = @ConfigDetails , Draft = @Draft
+	WHERE ID = @ID and SupplierID = @SupplierId
 
 END
