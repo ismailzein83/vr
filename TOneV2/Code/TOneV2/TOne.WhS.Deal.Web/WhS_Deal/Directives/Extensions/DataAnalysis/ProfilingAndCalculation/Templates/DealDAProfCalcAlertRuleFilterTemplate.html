@@ -1,0 +1,11 @@
+﻿<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-select on-ready="scopeModel.onDealAlertRuleFilterTypeSelectorReady"
+               datasource="scopeModel.datasource"
+               selectedvalues="scopeModel.selectedvalues"
+               datavaluefield="value"
+               datatextfield="description"
+               isrequired="ctrl.isrequired"
+               entityName="Traffic Filter"
+               label="Traffic Filter" hideremoveicon>
+    </vr-select>
+</vr-columns>

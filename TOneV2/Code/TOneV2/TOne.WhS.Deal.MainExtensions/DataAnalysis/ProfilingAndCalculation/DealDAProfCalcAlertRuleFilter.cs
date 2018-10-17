@@ -11,11 +11,11 @@ namespace TOne.WhS.Deal.MainExtensions.DataAnalysis.ProfilingAndCalculation
     {
         public override Guid ConfigId { get { return new Guid("E22E8134-2C77-4F8C-85CA-F8D26206D42C"); } }
 
-        public DealDAProfCalcAlertRuleFilterType DealAlertRuleFilterType { get; set; }
+        public DealDAProfCalcAlertRuleFilterType DealDAProfCalcAlertRuleFilterType { get; set; }
 
         public override RecordFilterGroup GetRecordFilterGroup(IDAProfCalcGetRecordFilterGroupContext context)
         {
-            switch (this.DealAlertRuleFilterType)
+            switch (this.DealDAProfCalcAlertRuleFilterType)
             {
                 case DealDAProfCalcAlertRuleFilterType.Sale:
                     RecordFilterGroup saleDealRecordFilterGroup = new RecordFilterGroup();
@@ -37,7 +37,7 @@ namespace TOne.WhS.Deal.MainExtensions.DataAnalysis.ProfilingAndCalculation
                     saleOrCostDealRecordFilterGroup.Filters.Add(GetCostDealRecordFilter());
                     return saleOrCostDealRecordFilterGroup;
 
-                default: throw new NotSupportedException(string.Format("DealAlertRuleFilterType '{0}'", this.DealAlertRuleFilterType));
+                default: throw new NotSupportedException(string.Format("DealAlertRuleFilterType '{0}'", this.DealDAProfCalcAlertRuleFilterType));
             }
         }
 

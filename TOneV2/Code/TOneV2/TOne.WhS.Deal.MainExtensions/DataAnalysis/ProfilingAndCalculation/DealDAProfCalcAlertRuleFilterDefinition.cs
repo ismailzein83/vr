@@ -11,6 +11,6 @@ namespace TOne.WhS.Deal.MainExtensions.DataAnalysis.ProfilingAndCalculation
     {
         public override Guid ConfigId { get { return new Guid("9CA79A5E-D8F5-4927-96D3-0F7568F87265"); } }
 
-        public override string RuntimeEditor { get { return ""; } }
+        public override string RuntimeEditor { get { return "vr-whs-deal-daprofcalc-alertrulefilter"; } }
     }
 }

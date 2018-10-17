@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Deal\Constant\CarrierFilterTypeEnum.js" />
+    <Content Include="WhS_Deal\Constant\DealDAProfCalcAlertRuleFilterType.js" />
     <Content Include="WhS_Deal\Constant\DealDefinitionTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\DealAgreementTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\DealContractTypeEnum.js" />
@@ -190,6 +191,10 @@
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\vr-whs-deal-salerateevaluator-selective.js" />
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\vr-whs-deal-supplierrateevaluator-selective.js" />
     <Content Include="WhS_Deal\Directives\DealStatus\vr-whs-deal-status-selector.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\DataAnalysis\ProfilingAndCalculation\Templates\DealDAProfCalcAlertRuleFilterDefinitionTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\DataAnalysis\ProfilingAndCalculation\Templates\DealDAProfCalcAlertRuleFilterTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\DataAnalysis\ProfilingAndCalculation\vr-whs-deal-daprofcalc-alertrulefilter.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\DataAnalysis\ProfilingAndCalculation\vr-whs-deal-daprofcalc-alertrulefilterdefinition.js" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\Templates\DealSaleRateEvaluatorDiccount.html" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\Templates\DealSaleRateEvaluatorFixed.html" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\vr-whs-deal-salerateevaluator-fixed.js" />
