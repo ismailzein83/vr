@@ -12,6 +12,7 @@ BEGIN
 
     SELECT [CacheTypeName]
       ,[CreatedTime]
+	  ,[LastUpdateTime]
       ,[timestamp]
 	FROM [common].[CacheRefreshHandle] WITH (NOLOCK)
 

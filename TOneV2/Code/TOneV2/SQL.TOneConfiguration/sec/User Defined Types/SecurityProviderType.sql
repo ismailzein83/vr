@@ -6,7 +6,10 @@
     [CreatedTime]      DATETIME         NULL,
     [LastModifiedTime] DATETIME         NULL,
     [LastModifiedBy]   INT              NULL,
-    [IsEnabled]        BIT              NULL);
+    [IsEnabled]        BIT              NULL,
+    [IsDefault]        BIT              NULL);
+
+
 
 
 

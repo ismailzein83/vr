@@ -813,6 +813,9 @@
     <Build Include="bp\Stored Procedures\sp_ProcessSynchronisation_Insert.sql" />
     <Build Include="bp\Stored Procedures\sp_ProcessSynchronisation_GetAll.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_GetById.sql" />
+    <Build Include="sec\Stored Procedures\sp_SecurityProvider_SetDefault.sql" />
+    <Build Include="sec\Stored Procedures\sp_SecurityProvider_GetDefault.sql" />
+    <Build Include="common\Stored Procedures\sp_CacheRefreshHandle_GetByCacheTypeName.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

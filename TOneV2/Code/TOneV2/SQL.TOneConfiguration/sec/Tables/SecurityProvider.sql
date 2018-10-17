@@ -8,9 +8,12 @@
     [LastModifiedBy]   INT              NULL,
     [timestamp]        ROWVERSION       NULL,
     [IsEnabled]        BIT              NULL,
+    [IsDefault]        BIT              NULL,
     CONSTRAINT [PK_SecurityProvider] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_SecurityProvider_Name] UNIQUE NONCLUSTERED ([Name] ASC)
 );
+
+
 
 
 
