@@ -9,9 +9,9 @@ namespace Vanrise.Security.MainExtensions.GenericBEActions
 {
     public class SetDefaultSecurityProviderAction : GenericBEActionSettings
     {
-        public override Guid ConfigId => new Guid("D44A8DED-2E6B-4226-99C7-BAA6895BECBE");
+        public override Guid ConfigId { get { return new Guid("D44A8DED-2E6B-4226-99C7-BAA6895BECBE"); } }
 
-        public override string ActionTypeName { get => "SetDefaultSecurityProviderAction"; }
+        public override string ActionTypeName { get { return "SetDefaultSecurityProviderAction"; } }
 
         public override bool DoesUserHaveAccess(IGenericBEActionDefinitionCheckAccessContext context)
         {
