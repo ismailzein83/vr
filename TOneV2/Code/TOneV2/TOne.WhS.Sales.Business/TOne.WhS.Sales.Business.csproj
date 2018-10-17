@@ -142,6 +142,7 @@
     <Compile Include="Country\RPCountrySoldToCustomerFilter.cs" />
     <Compile Include="Country\CountryWithDefaultRateManager.cs" />
     <Compile Include="DefaultItemManager.cs" />
+    <Compile Include="ExcludedItemsManager.cs" />
     <Compile Include="ImportRatePlan\ImportBulkActionValidationCacheManager.cs" />
     <Compile Include="ImportRatePlan\ImportedRowValidator.cs" />
     <Compile Include="ImportRatePlan\IsImportedRowValidContext.cs" />
