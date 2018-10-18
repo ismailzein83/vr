@@ -31,7 +31,7 @@ app.directive("whsBeRecurringchargeperiodsettingsQuarterly", ["UtilsService", "V
 
             function initializeController() {
                 $scope.scopeModel = {};
-
+                $scope.scopeModel.inAdvance = false;
                 defineAPI();
             }
 
@@ -40,13 +40,20 @@ app.directive("whsBeRecurringchargeperiodsettingsQuarterly", ["UtilsService", "V
 
                 api.load = function (payload) {
                     var promises = [];
-
+                    if(payload!=undefined)
+                    {
+                        if(payload.extendedSettings!=undefined)
+                        {
+                            $scope.scopeModel.inAdvance = payload.extendedSettings.InAdvance;
+                        }
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges.QuarterlyRecurringCharge,TOne.WhS.BusinessEntity.MainExtensions",
+                        InAdvance:$scope.scopeModel.inAdvance
                     };
                 };
 
