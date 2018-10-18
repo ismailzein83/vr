@@ -201,7 +201,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, ticketContactSelectorAPI, selectorPayload, setLoader);
                             getAccountManager(value.CarrierAccountId);
                             $scope.scopeModel.contactName = undefined;
-                            $scope.scopeModel.email = undefined;
+                            $scope.scopeModel.email.length=0;
                             $scope.scopeModel.phoneNumber = undefined;
                         }
 
@@ -302,7 +302,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
                     caseManagementObject.SendEmail = $scope.scopeModel.sendEmail;
                     caseManagementObject.ContactName = $scope.scopeModel.contactName;
-                    caseManagementObject.ContactEmails = $scope.scopeModel.email;
+                    caseManagementObject.ContactEmails = $scope.scopeModel.email.join(';');
                     caseManagementObject.PhoneNumber = $scope.scopeModel.phoneNumber;
                     caseManagementObject.AccountManager = $scope.scopeModel.accountManager;
                 };
@@ -345,9 +345,8 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
                 promises.push(ticketContactSelectorReadyPromiseDeferred.promise);
                 promises.push(selectedSupplierPromiseDeferred.promise);
                 UtilsService.waitMultiplePromises(promises).then(function () {
-
                     $scope.scopeModel.contactName = selectedValues.ContactName;
-                    $scope.scopeModel.email = selectedValues.ContactEmails;
+                    $scope.scopeModel.email = selectedValues.ContactEmails != undefined ? selectedValues.ContactEmails.split(';').filter(value => value && value != undefined && value != "" && /\S/.test(value)) : [];
                     $scope.scopeModel.phoneNumber = selectedValues.PhoneNumber;
 
                     var selectorPayload = {

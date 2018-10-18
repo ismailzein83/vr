@@ -156,7 +156,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, ticketContactSelectorAPI, selectorPayload, setLoader);
                             getAccountManager(value.CarrierAccountId);
                             $scope.scopeModel.contactName = undefined;
-                            $scope.scopeModel.email = undefined;
+                            $scope.scopeModel.email.length = 0;
                             $scope.scopeModel.phoneNumber = undefined;
                             selectedCustomer = customerSelectorAPI.getSelectedIds();
                             if (value.CarrierAccountId != selectedCustomer || !$scope.scopeModel.isEditMode) {
@@ -290,7 +290,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
                     caseManagementObject.Attachments = attachments == undefined ? null : attachments;
                     caseManagementObject.ContactName = $scope.scopeModel.contactName;
-                    caseManagementObject.ContactEmails = $scope.scopeModel.email;
+                    caseManagementObject.ContactEmails = $scope.scopeModel.email.join(';');
                     caseManagementObject.PhoneNumber = $scope.scopeModel.phoneNumber;
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
                     caseManagementObject.SendEmail = $scope.scopeModel.sendEmail;
@@ -392,7 +392,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 UtilsService.waitMultiplePromises(promises).then(function () {
 
                     $scope.scopeModel.contactName = selectedValues.ContactName;
-                    $scope.scopeModel.email = selectedValues.ContactEmails;
+                    $scope.scopeModel.email = selectedValues.ContactEmails != undefined ? selectedValues.ContactEmails.split(';').filter(value => value && value != undefined && value != "" && /\S/.test(value)) : [];
                     $scope.scopeModel.phoneNumber = selectedValues.PhoneNumber;
 
                     var selectorPayload = {

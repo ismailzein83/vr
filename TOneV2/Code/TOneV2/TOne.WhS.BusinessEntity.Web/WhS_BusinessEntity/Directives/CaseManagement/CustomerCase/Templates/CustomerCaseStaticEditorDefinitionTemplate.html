@@ -31,7 +31,7 @@
                         <vr-switch value="scopeModel.sendEmail" label="Send Email" isrequired="true"></vr-switch>
                     </vr-columns>
                     <vr-columns width="fullrow">
-                        <vr-textbox type="text" value="scopeModel.email" label="Emails" isrequired="scopeModel.sendEmail" vr-disabled="!scopeModel.sendEmail"></vr-textbox>
+                        <vr-textbox-multiple datatype="email" label="Emails" value="scopeModel.email" isrequired="scopeModel.sendEmail" vr-disabled="!scopeModel.sendEmail"></vr-textbox-multiple>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
