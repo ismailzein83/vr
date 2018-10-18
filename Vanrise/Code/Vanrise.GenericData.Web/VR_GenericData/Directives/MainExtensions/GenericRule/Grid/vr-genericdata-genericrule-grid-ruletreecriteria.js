@@ -12,38 +12,34 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var obj = new GenericRuleGrid($scope, ctrl, $attrs);
-                obj.initializeController();
+                var ctor = new GenericRuleGridCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
             templateUrl: '/Client/Modules/VR_GenericData/Directives/MainExtensions/GenericRule/Grid/Templates/RuleTreeCriteriaGridTemplate.html'
         };
 
-        function GenericRuleGrid($scope, ctrl, $attrs) {
+        function GenericRuleGridCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            var gridDrillDownTabsObj;
-            var gridAPI;
+
             var accessibility;
             var criteriaFieldsToHide;
 
+            var gridAPI;
+            var gridDrillDownTabsObj;
+
             function initializeController() {
-                ctrl.criteriaFields = [];
+                $scope.criteriaFields = [];
                 $scope.genericRules = [];
                 $scope.showSettingColum = false;
 
-
                 $scope.onGridReady = function (api) {
+                    gridAPI = api;
                     var drillDownDefinitions = VR_GenericData_GenericRule.getDrillDownDefinition();
                     gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
-                    gridAPI = api;
 
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
+                    defineAPI();
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -59,13 +55,15 @@
                     });
                 };
 
-                //defineMenuActions();
+                defineMenuActions();
             }
 
-            function getDirectiveAPI() {
+            function defineAPI() {
+
                 var directiveAPI = {};
 
                 directiveAPI.loadGrid = function (query) {
+
                     var promises = [];
 
                     accessibility = query.accessibility;
@@ -78,13 +76,13 @@
                     promises.push(retrieveDataDeferred.promise);
 
                     getDefinitionPromise.then(function (response) {
-                        ctrl.criteriaFields.length = 0;
+                        $scope.criteriaFields.length = 0;
                         if (response.CriteriaDefinition != undefined) {
                             for (var i = 0; i < response.CriteriaDefinition.Fields.length; i++) {
                                 var criteriaFieldDefinition = response.CriteriaDefinition.Fields[i];
                                 if (isCriteriaFieldVisible(criteriaFieldDefinition.FieldName)) {
                                     criteriaFieldDefinition.fieldValueIndex = i;
-                                    ctrl.criteriaFields.push(criteriaFieldDefinition);
+                                    $scope.criteriaFields.push(criteriaFieldDefinition);
                                 }
                             }
                         }
@@ -106,7 +104,9 @@
                     gridAPI.itemAdded(addedGenericRule);
                 };
 
-                return directiveAPI;
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(directiveAPI);
+                }
             }
 
             function isCriteriaFieldVisible(criteriaFieldName) {
@@ -119,24 +119,24 @@
                 return true;
             }
 
-            // function defineMenuActions() {
-            $scope.gridMenuActions = function () {
-                return [{
-                    name: 'Edit',
-                    clicked: editGenericRule,
-                    haspermission: hasEditGenericRulePermission
-                }, {
-                    name: 'View',
-                    clicked: viewGenericRule,
-                    haspermission: hasViewGenericRulePermission
-                }
-                ];
-            };
-            //  }
+            function defineMenuActions() {
+                $scope.gridMenuActions = function () {
+                    return [{
+                        name: 'Edit',
+                        clicked: editGenericRule,
+                        haspermission: hasEditGenericRulePermission
+                    }, {
+                        name: 'View',
+                        clicked: viewGenericRule,
+                        haspermission: hasViewGenericRulePermission
+                    }];
+                };
+            }
 
             function hasEditGenericRulePermission(genericRule) {
                 return VR_GenericData_GenericRuleAPIService.DoesUserHaveEditAccess(genericRule.Entity.DefinitionId);
             }
+
             function hasViewGenericRulePermission(genericRule) {
                 return VR_GenericData_GenericRuleAPIService.DoesUserHaveEditAccess(genericRule.Entity.DefinitionId).then(function (response) {
                     return !response;
@@ -155,7 +155,6 @@
                 VR_GenericData_GenericRule.viewGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, accessibility);
             }
 
-
             function deleteGenericRule(genericRule) {
                 var onGenericRuleDeleted = function () {
                     gridAPI.itemDeleted(genericRule);
@@ -164,7 +163,6 @@
             }
         }
     }
-    
-    app.directive('vrGenericdataGenericruleGridRuletreecriteria', RuleTreeCriteriaGrid);
 
+    app.directive('vrGenericdataGenericruleGridRuletreecriteria', RuleTreeCriteriaGrid);
 })(app);
