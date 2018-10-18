@@ -65,7 +65,7 @@
 			function loadStaticData() {
 				if (emailObject != undefined) {
 					$scope.scopeModel.from = emailObject.From;
-					$scope.scopeModel.cc = emailObject.CC;
+                    $scope.scopeModel.cc = emailObject.CC != undefined ? emailObject.CC.split(';') : [];
 					$scope.scopeModel.to = emailObject.To != undefined ? emailObject.To.split(';').filter(value => value && value != undefined && value != "" && /\S/.test(value)) : [];
 					$scope.scopeModel.subject = emailObject.Subject;
 					$scope.scopeModel.body = emailObject.Body;
@@ -83,14 +83,13 @@
 
 		function buildEmailObjFromScope() {
 			var attachementFileIds = $scope.scopeModel.uploadedAttachements.map(function (a) { return a.fileId; });
-
 			for (var i = 0; i < saleVrFiles.length; i++) {
 				attachementFileIds.push(saleVrFiles[i].FileId);
 			}
 
 			var obj = {
 				From: $scope.scopeModel.from,
-				CC: $scope.scopeModel.cc,
+                CC: $scope.scopeModel.cc.join(';'),
 				To: $scope.scopeModel.to.join(';'),
 				Subject: $scope.scopeModel.subject,
 				Body: $scope.scopeModel.body,
