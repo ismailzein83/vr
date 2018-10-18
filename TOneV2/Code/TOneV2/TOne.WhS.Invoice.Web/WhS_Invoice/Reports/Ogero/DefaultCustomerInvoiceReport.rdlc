@@ -2776,6 +2776,10 @@
           <DataField>CurrencyIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="DueDate">
+          <DataField>DueDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
         <Field Name="From">
           <DataField>From</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>

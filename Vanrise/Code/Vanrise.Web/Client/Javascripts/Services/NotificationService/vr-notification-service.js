@@ -131,7 +131,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             case InsertOperationResultEnum.Succeeded.value:
                 var msg = itemType + " added successfully";
                 notifyOnItemAction("success", msg, insertOperationOutput);
-                return true;
+                return true
                 break;
             case InsertOperationResultEnum.Failed.value:
                 var msg = "Failed to add " + itemType;
