@@ -90,6 +90,7 @@ namespace Vanrise.Common.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "User name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Action name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Action description", Width=40 });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -103,6 +104,7 @@ namespace Vanrise.Common.Business
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Time });
                             row.Cells.Add(new ExportExcelCell { Value = record.UserName });
                             row.Cells.Add(new ExportExcelCell { Value = record.ActionName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ActionDescription });
                         }
                     }
                 }
