@@ -569,6 +569,9 @@
     <Reference Include="Vanrise.Notification.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Notification.Data.RDB">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.SQL.dll</HintPath>
     </Reference>
