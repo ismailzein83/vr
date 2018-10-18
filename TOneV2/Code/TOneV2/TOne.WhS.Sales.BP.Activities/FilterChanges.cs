@@ -181,7 +181,7 @@ namespace TOne.WhS.Sales.BP.Activities
 					filteredZoneChange.NewRates = FilterZoneNewRates(customerId, sellingProductId, zoneChange.NewRates, customerCountry.BED, effectiveDate, pricingSettings.IncreasedRateDayOffset.Value, pricingSettings.DecreasedRateDayOffset.Value, effectiveRateLocator, cuurentRateLocator, currencyId, zoneChange.ZoneId, followPublisherRatesBED, excludedCountries, notSoldCountryIds, countriesWithDifferentCurrencies);
 
 				if (zoneChange.ClosedRates != null && zoneChange.ClosedRates.Any())
-					filteredZoneChange.ClosedRates = FilterZoneClosedRates(customerId, zoneChange.ClosedRates, customerCountry.BED, closedRateLocator, sellingProductId, currencyId, excludedCountries, notSoldCountryIds);
+					filteredZoneChange.ClosedRates = FilterZoneClosedRates(customerId, zoneChange.ClosedRates, customerCountry.BED, closedRateLocator, sellingProductId, currencyId, excludedCountries, notSoldCountryIds, zoneChange.ZoneId);
 
 				if (zoneChange.NewRoutingProduct != null && customerCountry.BED <= zoneChange.NewRoutingProduct.BED)
 				{
@@ -249,6 +249,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			var currentRate = new SaleEntityZoneRate();
 			if (!followPublisherRatesBED)
 				currentRate = cuurentRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
+			var rateTypeIds = BusinessEntity.Business.Helper.GetRateTypeIds(customerId, zoneId, DateTime.Now);
 
 			foreach (var newRate in newRates)
 			{
@@ -279,6 +280,11 @@ namespace TOne.WhS.Sales.BP.Activities
 				{
 					var countryId = saleZoneManager.GetSaleZoneCountryId(newRate.ZoneId);
 					countriesWithDifferentCurrencies.Add(countryId.Value);
+					continue;
+				}
+
+				if (newRate.RateTypeId != null && rateTypeIds != null && !rateTypeIds.Any(item => item == newRate.RateTypeId))
+				{
 					continue;
 				}
 
@@ -314,10 +320,11 @@ namespace TOne.WhS.Sales.BP.Activities
 			return filteredNewRates;
 		}
 
-		private IEnumerable<DraftRateToClose> FilterZoneClosedRates(int customerId, IEnumerable<DraftRateToClose> closedRates, DateTime countrySellDate, SaleEntityZoneRateLocator rateLocator, int sellingProductId, int currencyId, List<ExcludedChange> excludedCountries, List<int> notSoldCountryIds)
+		private IEnumerable<DraftRateToClose> FilterZoneClosedRates(int customerId, IEnumerable<DraftRateToClose> closedRates, DateTime countrySellDate, SaleEntityZoneRateLocator rateLocator, int sellingProductId, int currencyId, List<ExcludedChange> excludedCountries, List<int> notSoldCountryIds, long zoneId)
 		{
 			CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 			var carrierName = carrierAccountManager.GetCarrierAccountName(customerId);
+			var rateTypeIds = BusinessEntity.Business.Helper.GetRateTypeIds(customerId, zoneId, DateTime.Now);
 			CountryManager countryManager = new CountryManager();
 			var filteredClosedRates = new List<DraftRateToClose>();
 			foreach (var closedRate in closedRates)
@@ -333,6 +340,11 @@ namespace TOne.WhS.Sales.BP.Activities
 					//});
 					continue;
 				}
+				if (closedRate.RateTypeId != null && rateTypeIds != null && !rateTypeIds.Any(item => item == closedRate.RateTypeId))
+				{
+					continue;
+				}
+
 				var currentRate = rateLocator.GetCustomerZoneRate(customerId, sellingProductId, closedRate.ZoneId);
 				if (currentRate != null && currentRate.Source == SalePriceListOwnerType.Customer && currentRate.EffectiveCurrencyId == currencyId && (closedRate.RateTypeId == null || currentRate.RatesByRateType.ContainsKey(closedRate.RateTypeId.Value)))
 					filteredClosedRates.Add(closedRate);
