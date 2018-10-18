@@ -283,7 +283,7 @@ namespace TOne.WhS.Sales.BP.Activities
 					continue;
 				}
 
-				if (newRate.RateTypeId != null && rateTypeIds != null && !rateTypeIds.Any(item => item == newRate.RateTypeId))
+				if ((newRate.RateTypeId != null && rateTypeIds != null && !rateTypeIds.Any(item => item == newRate.RateTypeId)) || (newRate.RateTypeId != null && rateTypeIds == null))
 				{
 					continue;
 				}
@@ -340,7 +340,7 @@ namespace TOne.WhS.Sales.BP.Activities
 					//});
 					continue;
 				}
-				if (closedRate.RateTypeId != null && rateTypeIds != null && !rateTypeIds.Any(item => item == closedRate.RateTypeId))
+				if ((closedRate.RateTypeId != null && rateTypeIds != null && !rateTypeIds.Any(item => item == closedRate.RateTypeId)) || (closedRate.RateTypeId != null && rateTypeIds == null))
 				{
 					continue;
 				}
