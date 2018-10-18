@@ -905,6 +905,7 @@
     <None Include="Retail_NetworkRental.PostDeployment.sql" />
     <None Include="TOneCCT.PostDeployment.sql" />
     <None Include="TOne_Ogero.PostDeployment.sql" />
+    <None Include="Retail_ISP.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
