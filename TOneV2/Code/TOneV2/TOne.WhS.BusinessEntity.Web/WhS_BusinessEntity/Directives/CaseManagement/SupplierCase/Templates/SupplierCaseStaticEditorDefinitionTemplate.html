@@ -41,14 +41,14 @@
                 </vr-row>
                 <vr-row>
                     <vr-columns width="1/3row">
-                        <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.attempts" label="Attempts"></vr-textbox>
+                        <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.attempts" label="Attempts" maxvalue="2147483647" minvalue="0"></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/3row">
-                        <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.asr" label="ASR"></vr-textbox>
+                        <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.asr" label="ASR" maxvalue="999999999999.99999999" decimalprecision="8" minvalue="0"></vr-textbox>
                     </vr-columns>
 
                     <vr-columns width="1/3row ">
-                        <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.acd" label="ACD"></vr-textbox>
+                        <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.acd" label="ACD" maxvalue="999999999999.99999999" decimalprecision="8" minvalue="0"></vr-textbox>
                     </vr-columns>
                 </vr-row>
             </vr-columns>
