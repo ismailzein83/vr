@@ -14,7 +14,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public decimal Amount { get; set; }
         public int CurrencyId { get; set; }
         public string CurrencyIdDescription { get; set; }
-
+        public DateTime DueDate { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
         public decimal AmountAfterTaxes { get; set ; }

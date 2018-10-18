@@ -1,1 +1,7 @@
-﻿<whs-be-recurringchargeperiod-settings on-ready="scopeModel.onRecurringChargePeriodSelectorReady" normal-col-num="6" isrequired="true"></whs-be-recurringchargeperiod-settings>
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-label>Due Period</vr-label>
+        <vr-textbox value="scopeModel.duePeriod" type="number" minvalue="0" decimalprecision="0"></vr-textbox>
+    </vr-columns>
+</vr-row>
+<whs-be-recurringchargeperiod-settings on-ready="scopeModel.onRecurringChargePeriodSelectorReady" normal-col-num="6" isrequired="true"></whs-be-recurringchargeperiod-settings>

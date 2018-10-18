@@ -39,7 +39,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return effectiveCustomerRecurringCharges;
         }
-        public List<RecurringChargeItem> GetEvaluatedRecurringCharges(int financialAccountId, DateTime fromDate, DateTime toDate)
+        public List<RecurringChargeItem> GetEvaluatedRecurringCharges(int financialAccountId, DateTime fromDate, DateTime toDate, DateTime issueDate)
         {
             var effectiveCustomerRecurringCharges = GetEffectiveCustomerRecurringCharges(financialAccountId, fromDate, toDate);
             if (effectiveCustomerRecurringCharges == null)
@@ -72,6 +72,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             CurrencyId = effectiveCustomerRecurringCharge.CurrencyId,
                             RecurringChargeId=effectiveCustomerRecurringCharge.ID,
                             AmountAfterTaxes = effectiveCustomerRecurringCharge.Amount,
+                            DueDate = effectiveCustomerRecurringCharge.RecurringChargePeriod.DuePeriod.HasValue ? issueDate.AddDays(effectiveCustomerRecurringCharge.RecurringChargePeriod.DuePeriod.Value) : issueDate
                         });
                     }
                 }

@@ -42,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return effectiveSupplierRecurringCharges;
         }
 
-        public List<RecurringChargeItem> GetEvaluatedRecurringCharges(int financialAccountId, DateTime fromDate, DateTime toDate)
+        public List<RecurringChargeItem> GetEvaluatedRecurringCharges(int financialAccountId, DateTime fromDate, DateTime toDate, DateTime issueDate)
         {
            
             var effectiveSupplierRecurringCharges = GetEffectiveSupplierRecurringCharges(financialAccountId, fromDate, toDate);
@@ -77,10 +77,9 @@ namespace TOne.WhS.BusinessEntity.Business
                         To = period.To,
                         CurrencyId = effectiveSupplierRecurringCharge.CurrencyId,
                         AmountAfterTaxes = effectiveSupplierRecurringCharge.Amount,
-                        RecurringChargeId = effectiveSupplierRecurringCharge.ID
-
-
-                    });
+                        RecurringChargeId = effectiveSupplierRecurringCharge.ID,
+                        DueDate = effectiveSupplierRecurringCharge.RecurringChargePeriod.DuePeriod.HasValue ? issueDate.AddDays(effectiveSupplierRecurringCharge.RecurringChargePeriod.DuePeriod.Value) : issueDate
+                        });
                     }
                 }
             }

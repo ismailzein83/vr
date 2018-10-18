@@ -116,7 +116,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             var supplierInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails);
 
             SupplierRecurringChargeManager supplierRecurringChargeManager = new SupplierRecurringChargeManager();
-            List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate);
+            List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate, context.IssueDate);
             AddRecurringChargeToSupplierCurrency(supplierInvoiceBySaleCurrency, evaluatedSupplierRecurringCharges);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails, supplierInvoiceBySaleCurrency, evaluatedSupplierRecurringCharges);
             #region BuildSupplierInvoiceDetails

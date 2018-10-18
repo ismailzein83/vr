@@ -113,7 +113,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 return;
             }
             CustomerRecurringChargeManager customerRecurringChargeManager = new CustomerRecurringChargeManager();
-            List<RecurringChargeItem> evaluatedCustomerRecurringCharges = customerRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate);
+            List<RecurringChargeItem> evaluatedCustomerRecurringCharges = customerRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate, context.IssueDate);
             var customerInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails);
             AddRecurringChargeToCustomerCurrency(customerInvoiceBySaleCurrency, evaluatedCustomerRecurringCharges);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails, customerInvoiceBySaleCurrency, evaluatedCustomerRecurringCharges);

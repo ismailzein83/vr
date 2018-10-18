@@ -46,6 +46,9 @@ app.directive('whsBeRecurringchargeperiod', ['UtilsService', 'VRUIUtilsService',
                     if (payload != undefined)
                     {
                         selectedValues = payload.selectedValues;
+                        if (selectedValues != undefined && selectedValues.RecurringChargePeriod!=undefined) {
+                            $scope.scopeModel.duePeriod = selectedValues.RecurringChargePeriod.DuePeriod;
+                        }
                     }
 
                     var promises = [];
@@ -76,6 +79,7 @@ app.directive('whsBeRecurringchargeperiod', ['UtilsService', 'VRUIUtilsService',
                     {
                         entity.RecurringChargePeriod = {
                             $type: "TOne.WhS.BusinessEntity.Entities.RecurringChargePeriod, TOne.WhS.BusinessEntity.Entities",
+                            DuePeriod:$scope.scopeModel.duePeriod,
                             Settings: recurringChargePeriodSelectorAPI.getData()
                         };
                     }
