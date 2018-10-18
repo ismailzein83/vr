@@ -351,6 +351,9 @@
     <Reference Include="Vanrise.Common.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Data.RDB">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
     </Reference>
