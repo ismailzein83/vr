@@ -155,7 +155,7 @@ namespace TOne.WhS.Sales.BP.Activities
 					continue;
 				if (excludedClosedCountryIds.Contains(zoneChange.CountryId))
 					continue;
-				if (countryChanges != null && countryChanges.NewCountries != null && filteredChanges != null && filteredChanges.CountryChanges != null && filteredChanges.CountryChanges.NewCountries.Any(x => x.CountryId == zoneChange.CountryId))
+				if (countryChanges != null && countryChanges.NewCountries != null && filteredChanges != null && filteredChanges.CountryChanges != null && filteredChanges.CountryChanges.NewCountries != null && filteredChanges.CountryChanges.NewCountries.Any(x => x.CountryId == zoneChange.CountryId))
 				{
 					filteredZoneChanges.Add(zoneChange);
 					continue;
