@@ -98,7 +98,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="DLLs\Microsoft.reportviewer.common.dll" />
+    <Content Include="Resources\dotnetCore\ProjectConversion.txt" />
     <Content Include="Resources\RDB\MySQL.txt" />
+    <Content Include="StandardNetFramework_DLLs\System.Data.SqlClient.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BatchScripts\BIV2\Client-list-of-excluded-files.txt" />

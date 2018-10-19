@@ -1,0 +1,2 @@
+﻿add the following to the .Net 4.7.2 project to be able to reference .NetStandard 2.0
+<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime> --under first <PropertyGroup>
