@@ -80,10 +80,8 @@ namespace TOne.WhS.Deal.Business
 
             var timeZoneManager = new VRTimeZoneManager();
             var carrierAccountManager = new CarrierAccountManager();
-            
-            int timeZoneId = isSale
-                ? carrierAccountManager.GetCustomerTimeZoneId(carrierId)
-                : carrierAccountManager.GetSupplierTimeZoneId(carrierId);
+
+            int timeZoneId = carrierAccountManager.GetCarrierTimeZoneId(carrierId, isSale);
 
             VRTimeZone timeZone = timeZoneManager.GetVRTimeZone(timeZoneId);
 
