@@ -112,5 +112,6 @@
     <Build Include="VR_NumberingPlan\Stored Procedures\sp_CodePreparation_InsertOrUpdateChanges.sql" />
     <Build Include="VR_NumberingPlan\Stored Procedures\sp_CodePreparation_GetChanges.sql" />
     <Build Include="Security\VR_NumberingPlan.sql" />
+    <Build Include="VR_NumberingPlan\Stored Procedures\sp_CleanTemporaryTablesNumberingPlan.sql" />
   </ItemGroup>
 </Project>
