@@ -40,7 +40,7 @@
                 };
 
                 $scope.scopeModel.widgets = [];
-              
+
                 $scope.scopeModel.addWidget = function () {
                     var onWidgetAdd = function (widget) {
                         $scope.scopeModel.widgets.push({ widgetSettings: widget });
@@ -84,6 +84,15 @@
                     tableSelectorAPI = api;
                     tableSelectorReadyDeferred.resolve();
                 };
+                $scope.scopeModel.onTableDeselect = function (dataitem) {
+                    var analyticTableId = dataitem.AnalyticTableId;
+                    for (var index in $scope.scopeModel.widgets)
+                        if ($scope.scopeModel.widgets[index].widgetSettings.AnalyticTableId == analyticTableId) {
+                            $scope.scopeModel.widgets.length = 0;
+                            break;
+                        }
+
+                };
 
                 defineAPI();
             }
@@ -94,11 +103,11 @@
                 api.load = function (payload) {
                     var reportSettings;
                     var promises = [];
-                    if(payload != undefined && payload.reportSettings != undefined) {
+                    if (payload != undefined && payload.reportSettings != undefined) {
                         reportSettings = payload.reportSettings;
-                      
-                        if (reportSettings != undefined  && reportSettings.Widgets != undefined && reportSettings.Widgets.length > 0) {
-                            for (var i = 0 ; i < reportSettings.Widgets.length; i++) {
+
+                        if (reportSettings != undefined && reportSettings.Widgets != undefined && reportSettings.Widgets.length > 0) {
+                            for (var i = 0; i < reportSettings.Widgets.length; i++) {
                                 $scope.scopeModel.widgets.push({ widgetSettings: reportSettings.Widgets[i] });
                             }
                         }
@@ -168,13 +177,13 @@
                 Analytic_AnalyticService.editWidget(dataItem.widgetSettings, onWidgetUpdated, tableSelectorAPI.getSelectedIds());
 
             }
-       
+
             function getwidgetGridMenuActions() {
                 var defaultMenuActions = [
-                  {
-                      name: "Edit",
-                      clicked: editWidget,
-                  }];
+                    {
+                        name: "Edit",
+                        clicked: editWidget,
+                    }];
                 return defaultMenuActions;
             }
         }

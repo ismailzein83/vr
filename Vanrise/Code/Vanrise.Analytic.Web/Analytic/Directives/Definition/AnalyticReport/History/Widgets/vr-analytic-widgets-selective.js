@@ -40,6 +40,7 @@
             var tableSelectorAPI;
             var tableSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var tableSelectorSelectionChanged;
+            var tableSelectedPromiseDeffered;
 
             var recordFilterDirectiveAPI;
             var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -93,7 +94,12 @@
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, recordFilterDirectiveAPI, recordFilterDirectivePayload, setLoader, tableSelectorSelectionChanged);
                         });
+                        if (tableSelectedPromiseDeffered != undefined) {
+                            tableSelectedPromiseDeffered.resolve();
+                        }
+
                     }
+
                 };
 
                 defineColumnWidth();
@@ -117,18 +123,21 @@
                             $scope.scopeModel.showTitle = widgetEntity.ShowTitle;
 
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
-                            var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                            directiveReadyDeferred.promise.then(function () {
+                            tableSelectedPromiseDeffered = UtilsService.createPromiseDeferred();
+                            promises.push(tableSelectedPromiseDeffered.promise);
+
+                            var loadDirectivePromiseDeffered = UtilsService.createPromiseDeferred();
+                            promises.push(loadDirectivePromiseDeffered.promise);
+
+                            UtilsService.waitMultiplePromises([directiveReadyDeferred.promise, tableSelectedPromiseDeffered.promise]).then(function () {
                                 directiveReadyDeferred = undefined;
-                                var payloadDirective = {
+                                directivePayload = {
                                     tableIds: $scope.scopeModel.selectedTable != undefined ? [$scope.scopeModel.selectedTable.AnalyticTableId] : undefined,
                                     widgetEntity: widgetEntity
                                 };
-
-                                VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
-                            });
-                            promises.push(loadDirectivePromiseDeferred.promise);
-                        }
+                                VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, loadDirectivePromiseDeffered);
+                            })
+                        };
 
                         var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                         tableSelectorReadyDeferred.promise.then(function () {
@@ -136,9 +145,9 @@
                                 filter: { OnlySelectedIds: tableIds },
                                 selectedIds: widgetEntity != undefined ? widgetEntity.AnalyticTableId : undefined
                             };
-
                             VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoadTableSelector, loadTableSelectorPromiseDeferred);
                         });
+
                         promises.push(loadTableSelectorPromiseDeferred.promise);
 
                         var getWidgetsTemplateConfigsPromise = getWidgetsTemplateConfigs();
@@ -194,8 +203,12 @@
                             return recordFilterDirectiveLoadDeferred.promise;
                         }
 
-                        return UtilsService.waitMultiplePromises(promises);
+                        return UtilsService.waitMultiplePromises(promises).then(function () {
+
+                            tableSelectedPromiseDeffered = undefined;
+                        });
                     }
+
                 };
 
                 api.getData = function () {

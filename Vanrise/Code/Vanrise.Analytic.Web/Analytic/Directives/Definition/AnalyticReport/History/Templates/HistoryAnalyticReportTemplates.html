@@ -1,7 +1,7 @@
 ﻿<vr-tab header="'Search Settings'">
     <vr-row>
         <vr-columns width="1/2row">
-            <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedTables" ismultipleselection onselectionchanged="scopeModel.onTableSelectionChanged"></vr-analytic-table-selector>
+            <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" ondeselectitem="scopeModel.onTableDeselect" selectedvalues="scopeModel.selectedTables" ismultipleselection onselectionchanged="scopeModel.onTableSelectionChanged"></vr-analytic-table-selector>
         </vr-columns>
     </vr-row>
     <span ng-if="scopeModel.selectedTables !=undefined && scopeModel.selectedTables.length>0" vr-loader="scopeModel.isLoadingSearchSettingsDirective">
