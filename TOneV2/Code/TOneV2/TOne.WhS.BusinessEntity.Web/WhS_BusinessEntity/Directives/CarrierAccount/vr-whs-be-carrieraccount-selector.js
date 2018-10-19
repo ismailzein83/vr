@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile', 'WhS_BE_CarrierAccountService',
-    function (WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, $compile, WhS_BE_CarrierAccountService) {
+app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierAccountActivationStatusEnum',
+    function (WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, $compile, WhS_BE_CarrierAccountService, WhS_BE_CarrierAccountActivationStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -92,7 +92,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
 
-    
+
             var hideselectall = "";
             if (attrs.hideselectall != undefined)
                 hideselectall = "hideselectall";
@@ -118,13 +118,15 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             //var groupHtml = ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + '> ' +
-                        '<vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" ' +
-                            ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  ondeselectallitems="ctrl.ondeselectallitems" onblurdropdown="ctrl.onblurdropdown" ' +
-                            ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" ' +
-                            ' datadisabledfield="IsDisabled" ' + ' label="' + label + '" ' + customlabel + ' ' + hidelabel + ' ' + hideselectall + ' ' + hideselectall + ' ' + hideselectedvaluessection + ' ' + hideremoveicon +
-                            ' ' + ismultipleselection + ' ' + viewCliked + '>' +
-                        '</vr-select>' +
-                   '</vr-columns>';
+                '<vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" ' +
+                ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  ondeselectallitems="ctrl.ondeselectallitems" onblurdropdown="ctrl.onblurdropdown" ' +
+                ' datatooltipfield="additionalInfo"' +
+                ' datastylefield="colorStyle" ' +
+                ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" ' +
+                ' datadisabledfield="IsDisabled" ' + ' label="' + label + '" ' + customlabel + ' ' + hidelabel + ' ' + hideselectall + ' ' + hideselectall + ' ' + hideselectedvaluessection + ' ' + hideremoveicon +
+                ' ' + ismultipleselection + ' ' + viewCliked + '>' +
+                '</vr-select>' +
+                '</vr-columns>';
         }
 
         function carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, attrs) {
@@ -175,13 +177,20 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
                     return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter).then(function (response) {
                         ctrl.datasource.length = 0;
+
                         angular.forEach(response, function (itm) {
                             if (lockedIds != undefined && lockedIds.indexOf(itm.CarrierAccountId) > -1) {
                                 itm.Locked = true;
                             }
-                            ctrl.datasource.push(itm);
+                            if (itm.ActivationStatus != WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value) {
+                                ctrl.datasource.push(itm);
+                            }
+                            else if (selectedIds != undefined && selectedIds.includes(itm.CarrierAccountId)) {
+                                itm.additionalInfo = "Inactive";
+                                itm.colorStyle = "item-warning";
+                                ctrl.datasource.push(itm);
+                            }
                         });
-
                         if (selectedIds != undefined) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'CarrierAccountId', attrs, ctrl);
                         }
