@@ -185,7 +185,8 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                             if (itm.ActivationStatus != WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value) {
                                 ctrl.datasource.push(itm);
                             }
-                            else if (selectedIds != undefined && selectedIds.includes(itm.CarrierAccountId)) {
+
+                            else if (selectedIds != undefined && ((ctrl.ismultipleselection && selectedIds.includes(itm.CarrierAccountId)) || (!ctrl.ismultipleselection && selectedIds == itm.CarrierAccountId))) {
                                 itm.additionalInfo = "Inactive";
                                 itm.colorStyle = "item-warning";
                                 ctrl.datasource.push(itm);
