@@ -2868,11 +2868,18 @@ vr-pagination .dropdown-menu {
         color: #f53f3f;
     }
 
+    span.custom-label.item-warning {
+        color: #f53f3f;
+    }
+
 .item-future {
     background-color: #e6e6e6;
 }
 
     .item-future a.mark-select {
+        color: #969e97;
+    }
+    span.custom-label.item-future{
         color: #969e97;
     }
 
