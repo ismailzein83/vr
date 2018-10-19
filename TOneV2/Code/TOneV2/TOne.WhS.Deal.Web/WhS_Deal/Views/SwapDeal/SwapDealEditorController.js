@@ -47,11 +47,11 @@
             }
 
             isEditMode = (dealId != undefined);
-            if(isReadOnly && !isEditable)
+            if (isReadOnly && !isEditable)
                 UtilsService.setContextReadOnly($scope);
         }
         function defineScope() {
-            
+
             $scope.scopeModel = {};
             //UtilsService.setContextReadOnly($scope.scopeModel);
             $scope.scopeModel.disabelType = (isEditMode);
@@ -63,7 +63,8 @@
                 carrierAccountSelectorAPI = api;
                 carrierAccountSelectorReadyDeferred.resolve();
             };
-
+            if (!isEditMode )
+                $scope.scopeModel.saleFollowSystemTimeZone = true;
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
 
@@ -301,8 +302,8 @@
             $scope.scopeModel.deActivationDate = dealEntity.Settings.DeActivationDate;
             $scope.scopeModel.active = dealEntity.Settings.Active;
             $scope.scopeModel.difference = dealEntity.Settings.Difference;
-            //$scope.scopeModel.saleFollowSystemTimeZone = dealEntity.Settings.SaleFollowSystemTimeZone;
-            //$scope.scopeModel.costFollowSystemTimeZone = dealEntity.Settings.CostFollowSystemTimeZone;
+            $scope.scopeModel.saleFollowSystemTimeZone = dealEntity.Settings.SaleFollowSystemTimeZone;
+            $scope.scopeModel.costFollowSystemTimeZone = dealEntity.Settings.CostFollowSystemTimeZone;
         }
         function loadCarrierBoundsSection() {
             var promises = [];
@@ -451,8 +452,8 @@
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     DeActivationDate: $scope.scopeModel.deActivationDate,
                     IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable : true,
-                    //CostFollowSystemTimeZone: $scope.scopeModel.costFollowSystemTimeZone,
-                    //SaleFollowSystemTimeZone: $scope.scopeModel.saleFollowSystemTimeZone
+                    CostFollowSystemTimeZone: $scope.scopeModel.costFollowSystemTimeZone,
+                    SaleFollowSystemTimeZone: $scope.scopeModel.saleFollowSystemTimeZone
 
                 }
             };

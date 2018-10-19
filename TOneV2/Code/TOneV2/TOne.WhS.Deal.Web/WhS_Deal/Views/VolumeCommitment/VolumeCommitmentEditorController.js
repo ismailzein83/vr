@@ -62,6 +62,18 @@
                 if (!carrierAccountSelectedPromise)
                     $scope.scopeModel.description = undefined;
             };
+
+            $scope.scopeModel.onVolumeCommitmentTypeChanged = function () {
+                if ($scope.scopeModel.selectedVolumeCommitmentType != undefined) {
+                    if ($scope.scopeModel.selectedVolumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Sell.value && !isEditMode) {
+                        $scope.scopeModel.followSystemTimeZone = true;
+                    }
+                    if ($scope.scopeModel.selectedVolumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Buy.value && !isEditMode) {
+                        $scope.scopeModel.followSystemTimeZone = false;
+                    }
+                }
+            };
+
             $scope.scopeModel.selectedDealStatus = WhS_Deal_DealStatusTypeEnum.Draft;
             $scope.scopeModel.onCurrencySelectReady = function (api) {
                 currencyDirectiveAPI = api;
@@ -209,6 +221,7 @@
             $scope.scopeModel.deActivationDate = volumeCommitmentEntity.Settings.DeActivationDate;
             //$scope.scopeModel.active = volumeCommitmentEntity.Settings.Active;
             $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
+            $scope.scopeModel.followSystemTimeZone = volumeCommitmentEntity.Settings.FollowSystemTimeZone
         }
         function loadCarrierAccountDealItemsSection() {
             if (volumeCommitmentEntity == undefined)
@@ -326,7 +339,8 @@
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     Status: $scope.scopeModel.selectedDealStatus.value,
                     DeActivationDate: $scope.scopeModel.deActivationDate,
-                    IsRecurrable: volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined ? volumeCommitmentEntity.Settings.IsRecurrable : true
+                    IsRecurrable: volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined ? volumeCommitmentEntity.Settings.IsRecurrable : true,
+                    FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
                 }
             };
             return obj;

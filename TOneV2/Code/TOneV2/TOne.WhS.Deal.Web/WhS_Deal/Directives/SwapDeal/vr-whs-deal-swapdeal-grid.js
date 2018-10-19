@@ -150,7 +150,7 @@
             }
             function deleteDeal(dataItem) {
                 if (dataItem.Entity.DealId)
-                    return VRNotificationService.showConfirmation("Are you sure you want to delete this deal").then(function (result) {
+                    return VRNotificationService.showConfirmation("Are you sure you want to delete : " + dataItem.Entity.Name + " ?").then(function (result) {
                         if (result) {
                             return WhS_Deal_DealDefinitionAPIService.DeleteDeal(dataItem.Entity.DealId).then(function (deletionResponse) {
                                 var index = UtilsService.getItemIndexByVal($scope.scopeModel.swapDeals, dataItem.Entity.DealId, 'Entity.DealId');
