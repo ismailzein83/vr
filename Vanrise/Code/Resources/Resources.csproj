@@ -97,6 +97,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="BatchScripts\ISP\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\ISP\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\ISP\runtime-list-of-excluded-files.txt" />
     <Content Include="DLLs\Microsoft.reportviewer.common.dll" />
     <Content Include="Resources\dotnetCore\ProjectConversion.txt" />
     <Content Include="Resources\RDB\MySQL.txt" />
@@ -368,6 +371,15 @@
     <None Include="BatchScripts\INSOFT\06-GroupJSFiles.bat" />
     <None Include="BatchScripts\INSOFT\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\INSOFT\All.bat" />
+    <None Include="BatchScripts\ISP\01-Runtime.bat" />
+    <None Include="BatchScripts\ISP\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\ISP\03-WebSite.bat" />
+    <None Include="BatchScripts\ISP\05-CompressFiles.bat" />
+    <None Include="BatchScripts\ISP\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\ISP\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\ISP\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\ISP\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\ISP\All.bat" />
     <None Include="BatchScripts\Interconnect\01-Runtime.bat" />
     <None Include="BatchScripts\Interconnect\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Interconnect\03-WebSite.bat" />
