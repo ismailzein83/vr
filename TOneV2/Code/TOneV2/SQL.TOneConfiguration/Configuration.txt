@@ -115,3 +115,6 @@ InterConnect.PostDeployment.sql
 CentralAuth
 CentralAuth.PostDeployment.sql
 
+ISP
+Retail_ISP.PostDeployment.sql
+
