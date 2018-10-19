@@ -41,7 +41,7 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.onReportSelectorDirectiveReady = function (api) {
-                reportDirectiveAPI = api;
+                reportDirectiveAPI = api
             };
 
             $scope.scopeModel.onReportTypeSelectorDirectiveReady = function (api) {
@@ -50,8 +50,7 @@
             };
            
             $scope.scopeModel.onViewCommonPropertiesReady = function (api) {
-                viewCommonPropertiesAPI = api;
-                viewCommonPropertiesReadyDeferred.resolve();
+                viewCommonPropertiesAPI = api;                viewCommonPropertiesReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onReportTypeSelectionChanged = function () {
