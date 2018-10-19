@@ -22,5 +22,14 @@ namespace TOne.WhS.Deal.Web.Controllers
             var deserializedFilter = (serializedFilter != null) ? Vanrise.Common.Serializer.Deserialize<DealDefinitionFilter>(serializedFilter) : null;
             return manager.GetDealDefinitionInfo(deserializedFilter);
         }
+
+
+        [HttpGet]
+        [Route("DeleteDeal")]
+        public bool DeleteDeal(int dealId)
+        {
+            var manager = new DealDefinitionManager();
+            return manager.DeleteDeal(dealId);
+        }
     }
 }

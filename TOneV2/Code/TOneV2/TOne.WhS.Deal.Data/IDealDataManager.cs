@@ -12,7 +12,7 @@ namespace TOne.WhS.Deal.Data
 		IEnumerable<DealDefinition> GetDeals();
 
 		bool AreDealsUpdated(ref object updateHandle);
-
+        bool Delete(int dealId);
 		bool Insert(DealDefinition deal, out int insertedId);
 
 		bool Update(DealDefinition deal);

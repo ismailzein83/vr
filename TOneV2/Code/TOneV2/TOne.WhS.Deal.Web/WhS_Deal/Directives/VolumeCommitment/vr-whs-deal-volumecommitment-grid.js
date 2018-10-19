@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentGridDirective.$inject = ['WhS_Deal_VolCommitmentDealAPIService','WhS_Deal_DealStatusTypeEnum' ,'WhS_Deal_VolumeCommitmentService','WhS_Deal_RecurDealService', 'VRNotificationService', 'VRUIUtilsService'];
+    VolumeCommitmentGridDirective.$inject = ['WhS_Deal_VolCommitmentDealAPIService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_RecurDealService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_DealDefinitionAPIService','UtilsService'];
 
-    function VolumeCommitmentGridDirective(WhS_Deal_VolCommitmentDealAPIService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolumeCommitmentService, WhS_Deal_RecurDealService, VRNotificationService, VRUIUtilsService) {
+    function VolumeCommitmentGridDirective(WhS_Deal_VolCommitmentDealAPIService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolumeCommitmentService, WhS_Deal_RecurDealService, VRNotificationService, VRUIUtilsService, WhS_Deal_DealDefinitionAPIService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -85,7 +85,12 @@
                         clicked: recurDeal
                     };
                     menuActions.push(recurMenuAction);
-                }
+                    }
+                    var deleteMenuAction = {
+                        name: 'Delete',
+                        clicked: deleteDeal
+                    };
+                    menuActions.push(deleteMenuAction);
 
                 return menuActions;
                 };
@@ -116,6 +121,20 @@
 
             function hasEditVolCommitmentDealPermission() {
                 return WhS_Deal_VolCommitmentDealAPIService.HasEditDealPermission();
+            }
+
+            function deleteDeal(dataItem) {
+                if (dataItem.Entity.DealId)
+                    return VRNotificationService.showConfirmation("Are you sure you want to delete this deal ?").then(function (result) {
+                        if (result) {
+                            return WhS_Deal_DealDefinitionAPIService.DeleteDeal(dataItem.Entity.DealId).then(function (deletionResponse) {
+                                var index = UtilsService.getItemIndexByVal($scope.scopeModel.dataSource, dataItem.Entity.DealId, 'Entity.DealId');
+                                $scope.scopeModel.dataSource.splice(index, 1);
+                            }).catch(function (error) {
+                                VRNotificationService.notifyException(error, $scope);
+                            });
+                        }
+                    });
             }
         }
     }

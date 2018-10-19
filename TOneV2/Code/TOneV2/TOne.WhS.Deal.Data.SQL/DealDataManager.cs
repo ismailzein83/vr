@@ -54,7 +54,13 @@ namespace TOne.WhS.Deal.Data.SQL
 			return (recordsEffected > 0);
 		}
 
-		public Byte[] GetMaxTimestamp()
+        public bool Delete(int dealId)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_Deal.sp_Deal_Delete", dealId);
+            return (recordsEffected > 0);
+        }
+
+        public Byte[] GetMaxTimestamp()
 		{
 			object maxTimestamp = ExecuteScalarSP("[TOneWhS_Deal].[sp_Deal_GetMaxTimeStamp]");
 			if (maxTimestamp == null || maxTimestamp == DBNull.Value)

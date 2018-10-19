@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealGridDirective.$inject = ['WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_DealAgreementTypeEnum', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_RecurDealService', 'UtilsService', 'VRDateTimeService'];
+    SwapDealGridDirective.$inject = ['WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_DealAgreementTypeEnum', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_RecurDealService', 'UtilsService', 'VRDateTimeService', 'WhS_Deal_DealDefinitionAPIService'];
 
-    function SwapDealGridDirective(WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, VRNotificationService, VRUIUtilsService, WhS_Deal_DealAgreementTypeEnum, WhS_Deal_DealStatusTypeEnum, WhS_Deal_RecurDealService, UtilsService, VRDateTimeService) {
+    function SwapDealGridDirective(WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, VRNotificationService, VRUIUtilsService, WhS_Deal_DealAgreementTypeEnum, WhS_Deal_DealStatusTypeEnum, WhS_Deal_RecurDealService, UtilsService, VRDateTimeService, WhS_Deal_DealDefinitionAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -97,6 +97,12 @@
                         };
                         menuActions.push(recurMenuAction);
                     }
+                    var deleteMenuAction = {
+                        name: 'Delete',
+                        clicked: deleteDeal
+                    };
+                    menuActions.push(deleteMenuAction);
+
                     return menuActions;
                 };
             }
@@ -141,6 +147,19 @@
                     });
                 };
                 WhS_Deal_RecurDealService.recurDeal(dataItem.Entity.DealId, dataItem.Entity.Name, onRecur);
+            }
+            function deleteDeal(dataItem) {
+                if (dataItem.Entity.DealId)
+                    return VRNotificationService.showConfirmation("Are you sure you want to delete this deal").then(function (result) {
+                        if (result) {
+                            return WhS_Deal_DealDefinitionAPIService.DeleteDeal(dataItem.Entity.DealId).then(function (deletionResponse) {
+                                var index = UtilsService.getItemIndexByVal($scope.scopeModel.swapDeals, dataItem.Entity.DealId, 'Entity.DealId');
+                                $scope.scopeModel.swapDeals.splice(index, 1);
+                            }).catch(function (error) {
+                                VRNotificationService.notifyException(error, $scope);
+                            });
+                        }
+                    });
             }
 
             function viewDeal(dataItem) {

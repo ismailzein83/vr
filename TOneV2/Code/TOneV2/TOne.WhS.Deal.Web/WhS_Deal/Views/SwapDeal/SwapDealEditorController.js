@@ -301,6 +301,8 @@
             $scope.scopeModel.deActivationDate = dealEntity.Settings.DeActivationDate;
             $scope.scopeModel.active = dealEntity.Settings.Active;
             $scope.scopeModel.difference = dealEntity.Settings.Difference;
+            //$scope.scopeModel.saleFollowSystemTimeZone = dealEntity.Settings.SaleFollowSystemTimeZone;
+            //$scope.scopeModel.costFollowSystemTimeZone = dealEntity.Settings.CostFollowSystemTimeZone;
         }
         function loadCarrierBoundsSection() {
             var promises = [];
@@ -448,7 +450,10 @@
                     Difference: $scope.scopeModel.difference,
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     DeActivationDate: $scope.scopeModel.deActivationDate,
-                    IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable : true
+                    IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable : true,
+                    //CostFollowSystemTimeZone: $scope.scopeModel.costFollowSystemTimeZone,
+                    //SaleFollowSystemTimeZone: $scope.scopeModel.saleFollowSystemTimeZone
+
                 }
             };
             return obj;

@@ -14,8 +14,16 @@
              });
         }
 
+        function DeleteDeal(dealId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "DeleteDeal"),
+                {
+                    dealId: dealId
+                });
+        }
+
         return ({
-            GetDealDefinitionInfo: GetDealDefinitionInfo
+            GetDealDefinitionInfo: GetDealDefinitionInfo,
+            DeleteDeal: DeleteDeal
         });
     }
 

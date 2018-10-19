@@ -71,7 +71,12 @@ namespace TOne.WhS.Deal.Business
         }
 
 
-
+        public bool DeleteDeal(int dealId)
+        {
+            IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
+            return dataManager.Delete(dealId);
+        }
+            
         public Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail> UpdateDeal(DealDefinition deal)
         {
             var dealDefinition = GetDeal(deal.DealId);

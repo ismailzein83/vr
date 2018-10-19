@@ -44,6 +44,10 @@ namespace TOne.WhS.Deal.Business
 
             return cachedDeals.MapRecords(DealDefinitionInfoMapper, filterExpression).OrderBy(item => item.Name);
         }
+        public bool DeleteDeal (int dealId)
+        {
+            return base.DeleteDeal(dealId);
+        }
 
         /// <summary>
         /// used in data transformation
