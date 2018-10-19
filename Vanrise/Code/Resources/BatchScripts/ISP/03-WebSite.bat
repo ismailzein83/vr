@@ -10,9 +10,6 @@ ECHO ISP WebSite
 xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q														"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\ISP\list-of-excluded-files.txt
 xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.ISP.exclude" /y /v /z /i /Q /R							"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\"
 rename																									"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Web.config.ISP.exclude" "Web.config"												 
-del /s /q /f																							"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Images\iconheader.ico"
-del /s /q /f																							"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Images\login.png"
-del /s /q /f																							"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Images\logoonheader.png"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\ISP-logoonheader.png" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\ISP-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\ISP-iconheader.ico" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Images\"
