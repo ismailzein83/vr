@@ -4,7 +4,7 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
     return {
         restrict: 'E',
         scope: {
-            onReady: '=',
+            onReady: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -16,19 +16,16 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
         templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/ChargingPolicy/Templates/ChargingPolicyGridTemplate.html'
     };
 
-    function ChargingPolicyGrid($scope, ctrl, $attrs)
-    {
+    function ChargingPolicyGrid($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
 
         var gridAPI;
 
-        function initializeController()
-        {
+        function initializeController() {
             $scope.scopeModel = {};
             $scope.scopeModel.chargingPolicies = [];
 
-            $scope.scopeModel.menuActions = function (dataItem)
-            {
+            $scope.scopeModel.menuActions = function (dataItem) {
                 var menuActions = buildCommonMenuActions();
                 if (dataItem.menuActions != null) {
                     for (var i = 0; i < dataItem.menuActions.length; i++)
@@ -90,8 +87,7 @@ app.directive('retailBeChargingpolicyGrid', ['Retail_BE_ChargingPolicyAPIService
             };
         }
 
-        function editChargingPolicy(chargingPolicy)
-        {
+        function editChargingPolicy(chargingPolicy) {
             var onChargingPolicyUpdated = function (updatedChargingPolicy) {
                 Retail_BE_ServiceTypeService.defineServiceTypeRuleTabsAndMenuActions(updatedChargingPolicy, gridAPI, buildCriteriaFieldValues(updatedChargingPolicy));
                 gridAPI.itemUpdated(updatedChargingPolicy);

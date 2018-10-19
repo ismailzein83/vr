@@ -19,7 +19,7 @@
             };
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/ServiceType/ServiceTypeEditor.html', parameters, settings);
-        };
+        }
 
         function editPartType(partEntity, onPartTypeUpdated, context) {
             var parameters = {
@@ -33,7 +33,7 @@
             };
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/ServiceType/ChargingPolicyPartEditor.html', parameters, settings);
-        };
+        }
 
         function addPartType(onPartTypeAdded, context) {
             var parameters = {
@@ -47,13 +47,11 @@
             };
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/ServiceType/ChargingPolicyPartEditor.html', parameters, settings);
-        };
+        }
 
         function defineServiceTypeRuleTabsAndMenuActions(dataItem, gridAPI, criteriaFieldValues) {
-            if (dataItem.RuleDefinitions == null) {
-              
+            if (dataItem.RuleDefinitions == null) 
                 return;
-            }
 
             var drillDownTabs = [];
             var menuActions = [];
@@ -62,9 +60,11 @@
                 var ruleDefinition = dataItem.RuleDefinitions[i];
                 addDrillDownTab(ruleDefinition);               
             }
+
             addDrillDownHistoryTab();
             setDrillDownTabs();
             setMenuActions();
+
             function addDrillDownHistoryTab()
             {
                 var drillDownDefinition = {};
@@ -89,6 +89,7 @@
             function getEntityUniqueName(accountBEDefinitionId) {
                 return "Retail_BusinessEntity_ChargingPolicy_" + accountBEDefinitionId;
             }
+
             function addDrillDownTab(ruleDefinition) {
                 var drillDownTab = {};
 
@@ -122,8 +123,20 @@
                     return payload;
                 }
 
+                function buildAccessibilityObj() {
+                    return {
+                        criteriaAccessibility: {
+                            'ServiceType': { notAccessible: true },
+                            'ChargingPolicy': { notAccessible: true },
+                            'Package': { notAccessible: true }
+                        },
+                        settingNotAccessible: false
+                    };
+                }
+
                 drillDownTabs.push(drillDownTab);
             }
+
             function setDrillDownTabs() {
                 var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI, undefined);
                 drillDownManager.setDrillDownExtensionObject(dataItem);
@@ -135,18 +148,6 @@
                     dataItem.menuActions.push(menuActions[i]);
                 }
             }
-
-            function buildAccessibilityObj() {
-                return {
-                    criteriaAccessibility: {
-                        'ServiceType': { notAccessible: true },
-                        'ChargingPolicy': { notAccessible: true },
-                        'Package': { notAccessible: true }
-                    },
-                    settingNotAccessible: false
-                };
-            }
-
         }
       
         return {
@@ -154,7 +155,6 @@
             addPartType: addPartType,
             editPartType: editPartType,
             defineServiceTypeRuleTabsAndMenuActions: defineServiceTypeRuleTabsAndMenuActions
-            
         };
     }
 
