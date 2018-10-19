@@ -4,6 +4,8 @@ using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -70,6 +72,25 @@ namespace TOne.WhS.Deal.Business
                     dealSaleZoneGroupZoneItems.Add(dealSaleZoneGroup);
             }
             return dealSaleZoneGroupZoneItems;
+        }
+        public static DateTime? ShiftCarrierDateTime(int carrierId, bool isSale, DateTime? date)
+        {
+            if (!date.HasValue)
+                return null;
+
+            var timeZoneManager = new VRTimeZoneManager();
+            var carrierAccountManager = new CarrierAccountManager();
+            
+            int timeZoneId = isSale
+                ? carrierAccountManager.GetCustomerTimeZoneId(carrierId)
+                : carrierAccountManager.GetSupplierTimeZoneId(carrierId);
+
+            VRTimeZone timeZone = timeZoneManager.GetVRTimeZone(timeZoneId);
+
+            timeZone.ThrowIfNull("timeZone", carrierId);
+            timeZone.Settings.ThrowIfNull("timeZoneSettings", carrierId);
+
+            return date.Value.Subtract(timeZone.Settings.Offset);
         }
     }
 }
