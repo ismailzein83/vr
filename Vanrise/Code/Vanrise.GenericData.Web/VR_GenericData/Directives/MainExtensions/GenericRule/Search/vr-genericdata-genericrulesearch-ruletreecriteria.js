@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrGenericdataGenericrulesearchRuletreecriteria', ['UtilsService', 'VR_GenericData_DataRecordFieldAPIService', 'VRUIUtilsService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'VR_GenericData_GenericUIService', 'VR_GenericData_GenericRule',
     function (UtilsService, VR_GenericData_DataRecordFieldAPIService, VRUIUtilsService, VR_GenericData_GenericRuleTypeConfigAPIService, VR_GenericData_GenericUIService, VR_GenericData_GenericRule) {
         return {
@@ -9,21 +10,12 @@ app.directive('vrGenericdataGenericrulesearchRuletreecriteria', ['UtilsService',
                 basicselected: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
                 var ctor = new searchRuleTreeCriteriaCtor(ctrl, $scope);
                 ctor.initializeController();
-
             },
             controllerAs: 'ruleTreeCriteriaCtrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/GenericRule/Search/Templates/SearchRuleTreeCriteriaTemplate.html';
             }
@@ -32,9 +24,10 @@ app.directive('vrGenericdataGenericrulesearchRuletreecriteria', ['UtilsService',
         function searchRuleTreeCriteriaCtor(ctrl, $scope) {
             this.initializeController = initializeController;
 
-            var fieldTypes;
             var ruleDefinition;
+            var fieldTypes;
             var genericUIObj;
+            var criteriaFieldsToHide;
 
             var settingsFilterDirectiveAPI;
             var settingsFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -42,7 +35,6 @@ app.directive('vrGenericdataGenericrulesearchRuletreecriteria', ['UtilsService',
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.filters = [];
-
 
                 $scope.onSettingsFilterDirectiveReady = function (api) {
                     settingsFilterDirectiveAPI = api;
@@ -56,12 +48,14 @@ app.directive('vrGenericdataGenericrulesearchRuletreecriteria', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
-
                     $scope.scopeModel.filters.length = 0;
                     $scope.scopeModel.settingsFilterEditor = null;
 
+                    var promises = [];
+
                     ruleDefinition = payload.ruleDefinition;
+                    criteriaFieldsToHide = payload.criteriaFieldsToHide;
+
                     genericUIObj = VR_GenericData_GenericUIService.createGenericUIObj(ruleDefinition.CriteriaDefinition.Fields);
 
                     var getFieldTypeConfigsPromise = getFieldTypeConfigs();
@@ -80,23 +74,28 @@ app.directive('vrGenericdataGenericrulesearchRuletreecriteria', ['UtilsService',
                                 fieldTypes.push(response[i]);
                             }
                         });
-                    };
+                    }
 
                     function loadFilterSettings() {
                         var loadFilterSettingsLoadDeferred = UtilsService.createPromiseDeferred();
-                        getFieldTypeConfigsPromise.then(function () {
-                            var criteriaFilterPromises = [];
 
+                        getFieldTypeConfigsPromise.then(function () {
+
+                            var criteriaFilterPromises = [];
                             if (ruleDefinition.CriteriaDefinition != undefined) {
                                 for (var i = 0; i < ruleDefinition.CriteriaDefinition.Fields.length; i++) {
-                                    var criteriaField = ruleDefinition.CriteriaDefinition.Fields[i];
-                                    var filter = getFilter(criteriaField);
-                                    if (filter != undefined) {
-                                        criteriaFilterPromises.push(filter.directiveLoadDeferred.promise);
-                                        $scope.scopeModel.filters.push(filter);
+                                    var criteriaFieldDefinition = ruleDefinition.CriteriaDefinition.Fields[i];
+
+                                    if (isCriteriaFieldVisible(criteriaFieldDefinition.FieldName)) {
+                                        var filter = getFilter(criteriaFieldDefinition);
+                                        if (filter != undefined) {
+                                            criteriaFilterPromises.push(filter.directiveLoadDeferred.promise);
+                                            $scope.scopeModel.filters.push(filter);
+                                        }
                                     }
                                 }
                             }
+
                             UtilsService.waitMultiplePromises(criteriaFilterPromises).then(function () {
                                 loadFilterSettingsLoadDeferred.resolve();
                             });
@@ -104,39 +103,38 @@ app.directive('vrGenericdataGenericrulesearchRuletreecriteria', ['UtilsService',
                             loadFilterSettingsLoadDeferred.reject(error);
                         });
 
-                        return loadFilterSettingsLoadDeferred.promise;
-                    };
+                        function getFilter(criteriaField) {
+                            var filter;
 
-                    function getFilter(criteriaField) {
-                        var filter;
-                        var filterEditor = UtilsService.getItemByVal(fieldTypes, criteriaField.FieldType.ConfigId, 'ExtensionConfigurationId').FilterEditor;
+                            var filterEditor = UtilsService.getItemByVal(fieldTypes, criteriaField.FieldType.ConfigId, 'ExtensionConfigurationId').FilterEditor;
+                            if (filterEditor == null)
+                                return filter;
 
-                        if (filterEditor == null) return filter;
+                            filter = {};
+                            filter.criteriaFieldName = criteriaField.FieldName;
+                            filter.showInBasicSearch = criteriaField.ShowInBasicSearch;
+                            filter.directiveEditor = filterEditor;
 
-                        filter = {};
-                        filter.criteriaFieldName = criteriaField.FieldName;
-                        filter.showInBasicSearch = criteriaField.ShowInBasicSearch;
+                            filter.directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        filter.directiveEditor = filterEditor;
-                        filter.directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                            filter.onDirectiveReady = function (api) {
+                                filter.directiveAPI = api;
 
-                        filter.onDirectiveReady = function (api) {
-                            filter.directiveAPI = api;
+                                criteriaField.genericUIContext = genericUIObj.getFieldContext(criteriaField);
 
-                            criteriaField.genericUIContext = genericUIObj.getFieldContext(criteriaField);
-
-                            var directivePayload = {
-                                fieldTitle: criteriaField.Title,
-                                fieldType: criteriaField.FieldType,
-                                genericUIContext: criteriaField.genericUIContext
+                                var directivePayload = {
+                                    fieldTitle: criteriaField.Title,
+                                    fieldType: criteriaField.FieldType,
+                                    genericUIContext: criteriaField.genericUIContext
+                                };
+                                VRUIUtilsService.callDirectiveLoad(api, directivePayload, filter.directiveLoadDeferred);
                             };
 
+                            return filter;
+                        }
 
-                            VRUIUtilsService.callDirectiveLoad(api, directivePayload, filter.directiveLoadDeferred);
-                        };
-
-                        return filter;
-                    };
+                        return loadFilterSettingsLoadDeferred.promise;
+                    }
 
                     function loadSettingsFilter() {
                         var loadSettingsFilterLoadDeferred = UtilsService.createPromiseDeferred();
@@ -163,7 +161,7 @@ app.directive('vrGenericdataGenericrulesearchRuletreecriteria', ['UtilsService',
                             });
                         });
                         return loadSettingsFilterLoadDeferred.promise;
-                    };
+                    }
 
                     function getRuleTypes() {
                         return VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypes().then(function (response) {
@@ -173,7 +171,7 @@ app.directive('vrGenericdataGenericrulesearchRuletreecriteria', ['UtilsService',
                             }
                             $scope.scopeModel.settingsFilterEditor = UtilsService.getItemByVal(ruleTypes, ruleDefinition.SettingsDefinition.ConfigId, 'ExtensionConfigurationId').FilterEditor;
                         });
-                    };
+                    }
 
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         genericUIObj.loadingFinish();
@@ -219,6 +217,16 @@ app.directive('vrGenericdataGenericrulesearchRuletreecriteria', ['UtilsService',
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
+            }
+
+            function isCriteriaFieldVisible(criteriaFieldName) {
+                if (criteriaFieldsToHide == undefined)
+                    return true;
+                for (var i = 0; i < criteriaFieldsToHide.length; i++) {
+                    if (criteriaFieldName == criteriaFieldsToHide[i])
+                        return false;
+                }
+                return true;
             }
         }
     }]);

@@ -1,31 +1,26 @@
 ﻿<div ng-hide="filterSectionCollapsed">
     <vr-row removeline>
         <vr-columns colnum="10" haschildcolumns>
-            <vr-columns colnum="3" ng-show="scopeModel.ruleDefinition">
+            <vr-columns width="normal" ng-show="scopeModel.ruleDefinition">
                 <vr-datetimepicker label="Effective Date" value="scopeModel.effectiveDate" type="longDateTime"></vr-datetimepicker>
             </vr-columns>
-            <vr-columns colnum="3">
+            <vr-columns width="normal">
                 <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
             </vr-columns>
-            <vr-directivewrapper directive="scopeModel.settingsFilterEditor" on-ready="scopeModel.onSettingsFilterDirectiveReady" normal-col-num="3"></vr-directivewrapper>
-            <span ng-repeat="filter in scopeModel.filters">
-                <vr-directivewrapper ng-show="filter.showInBasicSearch" directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="3"></vr-directivewrapper>
+            <span ng-if="scopeModel.selectedRuleDefinitionType!=undefined">
+                <vr-directivewrapper directive="scopeModel.selectedRuleDefinitionType.SearchEditor" on-ready="scopeModel.onSearchDirectiveReady" basicselected="false" advancedselected="true"></vr-directivewrapper>
             </span>
-            <!--<span ng-show="advancedSelected">
-                <vr-directivewrapper directive="scopeModel.settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady" normal-col-num="2"></vr-directivewrapper>
-            </span>-->
-          
+
         </vr-columns>
-        <vr-columns colnum="12" >
+        <vr-columns colnum="12">
             <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked"></vr-button>
             <vr-button type="Add" standalone data-onclick="scopeModel.addGenericRule" ng-show="scopeModel.hasAddRulePermission"></vr-button>
             <vr-button type="Upload" standalone data-onclick="scopeModel.uploadGenericRules" ng-if="scopeModel.supportUpload"></vr-button>
         </vr-columns>
     </vr-row>
-    <span>{{scopeModel.settingsFilterEditor}}</span>
 </div>
 <vr-row removeline>
-    <vr-columns width="fullrow">
-        <vr-genericdata-genericrule-grid on-ready="scopeModel.onGridReady"></vr-genericdata-genericrule-grid>
+    <vr-columns colnum="12" simplecol>
+        <vr-directivewrapper ng-if="scopeModel.selectedRuleDefinitionType!=undefined" directive="scopeModel.selectedRuleDefinitionType.GridEditor" on-ready="scopeModel.onGridReady"></vr-directivewrapper>
     </vr-columns>
 </vr-row>

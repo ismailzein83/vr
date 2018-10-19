@@ -1,5 +1,4 @@
 ﻿<vr-panel ng-controller="VR_GenericData_GenericRuleManagementController">
-
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
@@ -12,8 +11,8 @@
             </vr-row>
             <vr-row removeline>
                 <vr-columns width="normal" ng-hide="hideGenericRuleDefinition">
-                    <vr-genericdata-genericruledefinition-selector on-ready="onGenericRuleDefinitionSelectorDirectiveReady" selectedvalues="scopeModel.ruleDefinition"
-                                                                   onselectionchanged="onGenericRuleDefinitionSelectorSelectionChange" customlabel="Rule Type"
+                    <vr-genericdata-genericruledefinition-selector on-ready="scopeModel.onGenericRuleDefinitionSelectorDirectiveReady" selectedvalues="scopeModel.ruleDefinition"
+                                                                   onselectionchanged="scopeModel.onGenericRuleDefinitionSelectorSelectionChange" customlabel="Rule Type"
                                                                    isrequired="true" normal-col-num="2" hideremoveicon showtitle>
                     </vr-genericdata-genericruledefinition-selector>
                 </vr-columns>
@@ -24,25 +23,25 @@
                     <vr-textbox label="Description" value="scopeModel.description"></vr-textbox>
                 </vr-columns>
                 <span ng-if="scopeModel.selectedRuleDefinitionType!=undefined">
-                    <vr-directivewrapper directive="scopeModel.selectedRuleDefinitionType.SearchEditor" on-ready="onSearchDirectiveReady" advancedselected="advancedSelected" basicselected="basicSelected"></vr-directivewrapper>
+                    <vr-directivewrapper directive="scopeModel.selectedRuleDefinitionType.SearchEditor" on-ready="scopeModel.onSearchDirectiveReady" basicselected="basicSelected" advancedselected="advancedSelected"></vr-directivewrapper>
                 </span>
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons" ng-show="scopeModel.ruleDefinition">
-                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-                    <vr-button type="Add" data-onclick="addGenericRule" ng-show="scopeModel.haveAddPermission"></vr-button>
-                    <vr-button type="Upload" data-onclick="uploadGenericRules" ng-show="scopeModel.ruleSupportsUpload"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.addGenericRule" ng-show="scopeModel.haveAddPermission"></vr-button>
+                    <vr-button type="Upload" data-onclick="scopeModel.uploadGenericRules" ng-show="scopeModel.ruleSupportsUpload"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns colnum="12" simplecol>
-                <vr-directivewrapper directive="scopeModel.selectedRuleDefinitionType.GridEditor" on-ready="onGridReady" ng-if="scopeModel.selectedRuleDefinitionType!=undefined && scopeModel.gridloadded"></vr-directivewrapper>
+                <vr-directivewrapper ng-if="scopeModel.selectedRuleDefinitionType!=undefined && scopeModel.gridloadded"
+                                     directive="scopeModel.selectedRuleDefinitionType.GridEditor" on-ready="scopeModel.onGridReady">
+                </vr-directivewrapper>
             </vr-columns>
         </vr-row>
-
     </vr-form>
-
 </vr-panel>
