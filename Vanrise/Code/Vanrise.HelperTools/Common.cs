@@ -392,6 +392,11 @@ when not matched by target then
                 sb = sb.Replace(mainItem, "StandardInterconnectStructure");
             }
 
+            if (projectName == "ISP")
+            {
+                sb = sb.Replace(mainItem, "StandardISPStructure");
+            }
+
             if (!Directory.Exists(sqlFilesOutputPath))
             {
                 Directory.CreateDirectory(sqlFilesOutputPath);
