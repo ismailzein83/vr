@@ -7,6 +7,8 @@
 \Web.config.Ringo.exclude
 \Web.config.TestCallAnalysis.exclude
 \Web.config.Zajil.exclude
+\Web.config.Interconnect.exclude
+\Web.config.ISP.exclude
 
 \images\nTegra-logoonheader.png
 \images\nTegra-login.png
@@ -15,6 +17,14 @@
 \images\RA-iconheader.ico
 \images\RA-login.png
 \images\RA-logoonheader.png
+
+\images\ICX-iconheader.ico
+\images\ICX-login.png
+\images\ICX-logoonheader.png
+
+\images\ISP-iconheader.ico
+\images\ISP-login.png
+\images\ISP-logoonheader.png
 
 \bin\Retail.Ringo.Business.dll
 \bin\Retail.Ringo.Data.dll
