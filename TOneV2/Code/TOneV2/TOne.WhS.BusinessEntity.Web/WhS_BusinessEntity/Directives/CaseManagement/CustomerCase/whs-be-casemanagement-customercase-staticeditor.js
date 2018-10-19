@@ -84,7 +84,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                             selectedTicketPromiseDeferred.resolve();
                         else {
                             $scope.scopeModel.contactName = carrierProfileTicketInfo.NameDescription;
-                            $scope.scopeModel.email = carrierProfileTicketInfo.Emails.join(';');
+                            $scope.scopeModel.email = carrierProfileTicketInfo.Emails;
                             $scope.scopeModel.phoneNumber = carrierProfileTicketInfo.PhoneNumber.join(';');
                         }
                     }

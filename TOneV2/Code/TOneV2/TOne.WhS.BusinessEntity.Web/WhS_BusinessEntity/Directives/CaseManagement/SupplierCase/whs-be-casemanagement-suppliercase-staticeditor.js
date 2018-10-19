@@ -89,7 +89,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FaultTicketAPIService, WhS_BE_S
                             selectedTicketPromiseDeferred.resolve();
                         else {
                             $scope.scopeModel.contactName = carrierProfileTicketInfo.NameDescription;
-                            $scope.scopeModel.email = carrierProfileTicketInfo.Emails.join(';');
+                            $scope.scopeModel.email = carrierProfileTicketInfo.Emails;
                             $scope.scopeModel.phoneNumber = carrierProfileTicketInfo.PhoneNumber.join(';');
                         }
                     }
