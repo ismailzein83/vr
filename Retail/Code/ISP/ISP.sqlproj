@@ -72,5 +72,6 @@
     <Build Include="ISP\User Defined Types\NASDeviceType.sql" />
     <Build Include="ISP\User Defined Types\ISPPackageType.sql" />
     <Build Include="Security\ISP.sql" />
+    <Build Include="ISP\Tables\ISPEvent.sql" />
   </ItemGroup>
 </Project>
