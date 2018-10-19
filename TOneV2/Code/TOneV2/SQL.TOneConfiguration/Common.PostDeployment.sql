@@ -45,7 +45,7 @@ as (select * from (values
 ('VRCommon/RateType/UpdateRateType','VRCommon_RateType: Edit'),
 
 ('VRCommon/Currency/GetFilteredCurrencies','VRCommon_Currency: View'),
-('VRCommon/Currency/GetCurrency','VRCommon_Currency: View'),
+('VRCommon/Currency/GetCurrency',null),
 ('VRCommon/Currency/AddCurrency','VRCommon_Currency: Add'),
 ('VRCommon/Currency/UpdateCurrency','VRCommon_Currency: Edit'),
 ('VRCommon/CurrencyExchangeRate/GetFilteredExchangeRateCurrencies','VRCommon_Currency: View Exchange Rates'),
