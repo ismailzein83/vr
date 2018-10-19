@@ -118,9 +118,6 @@ app.directive('cpMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsSe
                             $scope.scopeModel.fromDate = selectedValues.FromDate;
                             $scope.scopeModel.toDate = selectedValues.ToDate;
                             $scope.scopeModel.notes = selectedValues.Notes;
-                            $scope.scopeModel.sendEmail = selectedValues.SendEmail;
-                            $scope.scopeModel.phoneNumber = selectedValues.PhoneNumber;
-                            $scope.scopeModel.email = selectedValues.ContactEmails;
                             $scope.scopeModel.descriptionSettings = selectedValues.TicketDetails != undefined ? selectedValues.TicketDetails : [];
                         }
                     }
@@ -148,10 +145,7 @@ app.directive('cpMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsSe
                             $values: getDescriptionSettingsListData()
                         });
                     }
-                    faultTicketObject.ContactEmails = $scope.scopeModel.email;
                     faultTicketObject.Notes = $scope.scopeModel.notes;
-                    faultTicketObject.PhoneNumber = $scope.scopeModel.phoneNumber;
-                    faultTicketObject.SendEmail = $scope.scopeModel.sendEmail;
                     faultTicketObject.StatusId = statusSelectorAPI != undefined ? statusSelectorAPI.getSelectedIds() : undefined;
                     faultTicketObject.Attachments = attachmentGridAPI != undefined ? attachmentGridAPI.getData() : undefined;
                     faultTicketObject.SubscriberId = retailSubAccountsSelectorAPI != undefined && $scope.scopeModel.hasChildAccounts ? retailSubAccountsSelectorAPI.getSelectedIds() : undefined;

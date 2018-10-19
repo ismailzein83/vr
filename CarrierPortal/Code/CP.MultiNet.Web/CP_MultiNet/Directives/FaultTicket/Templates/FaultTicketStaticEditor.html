@@ -10,20 +10,6 @@
                 <vr-row>
                     <vr-common-statusdefinition-remoteselector on-ready="scopeModel.onStatusSelectorReady" customlabel="Status" normal-col-num="12" isrequired="true"></vr-common-statusdefinition-remoteselector>
                 </vr-row>
-                <vr-row>
-                    <vr-columns width="1/3row">
-                        <vr-switch value="scopeModel.sendEmail" label="Send Email" isrequired="true"></vr-switch>
-                    </vr-columns>
-                    <vr-columns width="fullrow">
-                        <vr-textbox type="text" value="scopeModel.email" label="Emails" isrequired="scopeModel.sendEmail" vr-disabled="!scopeModel.sendEmail"></vr-textbox>
-                    </vr-columns>
-                </vr-row>
-                <vr-row>
-                    <vr-columns width="fullrow">
-                        <vr-textbox type="text" value="scopeModel.phoneNumber" label="Phone Numbers"></vr-textbox>
-                    </vr-columns>
-                </vr-row>
-
             </vr-columns>
 
 
