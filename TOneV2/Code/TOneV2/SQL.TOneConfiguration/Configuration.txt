@@ -117,4 +117,5 @@ CentralAuth.PostDeployment.sql
 
 ISP
 Retail_ISP.PostDeployment.sql
+Retail_NetworkRental.PostDeployment.sql
 
