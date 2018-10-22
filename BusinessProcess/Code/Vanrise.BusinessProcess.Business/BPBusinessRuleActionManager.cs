@@ -22,7 +22,7 @@ namespace Vanrise.BusinessProcess.Business
             {
                 var action = GetBusinessRuleAction(bpBusinessRuleDefinitionId);
                 if (action == null)
-                    throw new VRBusinessException("no default actions are defined for business rules");
+                    throw new VRBusinessException(string.Format("No default actions are defined for business rules:{0}", bpBusinessRuleDefinitionId));
                 return new BPBusinessRuleEffectiveAction
                 {
                     RuleDefinitionId = bpBusinessRuleDefinitionId,
@@ -35,7 +35,7 @@ namespace Vanrise.BusinessProcess.Business
                 BPBusinessRuleSetEffectiveActionManager effectiveActionManager = new BPBusinessRuleSetEffectiveActionManager();
                 var effectiveAction = effectiveActionManager.GetBusinessRuleEffectiveAction(bpBusinessRuleDefinitionId, businessRuleSetId.Value);
                 if (effectiveAction == null)
-                    throw new VRBusinessException("no actions are defined for business rules");
+                    throw new VRBusinessException(string.Format("No default actions are defined for business rules:{0}", bpBusinessRuleDefinitionId));
                 return effectiveAction;
             }
         }
