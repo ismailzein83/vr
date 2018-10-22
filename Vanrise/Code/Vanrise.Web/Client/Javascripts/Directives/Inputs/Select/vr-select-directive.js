@@ -1045,8 +1045,12 @@
                                     if (index >= 0)
                                         continue;
                                 }
-                                if (!ctrl.getObjectDisabled(item))
+                                if (!ctrl.getObjectDisabled(item)){
                                     ctrl.selectedvalues.push(item);
+                                    if (ctrl.onselectitem && typeof (ctrl.onselectitem) == 'function') {
+                                        ctrl.onselectitem(item);
+                                    }
+                                }                                  
                             }
                         };
 
