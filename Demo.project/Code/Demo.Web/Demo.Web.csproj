@@ -518,6 +518,10 @@
       <Project>{01f1fafb-5f56-485e-8539-a5a50efb9edd}</Project>
       <Name>Vanrise.Tools.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Tools.Web\Vanrise.Tools.Web.csproj">
+      <Project>{3b7e7331-1e38-4f59-833a-d9fc0834bbb2}</Project>
+      <Name>Vanrise.Tools.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
