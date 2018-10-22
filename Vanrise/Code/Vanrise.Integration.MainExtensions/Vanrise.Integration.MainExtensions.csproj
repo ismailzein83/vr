@@ -46,6 +46,10 @@
     <Compile Include="BusinessObjectDataStore\DataSourceBusinessObjectDataProviderSettings.cs" />
     <Compile Include="FailedBatchInfoObjectType.cs" />
     <Compile Include="FailedBatchInfoPropertyEvaluator.cs" />
+    <Compile Include="FileDelayChecker\SizeBasedFileDelayChecker.cs" />
+    <Compile Include="FileDelayChecker\TimeBasedFileDelayChecker.cs" />
+    <Compile Include="FileMissingChecker\DateTimeFileMissingChecker.cs" />
+    <Compile Include="FileMissingChecker\SequenceFileMissingChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
