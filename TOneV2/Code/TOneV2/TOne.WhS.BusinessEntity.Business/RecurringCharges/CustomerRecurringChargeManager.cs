@@ -55,8 +55,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 effectiveCustomerRecurringCharge.RecurringChargePeriod.Settings.ThrowIfNull("effectiveCustomerRecurringCharge.RecurringChargePeriod.Settings");
                 var context = new RecurringChargePeriodSettingsContext()
                 {
-                    FromDate = fromDate,
-                    ToDate = toDate,
+                    FromDate = fromDate>effectiveCustomerRecurringCharge.BED ? fromDate : effectiveCustomerRecurringCharge.BED,
+                    ToDate = effectiveCustomerRecurringCharge.EED.HasValue && toDate > effectiveCustomerRecurringCharge.EED.Value ? effectiveCustomerRecurringCharge.EED.Value : toDate
                 };
                 effectiveCustomerRecurringCharge.RecurringChargePeriod.Settings.Execute(context);
                 if (context.Periods != null)
