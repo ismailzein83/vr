@@ -59,8 +59,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Tools.Data.SQL", "V
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Tools.Business", "Vanrise.Tools.Business\Vanrise.Tools.Business.csproj", "{B21F9693-9F89-4D18-9E06-BEA9B098C956}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Tools.Web", "Vanrise.Tools.Web\Vanrise.Tools.Web.csproj", "{26929100-6D63-49D1-8847-EE5DB47660A3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,10 +151,6 @@ Global
 		{B21F9693-9F89-4D18-9E06-BEA9B098C956}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B21F9693-9F89-4D18-9E06-BEA9B098C956}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B21F9693-9F89-4D18-9E06-BEA9B098C956}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26929100-6D63-49D1-8847-EE5DB47660A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26929100-6D63-49D1-8847-EE5DB47660A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26929100-6D63-49D1-8847-EE5DB47660A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26929100-6D63-49D1-8847-EE5DB47660A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,13 +180,12 @@ Global
 		{B26F126B-A1DD-4A03-95CD-E308F12550E1} = {A11B4DD9-3A5E-491D-B100-256E0D156872}
 		{5A6B5819-AA17-4756-9F90-A1A7B4C5494D} = {A11B4DD9-3A5E-491D-B100-256E0D156872}
 		{B21F9693-9F89-4D18-9E06-BEA9B098C956} = {A11B4DD9-3A5E-491D-B100-256E0D156872}
-		{26929100-6D63-49D1-8847-EE5DB47660A3} = {A11B4DD9-3A5E-491D-B100-256E0D156872}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C3DBADF-57FD-4F18-8AA7-145941D070DA}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 23
+		SccNumberOfProjects = 22
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -280,9 +273,5 @@ Global
 		SccProjectTopLevelParentUniqueName21 = DemoProject.sln
 		SccProjectName21 = Vanrise.Tools.Business
 		SccLocalPath21 = Vanrise.Tools.Business
-		SccProjectUniqueName22 = Vanrise.Tools.Web\\Vanrise.Tools.Web.csproj
-		SccProjectTopLevelParentUniqueName22 = DemoProject.sln
-		SccProjectName22 = Vanrise.Tools.Web
-		SccLocalPath22 = Vanrise.Tools.Web
 	EndGlobalSection
 EndGlobal
