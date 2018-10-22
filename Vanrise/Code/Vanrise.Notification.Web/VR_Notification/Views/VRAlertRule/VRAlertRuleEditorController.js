@@ -193,7 +193,7 @@
             var obj = buildVRAlertRuleObjFromScope();
             $scope.scopeModel.isLoading = true;
             return VR_Notification_VRAlertRuleAPIService.AddVRAlertRule(buildVRAlertRuleObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('VRAlertRule', response, 'Name')) {
+                if (VRNotificationService.notifyOnItemAdded('Action Rule', response, 'Name')) {
                     if ($scope.onVRAlertRuleAdded != undefined)
                         $scope.onVRAlertRuleAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -207,7 +207,7 @@
         function update() {
             $scope.scopeModel.isLoading = true;
             return VR_Notification_VRAlertRuleAPIService.UpdateVRAlertRule(buildVRAlertRuleObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('VRAlertRule', response, 'Name')) {
+                if (VRNotificationService.notifyOnItemUpdated('Action Rule', response, 'Name')) {
                     if ($scope.onVRAlertRuleUpdated != undefined) {
                         $scope.onVRAlertRuleUpdated(response.UpdatedObject);
                     }
