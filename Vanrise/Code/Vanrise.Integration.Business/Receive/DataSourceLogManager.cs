@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
@@ -15,7 +11,7 @@ namespace Vanrise.Integration.Business
         public Vanrise.Entities.IDataRetrievalResult<DataSourceLog> GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input)
         {
 
-            var maxTop = new ConfigManager().GetMaxSearchRecordCount();
+            var maxTop = new Vanrise.Common.Business.ConfigManager().GetMaxSearchRecordCount();
             if (input.Query.Top > maxTop)
                 throw new VRBusinessException(string.Format("Top record count cannot be greater than {0}", maxTop));
 
@@ -36,6 +32,7 @@ namespace Vanrise.Integration.Business
         }
 
         #region Private Classes
+
         private class DataSourceLogExcelExportHandler : ExcelExportHandler<DataSourceLog>
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DataSourceLog> context)
@@ -68,6 +65,7 @@ namespace Vanrise.Integration.Business
                 context.MainSheet = sheet;
             }
         }
+
         #endregion
-    }
+    } 
 }
