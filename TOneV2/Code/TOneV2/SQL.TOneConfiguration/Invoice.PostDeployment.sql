@@ -106,7 +106,9 @@ as (select * from (values
 
 ('50d14dde-3ab4-48be-aa14-0242adcc872f'	,'Invoice Data Provider Settings',	'Invoice Data Provider Settings'	,'VR_GenericData_BusinessObjectDataRecordStorage'	,'{"Editor":"vr-invoice-businessobject-dataprovidersettings"}'),
 ('8c03b3c5-3352-4558-8d08-ddc34fc5e11f'	,'Invoice Record Type Main Fields',	'Invoice Record Type Main Fields'	,'VR_GenericData_DataRecordTypeExtraField'	,'{"Editor":"vr-invoice-recordtypemainfield"}'),
-('77D7261A-E2C6-4A49-B6FA-4010A07F2C2B','ReportFileExist','Report File Exist','VR_Invoice_InvoiceType_InvoiceGridFilterConditionConfig','{"Editor":"vr-invoicetype-invoicefiltercondition-reportfileexist"}')
+('77D7261A-E2C6-4A49-B6FA-4010A07F2C2B','ReportFileExist','Report File Exist','VR_Invoice_InvoiceType_InvoiceGridFilterConditionConfig','{"Editor":"vr-invoicetype-invoicefiltercondition-reportfileexist"}'),
+('b9c2a813-4122-4de7-9173-e4cccc093af6','Invoice Report Files','Invoice Report Files','VR_Common_CompanyDefinition','{"Editor":"vr-invoice-invoicereportfiles-definition"}')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
