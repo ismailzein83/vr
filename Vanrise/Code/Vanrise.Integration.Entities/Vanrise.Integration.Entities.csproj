@@ -49,9 +49,11 @@
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
     <Compile Include="FailedBatchInfo.cs" />
+    <Compile Include="FileDataSourceDefinition\FileDataSourceDefinition.cs" />
     <Compile Include="ImportedBatchProcessingOutput.cs" />
     <Compile Include="Receive\BaseAdapterArgument.cs" />
     <Compile Include="Receive\BaseAdapterState.cs" />
+    <Compile Include="Receive\BaseFileReceiveAdapter.cs" />
     <Compile Include="Receive\BaseReceiveAdapter.cs" />
     <Compile Include="Receive\DataSource.cs" />
     <Compile Include="Receive\DataSourceAdapterType.cs" />
@@ -77,6 +79,9 @@
     <Compile Include="Receive\MappedBatchItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Receive\ImportedDataTypes\TextImportedData.cs" />
+    <Compile Include="FileDataSourceDefinition\FileMissingChecker.cs" />
+    <Compile Include="FileDataSourceDefinition\FileDelayChecker.cs" />
+    <Compile Include="Settings\DataSourceSettingData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
