@@ -65,6 +65,9 @@
     <Folder Include="ISP\Tables\" />
     <Folder Include="ISP\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="NetworkRentalManager\" />
+    <Folder Include="NetworkRentalManager\Tables\" />
+    <Folder Include="NetworkRentalManager\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ISP\Tables\ISPPackage.sql" />
@@ -73,5 +76,10 @@
     <Build Include="ISP\User Defined Types\ISPPackageType.sql" />
     <Build Include="Security\ISP.sql" />
     <Build Include="ISP\Tables\ISPEvent.sql" />
+    <Build Include="NetworkRentalManager\Tables\ProductSale.sql" />
+    <Build Include="NetworkRentalManager\Tables\Product.sql" />
+    <Build Include="NetworkRentalManager\User Defined Types\ProductType.sql" />
+    <Build Include="NetworkRentalManager\User Defined Types\ProductSaleType.sql" />
+    <Build Include="Security\NetworkRentalManager.sql" />
   </ItemGroup>
 </Project>
