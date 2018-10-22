@@ -131,7 +131,11 @@
     <Compile Include="DataStorage\IGetStorageRowCountContext.cs" />
     <Compile Include="GenericBusinessEntity\DeleteGenericBusinessEntityInput.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEDefinitionGridColumnAttribute.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEInvalidRow.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBERowToAdd.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityFilter.cs" />
+    <Compile Include="GenericBusinessEntity\ParsedGenericBERow.cs" />
+    <Compile Include="GenericBusinessEntity\UploadGenericBusinessEntityLog.cs" />
     <Compile Include="GenericEditorDefinitionSetting\VRGenericEditorDefinitionSetting.cs" />
     <Compile Include="GenericRules\AdditionalField.cs" />
     <Compile Include="GenericRules\CriteriaFieldsValues.cs" />

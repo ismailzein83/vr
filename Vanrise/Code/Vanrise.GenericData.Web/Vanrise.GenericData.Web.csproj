@@ -237,6 +237,7 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\GridActionDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\ActionDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\ActionDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\UploadDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\Templates\ViewDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\ActionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\ViewDefinitionEditorController.js" />
@@ -251,6 +252,7 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-gridactiondefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-filterdefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-actiondefinition-grid.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-uploaddefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-viewdefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbe-columndefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Editor\ColumnDefinitionEditorController.js" />
@@ -836,10 +838,12 @@
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\GenericRowEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\SectionEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\SectionEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditorUploaderController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityManagement.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityManagementController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditorUploader.html" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditor.html" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordFieldEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericDataRecord\DataRecordTypeEditor.html" />
@@ -878,6 +882,7 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_GenericData\Templates\Genric Business Entity Template.xlsx" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

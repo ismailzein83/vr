@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Vanrise.GenericData.Entities
+{
+	public class UploadGenericBusinessEntityLog
+	{
+		public long FileID { get; set; }
+		public int NumberOfItemsAdded { get; set; }
+		public int NumberOfItemsFailed { get; set; }
+		public String ErrorMessage { get; set; }
+
+	}
+}
