@@ -69,7 +69,7 @@
 
                     if (payload != undefined) {
                         context = payload.context;
-                        tagValueParserEntity = payload.tagValueParserEntity;
+                        tagValueParserEntity = payload.RecordParser;
                     }
 
                     if (tagValueParserEntity != undefined) {
@@ -165,6 +165,6 @@
         }
     }
 
-    app.directive('vrDataparserHextlvtagtypeTagvalueparser', TagValueParserDirective);
+    app.directive('vrDataparserHextlvTagTypeValueparser', TagValueParserDirective);
 
 })(app);

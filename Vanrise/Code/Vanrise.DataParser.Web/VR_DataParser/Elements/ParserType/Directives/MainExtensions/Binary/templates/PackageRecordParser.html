@@ -1,0 +1,57 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.recordType" label="Record Type" isrequired></vr-textbox>
+    </vr-columns>
+</vr-row>
+
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-textbox value="scopeModel.packageTagLength" label="Package Tag Length" typeof="number" isrequired></vr-textbox>
+        </vr-columns>
+        </vr-row>
+
+<vr-row>
+        <vr-columns width="1/2row">
+            <vr-textbox value="scopeModel.packageLengthByteLength " label="Package Length Byte Length" type="number" isrequired></vr-textbox>
+        </vr-columns>
+    </vr-row>
+
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.package" label="Package" type="number"></vr-textbox>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-button type="Add" data-onclick="ctrl.addPackage" standalone></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-datagrid datasource="scopeModel.packages"
+             pagingtype="'PagingOnScroll'"
+             showdeleterowsection="true"
+             defaultsortbyfieldname="true">
+    <vr-datagridcolumn headertext="'Package'" field="'Package'" fixedwidth="'100'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-dataparser-package-fieldparser on-ready="dataItem.onPackageRecordParserDirective" normal-col-num="6" isrequired="true"></vr-dataparser-package-fieldparser>
+    </vr-datagridexpandablerow>
+</vr-datagrid>
+
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-button type="Add" data-onclick="ctrl.addCompositeFieldParser" standalone></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-datagrid datasource="scopeModel.compositeFieldsParsers"
+             pagingtype="'PagingOnScroll'"
+             showdeleterowsection="true"
+             defaultsortbyfieldname="true">
+    <vr-datagridcolumn headertext="'Composite Field'" field="'CompositeField'" fixedwidth="'100'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+                <vr-dataparser-composite-fields-parser on-ready="dataItem.onCompositeFieldsRecordParserDirective" normal-col-num="6" isrequired="true"></vr-dataparser-composite-fields-parser>
+    </vr-datagridexpandablerow>
+</vr-datagrid>
+
+
+
+
+

@@ -1,0 +1,64 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.fieldName" label="Field Name " isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.dayIndex" label="Day Index " type="number" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.monthIndex" label="Month Index " isrequired="true" type="number"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.yearIndex" label="Year Index" isrequired="true" type="number"></vr-textbox>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.secondsIndex" label="Seconds Index " isrequired="true" type="number"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.minutesIndex" label="Minutes Index " isrequired="true" type="number"></vr-textbox>
+    </vr-columns> 
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.hoursIndex" label="Hours Index  " isrequired="true" type="number"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.hoursTimeShiftIndex" label="Hours Time Shift Index " isrequired="true" type="number"></vr-textbox>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.minutesTimeShiftIndex" label="Minutes Time Shift Index " isrequired="true" type="number"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.timeShiftIndicatorIndex" label="Time Shift Indicator Index " isrequired="true" type="number"></vr-textbox>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-switch value="scopeModel.withOffset" label="WithOffset"></vr-switch>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-switch value="scopeModel.isBCD" label="IsBCD"></vr-switch>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select on-ready="scopeModel.onRecordTypeFieldTypeDirectiveReady"
+                   datasource="scopeModel.recordTypeFieldType"
+                   selectedvalues="scopeModel.selectedValue"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   label="Record Type Field Type"
+                   hideremoveicon
+                   isrequired="true">
+        </vr-select>
+    </vr-columns>
+
+</vr-row>

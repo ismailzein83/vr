@@ -1,0 +1,19 @@
+﻿<vr-row>
+    <vr-columns width="1/2row" ng-if="!scopeModel.useRecordType">
+        <vr-textbox value="scopeModel.fieldName" label="Field Name " isrequired="true"></vr-textbox>
+    </vr-columns>
+
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select on-ready="scopeModel.onRecordTypeFieldTypeDirectiveReady"
+                   datasource="scopeModel.recordTypeFieldType"
+                   selectedvalues="scopeModel.selectedValue"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   label="Zero Bytes Block Action"
+                   hideremoveicon
+                   isrequired="true">
+        </vr-select>
+    </vr-columns>
+</vr-row>

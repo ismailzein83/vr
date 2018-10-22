@@ -1,5 +1,108 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <vr-textbox value="recordType" label="Record Type"></vr-textbox>
+        <vr-textbox value="recordType" label="Record Type" isrequired></vr-textbox>
     </vr-columns>
 </vr-row>
+
+<vr-section title="Field Parsers">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-textbox value="tagPosition" label="Tag Position" type="number"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox value="tagLength" label="Tag Length" type="number"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-button type="Add" data-onclick="ctrl.addTagName" standalone></vr-button>
+        </vr-columns>
+
+    </vr-row>
+    <vr-datagrid datasource="tagPositionFields"
+                 pagingtype="'PagingOnScroll'"
+                 showdeleterowsection="true"
+                 defaultsortbyfieldname="true">
+        <vr-datagridcolumn headertext="'Tag Position'" field="'Position'" width="1/2row"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Tag Length'" field="'Length'" width="1/2row"></vr-datagridcolumn>
+
+        <vr-datagridexpandablerow>
+            <vr-dataparser-hextlv-tag-type-valueparser on-ready="dataItem.onTagRecordParserDirective" isrequired="true"></vr-dataparser-hextlv-tag-type-valueparser>
+
+        </vr-datagridexpandablerow>
+    </vr-datagrid>
+</vr-section>
+
+<vr-section title="Field Constant Values">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-textbox value="fieldName" label="Field Name"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox value="value" label="Value"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-button type="Add" data-onclick="ctrl.addConstantValue" standalone></vr-button>
+        </vr-columns>
+
+    </vr-row>
+    <vr-datagrid datasource="tagConstantValueFields"
+                 pagingtype="'PagingOnScroll'"
+                 showdeleterowsection="true"
+                 defaultsortbyfieldname="true">
+        <vr-datagridcolumn headertext="'Field Name'" field="'FieldName'" width="1/2row"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Value'" field="'Value'" width="1/2row"></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-section>
+
+<vr-section title="Composite Fields Parsers">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-button type="Add" data-onclick="ctrl.addCompositeField" standalone></vr-button>
+        </vr-columns>
+
+    </vr-row>
+    <vr-datagrid datasource="tagCompositeFields"
+                 pagingtype="'PagingOnScroll'"
+                 showdeleterowsection="true"
+                 defaultsortbyfieldname="true">
+
+        <vr-datagridexpandablerow>
+            <vr-dataparser-composite-fields-parser on-ready="dataItem.onCompositeFieldParserDirective" isrequired="true"></vr-dataparser-composite-fields-parser>
+
+        </vr-datagridexpandablerow>
+    </vr-datagrid>
+</vr-section>
+<vr-section title="Temp Fields Names">
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-textbox value="scopeModel.tempFieldName" label="Temp Field Name"></vr-textbox>
+            <vr-datalist maxitemsperrow="2" datasource="datasource" autoremoveitem="true">
+                <vr-label>{{dataItem}}</vr-label>
+            </vr-datalist>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-button type="Add" data-onclick="ctrl.addTempFieldName" standalone></vr-button>
+        </vr-columns>
+    </vr-row>
+</vr-section>
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select on-ready="scopeModel.onRecordTypeFieldTypeDirectiveReady"
+                   datasource="scopeModel.recordTypeFieldType"
+                   selectedvalues="scopeModel.selectedValue"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   label="Record Type Field Type"
+                   hideremoveicon
+                   isrequired="true">
+        </vr-select>
+    </vr-columns>
+</vr-row>
+
+
+
+
+
+
+
+
+

@@ -53,7 +53,7 @@
 
                     if (payload.extendedSettings != undefined) {
                         $scope.headerLength = payload.extendedSettings.HeaderLength;
-                        $scope.recordLengthIndex = payload.extendedSettings.RecordLengthIndex;
+                        $scope.headerTagLength = payload.extendedSettings.HeaderTagLength;
                         $scope.recordLengthByteLength = payload.extendedSettings.RecordLengthByteLength;
                     }
 
@@ -80,7 +80,7 @@
                     return {
                         $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.RecordParsers.HeaderRecordParser, Vanrise.DataParser.MainExtensions",
                         HeaderLength: $scope.headerLength,
-                        RecordLengthIndex: $scope.recordLengthIndex,
+                        HeaderTagLength: $scope.headerTagLength,
                         RecordLengthByteLength: $scope.recordLengthByteLength,
                         PackageRecordParser: {
                             Settings: recordParserDirectiveAPI.getData()

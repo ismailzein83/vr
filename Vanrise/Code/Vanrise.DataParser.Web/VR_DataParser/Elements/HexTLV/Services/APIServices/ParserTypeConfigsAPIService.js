@@ -25,11 +25,26 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_DataParser_ModuleConfig.moduleName, controllerName, "GetBinaryRecordReaderTemplateConfigs"));
         }
 
+        function GetBaseStringParserTemplateConfigs() {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_DataParser_ModuleConfig.moduleName, controllerName, "GetBaseStringParserTemplateConfigs"));
+        }
+        function GetCompositeFieldsReaderTemplateConfigs() {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_DataParser_ModuleConfig.moduleName, controllerName, "GetCompositeFieldsReaderTemplateConfigs"));
+        }
+        function GetPackageFieldsReaderTemplateConfigs() {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_DataParser_ModuleConfig.moduleName, controllerName, "GetPackageFieldsReaderTemplateConfigs"));
+        }
         return ({
             GetParserTypeTemplateConfigs: GetParserTypeTemplateConfigs,
             GetRecordeReaderTemplateConfigs: GetRecordeReaderTemplateConfigs,
             GetTagValueParserTemplateConfigs: GetTagValueParserTemplateConfigs,
-            GetBinaryRecordReaderTemplateConfigs: GetBinaryRecordReaderTemplateConfigs
+            GetBinaryRecordReaderTemplateConfigs: GetBinaryRecordReaderTemplateConfigs,
+            GetBaseStringParserTemplateConfigs: GetBaseStringParserTemplateConfigs,
+            GetCompositeFieldsReaderTemplateConfigs: GetCompositeFieldsReaderTemplateConfigs,
+            GetPackageFieldsReaderTemplateConfigs: GetPackageFieldsReaderTemplateConfigs
         });
     }
 

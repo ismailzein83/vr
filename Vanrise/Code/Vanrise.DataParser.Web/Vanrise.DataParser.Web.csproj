@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -23,6 +24,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -119,28 +121,92 @@
     <Folder Include="VR_DataParser\Elements\HexTLV\Views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_DataParser\Constants\DateTimeParsingType.js" />
     <Content Include="VR_DataParser\Constants\ModuleConfig.js" />
+    <Content Include="VR_DataParser\Constants\ZeroBytesBlockAction.js" />
+    <Content Include="VR_DataParser\Constants\NumberType.js" />
     <Content Include="VR_DataParser\Constants\RecordTypeFieldType.js" />
-    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParseIPV4.html" />
-    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParserBool.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\DataFromTextHexParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexBCDNumberParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexCallLoactionInformationFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexConnectionIdentificationPackageFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexCoordinatesFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexDateTimePackageFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexDateTimeParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexHexaFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexNumberFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexPartyNumberFieldname.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexTBCDNumberParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexTimeFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexTrafficQualityDataFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexTrunkIdentificationFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexZonePackageParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\NumberFromTextHexParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TimeFromTextHexParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexTimeParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexIpv4FieldParser.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexBoolFieldParser.html" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParserSequence.html" />
-    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParserString.html" />
-    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tagvalueparser-ipv4.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\HexStringParse.html" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-bcd-number-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-call-location-information-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-connection-identification-package-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-coordinates-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-data-from-text-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-date-time-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-date-time-package-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-hexa-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-ipv4-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-number-field-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-number-from-text-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-party-number-fieldname-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\CreateRecordBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\DateFromDayNumberCompositeRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\DataSourceCompositeRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\DateTimeCompositeRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\DirectLengthPackageFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\DigitStringPackageFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\GuidCompositeRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\FileNameCompositeRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\FixedLengthPackageFieldParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\PackageRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\TimesTimestampRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-create-record-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-data-source-composite-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-date-from-day-number-composite-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-direct-length-package-field-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-digit-string-package-field-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-fixed-length-package-field-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-package-fieldparser.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-file-name-composite-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-date-time-composite-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-guid-composite-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-composite-fields-parser.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-stringparser.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tagvalueparser-sequence.js" />
-    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tagvalueparser-string.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-string-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tbcd-number-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-time-field-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-time-from-text-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-time-hex-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-traffic-quality-data-package-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-trunk-identification-package-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-zone-package-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\Templates\RecordReaderTagRecordReader.html" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\Templates\RecordReaderTagRecordReaderGrid.html" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\Templates\HexTLVTagTypeGrid.html" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\Templates\ParserTypeHexTLV.html" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParserInt.html" />
-    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tagvalueparser-bool.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-bool-hex-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\vr-dataparser-recordreader-tagrecordreader.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\vr-dataparser-recordreader-tagrecordreader-grid.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\vr-dataparser-hextlv-tag-type-grid.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\vr-dataparser-parsertype-hextlv.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tagvalueparser-int.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\AlcatelHeaderBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\HuaweiHeaderBinaryRecordParser.html" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\HexTLVSplitByTagBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\HuaweiBinaryRecordParser.html" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\NokiaHeaderBinaryRecordParser.html" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\BinaryRecordParser.html" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\ExecuteTemplateBinaryRecordParser.html" />
@@ -150,8 +216,12 @@
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\SplitByBlockBinaryRecordParser.html" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\SplitByOffSetBinaryRecordParser.html" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\SplitByPositionedTypeBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-package-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-times-timestamp-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-execute-template-binary-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-alcatel-header-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-fieldparser.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-huawei-binary-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-hextlv-split-by-tag-binary-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-nokia-header-binary-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-parsertype-binary.js" />
@@ -160,10 +230,10 @@
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-recordparser.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-skip-binary-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-split-by-block-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-huawei-header-binary-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-split-by-offset-binary-record-parser-settings.js" />
-    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-split-by-positionedtype-binary-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\vr-dataparser-parsertype-extendedsettings.js" />
-    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-hextlvtagtype-tagvalueparser.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-hextlv-tag-type-valueparser.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\vr-dataparser-hextlv-recordreader.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Services\APIServices\ParserTypeConfigsAPIService.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Services\ParserTypeConfigService.js" />
@@ -215,6 +285,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>

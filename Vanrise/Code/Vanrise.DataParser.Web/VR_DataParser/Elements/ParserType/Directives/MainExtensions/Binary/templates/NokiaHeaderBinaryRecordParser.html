@@ -1,17 +1,17 @@
 ﻿<vr-row>
     <vr-columns width="1/2row">
-        <vr-textbox value="headerLength" label="Header Length"></vr-textbox>
+        <vr-textbox value="headerLength" label="Header Length" isrequired></vr-textbox>
     </vr-columns>
 </vr-row>
 <vr-row>
     <vr-columns width="1/2row">
-        <vr-textbox value="recordLengthIndex" label="Record Length Index"></vr-textbox>
+        <vr-textbox value="headerTagLength" label="Header Tag Length" isrequired></vr-textbox>
     </vr-columns>
 </vr-row>
 <vr-row>
     <vr-columns width="1/2row">
-        <vr-textbox value="recordLengthByteLength" label="Record Length Byte Length"></vr-textbox>
+        <vr-textbox value="recordLengthByteLength" label="Record Length Byte Length" isrequired></vr-textbox>
     </vr-columns>
 </vr-row>
 
-<vr-dataparser-recordparser on-ready="scopeModel.onRecordParserDirective" normal-col-num="6"></vr-dataparser-recordparser>
+<vr-dataparser-recordparser on-ready="scopeModel.onRecordParserDirective" normal-col-num="6"isrequired="true"></vr-dataparser-recordparser>

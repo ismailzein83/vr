@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrDataparserTagvalueparserString", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrDataparserBoolHexRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -19,18 +19,20 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/TagValueParserString.html"
+        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexBoolFieldParser.html"
 
 
     };
 
     function boolParserEditor($scope, ctrl) {
+
         var context;
         var dataRecordTypeFieldSelectorAPI;
         var dataRecordTypeFieldSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         this.initializeController = initializeController;
 
         function initializeController() {
+
             $scope.scopeModel = {};
             $scope.scopeModel.onDataRecordTypeFieldsSelectorReady = function (api) {
                 dataRecordTypeFieldSelectorAPI = api;
@@ -48,42 +50,17 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     { $scope.scopeModel.fieldName = payload.ValueParser.FieldName; }
                     context = payload.context;
 
-                    if (context != undefined) {
-
-                        $scope.scopeModel.useRecordType = context.useRecordType();
-                    }
                 }
-                if ($scope.scopeModel.useRecordType) {
-                    promises.push(loadDataRecordTypeFieldSelector());
-                }
+            
 
-                function loadDataRecordTypeFieldSelector() {
-                    var dataRecordTypeFieldLoadDeferred = UtilsService.createPromiseDeferred();
-                    dataRecordTypeFieldSelectorReadyPromiseDeferred.promise.then(function () {
-                        dataRecordTypeFieldSelectorReadyPromiseDeferred = undefined;
-                        var dataRecordTypeFieldPayload = {};
-                        if (payload != undefined && payload.ValueParser != undefined)
-                            dataRecordTypeFieldPayload.selectedIds = payload.ValueParser.FieldName;
-                        if (context != undefined)
-                            dataRecordTypeFieldPayload.dataRecordTypeId = context.recordTypeId();
-                        VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldSelectorAPI, dataRecordTypeFieldPayload, dataRecordTypeFieldLoadDeferred);
-                    });
-
-                    return dataRecordTypeFieldLoadDeferred.promise;
-                }
                 return UtilsService.waitMultiplePromises(promises);
 
             };
 
             api.getData = function () {
-                var fieldName;
-                if ($scope.scopeModel.useRecordType == true) {
-                    fieldName = dataRecordTypeFieldSelectorAPI.getSelectedIds();
-                }
-                else { fieldName = $scope.scopeModel.fieldName; }
                 return {
-                    $type: "Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers.BoolParser ,Vanrise.DataParser.MainExtensions",
-                    FieldName: fieldName
+                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.BoolFieldParser ,Vanrise.DataParser.MainExtensions",
+                    FieldName:$scope.scopeModel.fieldName
                 }
             };
 

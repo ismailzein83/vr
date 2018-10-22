@@ -8,7 +8,7 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers
 {
     public class BCDNumberParser : BinaryFieldParserSettings
     {
-        public override Guid ConfigId { get { return new Guid("55FD305B-707F-4B98-A5DA-2CAEC314FC85"); } }
+        public override Guid ConfigId { get { return new Guid("78168E82-0528-4F3A-9E7C-47AEF279CD49"); } }
         public string FieldName { get; set; }
         public bool AIsZero { get; set; }
         public bool RemoveHexa { get; set; }

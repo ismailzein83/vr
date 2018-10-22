@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.DataParser.Entities;
 using Vanrise.Common.Business;
+using Vanrise.DataParser.Entities.HexTLV;
+using Vanrise.DataParser.BinaryParser;
 namespace Vanrise.DataParser.Business
 {
     public class ParserTypeConfigsManager
@@ -28,6 +30,22 @@ namespace Vanrise.DataParser.Business
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<BinaryRecordReadersConfig>(BinaryRecordReadersConfig.EXTENSION_TYPE);
+        }
+        public IEnumerable<BaseStringConfig> GetBaseStringParserTemplateConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<BaseStringConfig>(BaseStringConfig.EXTENSION_TYPE);
+        }
+        public IEnumerable<CompositeFieldsConfig> GetCompositeFieldsReaderTemplateConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<CompositeFieldsConfig>(CompositeFieldsConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<PackageFieldsConfig> GetPackageFieldsReaderTemplateConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<PackageFieldsConfig>(PackageFieldsConfig.EXTENSION_TYPE);
         }
     }
 }

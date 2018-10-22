@@ -44,12 +44,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryParser\BinaryRecordReadersConfig.cs" />
+    <Compile Include="BinaryParser\PackageFieldsConfig.cs" />
     <Compile Include="CompositeFieldsParser.cs" />
     <Compile Include="BinaryParser\BinaryFieldParser.cs" />
     <Compile Include="BinaryParser\BinaryFieldParserCollection.cs" />
     <Compile Include="BinaryParser\BinaryRecordParser.cs" />
     <Compile Include="BinaryParser\ParsedRecordFieldConstantValue.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="HexTLV\BaseStringConfig.cs" />
+    <Compile Include="HexTLV\CompositeFieldsConfig.cs" />
     <Compile Include="HexTLV\HexTLVRecordReadersConfig.cs">
       <SubType>Code</SubType>
     </Compile>
