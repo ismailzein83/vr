@@ -24,6 +24,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -499,6 +501,26 @@
     <ProjectReference Include="..\Demo.Module.Web\Demo.Module.Web.csproj">
       <Project>{99cb64f1-5314-41fd-9f8f-eb435ee7449a}</Project>
       <Name>Demo.Module.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Tools.Business\Vanrise.Tools.Business.csproj">
+      <Project>{b21f9693-9f89-4d18-9e06-bea9b098c956}</Project>
+      <Name>Vanrise.Tools.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Tools.Data.SQL\Vanrise.Tools.Data.SQL.csproj">
+      <Project>{5a6b5819-aa17-4756-9f90-a1a7b4c5494d}</Project>
+      <Name>Vanrise.Tools.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Tools.Data\Vanrise.Tools.Data.csproj">
+      <Project>{b26f126b-a1dd-4a03-95cd-e308f12550e1}</Project>
+      <Name>Vanrise.Tools.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Tools.Entities\Vanrise.Tools.Entities.csproj">
+      <Project>{01f1fafb-5f56-485e-8539-a5a50efb9edd}</Project>
+      <Name>Vanrise.Tools.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Tools.Web\Vanrise.Tools.Web.csproj">
+      <Project>{26929100-6d63-49d1-8847-ee5db47660a3}</Project>
+      <Name>Vanrise.Tools.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
