@@ -68,6 +68,7 @@
     <Compile Include="DBReplication\DBDefinitionInfo.cs" />
     <Compile Include="DBReplication\DBReplicationPreInsertConfig.cs" />
     <Compile Include="File\VRRemoteFileInfo.cs" />
+    <Compile Include="Tools\GeneratedScriptItem.cs" />
     <Compile Include="VRAPIDiscovery.cs" />
     <Compile Include="CompanyDefinitionConfig.cs" />
     <Compile Include="ComponentType\ComponentTypeInfo.cs" />
