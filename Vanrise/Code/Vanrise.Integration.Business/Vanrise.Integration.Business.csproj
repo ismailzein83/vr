@@ -51,6 +51,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigManager.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Receive\AdapterImportDataContext.cs" />
     <Compile Include="Receive\DataSourceImportedBatchManager.cs" />
     <Compile Include="Receive\DataSourceLogger.cs" />
