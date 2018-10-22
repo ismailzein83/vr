@@ -65,11 +65,7 @@
                 bankDirectiveApi = api;
                 bankReadyPromiseDeferred.resolve();
             };
-
-            $scope.onInvoiceReportFilesDirectiveReady = function (api) {
-                invoiceReportFilesDirectiveAPI = api;
-                invoiceReportFilesDirectiveReadyDeferred.resolve();
-            };
+          
 
         }
 
@@ -84,7 +80,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBankDetail, loadCompanyContacts, prepareCompanyDefinitions, loadInvoiceReportFiles])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBankDetail, loadCompanyContacts, prepareCompanyDefinitions])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -101,16 +97,6 @@
             });
         }
 
-        function loadInvoiceReportFiles() {
-            var invoiceReportFilesDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-            invoiceReportFilesDirectiveReadyDeferred.promise.then(function () {
-                var payload = {
-                    invoiceReportFiles: companySettingEntity != undefined ? companySettingEntity.InvoiceReportFiles : undefined
-                };
-                VRUIUtilsService.callDirectiveLoad(invoiceReportFilesDirectiveAPI, payload, invoiceReportFilesDirectiveLoadDeferred);
-            });
-            return invoiceReportFilesDirectiveLoadDeferred.promise;
-        }
 
         function prepareCompanyDefinitions() {
             var promises = [];
@@ -119,6 +105,7 @@
                     var directiveItem = {
                         definition: companyDefinitionSettings[currentCompanyDefinitionId],
                         directivePayload: extendedSettings[currentCompanyDefinitionId],
+                        invoiceReportFiles: companySettingEntity != undefined ? companySettingEntity.InvoiceReportFiles : undefined,
                         directiveReadyDeferred: UtilsService.createPromiseDeferred(),
                         directiveLoadDeferred: UtilsService.createPromiseDeferred(),
                     };
@@ -130,17 +117,19 @@
         }
 
         function addDirectiveAPI(directiveItem) {
+           
             var directive = {
                 directiveAPI: {},
                 runtimeEditor: directiveItem.definition.Setting.RuntimeEditor,
                 configId: directiveItem.definition.Setting.ConfigId,
             };
             directive.onDirectiveReady = function (api) {
-                directiveItem.directiveReadyDeferred.resolve();
                 directive.directiveAPI = api;
+                directiveItem.directiveReadyDeferred.resolve();
             };
             directiveItem.directiveReadyDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(directive.directiveAPI, directiveItem.directivePayload, directiveItem.directiveLoadDeferred);
+                var directivePayload = directive.directiveAPI.getData != undefined ? directiveItem.directivePayload : { invoiceReportFiles: directiveItem.invoiceReportFiles };
+                VRUIUtilsService.callDirectiveLoad(directive.directiveAPI, directivePayload, directiveItem.directiveLoadDeferred);
             });
             $scope.scopeModel.companyDefinitions.push(directive);
         }
@@ -150,7 +139,7 @@
             for (var i = 0; i < $scope.scopeModel.companyDefinitions.length; i++) {
                 var currentComanyDefinition = $scope.scopeModel.companyDefinitions[i];
                 if (currentComanyDefinition.directiveAPI != undefined) {
-                    if (companyExtendedSettings[currentComanyDefinition.configId] == undefined) {
+                    if (companyExtendedSettings[currentComanyDefinition.configId] == undefined && currentComanyDefinition.directiveAPI.getData != undefined) {
                         var data = currentComanyDefinition.directiveAPI.getData();
                         companyExtendedSettings[currentComanyDefinition.configId] = data;
                     }
@@ -158,7 +147,16 @@
             }
             return companyExtendedSettings;
         }
-
+        function getInvoiceSettings() {
+            for (var i = 0; i < $scope.scopeModel.companyDefinitions.length; i++) {
+                var currentComanyDefinition = $scope.scopeModel.companyDefinitions[i];
+                if (currentComanyDefinition.directiveAPI != undefined) {
+                    if (currentComanyDefinition.directiveAPI.getInvoiceData != undefined) {
+                        return currentComanyDefinition.directiveAPI.getInvoiceData();
+                    }
+                }
+            }
+        }
         function setTitle() {
             if (isEditMode && companySettingEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(companySettingEntity.CompanyName, "Company");
@@ -275,7 +273,7 @@
                 BankDetails: bankDirectiveApi.getSelectedIds(),
                 Contacts: getContactsData(),
                 ExtendedSettings: getCompanyExtendedSettings(),
-                InvoiceReportFiles: invoiceReportFilesDirectiveAPI.getData()
+                InvoiceReportFiles: getInvoiceSettings()
             };
             return obj;
         }

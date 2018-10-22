@@ -20,4 +20,10 @@ namespace Vanrise.Invoice.Business
             return new InvoiceTypeManager().DoesUserHaveViewAccess(context.UserId, this.InvoiceTypeId);
         }
     }
+
+    public class CompanyDefinitionInvoiceReportFilesSettings : BaseCompanyDefinitionExtendedSetting
+    {
+        public override Guid ConfigId { get { return new Guid("b9c2a813-4122-4de7-9173-e4cccc093af6"); } }
+        public override string RuntimeEditor { get { return "vr-invoice-invoicereportfiles"; } }
+    }
 }

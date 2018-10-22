@@ -70,7 +70,7 @@
                 companyDefinitionSelelctiveReadyPromiseDeferred.promise
                     .then(function () {
                         var directivePayload = {
-                            selectedIds: companyDefinitionEntity != undefined ? companyDefinitionEntity.Setting : undefined
+                            companyDefinition: companyDefinitionEntity != undefined ? companyDefinitionEntity.Setting : undefined
                         };
 
                         VRUIUtilsService.callDirectiveLoad(companyDefinitionSelelctiveApi, directivePayload, companyDefinitionSelectiveLoadPromiseDeferred);

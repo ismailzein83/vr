@@ -222,7 +222,7 @@ function (UtilsService, VRNotificationService,  VRUIUtilsService, VR_Invoice_Inv
                 };
 
 
-                api.getData = function () {
+                api.getInvoiceData = function () {
                     var invoiceReportItems;
 
                     if ($scope.scopeModel.invoiceReportItems != undefined) {
@@ -249,6 +249,71 @@ function (UtilsService, VRNotificationService,  VRUIUtilsService, VR_Invoice_Inv
                 return VR_Invoice_InvoiceTypeAPIService.GetInvoiceTypesInfo().then(function (response) {
                     invoiceTypes = response;
                 });
+            }
+        }
+
+        return directiveDefinitionObject;
+
+    }
+]);
+
+
+
+
+"use strict";
+
+app.directive("vrInvoiceInvoicereportfilesDefinition", ["UtilsService",
+    function (UtilsService) {
+
+        var directiveDefinitionObject = {
+
+            restrict: "E",
+            scope:
+            {
+                onReady: "=",
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+
+                var invoiceReportFiles = new InvoiceReportFiles($scope, ctrl, $attrs);
+                invoiceReportFiles.initializeController();
+            },
+            controllerAs: "ctrl",
+            bindToController: true,
+            compile: function (element, attrs) {
+
+            },
+            templateUrl: ""
+
+        };
+
+        function InvoiceReportFiles($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
+
+            var gridAPI;
+            var invoiceTypes = [];
+
+            function initializeController() {
+
+                $scope.scopeModel = {};
+                defineAPI();
+            }
+            function defineAPI() {
+                var api = {};
+
+                api.load = function (payload) {
+                    var promises = [];
+                    return UtilsService.waitMultiplePromises(promises);
+                };
+
+                api.getData = function () {
+                    return {
+                        $type:"Vanrise.Invoice.Business.CompanyDefinitionInvoiceReportFilesSettings, Vanrise.Invoice.Business"
+                    };
+                };
+
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
         }
 

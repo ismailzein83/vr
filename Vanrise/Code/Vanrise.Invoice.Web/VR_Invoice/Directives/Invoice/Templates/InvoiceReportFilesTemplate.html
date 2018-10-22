@@ -1,23 +1,25 @@
-﻿<vr-row>
-    <vr-columns width="fullrow">
-        <vr-button type="Add" data-onclick="scopeModel.addInvoiceReportItem" standalone vr-disabled="scopeModel.disableAddInvoiceReportItemButton()"></vr-button>
-    </vr-columns>
-</vr-row>
-<vr-row>
-    <vr-columns width="fullrow">
-        <vr-validator validate="scopeModel.validateInvoiceReportItems()">
-            <vr-datagrid datasource="scopeModel.invoiceReportItems"
-                         pagingtype="'PagingOnScroll'"
-                         ondeleterow="scopeModel.removeInvoiceReportItem"
-                         enableautoexport="true"
-                         vr-loader="scopeModel.isLoadingInvoiceReportFiles">
-                <vr-datagridcolumn headertext="'Invoice Type'" disablesorting>
-                    <vr-invoicetype-selector isrequired="true" on-ready="dataItem.onInvoiceTypeSelectorReady" hidelabel hideremoveicon onselectionchanged="dataItem.onInvoiceTypeSelectionChanged" usefullcolumn></vr-invoicetype-selector>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Report'" disablesorting>
-                    <vr-genericdata-genericbusinessentity-selector isrequired="true" hidelabel hideremoveicon on-ready="dataItem.onInvoiceReportFileSelectorReady" usefullcolumn></vr-genericdata-genericbusinessentity-selector>
-                </vr-datagridcolumn>
-            </vr-datagrid>
-        </vr-validator>
-    </vr-columns>
-</vr-row>
+﻿<vr-tab header="'Invoice Report Files'">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-button type="Add" data-onclick="scopeModel.addInvoiceReportItem" standalone vr-disabled="scopeModel.disableAddInvoiceReportItemButton()"></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-validator validate="scopeModel.validateInvoiceReportItems()">
+                <vr-datagrid datasource="scopeModel.invoiceReportItems"
+                             pagingtype="'PagingOnScroll'"
+                             ondeleterow="scopeModel.removeInvoiceReportItem"
+                             enableautoexport="true"
+                             vr-loader="scopeModel.isLoadingInvoiceReportFiles">
+                    <vr-datagridcolumn headertext="'Invoice Type'" disablesorting>
+                        <vr-invoicetype-selector isrequired="true" on-ready="dataItem.onInvoiceTypeSelectorReady" hidelabel hideremoveicon onselectionchanged="dataItem.onInvoiceTypeSelectionChanged" usefullcolumn></vr-invoicetype-selector>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Report'" disablesorting>
+                        <vr-genericdata-genericbusinessentity-selector isrequired="true" hidelabel hideremoveicon on-ready="dataItem.onInvoiceReportFileSelectorReady" usefullcolumn></vr-genericdata-genericbusinessentity-selector>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
