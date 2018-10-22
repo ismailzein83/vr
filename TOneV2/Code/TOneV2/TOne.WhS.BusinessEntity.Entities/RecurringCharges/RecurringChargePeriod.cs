@@ -8,7 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class RecurringChargePeriod
     {
-        public int? DuePeriod { get; set; }
         public RecurringChargePeriodSettings Settings { get; set; }
     }
     public abstract class RecurringChargePeriodSettings

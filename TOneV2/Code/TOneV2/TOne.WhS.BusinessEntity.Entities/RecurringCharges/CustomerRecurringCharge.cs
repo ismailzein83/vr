@@ -16,6 +16,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
         public RecurringChargePeriod RecurringChargePeriod { get; set; }
+        public int? DuePeriod { get; set; }
     }
 
 }

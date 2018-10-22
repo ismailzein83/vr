@@ -72,7 +72,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             CurrencyId = effectiveCustomerRecurringCharge.CurrencyId,
                             RecurringChargeId=effectiveCustomerRecurringCharge.ID,
                             AmountAfterTaxes = effectiveCustomerRecurringCharge.Amount,
-                            DueDate = effectiveCustomerRecurringCharge.RecurringChargePeriod.DuePeriod.HasValue ? issueDate.AddDays(effectiveCustomerRecurringCharge.RecurringChargePeriod.DuePeriod.Value) : issueDate
+                            DueDate = effectiveCustomerRecurringCharge.DuePeriod.HasValue ? issueDate.AddDays(effectiveCustomerRecurringCharge.DuePeriod.Value) : issueDate
                         });
                     }
                 }
@@ -103,7 +103,8 @@ namespace TOne.WhS.BusinessEntity.Business
                                 CurrencyId = Convert.ToInt32(fieldValues.GetRecord("CurrencyId")),
                                 BED = (DateTime)fieldValues.GetRecord("BED"),
                                 EED = (DateTime?)fieldValues.GetRecord("EED"),
-                                RecurringChargePeriod = (RecurringChargePeriod)fieldValues.GetRecord("RecurringChargePeriod")
+                                RecurringChargePeriod = (RecurringChargePeriod)fieldValues.GetRecord("RecurringChargePeriod"),
+                                DuePeriod = (int?) fieldValues.GetRecord("DuePeriod")
                             };
                             customerRecurringChargesDic.Add(customerRecurringCharge.ID, customerRecurringCharge);
                         }
