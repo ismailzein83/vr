@@ -1136,6 +1136,14 @@
       <Project>{87790317-4035-4fb8-be4f-88d44fd02abe}</Project>
       <Name>TOne.WhS.RouteSync.FreeRadius</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Huawei.SQL\TOne.WhS.RouteSync.Huawei.SQL.csproj">
+      <Project>{44fdc92d-6615-467b-aa20-e9fc9236bcec}</Project>
+      <Name>TOne.WhS.RouteSync.Huawei.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Huawei\TOne.WhS.RouteSync.Huawei.csproj">
+      <Project>{284a5935-1885-4064-ac33-381722cc4d72}</Project>
+      <Name>TOne.WhS.RouteSync.Huawei</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Idb\TOne.WhS.RouteSync.Idb.csproj">
       <Project>{d961eebd-058d-4419-b6ca-e1d53412c159}</Project>
       <Name>TOne.WhS.RouteSync.Idb</Name>
