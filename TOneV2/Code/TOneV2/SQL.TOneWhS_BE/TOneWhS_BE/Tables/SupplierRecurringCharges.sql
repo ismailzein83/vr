@@ -12,8 +12,11 @@
     [timestamp]             ROWVERSION      NULL,
     [FinancialAccountId]    BIGINT          NULL,
     [RecurringChargePeriod] NVARCHAR (MAX)  NULL,
+    [DuePeriod]             INT             NULL,
     CONSTRAINT [PK_SupplierRecurringCharges] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

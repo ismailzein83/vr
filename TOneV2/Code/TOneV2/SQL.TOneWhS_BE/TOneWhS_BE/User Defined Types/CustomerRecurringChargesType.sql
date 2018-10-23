@@ -10,5 +10,8 @@
     [LastModifiedTime]      DATETIME        NULL,
     [CreatedBy]             INT             NULL,
     [LastModifiedBy]        INT             NULL,
-    [RecurringChargePeriod] NVARCHAR (MAX)  NULL);
+    [RecurringChargePeriod] NVARCHAR (MAX)  NULL,
+    [DuePeriod]             INT             NULL);
+
+
 
