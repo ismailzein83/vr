@@ -299,6 +299,9 @@
     <Reference Include="Vanrise.BusinessProcess.Data">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Data.RDB">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Data.SQL">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Data.SQL.dll</HintPath>
     </Reference>
