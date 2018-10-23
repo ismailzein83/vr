@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Analytics.Data;
 using TOne.WhS.Analytics.Entities;
 using TOne.WhS.BusinessEntity.Business;
@@ -310,15 +307,10 @@ namespace TOne.WhS.Analytics.Business
                         summary.TimePeriodValues[i] += record.TimePeriodValues[i];
                 }
 
-                summary.Percentage = (summary.TimePeriodValues[0] - summary.Average) / GetDenominator(summary.Average) * 100;
-                summary.PreviousPeriodPercentage = (summary.TimePeriodValues[0] - summary.TimePeriodValues[1]) / GetDenominator(summary.TimePeriodValues[1]) * 100;
+                summary.Percentage = summary.Average>0 ? (summary.TimePeriodValues[0] - summary.Average) / summary.Average * 100 : 0;
+                summary.PreviousPeriodPercentage = summary.TimePeriodValues[1]>0 ? (summary.TimePeriodValues[0] - summary.TimePeriodValues[1]) / summary.TimePeriodValues[1] * 100:0;
 
                 return summary;
-            }
-
-            decimal GetDenominator(decimal average)
-            {
-                return (average > 0) ? average : Decimal.MaxValue;
             }
 
             #endregion

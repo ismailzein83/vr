@@ -77,7 +77,6 @@
                             {
                                 $scope.scopeModel.otherPeriodDefinitions.length = 0;
                                 $scope.scopeModel.firstPeriodDefinition = response.TimePeriods[0];
-
                                 setTimeout(function () {
                                     for (var i = 1; i < response.TimePeriods.length; i++) { // Discard the first period
                                         $scope.scopeModel.otherPeriodDefinitions.push(response.TimePeriods[i]);
@@ -145,6 +144,7 @@
                         TimePeriod: gridQueryObj.TimePeriod,
                         NumberOfPeriods: gridQueryObj.NumberOfPeriods,
                         GroupByProfile: gridQueryObj.GroupByProfile,
+                        OnlyTotal: gridQueryObj.OnlyTotal,
                         CurrencyId: gridQueryObj.CurrencyId
                     };
                 }
@@ -188,6 +188,7 @@
                             TimePeriod: gridQuery.TimePeriod,
                             NumberOfPeriods: gridQuery.NumberOfPeriods,
                             GroupByProfile: gridQuery.GroupByProfile,
+                            OnlyTotal: gridQuery.OnlyTotal,
                             CurrencyId: gridQuery.CurrencyId
                         };
 

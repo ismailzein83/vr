@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Analytics.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
@@ -131,11 +130,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 INTO #TotalResult
                 FROM #InResult InResult JOIN #OutResult OutResult ON InResult.DimensionId = OutResult.DimensionId
 
-                UPDATE #InResult SET OrderValue = 3.0 WHERE DimensionId IN (SELECT DimensionId FROM #TotalResult)
-                UPDATE #OutResult SET OrderValue = 3.0 WHERE DimensionId IN (SELECT DimensionId FROM #TotalResult)
-
-                SELECT *
-                FROM (SELECT * FROM #InResult UNION ALL SELECT * FROM #OutResult UNION ALL SELECT * FROM #TotalResult) AS FinalResult
+                #BASED_ON_ONLY_TOTAL_QUERY#
                 ORDER BY OrderValue, DimensionId, DimensionSuffix
             ");
 
@@ -143,10 +138,20 @@ namespace TOne.WhS.Analytics.Data.SQL
             VariationReportQuery outResultQuery;
             SetInOutResultQueries(query, out inResultQuery, out outResultQuery);
 
+            var basedOnOnlyTotalQuery = query.OnlyTotal ?
+                "SELECT *  FROM #TotalResult AS FinalResult"
+                :"UPDATE #InResult SET OrderValue = 3.0 " +
+                "WHERE DimensionId IN (SELECT DimensionId FROM #TotalResult)"+ 
+                "UPDATE #OutResult SET OrderValue = 3.0 " +
+                "WHERE DimensionId IN (SELECT DimensionId FROM #TotalResult)"+
+                "SELECT *  FROM(SELECT * FROM #InResult UNION ALL SELECT  * FROM #OutResult UNION ALL SELECT * FROM #TotalResult) AS FinalResult ";
+
+            multiBoundQueryBuilder.Replace("#BASED_ON_ONLY_TOTAL_QUERY#", basedOnOnlyTotalQuery);
+
             multiBoundQueryBuilder.Replace("#IN_BOUND_QUERY#", GetSingleBoundQuery(inResultQuery, VariationReportRecordDimensionSuffix.In, "#InResult"));
             multiBoundQueryBuilder.Replace("#OUT_BOUND_QUERY#", GetSingleBoundQuery(outResultQuery, VariationReportRecordDimensionSuffix.Out, "#OutResult"));
             multiBoundQueryBuilder.Replace("#TOTAL_DIMENSION_SUFFIX#", String.Format("{0}", (int)VariationReportRecordDimensionSuffix.Total));
-            multiBoundQueryBuilder.Replace("#TOTAL_RESULT_SUM_PART#", GetTotalResultSumPart(query));
+            multiBoundQueryBuilder.Replace("#TOTAL_RESULT_SUM_PART#", GetTotalResultSumPart(query.NumberOfPeriods));
 
             return multiBoundQueryBuilder.ToString();
         }
@@ -177,10 +182,10 @@ namespace TOne.WhS.Analytics.Data.SQL
             outResultQuery.GroupByProfile = query.GroupByProfile;
         }
 
-        string GetTotalResultSumPart(VariationReportQuery query)
+        string GetTotalResultSumPart(int numberOfPeriods)
         {
             var totalResultSumPartBuilder = new StringBuilder();
-            for (int i = 0; i < query.NumberOfPeriods; i++)
+            for (int i = 0; i < numberOfPeriods; i++)
             {
                 totalResultSumPartBuilder.Append(String.Format(", InResult.Period{0}Sum - OutResult.Period{0}Sum AS Period{0}Sum", i + 1));
             }

@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities
 {
@@ -20,6 +16,7 @@ namespace TOne.WhS.Analytics.Entities
         public int NumberOfPeriods { get; set; }
 
         public bool GroupByProfile { get; set; }
+        public bool OnlyTotal { get;set; }
 
         public int? CurrencyId { get; set; }
 

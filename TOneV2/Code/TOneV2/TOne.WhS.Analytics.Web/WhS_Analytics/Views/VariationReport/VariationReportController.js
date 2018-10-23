@@ -39,17 +39,19 @@
                 $scope.scopeModel.showGrid = false;
                 $scope.scopeModel.showChart = false;
 
-                showTopFilter();
+                showCorrespondingFields();
                 showCurrencyFilter();
 
-                function showTopFilter() {
+                function showCorrespondingFields() {
                     switch (reportTypeSelectorAPI.getSelectedIds()) {
                         case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
                         case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
                             $scope.scopeModel.showTopFilter = false;
+                            $scope.scopeModel.showOnlyTotal = true;
                             return;
                     }
                     $scope.scopeModel.showTopFilter = true;
+                    $scope.scopeModel.showOnlyTotal = false;
                 }
                 function showCurrencyFilter() {
                     switch (reportTypeSelectorAPI.getSelectedIds()) {
@@ -161,6 +163,7 @@
                 TimePeriod: $scope.scopeModel.selectedPeriodType.value,
                 NumberOfPeriods: $scope.scopeModel.numberOfPeriods,
                 GroupByProfile: $scope.scopeModel.groupByProfile,
+                OnlyTotal: $scope.scopeModel.onlyTotal,
                 CurrencyId: ($scope.scopeModel.showCurrencyFilter) ? currencySelectorAPI.getSelectedIds() : null
             };
         }

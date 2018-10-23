@@ -31,6 +31,9 @@
                 <vr-columns width="normal">
                     <vr-switch label="Grouped by Profile" value="scopeModel.groupByProfile"></vr-switch>
                 </vr-columns>
+                <vr-columns width="normal" ng-if="scopeModel.showOnlyTotal">
+                    <vr-switch label="Only Total" value="scopeModel.onlyTotal"></vr-switch>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>
