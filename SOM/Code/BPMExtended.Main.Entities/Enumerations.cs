@@ -44,5 +44,11 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         TelephonyLineMovingNewSwitch = 10,
 
+        [LineOfBusiness(LineOfBusiness.ADSL)]
+        ADSLAlterSpeed = 11,
+
+        [LineOfBusiness(LineOfBusiness.ADSL)]
+        ADSLChangePassword = 12,
+
     }
 }

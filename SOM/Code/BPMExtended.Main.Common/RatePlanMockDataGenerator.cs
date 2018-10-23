@@ -260,6 +260,10 @@ namespace BPMExtended.Main.Common
 
         const string SRV_OPT_LL_2 = "B9E6A499-8086-4647-8ED9-FFB88FCE2420";
 
+        const string SRV_OPT_LL_3 = "576D1A72-1227-457D-A04B-4B259C293E48";
+
+        const string SRV_OPT_LL_4 = "2BE8E748-2DAC-4631-8FC0-7B8612FF39FC";
+
         const string SRV_CORE_ADSL_1 = "F91FA9AB-6CBE-47FB-845C-F1852B21C19C";
 
         const string SRV_CORE_ADSL_2 = "B6D2326E-4C6B-4BA9-A787-0919EEC12335";
@@ -269,6 +273,24 @@ namespace BPMExtended.Main.Common
         const string SRV_OPT_ADSL_2 = "6EBB601B-2A76-4067-8EF7-27561813E511";
 
         const string SRV_OPT_ADSL_3 = "87CA1D3C-72FF-44B5-84AD-792DA0C6B3DF";
+
+        #endregion
+
+        #region ADSL Speeds
+
+        const string ADSL_SPEED_1 = "40 MB/s";
+
+        const string ADSL_SPEED_2 = "10 MB/s";
+
+        const string ADSL_SPEED_3 = "20 MB/s";
+
+        const string ADSL_SPEED_4 = "30 MB/s";
+
+        const string ADSL_SPEED_5 = "50 MB/s";
+
+        const string ADSL_SPEED_6 = "60 MB/s";
+
+        const string ADSL_SPEED_7 = "70 MB/s";
 
         #endregion
 
@@ -539,6 +561,56 @@ namespace BPMExtended.Main.Common
             return GetAllADSLContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
         }
 
+        public static List<ADSLSpeedInfo> GetAllADSLSpeedInfo()
+        {
+            return new List<ADSLSpeedInfo>
+            {
+                 new ADSLSpeedInfo
+                 {
+                     Id = "1",
+                     Name = ADSL_SPEED_1
+                   
+                 },
+                  new ADSLSpeedInfo
+                 {
+                     Id = "2",
+                     Name = ADSL_SPEED_2
+                   
+                 },
+                  new ADSLSpeedInfo
+                 {
+                     Id = "3",
+                     Name = ADSL_SPEED_3
+                   
+                 },
+                  new ADSLSpeedInfo
+                 {
+                     Id = "4",
+                     Name = ADSL_SPEED_4
+                   
+                 },
+                  new ADSLSpeedInfo
+                 {
+                     Id = "5",
+                     Name = ADSL_SPEED_5
+                   
+                 },
+                  new ADSLSpeedInfo
+                 {
+                     Id = "6",
+                     Name = ADSL_SPEED_6
+                   
+                 },
+                  new ADSLSpeedInfo
+                 {
+                     Id = "7",
+                     Name = ADSL_SPEED_7
+                   
+                 }
+
+            };
+        }
+
         private static List<ADSLContractDetail> GetAllADSLContracts()
         {
             return new List<ADSLContractDetail>
@@ -551,6 +623,14 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      RatePlanId = RP_ADSL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
+                     UserName = "Test1",
+                     Password = "pass1",
+                     Speed = ADSL_SPEED_1,
+                     CSO = "None",
+                     DSLAMPort="2",
+                     ProviderOfDSLAMPort="Huawei",
+                     SubscriptionDate ="2018/02/02",
+                     ReservedLinePath = "path1",
                      Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3)
@@ -563,6 +643,9 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_2,
                      RatePlanId = RP_ADSL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
+                     UserName = "Test2",
+                     Password = "pass2",
+                     Speed = ADSL_SPEED_2,
                      Status = ContractDetailStatus.Inactive,
                      CreatedTime = DateTime.Today.AddDays(-4),
                      LastModifiedTime = DateTime.Today
@@ -574,6 +657,9 @@ namespace BPMExtended.Main.Common
                      CustomerId = CUSTOMER_ID_1,
                      Status = ContractDetailStatus.Active,
                      PhoneNumber= PHONE_NUMBER_3,
+                     UserName = "Test3",
+                     Password = "pass3",
+                     Speed = ADSL_SPEED_3,
                      RatePlanId = RP_ADSL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
                      CreatedTime = DateTime.Today,
@@ -587,6 +673,9 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_6,
                      RatePlanId = RP_ADSL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
+                     UserName = "Test4",
+                     Password = "pass4",
+                     Speed = ADSL_SPEED_4,
                      Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3)
@@ -599,6 +688,9 @@ namespace BPMExtended.Main.Common
                       PhoneNumber= PHONE_NUMBER_7,
                       RatePlanId = RP_ADSL_RES_STUDENT,
                       RatePlanName = "Student Plan",
+                      UserName = "Test5",
+                      Password = "pass5",
+                      Speed = ADSL_SPEED_5,
                       Status = ContractDetailStatus.Inactive,
                       CreatedTime = DateTime.Today.AddDays(-4),
                       LastModifiedTime = DateTime.Today
@@ -831,9 +923,9 @@ namespace BPMExtended.Main.Common
                 new SOM.Main.Entities.RatePlan
                 {
                     RatePlanId = RP_LL_RES_NORMAL,
-                    Name = "Normal Plan",
+                    Name = "Engineers Plan",
                     LOB = SOM.Main.Entities.LineOfBusiness.LeasedLine,
-                    Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
+                    Category = GetCustomerCategory(CUSTOMER_CAT_RES_ENG),
                     CorePackage = GetServicePackage(PCKG_CORE_LL),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_LL_1 })
                 },
@@ -929,7 +1021,7 @@ namespace BPMExtended.Main.Common
                 },
                 new SOM.Main.Entities.ServicePackage
                 {
-                    PackageId = PCKG_OPT_ADSL_1,
+                    PackageId = PCKG_OPT_ADSL_2,
                     PackageName = "Gold",
                     Services = GetServices(PCKG_OPT_ADSL_2)
                 }
@@ -1063,6 +1155,22 @@ namespace BPMExtended.Main.Common
                     Name = "Call Wait/Hold",
                     Description = "Put a call on hold",
                     AccessFee = 150,
+                    PackageId = PCKG_OPT_LL_1
+                },
+                 new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_OPT_LL_3,
+                    Name = "LM Fiber Selected",
+                    Description = "LM Fiber",
+                    AccessFee = 200,
+                    PackageId = PCKG_OPT_LL_1
+                },
+                new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_OPT_LL_4,
+                    Name = "LM Microwave Selected",
+                    Description = "LM Microwave",
+                    AccessFee = 450,
                     PackageId = PCKG_OPT_LL_1
                 },
                 new SOM.Main.Entities.Service

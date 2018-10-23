@@ -137,6 +137,19 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
+
+        public bool ActivateADSLAlterSpeed(string contractId, string speed)
+        {
+            //TODO: Activate service
+            return true;
+        }
+
+        public bool ChangeADSLPassword(string contractId, string newPassword)
+        {
+            //TODO: 
+            return true;
+        }
+
         #region mappers
 
         private TelephonyContractInfo TelephonyContractDetailToInfo(TelephonyContractDetail detail)

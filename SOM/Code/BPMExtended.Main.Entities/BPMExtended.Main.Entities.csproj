@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ADSLSpeedInfo.cs" />
     <Compile Include="ContractDetail.cs" />
     <Compile Include="CPTNumberDetail.cs" />
     <Compile Include="CreateCustomerRequestOutput.cs" />

@@ -338,6 +338,21 @@ namespace BPMExtended.Main.Business
             return  item;
         }
 
+
+        public bool IsManualDSLAM(string contractId)
+        {
+
+            ContractManager contractManager = new ContractManager();
+            ADSLContractDetail contract = contractManager.GetADSLContract(contractId);
+
+            bool item = false;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<bool>(String.Format("api/SOM_Main/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
+            }
+            return item;
+        }
+
         public string ReserveTelephonyNumber(string phoneNumber, string pathType, string phoneNumberID, string deviceID, string mDFPortID, string dPPortID, string primaryPort, string secondaryPort)
         {
             string objectlist = phoneNumberID + "," + deviceID + "," + mDFPortID + "," + primaryPort + "," + secondaryPort + "," + dPPortID;

@@ -202,6 +202,14 @@ namespace BPMExtended.Main.Business
 
         }
 
+
+        public List<ADSLSpeedInfo> GetAllADSLSpeedInfo()
+        {
+
+            return RatePlanMockDataGenerator.GetAllADSLSpeedInfo();
+
+        }
+
         #region Mappers
 
         private RatePlanInfo RatePlanInfoMapper(SOM.Main.Entities.RatePlan ratePlan)

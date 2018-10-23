@@ -22,6 +22,12 @@ namespace BPMExtended.Main.Entities
 
         public string Address { get; set; }
 
+        public string CSO { get; set; }
+
+        public string SubscriptionDate { get; set; }
+
+        public string ReservedLinePath { get; set; }
+
         public ContractDetailStatus Status { get; set; }
 
         public DateTime CreatedTime { get; set; }
