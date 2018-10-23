@@ -137,6 +137,7 @@
                 if (isEditMode) {
                     $scope.scopeModel.qualityConfigurationId = qualityConfigurationEntity.QualityConfigurationId;
                     $scope.scopeModel.qualityConfigurationyName = qualityConfigurationEntity.Name;
+                    $scope.scopeModel.routingTriggerThreshold = qualityConfigurationEntity.RoutingTriggerThreshold;
                 }
             }
 
@@ -218,9 +219,10 @@
                 QualityConfigurationId: qualityConfigurationId,
                 QualityConfigurationDefinitionId: qualityConfigurationDefinitionId,
                 Name: $scope.scopeModel.qualityConfigurationyName,
+                RoutingTriggerThreshold: $scope.scopeModel.routingTriggerThreshold,
                 Settings: qualityConfigurationSettingsDirectiveAPI.getData()
             };
-
+            
             return obj;
         }
     }

@@ -12,4 +12,9 @@ namespace TOne.WhS.Routing.Entities
     //{
     //    public List<CustomerRouteQualityConfigurationData> CustomerRouteQualityConfigurationDataList { get; set; }  
     //}
+
+    public class CustomerRouteQualityDataBySupplierZone : Dictionary<long, Dictionary<Guid, CustomerRouteQualityConfigurationData>>
+    {
+
+    }
 }

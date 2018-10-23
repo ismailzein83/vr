@@ -16,6 +16,7 @@
   <x:Members>
     <x:Property Name="RoutingDatabaseId" Type="InArgument(x:Int32)" />
     <x:Property Name="EffectiveOn" Type="InArgument(s:DateTime)" />
+    <x:Property Name="VersionNumber" Type="InArgument(x:Int32)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.SubProcesses.CalculateCustomerRouteQualityData_1</sap2010:WorkflowViewState.IdRef>
@@ -78,7 +79,7 @@
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedCustomerRouteQualityData" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCustomerRouteQualityDataStatus" />
       </Parallel.Variables>
-      <twrba:CalculateRoutingQualityData>
+      <twrba:CalculateRoutingQualityData sap2010:WorkflowViewState.IdRef="CalculateRoutingQualityData_1">
         <twrba:CalculateRoutingQualityData.EffectiveDate>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveOn</mca:CSharpValue>
@@ -99,7 +100,11 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">calculateCustomerRouteQualityDataStatus</mca:CSharpReference>
           </OutArgument>
         </twrba:CalculateRoutingQualityData.Status>
-        <sap2010:WorkflowViewState.IdRef>CalculateRoutingQualityData_1</sap2010:WorkflowViewState.IdRef>
+        <twrba:CalculateRoutingQualityData.VersionNumber>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">VersionNumber</mca:CSharpValue>
+          </InArgument>
+        </twrba:CalculateRoutingQualityData.VersionNumber>
       </twrba:CalculateRoutingQualityData>
       <twrba:PrepareCustomerRouteQualityDataForDBApply sap2010:WorkflowViewState.IdRef="PrepareCustomerRouteQualityDataForDBApply_1">
         <twrba:PrepareCustomerRouteQualityDataForDBApply.InputQueue>
@@ -146,22 +151,22 @@
         </twrba:ApplyCustomerRouteQualityDataToDB.RoutingDatabaseId>
       </twrba:ApplyCustomerRouteQualityDataToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d2FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXENhbGN1bGF0ZUN1c3RvbWVyUm91dGVRdWFsaXR5RGF0YS54YW1sEUkDlgEOAgEBSgWUARACAQJRB2crAgE9aAeCATkCARmDAQeTATECAQNUDVRYAgFTYw1jiAECAUxZDVmvAQIBRV4NXoMBAgE+dQ11gAECATZrDWurAQIBL3oNelsCASh/DX+GAQIBIXANcIYBAgEaiwENiwF+AgEShgENhgF+AgELkAENkAFbAgEE</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXENhbGN1bGF0ZUN1c3RvbWVyUm91dGVRdWFsaXR5RGF0YS54YW1sEkoDmwEOAgEBSwWZARACAQJSB2wrAgFFbQeHATkCARyIAQeYATECAQNVDVVYAgFmZA1kiAECAV5aDVqvAQIBVmkNaVcCAU5fDV+DAQIBRnoNeoABAgE9cA1wpwECATV/DX9bAgEthAENhAGGAQIBJXUNdYYBAgEdkAENkAF+AgEUiwENiwF+AgEMlQENlQFbAgEE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="CalculateRoutingQualityData_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareCustomerRouteQualityDataForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyCustomerRouteQualityDataToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,210">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794.4,86.4" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816.8,211.2">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.CalculateCustomerRouteQualityData_1" sap:VirtualizedContainerService.HintSize="856,290" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.CalculateCustomerRouteQualityData_1" sap:VirtualizedContainerService.HintSize="856.8,291.2" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

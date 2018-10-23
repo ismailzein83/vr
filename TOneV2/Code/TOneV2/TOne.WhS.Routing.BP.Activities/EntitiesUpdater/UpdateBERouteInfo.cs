@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Activities;
-using Vanrise.Common;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 
@@ -24,10 +23,16 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<bool> HasModifiedSupplierZoneDetails { get; set; }
 
         [RequiredArgument]
+        public InArgument<bool> HasModifiedRoutingQualityData { get; set; }
+
+        [RequiredArgument]
         public InArgument<int> SaleRateVersionNumber { get; set; }
 
         [RequiredArgument]
         public InArgument<int> SupplierRateVersionNumber { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> QualityConfigurationVersionNumber { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime?> NextOpenOrCloseSaleRateTime { get; set; }
@@ -50,8 +55,10 @@ namespace TOne.WhS.Routing.BP.Activities
 
             bool hasModifiedCustomerZoneDetails = this.HasModifiedCustomerZoneDetails.Get(context);
             bool hasModifiedSupplierZoneDetails = this.HasModifiedSupplierZoneDetails.Get(context);
+            bool hasModifiedQualityConfigurationData = this.HasModifiedRoutingQualityData.Get(context);
             int saleRateVersionNumber = this.SaleRateVersionNumber.Get(context);
             int supplierRateVersionNumber = this.SupplierRateVersionNumber.Get(context);
+            int qualityConfigurationVersionNumber = this.QualityConfigurationVersionNumber.Get(context);
 
             DateTime? nextOpenOrCloseSaleRateTime = this.NextOpenOrCloseSaleRateTime.Get(context);
             object maxSaleRateTimeStamp = this.MaxSaleRateTimeStamp.Get(context);
@@ -69,6 +76,10 @@ namespace TOne.WhS.Routing.BP.Activities
             beRouteInfo.SupplierRateRouteInfo.MaxRateTimeStamp = maxSupplierRateTimeStamp;
             if (hasModifiedSupplierZoneDetails)
                 beRouteInfo.SupplierRateRouteInfo.LatestVersionNumber = supplierRateVersionNumber;
+
+            //Quality
+            if (hasModifiedQualityConfigurationData)
+                beRouteInfo.QualityRouteInfo.LatestVersionNumber = qualityConfigurationVersionNumber;
 
             beRouteInfo.LatestProcessDate = effectiveDate;
             RoutingEntityDetails routingEntityDetails = new RoutingEntityDetails() { RoutingEntityType = RoutingEntityType.BERouteInfo, RoutingEntityInfo = beRouteInfo };

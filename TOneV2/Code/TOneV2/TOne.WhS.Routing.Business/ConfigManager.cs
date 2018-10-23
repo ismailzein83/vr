@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Common.Business;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -185,6 +185,20 @@ namespace TOne.WhS.Routing.Business
                 throw new NullReferenceException("routeSettingsData.RouteRuleConfiguration");
 
             return routeSettingsData.RouteRuleConfiguration;
+        }
+
+        public Dictionary<Guid, Decimal> GetTriggerThresholdByRouteRuleQualityConfiguration()
+        {
+            var triggerThresholdByRouteRuleQualityConfiguration = new Dictionary<Guid, Decimal>();
+            var qualityConfiguration = GetQualityConfiguration();
+
+            if (qualityConfiguration.RouteRuleQualityConfigurationList != null)
+            {
+                foreach (var routeRuleQualityConfiguration in qualityConfiguration.RouteRuleQualityConfigurationList)
+                    triggerThresholdByRouteRuleQualityConfiguration.Add(routeRuleQualityConfiguration.QualityConfigurationId, routeRuleQualityConfiguration.RoutingTriggerThreshold);
+            }
+
+            return triggerThresholdByRouteRuleQualityConfiguration;
         }
 
         #endregion

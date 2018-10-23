@@ -14,6 +14,9 @@
                                                                                     customlabel="Type" isrequired="true" hideremoveicon>
                             </vr-whs-routing-qualityconfigurationdefinition-selector>
                         </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.routingTriggerThreshold" label="Routing Trigger Threshold" type="number" minvalue="0" isrequired="true"></vr-textbox>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-directivewrapper ng-if="scopeModel.selectedQualityConfigurationDefinition != undefined"

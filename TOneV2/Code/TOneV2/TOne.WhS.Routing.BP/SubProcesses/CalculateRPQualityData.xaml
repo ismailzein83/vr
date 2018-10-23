@@ -16,6 +16,7 @@
   <x:Members>
     <x:Property Name="RoutingDatabaseId" Type="InArgument(x:Int32)" />
     <x:Property Name="EffectiveOn" Type="InArgument(s:DateTime)" />
+    <x:Property Name="VersionNumber" Type="InArgument(x:Int32)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.SubProcesses.CalculateRPQualityData_1</sap2010:WorkflowViewState.IdRef>
@@ -99,6 +100,11 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">calculateRPQualityDataStatus</mca:CSharpReference>
           </OutArgument>
         </twrba:CalculateRoutingQualityData.Status>
+        <twrba:CalculateRoutingQualityData.VersionNumber>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">VersionNumber</mca:CSharpValue>
+          </InArgument>
+        </twrba:CalculateRoutingQualityData.VersionNumber>
       </twrba:CalculateRoutingQualityData>
       <twrba:PrepareRPQualityDataForDBApply sap2010:WorkflowViewState.IdRef="PrepareRPQualityDataForDBApply_1">
         <twrba:PrepareRPQualityDataForDBApply.InputQueue>
@@ -145,22 +151,22 @@
         </twrba:ApplyRPQualityDataToDB.RoutingDatabaseId>
       </twrba:ApplyRPQualityDataToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1ZDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXENhbGN1bGF0ZVJQUXVhbGl0eURhdGEueGFtbBFJA5UBDgIBAUoFkwEQAgECUQdmKwIBPWcHgQEuAgEZggEHkgEmAgEDVA1UWAIBU2MNY30CAUxZDVmvAQIBRV4NXokBAgE+dA10dQIBNmoNaqcBAgEveQ15WwIBKH4NfnsCASFvDW97AgEaigENigFzAgEShQENhQFzAgELjwENjwFbAgEE</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1ZDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXENhbGN1bGF0ZVJQUXVhbGl0eURhdGEueGFtbBJKA5sBDgIBAUsFmQEQAgECUgdsKwIBRW0HhwEuAgEciAEHmAEmAgEDVQ1VWAIBZmQNZH0CAV5aDVqvAQIBVmkNaVcCAU5fDV+JAQIBRnoNenUCAT1wDXCnAQIBNX8Nf1sCAS2EAQ2EAXsCASV1DXV7AgEdkAENkAFzAgEUiwENiwFzAgEMlQENlQFbAgEE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="CalculateRoutingQualityData_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareRPQualityDataForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyRPQualityDataToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,210">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794.4,86.4" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816.8,211.2">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.CalculateRPQualityData_1" sap:VirtualizedContainerService.HintSize="856,290" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.CalculateRPQualityData_1" sap:VirtualizedContainerService.HintSize="856.8,291.2" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -17,6 +14,8 @@ namespace TOne.WhS.Routing.Entities
         public bool IsActive { get; set; }
 
         public bool IsDefault { get; set; }
+
+        public Decimal RoutingTriggerThreshold { get; set; }
 
         public RouteRuleQualityConfigurationSettings Settings { get; set; }
     }
@@ -39,13 +38,15 @@ namespace TOne.WhS.Routing.Entities
 
         Guid QualityConfigurationDefinitionId { get; }
 
-        string QualityConfigurationName { get; } 
+        string QualityConfigurationName { get; }
 
         InitializedQualityConfiguration InitializedQualityConfiguration { get; }
 
         RoutingProcessType RoutingProcessType { get; }
 
         DateTime EffectiveDate { get; }
+
+        int VersionNumber { get; }
     }
 
     public class GetRouteRuleQualityConfigurationDataContext : IGetRouteRuleQualityConfigurationDataContext
@@ -54,26 +55,28 @@ namespace TOne.WhS.Routing.Entities
 
         public Guid QualityConfigurationDefinitionId { get; set; }
 
-        public string QualityConfigurationName { get; set; } 
+        public string QualityConfigurationName { get; set; }
 
         public InitializedQualityConfiguration InitializedQualityConfiguration { get; set; }
 
         public RoutingProcessType RoutingProcessType { get; set; }
 
         public DateTime EffectiveDate { get; set; }
+
+        public int VersionNumber { get; set; }
     }
 
     public interface IValidateQualityConfigurationDataContext
     {
         Guid QualityConfigurationDefinitionId { get; }
 
-        string QualityConfigurationName { get; } 
+        string QualityConfigurationName { get; }
     }
 
     public class ValidateQualityConfigurationDataContext : IValidateQualityConfigurationDataContext
     {
         public Guid QualityConfigurationDefinitionId { get; set; }
 
-        public string QualityConfigurationName { get; set; } 
+        public string QualityConfigurationName { get; set; }
     }
 }

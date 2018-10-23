@@ -20,6 +20,7 @@ namespace TOne.WhS.Routing.Entities
         public int LastVersionNumber { get; set; }
         public int LatestSaleRateVersionNumber { get; set; }
         public int LatestCostRateVersionNumber { get; set; }
+        public int LatestQualityConfigurationVersionNumber { get; set; }
         public DateTime LatestRoutingDate { get; set; }
         public DateTime FullRoutingDate { get; set; }
         public DateTime? NextOpenOrCloseRuleTime { get; set; }
@@ -30,6 +31,20 @@ namespace TOne.WhS.Routing.Entities
         public DateTime LatestProcessDate { get; set; }
         public RateRouteInfo SaleRateRouteInfo { get; set; }
         public RateRouteInfo SupplierRateRouteInfo { get; set; }
+        public QualityRouteInfo QualityRouteInfo { get; set; }
+
+        public BERouteInfo(DateTime latestProcessDate, RateRouteInfo saleRateRouteInfo, RateRouteInfo supplierRateRouteInfo, QualityRouteInfo qualityRouteInfo)
+        {
+            this.LatestProcessDate = latestProcessDate;
+            this.SaleRateRouteInfo = saleRateRouteInfo;
+            this.SupplierRateRouteInfo = supplierRateRouteInfo;
+            this.QualityRouteInfo = qualityRouteInfo;
+        }
+    }
+
+    public class QualityRouteInfo
+    {
+        public int LatestVersionNumber { get; set; }
     }
 
     public class RateRouteInfo

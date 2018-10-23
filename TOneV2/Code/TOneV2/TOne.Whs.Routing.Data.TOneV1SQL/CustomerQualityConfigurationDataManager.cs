@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Data.SQL;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
@@ -30,6 +28,16 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         }
 
         public void WriteRecordToStream(CustomerRouteQualityConfigurationData record, object dbApplyStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateCustomerRouteQualityConfigurationsData(List<CustomerRouteQualityConfigurationData> customerRouteQualityConfigurationData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CustomerRouteQualityConfigurationData> GetCustomerRouteQualityConfigurationsDataAfterVersionNumber(int versionNumber)
         {
             throw new NotImplementedException();
         }

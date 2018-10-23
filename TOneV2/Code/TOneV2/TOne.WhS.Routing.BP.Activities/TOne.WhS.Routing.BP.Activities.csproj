@@ -115,8 +115,10 @@
     <Compile Include="CalculateCustomerRouteQualityData.cs" />
     <Compile Include="CalculateRoutingQualityData.cs" />
     <Compile Include="CalculateRPQualityData.cs" />
+    <Compile Include="EntitiesUpdater\ApplyModifiedCustomerRoutingQualityData.cs" />
     <Compile Include="EntitiesUpdater\ApplyModifiedSupplierZoneDetails.cs" />
     <Compile Include="EntitiesUpdater\ApplyModifiedCustomerZoneDetails.cs" />
+    <Compile Include="EntitiesUpdater\CheckModifiedCustomerRoutingQualityData.cs" />
     <Compile Include="EntitiesUpdater\CheckModifiedSupplierZoneDetails.cs" />
     <Compile Include="EntitiesUpdater\CheckZoneDetails.cs" />
     <Compile Include="EntitiesUpdater\UpdateBERouteInfo.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="FillRoutingEntityDetails.cs" />
     <Compile Include="EntitiesUpdater\CheckModifiedCustomerZoneDetails.cs" />
     <Compile Include="GenerateZoneCodeGroup.cs" />
+    <Compile Include="GetCustomerRoutingQualityData.cs" />
     <Compile Include="InitializeRouteProcess.cs" />
     <Compile Include="PartialRoute\CheckModifiedCustomerRoutes.cs" />
     <Compile Include="PartialRoute\BuildPartialCustomerRoutes.cs" />

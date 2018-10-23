@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Activities;
-using TOne.WhS.Routing.Entities;
-using Vanrise.Queueing;
-using Vanrise.BusinessProcess;
+using System.Collections.Generic;
 using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Entities;
+using Vanrise.BusinessProcess;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -19,6 +17,8 @@ namespace TOne.WhS.Routing.BP.Activities
         public RoutingProcessType RoutingProcessType { get; set; }
 
         public BaseQueue<RouteRuleQualityConfigurationDataBatch> OutputQueue { get; set; }
+
+        public int VersionNumber { get; set; }
     }
 
     public sealed class CalculateRoutingQualityData : BaseAsyncActivity<CalculateRoutingQualityDataInput>
@@ -31,6 +31,8 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<RouteRuleQualityConfigurationDataBatch>> OutputQueue { get; set; }
 
+        [RequiredArgument]
+        public InArgument<int> VersionNumber { get; set; }
 
         protected override void DoWork(CalculateRoutingQualityDataInput inputArgument, AsyncActivityHandle handle)
         {
@@ -94,7 +96,8 @@ namespace TOne.WhS.Routing.BP.Activities
                         QualityConfigurationName = routeRuleQualityConfiguration.Name,
                         InitializedQualityConfiguration = initializedQualityConfigurations.GetRecord(routeRuleQualityConfiguration.QualityConfigurationId),
                         RoutingProcessType = routingProcessType,
-                        EffectiveDate = effectiveDate
+                        EffectiveDate = effectiveDate,
+                        VersionNumber = inputArgument.VersionNumber
                     };
                     List<RouteRuleQualityConfigurationData> routeRuleQualityConfigurationData = routeRuleQualityConfiguration.Settings.GetRouteRuleQualityConfigurationData(context);
                     if (routeRuleQualityConfigurationData == null || routeRuleQualityConfigurationData.Count == 0)
@@ -124,7 +127,8 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 EffectiveDate = this.EffectiveDate.Get(context),
                 RoutingProcessType = this.RoutingProcessType.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                VersionNumber = this.VersionNumber.Get(context)
             };
         }
 

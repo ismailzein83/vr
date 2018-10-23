@@ -1,0 +1,300 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.SubProcesses.UpdateModifiedCustomerRouteQuality"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
+ xmlns:twre="clr-namespace:TOne.WhS.Routing.Entities;assembly=TOne.WhS.Routing.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="EffectiveDate" Type="InArgument(s:DateTime)" />
+    <x:Property Name="RoutingDatabase" Type="InArgument(twre:RoutingDatabase)" />
+    <x:Property Name="HasModifiedRoutingQualityData" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="VersionNumber" Type="InArgument(x:Int32)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.SubProcesses.UpdateModifiedCustomerRouteQuality_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.WhS.Routing.BP.Arguments</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>TOne.WhS.Routing.Entities</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <Parallel DisplayName="CustomerRouteQualityConfiguration_Parallel" sap2010:WorkflowViewState.IdRef="Parallel_2">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)" Name="calculateCustomerRoutingQualityOutput">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">new MemoryQueue&lt;RouteRuleQualityConfigurationDataBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteQualityConfigurationData))" Name="checkCustomerRouteQualityOutputToUpdate">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteQualityConfigurationData))">new MemoryQueue&lt;List&lt;CustomerRouteQualityConfigurationData&gt;&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="calculateRoutingQualityDataStatus" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="checkCustomerRouteQualityConfigurationStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)" Name="checkCustomerRouteQualityOutputToInsert">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">new MemoryQueue&lt;RouteRuleQualityConfigurationDataBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="prepareCustomerRouteQualityToApplyToDBOutput">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">new MemoryQueue&lt;Object&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+      </Parallel.Variables>
+      <twrba:CalculateRoutingQualityData sap2010:WorkflowViewState.IdRef="CalculateRoutingQualityData_1">
+        <twrba:CalculateRoutingQualityData.EffectiveDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
+          </InArgument>
+        </twrba:CalculateRoutingQualityData.EffectiveDate>
+        <twrba:CalculateRoutingQualityData.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">calculateCustomerRoutingQualityOutput</mca:CSharpReference>
+          </InOutArgument>
+        </twrba:CalculateRoutingQualityData.OutputQueue>
+        <twrba:CalculateRoutingQualityData.RoutingProcessType>
+          <InArgument x:TypeArguments="twre:RoutingProcessType">
+            <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">RoutingDatabase.ProcessType</mca:CSharpValue>
+          </InArgument>
+        </twrba:CalculateRoutingQualityData.RoutingProcessType>
+        <twrba:CalculateRoutingQualityData.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">calculateRoutingQualityDataStatus</mca:CSharpReference>
+          </OutArgument>
+        </twrba:CalculateRoutingQualityData.Status>
+        <twrba:CalculateRoutingQualityData.VersionNumber>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">VersionNumber</mca:CSharpValue>
+          </InArgument>
+        </twrba:CalculateRoutingQualityData.VersionNumber>
+      </twrba:CalculateRoutingQualityData>
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+        <Sequence.Variables>
+          <Variable x:TypeArguments="twre:CustomerRouteQualityDataBySupplierZone" Name="customerRouteQualityConfigurationDataBySupplierZone" />
+        </Sequence.Variables>
+        <twrba:GetCustomerRoutingQualityData Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCustomerRoutingQualityData_1">
+          <twrba:GetCustomerRoutingQualityData.CustomerRouteQualityDataBySupplierZone>
+            <OutArgument x:TypeArguments="twre:CustomerRouteQualityDataBySupplierZone">
+              <mca:CSharpReference x:TypeArguments="twre:CustomerRouteQualityDataBySupplierZone">customerRouteQualityConfigurationDataBySupplierZone</mca:CSharpReference>
+            </OutArgument>
+          </twrba:GetCustomerRoutingQualityData.CustomerRouteQualityDataBySupplierZone>
+          <twrba:GetCustomerRoutingQualityData.RoutingDatabaseId>
+            <InArgument x:TypeArguments="x:Int32">
+              <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabase.ID</mca:CSharpValue>
+            </InArgument>
+          </twrba:GetCustomerRoutingQualityData.RoutingDatabaseId>
+        </twrba:GetCustomerRoutingQualityData>
+        <Parallel DisplayName="ApplyCustomerRouteQualityConfigurations_Parallel" sap2010:WorkflowViewState.IdRef="Parallel_1">
+          <Parallel.Variables>
+            <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCustomerRouteQualityToApplyToDBStatus" />
+          </Parallel.Variables>
+          <twrba:CheckModifiedCustomerRoutingQualityData sap2010:WorkflowViewState.IdRef="CheckModifiedCustomerRoutingQualityData_1">
+            <twrba:CheckModifiedCustomerRoutingQualityData.CustomerRouteQualityDataBySupplierZone>
+              <InArgument x:TypeArguments="twre:CustomerRouteQualityDataBySupplierZone">
+                <mca:CSharpValue x:TypeArguments="twre:CustomerRouteQualityDataBySupplierZone">customerRouteQualityConfigurationDataBySupplierZone</mca:CSharpValue>
+              </InArgument>
+            </twrba:CheckModifiedCustomerRoutingQualityData.CustomerRouteQualityDataBySupplierZone>
+            <twrba:CheckModifiedCustomerRoutingQualityData.HasModifiedRoutingQualityData>
+              <OutArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpReference x:TypeArguments="x:Boolean">HasModifiedRoutingQualityData</mca:CSharpReference>
+              </OutArgument>
+            </twrba:CheckModifiedCustomerRoutingQualityData.HasModifiedRoutingQualityData>
+            <twrba:CheckModifiedCustomerRoutingQualityData.InputQueue>
+              <InArgument x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">calculateCustomerRoutingQualityOutput</mca:CSharpValue>
+              </InArgument>
+            </twrba:CheckModifiedCustomerRoutingQualityData.InputQueue>
+            <twrba:CheckModifiedCustomerRoutingQualityData.OutputQueueToInsert>
+              <InArgument x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">checkCustomerRouteQualityOutputToInsert</mca:CSharpValue>
+              </InArgument>
+            </twrba:CheckModifiedCustomerRoutingQualityData.OutputQueueToInsert>
+            <twrba:CheckModifiedCustomerRoutingQualityData.OutputQueueToUpdate>
+              <InArgument x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteQualityConfigurationData))">
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteQualityConfigurationData))">checkCustomerRouteQualityOutputToUpdate</mca:CSharpValue>
+              </InArgument>
+            </twrba:CheckModifiedCustomerRoutingQualityData.OutputQueueToUpdate>
+            <twrba:CheckModifiedCustomerRoutingQualityData.PreviousActivityStatus>
+              <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">calculateRoutingQualityDataStatus</mca:CSharpValue>
+              </InArgument>
+            </twrba:CheckModifiedCustomerRoutingQualityData.PreviousActivityStatus>
+            <twrba:CheckModifiedCustomerRoutingQualityData.RoutingDatabase>
+              <InArgument x:TypeArguments="twre:RoutingDatabase">
+                <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+              </InArgument>
+            </twrba:CheckModifiedCustomerRoutingQualityData.RoutingDatabase>
+            <twrba:CheckModifiedCustomerRoutingQualityData.Status>
+              <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">checkCustomerRouteQualityConfigurationStatus</mca:CSharpReference>
+              </OutArgument>
+            </twrba:CheckModifiedCustomerRoutingQualityData.Status>
+          </twrba:CheckModifiedCustomerRoutingQualityData>
+          <twrba:ApplyModifiedCustomerRoutingQualityData Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyModifiedCustomerRoutingQualityData_1">
+            <twrba:ApplyModifiedCustomerRoutingQualityData.InputQueue>
+              <InArgument x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteQualityConfigurationData))">
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerRouteQualityConfigurationData))">checkCustomerRouteQualityOutputToUpdate</mca:CSharpValue>
+              </InArgument>
+            </twrba:ApplyModifiedCustomerRoutingQualityData.InputQueue>
+            <twrba:ApplyModifiedCustomerRoutingQualityData.PreviousActivityStatus>
+              <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">checkCustomerRouteQualityConfigurationStatus</mca:CSharpValue>
+              </InArgument>
+            </twrba:ApplyModifiedCustomerRoutingQualityData.PreviousActivityStatus>
+            <twrba:ApplyModifiedCustomerRoutingQualityData.RoutingDatabase>
+              <InArgument x:TypeArguments="twre:RoutingDatabase">
+                <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+              </InArgument>
+            </twrba:ApplyModifiedCustomerRoutingQualityData.RoutingDatabase>
+          </twrba:ApplyModifiedCustomerRoutingQualityData>
+          <twrba:PrepareCustomerRouteQualityDataForDBApply sap2010:WorkflowViewState.IdRef="PrepareCustomerRouteQualityDataForDBApply_1">
+            <twrba:PrepareCustomerRouteQualityDataForDBApply.InputQueue>
+              <InArgument x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">checkCustomerRouteQualityOutputToInsert</mca:CSharpValue>
+              </InArgument>
+            </twrba:PrepareCustomerRouteQualityDataForDBApply.InputQueue>
+            <twrba:PrepareCustomerRouteQualityDataForDBApply.OutputQueue>
+              <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">prepareCustomerRouteQualityToApplyToDBOutput</mca:CSharpReference>
+              </InOutArgument>
+            </twrba:PrepareCustomerRouteQualityDataForDBApply.OutputQueue>
+            <twrba:PrepareCustomerRouteQualityDataForDBApply.PreviousActivityStatus>
+              <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">checkCustomerRouteQualityConfigurationStatus</mca:CSharpValue>
+              </InArgument>
+            </twrba:PrepareCustomerRouteQualityDataForDBApply.PreviousActivityStatus>
+            <twrba:PrepareCustomerRouteQualityDataForDBApply.RoutingDatabaseId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabase.ID</mca:CSharpValue>
+              </InArgument>
+            </twrba:PrepareCustomerRouteQualityDataForDBApply.RoutingDatabaseId>
+            <twrba:PrepareCustomerRouteQualityDataForDBApply.Status>
+              <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareCustomerRouteQualityToApplyToDBStatus</mca:CSharpReference>
+              </OutArgument>
+            </twrba:PrepareCustomerRouteQualityDataForDBApply.Status>
+          </twrba:PrepareCustomerRouteQualityDataForDBApply>
+          <twrba:ApplyCustomerRouteQualityDataToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyCustomerRouteQualityDataToDB_1">
+            <twrba:ApplyCustomerRouteQualityDataToDB.InputQueue>
+              <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+                <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">prepareCustomerRouteQualityToApplyToDBOutput</mca:CSharpValue>
+              </InArgument>
+            </twrba:ApplyCustomerRouteQualityDataToDB.InputQueue>
+            <twrba:ApplyCustomerRouteQualityDataToDB.PreviousActivityStatus>
+              <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">prepareCustomerRouteQualityToApplyToDBStatus</mca:CSharpValue>
+              </InArgument>
+            </twrba:ApplyCustomerRouteQualityDataToDB.PreviousActivityStatus>
+            <twrba:ApplyCustomerRouteQualityDataToDB.RoutingDatabaseId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabase.ID</mca:CSharpValue>
+              </InArgument>
+            </twrba:ApplyCustomerRouteQualityDataToDB.RoutingDatabaseId>
+          </twrba:ApplyCustomerRouteQualityDataToDB>
+        </Parallel>
+      </Sequence>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d2JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXFVwZGF0ZU1vZGlmaWVkQ3VzdG9tZXJSb3V0ZVF1YWxpdHkueGFtbChNA4ECDgIBAU4F/wEQAgECUg1SuwECASRXDVfPAQIBGV4NXrsBAgEOYw1jeAIBA2cHgQErAwHFAoIBB/4BEgIBL2oNaloDAfICeQ15ggEDAecCbw1vqQEDAdwCfg1+VwMB0QJ0DXR1AwHGAoYBCZEBLwMBrAKSAQn9ARQCATCOAQ+OAV4DAbkCiQEPiQGrAQMBrQKWAQu/ATsDAcMBwAEL0AE7AwGbAdEBC+sBPQIBWewBC/wBNQIBMZ4BEZ4BdQMBnwKyARGyAX4DAZICowERowGlAQMBhQK3ARG3AWoDAfgBvAERvAGRAQMB6wGoARGoAacBAwHeAa0BEa0BsAEDAdEBmQERmQGlAQMBxAHIARHIAYkBAwG2AcMBEcMBsAEDAakBzQERzQFqAwGcAd4BEd4BiQEDAY4B1AER1AGnAQMBgQHjARHjAWACAXToARHoAZEBAgFn2QER2QGRAQIBWvQBEfQBiQECAUzvARHvAYkBAgE/+QER+QFgAgEy</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="CalculateRoutingQualityData_1" sap:VirtualizedContainerService.HintSize="200,273.6" />
+      <sap2010:ViewStateData Id="GetCustomerRoutingQualityData_1" sap:VirtualizedContainerService.HintSize="1034.4,22.4" />
+      <sap2010:ViewStateData Id="CheckModifiedCustomerRoutingQualityData_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyModifiedCustomerRoutingQualityData_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareCustomerRouteQualityDataForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyCustomerRouteQualityDataToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1034.4,86.4">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1056.8,273.6">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1411.2,320">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="1433.6,444.8">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.UpdateModifiedCustomerRouteQuality_1" sap:VirtualizedContainerService.HintSize="1473.6,524.8" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

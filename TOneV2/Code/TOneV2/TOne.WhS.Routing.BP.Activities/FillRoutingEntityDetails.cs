@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Activities;
-using Vanrise.BusinessProcess;
-using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -55,19 +55,20 @@ namespace TOne.WhS.Routing.BP.Activities
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             RoutingDatabase routingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
-            if (routingDatabase!=null && routingDatabase.Type == RoutingDatabaseType.Current)
+            if (routingDatabase != null && routingDatabase.Type == RoutingDatabaseType.Current)
             {
                 IRoutingEntityDetailsDataManager routingEntityDetailsDataManager = RoutingDataManagerFactory.GetDataManager<IRoutingEntityDetailsDataManager>();
                 routingEntityDetailsDataManager.RoutingDatabase = routingDatabase;
 
                 RateRouteInfo saleRateRouteInfo = new RateRouteInfo() { LatestVersionNumber = 0, MaxRateTimeStamp = inputArgument.MaxSaleRateTimeStamp, NextOpenOrCloseRateTime = inputArgument.NextOpenOrCloseSaleRateTime };
                 RateRouteInfo supplierRateRouteInfo = new RateRouteInfo() { LatestVersionNumber = 0, MaxRateTimeStamp = inputArgument.MaxSupplierRateTimeStamp, NextOpenOrCloseRateTime = inputArgument.NextOpenOrCloseSupplierRateTime };
+                QualityRouteInfo qualityRouteInfo = new QualityRouteInfo() { LatestVersionNumber = 0 };
 
-                PartialRouteInfo partialRouteInfo = new PartialRouteInfo() { LastVersionNumber = 0, LatestRoutingDate = inputArgument.EffectiveDate, LatestCostRateVersionNumber = 0, LatestSaleRateVersionNumber = 0, FullRoutingDate = inputArgument.EffectiveDate };
+                PartialRouteInfo partialRouteInfo = new PartialRouteInfo() { LastVersionNumber = 0, LatestRoutingDate = inputArgument.EffectiveDate, LatestCostRateVersionNumber = 0, LatestSaleRateVersionNumber = 0, LatestQualityConfigurationVersionNumber = 0, FullRoutingDate = inputArgument.EffectiveDate };
                 RoutingEntityDetails partialRoutingEntityDetails = new RoutingEntityDetails() { RoutingEntityType = RoutingEntityType.PartialRouteInfo, RoutingEntityInfo = partialRouteInfo };
                 routingEntityDetailsDataManager.ApplyRoutingEntityDetails(partialRoutingEntityDetails);
 
-                BERouteInfo beRouteInfo = new BERouteInfo() { LatestProcessDate = inputArgument.EffectiveDate, SaleRateRouteInfo = saleRateRouteInfo, SupplierRateRouteInfo = supplierRateRouteInfo };
+                BERouteInfo beRouteInfo = new BERouteInfo(inputArgument.EffectiveDate, saleRateRouteInfo, supplierRateRouteInfo, qualityRouteInfo);
                 RoutingEntityDetails beRoutingEntityDetails = new RoutingEntityDetails() { RoutingEntityType = RoutingEntityType.BERouteInfo, RoutingEntityInfo = beRouteInfo };
                 routingEntityDetailsDataManager.ApplyRoutingEntityDetails(beRoutingEntityDetails);
             }

@@ -1,8 +1,8 @@
 ﻿using System;
-using Vanrise.Common;
 using TOne.WhS.Routing.BP.Arguments;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -79,9 +79,11 @@ namespace TOne.WhS.Routing.Business
             beRouteInfo.ThrowIfNull("beRouteInfo");
             beRouteInfo.SaleRateRouteInfo.ThrowIfNull("beRouteInfo.SaleRateRouteInfo");
             beRouteInfo.SupplierRateRouteInfo.ThrowIfNull("beRouteInfo.SupplierRateRouteInfo");
+            beRouteInfo.QualityRouteInfo.ThrowIfNull("beRouteInfo.QualityRouteInfo");
 
             if (beRouteInfo.SaleRateRouteInfo.LatestVersionNumber > partialRouteInfo.LatestSaleRateVersionNumber ||
-                beRouteInfo.SupplierRateRouteInfo.LatestVersionNumber > partialRouteInfo.LatestCostRateVersionNumber)
+                beRouteInfo.SupplierRateRouteInfo.LatestVersionNumber > partialRouteInfo.LatestCostRateVersionNumber ||
+                beRouteInfo.QualityRouteInfo.LatestVersionNumber > partialRouteInfo.LatestQualityConfigurationVersionNumber)
                 return true;
 
             return false;

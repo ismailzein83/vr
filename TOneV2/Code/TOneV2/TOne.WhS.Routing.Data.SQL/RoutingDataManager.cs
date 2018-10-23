@@ -143,6 +143,7 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_CodeSupplierZoneMatchTable);
             query.AppendLine(query_RoutingEntityDetailsTable);
             query.AppendLine(query_SwitchSyncDataTable);
+            query.AppendLine(query_CustomerQualityConfigurationDataType);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -178,15 +179,27 @@ namespace TOne.WhS.Routing.Data.SQL
         const string query_CustomerQualityConfigurationTable = @"CREATE TABLE [dbo].[CustomerQualityConfigurationData](
                                                         [QualityConfigurationId] [uniqueidentifier] NOT NULL,
                                                         [SupplierZoneId] [bigint] NOT NULL,
-                                                        [Quality] [decimal](20, 8) NOT NULL
-                                                        )ON [PRIMARY]";
+                                                        [Quality] [decimal](20, 8) NOT NULL,
+                                                        [VersionNumber] [int] NOT NULL
+                                                        )ON [PRIMARY];
+
+                                                        CREATE NONCLUSTERED INDEX [IX_CustomerQualityConfigurationData_VersionNumber] ON [dbo].[CustomerQualityConfigurationData] 
+                                                        (
+	                                                        [VersionNumber] DESC
+                                                        );";
 
         const string query_RPQualityConfigurationTable = @"CREATE TABLE [dbo].[RPQualityConfigurationData](
                                                         [QualityConfigurationId] [uniqueidentifier] NOT NULL,
                                                         [SaleZoneId] [bigint] NOT NULL,
                                                         [SupplierId] [int] NOT NULL,
-                                                        [Quality] [decimal](20, 8) NOT NULL
-                                                        )ON [PRIMARY]";
+                                                        [Quality] [decimal](20, 8) NOT NULL,
+                                                        [VersionNumber] [int] NOT NULL
+                                                        )ON [PRIMARY];
+
+                                                        CREATE NONCLUSTERED INDEX [IX_RPQualityConfigurationData_VersionNumber] ON [dbo].[RPQualityConfigurationData] 
+                                                        (
+	                                                        [VersionNumber] DESC
+                                                        );";
 
         const string query_SaleZoneTable = @"CREATE TABLE [dbo].[SaleZone](
 	                                         [ID] [int] NOT NULL,
@@ -348,6 +361,12 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [CustomerId] [int] NOT NULL,
                                                         [SaleZoneId] [bigint] NOT NULL)";
 
+        const string query_CustomerQualityConfigurationDataType = @"CREATE TYPE [CustomerQualityConfigurationDataType] AS TABLE(
+	                                                                        [QualityConfigurationId] [uniqueidentifier] NOT NULL,
+                                                                            [SupplierZoneId] [bigint] NOT NULL,
+                                                                            [Quality] [decimal](20, 8) NOT NULL,
+                                                                            [VersionNumber] [int] NOT NULL)";
+
         const string query_CodeType = @"CREATE TYPE [CodeType] AS TABLE(
 	                                           [Code] [varchar](20) NOT NULL)";
 
@@ -370,6 +389,7 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [EffectiveRateValue] [decimal](20, 8) NULL,
 	                                                    [RateSource] [tinyint] NULL,
                                                         [SaleZoneServiceIds] [nvarchar](max) NULL,
+                                                        [DealId] [int] NULL,
                                                         [VersionNumber] [int] NOT NULL)";
 
         const string query_SupplierZoneDetailType = @"CREATE TYPE [SupplierZoneDetailType] AS TABLE(
@@ -381,6 +401,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         [SupplierServiceWeight] int NOT NULL,
                                                         [SupplierRateId] bigint NULL,
                                                         [SupplierRateEED] datetime NULL,
+                                                        [DealId] [int] NULL,
                                                         [VersionNumber] [int] NOT NULL)";
 
 

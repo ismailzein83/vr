@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Entities;
-using Vanrise.Common;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -37,7 +36,7 @@ namespace TOne.WhS.Routing.Business
 
                 default: throw new Exception(string.Format("Unsupported RoutingProcessType: {0}", context.RoutingProcessType));
             }
-            
+
             TrafficStatisticQualityConfigurationManager trafficStatisticQualityConfigurationManager = new TrafficStatisticQualityConfigurationManager();
 
             string errorMessage;
@@ -60,11 +59,11 @@ namespace TOne.WhS.Routing.Business
             switch (context.RoutingProcessType)
             {
                 case RoutingProcessType.CustomerRoute:
-                    routeRuleQualityConfigurationDataList.AddRange(this.GetCustomerRouteQualityConfigurationData(qualityAnalyticRecordList, context.QualityConfigurationId));
+                    routeRuleQualityConfigurationDataList.AddRange(this.GetCustomerRouteQualityConfigurationData(qualityAnalyticRecordList, context.QualityConfigurationId, context.VersionNumber));
                     break;
 
                 case RoutingProcessType.RoutingProductRoute:
-                    routeRuleQualityConfigurationDataList.AddRange(this.GetProductCostQualityConfigurationData(qualityAnalyticRecordList, context.QualityConfigurationId));
+                    routeRuleQualityConfigurationDataList.AddRange(this.GetProductCostQualityConfigurationData(qualityAnalyticRecordList, context.QualityConfigurationId, context.VersionNumber));
                     break;
 
                 default: throw new Exception(string.Format("Unsupported RoutingProcessType: {0}", context.RoutingProcessType));
@@ -146,7 +145,7 @@ namespace TOne.WhS.Routing.Business
             return true;
         }
 
-        private List<RouteRuleQualityConfigurationData> GetCustomerRouteQualityConfigurationData(List<QualityAnalyticRecord> qualityAnalyticRecordList, Guid qualityConfigurationId)
+        private List<RouteRuleQualityConfigurationData> GetCustomerRouteQualityConfigurationData(List<QualityAnalyticRecord> qualityAnalyticRecordList, Guid qualityConfigurationId, int versionNumber)
         {
             List<RouteRuleQualityConfigurationData> results = new List<RouteRuleQualityConfigurationData>();
 
@@ -162,14 +161,15 @@ namespace TOne.WhS.Routing.Business
                 {
                     QualityConfigurationId = qualityConfigurationId,
                     SupplierZoneId = supplierZoneId,
-                    QualityData = qualityAnalyticRecord.Quality
+                    QualityData = qualityAnalyticRecord.Quality,
+                    VersionNumber = versionNumber
                 });
             }
 
             return results;
         }
 
-        private List<RouteRuleQualityConfigurationData> GetProductCostQualityConfigurationData(List<QualityAnalyticRecord> qualityAnalyticRecordList, Guid qualityConfigurationId)
+        private List<RouteRuleQualityConfigurationData> GetProductCostQualityConfigurationData(List<QualityAnalyticRecord> qualityAnalyticRecordList, Guid qualityConfigurationId, int versionNumber)
         {
             List<RouteRuleQualityConfigurationData> results = new List<RouteRuleQualityConfigurationData>();
 
@@ -189,7 +189,8 @@ namespace TOne.WhS.Routing.Business
                     QualityConfigurationId = qualityConfigurationId,
                     SaleZoneId = saleZoneId,
                     SupplierId = supplierId,
-                    QualityData = qualityAnalyticRecord.Quality
+                    QualityData = qualityAnalyticRecord.Quality,
+                    VersionNumber = versionNumber
                 });
             }
 

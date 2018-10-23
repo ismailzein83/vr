@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -11,6 +8,8 @@ namespace TOne.WhS.Routing.Entities
         public Guid QualityConfigurationId { get; set; }
 
         public Decimal QualityData { get; set; }
+
+        public int VersionNumber { get; set; }
     }
 
     public class RouteRuleQualityConfigurationDataBatch

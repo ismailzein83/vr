@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Linq;
 using System.Activities;
 using System.Collections.Generic;
+using System.Linq;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
-using Vanrise.Entities;
 using Vanrise.Common;
-using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -102,6 +101,14 @@ namespace TOne.WhS.Routing.BP.Activities
                     List<SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsDataManager.GetSupplierZoneDetailsAfterVersionNumber(partialRouteInfo.LatestCostRateVersionNumber);
                     UpdateAffectedRouteList(affectedRouteOptionsList, supplierZoneDetails);
                 }
+
+                if(beRouteInfo.QualityRouteInfo.LatestVersionNumber > partialRouteInfo.LatestQualityConfigurationVersionNumber)
+                {
+                    ICustomerQualityConfigurationDataManager customerQualityConfigurationDataManager = RoutingDataManagerFactory.GetDataManager<ICustomerQualityConfigurationDataManager>();
+                    customerQualityConfigurationDataManager.RoutingDatabase = routingDatabase;
+                    List<CustomerRouteQualityConfigurationData> customerRouteQualityConfigurationData = customerQualityConfigurationDataManager.GetCustomerRouteQualityConfigurationsDataAfterVersionNumber(partialRouteInfo.LatestQualityConfigurationVersionNumber);
+                    UpdateAffectedRouteList(affectedRouteOptionsList, customerRouteQualityConfigurationData);
+                }
             }
 
             if (shouldTriggerFullRouteProcess)
@@ -185,6 +192,33 @@ namespace TOne.WhS.Routing.BP.Activities
                     SupplierId = kvp.Key,
                     SupplierZoneIds = kvp.Value
                 };
+                AffectedRouteOptions affectedRouteOptions = new AffectedRouteOptions() { SupplierWithZones = new List<SupplierWithZones>() { supplierWithZones } };
+                affectedRouteOptionsList.Add(affectedRouteOptions);
+            }
+        }
+
+        private void UpdateAffectedRouteList(List<AffectedRouteOptions> affectedRouteOptionsList, List<CustomerRouteQualityConfigurationData> customerRouteQualityConfigurationData)
+        {
+            if (customerRouteQualityConfigurationData == null || customerRouteQualityConfigurationData.Count == 0)
+                return;
+
+            Dictionary<int, List<long>> qualityConfigurationswithSupplierZonesDict = new Dictionary<int, List<long>>();
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+            foreach (CustomerRouteQualityConfigurationData customerRouteQualityConfiguration in customerRouteQualityConfigurationData)
+            {
+                var supplierId = supplierZoneManager.GetSupplierZone(customerRouteQualityConfiguration.SupplierZoneId).SupplierId;
+                List<long> zones = qualityConfigurationswithSupplierZonesDict.GetOrCreateItem(supplierId);
+                zones.Add(customerRouteQualityConfiguration.SupplierZoneId);
+            }
+
+            foreach (var kvp in qualityConfigurationswithSupplierZonesDict)
+            {
+                SupplierWithZones supplierWithZones = new SupplierWithZones()
+                {
+                    SupplierId = kvp.Key,
+                    SupplierZoneIds = kvp.Value
+                };
+
                 AffectedRouteOptions affectedRouteOptions = new AffectedRouteOptions() { SupplierWithZones = new List<SupplierWithZones>() { supplierWithZones } };
                 affectedRouteOptionsList.Add(affectedRouteOptions);
             }

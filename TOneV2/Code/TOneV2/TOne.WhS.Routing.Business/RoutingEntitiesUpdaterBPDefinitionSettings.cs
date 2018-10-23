@@ -81,14 +81,15 @@ namespace TOne.WhS.Routing.Business
 
             bool rebuildCustomerZoneDetails = ShouldRebuildCustomerZoneDetails(beRouteInfo.SaleRateRouteInfo, effectiveDate, out nextOpenOrCloseSaleRateTime, out maxSaleRateTimeStamp);
             bool rebuildSupplierZoneDetails = ShouldRebuildSupplierZoneDetails(beRouteInfo.SupplierRateRouteInfo, effectiveDate, out nextOpenOrCloseSupplierRateTime, out maxSupplierRateTimeStamp);
-            if (rebuildCustomerZoneDetails || rebuildSupplierZoneDetails)
-            {
-                UpdateRoutingEntitiesUpdaterProcessInputArg(inputArg, rebuildCustomerZoneDetails, nextOpenOrCloseSaleRateTime, maxSaleRateTimeStamp,
-                    rebuildSupplierZoneDetails, nextOpenOrCloseSupplierRateTime, maxSupplierRateTimeStamp);
-                return true;
-            }
 
-            return false;
+            //if (rebuildCustomerZoneDetails || rebuildSupplierZoneDetails)
+            //{
+            UpdateRoutingEntitiesUpdaterProcessInputArg(inputArg, rebuildCustomerZoneDetails, nextOpenOrCloseSaleRateTime, maxSaleRateTimeStamp,
+                rebuildSupplierZoneDetails, nextOpenOrCloseSupplierRateTime, maxSupplierRateTimeStamp);
+            return true;
+            //}
+
+            //return false;
         }
 
         private void UpdateRoutingEntitiesUpdaterProcessInputArg(RoutingEntitiesUpdaterProcessInput inputArg,

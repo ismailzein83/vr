@@ -1,5 +1,6 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.RoutingEntitiesUpdaterProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:TOne.WhS.Routing.BP.SubProcesses"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:s="clr-namespace:System;assembly=mscorlib"
@@ -124,6 +125,8 @@
             <Variable x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)" Name="SupplierInfos" />
             <Variable x:TypeArguments="x:Boolean" Name="HasModifiedCustomerZoneDetails" />
             <Variable x:TypeArguments="x:Boolean" Name="HasModifiedSupplierZoneDetails" />
+            <Variable x:TypeArguments="x:Boolean" Name="HasModifiedRoutingQualityData" />
+            <Variable x:TypeArguments="x:Int32" Name="QualityConfigurationVersionNumber" />
           </Sequence.Variables>
           <twrba1:GetBERouteInfo sap2010:WorkflowViewState.IdRef="GetBERouteInfo_1">
             <twrba1:GetBERouteInfo.BERouteInfo>
@@ -158,6 +161,18 @@
             <Assign.Value>
               <InArgument x:TypeArguments="x:Int32">
                 <mca:CSharpValue x:TypeArguments="x:Int32">BERouteInfo.SupplierRateRouteInfo.LatestVersionNumber + 1</mca:CSharpValue>
+              </InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Int32">
+                <mca:CSharpReference x:TypeArguments="x:Int32">QualityConfigurationVersionNumber</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">BERouteInfo.QualityRouteInfo.LatestVersionNumber + 1</mca:CSharpValue>
               </InArgument>
             </Assign.Value>
           </Assign>
@@ -432,6 +447,43 @@
                 </Sequence>
               </If.Then>
             </If>
+            <local:UpdateModifiedCustomerRouteQuality sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.SubProcesses.UpdateModifiedCustomerRouteQuality_1">
+              <local:UpdateModifiedCustomerRouteQuality.EffectiveDate>
+                <InArgument x:TypeArguments="s:DateTime">
+                  <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
+                </InArgument>
+              </local:UpdateModifiedCustomerRouteQuality.EffectiveDate>
+              <local:UpdateModifiedCustomerRouteQuality.HasModifiedRoutingQualityData>
+                <OutArgument x:TypeArguments="x:Boolean">
+                  <mca:CSharpReference x:TypeArguments="x:Boolean">HasModifiedRoutingQualityData</mca:CSharpReference>
+                </OutArgument>
+              </local:UpdateModifiedCustomerRouteQuality.HasModifiedRoutingQualityData>
+              <local:UpdateModifiedCustomerRouteQuality.RoutingDatabase>
+                <InArgument x:TypeArguments="twre:RoutingDatabase">
+                  <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+                </InArgument>
+              </local:UpdateModifiedCustomerRouteQuality.RoutingDatabase>
+              <local:UpdateModifiedCustomerRouteQuality.VersionNumber>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">QualityConfigurationVersionNumber</mca:CSharpValue>
+                </InArgument>
+              </local:UpdateModifiedCustomerRouteQuality.VersionNumber>
+              <sap2010:WorkflowViewState.ViewStateManager>
+                <sap2010:ViewStateManager>
+                  <sap2010:ViewStateData Id="CalculateRoutingQualityData_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
+                  <sap2010:ViewStateData Id="GetCustomerRoutingQualityData_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+                  <sap2010:ViewStateData Id="CheckModifiedCustomerRoutingQualityData_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
+                  <sap2010:ViewStateData Id="ApplyModifiedCustomerRoutingQualityData_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+                  <sap2010:ViewStateData Id="PrepareCustomerRouteQualityDataForDBApply_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
+                  <sap2010:ViewStateData Id="ApplyCustomerRouteQualityDataToDB_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
+                  <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
+                  <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
+                  <sap2010:ViewStateData Id="Parallel_2" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
+                  <sap2010:ViewStateData Id="Sequence_2" sap2010:WorkflowViewState.IdRef="ViewStateData_10" />
+                  <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.UpdateModifiedCustomerRouteQuality_1" sap2010:WorkflowViewState.IdRef="ViewStateData_11" />
+                </sap2010:ViewStateManager>
+              </sap2010:WorkflowViewState.ViewStateManager>
+            </local:UpdateModifiedCustomerRouteQuality>
           </Parallel>
           <twrba1:UpdateBERouteInfo sap2010:WorkflowViewState.IdRef="UpdateBERouteInfo_1">
             <twrba1:UpdateBERouteInfo.BERouteInfo>
@@ -449,6 +501,11 @@
                 <mca:CSharpValue x:TypeArguments="x:Boolean">HasModifiedCustomerZoneDetails</mca:CSharpValue>
               </InArgument>
             </twrba1:UpdateBERouteInfo.HasModifiedCustomerZoneDetails>
+            <twrba1:UpdateBERouteInfo.HasModifiedRoutingQualityData>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">HasModifiedRoutingQualityData</mca:CSharpValue>
+              </InArgument>
+            </twrba1:UpdateBERouteInfo.HasModifiedRoutingQualityData>
             <twrba1:UpdateBERouteInfo.HasModifiedSupplierZoneDetails>
               <InArgument x:TypeArguments="x:Boolean">
                 <mca:CSharpValue x:TypeArguments="x:Boolean">HasModifiedSupplierZoneDetails</mca:CSharpValue>
@@ -474,6 +531,11 @@
                 <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.NextOpenOrCloseSupplierRateTime</mca:CSharpValue>
               </InArgument>
             </twrba1:UpdateBERouteInfo.NextOpenOrCloseSupplierRateTime>
+            <twrba1:UpdateBERouteInfo.QualityConfigurationVersionNumber>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">QualityConfigurationVersionNumber</mca:CSharpValue>
+              </InArgument>
+            </twrba1:UpdateBERouteInfo.QualityConfigurationVersionNumber>
             <twrba1:UpdateBERouteInfo.RoutingDatabase>
               <InArgument x:TypeArguments="twre:RoutingDatabase">
                 <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
@@ -509,80 +571,113 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d1BDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ0VudGl0aWVzVXBkYXRlclByb2Nlc3MueGFtbGlOA4EEDgIBAVMLU1cCAQJXBV0gAwHoBl4FbicDAdsGbwX4AwoCAQz5AwX/AyACAQZaC1qFAQMB6gZXYFeMAQMB6QZmC2aOAQMB5AZhC2FsAwHgBmsLa5IBAwHcBnILcl8CAQ12Ce0DFAIBF/ADCfYDJAIBEfwDC/wDhQECAQj5A2D5A4wBAgEHgAELiwEjAwHEBowBC5cBFAMBrQaYAQujARQDAZYGpAELswEWAwH9BbQBC7MDFgMBkgG0AwvsAyYCARjzAw/zA4UBAgET8ANk8AOCAQIBEoMBEYMBagMB0AaIARGIAWoDAcUGlAERlAGDAQMBuQaPARGPAWsDAa4GoAERoAGHAQMBogabARGbAW8DAZcGpQENqwEtAwGKBqwBDbIBLQMB/gW1AQ2zAhIDAcgDtAINsgMSAwGTAbcDEbcDYgMBhwHVAxHVA34CAXzBAxHBA24CAXG8AxG8A14CAWbGAxHGA24CAVvfAxHfA2oCAVDaAxHaA4IBAgFFywMRywNpAgE66QMR6QNnAgEv0AMR0ANtAgEk5AMR5ANjAgEZqAETqAGHAQMBiwavAROvAYcBAwH/BbgBE7gBcgMByQO8ARGxAhwDAdQDtwITtwJyAwGUAbsCEbADHAMBnwG9AROwAh4DAdUDvAITrwMeAwGgAcIBG8IBqwEDAdYDxwEV4QE6AwG1BeIBFa8CIAMB5APBAhvBAqsBAwGhAcYCFeACOgMBgAPhAhWuAyADAa8BxwGNAccBlAEDAfwFzwEbzwF0AwHuBcoBG8oBhwEDAeAF2QEb2QGQAQMB0gXUARvUAaQBAwHEBd4BG94BbQMBtgXjARfuATcDAZgF7wEXrgIiAwHlA8YCjQHGApQBAwHHA8kCG8kCdAMBuQPTAhvTApABAwGrA84CG84CpAEDAZ0D3QIb3QJxAwGPA9gCG9gChwEDAYED4gIX7QI3AwHjAu4CF60DIgMBsAHmAR3mAZMBAwGnBesBHesBbAMBmQXzAR/zAbsBAwHmA/gBGZwCQwMBpwSdAhmtAkMDAfYD5QId5QJsAwHyAuoCHeoCkwEDAeQC8wIf8wK7AQMBsQH3AhmbA0MDAfIBnAMZrANDAwHBAY8CH48CjAEDAYgFhQIfhQKgAQMB+ASAAh+AAoQBAwHoBJQCH5QCeAMB2ASZAh+ZApQBAwHIBIoCH4oCpQEDAbgE+wEf+wGNAQMBqASlAh+lAowBAwGXBKACH6ACpQEDAYcEqgIfqgJ4AwH3A5gDH5gDjQEDAdMCiQMfiQOMAQMBwwL/Ah//AqABAwGzAvoCH/oChAEDAaMCjgMfjgN4AwGTApMDH5MDlAEDAYMChAMfhAOlAQMB8wGkAx+kA4wBAwHiAZ8DH58DpQEDAdIBqQMfqQN4AwHCAQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1BDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ0VudGl0aWVzVXBkYXRlclByb2Nlc3MueGFtbHNPA78EDgIBAVQLVFcCAQJYBV4gAwHICF8FbycDAbsIcAW2BAoCAQy3BAW9BCACAQZbC1uFAQMByghYYFiMAQMByQhnC2eOAQMBxAhiC2JsAwHACGwLbJIBAwG8CHMLc18CAQ13CasEFAIBF64ECbQEJAIBEboEC7oEhQECAQi3BGC3BIwBAgEHgwELjgEjAwGgCI8BC5oBFAMBhQibAQumARQDAeoHpwELsgEUAwHPB7MBC8IBFgMBsgfDAQvnAxYDAcIB6AMLqgQmAgEYsQQPsQSFAQIBE64EZK4EggECARKGARGGAWoDAa4IiwERiwFqAwGhCJcBEZcBgwEDAZMIkgERkgFrAwGGCKMBEaMBhwEDAfgHngERngFvAwHrB68BEa8BggEDAd0HqgERqgF3AwHQB7QBDboBLQMBwQe7AQ3BAS0DAbMHxAENwgISAwHVBMMCDcEDEgMB+AHCAw3mAzgDAcMB+gMR+gNtAwG1AZgEEZgEbwMBqAHrAxHrA2IDAZsBjgQRjgR+AwGOAfUDEfUDbgMBgQHwAxHwA14CAXT/AxH/A24CAWedBBGdBGoCAVqTBBGTBIIBAgFNhAQRhARpAgFApwQRpwRnAgEziQQRiQRtAgEmogQRogRjAgEZtwETtwGHAQMBwge+ARO+AYcBAwG0B8cBE8cBcgMB1gTLARHAAhwDAeMExgITxgJyAwH5AcoCEb8DHAMBhgLKAxPKA3cDAesBxQMTxQNgAwHeAc8DE88DbAMB0QHUAxPUA3EDAcQBzAETvwIeAwHkBMsCE74DHgMBhwLRARvRAasBAwHlBNYBFfABOgMB4AbxARW+AiADAfUE0AIb0AKrAQMBiALVAhXvAjoDAYME8AIVvQMgAwGYAtYBjQHWAZQBAwGxB94BG94BdAMBoQfZARvZAYcBAwGRB+gBG+gBkAEDAYEH4wEb4wGkAQMB8QbtARvtAW0DAeEG8gEX/QE3AwG/Bv4BF70CIgMB9gTVAo0B1QKUAQMB1ATYAhvYAnQDAcQE4gIb4gKQAQMBtATdAhvdAqQBAwGkBOwCG+wCcQMBlATnAhvnAocBAwGEBPECF/wCNwMB4gP9Ahe8AyIDAZkC9QEd9QGTAQMB0Ab6AR36AWwDAcAGggIfggK7AQMB9wSHAhmrAkMDAcAFrAIZvAJDAwGJBfQCHfQCbAMB8wP5Ah35ApMBAwHjA4IDH4IDuwEDAZoChgMZqgNDAwHjAqsDGbsDQwMBrAKeAh+eAowBAwGtBpQCH5QCoAEDAZsGjwIfjwKEAQMBiQajAh+jAngDAfcFqAIfqAKUAQMB5QWZAh+ZAqUBAwHTBYoCH4oCjQEDAcEFtAIftAKMAQMBrgWvAh+vAqUBAwGcBbkCH7kCeAMBigWnAx+nA40BAwHQA5gDH5gDjAEDAb4DjgMfjgOgAQMBrAOJAx+JA4QBAwGaA50DH50DeAMBiAOiAx+iA5QBAwH2ApMDH5MDpQEDAeQCswMfswOMAQMB0QKuAx+uA6UBAwG/ArgDH7gDeAMBrQI=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="2555,22" />
-      <sap2010:ViewStateData Id="GetLatestRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="2555,22" />
-      <sap2010:ViewStateData Id="GetBERouteInfo_1" sap:VirtualizedContainerService.HintSize="2308,22" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="2308,62" />
-      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="2308,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="2798.4,22.4" />
+      <sap2010:ViewStateData Id="GetLatestRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="2798.4,22.4" />
+      <sap2010:ViewStateData Id="GetBERouteInfo_1" sap:VirtualizedContainerService.HintSize="2551.2,22.4" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="2551.2,62.4" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="2551.2,62.4" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="2551.2,62.4" />
       <sap2010:ViewStateData Id="GetActiveCustomerInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetActiveSupplierInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="2308,86" />
-      <sap2010:ViewStateData Id="GenerateCustomerZoneDetails_2" sap:VirtualizedContainerService.HintSize="200,272" />
-      <sap2010:ViewStateData Id="GetCustomerZoneDetails_2" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="2551.2,86.4" />
+      <sap2010:ViewStateData Id="GenerateCustomerZoneDetails_2" sap:VirtualizedContainerService.HintSize="200,273.6" />
+      <sap2010:ViewStateData Id="GetCustomerZoneDetails_2" sap:VirtualizedContainerService.HintSize="554.4,22.4" />
       <sap2010:ViewStateData Id="CheckModifiedCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyModifiedCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="576,272">
+      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="554.4,86.4" />
+      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="576.8,273.6">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Parallel_5" sap:VirtualizedContainerService.HintSize="930,318" />
-      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="952,442">
+      <sap2010:ViewStateData Id="Parallel_5" sap:VirtualizedContainerService.HintSize="931.2,320" />
+      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="953.6,444.8">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="1077,592" />
-      <sap2010:ViewStateData Id="GenerateSupplierZoneDetails_2" sap:VirtualizedContainerService.HintSize="200,272" />
-      <sap2010:ViewStateData Id="GetSupplierZoneDetails_2" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="1078.4,596.8" />
+      <sap2010:ViewStateData Id="GenerateSupplierZoneDetails_2" sap:VirtualizedContainerService.HintSize="200,273.6" />
+      <sap2010:ViewStateData Id="GetSupplierZoneDetails_2" sap:VirtualizedContainerService.HintSize="554.4,22.4" />
       <sap2010:ViewStateData Id="CheckModifiedSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyModifiedSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_8" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="Sequence_13" sap:VirtualizedContainerService.HintSize="576,272">
+      <sap2010:ViewStateData Id="Parallel_8" sap:VirtualizedContainerService.HintSize="554.4,86.4" />
+      <sap2010:ViewStateData Id="Sequence_13" sap:VirtualizedContainerService.HintSize="576.8,273.6">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Parallel_6" sap:VirtualizedContainerService.HintSize="930,318" />
-      <sap2010:ViewStateData Id="Sequence_15" sap:VirtualizedContainerService.HintSize="952,442">
+      <sap2010:ViewStateData Id="Parallel_6" sap:VirtualizedContainerService.HintSize="931.2,320" />
+      <sap2010:ViewStateData Id="Sequence_15" sap:VirtualizedContainerService.HintSize="953.6,444.8">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1077,592" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="2308,638" />
-      <sap2010:ViewStateData Id="UpdateBERouteInfo_1" sap:VirtualizedContainerService.HintSize="2308,22" />
-      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="2330,1216">
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1078.4,596.8" />
+      <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="200,273.6" />
+      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="1034.4,22.4" />
+      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="1034.4,86.4" />
+      <sap2010:ViewStateData Id="ViewStateData_8" sap:VirtualizedContainerService.HintSize="1056.8,273.6">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_9" sap:VirtualizedContainerService.HintSize="1411.2,320">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_10" sap:VirtualizedContainerService.HintSize="1433.6,444.8">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="2555,1366" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="2555,22" />
-      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="2577,1676">
+      <sap2010:ViewStateData Id="ViewStateData_11" sap:VirtualizedContainerService.HintSize="1473.6,524.8" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.UpdateModifiedCustomerRouteQuality_1" sap:VirtualizedContainerService.HintSize="200,596.8" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="2551.2,643.2" />
+      <sap2010:ViewStateData Id="UpdateBERouteInfo_1" sap:VirtualizedContainerService.HintSize="2551.2,22.4" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="2573.6,1326.4">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingEntitiesUpdaterProcess_1" sap:VirtualizedContainerService.HintSize="2617,1756" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22.4" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="2798.4,1478.4" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="2798.4,22.4" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="2820.8,1790.4">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingEntitiesUpdaterProcess_1" sap:VirtualizedContainerService.HintSize="2860.8,1870.4" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

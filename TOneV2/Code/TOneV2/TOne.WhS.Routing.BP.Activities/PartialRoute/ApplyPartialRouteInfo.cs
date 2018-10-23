@@ -28,6 +28,9 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<int> LatestCostRateVersionNumber { get; set; }
 
+        [RequiredArgument]
+        public InArgument<int> LatestQualityConfigurationVersionNumber { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             PartialRouteInfo partialRouteInfo = this.PartialRouteInfo.Get(context);
@@ -36,6 +39,7 @@ namespace TOne.WhS.Routing.BP.Activities
             partialRouteInfo.NextOpenOrCloseRuleTime = this.NextOpenOrCloseRuleTime.Get(context);
             partialRouteInfo.LatestSaleRateVersionNumber = this.LatestSaleRateVersionNumber.Get(context);
             partialRouteInfo.LatestCostRateVersionNumber = this.LatestCostRateVersionNumber.Get(context);
+            partialRouteInfo.LatestQualityConfigurationVersionNumber = this.LatestQualityConfigurationVersionNumber.Get(context);
 
             RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
 
