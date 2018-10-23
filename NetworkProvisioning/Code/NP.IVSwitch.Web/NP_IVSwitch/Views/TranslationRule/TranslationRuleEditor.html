@@ -12,7 +12,8 @@
                                 datatextfield="description"
                                 datavaluefield="value"
                                 onselectionchanged="scopeModel.onEngineTypeSelectionChanged"
-                                isrequired>
+                                isrequired
+                                hideremoveicon>
                     </vr-select>
                 </vr-columns>
                 <vr-columns width="1/3row" haschildcolumns>
@@ -32,7 +33,7 @@
                     </vr-columns>
                 </vr-columns>
             </vr-row>
-            <vr-row>
+            <vr-row ng-if="scopeModel.selectedEngineType!=undefined">
                 <vr-columns width="1/3row">
                     <vr-select label="CLI Pattern"
                                datasource="scopeModel.cliTypes"

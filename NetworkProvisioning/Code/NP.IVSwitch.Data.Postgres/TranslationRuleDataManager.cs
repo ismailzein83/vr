@@ -51,7 +51,7 @@ namespace NP.IVSwitch.Data.Postgres
             var cliPattern = reader["cli_pattern"] as string;
             if (!String.IsNullOrEmpty(cliPattern))
             {
-                if (cliPattern.Contains("*"))
+                if (cliPattern.StartsWith("*") && translationRule.EngineType!=EngineType.Regex)
                 {
                     translationRule.CLIType = CLIType.PoolBasedCLI;
                     var poolId = int.Parse(cliPattern.Replace("*", ""));
@@ -86,6 +86,10 @@ namespace NP.IVSwitch.Data.Postgres
         private int PoolBasedCLISettingsIdMapper(IDataReader reader)
         {
             return (int)reader["pool_id"];
+        }
+        private EngineType EngineTypeMapper(IDataReader reader)
+        {
+            return (System.Int16)reader["engine_id"]==0 ? EngineType.Fast : EngineType.Regex;
         }
         public List<TranslationRule> GetTranslationRules()
         {
@@ -228,7 +232,13 @@ namespace NP.IVSwitch.Data.Postgres
             {
                 cmd.Parameters.AddWithValue("@psgid", translationRuleId);
             });
-            if (cliPattern!=null && cliPattern.Contains("*"))
+            String engineTypeCMDText = @"Select engine_id from trans_rules where trans_rule_id=@psgid;";
+            var engineType = GetItemText(engineTypeCMDText, EngineTypeMapper, cmd =>
+            {
+                cmd.Parameters.AddWithValue("@psgid", translationRuleId);
+            });
+
+            if (cliPattern!=null && cliPattern.StartsWith("*") && engineType != EngineType.Regex)
             {
                 var poolId = int.Parse(cliPattern.Replace("*", ""));
                 String deleteCLIPoolsCMDText = @"Delete from x_cli_pools where pool_id=@poolid;";
