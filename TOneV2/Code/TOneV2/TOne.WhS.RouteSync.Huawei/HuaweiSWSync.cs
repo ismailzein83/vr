@@ -10,31 +10,19 @@ namespace TOne.WhS.RouteSync.Huawei
 {
     public class HuaweiSWSync : SwitchRouteSynchronizer
     {
-        int _supplierMappingLength = 4;
+        int _supplierRNLength = 3;
         public override Guid ConfigId { get { return new Guid("376687E2-268D-4DFA-AA39-3205C3CD18E5"); } }
 
-        public string MappingSeparator { get; set; }
-        public int? NumberOfMappings { get; set; }
-        public int SupplierMappingLength
-        {
-            get { return _supplierMappingLength; }
-            set { _supplierMappingLength = value; }
-        }
-        public string SupplierOptionsSeparator { get; set; }
         public int NumberOfOptions { get; set; }
+
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
-        public class CarrierMapping
-        {
-            public int CarrierId { get; set; }
 
-            public List<string> CustomerMapping { get; set; }
-
-            public List<string> SupplierMapping { get; set; }
-        }
         public List<HuaweiSSHCommunication> SwitchCommunicationList { get; set; }
+
         public List<SwitchLogger> SwitchLoggerList { get; set; }
 
         #region Public Methods
+
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
             throw new NotImplementedException();
@@ -64,7 +52,37 @@ namespace TOne.WhS.RouteSync.Huawei
         {
             throw new NotImplementedException();
         }
+    
         #endregion
+    }
 
+    public class CarrierMapping
+    {
+        public int CarrierId { get; set; }
+
+        public CustomerMapping CustomerMapping { get; set; }
+
+        public SupplierMapping SupplierMapping { get; set; }
+    }
+
+    public class CustomerMapping
+    {
+        public int RSSN { get; set; }
+
+        public string CSCName { get; set; }
+
+        public List<DNSet> DNSets { get; set; }
+    }
+
+    public class SupplierMapping
+    {
+        public string RouteName { get; set; }
+
+        public string ISUP { get; set; }
+    }
+
+    public class DNSet
+    {
+        public int Number { get; set; }
     }
 }
