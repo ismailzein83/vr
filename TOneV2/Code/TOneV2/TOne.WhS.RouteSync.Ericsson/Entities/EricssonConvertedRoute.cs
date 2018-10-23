@@ -13,12 +13,21 @@ namespace TOne.WhS.RouteSync.Ericsson
 			return BO.GetHashCode() + Code.GetHashCode();
 		}
 	}
-	public class EricssonConvertedRoute : ConvertedRoute
-	{
+	public class EricssonConvertedRoute : ConvertedRouteWithCode
+    {
 		public string BO { get; set; }
-		public string Code { get; set; }
 		public int RCNumber { get; set; }
-	}
+
+        public override string GetCustomer()
+        {
+            return this.BO;
+        }
+
+        public override string GetRouteOptionsIdentifier()
+        {
+            return this.RCNumber.ToString();
+        }
+    }
 
 	public class EricssonConvertedRouteCompareResult
 	{

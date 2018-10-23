@@ -158,10 +158,16 @@ namespace TOne.WhS.RouteSync.Ericsson
 			EricssonConvertedRoutesPayload payload = context.ConvertedRoutesPayload.CastWithValidate<EricssonConvertedRoutesPayload>("context.ConvertedRoutesPayload");
 			if (payload.ConvertedRoutes == null || payload.ConvertedRoutes.Count == 0)
 				return;
-			context.ConvertedRoutes = CompressRoutes(payload.ConvertedRoutes);
+
+            context.ConvertedRoutes = RouteSync.Business.Helper.CompressRoutesWithCodes(payload.ConvertedRoutes, CreateEricssionConvertedRoute);
 		}
 
-		public override object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
+        private ConvertedRouteWithCode CreateEricssionConvertedRoute(ICreateConvertedRouteWithCodeContext context)
+        {
+            return new EricssonConvertedRoute() { BO = context.Customer, Code = context.Code, RCNumber = int.Parse(context.RouteOptionIdentifier) };
+        }
+
+        public override object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
 		{
 			IRouteDataManager routeDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteDataManager>();
 			routeDataManager.SwitchId = context.SwitchId;
@@ -1832,127 +1838,6 @@ namespace TOne.WhS.RouteSync.Ericsson
 			}
 		}
 		#endregion
-		#endregion
-
-		#region compress
-		private List<ConvertedRoute> CompressRoutes(IEnumerable<EricssonConvertedRoute> uncompressdRoutes)
-		{
-			List<ConvertedRoute> result = new List<ConvertedRoute>();
-
-			var compressedEricssonConvertedRoutesByBO = new CompressedEricssonConvertedRoutesByBO();
-
-			foreach (EricssonConvertedRoute uncompressdRoute in uncompressdRoutes)
-			{
-				var compressedEricssonConvertedRoutesByCodeLength = compressedEricssonConvertedRoutesByBO.GetOrCreateItem(uncompressdRoute.BO);
-				string currentCode = uncompressdRoute.Code;
-				var codeObjectsByParentPrefix = compressedEricssonConvertedRoutesByCodeLength.GetOrCreateItem(currentCode.Length);
-				string parentCode = currentCode.Substring(0, currentCode.Length - 1);
-				Dictionary<string, EricssonConvertedRouteForCompression> routes = codeObjectsByParentPrefix.GetOrCreateItem(parentCode);
-				EricssonConvertedRouteForCompression matchedEricssonConvertedRouteForCompression = routes.GetOrCreateItem(currentCode, () => { return new EricssonConvertedRouteForCompression() { Code = currentCode }; });
-				matchedEricssonConvertedRouteForCompression.RCNumber = uncompressdRoute.RCNumber;
-
-				var prefixes = Enumerable.Range(1, currentCode.Length - 1).Select(p => currentCode.Substring(0, p));
-
-				foreach (string prefix in prefixes)
-				{
-					var tempCodeObjectsByParentPrefix = compressedEricssonConvertedRoutesByCodeLength.GetOrCreateItem(prefix.Length);
-					string parentPrefixCode = prefix.Substring(0, prefix.Length - 1);
-					Dictionary<string, EricssonConvertedRouteForCompression> prefixRoutes = tempCodeObjectsByParentPrefix.GetOrCreateItem(parentPrefixCode);
-					EricssonConvertedRouteForCompression matchedPrefixEricssonConvertedRouteForCompression = prefixRoutes.GetOrCreateItem(prefix, () => { return new EricssonConvertedRouteForCompression() { Code = prefix }; });
-				}
-			}
-
-			foreach (var compressedEricssonConvertedRoutesKvp in compressedEricssonConvertedRoutesByBO)
-			{
-				string bo = compressedEricssonConvertedRoutesKvp.Key;
-				var compressedEricssonConvertedRoutesByCodeLength = compressedEricssonConvertedRoutesKvp.Value;
-
-				List<int> orderedKeys = compressedEricssonConvertedRoutesByCodeLength.Keys.OrderByDescending(itm => itm).ToList();
-				Dictionary<string, Dictionary<string, EricssonConvertedRouteForCompression>> longestConvertedRoutes = compressedEricssonConvertedRoutesByCodeLength.GetRecord(orderedKeys[0]);
-				foreach (var longestConvertedRoutesKvp in longestConvertedRoutes)
-				{
-					Dictionary<string, EricssonConvertedRouteForCompression> routes = longestConvertedRoutesKvp.Value;
-					foreach (EricssonConvertedRouteForCompression route in routes.Values)
-						route.CanBeGrouped = true;
-				}
-
-				for (int i = 1; i < orderedKeys.Count; i++)
-				{
-					int currentKey = orderedKeys[i];
-					int childrenKey = currentKey + 1;
-
-					Dictionary<string, Dictionary<string, EricssonConvertedRouteForCompression>> currentConvertedRoutesForCompressionByCode = compressedEricssonConvertedRoutesByCodeLength.GetRecord(currentKey);
-					Dictionary<string, Dictionary<string, EricssonConvertedRouteForCompression>> childrenConvertedRoutesForCompressionByCode = compressedEricssonConvertedRoutesByCodeLength.GetRecord(childrenKey);
-					foreach (var convertedRoutesKvp in currentConvertedRoutesForCompressionByCode)
-					{
-						List<EricssonConvertedRouteForCompression> routes = convertedRoutesKvp.Value.Values.ToList();
-
-						for (int j = routes.Count - 1; j >= 0; j--)
-						{
-							EricssonConvertedRouteForCompression route = routes[j];
-							string currentCode = route.Code;
-							if (childrenConvertedRoutesForCompressionByCode == null)
-							{
-								route.CanBeGrouped = true;
-								continue;
-							}
-
-							var tempResult = childrenConvertedRoutesForCompressionByCode.GetRecord(currentCode);
-							if (tempResult == null || tempResult.Values == null)
-							{
-								route.CanBeGrouped = true;
-								continue;
-							}
-
-							List<EricssonConvertedRouteForCompression> ericssonConvertedRoutes = tempResult.Values.ToList();
-							if (ericssonConvertedRoutes == null)
-							{
-								route.CanBeGrouped = true;
-								continue;
-							}
-
-							if (ericssonConvertedRoutes.Count != 10 || ericssonConvertedRoutes.FirstOrDefault(itm => !itm.CanBeGrouped) != null)
-							{
-								convertedRoutesKvp.Value.Remove(route.Code);
-								//routes.Remove(route);
-								continue;
-							}
-
-							HashSet<int?> distinctRCs = ericssonConvertedRoutes.Select(itm => itm.RCNumber).ToHashSet();
-							if (distinctRCs.Count > 1)
-							{
-								convertedRoutesKvp.Value.Remove(route.Code);
-								//routes.Remove(route);
-								continue;
-							}
-
-							route.RCNumber = distinctRCs.First();
-							route.CanBeGrouped = true;
-							childrenConvertedRoutesForCompressionByCode.Remove(currentCode);
-						}
-					}
-				}
-
-				foreach (var compressedEricssonConvertedRoutesByCodeLengthKvp in compressedEricssonConvertedRoutesByCodeLength)
-				{
-					var compressedEricssonConvertedRoutesByParentCode = compressedEricssonConvertedRoutesByCodeLengthKvp.Value;
-
-					foreach (var compressedEricssonConvertedRoutesByParentCodeKvp in compressedEricssonConvertedRoutesByParentCode)
-					{
-						var ericssonConvertedRouteForCompressionDict = compressedEricssonConvertedRoutesByParentCodeKvp.Value;
-						foreach (var ericssonConvertedRouteKvp in ericssonConvertedRouteForCompressionDict)
-						{
-							var ericssonConvertedRoute = ericssonConvertedRouteKvp.Value;
-							if (ericssonConvertedRoute.RCNumber.HasValue)
-								result.Add(new EricssonConvertedRoute { BO = bo, Code = ericssonConvertedRoute.Code, RCNumber = ericssonConvertedRoute.RCNumber.Value });
-						}
-					}
-
-				}
-			}
-
-			return result;
-		}
 		#endregion
 
 		#endregion
