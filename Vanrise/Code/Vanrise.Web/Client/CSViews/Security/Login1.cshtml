@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html ng-app="mainModule">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="/images/iconheader.ico" type="image/ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewBag.Title</title>
+    <script ng-if="'@ViewBag.isEnabledGA'">
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    </script>
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/AngularExtensions")
+    @Styles.Render("~/Content/CodeMirrorStyle")
+    @*@Styles.Render("~/Content/Semantic")*@
+    @Styles.Render("~/Content/FontStyle")
+    @Styles.Render("~/Content/Styles")
+    @Styles.Render("~/Content/Themes")
+
+</head>
+<body ng-class="isMobile?'custom login-body  vr-mobile-view':' login-body custom '" ng-controller="loginCtrl" ng-init="setCookieName('@ViewBag.CookieName');redirectURL = '@ViewBag.RedirectTo';setLocalizationEnabled(@ViewBag.IsLocalizationEnabled);setLocalizationRTL(@ViewBag.IsRTL);">
+
+    @*<nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
+            <div class="container">
+                <div class="navbar-header">
+                    <img src="/Client/Images/logoonheader.png" class="minilogo" />
+                </div>
+                <div id="navbar">
+
+                </div>/.nav-collapse
+            </div>
+        </nav>*@
+
+
+    <div class="main-login" ng-show="!isLoading">
+        <div class="custom-login-container">
+            <div ng-controller="VR_Sec_LoginController">
+                <div>
+                    <vr-form name="formLogin" submitname="login">
+                        <div style="width: 349px;padding-bottom: 55px;">
+                            <div class="row login-spacer" ng-show="showSecurityProviderSelector">
+                                <div class="col-md-12">
+                                    <vr-sec-securityprovider-selector customlabel="Authentication Method" on-ready="onSecurityProviderSelectorReady" isrequired="true" hideremoveicon selectedvalues="selectedSecurityProvider"></vr-sec-securityprovider-selector>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="width: 349px;background-color: #0177b5;text-align: center;">
+                            <img src="/NImages/t-one-login-logo.png" />
+                        </div>
+                        <div style="height:211px;background-color: #fff;">
+                            <span ng-if="selectedSecurityProvider!=undefined" vr-loader="isLoadingAuthenticateUserEditor">
+                                <vr-directivewrapper directive="selectedSecurityProvider.AuthenticateUserEditor" on-ready="onAuthenticateUserEditorReady"></vr-directivewrapper>
+                            </span>
+                            <div class="row login-spacer">
+                                <div class="col-xs-8 col-xs-offset-2 col-md-8 col-md-offset-2">
+                                    <vr-button type="Login" formname="formLogin" data-onclick="Login" submitname="login"></vr-button>
+                                </div>
+                            </div>
+                            <div class="row login-spacer" ng-if="selectedSecurityProvider!=undefined && selectedSecurityProvider.SupportPasswordManagement">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <a href="" class="pull-right fogetten-label" ng-click="forgotPassword()">Forgot Password</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </vr-form>
+                    <div class="vr-tone-version">Version 1/ Support +961 5 45 74 37</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+@Scripts.Render("~/bundles/helpers")
+@Scripts.Render("~/bundles/JQuery")
+@Scripts.Render("~/bundles/codemirror")
+@Scripts.Render("~/bundles/Angular")
+@Scripts.Render("~/bundles/CodemirrorDirective")
+@Scripts.Render("~/bundles/AngularExtensions")
+
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/highchart")
+@*@Scripts.Render("~/bundles/Semantic")*@
+@Scripts.Render("~/bundles/Javascripts")
+@Scripts.Render("~/bundles/BaseModulesJavascripts")
+@Scripts.Render("~/bundles/waves")
+
+
+</html>

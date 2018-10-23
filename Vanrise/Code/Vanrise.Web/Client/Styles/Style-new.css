@@ -1,0 +1,409 @@
+﻿.custom .vr-nav-custom {
+    height: 60px;
+    margin-bottom: 0px !important;
+    background-color: #fff;
+    background: unset;
+    margin-bottom: 0px !important;
+    border-color: #ddd !important;
+}
+
+.custom .vr-nav-custom .navbar-header {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+
+.custom #wrapper {
+    padding-top: 60px;
+}
+
+.custom .vr-sidebar-header {
+    display: inline-block;
+    width: 200px;
+    background-color: #0177b5;
+    height: inherit;
+    margin-bottom: -1px;
+}
+
+.custom .toggel-icon-container {
+    color: #fff;
+    width: 30px;
+    position: relative;
+    height: 100%;
+    display: inline-block;
+}
+.custom .toggel-icon {
+    position: absolute;
+    left: 8px;
+    font-size: 17px;
+    top: 20px;
+}
+.custom .logo-container {
+    display: inline-block;
+    width: calc(100% - 35px);
+    height: 100%;
+    position: relative;
+}
+.custom .index-logo {
+    position: absolute;
+    top: 8px;
+    left: 25px;
+}
+.custom .vr-page-header {
+    display: inline-block;
+    width: calc(100% - 205px);
+    height: inherit;
+    overflow: hidden;
+}
+
+.custom .page-header-wrapper {
+    display: flex;
+    width: 100%;
+    height: inherit
+}
+
+.custom .header-item {
+    display: inline-flex;
+    padding: 15px
+}
+
+.custom .header-item.info-container {
+    width: 100%
+}
+
+.custom .company-logo-container {
+    display: inline-block;
+    width: 20px
+}
+.custom .company-name-container {
+    display: inline-block;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.custom .vr-company-name {
+    font-size: 16px;
+    text-align: initial;
+    padding-left: 10px;
+    width: 100%;
+    color: #6B6B6B;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: bold;
+    top: unset;
+    position: static;
+    left: unset;
+}
+
+.custom .vr-page-title {
+    margin-left: 15px;
+    color: #6B6B6B;
+    margin-top: 4px;
+    font-size:14px;
+}
+
+
+.custom .header-item.action-container {
+    width: 470px;
+}
+.custom .vr-user-menu-wrapper {
+    display: inline-block;
+    width: 150px
+}
+
+.custom .vr-user-menu-wrapper {
+    display: inline-block;
+    width: 150px
+}
+
+.custom .vr-user-menu {
+    display: inline-block;
+    position: absolute
+}
+.custom .vr-user-icon {
+    top: -5px;
+}
+
+.custom .vr-user-label {
+    max-width: 140px;
+}
+
+.custom .header-action-item {
+    display: inline-block;
+    padding-left: 15px
+}
+
+.custom .vr-support-item {
+    width: 35px;
+}
+.custom .vr-notfication-item {
+    width: 50px;
+}
+.custom .vr-nav-custom div .badge {
+    position: relative;
+    top: -16px;
+    left: 13px;
+}
+
+.custom .badge {
+    background-color: #0177b5 !important;
+    font-weight: 500;
+}
+
+.custom .vr-dateclock-item {
+    display: inline-block;
+    width: 120px;
+    padding-left: 25px
+}
+
+.custom .vr-date-container {
+    color: #8B8B8C;
+    font-size: 10px;
+    font-weight: bold
+}
+.custom .vr-clock-container {
+    position: relative;
+    width: 100%;
+    height: 18px;
+    font-size: 9px;
+}
+.custom .vr-clock-item {
+    color: #6a6a6a;
+    font-weight: bold;
+    position: absolute;
+    right: 7px;
+    color: #9FA0A2
+}
+.custom .page-content-wrapper{
+    padding:0px;
+}
+/* menu override*/
+.custom .panel-heading-vr {
+    background: unset !important;
+    background-color: #e3e3e3 !important;
+    color: #87888a !important;
+    border-bottom: 1px solid #fff;
+}
+
+.custom .panel-heading-vr {
+    padding: 0px !important;
+    height: 39px;
+}
+
+.custom .collapsed-menu-item {
+    background-color: #87888a !important;
+    border-bottom: 1px solid #fff;
+}
+.custom .module-icon {
+    background-color: #87888a !important;
+    height: 39px;
+    width: 30px;
+    top: unset;
+}
+
+
+.custom .icon {
+    position: absolute;
+    top: 10px;
+    left: 5px;
+}
+
+.custom #sidebar-wrapper {
+    background: #e3e3e3; 
+}
+.custom .vr-module-name {
+    top: -10px;
+    font-weight: bold;
+    left: 5px;
+}
+
+.custom .chevron-direction {
+    font-size: 10px;
+    top: 15px;
+    left: -5px;
+}
+.custom .panel-heading-vr.selected-menu {
+    background-color: #87888a !important;
+    color: #e3e3e3 !important;
+}
+
+.custom .dll-menu a:before {
+    border-width: 0.21em;
+    border-radius: 30px;
+}
+.custom .version-container {
+    position: fixed;
+    bottom: 0px;
+    right: -10px;
+    width: calc(100% - 200px);
+    z-index: 1000;
+    height: 20px;
+    background-color: #fff;
+}
+
+.custom .version-container.collapsed-menu-in {   
+    width: calc(100% - 40px);
+}
+
+.custom .version-label {
+    font-size: 10px;
+    position: absolute;
+    right: 22px;
+}
+/*main view */
+.custom #page-content-wrapper {
+    padding: 0px 0px 0px 5px;
+}
+
+.custom vr-actionbar {
+    display: block;
+    margin: 0px 15px;
+}
+
+.custom .action-bar {
+    background-color: #e3e3e3;
+    border-radius: 0px;
+}
+
+.custom .action-bar .btn {
+    color: #88898B !important;
+    border-radius: 0px !important;
+    font-weight: bold;
+}
+
+.custom .action-bar .vr-half-circle {
+    background-color: #e3e3e3 !important;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.custom .action-bar.include-personalization {
+    border-radius: 0px;
+}
+
+.action-bar .vr-action-menu-dote {
+    color: #88898B !important;
+}
+
+.custom .btncustom:hover {
+    background-color: #dadada !important;
+}
+
+.custom .btncustom:disabled {
+    background-color: #cac0c0 !important;
+}
+
+.custom .vr-datagrid-header-simple {
+    background: #0177b5 !important;
+}
+
+.custom .vr-grid-menu-h-circle {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    width: 20px;
+    right: 7px;
+}
+
+.custom .vr-grid-menu-h-dote {
+    left: -3px;
+    top: -14px;
+}
+.custom .vr-datagrid[horizontal-line="true"] {
+    border-bottom: none;
+}
+.custom vr-datagrid[pagingtype="'PagingOnScroll'"] .vr-datagrid {
+    border-bottom: 1px solid #DDD;
+}
+.custom .vr-remote-footer {
+    background-color: #e3e3e3 !important;
+    color: #88898B !important;
+    margin-top: 3px;
+}
+.custom .vr-pager-container .vr-control-label {
+    color: #6B6B6B;
+}
+
+.custom .vr-custom-pagination > li > a {
+    color: #6B6B6B;
+     border-radius: 0px; 
+}
+
+.custom .vr-pagination-pagesize {   
+    margin-left: 4px;
+}
+
+.custom .vr-pagination-info {   
+    right: 4px;
+}
+.custom .vr-custom-pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    color: #FFF;
+}
+.custom .modal vr-actionbar {
+    margin: 0px ;
+}
+
+.custom .vr-modal-header {
+    background: #0177b5 !important;
+    color: #fff !important;
+    border-radius:0px;
+}
+
+.custom .action-bar .vr-menu-list,
+.custom vr-common-personalization .vr-menu-list,
+.custom .vr-grid-menu,
+.custom .btn,
+.custom .form-control,
+.custom .vr-tabs .clicked-btn,
+.custom .vr-tabs label,
+.custom .required-inpute > div:nth-child(1),
+.custom .dropdown-menu,
+.custom .panel-vr > .panel-heading,
+.custom .modal-dialog vr-form .action-bar,
+.custom .modal-content,
+.custom .alert,
+.custom vr-legend .main-content,
+.custom .label,
+.custom .vr-toolbox .item,
+.custom vr-tab vr-columns[tabs="true"] > div[class^="col"],
+.custom .fieldset-vr > .panel-body,
+.custom .tooltip-error{
+    border-radius: 0px !important;
+}
+
+.custom .modal-dialog vr-form .action-bar {
+    margin: 10px 15px 0px 15px;
+}
+
+.custom .action-bar .vr-action-menu-dote {
+    top: -16px;
+}
+
+.action-bar .vr-action-menu-dote .custom .panel-vr > .panel-heading {
+    background: #e3e3e3;
+}
+
+/*login section*/
+
+.custom.login-body {
+    background: url("/NImages/lg-bg.png") center repeat;`
+}
+.custom .main-login {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    padding-top: 200px;
+}
+.custom .custom-login-container {
+    width: 349px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    margin-top: calc(33% - 600px);
+}
+
+
+.custom .main-login .dropdown {
+    min-height: 32px !important;
+}
