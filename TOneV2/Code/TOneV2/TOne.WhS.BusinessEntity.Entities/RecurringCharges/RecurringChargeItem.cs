@@ -17,6 +17,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime? DueDate { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
+        public string FromDescription { get; set; }
+        public string ToDescription { get; set; }
         public decimal AmountAfterTaxes { get; set; }
         public long RecurringChargeId { get; set; }
         public decimal VAT { get; set; }
