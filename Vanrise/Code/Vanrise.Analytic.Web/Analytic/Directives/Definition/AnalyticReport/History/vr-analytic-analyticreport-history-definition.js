@@ -86,12 +86,8 @@
                 };
                 $scope.scopeModel.onTableDeselect = function (dataitem) {
                     var analyticTableId = dataitem.AnalyticTableId;
-                    for (var index in $scope.scopeModel.widgets)
-                        if ($scope.scopeModel.widgets[index].widgetSettings.AnalyticTableId == analyticTableId) {
-                            $scope.scopeModel.widgets.length = 0;
-                            break;
-                        }
-
+                    if (UtilsService.getItemByVal($scope.scopeModel.widgets, analyticTableId, "widgetSettings.AnalyticTableId"))
+                        $scope.scopeModel.widgets.length = 0;
                 };
 
                 defineAPI();
