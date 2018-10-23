@@ -388,13 +388,12 @@ namespace Vanrise.BusinessProcess.Business
 
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            IBPDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionDataManager>();
-            object _updateHandle;
-
+            protected override bool UseCentralizedCacheRefresher { get { return true; } }
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return dataManager.AreBPDefinitionsUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired(parameter);
             }
+
         }
 
         internal class BPDefinitionWorkflowCacheManager : Vanrise.Caching.BaseCacheManager

@@ -452,14 +452,13 @@ namespace Vanrise.BusinessProcess.Business
 
 		internal class CacheManager : Vanrise.Caching.BaseCacheManager
 		{
-			IVRWorkflowDataManager dataManager = BPDataManagerFactory.GetDataManager<IVRWorkflowDataManager>();
-			object _updateHandle;
+            protected override bool UseCentralizedCacheRefresher { get { return true; } }
 
-			protected override bool ShouldSetCacheExpired(object parameter)
-			{
-				return dataManager.AreVRWorkflowsUpdated(ref _updateHandle);
-			}
-		}
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return base.ShouldSetCacheExpired(parameter);
+            }
+        }
 
 		private class VRWorkflowLoggableEntity : VRLoggableEntityBase
 		{

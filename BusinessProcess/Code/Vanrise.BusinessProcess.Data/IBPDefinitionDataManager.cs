@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.BusinessProcess.Data
@@ -9,8 +10,6 @@ namespace Vanrise.BusinessProcess.Data
 
         bool InsertBPDefinition(BPDefinition bpDefinition);
 
-        bool UpdateBPDefinition(BPDefinition bPDefinition);
-
-        bool AreBPDefinitionsUpdated(ref object updateHandle);
+        bool UpdateBPDefinition(BPDefinition bpDefinition);
     }
 }

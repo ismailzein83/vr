@@ -12,7 +12,7 @@ namespace Vanrise.BusinessProcess.Data
         static ObjectFactory s_objectFactory;
         static BPDataManagerFactory()
         {
-            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.BusinessProcess.Data.SQL"));
+            s_objectFactory = new ObjectFactory(Assembly.Load("Vanrise.BusinessProcess.Data.SQL"));//, Assembly.Load("Vanrise.BusinessProcess.Data.RDB"));
         }
 
         public static T GetDataManager<T>() where T : class, IDataManager
