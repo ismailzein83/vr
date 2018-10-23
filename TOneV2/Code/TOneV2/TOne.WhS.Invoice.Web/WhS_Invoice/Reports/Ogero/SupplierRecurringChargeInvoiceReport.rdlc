@@ -402,7 +402,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!DueDate.Value).ToString("dd MMM yyyy")</Value>
+                              <Value>=iif(Fields!DueDate.Value is Nothing,"", CDate(Fields!DueDate.Value).ToString("dd MMM yyyy"))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1457,7 +1457,7 @@
         </Field>
         <Field Name="DueDate">
           <DataField>DueDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
+          <rd:TypeName>System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
