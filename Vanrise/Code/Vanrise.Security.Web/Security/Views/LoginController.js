@@ -5,6 +5,12 @@
     LoginController.$inject = ['$rootScope', '$scope', 'VR_Sec_SecurityAPIService', 'SecurityService', 'VRNotificationService', 'VR_Sec_UserService', 'UISettingsService', 'UtilsService', 'VR_Sec_UserAPIService', 'VRLocalizationService', 'VR_Sec_SecurityProviderAPIService', 'VRUIUtilsService', 'MobileService'];
 
     function LoginController($rootScope, $scope, VR_Sec_SecurityAPIService, SecurityService, VRNotificationService, VR_Sec_UserService, UISettingsService, UtilsService, VR_Sec_UserAPIService, VRLocalizationService, VR_Sec_SecurityProviderAPIService, VRUIUtilsService, MobileService) {
+        
+        (function () {
+            if(document.getElementById("mainLogin"))
+                document.getElementById("mainLogin").style.display = "block";
+        })();
+
         var securityProviderSelectorApi;
         var securityProviderSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
