@@ -50,9 +50,9 @@
                 destinationChartReadyDeferred.resolve();
             };
             $scope.scopeModel.getACDColor = function (dataItem) {
-                if (dataItem.ACD <= 5) {
+                if (dataItem.ACD <= 1.4) {
                     return LabelColorsEnum.Error.color;
-                } else if (dataItem.ACD <= 30) {
+                } else if (dataItem.ACD <= 3) {
                     return LabelColorsEnum.Warning.color;
                 } else {
                     return LabelColorsEnum.Processed.color;
@@ -65,11 +65,14 @@
                 else if (dataItem.PDDInSec >= 3) {
                     return LabelColorsEnum.Warning.color;
                 }
+                else {
+                    return LabelColorsEnum.Processed.color;
+                }
             };
             $scope.scopeModel.getPercConnectedColor = function (dataItem) {
-                if (dataItem.PercConnected <= 50) {
+                if (dataItem.PercConnected <= 20) {
                     return LabelColorsEnum.Error.color;
-                } else if (dataItem.PercConnected <= 80) {
+                } else if (dataItem.PercConnected <= 34) {
                     return LabelColorsEnum.Warning.color;
                 } else {
                     return LabelColorsEnum.Processed.color;
@@ -334,14 +337,14 @@
                     title: "ASR",
                     ranges: [{
                         from: 0,
-                        to: 50,
+                        to: 20,
                         color: '#DF5353',
                     }, {
-                        from: 50,
-                        to: 80,
+                        from: 20,
+                        to: 34,
                         color: '#f0ad4e',
                     }, {
-                        from: 80,
+                        from: 34,
                         to: 100,
                         color: '#55BF3B',
                     }
@@ -436,7 +439,7 @@
 
         function calculateMaxACD(acdValue)
         {
-            return acdValue <= 50 ? 50 : (Math.round(acdValue) + Math.round(acdValue) % 2);
+            return acdValue <= 15 ? 15 : (Math.round(acdValue) + Math.round(acdValue) % 2);
         }
 
         function loadACDGauge(liveSummaryResult) {
@@ -448,14 +451,14 @@
                     title:"ACD",
                     ranges: [{
                         from: 0,
-                        to: 5,
+                        to: 1.4,
                         color: '#DF5353',
                     }, {
-                        from: 5,
-                        to: 20,
+                        from: 1.4,
+                        to: 3,
                         color: '#f0ad4e',
                     }, {
-                        from: 20,
+                        from: 3,
                         to: lastACD,
                         color: '#55BF3B',
                     }
