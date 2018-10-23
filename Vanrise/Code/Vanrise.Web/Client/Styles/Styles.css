@@ -2029,7 +2029,7 @@ vr-fieldset[notopspace]>.fieldset-vr {
     display: inline;
     left: 1px;
     font-size: 10px;
-    top: -12px;
+    top: -15px;
 }
 
 .vr-grid-menu {
@@ -4372,9 +4372,9 @@ span.option-marketprice {
     color: #FFF;
     position: relative;
     display: inline;
-    left: 1px;
+    left: unset;
     font-size: 10px;
-    top: -14px;
+    top: -17px;
 }
 
 
@@ -4585,4 +4585,9 @@ vr-chart .highcharts-contextmenu > div > div:first-child {
 vr-chart .highcharts-contextmenu > div > hr {
     display: none !important;
     margin: unset;
+}
+
+.login-container .required-inpute > div:nth-child(1) {
+    border: unset !important;
+    box-shadow: unset;
 }
