@@ -13,7 +13,7 @@ namespace Vanrise.Entities.Tools
 
     public class GeneratedScriptItemTable
     {
-        public string ConnectionString { get; set; }
+        public Guid ConnectionId { get; set; }
         public string Schema { get; set; }
         public string TableName { get; set; }
         public List<GeneratedScriptItemTableColumn> InsertColumns { get; set; }
