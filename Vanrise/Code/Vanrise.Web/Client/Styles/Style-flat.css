@@ -429,7 +429,7 @@
     min-height: 32px !important;
 }
 
-.flat vr-textbox {
+.flat .flat-login-container vr-textbox {
     display: block;
     padding-bottom: 15px;
 }
