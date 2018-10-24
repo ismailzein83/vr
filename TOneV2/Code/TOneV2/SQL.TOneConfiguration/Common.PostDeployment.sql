@@ -223,7 +223,7 @@ set nocount on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('D018C0CD-F15F-486D-80C3-F9B87C3F47B8','Configuration'				,null,null,'/Client/Images/menu-icons/Administration.png',1,0),
+('D018C0CD-F15F-486D-80C3-F9B87C3F47B8','Configuration'				,null,null,'/Client/Images/menu-icons/configuration.png',1,0),
 
 ('A28351BA-A5D7-4651-913C-6C9E09B92AC1','System',null				,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,1,0),
 ('FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','System Processes',null		,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,20,0),
