@@ -410,7 +410,7 @@
 /*login section*/
 
 .flat.login-body {
-    background: url("Client/Images/lg-bg.png") center repeat;
+    background: url("/Images/lg-bg.png") center repeat;
 }
 
 .flat .main-login {
