@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Activities;
 using System.Collections.Generic;
-using Vanrise.Common;
+//using Vanrise.Common;
 using Retail.BusinessEntity.Entities;
 
 namespace Retail.BusinessEntity.BP.Activities
