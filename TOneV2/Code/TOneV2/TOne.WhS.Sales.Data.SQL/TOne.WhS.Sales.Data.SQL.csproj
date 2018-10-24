@@ -66,6 +66,7 @@
     <Compile Include="ChangedSaleZoneServiceDataManager.cs" />
     <Compile Include="DefaultRoutingProductPreviewDataManager.cs" />
     <Compile Include="DefaultServicePreviewDataManager.cs" />
+    <Compile Include="ExcludedItemsDataManager.cs" />
     <Compile Include="NewCustomerCountryDataManager.cs" />
     <Compile Include="NewCustomerCountryPreviewDataManager.cs" />
     <Compile Include="NewDefaultRoutingProductDataManager.cs" />
