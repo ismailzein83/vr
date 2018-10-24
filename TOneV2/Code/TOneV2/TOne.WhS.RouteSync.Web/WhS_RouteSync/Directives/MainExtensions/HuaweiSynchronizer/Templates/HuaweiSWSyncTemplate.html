@@ -1,0 +1,17 @@
+﻿<vr-tabs>
+    <vr-tab header="'Communication'">
+        <whs-routesync-huawei-communication on-ready="scopeModel.onHuaweiSwitchCommunicationReady"></whs-routesync-huawei-communication>
+    </vr-tab>
+    <vr-tab header="'Carrier Mapping'">
+        <vr-row>
+            <vr-columns colnum="2">
+                <vr-textbox value="scopeModel.numberOfOptions" label="Number Of Options" type="number" decimalprecision="0" minvalue="1" isrequired></vr-textbox>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <whs-routesync-carrieraccountmapping-huawei-grid on-ready="scopeModel.onHuaweiCarrierAccountMappingGridReady"></whs-routesync-carrieraccountmapping-huawei-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+</vr-tabs>

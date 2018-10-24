@@ -150,9 +150,11 @@
     <Content Include="WhS_RouteSync\Constant\ModuleConfig.js" />
     <Content Include="WhS_RouteSync\Constant\TrunkTypeEnum.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingFreeRadiusGridTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingHuaweiGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingTelesIdbGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-freeradius-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-grid.js" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-huawei-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-telesidb-grid.js" />
     <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\Templates\FreeRadiusDataManagersTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiusdatamanagers.js" />
@@ -179,6 +181,16 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiuspostgres-datamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusSynchronizer\Templates\FreeRadiusSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusSynchronizer\whs-routesync-freeradius-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Logger\Templates\HuaweiFTPLoggerTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Logger\whs-routesync-huaweilogger-ftp.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Templates\HuaweiSupplierMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Templates\HuaweiCustomerMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Templates\HuaweiCommunicationTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Templates\HuaweiSWSyncTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huawei-suppliermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huawei-customermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huawei-communication.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huawei-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\Templates\TelesPostgresIdbSWDataManagerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\whs-routesync-telesidb-postgresdatamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\Templates\BuiltInIVSwitchSWSyncTemplate.html" />
@@ -221,6 +233,7 @@
     <Content Include="WhS_RouteSync\Directives\IdbDataManagers\whs-routesync-idbdatamanagers-settings.js" />
     <Content Include="WhS_RouteSync\ModuleInitailization.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\EricssonBranchRouteSettingsAPIService.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\HuaweiSwitchLoggerAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\FreeRadiusAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\IdbDataManagerSettingAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\RouteSyncDefinitionAPIService.js" />

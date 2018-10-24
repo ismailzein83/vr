@@ -9,7 +9,7 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
 {
     public class SwitchLoggerConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "WhS_RouteSync_EricssonSwitchLogger";
+        public const string EXTENSION_TYPE = "WhS_RouteSync_HuaweiSynchronizerFTPLogger";
 
         public string Editor { get; set; }
     }

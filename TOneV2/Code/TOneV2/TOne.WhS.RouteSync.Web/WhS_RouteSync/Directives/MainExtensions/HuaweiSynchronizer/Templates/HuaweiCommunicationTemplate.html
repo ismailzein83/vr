@@ -1,0 +1,44 @@
+﻿<vr-row>
+    <vr-validator validate="scopeModel.validateLoggers()">
+        <vr-section level="1" header="Logger">
+            <vr-datagrid on-ready="scopeModel.onLoggerGridReady" datasource="scopeModel.switchLoggers">
+                <vr-datagridcolumn columnindex="0" invisibleheader headertext="''" disablesorting="true" fixedwidth="'120'">
+                    <vr-select datasource="viewScope.scopeModel.loggerTypes" datatextfield="Title" datavaluefield="ExtensionConfigurationId" label="Type" isrequired="true"
+                               selectedvalues="dataItem.selectedLoggerType" hideremoveicon></vr-select>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn columnindex="1" headertext="'Settings'" disablesorting="true">
+                    <span ng-if="dataItem.selectedLoggerType!=undefined" vr-loader="dataItem.isSwitchLoggerLoading">
+                        <vr-directivewrapper directive="dataItem.selectedLoggerType.Editor" on-ready="dataItem.onReady"></vr-directivewrapper>
+                    </span>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn columnindex="2" headertext="'Active'" disablesorting="true" fixedwidth="'50'">
+                    <span ng-if="dataItem.selectedLoggerType!=undefined">
+                        <vr-switch value="dataItem.isActive"></vr-switch>
+                    </span>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-section>
+    </vr-validator>
+</vr-row>
+
+<vr-row>
+    <vr-validator validate="scopeModel.validateSSHCommunicationList()">
+        <vr-section level="1" header="SSH">
+            <vr-datagrid on-ready="scopeModel.onSSHGridReady" datasource="scopeModel.switchSSHCommunications">
+                <vr-datagridcolumn columnindex="0" invisibleheader headertext="''" disablesorting="true" fixedwidth="'30'">
+                    <vr-check value="dataItem.isSelected"></vr-check>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn columnindex="1" headertext="'Settings'" disablesorting="true">
+                    <span ng-if="dataItem.isSelected" vr-loader="dataItem.isSwitchSSHCommunicationLoading">
+                        <vr-common-communicatorsettings-ssh normal-col-num="2" on-ready="dataItem.onSSHCommunicatorSettingsReady"></vr-common-communicatorsettings-ssh>
+                    </span>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn columnindex="2" headertext="'Active'" disablesorting="true" fixedwidth="'50'">
+                    <span ng-if="dataItem.isSelected">
+                        <vr-switch value="dataItem.isActive"></vr-switch>
+                    </span>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-section>
+    </vr-validator>
+</vr-row>
