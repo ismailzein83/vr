@@ -139,6 +139,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CountryWithDefaultRateController.cs" />
+    <Compile Include="Controllers\ExcludedItemsController.cs" />
     <Compile Include="Controllers\PricingTemplateController.cs" />
     <Compile Include="Controllers\SupplierTargetMatchController.cs" />
     <Compile Include="Controllers\CodeCompareController.cs" />
@@ -174,6 +175,7 @@
   <ItemGroup>
     <Content Include="WhS_Sales\Constants\CountrySelectionTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\CustomerSelectionTypeEnum.js" />
+    <Content Include="WhS_Sales\Constants\ExcludedItemTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\ImportedRowStatus.js" />
     <Content Include="WhS_Sales\Constants\SupplierStatusEnum.js" />
     <Content Include="WhS_Sales\Constants\MarginRateCalculateMethodType.js" />
@@ -288,6 +290,7 @@
     <Content Include="WhS_Sales\Directives\SupplierTargetMatch\vr-whs-sales-suppliertargetmatchmethods-selective.js" />
     <Content Include="WhS_Sales\Directives\Templates\DefaultRoutingProductTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\PercentageCostCalculationTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Templates\ExcludedItemsGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Templates\RatePlanGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\RoutePercentageCostCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Templates\ZoneRoutingProductTemplate.html" />
@@ -297,6 +300,7 @@
     <Content Include="WhS_Sales\Directives\TQI\Templates\TQISelectiveTemplate.html" />
     <Content Include="WhS_Sales\Directives\TQI\vr-whs-sales-tqi-grid.js" />
     <Content Include="WhS_Sales\Directives\TQI\vr-whs-sales-tqi-selective.js" />
+    <Content Include="WhS_Sales\Directives\vr-whs-sales-excludeditems-grid.js" />
     <Content Include="WhS_Sales\Directives\vr-whs-sales-routingproduct-default.js" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\vr-whs-sales-percentagecostcalculation.js" />
     <Content Include="WhS_Sales\Directives\vr-whs-sales-ownertype-selector.js" />
@@ -307,6 +311,7 @@
     <Content Include="WhS_Sales\Directives\Zone\vr-whs-sales-zonewithdefaultrate-grid.js" />
     <Content Include="WhS_Sales\Services\APIServices\CodeCompareAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\CountryWithDefaultRateAPIService.js" />
+    <Content Include="WhS_Sales\Services\APIServices\ExcludedItemsAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\PricingTemplateAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanConfigAPIService.js" />
@@ -331,6 +336,8 @@
     <Content Include="WhS_Sales\Views\EmailController.js" />
     <Content Include="WhS_Sales\Views\EmailCustomer.html" />
     <Content Include="WhS_Sales\Views\EmailCustomerController.js" />
+    <Content Include="WhS_Sales\Views\ExcludedItem.html" />
+    <Content Include="WhS_Sales\Views\ExcludedItemsController.js" />
     <Content Include="WhS_Sales\Views\FutureRate.html" />
     <Content Include="WhS_Sales\Views\FutureRateController.js" />
     <Content Include="WhS_Sales\Views\ImportRatePlan\ImportRatePlan.html" />

@@ -22,14 +22,15 @@ namespace TOne.WhS.Sales.BP.Activities
 
         [RequiredArgument]
         public InArgument<bool> TerminatedDueBusinessRulesViolation { get; set; }
-        public InArgument<List<ExcludedChange>> ExcludedCountries { get; set; }
+        public InArgument<List<ExcludedItem>> ExcludedItems { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
+            var excludedItems = ExcludedItems.Get(context);
             IRatePlanContext ratePlanContext = context.GetRatePlanContext();
             long rootProcessInstanceId = ratePlanContext.RootProcessInstanceId;
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             int subscriberId = SubscriberId.Get(context);
-            List<ExcludedChange> excludedCountries = ExcludedCountries.Get(context);
+            //List<ExcludedChange> excludedCountries = ExcludedCountries.Get(context);
             bool terminatedDueBusinessRulesViolation = TerminatedDueBusinessRulesViolation.Get(context);
             SubscriberProcessStatus status;
 
@@ -50,11 +51,15 @@ namespace TOne.WhS.Sales.BP.Activities
                 SubscriberId = subscriberId,
                 Status = status,
                 SubscriberProcessInstanceId = processInstanceId,
-                ExcludedCountries = excludedCountries
+                //ExcludedCountries = excludedCountries
             };
             var subscriberPreviewDataManager = SalesDataManagerFactory.GetDataManager<ISubscriberPreviewDataManager>();
             subscriberPreviewDataManager.ProcessInstanceId = rootProcessInstanceId;
             subscriberPreviewDataManager.InsertSubscriberPreview(subscriberPreview);
+            ExcludedItemsManager excludedItemsManager = new ExcludedItemsManager();
+
+            //Excluded Items Bulk Insert
+            excludedItemsManager.BulkInsertExcludedItems(excludedItems);
         }
         private string getTerminatedDueBusinessRulesViolationDescription(long processInstanceId)
         {

@@ -1,0 +1,17 @@
+﻿<div vr-modalcontent ng-controller="WhS_Sales_ExcludedItemsController" vr-loader="isLoading" width="'80%'">
+    <vr-modalbody>
+        <vr-form name="formExcludedItems">
+            <vr-row>
+                <vr-columns colnum="12">
+                    <vr-whs-sales-excludeditems-grid on-ready="onExcludedItemsGridReady" > </vr-whs-sales-excludeditems-grid>
+                </vr-columns>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" formname="formFutureNormalRate" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

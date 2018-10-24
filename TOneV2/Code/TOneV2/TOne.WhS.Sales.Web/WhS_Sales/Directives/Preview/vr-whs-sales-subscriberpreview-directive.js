@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsSalesSubscriberpreviewDirective', ['WhS_Sales_RatePlanPreviewAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SubscriberStatusEnum','BusinessProcess_BPInstanceService',
-    function (WhS_Sales_RatePlanPreviewAPIService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SubscriberStatusEnum, BusinessProcess_BPInstanceService) {
+app.directive('vrWhsSalesSubscriberpreviewDirective', ['WhS_Sales_RatePlanPreviewAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SubscriberStatusEnum', 'BusinessProcess_BPInstanceService', 'WhS_Sales_ExcludedItemsService',
+    function (WhS_Sales_RatePlanPreviewAPIService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SubscriberStatusEnum, BusinessProcess_BPInstanceService, WhS_Sales_ExcludedItemsService) {
         return {
             restrict: 'E',
             scope: {
@@ -29,6 +29,9 @@ app.directive('vrWhsSalesSubscriberpreviewDirective', ['WhS_Sales_RatePlanPrevie
                 };
                 $scope.processInstanceClicked = function (dataItem) {
                     BusinessProcess_BPInstanceService.openProcessTracking(dataItem.Entity.SubscriberProcessInstanceId);
+                };
+                $scope.viewExcludedItemsClicked = function (dataItem) {
+                    WhS_Sales_ExcludedItemsService.viewExcludedItems(dataItem.Entity.SubscriberProcessInstanceId);
                 };
             }
 

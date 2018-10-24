@@ -19,8 +19,8 @@
                      on-ready="scopeModel.onGridReady">
             <vr-datagridcolumn headertext="'Subscriber'" field="'SubscriberName'" isclickable="true" onclicked="processInstanceClicked" widthfactor="3" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Status'" field="'SubscriberStatusDescription'" widthfactor="2" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Excluded Countries'" field="'NumberOfExcludedCountries'" isclickable="true" onclicked="processInstanceClicked" widthfactor="3" type="'Text'">
-                <a href="" ng-click="viewScope.processInstanceClicked(dataItem)" ng-if="dataItem.NumberOfExcludedCountries > 0">Number of Countries : {{dataItem.NumberOfExcludedCountries}}</a>
+            <vr-datagridcolumn headertext="'Excluded Items'" field="'viewExcludedItems'" isclickable="true"  widthfactor="3" type="'Text'">
+                <a href="" ng-click="viewScope.viewExcludedItemsClicked(dataItem)" ng-if="dataItem.HasExcludedItems">View Excluded Items</a>
             </vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>

@@ -1,0 +1,11 @@
+﻿
+<vr-datagrid datasource="scopeModel.excludedItems"
+             pagingtype="'Pager'"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.ItemId'" ></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Item Type'" field="'ItemTypeDescription'" type="'text'" widthfactor="5" ></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Item Name'" field="'Entity.ItemName'" type="'text'" widthfactor="5"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Reason'" field="'Entity.Reason'" type="'text'" widthfactor="15"></vr-datagridcolumn>
+</vr-datagrid>
