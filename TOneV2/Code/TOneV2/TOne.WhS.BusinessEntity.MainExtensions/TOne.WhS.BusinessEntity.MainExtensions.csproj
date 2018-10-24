@@ -78,6 +78,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Notification.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
@@ -150,6 +158,8 @@
     <Compile Include="SupplierZoneGroups\SelectiveSupplierZoneGroup.cs" />
     <Compile Include="TransformationSteps\CustomerZoneRateStep.cs" />
     <Compile Include="TransformationSteps\SupplierZoneRateStep.cs" />
+    <Compile Include="VRObjectTypes\ActionRuleObjectType.cs" />
+    <Compile Include="VRObjectTypes\ActionRulePropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\SupplierObjectType.cs" />
     <Compile Include="VRObjectTypes\CustomerObjectType.cs" />
     <Compile Include="VRObjectTypes\SupplierPropertyEvaluator.cs" />
