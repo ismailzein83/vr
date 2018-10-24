@@ -833,8 +833,6 @@
     <Content Include="images\iconheader.ico" />
     <Content Include="images\menu-icons\account manager.png" />
     <Content Include="images\menu-icons\Account.png" />
-    <Content Include="images\menu-icons\admin.png" />
-    <Content Include="images\menu-icons\Administration.png" />
     <Content Include="images\menu-icons\Deals Module.png" />
     <Content Include="images\menu-icons\Management.png" />
     <Content Include="images\menu-icons\NOC.png" />
