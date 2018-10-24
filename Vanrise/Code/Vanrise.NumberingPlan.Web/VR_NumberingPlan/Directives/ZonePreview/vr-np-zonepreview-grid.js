@@ -102,7 +102,7 @@ app.directive("vrNpZonepreviewGrid", ["Vr_NP_CodePreparationPreviewAPIService", 
 			function mapDataNeeded(dataItem) {
 				if (!onlyModified) {
 					if (dataItem.NewCodes > 0 || dataItem.DeletedCodes > 0 || dataItem.CodesMovedTo > 0 || dataItem.CodesMovedFrom > 0) {
-						dataItem.ZoneStatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Modified.png";
+                        dataItem.ZoneStatusIconUrl = "Client/Modules/VR_NumberingPlan/Images/Modified.png";
 						dataItem.ZoneStatusIconTooltip = "Modified";
 					}
 				}

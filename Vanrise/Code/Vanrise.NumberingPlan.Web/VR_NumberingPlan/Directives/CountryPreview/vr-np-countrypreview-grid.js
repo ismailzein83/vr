@@ -104,7 +104,7 @@ function (Vr_NP_CodePreparationPreviewAPIService, VRUIUtilsService, VRNotificati
         function mapDataNeeded(dataItem) {
             if (dataItem.Entity.NewCodes > 0 || dataItem.Entity.MovedCodes > 0 || dataItem.Entity.DeletedCodes > 0) {
                 $scope.showStatusIcon = true;
-                dataItem.StatusIconUrl = "Client/Modules/WhS_BusinessEntity/Images/Modified.png";
+                dataItem.StatusIconUrl = "Client/Modules/VR_NumberingPlan/Images/Modified.png";
             }
 
         }
