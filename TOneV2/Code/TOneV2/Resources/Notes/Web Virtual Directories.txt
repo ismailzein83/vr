@@ -6,18 +6,12 @@
 	Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
 
  - Add the following virtual directories under "Client > Modules" folder:
-	Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
-	-removed-Main					C:\TFS\TOneV2\Code\TOneV2\TOne.Main.Web\Main
-	-removed-Analytics				C:\TFS\TOneV2\Code\TOneV2\TOne.Analytics.Web\Analytics
+	Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common	
 	BI						C:\TFS\Vanrise\Code\Vanrise.BI.Web\BI
-	-removed-Routing					C:\TFS\TOneV2\Code\TOneV2\TOne.LCR.Web\Routing
-	-removed-BusinessEntity			C:\TFS\TOneV2\Code\TOneV2\TOne.BusinessEntity.Web\BusinessEntity
 	Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
 	BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
 	Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
-	Queueing				C:\TFS\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing
-	-removed-Billing					C:\TFS\TOneV2\Code\TOneV2\TOne.Billing.Web\Billing
-	-removed-CDR						C:\TFS\TOneV2\Code\TOneV2\TOne.CDR.Web\CDR
+	Queueing				C:\TFS\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing	
 	WhS_CodePreparation		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CodePreparation.Web\WhS_CodePreparation
 	WhS_BusinessEntity		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_BusinessEntity
 	WhS_SupplierPriceList	C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.SupplierPriceList.Web\WhS_SupplierPriceList	
@@ -45,3 +39,11 @@
 	VR_CaseManagement		C:\TFS\Vanrise\Code\Vanrise.CaseManagement.Web\VR_CaseManagement
 	WhS_CDRComparison	    C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CDRComparison.Web\WhS_CDRComparison
 	CDRComparison			C:\TFS\Xbooster\Code\CDRComparison.Web\CDRComparison
+	
+	--do not create below directories
+	-removed-Main					C:\TFS\TOneV2\Code\TOneV2\TOne.Main.Web\Main
+	-removed-Analytics				C:\TFS\TOneV2\Code\TOneV2\TOne.Analytics.Web\Analytics
+	-removed-Routing					C:\TFS\TOneV2\Code\TOneV2\TOne.LCR.Web\Routing
+	-removed-BusinessEntity			C:\TFS\TOneV2\Code\TOneV2\TOne.BusinessEntity.Web\BusinessEntity
+	-removed-Billing					C:\TFS\TOneV2\Code\TOneV2\TOne.Billing.Web\Billing
+	-removed-CDR						C:\TFS\TOneV2\Code\TOneV2\TOne.CDR.Web\CDR
