@@ -760,9 +760,9 @@
     <Content Include="NImages\menu-icons\switch.png" />
     <Content Include="NImages\menu-icons\SystemProcesses.png" />
     <Content Include="NImages\menu-icons\NOC.png" />
-    <Content Include="NImages\t-one-login-logo.png" />
-    <Content Include="NImages\t-one-logo-index.png" />
-    <Content Include="NImages\iconheader.ico" />
+    <Content Include="images\TOne-flat-login.png" />
+    <Content Include="images\TOne-flat-logoonheader.png" />
+    <Content Include="images\TOne-flat-iconheader.ico" />
     <Content Include="Web.config.CloudXPoint.exclude" />
     <Content Include="WebBI.config.exclude" />
     <Content Include="Web.config.CentralAuth.exclude">
