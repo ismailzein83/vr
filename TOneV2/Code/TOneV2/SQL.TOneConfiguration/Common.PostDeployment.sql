@@ -243,7 +243,7 @@ as (select * from (values
 
 ('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing Management'		,null,null,'/Client/Images/menu-icons/billing.png',70,0),
 
-('1C7569FA-43C9-4853-AE4C-1152746A34FD','Rules'						,null,null,'/Client/Images/menu-icons/other.png',75,0),
+('1C7569FA-43C9-4853-AE4C-1152746A34FD','Rules'						,null,null,'/Client/Images/menu-icons/rules.png',75,0),
 
 ('EB303A61-929A-4D33-BF50-18F40308BC86','Reports & Dashboards'		,null,null,'/Client/Images/menu-icons/busines intel.png',95,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

@@ -134,7 +134,7 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('8437594D-5472-4F4E-8EF2-D15C32834714','Network Infrastructure',null,null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,30,0),
-('C49F3A08-1D96-4F56-B0C6-F81EB8AAC9CA','Fraud Analysis',null,null,null,'/images/menu-icons/other.png',11,0)
+('C49F3A08-1D96-4F56-B0C6-F81EB8AAC9CA','Fraud Analysis',null,null,null,'/Client/Images/menu-icons/other.png',11,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
