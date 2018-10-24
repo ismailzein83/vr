@@ -1,0 +1,488 @@
+﻿.flat .vr-nav-custom {
+    height: 60px;
+    margin-bottom: 0px !important;
+    background-color: #fff;
+    background: unset;
+    margin-bottom: 0px !important;
+    border-color: #ddd !important;
+}
+
+    .flat .vr-nav-custom .navbar-header {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+    }
+
+.flat #wrapper {
+    padding-top: 60px;
+}
+
+.flat .vr-sidebar-header {
+    display: inline-block;
+    width: 200px;
+    background-color: #0177b5;
+    height: inherit;
+    margin-bottom: -1px;
+}
+
+.flat .toggel-icon-container {
+    color: #fff;
+    width: 30px;
+    position: relative;
+    height: 100%;
+    display: inline-block;
+}
+
+.flat .toggel-icon {
+    position: absolute;
+    left: 8px;
+    font-size: 17px;
+    top: 20px;
+}
+
+.flat .logo-container {
+    display: inline-block;
+    width: calc(100% - 35px);
+    height: 100%;
+    position: relative;
+}
+
+.flat .index-logo {
+    position: absolute;
+    top: 8px;
+    left: 25px;
+}
+
+.flat .vr-page-header {
+    display: inline-block;
+    width: calc(100% - 205px);
+    height: inherit;
+    overflow: hidden;
+}
+
+.flat .page-header-wrapper {
+    display: flex;
+    width: 100%;
+    height: inherit
+}
+
+.flat .header-item {
+    display: inline-flex;
+    padding: 15px
+}
+
+    .flat .header-item.info-container {
+        width: 100%
+    }
+
+.flat .company-logo-container {
+    display: inline-block;
+    width: 20px
+}
+
+.flat .company-name-container {
+    display: inline-block;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.flat .vr-company-name {
+    font-size: 16px;
+    text-align: initial;
+    padding-left: 10px;
+    width: 100%;
+    color: #6B6B6B;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: bold;
+    top: unset;
+    position: static;
+    left: unset;
+}
+
+.flat .vr-page-title {
+    margin-left: 15px;
+    color: #6B6B6B;
+    margin-top: 4px;
+    font-size: 14px;
+}
+
+
+.flat .header-item.action-container {
+    width: 470px;
+}
+
+.flat .vr-user-menu-wrapper {
+    display: inline-block;
+    width: 150px
+}
+
+.flat .vr-user-menu-wrapper {
+    display: inline-block;
+    width: 150px
+}
+
+.flat .vr-user-menu {
+    display: inline-block;
+    position: absolute
+}
+
+.flat .vr-user-icon {
+    top: -5px;
+}
+
+.flat .vr-user-label {
+    max-width: 140px;
+}
+
+.flat .header-action-item {
+    display: inline-block;
+    padding-left: 15px
+}
+
+.flat .vr-support-item {
+    width: 35px;
+}
+
+.flat .vr-notfication-item {
+    width: 50px;
+}
+
+.flat .vr-nav-custom div .badge {
+    position: relative;
+    top: -16px;
+    left: 13px;
+}
+
+.flat .badge {
+    background-color: #0177b5 !important;
+    font-weight: 500;
+}
+
+.flat .vr-dateclock-item {
+    display: inline-block;
+    width: 120px;
+    padding-left: 25px
+}
+
+.flat .vr-date-container {
+    color: #8B8B8C;
+    font-size: 10px;
+    font-weight: bold
+}
+
+.flat .vr-clock-container {
+    position: relative;
+    width: 100%;
+    height: 18px;
+    font-size: 9px;
+}
+
+.flat .vr-clock-item {
+    color: #6a6a6a;
+    font-weight: bold;
+    position: absolute;
+    right: 7px;
+    color: #9FA0A2
+}
+
+.flat .page-content-wrapper {
+    padding: 0px;
+}
+/* menu override*/
+.flat .panel-heading-vr {
+    background: unset !important;
+    background-color: #e3e3e3 !important;
+    color: #87888a !important;
+    border-bottom: 1px solid #fff;
+}
+
+.flat .panel-heading-vr {
+    padding: 0px !important;
+    height: 39px;
+}
+
+.flat .collapsed-menu-item {
+    background-color: #87888a !important;
+    border-bottom: 1px solid #fff;
+}
+
+.flat .module-icon {
+    background-color: #87888a !important;
+    height: 39px;
+    width: 30px;
+    top: unset;
+}
+
+
+.flat .icon {
+    position: absolute;
+    top: 10px;
+    left: 5px;
+}
+
+.flat #sidebar-wrapper {
+    background: #e3e3e3;
+}
+
+.flat .vr-module-name {
+    top: -10px;
+    font-weight: bold;
+    left: 5px;
+}
+
+.flat .chevron-direction {
+    font-size: 10px;
+    top: 15px;
+    left: -5px;
+}
+
+.flat .panel-heading-vr.selected-menu {
+    background-color: #87888a !important;
+    color: #e3e3e3 !important;
+}
+
+.flat .dll-menu a:before {
+    border-width: 0.21em;
+    border-radius: 30px;
+}
+
+.flat .version-container {
+    position: fixed;
+    bottom: 0px;
+    right: -10px;
+    width: calc(100% - 200px);
+    z-index: 1000;
+    height: 20px;
+    background-color: #fff;
+}
+
+    .flat .version-container.collapsed-menu-in {
+        width: calc(100% - 40px);
+    }
+
+.flat .version-label {
+    font-size: 10px;
+    position: absolute;
+    right: 22px;
+}
+/*main view */
+.flat #page-content-wrapper {
+    padding: 0px 0px 0px 5px;
+}
+
+.flat vr-actionbar {
+    display: block;
+    margin: 0px 15px;
+}
+
+.flat .action-bar {
+    background-color: #e3e3e3;
+    border-radius: 0px;
+}
+
+    .flat .action-bar .btn {
+        color: #88898B !important;
+        border-radius: 0px !important;
+        font-weight: bold;
+    }
+
+    .flat .action-bar .vr-half-circle {
+        background-color: #e3e3e3 !important;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+
+    .flat .action-bar.include-personalization {
+        border-radius: 0px;
+    }
+
+.action-bar .vr-action-menu-dote {
+    color: #88898B !important;
+}
+
+.flat .btncustom:hover {
+    background-color: #dadada !important;
+}
+
+.flat .btncustom:disabled {
+    background-color: #cac0c0 !important;
+}
+
+.flat .vr-datagrid-header-simple {
+    background: #0177b5 !important;
+}
+
+.flat .vr-grid-menu-h-circle {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    width: 20px;
+    right: 7px;
+}
+
+.flat .vr-grid-menu-h-dote {
+    left: -3px;
+    top: -14px;
+}
+
+.flat .vr-datagrid[horizontal-line="true"] {
+    border-bottom: none;
+}
+
+.flat vr-datagrid[pagingtype="'PagingOnScroll'"] .vr-datagrid {
+    border-bottom: 1px solid #DDD;
+}
+
+.flat .vr-remote-footer {
+    background-color: #e3e3e3 !important;
+    color: #88898B !important;
+    margin-top: 3px;
+}
+
+.flat .vr-pager-container .vr-control-label {
+    color: #6B6B6B;
+}
+
+.flat .vr-custom-pagination > li > a {
+    color: #6B6B6B;
+    border-radius: 0px;
+}
+
+.flat .vr-pagination-pagesize {
+    margin-left: 4px;
+}
+
+.flat .vr-pagination-info {
+    right: 4px;
+}
+
+.flat .vr-custom-pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    color: #FFF;
+}
+
+.flat .modal vr-actionbar {
+    margin: 0px;
+}
+
+.flat .vr-modal-header {
+    background: #0177b5 !important;
+    color: #fff !important;
+    border-radius: 0px;
+}
+
+.flat .action-bar .vr-menu-list,
+.flat vr-common-personalization .vr-menu-list,
+.flat .vr-grid-menu,
+.flat .btn,
+.flat .form-control,
+.flat .vr-tabs .clicked-btn,
+.flat .vr-tabs label,
+.flat .required-inpute > div:nth-child(1),
+.flat .dropdown-menu,
+.flat .panel-vr > .panel-heading,
+.flat .modal-dialog vr-form .action-bar,
+.flat .modal-content,
+.flat .alert,
+.flat vr-legend .main-content,
+.flat .label,
+.flat .vr-toolbox .item,
+.flat vr-tab vr-columns[tabs="true"] > div[class^="col"],
+.flat .fieldset-vr > .panel-body,
+.flat .tooltip-error {
+    border-radius: 0px !important;
+}
+
+.flat .modal-dialog vr-form .action-bar {
+    margin: 10px 15px 0px 15px;
+}
+
+.flat .action-bar .vr-action-menu-dote {
+    top: -16px;
+}
+
+.action-bar .vr-action-menu-dote .flat .panel-vr > .panel-heading {
+    background: #e3e3e3;
+}
+
+/*login section*/
+
+.flat.login-body {
+    background: url("Client/Images/lg-bg.png") center repeat;
+}
+
+.flat .main-login {
+    position: relative;
+    width: 100%;
+}
+
+.flat .flat-login-container {
+    width: 349px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 115px;
+}
+
+.flat .main-login .dropdown {
+    min-height: 32px !important;
+}
+
+.flat vr-textbox {
+    display: block;
+    padding-bottom: 15px;
+}
+
+.flat .flat-login-container vr-textbox vr-validator[vr-input] > div:nth-child(1) {
+    width: 271px;
+    height: 43px;
+}
+
+
+
+.flat .flat-login-container vr-textbox .form-control {
+    height: 41px;
+    background-color: #d4d4d4;
+    color: #000;
+}
+
+.flat .flat-login-container .required-inpute > div:nth-child(1) {
+    border: unset !important;
+    box-shadow: unset;
+}
+
+.flat .flat-login-container .btn-danger[disabled],
+.flat .flat-login-container .btn-danger,
+.flat .flat-login-container danger[disabled]:hover {
+    border-color: unset;
+}
+
+.flat .flat-login-container div[class^="col"] {
+    width: 100% !important;
+    float: none !important;
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+.flat .flat-login-container .row {
+    margin: 0px !important;
+}
+
+.flat .login-btn {
+    height: 37px !important;
+    background-color: #0177b5 !important;
+    color: #FFF;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.flat .fogetten-label:visited {
+    color: #a9a7a7;
+    text-decoration: none;
+}
+
+.flat .fogetten-label {
+    color: #a9a7a7;
+    text-decoration: none;
+}
