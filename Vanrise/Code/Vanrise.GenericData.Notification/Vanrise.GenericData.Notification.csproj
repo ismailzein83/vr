@@ -9,12 +9,14 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Vanrise.GenericData.Notification</RootNamespace>
     <AssemblyName>Vanrise.GenericData.Notification</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -95,8 +97,8 @@
     <Compile Include="DataRecord\Filters\IVRNotificationTypeFilter\DataRecordNotificationTypeFilter.cs" />
     <Compile Include="EvaluateDataRecordRule.cs" />
     <Compile Include="LoadDataRecordRuleEvaluatorDefinition.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataRecord\QueueActivators\DataRecordCheckAlertRulesQueueActivator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordRuleEvaluatorDefinitionBPExtentedSettings.cs" />
   </ItemGroup>
   <ItemGroup>
