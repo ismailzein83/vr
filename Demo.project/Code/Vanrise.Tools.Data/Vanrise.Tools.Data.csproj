@@ -49,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IColumnsDataManager.cs" />
+    <Compile Include="ITableDataManager.cs" />
+    <Compile Include="ISchemaDataManager.cs" />
     <Compile Include="VRToolsFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

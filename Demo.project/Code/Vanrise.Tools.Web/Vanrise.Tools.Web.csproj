@@ -64,6 +64,26 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Web.Base">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web.Razor">
@@ -102,11 +122,25 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Folder Include="Controllers\ColumnsController\" />
+    <Folder Include="Controllers\SchemaController\" />
+    <Folder Include="Controllers\TableController\" />
     <Folder Include="VR_Tools\Elements\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_Tools\Constant\ModuleConfig.js" />
+    <Content Include="VR_Tools\Directives\InsertColumns\vanrise-tools-columns-selector.js" />
+    <Content Include="VR_Tools\Directives\Table\vanrise-tools-table-selector.js" />
+    <Content Include="VR_Tools\Directives\Schema\vanrise-tools-schema-selector.js" />
+    <Content Include="VR_Tools\Directives\GeneratedScript\Design\vanrise-tools-generated-script-design.js" />
+    <Content Include="VR_Tools\Directives\GeneratedScript\Templates\GeneratedScriptDesignGridTemplate.html" />
+    <Content Include="VR_Tools\Services\APIServices\ColumnsAPIService.js" />
+    <Content Include="VR_Tools\Services\APIServices\TableAPIService.js" />
+    <Content Include="VR_Tools\Services\APIServices\SchemaAPIService.js" />
+    <Content Include="VR_Tools\Views\GeneratedScriptManagement.html" />
+    <Content Include="VR_Tools\Views\GeneratedScriptDesignEditorController.js" />
+    <Content Include="VR_Tools\Views\GeneratedScriptManagementController.js" />
+    <Content Include="VR_Tools\Views\GeneratedScriptDesignEditor.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

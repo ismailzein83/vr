@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="scopeModel.designs"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="PageDefinitionId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'PageDefinitionId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

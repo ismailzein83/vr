@@ -46,6 +46,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Columns\Columns.cs" />
+    <Compile Include="Columns\ColumnsDetails.cs" />
+    <Compile Include="Columns\ColumnsInfo.cs" />
+    <Compile Include="Columns\ColumnsInfoFilter.cs" />
+    <Compile Include="Table\Table.cs" />
+    <Compile Include="Table\TableDetails.cs" />
+    <Compile Include="Table\TableInfo.cs" />
+    <Compile Include="Table\TableInfoFilter.cs" />
+    <Compile Include="Schema\SchemaInfo.cs" />
+    <Compile Include="Schema\SchemaInfoFilter.cs" />
+    <Compile Include="Schema\SchemaDetails.cs" />
+    <Compile Include="Schema\Schema.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
