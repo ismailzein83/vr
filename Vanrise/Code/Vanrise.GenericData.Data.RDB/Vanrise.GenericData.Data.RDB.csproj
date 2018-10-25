@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BELookupRuleDefinitionDataManager.cs" />
+    <Compile Include="BEParentChildRelationDataManager.cs" />
+    <Compile Include="BusinessEntityDefinitionDataManager.cs" />
+    <Compile Include="BusinessEntityStatusHistoryDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordFilterRDBBuilder.cs" />
   </ItemGroup>
@@ -63,6 +68,10 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data\Vanrise.GenericData.Data.csproj">
+      <Project>{2c487e04-e583-411a-b116-f4485c78a572}</Project>
+      <Name>Vanrise.GenericData.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
