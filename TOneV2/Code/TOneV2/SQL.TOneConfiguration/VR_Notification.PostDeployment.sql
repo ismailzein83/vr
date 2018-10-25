@@ -20,7 +20,9 @@ as (select * from (values
 ('A196C40A-30B5-4297-B7B0-4344C41CE5A2','VR_Notification_NotificationDefinition','Notification','VR_Security_ViewTypeConfig'												,'{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"vr-notification-notification-vieweditor"}'),
 ('d96f17c8-29d7-4c0c-88dc-9d5fbca2178f','VR_Notification_VRActionDefinition','Action Definition','VR_Common_VRComponentType'												,'{"Editor":"vr-notification-vractiondefinition-settings"}'),
 ('0B44D3F3-AA62-4289-8EB3-D93269515036','Alert Level','Alert Level','VR_GenericData_BusinessEntityDefinitionSettingsConfig'													,'{"Editor":"vr-notification-alertleveldefinitionbe-editor"}'),
-('AA2AD3F2-ED37-4212-BE3E-2CC507BC1205','VrAlertRuleTypeOverriddenConfiguration','AlertRuleType Overridden Configuration','VRCommon_OverriddenConfiguration','{"Editor":"vr-notification-overriddenconfiguration-alertruletype"}')
+('AA2AD3F2-ED37-4212-BE3E-2CC507BC1205','VrAlertRuleTypeOverriddenConfiguration','AlertRuleType Overridden Configuration','VRCommon_OverriddenConfiguration'				,'{"Editor":"vr-notification-overriddenconfiguration-alertruletype"}'),
+('FAE80F27-FCC2-4135-864B-2C17D4445192','ActionRule','Action Rule','VR_Common_ObjectType'																					,'{"Editor":"vr-notification-actionruleobjecttype", "PropertyEvaluatorExtensionType": "VR_Notification_ActionRule_PropertyEvaluator"}'),
+('70724B2E-DD4A-4F2B-8807-D139FCF28CDF','ActionRule Property','Action Rule Property','VR_Notification_ActionRule_PropertyEvaluator'											,'{"Editor":"vr-notification-actionrulepropertyevaluator"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
@@ -218,3 +220,23 @@ when matched then
 when not matched by target then
 	insert([ID],[UniqueName],[Settings])
 	values(s.[ID],s.[UniqueName],s.[Settings]);
+
+
+--[common].[VRObjectTypeDefinition]-----------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('F79AE668-B844-4121-9046-453E7C2BF041','ActionRule','{"$type": "Vanrise.Entities.VRObjectTypeDefinitionSettings, Vanrise.Entities","ObjectType":{"$type": "Vanrise.Notification.MainExtensions.ActionRuleObjectType, Vanrise.Notification.MainExtensions","ConfigId": "fae80f27-fcc2-4135-864b-2c17d4445192"},"Properties":{"$type": "System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities]], mscorlib","ActionRuleId":{"$type": "Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name": "ActionRuleId","Description": "Action Rule Id","PropertyEvaluator":{"$type": "Vanrise.Notification.MainExtensions.ActionRulePropertyEvaluator, Vanrise.Notification.MainExtensions","ConfigId":"70724b2e-dd4a-4f2b-8807-d139fcf28cdf","ActionRuleField":0}},"ActionRuleName":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"ActionRuleName","Description":"Action Rule Name","PropertyEvaluator":{"$type": "Vanrise.Notification.MainExtensions.ActionRulePropertyEvaluator, Vanrise.Notification.MainExtensions","ConfigId": "70724b2e-dd4a-4f2b-8807-d139fcf28cdf","ActionRuleField":1}}}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[common].[VRObjectTypeDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
