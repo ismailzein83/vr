@@ -101,7 +101,7 @@ namespace TOne.WhS.Routing.Business
             if (routingCustomerZonesByDealZoneGroup.Any())
             {
                 IEnumerable<DealZoneGroup> affectedDealZoneGroup = routingCustomerZonesByDealZoneGroup.Keys;
-                Dictionary<DealZoneGroup, DealProgress> dealProgresses = new DealProgressManager().GetDealProgresses(affectedDealZoneGroup.ToHashSet(), true);
+                Dictionary<DealZoneGroup, DealProgress> dealProgresses = new DealProgressManager().GetDealProgresses(Vanrise.Common.ExtensionMethods.ToHashSet(affectedDealZoneGroup), true);
 
                 foreach (var kvp in routingCustomerZonesByDealZoneGroup)
                 {
@@ -192,7 +192,7 @@ namespace TOne.WhS.Routing.Business
                 SaleEntityService customerService = customerServiceLocator.GetCustomerZoneService(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
                 if (customerService != null && customerService.Services != null && customerService.Services.Count > 0)
-                    saleZoneServices = customerService.Services.Select(itm => itm.ServiceId).ToHashSet();
+                    saleZoneServices = Vanrise.Common.ExtensionMethods.ToHashSet(customerService.Services.Select(itm => itm.ServiceId));
             }
             else
             {
@@ -288,7 +288,7 @@ namespace TOne.WhS.Routing.Business
             if (routingSupplierZonesByDealZoneGroup.Any())
             {
                 IEnumerable<DealZoneGroup> affectedDealZoneGroup = routingSupplierZonesByDealZoneGroup.Keys;
-                Dictionary<DealZoneGroup, DealProgress> dealProgresses = new DealProgressManager().GetDealProgresses(affectedDealZoneGroup.ToHashSet(), false);
+                Dictionary<DealZoneGroup, DealProgress> dealProgresses = new DealProgressManager().GetDealProgresses(Vanrise.Common.ExtensionMethods.ToHashSet(affectedDealZoneGroup), false);
 
                 foreach (var kvp in routingSupplierZonesByDealZoneGroup)
                 {

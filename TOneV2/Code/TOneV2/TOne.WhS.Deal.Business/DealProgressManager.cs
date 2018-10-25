@@ -49,7 +49,7 @@ namespace TOne.WhS.Deal.Business
                 return;
 
             IDealProgressDataManager dealProgressDataManager = DealDataManagerFactory.GetDataManager<IDealProgressDataManager>();
-            dealProgressDataManager.DeleteDealProgresses(dealZoneGroups.ToHashSet(), isSale);
+            dealProgressDataManager.DeleteDealProgresses(Vanrise.Common.ExtensionMethods.ToHashSet(dealZoneGroups), isSale);
         }
 
         public  IEnumerable<DealZoneGroup> GetAffectedDealZoneGroups(bool isSale)

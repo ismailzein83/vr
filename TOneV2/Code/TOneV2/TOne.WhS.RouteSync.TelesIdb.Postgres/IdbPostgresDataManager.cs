@@ -128,7 +128,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
             HashSet<int> failedNodeIndexes = null;
             if (previousSwitchSyncOutput != null && previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList != null)
             {
-                failedNodeIndexes = previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList.Select(itm => (itm as TelesIdbSWSyncOutput).ItemIndex).ToHashSet();
+                failedNodeIndexes = Vanrise.Common.ExtensionMethods.ToHashSet(previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList.Select(itm => (itm as TelesIdbSWSyncOutput).ItemIndex));
                 if (failedNodeIndexes != null && failedNodeIndexes.Count == _telesIdbPostgresDataManagers.Count)
                 {
                     switchSyncOutput = new SwitchSyncOutput()

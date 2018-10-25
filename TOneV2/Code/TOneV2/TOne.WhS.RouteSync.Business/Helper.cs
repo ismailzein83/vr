@@ -15,7 +15,7 @@ namespace TOne.WhS.RouteSync.Business
             if (switchSyncOutputList == null || switchSyncOutputList.Count == 0)
                 return null;
 
-            HashSet<string> distinctSwitchIds = switchSyncOutputList.Select(itm => itm.SwitchId).ToHashSet();
+            HashSet<string> distinctSwitchIds = Vanrise.Common.ExtensionMethods.ToHashSet(switchSyncOutputList.Select(itm => itm.SwitchId));
             if (distinctSwitchIds.Count > 1)
                 throw new Exception("switchSyncOutputList items should be related to one Switch.");
 
@@ -125,7 +125,7 @@ namespace TOne.WhS.RouteSync.Business
                                 continue;
                             }
 
-                            HashSet<string> distinctIdentifiers = convertedRouteForCompression.Select(itm => itm.RouteOptionsIdentifier).ToHashSet();
+                            HashSet<string> distinctIdentifiers = Vanrise.Common.ExtensionMethods.ToHashSet(convertedRouteForCompression.Select(itm => itm.RouteOptionsIdentifier));
                             if (distinctIdentifiers.Count > 1)
                             {
                                 convertedRoutesKvp.Value.Remove(route.Code);

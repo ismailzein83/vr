@@ -36,7 +36,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     long zoneId = (long)reader["ZoneId"];
                     string codeGroupsAsString = reader["CodeGroups"] as string;
 
-                    HashSet<string> codeGroups = codeGroupsAsString.Split(',').ToHashSet();
+                    HashSet<string> codeGroups = Vanrise.Common.ExtensionMethods.ToHashSet(codeGroupsAsString.Split(','));
 
                     Dictionary<long, HashSet<string>> zoneCodeGroupsByZoneId = result.GetOrCreateItem(isSale);
                     zoneCodeGroupsByZoneId.Add(zoneId, codeGroups);

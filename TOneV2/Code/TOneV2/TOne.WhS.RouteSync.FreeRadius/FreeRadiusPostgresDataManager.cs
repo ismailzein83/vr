@@ -120,7 +120,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
             HashSet<int> failedNodeIndexes = null;
             if (previousSwitchSyncOutput != null && previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList != null)
             {
-                failedNodeIndexes = previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList.Select(itm => (itm as FreeRadiusSWSyncOutput).ItemIndex).ToHashSet();
+                failedNodeIndexes = Vanrise.Common.ExtensionMethods.ToHashSet(previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList.Select(itm => (itm as FreeRadiusSWSyncOutput).ItemIndex));
                 if (failedNodeIndexes != null && failedNodeIndexes.Count == _freeRadiusPostgresDataManagers.Count)
                 {
                     switchSyncOutput = new SwitchSyncOutput()
@@ -278,7 +278,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
             List<FreeRadiusConvertedRoute> updatedRoutes = Vanrise.Common.Utilities.CloneObject(updatedConvertedRoute);
 
-            HashSet<CustomerCode> customerCodes = updatedRoutes.Select(itm => new CustomerCode() { CustomerId = itm.Customer_id, Code = itm.Cldsid }).ToHashSet();
+            HashSet<CustomerCode> customerCodes = Vanrise.Common.ExtensionMethods.ToHashSet(updatedRoutes.Select(itm => new CustomerCode() { CustomerId = itm.Customer_id, Code = itm.Cldsid }));
 
             List<FreeRadiusConvertedRoute> compressedAffectedRoutes = GetAffectedRoutes(customerCodes);
             if (compressedAffectedRoutes != null && compressedAffectedRoutes.Count > 0)

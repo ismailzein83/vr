@@ -282,8 +282,8 @@ namespace TOne.WhS.BusinessEntity.Business
 				tempZoneIds.AddRange(zoneService.ZoneIds);
 				tempServiceIds.AddRange(zoneService.ServiceIds);
 			}
-			zoneIds = tempZoneIds.ToHashSet<long>();
-			serviceIds = tempServiceIds.ToHashSet<int>();
+			zoneIds = Vanrise.Common.ExtensionMethods.ToHashSet(tempZoneIds);
+			serviceIds = Vanrise.Common.ExtensionMethods.ToHashSet(tempServiceIds);
 		}
 
 		public HashSet<long> GetFilteredZoneIds(int routingProductId)

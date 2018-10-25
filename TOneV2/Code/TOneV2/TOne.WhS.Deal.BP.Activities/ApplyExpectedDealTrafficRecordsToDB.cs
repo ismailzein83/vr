@@ -68,7 +68,7 @@ namespace TOne.WhS.Deal.BP.Activities
                         return true;
                     return false;
                 };
-                dealProgressesToDelete = inputArgument.AffectedDealZoneGroups.FindAllRecords(predicate).ToHashSet();
+                dealProgressesToDelete = Vanrise.Common.ExtensionMethods.ToHashSet(inputArgument.AffectedDealZoneGroups.FindAllRecords(predicate));
             }
 
             DealProgressManager dealProgressManager = new DealProgressManager();

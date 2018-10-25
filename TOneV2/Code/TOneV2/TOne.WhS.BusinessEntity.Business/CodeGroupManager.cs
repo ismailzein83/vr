@@ -51,7 +51,7 @@ namespace TOne.WhS.BusinessEntity.Business
                                                                                 && itm.Value.CountryId != codeGroup.Value.CountryId);
 
                        if (matchedCodeGroups != null && matchedCodeGroups.Count() > 0)
-                           result.Add(codeGroup.Value.Code, matchedCodeGroups.Select(itm => itm.Value.CountryId).ToHashSet());
+                           result.Add(codeGroup.Value.Code, Vanrise.Common.ExtensionMethods.ToHashSet(matchedCodeGroups.Select(itm => itm.Value.CountryId)));
                    }
 
                    return result;

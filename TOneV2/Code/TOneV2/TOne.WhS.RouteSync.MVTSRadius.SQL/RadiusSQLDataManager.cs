@@ -178,7 +178,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
             HashSet<int> failedNodeIndexes = null;
             if (previousSwitchSyncOutput != null && previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList != null)
             {
-                failedNodeIndexes = previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList.Select(itm => (itm as MVTSRadiusSWSyncOutput).ItemIndex).ToHashSet();
+                failedNodeIndexes = Vanrise.Common.ExtensionMethods.ToHashSet(previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList.Select(itm => (itm as MVTSRadiusSWSyncOutput).ItemIndex));
                 if (failedNodeIndexes != null && failedNodeIndexes.Count == _mvtsRadiusSQLDataManagers.Count)
                 {
                     switchSyncOutput = new SwitchSyncOutput()

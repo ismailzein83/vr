@@ -129,7 +129,7 @@ namespace TOne.WhS.Routing.Business
             string ruleNameLower = !string.IsNullOrEmpty(input.Query.Name) ? input.Query.Name.ToLower() : null;
             var routeRuleIsSupplierIncludedContext = new RouteRuleAreSuppliersIncludedContext()
             {
-                SupplierIds = input.Query.SupplierIds != null ? input.Query.SupplierIds.ToHashSet() : null
+                SupplierIds = input.Query.SupplierIds != null ? Vanrise.Common.ExtensionMethods.ToHashSet(input.Query.SupplierIds) : null
             };
 
             Func<RouteRule, bool> filterExpression = (routeRule) =>

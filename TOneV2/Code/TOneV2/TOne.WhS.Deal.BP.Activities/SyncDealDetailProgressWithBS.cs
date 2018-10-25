@@ -55,7 +55,7 @@ namespace TOne.WhS.Deal.BP.Activities
 			else if (affectedDealZoneGroups == null)
 				dealZoneGroups = inputArgument.AffectedDealZoneGroups;
 			else
-				dealZoneGroups = inputArgument.AffectedDealZoneGroups.Union(affectedDealZoneGroups).ToHashSet();
+				dealZoneGroups = Vanrise.Common.ExtensionMethods.ToHashSet(inputArgument.AffectedDealZoneGroups.Union(affectedDealZoneGroups));
 
 			return new SyncDealDetailProgressWithBSOutput()
 			{
@@ -91,7 +91,7 @@ namespace TOne.WhS.Deal.BP.Activities
 				Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> dealDetailedProgressesDictToDelete = dealDetailedProgressManager.GetDealDetailedProgressesByDate(isSale, beginDate, null);
 				if (dealDetailedProgressesDictToDelete != null)
 				{
-					affectedDealZoneGroups = dealDetailedProgressesDictToDelete.Keys.Select(itm => new DealZoneGroup() { DealId = itm.DealId, ZoneGroupNb = itm.ZoneGroupNb }).ToHashSet();
+					affectedDealZoneGroups = Vanrise.Common.ExtensionMethods.ToHashSet(dealDetailedProgressesDictToDelete.Keys.Select(itm => new DealZoneGroup() { DealId = itm.DealId, ZoneGroupNb = itm.ZoneGroupNb }));
 					dealProgressManager.InsertAffectedDealZoneGroups(affectedDealZoneGroups, isSale);
 					dealDetailedProgressManager.DeleteDealDetailedProgresses(dealDetailedProgressesDictToDelete.Values.Select(itm => itm.DealDetailedProgressId).ToList());
 				}
@@ -102,7 +102,7 @@ namespace TOne.WhS.Deal.BP.Activities
 				return;
 			}
 
-			affectedDealZoneGroups = currentDealBillingSummaryRecords.Keys.ToHashSet();
+			affectedDealZoneGroups = Vanrise.Common.ExtensionMethods.ToHashSet(currentDealBillingSummaryRecords.Keys);
 			int intervalOffsetInMinutes = new ConfigManager().GetDealTechnicalSettingIntervalOffsetInMinutes();
 			var dealDetailedProgresses = dealDetailedProgressManager.GetDealDetailedProgressesByDate(isSale, beginDate, null);
 
@@ -142,7 +142,7 @@ namespace TOne.WhS.Deal.BP.Activities
 
 			if (dealDetailedProgressesToDelete != null && dealDetailedProgressesToDelete.Any())
 			{
-				dealProgressManager.InsertAffectedDealZoneGroups(dealDetailedProgressesToDelete.Select(itm => new DealZoneGroup() { DealId = itm.DealId, ZoneGroupNb = itm.ZoneGroupNb }).ToHashSet(), isSale);
+				dealProgressManager.InsertAffectedDealZoneGroups(Vanrise.Common.ExtensionMethods.ToHashSet(dealDetailedProgressesToDelete.Select(itm => new DealZoneGroup() { DealId = itm.DealId, ZoneGroupNb = itm.ZoneGroupNb })), isSale);
 				dealDetailedProgressManager.DeleteDealDetailedProgresses(dealDetailedProgressesToDelete.Select(itm => itm.DealDetailedProgressId).ToList());
 			}
 

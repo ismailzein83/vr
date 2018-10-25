@@ -42,9 +42,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (businessEntityList == null)
                 return;
 
-            HashSet<DateTime> distinctDateTimes = businessEntityList.FindAll(itm => itm.EED.HasValue && itm.EED.Value <= toDate).Select(itm => itm.EED.Value)
+            HashSet<DateTime> distinctDateTimes = Vanrise.Common.ExtensionMethods.ToHashSet(businessEntityList.FindAll(itm => itm.EED.HasValue && itm.EED.Value <= toDate).Select(itm => itm.EED.Value)
                                                   .Union(businessEntityList.FindAll(itm => itm.BED >= fromDate).Select(itm => itm.BED)).Union(new List<DateTime>() { fromDate, toDate })
-                                                  .Distinct().OrderBy(itm => itm).ToHashSet();
+                                                  .Distinct().OrderBy(itm => itm));
 
             List<DateTime> intervalDates = distinctDateTimes.ToList();
             int distinctDateTimesCount = intervalDates.Count;

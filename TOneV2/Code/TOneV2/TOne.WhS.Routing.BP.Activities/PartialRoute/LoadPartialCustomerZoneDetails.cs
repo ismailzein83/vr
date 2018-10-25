@@ -39,7 +39,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             List<CustomerRouteData> affectedCustomerRoutes = inputArgument.AffectedCustomerRoutes;
 
-            HashSet<CustomerSaleZone> customerSaleZones = affectedCustomerRoutes.Select(itm => new CustomerSaleZone() { CustomerId = itm.CustomerId, SaleZoneId = itm.SaleZoneId }).ToHashSet();
+            HashSet<CustomerSaleZone> customerSaleZones = Vanrise.Common.ExtensionMethods.ToHashSet(affectedCustomerRoutes.Select(itm => new CustomerSaleZone() { CustomerId = itm.CustomerId, SaleZoneId = itm.SaleZoneId }));
             ICustomerZoneDetailsDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerZoneDetailsDataManager>();
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             dataManager.RoutingDatabase = routingDatabaseManager.GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);

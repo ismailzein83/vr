@@ -152,7 +152,7 @@ namespace TOne.WhS.Routing.Business
             HashSet<int> soldCountries = context.CustomerCountries.GetOrCreateItem(customerId, () =>
             {
                 var customerCountryIds = customerCountryManager.GetCustomerCountryIds(customerId, context.EntitiesEffectiveOn, context.EntitiesEffectiveInFuture);
-                return customerCountryIds != null ? customerCountryIds.ToHashSet() : null;
+                return customerCountryIds != null ? Vanrise.Common.ExtensionMethods.ToHashSet(customerCountryIds) : null;
             });
 
             if (soldCountries == null)

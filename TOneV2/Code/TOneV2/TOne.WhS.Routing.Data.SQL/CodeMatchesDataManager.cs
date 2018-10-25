@@ -216,8 +216,8 @@ namespace TOne.WhS.Routing.Data.SQL
                     SupplierId = (int)reader["SupplierID"],
                     SupplierZoneId = supplierZoneId.Value
                 },
-                SupplierServiceIds = !string.IsNullOrEmpty(supplierServiceIds) ? supplierServiceIds.Split(',').Select(itm => int.Parse(itm)).ToHashSet() : null,
-                ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm)).ToHashSet() : null,
+                SupplierServiceIds = !string.IsNullOrEmpty(supplierServiceIds) ? Vanrise.Common.ExtensionMethods.ToHashSet(supplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
+                ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? Vanrise.Common.ExtensionMethods.ToHashSet(exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 RateValue = (decimal)reader["EffectiveRateValue"],
                 SupplierRateEED = GetReaderValue<DateTime?>(reader, "SupplierRateEED"),
                 SupplierRateId = GetReaderValue<long?>(reader, "SupplierRateId"),

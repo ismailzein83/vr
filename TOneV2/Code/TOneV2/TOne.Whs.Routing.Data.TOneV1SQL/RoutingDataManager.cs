@@ -93,7 +93,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             int serviceflag = 0;
             if (serviceIds != null)
             {
-                HashSet<int> orderedServiceIds = serviceIds.OrderBy(itm => itm).ToHashSet();
+                HashSet<int> orderedServiceIds = Vanrise.Common.ExtensionMethods.ToHashSet(serviceIds.OrderBy(itm => itm));
                 string serviceIdsAsString = string.Join<int>(",", orderedServiceIds);
 
                 if (!_allZoneServiceConfigIds.TryGetValue(serviceIdsAsString, out serviceflag))

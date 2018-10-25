@@ -43,7 +43,7 @@ namespace TOne.WhS.Routing.Business
             if (routeRuleQualityConfigurationIds.Count == 0)
                 return null;
 
-            HashSet<Guid> distinctRouteRuleQualityConfigurationIds = routeRuleQualityConfigurationIds.ToHashSet();
+            HashSet<Guid> distinctRouteRuleQualityConfigurationIds = Vanrise.Common.ExtensionMethods.ToHashSet(routeRuleQualityConfigurationIds);
             List<RouteRuleQualityConfiguration> routeRuleQualityConfigurationList = new List<RouteRuleQualityConfiguration>();
 
             foreach (var routeRuleQualityConfigurationId in distinctRouteRuleQualityConfigurationIds)

@@ -65,7 +65,7 @@ namespace TOne.WhS.Sales.Business
             Dictionary<string, List<CodeSupplierZoneMatch>> codeSupplierZoneMatchDictionary = codeCompareManager.StructureCodeSupplierZoneMatchDictionary(codeMatchBySupplier);
             Dictionary<string, CodeSaleZoneMatch> codeSaleZoneMatchDictionary = codeCompareManager.StructureCodeSaleZoneMatchDictionary(saleCodeMatch);
 
-            HashSet<string> distinctCode = codeSupplierZoneMatchDictionary.Keys.ToHashSet<string>();
+            HashSet<string> distinctCode = Vanrise.Common.ExtensionMethods.ToHashSet(codeSupplierZoneMatchDictionary.Keys);
             foreach (var code in codeSaleZoneMatchDictionary.Keys)
             {
                 distinctCode.Add(code);
