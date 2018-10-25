@@ -170,7 +170,7 @@ namespace BPMExtended.Main.Common
 
         const string RP_TL_ISDN_RES_NORMAL = "27F668F2-34A8-416E-9434-D64CE6ED59EE";
 
-        const string RP_LL_RES_NORMAL = "EA8BE377-EF09-44BB-86C8-0D2DA96D2A16";
+        const string RP_TL_RES_NORMAL = "EA8BE377-EF09-44BB-86C8-0D2DA96D2A16";
 
         #endregion
 
@@ -185,6 +185,32 @@ namespace BPMExtended.Main.Common
         const string RP_TL_PSTN_RES_MAR = "B49AA915-20A8-4B9A-9F37-231931ED9842";
 
         const string RP_TL_ISDN_RES_MAR = "B5F5458C-FBDD-4B33-8FFE-877C059643AB";
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
+        #region Leased Line Rate Plans
+
+        #region Residential
+
+        #region Normal
+
+        const string RP_LL_RES_NORMAL = "bbd6ee50-5ed7-4d93-8e9b-1a875213429c";
+
+        #endregion
+
+        #region Engineer
+
+        const string RP_LL_RES_ENG = "6FEB17A6-C483-4136-B3CF-44EC998537A0";
+
+        #endregion
+
+        #region Martyr
+
+        const string RP_LL_RES_MAR = "E3C008F3-3838-467C-9C70-EAC2ADF2D930";
 
         #endregion
 
@@ -377,7 +403,7 @@ namespace BPMExtended.Main.Common
                      ContractId = CONTRACT_CUST3_TL1,
                      CustomerId = CUSTOMER_ID_3,
                      PhoneNumber= PHONE_NUMBER_6,
-                     RatePlanId = RP_LL_RES_NORMAL,
+                     RatePlanId = RP_TL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
                      Address = "Tyr",
                      Status = ContractDetailStatus.Active,
@@ -724,7 +750,7 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3)
+                     LastModifiedTime = DateTime.Today.AddDays(-3),
                  },
                  new LeasedLineContractDetail
                  {
@@ -923,9 +949,27 @@ namespace BPMExtended.Main.Common
                 new SOM.Main.Entities.RatePlan
                 {
                     RatePlanId = RP_LL_RES_NORMAL,
+                    Name = "Normal Plan",
+                    LOB = SOM.Main.Entities.LineOfBusiness.LeasedLine,
+                    Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
+                    CorePackage = GetServicePackage(PCKG_CORE_LL),
+                    OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_LL_1 })
+                },
+                new SOM.Main.Entities.RatePlan
+                {
+                    RatePlanId = RP_LL_RES_ENG,
                     Name = "Engineers Plan",
                     LOB = SOM.Main.Entities.LineOfBusiness.LeasedLine,
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_ENG),
+                    CorePackage = GetServicePackage(PCKG_CORE_LL),
+                    OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_LL_1 })
+                },
+                new SOM.Main.Entities.RatePlan
+                {
+                    RatePlanId = RP_LL_RES_MAR,
+                    Name = "Family of Martyr Plan",
+                    LOB = SOM.Main.Entities.LineOfBusiness.LeasedLine,
+                    Category = GetCustomerCategory(CUSTOMER_CAT_RES_MARTYR),
                     CorePackage = GetServicePackage(PCKG_CORE_LL),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_LL_1 })
                 },

@@ -413,6 +413,47 @@ namespace SOM.Main.Business
             }
             return result;
         }
+        public List<PortItem> GetDSLAMPorts(string switchId)
+        {
+            List<PortItem> result = new List<PortItem>();
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            List<DSLAMPort> data = connector.Get<List<DSLAMPort>>("/getdslamport/Get?switchid=" + switchId);
+
+            if (data != null && data.Count > 0)
+            {
+                foreach (var item in data)
+                {
+                    result.Add(new PortItem
+                    {
+                        Id = item.OBJECT_ID.ToString(),
+                        Name = item.POS
+                    });
+                }
+            }
+
+            return result;
+        }
+        public LinePath CheckADSL(string phoneNumber)
+        {
+
+            LinePath result = new LinePath();
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            PhoneLinePath data = connector.Get<PhoneLinePath>("/checkadsl/Get?Phonenumber=" + phoneNumber);
+
+            if (data != null)
+            {
+                result.Path = data.PATH;
+            }
+            return result;
+        }
     }
 
 }

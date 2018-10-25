@@ -207,4 +207,29 @@ namespace SOM.Main.Business
         public string CURRENT_UTILIZATION { get; set; }
         public string THRESHOLD { get; set; }
     }
+    public class DSLAMPort
+    {
+        public string OBJECT_ID { get; set; }
+        public string POS { get; set; }
+        public string CONNECTOR_TYPE { get; set; }
+        public string CAPACITY { get; set; }
+        public string DIRECTION { get; set; }
+        public string VENDOR_PORT_NAME { get; set; }
+        public string RESERVATION_STATUS { get; set; }
+        public string RESERVED_BY { get; set; }
+        public string RESERVED_DATE { get; set; }
+        public string RESERVATION_PERIOD { get; set; }
+        public string REMARKS { get; set; }
+        public string CREATED { get; set; }
+        public string CREATED_BY { get; set; }
+        public string LAST_CHANGED { get; set; }
+        public string CHANGED_BY { get; set; }
+        public string ISP { get; set; }
+        public string USERNAME { get; set; }
+
+    }
+    public class PhoneLinePath
+    {
+        public string PATH { get; set; }
+    }
 }

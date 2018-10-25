@@ -145,5 +145,19 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.ReserveTelephonyNumber(pathtype,Pathname,ObjectList,connectors);
         }
+        [HttpGet]
+        [Route("GetDSLAMPorts")]
+        public List<PortItem> GetDSLAMPorts(string switchId)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetDSLAMPorts(switchId);
+        }
+        [HttpGet]
+        [Route("IsManualSwitch")]
+        public LinePath CheckADSL(string phoneNumber)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.CheckADSL(phoneNumber);
+        }
     }
 }

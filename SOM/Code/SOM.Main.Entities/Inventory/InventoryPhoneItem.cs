@@ -162,4 +162,8 @@ namespace SOM.Main.Entities
         public string Threshold { get; set; }
 
     }
+    public class LinePath
+    {
+        public string Path { get; set; }
+    }
 }

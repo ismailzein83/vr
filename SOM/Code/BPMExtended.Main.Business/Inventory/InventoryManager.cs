@@ -12,7 +12,7 @@ namespace BPMExtended.Main.Business
 {
     public class InventoryManager
     {
-        public InventoryPhoneItemDetail GetInventoryDetail(string phoneNumber)
+        public static InventoryPhoneItemDetail GetInventoryDetail(string phoneNumber)
         {
             InventoryPhoneItem item = null;
             using (SOMClient client = new SOMClient())
@@ -371,6 +371,20 @@ namespace BPMExtended.Main.Business
         {
             return RatePlanMockDataGenerator.GetAllISPInfo();
 
+        }
+
+        public bool CheckADSL(string contractId)
+        {
+
+            ContractManager contractManager = new ContractManager();
+            ADSLContractDetail contract = contractManager.GetADSLContract(contractId);
+
+            LinePath item = new LinePath();
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<LinePath>(String.Format("api/SOM_Main/Inventory/CheckADSL?phoneNumber={0}", contract.PhoneNumber));
+            }
+            return true;
         }
 
     }
