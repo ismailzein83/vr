@@ -9,14 +9,14 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TOne.WhS.BusinessEntity.MainExtensions</RootNamespace>
     <AssemblyName>TOne.WhS.BusinessEntity.MainExtensions</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -160,8 +160,6 @@
     <Compile Include="SupplierZoneGroups\SelectiveSupplierZoneGroup.cs" />
     <Compile Include="TransformationSteps\CustomerZoneRateStep.cs" />
     <Compile Include="TransformationSteps\SupplierZoneRateStep.cs" />
-    <Compile Include="VRObjectTypes\ActionRuleObjectType.cs" />
-    <Compile Include="VRObjectTypes\ActionRulePropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\SupplierObjectType.cs" />
     <Compile Include="VRObjectTypes\CustomerObjectType.cs" />
     <Compile Include="VRObjectTypes\SupplierPropertyEvaluator.cs" />

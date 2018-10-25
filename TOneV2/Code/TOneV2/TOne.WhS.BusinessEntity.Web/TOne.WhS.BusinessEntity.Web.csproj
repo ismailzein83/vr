@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TOne.WhS.BusinessEntity.Web</RootNamespace>
     <AssemblyName>TOne.WhS.BusinessEntity.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -28,7 +28,7 @@
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,14 +55,14 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
@@ -112,6 +112,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -216,7 +217,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WhS_BusinessEntity\Constant\ActionRulePropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\AutoImportEmailTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountActivationStatusEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CDPNIdentificationEnum.js" />
@@ -418,8 +418,6 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\Templates\SupplierZoneRateStepTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\vr-whs-be-datatransformation-supplierzonerate-preview.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\vr-whs-be-datatransformation-supplierzonerate.js" />
-    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\ActionRulePropertyEvaluatorTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\ActionRuleObjectTypeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\SupplierObjectTypeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\SupplierPropertyEvaluatorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\WHSFinancialAccountObjectTypeTemplate.html" />
@@ -430,8 +428,6 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\CustomerObjectTypeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\SalePriceListPropertyEvaluatorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\CustomerPropertyEvaluatorTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-actionruleobjecttype.js" />
-    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-actionrulepropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-supplierobjecttype.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-supplierpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-profilepropertyevaluator.js" />
@@ -827,7 +823,9 @@
     <Folder Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyDefinition\Templates\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="web.config" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">
