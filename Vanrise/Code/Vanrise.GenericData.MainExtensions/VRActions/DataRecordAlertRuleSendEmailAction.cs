@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vanrise.Notification.Entities;
+using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Notification;
-using Vanrise.Common;
-using Vanrise.Entities;
+using Vanrise.Notification.Business;
+using Vanrise.Notification.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.VRActions
 {
@@ -56,6 +57,12 @@ namespace Vanrise.GenericData.MainExtensions.VRActions
                     Object objectInstance = objectTypeDefinition.Settings.ObjectType.CreateObject(objectTypeCreateObjectContext);
                     mailTemplateObjects.Add(objectFieldMapping.ObjectName, objectInstance);
                 }
+            }
+
+            if (context.AlertRuleId.HasValue)
+            {
+                VRAlertRule alertRule = new VRAlertRuleManager().GetVRAlertRule(context.AlertRuleId.Value);
+                mailTemplateObjects.Add("ActionRule", alertRule);
             }
 
             new VRMailManager().SendMail(this.MailMessageTemplateId, mailTemplateObjects);

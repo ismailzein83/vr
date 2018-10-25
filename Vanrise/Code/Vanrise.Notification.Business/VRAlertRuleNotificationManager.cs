@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
 
 namespace Vanrise.Notification.Business
@@ -21,6 +18,7 @@ namespace Vanrise.Notification.Business
                 ParentTypes = notificationParentTypes,
                 Description = notificationInput.Description,
                 AlertLevelId = notificationInput.AlertLevelId,
+                AlertRuleId = notificationInput.AlertRuleId,
                 EntityId = notificationInput.EntityId,
                 EventKey = notificationInput.EventKey,
                 EventPayload = notificationInput.EventPayload,
@@ -47,6 +45,7 @@ namespace Vanrise.Notification.Business
                 ParentTypes = notificationParentTypes,
                 Description = notificationInput.Description,
                 UserId = notificationInput.UserId,
+                AlertRuleId = notificationInput.AlertRuleId
             };
             _vrNofiticationManager.ClearNotifications(clearNotificationInput);
         }

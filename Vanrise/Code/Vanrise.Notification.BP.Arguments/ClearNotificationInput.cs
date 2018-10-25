@@ -23,5 +23,7 @@ namespace Vanrise.Notification.BP.Arguments
         public VRNotificationParentTypes ParentTypes {get;set;}
 
         public string EventKey { get; set; }
+
+        public long? AlertRuleId { get; set; }
     }
 }

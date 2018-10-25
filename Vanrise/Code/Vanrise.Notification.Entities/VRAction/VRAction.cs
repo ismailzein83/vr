@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
@@ -29,8 +25,8 @@ namespace Vanrise.Notification.Entities
         IVRActionRollbackEventPayload RollbackEventPayload { get; }
         int UserID { get; }
         int NumberOfExecutions { get; }
-
         DateTime? NextExecutionTime { set; }
+        long? AlertRuleId { get; }
 
         //void SetExecutionAsynchronous(out VRActionProgressReporter progressReporter);
     }

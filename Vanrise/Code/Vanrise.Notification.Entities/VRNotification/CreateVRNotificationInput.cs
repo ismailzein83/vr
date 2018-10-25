@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Notification.Entities
 {
@@ -19,6 +16,8 @@ namespace Vanrise.Notification.Entities
         public string Description { get; set; }
 
         public Guid AlertLevelId { get; set; }
+
+        public long? AlertRuleId { get; set; }
 
         public IVRActionEventPayload EventPayload { get; set; }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Activities;
+﻿using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
@@ -12,6 +11,7 @@ namespace Vanrise.Notification.BP.Activities
         public InArgument<IVRActionRollbackEventPayload> RollbackEventPayload { get; set; }
         public InArgument<VRAction> Action { get; set; }
         public InArgument<int> UserID { get; set; }
+        public InArgument<long?> AlertRuleId { get; set; }
 
         protected override void VRExecute(IBaseCodeActivityContext context)
         {
@@ -19,7 +19,8 @@ namespace Vanrise.Notification.BP.Activities
             {
                 EventPayload = EventPayload.Get(context.ActivityContext),
                 RollbackEventPayload = this.RollbackEventPayload.Get(context.ActivityContext),
-                UserID = context.ActivityContext.GetSharedInstanceData().InstanceInfo.InitiatorUserId
+                UserID = context.ActivityContext.GetSharedInstanceData().InstanceInfo.InitiatorUserId,
+                AlertRuleId = this.AlertRuleId.Get(context.ActivityContext)
             };
             Action.Get(context.ActivityContext).Execute(vrActionExecutionContext);
         }

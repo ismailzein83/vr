@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.Notification.BP.Arguments;
 using Vanrise.Notification.Data;
 using Vanrise.Notification.Entities;
-using Vanrise.Common;
-using Vanrise.Entities;
-using Vanrise.Common.Business;
 
 namespace Vanrise.Notification.Business
 {
@@ -50,7 +50,8 @@ namespace Vanrise.Notification.Business
                 EntityId = input.EntityId,
                 EventKey = input.EventKey,
                 ProcessTitle = input.Description != null ? input.Description : null,
-                UserId = input.UserId
+                UserId = input.UserId,
+                AlertRuleId = input.AlertRuleId
             };
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
             {
@@ -79,7 +80,8 @@ namespace Vanrise.Notification.Business
                 EntityId = input.EntityId,
                 ParentTypes = input.ParentTypes,
                 ProcessTitle = input.Description,
-                UserId = input.UserId
+                UserId = input.UserId,
+                AlertRuleId = input.AlertRuleId
             };
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
             {

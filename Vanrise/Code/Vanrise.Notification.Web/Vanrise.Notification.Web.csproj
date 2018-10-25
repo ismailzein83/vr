@@ -25,6 +25,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -155,10 +157,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_Notification\Constants\ActionRulePropertyEnum.js" />
     <Content Include="VR_Notification\Constants\GridMaxSize.js" />
     <Content Include="VR_Notification\Constants\ModuleConfig.js" />
     <Content Include="VR_Notification\Constants\VRAlertRuleStatusEnum.js" />
     <Content Include="VR_Notification\Constants\VRNotificationStatusEnum.js" />
+    <Content Include="VR_Notification\Directives\MainExtensions\VRObjectTypes\Templates\ActionRuleObjectTypeTemplate.html" />
+    <Content Include="VR_Notification\Directives\MainExtensions\VRObjectTypes\Templates\ActionRulePropertyEvaluatorTemplate.html" />
+    <Content Include="VR_Notification\Directives\MainExtensions\VRObjectTypes\vr-notification-actionruleobjecttype.js" />
+    <Content Include="VR_Notification\Directives\MainExtensions\VRObjectTypes\vr-notification-actionrulepropertyevaluator.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vractiondefinitionconfig-selector.js" />
     <Content Include="VR_Notification\Directives\MainExtensions\VRNotificationType\vr-notification-vrnotifivationtype-settings.js" />
     <Content Include="VR_Notification\Directives\VRActions\Templates\VRActionDefinitionSettingsTemplate.html" />
