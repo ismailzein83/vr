@@ -36,7 +36,9 @@ app.directive('retailBeFaultticketSettingsEditor', ['UtilsService', 'VRUIUtilsSe
             var faultTicketClosedMailTemplateSelectorAPI;
             var faultTicketClosedMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-                    
+
+            var faultTicketBackOfficeMailTemplateSelectorAPI;
+            var faultTicketBackOfficeMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -57,8 +59,12 @@ app.directive('retailBeFaultticketSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     faultTicketClosedMailTemplateSelectorAPI = api;
                     faultTicketClosedMailTemplateSelectorReadyDeferred.resolve();
                 };
-                
-                UtilsService.waitMultiplePromises([faultTicketSerialNumberEditorReadyDeferred.promise, faultTicketOpenMailTemplateSelectorReadyDeferred.promise, faultTicketPendingMailTemplateSelectorReadyDeferred.promise, faultTicketClosedMailTemplateSelectorReadyDeferred.promise]).then(function () {
+                $scope.scopeModel.onFaultTicketBackOfficeMailTemplateSelectorReady = function (api) {
+                    faultTicketBackOfficeMailTemplateSelectorAPI = api;
+                    faultTicketBackOfficeMailTemplateSelectorReadyDeferred.resolve();
+                };
+
+                UtilsService.waitMultiplePromises([faultTicketSerialNumberEditorReadyDeferred.promise, faultTicketOpenMailTemplateSelectorReadyDeferred.promise, faultTicketPendingMailTemplateSelectorReadyDeferred.promise, faultTicketClosedMailTemplateSelectorReadyDeferred.promise, faultTicketBackOfficeMailTemplateSelectorReadyDeferred.promise]).then(function () {
 
                     defineAPI();
                 });
@@ -85,13 +91,13 @@ app.directive('retailBeFaultticketSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     var loadFaultTicketOpenMailTemplateSelectorPromise = loadFaultTicketOpenMailTemplateSelector();
                     var loadFaultTicketPendingMailTemplateSelectorPromise = loadFaultTicketPendingMailTemplateSelector();
                     var loadFaultTicketClosedMailTemplateSelectorPromise = loadFaultTicketClosedMailTemplateSelector();
-
+                    var loadFaultTicketBackOfficeMailTemplateSelectorPromise = loadFaultTicketBackOfficeMailTemplateSelector();
 
                     promises.push(loadFaultTicketSerialNumberEditorPromise);
                     promises.push(loadFaultTicketOpenMailTemplateSelectorPromise);
                     promises.push(loadFaultTicketPendingMailTemplateSelectorPromise);
                     promises.push(loadFaultTicketClosedMailTemplateSelectorPromise);
-                    
+                    promises.push(loadFaultTicketBackOfficeMailTemplateSelectorPromise);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -104,7 +110,8 @@ app.directive('retailBeFaultticketSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                             InitialSequence: $scope.scopeModel.faultTicketInitialSequence,
                             OpenMailTemplateId: faultTicketOpenMailTemplateSelectorAPI.getSelectedIds(),
                             PendingMailTemplateId: faultTicketPendingMailTemplateSelectorAPI.getSelectedIds(),
-                            ClosedMailTemplateId: faultTicketClosedMailTemplateSelectorAPI.getSelectedIds()
+                            ClosedMailTemplateId: faultTicketClosedMailTemplateSelectorAPI.getSelectedIds(),
+                            BackOfficeMailTemplateId: faultTicketBackOfficeMailTemplateSelectorAPI.getSelectedIds()
                         }
                     };
                 };
@@ -169,7 +176,20 @@ app.directive('retailBeFaultticketSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                 });
                 return faultTicketClosedMailTemplateSelectorLoadDeferred.promise;
             }
+            function loadFaultTicketBackOfficeMailTemplateSelector() {
 
+                var faultTicketBackOfficeMailTemplateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                faultTicketBackOfficeMailTemplateSelectorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        filter: {
+                            VRMailMessageTypeId: "805743a7-fc4c-46dc-b99e-b4fa4ae051b1"
+                        },
+                        selectedIds: faultTicketSetting != undefined ? faultTicketSetting.BackOfficeMailTemplateId : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(faultTicketBackOfficeMailTemplateSelectorAPI, payload, faultTicketBackOfficeMailTemplateSelectorLoadDeferred);
+                });
+                return faultTicketBackOfficeMailTemplateSelectorLoadDeferred.promise;
+            }
 
         }
 
