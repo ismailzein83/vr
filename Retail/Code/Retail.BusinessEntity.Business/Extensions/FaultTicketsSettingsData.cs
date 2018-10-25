@@ -17,5 +17,6 @@ namespace Retail.BusinessEntity.Business
         public Guid? OpenMailTemplateId { get; set; }
         public Guid? PendingMailTemplateId { get; set; }
         public Guid? ClosedMailTemplateId { get; set; }
+        public Guid? BackOfficeMailTemplateId { get; set; }
     }
 }

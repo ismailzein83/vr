@@ -60,6 +60,12 @@ namespace Retail.BusinessEntity.Business
             faultTicketsSettingsData.FaultTicketSetting.ThrowIfNull("faultTicketsSettingsData.FaultTicketSetting");
             return faultTicketsSettingsData.FaultTicketSetting.ClosedMailTemplateId;
         }
+        public Guid? GetFaultTicketsBackOfficeMailTemplateId()
+        {
+            FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
+            faultTicketsSettingsData.FaultTicketSetting.ThrowIfNull("faultTicketsSettingsData.FaultTicketSetting");
+            return faultTicketsSettingsData.FaultTicketSetting.BackOfficeMailTemplateId;
+        }
         #endregion
 
         #region Private Methods

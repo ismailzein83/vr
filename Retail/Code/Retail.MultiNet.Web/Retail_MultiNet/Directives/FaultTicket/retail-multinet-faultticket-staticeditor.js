@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService',
-    function (UtilsService, VRUIUtilsService, VRDateTimeService) {
+app.directive('retailMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService','Retail_MultiNet_FaultTicketSourceEnum',
+    function (UtilsService, VRUIUtilsService, VRDateTimeService, Retail_MultiNet_FaultTicketSourceEnum) {
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -148,6 +148,7 @@ app.directive('retailMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUti
                             $type: "Retail.MultiNet.Entities.FaultTicketSettingsDetailsCollection,Retail.MultiNet.Entities",
                             $values: getDescriptionSettingsListData()
                         };
+                        faultTicketObject.SourceId = Retail_MultiNet_FaultTicketSourceEnum.BackOffice.value;
                     }
                     faultTicketObject.ContactEmails = $scope.scopeModel.email;
                     faultTicketObject.Notes = $scope.scopeModel.notes;

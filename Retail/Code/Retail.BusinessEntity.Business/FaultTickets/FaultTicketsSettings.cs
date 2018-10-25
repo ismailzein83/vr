@@ -25,6 +25,7 @@ namespace Retail.BusinessEntity.Business
                 case "OpenTicketMailTemplate": return new ConfigManager().GetFaultTicketsOpenMailTemplateId();
                 case "PendingTicketMailTemplate": return new ConfigManager().GetFaultTicketsPendingMailTemplateId();
                 case "ClosedTicketMailTemplate": return new ConfigManager().GetFaultTicketsClosedMailTemplateId();
+                case "BackOfficeMailTemplate": return new ConfigManager().GetFaultTicketsBackOfficeMailTemplateId();
                 case "TicketDetails":
                     DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
                     var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(context.DefinitionSettings.DataRecordTypeId);
