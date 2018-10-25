@@ -119,7 +119,7 @@ namespace Vanrise.Fzero.FraudAnalysis.Business
             };
 
             List<AggregateDefinition> aggregateDefinitions = new List<AggregateDefinition>();
-            HashSet<int> aggregateIdsToUse = GetCachedAggregates().Values.Select(itm => itm.Id).ToHashSet();
+            HashSet<int> aggregateIdsToUse = Vanrise.Common.ExtensionMethods.ToHashSet(GetCachedAggregates().Values.Select(itm => itm.Id));
 
             CheckAndAddAggregateDefinition(aggregateDefinitions, aggregateIdsToUse, new AggregateDefinition()
                 {
