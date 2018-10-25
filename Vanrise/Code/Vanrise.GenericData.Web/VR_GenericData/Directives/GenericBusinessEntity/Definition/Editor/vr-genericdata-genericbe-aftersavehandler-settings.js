@@ -2,9 +2,9 @@
 
     'use strict';
 
-    afterSaveSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    afterSaveSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService','VR_GenericData_HandlerOperationTypeEnum'];
 
-    function afterSaveSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
+    function afterSaveSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_HandlerOperationTypeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -39,6 +39,8 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.selectedTemplateConfig;
+                $scope.scopeModel.handlerOperationTypes = UtilsService.getArrayEnum(VR_GenericData_HandlerOperationTypeEnum);
+                $scope.scopeModel.selectedHandlerOperationTypes = [];
 
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -71,8 +73,14 @@
                         settings = payload.settings;
                         context = payload.context;
                     }
-
                     if (settings != undefined) {
+                        if (settings.HandlerOperationTypes != undefined && settings.HandlerOperationTypes.length > 0) {
+                            for (var i = 0; i < settings.HandlerOperationTypes.length; i++) {
+                                var item = UtilsService.getItemByVal($scope.scopeModel.handlerOperationTypes, settings.HandlerOperationTypes[i], "value");
+                                if (item != null)
+                                    $scope.scopeModel.selectedHandlerOperationTypes.push(item);
+                            }
+                        }
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
@@ -122,6 +130,12 @@
                         data = directiveAPI.getData();
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
+                            if ($scope.scopeModel.selectedHandlerOperationTypes != null && $scope.scopeModel.selectedHandlerOperationTypes.length > 0) {
+                                data.HandlerOperationTypes = [];
+                                for (var i = 0; i < $scope.scopeModel.selectedHandlerOperationTypes.length; i++) {
+                                    data.HandlerOperationTypes.push($scope.scopeModel.selectedHandlerOperationTypes[i].value);
+                                }
+                            }
                         }
                     }
                     return data;
@@ -158,6 +172,16 @@
                             + ' isrequired="afterSaveSettingsCtrl.isrequired"'
                             + ' '+ hideremoveicon + ' >'
                         + '</vr-select>'
+                    + ' </vr-columns>'
+                    + '<vr-columns colnum="{{afterSaveSettingsCtrl.normalColNum}}">'
+                            + ' <vr-select'
+                            + ' datasource="scopeModel.handlerOperationTypes"'
+                            + ' selectedvalues="scopeModel.selectedHandlerOperationTypes"'
+                            + ' datavaluefield="value"'
+                            + ' datatextfield="description"'
+                            + ' label=" Handler Operation Types"'
+                            + ' ismultipleselection >'
+                            + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'

@@ -16,35 +16,37 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAf
         }
         public override void Execute(IGenericBEOnAfterSaveHandlerContext context)
         {
-
-            this.EntityObjectName.ThrowIfNull("EntityObjectName");
-            this.InfoType.ThrowIfNull("InfoType");
-
-            VRMailManager vrMailManager = new VRMailManager();
-            Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(context.DefinitionSettings.DataRecordTypeId);
-            var dataRecord = Activator.CreateInstance(dataRecordRuntimeType, context.NewEntity.FieldValues);
-            objects.Add(EntityObjectName, dataRecord);
-            GenericBusinessEntityDefinitionManager genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
-            if (SendEmailObjectsInfo != null)
+            if (base.HandlerOperationTypes == null || base.HandlerOperationTypes.Contains(context.OperationType))
             {
-                foreach(var sendEmailObjectInfo in SendEmailObjectsInfo)
+                this.EntityObjectName.ThrowIfNull("EntityObjectName");
+                this.InfoType.ThrowIfNull("InfoType");
+
+                VRMailManager vrMailManager = new VRMailManager();
+                Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+                DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+                var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(context.DefinitionSettings.DataRecordTypeId);
+                var dataRecord = Activator.CreateInstance(dataRecordRuntimeType, context.NewEntity.FieldValues);
+                objects.Add(EntityObjectName, dataRecord);
+                GenericBusinessEntityDefinitionManager genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
+                if (SendEmailObjectsInfo != null)
                 {
-                    var objectValue = genericBusinessEntityDefinitionManager.GetExtendedSettingsInfoByType(context.DefinitionSettings, sendEmailObjectInfo.InfoType, context.NewEntity);
-                    objectValue.ThrowIfNull("objectValue", sendEmailObjectInfo.InfoType);
-                    objects.Add(sendEmailObjectInfo.ObjectName, objectValue);
+                    foreach(var sendEmailObjectInfo in SendEmailObjectsInfo)
+                    {
+                        var objectValue = genericBusinessEntityDefinitionManager.GetExtendedSettingsInfoByType(context.DefinitionSettings, sendEmailObjectInfo.InfoType, context.NewEntity);
+                        objectValue.ThrowIfNull("objectValue", sendEmailObjectInfo.InfoType);
+                        objects.Add(sendEmailObjectInfo.ObjectName, objectValue);
+                    }
                 }
-            }
 
-            var mailTemplateId = genericBusinessEntityDefinitionManager.GetExtendedSettingsInfoByType(context.DefinitionSettings, this.InfoType);
-            if(mailTemplateId != null)
-            {
-                var emailTemplateEvaluator = vrMailManager.EvaluateMailTemplate((Guid)mailTemplateId, objects);
-                emailTemplateEvaluator.ThrowIfNull("emailTemplateEvaluator");
+                var mailTemplateId = genericBusinessEntityDefinitionManager.GetExtendedSettingsInfoByType(context.DefinitionSettings, this.InfoType);
+                if(mailTemplateId != null)
+                {
+                    var emailTemplateEvaluator = vrMailManager.EvaluateMailTemplate((Guid)mailTemplateId, objects);
+                    emailTemplateEvaluator.ThrowIfNull("emailTemplateEvaluator");
 
-                vrMailManager.SendMail(emailTemplateEvaluator.From, emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body);
-                new GenericBusinessEntityManager().LogObjectCustomAction(context.BusinessEntityDefinitionId,context.NewEntity, "Send Email",true, null);
+                    vrMailManager.SendMail(emailTemplateEvaluator.From, emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body);
+                    new GenericBusinessEntityManager().LogObjectCustomAction(context.BusinessEntityDefinitionId, context.NewEntity, "Send Email", true, null);
+                }
             }
         }
         public string EntityObjectName { get; set; }

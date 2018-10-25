@@ -67,7 +67,7 @@
                 if (isEditMode) {
 					getBusinessEntityDefinitionRuntimeEditor().then(function () {
                         loadAllControls();
-                    }).catch(function () {
+                    }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                         $scope.scopeModel.isLoading = false;
                     });

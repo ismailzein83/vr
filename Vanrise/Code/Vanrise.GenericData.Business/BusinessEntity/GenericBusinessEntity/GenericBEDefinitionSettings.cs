@@ -201,6 +201,7 @@ namespace Vanrise.GenericData.Business
     public abstract class GenericBEOnAfterSaveHandler
     {
         public abstract Guid ConfigId { get; }
+        public List<HandlerOperationType> HandlerOperationTypes { get; set; }
         public virtual object TryGetInfoByType(IGenericBEOnAfterSaveHandlerInfoByTypeContext context)
         {
             return null;
