@@ -477,6 +477,7 @@
             });
             return loadCarrierAccountSelectorDeferred.promise;
         }
+       
         function getCarrierAccountSelectorNewCountryFilter() {
             var carrierAccountNewCountryFilters = [];
 
@@ -501,7 +502,7 @@
 
         function loadNewCountryPreview() {
             var loadNewCountryPreviewPromiseDeffered = UtilsService.createPromiseDeferred();
-            changedCountryLoadCarrierAccountSelector().then(function (response) {
+            newCountryLoadCarrierAccountSelector().then(function (response) {
                 $scope.scopeModel.showNewCountriesCarrierAccountSelector = !newCountryCarrierAccountSelectorAPI.hasSingleItem();
                 loadNewCountryPreviewGrid().then(function (response) {
                     loadNewCountryPreviewPromiseDeffered.resolve();
