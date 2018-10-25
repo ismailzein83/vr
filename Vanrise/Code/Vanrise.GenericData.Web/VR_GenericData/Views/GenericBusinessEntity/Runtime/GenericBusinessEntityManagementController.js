@@ -95,6 +95,11 @@
                 VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessEntityDefinitionAPI.getSelectedIds(), editorSize);
             };
 
+            $scope.scopeModel.uploadBusinessEntity = function () {
+                var editorSize = undefined;
+                VR_GenericData_GenericBusinessEntityService.uploadGenericBusinessEntity(businessEntityDefinitionAPI.getSelectedIds(), editorSize);
+			};
+
             UtilsService.waitMultiplePromises([businessEntityDefinitionReadyDeferred.promise]).then(function () {
                 load();
             });
@@ -152,6 +157,7 @@
                         $scope.scopeModel.filterDirective = genericBEDefinitionSettings.FilterDefinition.Settings.RuntimeEditor;
                     }
                     $scope.scopeModel.showAddButton = !genericBEDefinitionSettings.HideAddButton;
+                    $scope.scopeModel.showUploadButton = genericBEDefinitionSettings.ShowUpload;
                 }
             });
         }

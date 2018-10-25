@@ -16,7 +16,10 @@
             UpdateGenericBusinessEntity: UpdateGenericBusinessEntity,
             DoesUserHaveEditAccess: DoesUserHaveEditAccess,
             GetGenericBusinessEntityInfo: GetGenericBusinessEntityInfo,
-            DeleteGenericBusinessEntity: DeleteGenericBusinessEntity
+			DeleteGenericBusinessEntity: DeleteGenericBusinessEntity,
+			UploadGenericBusinessEntities: UploadGenericBusinessEntities,
+			DownloadGenericBusinessEntityTemplate: DownloadGenericBusinessEntityTemplate,
+			DownloadBusinessEntityLog: DownloadBusinessEntityLog
         };
 
         function GetFilteredGenericBusinessEntities(input) {
@@ -70,7 +73,30 @@
             }, {
                 useCache: true
             });
-        }
+		}
+
+		function UploadGenericBusinessEntities(businessEntityDefinitionId,fileId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "UploadGenericBusinessEntities"), {
+				businessEntityDefinitionId: businessEntityDefinitionId,
+				fileId: fileId
+			});
+		}
+
+		function DownloadGenericBusinessEntityTemplate(businessEntityDefinitionId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "DownloadGenericBusinessEntityTemplate"), { businessEntityDefinitionId: businessEntityDefinitionId },
+				{
+				returnAllResponseParameters: true,
+				responseTypeAsBufferArray: true
+			});
+		} 
+
+		function DownloadBusinessEntityLog(fileId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "DownloadBusinessEntityLog"), { fileId: fileId },
+				{
+					returnAllResponseParameters: true,
+					responseTypeAsBufferArray: true
+				});
+		}
     }
 
     appControllers.service('VR_GenericData_GenericBusinessEntityAPIService', GenericBusinessEntityAPIService);

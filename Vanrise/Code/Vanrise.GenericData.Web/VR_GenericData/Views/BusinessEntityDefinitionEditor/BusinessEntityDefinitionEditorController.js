@@ -11,7 +11,8 @@
         var businessEntityDefinitionId;
 
         var settingDirectiveAPI;
-        var settingReadyPromiseDeferred;
+		var settingReadyPromiseDeferred;
+		var additionalData;
 
         loadParameters();
         defineScope();
@@ -64,7 +65,7 @@
             $scope.scopeModel.isLoading = true;
             getBEDefinitionSettingConfigs().then(function () {
                 if (isEditMode) {
-                    getBusinessEntityDefinition().then(function () {
+					getBusinessEntityDefinitionRuntimeEditor().then(function () {
                         loadAllControls();
                     }).catch(function () {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -104,8 +105,9 @@
                             .then(function () {
                                 var directivePayload = {
                                     businessEntityDefinitionId: businessEntityDefinitionId,
-                                    businessEntityDefinitionSettings: businessEntityDefinitionEntity.Settings,
-                                };
+									businessEntityDefinitionSettings: businessEntityDefinitionEntity.Settings,
+									additionalData: additionalData
+								};
                                 VRUIUtilsService.callDirectiveLoad(settingDirectiveAPI, directivePayload, loadSettingDirectivePromiseDeferred);
                             });
 
@@ -123,9 +125,10 @@
 
             }
 
-            function getBusinessEntityDefinition() {
-                return VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(businessEntityDefinitionId).then(function (businessEntityDefinition) {
-                    businessEntityDefinitionEntity = businessEntityDefinition;
+			function getBusinessEntityDefinitionRuntimeEditor() {
+				return VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinitionRuntimeEditor(businessEntityDefinitionId).then(function (response) {
+					businessEntityDefinitionEntity = response.BusinessEntityDefinition;
+					additionalData = response.AdditionalData;
                 });
             }
         }

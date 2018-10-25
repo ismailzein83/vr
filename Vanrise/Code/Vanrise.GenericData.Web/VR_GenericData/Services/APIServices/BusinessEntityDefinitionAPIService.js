@@ -16,7 +16,12 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetBusinessEntityDefinition'), {
                 businessEntityDefinitionId: businessEntityDefinitionId
             });
-        }
+		}
+		function GetBusinessEntityDefinitionRuntimeEditor(businessEntityDefinitionId) {
+			return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetBusinessEntityDefinitionRuntimeEditor'), {
+				businessEntityDefinitionId: businessEntityDefinitionId
+			});
+		}
 
         function GetBusinessEntityDefinitionsInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetBusinessEntityDefinitionsInfo'), {
@@ -66,7 +71,8 @@
 
         return {
             GetFilteredBusinessEntityDefinitions: GetFilteredBusinessEntityDefinitions,
-            GetBusinessEntityDefinition: GetBusinessEntityDefinition,
+			GetBusinessEntityDefinition: GetBusinessEntityDefinition,
+			GetBusinessEntityDefinitionRuntimeEditor: GetBusinessEntityDefinitionRuntimeEditor,
             GetBusinessEntityDefinitionsInfo: GetBusinessEntityDefinitionsInfo,
             GetRemoteBusinessEntityDefinitionsInfo: GetRemoteBusinessEntityDefinitionsInfo,
             AddBusinessEntityDefinition: AddBusinessEntityDefinition,

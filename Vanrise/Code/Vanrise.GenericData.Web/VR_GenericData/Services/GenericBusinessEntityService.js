@@ -10,6 +10,7 @@
             addGenericBusinessEntity: addGenericBusinessEntity,
             editGenericBusinessEntity: editGenericBusinessEntity,
             defineGenericBEViewTabs: defineGenericBEViewTabs,
+			uploadGenericBusinessEntity:uploadGenericBusinessEntity,
             getEntityUniqueName: getEntityUniqueName
          //   getDrillDownDefinition: getDrillDownDefinition
 
@@ -48,6 +49,17 @@
                 modalScope.onGenericBEUpdated = onGenericBEUpdated;
             };
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
+        }
+
+        function uploadGenericBusinessEntity(businessEntityDefinitionId,editorSize) {
+            var parameters = {
+                businessEntityDefinitionId: businessEntityDefinitionId,
+            };
+
+            var settings = {
+               size: editorSize != undefined ? editorSize : "medium",
+            };
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditorUploader.html', parameters, settings);
         }
 
         function defineGenericBEViewTabs(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEGridViews, idFieldType)

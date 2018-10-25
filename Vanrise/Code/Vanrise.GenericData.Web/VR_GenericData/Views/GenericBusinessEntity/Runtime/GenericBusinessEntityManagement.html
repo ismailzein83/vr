@@ -13,6 +13,7 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
+                    <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton"></vr-button>
                     <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
                     <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton"></vr-button>
                 </div>

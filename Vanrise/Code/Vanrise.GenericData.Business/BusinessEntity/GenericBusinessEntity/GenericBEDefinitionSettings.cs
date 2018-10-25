@@ -42,8 +42,30 @@ namespace Vanrise.GenericData.Business
         {
             return new DataRecordTypeManager().GetDataRecordTypeFields(this.DataRecordTypeId);
         }
+		public override Object GetEditorRuntimeAdditionalData(IBEDefinitionSettingsGetEditorRuntimeAdditionalDataContext context)
+		{
+			GenericBEDefinitionSettings settings = context.BEDefinition.Settings.CastWithValidate<GenericBEDefinitionSettings>("GenericBEDefinitionSettings");
+			Dictionary<string, DataRecordField> dataRecordFields = new DataRecordTypeManager().GetDataRecordTypeFields(settings.DataRecordTypeId);
 
-        public GenericBEDefinitionType GenericBEType { get; set; }
+			List<GenericBEAddedValue> genericBEAddedValues = new List<GenericBEAddedValue>();
+			if (settings.UploadFields != null)
+				foreach (var uploadField in settings.UploadFields)
+				{
+					var fieldValue = dataRecordFields.GetRecord(uploadField.FieldName);
+					if (fieldValue != null)
+					{
+						genericBEAddedValues.Add(new GenericBEAddedValue
+						{
+
+							FieldName = uploadField.FieldName,
+							IsRequired = uploadField.IsRequired,
+							FieldTitle = fieldValue.Title
+						});
+					}
+				}
+			return genericBEAddedValues;
+		}
+		public GenericBEDefinitionType GenericBEType { get; set; }
         public Guid? VRConnectionId { get; set; }
         public Guid? RemoteGenericBEDefinitionId { get; set; }
 
@@ -77,6 +99,7 @@ namespace Vanrise.GenericData.Business
     public class GenericBEUploadField
     {
         public string FieldName { get; set; }
+		public bool IsRequired { get; set; }
 
     }
 
@@ -368,5 +391,11 @@ namespace Vanrise.GenericData.Business
 
         public RequiredPermissionSettings DeleteRequiredPermission { get; set; }
     }
+	public class GenericBEAddedValue
+	{
+		public string FieldName { get; set; }
+		public bool IsRequired { get; set; }
+		public string FieldTitle { get; set; }
 
+	}
 }

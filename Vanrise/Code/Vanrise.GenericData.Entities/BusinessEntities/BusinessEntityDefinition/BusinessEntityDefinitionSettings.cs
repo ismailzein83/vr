@@ -26,7 +26,12 @@ namespace Vanrise.GenericData.Entities
         {
             return null;
         }
-    }
+		public virtual Object GetEditorRuntimeAdditionalData(IBEDefinitionSettingsGetEditorRuntimeAdditionalDataContext context)
+		{
+			return null;
+		}
+
+	}
     public interface IBEDefinitionSettingsTryGetRecordTypeFieldsContext
     {
         BusinessEntityDefinition BEDefinition { get; }
@@ -35,4 +40,8 @@ namespace Vanrise.GenericData.Entities
     {
         BusinessEntityDefinition BEDefinition { get; }
     }
+	public interface IBEDefinitionSettingsGetEditorRuntimeAdditionalDataContext
+	{
+		BusinessEntityDefinition BEDefinition { get; }
+	}
 }

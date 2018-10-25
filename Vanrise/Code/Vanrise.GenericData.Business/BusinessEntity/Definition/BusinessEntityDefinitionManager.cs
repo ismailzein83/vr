@@ -47,8 +47,17 @@ namespace Vanrise.GenericData.Business
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
             return cachedBEDefinitions.GetRecord(businessEntityDefinitionId);
         }
+		public BusinessEntityDefinitionRuntimeEditor GetBusinessEntityDefinitionRuntimeEditor(Guid businessEntityDefinitionId)
+		{
+			var beDefinition = this.GetBusinessEntityDefinition(businessEntityDefinitionId);
+			BusinessEntityDefinitionRuntimeEditor businessEntityDefinitionRuntimeEditor = new BusinessEntityDefinitionRuntimeEditor {
+				BusinessEntityDefinition = beDefinition,
+				AdditionalData = beDefinition.Settings.GetEditorRuntimeAdditionalData(new BEDefinitionSettingsGetEditorRuntimeAdditionalDataContext { BEDefinition = beDefinition })
+			};
+			return businessEntityDefinitionRuntimeEditor;
+		}
 
-        public string GetBusinessEntityDefinitionName(Guid businessEntityDefinitionId)
+		public string GetBusinessEntityDefinitionName(Guid businessEntityDefinitionId)
         {
             var beDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
             return beDefinition != null ? beDefinition.Title : null;
@@ -350,4 +359,10 @@ namespace Vanrise.GenericData.Business
 
         #endregion
     }
+}
+
+
+public class BEDefinitionSettingsGetEditorRuntimeAdditionalDataContext : IBEDefinitionSettingsGetEditorRuntimeAdditionalDataContext
+{
+	public BusinessEntityDefinition BEDefinition { get; set; }
 }

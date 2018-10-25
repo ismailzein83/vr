@@ -84,5 +84,12 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetBusinessEntityDefinitionViewEditor(businessEntityDefinitionId);
         }
-    }
+
+		[HttpGet]
+		[Route("GetBusinessEntityDefinitionRuntimeEditor")]
+		public BusinessEntityDefinitionRuntimeEditor GetBusinessEntityDefinitionRuntimeEditor(Guid businessEntityDefinitionId)
+		{
+			return _manager.GetBusinessEntityDefinitionRuntimeEditor(businessEntityDefinitionId);
+		}
+	}
 }

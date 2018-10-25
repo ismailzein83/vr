@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -106,7 +107,36 @@ namespace Vanrise.GenericData.Web.Controllers
             return manager.GetGenericBusinessEntityInfo(businessEntityDefinitionId, filter);
         }
 
-      
-         
-    }
+		[HttpGet]
+		[Route("DownloadGenericBusinessEntityTemplate")]
+		public object DownloadGenericBusinessEntityTemplate(Guid businessEntityDefinitionId)
+		{
+			GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+			byte[] templateWithDateFormatBytes = manager.DownloadGenericBusinessEntityTemplate(businessEntityDefinitionId);
+			MemoryStream memoryStream = new System.IO.MemoryStream();
+			memoryStream.Write(templateWithDateFormatBytes, 0, templateWithDateFormatBytes.Length);
+			memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
+			return GetExcelResponse(memoryStream, "Genric Business Entity Template.xlsx");
+
+		}
+
+		[HttpGet]
+		[Route("UploadGenericBusinessEntities")]
+		public UploadGenericBusinessEntityLog UploadGenericBusinessEntities(Guid businessEntityDefinitionId,int fileID)
+		{
+			GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+			return manager.AddUploadedGenericBusinessEntities(businessEntityDefinitionId, fileID);
+		}
+		[HttpGet]
+		[Route("DownloadBusinessEntityLog")]
+		public object DownloadBusinessEntityLog(int fileID)
+		{
+			GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+			byte[] bytes = manager.DownloadBusinessEntityLog(fileID);
+			return GetExcelResponse(bytes, "ImportedResults.xls");
+		}
+		
+
+
+	}
 }

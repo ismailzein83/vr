@@ -6,14 +6,21 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class BusinessEntityDefinition
-    {
-        public Guid BusinessEntityDefinitionId { get; set; }
+	public class BusinessEntityDefinition
+	{
+		public Guid BusinessEntityDefinitionId { get; set; }
 
-        public string Name { get; set; }
+		public string Name { get; set; }
 
-        public string Title { get; set; }
+		public string Title { get; set; }
 
-        public BusinessEntityDefinitionSettings Settings { get; set; }
-    }
+		public BusinessEntityDefinitionSettings Settings { get; set; }
+	}
+
+	public class BusinessEntityDefinitionRuntimeEditor
+	{
+		public BusinessEntityDefinition BusinessEntityDefinition { get; set; }
+		public Object AdditionalData { get; set; }
+	}
+
 }
