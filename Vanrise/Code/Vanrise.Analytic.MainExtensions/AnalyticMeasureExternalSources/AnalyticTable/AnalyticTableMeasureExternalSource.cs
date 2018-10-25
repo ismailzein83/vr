@@ -242,7 +242,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
                         dimensionNames.AddRange(subTable.Dimensions);
                 }
             }
-            return dimensionNames.ToHashSet();
+            return Vanrise.Common.ExtensionMethods.ToHashSet(dimensionNames);
         }
 
         private void AddDimensionsNamesFromFilterGroup(List<string> dimensionNames, RecordFilterGroup filterGroup)

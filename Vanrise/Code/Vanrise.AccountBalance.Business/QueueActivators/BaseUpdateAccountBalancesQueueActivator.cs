@@ -357,7 +357,7 @@ namespace Vanrise.AccountBalance.Business
                                          BatchStart = itm.Key.BatchStart,
                                          BatchEnd = itm.Key.BatchEnd,
                                          AlreadyFinalised = itm.Key.AlreadyFinalised,
-                                         AccountBalanceTypes = itm.SelectMany(x => Vanrise.Common.Serializer.Deserialize<List<AccountBalanceType>>(x.Payload)).ToHashSet()
+                                         AccountBalanceTypes = Vanrise.Common.ExtensionMethods.ToHashSet(itm.SelectMany(x => Vanrise.Common.Serializer.Deserialize<List<AccountBalanceType>>(x.Payload)))
                                      }).ToList();
         }
 

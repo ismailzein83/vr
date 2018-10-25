@@ -665,7 +665,7 @@ namespace Vanrise.Analytic.Business
                     List<string> allQueryAndSubTableDimensionsList = new List<string>(allDimensionNames);
                     if (querySubTable.Dimensions != null)
                         allQueryAndSubTableDimensionsList.AddRange(querySubTable.Dimensions);
-                    HashSet<string> allQueryAndSubTableDimensions = allQueryAndSubTableDimensionsList.ToHashSet();
+                    HashSet<string> allQueryAndSubTableDimensions = Vanrise.Common.ExtensionMethods.ToHashSet(allQueryAndSubTableDimensionsList);
                     var subTableDBRecords = subTablesDBRecords[subTableIndex];
                     SubTableAnalyticRecordInProcessByParentGroupingKey subTableRecordsByParentGroupingKey = new SubTableAnalyticRecordInProcessByParentGroupingKey();
                     subTablesRecordsByParentGroupingKey.Add(subTableRecordsByParentGroupingKey);
