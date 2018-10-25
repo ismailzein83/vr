@@ -373,6 +373,72 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         }
     }
 
+    public int? Compression
+    {
+        get
+        {
+            return compression.SelectedValue != null ? compression.SelectedValue.ToInt() : default(int?);
+        }
+        set
+        {
+            compression.Text = value.HasValue ? value.Value.ToString() : null;
+        }
+    }
+    public int? SshEncryptionAlgorithm
+    {
+        get
+        {
+            return sshEncryptionAlgorithm.SelectedValue != null ? sshEncryptionAlgorithm.SelectedValue.ToInt(): default(int?);
+        }
+        set
+        {
+            sshEncryptionAlgorithm.Text = value.HasValue? value.Value.ToString() : null;
+        }
+    }
+    public int? SshHostKeyAlgorithm
+    {
+        get
+        {
+            return sshHostKeyAlgorithm.SelectedValue != null ? sshHostKeyAlgorithm.SelectedValue.ToInt() : default(int?);
+        }
+        set
+        {
+            sshHostKeyAlgorithm.Text = value.HasValue ? value.Value.ToString() : null;
+        }
+    }
+    public int? SshKeyExchangeAlgorithm
+    {
+        get
+        {
+            return sshKeyExchangeAlgorithm.SelectedValue != null ? sshKeyExchangeAlgorithm.SelectedValue.ToInt() : default(int?);
+        }
+        set
+        {
+            sshKeyExchangeAlgorithm.Text = value.HasValue ? value.Value.ToString() : null;
+        }
+    }
+    public int? SshMacAlgorithm
+    {
+        get
+        {
+            return sshMacAlgorithm.SelectedValue != null ? sshMacAlgorithm.SelectedValue.ToInt() : default(int?);
+        }
+        set
+        {
+            sshMacAlgorithm.Text = value.HasValue ? value.Value.ToString() : null;
+        }
+    }
+    public int? SshOptions
+    {
+        get
+        {
+            return sshOptions.SelectedValue != null ? sshOptions.SelectedValue.ToInt() : default(int?);
+        }
+        set
+        {
+            sshOptions.Text = value.HasValue ? value.Value.ToString() : null;
+        }
+    }
     #endregion
 
     #region Methods
@@ -567,6 +633,15 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
             lblPrefixes.Visible = true;
         }
 
+        Compression = MobileOperator.Compression;
+        SshEncryptionAlgorithm = MobileOperator.SshEncryptionAlgorithm;
+        SshHostKeyAlgorithm = MobileOperator.SshHostKeyAlgorithm;
+        SshKeyExchangeAlgorithm = MobileOperator.SshKeyExchangeAlgorithm;
+        SshMacAlgorithm = MobileOperator.SshMacAlgorithm;
+        SshOptions = MobileOperator.SshOptions;
+
+
+
         Website = MobileOperator.User.Website.ToText().Trim();
         PasswordVisible = false;
         txtUserNameReadOnly = true;
@@ -626,6 +701,14 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         }
 
 
+        MobileOperator.Compression = Compression;
+        MobileOperator.SshEncryptionAlgorithm = SshEncryptionAlgorithm;
+        MobileOperator.SshHostKeyAlgorithm = SshHostKeyAlgorithm;
+        MobileOperator.SshKeyExchangeAlgorithm = SshKeyExchangeAlgorithm;
+        MobileOperator.SshMacAlgorithm = SshMacAlgorithm;
+        MobileOperator.SshOptions =  SshOptions;
+
+
         if (PasswordVisible)
         {
             MobileOperator.User.Password = EncryptionHelper.Encrypt(MobileOperatorPassword);
@@ -635,5 +718,8 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
 
         return MobileOperator;
     }
+
+
     #endregion
 }
+

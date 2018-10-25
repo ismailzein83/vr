@@ -143,6 +143,9 @@
     <Compile Include="Client.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="DailySentReport.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="delete_prSummary_Admin_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -168,6 +171,12 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="GeneratedCall.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GeneratedCalls1.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GeneratedCalls2.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="GMT.cs">
@@ -304,6 +313,9 @@
     <Compile Include="RecievedCall.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="RecievedCalls1.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="RecievedEmail.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -317,6 +329,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Report.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportedCleanCall.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="ReportingStatus.cs">

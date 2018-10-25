@@ -80,6 +80,11 @@ namespace Vanrise.Fzero.Bypass
         public DbSet<GeneratedCall> GeneratedCalls { get; set; }
         public DbSet<ViewGeneratedCall> ViewGeneratedCalls { get; set; }
         public DbSet<ViewGeneratedCallsNew> ViewGeneratedCallsNews { get; set; }
+        public DbSet<DailySentReport> DailySentReports { get; set; }
+        public DbSet<ReportedCleanCall> ReportedCleanCalls { get; set; }
+        public DbSet<GeneratedCalls1> GeneratedCalls1 { get; set; }
+        public DbSet<GeneratedCalls2> GeneratedCalls2 { get; set; }
+        public DbSet<RecievedCalls1> RecievedCalls1 { get; set; }
     
         public virtual int delete_asp_Write_String_To_File(string @string, string path, string filename)
         {

@@ -148,7 +148,52 @@ namespace Vanrise.Fzero.Bypass
          }
 
 
+        public enum CompressionEnum
+        {
+            False = 0,
+            True = 1
+        }
 
-       
+        public enum SshEncryptionAlgorithmEnum
+        {
+            None = 0,
+            RC4 = 1,
+            TripleDES = 2,
+            AES = 4,
+            Blowfish = 8,
+            Twofish = 16,
+            Any = 255
+        }
+
+        public enum SshHostKeyAlgorithmEnum
+        {
+            None = 0,
+            RSA = 1,
+            DSS = 2,
+            Any = 255
+        }
+
+        public enum SshKeyExchangeAlgorithmEnum
+        {
+            None = 0,
+            DiffieHellmanGroup1SHA1 = 1,
+            DiffieHellmanGroup14SHA1 = 2,
+            DiffieHellmanGroupExchangeSHA1 = 4,
+            Any = 255
+        }
+
+        public enum SshMacAlgorithmEnum
+        {
+            None = 0,
+            MD5 = 1,
+            SHA1 = 2,
+            Any = 255
+        }
+
+        public enum SshOptionsEnum
+        {
+            None = 0
+        }
+
     }
 }

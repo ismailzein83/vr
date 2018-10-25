@@ -42,6 +42,12 @@ namespace Vanrise.Fzero.Bypass
         public string NonFruadReportEmail { get; set; }
         public Nullable<bool> EnableDailyReportsSummary { get; set; }
         public string DailyReportsSummaryEmail { get; set; }
+        public Nullable<int> Compression { get; set; }
+        public Nullable<int> SshEncryptionAlgorithm { get; set; }
+        public Nullable<int> SshHostKeyAlgorithm { get; set; }
+        public Nullable<int> SshKeyExchangeAlgorithm { get; set; }
+        public Nullable<int> SshMacAlgorithm { get; set; }
+        public Nullable<int> SshOptions { get; set; }
     
         public virtual ICollection<EmailCC> EmailCCs { get; set; }
         public virtual User User { get; set; }

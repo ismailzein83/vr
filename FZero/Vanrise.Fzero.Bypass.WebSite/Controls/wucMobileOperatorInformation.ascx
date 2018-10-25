@@ -269,6 +269,93 @@
                                                 <telerik:RadTextBox ID="ftpPort" runat="server"></telerik:RadTextBox>
                                             </td>
                                         </tr>
+
+
+
+                                         <tr id="trCompression" runat="server">
+                                            <td class="caption">Compression</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                  <telerik:RadComboBox ID="compression" runat="server" AutoPostBack="true">
+                                                    <Items>
+                                                        <telerik:RadComboBoxItem Selected="True" Value="0" Text="False"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="1" Text="True"></telerik:RadComboBoxItem>
+                                                    </Items>
+                                                  </telerik:RadComboBox>
+                                            </td>
+                                        </tr>
+                                         <tr id="trSshEncryptionAlgorithm" runat="server">
+                                            <td class="caption">Ssh Encryption Algorithm</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                  <telerik:RadComboBox ID="sshEncryptionAlgorithm" runat="server" AutoPostBack="true">
+                                                    <Items>
+                                                        <telerik:RadComboBoxItem Selected="True" Value="0" Text="None"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="1" Text="RC4"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="2" Text="TripleDES"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="4" Text="AES"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="8" Text="Blowfish"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="16" Text="Twofish"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="255" Text="Any"></telerik:RadComboBoxItem>
+
+                                                    </Items>
+                                                  </telerik:RadComboBox>
+                                            </td>
+                                        </tr> 
+                                        <tr id="trSshHostKeyAlgorithm" runat="server">
+                                            <td class="caption">Ssh Host Key Algorithm</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                 <telerik:RadComboBox ID="sshHostKeyAlgorithm" runat="server" AutoPostBack="true">
+                                                    <Items>
+                                                        <telerik:RadComboBoxItem Selected="True" Value="0" Text="None"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="1" Text="RSA"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="2" Text="DSS"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="255" Text="Any"></telerik:RadComboBoxItem>
+                                                    </Items>
+                                                  </telerik:RadComboBox>
+                                            </td>
+                                        </tr>
+                                         <tr id="trSshKeyExchangeAlgorithm" runat="server">
+                                            <td class="caption">Ssh Key Exchange Algorithm</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <telerik:RadComboBox ID="sshKeyExchangeAlgorithm" runat="server" AutoPostBack="true">
+                                                    <Items>
+                                                        <telerik:RadComboBoxItem Selected="True" Value="0" Text="None"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="1" Text="DiffieHellmanGroup1SHA1"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="2" Text="DiffieHellmanGroup14SHA1"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="4" Text="DiffieHellmanGroupExchangeSHA1"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="255" Text="Any"></telerik:RadComboBoxItem>
+                                                    </Items>
+                                                  </telerik:RadComboBox>
+                                            </td>
+                                        </tr>
+                                         <tr id="trSshMacAlgorithm" runat="server">
+                                            <td class="caption">Ssh Mac Algorithm</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <telerik:RadComboBox ID="sshMacAlgorithm" runat="server" AutoPostBack="true">
+                                                    <Items>
+                                                        <telerik:RadComboBoxItem Selected="True" Value="0" Text="None"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="1" Text="MD5"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="2" Text="SHA1"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="255" Text="Any"></telerik:RadComboBoxItem>
+                                                    </Items>
+                                                  </telerik:RadComboBox>
+                                            </td>
+                                        </tr>
+                                        <tr id="trSshOptions" runat="server">
+                                            <td class="caption">Ssh Options</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                 <telerik:RadComboBox ID="sshOptions" runat="server" AutoPostBack="true">
+                                                    <Items>
+                                                        <telerik:RadComboBoxItem Selected="True" Value="0" Text="None"></telerik:RadComboBoxItem>
+                                                    </Items>
+                                                  </telerik:RadComboBox>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </td>
                             </tr>

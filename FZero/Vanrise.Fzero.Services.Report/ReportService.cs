@@ -116,7 +116,7 @@ namespace Vanrise.Fzero.Services.Report
                                 SendReport(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT), out  reportCounter);
                                 if (i.EnableFTP.HasValue && i.EnableFTP.Value)
                                 {
-                                    SaveToFTPFile(i.FTPAddress, i.FTPUserName, i.FTPPassword, i.FTPPort, i.FTPType, i.User.FullName, DistinctCLIsWitoutCountryCode, reportCounter);
+                                    SaveToFTPFile(i.FTPAddress, i.FTPUserName, i.FTPPassword, i.FTPPort, i.FTPType, i.User.FullName, DistinctCLIsWitoutCountryCode, reportCounter,i.Compression,i.SshEncryptionAlgorithm,i.SshHostKeyAlgorithm,i.SshKeyExchangeAlgorithm,i.SshMacAlgorithm,i.SshOptions);
                                 }
                             }
                         }
@@ -182,7 +182,7 @@ namespace Vanrise.Fzero.Services.Report
         }
 
 
-        private void SaveToFTPFile(string ftpAddress, string ftpUserName, string ftpPassword, string ftpPort, int? ftpType, string mobileOperatorName, HashSet<string> distinctCLIs, string reportCounter)
+        private void SaveToFTPFile(string ftpAddress, string ftpUserName, string ftpPassword, string ftpPort, int? ftpType, string mobileOperatorName, HashSet<string> distinctCLIs, string reportCounter, int? compression,int? sshEncryptionAlgorithm,int? sshHostKeyAlgorithm, int? sshKeyExchangeAlgorithm,int? sshMacAlgorithm, int? sshOptions)
         {
 
             try
@@ -229,7 +229,34 @@ namespace Vanrise.Fzero.Services.Report
                             serverPort = Convert.ToInt32(ftpPort);
                         }
                         var ftpAddressArray = ftpAddress.Split('/');
-                        client.Connect(ftpAddressArray[0], serverPort);
+
+                        SshParameters sshParameters = new SshParameters();
+                        if (compression.HasValue)
+                        {
+                            TrySetCompression(sshParameters, (VRCompressionEnum)compression.Value);
+                        }
+                        if (sshEncryptionAlgorithm.HasValue)
+                        {
+                            TrySetSshEncryptionAlgorithm(sshParameters, (VRSshEncryptionAlgorithmEnum)sshEncryptionAlgorithm.Value);
+                        }
+                        if (sshHostKeyAlgorithm.HasValue)
+                        {
+                            TrySetSshHostKeyAlgorithm(sshParameters, (VRSshHostKeyAlgorithmEnum)sshHostKeyAlgorithm.Value);
+                        }
+                        if (sshKeyExchangeAlgorithm.HasValue)
+                        {
+                            TrySetSshKeyExchangeAlgorithm(sshParameters, (VRSshKeyExchangeAlgorithmEnum)sshKeyExchangeAlgorithm.Value);
+                        }
+                        if (sshMacAlgorithm.HasValue)
+                        {
+                            TrySetSshMacAlgorithm(sshParameters, (VRSshMacAlgorithmEnum)sshMacAlgorithm.Value);
+                        }
+                        if (sshOptions.HasValue)
+                        {
+                            TrySetSshOptions(sshParameters, (VRSshOptionsEnum)sshOptions.Value);
+                        }
+
+                        client.Connect(ftpAddressArray[0], serverPort, sshParameters);
                         client.Login(ftpUserName, ftpPassword);
                         System.IO.MemoryStream ms = new System.IO.MemoryStream(buffer);
                         if (ftpAddressArray.Length > 1)
@@ -252,6 +279,96 @@ namespace Vanrise.Fzero.Services.Report
                 ErrorLog("SaveToFTPFile: " + ex.ToString());
             }
 
+        }
+
+
+        private void TrySetCompression(SshParameters sshParameters, VRCompressionEnum? compression)
+        {
+            if (compression.HasValue)
+            {
+                switch (compression.Value)
+                {
+                    case VRCompressionEnum.False: sshParameters.Compression = false; break;
+                    case VRCompressionEnum.True: sshParameters.Compression = true; break;
+                    default: throw new NotSupportedException(string.Format("VRCompressionEnum {0} not supported.", compression.Value));
+                }
+            }
+        }
+
+        private void TrySetSshEncryptionAlgorithm(SshParameters sshParameters, VRSshEncryptionAlgorithmEnum? sshEncryptionAlgorithm)
+        {
+            if (sshEncryptionAlgorithm.HasValue)
+            {
+                switch (sshEncryptionAlgorithm.Value)
+                {
+                    case VRSshEncryptionAlgorithmEnum.AES: sshParameters.EncryptionAlgorithms = Rebex.Net.SshEncryptionAlgorithm.AES; break;
+                    case VRSshEncryptionAlgorithmEnum.Any: sshParameters.EncryptionAlgorithms = Rebex.Net.SshEncryptionAlgorithm.Any; break;
+                    case VRSshEncryptionAlgorithmEnum.Blowfish: sshParameters.EncryptionAlgorithms = Rebex.Net.SshEncryptionAlgorithm.Blowfish; break;
+                    case VRSshEncryptionAlgorithmEnum.None: sshParameters.EncryptionAlgorithms = Rebex.Net.SshEncryptionAlgorithm.None; break;
+                    case VRSshEncryptionAlgorithmEnum.RC4: sshParameters.EncryptionAlgorithms = Rebex.Net.SshEncryptionAlgorithm.RC4; break;
+                    case VRSshEncryptionAlgorithmEnum.TripleDES: sshParameters.EncryptionAlgorithms = Rebex.Net.SshEncryptionAlgorithm.TripleDES; break;
+                    case VRSshEncryptionAlgorithmEnum.Twofish: sshParameters.EncryptionAlgorithms = Rebex.Net.SshEncryptionAlgorithm.Twofish; break;
+                    default: throw new NotSupportedException(string.Format("VRSshEncryptionAlgorithmEnum {0} not supported.", sshEncryptionAlgorithm.Value));
+                }
+            }
+        }
+
+        private void TrySetSshHostKeyAlgorithm(SshParameters sshParameters, VRSshHostKeyAlgorithmEnum? sshHostKeyAlgorithm)
+        {
+            if (sshHostKeyAlgorithm.HasValue)
+            {
+                switch (sshHostKeyAlgorithm.Value)
+                {
+                    case VRSshHostKeyAlgorithmEnum.Any: sshParameters.HostKeyAlgorithms = Rebex.Net.SshHostKeyAlgorithm.Any; break;
+                    case VRSshHostKeyAlgorithmEnum.DSS: sshParameters.HostKeyAlgorithms = Rebex.Net.SshHostKeyAlgorithm.DSS; break;
+                    case VRSshHostKeyAlgorithmEnum.None: sshParameters.HostKeyAlgorithms = Rebex.Net.SshHostKeyAlgorithm.None; break;
+                    case VRSshHostKeyAlgorithmEnum.RSA: sshParameters.HostKeyAlgorithms = Rebex.Net.SshHostKeyAlgorithm.RSA; break;
+                    default: throw new NotSupportedException(string.Format("VRSshHostKeyAlgorithmEnum {0} not supported.", sshHostKeyAlgorithm.Value));
+                }
+            }
+        }
+
+        private void TrySetSshKeyExchangeAlgorithm(SshParameters sshParameters, VRSshKeyExchangeAlgorithmEnum? sshKeyExchangeAlgorithm)
+        {
+            if (sshKeyExchangeAlgorithm.HasValue)
+            {
+                switch (sshKeyExchangeAlgorithm.Value)
+                {
+                    case VRSshKeyExchangeAlgorithmEnum.Any: sshParameters.KeyExchangeAlgorithms = Rebex.Net.SshKeyExchangeAlgorithm.Any; break;
+                    case VRSshKeyExchangeAlgorithmEnum.DiffieHellmanGroup14SHA1: sshParameters.KeyExchangeAlgorithms = Rebex.Net.SshKeyExchangeAlgorithm.DiffieHellmanGroup14SHA1; break;
+                    case VRSshKeyExchangeAlgorithmEnum.DiffieHellmanGroup1SHA1: sshParameters.KeyExchangeAlgorithms = Rebex.Net.SshKeyExchangeAlgorithm.DiffieHellmanGroup1SHA1; break;
+                    case VRSshKeyExchangeAlgorithmEnum.DiffieHellmanGroupExchangeSHA1: sshParameters.KeyExchangeAlgorithms = Rebex.Net.SshKeyExchangeAlgorithm.DiffieHellmanGroupExchangeSHA1; break;
+                    case VRSshKeyExchangeAlgorithmEnum.None: sshParameters.KeyExchangeAlgorithms = Rebex.Net.SshKeyExchangeAlgorithm.None; break;
+                    default: throw new NotSupportedException(string.Format("VRSshKeyExchangeAlgorithmEnum {0} not supported.", sshKeyExchangeAlgorithm.Value));
+                }
+            }
+        }
+
+        private void TrySetSshMacAlgorithm(SshParameters sshParameters, VRSshMacAlgorithmEnum? sshMacAlgorithm)
+        {
+            if (sshMacAlgorithm.HasValue)
+            {
+                switch (sshMacAlgorithm.Value)
+                {
+                    case VRSshMacAlgorithmEnum.Any: sshParameters.MacAlgorithms = Rebex.Net.SshMacAlgorithm.Any; break;
+                    case VRSshMacAlgorithmEnum.MD5: sshParameters.MacAlgorithms = Rebex.Net.SshMacAlgorithm.MD5; break;
+                    case VRSshMacAlgorithmEnum.None: sshParameters.MacAlgorithms = Rebex.Net.SshMacAlgorithm.None; break;
+                    case VRSshMacAlgorithmEnum.SHA1: sshParameters.MacAlgorithms = Rebex.Net.SshMacAlgorithm.SHA1; break;
+                    default: throw new NotSupportedException(string.Format("VRSshMacAlgorithmEnum {0} not supported.", sshMacAlgorithm.Value));
+                }
+            }
+        }
+
+        private void TrySetSshOptions(SshParameters sshParameters, VRSshOptionsEnum? sshOptions)
+        {
+            if (sshOptions.HasValue)
+            {
+                switch (sshOptions.Value)
+                {
+                    case VRSshOptionsEnum.None: sshParameters.Options = Rebex.Net.SshOptions.None; break;
+                    default: throw new NotSupportedException(string.Format("VRSshOptionsEnum {0} not supported.", sshOptions.Value));
+                }
+            }
         }
 
         private void SendReport(HashSet<string> CLIs, List<int> ListIds, string MobileOperatorName, int StatusID, int MobileOperatorID, string EmailAddress, int ClientID, int DifferenceInGMT, out string reportCounter)
@@ -713,6 +830,53 @@ namespace Vanrise.Fzero.Services.Report
 
         }
 
+    }
+
+    public enum VRCompressionEnum
+    {
+        False = 0,
+        True = 1
+    }
+
+    public enum VRSshEncryptionAlgorithmEnum
+    {
+        None = 0,
+        RC4 = 1,
+        TripleDES = 2,
+        AES = 4,
+        Blowfish = 8,
+        Twofish = 16,
+        Any = 255
+    }
+
+    public enum VRSshHostKeyAlgorithmEnum
+    {
+        None = 0,
+        RSA = 1,
+        DSS = 2,
+        Any = 255
+    }
+
+    public enum VRSshKeyExchangeAlgorithmEnum
+    {
+        None = 0,
+        DiffieHellmanGroup1SHA1 = 1,
+        DiffieHellmanGroup14SHA1 = 2,
+        DiffieHellmanGroupExchangeSHA1 = 4,
+        Any = 255
+    }
+
+    public enum VRSshMacAlgorithmEnum
+    {
+        None = 0,
+        MD5 = 1,
+        SHA1 = 2,
+        Any = 255
+    }
+
+    public enum VRSshOptionsEnum
+    {
+        None = 0
     }
 
 }
