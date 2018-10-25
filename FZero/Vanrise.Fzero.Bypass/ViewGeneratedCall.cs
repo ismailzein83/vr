@@ -65,7 +65,5 @@ namespace Vanrise.Fzero.Bypass
         public Nullable<int> ReportingStatusSecurityID { get; set; }
         public Nullable<int> ReportSecID { get; set; }
         public string RCb_number { get; set; }
-        public Nullable<int> RecievedCallsID { get; set; }
-
     }
 }
