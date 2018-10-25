@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('cpMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService',
-    function (UtilsService, VRUIUtilsService, VRDateTimeService) {
+app.directive('cpMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService','CP_MultiNet_FaultTicketSourceEnum',
+    function (UtilsService, VRUIUtilsService, VRDateTimeService, CP_MultiNet_FaultTicketSourceEnum) {
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -149,6 +149,7 @@ app.directive('cpMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsSe
                     faultTicketObject.StatusId = statusSelectorAPI != undefined ? statusSelectorAPI.getSelectedIds() : undefined;
                     faultTicketObject.Attachments = attachmentGridAPI != undefined ? attachmentGridAPI.getData() : undefined;
                     faultTicketObject.SubscriberId = retailSubAccountsSelectorAPI != undefined && $scope.scopeModel.hasChildAccounts ? retailSubAccountsSelectorAPI.getSelectedIds() : undefined;
+                    faultTicketObject.SourceId = CP_MultiNet_FaultTicketSourceEnum.Portal.value;
                 };
 
                 if (ctrl.onReady != null)

@@ -26,7 +26,7 @@
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -116,6 +116,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CP_MultiNet\Constant\FaultTicketSourceEnum.js" />
     <Content Include="CP_MultiNet\Constant\ModuleConfig.js" />
     <Content Include="CP_MultiNet\Directives\FaultTicket\cp-multinet-faultticket-staticeditor.js" />
     <Content Include="CP_MultiNet\Directives\FaultTicket\Templates\FaultTicketStaticEditor.html" />
