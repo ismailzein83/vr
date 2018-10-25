@@ -494,6 +494,22 @@ namespace BPMExtended.Main.Business
         }
 
 
+        public string generateInvoice(string customerId , string contractId)
+        {
+            //TODO: generate Invoice 
+
+            return "9000";//return invoice Id
+        }
+
+
+        public bool validateInvoice(string invoiceId)
+        {
+            //TODO: 
+
+            return true;
+        }
+
+
     }
 
     public class PDFDocument

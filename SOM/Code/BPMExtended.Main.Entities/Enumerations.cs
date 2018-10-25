@@ -50,5 +50,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.ADSL)]
         ADSLChangePassword = 12,
 
+        [LineOfBusiness(LineOfBusiness.ADSL)]
+        ContractTakeOver = 13,
+
     }
 }

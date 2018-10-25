@@ -110,6 +110,19 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetLeasedLineContracts(customerId);
         }
 
+        public string CountOfActiveContracts(string customerId , string contractId)
+        {
+            Random gen = new Random();
+            int prob = gen.Next(10);
+            return prob <= 6? "1" : "4";
+        }
+
+        public bool ContractTakeOver(string customerId, string contractId , string targetCustomerId , bool isAdslTakenOver , string username, string pass)
+        {
+            //TODO: 
+
+            return true;
+        }
 
         public bool AddADSLISPService(string contractId)
         {
