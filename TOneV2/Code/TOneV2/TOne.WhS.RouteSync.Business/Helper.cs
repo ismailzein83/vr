@@ -42,6 +42,7 @@ namespace TOne.WhS.RouteSync.Business
         }
 
         #region Compression
+
         public static List<ConvertedRoute> CompressRoutesWithCodes(IEnumerable<ConvertedRouteWithCode> uncompressdRoutes, Func<ICreateConvertedRouteWithCodeContext, ConvertedRouteWithCode> createConvertedRouteWithCode)
         {
             List<ConvertedRoute> result = new List<ConvertedRoute>();
@@ -177,6 +178,7 @@ namespace TOne.WhS.RouteSync.Business
         private class CompressedConvertedRoutesByCustomer : Dictionary<string, CompressedConvertedRoutes>
         {
         }
+
         private class CompressedConvertedRoutes : Dictionary<int, CompressedConvertedRoutesByParentCode>
         {
         }
@@ -187,6 +189,7 @@ namespace TOne.WhS.RouteSync.Business
             public string RouteOptionsIdentifier { get; set; }
             public bool CanBeGrouped { get; set; }
         }
+
         #endregion
     }
 }
