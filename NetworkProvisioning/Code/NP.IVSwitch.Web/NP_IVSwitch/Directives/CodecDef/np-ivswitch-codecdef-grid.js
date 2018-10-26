@@ -101,7 +101,7 @@ app.directive('npIvswitchCodecdefGrid', ['UtilsService', 'VRUIUtilsService', 'NP
 					$scope.scopeModel.codecDef.length = 0;
 					var selectedItems = [];
 					if (payload != undefined) {
-						var codecDefList = payload.codecDefList
+						var codecDefList = payload.codecDefList;
 						if (codecDefList!=undefined)
 							for (var x = 0; x < codecDefList.length; x++) {
 								selectedItems.push(codecDefList[x].CodecId);
