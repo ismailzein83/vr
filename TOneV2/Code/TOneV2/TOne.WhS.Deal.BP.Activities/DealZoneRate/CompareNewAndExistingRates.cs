@@ -232,11 +232,11 @@ namespace TOne.WhS.Deal.BP.Activities
 			var days = new HashSet<DateTime>();
 
 			if (to.VRGreaterThan(DateTime.Today))
-				to = DateTime.Today;
+				to = DateTime.Today.AddDays(1);//to is excluded
 
 			from = from.Date;
 			to = to.Value.Date;
-			for (var day = from; day <= to; day = day.AddDays(1))
+			for (var day = from; day < to; day = day.AddDays(1))
 				days.Add(day);
 
 			return days;
