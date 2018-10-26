@@ -18,7 +18,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -117,6 +117,10 @@
     <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">
       <Project>{564d6923-6b08-4721-b9c2-bd6c3d22c3df}</Project>
       <Name>TOne.WhS.Deal.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.MainExtensions\TOne.WhS.Deal.MainExtensions.csproj">
+      <Project>{fb425cbf-8711-4ddf-898e-5598e197a46b}</Project>
+      <Name>TOne.WhS.Deal.MainExtensions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
