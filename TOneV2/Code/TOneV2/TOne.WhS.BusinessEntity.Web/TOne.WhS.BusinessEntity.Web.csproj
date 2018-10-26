@@ -225,6 +225,7 @@
     <Content Include="WhS_BusinessEntity\Constant\CommisssionTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\PortalCarrierAccountTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SupplierPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CustomerTicketDetailsFieldPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ExclusiveSessionTargetIdPrefixEnum.js" />
