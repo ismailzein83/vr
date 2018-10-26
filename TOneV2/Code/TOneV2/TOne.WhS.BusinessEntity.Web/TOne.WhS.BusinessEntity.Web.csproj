@@ -642,6 +642,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\OtherRatesPreviewAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\OtherSaleRateAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\PortalAccountAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\RecurringChargeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneRoutingProductHistoryAPIService.js" />
@@ -666,6 +667,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneRoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CDRImportTechnicalSettingsService.js" />
     <Content Include="WhS_BusinessEntity\Services\FinancialAccountService.js" />
+    <Content Include="WhS_BusinessEntity\Services\PortalAccountService.js" />
     <Content Include="WhS_BusinessEntity\Services\RecurringChargeService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
     <Content Include="WhS_BusinessEntity\Services\SaleAreaTechnicalSettingsService.js" />
