@@ -490,7 +490,7 @@ namespace Vanrise.Data.SQL
                 if (!columns.TryGetValue(columnName, out matchColumn))
                     throw new Exception(String.Format("Column Name '{0}' is not available in the SQL table '{1}'", columnName, bulkInsertInfo.TableName));
                 columnOrder++;
-                string fieldDelimiter = String.Format("\"{0}\"", (columnOrder < bulkInsertInfo.ColumnNames.Count() ? bulkInsertInfo.FieldSeparator.ToString() : "\\r\\n"));
+                string fieldDelimiter = String.Format("\"{0}\"", (columnOrder < bulkInsertInfo.ColumnNames.Count() ? bulkInsertInfo.FieldSeparator.ToString() + "\\0" : "\\r\\0\\n\\0"));
                 newFormatLines.Add(String.Format("{0}  {1}  0  0  {2}  {3}  {4}  {5}", columnOrder, matchColumn.HostFileDataType, fieldDelimiter, matchColumn.ServerColumnOrder, matchColumn.ServerColumnName, matchColumn.ColumnCollation));
             }
             File.WriteAllLines(formatFileName, newFormatLines);
@@ -508,7 +508,7 @@ namespace Vanrise.Data.SQL
                 securityArgs = String.Format(" -U {0} -P #PASSWORD# ", connStringBuilder.UserID);
                 sqlPassword = connStringBuilder.Password;
             }
-            return String.Format("{0} {1} -d {2} -S {3} {4} -c ", bulkInsertInfo.TableName, bcpCommand, connStringBuilder.InitialCatalog, connStringBuilder.DataSource, securityArgs);
+            return String.Format("{0} {1} -d {2} -S {3} {4} -w ", bulkInsertInfo.TableName, bcpCommand, connStringBuilder.InitialCatalog, connStringBuilder.DataSource, securityArgs);
         }
 
         private void ExecuteBCPCommand(string args, string sqlPassword)

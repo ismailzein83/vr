@@ -23,7 +23,7 @@ namespace Vanrise.Data.SQL
         internal StreamForBulkInsert(string filePath)
         {
             _filePath = filePath;
-            _streamWriter = new System.IO.StreamWriter(filePath);
+            _streamWriter = new System.IO.StreamWriter(filePath, false, new UnicodeEncoding(false, false));
         }
         public string FilePath
         {
