@@ -231,7 +231,7 @@ namespace Vanrise.GenericData.Business
 			genericBEDefinitionSetting.TitleFieldName.ThrowIfNull("genericBEDefinitionSetting.TitleFieldName");
 			if (genericBusinessEntity != null && genericBusinessEntity.FieldValues != null)
 			{
-				var fieldValue = genericBusinessEntity.FieldValues[genericBEDefinitionSetting.TitleFieldName];
+				var fieldValue = genericBusinessEntity.FieldValues.GetRecord(genericBEDefinitionSetting.TitleFieldName);
 				if (fieldValue != null)
 					return fieldValue.ToString();
 			}
@@ -622,19 +622,24 @@ namespace Vanrise.GenericData.Business
 		public byte[] DownloadGenericBusinessEntityTemplate(Guid businessEntityDefinitionId)
 		{
 			var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
-			VRExcelFile excelFile = new VRExcelFile();
-			VRExcelSheet excelSheet = new VRExcelSheet();
+			var dataRecordTypeFields = new DataRecordTypeManager().GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
+			var excelFile = new VRExcelFile();
+			var excelSheet = new VRExcelSheet();
 			var index = 0;
-
 			if (genericBEDefinitionSetting.UploadFields != null)
 			{
 				foreach (var item in genericBEDefinitionSetting.UploadFields)
 				{
-					excelSheet.AddCell(new VRExcelCell {
-						RowIndex = 0,
-						ColumnIndex = index++,
-						Value = item.FieldName
-					});
+					var dataRecordTypeField = dataRecordTypeFields.GetRecord(item.FieldName);
+					if (dataRecordTypeField != null)
+					{
+						excelSheet.AddCell(new VRExcelCell
+						{
+							RowIndex = 0,
+							ColumnIndex = index++,
+							Value = dataRecordTypeField.Title
+						});
+					}
 				}
 			}
 			excelFile.AddSheet(excelSheet);
@@ -729,34 +734,34 @@ namespace Vanrise.GenericData.Business
 			if (genericBEDefinitionSetting.ShowUpload == false)
 				throw new NotSupportedException("Does not support bulk uploading");
 
-			Dictionary<string, DataRecordField> dataRecordFields = new DataRecordTypeManager().GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
-			Dictionary<string, DataRecordFieldExel> uploadFields = new Dictionary<string, DataRecordFieldExel>();
-			DataRecordField dataRecordField = new DataRecordField();
+			var dataRecordFields = new DataRecordTypeManager().GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
+			var uploadFields = new Dictionary<string, DataRecordFieldExel>();
 			bool invalid;
 
 			if (genericBEDefinitionSetting.UploadFields != null)
 			{
 				foreach (var item in genericBEDefinitionSetting.UploadFields)
 				{
-					dataRecordField = dataRecordFields.GetRecord(item.FieldName);
+					var dataRecordField = dataRecordFields.GetRecord(item.FieldName);
 					if (dataRecordField != null)
 					{
 						uploadFields.Add(dataRecordField.Title, new DataRecordFieldExel
 						{
 							IsRequired = item.IsRequired,
 							DataRecordField = dataRecordField,
+							FieldName = item.FieldName
 						});
 					}
 				}
 			}
-				
+
 
 			if (parsedExcel != null && parsedExcel.Count != 0)
 			{
 				foreach (var parsedRow in parsedExcel)
 				{
 					invalid = false;
-					Dictionary<string, Object> fieldValues = new Dictionary<string, object>();
+					var fieldValues = new Dictionary<string, object>();
 					if (parsedRow.ColumnValueByFieldName != null && parsedRow.ColumnValueByFieldName.Count == 0)
 					{
 						continue;
@@ -779,7 +784,7 @@ namespace Vanrise.GenericData.Business
 
 							if (fieldValue == null)
 							{
-								fieldValues.Add(uploadField.Key, null);
+								fieldValues.Add(uploadField.Value.FieldName, null);
 								continue;
 							}
 
@@ -801,7 +806,7 @@ namespace Vanrise.GenericData.Business
 								break;
 							}
 
-							fieldValues.Add(uploadField.Key, getValueByDescriptionContext.FieldValue);
+							fieldValues.Add(uploadField.Value.FieldName, getValueByDescriptionContext.FieldValue);
 						}
 
 					if (!invalid)
@@ -832,7 +837,7 @@ namespace Vanrise.GenericData.Business
 			Worksheet UploadOutputWorksheet = UploadOutputWorkbook.Worksheets[0];
 
 			UploadOutputWorksheet.Name = "Result";
-			int colnum = UploadOutputWorksheet.Cells.Columns.Count;
+			int colnum = UploadOutputWorksheet.Cells.MaxColumn + 1;
 			UploadOutputWorksheet.Cells.SetColumnWidth(colnum, 20);
 			UploadOutputWorksheet.Cells.SetColumnWidth(colnum + 1, 40);
 			UploadOutputWorksheet.Cells[0, colnum].PutValue("Result");
@@ -1093,6 +1098,7 @@ namespace Vanrise.GenericData.Business
 		{
 			public DataRecordField DataRecordField { get; set; }
 			public bool IsRequired { get; set; }
+			public string FieldName { get; set; }
 		}
 		#endregion
 		#region Mappers

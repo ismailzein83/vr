@@ -47,10 +47,13 @@ app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VR
 				$scope.scopeModel.onSelectUploadFieldItem = function (option) {
 					var index = UtilsService.getItemIndexByVal($scope.scopeModel.uploadedFields, option.Name, "Name");
 					if (option != undefined && index == -1) {
-						var item = {};
-						item.Name = option.Name;
-						item.TitleField = option.Title;
-						item.IsRequired = false;
+						var item = {
+
+							Name: option.Name,
+							TitleField: option.Title,
+							IsRequired: false
+						};
+
 						$scope.scopeModel.uploadedFields.push(item);
 					}
 				};
@@ -80,7 +83,7 @@ app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VR
 					if (payload != undefined) {
 						promises.push(loadSelector(payload));
 						if (payload.UploadFields != undefined && payload.UploadFields.length > 0)
-							promises.push(loadGrid(payload));
+							loadGrid(payload);
 					}
 
 					return UtilsService.waitMultiplePromises(promises);
@@ -122,16 +125,15 @@ app.directive("vrGenericdataGenericbeUploaddefinitionGrid", ["UtilsService", "VR
 				function loadGrid(payload) {
 
 					var uploadFields = payload.genericBEAddedValues;
-					var defferedGrid = UtilsService.createPromiseDeferred();
 
-						if (uploadFields != undefined)
-							for (var x = 0; x < uploadFields.length; x++) {
-								$scope.scopeModel.uploadedFields.push({ TitleField: uploadFields[x].FieldTitle, IsRequired: uploadFields[x].IsRequired, Name: uploadFields[x].FieldName });
-								defferedGrid.resolve();
-							}
-	
+					if (uploadFields != undefined)
+					{
+						for (var x = 0; x < uploadFields.length; x++)
+						{
+							$scope.scopeModel.uploadedFields.push({ TitleField: uploadFields[x].FieldTitle, IsRequired: uploadFields[x].IsRequired, Name: uploadFields[x].FieldName });
+						}
+					}
 
-					return defferedGrid.promise;
 				}
 
 				api.clearDataSource = function () {
