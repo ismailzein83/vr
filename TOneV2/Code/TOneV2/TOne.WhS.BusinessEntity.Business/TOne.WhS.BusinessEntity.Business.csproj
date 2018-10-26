@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -176,6 +176,7 @@
     <Compile Include="Helper.cs" />
     <Compile Include="PointOfInterconnect\PointOfInterconnectManager.cs" />
     <Compile Include="PointOfInterconnect\PointOfInterconnectTrunksObjectTypeSettings.cs" />
+    <Compile Include="PortalAccountManager.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
     <Compile Include="RecurringCharges\CustomerRecurringChargeManager.cs" />
     <Compile Include="RecurringCharges\CustomerRecurringChargeTypeManager.cs" />

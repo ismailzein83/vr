@@ -157,6 +157,7 @@
     <Compile Include="Controllers\FaultTicketController.cs" />
     <Compile Include="Controllers\CustomerSoldZonesController.cs" />
     <Compile Include="Controllers\OtherRatesPreviewController.cs" />
+    <Compile Include="Controllers\PortalAccountController.cs" />
     <Compile Include="Controllers\RecurringChargeController.cs" />
     <Compile Include="Controllers\SwitchReleaseCauseController.cs" />
     <Compile Include="Controllers\WHSFinancialAccountController.cs" />
