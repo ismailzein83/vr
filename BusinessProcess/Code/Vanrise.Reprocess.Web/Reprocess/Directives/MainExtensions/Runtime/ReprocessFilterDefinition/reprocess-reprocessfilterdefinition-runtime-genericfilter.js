@@ -41,6 +41,7 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    $scope.scopeModel.fields.length = 0;
                     var promises = [];
                     var filterDefinition = payload.filterDefinition;
                     var filter = payload.filter;

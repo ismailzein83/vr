@@ -72,7 +72,19 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
 
                         Reprocess_ReprocessDefinitionAPIService.GetReprocessDefinition(selectedValue.ReprocessDefinitionId).then(function (response) {
                             reprocessDefinitionSettings = response.Settings;
+
+                            var previousFilterDefinitionEditor = $scope.scopeModel.filterDefinitionEditor;
                             $scope.scopeModel.filterDefinitionEditor = reprocessDefinitionSettings.FilterDefinition != undefined ? reprocessDefinitionSettings.FilterDefinition.RuntimeEditor : undefined;
+
+                            if (previousFilterDefinitionEditor == $scope.scopeModel.filterDefinitionEditor && filterDefinitionDirectiveAPI != undefined) {
+                                var setFilterDefinitionEditorLoader = function (value) {
+                                    $scope.scopeModel.isLoadingDirective = value;
+                                };
+                                var filterDefinitionEditorPayload = {
+                                    filterDefinition: reprocessDefinitionSettings != undefined ? reprocessDefinitionSettings.FilterDefinition : undefined
+                                };
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDefinitionDirectiveAPI, filterDefinitionEditorPayload, setFilterDefinitionEditorLoader, undefined);
+                            }
 
                             if (reprocessDefinitionSelectionChangedDeferred == undefined) {
                                 $scope.scopeModel.useTempStorage = false;
