@@ -46,6 +46,17 @@
 
                     }
                 }();
+
+                $scope.$on( "$destroy", function ()
+                {
+                    valueWatch();
+                } );
+                $scope.$on( "$destroy", function ()
+                {
+                    $( window ).off( "resize.Viewport" );
+                    valueWatch();
+
+                } );
                 ctrl.tabindex = "";
                 var isUserChange;
                 var valueWatch = $scope.$watchCollection( 'ctrl.value', function ( newValue, oldValue )
@@ -118,17 +129,11 @@
                 return {
                     pre: function ( $scope, iElem, iAttrs )
                     {
-                        $scope.$on( "$destroy", function ()
-                        {
-                            valueWatch();
-                        } );
+
                         $scope.$on( "$destroy", function ()
                         {
                             $( window ).unbind( 'scroll', fixMultipleTextDropdownPosition );
                             $( window ).unbind( 'resize', fixMultipleTextDropdownPosition );
-                            $( window ).off( "resize.Viewport" );
-                            valueWatch();
-
                         } );
                         iElem.on( '$destroy', function ()
                         {
@@ -257,14 +262,14 @@
                                         marginTop: 0,
                                         height: height
                                     }, 1000, function ()
-                                    {
-                                        $( this ).css( {
-                                            display: "",
-                                            overflow: "",
-                                            height: "",
-                                            marginTop: ""
+                                        {
+                                            $( this ).css( {
+                                                display: "",
+                                                overflow: "",
+                                                height: "",
+                                                marginTop: ""
+                                            } );
                                         } );
-                                    } );
 
                                 }
                                 else
