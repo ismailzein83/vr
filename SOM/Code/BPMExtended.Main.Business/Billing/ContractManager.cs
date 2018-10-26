@@ -40,7 +40,6 @@ namespace BPMExtended.Main.Business
             return contracts.MapRecords(TelephonyContractDetailToInfo, filterExpression).ToList();
         }
 
-       
         public ADSLContractDetail GetADSLContract(string contractId)
         {
             return RatePlanMockDataGenerator.GetADSLContract(contractId);
