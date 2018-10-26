@@ -530,7 +530,7 @@ namespace TOne.WhS.RouteSync.Ericsson
             routeCaseOption.GroupID = groupId;
             routeCaseOption.BNT = 1;
             routeCaseOption.SP = 1;
-
+            routeCaseOption.SupplierId = supplierId;
             if (string.Compare(routeCodeGroup, LocalCountryCode) == 0)
             {
                 if ((!string.IsNullOrEmpty(InterconnectGeneralPrefix) && trunk.TrunkName.StartsWith(InterconnectGeneralPrefix)) || IncomingTrafficSuppliers.Any(item => item.SupplierId.ToString() == supplierId))
@@ -728,7 +728,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                         if (option != null)
                             totalPercentage += option.Percentage.HasValue ? option.Percentage.Value : 0; ;
                     }
-
+                    var firstSupplierId = optionGroups.First().First().SupplierId;
                     if (routeCaseOptions.Any(item => item.IsBackup) || totalPercentage == 100)
                     {
                         foreach (var optionGroup in optionGroups)
@@ -739,6 +739,8 @@ namespace TOne.WhS.RouteSync.Ericsson
                             foreach (RouteCaseOption option in optionGroup)
                             {
                                 if (option.IsSwitch && !branchRoute.IncludeTrunkAsSwitch)
+                                    continue;
+                                if (option.IsSwitch && branchRoute.OverflowOnFirstOptionOnly && (!option.SupplierId.Equals(firstSupplierId) || option.IsBackup))
                                     continue;
                                 if (!option.IsSwitch && !string.IsNullOrEmpty(ESR))
                                     esrCommand = string.Format(",ESR={0},", ESR);
@@ -762,6 +764,8 @@ namespace TOne.WhS.RouteSync.Ericsson
                             foreach (RouteCaseOption option in optionGroup)
                             {
                                 if (option.IsSwitch && !branchRoute.IncludeTrunkAsSwitch)
+                                    continue;
+                                if (option.IsSwitch && branchRoute.OverflowOnFirstOptionOnly && (option.SupplierId != firstSupplierId || option.IsBackup))
                                     continue;
                                 if (!option.IsSwitch && !string.IsNullOrEmpty(ESR))
                                     esrCommand = string.Format(",ESR={0},", ESR);
@@ -1065,7 +1069,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                     if (!string.IsNullOrEmpty(routeParamerters.L) && route.Code.Length > MinCodeLength)
                         L = route.Code.Length.ToString() + "-" + MaxCodeLength.ToString();
 
-                    strCommand.Append(GetRouteCommandStringText(B, route.RCNumber, L, routeParamerters.M, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, L, routeParamerters.M, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
                     break;
 
                 case EricssonConvertedRouteType.Normal:
@@ -1076,36 +1080,36 @@ namespace TOne.WhS.RouteSync.Ericsson
 
                     string mValue = string.IsNullOrEmpty(routeParamerters.M) ? null : string.Format("0-{0}", routeParamerters.M);
 
-                    strCommand.Append(GetRouteCommandStringText(B, route.RCNumber, L, mValue, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, L, mValue, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
                     break;
 
                 case EricssonConvertedRouteType.Forward:
                     B = string.Format("{0}-{1}", routeParamerters.IOBA, route.Code);
-                    strCommand.Append(GetRouteCommandStringText(B, null, null, routeParamerters.M, null, null, null, routeParamerters.FBO, routeParamerters.NBNT));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.M, null, null, null, routeParamerters.FBO, routeParamerters.NBNT));
                     strCommand.AppendLine("");
                     B = string.Format("{0}-{1}", routeParamerters.NOBA, route.Code.Substring(routeCodeGroup.Length));
-                    strCommand.Append(GetRouteCommandStringText(B, null, null, routeParamerters.NationalM, null, null, routeParamerters.CCL, routeParamerters.FBO, routeParamerters.NBNT));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.NationalM, null, null, routeParamerters.CCL, routeParamerters.FBO, routeParamerters.NBNT));
                     break;
 
                 case EricssonConvertedRouteType.Transit:
                     B = string.Format("{0}-{1}", routeParamerters.IOBA, route.Code);
-                    strCommand.Append(GetRouteCommandStringText(B, null, null, routeParamerters.M, null, null, null, routeParamerters.NOBA, routeParamerters.NBNT));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.M, null, null, null, routeParamerters.NOBA, routeParamerters.NBNT));
                     strCommand.AppendLine("");
                     B = string.Format("{0}-{1}", routeParamerters.NOBA, route.Code.Substring(routeCodeGroup.Length));
-                    strCommand.Append(GetRouteCommandStringText(B, route.RCNumber, routeParamerters.L, string.IsNullOrEmpty(routeParamerters.NationalM) ? routeParamerters.M : routeParamerters.NationalM, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, routeParamerters.L, string.IsNullOrEmpty(routeParamerters.NationalM) ? routeParamerters.M : routeParamerters.NationalM, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
                     break;
 
                 case EricssonConvertedRouteType.Local:
                     B = string.Format("{0}-{1}", routeParamerters.IOBA, route.Code);
-                    strCommand.Append(GetRouteCommandStringText(B, null, null, routeParamerters.M, null, null, null, routeParamerters.NOBA, routeParamerters.NBNT));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.M, null, null, null, routeParamerters.NOBA, routeParamerters.NBNT));
                     strCommand.AppendLine("");
                     B = string.Format("{0}-{1}", routeParamerters.NOBA, route.Code.Substring(routeCodeGroup.Length));
-                    strCommand.Append(GetRouteCommandStringText(B, route.RCNumber, routeParamerters.L, routeParamerters.NationalM, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, routeParamerters.L, routeParamerters.NationalM, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
                     break;
 
                 case EricssonConvertedRouteType.InterconnectOverride:
                     B = string.Format("{0}-{1}{2}", route.BO, InterconnectGeneralPrefix, routeCodeGroup);
-                    strCommand.Append(GetRouteCommandStringText(B, route.RCNumber, routeParamerters.L, routeParamerters.M, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, routeParamerters.L, routeParamerters.M, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
                     break;
 
                 default:
@@ -1113,14 +1117,14 @@ namespace TOne.WhS.RouteSync.Ericsson
             }
             return strCommand.ToString();
         }
-        private StringBuilder GetRouteCommandStringText(string B, int? RC, string L, string M, string D, string cc, string CCL, string F, string BNT)
+        private StringBuilder GetRouteCommandStringText(string code, string B, int? RC, string L, string M, string D, string cc, string CCL, string F, string BNT)
         {
             StringBuilder script = new StringBuilder(string.Format("{0}:", EricssonCommands.ANBSI_Command));
             if (!string.IsNullOrEmpty(B))
                 script.AppendFormat("B={0}", B);
 
             if (RC.HasValue)
-                script.AppendFormat(",RC={0},TRD={0}", RC);
+                script.AppendFormat(",RC={0},TRD={1}", RC, code);
 
             if (!string.IsNullOrEmpty(L))
                 script.AppendFormat(",L={0}", L);

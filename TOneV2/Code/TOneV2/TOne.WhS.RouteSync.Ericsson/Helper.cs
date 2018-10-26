@@ -73,8 +73,8 @@ namespace TOne.WhS.RouteSync.Ericsson
 			string percentage = routeCaseOption.Percentage.HasValue ? routeCaseOption.Percentage.Value.ToString() : string.Empty;
 			string trunkPercentage = routeCaseOption.TrunkPercentage.HasValue ? routeCaseOption.TrunkPercentage.Value.ToString() : string.Empty;
 
-			return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}", OptionFieldsSeparatorAsString, percentage, routeCaseOption.IsSwitch ? 1 : 0, routeCaseOption.OutTrunk, (int)routeCaseOption.Type,
-				routeCaseOption.BNT, routeCaseOption.SP, trunkPercentage, routeCaseOption.IsBackup ? 1 : 0, routeCaseOption.GroupID);
+			return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}", OptionFieldsSeparatorAsString, percentage, routeCaseOption.IsSwitch ? 1 : 0, routeCaseOption.OutTrunk, (int)routeCaseOption.Type,
+				routeCaseOption.BNT, routeCaseOption.SP, trunkPercentage, routeCaseOption.IsBackup ? 1 : 0, routeCaseOption.GroupID,routeCaseOption.SupplierId);
 		}
 
 		public static List<RouteCaseOption> DeserializeRouteCaseOptions(string serializedRouteCaseOptions)
@@ -103,7 +103,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 				return null;
 
 			string[] routeCaseOptionAsString = serializedRouteCaseOption.Split(new string[] { OptionFieldsSeparatorAsString }, StringSplitOptions.None);
-			if (routeCaseOptionAsString == null || routeCaseOptionAsString.Count() != 9)
+			if (routeCaseOptionAsString == null || routeCaseOptionAsString.Count() != 10)
 				return null;
 
 			RouteCaseOption routeCaseOption = new RouteCaseOption();
@@ -142,7 +142,9 @@ namespace TOne.WhS.RouteSync.Ericsson
 			if (!string.IsNullOrEmpty(groupID))
 				routeCaseOption.GroupID = int.Parse(groupID);
 
-			return routeCaseOption;
+            routeCaseOption.SupplierId = routeCaseOptionAsString[9];
+
+            return routeCaseOption;
 		}
 
 		public static RouteCaseOption GetBlockedRouteCaseOption()
@@ -177,7 +179,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			if (branchRoute == null)
 				return null;
 
-			return string.Format("{1}{0}{2}{0}{3}", BranchRouteFieldSeparatorAsString, branchRoute.Name, branchRoute.IncludeTrunkAsSwitch, branchRoute.AlternativeName);
+			return string.Format("{1}{0}{2}{0}{3}{0}{4}", BranchRouteFieldSeparatorAsString, branchRoute.Name, branchRoute.IncludeTrunkAsSwitch, branchRoute.AlternativeName,branchRoute.OverflowOnFirstOptionOnly);
 		}
 
 		public static List<BranchRoute> DeserializeBranchRoutes(string serializedBranchRoutes)
@@ -206,7 +208,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 				return null;
 
 			string[] branchRouteAsString = serializedBranchRoute.Split(new string[] { BranchRouteFieldSeparatorAsString }, StringSplitOptions.None);
-			if (branchRouteAsString == null || branchRouteAsString.Count() != 3)
+			if (branchRouteAsString == null || branchRouteAsString.Count() != 4)
 				return null;
 
 			BranchRoute branchRoute = new BranchRoute();
@@ -216,8 +218,11 @@ namespace TOne.WhS.RouteSync.Ericsson
 			if (!string.IsNullOrEmpty(includeTrunkAsSwitch))
 				branchRoute.IncludeTrunkAsSwitch = bool.Parse(includeTrunkAsSwitch);
 			branchRoute.AlternativeName = branchRouteAsString[2];
+            string OverflowOnFirstOptionOnly = branchRouteAsString[3];
+            if (!string.IsNullOrEmpty(OverflowOnFirstOptionOnly))
+                branchRoute.OverflowOnFirstOptionOnly = bool.Parse(OverflowOnFirstOptionOnly);
 
-			return branchRoute;
+            return branchRoute;
 		}
 
 		#endregion

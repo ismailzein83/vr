@@ -56,7 +56,8 @@
 				$scope.scopeModel.addBR = function () {
 					var br = {
 						Name: $scope.scopeModel.brToAdd,
-						IncludeTrunkAsSwitch: false
+                        IncludeTrunkAsSwitch: false,
+                        OverflowOnFirstOptionOnly:false
 					};
 
 					$scope.scopeModel.brList.push(br);
