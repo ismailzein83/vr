@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,6 +78,7 @@
     <Compile Include="ANumber\ANumberSaleCode.cs" />
     <Compile Include="ANumber\ANumberSupplierCode.cs" />
     <Compile Include="Carriers\CarrierAccounts\PassThroughCustomerRateEvaluatorExtensionConfig.cs" />
+    <Compile Include="Carriers\CarrierProfile\CarrierProfilePortalAccount.cs" />
     <Compile Include="CodeList\CodeListResolver.cs" />
     <Compile Include="InsertCarrierAccountOperationOutput.cs" />
     <Compile Include="RecurringCharges\CustomerBillingRecurringCharge.cs" />
