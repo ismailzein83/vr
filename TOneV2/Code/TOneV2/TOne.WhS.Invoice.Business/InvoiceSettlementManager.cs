@@ -132,7 +132,8 @@ namespace TOne.WhS.Invoice.Business
                 string errorMessage;
                 Dictionary<string, decimal> supplierAmountByCurrency;
                 settlementGenerationCustomSectionPayload.AvailableSupplierInvoices = GetAvailableSupplierInvoices(supplierInvoiceTypeId, currentPartnerId, supplierInvoices,supplierInvoiceItems, partnerIds, fromDate, toDate, normalPrecisionValue, getAllCurrencies, out supplierAmountByCurrency, out  errorMessage);
-                settlementGenerationCustomSectionPayload.Summary.ErrorMessage = errorMessage;
+                if(settlementGenerationCustomSectionPayload.Summary.ErrorMessage == null)
+                    settlementGenerationCustomSectionPayload.Summary.ErrorMessage = errorMessage;
                 settlementGenerationCustomSectionPayload.Summary.SupplierAmountByCurrency = supplierAmountByCurrency;
             }
             return settlementGenerationCustomSectionPayload;
@@ -345,37 +346,71 @@ namespace TOne.WhS.Invoice.Business
                 var partnerCustomerInvoices = customerInvoices.FindAllRecords(x => x.PartnerId == currentPartnerId);
                 if (partnerCustomerInvoices != null & partnerCustomerInvoices.Count() > 0)
                 {
-                    availableCustomerInvoices = new List<InvoiceAvailableForSettlement>();
+                    List<SelectedInvoiceItem> selectedInvoiceIds = new List<SelectedInvoiceItem>();
                     foreach (var partnerCustomerInvoice in partnerCustomerInvoices)
                     {
+                        if (availableCustomerInvoices == null)
+                           availableCustomerInvoices = new List<InvoiceAvailableForSettlement>();
                         var partnerCustomerInvoiceDetail = partnerCustomerInvoice.Details as CustomerInvoiceDetails;
-
-                        var invoiceItems = customerInvoiceItems.FindAllRecords(x => x.InvoiceId == partnerCustomerInvoice.InvoiceId);
-                        if(invoiceItems != null)
+                        if (partnerCustomerInvoiceDetail != null)
                         {
-                            foreach(var invoiceItem in invoiceItems)
+                            var invoiceItems = customerInvoiceItems.FindAllRecords(x => x.InvoiceId == partnerCustomerInvoice.InvoiceId);
+                            if (invoiceItems != null)
                             {
-                                var invoiceItemDetail = invoiceItem.Details as InvoiceBySaleCurrencyItemDetails;
-                                if (invoiceItemDetail != null)
+                                foreach (var invoiceItem in invoiceItems)
                                 {
-                                    availableCustomerInvoices.Add(new InvoiceAvailableForSettlement
+                                    var invoiceAvailableForSettlement = new InvoiceAvailableForSettlement
                                     {
                                         InvoiceId = partnerCustomerInvoice.InvoiceId,
                                         IsSelected = true,
-                                        CurrencyId = invoiceItemDetail.CurrencyId
-                                    });
+                                    };
+                                    var invoiceItemDetail = invoiceItem.Details as InvoiceBySaleCurrencyItemDetails;
+                                    if (invoiceItemDetail != null)
+                                    {
+                                        invoiceAvailableForSettlement.CurrencyId = invoiceItemDetail.CurrencyId;
+                                        availableCustomerInvoices.Add(invoiceAvailableForSettlement);
+                                        if (invoiceAvailableForSettlement.IsSelected)
+                                        {
+                                            OriginalDataCurrrency originalDataCurrrency;
+                                            if (partnerCustomerInvoiceDetail.OriginalAmountByCurrency != null && partnerCustomerInvoiceDetail.OriginalAmountByCurrency.TryGetValue(invoiceItemDetail.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && originalDataCurrrency.OriginalAmount.HasValue)
+                                            {
+                                                if (customerAmountByCurrency == null)
+                                                    customerAmountByCurrency = new Dictionary<string, decimal>();
+
+                                                string currencySymbol = _currencyManager.GetCurrencySymbol(invoiceItemDetail.CurrencyId);
+                                                currencySymbol.ThrowIfNull("currencySymbol", invoiceItemDetail.CurrencyId);
+                                                customerAmountByCurrency.Add(currencySymbol, Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue));
+                                            }
+                                            else
+                                            {
+                                                selectedInvoiceIds.Add(new SelectedInvoiceItem { InvoiceId = invoiceAvailableForSettlement.InvoiceId, CurrencyId = invoiceAvailableForSettlement.CurrencyId });
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
-                       
                     }
-                    var selectedInvoiceIds = availableCustomerInvoices.MapRecords(x => new SelectedInvoiceItem { InvoiceId = x.InvoiceId, CurrencyId = x.CurrencyId }, x => x.IsSelected).ToList();
 
-                    if (!TryGetCustomerAmountByCurrency(invoiceTypeId, partnerCustomerInvoices, customerInvoiceItems, selectedInvoiceIds, fromDate, toDate, normalPrecisionValue, getAllCurrencies, out customerAmountByCurrency, out  errorMessage))
+                    Dictionary<string, decimal> amountsByCurrency = null;
+                    if (!TryGetCustomerAmountByCurrency(invoiceTypeId, partnerCustomerInvoices, customerInvoiceItems, selectedInvoiceIds, fromDate, toDate, normalPrecisionValue, getAllCurrencies, out amountsByCurrency, out errorMessage))
                     {
                         return null;
                     }
 
+                    if (amountsByCurrency != null)
+                    {
+                        foreach (var amount in amountsByCurrency)
+                        {
+
+                            if (customerAmountByCurrency == null)
+                                customerAmountByCurrency = new Dictionary<string, decimal>();
+                            if (!customerAmountByCurrency.ContainsKey(amount.Key))
+                            {
+                                customerAmountByCurrency.Add(amount.Key, amount.Value);
+                            }
+                        }
+                    }
                 }
             }
             return availableCustomerInvoices;
