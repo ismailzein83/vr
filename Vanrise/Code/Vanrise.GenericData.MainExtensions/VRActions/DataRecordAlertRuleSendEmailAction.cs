@@ -62,7 +62,7 @@ namespace Vanrise.GenericData.MainExtensions.VRActions
             if (context.AlertRuleId.HasValue)
             {
                 VRAlertRule alertRule = new VRAlertRuleManager().GetVRAlertRule(context.AlertRuleId.Value);
-                mailTemplateObjects.Add("ActionRule", alertRule);
+                mailTemplateObjects.Add("Action Rule", alertRule);
             }
 
             new VRMailManager().SendMail(this.MailMessageTemplateId, mailTemplateObjects);
