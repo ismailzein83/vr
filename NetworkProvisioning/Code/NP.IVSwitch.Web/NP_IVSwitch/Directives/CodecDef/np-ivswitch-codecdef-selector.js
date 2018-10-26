@@ -15,7 +15,8 @@ app.directive('npIvswitchCodecdefSelector', ['NP_IVSwitch_CodecDefAPIService', '
                 isrequired: '=',
                 hideremoveicon: '@',
                 normalColNum: '@',
-                customvalidate: '='
+				customvalidate: '=',
+				ondeselectallitems: '='
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -105,7 +106,7 @@ app.directive('npIvswitchCodecdefSelector', ['NP_IVSwitch_CodecDefAPIService', '
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
                    '<vr-select ' + multipleselection + ' datatextfield="Description" datavaluefield="CodecId" isrequired="ctrl.isrequired" label="' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ondeselectallitems="ctrl.ondeselectallitems" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                    '</vr-select>' +
                    '</vr-columns>';
         }

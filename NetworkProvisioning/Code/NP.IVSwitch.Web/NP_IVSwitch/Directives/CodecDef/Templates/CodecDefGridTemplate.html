@@ -1,10 +1,29 @@
-﻿<vr-button type="Add" data-onclick="scopeModel.add"  standalone></vr-button>
-<vr-validator validate="ctrl.isGridValid()">
-    <vr-datagrid on-ready="scopeModel.onGridReady"
-                 datasource="scopeModel.codecDef"
-                 menuactions="scopeModel.menuActions"
-                 idfield="Entity.CodecId"
-                 ondeleterow="ctrl.deleterow">
-        <vr-datagridcolumn headertext="'Codec Name'" field="'Entity.Description'"></vr-datagridcolumn>
-    </vr-datagrid>
-    </vr-validator>
+﻿<vr-row>
+	<vr-columns width="1/3row" haschildcolumns>
+		<np-ivswitch-codecdef-selector on-ready="scopeModel.onSelectorDirectiveReady"
+									   onselectitem="scopeModel.onSelectItem"
+									   selectedvalues="scopeModel.selectedValues"
+									   ismultipleselection
+									   ondeselectitem="scopeModel.onDeselectItem"
+									   normal-col-num="12"
+									   ondeselectallitems="scopeModel.onDeselecAllItems">
+		</np-ivswitch-codecdef-selector>
+	</vr-columns>
+	<vr-columns width="2/3row" withemptyline>
+		<vr-validator validate="ctrl.isGridValid()">
+			<vr-datagrid on-ready="scopeModel.onGridReady"
+						 datasource="scopeModel.codecDef"
+						 menuactions="scopeModel.menuActions"
+						 idfield="Entity.CodecId"
+						 maxheight="150px"
+						 ondeleterow="ctrl.deleterow">
+				<vr-datagridcolumn headertext="'Codec Name'" field="'Entity.Description'"></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Payload Size'" field="'Entity.PayloadSize'"></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Sampling Frequency (Hz)'" field="'Entity.SamplingFrequency'"></vr-datagridcolumn>
+				<vr-datagridcolumn headertext="'Passthru'" field="'Entity.PassThru'"></vr-datagridcolumn>
+
+			</vr-datagrid>
+		</vr-validator>
+	</vr-columns>
+
+</vr-row>

@@ -7,7 +7,7 @@
 
     function CodecDefService(NPModalService) {
 
-        function addCodecDef(onCodecDefAdded) {
+		function addCodecDef(onCodecDefAdded) {
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
