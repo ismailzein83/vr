@@ -247,7 +247,7 @@ namespace Vanrise.Invoice.Business
                     generateInvoiceOutput.Message = new InvoiceGenerationMessageOutput
                     {
                         LogEntryType = LogEntryType.Warning,
-                        Message = "Stopped due to an error occurred in the generation of related invoice"
+                        Message = "Stopped due to an error that occurred in the generation of the related invoice"
                     };
                 }
                 else
