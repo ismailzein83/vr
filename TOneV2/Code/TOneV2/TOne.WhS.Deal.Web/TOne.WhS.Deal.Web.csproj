@@ -28,7 +28,7 @@
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -206,6 +206,8 @@
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\Templates\DealSupplierRateEvaluatorFixed.html" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\vr-whs-deal-supplierrateevaluator-discount.js" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\vr-whs-deal-supplierrateevaluator-fixed.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\ReprocessFilterDefinition\Templates\DealReprocessFilterDefinitionTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\ReprocessFilterDefinition\vr-whs-deal-reprocessfilterdefinition-definition.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\Templates\SwapDealOverallProgressBusinessObjectDataProviderSettingsTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\Templates\SwapDealBusinessObjectDataProviderSettingsTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\vr-whs-swapdeal-overallprogress-businessobject-dataprovidersettings.js" />
@@ -349,6 +351,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
