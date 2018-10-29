@@ -175,8 +175,8 @@ namespace TOne.WhS.Deal.Business
 
                         if (!FollowSystemTimeZone)
                         {
-                            BED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, BED).Value;
-                            EED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, EED);
+                            BED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, BED).Value;
+                            EED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, EED);
                         }
                         List<BaseDealSupplierZoneGroup> dealSupplierZoneGroups = new List<BaseDealSupplierZoneGroup>();
                         foreach (VolCommitmentDealItem volCommitmentDealItem in Items)
@@ -211,8 +211,8 @@ namespace TOne.WhS.Deal.Business
 
                         if (!FollowSystemTimeZone)
                         {
-                            BED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, BED).Value;
-                            EED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, EED);
+                            BED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, BED).Value;
+                            EED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, EED);
                         }
                         List<BaseDealSaleZoneGroup> dealSaleZoneGroups = new List<BaseDealSaleZoneGroup>();
                         foreach (VolCommitmentDealItem volCommitmentDealItem in Items)
