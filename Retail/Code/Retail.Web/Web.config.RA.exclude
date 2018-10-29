@@ -73,7 +73,7 @@
 
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
 
-    <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preperation sample.xls"/>
+    <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preparation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
     <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,RetailRACDRDBConnString"/>

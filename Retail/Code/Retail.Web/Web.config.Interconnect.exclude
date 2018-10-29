@@ -78,7 +78,7 @@
     <add key="RetailCDRDBConnStringKey"                         value="RetailCDRDBConnString"/>
     <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>    
     
-    <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preperation sample.xls"/>
+    <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preparation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
     <add key="ExposedConnectionStringNames" value="ICXCDRDBConnString,ICXAnalyticsDBConnString,ConfigurationDBConnString"/>
