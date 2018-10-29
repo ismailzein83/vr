@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class ResetPasswordInput
+    public class PortalAccountResetPasswordInput
     {
         public int CarrierProfileId { get; set; }
         public string Password { get; set; }
