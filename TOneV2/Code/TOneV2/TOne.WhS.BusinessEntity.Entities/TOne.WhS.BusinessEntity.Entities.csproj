@@ -81,6 +81,7 @@
     <Compile Include="Carriers\CarrierProfile\CarrierProfilePortalAccount.cs" />
     <Compile Include="CodeList\CodeListResolver.cs" />
     <Compile Include="InsertCarrierAccountOperationOutput.cs" />
+    <Compile Include="PortalAccountEditorObject.cs" />
     <Compile Include="RecurringCharges\CustomerBillingRecurringCharge.cs" />
     <Compile Include="RecurringCharges\SupplierBillingRecurringCharge.cs" />
     <Compile Include="Settings\AutoImportSPLSettings.cs" />
