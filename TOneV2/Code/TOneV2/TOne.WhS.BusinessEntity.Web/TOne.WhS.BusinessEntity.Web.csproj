@@ -730,6 +730,8 @@
     <Content Include="WhS_BusinessEntity\Views\FinancialAccount\FinancialAccountEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\PortalAccount\PortalAccountEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\PortalAccount\PortalAccountEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\PortalAccount\ResetPasswordEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\PortalAccount\ResetPasswordEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\ReleaseCodeDescription\ReleaseCodeDescriptionViewer.html" />
     <Content Include="WhS_BusinessEntity\Views\ReleaseCodeDescription\ReleaseCodeDescriptionViewerController.js" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditor.html" />
