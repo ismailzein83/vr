@@ -235,7 +235,7 @@ namespace TOne.WhS.Deal.BP.Activities
 				to = DateTime.Today.AddDays(1);//to is excluded
 
 			from = from.Date;
-			to = to.Value.Date;
+			to = to.Value;
 			for (var day = from; day < to; day = day.AddDays(1))
 				days.Add(day);
 

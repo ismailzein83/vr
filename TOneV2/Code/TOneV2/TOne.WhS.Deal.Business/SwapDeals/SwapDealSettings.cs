@@ -375,7 +375,7 @@ namespace TOne.WhS.Deal.Business
             DateTime BED = BeginDate;
             DateTime? EED = RealEED;
 
-            if (SaleFollowSystemTimeZone)
+            if (!SaleFollowSystemTimeZone)
             {
                 BED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, BED).Value;
                 EED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, EED);
@@ -456,7 +456,7 @@ namespace TOne.WhS.Deal.Business
                 DealRate dealRate = new DealRate
                 {
                     ZoneId = zone.ZoneId,
-                    BED = BeginDate,
+                    BED = zone.BED,
                     EED = zone.EED,
                     Rate = rate,
                     CurrencyId = CurrencyId
@@ -473,7 +473,7 @@ namespace TOne.WhS.Deal.Business
             DateTime BED = BeginDate;
             DateTime? EED = RealEED;
 
-            if (CostFollowSystemTimeZone)
+            if (!CostFollowSystemTimeZone)
             {
                 BED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, BED).Value;
                 EED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, EED);
@@ -636,7 +636,7 @@ namespace TOne.WhS.Deal.Business
                 DealRate dealRate = new DealRate
                 {
                     ZoneId = zone.ZoneId,
-                    BED = BeginDate,
+                    BED = zone.BED,
                     EED = zone.EED,
                     Rate = rate,
                     CurrencyId = CurrencyId
