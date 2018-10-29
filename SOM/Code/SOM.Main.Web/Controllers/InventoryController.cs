@@ -153,7 +153,7 @@ namespace SOM.Main.Web.Controllers
             return manager.GetDSLAMPorts(switchId);
         }
         [HttpGet]
-        [Route("IsManualSwitch")]
+        [Route("CheckADSL")]
         public LinePath CheckADSL(string phoneNumber)
         {
             InventoryManager manager = new InventoryManager();

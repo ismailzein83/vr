@@ -14,8 +14,13 @@ namespace BPMExtended.Main.Business
 
         public List<DSLAMPortInfo> GetFreeDSLAMPorts(string phoneNumber)
         {
-            InventoryPhoneItemDetail phoneitem = InventoryManager.GetInventoryDetail(phoneNumber);
-            string switchId = phoneitem.SwitchId;
+            InventoryPhoneItem item = null;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<InventoryPhoneItem>(String.Format("api/SOM_Main/Inventory/GetInventoryPhoneItem?phoneNumber={0}", phoneNumber));
+            }
+
+            string switchId = item.SwitchId;
             List<PortItem> apiResult;
             using (SOMClient client = new SOMClient())
             {

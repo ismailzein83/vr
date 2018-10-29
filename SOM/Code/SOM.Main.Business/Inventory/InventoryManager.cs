@@ -446,11 +446,11 @@ namespace SOM.Main.Business
             {
                 BaseURL = "http://192.168.110.195:8901"
             };
-            PhoneLinePath data = connector.Get<PhoneLinePath>("/checkadsl/Get?Phonenumber=" + phoneNumber);
+            List<PhoneLinePath> data = connector.Get<List<PhoneLinePath>>("/checkdsl/Get?phonenumber=" + phoneNumber);
 
-            if (data != null)
+            if (data != null && data.Count>0)
             {
-                result.Path = data.PATH;
+                result.Path = data[0].PATH;
             }
             return result;
         }

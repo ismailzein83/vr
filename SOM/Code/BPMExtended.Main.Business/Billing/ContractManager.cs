@@ -55,9 +55,19 @@ namespace BPMExtended.Main.Business
             //TODO: check if Telephony Line  mapped to an ADSL contract
 
             //return random boolean value
-            Random gen = new Random();
-            int prob = gen.Next(100);
-            return prob <= 50;
+            ContractManager contractManager = new ContractManager();
+            TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
+
+            SOM.Main.Entities.LinePath item = new SOM.Main.Entities.LinePath();
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<SOM.Main.Entities.LinePath>(String.Format("api/SOM_Main/Inventory/CheckADSL?phoneNumber={0}", contract.PhoneNumber));
+            }
+            string[] path = item.Path.Split(',');
+            return path[6] == "1";
+            //Random gen = new Random();
+            //int prob = gen.Next(100);
+            //return prob <= 50;
         }
 
         public List<TelephonyContractInfo> GetTelephonyContractsInfo(string customerId)
