@@ -31,4 +31,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public UserStatus UserStatus { get; set; }
         public string UserStatusDescription { get; set; }
     }
+
+    public class PortalAccountSettings
+    {
+        public List<CarrierProfilePortalAccount> CarrierProfilePortalAccounts { get; set; }
+    }
 }
