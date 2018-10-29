@@ -73,8 +73,16 @@ namespace TOne.WhS.Deal.Business
 
             if (!FollowSystemTimeZone)
             {
-                BED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, BED).Value;
-                EED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, EED);
+                if (this.DealType == VolCommitmentDealType.Sell)
+                {
+                    BED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, BED).Value;
+                    EED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, EED);
+                }
+                else if (this.DealType == VolCommitmentDealType.Buy)
+                {
+                    BED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, BED).Value;
+                    EED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, EED);
+                }
             }
             var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, BED,EED);
             var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, BED,EED);

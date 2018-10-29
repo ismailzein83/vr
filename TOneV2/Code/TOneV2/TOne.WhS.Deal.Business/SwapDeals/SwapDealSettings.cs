@@ -122,8 +122,8 @@ namespace TOne.WhS.Deal.Business
 
             if (!CostFollowSystemTimeZone)
             {
-                costBED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, costBED).Value;
-                costEED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, costEED);
+                costBED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, costBED).Value;
+                costEED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, costEED);
             }
             var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, costBED, costEED);
             if (excludedSaleZones.Count() > 0)
