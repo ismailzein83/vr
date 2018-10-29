@@ -25,7 +25,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
@@ -188,7 +189,6 @@
     <Content Include="VR_NumberingPlan\Services\CodeGroupService.js" />
     <Content Include="VR_NumberingPlan\Services\SaleZoneService.js" />
     <Content Include="VR_NumberingPlan\Services\SellingNumberPlanService.js" />
-    <Content Include="VR_NumberingPlan\Template\Code preperation sample.xls" />
     <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupEditor.html" />
     <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupEditorController.js" />
     <Content Include="VR_NumberingPlan\Views\CodeGroup\CodeGroupManagement.html" />
@@ -263,6 +263,7 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_NumberingPlan\Template\Code preparation sample.xls" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
