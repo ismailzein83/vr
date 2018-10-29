@@ -11,7 +11,7 @@ CREATE PROCEDURE [TOneWhS_Deal].[sp_Deal_Insert]
 AS
 BEGIN
 SET @id =0;
-IF NOT EXISTS(SELECT 1 FROM TOneWhS_Deal.Deal WHERE [Name] = @Name)
+IF NOT EXISTS(SELECT 1 FROM TOneWhS_Deal.Deal WHERE [Name] = @Name AND IsDeleted = 0)
 	BEGIN
 		Insert into TOneWhS_Deal.Deal(Name,Settings)
 		Values(@Name,@Settings)
