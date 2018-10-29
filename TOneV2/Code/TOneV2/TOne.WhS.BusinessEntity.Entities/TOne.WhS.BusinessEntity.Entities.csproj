@@ -84,6 +84,7 @@
     <Compile Include="PortalAccountEditorObject.cs" />
     <Compile Include="RecurringCharges\CustomerBillingRecurringCharge.cs" />
     <Compile Include="RecurringCharges\SupplierBillingRecurringCharge.cs" />
+    <Compile Include="ResetPasswordInput.cs" />
     <Compile Include="Settings\AutoImportSPLSettings.cs" />
     <Compile Include="BaseOtherRatesPreviewQueryHandler.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
