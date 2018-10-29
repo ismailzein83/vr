@@ -387,7 +387,8 @@
                                     CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                                     DealId: dealId,
                                     BED: $scope.scopeModel.beginDate,
-                                    EED: $scope.scopeModel.endDate
+                                    EED: $scope.scopeModel.endDate,
+                                    FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
                                 }];
                                 break;
                             case WhS_Deal_VolumeCommitmentTypeEnum.Sell.value:
@@ -416,7 +417,8 @@
                                     CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                                     DealId: dealId,
                                     BED: $scope.scopeModel.beginDate,
-                                    EED: $scope.scopeModel.endDate
+                                    EED: $scope.scopeModel.endDate,
+                                    FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
                                 }];
                                 break;
                         }

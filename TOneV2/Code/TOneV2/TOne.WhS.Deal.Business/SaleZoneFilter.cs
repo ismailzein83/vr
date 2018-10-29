@@ -15,8 +15,17 @@ namespace TOne.WhS.Deal.Business
         public int? DealId { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
+        public bool FollowSystemTimeZone { get; set; }
         public bool IsExcluded(ISaleZoneFilterContext context)
         {
+            DateTime BED = this.BED;
+            DateTime? EED = this.EED;
+
+            if (!FollowSystemTimeZone)
+            {
+                BED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, BED).Value;
+                EED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, EED);
+            }
             DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
             if (context.SaleZone == null)
                 throw new ArgumentNullException("SaleZone");

@@ -68,9 +68,16 @@ namespace TOne.WhS.Deal.Business
 
             validateBeforeSaveContext.ValidateMessages = new List<string>();
             bool validationResult = true;
+            DateTime BED = this.BeginDate;
+            DateTime? EED = this.EndDate;
 
-            var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, this.BeginDate, this.EndDate);
-            var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, this.BeginDate, this.EndDate);
+            if (!FollowSystemTimeZone)
+            {
+                BED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, BED).Value;
+                EED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, EED);
+            }
+            var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, BED,EED);
+            var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, BED,EED);
 
             if (excludedSaleZones.Count() > 0 || excludedSupplierZones.Count > 0)
             {

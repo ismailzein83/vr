@@ -108,8 +108,24 @@ namespace TOne.WhS.Deal.Business
                     }
                 }
             }
-            var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, this.BeginDate, this.EndDate);
-            var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, this.BeginDate, this.EndDate);
+            DateTime saleBED = this.BeginDate;
+            DateTime? saleEED = this.EndDate;
+
+            if (!SaleFollowSystemTimeZone)
+            {
+                saleBED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, saleBED).Value;
+                saleEED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, saleEED);
+            }
+            var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, saleBED, saleEED);
+            DateTime costBED = this.BeginDate;
+            DateTime? costEED = this.EndDate;
+
+            if (!CostFollowSystemTimeZone)
+            {
+                costBED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, costBED).Value;
+                costEED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, costEED);
+            }
+            var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, costBED, costEED);
             if (excludedSaleZones.Count() > 0)
             {
                 validationResult = false;

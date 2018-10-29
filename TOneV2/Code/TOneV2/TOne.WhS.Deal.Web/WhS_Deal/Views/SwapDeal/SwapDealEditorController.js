@@ -488,7 +488,8 @@
                         CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         DealId: dealId,
                         BED: $scope.scopeModel.beginDate,
-                        EED: $scope.scopeModel.endDate
+                        EED: $scope.scopeModel.endDate,
+                        FollowSystemTimeZone: $scope.scopeModel.costFollowSystemTimeZone
                     }];
                     return payload;
                 },
@@ -526,7 +527,8 @@
                         CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         DealId: dealId,
                         BED: $scope.scopeModel.beginDate,
-                        EED: $scope.scopeModel.endDate
+                        EED: $scope.scopeModel.endDate,
+                        FollowSystemTimeZone: $scope.scopeModel.saleFollowSystemTimeZone
                     }];
 
                     return payload;
