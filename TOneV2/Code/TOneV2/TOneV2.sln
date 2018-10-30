@@ -420,6 +420,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.TOneAnalytics_Ogero", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.BusinessEntity.Data.RDB", "TOne.WhS.BusinessEntity.Data.RDB\TOne.WhS.BusinessEntity.Data.RDB.csproj", "{8ECC9E2D-69B6-4996-82AA-7C93628B46C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.BusinessEntity.APIEntities", "TOne.WhS.BusinessEntity.APIEntities\TOne.WhS.BusinessEntity.APIEntities.csproj", "{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -6829,6 +6831,54 @@ Global
 		{8ECC9E2D-69B6-4996-82AA-7C93628B46C1}.SingleImage|x64.Build.0 = Release|Any CPU
 		{8ECC9E2D-69B6-4996-82AA-7C93628B46C1}.SingleImage|x86.ActiveCfg = Release|Any CPU
 		{8ECC9E2D-69B6-4996-82AA-7C93628B46C1}.SingleImage|x86.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.CD_ROM|x64.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.CD_ROM|x64.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.CD_ROM|x86.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.CD_ROM|x86.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Debug|x64.Build.0 = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Debug|x86.Build.0 = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.DVD-5|x64.ActiveCfg = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.DVD-5|x64.Build.0 = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.DVD-5|x86.ActiveCfg = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.DVD-5|x86.Build.0 = Debug|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Optimized|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Optimized|Any CPU.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Optimized|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Optimized|Mixed Platforms.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Optimized|x64.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Optimized|x64.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Optimized|x86.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Optimized|x86.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Release|x64.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Release|x64.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Release|x86.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.Release|x86.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.SingleImage|x64.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.SingleImage|x64.Build.0 = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.SingleImage|x86.ActiveCfg = Release|Any CPU
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B}.SingleImage|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -7035,14 +7085,15 @@ Global
 		{E5B151C8-0594-4570-9EBE-26631E9E91D5} = {5D93796B-CC22-4CB0-972E-24562EA8A054}
 		{31B95005-DD4F-4344-94E8-E52DE62EE803} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}
 		{8ECC9E2D-69B6-4996-82AA-7C93628B46C1} = {1C13D72B-1861-4CD6-9BC9-A7249B29B7A1}
+		{C8A2CAD2-1A81-4EAD-8B24-5BD45B477E8B} = {1C13D72B-1861-4CD6-9BC9-A7249B29B7A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9AA4648-5D8B-487B-A34E-74D631BBC0B1}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 173
+		SccNumberOfProjects = 174
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = TestRuntime\\TestRuntime.csproj
 		SccProjectTopLevelParentUniqueName1 = TOneV2.sln
@@ -7732,5 +7783,9 @@ Global
 		SccProjectTopLevelParentUniqueName172 = TOneV2.sln
 		SccProjectName172 = TOne.WhS.BusinessEntity.Data.RDB
 		SccLocalPath172 = TOne.WhS.BusinessEntity.Data.RDB
+		SccProjectUniqueName173 = TOne.WhS.BusinessEntity.APIEntities\\TOne.WhS.BusinessEntity.APIEntities.csproj
+		SccProjectTopLevelParentUniqueName173 = TOneV2.sln
+		SccProjectName173 = TOne.WhS.BusinessEntity.APIEntities
+		SccLocalPath173 = TOne.WhS.BusinessEntity.APIEntities
 	EndGlobalSection
 EndGlobal
