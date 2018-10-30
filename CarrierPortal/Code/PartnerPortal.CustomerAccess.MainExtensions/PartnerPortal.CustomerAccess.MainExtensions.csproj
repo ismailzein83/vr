@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -89,6 +89,7 @@
     <Compile Include="AccountStatement\RetailAccountUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRRestAPIAnalyticQueryInterceptor\RetailAccountVRRestAPIAnalyticQueryInterceptor.cs" />
+    <Compile Include="VRRestAPIAnalyticQueryInterceptor\WhSAccountVRRestAPIAnalyticQueryInterceptor.cs" />
     <Compile Include="VRRestAPIRecordQueryInterceptor\RetailAccountVRRestAPIRecordQueryInterceptor.cs" />
   </ItemGroup>
   <ItemGroup>
