@@ -8,6 +8,8 @@ using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.MainExtensions.PackageTypes;
 using System.Linq;
+using System.IO;
+using System.Configuration;
 
 namespace Retail.BusinessEntity.BP.Activities
 {
@@ -73,6 +75,9 @@ namespace Retail.BusinessEntity.BP.Activities
 
             Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> accountStatusHistoryListByAccountDefinition = new AccountStatusHistoryManager().GetAccountStatusHistoryListByAccountDefinition(accountDefinitions);
 
+            System.Text.StringBuilder strBuilder = new System.Text.StringBuilder("AccountId,ChargeDay,ChargeAmount,Data");
+            strBuilder.AppendLine();
+
             foreach (AccountPackageRecurChargeDetails accountPackageRecurChargeDetails in accountPackageRecurChargeDetailsList)
             {
                 AccountPackageRecurChargeData accountPackageRecurChargeData = accountPackageRecurChargeDetails.AccountPackageRecurChargeData;
@@ -94,27 +99,37 @@ namespace Retail.BusinessEntity.BP.Activities
 
                     foreach (RecurringChargeEvaluatorOutput recurringChargeEvaluatorOutput in recurringChargeEvaluatorOutputs)
                     {
+
+                        ChargeableEntitySettings chargeableEntitySettings = chargeableEntityManager.GetChargeableEntitySettings(recurringChargeEvaluatorOutput.ChargeableEntityId);
+                        chargeableEntitySettings.ThrowIfNull("chargeableEntitySettings", recurringChargeEvaluatorOutput.ChargeableEntityId);
+
+                        string classification = "Customer";
+
+                        FinancialAccountRuntimeData financialAccountRuntimeData = financialAccountManager.GetAccountFinancialInfo(accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage.AccountId, chargeDay, classification);
+                        AccountPackageRecurCharge accountPackageRecurCharge = BuildAccountPackageRecurCharge(accountPackageRecurChargeData, accountBEDefinitionId, chargeDay, recurringChargeEvaluatorOutput, chargeableEntitySettings, financialAccountRuntimeData);
+
+                        List<AccountPackageRecurCharge> dateAccountPackageRecurChargeList = accountPackageRecurChargesByDate.GetOrCreateItem(accountPackageRecurCharge.ChargeDay);
+                        List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountPackageRecurChargesByAccountPackage.GetOrCreateItem(accountPackageRecurCharge.AccountPackageID);
+
+                        strBuilder.AppendLine(string.Concat(accountPackageRecurCharge.AccountID, ",", chargeDay, ",", recurringChargeEvaluatorOutput.AmountPerDay, ",", Serializer.Serialize(accountPackageRecurCharge).Replace(",", ";")));
                         if (recurringChargeEvaluatorOutput.AmountPerDay > 0)
                         {
-                            ChargeableEntitySettings chargeableEntitySettings = chargeableEntityManager.GetChargeableEntitySettings(recurringChargeEvaluatorOutput.ChargeableEntityId);
-                            chargeableEntitySettings.ThrowIfNull("chargeableEntitySettings", recurringChargeEvaluatorOutput.ChargeableEntityId);
-
-
-                            string classification = "Customer";
-
-                            FinancialAccountRuntimeData financialAccountRuntimeData = financialAccountManager.GetAccountFinancialInfo(accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage.AccountId, chargeDay, classification);
-                            AccountPackageRecurCharge accountPackageRecurCharge = BuildAccountPackageRecurCharge(accountPackageRecurChargeData, accountBEDefinitionId, chargeDay, recurringChargeEvaluatorOutput, chargeableEntitySettings, financialAccountRuntimeData);
-
-                            List<AccountPackageRecurCharge> dateAccountPackageRecurChargeList = accountPackageRecurChargesByDate.GetOrCreateItem(accountPackageRecurCharge.ChargeDay);
-                            List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountPackageRecurChargesByAccountPackage.GetOrCreateItem(accountPackageRecurCharge.AccountPackageID);
-
                             dateAccountPackageRecurChargeList.Add(accountPackageRecurCharge);
                             accountPackageRecurChargeList.Add(accountPackageRecurCharge);
                         }
+
                         chargeDay = chargeDay.AddDays(1);
                     }
                 }
             }
+            string filePath;
+            string configuredDirectory = ConfigurationManager.AppSettings["BCPTempFilesDirectory"];
+            if (!String.IsNullOrEmpty(configuredDirectory))
+                filePath = Path.Combine(configuredDirectory, string.Concat(Guid.NewGuid().ToString(), ".csv"));
+            else
+                filePath = Path.Combine(Path.GetTempPath(), string.Concat(Guid.NewGuid().ToString(), ".csv"));
+
+            File.WriteAllText(filePath, strBuilder.ToString());
 
             this.AccountPackageRecurChargesByDate.Set(context, accountPackageRecurChargesByDate);
             context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Evaluate Reccuring Charge is done", null);
