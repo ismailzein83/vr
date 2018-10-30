@@ -14,7 +14,7 @@ namespace Retail.BusinessEntity.Business
             IAccountStatusHistoryDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountStatusHistoryDataManager>();
             dataManager.Insert(accountDefinitionId, accountId, statusDefinitionId, previousStatusId, statusChangedDate);
         }
-      
+
         public void DeleteAccountStatusHistories(List<long> accountStatusHistoryIdsToDelete)
         {
             IAccountStatusHistoryDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountStatusHistoryDataManager>();
@@ -53,7 +53,7 @@ namespace Retail.BusinessEntity.Business
                 return account.StatusId;
 
             AccountStatusHistory previousAccountStatusHistory = null;
-            foreach (AccountStatusHistory accountStatusHistory in accountStatusHistoryList)
+            foreach (AccountStatusHistory accountStatusHistory in accountStatusHistoryList.OrderByDescending(itm => itm.AccountStatusHistoryId))
             {
                 if (accountStatusHistory.StatusChangedDate <= chargeDay)
                     return accountStatusHistory.StatusId;
@@ -75,9 +75,9 @@ namespace Retail.BusinessEntity.Business
         public Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> GetAccountStatusHistoryListByAccountDefinition(Guid accountBEDefinition, List<long> accountIds)
         {
             HashSet<AccountDefinition> accountDefinitions = new HashSet<AccountDefinition>();
-            if(accountIds != null)
+            if (accountIds != null)
             {
-                foreach(var accountId in accountIds)
+                foreach (var accountId in accountIds)
                 {
                     accountDefinitions.Add(new AccountDefinition
                     {
