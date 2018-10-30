@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.BusinessEntity.Entities.Carriers.CarrierProfile
+namespace TOne.WhS.BusinessEntity.APIEntities
 {
     public class CarrierProfileCarrierAccounts
     {

@@ -78,7 +78,6 @@
     <Compile Include="ANumber\ANumberSaleCode.cs" />
     <Compile Include="ANumber\ANumberSupplierCode.cs" />
     <Compile Include="Carriers\CarrierAccounts\PassThroughCustomerRateEvaluatorExtensionConfig.cs" />
-    <Compile Include="Carriers\CarrierProfile\CarrierProfileCarrierAccounts.cs" />
     <Compile Include="Carriers\CarrierProfile\CarrierProfilePortalAccount.cs" />
     <Compile Include="CodeList\CodeListResolver.cs" />
     <Compile Include="InsertCarrierAccountOperationOutput.cs" />
