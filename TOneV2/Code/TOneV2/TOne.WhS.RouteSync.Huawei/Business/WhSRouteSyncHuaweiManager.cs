@@ -10,11 +10,20 @@ namespace TOne.WhS.RouteSync.Huawei.Business
 {
     public class WhSRouteSyncHuaweiManager
     {
-        public void Initialize(string switchId)
+        string _switchId;
+        IWhSRouteSyncHuaweiDataManager _dataManager;
+
+        public WhSRouteSyncHuaweiManager(string switchId)
         {
-            IWhSRouteSyncHuaweiDataManager whSRouteSyncHuaweiDataManager = RouteSyncHuaweiDataManagerFactory.GetDataManager<IWhSRouteSyncHuaweiDataManager>();
-            whSRouteSyncHuaweiDataManager.SwitchId = switchId;
-            whSRouteSyncHuaweiDataManager.Initialize(new WhSRouteSyncHuaweiInitializeContext());
+            _switchId = switchId;
+
+            _dataManager = RouteSyncHuaweiDataManagerFactory.GetDataManager<IWhSRouteSyncHuaweiDataManager>();
+            _dataManager.SwitchId = switchId;
+        }
+
+        public void Initialize()
+        {
+            _dataManager.Initialize(new WhSRouteSyncHuaweiInitializeContext());
         }
     }
 }

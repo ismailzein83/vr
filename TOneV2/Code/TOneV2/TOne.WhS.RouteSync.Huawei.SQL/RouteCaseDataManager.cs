@@ -12,7 +12,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 {
     public class RouteCaseDataManager : BaseSQLDataManager, IRouteCaseDataManager
     {
-        readonly string[] columns = { "RouteCase" };
+        readonly string[] columns = { "RSName", "RouteCase" };
 
         public string SwitchId { get; set; }
 
@@ -20,12 +20,6 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             : base(GetConnectionStringName("TOneWhS_RouteSync_DBConnStringKey", "RouteSyncDBConnString"))
         {
 
-        }
-
-        public void Initialize(IRouteCaseInitializeContext context)
-        {
-            string query = string.Format(query_CreateRouteCaseTable, SwitchId);
-            ExecuteNonQueryText(query, null);
         }
 
         public List<RouteCase> GetAllRouteCases()
@@ -45,6 +39,27 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             return routeCases.Count > 0 ? routeCases : null;
         }
 
+        public List<RouteCase> GetNotSyncedRouteCases()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Initialize(IRouteCaseInitializeContext context)
+        {
+            string query = string.Format(query_CreateRouteCaseTable, SwitchId);
+            ExecuteNonQueryText(query, null);
+        }
+
+        public Dictionary<string, RouteCase> GetRouteCasesAfterRCNumber(int rcNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ApplyRouteCaseForDB(object preparedRouteCase)
+        {
+            throw new NotImplementedException();
+        }
+
         public object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -53,7 +68,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         public void WriteRecordToStream(RouteCase record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}", record.RouteCaseAsString);
+            streamForBulkInsert.WriteRecord("{0}^{1}", record.RSName, record.RouteCaseAsString);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -71,13 +86,21 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             };
         }
 
-        RouteCase RouteCaseMapper(IDataReader reader)
+        private RouteCase RouteCaseMapper(IDataReader reader)
         {
             return new RouteCase()
             {
+                RCNumber = (int)reader["RCNumber"],
+                RSName = reader["RSName"] as string,
                 RouteCaseAsString = reader["RouteCase"] as string
             };
         }
+
+        public void UpdateSyncedRouteCases(IEnumerable<int> rcNumbers)
+        {
+            throw new NotImplementedException();
+        }
+
 
         #region Queries
 
@@ -85,7 +108,8 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 		                                            BEGIN
                                                         CREATE TABLE [WhS_RouteSync_Huawei_{0}].[RouteCase](
 	                                                        [RCNumber] [int] IDENTITY(1,1) NOT NULL,
-	                                                        [RC] [varchar](max) NOT NULL,
+	                                                        [RSName] [varchar](max) NOT NULL,
+	                                                        [RouteCase] [varchar](max) NOT NULL,
 	                                                        [Synced] [bit] NOT NULL,
                                                          CONSTRAINT [PK_RouteCase] PRIMARY KEY CLUSTERED 
                                                         (
@@ -99,7 +123,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                                                         )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY];
 		                                            END";
 
-        const string query_GetRouteCases = @"SELECT rc.RC, rc.Synced
+        const string query_GetRouteCases = @"SELECT rc.RCNumber, rc.RSName, rc.RouteCase
                                                     FROM [WhS_RouteSync_Huawei_{0}].[RouteCase] rc with(nolock) 
                                                     #FILTER#";
 

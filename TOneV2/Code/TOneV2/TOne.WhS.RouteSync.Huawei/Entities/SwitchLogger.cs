@@ -72,7 +72,7 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
 
         ExecutionStatus ExecutionStatus { get; }
 
-        int BONumber { get; }
+        int RSSNNumber { get; }
     }
 
     public class LogRoutesContext : ILogRoutesContext
@@ -83,7 +83,7 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
 
         public ExecutionStatus ExecutionStatus { get; set; }
 
-        public int BONumber { get; set; }
+        public int RSSNNumber { get; set; }
     }
 
     public interface ILogCommandsContext

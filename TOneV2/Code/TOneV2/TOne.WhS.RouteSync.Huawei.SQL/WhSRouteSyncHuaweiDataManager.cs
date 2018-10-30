@@ -26,8 +26,8 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         }
 
         const string query_CreateSchema = @"IF  NOT EXISTS( SELECT * FROM sys.schemas s WHERE s.name = 'WhS_RouteSync_Huawei_{0}')
-		                                            begin
+		                                            BEGIN
 			                                             EXEC ('CREATE SCHEMA WhS_RouteSync_Huawei_{0}')
-		                                            end";
+		                                            END";
     }
 }

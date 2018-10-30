@@ -11,7 +11,11 @@ namespace TOne.WhS.RouteSync.Huawei.Data
     public interface IRouteCaseDataManager : IDataManager, IBulkApplyDataManager<RouteCase>
     {
         string SwitchId { get; set; }
-        void Initialize(IRouteCaseInitializeContext context);
         List<RouteCase> GetAllRouteCases();
+        List<RouteCase> GetNotSyncedRouteCases();
+        void Initialize(IRouteCaseInitializeContext context);
+        Dictionary<string, RouteCase> GetRouteCasesAfterRCNumber(int rcNumber);
+        void ApplyRouteCaseForDB(object preparedRouteCase);
+        void UpdateSyncedRouteCases(IEnumerable<int> rcNumbers);
     }
 }

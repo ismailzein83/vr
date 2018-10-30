@@ -9,13 +9,13 @@ using Vanrise.Data.SQL;
 
 namespace TOne.WhS.RouteSync.Huawei.SQL
 {
-    public class RouteSucceededDataManager //: BaseSQLDataManager, IRouteSucceededDataManager
+    public class RouteSucceededDataManager : BaseSQLDataManager, IRouteSucceededDataManager
     {
-        //public string SwitchId { get; set; }
+        public string SwitchId { get; set; }
 
-        //public void SaveRoutesSucceededToDB(Dictionary<int, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public void SaveRoutesSucceededToDB(Dictionary<int, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

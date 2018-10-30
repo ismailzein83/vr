@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TOne.WhS.RouteSync.Huawei.Data;
 using TOne.WhS.RouteSync.Huawei.Entities;
 using Vanrise.Data.SQL;
@@ -26,6 +27,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         public void Initialize(IRouteInitializeContext context)
         {
             Guid guid = Guid.NewGuid();
+
             string createTempTableQuery = string.Format(query_CreateRouteTempTable, SwitchId, guid, RouteTempTableName);
             ExecuteNonQueryText(createTempTableQuery, null);
 
@@ -57,6 +59,33 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             #endregion
         }
 
+        public void CompareTables(IRouteCompareTablesContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InsertRoutesToTempTable(IEnumerable<HuaweiConvertedRoute> routes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveRoutesFromTempTable(IEnumerable<HuaweiConvertedRoute> routes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateRoutesInTempTable(IEnumerable<HuaweiConvertedRoute> routes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Finalize(IRouteFinalizeContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        #region IBulkApplyDataManager
+
         public object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -65,7 +94,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         public void WriteRecordToStream(HuaweiConvertedRoute record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.CustomerId, record.Code, record.RouteCaseAsString);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.RSSN, record.Code, record.RSName);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -83,6 +112,8 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             };
         }
 
+        #endregion
+
         #region Queries
 
         const string query_CreateRouteTempTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Huawei_{0}.{2}') AND s.type in (N'U'))
@@ -93,7 +124,8 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                                                     CREATE TABLE [WhS_RouteSync_Huawei_{0}].[{2}](
                                                           CustomerId varchar(255) NOT NULL,
 	                                                      Code varchar(20) NOT NULL,
-	                                                      RouteCase varchar(max) NOT NULL
+	                                                      RSName varchar(max) NOT NULL,
+                                                          DNSet int NOT NULL
                                                     CONSTRAINT [PK_WhS_RouteSync_Huawei_{0}.{2}{1}] PRIMARY KEY CLUSTERED 
                                                     (
                                                         CustomerId ASC,
@@ -106,7 +138,8 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                                                         CREATE TABLE [WhS_RouteSync_Huawei_{0}].[{2}](
                                                               CustomerId varchar(255) NOT NULL,
 	                                                          Code varchar(20) NOT NULL,
-	                                                          RouteCase varchar(max) NOT NULL
+	                                                          RSName varchar(max) NOT NULL,
+                                                              DNSet int NOT NULL
                                                         CONSTRAINT [PK_WhS_RouteSync_Huawei_{0}.{2}{1}] PRIMARY KEY CLUSTERED 
                                                         (
                                                             CustomerId ASC,
@@ -118,13 +151,15 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         const string query_CreateSucceedRouteTable = @"CREATE TABLE [WhS_RouteSync_Huawei_{0}].[{2}](
                                                           CustomerId varchar(255) NOT NULL,
 	                                                      Code varchar(20) NOT NULL,
-	                                                      RouteCase varchar(max) NOT NULL
+	                                                      RSName varchar(max) NOT NULL,
+                                                          DNSet int NOT NULL
                                                        CONSTRAINT [PK_WhS_RouteSync_Huawei_{0}.{2}{1}] PRIMARY KEY CLUSTERED 
                                                        (
                                                            CustomerId ASC,
 	                                                       Code ASC
                                                        )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
                                                        ) ON [PRIMARY]";
+
         const string query_SyncWithRouteDeletedTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Huawei_{0}.{2}') AND s.type in (N'U')) 
 															BEGIN
 																DELETE WhS_RouteSync_Huawei_{0}.{1} 
@@ -140,7 +175,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 														        MERGE INTO WhS_RouteSync_Huawei_{0}.{1} as routes 
 														        USING WhS_RouteSync_Huawei_{0}.{2} as updatedRoutes
 														        ON routes.CustomerId = updatedRoutes.CustomerId and routes.Code = updatedRoutes.Code
-														        WHEN MATCHED THEN UPDATE SET routes.RouteCase = updatedRoutes.RouteCase;
+														        WHEN MATCHED THEN UPDATE SET routes.RSName = updatedRoutes.RSName, routes.DNSet = updatedRoutes.DNSet;
 
 														        DROP TABLE WhS_RouteSync_Huawei_{0}.{2}
                                                             END";
@@ -149,8 +184,8 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 														BEGIN
 														    BEGIN TRANSACTION
 															BEGIN TRY
-															    INSERT INTO  WhS_RouteSync_Huawei_{0}.{1} (CustomerId, Code, RouteCase)
-															    SELECT CustomerId, Code, RouteCase 
+															    INSERT INTO  WhS_RouteSync_Huawei_{0}.{1} (CustomerId, Code, RSName, DNSet)
+															    SELECT CustomerId, Code, RSName, DNSet
                                                                 FROM WhS_RouteSync_Huawei_{0}.{2}
 														
 															    DROP TABLE WhS_RouteSync_Huawei_{0}.{2}

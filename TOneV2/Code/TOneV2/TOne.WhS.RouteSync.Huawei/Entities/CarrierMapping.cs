@@ -14,7 +14,7 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
 
         public SupplierMapping SupplierMapping { get; set; }
     }
-
+     
     public class CustomerMapping
     {
         public int RSSN { get; set; }
@@ -23,7 +23,7 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
 
         public int DNSet { get; set; } 
     }
-
+      
     public class SupplierMapping
     {
         public string RouteName { get; set; }

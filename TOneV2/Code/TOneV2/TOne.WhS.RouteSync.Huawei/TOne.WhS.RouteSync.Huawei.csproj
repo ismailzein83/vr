@@ -69,6 +69,14 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Web.Base">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
     </Reference>
@@ -77,6 +85,7 @@
     <Compile Include="Business\HuaweiFTPLogger.cs" />
     <Compile Include="Business\RouteCaseManager.cs" />
     <Compile Include="Business\RouteManager.cs" />
+    <Compile Include="Business\RouteSucceededManager.cs" />
     <Compile Include="Business\SwitchLoggerManager.cs" />
     <Compile Include="Business\WhSRouteSyncHuaweiManager.cs" />
     <Compile Include="Constants.cs" />
@@ -84,22 +93,31 @@
     <Compile Include="Data\IDataManager.cs" />
     <Compile Include="Data\IRouteCaseDataManager.cs" />
     <Compile Include="Data\IRouteDataManager.cs" />
+    <Compile Include="Data\IRouteSucceededDataManager.cs" />
     <Compile Include="Data\IWhSRouteSyncHuaweiDataManager.cs" />
     <Compile Include="Data\RouteSyncHuaweiDataManagerFactory.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
     <Compile Include="Entities\Context\RouteCaseContext.cs" />
     <Compile Include="Entities\Context\RouteContext.cs" />
     <Compile Include="Entities\Context\WhSRouteSyncHuaweiContext.cs" />
+    <Compile Include="Entities\Enums.cs" />
+    <Compile Include="Entities\HuaweiCommands.cs" />
+    <Compile Include="Entities\HuaweiConvertedRoutesPayload.cs" />
     <Compile Include="Entities\HuaweiSSHCommunication.cs" />
     <Compile Include="Entities\RouteCase.cs" />
     <Compile Include="Entities\SwitchLogger.cs" />
     <Compile Include="Entities\SwitchLoggerConfig.cs" />
     <Compile Include="Entities\HuaweiConvertedRoute.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="HuaweiSWSyncTemp.cs" />
     <Compile Include="HuaweiSWSync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">
+      <Project>{31466bbd-3579-4033-b991-12d044564a32}</Project>
+      <Name>TOne.WhS.RouteSync.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
       <Name>TOne.WhS.RouteSync.Entities</Name>
