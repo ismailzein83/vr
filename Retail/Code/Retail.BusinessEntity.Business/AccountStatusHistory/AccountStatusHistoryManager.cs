@@ -53,7 +53,7 @@ namespace Retail.BusinessEntity.Business
                 return account.StatusId;
 
             AccountStatusHistory previousAccountStatusHistory = null;
-            foreach (AccountStatusHistory accountStatusHistory in accountStatusHistoryList.OrderByDescending(itm => itm.AccountStatusHistoryId))
+            foreach (AccountStatusHistory accountStatusHistory in accountStatusHistoryList.OrderByDescending(itm => itm.StatusChangedDate).ThenByDescending(itm => itm.AccountStatusHistoryId))
             {
                 if (accountStatusHistory.StatusChangedDate <= chargeDay)
                     return accountStatusHistory.StatusId;
