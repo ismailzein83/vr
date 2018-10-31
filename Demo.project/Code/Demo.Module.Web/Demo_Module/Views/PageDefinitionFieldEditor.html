@@ -1,0 +1,31 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_PageDefinitionFieldEditorController" vr-loader="scopeModel.isLoading" width="small">
+    <vr-modalbody>
+        <vr-form name="formPageDefintionFieldEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.title" label="Title" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-switch value="scopeModel.IsRequired" label="Required"></vr-switch>
+                        </vr-columns>
+                    </vr-row>
+                    <demo-module-page-definition-field-type on-ready="scopeModel.onFieldTypeDirectiveReady" isrequired="true"></demo-module-page-definition-field-type>
+
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formPageDefintionFieldEditor" data-onclick="scopeModel.savePageDefinitionField"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

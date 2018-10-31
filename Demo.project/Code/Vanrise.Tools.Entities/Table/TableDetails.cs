@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Tools.Entities
 {
-    public class TableDetails
-    {
+    public class TableDetails{
         public string Name { get; set; }
-        public Guid ConnectionId { get; set; }
 
     }
 }

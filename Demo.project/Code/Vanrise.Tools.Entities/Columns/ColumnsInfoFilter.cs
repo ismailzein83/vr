@@ -9,7 +9,8 @@ namespace Vanrise.Tools.Entities
     public class ColumnsInfoFilter
     {
         public Guid ConnectionId { get; set; }
-        public string Table { get; set; }
-        public string Schema { get; set; }
+        public string TableName { get; set; }
+        public string SchemaName { get; set; }
+
     }
 }

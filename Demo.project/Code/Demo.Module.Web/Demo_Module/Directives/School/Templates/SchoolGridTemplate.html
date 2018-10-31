@@ -1,0 +1,13 @@
+﻿<vr-datagrid datasource="scopeModel.schools"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="SchoolId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'SchoolId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 
 namespace Demo.Module.Data.SQL
-{
+{ 
     public class ContractDataManager : BaseSQLDataManager, IContractDataManager
     {
 

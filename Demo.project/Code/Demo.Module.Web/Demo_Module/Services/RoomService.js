@@ -1,7 +1,7 @@
 ﻿app.service('Demo_Module_RoomService', ['VRModalService', 'VRNotificationService',
 function (VRModalService, VRNotificationService) {
 
-    function addRoom(onRoomAdded, buildingIdItem) {
+    function addRoom(onRoomAdded, S) {
 
         var settings = {};
         var parameters = {

@@ -15,21 +15,16 @@ namespace Vanrise.Tools.Business
     {
 
         #region Public Methods
-
-
-        ISchemaDataManager schemaDataManager = VRToolsFactory.GetDataManager<ISchemaDataManager>();
-
-        
-
         public IEnumerable<SchemaInfo> GetSchemasInfo(SchemaInfoFilter schemaInfoFilter)
         {
+            ISchemaDataManager schemaDataManager = VRToolsFactory.GetDataManager<ISchemaDataManager>();
+
 
             Guid ConnectionId = schemaInfoFilter.ConnectionId;
             SQLConnection settings = new VRConnectionManager().GetVRConnection(ConnectionId).Settings as SQLConnection;
             string connectionString = (settings != null) ? settings.ConnectionString : null;
 
             schemaDataManager.Connection_String = connectionString;
-
 
             List<Schema> allSchemas = schemaDataManager.GetSchemas();
 
@@ -53,24 +48,11 @@ namespace Vanrise.Tools.Business
         #endregion
 
         #region Mappers
-        public SchemaDetails SchemaDetailMapper(Schema schema)
-        {
-            var schemaDetails = new SchemaDetails
-            {
-                Name = schema.Name,
-                ConnectionId = schema.ConnectionId,
-
-            };
-
-            return schemaDetails;
-        }
-
         public SchemaInfo SchemaInfoMapper(Schema schema)
         {
             return new SchemaInfo
             {
                 Name = schema.Name,
-                ConnectionId = schema.ConnectionId
             };
         }
         #endregion

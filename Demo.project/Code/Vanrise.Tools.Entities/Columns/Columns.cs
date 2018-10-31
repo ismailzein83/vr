@@ -9,9 +9,5 @@ namespace Vanrise.Tools.Entities
     public class Columns
     {
         public string Name { get; set; }
-        public Guid ConnectionId { get; set; }
-        public string TableName { get; set; }
-
-
     }
 }

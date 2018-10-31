@@ -1,0 +1,16 @@
+﻿        <vr-datagrid datasource="scopeModel.tableData"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'Pager'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="Connection"
+             enableautoexport="true"
+             defaultsortbyfieldname="scopeModel.key">
+    <vr-datagridcolumn>
+        <vr-check value="dataItem.isSelected" onvaluechanged="dataItem.onSelectItem"></vr-check>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x.Name" field="'FieldValues.'+ x.Name"></vr-datagridcolumn>
+
+</vr-datagrid>
+
+

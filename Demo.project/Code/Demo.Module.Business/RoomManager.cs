@@ -121,14 +121,14 @@ namespace Demo.Module.Business
                 RoomId = room.RoomId,
                 BuildingName = _buildingManager.GetBuildingName(room.BuildingId),
             };
-            if (room.Settings != null && room.Settings.RoomShape != null)
-            {
-                var context = new RoomShapeDescriptionContext
+        /*    if (room.Settings != null && room.Settings.RoomShape != null)
+         {
+                var context=new RoomShapeDescriptionContext
                 {
                     Room = room
                 };
                 roomDetails.AreaDescription = room.Settings.RoomShape.GetRoomShapeDescription(context);
-            }
+            }*/
             return roomDetails;
         }
         #endregion

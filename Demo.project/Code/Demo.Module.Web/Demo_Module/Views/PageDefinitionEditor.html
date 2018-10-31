@@ -1,0 +1,32 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_PageDefinitionEditorController" vr-loader="scopeModel.isLoading" width="medium">
+    <vr-modalbody>
+        <vr-form name="formPageDefinitionEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Fields'">
+                    <demo-module-page-definition-fields on-ready="scopeModel.onFieldsReady"></demo-module-page-definition-fields>       
+                </vr-tab>
+                <vr-tab header="'SubViews'">
+                    <demo-module-page-definition-subviews on-ready="scopeModel.onSubviewsReady"></demo-module-page-definition-subviews>
+                </vr-tab>
+                <vr-tab header="'Filters'">
+                    <demo-module-page-definition-field-filters on-ready="scopeModel.onFieldFiltersReady" ismultipleselection></demo-module-page-definition-field-filters>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formPageDefinitionEditor" data-onclick="scopeModel.savePageDefinition"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

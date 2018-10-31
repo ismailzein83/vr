@@ -10,7 +10,7 @@ namespace Vanrise.Tools.Data
     public interface ITableDataManager : IDataManager
     {
 
-        List<Table> GetTables();
+        List<Table> GetTables(string schemaName);
         string Connection_String { set; }
 
 

@@ -1,0 +1,28 @@
+﻿<vr-panel ng-controller="Demo_Module_PageRunTimeManagementController" vr-loader="scopeModel.isLoading">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <demo-module-page-definition-selector on-ready="scopeModel.onPageDefinitionSelectorReady" onselectionchanged="scopeModel.onPageDefinitionChanged" isrequired="true"></demo-module-page-definition-selector>
+                </vr-columns>
+                <vr-columns width="normal" ng-repeat="x in scopeModel.filters">
+                    <vr-label>{{x.fieldTitle}}</vr-label>
+                    <vr-directivewrapper directive="x.runtimeFilterEditor" on-ready="x.onRunTimeFilterReady"></vr-directivewrapper>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.addPageRunTime"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <demo-module-page-run-time-grid on-ready="scopeModel.onGridReady"></demo-module-page-run-time-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

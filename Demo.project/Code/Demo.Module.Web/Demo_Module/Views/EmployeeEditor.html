@@ -1,0 +1,56 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_EmployeeEditorController" vr-loader="scopeModel.isLoading" width="small">
+    <vr-modalbody>
+        <vr-form name="formEmployeeEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <demo-module-speciality-selector isdisabled="scopeModel.disableCountry" on-ready="scopeModel.onSpecialityDirectiveReady"  isrequired="true" normal-col-num="12"></demo-module-speciality-selector>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <demo-module-desksize-selector isdisabled="scopeModel.disableCity" on-ready="scopeModel.onDesksizeDirectiveReady" onselectionchanged="scopeModel.onDesksizeChanged" isrequired="true" normal-col-num="12"></demo-module-desksize-selector>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <demo-module-color-selector isdisabled="scopeModel.disableSchool" on-ready="scopeModel.onColorDirectiveReady" isrequired="true" normal-col-num="12"></demo-module-color-selector>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <demo-module-employee-work normal-col-num="6" isrequired="true" on-ready="scopeModel.onWorkDirectiveReady"></demo-module-employee-work>
+                </vr-tab>
+                <vr-tab header="'Contacts'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row" >
+                            <vr-button type="Add" standalone data-onclick="scopeModel.onEmployeeContactAdded"></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-datagrid datasource="scopeModel.contacts"
+                                     on-ready="scopeModel.onGridReady"
+                                     dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                                     pagingtype="'PagingOnScroll'"
+                                     menuactions="scopeModel.gridMenuActions"
+                                     idfield="EmployeeId"
+                                     enableautoexport="true">
+                            <vr-datagridcolumn headertext="'Email'" field="'Email'" type="'Text'"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Phone Number'" field="'PhoneNumber'" type="'Text'"></vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formEmployeeEditor" data-onclick="scopeModel.saveEmployee"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

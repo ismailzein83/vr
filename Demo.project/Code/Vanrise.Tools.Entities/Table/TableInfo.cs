@@ -9,7 +9,6 @@ namespace Vanrise.Tools.Entities
     public class TableInfo
     {
         public string Name { get; set; }
-        public Guid ConnectionId { get; set; }
 
 
     }

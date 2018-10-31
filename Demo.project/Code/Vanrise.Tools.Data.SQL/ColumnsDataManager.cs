@@ -14,7 +14,7 @@ namespace Vanrise.Tools.Data.SQL
     public class ColumnsDataManager : BaseSQLDataManager, IColumnsDataManager
     {
         public ColumnsDataManager() :
-            base(GetConnectionStringName("", ""))
+            base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoProject_DBConnStringKey"))
         {
         }
 
@@ -24,11 +24,9 @@ namespace Vanrise.Tools.Data.SQL
         {
             return Connection_String;
         }
-        public List<Columns> GetColumns(string schema,string table)
+        public List<Columns> GetColumns(string tableName)
         {
-
-
-           return GetItemsText("SELECT * FROM [" + schema + "].[" + table + "]", ColumnsMapper,null);
+            return GetItemsText("select cols.name from sys.columns cols inner join sys.tables tbls on cols.object_id= tbls.object_id WHERE tbls.name='" + tableName + "'", ColumnsMapper, null);
         }
 
 
@@ -36,7 +34,7 @@ namespace Vanrise.Tools.Data.SQL
         {
             return new Columns
             {
-                Name = GetReaderValue<string>(reader, "Column Name"),
+                Name = GetReaderValue<string>(reader, "name"),
 
             };
         }

@@ -9,8 +9,6 @@ namespace Vanrise.Tools.Entities
     public class ColumnsInfo
     {
         public string Name { get; set; }
-        public string TableName { get; set; }
-
 
     }
 }

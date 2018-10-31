@@ -1,0 +1,18 @@
+﻿<vr-datagrid datasource="scopeModel.pageRunTimes"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="PageRunTimeId"
+             enableautoexport="true"
+             defaultsortbyfieldname="'PageRunTimeId'">
+    <vr-datagridcolumn headertext="'ID'" field="'PageRunTimeId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="x in scopeModel.fields" headertext="x.Title" field="'FieldValues.'+ x.Name">
+
+    </vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+
+</vr-datagrid>
+

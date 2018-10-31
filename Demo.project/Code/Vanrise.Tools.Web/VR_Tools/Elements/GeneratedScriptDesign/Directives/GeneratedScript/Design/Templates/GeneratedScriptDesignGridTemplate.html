@@ -1,0 +1,23 @@
+﻿<vr-row removeline>
+    <vr-columns width="1/2row">
+        <vr-button type="Add" standalone data-onclick="scopeModel.onGeneratedScriptDesignAdded"></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="scopeModel.designs"
+                     on-ready="scopeModel.onGridReady"
+                     dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="scopeModel.gridMenuActions"
+                     idfield="ConnectionId"
+                     enableautoexport="true">
+            <!--<vr-datagridcolumn headertext="'Connection String Id'" field="'ConnectionStringId'" type="'Text'"></vr-datagridcolumn>-->
+            <vr-datagridcolumn headertext="'Schema'" field="'Schema'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Table'" field="'Table'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Inserted Columns'" field="'InsertColumnNames'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Updated Columns'" field="'UpdateColumnNames'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Identifier Columns'" field="'IdentifierColumnNames'" type="'Text'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

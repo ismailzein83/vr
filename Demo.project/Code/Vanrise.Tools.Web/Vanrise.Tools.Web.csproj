@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Vanrise.Tools.Web</RootNamespace>
     <AssemblyName>Vanrise.Tools.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -25,6 +25,7 @@
     <SccProvider>SAK</SccProvider>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,28 +45,43 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.0.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -85,6 +101,9 @@
     </Reference>
     <Reference Include="Vanrise.Web.Base">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -106,43 +125,41 @@
     <Reference Include="Microsoft.Web.Infrastructure">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.Formatting">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.2\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\TableDataController.cs" />
+    <Compile Include="Controllers\ColumnsController.cs" />
+    <Compile Include="Controllers\SchemaController.cs" />
+    <Compile Include="Controllers\TableController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\ColumnsController\" />
-    <Folder Include="Controllers\SchemaController\" />
-    <Folder Include="Controllers\TableController\" />
-    <Folder Include="VR_Tools\Elements\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="VR_Tools\Constant\ModuleConfig.js" />
-    <Content Include="VR_Tools\Directives\InsertColumns\vanrise-tools-columns-selector.js" />
-    <Content Include="VR_Tools\Directives\Table\vanrise-tools-table-selector.js" />
-    <Content Include="VR_Tools\Directives\Schema\vanrise-tools-schema-selector.js" />
-    <Content Include="VR_Tools\Directives\GeneratedScript\Design\vanrise-tools-generated-script-design.js" />
-    <Content Include="VR_Tools\Directives\GeneratedScript\Templates\GeneratedScriptDesignGridTemplate.html" />
-    <Content Include="VR_Tools\Services\APIServices\ColumnsAPIService.js" />
-    <Content Include="VR_Tools\Services\APIServices\TableAPIService.js" />
-    <Content Include="VR_Tools\Services\APIServices\SchemaAPIService.js" />
-    <Content Include="VR_Tools\Views\GeneratedScriptManagement.html" />
-    <Content Include="VR_Tools\Views\GeneratedScriptDesignEditorController.js" />
-    <Content Include="VR_Tools\Views\GeneratedScriptManagementController.js" />
-    <Content Include="VR_Tools\Views\GeneratedScriptDesignEditor.html" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\Columns\vanrise-tools-columns-selector.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\Columns\vanrise-tools-update-columns-selector.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\Columns\vanrise-tools-insert-columns-selector.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\GeneratedScript\Design\Templates\SelectedTableDataGridTemplate.html" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\GeneratedScript\Design\Templates\TableDataGridTemplate.html" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\GeneratedScript\Design\vanrise-tools-selected-table-data-grid.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\GeneratedScript\Design\vanrise-tools-table-data-grid.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\Table\vanrise-tools-table-selector.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\Schema\vanrise-tools-schema-selector.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\GeneratedScript\Design\vanrise-tools-generated-script-design-grid.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\GeneratedScript\Design\Templates\GeneratedScriptDesignGridTemplate.html" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Services\APIServices\TableDataAPIService.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Services\APIServices\ColumnsAPIService.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Services\APIServices\TableAPIService.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Services\APIServices\SchemaAPIService.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Services\GeneratedScriptService.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptManagement.html" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptDesignEditorController.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptManagementController.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptDesignEditor.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Tools.Business\Vanrise.Tools.Business.csproj">

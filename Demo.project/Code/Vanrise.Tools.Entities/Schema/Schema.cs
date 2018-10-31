@@ -9,8 +9,6 @@ namespace Vanrise.Tools.Entities
     public class Schema
     {
         public string Name { get; set; }
-        public Guid ConnectionId { get; set; }
-
 
     }
 }

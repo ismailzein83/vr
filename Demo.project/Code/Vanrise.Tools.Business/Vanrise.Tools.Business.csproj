@@ -44,6 +44,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
@@ -59,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColumnsManager.cs" />
+    <Compile Include="TableDataManager.cs" />
     <Compile Include="TableManager.cs" />
     <Compile Include="SchemaManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

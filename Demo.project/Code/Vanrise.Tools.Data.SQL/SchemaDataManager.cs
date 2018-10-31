@@ -16,30 +16,27 @@ namespace Vanrise.Tools.Data.SQL
     public class SchemaDataManager : BaseSQLDataManager, ISchemaDataManager
     {
         public SchemaDataManager() :
-            base(GetConnectionStringName("", ""))
+            base(GetConnectionStringName("DemoProject_DBConnStringKey", "DemoProject_DBConnStringKey"))
         {
         }
-
         public string Connection_String { get; set; }
 
-    
         protected override string GetConnectionString()
         {
             return Connection_String;
         }
-       
         public List<Schema> GetSchemas()
 
         {
-             return GetItemsText("SELECT * FROM sys.schemas", SchemaMapper, null);
+            return GetItemsText("select name from sys.schemas ", SchemaMapper, null);
         }
 
-       
         Schema SchemaMapper(IDataReader reader)
         {
             return new Schema
             {
                 Name = GetReaderValue<string>(reader, "name"),
+
 
             };
         }

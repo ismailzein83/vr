@@ -1,0 +1,9 @@
+﻿        <vr-datagrid datasource="scopeModel.selectedTableData"
+                     on-ready="scopeModel.onGridReady"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="scopeModel.gridMenuActions"
+                     enableautoexport="true">
+            <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x.Name" field="'FieldValues.'+ x.Name"></vr-datagridcolumn>
+        </vr-datagrid>
+
+

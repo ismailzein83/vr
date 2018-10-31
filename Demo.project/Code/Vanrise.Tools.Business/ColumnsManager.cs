@@ -15,11 +15,11 @@ namespace Vanrise.Tools.Business
     public class ColumnsManager
     {
 
-        IColumnsDataManager columnsDataManager = VRToolsFactory.GetDataManager<IColumnsDataManager>();
 
         #region Public Methods
         public IEnumerable<ColumnsInfo> GetColumnsInfo(ColumnsInfoFilter columnInfoFilter)
         {
+            IColumnsDataManager columnsDataManager = VRToolsFactory.GetDataManager<IColumnsDataManager>();
 
             Guid ConnectionId = columnInfoFilter.ConnectionId;
             SQLConnection settings = new VRConnectionManager().GetVRConnection(ConnectionId).Settings as SQLConnection;
@@ -27,12 +27,10 @@ namespace Vanrise.Tools.Business
 
             columnsDataManager.Connection_String = connectionString;
 
-
-            List<Columns> allColumns = columnsDataManager.GetColumns(columnInfoFilter.Schema, columnInfoFilter.Table);
+            List<Columns> allColumns = columnsDataManager.GetColumns(columnInfoFilter.TableName);
 
             Func<Columns, bool> filterFunc = (columns) =>
             {
-                
                 return true;
             };
             return allColumns.MapRecords(ColumnsInfoMapper, filterFunc).OrderBy(columns => columns.Name);
@@ -56,7 +54,6 @@ namespace Vanrise.Tools.Business
             return new ColumnsInfo
             {
                 Name = columns.Name,
-                TableName = columns.TableName
             };
         }
         #endregion
