@@ -6,21 +6,6 @@ using Renci.SshNet;
 
 namespace Vanrise.Common
 {
-    public class SSHCommunicatorSettings
-    {
-        public String Host { get; set; }
-
-        public int Port { get; set; }
-
-        public String Username { get; set; }
-
-        public String Password { get; set; }
-
-        public int ConnectionTimeOutInSeconds { get; set; }
-
-        public int ReadTimeOutInSeconds { get; set; }
-    }
-
     public class SSHCommunicator
     {
         private SshClient client;
@@ -107,5 +92,20 @@ namespace Vanrise.Common
         }
 
         #endregion
+    }
+
+    public class SSHCommunicatorSettings
+    {
+        public String Host { get; set; }
+
+        public int Port { get; set; }
+
+        public String Username { get; set; }
+
+        public String Password { get; set; }
+
+        public int ConnectionTimeOutInSeconds { get; set; }
+
+        public int ReadTimeOutInSeconds { get; set; }
     }
 }
