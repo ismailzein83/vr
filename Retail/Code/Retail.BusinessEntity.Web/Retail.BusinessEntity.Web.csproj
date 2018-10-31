@@ -851,6 +851,8 @@
     <Content Include="Retail_BusinessEntity\Services\VisibilityAccountDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountManager\AccountManagerAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountManager\AccountManagerAssignmentEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\AccountPackage\AccountPackageManagement.html" />
+    <Content Include="Retail_BusinessEntity\Views\AccountPackage\AccountPackageManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionEditor.html" />

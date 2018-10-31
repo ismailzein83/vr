@@ -152,11 +152,19 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
             }
         }
 
-        #endregion
+		public override void GetExtraFields(IPackageSettingExtraFieldsContext context)
+		{
+			context.CurrencyId = CurrencyId;
+			context.ChargeValue = this.Price;
+			context.PeriodType = this.RecurringPeriod.GetDescription();
+		}
 
-        #region Private Methods
 
-        private List<PackageItemToEvaluate> GetPackageItemsToEvaluate(Guid serviceTypeId, Guid recordTypeId)
+		#endregion
+
+		#region Private Methods
+
+		private List<PackageItemToEvaluate> GetPackageItemsToEvaluate(Guid serviceTypeId, Guid recordTypeId)
         {
             PackageItemsToEvaluateByRecordTypeId packageItemsForServiceType;
             if (!_itemsByServiceId.TryGetValue(serviceTypeId, out packageItemsForServiceType))

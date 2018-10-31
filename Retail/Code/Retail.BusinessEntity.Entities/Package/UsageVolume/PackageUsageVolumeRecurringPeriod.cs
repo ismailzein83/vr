@@ -6,45 +6,46 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class PackageUsageVolumeRecurringPeriod
-    {
-        public abstract Guid ConfigId { get; }
+	public abstract class PackageUsageVolumeRecurringPeriod
+	{
+		public abstract Guid ConfigId { get; }
 
-        public abstract void GetEventApplicablePeriod(IPackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext context);
+		public abstract void GetEventApplicablePeriod(IPackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext context);
 
-        public abstract void GetChargingDates(IPackageUsageVolumeRecurringPeriodGetChargingDatesContext context);
-    }
+		public abstract void GetChargingDates(IPackageUsageVolumeRecurringPeriodGetChargingDatesContext context);
+		public abstract string GetDescription();
+	}
 
-    public interface IPackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext
-    {
-        DateTime EventTime { get; }
+	public interface IPackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext
+	{
+		DateTime EventTime { get; }
 
-        DateTime PackageAssignmentStartTime { get; }
+		DateTime PackageAssignmentStartTime { get; }
 
-        DateTime? PackageAssignmentEndTime { get; }
+		DateTime? PackageAssignmentEndTime { get; }
 
-        DateTime PeriodStart { set; }
+		DateTime PeriodStart { set; }
 
-        DateTime PeriodEnd { set; }
-    }
+		DateTime PeriodEnd { set; }
+	}
 
-    public interface IPackageUsageVolumeRecurringPeriodGetChargingDatesContext
-    {
-        DateTime FromDate { get; }
+	public interface IPackageUsageVolumeRecurringPeriodGetChargingDatesContext
+	{
+		DateTime FromDate { get; }
 
-        DateTime ToDate { get; }
+		DateTime ToDate { get; }
 
-        DateTime PackageAssignmentStartTime { get; }
+		DateTime PackageAssignmentStartTime { get; }
 
-        DateTime? PackageAssignmentEndTime { get; }
+		DateTime? PackageAssignmentEndTime { get; }
 
-        List<PackageUsageVolumeRecurringPeriodChargingDate> ChargingDates { set; }
-    }
+		List<PackageUsageVolumeRecurringPeriodChargingDate> ChargingDates { set; }
+	}
 
-    public class PackageUsageVolumeRecurringPeriodChargingDate
-    {
-        public DateTime ChargingDate { get; set; }
+	public class PackageUsageVolumeRecurringPeriodChargingDate
+	{
+		public DateTime ChargingDate { get; set; }
 
-        public Decimal? PeriodFractionOfTheFullPeriod { get; set; }
-    }
+		public Decimal? PeriodFractionOfTheFullPeriod { get; set; }
+	}
 }

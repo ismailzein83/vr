@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class PackageExtendedSettings
+	public abstract class PackageExtendedSettings
     {
         //public abstract Guid ConfigId { get; }
 
@@ -35,9 +35,11 @@ namespace Retail.BusinessEntity.Entities
         {
 
         }
-    }
+		public virtual void GetExtraFields(IPackageSettingExtraFieldsContext context) { }
 
-    public abstract class PackageExtendedSettingsEditorRuntime
+	}
+
+	public abstract class PackageExtendedSettingsEditorRuntime
     {
 
     }
@@ -120,4 +122,19 @@ namespace Retail.BusinessEntity.Entities
         bool IsValid { set; }
         string ErrorMessage { set; }
     }
+
+	public interface IPackageSettingExtraFieldsContext
+	{
+		decimal? ChargeValue { get; set; }
+		int? CurrencyId { get; set; }
+		string PeriodType { get; set; }
+
+	}
+	public class PackageSettingExtraFieldsContext : IPackageSettingExtraFieldsContext
+	{
+		public decimal? ChargeValue { get; set; }
+		public int? CurrencyId { get; set; }
+		public string PeriodType { get; set; }
+
+	}
 }

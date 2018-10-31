@@ -8,71 +8,88 @@ using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public abstract class RecurringChargeEvaluatorSettings
-    {
-        public abstract void ValidatePackageAssignment(IValidateAssignmentRecurringChargeEvaluatorContext context);
+	public abstract class RecurringChargeEvaluatorSettings
+	{
+		public abstract void ValidatePackageAssignment(IValidateAssignmentRecurringChargeEvaluatorContext context);
 
-        public virtual void Initialize(IInitializeRecurringChargeContext context) { }
+		public virtual void Initialize(IInitializeRecurringChargeContext context) { }
 
-        public abstract List<RecurringChargeEvaluatorOutput> Evaluate(IRecurringChargeEvaluatorContext context);
-    }
+		public abstract List<RecurringChargeEvaluatorOutput> Evaluate(IRecurringChargeEvaluatorContext context);
+		public virtual void GetExtraFields(IRecurringChargeEvaluatorExtraFieldsContext context) { }
 
-    public interface IRecurringChargeEvaluatorContext
-    {
-        RecurringChargeEvaluatorDefinitionSettings EvaluatorDefinitionSettings { get; }
+	}
 
-        Account Account { get; }
+	public interface IRecurringChargeEvaluatorContext
+	{
+		RecurringChargeEvaluatorDefinitionSettings EvaluatorDefinitionSettings { get; }
 
-        DateTime ChargingPeriodStart { get; }
+		Account Account { get; }
 
-        DateTime ChargingPeriodEnd { get; }
+		DateTime ChargingPeriodStart { get; }
 
-        DateTime PackageAssignmentStart { get; }
+		DateTime ChargingPeriodEnd { get; }
 
-        DateTime? PackageAssignmentEnd { get; }
+		DateTime PackageAssignmentStart { get; }
 
-        DateTime ChargeDay { get; }
+		DateTime? PackageAssignmentEnd { get; }
 
-        long AccountPackageId { get; }
+		DateTime ChargeDay { get; }
 
-        Object InitializeData { get; }
+		long AccountPackageId { get; }
 
-        Guid AccountBEDefinitionId { get; }
+		Object InitializeData { get; }
 
-        Func<int, DateTimeRange, List<AccountPackageRecurCharge>> GetAccountPackageRecurCharges { get; }
+		Guid AccountBEDefinitionId { get; }
 
-        Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> AccountStatusHistoryListByAccountDefinition { get; }
-    }
+		Func<int, DateTimeRange, List<AccountPackageRecurCharge>> GetAccountPackageRecurCharges { get; }
 
-    public interface IInitializeRecurringChargeContext
-    {
-        DateTime ChargingPeriodStart { get; }
+		Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> AccountStatusHistoryListByAccountDefinition { get; }
+	}
 
-        DateTime ChargingPeriodEnd { get; }
+	public interface IInitializeRecurringChargeContext
+	{
+		DateTime ChargingPeriodStart { get; }
 
-        DateTime PackageAssignmentStart { get; }
+		DateTime ChargingPeriodEnd { get; }
 
-        DateTime? PackageAssignmentEnd { get; }
+		DateTime PackageAssignmentStart { get; }
 
-        object InitializeData { set; }
+		DateTime? PackageAssignmentEnd { get; }
 
-        DateTimeRange RecurringChargePeriod { set; }
-    }
+		object InitializeData { set; }
 
-    public interface IValidateAssignmentRecurringChargeEvaluatorContext
-    {
-        Account Account { get; }
-        DateTime PackageAssignmentStart { get; }
-        DateTime? PackageAssignmentEnd { get; }
-        bool IsValid { set; }
-        string ErrorMessage { set; }
-    }
-    public class ValidateAssignmentRecurringChargeEvaluatorContext : IValidateAssignmentRecurringChargeEvaluatorContext
-    {
-        public Account Account { set; get; }
-        public DateTime PackageAssignmentStart { set; get; }
-        public DateTime? PackageAssignmentEnd { set; get; }
-        public bool IsValid { set; get; }
-        public string ErrorMessage { get; set; }
-    }
+		DateTimeRange RecurringChargePeriod { set; }
+	}
+
+	public interface IValidateAssignmentRecurringChargeEvaluatorContext
+	{
+		Account Account { get; }
+		DateTime PackageAssignmentStart { get; }
+		DateTime? PackageAssignmentEnd { get; }
+		bool IsValid { set; }
+		string ErrorMessage { set; }
+	}
+	public class ValidateAssignmentRecurringChargeEvaluatorContext : IValidateAssignmentRecurringChargeEvaluatorContext
+	{
+		public Account Account { set; get; }
+		public DateTime PackageAssignmentStart { set; get; }
+		public DateTime? PackageAssignmentEnd { set; get; }
+		public bool IsValid { set; get; }
+		public string ErrorMessage { get; set; }
+	}
+
+	public interface IRecurringChargeEvaluatorExtraFieldsContext
+	{
+
+		decimal? ChargeValue { get; set; }
+		int? CurrencyId { get; set; }
+		string PeriodType { get; set; }
+	}
+
+	public class RecurringChargeEvaluatorExtraFieldsContext : IRecurringChargeEvaluatorExtraFieldsContext
+	{
+		public decimal? ChargeValue { get ; set; }
+		public int? CurrencyId { get; set ; }
+		public string PeriodType { get ; set; }
+	}
 }

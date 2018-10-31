@@ -6,13 +6,13 @@ using Retail.BusinessEntity.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
 {
-    public enum PeriodicRecurringChargePeriodType
-    {
-        Monthly = 0,
-        Days = 1
-    }
+	public enum PeriodicRecurringChargePeriodType
+	{
+		Monthly = 0,
+		Days = 1
+	}
 
-    public class PeriodicRecurringChargeEvaluator : RecurringChargeEvaluatorSettings
+	public class PeriodicRecurringChargeEvaluator : RecurringChargeEvaluatorSettings
     {
         public Decimal Price { get; set; }
 
@@ -152,5 +152,12 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
                     throw new NotSupportedException(string.Format("PeriodType '{0}'", this.PeriodType));
             }
         }
-    }
+		public override void GetExtraFields(IRecurringChargeEvaluatorExtraFieldsContext context)
+		{
+
+			context.CurrencyId = CurrencyId;
+			context.ChargeValue = this.Price;
+			context.PeriodType = Vanrise.Common.Utilities.GetEnumDescription(PeriodType);
+		}
+	}
 }

@@ -27,5 +27,15 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
             context.IsValid = validateAssignmentRecurringChargeEvaluatorContext.IsValid;
             context.ErrorMessage = validateAssignmentRecurringChargeEvaluatorContext.ErrorMessage;
         }
-    }
+		public override void GetExtraFields(IPackageSettingExtraFieldsContext context)
+		{
+			RecurringChargeEvaluatorExtraFieldsContext recurringChargeEvaluatorExtraFieldsContext = new RecurringChargeEvaluatorExtraFieldsContext();
+	
+			Evaluator.GetExtraFields(recurringChargeEvaluatorExtraFieldsContext);
+			context.ChargeValue = recurringChargeEvaluatorExtraFieldsContext.ChargeValue;
+			context.PeriodType = recurringChargeEvaluatorExtraFieldsContext.PeriodType;
+			context.CurrencyId = recurringChargeEvaluatorExtraFieldsContext.CurrencyId;
+
+		}
+	}
 }

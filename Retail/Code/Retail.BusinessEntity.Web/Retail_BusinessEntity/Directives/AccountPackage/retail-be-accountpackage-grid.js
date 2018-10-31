@@ -1,96 +1,118 @@
 ﻿'use strict';
 
 app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService', 'VRNotificationService', 'Retail_BE_AccountPackageService',
-    function (Retail_BE_AccountPackageAPIService, VRNotificationService, Retail_BE_AccountPackageService) {
-        return {
-            restrict: 'E',
-            scope: {
-                onReady: '=',
-            },
-            controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
-                var accountPackageGrid = new AccountPackageGrid($scope, ctrl, $attrs);
-                accountPackageGrid.initializeController();
-            },
-            controllerAs: 'ctrl',
-            bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountPackage/Templates/AccountPackageGridTemplate.html'
-        };
+	function (Retail_BE_AccountPackageAPIService, VRNotificationService, Retail_BE_AccountPackageService) {
+		return {
+			restrict: 'E',
+			scope: {
+				onReady: '=',
+			},
+			controller: function ($scope, $element, $attrs) {
+				var ctrl = this;
+				var accountPackageGrid = new AccountPackageGrid($scope, ctrl, $attrs);
+				accountPackageGrid.initializeController();
+			},
+			controllerAs: 'ctrl',
+			bindToController: true,
+			templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountPackage/Templates/AccountPackageGridTemplate.html'
+		};
 
-        function AccountPackageGrid($scope, ctrl, $attrs) {
-            this.initializeController = initializeController;
+		function AccountPackageGrid($scope, ctrl, $attrs) {
+			this.initializeController = initializeController;
 
-            var accountBEDefinitionId;
-            var assignedToAccountId;
+			var accountBEDefinitionId;
+			var assignedToAccountId;
+			var packageName;
+			var packageTypes;
+			var accountIds;
+			var statusIds;
+			var currencyIds;
+			var bed;
+			var eed;
 
-            var gridAPI;
+			var gridAPI;
 
-            function initializeController() {
-                $scope.scopeModel = {};
-                $scope.scopeModel.menuActions = [];
-                $scope.scopeModel.accountPackages = [];
+			function initializeController() {
+				$scope.scopeModel = {};
+				$scope.scopeModel.menuActions = [];
+				$scope.scopeModel.accountPackages = [];
 
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
-                    defineAPI();
-                };
+				$scope.scopeModel.onGridReady = function (api) {
+					gridAPI = api;
+					defineAPI();
+				};
 
-                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return Retail_BE_AccountPackageAPIService.GetFilteredAccountPackages(dataRetrievalInput).then(function (response) {
-                        onResponseReady(response);
-                    }).catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    });
-                };
+				$scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+					return Retail_BE_AccountPackageAPIService.GetFilteredAccountPackages(dataRetrievalInput).then(function (response) {
+						onResponseReady(response);
+					}).catch(function (error) {
+						VRNotificationService.notifyExceptionWithClose(error, $scope);
+					});
+				};
 
-                defineMenuActions();
-            }
+			}
 
-            function defineAPI() {
-                var api = {};
+			function defineAPI() {
+				var api = {};
 
-                api.load = function (payload) {
+				api.load = function (payload) {
+					if (payload != undefined) {
+						accountBEDefinitionId = payload.accountBEDefinitionId;
+						assignedToAccountId = payload.AssignedToAccountId;
+						$scope.scopeModel.isAssignedToAccountId = (assignedToAccountId != undefined);
+						packageName = payload.packageName;
+						packageTypes = payload.packageTypes;
+						accountIds = payload.accountIds;
+						statusIds = payload.statusIds;
+						currencyIds = payload.currencyIds;
+						bed = payload.bed;
+						eed = payload.eed;
+					}
+					defineMenuActions();
+					return gridAPI.retrieveData(buildGridQuery());
+				};
 
-                    if (payload != undefined) {
-                        accountBEDefinitionId = payload.accountBEDefinitionId;
-                        assignedToAccountId = payload.AssignedToAccountId;
-                    }
-                   
-                    return gridAPI.retrieveData(buildGridQuery());
-                };
+				api.onAccountPackageAdded = function (addedAccountPackage) {
+					gridAPI.itemAdded(addedAccountPackage);
+				};
 
-                api.onAccountPackageAdded = function (addedAccountPackage) {
-                    gridAPI.itemAdded(addedAccountPackage);
-                };
+				if (ctrl.onReady != null)
+					ctrl.onReady(api);
+			}
 
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
-            }
+			function defineMenuActions() {
+				if (assignedToAccountId != undefined) {
+					$scope.scopeModel.menuActions.push({
+						name: 'Edit',
+						clicked: editAccountPackage,
+						haspermession: hasEditAccountPackagePermission
+					});
+				}
+			}
+			function hasEditAccountPackagePermission() {
+				return Retail_BE_AccountPackageAPIService.DoesUserHaveAddAccess(accountBEDefinitionId);
+			}
 
-            function defineMenuActions() {
-                $scope.scopeModel.menuActions.push({
-                    name: 'Edit',
-                    clicked: editAccountPackage,
-                    haspermession: hasEditAccountPackagePermission
-                });
-            }
-            function hasEditAccountPackagePermission() {
-                return Retail_BE_AccountPackageAPIService.DoesUserHaveAddAccess(accountBEDefinitionId);
-            }
+			function editAccountPackage(accountPackageItem) {
+				var onAccountPackageUpdated = function (accountPackageItem) {
+					gridAPI.itemUpdated(accountPackageItem);
+				};
 
-            function editAccountPackage(accountPackageItem) {
-                var onAccountPackageUpdated = function (accountPackageItem) {
-                    gridAPI.itemUpdated(accountPackageItem);
-                };
+				Retail_BE_AccountPackageService.editAccountPackage(accountPackageItem.Entity.AccountPackageId, accountBEDefinitionId, onAccountPackageUpdated);
+			}
 
-                Retail_BE_AccountPackageService.editAccountPackage(accountPackageItem.Entity.AccountPackageId,accountBEDefinitionId,onAccountPackageUpdated);
-            }
-
-            function buildGridQuery() {
-                return {
-                    AccountBEDefinitionId: accountBEDefinitionId,
-                    AssignedToAccountId: assignedToAccountId
-                };
-            }
-        }
-    }]);
+			function buildGridQuery() {
+				return {
+					AccountBEDefinitionId: accountBEDefinitionId,
+					AssignedToAccountId: assignedToAccountId,
+					PackageName: packageName,
+					PackageTypes: packageTypes,
+					AccountIds: accountIds,
+					StatusIds: statusIds,
+					CurrencyIds: currencyIds,
+					BED: bed,
+					EED:eed
+				};
+			}
+		}
+	}]);

@@ -57,5 +57,11 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
 
             }
         }
-    }
+		public override void GetExtraFields(IRecurringChargeEvaluatorExtraFieldsContext context)
+		{
+
+			context.CurrencyId = CurrencyId;
+			context.ChargeValue = this.Price;
+		}
+	}
 }

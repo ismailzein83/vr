@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             if (!_manager.DoesUserHaveViewAccountPackageAccess(input.Query.AccountBEDefinitionId))
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredAccountPackages(input));
+            return GetWebResponse(input, _manager.GetFilteredAccountPackages(input),"Account Package");
         }
         [HttpGet]
         [Route("DoesUserHaveAddAccess")]
