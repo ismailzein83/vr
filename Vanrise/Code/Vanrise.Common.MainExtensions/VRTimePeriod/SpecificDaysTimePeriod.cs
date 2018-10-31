@@ -14,11 +14,10 @@ namespace Vanrise.Common.MainExtensions
         public int NumberOfDays { get; set; }
         public override void GetTimePeriod(IVRTimePeriodContext context)
         {
-            DateTime fromTime = context.EffectiveDate.AddDays(-1 * DaysBack);
+            DateTime fromTime = context.EffectiveDate.Date.AddDays(-DaysBack);
             context.FromTime = fromTime;
             DateTime toTime = new DateTime(fromTime.Year, fromTime.Month, fromTime.Day, 23, 59, 59, 998);
             context.ToTime = toTime.AddDays(NumberOfDays - 1);
-
         }
     }
 }

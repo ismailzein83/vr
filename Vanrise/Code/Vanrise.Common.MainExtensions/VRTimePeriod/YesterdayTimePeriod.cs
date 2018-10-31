@@ -13,8 +13,8 @@ namespace Vanrise.Common.MainExtensions
 
         public override void GetTimePeriod(IVRTimePeriodContext context)
         {
-            DateTime yesterday = context.EffectiveDate.AddDays(-1);
-            context.FromTime = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 0, 0, 0, 0);
+            DateTime yesterday = context.EffectiveDate.Date.AddDays(-1);
+            context.FromTime = yesterday;
             context.ToTime = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 23, 59, 59, 998);
         }
     }

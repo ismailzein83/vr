@@ -44,16 +44,16 @@ app.directive("vrCommonTimeperiodYesterday", [function () {
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.Common.MainExtensions.YesterdayTimePeriod, Vanrise.Common.MainExtensions",
+                    $type: "Vanrise.Common.MainExtensions.YesterdayTimePeriod, Vanrise.Common.MainExtensions"
                 };
             };
 
             api.load = function (payload) {
-                if (payload != undefined) {
-                }
+                var promises = [];
+                return UtilsService.waitMultiplePromises(promises);
             };
 
-            if (ctrl.onReady != null)
+            if (ctrl.onReady != undefined)
                 ctrl.onReady(api);
         }
     }

@@ -37,7 +37,7 @@ app.directive("vrCommonTimeperiodSpecificdays", ['UtilsService', 'VRUIUtilsServi
                     var promises = [];
 
 
-                    if (payload != undefined) {
+                    if (payload != undefined && payload.timePeriod != undefined) {
                         $scope.scopeModel.daysBack = payload.timePeriod.DaysBack;
                         $scope.scopeModel.numberOfDays = payload.timePeriod.NumberOfDays;
                     }
