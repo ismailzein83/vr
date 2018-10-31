@@ -1,6 +1,7 @@
 ﻿using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using Newtonsoft.Json;
+using SOM.Main.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,6 +122,14 @@ namespace BPMExtended.Main.Business
             }
 
             return services;
+        }
+
+
+        public bool CheckServicesConsistency(List<ServiceParameter> services)
+        {
+           //TODO : validate services 
+
+            return true;
         }
 
         public List<ServiceDetail> checkIfSwitchSupportedServices(string services, string switchId)
