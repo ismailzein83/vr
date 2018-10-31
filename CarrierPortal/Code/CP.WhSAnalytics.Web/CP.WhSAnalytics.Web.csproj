@@ -92,11 +92,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BlockedAttemptsController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="CP_WhSAnalytics\Constants\ModuleConfig.js" />
     <Content Include="CP_WhSAnalytics\Elements\BlockedAttempts\Directives\cp-whsanalytics-blockedattempts-grid.js" />
