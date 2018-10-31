@@ -407,7 +407,9 @@ as (select * from (values
 
 ('44E97625-1B35-478A-918E-60F9C58678B4','ExecuteDatabaseCommandSMSHandler','SQL SMS Handler','VRCommon_SMSSendHandlerSettings'														,'{"Editor":"vr-common-executedatabasecommand-smshandler"}'),
 ('A6B961D2-84F3-4772-94BC-67328FCA0C05','Comment Section','Comment Section','VR_Invoice_InvoiceType_InvoiceUISubSectionSettings','{"Editor":"vr-invoicetype-invoicesubsectionsettings-comment","RuntimeEditor":"vr-invoice-commentsubsection-grid"}'),
-('98154422-B815-4843-9304-CE63930CED84','VRCommon_Comment','VRComment','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"vr-commentbe-editor"}')
+('98154422-B815-4843-9304-CE63930CED84','VRCommon_Comment','VRComment','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"vr-commentbe-editor"}'),
+('D72E97C0-73BA-4BB9-AA37-4889A4C3386F','Yesterday','Yesterday','VRCommon_VRTimePeriod','{"Editor":"vr-common-timeperiod-yesterday"}'),
+('FB9B7430-6FE8-418C-98EB-49730B562DE8','SpecificDaysTimePeriod','Specific Days','VRCommon_VRTimePeriod','{"Editor":"vr-common-timeperiod-specificdays"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
