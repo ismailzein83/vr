@@ -81,8 +81,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.WhSAnalytics.Business", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.WhSAnalytics.Entities", "CP.WhSAnalytics.Entities\CP.WhSAnalytics.Entities.csproj", "{97351548-C5EC-4BDB-8D62-FB033A503FE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.WhSAnalytics.Web", "CP.WhSAnalytics.Web\CP.WhSAnalytics.Web.csproj", "{E626B21C-57DB-4803-AB8F-04E5A6585E69}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -203,10 +201,6 @@ Global
 		{97351548-C5EC-4BDB-8D62-FB033A503FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97351548-C5EC-4BDB-8D62-FB033A503FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97351548-C5EC-4BDB-8D62-FB033A503FE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E626B21C-57DB-4803-AB8F-04E5A6585E69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E626B21C-57DB-4803-AB8F-04E5A6585E69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E626B21C-57DB-4803-AB8F-04E5A6585E69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E626B21C-57DB-4803-AB8F-04E5A6585E69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -246,15 +240,14 @@ Global
 		{1104DEDF-9432-48A9-85BE-741C916EE86F} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
 		{ABE9FF39-F636-40B3-B433-0B48CF5FB1B4} = {1104DEDF-9432-48A9-85BE-741C916EE86F}
 		{97351548-C5EC-4BDB-8D62-FB033A503FE0} = {1104DEDF-9432-48A9-85BE-741C916EE86F}
-		{E626B21C-57DB-4803-AB8F-04E5A6585E69} = {1104DEDF-9432-48A9-85BE-741C916EE86F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1A90436-F2DC-4DEA-AA4A-D70AADE7B065}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 30
+		SccNumberOfProjects = 29
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = CarrierPortal.sln
@@ -368,9 +361,5 @@ Global
 		SccProjectTopLevelParentUniqueName28 = CarrierPortal.sln
 		SccProjectName28 = CP.WhSAnalytics.Entities
 		SccLocalPath28 = CP.WhSAnalytics.Entities
-		SccProjectUniqueName29 = CP.WhSAnalytics.Web\\CP.WhSAnalytics.Web.csproj
-		SccProjectTopLevelParentUniqueName29 = CarrierPortal.sln
-		SccProjectName29 = CP.WhSAnalytics.Web
-		SccLocalPath29 = CP.WhSAnalytics.Web
 	EndGlobalSection
 EndGlobal
