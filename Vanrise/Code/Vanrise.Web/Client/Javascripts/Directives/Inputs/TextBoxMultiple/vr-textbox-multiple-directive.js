@@ -160,6 +160,8 @@
                         var validationOptionsInput = {};
                         if ( iAttrs.datatype === TextboxTypeEnum.Email.name || $scope.$parent.$eval( ctrl.datatype ) === TextboxTypeEnum.Email.name )
                             validationOptionsInput.emailValidation = true;
+                        if ( iAttrs.type === TextboxTypeEnum.LabeledEmail.name || $scope.$parent.$eval( ctrl.type ) === TextboxTypeEnum.LabeledEmail.name )
+                            validationOptionsInput.labledEmailValidation = true;
                         if ( iAttrs.datatype === TextboxTypeEnum.Ip.name || $scope.$parent.$eval( ctrl.datatype ) === TextboxTypeEnum.Ip.name )
                             validationOptionsInput.ipValidation = true;
                         else if ( iAttrs.datatype === TextboxTypeEnum.Number.name || $scope.$parent.$eval( ctrl.datatype ) === TextboxTypeEnum.Number.name )
@@ -437,6 +439,7 @@
 
     app.constant( 'TextboxTypeEnum', {
         Email: { name: "email" },
+        LabeledEmail: { name: "labeledemail" },
         Ip: { name: "ip" },
         Number: { name: "number" },
         Password: { name: "password" }

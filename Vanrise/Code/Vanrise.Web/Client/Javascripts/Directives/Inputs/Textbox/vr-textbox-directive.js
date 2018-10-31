@@ -25,9 +25,11 @@
 				ctrl.readOnly = false;
 				if ($attrs.stopreadonly == undefined)
 					ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
-				var validationOptions = {};
-				if ($attrs.type === TextboxTypeEnum.Email.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Email.name)
-					validationOptions.emailValidation = true;
+				var validationOptions = {};               
+                if ($attrs.type === TextboxTypeEnum.Email.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Email.name)
+                    validationOptions.emailValidation = true;
+                if ( $attrs.type === TextboxTypeEnum.LabeledEmail.name || $scope.$parent.$eval( ctrl.type ) === TextboxTypeEnum.LabeledEmail.name )
+                    validationOptions.labledEmailValidation = true;
 				if ($attrs.type === TextboxTypeEnum.Ip.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Ip.name)
 					validationOptions.ipValidation = true;
 				if ($attrs.refusepecialcharacter != undefined)
@@ -311,7 +313,10 @@
 	app.constant('TextboxTypeEnum', {
 		Email: {
 			name: "email"
-		},
+        },
+        LabeledEmail: {
+            name: "labeledemail"
+        },
 		Ip: {
 			name: "ip"
 		},
