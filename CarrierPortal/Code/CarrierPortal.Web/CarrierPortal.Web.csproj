@@ -370,6 +370,10 @@
       <Project>{97351548-c5ec-4bdb-8d62-fb033a503fe0}</Project>
       <Name>CP.WhSAnalytics.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CP.WhSAnalytics.Web\CP.WhSAnalytics.Web.csproj">
+      <Project>{a82eb835-f295-4cf0-b826-b7fbac60736a}</Project>
+      <Name>CP.WhSAnalytics.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PartnerPortal.CustomerAccess.Business\PartnerPortal.CustomerAccess.Business.csproj">
       <Project>{c4ac9650-72a5-4470-a2d4-2d22c504bf0f}</Project>
       <Name>PartnerPortal.CustomerAccess.Business</Name>
