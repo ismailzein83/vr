@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -122,6 +122,9 @@
     <Compile Include="VariationReport\VariationReportRecord.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
