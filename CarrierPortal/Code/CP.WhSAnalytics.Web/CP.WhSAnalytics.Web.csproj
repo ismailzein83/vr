@@ -28,7 +28,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>True</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>True</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,7 +68,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-      <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -96,10 +96,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="CP_WhSAnalytics\Elements\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="CP_WhSAnalytics\Constants\ModuleConfig.js" />
+    <Content Include="CP_WhSAnalytics\Elements\BlockedAttempts\Directives\cp-whsanalytics-blockedattempts-grid.js" />
+    <Content Include="CP_WhSAnalytics\Elements\BlockedAttempts\Directives\Templates\BlockedAttemptsGridTemplate.html" />
+    <Content Include="CP_WhSAnalytics\Elements\BlockedAttempts\Services\APIServices\BlockedAttemptsAPIService.js" />
+    <Content Include="CP_WhSAnalytics\Elements\BlockedAttempts\Views\BlockedAttemptsManagement.html" />
+    <Content Include="CP_WhSAnalytics\Elements\BlockedAttempts\Views\BlockedAttemptsManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
