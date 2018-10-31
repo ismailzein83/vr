@@ -13,7 +13,9 @@ namespace Vanrise.Common.MainExtensions
 
         public override void GetTimePeriod(IVRTimePeriodContext context)
         {
-            throw new NotImplementedException();
+            DateTime yesterday = context.EffectiveDate.AddDays(-1);
+            context.FromTime = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 0, 0, 0, 0);
+            context.ToTime = new DateTime(yesterday.Year, yesterday.Month, yesterday.Day, 23, 59, 59, 998);
         }
     }
 }

@@ -26,7 +26,8 @@
     <SccProvider>SAK</SccProvider>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -117,6 +118,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\SpecificDaysDirectiveTemplate.html" />
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-specificdays.js" />
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-yesterday.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
