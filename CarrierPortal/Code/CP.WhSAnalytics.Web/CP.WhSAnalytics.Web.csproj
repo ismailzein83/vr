@@ -105,10 +105,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="CP_WhSAnalytics\Elements\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CP_WhSAnalytics\Constants\ModuleConfig.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
