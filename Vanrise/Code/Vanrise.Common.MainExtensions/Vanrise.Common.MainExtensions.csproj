@@ -89,6 +89,7 @@
     <Compile Include="VRTimePeriod\CurrentMonthTimePeriod.cs" />
     <Compile Include="VRTimePeriod\SpecificDaysTimePeriod.cs" />
     <Compile Include="VRTimePeriod\TodayTimePeriod.cs" />
+    <Compile Include="VRTimePeriod\YesterdayTimePeriod.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.BEBridge.Entities\Vanrise.BEBridge.Entities.csproj">

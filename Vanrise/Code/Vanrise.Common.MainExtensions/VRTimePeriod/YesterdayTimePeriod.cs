@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Entities;
+
+namespace Vanrise.Common.MainExtensions
+{
+    public class YesterdayTimePeriod : VRTimePeriod
+    {
+        public override Guid ConfigId { get { return new Guid("D72E97C0-73BA-4BB9-AA37-4889A4C3386F"); } }
+
+        public override void GetTimePeriod(IVRTimePeriodContext context)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
