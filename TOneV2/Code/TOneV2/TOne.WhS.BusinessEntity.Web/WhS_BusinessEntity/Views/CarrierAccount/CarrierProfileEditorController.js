@@ -1,10 +1,12 @@
-﻿(function (appControllers) {
+﻿( function ( appControllers )
+{
 
     "use strict";
 
     carrierProfileEditorController.$inject = ['$scope', 'WhS_BE_CarrierProfileAPIService', 'WhS_BE_TechnicalSettingsAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_ContactTypeEnum', 'VRUIUtilsService'];
 
-    function carrierProfileEditorController($scope, WhS_BE_CarrierProfileAPIService, WhS_BE_TechnicalSettingsAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_ContactTypeEnum, VRUIUtilsService) {
+    function carrierProfileEditorController( $scope, WhS_BE_CarrierProfileAPIService, WhS_BE_TechnicalSettingsAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_ContactTypeEnum, VRUIUtilsService )
+    {
 
         var isEditMode;
         var carrierProfileId;
@@ -48,21 +50,25 @@
         defineScope();
         load();
 
-        function loadParameters() {
-            var parameters = VRNavigationService.getParameters($scope);
+        function loadParameters()
+        {
+            var parameters = VRNavigationService.getParameters( $scope );
 
-            if (parameters != undefined && parameters != null) {
+            if ( parameters != undefined && parameters != null )
+            {
                 carrierProfileId = parameters.CarrierProfileId;
                 context = parameters.context;
             }
-            isEditMode = (carrierProfileId != undefined);
-            isViewHistoryMode = (context != undefined && context.historyId != undefined);
+            isEditMode = ( carrierProfileId != undefined );
+            isViewHistoryMode = ( context != undefined && context.historyId != undefined );
         }
 
-        function defineScope() {
+        function defineScope()
+        {
 
-            $scope.hasSaveCarrierProfilePermission = function () {
-                if ($scope.scopeModal.isEditMode)
+            $scope.hasSaveCarrierProfilePermission = function ()
+            {
+                if ( $scope.scopeModal.isEditMode )
                     return WhS_BE_CarrierProfileAPIService.HasUpdateCarrierProfilePermission();
                 else
                     return WhS_BE_CarrierProfileAPIService.HasAddCarrierProfilePermission();
@@ -76,298 +82,352 @@
                 documents: [],
                 documentCategories: []
             };
-            $scope.scopeModal.onDefaultCustomerTimeZoneSelectorReady = function (api) {
+            $scope.scopeModal.onDefaultCustomerTimeZoneSelectorReady = function ( api )
+            {
                 defaultCustomerTimeZoneDirectiveAPI = api;
                 defaultCustomerTimeZoneReadyPromiseDeferred.resolve();
 
             };
-            $scope.scopeModal.onDefaultSupplierTimeZoneSelectorReady = function (api) {
+            $scope.scopeModal.onDefaultSupplierTimeZoneSelectorReady = function ( api )
+            {
                 defaultSupplierTimeZoneDirectiveAPI = api;
                 defaultSupplierTimeZoneReadyPromiseDeferred.resolve();
 
             };
-            $scope.scopeModal.onCompanySettingSelectorReady = function (api) {
+            $scope.scopeModal.onCompanySettingSelectorReady = function ( api )
+            {
                 companySettingsSelectorAPI = api;
                 companySettingsSelectorReadyPromiseDeferred.resolve();
             };
-            $scope.scopeModal.onBankDetailsSelectorReady = function (api) {
+            $scope.scopeModal.onBankDetailsSelectorReady = function ( api )
+            {
                 bankDetailsSelectorAPI = api;
                 bankDetailsSelectorReadyPromiseDeferred.resolve();
             };
 
-            $scope.onCountryDirectiveReady = function (api) {
+            $scope.onCountryDirectiveReady = function ( api )
+            {
                 countryDirectiveApi = api;
                 countryReadyPromiseDeferred.resolve();
             };
 
-            $scope.onCityyDirectiveReady = function (api) {
+            $scope.onCityyDirectiveReady = function ( api )
+            {
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
             };
 
-            $scope.scopeModal.onCurrencySelectorReady = function (api) {
+            $scope.scopeModal.onCurrencySelectorReady = function ( api )
+            {
                 currencySelectorAPI = api;
                 currencySelectorReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModal.disabledfax = true;
-            $scope.scopeModal.onFaxValueChange = function (value) {
-                $scope.scopeModal.disabledfax = (value == undefined);
+            $scope.scopeModal.onFaxValueChange = function ( value )
+            {
+                $scope.scopeModal.disabledfax = ( value == undefined );
             };
             $scope.scopeModal.disabledphone = true;
-            $scope.scopeModal.onPhoneValueChange = function (value) {
-                $scope.scopeModal.disabledphone = (value == undefined);
+            $scope.scopeModal.onPhoneValueChange = function ( value )
+            {
+                $scope.scopeModal.disabledphone = ( value == undefined );
             };
 
 
-            $scope.SaveCarrierProfile = function () {
-                if (isEditMode) {
+            $scope.SaveCarrierProfile = function ()
+            {
+                if ( isEditMode )
+                {
                     return updateCarrierProfile();
                 }
-                else {
+                else
+                {
                     return insertCarrierProfile();
                 }
             };
-            $scope.close = function () {
+            $scope.close = function ()
+            {
                 $scope.modalContext.closeModal();
             };
 
 
-            $scope.addPhoneNumberOption = function () {
+            $scope.addPhoneNumberOption = function ()
+            {
 
-                $scope.scopeModal.phoneNumbers.push({
+                $scope.scopeModal.phoneNumbers.push( {
                     phoneNumber: $scope.scopeModal.phoneNumberValue
-                });
+                } );
                 $scope.scopeModal.phoneNumberValue = undefined;
                 $scope.scopeModal.disabledphone = true;
             };
 
 
-            $scope.onCountrySelectionChanged = function () {
+            $scope.onCountrySelectionChanged = function ()
+            {
                 var selectedCountryId = countryDirectiveApi.getSelectedIds();
-                if (selectedCountryId != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingCities = value; };
+                if ( selectedCountryId != undefined )
+                {
+                    var setLoader = function ( value ) { $scope.isLoadingCities = value; };
                     var payload = {
                         countryId: selectedCountryId
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, cityDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise( $scope, cityDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred );
                 }
-                else if (cityDirectiveAPI != undefined)
+                else if ( cityDirectiveAPI != undefined )
                     cityDirectiveAPI.clearDataSource();
             };
 
 
-            $scope.addFaxOption = function () {
+            $scope.addFaxOption = function ()
+            {
                 var fax = $scope.scopeModal.faxvalue;
-                $scope.scopeModal.faxes.push({
+                $scope.scopeModal.faxes.push( {
                     fax: fax
-                });
+                } );
                 $scope.scopeModal.faxvalue = undefined;
                 $scope.scopeModal.disabledfax = true;
             };
 
-            $scope.scopeModal.addDocument = function () {
+            $scope.scopeModal.addDocument = function ()
+            {
                 documentsGridAPI.addDocument();
             };
 
-            $scope.scopeModal.addTicketContact = function () {
+            $scope.scopeModal.addTicketContact = function ()
+            {
                 ticketContactsGridAPI.addTicketContact();
             };
 
-            $scope.scopeModal.onDocumentGridReady = function (api) {
+            $scope.scopeModal.onDocumentGridReady = function ( api )
+            {
                 documentsGridAPI = api;
                 documentsGridReadyPromiseDeferred.resolve();
             };
 
-            $scope.scopeModal.onTicketContactGridReady = function (api) {
+            $scope.scopeModal.onTicketContactGridReady = function ( api )
+            {
                 ticketContactsGridAPI = api;
                 ticketContactsGridReadyPromiseDeferred.resolve();
             };
         }
 
-        function load() {
+        function load()
+        {
             $scope.isLoading = true;
             loadAllControls()
-            .catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
-            .finally(function () {
-                $scope.isLoading = false;
-            });
+                .catch( function ( error )
+                {
+                    VRNotificationService.notifyExceptionWithClose( error, $scope );
+                } )
+                .finally( function ()
+                {
+                    $scope.isLoading = false;
+                } );
         }
 
-        function loadAllControls() {
+        function loadAllControls()
+        {
 
             var initialPromises = [];
-            if (isEditMode) {
-                initialPromises.push(getCarrierProfile());
+            if ( isEditMode )
+            {
+                initialPromises.push( getCarrierProfile() );
             }
-            else if (isViewHistoryMode) {
-                initialPromises.push(getCarrierProfileHistory());
+            else if ( isViewHistoryMode )
+            {
+                initialPromises.push( getCarrierProfileHistory() );
             }
 
-            function getCarrierProfileHistory() {
-                return WhS_BE_CarrierProfileAPIService.GetCarrierProfileHistoryDetailbyHistoryId(context.historyId).then(function (response) {
+            function getCarrierProfileHistory()
+            {
+                return WhS_BE_CarrierProfileAPIService.GetCarrierProfileHistoryDetailbyHistoryId( context.historyId ).then( function ( response )
+                {
                     carrierProfileEntity = response;
 
-                });
+                } );
             }
 
-            function getCarrierProfile() {
-                return WhS_BE_CarrierProfileAPIService.GetCarrierProfile(carrierProfileId).then(function (carrierProfile) {
+            function getCarrierProfile()
+            {
+                return WhS_BE_CarrierProfileAPIService.GetCarrierProfile( carrierProfileId ).then( function ( carrierProfile )
+                {
                     carrierProfileEntity = carrierProfile;
                     cityId = carrierProfileEntity.Settings.CityId;
-                });
+                } );
             }
 
-            function setTitle() {
+            function setTitle()
+            {
 
 
-                if (isEditMode && carrierProfileEntity != undefined)
+                if ( isEditMode && carrierProfileEntity != undefined )
 
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(carrierProfileEntity.Name, 'Carrier Profile', $scope);
+                    $scope.title = UtilsService.buildTitleForUpdateEditor( carrierProfileEntity.Name, 'Carrier Profile', $scope );
 
-                else if (isViewHistoryMode && carrierProfileEntity != undefined)
+                else if ( isViewHistoryMode && carrierProfileEntity != undefined )
                     $scope.title = "View Carrier Profile: " + carrierProfileEntity.Name;
                 else
-                    $scope.title = UtilsService.buildTitleForAddEditor('Carrier Profile');
+                    $scope.title = UtilsService.buildTitleForAddEditor( 'Carrier Profile' );
 
             }
 
-            function loadCurrencySelector() {
+            function loadCurrencySelector()
+            {
                 var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                currencySelectorReadyPromiseDeferred.promise.then(function () {
+                currencySelectorReadyPromiseDeferred.promise.then( function ()
+                {
 
                     var payload = {
-                        selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.CurrencyId : undefined)
+                        selectedIds: ( carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.CurrencyId : undefined )
                     };
 
-                    VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, payload, loadCurrencySelectorPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad( currencySelectorAPI, payload, loadCurrencySelectorPromiseDeferred );
 
-                });
+                } );
 
                 return loadCurrencySelectorPromiseDeferred.promise;
             }
 
-            function loadDefaultCustomerTimeZoneSelector() {
+            function loadDefaultCustomerTimeZoneSelector()
+            {
                 var loadDefaultCustomerTimeZoneSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                defaultCustomerTimeZoneReadyPromiseDeferred.promise.then(function () {
+                defaultCustomerTimeZoneReadyPromiseDeferred.promise.then( function ()
+                {
 
                     var payload = {
-                        selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.DefaultCusotmerTimeZoneId : undefined)
+                        selectedIds: ( carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.DefaultCusotmerTimeZoneId : undefined )
                     };
 
-                    VRUIUtilsService.callDirectiveLoad(defaultCustomerTimeZoneDirectiveAPI, payload, loadDefaultCustomerTimeZoneSelectorPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad( defaultCustomerTimeZoneDirectiveAPI, payload, loadDefaultCustomerTimeZoneSelectorPromiseDeferred );
 
-                });
+                } );
 
                 return loadDefaultCustomerTimeZoneSelectorPromiseDeferred.promise;
             }
 
-            function loadDefaultSupplierTimeZoneSelector() {
+            function loadDefaultSupplierTimeZoneSelector()
+            {
                 var loadDefaultSupplierTimeZoneSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                defaultSupplierTimeZoneReadyPromiseDeferred.promise.then(function () {
+                defaultSupplierTimeZoneReadyPromiseDeferred.promise.then( function ()
+                {
 
                     var payload = {
-                        selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.DefaultSupplierTimeZoneId : undefined)
+                        selectedIds: ( carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.DefaultSupplierTimeZoneId : undefined )
                     };
 
-                    VRUIUtilsService.callDirectiveLoad(defaultSupplierTimeZoneDirectiveAPI, payload, loadDefaultSupplierTimeZoneSelectorPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad( defaultSupplierTimeZoneDirectiveAPI, payload, loadDefaultSupplierTimeZoneSelectorPromiseDeferred );
 
-                });
+                } );
 
                 return loadDefaultSupplierTimeZoneSelectorPromiseDeferred.promise;
             }
 
-            function loadBankDetailsSelector() {
+            function loadBankDetailsSelector()
+            {
                 var loadBankDetailsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                bankDetailsSelectorReadyPromiseDeferred.promise.then(function () {
+                bankDetailsSelectorReadyPromiseDeferred.promise.then( function ()
+                {
 
                     var payload = {
-                        selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.BankDetailsIds : undefined)
+                        selectedIds: ( carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.BankDetailsIds : undefined )
                     };
 
-                    VRUIUtilsService.callDirectiveLoad(bankDetailsSelectorAPI, payload, loadBankDetailsSelectorPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad( bankDetailsSelectorAPI, payload, loadBankDetailsSelectorPromiseDeferred );
 
-                });
+                } );
 
                 return loadBankDetailsSelectorPromiseDeferred.promise;
             }
 
-            function loadCompanySettingSelector() {
+            function loadCompanySettingSelector()
+            {
                 var loadCompanySettingSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                companySettingsSelectorReadyPromiseDeferred.promise.then(function () {
+                companySettingsSelectorReadyPromiseDeferred.promise.then( function ()
+                {
 
                     var payload = {
-                        selectedIds: (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.CompanySettingId : undefined)
+                        selectedIds: ( carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined ? carrierProfileEntity.Settings.CompanySettingId : undefined )
                     };
 
-                    VRUIUtilsService.callDirectiveLoad(companySettingsSelectorAPI, payload, loadCompanySettingSelectorPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad( companySettingsSelectorAPI, payload, loadCompanySettingSelectorPromiseDeferred );
 
-                });
+                } );
 
                 return loadCompanySettingSelectorPromiseDeferred.promise;
             }
 
-            function loadCountryCitySection() {
+            function loadCountryCitySection()
+            {
                 var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 var promises = [];
-                promises.push(loadCountryPromiseDeferred.promise);
+                promises.push( loadCountryPromiseDeferred.promise );
 
                 var payload;
 
-                if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined) {
+                if ( carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined )
+                {
                     payload = {};
                     payload.selectedIds = carrierProfileEntity.Settings.CountryId;
                     countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                 }
 
-                countryReadyPromiseDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
-                });
+                countryReadyPromiseDeferred.promise.then( function ()
+                {
+                    VRUIUtilsService.callDirectiveLoad( countryDirectiveApi, payload, loadCountryPromiseDeferred );
+                } );
 
 
 
-                if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined) {
+                if ( carrierProfileEntity != undefined && carrierProfileEntity.Settings.CountryId != undefined )
+                {
                     var loadCitiesPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    promises.push(loadCitiesPromiseDeferred.promise);
+                    promises.push( loadCitiesPromiseDeferred.promise );
 
-                    UtilsService.waitMultiplePromises([cityReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
+                    UtilsService.waitMultiplePromises( [cityReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise] ).then( function ()
+                    {
                         var citiesPayload = {
                             countryId: carrierProfileEntity.Settings.CountryId,
                             selectedIds: carrierProfileEntity.Settings.CityId
                         };
 
-                        VRUIUtilsService.callDirectiveLoad(cityDirectiveAPI, citiesPayload, loadCitiesPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad( cityDirectiveAPI, citiesPayload, loadCitiesPromiseDeferred );
                         countrySelectedPromiseDeferred = undefined;
-                    });
+                    } );
                 }
 
-                return UtilsService.waitMultiplePromises(promises);
+                return UtilsService.waitMultiplePromises( promises );
             }
 
-            function loadTaxes() {
+            function loadTaxes()
+            {
 
                 $scope.scopeModal.vat = carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.TaxSetting != undefined ? carrierProfileEntity.Settings.TaxSetting.VAT : undefined;
 
                 $scope.scopeModal.vatId = carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.TaxSetting != undefined ? carrierProfileEntity.Settings.TaxSetting.VATId : undefined;
 
-                WhS_BE_CarrierProfileAPIService.GetTaxesDefinition().then(function (response) {
-                    if (response.length > 0) {
-                        for (var i = 0; i < response.length; i++) {
+                WhS_BE_CarrierProfileAPIService.GetTaxesDefinition().then( function ( response )
+                {
+                    if ( response.length > 0 )
+                    {
+                        for ( var i = 0; i < response.length; i++ )
+                        {
                             var item = response[i];
-                            $scope.scopeModal.taxes.push(item);
+                            $scope.scopeModal.taxes.push( item );
 
-                            if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.TaxSetting != undefined) {
-                                for (var j = 0; j < carrierProfileEntity.Settings.TaxSetting.Items.length; j++) {
-                                    if (carrierProfileEntity.Settings.TaxSetting.Items[j].ItemId === item.ItemId) {
+                            if ( carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.TaxSetting != undefined )
+                            {
+                                for ( var j = 0; j < carrierProfileEntity.Settings.TaxSetting.Items.length; j++ )
+                                {
+                                    if ( carrierProfileEntity.Settings.TaxSetting.Items[j].ItemId === item.ItemId )
+                                    {
                                         item.value = carrierProfileEntity.Settings.TaxSetting.Items[j].Value;
                                     }
                                 }
@@ -375,70 +435,85 @@
                             }
                         }
                     }
-                });
+                } );
 
             }
 
-            function loadDocuments() {
+            function loadDocuments()
+            {
                 var loadDocumentsPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                documentsGridReadyPromiseDeferred.promise.then(function () {
-                    WhS_BE_TechnicalSettingsAPIService.GetDocumentItemDefinitionsInfo().then(function (response) {
+                documentsGridReadyPromiseDeferred.promise.then( function ()
+                {
+                    WhS_BE_TechnicalSettingsAPIService.GetDocumentItemDefinitionsInfo().then( function ( response )
+                    {
                         var documentCategories = [];
-                        if (response != undefined) {
-                            for (var i = 0; i < response.length; i++)
-                                documentCategories.push(response[i]);
+                        if ( response != undefined )
+                        {
+                            for ( var i = 0; i < response.length; i++ )
+                                documentCategories.push( response[i] );
                         }
                         var payload = {
                             documentCategories: documentCategories
                         };
-                        if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.Documents != undefined) {
+                        if ( carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.Documents != undefined )
+                        {
                             payload.documents = carrierProfileEntity.Settings.Documents;
                         }
-                        VRUIUtilsService.callDirectiveLoad(documentsGridAPI, payload, loadDocumentsPromiseDeferred);
-                    });
+                        VRUIUtilsService.callDirectiveLoad( documentsGridAPI, payload, loadDocumentsPromiseDeferred );
+                    } );
 
-                });
+                } );
                 return loadDocumentsPromiseDeferred.promise;
             }
 
-            function loadTicketContacts() {
+            function loadTicketContacts()
+            {
                 var loadTicketContactsPromiseDeferred = UtilsService.createPromiseDeferred();
-                ticketContactsGridReadyPromiseDeferred.promise.then(function () {
+                ticketContactsGridReadyPromiseDeferred.promise.then( function ()
+                {
                     var payload = {};
-                    if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.TicketContacts != undefined) {
+                    if ( carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.TicketContacts != undefined )
+                    {
                         payload.ticketContacts = carrierProfileEntity.Settings.TicketContacts;
                     }
-                    VRUIUtilsService.callDirectiveLoad(ticketContactsGridAPI, payload, loadTicketContactsPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad( ticketContactsGridAPI, payload, loadTicketContactsPromiseDeferred );
 
-                });
+                } );
                 return loadTicketContactsPromiseDeferred.promise;
             }
 
-            function loadContacts() {
-                for (var x in WhS_BE_ContactTypeEnum) {
-                    $scope.scopeModal.contacts.push(addcontactObj(x));
+            function loadContacts()
+            {
+                for ( var x in WhS_BE_ContactTypeEnum )
+                {
+                    $scope.scopeModal.contacts.push( addcontactObj( x ) );
                 }
 
-                if (carrierProfileEntity != undefined && carrierProfileEntity.Settings.Contacts != null)
-                    for (var y = 0; y < carrierProfileEntity.Settings.Contacts.length; y++) {
+                if ( carrierProfileEntity != undefined && carrierProfileEntity.Settings.Contacts != null )
+                    for ( var y = 0; y < carrierProfileEntity.Settings.Contacts.length; y++ )
+                    {
                         var item = carrierProfileEntity.Settings.Contacts[y];
-                        var matchedItem = UtilsService.getItemByVal($scope.scopeModal.contacts, item.Type, 'value');
+                        var matchedItem = UtilsService.getItemByVal( $scope.scopeModal.contacts, item.Type, 'value' );
 
-                        if (matchedItem != null) {
-                            if (matchedItem.inputetype == 'text' || matchedItem.inputetype == 'number')
+                        if ( matchedItem != null )
+                        {
+                            if ( matchedItem.inputetype == 'text' || matchedItem.inputetype == 'number' )
                                 matchedItem.description = item.Description;
-                            else {
-                                if (item.Description != null && item.Description != "") {
+                            else
+                            {
+                                if ( item.Description != null && item.Description != "" )
+                                {
                                     matchedItem.description = item.Description;
-                                    matchedItem.description = item.Description.split(";");
+                                    matchedItem.description = item.Description.split( ";" );
                                 }
                             }
                         }
                     }
             }
 
-            function addcontactObj(x) {
+            function addcontactObj( x )
+            {
                 return {
                     label: WhS_BE_ContactTypeEnum[x].label,
                     value: WhS_BE_ContactTypeEnum[x].value,
@@ -446,11 +521,14 @@
                 };
             }
 
-            function loadStaticSection() {
-                if (carrierProfileEntity != undefined) {
+            function loadStaticSection()
+            {
+                if ( carrierProfileEntity != undefined )
+                {
                     $scope.scopeModal.name = carrierProfileEntity.Name;
 
-                    if (carrierProfileEntity.Settings != null) {
+                    if ( carrierProfileEntity.Settings != null )
+                    {
                         $scope.scopeModal.company = carrierProfileEntity.Settings.Company;
                         $scope.scopeModal.website = carrierProfileEntity.Settings.Website;
                         $scope.scopeModal.registrationNumber = carrierProfileEntity.Settings.RegistrationNumber;
@@ -458,27 +536,29 @@
                         $scope.scopeModal.postalCode = carrierProfileEntity.Settings.PostalCode;
                         $scope.scopeModal.town = carrierProfileEntity.Settings.Town;
                         $scope.scopeModal.invoiceSubject = carrierProfileEntity.Settings.InvoiceSubject;
-                        if (carrierProfileEntity.Settings.CompanyLogo != null)
+                        if ( carrierProfileEntity.Settings.CompanyLogo != null )
                             $scope.scopeModal.companyLogo = {
                                 fileId: carrierProfileEntity.Settings.CompanyLogo
                             };
                         else
                             $scope.scopeModal.companyLogo = null;
-                        if (carrierProfileEntity.Settings.PhoneNumbers == undefined)
+                        if ( carrierProfileEntity.Settings.PhoneNumbers == undefined )
                             carrierProfileEntity.Settings.PhoneNumbers = [];
                         $scope.scopeModal.phoneNumbers = [];
-                        for (var i = 0; i < carrierProfileEntity.Settings.PhoneNumbers.length; i++) {
-                            $scope.scopeModal.phoneNumbers.push({
+                        for ( var i = 0; i < carrierProfileEntity.Settings.PhoneNumbers.length; i++ )
+                        {
+                            $scope.scopeModal.phoneNumbers.push( {
                                 phoneNumber: carrierProfileEntity.Settings.PhoneNumbers[i]
-                            });
+                            } );
                         }
                         $scope.scopeModal.faxes = [];
-                        if (carrierProfileEntity.Settings.Faxes == undefined)
+                        if ( carrierProfileEntity.Settings.Faxes == undefined )
                             carrierProfileEntity.Settings.Faxes = [];
-                        for (var j = 0; j < carrierProfileEntity.Settings.Faxes.length; j++) {
-                            $scope.scopeModal.faxes.push({
+                        for ( var j = 0; j < carrierProfileEntity.Settings.Faxes.length; j++ )
+                        {
+                            $scope.scopeModal.faxes.push( {
                                 fax: carrierProfileEntity.Settings.Faxes[j]
-                            });
+                            } );
                         }
                     }
                 }
@@ -486,54 +566,67 @@
 
             var rootPromiseNode = {
                 promises: initialPromises,
-                getChildNode: function () {
+                getChildNode: function ()
+                {
                     return {
-                        promises: [UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDefaultCustomerTimeZoneSelector, loadDefaultSupplierTimeZoneSelector, loadDocuments, loadCompanySettingSelector, loadBankDetailsSelector, loadTicketContacts])]
+                        promises: [UtilsService.waitMultipleAsyncOperations( [setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDefaultCustomerTimeZoneSelector, loadDefaultSupplierTimeZoneSelector, loadDocuments, loadCompanySettingSelector, loadBankDetailsSelector, loadTicketContacts] )]
                     };
                 }
             };
 
-            return UtilsService.waitPromiseNode(rootPromiseNode).finally(function () {
+            return UtilsService.waitPromiseNode( rootPromiseNode ).finally( function ()
+            {
                 carrierProfileEntity = undefined;
-            });
+            } );
         }
 
-        function insertCarrierProfile() {
+        function insertCarrierProfile()
+        {
             $scope.isLoading = true;
-            return WhS_BE_CarrierProfileAPIService.AddCarrierProfile(buildCarrierProfileObjFromScope())
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Carrier Profile", response, "Name")) {
-                    if ($scope.onCarrierProfileAdded != undefined)
-                        $scope.onCarrierProfileAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
-            });
+            return WhS_BE_CarrierProfileAPIService.AddCarrierProfile( buildCarrierProfileObjFromScope() )
+                .then( function ( response )
+                {
+                    if ( VRNotificationService.notifyOnItemAdded( "Carrier Profile", response, "Name" ) )
+                    {
+                        if ( $scope.onCarrierProfileAdded != undefined )
+                            $scope.onCarrierProfileAdded( response.InsertedObject );
+                        $scope.modalContext.closeModal();
+                    }
+                } ).catch( function ( error )
+                {
+                    VRNotificationService.notifyException( error, $scope );
+                } ).finally( function ()
+                {
+                    $scope.isLoading = false;
+                } );
         }
 
-        function updateCarrierProfile() {
+        function updateCarrierProfile()
+        {
             $scope.isLoading = true;
-            return WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile(buildCarrierProfileObjFromScope())
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Carrier Profile", response, "Name")) {
-                    if ($scope.onCarrierProfileUpdated != undefined)
-                        $scope.onCarrierProfileUpdated(response.UpdatedObject);
+            return WhS_BE_CarrierProfileAPIService.UpdateCarrierProfile( buildCarrierProfileObjFromScope() )
+                .then( function ( response )
+                {
+                    if ( VRNotificationService.notifyOnItemUpdated( "Carrier Profile", response, "Name" ) )
+                    {
+                        if ( $scope.onCarrierProfileUpdated != undefined )
+                            $scope.onCarrierProfileUpdated( response.UpdatedObject );
 
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.isLoading = false;
-            });
+                        $scope.modalContext.closeModal();
+                    }
+                } ).catch( function ( error )
+                {
+                    VRNotificationService.notifyException( error, $scope );
+                } ).finally( function ()
+                {
+                    $scope.isLoading = false;
+                } );
         }
 
-        function buildCarrierProfileObjFromScope() {
+        function buildCarrierProfileObjFromScope()
+        {
             var obj = {
-                CarrierProfileId: (carrierProfileId != null) ? carrierProfileId : 0,
+                CarrierProfileId: ( carrierProfileId != null ) ? carrierProfileId : 0,
                 Name: $scope.scopeModal.name,
                 Settings: {
                     CountryId: countryDirectiveApi.getSelectedIds(),
@@ -547,9 +640,9 @@
                     Address: $scope.scopeModal.address,
                     PostalCode: $scope.scopeModal.postalCode,
                     Town: $scope.scopeModal.town,
-                    CompanyLogo: ($scope.scopeModal.companyLogo != null) ? $scope.scopeModal.companyLogo.fileId : null,
-                    PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModal.phoneNumbers, "phoneNumber"),
-                    Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax"),
+                    CompanyLogo: ( $scope.scopeModal.companyLogo != null ) ? $scope.scopeModal.companyLogo.fileId : null,
+                    PhoneNumbers: UtilsService.getPropValuesFromArray( $scope.scopeModal.phoneNumbers, "phoneNumber" ),
+                    Faxes: UtilsService.getPropValuesFromArray( $scope.scopeModal.faxes, "fax" ),
                     Documents: documentsGridAPI.getData(),
                     DefaultCusotmerTimeZoneId: defaultCustomerTimeZoneDirectiveAPI.getSelectedIds(),
                     DefaultSupplierTimeZoneId: defaultSupplierTimeZoneDirectiveAPI.getSelectedIds(),
@@ -558,31 +651,38 @@
                 }
             };
 
-            if ($scope.scopeModal.contacts.length > 0) {
+            if ( $scope.scopeModal.contacts.length > 0 )
+            {
                 obj.Settings.Contacts = [];
-                for (var i = 0; i < $scope.scopeModal.contacts.length; i++) {
+                for ( var i = 0; i < $scope.scopeModal.contacts.length; i++ )
+                {
                     var item = $scope.scopeModal.contacts[i];
 
-                    if (item.description != undefined) {
-                        if (item.inputetype == 'email') {
-                            var des = item.description.join(";");
-                            obj.Settings.Contacts.push({ Type: item.value, Description: des });
+                    if ( item.description != undefined )
+                    {
+                        if ( item.inputetype == 'email' )
+                        {
+                            var des = item.description.length > 0 ? item.description.join( ";" ) : null;
+                            obj.Settings.Contacts.push( { Type: item.value, Description: des } );
                         }
                         else
-                            obj.Settings.Contacts.push({ Type: item.value, Description: item.description });
+                            obj.Settings.Contacts.push( { Type: item.value, Description: item.description } );
                     }
                 }
             }
 
-            if ($scope.scopeModal.taxes.length > 0) {
+            if ( $scope.scopeModal.taxes.length > 0 )
+            {
                 obj.Settings.TaxSetting = {};
                 obj.Settings.TaxSetting.VAT = $scope.scopeModal.vat;
                 obj.Settings.TaxSetting.VATId = $scope.scopeModal.vatId;
                 obj.Settings.TaxSetting.Items = [];
-                for (var i = 0; i < $scope.scopeModal.taxes.length; i++) {
+                for ( var i = 0; i < $scope.scopeModal.taxes.length; i++ )
+                {
                     var item = $scope.scopeModal.taxes[i];
-                    if (item.value != undefined) {
-                        obj.Settings.TaxSetting.Items.push({ ItemId: item.ItemId, Value: item.value });
+                    if ( item.value != undefined )
+                    {
+                        obj.Settings.TaxSetting.Items.push( { ItemId: item.ItemId, Value: item.value } );
                     }
                 }
             }
@@ -590,5 +690,5 @@
         }
     }
 
-    appControllers.controller('WhS_BE_CarrierProfileEditorController', carrierProfileEditorController);
-})(appControllers);
+    appControllers.controller( 'WhS_BE_CarrierProfileEditorController', carrierProfileEditorController );
+} )( appControllers );
