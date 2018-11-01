@@ -81,6 +81,7 @@
     <Compile Include="DARecordAggregates\MaxAggregate.cs" />
     <Compile Include="DARecordAggregates\CountAggregate.cs" />
     <Compile Include="DARecordAggregates\DistinctCountAggregate.cs" />
+    <Compile Include="DARecordAggregates\MinAggregate.cs" />
     <Compile Include="DARecordAggregates\SumAggregate.cs" />
     <Compile Include="DataAnalysisAggregates\WhSFilters.cs" />
     <Compile Include="DRSearchPageSubviewDefinitions\DRSourceSubviewDefinitionSettings.cs" />

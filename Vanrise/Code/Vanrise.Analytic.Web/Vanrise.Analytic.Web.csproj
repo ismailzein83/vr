@@ -205,7 +205,9 @@
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\vr-analytictablequerydefinition-automatedreport.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\vr-recordsearchquerydefinition-automatedreport.js" />
     <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\Templates\MaxAggregateTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\Templates\MinAggregateTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\vr-analytic-maxaggregate.js" />
+    <Content Include="Analytic\Directives\MainExtensions\DARecordAggregates\vr-analytic-minaggregate.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\AnalyticDimensionMappingRulesGridEditorController.js" />
     <Content Include="Analytic\Directives\AnalyticMeasureExternalSource\AnalyticMeasureMappingRulesGridEditorController.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\Templates\AnalyticDimensionMappingRulesGridTemplate.html" />

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    MaxAggregateDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    MinAggregateDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function MaxAggregateDirective(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function MinAggregateDirective(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -12,15 +12,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var maxAggregate = new MaxAggregate($scope, ctrl, $attrs);
-                maxAggregate.initializeController();
+                var minAggregate = new MinAggregate($scope, ctrl, $attrs);
+                minAggregate.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/DARecordAggregates/Templates/MaxAggregateTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/DARecordAggregates/Templates/MinAggregateTemplate.html"
 
         };
-        function MaxAggregate($scope, ctrl, $attrs) {
+        function MinAggregate($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var dataRecordTypeFieldsSelectorAPI;
@@ -55,7 +55,7 @@
 
                     var dataRecordTypeFieldsSelectorPayload = {};
                     if (recordAggregate != undefined) {
-                        dataRecordTypeFieldsSelectorPayload.selectedIds = recordAggregate.MaxFieldName;
+                        dataRecordTypeFieldsSelectorPayload.selectedIds = recordAggregate.MinFieldName;
                     }
 
                     var _dataRecordTypeId = context.getDataRecordTypeId();
@@ -75,8 +75,8 @@
                 api.getData = function () {
 
                     var data = {
-                        $type: "Vanrise.Analytic.MainExtensions.DARecordAggregates.MaxAggregate, Vanrise.Analytic.MainExtensions",
-                        MaxFieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
+                        $type: "Vanrise.Analytic.MainExtensions.DARecordAggregates.MinAggregate, Vanrise.Analytic.MainExtensions",
+                        MinFieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds(),
                         FieldType: $scope.scopeModel.selectedField.Type
                     };
                     return data;
@@ -89,6 +89,6 @@
         }
     }
 
-    app.directive('vrAnalyticMaxaggregate', MaxAggregateDirective);
+    app.directive('vrAnalyticMinaggregate', MinAggregateDirective);
 
 })(app);

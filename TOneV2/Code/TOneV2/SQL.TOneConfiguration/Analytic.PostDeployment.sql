@@ -20,6 +20,9 @@ Post-Deployment Script Template
 ('DC962A83-2FDA-456F-9940-15E9BE787D89','VR_Analytic_DARecordAggregate_SumAggregate','Sum','Analytic_DARecordAggregate','{"Editor" : "vr-analytic-sumaggregate"}'),
 ('982B1256-3F3E-4CA6-9D23-8844B060062D','VR_Analytic_DARecordAggregate_DistinctCountAggregate','Distinct Count','Analytic_DARecordAggregate','{"Editor" : "vr-analytic-distinctcountaggregate"}'),
 ('DAD39EDB-65B1-4C40-935C-7E6339267055','VR_Analytic_DARecordAggregate_CountAggregate','Count','Analytic_DARecordAggregate','{"Editor" : "vr-analytic-countaggregate"}'),
+('F50143C9-62B4-4A6F-8C94-B9EED7970DCF','VR_Analytic_DARecordAggregate_MaxAggregate','Max','Analytic_DARecordAggregate','{"Editor" : "vr-analytic-maxaggregate"}'),
+('CE3AC24F-45C2-4965-B2AA-AB09DA9B97F8','VR_Analytic_DARecordAggregate_MinAggregate','Min','Analytic_DARecordAggregate','{"Editor" : "vr-analytic-minaggregate"}'),
+
 
 ('635B2CE2-F787-4F46-832E-69B78D422FD5','VR_Analytic_Report_RealTime','Real Time','Analytic_AnalyticReportConfigType','{"Editor":"vr-analytic-analyticreport-realtime-definition","RuntimeEditor":"vr-analytic-analyticreport-realtime-runtime"}'),
 ('E5FB0790-5428-44B4-BB1F-4F79B69CD6EF','VR_Analytic_Report_History','History','Analytic_AnalyticReportConfigType','{"Editor":"vr-analytic-analyticreport-history-definition","RuntimeEditor":"vr-analytic-analyticreport-history-runtime"}'),
