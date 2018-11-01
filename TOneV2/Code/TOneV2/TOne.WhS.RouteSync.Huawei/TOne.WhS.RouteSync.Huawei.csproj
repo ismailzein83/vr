@@ -104,6 +104,7 @@
     <Compile Include="Entities\HuaweiCommands.cs" />
     <Compile Include="Entities\HuaweiConvertedRoutesPayload.cs" />
     <Compile Include="Entities\HuaweiSSHCommunication.cs" />
+    <Compile Include="Entities\HuaweiSwitchRouteSynchronizerSettings.cs" />
     <Compile Include="Entities\RouteCase.cs" />
     <Compile Include="Entities\SwitchLogger.cs" />
     <Compile Include="Entities\SwitchLoggerConfig.cs" />

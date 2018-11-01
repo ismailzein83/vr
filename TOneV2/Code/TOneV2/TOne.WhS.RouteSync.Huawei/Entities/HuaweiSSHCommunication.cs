@@ -11,6 +11,8 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
     {
         public bool IsActive { get; set; }
 
+        public string InterfaceIP { get; set; }
+
         public SSHCommunicatorSettings SSHCommunicatorSettings { get; set; }
     }
 }

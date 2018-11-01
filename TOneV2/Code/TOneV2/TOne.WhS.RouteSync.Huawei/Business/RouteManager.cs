@@ -33,19 +33,39 @@ namespace TOne.WhS.RouteSync.Huawei.Business
             _dataManager.InsertRoutesToTempTable(routes);
         }
 
-        public void RemoveRoutesFromTempTable(IEnumerable<HuaweiConvertedRoute> routes)
-        {
-            _dataManager.RemoveRoutesFromTempTable(routes);
-        }
-
         public void UpdateRoutesInTempTable(IEnumerable<HuaweiConvertedRoute> routes)
         {
             _dataManager.UpdateRoutesInTempTable(routes);
         }
 
+        public void RemoveRoutesFromTempTable(IEnumerable<HuaweiConvertedRoute> routes)
+        {
+            _dataManager.RemoveRoutesFromTempTable(routes);
+        }
+
         public void Finalize(IRouteFinalizeContext context)
         {
             _dataManager.Finalize(context);
+        }
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return _dataManager.InitialiazeStreamForDBApply();
+        }
+
+        public void WriteRecordToStream(HuaweiConvertedRoute record, object dbApplyStream)
+        {
+            _dataManager.WriteRecordToStream(record, dbApplyStream);
+        }
+
+        public object FinishDBApplyStream(object dbApplyStream)
+        {
+            return _dataManager.FinishDBApplyStream(dbApplyStream);
+        }
+
+        public void ApplyRouteForDB(object preparedRoute)
+        {
+            _dataManager.ApplyRouteForDB(preparedRoute);
         }
     }
 }

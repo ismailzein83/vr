@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Huawei.Business;
 using TOne.WhS.RouteSync.Huawei.Data;
@@ -25,6 +24,33 @@ namespace TOne.WhS.RouteSync.Huawei
         public List<HuaweiSSHCommunication> SwitchCommunicationList { get; set; }
 
         public List<SwitchLogger> SwitchLoggerList { get; set; }
+
+        private Dictionary<int, CustomerMapping> _customerMappingsByRSSN;
+        private Dictionary<int, CustomerMapping> CustomerMappingsByRSSN
+        {
+            get
+            {
+                if (_customerMappingsByRSSN != null)
+                    return _customerMappingsByRSSN;
+
+                if (CarrierMappings == null || CarrierMappings.Count == 0)
+                    return null;
+
+                _customerMappingsByRSSN = new Dictionary<int, CustomerMapping>();
+
+                foreach (var carrierMappingKvp in CarrierMappings)
+                {
+                    var carrierMapping = carrierMappingKvp.Value;
+                    if (carrierMapping.CustomerMapping != null)
+                        _customerMappingsByRSSN.Add(carrierMapping.CustomerMapping.RSSN, carrierMapping.CustomerMapping);
+                }
+
+                if (_customerMappingsByRSSN.Count == 0)
+                    _customerMappingsByRSSN = null;
+
+                return _customerMappingsByRSSN;
+            }
+        }
 
         #region Public Methods
 
@@ -54,20 +80,20 @@ namespace TOne.WhS.RouteSync.Huawei
 
             foreach (var route in context.Routes)
             {
-                var customerCarrierMapping = CarrierMappings.GetRecord(route.CustomerId);
-                if (customerCarrierMapping == null)
+                var carrierMapping = CarrierMappings.GetRecord(route.CustomerId);
+                if (carrierMapping == null)
                     continue;
 
-                var customerMapping = customerCarrierMapping.CustomerMapping;
+                var customerMapping = carrierMapping.CustomerMapping;
                 if (customerMapping == null)
                     continue;
 
-                RTANA rtana = this.GetRTANA(customerMapping.RSSN, route.Options);
-                string rsName = Helper.GetRSName(rtana, _supplierRNLength);
+                RouteAnalysis routeAnalysis = this.GetRouteAnalysis(customerMapping.RSSN, route.Options);
+                string rsName = Helper.GetRSName(routeAnalysis, _supplierRNLength);
 
                 RouteCase routeCase;
-                if (!routeCasesByRSName.TryGetValue(rsName, out routeCase))
-                    routeCasesToAdd.Add(new RouteCase() { RSName = rsName, RouteCaseAsString = Helper.SerializeRouteCase(rtana) });
+                if (rsName.CompareTo(HuaweiCommands.ROUTE_BLOCK) != 0 && !routeCasesByRSName.TryGetValue(rsName, out routeCase))
+                    routeCasesToAdd.Add(new RouteCase() { RSName = rsName, RouteCaseAsString = Helper.SerializeRouteCase(routeAnalysis) });
 
                 HuaweiConvertedRoute huaweiConvertedRoute = new HuaweiConvertedRoute()
                 {
@@ -124,13 +150,6 @@ namespace TOne.WhS.RouteSync.Huawei
             RouteCaseManager routeCaseManager = new RouteCaseManager(context.SwitchId);
             RouteSucceededManager routeSucceededManager = new RouteSucceededManager(context.SwitchId);
 
-            //Get Commands
-            var routeCasesToBeAdded = routeCaseManager.GetNotSyncedRouteCases();
-            var routeCasesToBeAddedWithCommands = GetRouteCasesWithCommands(routeCasesToBeAdded);
-
-            Dictionary<int, HuaweiConvertedRouteDifferences> routeDifferencesByRSSN;
-            var huaweiRoutesWithCommandsByRSSN = GetHuaweiRoutesWithCommands(context.SwitchId, routeCaseManager, out routeDifferencesByRSSN);
-
             //Communication
             HuaweiSSHCommunication huaweiSSHCommunication = null;
             if (SwitchCommunicationList != null)
@@ -144,59 +163,60 @@ namespace TOne.WhS.RouteSync.Huawei
 
             List<CommandResult> commandResults = new List<CommandResult>();
 
-            List<string> faultCodes = null;
             int maxNumberOfRetries = 0;
-            //if (sshCommunicator != null)
-            //{
-            //    var configManager = new TOne.WhS.RouteSync.Business.ConfigManager();
-            //    HuaweiSwitchRouteSynchronizerSettings switchSettings = configManager.GetRouteSynchronizerSwitchSettings(ConfigId) as HuaweiSwitchRouteSynchronizerSettings;
-            //    if (switchSettings == null || switchSettings.FaultCodes == null)
-            //        throw new NullReferenceException("Huawei switch settings is not defined. Please go to Route Sync under Component Settings and add related settings.");
-            //    faultCodes = switchSettings.FaultCodes;
-            //    maxNumberOfRetries = switchSettings.NumberOfRetries;
-            //}
+            if (sshCommunicator != null)
+            {
+                var configManager = new TOne.WhS.RouteSync.Business.ConfigManager();
+                var huaweiSwitchRouteSynchronizerSettings = configManager.GetRouteSynchronizerSwitchSettings(ConfigId) as HuaweiSwitchRouteSynchronizerSettings;
+                if (huaweiSwitchRouteSynchronizerSettings != null)
+                    maxNumberOfRetries = huaweiSwitchRouteSynchronizerSettings.NumberOfRetries;
+            }
 
-            #region Execute and Log Route Cases
+            //Get Commands
+            var routeCasesToBeAdded = routeCaseManager.GetNotSyncedRouteCases();
+            var routeCasesToBeAddedWithCommands = GetRouteCasesWithCommands(routeCasesToBeAdded);
+
+            Dictionary<int, HuaweiConvertedRouteDifferences> routeDifferencesByRSSN;
+            var huaweiRoutesWithCommandsByRSSN = GetHuaweiRoutesWithCommands(context.SwitchId, routeCaseManager, routeManager, out routeDifferencesByRSSN);
+
+            //Execute and Log Route Cases
             List<RouteCaseWithCommands> succeedRouteCasesWithCommands;
             List<RouteCaseWithCommands> failedRouteCasesWithCommands;
 
-            ExecuteRouteCasesCommands(routeCasesToBeAddedWithCommands, huaweiSSHCommunication, sshCommunicator, commandResults, out succeedRouteCasesWithCommands,
-                out failedRouteCasesWithCommands, routeCaseManager, maxNumberOfRetries, context.SwitchId);
+            ExecuteRouteCasesCommands(routeCasesToBeAddedWithCommands, huaweiSSHCommunication, sshCommunicator, commandResults, routeCaseManager, maxNumberOfRetries,
+                out succeedRouteCasesWithCommands, out failedRouteCasesWithCommands);
 
             LogRouteCaseCommands(succeedRouteCasesWithCommands, failedRouteCasesWithCommands, ftpLogger, finalizeTime);
-            #endregion
 
-            #region Execute and Log Routes
+            //Execute and Log Routes
             IEnumerable<string> failedRSNames = failedRouteCasesWithCommands == null ? null : failedRouteCasesWithCommands.Select(item => item.RouteCase.RSName);
 
             Dictionary<int, List<HuaweiRouteWithCommands>> succeedHuaweiRoutesWithCommandsByRSSN;
             Dictionary<int, List<HuaweiRouteWithCommands>> failedHuaweiRoutesWithCommandsByRSSN;
-            Dictionary<int, List<HuaweiRouteWithCommands>> allFailedHuaweiRoutesWithCommandsByRSSN;
 
-            ExecuteRoutesCommands(huaweiRoutesWithCommandsByRSSN, huaweiSSHCommunication, sshCommunicator, commandResults,
-                out succeedHuaweiRoutesWithCommandsByRSSN, out failedHuaweiRoutesWithCommandsByRSSN, out allFailedHuaweiRoutesWithCommandsByRSSN,
-                failedRSNames, faultCodes, maxNumberOfRetries);
+            ExecuteRoutesCommands(huaweiRoutesWithCommandsByRSSN, huaweiSSHCommunication, sshCommunicator, commandResults, failedRSNames, maxNumberOfRetries,
+                out succeedHuaweiRoutesWithCommandsByRSSN, out failedHuaweiRoutesWithCommandsByRSSN);
 
             LogHuaweiRouteCommands(succeedHuaweiRoutesWithCommandsByRSSN, failedHuaweiRoutesWithCommandsByRSSN, ftpLogger, finalizeTime);
 
             if (succeedHuaweiRoutesWithCommandsByRSSN != null && succeedHuaweiRoutesWithCommandsByRSSN.Count > 0)// save succeeded routes to succeeded table
                 routeSucceededManager.SaveRoutesSucceededToDB(succeedHuaweiRoutesWithCommandsByRSSN);
 
-            if (allFailedHuaweiRoutesWithCommandsByRSSN != null && allFailedHuaweiRoutesWithCommandsByRSSN.Count > 0)
+            if (failedHuaweiRoutesWithCommandsByRSSN != null && failedHuaweiRoutesWithCommandsByRSSN.Count > 0)
             {
                 var failedAdded = new List<HuaweiConvertedRoute>();
                 var failedUpdated = new List<HuaweiConvertedRoute>();
                 var failedDeleted = new List<HuaweiConvertedRoute>();
 
-                foreach (var failedHuaweiRoutesWithCommands in allFailedHuaweiRoutesWithCommandsByRSSN)
+                foreach (var failedHuaweiRoutesWithCommands in failedHuaweiRoutesWithCommandsByRSSN)
                 {
-                    foreach (var route in failedHuaweiRoutesWithCommands.Value)
+                    foreach (var failedHuaweiRoute in failedHuaweiRoutesWithCommands.Value)
                     {
-                        switch (route.ActionType)
+                        switch (failedHuaweiRoute.ActionType)
                         {
-                            case RouteActionType.Add: failedAdded.Add(route.RouteCompareResult.NewRoute); break;
-                            case RouteActionType.Update: failedUpdated.Add(route.RouteCompareResult.ExistingRoute); break;
-                            case RouteActionType.Delete: failedDeleted.Add(route.RouteCompareResult.NewRoute); break;
+                            case RouteActionType.Add: failedAdded.Add(failedHuaweiRoute.RouteCompareResult.NewRoute); break;
+                            case RouteActionType.Update: failedUpdated.Add(failedHuaweiRoute.RouteCompareResult.ExistingRoute); break;
+                            case RouteActionType.Delete: failedDeleted.Add(failedHuaweiRoute.RouteCompareResult.NewRoute); break;
                         }
                     }
                 }
@@ -212,22 +232,29 @@ namespace TOne.WhS.RouteSync.Huawei
             }
 
             routeManager.Finalize(new RouteFinalizeContext());
-            #endregion
         }
 
         public override object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
         {
-            throw new NotImplementedException();
+            RouteManager routeManager = new RouteManager(context.SwitchId);
+            var dbApplyStream = routeManager.InitialiazeStreamForDBApply();
+
+            foreach (var convertedRoute in context.ConvertedRoutes)
+                routeManager.WriteRecordToStream(convertedRoute as HuaweiConvertedRoute, dbApplyStream);
+
+            return routeManager.FinishDBApplyStream(dbApplyStream);
         }
 
         public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
-            throw new NotImplementedException();
+            RouteManager routeManager = new RouteManager(context.SwitchId);
+            routeManager.ApplyRouteForDB(context.PreparedItemsForApply);
         }
 
         public override void RemoveConnection(ISwitchRouteSynchronizerRemoveConnectionContext context)
         {
-            throw new NotImplementedException();
+            SwitchCommunicationList = null;
+            SwitchLoggerList = null;
         }
 
         #endregion
@@ -236,12 +263,15 @@ namespace TOne.WhS.RouteSync.Huawei
 
         private ConvertedRouteWithCode CreateHuaweiConvertedRoute(ICreateConvertedRouteWithCodeContext context)
         {
-            var customerCarrierMapping = CarrierMappings.GetRecord(context.Customer);
-            var customerMapping = customerCarrierMapping.CustomerMapping;
+            if (CustomerMappingsByRSSN == null)
+                throw new NullReferenceException("CustomerMappingsByRSSN");
+
+            int rssn = int.Parse(context.Customer);
+            var customerMapping = CustomerMappingsByRSSN.GetRecord(rssn); ;
             return new HuaweiConvertedRoute() { RSSN = int.Parse(context.Customer), Code = context.Code, RSName = context.RouteOptionIdentifier, DNSet = customerMapping.DNSet };
         }
 
-        private RTANA GetRTANA(int rssn, List<RouteOption> routeOptions)
+        private RouteAnalysis GetRouteAnalysis(int rssn, List<RouteOption> routeOptions)
         {
             bool isSequence = true;
             List<RouteCaseOption> routeCaseOptions = new List<RouteCaseOption>();
@@ -274,14 +304,15 @@ namespace TOne.WhS.RouteSync.Huawei
             if (routeCaseOptions.Count == 0)
                 return null;
 
-            RTANA rtana = new RTANA();
-            rtana.RSSN = rssn;
-            rtana.IsSequence = isSequence;
-            rtana.RouteCaseOptions = routeCaseOptions;
-            return rtana;
+            RouteAnalysis routeAnalysis = new RouteAnalysis();
+            routeAnalysis.RSSN = rssn;
+            routeAnalysis.RouteCaseOptionsType = isSequence ? RouteCaseOptionsType.Sequence : RouteCaseOptionsType.Percentage;
+            routeAnalysis.RouteCaseOptions = routeCaseOptions;
+            return routeAnalysis;
         }
 
-        #region Commands For RouteCase changes
+        #region RouteCase Commands
+
         private List<RouteCaseWithCommands> GetRouteCasesWithCommands(IEnumerable<RouteCase> routeCases)
         {
             if (routeCases == null || !routeCases.Any())
@@ -304,108 +335,163 @@ namespace TOne.WhS.RouteSync.Huawei
 
         private List<string> GetRouteCaseCommands(RouteCase routeCase)
         {
-            return null;
+            if (routeCase == null)
+                return null;
+
+            RouteAnalysis routeAnalysis = Helper.DeserializeRouteCase(routeCase.RouteCaseAsString);
+            if (routeAnalysis == null)
+                return null;
+
+            string rtsm;
+            switch (routeAnalysis.RouteCaseOptionsType)
+            {
+                case RouteCaseOptionsType.Sequence: rtsm = HuaweiCommands.RTSM_SEQ; break;
+                case RouteCaseOptionsType.Percentage: rtsm = HuaweiCommands.RTSM_PERC; break;
+                default: throw new NotSupportedException(string.Format("rtana.RouteCaseOptionsType {0} not supported", routeAnalysis.RouteCaseOptionsType));
+            }
+
+            List<string> routeNames = new List<string>();
+            List<string> percentages = new List<string>();
+
+            RouteCaseOption firstRouteCaseOption = routeAnalysis.RouteCaseOptions.First();
+            routeNames.Add(string.Format("RN=\"{0}\"", firstRouteCaseOption.RouteName));
+
+            if (firstRouteCaseOption.Percentage.HasValue)
+                percentages.Add(string.Format("PRT1={0}", firstRouteCaseOption.Percentage.Value));
+
+            for (var index = 1; index < routeAnalysis.RouteCaseOptions.Count; index++)
+            {
+                RouteCaseOption currentRouteCaseOption = routeAnalysis.RouteCaseOptions[index];
+
+                routeNames.Add(string.Format("R{0}N=\"{1}\"", index + 1, currentRouteCaseOption.RouteName));
+
+                if (currentRouteCaseOption.Percentage.HasValue)
+                    percentages.Add(string.Format("PRT{0}={1}", index + 1, currentRouteCaseOption.Percentage.Value));
+            }
+
+            string routeNamesAsString = string.Join(", ", routeNames);
+            string percentagesAsString = string.Empty;
+            if (percentages.Count > 0)
+                percentagesAsString = string.Concat(", ", string.Join(", ", percentages));
+
+            string command = string.Format("ADD RTANA: RSN=\"{0}\", RSSN=\"{1}\", TSN=\"DEFAULT”, RTSM={2}, {3} {4}, ISUP={5}", routeCase.RSName, routeAnalysis.RSSN, rtsm,
+                routeNamesAsString, percentagesAsString, firstRouteCaseOption.ISUP);
+
+            return new List<string>() { command };
         }
+
         #endregion
 
-        #region Commands For Route changes
-        private Dictionary<int, List<HuaweiRouteWithCommands>> GetHuaweiRoutesWithCommands(string switchId, RouteCaseManager routeCaseManager, out Dictionary<int, HuaweiConvertedRouteDifferences> routeDifferencesByRSSN)
+        #region Route Commands
+
+        private Dictionary<int, List<HuaweiRouteWithCommands>> GetHuaweiRoutesWithCommands(string switchId, RouteCaseManager routeCaseManager, RouteManager routeManager,
+            out Dictionary<int, HuaweiConvertedRouteDifferences> routeDifferencesByRSSN)
         {
             var routeCases = routeCaseManager.GetCachedRouteCases();
             if (routeCases == null || routeCases.Count == 0)
                 throw new VRBusinessException(string.Format("No route cases found for switch with id {0}", switchId));
 
-            Dictionary<int, CarrierMapping> carrierMappingByRSSN = new Dictionary<int, CarrierMapping>();
-
-            foreach (var carrierMappingKvp in CarrierMappings)
-            {
-                var carrierMapping = carrierMappingKvp.Value;
-
-                if (carrierMapping.CustomerMapping != null)
-                    carrierMappingByRSSN.Add(carrierMapping.CustomerMapping.RSSN, carrierMapping);
-            }
-
             RouteCompareTablesContext routeCompareTablesContext = new RouteCompareTablesContext();
-            IRouteDataManager routeDataManager = RouteSyncHuaweiDataManagerFactory.GetDataManager<IRouteDataManager>();
-            routeDataManager.SwitchId = switchId;
-            routeDataManager.CompareTables(routeCompareTablesContext);
+            routeManager.CompareTables(routeCompareTablesContext);
+
             routeDifferencesByRSSN = routeCompareTablesContext.RouteDifferencesByRSSN;
+            if (routeDifferencesByRSSN == null || routeDifferencesByRSSN.Count == 0)
+                return null;
 
             Dictionary<int, List<HuaweiRouteWithCommands>> results = new Dictionary<int, List<HuaweiRouteWithCommands>>();
 
-            if (routeDifferencesByRSSN != null && routeDifferencesByRSSN.Count > 0)
+            foreach (var routeDifferencesKvp in routeDifferencesByRSSN)
             {
-                foreach (var routeDifferencesKvp in routeDifferencesByRSSN)
+                var routeDifferences = routeDifferencesKvp.Value;
+                List<HuaweiRouteWithCommands> customerHuaweiRoutesWithCommands = results.GetOrCreateItem(routeDifferencesKvp.Key);
+
+                if (routeDifferences.RoutesToAdd != null && routeDifferences.RoutesToAdd.Count > 0)
                 {
-                    var routeDifferences = routeDifferencesKvp.Value;
-                    List<HuaweiRouteWithCommands> customerHuaweiRoutesWithCommands = results.GetOrCreateItem(routeDifferencesKvp.Key);
-
-                    if (routeDifferences.RoutesToAdd != null && routeDifferences.RoutesToAdd.Count > 0)
+                    foreach (var routeCompareResult in routeDifferences.RoutesToAdd)
                     {
-                        foreach (var routeCompareResult in routeDifferences.RoutesToAdd)
-                        {
-                            var commands = GetRouteCommand(carrierMappingByRSSN, routeCases, routeCompareResult);
-                            customerHuaweiRoutesWithCommands.Add(new HuaweiRouteWithCommands() { RouteCompareResult = routeCompareResult, Commands = commands, ActionType = RouteActionType.Add });
-                        }
+                        var commands = GetAddedRouteCommands(routeCompareResult, routeCases);
+                        customerHuaweiRoutesWithCommands.Add(new HuaweiRouteWithCommands() { RouteCompareResult = routeCompareResult, Commands = commands, ActionType = RouteActionType.Add });
                     }
+                }
 
-                    if (routeDifferences.RoutesToUpdate != null && routeDifferences.RoutesToUpdate.Count > 0)
+                if (routeDifferences.RoutesToUpdate != null && routeDifferences.RoutesToUpdate.Count > 0)
+                {
+                    foreach (var routeCompareResult in routeDifferences.RoutesToUpdate)
                     {
-                        foreach (var routeCompareResult in routeDifferences.RoutesToUpdate)
-                        {
-                            var commands = GetRouteCommand(carrierMappingByRSSN, routeCases, routeCompareResult);
-                            customerHuaweiRoutesWithCommands.Add(new HuaweiRouteWithCommands() { RouteCompareResult = routeCompareResult, Commands = commands, ActionType = RouteActionType.Update });
-                        }
+                        var commands = GetUpdatedRouteCommands(routeCompareResult, routeCases);
+                        customerHuaweiRoutesWithCommands.Add(new HuaweiRouteWithCommands() { RouteCompareResult = routeCompareResult, Commands = commands, ActionType = RouteActionType.Update });
                     }
+                }
 
-                    if (routeDifferences.RoutesToDelete != null && routeDifferences.RoutesToDelete.Count > 0)
+                if (routeDifferences.RoutesToDelete != null && routeDifferences.RoutesToDelete.Count > 0)
+                {
+                    foreach (var routeCompareResult in routeDifferences.RoutesToDelete)
                     {
-                        foreach (var routeCompareResult in routeDifferences.RoutesToDelete)
-                        {
-                            var commands = GetDeletedRouteCommands(carrierMappingByRSSN, routeCases, routeCompareResult);
-                            customerHuaweiRoutesWithCommands.Add(new HuaweiRouteWithCommands() { RouteCompareResult = routeCompareResult, Commands = commands, ActionType = RouteActionType.Delete });
-                        }
+                        var commands = GetDeletedRouteCommands(routeCompareResult, routeCases);
+                        customerHuaweiRoutesWithCommands.Add(new HuaweiRouteWithCommands() { RouteCompareResult = routeCompareResult, Commands = commands, ActionType = RouteActionType.Delete });
                     }
                 }
             }
+
             return results;
         }
-        private List<string> GetRouteCommand(Dictionary<int, CarrierMapping> carrierMappingByCustomerBo, List<RouteCase> routeCases, HuaweiConvertedRouteCompareResult routeCompareResult)
+
+        private List<string> GetAddedRouteCommands(HuaweiConvertedRouteCompareResult routeCompareResult, List<RouteCase> routeCases)
         {
-            throw new NotImplementedException();
+            HuaweiConvertedRoute addedRoute = routeCompareResult.NewRoute;
+
+            string command;
+
+            if (addedRoute.RSName.CompareTo(HuaweiCommands.ROUTE_BLOCK) != 0)
+            {
+                command = string.Format("ADD CNACLD: P={0}, PFX=K'{1}, CSA={2}, RSNAME=\"{3}\", MINL=10, MAXL=32, ICLDTYPE=PS, ISERVICECHECKNAME=\"INVALID\", NUMNAME=\"INVALID\", " +
+                    "TARIFF=CI, CHGNAME=\"INVALID\", NCN=\"INVALID\", SDCSN=\"INVALID\";", addedRoute.DNSet, addedRoute.Code, HuaweiCommands.CSA_ITT, addedRoute.RSName);
+            }
+            else
+            {
+                command = string.Format("ADD CNACLD: P={0}, PFX=K'{1}, CSA={2}, MINL=10, MAXL=32, ICLDTYPE=PS, SDESCRIPTION=\"T-One_Blocked\", ISERVICECHECKNAME=\"INVALID\", DNPREPARE=FALSE, " +
+                    "NUMNAME=\"INVALID\", TARIFF=CI, CHGNAME=\"INVALID\", NCN=\"INVALID\", SDCSN=\"INVALID\";", addedRoute.DNSet, addedRoute.Code, HuaweiCommands.CSA_TON);
+            }
+
+            return new List<string>() { command };
         }
-        private List<string> GetDeletedRouteCommands(Dictionary<int, CarrierMapping> carrierMappingByCustomerBo, List<RouteCase> routeCases, HuaweiConvertedRouteCompareResult routeCompareResult)
+
+        private List<string> GetUpdatedRouteCommands(HuaweiConvertedRouteCompareResult routeCompareResult, List<RouteCase> routeCases)
         {
-            throw new NotImplementedException();
+            HuaweiConvertedRoute newRoute = routeCompareResult.NewRoute;
+            HuaweiConvertedRoute existingRoute = routeCompareResult.ExistingRoute;
+
+            string command = null;
+
+            if (newRoute.RSName.CompareTo(HuaweiCommands.ROUTE_BLOCK) != 0 && existingRoute.RSName.CompareTo(HuaweiCommands.ROUTE_BLOCK) != 0)
+            {
+                command = string.Format("MOD CNACLD: P={0}, PFX=K'{1}, ADDR=ALL, RSNAME=\"{2}\";", newRoute.DNSet, newRoute.Code, newRoute.RSName);
+            }
+            else if (newRoute.RSName.CompareTo(HuaweiCommands.ROUTE_BLOCK) == 0)
+            {
+                command = string.Format("MOD CNACLD: P={0}, PFX=K'{1}, ADDR=ALL, CSA={2};", newRoute.DNSet, newRoute.Code, HuaweiCommands.CSA_TON);
+            }
+            else if (existingRoute.RSName.CompareTo(HuaweiCommands.ROUTE_BLOCK) == 0)
+            {
+                command = string.Format("MOD CNACLD: P={0}, PFX=K'{1}, ADDR=ALL, CSA=ITT, RSNAME=\"{2}\";", newRoute.DNSet, newRoute.Code, newRoute.RSName);
+            }
+
+            if (command == null)
+                return null;
+
+            return new List<string>() { command };
         }
+
+        private List<string> GetDeletedRouteCommands(HuaweiConvertedRouteCompareResult routeCompareResult, List<RouteCase> routeCases)
+        {
+            HuaweiConvertedRoute existingRoute = routeCompareResult.ExistingRoute;
+            string command = string.Format("RMV CNACLD: P={0}, PFX=K'{1}, ADDR=ALL", existingRoute.DNSet, existingRoute.Code);
+            return new List<string>() { command };
+        }
+
         #endregion
 
         #region LOG File
-
-        private static void LogHuaweiRouteCommands(Dictionary<int, List<HuaweiRouteWithCommands>> succeedHuaweiRoutesWithCommandsByRSSN, Dictionary<int, List<HuaweiRouteWithCommands>> failedHuaweiRoutesWithCommandsByRSSN, SwitchLogger ftpLogger, DateTime dateTime)
-        {
-            if (succeedHuaweiRoutesWithCommandsByRSSN != null && succeedHuaweiRoutesWithCommandsByRSSN.Count > 0)
-            {
-                foreach (var customerRoutesWithCommandsKvp in succeedHuaweiRoutesWithCommandsByRSSN)
-                {
-                    var customerRoutesWithCommands = customerRoutesWithCommandsKvp.Value;
-                    var commandResults = customerRoutesWithCommands.Select(item => new CommandResult() { Command = string.Join(Environment.NewLine, item.Commands) }).ToList();
-                    ILogRoutesContext logRoutesContext = new LogRoutesContext() { ExecutionDateTime = dateTime, ExecutionStatus = ExecutionStatus.Succeeded, CommandResults = commandResults, RSSNNumber = Convert.ToInt32(customerRoutesWithCommandsKvp.Key) };
-                    ftpLogger.LogRoutes(logRoutesContext);
-                }
-            }
-
-            if (failedHuaweiRoutesWithCommandsByRSSN != null && failedHuaweiRoutesWithCommandsByRSSN.Count > 0)
-            {
-                foreach (var customerRoutesWithCommandsKvp in succeedHuaweiRoutesWithCommandsByRSSN)
-                {
-                    var customerRoutesWithCommands = customerRoutesWithCommandsKvp.Value;
-                    var commandResults = customerRoutesWithCommands.Select(item => new CommandResult() { Command = string.Join(Environment.NewLine, item.Commands) }).ToList();
-                    ILogRoutesContext logRoutesContext = new LogRoutesContext() { ExecutionDateTime = dateTime, ExecutionStatus = ExecutionStatus.Failed, CommandResults = commandResults, RSSNNumber = Convert.ToInt32(customerRoutesWithCommandsKvp.Key) };
-                    ftpLogger.LogRoutes(logRoutesContext);
-                }
-            }
-        }
 
         private static void LogRouteCaseCommands(List<RouteCaseWithCommands> succeedRouteCasesWithCommands, List<RouteCaseWithCommands> failedRouteCasesWithCommands,
             SwitchLogger ftpLogger, DateTime dateTime)
@@ -425,121 +511,110 @@ namespace TOne.WhS.RouteSync.Huawei
             }
         }
 
+        private static void LogHuaweiRouteCommands(Dictionary<int, List<HuaweiRouteWithCommands>> succeedHuaweiRoutesWithCommandsByRSSN, Dictionary<int, List<HuaweiRouteWithCommands>> failedHuaweiRoutesWithCommandsByRSSN,
+            SwitchLogger ftpLogger, DateTime dateTime)
+        {
+            if (succeedHuaweiRoutesWithCommandsByRSSN != null && succeedHuaweiRoutesWithCommandsByRSSN.Count > 0)
+            {
+                foreach (var customerRoutesWithCommandsKvp in succeedHuaweiRoutesWithCommandsByRSSN)
+                {
+                    var customerRoutesWithCommands = customerRoutesWithCommandsKvp.Value;
+                    var commandResults = customerRoutesWithCommands.Select(item => new CommandResult() { Command = string.Join(Environment.NewLine, item.Commands) }).ToList();
+                    ILogRoutesContext logRoutesContext = new LogRoutesContext()
+                    {
+                        ExecutionDateTime = dateTime,
+                        ExecutionStatus = ExecutionStatus.Succeeded,
+                        CommandResults = commandResults,
+                        RSSNNumber = Convert.ToInt32(customerRoutesWithCommandsKvp.Key)
+                    };
+                    ftpLogger.LogRoutes(logRoutesContext);
+                }
+            }
+
+            if (failedHuaweiRoutesWithCommandsByRSSN != null && failedHuaweiRoutesWithCommandsByRSSN.Count > 0)
+            {
+                foreach (var customerRoutesWithCommandsKvp in succeedHuaweiRoutesWithCommandsByRSSN)
+                {
+                    var customerRoutesWithCommands = customerRoutesWithCommandsKvp.Value;
+                    var commandResults = customerRoutesWithCommands.Select(item => new CommandResult() { Command = string.Join(Environment.NewLine, item.Commands) }).ToList();
+                    ILogRoutesContext logRoutesContext = new LogRoutesContext()
+                    {
+                        ExecutionDateTime = dateTime,
+                        ExecutionStatus = ExecutionStatus.Failed,
+                        CommandResults = commandResults,
+                        RSSNNumber = Convert.ToInt32(customerRoutesWithCommandsKvp.Key)
+                    };
+                    ftpLogger.LogRoutes(logRoutesContext);
+                }
+            }
+        }
+
         #endregion
 
         #region SSH
 
-        private void ExecuteRouteCasesCommands(List<RouteCaseWithCommands> routeCasesWithCommands, HuaweiSSHCommunication sshCommunication, SSHCommunicator sshCommunicator,
-            List<CommandResult> commandResults, out List<RouteCaseWithCommands> succeedRouteCaseNumbers, out List<RouteCaseWithCommands> failedRouteCaseNumbers,
-            RouteCaseManager routeCaseManager, int maxNumberOfRetries, string switchId)
+        private void ExecuteRouteCasesCommands(List<RouteCaseWithCommands> routeCasesWithCommands, HuaweiSSHCommunication huaweiSSHCommunication, SSHCommunicator sshCommunicator,
+            List<CommandResult> commandResults, RouteCaseManager routeCaseManager, int maxNumberOfRetries, out List<RouteCaseWithCommands> succeedRouteCasesWithCommands,
+            out List<RouteCaseWithCommands> failedRouteCasesWithCommands)
         {
-            int batchSize = 100;
-            var routeCaseNumbersToUpdate = new List<int>();
-            succeedRouteCaseNumbers = new List<RouteCaseWithCommands>();
-            failedRouteCaseNumbers = new List<RouteCaseWithCommands>();
+            succeedRouteCasesWithCommands = new List<RouteCaseWithCommands>();
+            failedRouteCasesWithCommands = new List<RouteCaseWithCommands>();
 
             if (routeCasesWithCommands == null || routeCasesWithCommands.Count == 0)
                 return;
 
-            if (sshCommunication == null)
+            if (huaweiSSHCommunication == null)
             {
-                succeedRouteCaseNumbers = routeCasesWithCommands;
-                routeCaseManager.UpdateSyncedRouteCases(succeedRouteCaseNumbers.Select(item => item.RouteCase.RCNumber));
+                succeedRouteCasesWithCommands = routeCasesWithCommands;
+                routeCaseManager.UpdateSyncedRouteCases(succeedRouteCasesWithCommands.Select(item => item.RouteCase.RCNumber));
                 return;
             }
 
-            string response;
+            if (!TryOpenConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults))
+            {
+                failedRouteCasesWithCommands = routeCasesWithCommands;
+                return;
+            }
 
-            response = OpenConnectionWithSwitch(sshCommunicator, commandResults);
+            int batchSize = 100;
+            var routeCaseNumbersToUpdate = new List<int>();
 
             foreach (var routeCaseWithCommands in routeCasesWithCommands)
             {
-                bool isSuccessfull = false;
+                bool isCommandExecuted = false;
                 int numberOfTriesDone = 0;
 
-                var rcNumber = routeCaseWithCommands.RouteCase.RCNumber;
-
-                while (!isSuccessfull && numberOfTriesDone < maxNumberOfRetries)
+                while (!isCommandExecuted && numberOfTriesDone < maxNumberOfRetries)
                 {
                     try
                     {
                         string command = routeCaseWithCommands.Commands[0];
+
+                        string response;
                         sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
                         commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
-                        if (!IsCommandSucceed(response))
+                        if (IsCommandSucceed(response))
                         {
-                            string commandTemp = string.Format("{0}:RC={1};", HuaweiCommands.ANRAR_Command, rcNumber);
-                            sshCommunicator.ExecuteCommand(commandTemp, CommandPrompt, out response);
-                            commandResults.Add(new CommandResult() { Command = commandTemp, Output = new List<string>() { response } });
+                            succeedRouteCasesWithCommands.Add(routeCaseWithCommands);
 
-                            sshCommunicator.ExecuteCommand(";", CommandPrompt, out response);
-                            commandResults.Add(new CommandResult() { Command = ";", Output = new List<string>() { response } });
-
-                            if (IsCommandSucceed(response))
+                            routeCaseNumbersToUpdate.Add(routeCaseWithCommands.RouteCase.RCNumber);
+                            if (routeCaseNumbersToUpdate.Count == batchSize)
                             {
-                                commandTemp = string.Format("{0}:RC={1};", HuaweiCommands.ANRZI_Command, rcNumber);
-                                sshCommunicator.ExecuteCommand(commandTemp, CommandPrompt, out response);
-                                commandResults.Add(new CommandResult() { Command = commandTemp, Output = new List<string>() { response } });
-                            }
-
-                            sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
-                            commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
-                            if (!IsCommandSucceed(response))
-                            {
-                                failedRouteCaseNumbers.Add(routeCaseWithCommands);
-                                break;
+                                routeCaseManager.UpdateSyncedRouteCases(routeCaseNumbersToUpdate);
+                                routeCaseNumbersToUpdate = new List<int>();
                             }
                         }
-
-                        var commandsSucceed = true;
-                        for (int i = 1; i < routeCaseWithCommands.Commands.Count; i++)
+                        else
                         {
-                            string routeCaseCommand = routeCaseWithCommands.Commands[i];
-                            sshCommunicator.ExecuteCommand(routeCaseCommand, CommandPrompt, out response);
-                            commandResults.Add(new CommandResult() { Command = routeCaseCommand, Output = new List<string>() { response } });
-                            if (!IsCommandSucceed(response))
-                            {
-                                commandsSucceed = false;
-                                break;
-                            }
+                            failedRouteCasesWithCommands.Add(routeCaseWithCommands);
                         }
 
-                        if (!commandsSucceed)
-                        {
-                            failedRouteCaseNumbers.Add(routeCaseWithCommands);
-                            break;
-                        }
-
-                        command = string.Format("{0}:RC={1};", HuaweiCommands.ANRAI_Command, rcNumber);
-                        sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
-                        commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
-                        if (!IsCommandSucceed(response))
-                        {
-                            failedRouteCaseNumbers.Add(routeCaseWithCommands);
-                            break;
-                        }
-
-                        sshCommunicator.ExecuteCommand(";", CommandPrompt, out response);
-                        commandResults.Add(new CommandResult() { Command = ";", Output = new List<string>() { response } });
-                        if (!IsCommandSucceed(response))
-                        {
-                            failedRouteCaseNumbers.Add(routeCaseWithCommands);
-                            break;
-                        }
-
-                        succeedRouteCaseNumbers.Add(routeCaseWithCommands);
-                        routeCaseNumbersToUpdate.Add(rcNumber);
-                        if (routeCaseNumbersToUpdate.Count == batchSize)
-                        {
-                            routeCaseManager.UpdateSyncedRouteCases(routeCaseNumbersToUpdate);
-                            routeCaseNumbersToUpdate = new List<int>();
-                        }
-                        isSuccessfull = true;
+                        isCommandExecuted = true;
                     }
                     catch (Exception ex)
                     {
                         numberOfTriesDone++;
-                        isSuccessfull = false;
+                        isCommandExecuted = false;
                     }
                 }
             }
@@ -548,190 +623,93 @@ namespace TOne.WhS.RouteSync.Huawei
                 routeCaseManager.UpdateSyncedRouteCases(routeCaseNumbersToUpdate);
         }
 
-        private void ExecuteRoutesCommands(Dictionary<int, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN, HuaweiSSHCommunication sshCommunication,
-            SSHCommunicator sshCommunicator, List<CommandResult> commandResults, out Dictionary<int, List<HuaweiRouteWithCommands>> succeededRoutesWithCommandsByRSSN,
-            out Dictionary<int, List<HuaweiRouteWithCommands>> failedRoutesWithCommandsByRSSN, out Dictionary<int, List<HuaweiRouteWithCommands>> allFailedRoutesWithCommandsByRSSN,
-            IEnumerable<string> failedRSNames, IEnumerable<string> faultCodes, int maxNumberOfRetries)
+        private void ExecuteRoutesCommands(Dictionary<int, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN, HuaweiSSHCommunication huaweiSSHCommunication,
+            SSHCommunicator sshCommunicator, List<CommandResult> commandResults, IEnumerable<string> failedRSNames, int maxNumberOfRetries,
+            out Dictionary<int, List<HuaweiRouteWithCommands>> succeededRoutesWithCommandsByRSSN, out Dictionary<int, List<HuaweiRouteWithCommands>> failedRoutesWithCommandsByRSSN)
         {
             succeededRoutesWithCommandsByRSSN = new Dictionary<int, List<HuaweiRouteWithCommands>>();
             failedRoutesWithCommandsByRSSN = new Dictionary<int, List<HuaweiRouteWithCommands>>();
-            allFailedRoutesWithCommandsByRSSN = new Dictionary<int, List<HuaweiRouteWithCommands>>();
 
             if (routesWithCommandsByRSSN == null || routesWithCommandsByRSSN.Count == 0)
                 return;
 
-            if (sshCommunication == null)
+            if (huaweiSSHCommunication == null)
             {
                 succeededRoutesWithCommandsByRSSN = routesWithCommandsByRSSN;
                 return;
             }
 
-            string response;
-
-            OpenConnectionWithSwitch(sshCommunicator, commandResults);
-            sshCommunicator.ExecuteCommand(HuaweiCommands.ANBAR_Command, CommandPrompt, out response);
-            commandResults.Add(new CommandResult() { Command = HuaweiCommands.ANBAR_Command, Output = new List<string>() { response } });
-            sshCommunicator.ExecuteCommand(";", CommandPrompt, out response);
-            commandResults.Add(new CommandResult() { Command = ";", Output = new List<string>() { response } });
-
-            if (IsCommandFailed(response, faultCodes))
+            if (!TryOpenConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults))
             {
-                sshCommunicator.ExecuteCommand(HuaweiCommands.ANBZI_Command, CommandPrompt, out response);
-                commandResults.Add(new CommandResult() { Command = HuaweiCommands.ANBZI_Command, Output = new List<string>() { response } });
-                Thread.Sleep(5000);
-
-                if (response.ToUpper().Contains(HuaweiCommands.ORDERED))
-                {
-                    sshCommunicator.ExecuteCommand(HuaweiCommands.Exit_Command, ">", out response);
-                    commandResults.Add(new CommandResult() { Command = HuaweiCommands.Exit_Command, Output = new List<string>() { response } });
-                    Thread.Sleep(2000);
-
-                    sshCommunicator.ExecuteCommand(HuaweiCommands.MML_Command, "<", out response);
-                    commandResults.Add(new CommandResult() { Command = HuaweiCommands.MML_Command, Output = new List<string>() { response } });
-                    Thread.Sleep(1000);
-                }
-                else if (!IsCommandSucceed(response))
-                {
-                    throw new Exception("ANBAR Not Executed");
-                }
-
-                sshCommunicator.ExecuteCommand(HuaweiCommands.ANBCI_Command, CommandPrompt, out response);
-                commandResults.Add(new CommandResult() { Command = HuaweiCommands.ANBCI_Command, Output = new List<string>() { response } });
-
-                Thread.Sleep(5000);
-                while (!response.ToUpper().Contains(HuaweiCommands.ORDERED) && response.ToUpper().Contains("new List<string>() { response }  BUSY"))
-                {
-                    sshCommunicator.ExecuteCommand(HuaweiCommands.ANBCI_Command, CommandPrompt, out response);
-                    commandResults.Add(new CommandResult() { Command = HuaweiCommands.ANBCI_Command, Output = new List<string>() { response } });
-                    Thread.Sleep(3000);
-                }
-                if (response.ToUpper().Contains(HuaweiCommands.ORDERED))
-                {
-                    sshCommunicator.ExecuteCommand(HuaweiCommands.Exit_Command, ">", out response);
-                    commandResults.Add(new CommandResult() { Command = HuaweiCommands.Exit_Command, Output = new List<string>() { response } });
-                    Thread.Sleep(2000);
-                    sshCommunicator.ExecuteCommand(HuaweiCommands.MML_Command, "<", out response);
-                    commandResults.Add(new CommandResult() { Command = HuaweiCommands.MML_Command, Output = new List<string>() { response } });
-                    Thread.Sleep(1000);
-                }
-                else if (!IsCommandSucceed(response))
-                {
-                    throw new Exception("ANBAR Not Executed");
-                }
-            }
-            else if (!IsCommandSucceed(response))
-            {
-                throw new Exception("ANBAR Not Executed");
+                failedRoutesWithCommandsByRSSN = routesWithCommandsByRSSN;
+                return;
             }
 
-            foreach (var huaweiRouteWithCommandsKvp in routesWithCommandsByRSSN)
+            foreach (var routeWithCommandsKvp in routesWithCommandsByRSSN)
             {
-                var rssn = huaweiRouteWithCommandsKvp.Key;
-                var huaweiRoutesWithCommands = huaweiRouteWithCommandsKvp.Value;
+                var rssn = routeWithCommandsKvp.Key;
+                var routesWithCommands = routeWithCommandsKvp.Value;
 
-                foreach (var huaweiRouteWithCommands in huaweiRoutesWithCommands)
+                foreach (var routeWithCommands in routesWithCommands)
                 {
-                    if (huaweiRouteWithCommands.RouteCompareResult != null && failedRSNames.Contains(huaweiRouteWithCommands.RouteCompareResult.NewRoute.RSName))
-                    {
-                        var allFailedRoutesWithCommands = allFailedRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
-                        allFailedRoutesWithCommands.Add(huaweiRouteWithCommands);
-                        continue;
-                    }
-
-                    bool isSuccessfull = false;
                     int numberOfTriesDone = 0;
+                    bool isCommandExecuted = false;
 
-                    var commandsSucceed = true;
-                    while (!isSuccessfull && numberOfTriesDone < maxNumberOfRetries)
+                    while (!isCommandExecuted && numberOfTriesDone < maxNumberOfRetries)
                     {
                         try
                         {
-                            foreach (var command in huaweiRouteWithCommands.Commands)
-                            {
-                                sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
-                                commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
-                                while (response.ToUpper().Contains(HuaweiCommands.FUNCTION_BUSY))
-                                {
-                                    Thread.Sleep(3000);
-                                    sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
-                                    commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
-                                }
+                            string command = routeWithCommands.Commands[0];
 
-                                if (!IsCommandSucceed(response))
-                                {
-                                    commandsSucceed = false;
-                                    break;
-                                }
-                            }
-
-                            if (commandsSucceed)
+                            string response;
+                            sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
+                            commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
+                            if (IsCommandSucceed(response))
                             {
-                                isSuccessfull = true;
-                                var succeededHuaweiRoutesWithCommands = succeededRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
-                                succeededHuaweiRoutesWithCommands.Add(huaweiRouteWithCommands);
+                                List<HuaweiRouteWithCommands> tempHuaweiRouteWithCommands = succeededRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
+                                tempHuaweiRouteWithCommands.Add(routeWithCommands);
                             }
                             else
                             {
-                                var allFailedHuaweiRoutesWithCommands = allFailedRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
-                                allFailedHuaweiRoutesWithCommands.Add(huaweiRouteWithCommands);
-
-                                var failedHuaweiRoutesWithCommands = failedRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
-                                failedHuaweiRoutesWithCommands.Add(huaweiRouteWithCommands);
-                                break;
+                                List<HuaweiRouteWithCommands> tempHuaweiRouteWithCommands = failedRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
+                                tempHuaweiRouteWithCommands.Add(routeWithCommands);
                             }
+
+                            isCommandExecuted = true;
                         }
                         catch (Exception ex)
                         {
                             numberOfTriesDone++;
-                            isSuccessfull = false;
+                            isCommandExecuted = false;
                         }
                     }
                 }
             }
-
-            sshCommunicator.ExecuteCommand(HuaweiCommands.ANBAI_Command, CommandPrompt, out response);
-            commandResults.Add(new CommandResult() { Command = HuaweiCommands.ANBAI_Command, Output = new List<string>() { response } });
-
-            sshCommunicator.ExecuteCommand(";", CommandPrompt, out response);
-            commandResults.Add(new CommandResult() { Command = ";", Output = new List<string>() { response } });
-
-            Thread.Sleep(3000);
-            sshCommunicator.ExecuteCommand(HuaweiCommands.Exit_Command, ">", out response);
-            commandResults.Add(new CommandResult() { Command = HuaweiCommands.Exit_Command, Output = new List<string>() { response } });
-
-            sshCommunicator.ExecuteCommand(HuaweiCommands.Exit_Command);
-            commandResults.Add(new CommandResult() { Command = HuaweiCommands.Exit_Command });
         }
 
-
-        private string OpenConnectionWithSwitch(SSHCommunicator sshCommunicator, List<CommandResult> commandResults)
+        private bool TryOpenConnectionWithSwitch(HuaweiSSHCommunication sshCommunication, SSHCommunicator sshCommunicator, List<CommandResult> commandResults)
         {
-            string response;
             sshCommunicator.OpenConnection();
             sshCommunicator.OpenShell();
             sshCommunicator.ReadPrompt(">");
-            sshCommunicator.ExecuteCommand(HuaweiCommands.MML_Command, "<", out response);
-            commandResults.Add(new CommandResult() { Command = HuaweiCommands.MML_Command, Output = new List<string>() { response } });
-            return response;
-        }
 
-        private bool IsCommandSucceed(string response)
-        {
-            string responseToUpper = response.ToUpper();
-            if (string.IsNullOrEmpty(response) || response.Equals(";") || responseToUpper.Contains(HuaweiCommands.EXECUTED) && !responseToUpper.Contains("NOT") || responseToUpper.Contains(HuaweiCommands.ORDERED))
+            string registerToMSCServerCommand = string.Format("REG NE:IP=\"{0}\";", sshCommunication.InterfaceIP);
+
+            string response;
+            sshCommunicator.ExecuteCommand(registerToMSCServerCommand, CommandPrompt, out response);
+            commandResults.Add(new CommandResult() { Command = registerToMSCServerCommand, Output = new List<string>() { response } });
+
+            string responseToUpper = response.Replace(" ", "").ToUpper();
+            if (responseToUpper.Contains("RETCODE=0SUCCESS"))
                 return true;
 
             return false;
         }
 
-        private bool IsCommandFailed(string response, IEnumerable<string> faultCodes)
+        private bool IsCommandSucceed(string response)
         {
             string responseToUpper = response.ToUpper();
-
-            if (string.IsNullOrEmpty(response))
-                return false;
-
-            if (responseToUpper.Contains(HuaweiCommands.PROTECTION_PERIOD_ELAPSED) || responseToUpper.Contains(HuaweiCommands.PROTECTIVE_PERIOD_ELAPSED) || faultCodes.Any(item => responseToUpper.Contains(item)))
+            if (responseToUpper.Contains("RETCODE=0OPERATIONSUCCEEDED"))
                 return true;
 
             return false;

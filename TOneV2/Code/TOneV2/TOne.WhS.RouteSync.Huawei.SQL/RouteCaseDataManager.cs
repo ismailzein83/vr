@@ -41,7 +41,19 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 
         public List<RouteCase> GetNotSyncedRouteCases()
         {
-            throw new NotImplementedException();
+            List<RouteCase> routeCases = new List<RouteCase>();
+
+            string query = string.Format(query_GetRouteCases.Replace("#FILTER#", " WHERE Synced = 0 "), SwitchId);
+            ExecuteReaderText(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    RouteCase routeCase = RouteCaseMapper(reader);
+                    routeCases.Add(routeCase);
+                }
+            }, null);
+
+            return routeCases;
         }
 
         public void Initialize(IRouteCaseInitializeContext context)
@@ -52,7 +64,19 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 
         public Dictionary<string, RouteCase> GetRouteCasesAfterRCNumber(int rcNumber)
         {
-            throw new NotImplementedException();
+            Dictionary<string, RouteCase> routeCases = new Dictionary<string, RouteCase>();
+
+            string query = string.Format(query_GetRouteCases.Replace("#FILTER#", " WHERE rc.RCNumber > {1}"), SwitchId, rcNumber);
+            ExecuteReaderText(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    RouteCase routeCase = RouteCaseMapper(reader);
+                    routeCases.Add(routeCase.RouteCaseAsString, routeCase);
+                }
+            }, null);
+
+            return routeCases;
         }
 
         public void ApplyRouteCaseForDB(object preparedRouteCase)

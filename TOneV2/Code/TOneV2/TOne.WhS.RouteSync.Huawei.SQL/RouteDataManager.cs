@@ -84,6 +84,11 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             throw new NotImplementedException();
         }
 
+        public void ApplyRouteForDB(object preparedRoute)
+        {
+            InsertBulkToTable(preparedRoute as BaseBulkInsertInfo);
+        }
+
         #region IBulkApplyDataManager
 
         public object InitialiazeStreamForDBApply()
@@ -181,32 +186,32 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                                                             END";
 
         const string query_SyncWithRouteAddedTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Huawei_{0}.{2}') AND s.type in (N'U'))
-														BEGIN
-														    BEGIN TRANSACTION
-															BEGIN TRY
-															    INSERT INTO  WhS_RouteSync_Huawei_{0}.{1} (CustomerId, Code, RSName, DNSet)
-															    SELECT CustomerId, Code, RSName, DNSet
-                                                                FROM WhS_RouteSync_Huawei_{0}.{2}
-														
-															    DROP TABLE WhS_RouteSync_Huawei_{0}.{2}
-															    COMMIT Transaction
-															END TRY
-
-															BEGIN CATCH
-															    If @@TranCount>0
-																    ROLLBACK Transaction;
-																    DECLARE @ErrorMessage NVARCHAR(max);
-																    DECLARE @ErrorSeverity INT;
-																    DECLARE @ErrorState INT;
-
-																    SELECT 
-																	    @ErrorMessage = ERROR_MESSAGE() + ' Line ' + cast(ERROR_LINE() as nvarchar(5)),
-																	    @ErrorSeverity = ERROR_SEVERITY(),
-																	    @ErrorState = ERROR_STATE();
-
-																    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
-															END CATCH
-														END";
+														  BEGIN
+														      BEGIN TRANSACTION
+														  	  BEGIN TRY
+														  	      INSERT INTO  WhS_RouteSync_Huawei_{0}.{1} (CustomerId, Code, RSName, DNSet)
+														  	      SELECT CustomerId, Code, RSName, DNSet
+                                                                    FROM WhS_RouteSync_Huawei_{0}.{2}
+														      
+														  	      DROP TABLE WhS_RouteSync_Huawei_{0}.{2}
+														  	      COMMIT Transaction
+														  	  END TRY
+                                                              
+														  	  BEGIN CATCH
+														  	      If @@TranCount>0
+														  	  	    ROLLBACK Transaction;
+														  	  	    DECLARE @ErrorMessage NVARCHAR(max);
+														  	  	    DECLARE @ErrorSeverity INT;
+														  	  	    DECLARE @ErrorState INT;
+                                                              
+														  	  	    SELECT 
+														  	  		    @ErrorMessage = ERROR_MESSAGE() + ' Line ' + cast(ERROR_LINE() as nvarchar(5)),
+														  	  		    @ErrorSeverity = ERROR_SEVERITY(),
+														  	  		    @ErrorState = ERROR_STATE();
+                                                              
+														  	  	    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+														  	  END CATCH
+														  END";
 
         #endregion
     }

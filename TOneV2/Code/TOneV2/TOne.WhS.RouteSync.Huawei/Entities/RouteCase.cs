@@ -13,20 +13,19 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
         public string RouteCaseAsString { get; set; }
     }
 
-    public class RTANA
+    public class RouteAnalysis
     {
         public int RSSN { get; set; }
-        public bool IsSequence { get; set; }
+        public RouteCaseOptionsType RouteCaseOptionsType { get; set; }
         public List<RouteCaseOption> RouteCaseOptions { get; set; }
     }
 
     public class RouteCaseOption
     {
         public string RouteName { get; set; }
-        public string ISUP { get; set; }
         public int? Percentage { get; set; }
+        public string ISUP { get; set; }
     }
 
-    //ToBeDeleted???
-    //public enum RouteCaseOptionsType { Sequence = 0, Percentage = 1 }
+    public enum RouteCaseOptionsType { Sequence = 0, Percentage = 1 }
 }

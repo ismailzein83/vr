@@ -17,5 +17,6 @@ namespace TOne.WhS.RouteSync.Huawei.Data
         void RemoveRoutesFromTempTable(IEnumerable<HuaweiConvertedRoute> routes);
         void UpdateRoutesInTempTable(IEnumerable<HuaweiConvertedRoute> routes);
         void Finalize(IRouteFinalizeContext context);
+        void ApplyRouteForDB(object preparedRoute);
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TOne.WhS.RouteSync.Huawei.Entities;
 
@@ -10,14 +12,14 @@ namespace TOne.WhS.RouteSync.Huawei
         public const string RouteCaseOptionsSeparatorAsString = "|";
         public const string RouteCaseOptionsFieldsSeparatorAsString = "~";
 
-        public static string GetRSName(RTANA rtana, int routeNameLength)
+        public static string GetRSName(RouteAnalysis routeAnalysis, int routeNameLength)
         {
-            if (rtana == null || rtana.RouteCaseOptions == null || rtana.RouteCaseOptions.Count == 0)
-                return "BLK";
+            if (routeAnalysis == null || routeAnalysis.RouteCaseOptions == null || routeAnalysis.RouteCaseOptions.Count == 0)
+                return HuaweiCommands.ROUTE_BLOCK;
 
-            StringBuilder sb_RSName = new StringBuilder(rtana.RSSN);
+            StringBuilder sb_RSName = new StringBuilder(routeAnalysis.RSSN);
 
-            foreach (var routeCaseOption in rtana.RouteCaseOptions)
+            foreach (var routeCaseOption in routeAnalysis.RouteCaseOptions)
             {
                 string percentageAsString = routeCaseOption.Percentage.HasValue ? routeCaseOption.Percentage.Value.ToString() : string.Empty;
                 string routeName = routeCaseOption.RouteName.Replace(" ", "");
@@ -29,15 +31,22 @@ namespace TOne.WhS.RouteSync.Huawei
             return sb_RSName.ToString();
         }
 
-        public static string SerializeRouteCase(RTANA rtana)
+        public static string SerializeRouteCase(RouteAnalysis routeAnalysis)
         {
-            if (rtana == null || rtana.RouteCaseOptions == null || rtana.RouteCaseOptions.Count == 0)
-                return "BLK";
+            if (routeAnalysis == null || routeAnalysis.RouteCaseOptions == null || !routeAnalysis.RouteCaseOptions.Any())
+                return HuaweiCommands.ROUTE_BLOCK;
 
-            string isSequenceAsString = rtana.IsSequence ? "SEQ" : "PERC";
-            string serializedRouteCaseOptions = SerializeRouteCaseOptions(rtana.RouteCaseOptions);
+            string routeCaseOptionsTypeAsString;
+            switch (routeAnalysis.RouteCaseOptionsType)
+            {
+                case RouteCaseOptionsType.Sequence: routeCaseOptionsTypeAsString = HuaweiCommands.RTSM_SEQ; break;
+                case RouteCaseOptionsType.Percentage: routeCaseOptionsTypeAsString = HuaweiCommands.RTSM_PERC; break;
+                default: throw new NotSupportedException(string.Format("rtana.RouteCaseOptionsType {0} not supported", routeAnalysis.RouteCaseOptionsType));
+            }
 
-            return string.Format("{0}{1}{0}{2}{0}{3}", RouteCaseFieldsSeparatorAsString, rtana.RSSN, isSequenceAsString, serializedRouteCaseOptions);
+            string serializedRouteCaseOptions = SerializeRouteCaseOptions(routeAnalysis.RouteCaseOptions);
+
+            return string.Format("{0}{1}{0}{2}{0}{3}", RouteCaseFieldsSeparatorAsString, routeAnalysis.RSSN, routeCaseOptionsTypeAsString, serializedRouteCaseOptions);
         }
 
         private static string SerializeRouteCaseOptions(List<RouteCaseOption> routeCaseOptions)
@@ -58,6 +67,57 @@ namespace TOne.WhS.RouteSync.Huawei
             }
 
             return sb_RouteCaseOptions.ToString();
+        }
+
+        public static RouteAnalysis DeserializeRouteCase(string routeCaseAsString)
+        {
+            if (string.IsNullOrEmpty(routeCaseAsString))
+                return null;
+
+            string[] routeCaseFields = routeCaseAsString.Split(new string[] { RouteCaseFieldsSeparatorAsString }, StringSplitOptions.None);
+            if (routeCaseFields == null || routeCaseFields.Count() != 3)
+                return null;
+
+            RouteAnalysis routeAnalysis = new RouteAnalysis();
+            routeAnalysis.RSSN = int.Parse(routeCaseFields[0]);
+
+            string routeCaseOptionsTypeAsString = routeCaseFields[1];
+            switch (routeCaseOptionsTypeAsString)
+            {
+                case HuaweiCommands.RTSM_SEQ: routeAnalysis.RouteCaseOptionsType = RouteCaseOptionsType.Sequence; break;
+                case HuaweiCommands.RTSM_PERC: routeAnalysis.RouteCaseOptionsType = RouteCaseOptionsType.Percentage; break;
+                default: throw new NotSupportedException(string.Format("rtana.RouteCaseOptionsType {0} not supported", routeAnalysis.RouteCaseOptionsType));
+            }
+
+            routeAnalysis.RouteCaseOptions = DeserializeRouteCaseOptions(routeCaseFields[2]);
+            return routeAnalysis;
+        }
+
+        public static List<RouteCaseOption> DeserializeRouteCaseOptions(string serializedRouteCaseOption)
+        {
+            if (string.IsNullOrEmpty(serializedRouteCaseOption))
+                return null;
+
+            string[] routeCaseOptions = serializedRouteCaseOption.Split(new string[] { RouteCaseOptionsSeparatorAsString }, StringSplitOptions.None);
+            if (routeCaseOptions == null || !routeCaseOptions.Any())
+                return null;
+
+            List<RouteCaseOption> results = new List<RouteCaseOption>();
+
+            foreach (var routeCaseOption in routeCaseOptions)
+            {
+                string[] routeCaseOptionFields = routeCaseOption.Split(new string[] { RouteCaseOptionsFieldsSeparatorAsString }, StringSplitOptions.None);
+                if (routeCaseOptionFields == null || routeCaseOptionFields.Count() != 3)
+                    continue;
+
+                int? percentage = null;
+                if (!string.IsNullOrEmpty(routeCaseOptionFields[1]))
+                    percentage = int.Parse(routeCaseOptionFields[1]);
+
+                results.Add(new RouteCaseOption() { RouteName = routeCaseOptionFields[0], Percentage = percentage, ISUP = routeCaseOptionFields[2] });
+            }
+
+            return results.Count > 0 ? results : null;
         }
     }
 }

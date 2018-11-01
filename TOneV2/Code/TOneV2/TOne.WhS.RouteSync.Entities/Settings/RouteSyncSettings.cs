@@ -13,7 +13,6 @@ namespace TOne.WhS.RouteSync.Entities
         public RouteSyncProcess RouteSyncProcess { get; set; }
 
         public Dictionary<Guid, RouteSynchronizerSwitchSettings> SwitchSettingsByConfigId { get; set; }
-
     }
 
     public class RouteSyncProcess
@@ -35,5 +34,6 @@ namespace TOne.WhS.RouteSync.Entities
 
     public abstract class RouteSynchronizerSwitchSettings
     {
+
     }
 }
