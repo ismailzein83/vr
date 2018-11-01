@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TOne.WhS.RouteSync.Entities;
 
 namespace TOne.WhS.RouteSync.Huawei.Entities
@@ -42,5 +38,17 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
         public List<HuaweiConvertedRouteCompareResult> RoutesToAdd { get; set; }
         public List<HuaweiConvertedRouteCompareResult> RoutesToUpdate { get; set; }
         public List<HuaweiConvertedRouteCompareResult> RoutesToDelete { get; set; }
+    }
+     
+    public struct HuaweiConvertedRouteIdentifier
+    {
+        public int RSSN { get; set; }
+        public string Code { get; set; }
+        public int DNSet { get; set; }
+
+        public override int GetHashCode()
+        {
+            return RSSN.GetHashCode() + Code.GetHashCode() + DNSet.GetHashCode();
+        }
     }
 }

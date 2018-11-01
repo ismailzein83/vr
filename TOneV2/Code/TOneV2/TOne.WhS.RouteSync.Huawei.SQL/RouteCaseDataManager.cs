@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Huawei.Data;
 using TOne.WhS.RouteSync.Huawei.Entities;
 using Vanrise.Data.SQL;
@@ -81,7 +78,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 
         public void ApplyRouteCaseForDB(object preparedRouteCase)
         {
-            throw new NotImplementedException();
+            InsertBulkToTable(preparedRouteCase as BaseBulkInsertInfo);
         }
 
         public object InitialiazeStreamForDBApply()
@@ -122,9 +119,13 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 
         public void UpdateSyncedRouteCases(IEnumerable<int> rcNumbers)
         {
-            throw new NotImplementedException();
-        }
+            if (rcNumbers == null || !rcNumbers.Any())
+                return;
 
+            string filter = string.Format(" Where RCNumber in ({0})", string.Join(",", rcNumbers));
+            string query = string.Format(query_UpdateSyncedRouteCases.Replace("#FILTER#", filter), SwitchId);
+            ExecuteNonQueryText(query, null);
+        }
 
         #region Queries
 
@@ -150,6 +151,10 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         const string query_GetRouteCases = @"SELECT rc.RCNumber, rc.RSName, rc.RouteCase
                                                     FROM [WhS_RouteSync_Huawei_{0}].[RouteCase] rc with(nolock) 
                                                     #FILTER#";
+
+        const string query_UpdateSyncedRouteCases = @"UPDATE [WhS_RouteSync_Ericsson_{0}].[RouteCase]
+													  SET [Synced] = 1
+													  #FILTER#";
 
         #endregion
     }

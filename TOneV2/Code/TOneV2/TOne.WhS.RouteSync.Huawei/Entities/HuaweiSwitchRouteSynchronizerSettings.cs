@@ -9,6 +9,6 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
 {
     public class HuaweiSwitchRouteSynchronizerSettings : RouteSynchronizerSwitchSettings
     {
-        public int NumberOfRetries { get; set; }
+        public int NumberOfTries { get; set; }
     }
 }

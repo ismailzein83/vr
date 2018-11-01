@@ -163,13 +163,13 @@ namespace TOne.WhS.RouteSync.Huawei
 
             List<CommandResult> commandResults = new List<CommandResult>();
 
-            int maxNumberOfRetries = 0;
+            int maxNumberOfTries = 1;
             if (sshCommunicator != null)
             {
                 var configManager = new TOne.WhS.RouteSync.Business.ConfigManager();
                 var huaweiSwitchRouteSynchronizerSettings = configManager.GetRouteSynchronizerSwitchSettings(ConfigId) as HuaweiSwitchRouteSynchronizerSettings;
                 if (huaweiSwitchRouteSynchronizerSettings != null)
-                    maxNumberOfRetries = huaweiSwitchRouteSynchronizerSettings.NumberOfRetries;
+                    maxNumberOfTries = huaweiSwitchRouteSynchronizerSettings.NumberOfTries;
             }
 
             //Get Commands
@@ -183,7 +183,7 @@ namespace TOne.WhS.RouteSync.Huawei
             List<RouteCaseWithCommands> succeedRouteCasesWithCommands;
             List<RouteCaseWithCommands> failedRouteCasesWithCommands;
 
-            ExecuteRouteCasesCommands(routeCasesToBeAddedWithCommands, huaweiSSHCommunication, sshCommunicator, commandResults, routeCaseManager, maxNumberOfRetries,
+            ExecuteRouteCasesCommands(routeCasesToBeAddedWithCommands, huaweiSSHCommunication, sshCommunicator, commandResults, routeCaseManager, maxNumberOfTries,
                 out succeedRouteCasesWithCommands, out failedRouteCasesWithCommands);
 
             LogRouteCaseCommands(succeedRouteCasesWithCommands, failedRouteCasesWithCommands, ftpLogger, finalizeTime);
@@ -194,7 +194,7 @@ namespace TOne.WhS.RouteSync.Huawei
             Dictionary<int, List<HuaweiRouteWithCommands>> succeedHuaweiRoutesWithCommandsByRSSN;
             Dictionary<int, List<HuaweiRouteWithCommands>> failedHuaweiRoutesWithCommandsByRSSN;
 
-            ExecuteRoutesCommands(huaweiRoutesWithCommandsByRSSN, huaweiSSHCommunication, sshCommunicator, commandResults, failedRSNames, maxNumberOfRetries,
+            ExecuteRoutesCommands(huaweiRoutesWithCommandsByRSSN, huaweiSSHCommunication, sshCommunicator, commandResults, failedRSNames, maxNumberOfTries,
                 out succeedHuaweiRoutesWithCommandsByRSSN, out failedHuaweiRoutesWithCommandsByRSSN);
 
             LogHuaweiRouteCommands(succeedHuaweiRoutesWithCommandsByRSSN, failedHuaweiRoutesWithCommandsByRSSN, ftpLogger, finalizeTime);
@@ -525,7 +525,7 @@ namespace TOne.WhS.RouteSync.Huawei
                         ExecutionDateTime = dateTime,
                         ExecutionStatus = ExecutionStatus.Succeeded,
                         CommandResults = commandResults,
-                        RSSNNumber = Convert.ToInt32(customerRoutesWithCommandsKvp.Key)
+                        CustomerIdentifier = customerRoutesWithCommandsKvp.Key.ToString()
                     };
                     ftpLogger.LogRoutes(logRoutesContext);
                 }
@@ -542,7 +542,7 @@ namespace TOne.WhS.RouteSync.Huawei
                         ExecutionDateTime = dateTime,
                         ExecutionStatus = ExecutionStatus.Failed,
                         CommandResults = commandResults,
-                        RSSNNumber = Convert.ToInt32(customerRoutesWithCommandsKvp.Key)
+                        CustomerIdentifier = customerRoutesWithCommandsKvp.Key.ToString()
                     };
                     ftpLogger.LogRoutes(logRoutesContext);
                 }
@@ -554,7 +554,7 @@ namespace TOne.WhS.RouteSync.Huawei
         #region SSH
 
         private void ExecuteRouteCasesCommands(List<RouteCaseWithCommands> routeCasesWithCommands, HuaweiSSHCommunication huaweiSSHCommunication, SSHCommunicator sshCommunicator,
-            List<CommandResult> commandResults, RouteCaseManager routeCaseManager, int maxNumberOfRetries, out List<RouteCaseWithCommands> succeedRouteCasesWithCommands,
+            List<CommandResult> commandResults, RouteCaseManager routeCaseManager, int maxNumberOfTries, out List<RouteCaseWithCommands> succeedRouteCasesWithCommands,
             out List<RouteCaseWithCommands> failedRouteCasesWithCommands)
         {
             succeedRouteCasesWithCommands = new List<RouteCaseWithCommands>();
@@ -584,7 +584,7 @@ namespace TOne.WhS.RouteSync.Huawei
                 bool isCommandExecuted = false;
                 int numberOfTriesDone = 0;
 
-                while (!isCommandExecuted && numberOfTriesDone < maxNumberOfRetries)
+                while (!isCommandExecuted && numberOfTriesDone < maxNumberOfTries)
                 {
                     try
                     {
@@ -624,7 +624,7 @@ namespace TOne.WhS.RouteSync.Huawei
         }
 
         private void ExecuteRoutesCommands(Dictionary<int, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN, HuaweiSSHCommunication huaweiSSHCommunication,
-            SSHCommunicator sshCommunicator, List<CommandResult> commandResults, IEnumerable<string> failedRSNames, int maxNumberOfRetries,
+            SSHCommunicator sshCommunicator, List<CommandResult> commandResults, IEnumerable<string> failedRSNames, int maxNumberOfTries,
             out Dictionary<int, List<HuaweiRouteWithCommands>> succeededRoutesWithCommandsByRSSN, out Dictionary<int, List<HuaweiRouteWithCommands>> failedRoutesWithCommandsByRSSN)
         {
             succeededRoutesWithCommandsByRSSN = new Dictionary<int, List<HuaweiRouteWithCommands>>();
@@ -655,7 +655,7 @@ namespace TOne.WhS.RouteSync.Huawei
                     int numberOfTriesDone = 0;
                     bool isCommandExecuted = false;
 
-                    while (!isCommandExecuted && numberOfTriesDone < maxNumberOfRetries)
+                    while (!isCommandExecuted && numberOfTriesDone < maxNumberOfTries)
                     {
                         try
                         {

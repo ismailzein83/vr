@@ -130,11 +130,6 @@ namespace TOne.WhS.RouteSync.Huawei.Business
 
         }
 
-        //private struct GetCachedRouteCasesCacheName
-        //{
-        //    public string SwitchId { get; set; }
-        //}
-
         private class RouteCaseCacheExpirationChecker : CacheExpirationChecker
         {
             static RouteCaseCacheExpirationChecker s_instance = new RouteCaseCacheExpirationChecker();
@@ -147,5 +142,10 @@ namespace TOne.WhS.RouteSync.Huawei.Business
                 return slidingWindowCacheExpirationChecker.IsCacheExpired(context);
             }
         }
+
+        //private struct GetCachedRouteCasesCacheName
+        //{
+        //    public string SwitchId { get; set; }
+        //}
     }
 }
