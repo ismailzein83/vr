@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,6 +73,7 @@
     <Compile Include="RouteSyncProcessBPDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteSyncDefinitionManager.cs" />
+    <Compile Include="SwitchFTPLoggerHelper.cs" />
     <Compile Include="SwitchInfoGetterContext.cs" />
     <Compile Include="SwitchManager.cs" />
     <Compile Include="SwitchRouteSynchronizerManager.cs" />

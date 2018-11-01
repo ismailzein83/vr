@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,6 +60,7 @@
     <Compile Include="BusinessManagers\IRouteSyncDefinitionManager.cs" />
     <Compile Include="Context\IApplyDifferentialRoutesContext.cs" />
     <Compile Include="Context\ISwapTableContext.cs" />
+    <Compile Include="FTPLogger\FTPLoggerEntities.cs" />
     <Compile Include="RouteEntities\ConvertedRoute.cs" />
     <Compile Include="RouteEntities\ConvertedRouteBatch.cs" />
     <Compile Include="RouteEntities\RouteBatch.cs" />
