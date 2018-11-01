@@ -13,4 +13,4 @@ Analytic						C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
 PartnerPortal_Invoice			C:\TFS\CarrierPortal\Code\PartnerPortal.Invoice.Web\PartnerPortal_Invoice
 CP_Ringo						C:\TFS\CarrierPortal\Code\CP.Ringo.Web\CP_Ringo
 CP_MultiNet						C:\TFS\CarrierPortal\Code\CP.MultiNet.Web\CP_MultiNet
-CP_WhSAnalytics					C:\TFS\CarrierPortal\Code\CP.WhSAnalytics.Web\CP_WhSAnalytics
+CP_WhS			            	C:\TFS\CarrierPortal\Code\CP.WhS.Web\CP_WhS

@@ -83,6 +83,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.WhSAnalytics.Entities", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.WhSAnalytics.Web", "CP.WhSAnalytics.Web\CP.WhSAnalytics.Web.csproj", "{A82EB835-F295-4CF0-B826-B7FBAC60736A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CP.WhS", "CP.WhS", "{FE0FF8C1-3FF0-49CF-8498-045ECDD249D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.WhS.Business", "CP.WhS.Business\CP.WhS.Business.csproj", "{F2CA5F71-D417-4DFC-B4C3-57A114D3A717}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.WhS.Entities", "CP.WhS.Entities\CP.WhS.Entities.csproj", "{641CA341-AAE6-4632-9F12-16E8BB689F2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.WhS.Web", "CP.WhS.Web\CP.WhS.Web.csproj", "{25B8DF86-C55A-4FAE-A34A-AAAB7377599E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -207,6 +215,18 @@ Global
 		{A82EB835-F295-4CF0-B826-B7FBAC60736A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A82EB835-F295-4CF0-B826-B7FBAC60736A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A82EB835-F295-4CF0-B826-B7FBAC60736A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2CA5F71-D417-4DFC-B4C3-57A114D3A717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2CA5F71-D417-4DFC-B4C3-57A114D3A717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2CA5F71-D417-4DFC-B4C3-57A114D3A717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2CA5F71-D417-4DFC-B4C3-57A114D3A717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{641CA341-AAE6-4632-9F12-16E8BB689F2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{641CA341-AAE6-4632-9F12-16E8BB689F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{641CA341-AAE6-4632-9F12-16E8BB689F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{641CA341-AAE6-4632-9F12-16E8BB689F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25B8DF86-C55A-4FAE-A34A-AAAB7377599E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25B8DF86-C55A-4FAE-A34A-AAAB7377599E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25B8DF86-C55A-4FAE-A34A-AAAB7377599E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25B8DF86-C55A-4FAE-A34A-AAAB7377599E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -247,14 +267,18 @@ Global
 		{ABE9FF39-F636-40B3-B433-0B48CF5FB1B4} = {1104DEDF-9432-48A9-85BE-741C916EE86F}
 		{97351548-C5EC-4BDB-8D62-FB033A503FE0} = {1104DEDF-9432-48A9-85BE-741C916EE86F}
 		{A82EB835-F295-4CF0-B826-B7FBAC60736A} = {1104DEDF-9432-48A9-85BE-741C916EE86F}
+		{FE0FF8C1-3FF0-49CF-8498-045ECDD249D9} = {2286F6A4-46B0-40AE-9ADE-98E675DB91CB}
+		{F2CA5F71-D417-4DFC-B4C3-57A114D3A717} = {FE0FF8C1-3FF0-49CF-8498-045ECDD249D9}
+		{641CA341-AAE6-4632-9F12-16E8BB689F2D} = {FE0FF8C1-3FF0-49CF-8498-045ECDD249D9}
+		{25B8DF86-C55A-4FAE-A34A-AAAB7377599E} = {FE0FF8C1-3FF0-49CF-8498-045ECDD249D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1A90436-F2DC-4DEA-AA4A-D70AADE7B065}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 30
+		SccNumberOfProjects = 33
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = CarrierPortal.sln
@@ -372,5 +396,17 @@ Global
 		SccProjectTopLevelParentUniqueName29 = CarrierPortal.sln
 		SccProjectName29 = CP.WhSAnalytics.Web
 		SccLocalPath29 = CP.WhSAnalytics.Web
+		SccProjectUniqueName30 = CP.WhS.Business\\CP.WhS.Business.csproj
+		SccProjectTopLevelParentUniqueName30 = CarrierPortal.sln
+		SccProjectName30 = CP.WhS.Business
+		SccLocalPath30 = CP.WhS.Business
+		SccProjectUniqueName31 = CP.WhS.Entities\\CP.WhS.Entities.csproj
+		SccProjectTopLevelParentUniqueName31 = CarrierPortal.sln
+		SccProjectName31 = CP.WhS.Entities
+		SccLocalPath31 = CP.WhS.Entities
+		SccProjectUniqueName32 = CP.WhS.Web\\CP.WhS.Web.csproj
+		SccProjectTopLevelParentUniqueName32 = CarrierPortal.sln
+		SccProjectName32 = CP.WhS.Web
+		SccLocalPath32 = CP.WhS.Web
 	EndGlobalSection
 EndGlobal
