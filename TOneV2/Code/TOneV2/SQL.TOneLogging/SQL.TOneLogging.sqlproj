@@ -85,7 +85,6 @@
     <Build Include="bp\Views\vw_BPTracking.sql" />
     <Build Include="Security\bp.sql" />
     <Build Include="logging\Tables\LogEntry.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPTrackings_GetByInstanceId.sql" />
     <Build Include="Security\logging.sql" />
     <Build Include="bp\Functions\ParseStringList.sql" />
     <Build Include="integration\Tables\DataSourceImportedBatch.sql" />
@@ -94,7 +93,6 @@
     <Build Include="Security\integration.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_Insert.sql" />
     <Build Include="integration\User Defined Types\SeverityType.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPTrackings_GetFromInstanceId.sql" />
     <Build Include="integration\User Defined Types\MappingResultType.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceLog_CreateTempByFiltered.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_CreateTempByFiltered.sql" />
@@ -104,7 +102,6 @@
     <Build Include="bp\Stored Procedures\sp_BPValidationMessage_GetUpdated.sql" />
     <Build Include="bp\Stored Procedures\sp_BPValidationMessage_GetBeforeID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPValidationMessage_CreateTempForFiltered.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPTrackings_CreateTempForFiltered.sql" />
     <Build Include="logging\Stored Procedures\SP_LogEntry_CreateTempByFiltered.sql" />
     <Build Include="logging\Tables\UserActionAudit.sql" />
     <Build Include="logging\Tables\ActionAuditLKUP.sql" />
