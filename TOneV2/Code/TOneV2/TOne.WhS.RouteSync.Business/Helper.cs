@@ -119,22 +119,19 @@ namespace TOne.WhS.RouteSync.Business
                                 continue;
                             }
 
-                            if (convertedRouteForCompression.Count != 10 || convertedRouteForCompression.FirstOrDefault(itm => !itm.CanBeGrouped) != null)
-                            {
-                                convertedRoutesKvp.Value.Remove(route.Code);
-                                //routes.Remove(route);
+                            if (convertedRouteForCompression.FirstOrDefault(itm => !itm.CanBeGrouped) != null)
                                 continue;
-                            }
 
                             HashSet<string> distinctIdentifiers = Vanrise.Common.ExtensionMethods.ToHashSet(convertedRouteForCompression.Select(itm => itm.RouteOptionsIdentifier));
-                            if (distinctIdentifiers.Count > 1)
-                            {
-                                convertedRoutesKvp.Value.Remove(route.Code);
-                                //routes.Remove(route);
-                                continue;
-                            }
 
-                            route.RouteOptionsIdentifier = distinctIdentifiers.First();
+                            if (distinctIdentifiers.Count > 1)
+                                continue;
+
+                            string childrenRouteIdentifier = distinctIdentifiers.First();
+                            if (string.Compare(route.RouteOptionsIdentifier, childrenRouteIdentifier) != 0 && convertedRouteForCompression.Count != 10)
+                                continue;
+                            
+                            route.RouteOptionsIdentifier = childrenRouteIdentifier;
                             route.CanBeGrouped = true;
                             childrenConvertedRoutesForCompressionByCode.Remove(currentCode);
                         }
