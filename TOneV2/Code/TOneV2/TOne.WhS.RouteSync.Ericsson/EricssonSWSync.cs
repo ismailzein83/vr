@@ -42,6 +42,7 @@ namespace TOne.WhS.RouteSync.Ericsson
         public string PercentagePrefix { get; set; }
         public string ESR { get; set; }
         public string CC { get; set; }
+        public EricssonManualRouteSettings ManualRouteSettings { get; set; }
 
         #region Public Methods
 
@@ -64,6 +65,34 @@ namespace TOne.WhS.RouteSync.Ericsson
 
             CustomerMappingManager customerMappingManager = new CustomerMappingManager();
             customerMappingManager.Initialize(context.SwitchId, CarrierMappings.Values);
+
+            List<EricssonConvertedRoute> manualRoutes = new List<EricssonConvertedRoute>();
+            if (ManualRouteSettings != null)
+            {
+                if (ManualRouteSettings.EricssonManualRoutes != null)
+                {
+                    List<string> allCustomers = new List<string>();
+                    var customers = CarrierMappings.Values.Where(item => item.CustomerMapping != null && item.CustomerMapping.BO != null);
+                    if (customers != null && customers.Any())
+                        allCustomers = customers.Select(item => item.CustomerMapping.BO).ToList();
+                    foreach (var manualRoute in ManualRouteSettings.EricssonManualRoutes)
+                    {
+                        var manualRouteActionContext = new EricssonManualRouteActionContext() { Customers = manualRoute.Customers, Codes = manualRoute.ManualRouteOriginations.GetOriginationCodes(new EricssonManualRouteGetOriginationsContext()), AllCustomers = allCustomers, BlockRCNumber = FirstRCNumber };
+                        manualRoute.ManualRouteAction.Execute(manualRouteActionContext);
+                        if (manualRouteActionContext.ManualConvertedRoutes != null && manualRouteActionContext.ManualConvertedRoutes.Count > 0)
+                        {
+                            foreach (var manualConvertedRoute in manualRouteActionContext.ManualConvertedRoutes)
+                            {
+                                if (!manualRoutes.Any(item => item.BO == manualConvertedRoute.BO && item.Code == manualConvertedRoute.Code && item.RouteType == manualConvertedRoute.RouteType))
+                                    manualRoutes.Add(manualConvertedRoute);
+                            }
+                        }
+                    }
+                }
+            }
+            if (manualRoutes.Count > 0)
+                routeDataManager.InsertRoutesToTempTable(manualRoutes);
+
         }
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
@@ -97,7 +126,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                 int routeCodeGroupId = codeGroupObject.CodeGroupId;
                 string routeCodeGroup = codeGroupObject.Code;
 
-                EricssonConvertedRoute ericssonConvertedRoute = new EricssonConvertedRoute() { BO = customerMapping.BO, Code = route.Code };
+                EricssonConvertedRoute ericssonConvertedRoute = new EricssonConvertedRoute() { BO = customerMapping.BO, Code = route.Code, RouteType = EricssonRouteType.BNumber };
 
                 List<RouteCaseOption> routeCaseOptions = GetRouteCaseOptions(route, routeCodeGroupId, routeCodeGroup, ruleTree);
 
@@ -164,7 +193,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
         private ConvertedRouteWithCode CreateEricssionConvertedRoute(ICreateConvertedRouteWithCodeContext context)
         {
-            return new EricssonConvertedRoute() { BO = context.Customer, Code = context.Code, RCNumber = int.Parse(context.RouteOptionIdentifier) };
+            return new EricssonConvertedRoute() { BO = context.Customer, Code = context.Code, RouteType = EricssonRouteType.BNumber, RCNumber = int.Parse(context.RouteOptionIdentifier) };
         }
 
         public override object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
@@ -531,13 +560,13 @@ namespace TOne.WhS.RouteSync.Ericsson
             routeCaseOption.BNT = 1;
             routeCaseOption.SP = 1;
             routeCaseOption.SupplierId = supplierId;
-            if (string.Compare(routeCodeGroup, LocalCountryCode) == 0)
+            if (string.Compare(routeCodeGroup, trunk.NationalCountryCode) == 0)
             {
-                if ((!string.IsNullOrEmpty(InterconnectGeneralPrefix) && trunk.TrunkName.StartsWith(InterconnectGeneralPrefix)) || IncomingTrafficSuppliers.Any(item => item.SupplierId.ToString() == supplierId))
-                {
-                    routeCaseOption.BNT = 4;
-                    routeCaseOption.SP = Convert.ToInt16(LocalCountryCode.Length + 1);
-                }
+                //if ((!string.IsNullOrEmpty(InterconnectGeneralPrefix) && trunk.TrunkName.StartsWith(InterconnectGeneralPrefix)) || IncomingTrafficSuppliers.Any(item => item.SupplierId.ToString() == supplierId))
+                //{
+                routeCaseOption.BNT = 4;
+                routeCaseOption.SP = Convert.ToInt16(trunk.NationalCountryCode.Length + 1);
+                //}
             }
             return routeCaseOption;
         }
@@ -675,7 +704,8 @@ namespace TOne.WhS.RouteSync.Ericsson
         */
         private List<string> GetCustomerMappingDeleteCommands(CustomerMapping customerMappingToDelete)
         {
-            return new List<string>() { string.Format("{0}:B={1};", EricssonCommands.ANBSE_Command, customerMappingToDelete.BO) };
+            return new List<string>() { string.Format("{0}:B={1};", EricssonCommands.ANBSE_Command, customerMappingToDelete.BO),
+                                        string.Format("{0}:B={1};",EricssonCommands.ANASE_Command, customerMappingToDelete.BO) };
         }
         #endregion
 
@@ -901,21 +931,26 @@ namespace TOne.WhS.RouteSync.Ericsson
             var options = deserializedRouteCase.RouteCaseOptions;
 
             EricssonRouteProperties ericssonRouteProperties = GetRouteTypeAndParameters(supplierByOutTrunk, route, ref routeCodeGroup, carrierCustomerMapping, options);
+            string deleteEricssonCommands = null;
+            if (route.RouteType == EricssonRouteType.ANumber)
+                deleteEricssonCommands = EricssonCommands.ANASE_Command;
+            else if (route.RouteType == EricssonRouteType.BNumber)
+                deleteEricssonCommands = EricssonCommands.ANBSE_Command;
 
             switch (ericssonRouteProperties.Type)
             {
                 case EricssonConvertedRouteType.Forward:
                 case EricssonConvertedRouteType.Transit:
                 case EricssonConvertedRouteType.Local:
-                    deletedRouteCommands.Add(string.Format("{0}:B={1}-{2};", EricssonCommands.ANBSE_Command, ericssonRouteProperties.IOBA, route.Code));
-                    deletedRouteCommands.Add(string.Format("{0}:B={1}-{2};", EricssonCommands.ANBSE_Command, ericssonRouteProperties.NOBA, route.Code.Substring(routeCodeGroup.Length)));
+                    deletedRouteCommands.Add(string.Format("{0}:B={1}-{2};", deleteEricssonCommands, ericssonRouteProperties.IOBA, route.Code));
+                    deletedRouteCommands.Add(string.Format("{0}:B={1}-{2};", deleteEricssonCommands, ericssonRouteProperties.NOBA, route.Code.Substring(routeCodeGroup.Length)));
                     break;
                 case EricssonConvertedRouteType.Normal:
                 case EricssonConvertedRouteType.Override:
-                    deletedRouteCommands.Add(string.Format("{0}:B={1}-{2};", EricssonCommands.ANBSE_Command, route.BO, route.Code));
+                    deletedRouteCommands.Add(string.Format("{0}:B={1}-{2};", deleteEricssonCommands, route.BO, route.Code));
                     break;
                 case EricssonConvertedRouteType.InterconnectOverride:
-                    deletedRouteCommands.Add(string.Format("{0}:B={1}-{2}{3};", EricssonCommands.ANBSE_Command, route.BO, route.Code, routeCodeGroup));
+                    deletedRouteCommands.Add(string.Format("{0}:B={1}-{2}{3};", deleteEricssonCommands, route.BO, route.Code, routeCodeGroup));
                     break;
                 default:
                     break;
@@ -952,7 +987,7 @@ namespace TOne.WhS.RouteSync.Ericsson
             var ericssonRouteParamerters = new EricssonRouteProperties();
 
             #region Manual Override
-            var matchedmanualOverride = (ManualOverrides != null && ManualOverrides.Count > 0) ? ManualOverrides.FindRecord(item => item.BO == route.BO && item.Code == route.Code) : null;
+            var matchedmanualOverride = (ManualOverrides != null && ManualOverrides.Count > 0) ? ManualOverrides.FindRecord(item => item.BO == route.BO && item.Code == route.Code && item.RouteType == route.RouteType) : null;
             if (matchedmanualOverride != null)
             {
                 ericssonRouteParamerters.IsOverride = true;
@@ -966,7 +1001,7 @@ namespace TOne.WhS.RouteSync.Ericsson
             #endregion
 
             #region InterconnectOverride
-            var matchedInterconnectOverride = (InterconnectOverrides != null && InterconnectOverrides.Count > 0) ? InterconnectOverrides.FindRecord(item => item.BO == route.BO && item.Code == route.Code) : null;
+            var matchedInterconnectOverride = (InterconnectOverrides != null && InterconnectOverrides.Count > 0) ? InterconnectOverrides.FindRecord(item => item.BO == route.BO && item.Code == route.Code && item.RouteType == route.RouteType) : null;
             if (matchedInterconnectOverride != null)
             {
                 string codeGroup = routeCodeGroup.StartsWith("1") ? "1" : routeCodeGroup;
@@ -1069,7 +1104,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                     if (!string.IsNullOrEmpty(routeParamerters.L) && route.Code.Length > MinCodeLength)
                         L = route.Code.Length.ToString() + "-" + MaxCodeLength.ToString();
 
-                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, L, routeParamerters.M, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, L, routeParamerters.M, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null, route.RouteType));
                     break;
 
                 case EricssonConvertedRouteType.Normal:
@@ -1080,36 +1115,36 @@ namespace TOne.WhS.RouteSync.Ericsson
 
                     string mValue = string.IsNullOrEmpty(routeParamerters.M) ? null : string.Format("0-{0}", routeParamerters.M);
 
-                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, L, mValue, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, L, mValue, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null, route.RouteType));
                     break;
 
                 case EricssonConvertedRouteType.Forward:
                     B = string.Format("{0}-{1}", routeParamerters.IOBA, route.Code);
-                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.M, null, null, null, routeParamerters.FBO, routeParamerters.NBNT));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.M, null, null, null, routeParamerters.FBO, routeParamerters.NBNT, route.RouteType));
                     strCommand.AppendLine("");
                     B = string.Format("{0}-{1}", routeParamerters.NOBA, route.Code.Substring(routeCodeGroup.Length));
-                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.NationalM, null, null, routeParamerters.CCL, routeParamerters.FBO, routeParamerters.NBNT));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.NationalM, null, null, routeParamerters.CCL, routeParamerters.FBO, routeParamerters.NBNT, route.RouteType));
                     break;
 
                 case EricssonConvertedRouteType.Transit:
                     B = string.Format("{0}-{1}", routeParamerters.IOBA, route.Code);
-                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.M, null, null, null, routeParamerters.NOBA, routeParamerters.NBNT));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.M, null, null, null, routeParamerters.NOBA, routeParamerters.NBNT, route.RouteType));
                     strCommand.AppendLine("");
                     B = string.Format("{0}-{1}", routeParamerters.NOBA, route.Code.Substring(routeCodeGroup.Length));
-                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, routeParamerters.L, string.IsNullOrEmpty(routeParamerters.NationalM) ? routeParamerters.M : routeParamerters.NationalM, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, routeParamerters.L, string.IsNullOrEmpty(routeParamerters.NationalM) ? routeParamerters.M : routeParamerters.NationalM, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null, route.RouteType));
                     break;
 
                 case EricssonConvertedRouteType.Local:
                     B = string.Format("{0}-{1}", routeParamerters.IOBA, route.Code);
-                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.M, null, null, null, routeParamerters.NOBA, routeParamerters.NBNT));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, null, null, routeParamerters.M, null, null, null, routeParamerters.NOBA, routeParamerters.NBNT, route.RouteType));
                     strCommand.AppendLine("");
                     B = string.Format("{0}-{1}", routeParamerters.NOBA, route.Code.Substring(routeCodeGroup.Length));
-                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, routeParamerters.L, routeParamerters.NationalM, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, routeParamerters.L, routeParamerters.NationalM, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null, route.RouteType));
                     break;
 
                 case EricssonConvertedRouteType.InterconnectOverride:
                     B = string.Format("{0}-{1}{2}", route.BO, InterconnectGeneralPrefix, routeCodeGroup);
-                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, routeParamerters.L, routeParamerters.M, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null));
+                    strCommand.Append(GetRouteCommandStringText(route.Code, B, route.RCNumber, routeParamerters.L, routeParamerters.M, routeParamerters.D, routeParamerters.CC, routeParamerters.CCL, null, null, route.RouteType));
                     break;
 
                 default:
@@ -1117,9 +1152,15 @@ namespace TOne.WhS.RouteSync.Ericsson
             }
             return strCommand.ToString();
         }
-        private StringBuilder GetRouteCommandStringText(string code, string B, int? RC, string L, string M, string D, string cc, string CCL, string F, string BNT)
+        private StringBuilder GetRouteCommandStringText(string code, string B, int? RC, string L, string M, string D, string cc, string CCL, string F, string BNT, EricssonRouteType routeType)
         {
-            StringBuilder script = new StringBuilder(string.Format("{0}:", EricssonCommands.ANBSI_Command));
+            string insertCommand = "";
+            if (routeType == EricssonRouteType.ANumber)
+                insertCommand = EricssonCommands.ANASI_Command;
+            else if (routeType == EricssonRouteType.BNumber)
+                insertCommand = EricssonCommands.ANBSI_Command;
+
+            StringBuilder script = new StringBuilder(string.Format("{0}:", insertCommand));
             if (!string.IsNullOrEmpty(B))
                 script.AppendFormat("B={0}", B);
 
@@ -1162,7 +1203,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                 {
                     var customerRoutesWithCommands = customerRoutesWithCommandsKvp.Value;
                     var commandResults = customerRoutesWithCommands.Select(item => new CommandResult() { Command = string.Join(Environment.NewLine, item.Commands) }).ToList();
-                    ILogRoutesContext logRoutesContext = new LogRoutesContext() { ExecutionDateTime = dateTime, ExecutionStatus = ExecutionStatus.Succeeded, CommandResults = commandResults, BONumber = Convert.ToInt32(customerRoutesWithCommandsKvp.Key) };
+                    ILogRoutesContext logRoutesContext = new LogRoutesContext() { ExecutionDateTime = dateTime, ExecutionStatus = ExecutionStatus.Succeeded, CommandResults = commandResults, CustomerIdentifier = customerRoutesWithCommandsKvp.Key };
                     ftpLogger.LogRoutes(logRoutesContext);
                 }
             }
@@ -1173,7 +1214,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                 {
                     var customerRoutesWithCommands = customerRoutesWithCommandsKvp.Value;
                     var commandResults = customerRoutesWithCommands.Select(item => new CommandResult() { Command = string.Join(Environment.NewLine, item.Commands) }).ToList();
-                    ILogRoutesContext logRoutesContext = new LogRoutesContext() { ExecutionDateTime = dateTime, ExecutionStatus = ExecutionStatus.Failed, CommandResults = commandResults, BONumber = Convert.ToInt32(customerRoutesWithCommandsKvp.Key) };
+                    ILogRoutesContext logRoutesContext = new LogRoutesContext() { ExecutionDateTime = dateTime, ExecutionStatus = ExecutionStatus.Failed, CommandResults = commandResults, CustomerIdentifier = customerRoutesWithCommandsKvp.Key };
                     ftpLogger.LogRoutes(logRoutesContext);
                 }
             }

@@ -123,30 +123,30 @@ namespace TOne.WhS.RouteSync.Entities
         Action<Exception, bool> WriteBusinessHandledException { get; }
     }
 
-	public class SwitchRouteSynchronizerApplyRoutesContext : ISwitchRouteSynchronizerApplyRoutesContext
-	{
-		public SwitchRouteSynchronizerApplyRoutesContext(Object preparedItemsForApply, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput, Action<Exception, bool> writeBusinessHandledException)
-		{
-			PreparedItemsForApply = preparedItemsForApply;
-			SwitchId = switchId;
-			WriteBusinessHandledException = writeBusinessHandledException;
-			PreviousSwitchSyncOutput = previousSwitchSyncOutput;
-			SwitchName = switchName;
-		}
-		public Object PreparedItemsForApply { get; set; }
+    public class SwitchRouteSynchronizerApplyRoutesContext : ISwitchRouteSynchronizerApplyRoutesContext
+    {
+        public SwitchRouteSynchronizerApplyRoutesContext(Object preparedItemsForApply, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput, Action<Exception, bool> writeBusinessHandledException)
+        {
+            PreparedItemsForApply = preparedItemsForApply;
+            SwitchId = switchId;
+            WriteBusinessHandledException = writeBusinessHandledException;
+            PreviousSwitchSyncOutput = previousSwitchSyncOutput;
+            SwitchName = switchName;
+        }
+        public Object PreparedItemsForApply { get; set; }
 
-		public string SwitchId { get; set; }
+        public string SwitchId { get; set; }
 
-		public SwitchSyncOutput SwitchSyncOutput { get; set; }
+        public SwitchSyncOutput SwitchSyncOutput { get; set; }
 
-		public SwitchSyncOutput PreviousSwitchSyncOutput { get; set; }
+        public SwitchSyncOutput PreviousSwitchSyncOutput { get; set; }
 
-		public Action<Exception, bool> WriteBusinessHandledException { get; set; }
+        public Action<Exception, bool> WriteBusinessHandledException { get; set; }
 
-		public string SwitchName { get; set; }
-	}
+        public string SwitchName { get; set; }
+    }
 
-	public interface ISwitchRouteSynchronizerConvertRoutesContext
+    public interface ISwitchRouteSynchronizerConvertRoutesContext
     {
         string SwitchId { get; }
 

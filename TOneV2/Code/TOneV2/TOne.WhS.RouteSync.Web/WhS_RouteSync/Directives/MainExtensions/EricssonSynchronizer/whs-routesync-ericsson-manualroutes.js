@@ -23,7 +23,6 @@ app.directive('whsRoutesyncEricssonManualroutes', ['UtilsService', 'VRUIUtilsSer
 
         function RoutesyncManualRoutesEricssonCtor(ctrl, $scope, $attrs) {
             var gridAPI;
-            var counter = 0;
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -47,29 +46,31 @@ app.directive('whsRoutesyncEricssonManualroutes', ['UtilsService', 'VRUIUtilsSer
 
                 $scope.scopeModel.addManualRoute = function () {
                     var newManualRoute = {};
-                    newManualRoute.onManualRouteActionReady = function (api) {
-                        newManualRoute.actionAPI = api;
-                        //newManualRoute.actionPromiseDeferred = UtilsService.createPromiseDeferred();
-                        var setLoader = function (value) { };
-                        var actionPayload = newManualRoute.ManualRouteAction;
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, newManualRoute.actionAPI, actionPayload, setLoader);
-                    };
+                    extendManualRoute(newManualRoute);
 
-                    //newManualRoute.onManualRouteDestinationsReady = function (api) {
-                    //    newManualRoute.destinationsAPI = api;
-                    //    //newManualRoute.destinationsPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //newManualRoute.onManualRouteActionReady = function (api) {
+                    //    newManualRoute.actionAPI = api;
+                    //    //newManualRoute.actionPromiseDeferred = UtilsService.createPromiseDeferred();
                     //    var setLoader = function (value) { };
-                    //    var destinationsPayload = newManualRoute.ManualRouteDestinations;
-                    //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, newManualRoute.destinationsAPI, destinationsPayload, setLoader);
+                    //    var actionPayload = newManualRoute.ManualRouteAction;
+                    //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, newManualRoute.actionAPI, actionPayload, setLoader);
                     //};
 
-                    newManualRoute.onManualRouteOriginationsReady = function (api) {
-                        newManualRoute.originationsAPI = api;
-                        //newManualRoute.originationsPromiseDeferred = UtilsService.createPromiseDeferred();
-                        var setLoader = function (value) { };
-                        var originationsPayload = newManualRoute.ManualRouteOriginations;
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, newManualRoute.originationsAPI, originationsPayload, setLoader);
-                    };
+                    ////newManualRoute.onManualRouteDestinationsReady = function (api) {
+                    ////    newManualRoute.destinationsAPI = api;
+                    ////    //newManualRoute.destinationsPromiseDeferred = UtilsService.createPromiseDeferred();
+                    ////    var setLoader = function (value) { };
+                    ////    var destinationsPayload = newManualRoute.ManualRouteDestinations;
+                    ////    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, newManualRoute.destinationsAPI, destinationsPayload, setLoader);
+                    ////};
+
+                    //newManualRoute.onManualRouteOriginationsReady = function (api) {
+                    //    newManualRoute.originationsAPI = api;
+                    //    //newManualRoute.originationsPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //    var setLoader = function (value) { };
+                    //    var originationsPayload = newManualRoute.ManualRouteOriginations;
+                    //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, newManualRoute.originationsAPI, originationsPayload, setLoader);
+                    //};
                     $scope.scopeModel.datasource.push(newManualRoute);
                 };
 
@@ -93,7 +94,7 @@ app.directive('whsRoutesyncEricssonManualroutes', ['UtilsService', 'VRUIUtilsSer
                     if (payload != undefined) {
                         if (payload.EricssonManualRoutes != undefined) {
                             for (var i = 0; i < payload.EricssonManualRoutes.length; i++) {
-                                extendManualRoute(payload.EricssonManualRoutes[i]);
+                                promises.push(extendManualRoute(payload.EricssonManualRoutes[i]));
                                 $scope.scopeModel.datasource.push(payload.EricssonManualRoutes[i]);
                             }
                         }
@@ -123,13 +124,15 @@ app.directive('whsRoutesyncEricssonManualroutes', ['UtilsService', 'VRUIUtilsSer
             }
 
             function extendManualRoute(manualRoute) {
-                manualRoute.Id = counter;
-                counter++;
+                var routePromises = [];
+                manualRoute.Id = UtilsService.guid();
+                var actionPromiseDeferred = UtilsService.createPromiseDeferred();
+                var originationsPromiseDeferred = UtilsService.createPromiseDeferred();
                 manualRoute.onManualRouteActionReady = function (api) {
                     manualRoute.actionAPI = api;
-                    manualRoute.actionPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //manualRoute.actionPromiseDeferred = UtilsService.createPromiseDeferred();
                     var payload = { ManualRouteAction: manualRoute.ManualRouteAction };
-                    VRUIUtilsService.callDirectiveLoad(manualRoute.actionAPI, payload, manualRoute.actionPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(manualRoute.actionAPI, payload, actionPromiseDeferred);
                 };
 
                 //manualRoute.onManualRouteDestinationsReady = function (api) {
@@ -141,10 +144,11 @@ app.directive('whsRoutesyncEricssonManualroutes', ['UtilsService', 'VRUIUtilsSer
 
                 manualRoute.onManualRouteOriginationsReady = function (api) {
                     manualRoute.originationsAPI = api;
-                    manualRoute.originationsPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //manualRoute.originationsPromiseDeferred = UtilsService.createPromiseDeferred();
                     var payload = { RouteOriginations: manualRoute.ManualRouteOriginations };
-                    VRUIUtilsService.callDirectiveLoad(manualRoute.originationsAPI, payload, manualRoute.originationsPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(manualRoute.originationsAPI, payload, originationsPromiseDeferred);
                 };
+                return UtilsService.waitMultiplePromises(routePromises);
             }
         }
         return directiveDefinitionObject;

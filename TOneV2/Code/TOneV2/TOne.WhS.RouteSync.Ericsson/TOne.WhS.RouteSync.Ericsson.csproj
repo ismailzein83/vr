@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -94,6 +94,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\EricssonManualRoutesManager.cs" />
     <Compile Include="Business\BranchRouteSettingsManager.cs" />
     <Compile Include="Business\CustomerMappingManager.cs" />
     <Compile Include="Business\RouteCaseManager.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Business\SwitchLoggerManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controller\EricssonBranchRouteSettingsController.cs" />
+    <Compile Include="Controller\EricssonManualRoutesController.cs" />
     <Compile Include="Controller\EricssonSwitchLoggerController.cs" />
     <Compile Include="Data\ICustomerMappingDataManager.cs" />
     <Compile Include="Data\IWhSRouteSyncEricssonDataManager.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="Entities\BranchRouteSettingsConfig.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
     <Compile Include="Entities\EricssonConvertedRoutesPayload.cs" />
+    <Compile Include="Entities\EricssonManualRouteAction.cs" />
     <Compile Include="Entities\EricssonSwitchRouteSynchronizerSettings.cs" />
     <Compile Include="Entities\EricssonCommands.cs" />
     <Compile Include="Entities\Context\CustomerMappingContext.cs" />
@@ -120,6 +123,9 @@
     <Compile Include="Entities\EricssonSSHCommunication.cs" />
     <Compile Include="Entities\IncomingTrafficSupplier.cs" />
     <Compile Include="Entities\LocalSupplierMapping.cs" />
+    <Compile Include="Entities\EricssonManualRouteDistinations.cs" />
+    <Compile Include="Entities\EricssonManualRouteOriginations.cs" />
+    <Compile Include="Entities\EricssonManualRouteSettings.cs" />
     <Compile Include="Entities\OutgoingTrafficCustomer.cs" />
     <Compile Include="Entities\RouteCase.cs" />
     <Compile Include="Entities\Context\RouteCaseContext.cs" />

@@ -416,7 +416,7 @@ namespace TOne.WhS.Runtime.Tasks
             logRoutesContext.CommandResults = logRoutesCommandResults;
             logRoutesContext.ExecutionDateTime = now;
             logRoutesContext.ExecutionStatus = ExecutionStatus.Failed;
-            logRoutesContext.BONumber = 51;
+            logRoutesContext.CustomerIdentifier = "51";
 
             ftpLogger.LogRoutes(logRoutesContext);
 

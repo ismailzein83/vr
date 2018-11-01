@@ -15,7 +15,9 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
 		public static string ANBSI_Command = "ANBSI";
 
-		public static string EXRBC_Command = "EXRBC";
+        public static string ANASI_Command = "ANASI";
+
+        public static string EXRBC_Command = "EXRBC";
 
 		public static string ANBAI_Command = "ANBAI";
 
@@ -29,7 +31,9 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
 		public static string ANBAR_Command = "ANBAR";
 
-		public static string ANBSE_Command = "ANBSE";
+        public static string ANASE_Command = "ANASE";
+
+        public static string ANBSE_Command = "ANBSE";
 
 		public static string PNBAR_Command = "PNBAR";
 
