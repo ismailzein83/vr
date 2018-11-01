@@ -28,7 +28,7 @@
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -169,7 +169,24 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\BranchRoutes\whs-routesync-ericssonbranchroutesettings.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\Communication\Templates\EricssonSwitchCommunicationTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingEricssonGridTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\Templates\EricssonManualRouteBlockActionTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\Templates\EricssonManualRouteActionSelectiveTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\Templates\EricssonManualRouteOriginationSelectiveTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\Templates\EricssonManualRouteDestinationSelectiveTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\Templates\EricssonManualRouteOriginationRangeTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\Templates\EricssonManualRouteDestinationRangeTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-blockaction.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\Templates\EricssonManualRouteDestinationCodesTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\Templates\EricssonManualRouteOriginationCodesTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-action-selective.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-origination-selective.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-destination-selective.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-destinationcodes.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-originationrange.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-destinationrange.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-originationcodes.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonCustomerMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonManualRoutesTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonRouteSyncSetting.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonSupplierMappingTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonSWSyncTemplate.html" />
@@ -180,6 +197,7 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-trunktrunkgroup.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericssonsettings-editor.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-manualroutes.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusDataManagers\Templates\FreeRadiusPostgresDataManagerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiuspostgres-datamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusSynchronizer\Templates\FreeRadiusSWSyncTemplate.html" />
@@ -236,6 +254,7 @@
     <Content Include="WhS_RouteSync\Directives\IdbDataManagers\whs-routesync-idbdatamanagers-settings.js" />
     <Content Include="WhS_RouteSync\ModuleInitailization.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\EricssonBranchRouteSettingsAPIService.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\EricssonManualRoutesAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\HuaweiSwitchLoggerAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\FreeRadiusAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\IdbDataManagerSettingAPIService.js" />

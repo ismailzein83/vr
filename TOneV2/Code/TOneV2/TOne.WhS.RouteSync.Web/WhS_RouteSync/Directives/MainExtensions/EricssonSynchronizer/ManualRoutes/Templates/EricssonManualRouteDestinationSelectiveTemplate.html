@@ -1,0 +1,21 @@
+﻿<vr-row removeline>
+    <vr-columns colnum="3">
+        <vr-select on-ready="scopeModel.onSelectorReady"
+                   datasource="scopeModel.extensionConfigs"
+                   selectedvalues="scopeModel.selectedExtensionConfig"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Title"
+                   isrequired="true"
+                   hideremoveicon="true">
+        </vr-select>
+    </vr-columns>
+    <vr-columns colnum="9">
+        <span vr-loader="scopeModel.isLoadingDirective">
+            <vr-directivewrapper directive="scopeModel.selectedExtensionConfig.Editor"
+                                 on-ready="scopeModel.onDirectiveReady"
+                                 normal-col-num="9"
+                                 isrequired="false">
+            </vr-directivewrapper>
+        </span>
+    </vr-columns>
+</vr-row>

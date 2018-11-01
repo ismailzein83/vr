@@ -1,0 +1,25 @@
+﻿<vr-button type="Add" data-onclick="scopeModel.addManualRoute" standalone></vr-button>
+
+<vr-validator validate="scopeModel.isValid()">
+    <vr-datagrid on-ready="scopeModel.onGridReady"
+                 datasource="scopeModel.datasource"
+                 ondeleterow="scopeModel.removerow"
+                 hidegridmenu>
+        <vr-datagridcolumn headertext="'BOs'" widthfactor="10" disablesorting>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-textbox-multiple placeholder="Insert BOs" datatype="text" value="dataItem.Customers" entityname="BOs"></vr-textbox-multiple>
+                </vr-columns>
+            </vr-row>
+        </vr-datagridcolumn>
+        <!--<vr-datagridcolumn headertext="'Destination Codes'" widthfactor="15" disablesorting>
+            <whs-routesync-ericsson-manualroute-destination-selective on-ready="dataItem.onManualRouteDestinationReady"></whs-routesync-ericsson-manualroute-destination-selective>
+        </vr-datagridcolumn>-->
+        <vr-datagridcolumn headertext="'Origination Codes'" widthfactor="15" disablesorting>
+            <whs-routesync-ericsson-manualroute-origination-selective on-ready="dataItem.onManualRouteOriginationsReady"></whs-routesync-ericsson-manualroute-origination-selective>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Action'" widthfactor="15" disablesorting>
+            <whs-routesync-ericsson-manualroute-action-selective on-ready="dataItem.onManualRouteActionReady"></whs-routesync-ericsson-manualroute-action-selective>
+        </vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

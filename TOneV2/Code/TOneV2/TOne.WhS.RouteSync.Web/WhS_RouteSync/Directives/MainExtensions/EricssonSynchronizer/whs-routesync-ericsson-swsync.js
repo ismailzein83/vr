@@ -1,326 +1,352 @@
 ﻿(function (app) {
 
-	'use strict';
+    'use strict';
 
-	EricssonSWSync.$inject = ["UtilsService", 'VRUIUtilsService'];
+    EricssonSWSync.$inject = ["UtilsService", 'VRUIUtilsService'];
 
-	function EricssonSWSync(UtilsService, VRUIUtilsService) {
-		return {
-			restrict: "E",
-			scope: {
-				onReady: "="
-			},
-			controller: function ($scope, $element, $attrs) {
-				var ctrl = this;
-				var ctor = new EricssonSWSyncronizerCtor($scope, ctrl, $attrs);
-				ctor.initializeController();
-			},
-			controllerAs: "Ctrl",
-			bindToController: true,
-			templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/EricssonSynchronizer/Templates/EricssonSWSyncTemplate.html"
-		};
+    function EricssonSWSync(UtilsService, VRUIUtilsService) {
+        return {
+            restrict: "E",
+            scope: {
+                onReady: "="
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new EricssonSWSyncronizerCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: "Ctrl",
+            bindToController: true,
+            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/EricssonSynchronizer/Templates/EricssonSWSyncTemplate.html"
+        };
 
-		function EricssonSWSyncronizerCtor($scope, ctrl, $attrs) {
-			this.initializeController = initializeController;
+        function EricssonSWSyncronizerCtor($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
-			var switchCommunicationAPI;
-			var switchCommunicationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var switchCommunicationAPI;
+            var switchCommunicationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-			var outgoingTrafficCustomerSelectorAPI;
-			var outgoingTrafficCustomerSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var outgoingTrafficCustomerSelectorAPI;
+            var outgoingTrafficCustomerSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-			var incomingTrafficSupplierSelectorAPI;
-			var incomingTrafficSupplierSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var incomingTrafficSupplierSelectorAPI;
+            var incomingTrafficSupplierSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-			var localSupplierSelectorAPI;
-			var localSupplierSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var localSupplierSelectorAPI;
+            var localSupplierSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-			var carrierAccountMappingGridAPI;
-			var carrierAccountMappingGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var carrierAccountMappingGridAPI;
+            var carrierAccountMappingGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-			var branchRouteSettingsAPI;
-			var branchRouteSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var branchRouteSettingsAPI;
+            var branchRouteSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-			function initializeController() {
-				$scope.scopeModel = {};
-				$scope.scopeModel.localSuppliers = [];
+            var manualRouteSettingsAPI;
+            var manualRouteSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-				$scope.scopeModel.onEricssonSwitchCommunicationReady = function (api) {
-					switchCommunicationAPI = api;
-					switchCommunicationReadyPromiseDeferred.resolve();
-				};
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.localSuppliers = [];
 
-				$scope.scopeModel.onBranchRouteSettingsReady = function (api) {
-					branchRouteSettingsAPI = api;
-					branchRouteSettingsReadyPromiseDeferred.resolve();
-				};
+                $scope.scopeModel.onManualRoutesReady = function (api) {
+                    manualRouteSettingsAPI = api;
+                    manualRouteSettingsReadyPromiseDeferred.resolve();
+                };
 
-				$scope.scopeModel.onOutgoingTrafficCustomerSelectorReady = function (api) {
-					outgoingTrafficCustomerSelectorAPI = api;
-					outgoingTrafficCustomerSelectorReadyPromiseDeferred.resolve();
-				};
+                $scope.scopeModel.onEricssonSwitchCommunicationReady = function (api) {
+                    switchCommunicationAPI = api;
+                    switchCommunicationReadyPromiseDeferred.resolve();
+                };
 
-				$scope.scopeModel.onIncomingTrafficSupplierSelectorReady = function (api) {
-					incomingTrafficSupplierSelectorAPI = api;
-					incomingTrafficSupplierSelectorReadyPromiseDeferred.resolve();
-				};
+                $scope.scopeModel.onBranchRouteSettingsReady = function (api) {
+                    branchRouteSettingsAPI = api;
+                    branchRouteSettingsReadyPromiseDeferred.resolve();
+                };
 
-				$scope.scopeModel.onLocalSuppliersSelectorReady = function (api) {
-					localSupplierSelectorAPI = api;
-					localSupplierSelectorReadyPromiseDeferred.resolve();
-				};
+                $scope.scopeModel.onOutgoingTrafficCustomerSelectorReady = function (api) {
+                    outgoingTrafficCustomerSelectorAPI = api;
+                    outgoingTrafficCustomerSelectorReadyPromiseDeferred.resolve();
+                };
 
-				$scope.scopeModel.onCarrierAccountMappingGridReady = function (api) {
-					carrierAccountMappingGridAPI = api;
-					carrierAccountMappingGridReadyPromiseDeferred.resolve();
-				};
+                $scope.scopeModel.onIncomingTrafficSupplierSelectorReady = function (api) {
+                    incomingTrafficSupplierSelectorAPI = api;
+                    incomingTrafficSupplierSelectorReadyPromiseDeferred.resolve();
+                };
 
-				$scope.scopeModel.onSelectLocalSupplier = function (selectedItem) {
+                $scope.scopeModel.onLocalSuppliersSelectorReady = function (api) {
+                    localSupplierSelectorAPI = api;
+                    localSupplierSelectorReadyPromiseDeferred.resolve();
+                };
 
-					$scope.scopeModel.localSuppliers.push({
-						CarrierAccountId: selectedItem.CarrierAccountId,
-						Name: selectedItem.Name
-					});
-				};
+                $scope.scopeModel.onCarrierAccountMappingGridReady = function (api) {
+                    carrierAccountMappingGridAPI = api;
+                    carrierAccountMappingGridReadyPromiseDeferred.resolve();
+                };
 
-				$scope.scopeModel.onDeselectLocalSupplier = function (deselectedItem) {
-					var index = UtilsService.getItemIndexByVal($scope.scopeModel.localSuppliers, deselectedItem.CarrierAccountId, 'CarrierAccountId');
-					$scope.scopeModel.localSuppliers.splice(index, 1);
-				};
+                $scope.scopeModel.onSelectLocalSupplier = function (selectedItem) {
 
-				$scope.scopeModel.onDeleteLocalSupplierRow = function (deletedItem) {
-					var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedLocalSuppliers, deletedItem.CarrierAccountId, 'CarrierAccountId');
-					$scope.scopeModel.selectedLocalSuppliers.splice(index, 1);
-					$scope.scopeModel.onDeselectLocalSupplier(deletedItem);
-				};
+                    $scope.scopeModel.localSuppliers.push({
+                        CarrierAccountId: selectedItem.CarrierAccountId,
+                        Name: selectedItem.Name
+                    });
+                };
 
-				$scope.scopeModel.isLocalSuppliersValid = function () {
-					var localSuppliersLength = $scope.scopeModel.localSuppliers.length;
-					if (localSuppliersLength == 0)
-						return "you should define at least one local supplier";
+                $scope.scopeModel.onDeselectLocalSupplier = function (deselectedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.localSuppliers, deselectedItem.CarrierAccountId, 'CarrierAccountId');
+                    $scope.scopeModel.localSuppliers.splice(index, 1);
+                };
 
-					return null;
-				};
+                $scope.scopeModel.onDeleteLocalSupplierRow = function (deletedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedLocalSuppliers, deletedItem.CarrierAccountId, 'CarrierAccountId');
+                    $scope.scopeModel.selectedLocalSuppliers.splice(index, 1);
+                    $scope.scopeModel.onDeselectLocalSupplier(deletedItem);
+                };
 
-				defineAPI();
-			}
-			function defineAPI() {
-				var api = {};
+                $scope.scopeModel.isLocalSuppliersValid = function () {
+                    var localSuppliersLength = $scope.scopeModel.localSuppliers.length;
+                    if (localSuppliersLength == 0)
+                        return "you should define at least one local supplier";
 
-				api.load = function (payload) {
-					var promises = [];
+                    return null;
+                };
 
-					var ericssonSWSync;
-					var outgoingTrafficCustomers;
-					var incomingTrafficSuppliers;
-					var localSupplierMappings;
-					var carrierMappings;
-					var sshCommunicationList;
-					var switchLoggerList;
-					var branchRouteSettings;
+                defineAPI();
+            }
+            function defineAPI() {
+                var api = {};
 
-					if (payload != undefined) {
-						ericssonSWSync = payload.switchSynchronizerSettings;
+                api.load = function (payload) {
+                    var promises = [];
 
-						if (ericssonSWSync != undefined) {
-							$scope.scopeModel.isEditMode = true;
-							$scope.scopeModel.firstRCNumber = ericssonSWSync.FirstRCNumber;
-							$scope.scopeModel.numberOfMappings = ericssonSWSync.NumberOfMappings;
-							$scope.scopeModel.minCodeLength = ericssonSWSync.MinCodeLength;
-							$scope.scopeModel.maxCodeLength = ericssonSWSync.MaxCodeLength;
-							$scope.scopeModel.localCountryCode = ericssonSWSync.LocalCountryCode;
-							$scope.scopeModel.interconnectGeneralPrefix = ericssonSWSync.InterconnectGeneralPrefix;
-							$scope.scopeModel.esr = ericssonSWSync.ESR;
-							$scope.scopeModel.cc = ericssonSWSync.CC;
-							$scope.scopeModel.percentagePrefix = ericssonSWSync.PercentagePrefix;
-							branchRouteSettings = ericssonSWSync.BranchRouteSettings;
-							sshCommunicationList = ericssonSWSync.SwitchCommunicationList;
-							switchLoggerList = ericssonSWSync.SwitchLoggerList;
-							outgoingTrafficCustomers = ericssonSWSync.OutgoingTrafficCustomers;
-							incomingTrafficSuppliers = ericssonSWSync.IncomingTrafficSuppliers;
-							localSupplierMappings = ericssonSWSync.LocalSupplierMappings;
-							carrierMappings = ericssonSWSync.CarrierMappings;
-						}
-					}
-					//Loading Switch Communication
-					var switchCommunicationLoadPromise = getSwitchCommunicationLoadPromise();
-					promises.push(switchCommunicationLoadPromise);
+                    var ericssonSWSync;
+                    var outgoingTrafficCustomers;
+                    var incomingTrafficSuppliers;
+                    var localSupplierMappings;
+                    var carrierMappings;
+                    var sshCommunicationList;
+                    var switchLoggerList;
+                    var branchRouteSettings;
 
-					//Loading OutgoingTrafficCustomers Selector
-					var outgoingTrafficCustomerSelectorLoadPromise = getOutgoingTrafficCustomerSelectorLoadPromise();
-					promises.push(outgoingTrafficCustomerSelectorLoadPromise);
+                    if (payload != undefined) {
+                        ericssonSWSync = payload.switchSynchronizerSettings;
 
-					//Loading IncomingTrafficSuppliers Selector
-					var incomingTrafficSupplierSelectorLoadPromise = getIncomingTrafficSupplierSelectorLoadPromise();
-					promises.push(incomingTrafficSupplierSelectorLoadPromise);
+                        if (ericssonSWSync != undefined) {
+                            $scope.scopeModel.isEditMode = true;
+                            $scope.scopeModel.firstRCNumber = ericssonSWSync.FirstRCNumber;
+                            $scope.scopeModel.numberOfMappings = ericssonSWSync.NumberOfMappings;
+                            $scope.scopeModel.minCodeLength = ericssonSWSync.MinCodeLength;
+                            $scope.scopeModel.maxCodeLength = ericssonSWSync.MaxCodeLength;
+                            $scope.scopeModel.localCountryCode = ericssonSWSync.LocalCountryCode;
+                            $scope.scopeModel.interconnectGeneralPrefix = ericssonSWSync.InterconnectGeneralPrefix;
+                            $scope.scopeModel.esr = ericssonSWSync.ESR;
+                            $scope.scopeModel.cc = ericssonSWSync.CC;
+                            $scope.scopeModel.percentagePrefix = ericssonSWSync.PercentagePrefix;
+                            branchRouteSettings = ericssonSWSync.BranchRouteSettings;
+                            sshCommunicationList = ericssonSWSync.SwitchCommunicationList;
+                            switchLoggerList = ericssonSWSync.SwitchLoggerList;
+                            outgoingTrafficCustomers = ericssonSWSync.OutgoingTrafficCustomers;
+                            incomingTrafficSuppliers = ericssonSWSync.IncomingTrafficSuppliers;
+                            localSupplierMappings = ericssonSWSync.LocalSupplierMappings;
+                            carrierMappings = ericssonSWSync.CarrierMappings;
+                        }
+                    }
+                    //Loading Switch Communication
+                    var switchCommunicationLoadPromise = getSwitchCommunicationLoadPromise();
+                    promises.push(switchCommunicationLoadPromise);
 
-					//Loading LocalSupplierMapping Directive
-					var localSupplierMappingDirectiveLoadPromise = getLocalSupplierMappingDirectiveLoadPromise();
-					promises.push(localSupplierMappingDirectiveLoadPromise);
+                    //Loading OutgoingTrafficCustomers Selector
+                    var outgoingTrafficCustomerSelectorLoadPromise = getOutgoingTrafficCustomerSelectorLoadPromise();
+                    promises.push(outgoingTrafficCustomerSelectorLoadPromise);
 
-					//Loading CarrierAccountMapping Grid
-					var carrierAccountMappingGridLoadPromise = getCarrierAccountMappingGridLoadPromise();
-					promises.push(carrierAccountMappingGridLoadPromise);
+                    //Loading IncomingTrafficSuppliers Selector
+                    var incomingTrafficSupplierSelectorLoadPromise = getIncomingTrafficSupplierSelectorLoadPromise();
+                    promises.push(incomingTrafficSupplierSelectorLoadPromise);
 
-					//LoadingBranchRouteSettings
-					var branchRouteSettingsLoadPromise = getBranchRouteSettingsLoadPromise();
-					promises.push(branchRouteSettingsLoadPromise);
+                    //Loading LocalSupplierMapping Directive
+                    var localSupplierMappingDirectiveLoadPromise = getLocalSupplierMappingDirectiveLoadPromise();
+                    promises.push(localSupplierMappingDirectiveLoadPromise);
 
-					function getSwitchCommunicationLoadPromise() {
-						var switchCommunicationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //Loading CarrierAccountMapping Grid
+                    var carrierAccountMappingGridLoadPromise = getCarrierAccountMappingGridLoadPromise();
+                    promises.push(carrierAccountMappingGridLoadPromise);
 
-						switchCommunicationReadyPromiseDeferred.promise.then(function () {
-							var switchCommunicationPayload;
-							if (ericssonSWSync != undefined) {
-								switchCommunicationPayload = { sshCommunicationList: sshCommunicationList, switchLoggerList: switchLoggerList };
-							}
-							VRUIUtilsService.callDirectiveLoad(switchCommunicationAPI, switchCommunicationPayload, switchCommunicationLoadPromiseDeferred);
-						});
+                    //LoadingBranchRouteSettings
+                    var branchRouteSettingsLoadPromise = getBranchRouteSettingsLoadPromise();
+                    promises.push(branchRouteSettingsLoadPromise);
 
-						return switchCommunicationLoadPromiseDeferred.promise;
-					}
+                    var manualRouteSettingsLoadPromise = getManualRouteSettingsLoadPromise();
+                    promises.push(manualRouteSettingsLoadPromise);
 
-					function getOutgoingTrafficCustomerSelectorLoadPromise() {
-						var outgoingTrafficCustomerSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    function getManualRouteSettingsLoadPromise() {
+                        var manualRouteSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-						outgoingTrafficCustomerSelectorReadyPromiseDeferred.promise.then(function () {
+                        manualRouteSettingsReadyPromiseDeferred.promise.then(function () {
+                            var manualRouteSettingsPayload;
+                            if (ericssonSWSync != undefined) {
+                                manualRouteSettingsPayload = ericssonSWSync.ManualRouteSettings;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(manualRouteSettingsAPI, manualRouteSettingsPayload, manualRouteSettingsLoadPromiseDeferred);
+                        });
 
-							var outgoingTrafficCustomerSelectorPayload;
-							if (outgoingTrafficCustomers != undefined) {
-								outgoingTrafficCustomerSelectorPayload = { selectedIds: UtilsService.getPropValuesFromArray(outgoingTrafficCustomers, 'CustomerId') };
-							}
-							VRUIUtilsService.callDirectiveLoad(outgoingTrafficCustomerSelectorAPI, outgoingTrafficCustomerSelectorPayload, outgoingTrafficCustomerSelectorLoadPromiseDeferred);
-						});
+                        return manualRouteSettingsLoadPromiseDeferred.promise;
+                    }
 
-						return outgoingTrafficCustomerSelectorLoadPromiseDeferred.promise;
-					}
-					function getIncomingTrafficSupplierSelectorLoadPromise() {
-						var incomingTrafficSupplierSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    function getSwitchCommunicationLoadPromise() {
+                        var switchCommunicationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-						incomingTrafficSupplierSelectorReadyPromiseDeferred.promise.then(function () {
+                        switchCommunicationReadyPromiseDeferred.promise.then(function () {
+                            var switchCommunicationPayload;
+                            if (ericssonSWSync != undefined) {
+                                switchCommunicationPayload = { sshCommunicationList: sshCommunicationList, switchLoggerList: switchLoggerList };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(switchCommunicationAPI, switchCommunicationPayload, switchCommunicationLoadPromiseDeferred);
+                        });
 
-							var incomingTrafficSupplierSelectorPayload;
-							if (incomingTrafficSuppliers != undefined) {
-								incomingTrafficSupplierSelectorPayload = { selectedIds: UtilsService.getPropValuesFromArray(incomingTrafficSuppliers, 'SupplierId') };
-							}
-							VRUIUtilsService.callDirectiveLoad(incomingTrafficSupplierSelectorAPI, incomingTrafficSupplierSelectorPayload, incomingTrafficSupplierSelectorLoadPromiseDeferred);
-						});
+                        return switchCommunicationLoadPromiseDeferred.promise;
+                    }
 
-						return incomingTrafficSupplierSelectorLoadPromiseDeferred.promise;
-					}
-					function getLocalSupplierMappingDirectiveLoadPromise() {
-						var supplierMappingDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    function getOutgoingTrafficCustomerSelectorLoadPromise() {
+                        var outgoingTrafficCustomerSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-						localSupplierSelectorReadyPromiseDeferred.promise.then(function () {
+                        outgoingTrafficCustomerSelectorReadyPromiseDeferred.promise.then(function () {
 
-							var localSupplierSelectorPayload;
-							if (localSupplierMappings != undefined) {
-								localSupplierSelectorPayload = { selectedIds: UtilsService.getPropValuesFromArray(localSupplierMappings, 'SupplierId') };
-							}
-							VRUIUtilsService.callDirectiveLoad(localSupplierSelectorAPI, localSupplierSelectorPayload, supplierMappingDirectiveLoadPromiseDeferred);
-						});
+                            var outgoingTrafficCustomerSelectorPayload;
+                            if (outgoingTrafficCustomers != undefined) {
+                                outgoingTrafficCustomerSelectorPayload = { selectedIds: UtilsService.getPropValuesFromArray(outgoingTrafficCustomers, 'CustomerId') };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(outgoingTrafficCustomerSelectorAPI, outgoingTrafficCustomerSelectorPayload, outgoingTrafficCustomerSelectorLoadPromiseDeferred);
+                        });
 
-						return supplierMappingDirectiveLoadPromiseDeferred.promise.then(function () {
+                        return outgoingTrafficCustomerSelectorLoadPromiseDeferred.promise;
+                    }
+                    function getIncomingTrafficSupplierSelectorLoadPromise() {
+                        var incomingTrafficSupplierSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-							for (var i = 0; i < $scope.scopeModel.selectedLocalSuppliers.length; i++) {
-								var currentLoadSupplier = $scope.scopeModel.selectedLocalSuppliers[i];
-								var localSupplierMapping = localSupplierMappings[i];
+                        incomingTrafficSupplierSelectorReadyPromiseDeferred.promise.then(function () {
 
-								$scope.scopeModel.localSuppliers.push({
-									CarrierAccountId: currentLoadSupplier.CarrierAccountId,
-									Name: currentLoadSupplier.Name,
-									BO: localSupplierMapping.BO
-								});
-							}
-						});
-					}
-					function getCarrierAccountMappingGridLoadPromise() {
-						var carrierAccountMappingGridLoadDeferred = UtilsService.createPromiseDeferred();
+                            var incomingTrafficSupplierSelectorPayload;
+                            if (incomingTrafficSuppliers != undefined) {
+                                incomingTrafficSupplierSelectorPayload = { selectedIds: UtilsService.getPropValuesFromArray(incomingTrafficSuppliers, 'SupplierId') };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(incomingTrafficSupplierSelectorAPI, incomingTrafficSupplierSelectorPayload, incomingTrafficSupplierSelectorLoadPromiseDeferred);
+                        });
 
-						carrierAccountMappingGridReadyPromiseDeferred.promise.then(function () {
-							var carrierAccountMappingGridPayload = { carrierMappings: carrierMappings };
-							VRUIUtilsService.callDirectiveLoad(carrierAccountMappingGridAPI, carrierAccountMappingGridPayload, carrierAccountMappingGridLoadDeferred);
-						});
+                        return incomingTrafficSupplierSelectorLoadPromiseDeferred.promise;
+                    }
+                    function getLocalSupplierMappingDirectiveLoadPromise() {
+                        var supplierMappingDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-						return carrierAccountMappingGridLoadDeferred.promise;
-					}
+                        localSupplierSelectorReadyPromiseDeferred.promise.then(function () {
 
-					function getBranchRouteSettingsLoadPromise() {
-						var branchRouteSettingsLoadPromise = UtilsService.createPromiseDeferred();
-						branchRouteSettingsReadyPromiseDeferred.promise.then(function () {
-							var branchRouteSettingsPayload = { branchRouteSettings: branchRouteSettings };
-							VRUIUtilsService.callDirectiveLoad(branchRouteSettingsAPI, branchRouteSettingsPayload, branchRouteSettingsLoadPromise);
-						});
+                            var localSupplierSelectorPayload;
+                            if (localSupplierMappings != undefined) {
+                                localSupplierSelectorPayload = { selectedIds: UtilsService.getPropValuesFromArray(localSupplierMappings, 'SupplierId') };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(localSupplierSelectorAPI, localSupplierSelectorPayload, supplierMappingDirectiveLoadPromiseDeferred);
+                        });
 
-						return branchRouteSettingsLoadPromise.promise;
-					}
+                        return supplierMappingDirectiveLoadPromiseDeferred.promise.then(function () {
 
-					return UtilsService.waitMultiplePromises(promises);
-				};
+                            for (var i = 0; i < $scope.scopeModel.selectedLocalSuppliers.length; i++) {
+                                var currentLoadSupplier = $scope.scopeModel.selectedLocalSuppliers[i];
+                                var localSupplierMapping = localSupplierMappings[i];
 
-				api.getData = function () {
+                                $scope.scopeModel.localSuppliers.push({
+                                    CarrierAccountId: currentLoadSupplier.CarrierAccountId,
+                                    Name: currentLoadSupplier.Name,
+                                    BO: localSupplierMapping.BO
+                                });
+                            }
+                        });
+                    }
+                    function getCarrierAccountMappingGridLoadPromise() {
+                        var carrierAccountMappingGridLoadDeferred = UtilsService.createPromiseDeferred();
 
-					function getIncomingTrafficSuppliers() {
-						var incomingTrafficSupplierIds = incomingTrafficSupplierSelectorAPI.getSelectedIds();
-						if (incomingTrafficSupplierIds == undefined || incomingTrafficSupplierIds.length == 0)
-							return null;
+                        carrierAccountMappingGridReadyPromiseDeferred.promise.then(function () {
+                            var carrierAccountMappingGridPayload = { carrierMappings: carrierMappings };
+                            VRUIUtilsService.callDirectiveLoad(carrierAccountMappingGridAPI, carrierAccountMappingGridPayload, carrierAccountMappingGridLoadDeferred);
+                        });
 
-						var incomingTrafficSuppliers = [];
-						for (var index = 0; index < incomingTrafficSupplierIds.length; index++) {
-							incomingTrafficSuppliers.push({ SupplierId: incomingTrafficSupplierIds[index] });
-						}
-						return incomingTrafficSuppliers;
-					}
-					function getOutgoingTrafficCustomers() {
-						var outgoingTrafficCustomerIds = outgoingTrafficCustomerSelectorAPI.getSelectedIds();
-						if (outgoingTrafficCustomerIds == undefined || outgoingTrafficCustomerIds.length == 0)
-							return null;
+                        return carrierAccountMappingGridLoadDeferred.promise;
+                    }
 
-						var outgoingTrafficCustomers = [];
-						for (var index = 0; index < outgoingTrafficCustomerIds.length; index++) {
-							outgoingTrafficCustomers.push({ CustomerId: outgoingTrafficCustomerIds[index] });
-						}
-						return outgoingTrafficCustomers;
-					}
-					function getLocalSupplierMappings() {
-						var localSupplierMappings = [];
-						for (var i = 0; i < $scope.scopeModel.localSuppliers.length; i++) {
-							var localSupplier = $scope.scopeModel.localSuppliers[i];
-							localSupplierMappings.push({ SupplierId: localSupplier.CarrierAccountId, BO: localSupplier.BO });
-						}
-						return localSupplierMappings;
-					}
+                    function getBranchRouteSettingsLoadPromise() {
+                        var branchRouteSettingsLoadPromise = UtilsService.createPromiseDeferred();
+                        branchRouteSettingsReadyPromiseDeferred.promise.then(function () {
+                            var branchRouteSettingsPayload = { branchRouteSettings: branchRouteSettings };
+                            VRUIUtilsService.callDirectiveLoad(branchRouteSettingsAPI, branchRouteSettingsPayload, branchRouteSettingsLoadPromise);
+                        });
 
-					var switchCommunicationData = switchCommunicationAPI.getData();
-					var data = {
-						$type: "TOne.WhS.RouteSync.Ericsson.EricssonSWSync, TOne.WhS.RouteSync.Ericsson",
-						NumberOfMappings: $scope.scopeModel.numberOfMappings,
-						MinCodeLength: $scope.scopeModel.minCodeLength,
-						MaxCodeLength: $scope.scopeModel.maxCodeLength,
-						LocalCountryCode: $scope.scopeModel.localCountryCode,
-						InterconnectGeneralPrefix: $scope.scopeModel.interconnectGeneralPrefix,
-						IncomingTrafficSuppliers: getIncomingTrafficSuppliers(),
-						OutgoingTrafficCustomers: getOutgoingTrafficCustomers(),
-						LocalSupplierMappings: getLocalSupplierMappings(),
-						CarrierMappings: carrierAccountMappingGridAPI.getData(),
-						SwitchCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.sshCommunicationList : undefined,
-						SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined,
-						FirstRCNumber: $scope.scopeModel.firstRCNumber,
-						BranchRouteSettings: (branchRouteSettingsAPI != undefined) ? branchRouteSettingsAPI.getData() : null,
-						ESR: $scope.scopeModel.esr,
-						CC: $scope.scopeModel.cc,
-						PercentagePrefix: $scope.scopeModel.percentagePrefix
-					};
-					return data;
-				};
+                        return branchRouteSettingsLoadPromise.promise;
+                    }
 
-				if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-					ctrl.onReady(api);
-				}
-			}
-		}
-	}
+                    return UtilsService.waitMultiplePromises(promises);
+                };
 
-	app.directive('whsRoutesyncEricssonSwsync', EricssonSWSync);
+                api.getData = function () {
+
+                    function getIncomingTrafficSuppliers() {
+                        var incomingTrafficSupplierIds = incomingTrafficSupplierSelectorAPI.getSelectedIds();
+                        if (incomingTrafficSupplierIds == undefined || incomingTrafficSupplierIds.length == 0)
+                            return null;
+
+                        var incomingTrafficSuppliers = [];
+                        for (var index = 0; index < incomingTrafficSupplierIds.length; index++) {
+                            incomingTrafficSuppliers.push({ SupplierId: incomingTrafficSupplierIds[index] });
+                        }
+                        return incomingTrafficSuppliers;
+                    }
+                    function getOutgoingTrafficCustomers() {
+                        var outgoingTrafficCustomerIds = outgoingTrafficCustomerSelectorAPI.getSelectedIds();
+                        if (outgoingTrafficCustomerIds == undefined || outgoingTrafficCustomerIds.length == 0)
+                            return null;
+
+                        var outgoingTrafficCustomers = [];
+                        for (var index = 0; index < outgoingTrafficCustomerIds.length; index++) {
+                            outgoingTrafficCustomers.push({ CustomerId: outgoingTrafficCustomerIds[index] });
+                        }
+                        return outgoingTrafficCustomers;
+                    }
+                    function getLocalSupplierMappings() {
+                        var localSupplierMappings = [];
+                        for (var i = 0; i < $scope.scopeModel.localSuppliers.length; i++) {
+                            var localSupplier = $scope.scopeModel.localSuppliers[i];
+                            localSupplierMappings.push({ SupplierId: localSupplier.CarrierAccountId, BO: localSupplier.BO });
+                        }
+                        return localSupplierMappings;
+                    }
+
+                    var switchCommunicationData = switchCommunicationAPI.getData();
+                    var data = {
+                        $type: "TOne.WhS.RouteSync.Ericsson.EricssonSWSync, TOne.WhS.RouteSync.Ericsson",
+                        NumberOfMappings: $scope.scopeModel.numberOfMappings,
+                        MinCodeLength: $scope.scopeModel.minCodeLength,
+                        MaxCodeLength: $scope.scopeModel.maxCodeLength,
+                        LocalCountryCode: $scope.scopeModel.localCountryCode,
+                        InterconnectGeneralPrefix: $scope.scopeModel.interconnectGeneralPrefix,
+                        IncomingTrafficSuppliers: getIncomingTrafficSuppliers(),
+                        OutgoingTrafficCustomers: getOutgoingTrafficCustomers(),
+                        LocalSupplierMappings: getLocalSupplierMappings(),
+                        CarrierMappings: carrierAccountMappingGridAPI.getData(),
+                        SwitchCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.sshCommunicationList : undefined,
+                        SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined,
+                        FirstRCNumber: $scope.scopeModel.firstRCNumber,
+                        BranchRouteSettings: (branchRouteSettingsAPI != undefined) ? branchRouteSettingsAPI.getData() : null,
+                        ManualRouteSettings: (manualRouteSettingsAPI != undefined) ? manualRouteSettingsAPI.getData() : null,
+                        ESR: $scope.scopeModel.esr,
+                        CC: $scope.scopeModel.cc,
+                        PercentagePrefix: $scope.scopeModel.percentagePrefix
+                    };
+                    return data;
+                };
+
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
+                }
+            }
+        }
+    }
+
+    app.directive('whsRoutesyncEricssonSwsync', EricssonSWSync);
 
 })(app);
