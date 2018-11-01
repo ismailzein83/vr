@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vanrise.Data.SQL;
 using System.Data;
 using System.Linq;
 using Vanrise.BusinessProcess.Entities;
-using Vanrise.Common;
+using Vanrise.Data.SQL;
 using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.Data.SQL
@@ -36,8 +35,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             s_trackingMessagesSchemaTable.Columns.Add("Severity", typeof(int));
             s_trackingMessagesSchemaTable.Columns.Add("EventTime", typeof(DateTime));
         }
-
-
         #endregion
 
         #region IBPTrackingDataManager Members
@@ -65,38 +62,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             dt.EndLoadData();
             WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
-
-        public BigResult<BPTrackingMessage> GetFilteredTrackings(DataRetrievalInput<TrackingQuery> input)
-        {
-            int? top = input.DataRetrievalResultType == DataRetrievalResultType.Normal ? (int?)(input.ToRow ?? 0) - (input.FromRow ?? 0) + 1 : null;
-
-            return new BigResult<BPTrackingMessage>()
-            {
-                Data = GetItemsSP("bp.sp_BPTrackings_GetByInstanceId", BPTrackingMapper, input.Query.ProcessInstanceId, input.Query.FromTrackingId,
-                input.Query.Message,
-                input.Query.Severities == null
-                    ? null
-                    : string.Join(",", input.Query.Severities.Select(n => ((int)n).ToString()).ToArray()),
-                top)
-            };
-        }
-
-        public BigResult<BPTrackingMessageDetail> GetFilteredBPInstanceTracking(DataRetrievalInput<BPTrackingQuery> input)
-        {
-            if (input.SortByColumnName != null)
-                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
-
-            return RetrieveData(input, (tempTableName) =>
-            {
-                ExecuteNonQuerySP("bp.sp_BPTrackings_CreateTempForFiltered", tempTableName, input.Query.ProcessInstanceId, input.Query.Message,
-                    input.Query.Severities == null ? null : string.Join(",", input.Query.Severities.Select(n => (int)n).ToArray()));
-
-            }, BPTrackingDetailMapper, _mapper);
-        }
-        public List<BPTrackingMessage> GetTrackingsFrom(TrackingQuery input)
-        {
-            return GetItemsSP("bp.sp_BPTrackings_GetFromInstanceId", BPTrackingMapper, input.ProcessInstanceId, input.FromTrackingId);
-        }
+        
         public List<BPTrackingMessage> GetBPInstanceTrackingMessages(long processInstanceId, List<LogEntryType> severities)
         {
             string severitiesString = (severities == null) ? string.Empty : string.Join(",", severities.Select(n => ((int)n).ToString()).ToArray());
@@ -129,17 +95,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             return GetItemsSP("[bp].[sp_BPTrackings_GetBeforeID]", BPTrackingMapper, input.LessThanID, input.NbOfRows, input.BPInstanceID, severityIdsAsString);
         }
-
-
-
-        public List<BPTrackingMessage> GetRecentBPInstanceTrackings(long bpInstanceId, int nbOfRecords, long? lessThanId, List<LogEntryType> severities)
-        {
-            string severityIdsAsString = null;
-            if (severities != null && severities.Count() > 0)
-                severityIdsAsString = string.Join<int>(",", severities.Select(n => ((int)n)));
-            return GetItemsSP("[bp].[sp_BPTrackings_GetBeforeID]", BPTrackingMapper, lessThanId, nbOfRecords, bpInstanceId, severityIdsAsString);
-        }
-
+        
         #endregion
 
         #region Private Methods
@@ -158,11 +114,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             };
 
             return bpTrackingMessage;
-        }
-
-        BPTrackingMessageDetail BPTrackingDetailMapper(IDataReader reader)
-        {
-            return new BPTrackingMessageDetail() { Entity = BPTrackingMapper(reader) };
         }
 
         #endregion

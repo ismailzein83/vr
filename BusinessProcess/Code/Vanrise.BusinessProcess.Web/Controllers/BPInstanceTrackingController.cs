@@ -10,15 +10,6 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     public class BPInstanceTrackingController : BaseAPIController
     {
         [HttpPost]
-        [Route("GetFilteredBPInstanceTracking")]
-        public object GetFilteredBPInstanceTracking(Vanrise.Entities.DataRetrievalInput<BPTrackingQuery> input)
-        {
-            BPInstanceTrackingManager manager = new BPInstanceTrackingManager();
-            return GetWebResponse(input, manager.GetFilteredBPInstanceTracking(input));
-        }
-
-
-        [HttpPost]
         [Route("GetUpdated")]
         public BPTrackingUpdateOutput GetUpdated(BPTrackingUpdateInput input)
         {
