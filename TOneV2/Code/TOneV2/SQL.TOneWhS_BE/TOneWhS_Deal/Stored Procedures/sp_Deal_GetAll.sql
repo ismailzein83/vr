@@ -1,11 +1,6 @@
 ﻿CREATE PROCEDURE [TOneWhS_Deal].[sp_Deal_GetAll]
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-	SELECT	d.ID,d.Name,d.Settings
+	SELECT	d.ID,d.Name,d.Settings, d.IsDeleted
 	FROM	[TOneWhS_Deal].Deal d WITH(NOLOCK) 
-	WHERE d.IsDeleted = 0
-	SET NOCOUNT OFF
 END
