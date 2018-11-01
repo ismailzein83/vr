@@ -49,6 +49,7 @@
     <Compile Include="BEParentChildRelationDataManager.cs" />
     <Compile Include="BusinessEntityDefinitionDataManager.cs" />
     <Compile Include="BusinessEntityStatusHistoryDataManager.cs" />
+    <Compile Include="DataRecordFieldChoiceDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordFilterRDBBuilder.cs" />
   </ItemGroup>
