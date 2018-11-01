@@ -1,0 +1,15 @@
+﻿<vr-datagrid datasource="scopeModel.releaseCodeStatistics"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             defaultsortbyfieldname="'Entity.Attempt'"
+             defaultsortdirection="'DESC'" enableautoexport="true">
+    <vr-datagridcolumn headertext="'Release Code'" field="'Entity.ReleaseCode'" type="'Text'" tooltipfield="'ReleaseCodeDescription'" isclickable="true" onclicked="onClickReleaseCode"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Release Source'" field="'Entity.ReleaseSource'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Attempts'" field="'Entity.Attempt'" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Duration (min)'" field="'Entity.DurationInMinutes'" type="'Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'%'" field="'Entity.Percentage'" type="'Number'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'First Attempt'" field="'Entity.FirstAttempt'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Last Attempt'" field="'Entity.LastAttempt'" type="'Datetime'"></vr-datagridcolumn>
+</vr-datagrid>

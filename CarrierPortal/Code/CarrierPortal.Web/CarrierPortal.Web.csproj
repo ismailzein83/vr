@@ -362,17 +362,17 @@
       <Project>{862acf40-050c-423f-bae1-66cdd06e5eb0}</Project>
       <Name>CP.SupplierPricelist.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CP.WhSAnalytics.Business\CP.WhSAnalytics.Business.csproj">
-      <Project>{abe9ff39-f636-40b3-b433-0b48cf5fb1b4}</Project>
-      <Name>CP.WhSAnalytics.Business</Name>
+    <ProjectReference Include="..\CP.WhS.Business\CP.WhS.Business.csproj">
+      <Project>{f2ca5f71-d417-4dfc-b4c3-57a114d3a717}</Project>
+      <Name>CP.WhS.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CP.WhSAnalytics.Entities\CP.WhSAnalytics.Entities.csproj">
-      <Project>{97351548-c5ec-4bdb-8d62-fb033a503fe0}</Project>
-      <Name>CP.WhSAnalytics.Entities</Name>
+    <ProjectReference Include="..\CP.WhS.Entities\CP.WhS.Entities.csproj">
+      <Project>{641ca341-aae6-4632-9f12-16e8bb689f2d}</Project>
+      <Name>CP.WhS.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CP.WhSAnalytics.Web\CP.WhSAnalytics.Web.csproj">
-      <Project>{a82eb835-f295-4cf0-b826-b7fbac60736a}</Project>
-      <Name>CP.WhSAnalytics.Web</Name>
+    <ProjectReference Include="..\CP.WhS.Web\CP.WhS.Web.csproj">
+      <Project>{25b8df86-c55a-4fae-a34a-aaab7377599e}</Project>
+      <Name>CP.WhS.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\PartnerPortal.CustomerAccess.Business\PartnerPortal.CustomerAccess.Business.csproj">
       <Project>{c4ac9650-72a5-4470-a2d4-2d22c504bf0f}</Project>

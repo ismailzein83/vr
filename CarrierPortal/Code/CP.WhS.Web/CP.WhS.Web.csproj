@@ -27,8 +27,8 @@
     <SccProvider>SAK</SccProvider>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-	<TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>True</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>True</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,6 +67,12 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="TOne.WhS.Analytics.Entities">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Analytics.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
@@ -93,14 +99,46 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BlockedAttemptsController.cs" />
+    <Compile Include="Controllers\ReleaseCodeStatisticsController.cs" />
+    <Compile Include="Controllers\RepeatedNumbersController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="CP_WhS\Elements\" />
+    <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CP.WhS.Business\CP.WhS.Business.csproj">
+      <Project>{f2ca5f71-d417-4dfc-b4c3-57a114d3a717}</Project>
+      <Name>CP.WhS.Business</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CP_WhS\Constants\AccountViewTypeEnum.js" />
+    <Content Include="CP_WhS\Constants\BillingCDROptionMeasureEnum.js" />
+    <Content Include="CP_WhS\Constants\GenericAnalyticReleaseCodeDimensionsEnum.js" />
     <Content Include="CP_WhS\Constants\ModuleConfig.js" />
+    <Content Include="CP_WhS\Constants\PhoneNumberEnum.js" />
+    <Content Include="CP_WhS\Elements\AccountViewType\cp-whsanalytics-accountviewtype-selector.js" />
+    <Content Include="CP_WhS\Elements\BlockedAttempts\Directives\cp-whsanalytics-blockedattempts-grid.js" />
+    <Content Include="CP_WhS\Elements\BlockedAttempts\Directives\Templates\BlockedAttemptsGridTemplate.html" />
+    <Content Include="CP_WhS\Elements\BlockedAttempts\Services\APIServices\BlockedAttemptsAPIService.js" />
+    <Content Include="CP_WhS\Elements\BlockedAttempts\Views\BlockedAttemptsManagement.html" />
+    <Content Include="CP_WhS\Elements\BlockedAttempts\Views\BlockedAttemptsManagementController.js" />
+    <Content Include="CP_WhS\Elements\CallStatus\cp-whsanalytics-callstatus-selector.js" />
+    <Content Include="CP_WhS\Elements\PhoneNumber\cp-whsanalytics-phonenumber-selector.js" />
+    <Content Include="CP_WhS\Elements\ReleaseCodeStatistics\Directives\cp-whsanalytics-releasecode-dimension-selector.js" />
+    <Content Include="CP_WhS\Elements\ReleaseCodeStatistics\Directives\cp-whsanalytics-releasecodestatistics-grid.js" />
+    <Content Include="CP_WhS\Elements\ReleaseCodeStatistics\Directives\Templates\ReleaseCodeStatisticsGridTemplate.html" />
+    <Content Include="CP_WhS\Elements\ReleaseCodeStatistics\Services\APIServices\ReleaseCodeStatisticsAPIService.js" />
+    <Content Include="CP_WhS\Elements\ReleaseCodeStatistics\Views\ReleaseCodeStatisticsManagement.html" />
+    <Content Include="CP_WhS\Elements\ReleaseCodeStatistics\Views\ReleaseCodeStatisticsManagementController.js" />
+    <Content Include="CP_WhS\Elements\RepeatedNumbers\Directives\cp-whsanalytics-repeatednumbers-grid.js" />
+    <Content Include="CP_WhS\Elements\RepeatedNumbers\Directives\Templates\RepeatedNumbersGridTemplate.html" />
+    <Content Include="CP_WhS\Elements\RepeatedNumbers\Services\APIServices\RepeatedNumbersAPIService.js" />
+    <Content Include="CP_WhS\Elements\RepeatedNumbers\Views\RepeatedNumbersManagement.html" />
+    <Content Include="CP_WhS\Elements\RepeatedNumbers\Views\RepeatedNumbersManagementController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -8,7 +8,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
-namespace CP.WhSAnalytics.Business
+namespace CP.WhS.Business
 {
     public class BlockedAttemptsManager
     {

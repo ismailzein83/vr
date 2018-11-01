@@ -1,0 +1,42 @@
+﻿<vr-panel ng-controller="CP_WhSAnalytics_RepeatedNumbersController">
+    <vr-form name="formFilter">
+
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
+            <vr-row removeline>
+                <cp-whsanalytics-accountviewtype-selector normal-col-num="2" on-ready="onAccountViewTypeSelectorReady"></cp-whsanalytics-accountviewtype-selector>
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="selectedPeriod" from="fromDate" to="toDate"></vr-timerange>
+                <!--<vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
+
+    <vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerDirectiveReady"></vr-whs-be-customer-selector>
+
+    <vr-whs-be-supplier-selector normal-col-num="2" ismultipleselection on-ready="onSupplierDirectiveReady"></vr-whs-be-supplier-selector>-->
+
+                <cp-whsanalytics-callstatus-selector normal-col-num="2" on-ready="onCallStatusDirectiveReady" isrequired="true"></cp-whsanalytics-callstatus-selector>
+                <cp-whsanalytics-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady" isrequired="true" customlabel="Phone Number Type"></cp-whsanalytics-phonenumber-selector>
+                <vr-columns width="normal">
+                    <vr-textbox value="phoneNumber" label="Phone Number"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox type="number" value="nRecords" label="Repeated More Than" minvalue="0" maxvalue="100000" decimalprecision="0" isrequired></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <cp-whsanalytics-repeatednumbers-grid on-ready="onMainGridReady"></cp-whsanalytics-repeatednumbers-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
+
+
+
+

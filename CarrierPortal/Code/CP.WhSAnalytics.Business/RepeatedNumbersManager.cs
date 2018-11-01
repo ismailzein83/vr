@@ -10,21 +10,21 @@ using Vanrise.Entities;
 
 namespace CP.WhSAnalytics.Business
 {
-    public class BlockedAttemptsManager
+    public class RepeatedNumbersManager
     {
         static Guid WhSConnectionId = new Guid("B8058F6A-6545-465A-9DCA-6A4157ECFECB");
-        public IDataRetrievalResult<BlockedAttemptDetail> GetFilteredBlockedAttempts(DataRetrievalInput<BlockedAttemptQuery> query)
+        public IDataRetrievalResult<RepeatedNumberDetail> GetFilteredBlockedAttempts(DataRetrievalInput<RepeatedNumberQuery> query)
         {
             var connectionSettings = GetWhSConnectionSettings();
-            var clonedInput = Utilities.CloneObject<DataRetrievalInput<BlockedAttemptQuery>>(query);
+            var clonedInput = Utilities.CloneObject<DataRetrievalInput<RepeatedNumberQuery>>(query);
             clonedInput.IsAPICall = true;
             if (clonedInput.DataRetrievalResultType == DataRetrievalResultType.Excel)
             {
-                return connectionSettings.Post<DataRetrievalInput<BlockedAttemptQuery>, RemoteExcelResult<BlockedAttemptDetail>>("/api/WhS_Analytics/BlockedAttempts/GetBlockedAttemptsData", clonedInput);
+                return connectionSettings.Post<DataRetrievalInput<RepeatedNumberQuery>, RemoteExcelResult<RepeatedNumberDetail>>("/api/WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers", clonedInput);
             }
             else if (clonedInput.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
-                return connectionSettings.Post<DataRetrievalInput<BlockedAttemptQuery>, BigResult<BlockedAttemptDetail>>("/api/WhS_Analytics/BlockedAttempts/GetBlockedAttemptsData", clonedInput);
+                return connectionSettings.Post<DataRetrievalInput<RepeatedNumberQuery>, BigResult<RepeatedNumberDetail>>("/api/WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers", clonedInput);
             }
             return null;
         }
@@ -33,7 +33,7 @@ namespace CP.WhSAnalytics.Business
         {
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(WhSConnectionId);
-            return  vrConnection.Settings as VRInterAppRestConnection;
+            return vrConnection.Settings as VRInterAppRestConnection;
         }
     }
 }

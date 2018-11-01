@@ -1,0 +1,39 @@
+﻿<vr-panel ng-controller="CP_WhSAnalytics_ReleaseCodeStatisticsController">
+    <vr-form name="formFilter">
+
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
+            <vr-row removeline>
+                <cp-whsanalytics-accountviewtype-selector normal-col-num="2" on-ready="onAccountViewTypeSelectorReady"></cp-whsanalytics-accountviewtype-selector>
+                <cp-whsanalytics-releasecode-dimension-selector normal-col-num="2" ismultipleselection on-ready="onReleaseCodeDimenssionDirectiveReady"></cp-whsanalytics-releasecode-dimension-selector>
+
+                <!--<vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerDirectiveReady"></vr-whs-be-customer-selector>
+
+                <vr-whs-be-supplier-selector normal-col-num="2" ismultipleselection on-ready="onSupplierDirectiveReady"></vr-whs-be-supplier-selector>-->
+
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="today" from="fromDate" to="toDate"></vr-timerange>
+                <!--<vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>-->
+                <!--<vr-common-country-selector normal-col-num="2" on-ready="onCountryReady" ismultipleselection></vr-common-country-selector>-->
+                <!--<vr-whs-be-salezone-masterplan-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady"></vr-whs-be-salezone-masterplan-selector>-->
+
+            </vr-row>
+        </div>
+
+
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="getData"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <cp-whsanalytics-releasecodestatistics-grid on-ready="onMainGridReady" dimenssion="dimenssionvalues"></cp-whsanalytics-releasecodestatistics-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
+
+
+
+
