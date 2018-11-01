@@ -680,6 +680,9 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (filter.SellingProductId.HasValue && carr.SellingProductId != filter.SellingProductId.Value)
                         return false;
 
+                    if (filter.CarrierProfileId.HasValue && carr.CarrierProfileId != filter.CarrierProfileId.Value)
+                        return false;
+
                     if (filter.AssignableToUserId.HasValue && !IsCarrierAccountAssignableToUser(carr, filter.GetCustomers, filter.GetSuppliers, assignedCarriers))
                         return false;
                     if (filter.Filters != null)

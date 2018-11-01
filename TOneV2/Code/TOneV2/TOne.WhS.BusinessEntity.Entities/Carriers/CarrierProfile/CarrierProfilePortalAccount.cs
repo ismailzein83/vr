@@ -36,4 +36,10 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public List<CarrierProfilePortalAccount> CarrierProfilePortalAccounts { get; set; }
     }
+    public class CarrierProfilePortalAccountSettings
+    {
+        public List<PortalCarrierAccount> PortalCarrierAccounts { get; set; }
+        public int CarrierProfileId { get; set; }
+        public PortalAccountSettings PortalAccountSettings { get; set; }
+    }
 }

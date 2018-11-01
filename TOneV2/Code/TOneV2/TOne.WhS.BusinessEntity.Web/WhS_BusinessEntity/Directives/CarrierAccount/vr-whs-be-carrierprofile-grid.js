@@ -62,7 +62,25 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                     }
                 }
 
+                AddPortalAccountDrillDown();
+                function AddPortalAccountDrillDown() {
+                    var drillDownDefinition = {};
 
+                    drillDownDefinition.title = "Portal Account";
+                    drillDownDefinition.directive = "vr-whs-be-portalaccount-grid";
+
+
+                    drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
+                        carrierProfileItem.objectTrackingGridAPI = directiveAPI;
+                        var query = {
+                            ObjectId: carrierProfileItem.Entity.CarrierProfileId,
+                            EntityUniqueName: WhS_BE_CarrierProfileService.getEntityUniqueName()
+                        };
+                        return carrierProfileItem.objectTrackingGridAPI.load(query);
+                    };
+
+                    finalDrillDownDefinitions.push(drillDownDefinition);
+                }
                 AddObjectTrackingDrillDown();
 
                 function AddObjectTrackingDrillDown() {
@@ -76,8 +94,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                         carrierProfileItem.objectTrackingGridAPI = directiveAPI;
                         var query = {
                             ObjectId: carrierProfileItem.Entity.CarrierProfileId,
-                            EntityUniqueName: WhS_BE_CarrierProfileService.getEntityUniqueName(),
-
+                            EntityUniqueName: WhS_BE_CarrierProfileService.getEntityUniqueName()
                         };
                         return carrierProfileItem.objectTrackingGridAPI.load(query);
                     };
@@ -85,6 +102,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                     finalDrillDownDefinitions.push(drillDownDefinition);
 
                 }
+
 
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(finalDrillDownDefinitions, gridAPI, $scope.gridMenuActions);
 
@@ -155,7 +173,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
         function addCarrierAccount(dataItem) {
             gridAPI.expandRow(dataItem);
             var query = {
-                CarrierProfilesIds: [dataItem.CarrierProfileId],
+                CarrierProfilesIds: [dataItem.CarrierProfileId]
             };
 
             var onCarrierAccountAdded = function (carrierAccountObj) {

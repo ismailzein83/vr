@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.APIEntities;
 using TOne.WhS.BusinessEntity.Business.CarrierProfiles;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
@@ -62,6 +63,24 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId);
             return GetCarrierProfileName(carrierProfile);
+        }
+        public CarrierProfileCarrierAccounts GetCarrierProfileCarrierAccountsByUserId(int userId)
+        {
+            var cachedCarrierProfilePortalAccountSettingsByUserId = GetCachedCarrierProfilePortalAccountSettingsByUserId();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var carrierProfileCarrierAccounts = new CarrierProfileCarrierAccounts
+            {
+                CarrierAccountIds = new List<int>()
+            };
+            if (cachedCarrierProfilePortalAccountSettingsByUserId != null && cachedCarrierProfilePortalAccountSettingsByUserId.Count > 0)
+            {
+                var carrierProfilePortalAccountSettings = cachedCarrierProfilePortalAccountSettingsByUserId.GetRecord(userId);
+                if (carrierProfilePortalAccountSettings != null)
+                {
+                    carrierProfileCarrierAccounts.CarrierAccountIds = carrierProfilePortalAccountSettings.PortalCarrierAccounts.Select<PortalCarrierAccount, int>(x => x.CarrierAccountId).ToList();
+                }
+            }
+            return carrierProfileCarrierAccounts;
         }
 
         public string GetCarrierProfileName(CarrierProfile carrierProfile)
@@ -524,7 +543,59 @@ namespace TOne.WhS.BusinessEntity.Business
                    return carrierProfiles;
                });
         }
-
+        private Dictionary<int, CarrierProfilePortalAccountSettings> GetCachedCarrierProfilePortalAccountSettingsByUserId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCarrierProfilePortalAccountSettingsByUserId",
+             () =>
+             {
+                 ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+                 IEnumerable<CarrierProfile> carrierProfiles = dataManager.GetCarrierProfiles();
+                 Dictionary<int, CarrierProfilePortalAccountSettings> carrierProfilePortalSettings = new Dictionary<int, CarrierProfilePortalAccountSettings>();
+                 if (carrierProfiles != null && carrierProfiles.Count() > 0)
+                 {
+                     foreach (var cp in carrierProfiles)
+                     {
+                         if (cp.ExtendedSettings != null && cp.ExtendedSettings.Count > 0)
+                         {
+                             var extendedSettings = cp.ExtendedSettings.GetRecord("TOne.WhS.BusinessEntity.Entities.PortalAccountSettings");
+                             if (extendedSettings != null)
+                             {
+                                 var portalAccountSettings = extendedSettings.CastWithValidate<PortalAccountSettings>("PortalAccountSettings");
+                                 portalAccountSettings.ThrowIfNull("portalAccountSettings");
+                                 portalAccountSettings.CarrierProfilePortalAccounts.ThrowIfNull("portalAccountSettings.CarrierProfilePortalAccounts");
+                                 foreach (var cpPortalAccount in portalAccountSettings.CarrierProfilePortalAccounts)
+                                 {
+                                     if (cpPortalAccount.Type == PortalCarrierAccountType.All)
+                                     {
+                                         CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                                         var carrierAccounts = carrierAccountManager.GetCarriersByProfileId(cp.CarrierProfileId, true, true);
+                                         carrierProfilePortalSettings.Add(cpPortalAccount.UserId, new CarrierProfilePortalAccountSettings
+                                         {
+                                             PortalCarrierAccounts = carrierAccounts.Select<CarrierAccount, PortalCarrierAccount>(x => new PortalCarrierAccount
+                                             {
+                                                 CarrierAccountId = x.CarrierAccountId
+                                             }).ToList(),
+                                             CarrierProfileId = cp.CarrierProfileId,
+                                             PortalAccountSettings = portalAccountSettings
+                                         });
+                                     }
+                                     else
+                                     {
+                                         carrierProfilePortalSettings.Add(cpPortalAccount.UserId, new CarrierProfilePortalAccountSettings
+                                         {
+                                             PortalCarrierAccounts = cpPortalAccount.CarrierAccounts,
+                                             CarrierProfileId = cp.CarrierProfileId,
+                                             PortalAccountSettings = portalAccountSettings
+                                         });
+                                     }
+                                 }
+                             }
+                         }
+                     }
+                 }
+                 return carrierProfilePortalSettings;
+             });
+        }
         private Dictionary<int, CarrierProfile> GetCachedCarrierProfilesWithDeleted()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("AllarrierProfiles",

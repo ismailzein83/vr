@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using TOne.WhS.BusinessEntity.APIEntities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
@@ -82,6 +83,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             CarrierProfileManager manager = new CarrierProfileManager();
             return manager.GetAccountManagerName(accountId);
+        }
+
+        [HttpGet]
+        [Route("GetCarrierProfileCarrierAccountsByUserId")]
+        public CarrierProfileCarrierAccounts GetCarrierProfileCarrierAccountsByUserId(int userId)
+        {
+            CarrierProfileManager manager = new CarrierProfileManager();
+            return manager.GetCarrierProfileCarrierAccountsByUserId(userId);
         }
     }
 }
