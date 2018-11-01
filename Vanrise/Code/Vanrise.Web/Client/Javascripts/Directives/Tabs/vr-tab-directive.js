@@ -7,7 +7,8 @@ app.directive("vrTab", ["MultiTranscludeService", "UtilsService", "VRLocalizatio
         transclude: true,
         restrict: "E",
         scope: {
-            tabobject: "="
+            tabobject: "=",
+            ontabselected:'='
         },
         require: "^vrTabs",
         controller: function ($scope, $element, $attrs) {
@@ -49,9 +50,16 @@ app.directive("vrTab", ["MultiTranscludeService", "UtilsService", "VRLocalizatio
                     tabsCtrl.removeTab(ctrl.tabobject);
                     ctrl.tabobject = undefined;
                 }
-                else {                   
+                else {
                     tabsCtrl.removeTabAndHeader(ctrl.tabobject);
                     ctrl.tabobject = undefined;
+                }
+            });
+
+            $scope.$watch('ctrl.tabobject.isSelected', function (value) {
+                if (ctrl.tabobject.isSelected) {
+                    if (ctrl.ontabselected != undefined && typeof (ctrl.ontabselected) == 'function')
+                        ctrl.ontabselected();
                 }
             });
         },
