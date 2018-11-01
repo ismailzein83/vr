@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Web.Controllers
 {
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "BusinessEntity")]
-    public class BusinessEntityController : BaseAPIController
+    public class VRBusinessEntityController : BaseAPIController
     {
         BusinessEntityManager _manager = new BusinessEntityManager();
 

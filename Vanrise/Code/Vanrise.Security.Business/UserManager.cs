@@ -205,13 +205,14 @@ namespace Vanrise.Security.Business
             insertOperationOutput.InsertedObject = null;
             int userId = -1;
             bool insertActionSucc;
-
+            if (!userObject.SecurityProviderId.HasValue)
+                userObject.SecurityProviderId = new SecurityProviderManager().GetDefaultSecurityProviderId();
 
             string errorMessage;
             string encryptedPassword;
             string pwd;
             bool passwordCheckRequired;
-            if (!ValidateUser(userObject.Email, userObject.SecurityProviderId, userObject.Password, out  encryptedPassword, out  pwd, out  passwordCheckRequired, out  errorMessage))
+            if (!ValidateUser(userObject.Email, userObject.SecurityProviderId.Value, userObject.Password, out  encryptedPassword, out  pwd, out  passwordCheckRequired, out  errorMessage))
             {
                 insertOperationOutput.Message = errorMessage;
                 return insertOperationOutput;
@@ -225,7 +226,7 @@ namespace Vanrise.Security.Business
             {
                 Email = userObject.Email,
                 Name = userObject.Name,
-                SecurityProviderId = userObject.SecurityProviderId,
+                SecurityProviderId = userObject.SecurityProviderId.Value,
                 EnabledTill = userObject.EnabledTill,
                 Description = userObject.Description,
                 TenantId = userObject.TenantId,
