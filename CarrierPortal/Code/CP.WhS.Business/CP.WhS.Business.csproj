@@ -46,6 +46,9 @@
     <Reference Include="TOne.WhS.Analytics.Entities">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Analytics.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.Entities">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
@@ -65,7 +68,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReleaseCodeStatisticsManager.cs" />
     <Compile Include="RepeatedNumbersManager.cs" />
+    <Compile Include="WhSCarrierAccountBEManager.cs" />
     <Compile Include="WhSCarrierAccountsBEDefinition.cs" />
+    <Compile Include="WhSConnectionManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
