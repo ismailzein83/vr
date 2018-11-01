@@ -274,7 +274,14 @@ as (select * from (values
 ('054B8A6C-1FFF-4BC6-8620-8A942A5980B6','SpecificSaleZoneCodeListResolver','Sale Zone','WhS_BE_CodeListResolverConfig'	,'{"Editor":"whs-be-specific-sale-zone-code-list-resolver"}'),
 ('AA1911DF-E45F-4CF6-BCA5-ECDFDD246FEE','ExcludedCodes','Codes','WhS_BE_ExcludedDestinationsConfig'						,'{"Editor":"whs-be-specific-excluded-codes"}'),
 ('A5A8B72B-F834-4DAA-80F8-25157C2C3D37','Quarterly','Quarterly','WhS_BE_RecurringCharge','{"Editor":"whs-be-recurringchargeperiodsettings-quarterly"}'),
-('A1D0F08B-B8F7-4B9C-9C83-49DABD2A68D5','Monthly','Monthly','WhS_BE_RecurringCharge','{"Editor":"whs-be-recurringchargeperiodsettings-monthly"}')
+('A1D0F08B-B8F7-4B9C-9C83-49DABD2A68D5','Monthly','Monthly','WhS_BE_RecurringCharge','{"Editor":"whs-be-recurringchargeperiodsettings-monthly"}'),
+
+('44F41AFD-47A9-4F86-A40D-8997B7C2D896','Ericsson Manual Route Origination Codes','Codes','WhS_RouteSync_EricssonManualRouteOriginationsConfig','{"Editor":"whs-routesync-ericsson-manualroute-originationcodes"}'),
+('B53B18B1-3B53-4A2D-882A-CEC022E85320','Ericsson Manual Route Origination Range','Range','WhS_RouteSync_EricssonManualRouteOriginationsConfig','{"Editor":"whs-routesync-ericsson-manualroute-originationrange"}'),
+('5FD9FE6B-BC13-4C82-9244-3CB5976BF448','Ericsson Manual Route Destination Range','Range','WhS_RouteSync_EricssonManualRouteDestinationsConfig','{"Editor":"whs-routesync-ericsson-manualroute-destinationrange"}'),
+('DD43F4F5-6908-4335-92AF-E2A7CC557BE4','Ericsson Manual Route Destination Codes','Codes','WhS_RouteSync_EricssonManualRouteDestinationsConfig','{"Editor":"whs-routesync-ericsson-manualroute-destinationcodes"}'),
+('58B8076D-C69A-4019-B2AE-B32456F9560B','Ericsson Manual Route Block Action','Block','WhS_RouteSync_EricssonManualRouteActionConfig','{"Editor":"whs-routesync-ericsson-manualroute-blockaction"}')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
