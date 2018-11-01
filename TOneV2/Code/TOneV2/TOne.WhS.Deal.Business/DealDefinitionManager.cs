@@ -376,12 +376,12 @@ namespace TOne.WhS.Deal.Business
             throw new NotImplementedException();
         }
 
-        public Dictionary<int, DealDefinition> GetAllCachedDealDefinitions()
+        public Dictionary<int, DealDefinition> GetAllCachedDealDefinitions(bool getDeletedDeals = false)
         {
-            return GetCachedDeals();
+            return !getDeletedDeals ? GetCachedDeals() : GetCachedDealsWithDeleted();
         }
 
-        public IEnumerable<DealSaleZoneGroup> GetDealSaleZoneGroupsByDealDefinitions(IEnumerable<DealDefinition> dealDefinitions)
+        public IEnumerable<DealSaleZoneGroup> GetDealSaleZoneGroupsByDealDefinitions(IEnumerable<DealDefinition> dealDefinitions, bool skipDeleted = true)
         {
             if (dealDefinitions == null)
                 return null;
@@ -390,6 +390,9 @@ namespace TOne.WhS.Deal.Business
 
             foreach (DealDefinition dealDefinition in dealDefinitions)
             {
+                if (dealDefinition.IsDeleted && skipDeleted)
+                    continue;
+
                 DealGetZoneGroupsContext context = new DealGetZoneGroupsContext(dealDefinition.DealId, DealZoneGroupPart.Sale, true);
                 dealDefinition.Settings.GetZoneGroups(context);
                 if (context.SaleZoneGroups != null && context.SaleZoneGroups.Any())
@@ -407,7 +410,7 @@ namespace TOne.WhS.Deal.Business
             return result.Count > 0 ? result : null;
         }
 
-        public IEnumerable<DealSupplierZoneGroup> GetDealSupplierZoneGroupsByDealDefinitions(IEnumerable<DealDefinition> dealDefinitions)
+        public IEnumerable<DealSupplierZoneGroup> GetDealSupplierZoneGroupsByDealDefinitions(IEnumerable<DealDefinition> dealDefinitions, bool skipDeleted = true)
         {
             if (dealDefinitions == null)
                 return null;
@@ -416,6 +419,9 @@ namespace TOne.WhS.Deal.Business
 
             foreach (DealDefinition dealDefinition in dealDefinitions)
             {
+                if (dealDefinition.IsDeleted && skipDeleted)
+                    continue;
+
                 DealGetZoneGroupsContext context = new DealGetZoneGroupsContext(dealDefinition.DealId, DealZoneGroupPart.Cost, true);
                 dealDefinition.Settings.GetZoneGroups(context);
                 if (context.SupplierZoneGroups != null && context.SupplierZoneGroups.Any())

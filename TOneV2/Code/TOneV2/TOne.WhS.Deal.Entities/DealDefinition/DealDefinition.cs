@@ -6,6 +6,8 @@
 
         public string Name { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public DealSettings Settings { get; set; }
     }
 }

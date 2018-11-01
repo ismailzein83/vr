@@ -83,6 +83,7 @@ namespace TOne.WhS.Deal.Data.SQL
 			{
 				DealId = (int)reader["ID"],
 				Name = reader["Name"] as string,
+                IsDeleted = GetReaderValue<bool>(reader, "IsDeleted"),
 				Settings = Vanrise.Common.Serializer.Deserialize<DealSettings>(reader["Settings"] as string)
 			};
 			return deal;

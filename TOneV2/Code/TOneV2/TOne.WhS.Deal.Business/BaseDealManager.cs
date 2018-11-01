@@ -15,9 +15,14 @@ namespace TOne.WhS.Deal.Business
     public abstract class BaseDealManager : BaseBusinessEntityManager
     {
         #region Public Methods
-        public DealDefinition GetDeal(int dealId)
+        public DealDefinition GetDeal(int dealId, bool checkDeletedDeals = false)
         {
-            Dictionary<int, DealDefinition> cachedEntities = this.GetCachedDeals();
+            Dictionary<int, DealDefinition> cachedEntities;
+            if (checkDeletedDeals)
+                cachedEntities = this.GetCachedDealsWithDeleted();
+            else
+                cachedEntities = this.GetCachedDeals();
+
             return cachedEntities.GetRecord(dealId);
         }
 
@@ -76,7 +81,7 @@ namespace TOne.WhS.Deal.Business
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
             return dataManager.Delete(dealId);
         }
-            
+
         public Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail> UpdateDeal(DealDefinition deal)
         {
             var dealDefinition = GetDeal(deal.DealId);
@@ -179,6 +184,27 @@ namespace TOne.WhS.Deal.Business
         protected Dictionary<int, DealDefinition> GetCachedDeals()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDeals", () =>
+            {
+                var cachedDealsWithDeleted = GetCachedDealsWithDeleted();
+                Dictionary<int, DealDefinition> cachedDeals = new Dictionary<int, DealDefinition>();
+
+                if (cachedDealsWithDeleted != null && cachedDealsWithDeleted.Count > 0)
+                {
+                    foreach (var cachedDeal in cachedDealsWithDeleted)
+                    {
+                        int dealId = cachedDeal.Key;
+                        DealDefinition dealDefinition = cachedDeal.Value;
+                        if (!dealDefinition.IsDeleted)
+                            cachedDeals.Add(dealId, dealDefinition);
+                    }
+                }
+                return cachedDeals;
+            });
+        }
+
+        protected Dictionary<int, DealDefinition> GetCachedDealsWithDeleted()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDealsWithDeleted", () =>
             {
                 IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
                 IEnumerable<DealDefinition> deals = dataManager.GetDeals();

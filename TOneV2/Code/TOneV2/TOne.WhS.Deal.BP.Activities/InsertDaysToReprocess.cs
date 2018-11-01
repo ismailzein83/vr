@@ -37,7 +37,7 @@ namespace TOne.WhS.Deal.BP.Activities
 
 			foreach (var dealDaysToReprocess in dayToReprocessByDealId)
 			{
-				var deal = dealDefinitionManager.GetDeal(dealDaysToReprocess.Key);
+				var deal = dealDefinitionManager.GetDeal(dealDaysToReprocess.Key, true);
 				if (deal == null)
 					throw new DataIntegrityValidationException(String.Format("Deal '{0}' does not exist", dealDaysToReprocess.Key));
 

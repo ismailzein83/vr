@@ -39,18 +39,25 @@ namespace TOne.WhS.Deal.BP.Activities
             var dealEffectiveAfter = inputArgument.DealEffectiveAfter;
 
             var dealDefinitionManager = new DealDefinitionManager();
-            var cachedDeals = dealDefinitionManager.GetAllCachedDealDefinitions();
+            var cachedDealsWithDeleted = dealDefinitionManager.GetAllCachedDealDefinitions(true);
 
             var dealDefinitionsToReevaluate = new List<DealDefinition>();
             var dealIdsToReevaluate = new List<int>();
             var dealIdsToKeep = new List<int>();
 
-            if (cachedDeals != null)
+            if (cachedDealsWithDeleted != null)
             {
-                foreach (var cachedDealKvp in cachedDeals)
+                foreach (var cachedDealKvp in cachedDealsWithDeleted)
                 {
                     var dealDefinition = cachedDealKvp.Value;
                     int dealId = cachedDealKvp.Key;
+
+                    if (dealDefinition.IsDeleted)
+                    {
+                        dealIdsToReevaluate.Add(dealId);
+                        dealDefinitionsToReevaluate.Add(dealDefinition);
+                        continue;
+                    }
 
                     if (dealDefinition.Settings.BeginDate == dealDefinition.Settings.RealEED)
                         continue;
