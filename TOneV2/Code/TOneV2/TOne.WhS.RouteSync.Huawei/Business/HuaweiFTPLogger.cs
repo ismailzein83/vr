@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+using TOne.WhS.RouteSync.Business;
+using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Huawei.Entities;
 using Vanrise.Common;
 
@@ -16,23 +14,20 @@ namespace TOne.WhS.RouteSync.Huawei.Business
 
         public override void LogRouteCases(ILogRouteCasesContext context)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void LogCarrierMappings(ILogCarrierMappingsContext context)
-        {
-            throw new NotImplementedException();
+            string errorMessage;
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "RouteAnalysis", this.FTPCommunicatorSettings, context.ExecutionDateTime, out errorMessage);
         }
 
         public override void LogRoutes(ILogRoutesContext context)
         {
-            throw new NotImplementedException();
+            string errorMessage;
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, string.Format("RouteRSSN{0}", context.CustomerIdentifier), this.FTPCommunicatorSettings, context.ExecutionDateTime, out errorMessage);
         }
 
         public override void LogCommands(ILogCommandsContext context)
         {
-            throw new NotImplementedException();
+            string errorMessage;
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "CommandExecution", this.FTPCommunicatorSettings, context.ExecutionDateTime, out errorMessage);
         }
-
     }
 }
