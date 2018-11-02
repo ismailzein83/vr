@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('cpWhsanalyticsPhonenumberSelector', ['CP_WhSAnalytics_PhoneNumberEnum', 'UtilsService', 'VRUIUtilsService',
-    function (PhoneNumberEnum, UtilsService, VRUIUtilsService) {
+app.directive('cpWhsAccountviewtypeSelector', ['CP_WhS_AccountViewTypeEnum', 'UtilsService', 'VRUIUtilsService',
+    function (CP_WhS_AccountViewTypeEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -19,7 +19,7 @@ app.directive('cpWhsanalyticsPhonenumberSelector', ['CP_WhSAnalytics_PhoneNumber
                 ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
-                var selector = new phoneNumberSelector(ctrl, $scope, $attrs);
+                var selector = new AccountViewTypeSelector(ctrl, $scope, $attrs);
                 selector.initializeController();
             },
             controllerAs: 'ctrl',
@@ -32,17 +32,17 @@ app.directive('cpWhsanalyticsPhonenumberSelector', ['CP_WhSAnalytics_PhoneNumber
                 }
             },
             template: function (element, attrs) {
-                return getPhoneNumberTemplate(attrs);
+                return getAccountViewTypeTemplate(attrs);
             }
 
         };
 
-        function getPhoneNumberTemplate(attrs) {
+        function getAccountViewTypeTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Phone Number";
+            var label = "Account Type";
             if (attrs.ismultipleselection != undefined) {
-                label = "Phone Numbers";
+                label = "Account Types";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
@@ -54,7 +54,7 @@ app.directive('cpWhsanalyticsPhonenumberSelector', ['CP_WhSAnalytics_PhoneNumber
                 + '</vr-columns>';
         }
 
-        function phoneNumberSelector(ctrl, $scope, attrs) {
+        function AccountViewTypeSelector(ctrl, $scope, attrs) {
 
             var selectorAPI;
             function initializeController() {
@@ -77,7 +77,7 @@ app.directive('cpWhsanalyticsPhonenumberSelector', ['CP_WhSAnalytics_PhoneNumber
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
-                    ctrl.datasource = UtilsService.getArrayEnum(PhoneNumberEnum);
+                    ctrl.datasource = UtilsService.getArrayEnum(CP_WhS_AccountViewTypeEnum);
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }

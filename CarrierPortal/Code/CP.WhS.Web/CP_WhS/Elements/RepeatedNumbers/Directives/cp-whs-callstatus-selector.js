@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('cpWhsanalyticsCallstatusSelector', ['CP_WhSAnalytics_BillingCDROptionMeasureEnum', 'UtilsService', 'VRUIUtilsService',
+app.directive('cpWhsCallstatusSelector', ['CP_WhS_BillingCDROptionMeasureEnum', 'UtilsService', 'VRUIUtilsService',
     function (BillingCDROptionMeasureEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {

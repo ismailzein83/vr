@@ -42,7 +42,7 @@ app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService
         function getCarrierAccountSelectorTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Carrier Accounts";
+            var label = "Carrier Account";
             if (attrs.ismultipleselection != undefined) {
                 label = "Carrier Accounts";
                 multipleselection = "ismultipleselection";

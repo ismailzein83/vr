@@ -1,20 +1,14 @@
-﻿<vr-panel ng-controller="CP_WhSAnalytics_ReleaseCodeStatisticsController">
+﻿<vr-panel ng-controller="CP_WhS_ReleaseCodeStatisticsController">
     <vr-form name="formFilter">
 
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
-                <cp-whsanalytics-accountviewtype-selector normal-col-num="2" on-ready="onAccountViewTypeSelectorReady"></cp-whsanalytics-accountviewtype-selector>
-                <cp-whsanalytics-releasecode-dimension-selector normal-col-num="2" ismultipleselection on-ready="onReleaseCodeDimenssionDirectiveReady"></cp-whsanalytics-releasecode-dimension-selector>
-
-                <!--<vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerDirectiveReady"></vr-whs-be-customer-selector>
-
-                <vr-whs-be-supplier-selector normal-col-num="2" ismultipleselection on-ready="onSupplierDirectiveReady"></vr-whs-be-supplier-selector>-->
-
-                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="today" from="fromDate" to="toDate"></vr-timerange>
-                <!--<vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>-->
+                <cp-whs-accountviewtype-selector normal-col-num="2" on-ready="onAccountViewTypeSelectorReady" isrequired="true" onselectionchanged="onAccountViewTypeSelectionChange" selectedvalues="selectedAccountViewType"></cp-whs-accountviewtype-selector>
+                <cp-whs-carrieraccounts-selector normal-col-num="2" on-ready="onAccountDirectiveReady" ismultipleselection selectedvalues="selectedCarrierAccounts" vr-disabled="selectedAccountViewType==undefined"></cp-whs-carrieraccounts-selector>
+                <cp-whs-releasecode-dimension-selector normal-col-num="2" ismultipleselection on-ready="onReleaseCodeDimenssionDirectiveReady"></cp-whs-releasecode-dimension-selector>
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="today" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
                 <!--<vr-common-country-selector normal-col-num="2" on-ready="onCountryReady" ismultipleselection></vr-common-country-selector>-->
                 <!--<vr-whs-be-salezone-masterplan-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady"></vr-whs-be-salezone-masterplan-selector>-->
-
             </vr-row>
         </div>
 
@@ -28,7 +22,7 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <cp-whsanalytics-releasecodestatistics-grid on-ready="onMainGridReady" dimenssion="dimenssionvalues"></cp-whsanalytics-releasecodestatistics-grid>
+                <cp-whs-releasecodestatistics-grid on-ready="onMainGridReady" dimension="dimensionvalues"></cp-whs-releasecodestatistics-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

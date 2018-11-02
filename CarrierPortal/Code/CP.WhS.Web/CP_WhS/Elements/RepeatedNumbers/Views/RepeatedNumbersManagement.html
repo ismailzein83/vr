@@ -1,18 +1,13 @@
-﻿<vr-panel ng-controller="CP_WhSAnalytics_RepeatedNumbersController">
+﻿<vr-panel ng-controller="CP_WhS_RepeatedNumbersController">
     <vr-form name="formFilter">
 
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
-                <cp-whsanalytics-accountviewtype-selector normal-col-num="2" on-ready="onAccountViewTypeSelectorReady"></cp-whsanalytics-accountviewtype-selector>
+                <cp-whs-accountviewtype-selector normal-col-num="2" on-ready="onAccountViewTypeSelectorReady" isrequired="true" onselectionchanged="onAccountViewTypeSelectionChange" selectedvalues="selectedAccountViewType"></cp-whs-accountviewtype-selector>
+                <cp-whs-carrieraccounts-selector normal-col-num="2" on-ready="onAccountDirectiveReady" ismultipleselection selectedvalues="selectedCarrierAccounts" vr-disabled="selectedAccountViewType==undefined"></cp-whs-carrieraccounts-selector>
                 <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="selectedPeriod" from="fromDate" to="toDate"></vr-timerange>
-                <!--<vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
-
-    <vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerDirectiveReady"></vr-whs-be-customer-selector>
-
-    <vr-whs-be-supplier-selector normal-col-num="2" ismultipleselection on-ready="onSupplierDirectiveReady"></vr-whs-be-supplier-selector>-->
-
-                <cp-whsanalytics-callstatus-selector normal-col-num="2" on-ready="onCallStatusDirectiveReady" isrequired="true"></cp-whsanalytics-callstatus-selector>
-                <cp-whsanalytics-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady" isrequired="true" customlabel="Phone Number Type"></cp-whsanalytics-phonenumber-selector>
+                <cp-whs-callstatus-selector normal-col-num="2" on-ready="onCallStatusDirectiveReady" isrequired="true"></cp-whs-callstatus-selector>
+                <cp-whs-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady" isrequired="true" customlabel="Phone Number Type"></cp-whs-phonenumber-selector>
                 <vr-columns width="normal">
                     <vr-textbox value="phoneNumber" label="Phone Number"></vr-textbox>
                 </vr-columns>
@@ -31,7 +26,7 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <cp-whsanalytics-repeatednumbers-grid on-ready="onMainGridReady"></cp-whsanalytics-repeatednumbers-grid>
+                <cp-whs-repeatednumbers-grid on-ready="onMainGridReady"></cp-whs-repeatednumbers-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

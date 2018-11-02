@@ -1,4 +1,4 @@
-﻿app.constant('CP_WhSAnalytics_BillingCDROptionMeasureEnum', {
+﻿app.constant('CP_WhS_BillingCDROptionMeasureEnum', {
     All: { value: 0, propertyName: "All", description: "All", cdrSourceName: "AllCDRs" },
     Failed: { value: 2, propertyName: "Failed", description: "Failed", cdrSourceName: "FailedCDRs" },
     Invalid: { value: 3, propertyName: "Invalid", description: "Invalid", cdrSourceName: "Invalid CDRs" },

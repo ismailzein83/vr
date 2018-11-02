@@ -17,7 +17,6 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
     var timeRangeDirectiveAPI;
     var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
     defineScope();
     load();
 
@@ -38,6 +37,11 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
         $scope.onCustomerAccountDirectiveReady = function (api) {
             customerAccountDirectiveAPI = api;
             customerAccountReadyPromiseDeferred.resolve();
+        };
+
+        $scope.onAccountsReady = function (api) {
+            carrierAccountsAPI = api;
+            carrierAccountsReadyPromiseDeferred.resolve();
         };
 
         $scope.onSwitchDirectiveReady = function (api) {
@@ -74,7 +78,6 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
             Filter: filter,
             From: $scope.fromDate,
             To: $scope.toDate,
-            Top: $scope.limit,
             Period: $scope.selectedPeriod.value
         };
         return query;
@@ -86,7 +89,7 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector])
+        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadCustomers])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -97,10 +100,8 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
 
     function buildFilter() {
         var filter = {};
-        //filter.SwitchIds = switchDirectiveAPI.getSelectedIds();
-        //filter.CustomerIds = customerAccountDirectiveAPI.getSelectedIds();
-        //filter.SaleZoneIds = saleZoneDirectiveAPI.getSelectedIds();
-        //filter.GroupByNumber = $scope.groupbyNumber;
+        filter.CustomerIds = customerAccountDirectiveAPI.getSelectedIds();
+        filter.GroupByNumber = $scope.groupbyNumber;
         return filter;
     }
 
@@ -112,18 +113,13 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
         return loadSwitchPromiseDeferred.promise;
     }
 
-    function loadSaleZoneSection() {
-        var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
-        saleZoneReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, undefined, loadSaleZonePromiseDeferred);
-        });
-        return loadSaleZonePromiseDeferred.promise;
-    }
-
     function loadCustomers() {
         var loadCustomerAccountPromiseDeferred = UtilsService.createPromiseDeferred();
         customerAccountReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, undefined, loadCustomerAccountPromiseDeferred);
+            var payload = {
+               // businessEntityDefinitionId:"32cc6b0b-785c-437c-9a58-bab8753e50ee"
+            };
+            VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, payload, loadCustomerAccountPromiseDeferred);
         });
 
         return loadCustomerAccountPromiseDeferred.promise;
@@ -141,4 +137,4 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
 
 };
 
-appControllers.controller("CP_WhSAnalytics_BlockedAttemptsManagementController", BlockedAttemptsController);
+appControllers.controller("CP_WhS_BlockedAttemptsManagementController", BlockedAttemptsController);

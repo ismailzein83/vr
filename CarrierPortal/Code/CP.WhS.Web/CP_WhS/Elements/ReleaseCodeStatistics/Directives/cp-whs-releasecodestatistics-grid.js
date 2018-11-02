@@ -1,30 +1,35 @@
 ﻿'use strict';
 
-app.directive('cpWhsanalyticsBlockedattemptsGrid', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'CP_WhSAnalytics_BlockedAttemptsAPIService',
-    function (UtilsService, VRUIUtilsService, VRNotificationService, CP_WhSAnalytics_BlockedAttemptsAPIService) {
+app.directive('cpWhsReleasecodestatisticsGrid', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'CP_WhS_ReleaseCodeStatisticsAPIService',
+    function (UtilsService, VRUIUtilsService, VRNotificationService, CP_WhS_ReleaseCodeStatisticsAPIService) {
         return {
             restrict: 'E',
             scope: {
                 onReady: '=',
+                dimension:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var grid = new BlockedAttemptsGrid($scope, ctrl, $attrs);
+                var grid = new ReleaseCodeStatisticsGrid($scope, ctrl, $attrs);
                 grid.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/CP_WhSAnalytics/Elements/BlockedAttempts/Directives/Templates/BlockedAttemptsGridTemplate.html'
+            templateUrl: '/Client/Modules/CP_WhS/Elements/ReleaseCodeStatistics/Directives/Templates/ReleaseCodeStatisticsGridTemplate.html'
         };
 
-        function BlockedAttemptsGrid($scope, ctrl, $attrs) {
+        function ReleaseCodeStatisticsGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var gridAPI;
 
             function initializeController() {
+                ctrl.showDimensionCol = function (d) {
+                    return ctrl.dimension != undefined && ctrl.dimension.indexOf(d) > -1;
+                };
+
                 $scope.scopeModel = {};
-                $scope.scopeModel.blockedAttempts = [];
+                $scope.scopeModel.releaseCodeStatistics = [];
                 $scope.scopeModel.gridMenuActions = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
@@ -33,8 +38,7 @@ app.directive('cpWhsanalyticsBlockedattemptsGrid', ['UtilsService', 'VRUIUtilsSe
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    console.log(dataRetrievalInput);
-                    return CP_WhSAnalytics_BlockedAttemptsAPIService.GetFilteredBlockedAttempts(dataRetrievalInput).then(function (response) {
+                    return CP_WhS_ReleaseCodeStatisticsAPIService.GetFilteredReleaseCodeStatistics(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);

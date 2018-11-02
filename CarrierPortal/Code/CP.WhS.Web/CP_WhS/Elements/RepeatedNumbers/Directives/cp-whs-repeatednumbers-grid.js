@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('cpWhsanalyticsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'CP_WhSAnalytics_RepeatedNumbersAPIService',
-    function (UtilsService, VRUIUtilsService, VRNotificationService, CP_WhSAnalytics_RepeatedNumbersAPIService) {
+app.directive('cpWhsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'CP_WhS_RepeatedNumbersAPIService',
+    function (UtilsService, VRUIUtilsService, VRNotificationService, CP_WhS_RepeatedNumbersAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -14,7 +14,7 @@ app.directive('cpWhsanalyticsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsSe
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/CP_WhSAnalytics/Elements/RepeatedNumbers/Directives/Templates/RepeatedNumbersGridTemplate.html'
+            templateUrl: '/Client/Modules/CP_WhS/Elements/RepeatedNumbers/Directives/Templates/RepeatedNumbersGridTemplate.html'
         };
 
         function RepeatedNumbersGrid($scope, ctrl, $attrs) {
@@ -33,8 +33,7 @@ app.directive('cpWhsanalyticsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsSe
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    console.log(dataRetrievalInput);
-                    return CP_WhSAnalytics_RepeatedNumbersAPIService.GetFilteredRepeatedNumbers(dataRetrievalInput).then(function (response) {
+                    return CP_WhS_RepeatedNumbersAPIService.GetFilteredRepeatedNumbers(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -46,6 +45,7 @@ app.directive('cpWhsanalyticsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsSe
                 var api = {};
 
                 api.loadGrid = function (query) {
+                    $scope.showCustomer = query.Filter.CustomerIds != undefined;
                     return gridAPI.retrieveData(query);
                 };
 

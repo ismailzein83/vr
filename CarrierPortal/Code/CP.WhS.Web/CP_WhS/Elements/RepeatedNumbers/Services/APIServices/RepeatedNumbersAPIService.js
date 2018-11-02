@@ -13,6 +13,6 @@
             GetFilteredRepeatedNumbers: GetFilteredRepeatedNumbers
         });
     }
-    appControllers.service('CP_WhSAnalytics_RepeatedNumbersAPIService', RepeatedNumbersAPIService);
+    appControllers.service('CP_WhS_RepeatedNumbersAPIService', RepeatedNumbersAPIService);
 
 })(appControllers);

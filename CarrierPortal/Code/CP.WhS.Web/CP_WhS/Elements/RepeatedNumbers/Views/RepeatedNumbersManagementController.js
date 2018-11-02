@@ -1,22 +1,16 @@
 ﻿"use strict";
-RepeatedNumberController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'PeriodEnum'];
+RepeatedNumberController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'PeriodEnum', "CP_WhS_AccountViewTypeEnum"];
 
-function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService, VRValidationService, PeriodEnum) {
+function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService, VRValidationService, PeriodEnum, CP_WhS_AccountViewTypeEnum) {
 
-    var receivedSwitchIds;
     var mainGridAPI;
-
-    var switchDirectiveAPI;
-    var switchReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-    var customerApi;
-    var customerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-    var supplierApi;
-    var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     var timeRangeDirectiveAPI;
     var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+    var accountDirectiveAPI;
+    var accountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 
     var callStatusDirectiveAPI;
     var callStatusReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -36,12 +30,10 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
             return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
         };
 
-        $scope.onSwitchDirectiveReady = function (api) {
-            switchDirectiveAPI = api;
-            switchReadyPromiseDeferred.resolve();
+        $scope.onAccountDirectiveReady = function (api) {
+            accountDirectiveAPI = api;
+            accountReadyPromiseDeferred.resolve();
         };
-
-
 
         $scope.onCustomerDirectiveReady = function (api) {
             customerApi = api;
@@ -85,6 +77,17 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
             accountViewTypeAPI = api;
             accountViewTypeReadyPromiseDeferred.resolve();
         };
+        $scope.onAccountViewTypeSelectionChange = function (value) {
+            if (value != undefined) {
+                var setLoader = function (value) {
+                    $scope.isLoading = value;
+                };
+                var accountViewTypePayload = {
+                    businessEntityDefinitionId: accountViewTypeAPI.getSelectedIds() == CP_WhS_AccountViewTypeEnum.Customer.value ? "32cc6b0b-785c-437c-9a58-bab8753e50ee" : "574ef14e-64d3-4f56-8d0a-8ec05f043b7b"
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountDirectiveAPI, accountViewTypePayload, setLoader, undefined);
+            }
+        };
 
         $scope.search = function () {
             return mainGridAPI.loadGrid(getQuery());
@@ -124,31 +127,15 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
 
     function buildFilter() {
         var filter = {};
-        //filter.SwitchIds = switchDirectiveAPI.getSelectedIds();
-        //filter.CustomerIds = customerApi.getSelectedIds();
-        //filter.SupplierIds = supplierApi.getSelectedIds();
-
+        if (accountViewTypeAPI.getSelectedIds() == CP_WhS_AccountViewTypeEnum.Customer.value) {
+            filter.CustomerIds = accountDirectiveAPI.getSelectedIds();
+        }
+        else {
+            filter.SupplierIds = accountDirectiveAPI.getSelectedIds();
+        }
         return filter;
     }
 
-    function loadSwitches() {
-        var loadSwitchPromiseDeferred = UtilsService.createPromiseDeferred();
-        switchReadyPromiseDeferred.promise.then(function () {
-            var payload = {
-                selectedIds: receivedSwitchIds
-            };
-            VRUIUtilsService.callDirectiveLoad(switchDirectiveAPI, payload, loadSwitchPromiseDeferred);
-        });
-        return loadSwitchPromiseDeferred.promise;
-    }
-
-    function loadCustomerSelector() {
-        var loadCustomerPromiseDeferred = UtilsService.createPromiseDeferred();
-        customerReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(customerApi, undefined, loadCustomerPromiseDeferred);
-        });
-        return loadCustomerPromiseDeferred.promise;
-    }
     function loadAccountViewTypeSelector() {
         var accountViewTypeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         accountViewTypeReadyPromiseDeferred.promise.then(function () {
@@ -157,13 +144,6 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
         return accountViewTypeLoadPromiseDeferred.promise;
     }
 
-    function loadSupplierSelector() {
-        var loadSupplierPromiseDeferred = UtilsService.createPromiseDeferred();
-        supplierReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(supplierApi, undefined, loadSupplierPromiseDeferred);
-        });
-        return loadSupplierPromiseDeferred.promise;
-    }
 
     function loadTimeRangeSelector() {
         var timeRangeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -193,4 +173,4 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
     }
 };
 
-appControllers.controller('CP_WhSAnalytics_RepeatedNumbersController', RepeatedNumberController);
+appControllers.controller('CP_WhS_RepeatedNumbersController', RepeatedNumberController);

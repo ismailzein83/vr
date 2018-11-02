@@ -12,6 +12,6 @@
             GetFilteredBlockedAttempts: GetFilteredBlockedAttempts
         });
     }
-    appControllers.service('CP_WhSAnalytics_BlockedAttemptsAPIService', BlockedAttemptsAPIService);
+    appControllers.service('CP_WhS_BlockedAttemptsAPIService', BlockedAttemptsAPIService);
 
 })(appControllers);

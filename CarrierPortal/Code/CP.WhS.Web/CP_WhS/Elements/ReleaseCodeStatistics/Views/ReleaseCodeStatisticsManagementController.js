@@ -1,24 +1,18 @@
 ﻿"use strict";
-ReleaseCodeStatisticsController.$inject = ["$scope", "UtilsService", "VRNavigationService", "VRNotificationService", "VRUIUtilsService", "VRValidationService", "PeriodEnum", "CP_WhSAnalytics_AccountViewTypeEnum"];
+ReleaseCodeStatisticsController.$inject = ["$scope", "UtilsService", "VRNavigationService", "VRNotificationService", "VRUIUtilsService", "VRValidationService", "PeriodEnum", "CP_WhS_AccountViewTypeEnum"];
 
-function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService, VRValidationService, PeriodEnum, CP_WhSAnalytics_AccountViewTypeEnum) {
+function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService, VRValidationService, PeriodEnum, CP_WhS_AccountViewTypeEnum) {
 
     var mainGridAPI;
 
     var timeRangeDirectiveAPI;
     var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-    var releaseCodeDimenssionDirectiveAPI;
+    var releaseCodeDimensionDirectiveAPI;
     var releaseCodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-    var customerDirectiveAPI;
-    var customerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-    var supplierDirectiveAPI;
-    var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-    var switchDirectiveAPI;
-    var switchReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    var accountDirectiveAPI;
+    var accountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     var countryDirectiveAPI;
     var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -35,7 +29,7 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     function defineScope() {
         $scope.fromDate;
         $scope.toDate;
-        $scope.dimenssionvalues = [];
+        $scope.dimensionvalues = [];
         $scope.today = PeriodEnum.Today;
 
         $scope.onTimeRangeDirectiveReady = function (api) {
@@ -43,23 +37,17 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
             timeRangeReadyPromiseDeferred.resolve();
         };
         $scope.onReleaseCodeDimenssionDirectiveReady = function (api) {
-            releaseCodeDimenssionDirectiveAPI = api;
+            releaseCodeDimensionDirectiveAPI = api;
             releaseCodReadyPromiseDeferred.resolve();
         };
 
-        $scope.onCustomerDirectiveReady = function (api) {
-            customerDirectiveAPI = api;
-            customerReadyPromiseDeferred.resolve();
-        };
-        $scope.onSupplierDirectiveReady = function (api) {
-            supplierDirectiveAPI = api;
-            supplierReadyPromiseDeferred.resolve();
+      
+        $scope.onAccountDirectiveReady = function (api) {
+            accountDirectiveAPI = api;
+            accountReadyPromiseDeferred.resolve();
         };
 
-        $scope.onSwitchDirectiveReady = function (api) {
-            switchDirectiveAPI = api;
-            switchReadyPromiseDeferred.resolve();
-        };
+     
         $scope.onCountryReady = function (api) {
             countryDirectiveAPI = api;
             countryReadyPromiseDeferred.resolve();
@@ -71,6 +59,23 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         $scope.onAccountViewTypeSelectorReady = function (api) {
             accountViewTypeAPI = api;
             accountViewTypeReadyPromiseDeferred.resolve();
+        };
+
+        $scope.onAccountViewTypeSelectionChange = function (value) {
+            if (value != undefined) {
+                var setLoader = function (value) {
+                    $scope.isLoading = value;
+                };
+                var accountViewTypePayload = {
+                    businessEntityDefinitionId: accountViewTypeAPI.getSelectedIds() == CP_WhS_AccountViewTypeEnum.Customer.value ? "32cc6b0b-785c-437c-9a58-bab8753e50ee" : "574ef14e-64d3-4f56-8d0a-8ec05f043b7b"
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountDirectiveAPI, accountViewTypePayload, setLoader, undefined);
+
+                var dimensionsPayload = {
+                    hideSupplier: accountViewTypeAPI.getSelectedIds() == CP_WhS_AccountViewTypeEnum.Customer.value
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, releaseCodeDimensionDirectiveAPI, dimensionsPayload, setLoader, undefined);
+            }
         };
 
         $scope.onMainGridReady = function (api) {
@@ -99,7 +104,7 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadReleaseCodeDimessionSection, loadAccountViewTypeSelector])
+        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadAccountViewTypeSelector])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -110,11 +115,14 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
 
     function buildFilter() {
         var filter = {};
-        //filter.Dimession = releaseCodeDimenssionDirectiveAPI.getSelectedIds();
-        //$scope.dimenssionvalues = releaseCodeDimenssionDirectiveAPI.getSelectedIds();
-        //filter.CustomerIds = customerDirectiveAPI.getSelectedIds();
-        //filter.SupplierIds = supplierDirectiveAPI.getSelectedIds();
-        //filter.SwitchIds = switchDirectiveAPI.getSelectedIds();
+        filter.Dimession = releaseCodeDimensionDirectiveAPI.getSelectedIds();
+        $scope.dimensionvalues = filter.Dimession;
+        if (accountViewTypeAPI.getSelectedIds() == CP_WhS_AccountViewTypeEnum.Customer.value) {
+            filter.CustomerIds = accountDirectiveAPI.getSelectedIds();
+        }
+        else {
+            filter.SupplierIds = accountDirectiveAPI.getSelectedIds();
+        }
         //filter.CountryIds = countryDirectiveAPI.getSelectedIds();
         //filter.MasterSaleZoneIds = saleZoneDirectiveAPI.getSelectedIds();
 
@@ -127,44 +135,13 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         });
         return timeRangeLoadPromiseDeferred.promise;
     }
-    function loadReleaseCodeDimessionSection() {
-        var loadReleaseCodeDimessionPromiseDeferred = UtilsService.createPromiseDeferred();
-        releaseCodReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(releaseCodeDimenssionDirectiveAPI, undefined, loadReleaseCodeDimessionPromiseDeferred);
-        });
-        return loadReleaseCodeDimessionPromiseDeferred.promise;
-    }
+
     function loadAccountViewTypeSelector() {
         var accountViewTypeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         accountViewTypeReadyPromiseDeferred.promise.then(function () {
             VRUIUtilsService.callDirectiveLoad(accountViewTypeAPI, undefined, accountViewTypeLoadPromiseDeferred);
         });
         return accountViewTypeLoadPromiseDeferred.promise;
-    }
-
-    function loadSwitches() {
-        var loadSwitchPromiseDeferred = UtilsService.createPromiseDeferred();
-        switchReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(switchDirectiveAPI, undefined, loadSwitchPromiseDeferred);
-        });
-        return loadSwitchPromiseDeferred.promise;
-    }
-
-    function loadCustomers() {
-        var loadCustomerPromiseDeferred = UtilsService.createPromiseDeferred();
-        customerReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(customerDirectiveAPI, undefined, loadCustomerPromiseDeferred);
-        });
-
-        return loadCustomerPromiseDeferred.promise;
-    }
-    function loadSuppliers() {
-        var loadSupplierPromiseDeferred = UtilsService.createPromiseDeferred();
-        supplierReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(supplierDirectiveAPI, undefined, loadSupplierPromiseDeferred);
-        });
-
-        return loadSupplierPromiseDeferred.promise;
     }
 
     function loadCountries() {
@@ -176,15 +153,6 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         return loadCountryPromiseDeferred.promise;
     }
 
-    //function loadCodeGroups() {
-    //    var loadCodeGroupPromiseDeferred = UtilsService.createPromiseDeferred();
-    //    codeGroupReadyPromiseDeferred.promise.then(function () {
-    //        VRUIUtilsService.callDirectiveLoad(codeGroupDirectiveAPI, undefined, loadCodeGroupPromiseDeferred);
-    //    });
-
-    //    return loadCodeGroupPromiseDeferred.promise;
-    //}
-
 
     function loadSaleZoneSection() {
         var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -193,8 +161,6 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         });
         return loadSaleZonePromiseDeferred.promise;
     }
-
-
 };
 
-appControllers.controller("CP_WhSAnalytics_ReleaseCodeStatisticsController", ReleaseCodeStatisticsController);
+appControllers.controller("CP_WhS_ReleaseCodeStatisticsController", ReleaseCodeStatisticsController);

@@ -12,6 +12,6 @@
             GetFilteredReleaseCodeStatistics: GetFilteredReleaseCodeStatistics
         });
     }
-    appControllers.service('CP_WhSAnalytics_ReleaseCodeStatisticsAPIService', ReleaseCodeStatisticsAPIService);
+    appControllers.service('CP_WhS_ReleaseCodeStatisticsAPIService', ReleaseCodeStatisticsAPIService);
 
 })(appControllers);

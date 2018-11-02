@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('cpWhsanalyticsReleasecodeDimensionSelector', ['CP_WhSAnalytics_GenericAnalyticReleaseCodeDimensionsEnum', 'UtilsService', 'VRUIUtilsService',
+app.directive('cpWhsReleasecodeDimensionSelector', ['CP_WhS_GenericAnalyticReleaseCodeDimensionsEnum', 'UtilsService', 'VRUIUtilsService',
     function (GenericAnalyticReleaseCodeDimensionsEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -71,10 +71,16 @@ app.directive('cpWhsanalyticsReleasecodeDimensionSelector', ['CP_WhSAnalytics_Ge
                 };
                 api.load = function (payload) {
                     var selectedIds;
+                    var hideSupplier;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+                        hideSupplier = payload.hideSupplier;
                     }
                     ctrl.datasource = UtilsService.getArrayEnum(GenericAnalyticReleaseCodeDimensionsEnum);
+                    if (hideSupplier) {
+                        var index = ctrl.datasource.indexOf(GenericAnalyticReleaseCodeDimensionsEnum.Supplier);
+                        ctrl.datasource.splice(index, 1);
+                    }
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }
