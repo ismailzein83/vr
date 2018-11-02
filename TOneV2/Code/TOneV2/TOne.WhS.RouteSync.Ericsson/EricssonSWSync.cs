@@ -251,10 +251,9 @@ namespace TOne.WhS.RouteSync.Ericsson
 
             Dictionary<string, CustomerMappingWithActionType> customersToDeleteByBO;
             Dictionary<string, List<EricssonRouteWithCommands>> ericssonRoutesToDeleteWithCommandsByBo;
-            Dictionary<string, EricssonConvertedRouteDifferences> routeDifferencesByBO;
             var customerMappingsWithCommands = GetCustomerMappingsWithCommands(context.SwitchId, out ericssonRoutesToDeleteWithCommandsByBo, out customersToDeleteByBO);
 
-            var ericssonRoutesWithCommandsByBo = GetEricssonRoutesWithCommands(context.SwitchId, customersToDeleteByBO, ericssonRoutesToDeleteWithCommandsByBo, out routeDifferencesByBO);
+            var ericssonRoutesWithCommandsByBo = GetEricssonRoutesWithCommands(context.SwitchId, customersToDeleteByBO, ericssonRoutesToDeleteWithCommandsByBo);
             #endregion
 
             EricssonSSHCommunication ericssonSSHCommunication = null;
@@ -493,14 +492,20 @@ namespace TOne.WhS.RouteSync.Ericsson
 
                     if (trunkGroup.TrunkTrunkGroups != null && trunkGroup.TrunkTrunkGroups.Count > 0)
                     {
+                        bool firstTrunk = !trunkGroup.TrunkTrunkGroups.Any(item => item.Percentage.HasValue);
                         foreach (var trunkGroupTrunk in trunkGroup.TrunkTrunkGroups)
                         {
                             var trunk = supplierMapping.OutTrunks.FindRecord(item => item.TrunkId == trunkGroupTrunk.TrunkId);
                             if (!trunk.IsSwitch)
                                 numberOfMappings++;
-                            routeCaseOptions.Add(GetRouteCaseOption(trunk, routeCodeGroup, option.SupplierId, option.Percentage, supplierMapping, trunkGroup, trunkGroupTrunk, groupId, numberOfMappings));
+                            routeCaseOptions.Add(GetRouteCaseOption(trunk, routeCodeGroup, option.SupplierId, option.Percentage, supplierMapping, trunkGroup, trunkGroupTrunk, groupId, numberOfMappings, firstTrunk));
+                            firstTrunk = false;
                             if (numberOfMappings == NumberOfMappings)
+                            {
+                                if (option.Percentage.HasValue)
+                                    ReevaluatePercentageDistribution(routeCaseOptions, option.Percentage.Value);
                                 return routeCaseOptions;
+                            }
                         }
                     }
 
@@ -527,7 +532,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                                     var trunk = backupSupplierMapping.OutTrunks.FindRecord(item => item.TrunkId == trunkGroupTrunk.TrunkId);
                                     if (!trunk.IsSwitch)
                                         numberOfMappings++;
-                                    routeCaseOptions.Add(GetRouteCaseOption(trunk, routeCodeGroup, backupOption.SupplierId, null, backupSupplierMapping, backupTrunkGroup, trunkGroupTrunk, groupId, numberOfMappings));
+                                    routeCaseOptions.Add(GetRouteCaseOption(trunk, routeCodeGroup, backupOption.SupplierId, null, backupSupplierMapping, backupTrunkGroup, trunkGroupTrunk, groupId, numberOfMappings, false));
                                     if (numberOfMappings == NumberOfMappings)
                                         return routeCaseOptions;
                                 }
@@ -547,14 +552,66 @@ namespace TOne.WhS.RouteSync.Ericsson
             return routeCaseOptions;
         }
 
-        private RouteCaseOption GetRouteCaseOption(OutTrunk trunk, string routeCodeGroup, string supplierId, int? percentage, SupplierMapping supplierMapping, TrunkGroup trunkGroup, TrunkTrunkGroup trunkGroupTrunk, int groupId, int numberOfMappings)
+        private void ReevaluatePercentageDistribution(List<RouteCaseOption> options, int totalPercentage)
+        {
+            var orderedOptions = options.OrderBy(item => item.TrunkPercentage).ToList();
+            var assignedPercentage = orderedOptions.Sum(item => item.TrunkPercentage);
+            if (!assignedPercentage.HasValue)
+                throw new VRBusinessException("No trunk percentage>");
+
+            int percentageDiff = totalPercentage - assignedPercentage.Value;
+            var lastIndex = orderedOptions.Count - 1;
+            if (percentageDiff > 0)
+            {
+                while (percentageDiff > 0)
+                {
+                    for (int i = 0; i < orderedOptions.Count; i++)
+                    {
+                        if (orderedOptions[lastIndex - i].TrunkPercentage.HasValue && orderedOptions[lastIndex - i].TrunkPercentage > 0)
+                        {
+                            orderedOptions[lastIndex - i].TrunkPercentage++;
+                            percentageDiff--;
+                        }
+                        if (percentageDiff == 0)
+                            break;
+                    }
+                }
+            }
+            else if (percentageDiff < 0)
+            {
+                while (percentageDiff < 0)
+                {
+                    for (int i = 0; i < orderedOptions.Count; i++)
+                    {
+                        if (orderedOptions[i].TrunkPercentage > 1)
+                        {
+                            orderedOptions[i].TrunkPercentage--;
+                            percentageDiff++;
+                        }
+                        if (percentageDiff == 0)
+                            break;
+                    }
+                }
+            }
+        }
+
+        private RouteCaseOption GetRouteCaseOption(OutTrunk trunk, string routeCodeGroup, string supplierId, int? percentage, SupplierMapping supplierMapping, TrunkGroup trunkGroup, TrunkTrunkGroup trunkGroupTrunk, int groupId, int numberOfMappings, bool isFirstTrunk)
         {
             RouteCaseOption routeCaseOption = new RouteCaseOption();
+            int? routeCaseOptionPercentage = null;
+            if (percentage.HasValue)
+            {
+                if (trunkGroupTrunk.Percentage.HasValue)
+                    routeCaseOptionPercentage = Convert.ToInt32(percentage.Value * trunkGroupTrunk.Percentage.Value / 100.0);
+                else if (isFirstTrunk)
+                    routeCaseOptionPercentage = percentage;
+                else routeCaseOptionPercentage = 0;
+            }
             routeCaseOption.Percentage = percentage;
             routeCaseOption.IsSwitch = trunk.IsSwitch;
             routeCaseOption.OutTrunk = trunk.TrunkName;
             routeCaseOption.Type = trunk.TrunkType;
-            routeCaseOption.TrunkPercentage = trunkGroupTrunk.Percentage;
+            routeCaseOption.TrunkPercentage = routeCaseOptionPercentage;
             routeCaseOption.IsBackup = trunkGroup.IsBackup;
             routeCaseOption.GroupID = groupId;
             routeCaseOption.BNT = 1;
@@ -759,14 +816,37 @@ namespace TOne.WhS.RouteSync.Ericsson
                             totalPercentage += option.Percentage.HasValue ? option.Percentage.Value : 0; ;
                     }
                     var firstSupplierId = optionGroups.First().First().SupplierId;
-                    if (routeCaseOptions.Any(item => item.IsBackup) || totalPercentage == 100)
+                    if (routeCaseOptions.Any(item => item.IsBackup) || totalPercentage > 0)
                     {
                         foreach (var optionGroup in optionGroups)
                         {
                             pValue++;
                             int priority = 1;
-
+                            var filteredOptions = new List<RouteCaseOption>();
                             foreach (RouteCaseOption option in optionGroup)
+                            {
+                                if (option.IsSwitch && !branchRoute.IncludeTrunkAsSwitch)
+                                    continue;
+                                if (option.IsSwitch && branchRoute.OverflowOnFirstOptionOnly && (!option.SupplierId.Equals(firstSupplierId) || option.IsBackup))
+                                    continue;
+                                filteredOptions.Add(new RouteCaseOption()
+                                {
+                                    BNT = option.BNT,
+                                    GroupID = option.GroupID,
+                                    IsBackup = option.IsBackup,
+                                    IsSwitch = option.IsSwitch,
+                                    OutTrunk = option.OutTrunk,
+                                    Percentage = option.Percentage,
+                                    SP = option.SP,
+                                    SupplierId = option.SupplierId,
+                                    TrunkPercentage = option.TrunkPercentage,
+                                    Type = option.Type
+                                });
+                            }
+                            if (optionGroup.First().Percentage.HasValue)
+                                ReevaluatePercentageDistribution(filteredOptions, optionGroup.First().Percentage.Value);
+
+                            foreach (RouteCaseOption option in filteredOptions)
                             {
                                 if (option.IsSwitch && !branchRoute.IncludeTrunkAsSwitch)
                                     continue;
@@ -775,8 +855,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                                 if (!option.IsSwitch && !string.IsNullOrEmpty(ESR))
                                     esrCommand = string.Format(",ESR={0},", ESR);
                                 else esrCommand = ",";
-
-                                command = option.Percentage.HasValue ? string.Format("{0}:BR={1}{2}{3},P0{4}={5},R={6}{7}BNT={8},SP=MM{9};", EricssonCommands.ANRSI_Command, brName, PercentagePrefix, option.Percentage, pValue, priority, option.OutTrunk, esrCommand, option.BNT, option.SP)
+                                command = option.TrunkPercentage.HasValue && option.TrunkPercentage > 0 ? string.Format("{0}:BR={1}{2}{3},P0{4}={5},R={6}{7}BNT={8},SP=MM{9};", EricssonCommands.ANRSI_Command, brName, PercentagePrefix, option.TrunkPercentage, pValue, priority, option.OutTrunk, esrCommand, option.BNT, option.SP)
                                     : string.Format("{0}:BR={1},P0{2}={3},R={4}{5}BNT={6},SP=MM{7};", EricssonCommands.ANRSI_Command, brName, pValue, priority, option.OutTrunk, esrCommand, option.BNT, option.SP);
                                 routeCaseCommands.Add(command);
                                 if (priority == NumberOfMappings)
@@ -803,12 +882,12 @@ namespace TOne.WhS.RouteSync.Ericsson
 
                                 if (optionGroup.Key == 1)
                                 {
-                                    command = option.Percentage.HasValue ? string.Format("{0}:BR={1}{2}{3},P0{4}={5},R={6}{7}BNT={8},SP=MM{9};", EricssonCommands.ANRSI_Command, brName, PercentagePrefix, option.Percentage, pValue, priority, option.OutTrunk, esrCommand, option.BNT, option.SP)
+                                    command = option.TrunkPercentage.HasValue && option.TrunkPercentage > 0 ? string.Format("{0}:BR={1}{2}{3},P0{4}={5},R={6}{7}BNT={8},SP=MM{9};", EricssonCommands.ANRSI_Command, brName, PercentagePrefix, option.TrunkPercentage, pValue, priority, option.OutTrunk, esrCommand, option.BNT, option.SP)
                                         : string.Format("{0}:BR={1},P0{2}={3},R={4}{5}BNT={6},SP=MM{7};", EricssonCommands.ANRSI_Command, brName, pValue, priority, option.OutTrunk, esrCommand, option.BNT, option.SP);
                                 }
                                 else
                                 {
-                                    command = option.Percentage.HasValue ? string.Format("{0}:BR={1}{2}{3},P0{4}={5},R={6}{7}BNT={8},SP=MM{9};", EricssonCommands.ANRSI_Command, brAlternativeName, PercentagePrefix, option.Percentage, pValue, priority, option.OutTrunk, esrCommand, option.BNT, option.SP)
+                                    command = option.TrunkPercentage.HasValue && option.TrunkPercentage > 0 ? string.Format("{0}:BR={1}{2}{3},P0{4}={5},R={6}{7}BNT={8},SP=MM{9};", EricssonCommands.ANRSI_Command, brAlternativeName, PercentagePrefix, option.TrunkPercentage, pValue, priority, option.OutTrunk, esrCommand, option.BNT, option.SP)
                                         : string.Format("{0}:BR={1},P0{2}={3},R={4}{5}BNT={6},SP=MM{7};", EricssonCommands.ANRSI_Command, brAlternativeName, pValue, priority, option.OutTrunk, esrCommand, option.BNT, option.SP);
                                 }
                                 routeCaseCommands.Add(command);
@@ -832,7 +911,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
         #region Commands For Route changes
         private Dictionary<string, List<EricssonRouteWithCommands>> GetEricssonRoutesWithCommands(string switchId, Dictionary<string, CustomerMappingWithActionType> customersToDeleteByBO,
-        Dictionary<string, List<EricssonRouteWithCommands>> ericssonRoutesToDeleteWithCommands, out Dictionary<string, EricssonConvertedRouteDifferences> routeDifferencesByBO)
+        Dictionary<string, List<EricssonRouteWithCommands>> ericssonRoutesToDeleteWithCommands)
         {
             var routeCases = new RouteCaseManager().GetAllRouteCases(switchId);
             if (routeCases == null || routeCases.Count == 0)
@@ -864,7 +943,7 @@ namespace TOne.WhS.RouteSync.Ericsson
             IRouteDataManager routeDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteDataManager>();
             routeDataManager.SwitchId = switchId;
             routeDataManager.CompareTables(routeCompareTablesContext);
-            routeDifferencesByBO = routeCompareTablesContext.RouteDifferencesByBO;
+            var routeDifferencesByBO = routeCompareTablesContext.RouteDifferencesByBO;
             if (routeDifferencesByBO != null && routeDifferencesByBO.Count > 0)
             {
                 foreach (var routeDifferencesKvp in routeCompareTablesContext.RouteDifferencesByBO)
