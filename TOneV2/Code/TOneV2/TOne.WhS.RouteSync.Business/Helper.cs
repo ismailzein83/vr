@@ -76,13 +76,13 @@ namespace TOne.WhS.RouteSync.Business
                 var compressedConvertedRoutesByCodeLength = compressedConvertedRoutesKvp.Value;
 
                 List<int> orderedKeys = compressedConvertedRoutesByCodeLength.Keys.OrderByDescending(itm => itm).ToList();
-                Dictionary<string, Dictionary<string, ConvertedRouteForCompression>> longestConvertedRoutes = compressedConvertedRoutesByCodeLength.GetRecord(orderedKeys[0]);
-                foreach (var longestConvertedRoutesKvp in longestConvertedRoutes)
-                {
-                    Dictionary<string, ConvertedRouteForCompression> routes = longestConvertedRoutesKvp.Value;
-                    foreach (ConvertedRouteForCompression route in routes.Values)
-                        route.CanBeGrouped = true;
-                }
+                //Dictionary<string, Dictionary<string, ConvertedRouteForCompression>> longestConvertedRoutes = compressedConvertedRoutesByCodeLength.GetRecord(orderedKeys[0]);
+                //foreach (var longestConvertedRoutesKvp in longestConvertedRoutes)
+                //{
+                //    Dictionary<string, ConvertedRouteForCompression> routes = longestConvertedRoutesKvp.Value;
+                //    foreach (ConvertedRouteForCompression route in routes.Values)
+                //        route.CanBeGrouped = true;
+                //}
 
                 for (int i = 1; i < orderedKeys.Count; i++)
                 {
@@ -101,43 +101,54 @@ namespace TOne.WhS.RouteSync.Business
                             string currentCode = route.Code;
                             if (childrenConvertedRoutesForCompressionByCode == null)
                             {
-                                route.CanBeGrouped = true;
+                                //route.CanBeGrouped = true;
                                 continue;
                             }
 
                             var tempResult = childrenConvertedRoutesForCompressionByCode.GetRecord(currentCode);
                             if (tempResult == null || tempResult.Values == null)
                             {
-                                route.CanBeGrouped = true;
+                                //route.CanBeGrouped = true;
                                 continue;
                             }
 
                             List<ConvertedRouteForCompression> convertedRouteForCompression = tempResult.Values.ToList();
                             if (convertedRouteForCompression == null)
                             {
-                                route.CanBeGrouped = true;
+                                //route.CanBeGrouped = true;
                                 continue;
                             }
 
-                            if (convertedRouteForCompression.FirstOrDefault(itm => !itm.CanBeGrouped) != null)
-                                continue;
+                            //if (convertedRouteForCompression.FirstOrDefault(itm => !itm.CanBeGrouped) != null)
+                            //    continue;
 
                             HashSet<string> distinctIdentifiers = Vanrise.Common.ExtensionMethods.ToHashSet(convertedRouteForCompression.Select(itm => itm.RouteOptionsIdentifier));
 
                             if (distinctIdentifiers.Count > 1)
+                            {
+                                IEnumerable<ConvertedRouteForCompression> convertedRouteWithSameParentRC = convertedRouteForCompression.Where(itm => itm.RouteOptionsIdentifier == route.RouteOptionsIdentifier);
+                                if (convertedRouteWithSameParentRC != null)
+                                {
+                                    IEnumerable<string> childrenToBeRemoved = convertedRouteWithSameParentRC.Select(itm => itm.Code);
+                                    foreach (string codeToRemove in childrenToBeRemoved)
+                                        tempResult.Remove(codeToRemove);
+
+                                }
+
                                 continue;
+                            }
 
                             string childrenRouteIdentifier = distinctIdentifiers.First();
                             if (string.Compare(route.RouteOptionsIdentifier, childrenRouteIdentifier) != 0 && convertedRouteForCompression.Count != 10)
                                 continue;
-                            
+
                             route.RouteOptionsIdentifier = childrenRouteIdentifier;
-                            route.CanBeGrouped = true;
+                            //route.CanBeGrouped = true;
                             childrenConvertedRoutesForCompressionByCode.Remove(currentCode);
                         }
                     }
                 }
-
+                Dictionary<int, Dictionary<string, ConvertedRouteWithCode>> convertedRoutesByCodeLength = new Dictionary<int, Dictionary<string, ConvertedRouteWithCode>>();
                 foreach (var compressedConvertedRoutesByCodeLengthKvp in compressedConvertedRoutesByCodeLength)
                 {
                     var compressedConvertedRoutesByParentCode = compressedConvertedRoutesByCodeLengthKvp.Value;
@@ -156,12 +167,54 @@ namespace TOne.WhS.RouteSync.Business
                                     Customer = customer,
                                     RouteOptionIdentifier = convertedRoute.RouteOptionsIdentifier
                                 };
-                                result.Add(createConvertedRouteWithCode(context));
+                                int codeLength = convertedRoute.Code.Length;
+
+                                Dictionary<string, ConvertedRouteWithCode> routes = convertedRoutesByCodeLength.GetOrCreateItem(codeLength, () => { return new Dictionary<string, ConvertedRouteWithCode>(); });
+                                routes.Add(convertedRoute.Code, createConvertedRouteWithCode(context));
                             }
                         }
                     }
-
                 }
+                IOrderedEnumerable<int> orderedCodeLength = convertedRoutesByCodeLength.Keys.OrderByDescending(itm => itm);
+                ConvertedRouteWithCode tempConvertedRouteWithCode;
+
+                List<ConvertedRoute> finalConvertedRoutes = new List<ConvertedRoute>();
+
+                foreach (int codeLengthValue in orderedCodeLength)
+                {
+                    Dictionary<string, ConvertedRouteWithCode> tempRoutes = convertedRoutesByCodeLength.GetRecord(codeLengthValue);
+
+                    foreach (var convertedRouteWithCodeKvp in tempRoutes)
+                    {
+                        var currentTempRoute = convertedRouteWithCodeKvp.Value;
+                        var currentCode = convertedRouteWithCodeKvp.Key;
+                        var currentRouteOptionIdentifier = currentTempRoute.GetRouteOptionsIdentifier();
+
+                        int previousCodeLengthValue = codeLengthValue - 1;
+                        while (previousCodeLengthValue > 0)
+                        {
+                            string modifiedCode = currentCode.Substring(0, previousCodeLengthValue);
+
+                            Dictionary<string, ConvertedRouteWithCode> parentTempRoutes = convertedRoutesByCodeLength.GetRecord(previousCodeLengthValue);
+                            if (parentTempRoutes != null && parentTempRoutes.Count > 0 && parentTempRoutes.TryGetValue(modifiedCode, out tempConvertedRouteWithCode))
+                            {
+                                if (!currentRouteOptionIdentifier.Equals(tempConvertedRouteWithCode.GetRouteOptionsIdentifier()))
+                                    finalConvertedRoutes.Add(currentTempRoute);
+
+                                break;
+                            }
+
+                            previousCodeLengthValue--;
+                        }
+
+                        if (previousCodeLengthValue == 0)
+                        {
+                            finalConvertedRoutes.Add(currentTempRoute);
+                        }
+                    }
+                }
+                if (finalConvertedRoutes.Count > 0)
+                    result.AddRange(finalConvertedRoutes);
             }
 
             return result;
@@ -184,7 +237,7 @@ namespace TOne.WhS.RouteSync.Business
         {
             public string Code { get; set; }
             public string RouteOptionsIdentifier { get; set; }
-            public bool CanBeGrouped { get; set; }
+            //public bool CanBeGrouped { get; set; }
         }
 
         #endregion
