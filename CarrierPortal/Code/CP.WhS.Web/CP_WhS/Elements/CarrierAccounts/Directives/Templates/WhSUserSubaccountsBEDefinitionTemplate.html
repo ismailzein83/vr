@@ -1,0 +1,13 @@
+﻿<vr-tab header="'Settings'">
+    <vr-row>
+        <vr-common-connection-selector on-ready="scopeModel.onConnectionSelectorReady" isrequired="true" normal-col-num="6"></vr-common-connection-selector>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-switch value="scopeModel.includeCustomers" label="Include Customers"></vr-switch>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-switch value="scopeModel.includeSuppliers" label="Include Suppliers"></vr-switch>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
