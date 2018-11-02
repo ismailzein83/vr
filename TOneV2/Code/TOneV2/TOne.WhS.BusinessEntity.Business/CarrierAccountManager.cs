@@ -682,7 +682,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     if (filter.CarrierProfileId.HasValue && carr.CarrierProfileId != filter.CarrierProfileId.Value)
                         return false;
-
+                    if (filter.UserId.HasValue)
+                    {
+                        CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                        var carrierAccountIds = carrierProfileManager.GetCarrierProfileCarrierAccountsByUserId(filter.UserId.Value);
+                        if (carrierAccountIds != null)
+                        {
+                            if (!carrierAccountIds.CarrierAccountIds.Contains(carr.CarrierAccountId))
+                                return false;
+                        }
+                    }
                     if (filter.AssignableToUserId.HasValue && !IsCarrierAccountAssignableToUser(carr, filter.GetCustomers, filter.GetSuppliers, assignedCarriers))
                         return false;
                     if (filter.Filters != null)
