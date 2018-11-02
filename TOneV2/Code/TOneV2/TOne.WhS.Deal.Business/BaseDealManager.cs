@@ -15,14 +15,9 @@ namespace TOne.WhS.Deal.Business
     public abstract class BaseDealManager : BaseBusinessEntityManager
     {
         #region Public Methods
-        public DealDefinition GetDeal(int dealId, bool checkDeletedDeals = false)
+        public DealDefinition GetDeal(int dealId)
         {
-            Dictionary<int, DealDefinition> cachedEntities;
-            if (checkDeletedDeals)
-                cachedEntities = this.GetCachedDealsWithDeleted();
-            else
-                cachedEntities = this.GetCachedDeals();
-
+            Dictionary<int, DealDefinition> cachedEntities = this.GetCachedDealsWithDeleted();
             return cachedEntities.GetRecord(dealId);
         }
 
