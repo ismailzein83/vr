@@ -328,13 +328,13 @@ namespace TOne.WhS.Deal.Business
         public override dynamic GetEntity(Vanrise.GenericData.Entities.IBusinessEntityGetByIdContext context)
         {
             int dealId = Convert.ToInt32(context.EntityId);
-            return GetDeal(dealId);
+            return base.GetDeal(dealId);
         }
 
         public override string GetEntityDescription(Vanrise.GenericData.Entities.IBusinessEntityDescriptionContext context)
         {
             int dealId = Convert.ToInt32(context.EntityId);
-            DealDefinition deal = GetDeal(dealId);
+            DealDefinition deal =  base.GetDeal(dealId);
             if (deal != null)
                 return deal.Name;
             return null;
