@@ -26,6 +26,7 @@
             var idbDataManager;
             var carrierMappings;
             var manualRoutes;
+            var context;
 
             var sshCommunicationList;
             var switchLoggerList;
@@ -66,16 +67,11 @@
                         huaweiSWSync = payload.switchSynchronizerSettings;
 
                         if (huaweiSWSync != undefined) {
-                            $scope.scopeModel.mappingSeparator = huaweiSWSync.MappingSeparator;
-                            $scope.scopeModel.numberOfMappings = huaweiSWSync.NumberOfMappings;
-                            $scope.scopeModel.supplierMappingLength = huaweiSWSync.SupplierMappingLength;
-                            $scope.scopeModel.supplierOptionsSeparator = huaweiSWSync.SupplierOptionsSeparator;
                             $scope.scopeModel.numberOfOptions = huaweiSWSync.NumberOfOptions;
-                            idbDataManager = huaweiSWSync.DataManager;
                             carrierMappings = huaweiSWSync.CarrierMappings;
-                            manualRoutes = huaweiSWSync.ManualRoutes;
                             sshCommunicationList = huaweiSWSync.SwitchCommunicationList;
                             switchLoggerList = huaweiSWSync.SwitchLoggerList;
+                            $scope.scopeModel.minRNLength = huaweiSWSync.MinRNLength;
                         }
                     }
 
@@ -97,14 +93,11 @@
 
                     var data = {
                         $type: "TOne.WhS.RouteSync.Huawei.HuaweiSWSync, TOne.WhS.RouteSync.Huawei",
-                        MappingSeparator: $scope.scopeModel.mappingSeparator,
-                        NumberOfMappings: $scope.scopeModel.numberOfMappings,
-                        SupplierMappingLength: $scope.scopeModel.supplierMappingLength,
-                        SupplierOptionsSeparator: $scope.scopeModel.supplierOptionsSeparator,
                         NumberOfOptions: $scope.scopeModel.numberOfOptions,
                         CarrierMappings: huaweiCarrierAccountMappingGridAPI.getData(),
                         SwitchCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.sshCommunicationList : undefined,
                         SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined,
+                        MinRNLength: $scope.scopeModel.minRNLength
                     };
                     return data;
                 };
@@ -119,7 +112,10 @@
                 var carrierAccountMappingGridLoadDeferred = UtilsService.createPromiseDeferred();
 
                 huaweiCarrierAccountMappingGridReadyDeferred.promise.then(function () {
-                    var carrierAccountMappingGridPayload = { carrierMappings: carrierMappings };
+                    var carrierAccountMappingGridPayload = {
+                        carrierMappings: carrierMappings,
+                        context: buildContext()
+                    };
                     VRUIUtilsService.callDirectiveLoad(huaweiCarrierAccountMappingGridAPI, carrierAccountMappingGridPayload, carrierAccountMappingGridLoadDeferred);
                 });
 
@@ -141,15 +137,14 @@
             }
 
             function buildContext() {
-                var context = {
-                    getMappingSeparator: function () {
-                        return $scope.scopeModel.mappingSeparator;
-                    },
-                    getSupplierMappingLength: function () {
-                        return $scope.scopeModel.supplierMappingLength;
-                    }
-                };
-                return context;
+                var currentcontext = context;
+                if (currentcontext == undefined)
+                    currentcontext = {
+                        getMinRNLength: function () {
+                            return $scope.scopeModel.minRNLength;
+                        }
+                    };
+                return currentcontext;
             }
         }
     }

@@ -1,7 +1,8 @@
 ﻿<vr-form name="validationContext">
     <vr-row>
         <vr-columns width="1/4row">
-            <vr-textbox value="scopeModel.routeName" label="RouteName" type="text" onvaluechanged="scopeModel.isSupplierMappingExists" isrequired="scopeModel.supplierMappingExists"></vr-textbox>
+            <vr-textbox value="scopeModel.routeName" label="RouteName" type="text" onvaluechanged="scopeModel.isSupplierMappingExists"
+                        customvalidate="scopeModel.isRouteNameValidated(scopeModel.routeName)" isrequired="scopeModel.supplierMappingExists"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/4row">
             <vr-textbox value="scopeModel.isup" label="ISUP" type="text" onvaluechanged="scopeModel.isSupplierMappingExists" isrequired="scopeModel.supplierMappingExists"></vr-textbox>

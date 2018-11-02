@@ -204,6 +204,7 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusSynchronizer\whs-routesync-freeradius-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Logger\Templates\HuaweiFTPLoggerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Logger\whs-routesync-huaweilogger-ftp.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Templates\HuaweiRouteSyncSetting.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Templates\HuaweiSupplierMappingTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Templates\HuaweiCustomerMappingTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Templates\HuaweiCommunicationTemplate.html" />
@@ -212,6 +213,7 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huawei-customermapping.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huawei-communication.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huawei-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\whs-routesync-huaweisettings-editor.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\Templates\TelesPostgresIdbSWDataManagerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\whs-routesync-telesidb-postgresdatamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\Templates\BuiltInIVSwitchSWSyncTemplate.html" />

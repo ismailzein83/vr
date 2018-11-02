@@ -119,8 +119,6 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                 WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter).then(function (response) {
 
                     if (response != undefined) {
-                        var mappingSeparator = context != undefined ? context.getMappingSeparator() : undefined;
-
                         for (var i = 0; i < response.length; i++) {
                             var currentCarrierAccountInfo = response[i];
 
@@ -293,15 +291,30 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                 return "Route Name: '" + routeName + "'; ISUP: '" + isup + "'.";
             }
             function buildSupplierMappingDirectiveContext(carrierAccountMapping) {
-                var context = {
+                var suppliercontext = {
                     updateErrorDescription: function (isValid, fromCustomerMapping) {
                         updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping);
                     },
                     updateSupplierMappingDescription: function (supplierMapping) {
                         carrierAccountMapping.SupplierMappingDescription = buildSupplierMappingDescription(supplierMapping);
+                    },
+                    isRouteNameValidated: function (routeName) {
+                        if (routeName == undefined || context == undefined)
+                            return null;
+
+                        var minRNLength = context.getMinRNLength();
+
+                        if (minRNLength == undefined)
+                            return null;
+
+                        var routeNameWithoutEmptySpace = UtilsService.replaceAll(routeName, " ", "");
+                        if (routeNameWithoutEmptySpace.length >= minRNLength)
+                            return null;
+
+                        return 'Length should be greater than ' + minRNLength;
                     }
                 };
-                return context;
+                return suppliercontext;
             }
             function updateErrorDescription(carrierAccountMapping, isValid, fromCustomerMapping) {
 
@@ -311,5 +324,6 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                     carrierAccountMapping.isSupplierMappingInvalid = !isValid;
                 }
             }
+
         }
     }]);

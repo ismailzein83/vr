@@ -141,6 +141,7 @@
                             sshCommnunicationItem.sshCommunicatorSettingsReadyDeferred = UtilsService.createPromiseDeferred();
                             sshCommnunicationItem.isSelected = true;
                             sshCommnunicationItem.isActive = sshCommunication.IsActive;
+                            sshCommnunicationItem.interfaceIP = sshCommunication.InterfaceIP;
 
                             sshCommnunicationItem.sshCommunicationSettingsLoadPromise = getSSHCommunicationSettingsLoadPromise();
                             promises.push(sshCommnunicationItem.sshCommunicationSettingsLoadPromise);
@@ -209,7 +210,7 @@
                     loggerSettings.IsActive = loggerItem.isActive;
 
                     var result = {
-                        sshCommunicationList: sshCommunicatorSettings != undefined ? [{ SSHCommunicatorSettings: sshCommunicatorSettings, IsActive: switchSSHCommunicationItem.isActive }] : undefined,
+                        sshCommunicationList: sshCommunicatorSettings != undefined ? [{ SSHCommunicatorSettings: sshCommunicatorSettings, IsActive: switchSSHCommunicationItem.isActive, InterfaceIP: switchSSHCommunicationItem.interfaceIP }] : undefined,
                         switchLoggerList: [loggerSettings]
                     };
 

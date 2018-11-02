@@ -24,7 +24,7 @@
 <vr-row>
     <vr-validator validate="scopeModel.validateSSHCommunicationList()">
         <vr-section level="1" header="SSH">
-            <vr-datagrid on-ready="scopeModel.onSSHGridReady" datasource="scopeModel.switchSSHCommunications">
+            <vr-datagrid on-ready="scopeModel.onSSHGridReady" datasource="scopeModel.switchSSHCommunications" disabledraggablecolumns>
                 <vr-datagridcolumn columnindex="0" invisibleheader headertext="''" disablesorting="true" fixedwidth="'30'">
                     <vr-check value="dataItem.isSelected"></vr-check>
                 </vr-datagridcolumn>
@@ -33,7 +33,12 @@
                         <vr-common-communicatorsettings-ssh normal-col-num="2" on-ready="dataItem.onSSHCommunicatorSettingsReady"></vr-common-communicatorsettings-ssh>
                     </span>
                 </vr-datagridcolumn>
-                <vr-datagridcolumn columnindex="2" headertext="'Active'" disablesorting="true" fixedwidth="'50'">
+                <vr-datagridcolumn columnindex="2" disablesorting="true" fixedwidth="'140'">
+                    <span ng-if="dataItem.isSelected">
+                        <vr-textbox value="dataItem.interfaceIP" label="Interface IP" isrequired="true" type="ip"></vr-textbox>
+                    </span>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn columnindex="3" headertext="'Active'" disablesorting="true" fixedwidth="'50'">
                     <span ng-if="dataItem.isSelected">
                         <vr-switch value="dataItem.isActive"></vr-switch>
                     </span>
