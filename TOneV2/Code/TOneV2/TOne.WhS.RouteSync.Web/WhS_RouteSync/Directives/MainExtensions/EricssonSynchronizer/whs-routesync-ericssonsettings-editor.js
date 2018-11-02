@@ -1,103 +1,103 @@
 ﻿(function (app) {
 
-	'use strict';
+    'use strict';
 
-	EricssonSWSyncEricssonSettings.$inject = ["UtilsService", 'VRUIUtilsService'];
+    EricssonSWSyncEricssonSettings.$inject = ["UtilsService", 'VRUIUtilsService'];
 
-	function EricssonSWSyncEricssonSettings(UtilsService, VRUIUtilsService) {
-		return {
-			restrict: "E",
-			scope: {
-				onReady: "="
-			},
-			controller: function ($scope, $element, $attrs) {
-				var ctrl = this;
-				var ctor = new EricssonSWSyncEricssonSettingsrCtor($scope, ctrl, $attrs);
-				ctor.initializeController();
-			},
-			controllerAs: "Ctrl",
-			bindToController: true,
-			templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/EricssonSynchronizer/Templates/EricssonRouteSyncSetting.html"
-		};
+    function EricssonSWSyncEricssonSettings(UtilsService, VRUIUtilsService) {
+        return {
+            restrict: "E",
+            scope: {
+                onReady: "="
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new EricssonSWSyncEricssonSettingsrCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: "Ctrl",
+            bindToController: true,
+            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/EricssonSynchronizer/Templates/EricssonRouteSyncSetting.html"
+        };
 
-		function EricssonSWSyncEricssonSettingsrCtor($scope, ctrl, $attrs) {
-			this.initializeController = initializeController;
+        function EricssonSWSyncEricssonSettingsrCtor($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
 
-			function initializeController() {
-				$scope.scopeModel = {};
-				$scope.scopeModel.faultCodes = [];
-				$scope.scopeModel.faultCodeValue = undefined;
-				$scope.scopeModel.disableAddButton = true;
+            function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.faultCodes = [];
+                $scope.scopeModel.faultCodeValue = undefined;
+                $scope.scopeModel.disableAddButton = true;
+                $scope.scopeModel.numberOfRetries = 1;
+                $scope.scopeModel.onFaultCodeValueChange = function (value) {
 
-				$scope.scopeModel.onFaultCodeValueChange = function (value) {
+                    if (value == undefined) {
+                        $scope.scopeModel.disableAddButton = true;
+                        return;
+                    }
 
-					if (value == undefined) {
-						$scope.scopeModel.disableAddButton = true;
-						return;
-					}
+                    if ($scope.scopeModel.faultCodes == undefined || $scope.scopeModel.faultCodes.length == 0) {
+                        $scope.scopeModel.disableAddButton = false;
+                        return;
+                    }
 
-					if ($scope.scopeModel.faultCodes == undefined || $scope.scopeModel.faultCodes.length == 0) {
-						$scope.scopeModel.disableAddButton = false;
-						return;
-					}
+                    for (var i = 0; i < $scope.scopeModel.faultCodes.length; i++) {
+                        if ($scope.scopeModel.faultCodes[i].faultCode == $scope.scopeModel.faultCodeValue) {
+                            $scope.scopeModel.disableAddButton = true;
+                            return;
+                        }
+                    }
+                    $scope.scopeModel.disableAddButton = false;
+                };
 
-					for (var i = 0; i < $scope.scopeModel.faultCodes.length; i++) {
-						if ($scope.scopeModel.faultCodes[i].faultCode == $scope.scopeModel.faultCodeValue) {
-							$scope.scopeModel.disableAddButton = true;
-							return;
-						}
-					}
-					$scope.scopeModel.disableAddButton = false;
-				};
+                $scope.scopeModel.addFaultCodeValue = function () {
 
-				$scope.scopeModel.addFaultCodeValue = function () {
+                    $scope.scopeModel.faultCodes.push({
+                        faultCode: $scope.scopeModel.faultCodeValue
+                    });
+                    $scope.scopeModel.faultCodeValue = undefined;
+                    $scope.scopeModel.disableAddButton = true;
+                };
 
-					$scope.scopeModel.faultCodes.push({
-						faultCode: $scope.scopeModel.faultCodeValue
-					});
-					$scope.scopeModel.faultCodeValue = undefined;
-					$scope.scopeModel.disableAddButton = true;
-				};
+                $scope.scopeModel.validateFaultCodes = function () {
+                    if ($scope.scopeModel.faultCodes == undefined || $scope.scopeModel.faultCodes.length == 0)
+                        return 'Please, add fault codes';
+                    return null;
+                };
 
-				$scope.scopeModel.validateFaultCodes = function () {
-					if ($scope.scopeModel.faultCodes == undefined || $scope.scopeModel.faultCodes.length == 0)
-						return 'Please, add fault codes';
-					return null;
-				};
+                defineAPI();
+            }
+            function defineAPI() {
+                var api = {};
 
-				defineAPI();
-			}
-			function defineAPI() {
-				var api = {};
+                api.load = function (payload) {
+                    var promises = [];
 
-				api.load = function (payload) {
-					var promises = [];
+                    if (payload != undefined) {
+                        $scope.scopeModel.numberOfRetries = payload.settings.NumberOfRetries;
+                        if (payload.settings.FaultCodes != undefined) {
+                            $scope.scopeModel.faultCodes = payload.settings.FaultCodes;
 
-					if (payload != undefined) {
-						$scope.scopeModel.numberOfRetries = payload.settings.NumberOfRetries;
-						if (payload.settings.FaultCodes != undefined) {
-							$scope.scopeModel.faultCodes = payload.settings.FaultCodes;
+                        }
+                    }
+                };
+                api.getData = function () {
+                    var data = {
+                        $type: "TOne.WhS.RouteSync.Ericsson.EricssonSwitchRouteSynchronizerSettings, TOne.WhS.RouteSync.Ericsson",
+                        NumberOfRetries: $scope.scopeModel.numberOfRetries,
+                        FaultCodes: $scope.scopeModel.faultCodes,
+                    };
+                    return data;
+                };
 
-						}
-					}
-				};
-				api.getData = function () {
-					var data = {
-						$type: "TOne.WhS.RouteSync.Ericsson.EricssonSwitchRouteSynchronizerSettings, TOne.WhS.RouteSync.Ericsson",
-						NumberOfRetries: $scope.scopeModel.numberOfRetries,
-						FaultCodes: $scope.scopeModel.faultCodes,
-					};
-					return data;
-				};
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
+                }
+            }
+        }
+    }
 
-				if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-					ctrl.onReady(api);
-				}
-			}
-		}
-	}
-
-	app.directive('whsRoutesyncEricssonsettingsEditor', EricssonSWSyncEricssonSettings);
+    app.directive('whsRoutesyncEricssonsettingsEditor', EricssonSWSyncEricssonSettings);
 
 })(app);
