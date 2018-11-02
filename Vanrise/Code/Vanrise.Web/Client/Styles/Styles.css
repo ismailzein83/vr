@@ -3457,12 +3457,22 @@ vr-validator[vr-input] > div:nth-child(1) {
     font-size: 12px !important;
     top: 2px;
 }
+.vr-datagrid-celltext vr-validator > div:nth-child(1) {
+    min-height: 22px;
+}
+.vr-datagrid-celltext vr-validator > div[validator-section] > div:nth-child(1) {
+    min-height: 22px;
+}
+.vr-datagrid-celltext vr-validator > div:nth-child(1) {
+    height: 22px;
+}
+
 
 .vr-datagrid-celltext vr-validator[vr-input] > div:nth-child(1) {
     height: 21px;
     min-height: initial !important;
     position: relative;
-    top: -2px;
+    /*top: -2px;*/
 }
 
 .vr-datagrid-celltext .form-control {
