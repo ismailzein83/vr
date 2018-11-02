@@ -178,7 +178,7 @@ namespace TOne.WhS.RouteSync.Business
                 IOrderedEnumerable<int> orderedCodeLength = convertedRoutesByCodeLength.Keys.OrderByDescending(itm => itm);
                 ConvertedRouteWithCode tempConvertedRouteWithCode;
 
-                List<ConvertedRoute> finalConvertedRoutes = new List<ConvertedRoute>();
+                List<ConvertedRouteWithCode> finalConvertedRoutes = new List<ConvertedRouteWithCode>();
 
                 foreach (int codeLengthValue in orderedCodeLength)
                 {
@@ -214,9 +214,8 @@ namespace TOne.WhS.RouteSync.Business
                     }
                 }
                 if (finalConvertedRoutes.Count > 0)
-                    result.AddRange(finalConvertedRoutes);
+                    result.AddRange(finalConvertedRoutes.OrderBy(itm => itm.Code));
             }
-
             return result;
         }
 
