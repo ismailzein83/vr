@@ -31,7 +31,7 @@ app.directive('vrCpCarrieraccountSelector', ['CP_SupplierPricelist_SupplierMappi
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getSupplierInfoTemplate(attrs);
@@ -62,14 +62,14 @@ app.directive('vrCpCarrieraccountSelector', ['CP_SupplierPricelist_SupplierMappi
                 $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
                 var api = {};
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('SupplierId', attrs, ctrl);
-                }
+                };
                 api.load = function (payload) {
                     var selectedIds;
                     var filter;
@@ -105,7 +105,7 @@ app.directive('vrCpCarrieraccountSelector', ['CP_SupplierPricelist_SupplierMappi
                     });
 
 
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
