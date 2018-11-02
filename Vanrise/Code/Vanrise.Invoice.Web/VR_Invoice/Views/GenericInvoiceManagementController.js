@@ -2,9 +2,9 @@
 
     "use strict";
 
-    genericInvoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_InvoiceActionService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService', 'VRNotificationService', 'VRDateTimeService','VR_Invoice_InvoiceBulkActionService'];
+    genericInvoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Invoice_InvoiceActionService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService', 'VRNotificationService', 'VRDateTimeService', 'VR_Invoice_InvoiceBulkActionService', 'VRValidationService'];
 
-    function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceActionService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRNotificationService, VRDateTimeService, VR_Invoice_InvoiceBulkActionService) {
+    function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceActionService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRNotificationService, VRDateTimeService, VR_Invoice_InvoiceBulkActionService, VRValidationService) {
         var invoiceTypeId;
         $scope.scopeModel = {};
 
@@ -38,7 +38,7 @@
         }
 
         function defineScope() {
-           
+
             $scope.scopeModel.onAccountStatusSelectorReady = function (api) {
                 accountStatusSelectorAPI = api;
                 accountStatusSelectorReadyDeferred.resolve();
@@ -64,7 +64,7 @@
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 if (!$scope.scopeModel.isLoadingFilters)
-                  gridAPI.loadGrid(getFilterObject());
+                    gridAPI.loadGrid(getFilterObject());
 
             };
             $scope.scopeModel.onPartnerSelectorReady = function (api) {
@@ -97,7 +97,7 @@
                 gridAPI.selectAllInvoices();
             };
             $scope.scopeModel.bulkActionsClicked = function () {
-                var  onBulkActionExecuted = function () {
+                var onBulkActionExecuted = function () {
 
                 };
                 VR_Invoice_InvoiceBulkActionService.openMenualInvoiceBulkActions(onBulkActionExecuted, invoiceTypeId, getContext());
@@ -113,6 +113,26 @@
                 invoiceSentSelectorAPI = api;
                 invoiceSentSelectorReadyDeferred.resolve();
             };
+            $scope.scopeModel.validateFromDate = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
+            };
+
+            $scope.scopeModel.validateToDate = function () {
+                var result = VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
+                if (result != null)
+                    return result;
+
+                if ($scope.scopeModel.toDate != undefined && $scope.scopeModel.toDate >= VRDateTimeService.getTodayDate()) {
+                    return 'To should be less than today date';
+                }
+                return null;
+            };
+
+            $scope.scopeModel.validateIssueDate = function () {
+                var result = VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.issueDate);
+                if (result == null)
+                    return VRValidationService.validateTimeRange($scope.scopeModel.toDate, $scope.scopeModel.issueDate);
+            };
 
         }
 
@@ -124,11 +144,11 @@
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.scopeModel.isLoadingFilters = false;
             });
-           
+
         }
         function getFilterObject() {
             var partnerObject;
-            if (partnerSelectorAPI !=undefined)
+            if (partnerSelectorAPI != undefined)
                 partnerObject = partnerSelectorAPI.getData();
 
             var accountStatusObj = accountStatusSelectorAPI.getData();
@@ -140,18 +160,18 @@
                 InvoiceTypeId: invoiceTypeId,
                 invoiceItemGroupings: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ItemGroupings,
                 context: getContext(),
-                canSelectInvoices :$scope.scopeModel.showActionButtons,
+                canSelectInvoices: $scope.scopeModel.showActionButtons,
                 query: {
                     FromTime: $scope.scopeModel.fromDate,
                     ToTime: $scope.scopeModel.toDate,
                     PartnerIds: partnerObject != undefined ? partnerObject.selectedIds : undefined,
-                    PartnerPrefix:partnerObject != undefined?partnerObject.partnerPrefix:undefined,
+                    PartnerPrefix: partnerObject != undefined ? partnerObject.partnerPrefix : undefined,
                     InvoiceTypeId: invoiceTypeId,
                     IssueDate: $scope.scopeModel.issueDate,
                     EffectiveDate: accountStatusObj != undefined ? accountStatusObj.EffectiveDate : undefined,
                     IsEffectiveInFuture: accountStatusObj != undefined ? accountStatusObj.IsEffectiveInFuture : undefined,
                     Status: accountStatusObj != undefined ? accountStatusObj.Status : undefined,
-                    IsSent:invoiceSentSelectorAPI.getSelectedIds(),
+                    IsSent: invoiceSentSelectorAPI.getSelectedIds(),
                     IsPaid: invoicePaidSelectorAPI.getSelectedIds(),
                     InvoiceSettingIds: invoiceSettingSelectorAPI.getSelectedIds()
                 }
@@ -203,33 +223,30 @@
                 invoiceSettingSelectorReadyDeferred.promise.then(function () {
                     var filter = { InvoiceTypeId: invoiceTypeId };
                     var invoiceSettingPayload = { filter: filter };
-                    
+
                     VRUIUtilsService.callDirectiveLoad(invoiceSettingSelectorAPI, invoiceSettingPayload, invoiceSettingDirectiveLoadPromiseDeferred);
                 });
                 return invoiceSettingDirectiveLoadPromiseDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([loadPartnerSelectorDirective, loadAccountStatusSelectorDirective, loadInvoicePaidSelectorDirective, loadInvoiceSentSelectorDirective, loadInvoiceSetting]).then(function ()
-            {
-                if(gridAPI != undefined)
-                {
+            return UtilsService.waitMultipleAsyncOperations([loadPartnerSelectorDirective, loadAccountStatusSelectorDirective, loadInvoicePaidSelectorDirective, loadInvoiceSentSelectorDirective, loadInvoiceSetting]).then(function () {
+                if (gridAPI != undefined) {
                     gridAPI.loadGrid(getFilterObject());
                 }
             })
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-               .finally(function () {
-                   $scope.scopeModel.isLoadingFilters = false;
-              });
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.scopeModel.isLoadingFilters = false;
+                });
         }
 
-        function getInvoiceTypeRuntime()
-        {
+        function getInvoiceTypeRuntime() {
             return VR_Invoice_InvoiceTypeAPIService.GetInvoiceTypeRuntime(invoiceTypeId).then(function (response) {
                 $scope.scopeModel.invoiceTypeEntity = response;
                 if ($scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions.length > 0)
-                   $scope.scopeModel.showActionButtons = true;
+                    $scope.scopeModel.showActionButtons = true;
             });
         }
 
@@ -249,12 +266,11 @@
             VR_Invoice_InvoiceActionService.generateInvoices(onGenerateInvoice, invoiceTypeId);
         }
 
-      
 
-        function getContext()
-        {
+
+        function getContext() {
             var context = {
-                reEvaluateButtonsStatus: function(){
+                reEvaluateButtonsStatus: function () {
                     reEvaluateButtonsStatus();
                 },
                 getTargetInvoicesEntity: function () {
@@ -266,11 +282,9 @@
             };
             return context;
         }
-        function reEvaluateButtonsStatus()
-        {
+        function reEvaluateButtonsStatus() {
             var hasInvoices = gridAPI.hasInvoices();
-            if (hasInvoices)
-            {
+            if (hasInvoices) {
                 var isInvoiceSelected = gridAPI.anyInvoiceSelected();
                 var allInvoicesSelected = gridAPI.allInvoiceSelected();
 
@@ -297,7 +311,7 @@
                 $scope.scopeModel.disableBulkActions = true;
                 $scope.scopeModel.disableSelectAll = true;
             }
-           
+
         }
 
     }

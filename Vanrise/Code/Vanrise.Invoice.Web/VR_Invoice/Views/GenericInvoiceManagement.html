@@ -7,13 +7,13 @@
                 <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective" directive="scopeModel.invoiceTypeEntity.InvoicePartnerManager.PartnerFilterSelector" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="2" ismultipleselection></vr-directivewrapper>
 
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" label="From" value="scopeModel.fromDate" isrequired="true"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" label="From" value="scopeModel.fromDate" customvalidate="scopeModel.validateFromDate()" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" applytimemax label="To" value="scopeModel.toDate"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" applytimemax label="To" customvalidate="scopeModel.validateToDate()" value="scopeModel.toDate"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" label="Issue Date" value="scopeModel.issueDate"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" label="Issue Date"customvalidate="scopeModel.validateIssueDate()"  value="scopeModel.issueDate"></vr-datetimepicker>
                 </vr-columns>
 
                 <vr-common-boolean-selector label="Sent" on-ready="scopeModel.onInvoiceSentSelectorReady" normal-col-num="2"></vr-common-boolean-selector>
