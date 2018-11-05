@@ -49,7 +49,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-   <Reference Include="System" />
+    <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -116,7 +116,7 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />	
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -174,10 +174,7 @@
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Views\RepeatedNumbersManagement.html" />
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Views\RepeatedNumbersManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CP_WhS\Elements\CallStatus\" />
-    <Folder Include="CP_WhS\Elements\PhoneNumber\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
