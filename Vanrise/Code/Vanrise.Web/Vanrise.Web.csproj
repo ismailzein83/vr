@@ -26,7 +26,8 @@
     <SccProvider>SAK</SccProvider>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1159,29 +1160,19 @@
     <Content Include="Client\Libraries\Charts\FusionChart\themes\fusioncharts.theme.fint.js" />
     <Content Include="Client\Libraries\Charts\FusionChart\themes\fusioncharts.theme.ocean.js" />
     <Content Include="Client\Libraries\Charts\FusionChart\themes\fusioncharts.theme.zune.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\adapters\standalone-framework.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\highcharts-3d.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\highcharts-more.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\highcharts.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\modules\broken-axis.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\modules\canvas-tools.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\modules\data.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\modules\drilldown.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\modules\exporting.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\modules\funnel.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\modules\heatmap.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\modules\no-data-to-display.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\modules\solid-gauge.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\modules\treemap.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\Plugins\grouped-categories.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\themes\dark-blue.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\themes\dark-green.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\themes\dark-unica.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\themes\gray.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\themes\grid-light.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\themes\grid.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\themes\sand-signika.js" />
-    <Content Include="Client\Libraries\Charts\HichChart\themes\skies.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\highcharts-3d.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\highcharts-more.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\highcharts.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\Modules\broken-axis.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\Modules\data.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\Modules\drilldown.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\Modules\exporting.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\Modules\funnel.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\Modules\heatmap.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\Modules\no-data-to-display.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\Modules\solid-gauge.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\Modules\treemap.js" />
+    <Content Include="Client\Libraries\Charts\HighChartV6\Plugins\grouped-categories.js" />
     <Content Include="Client\Libraries\Charts\ZingChart\zingchart.min.js" />
     <Content Include="Client\Libraries\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Client\Libraries\HandsonTable\handsontable.full.css" />

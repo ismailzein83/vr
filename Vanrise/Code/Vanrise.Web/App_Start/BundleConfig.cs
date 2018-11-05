@@ -120,12 +120,12 @@ namespace Vanrise.Web
 
             //HichChart
             bundles.Add(new ScriptBundle("~/bundles/highchart").Include(
-               "~/Client/Libraries/Charts/HichChart/highcharts.js",
-               "~/Client/Libraries/Charts/HichChart/highcharts-more.js",
-               "~/Client/Libraries/Charts/HichChart/highcharts-3d.js").IncludeDirectory(
-                "~/Client/Libraries/Charts/HichChart/adapters", "*.js", true).IncludeDirectory(
-                "~/Client/Libraries/Charts/HichChart/modules", "*.js", true).IncludeDirectory(
-                "~/Client/Libraries/Charts/HichChart/Plugins", "*.js", true));
+             "~/Client/Libraries/Charts/HighChartV6/highcharts.js",
+             "~/Client/Libraries/Charts/HighChartV6/highcharts-more.js",
+             "~/Client/Libraries/Charts/HighChartV6/highcharts-3d.js",
+             "~/Client/Libraries/Charts/HighChartV6/modules/exporting.js").IncludeDirectory(
+               "~/Client/Libraries/Charts/HighChartV6/modules", "*.js", true).IncludeDirectory(
+               "~/Client/Libraries/Charts/HighChartV6/Plugins", "*.js", true));
 
             //Site
             bundles.Add(new ScriptBundle("~/bundles/Javascripts").IncludeDirectory(
