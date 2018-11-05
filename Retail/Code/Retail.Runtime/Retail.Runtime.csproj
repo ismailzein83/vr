@@ -401,9 +401,8 @@
     <Reference Include="Vanrise.Integration.Adapters.SFTPReceiveAdapter">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SFTPReceiveAdapter.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Integration.Adapters.SQLReceiveAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Vanrise\Code\Vanrise.Integration.Adapters.SQLReceiveAdapter\bin\Debug\netstandard2.0\Vanrise.Integration.Adapters.SQLReceiveAdapter.dll</HintPath>
+    <Reference Include="Vanrise.Integration.Adapters.SQLReceiveAdapter">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.SQLReceiveAdapter.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Integration.BP.Activities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.BP.Activities.dll</HintPath>
