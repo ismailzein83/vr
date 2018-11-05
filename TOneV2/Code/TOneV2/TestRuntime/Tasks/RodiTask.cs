@@ -47,8 +47,8 @@ namespace TOne.WhS.Runtime.Tasks
 			SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
 			runtimeServices.Add(summaryQueueActivationService);
 
-			//DataSourceRuntimeService dsRuntimeService = new DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-			//runtimeServices.Add(dsRuntimeService);
+			DataSourceRuntimeService dsRuntimeService = new DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+			runtimeServices.Add(dsRuntimeService);
 
 			BigDataRuntimeService bigDataService = new BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
 			runtimeServices.Add(bigDataService);
