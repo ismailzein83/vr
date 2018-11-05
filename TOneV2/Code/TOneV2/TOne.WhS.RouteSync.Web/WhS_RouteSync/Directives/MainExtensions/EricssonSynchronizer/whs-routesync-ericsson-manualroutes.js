@@ -37,9 +37,8 @@ app.directive('whsRoutesyncEricssonManualroutes', ['UtilsService', 'VRUIUtilsSer
                 $scope.scopeModel.removerow = function (dataItem) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
-                            console.log(dataItem.Id);
                             var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.Id, 'Id');
-                            $scope.scopeModel.datasource.splice(index, 1); console.log(index);
+                            $scope.scopeModel.datasource.splice(index, 1);
                         }
                     });
                 };
@@ -48,39 +47,11 @@ app.directive('whsRoutesyncEricssonManualroutes', ['UtilsService', 'VRUIUtilsSer
                     var newManualRoute = {};
                     extendManualRoute(newManualRoute);
 
-                    //newManualRoute.onManualRouteActionReady = function (api) {
-                    //    newManualRoute.actionAPI = api;
-                    //    //newManualRoute.actionPromiseDeferred = UtilsService.createPromiseDeferred();
-                    //    var setLoader = function (value) { };
-                    //    var actionPayload = newManualRoute.ManualRouteAction;
-                    //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, newManualRoute.actionAPI, actionPayload, setLoader);
-                    //};
-
-                    ////newManualRoute.onManualRouteDestinationsReady = function (api) {
-                    ////    newManualRoute.destinationsAPI = api;
-                    ////    //newManualRoute.destinationsPromiseDeferred = UtilsService.createPromiseDeferred();
-                    ////    var setLoader = function (value) { };
-                    ////    var destinationsPayload = newManualRoute.ManualRouteDestinations;
-                    ////    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, newManualRoute.destinationsAPI, destinationsPayload, setLoader);
-                    ////};
-
-                    //newManualRoute.onManualRouteOriginationsReady = function (api) {
-                    //    newManualRoute.originationsAPI = api;
-                    //    //newManualRoute.originationsPromiseDeferred = UtilsService.createPromiseDeferred();
-                    //    var setLoader = function (value) { };
-                    //    var originationsPayload = newManualRoute.ManualRouteOriginations;
-                    //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, newManualRoute.originationsAPI, originationsPayload, setLoader);
-                    //};
                     $scope.scopeModel.datasource.push(newManualRoute);
                 };
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
-                    /*if (gridAPI != undefined) {
-                        gridAPI.onItemAdded = function (dataItem) {
-                            extendManualRoute(dataItem);
-                        };
-                    }*/
                 };
 
                 defineAPI();
@@ -128,6 +99,8 @@ app.directive('whsRoutesyncEricssonManualroutes', ['UtilsService', 'VRUIUtilsSer
                 manualRoute.Id = UtilsService.guid();
                 var actionPromiseDeferred = UtilsService.createPromiseDeferred();
                 var originationsPromiseDeferred = UtilsService.createPromiseDeferred();
+                routePromises.push(actionPromiseDeferred.promise);
+                routePromises.push(originationsPromiseDeferred.promise);
                 manualRoute.onManualRouteActionReady = function (api) {
                     manualRoute.actionAPI = api;
                     //manualRoute.actionPromiseDeferred = UtilsService.createPromiseDeferred();

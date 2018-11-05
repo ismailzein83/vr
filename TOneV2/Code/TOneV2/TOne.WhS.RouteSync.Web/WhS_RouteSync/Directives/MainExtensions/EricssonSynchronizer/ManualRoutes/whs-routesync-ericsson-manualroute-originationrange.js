@@ -47,7 +47,6 @@
 
                     if (payload != undefined) {
                         if (payload.RouteOriginations != undefined) {
-                            console.log(payload.RouteOriginations);
                             $scope.scopeModel.fromCode = payload.RouteOriginations.FromCode;
                             $scope.scopeModel.toCode = payload.RouteOriginations.ToCode;
                         }

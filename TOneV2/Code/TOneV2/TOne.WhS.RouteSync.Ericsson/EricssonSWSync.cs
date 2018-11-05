@@ -554,6 +554,8 @@ namespace TOne.WhS.RouteSync.Ericsson
 
         private void ReevaluatePercentageDistribution(List<RouteCaseOption> options, int totalPercentage)
         {
+            if (options == null || options.Count == 0)
+                return;
             var orderedOptions = options.OrderBy(item => item.TrunkPercentage).ToList();
             var assignedPercentage = orderedOptions.Sum(item => item.TrunkPercentage);
             if (!assignedPercentage.HasValue)
@@ -1129,6 +1131,8 @@ namespace TOne.WhS.RouteSync.Ericsson
                     ericssonRouteParamerters.L = ericssonRouteParamerters.IsOverride ? ericssonRouteParamerters.L : LocalNumberLength.ToString();
                     ericssonRouteParamerters.NationalM = ericssonRouteParamerters.IsOverride ? ericssonRouteParamerters.M : "";
                     ericssonRouteParamerters.FBO = localSupplierMapping.BO;
+                    ericssonRouteParamerters.NOBA = (string.IsNullOrEmpty(ericssonRouteParamerters.NOBA)) ? carrierCustomerMapping.CustomerMapping.NationalOBA : ericssonRouteParamerters.NOBA;
+                    ericssonRouteParamerters.IOBA = (string.IsNullOrEmpty(ericssonRouteParamerters.IOBA)) ? carrierCustomerMapping.CustomerMapping.InternationalOBA : ericssonRouteParamerters.IOBA;
                     ericssonRouteParamerters.CCL = ericssonRouteParamerters.IsOverride ? ericssonRouteParamerters.CCL : "";
                 }
                 else if (incomingTrafficSupplier != null)
@@ -1136,6 +1140,8 @@ namespace TOne.WhS.RouteSync.Ericsson
                     ericssonRouteParamerters.Type = EricssonConvertedRouteType.Local;
                     ericssonRouteParamerters.L = ericssonRouteParamerters.IsOverride ? ericssonRouteParamerters.L : LocalNumberLength.ToString();
                     ericssonRouteParamerters.NationalM = ericssonRouteParamerters.IsOverride ? ericssonRouteParamerters.M : "";
+                    ericssonRouteParamerters.NOBA = (string.IsNullOrEmpty(ericssonRouteParamerters.NOBA)) ? carrierCustomerMapping.CustomerMapping.NationalOBA : ericssonRouteParamerters.NOBA;
+                    ericssonRouteParamerters.IOBA = (string.IsNullOrEmpty(ericssonRouteParamerters.IOBA)) ? carrierCustomerMapping.CustomerMapping.InternationalOBA : ericssonRouteParamerters.IOBA;
                     ericssonRouteParamerters.FBO = ericssonRouteParamerters.NOBA;
                     ericssonRouteParamerters.CCL = ericssonRouteParamerters.IsOverride ? ericssonRouteParamerters.CCL : "";
                     ericssonRouteParamerters.D = ericssonRouteParamerters.IsOverride ? ericssonRouteParamerters.D : "4-0";
@@ -1144,6 +1150,8 @@ namespace TOne.WhS.RouteSync.Ericsson
                 else
                 {
                     ericssonRouteParamerters.Type = EricssonConvertedRouteType.Transit;
+                    ericssonRouteParamerters.NOBA = (string.IsNullOrEmpty(ericssonRouteParamerters.NOBA)) ? carrierCustomerMapping.CustomerMapping.NationalOBA : ericssonRouteParamerters.NOBA;
+                    ericssonRouteParamerters.IOBA = (string.IsNullOrEmpty(ericssonRouteParamerters.IOBA)) ? carrierCustomerMapping.CustomerMapping.InternationalOBA : ericssonRouteParamerters.IOBA;
                     ericssonRouteParamerters.L = ericssonRouteParamerters.IsOverride ? ericssonRouteParamerters.L : LocalNumberLength.ToString();
                     ericssonRouteParamerters.NationalM = ericssonRouteParamerters.IsOverride ? ericssonRouteParamerters.M : "0-" + LocalCountryCode;
                     ericssonRouteParamerters.CCL = ericssonRouteParamerters.IsOverride ? ericssonRouteParamerters.CCL : LocalCountryCode.Length.ToString();
@@ -1670,6 +1678,11 @@ namespace TOne.WhS.RouteSync.Ericsson
             if (routesWithCommandsByBo == null || routesWithCommandsByBo.Count == 0)
                 return;
 
+            foreach (var ericssonRouteWithCommandsKvp in routesWithCommandsByBo)
+            {
+                var ericssonRoutesWithCommands = ericssonRouteWithCommandsKvp.Value;
+                ericssonRoutesWithCommands.Sort((x, y) => x.RouteCompareResult.Route.Code.CompareTo(y.RouteCompareResult.Route.Code));
+            }
             if (sshCommunication == null)
             {
                 succeededRoutesWithCommandsByBo = routesWithCommandsByBo;
