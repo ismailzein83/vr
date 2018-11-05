@@ -85,6 +85,7 @@
     <add key="BIDimension_DAYOFMONTH" value="[Dim Time].[Day]"/>
     <add key="BIDimension_HOUR" value="[Dim Time].[Hour]"/>
     <!-- BI CONFIGURATION END-->
+    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString"/>
   </appSettings>
 
   
