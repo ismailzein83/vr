@@ -170,6 +170,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="PartnerPortal_CustomerAccess\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="PartnerPortal_CustomerAccess\Constant\ModuleConfig.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\MainExtensions\AccountStatementSettings\pportal-custaccess-accountstatement-settings-default.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\MainExtensions\AccountStatementSettings\Templates\DefaultAccountStatementExtendedSettings.html" />

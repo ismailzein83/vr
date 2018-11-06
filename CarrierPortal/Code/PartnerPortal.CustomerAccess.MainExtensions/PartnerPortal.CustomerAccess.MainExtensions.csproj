@@ -46,6 +46,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TOne.WhS.BusinessEntity.APIEntities">
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.APIEntities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountBalance.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
     </Reference>
@@ -93,6 +96,10 @@
     <Compile Include="VRRestAPIRecordQueryInterceptor\RetailAccountVRRestAPIRecordQueryInterceptor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CP.WhS.Business\CP.WhS.Business.csproj">
+      <Project>{F2CA5F71-D417-4DFC-B4C3-57A114D3A717}</Project>
+      <Name>CP.WhS.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PartnerPortal.CustomerAccess.Business\PartnerPortal.CustomerAccess.Business.csproj">
       <Project>{c4ac9650-72a5-4470-a2d4-2d22c504bf0f}</Project>
       <Name>PartnerPortal.CustomerAccess.Business</Name>

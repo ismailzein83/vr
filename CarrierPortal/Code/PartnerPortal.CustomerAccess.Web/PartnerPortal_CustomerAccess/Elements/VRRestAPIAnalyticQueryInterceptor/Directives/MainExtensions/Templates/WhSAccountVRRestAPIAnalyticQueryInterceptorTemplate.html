@@ -1,1 +1,12 @@
-﻿
+﻿<vr-columns width="1/2row">
+    <vr-select datasource="scopeModel.carrierAccountTypes"
+                selectedvalues="scopeModel.selectedCarrierAccountType"
+                datatextfield="description"
+                datavaluefield="value"
+                label="Carrier Account Types"
+               isrequired>
+    </vr-select>
+</vr-columns>
+<vr-columns width="1/2row">
+    <vr-textbox type="text" label="Account Dimension Name" value="scopeModel.accountDimensionName" isrequired></vr-textbox>
+</vr-columns>
