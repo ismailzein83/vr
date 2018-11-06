@@ -51,7 +51,7 @@ app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService
                 label = attrs.customlabel;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CarrierAccountId" isrequired="ctrl.isrequired" '
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="AccountId" isrequired="ctrl.isrequired" '
                 + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</vr-columns>';
         }
@@ -70,7 +70,7 @@ app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService
                 var api = {};
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('CarrierAccountId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('AccountId', attrs, ctrl);
                 };
 
                 api.load = function (payload) {
@@ -93,7 +93,7 @@ app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService
                     return CP_WhS_CarrierAccountsAPIService.GetRemoteCarrierAccountsInfo(UtilsService.serializetoJson(getFilter())).then(function (response) {
                         ctrl.datasource = response;
                         if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'CarrierAccountId', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'AccountId', attrs, ctrl);
                         }
                     });
                 };
