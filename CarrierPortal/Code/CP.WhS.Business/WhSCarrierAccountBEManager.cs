@@ -1,10 +1,13 @@
-﻿using System;
+﻿using CP.WhS.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.APIEntities;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -14,28 +17,74 @@ namespace CP.WhS.Business
 {
     public class WhSCarrierAccountBEManager : BaseBusinessEntityManager
     {
-
         #region Public Methods
-        public IEnumerable<CarrierAccountInfo> GetRemoteCarrierAccountsInfo(string serializedFilter)
+        public IEnumerable<ClientAccountInfo> GetRemoteCarrierAccountsInfo(ClientAccountInfoFilter filter)
         {
-            PortalConnectionManager connectionManager = new PortalConnectionManager();
-            var connectionSettings = connectionManager.GetWhSConnectionSettings();
-            var userId = SecurityContext.Current.GetLoggedInUserId();
-            var deserializedFilter = Vanrise.Common.Serializer.Deserialize<CarrierAccountInfoFilter>(serializedFilter);
-            if(deserializedFilter == null)
-                deserializedFilter = new CarrierAccountInfoFilter();
-            if (deserializedFilter.BusinessEntityDefinitionId.HasValue)
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            Func<ClientAccountInfo, bool> filterExpression = (carrierAccountInfo) =>
             {
-                var whSCarrierAccountBEDefition = GetWhSCarrierAccountsBEDefinition(deserializedFilter.BusinessEntityDefinitionId.Value);
-                deserializedFilter.GetCustomers = whSCarrierAccountBEDefition.GetCustomers;
-                deserializedFilter.GetSuppliers = whSCarrierAccountBEDefition.GetSuppliers;
-            }
-            deserializedFilter.UserId = userId;
-            return connectionSettings.Get<IEnumerable<CarrierAccountInfo>>(string.Format("/api/WhS_BE/CarrierAccount/GetCarrierAccountInfo?serializedFilter={0}", Vanrise.Common.Serializer.Serialize(deserializedFilter)));
+                if(filter != null)
+                {
+                    if(filter.BusinessEntityDefinitionId.HasValue)
+                    {
+                        var whSCarrierAccountBEDefition = GetWhSCarrierAccountsBEDefinition(filter.BusinessEntityDefinitionId.Value);
+                        if(whSCarrierAccountBEDefition != null)
+                        {
+                            if (whSCarrierAccountBEDefition.GetCustomers && carrierAccountInfo.CarrierAccountType != ClientAccountType.Customer)
+                                return false;
+                            if (whSCarrierAccountBEDefition.GetSuppliers && carrierAccountInfo.CarrierAccountType != ClientAccountType.Supplier)
+                                return false;
+                        }
+                    }
+                }
+                return true;
+            };
+            return GetCachedClientWhSAccountsInfo(userId).FindAllRecords(filterExpression);
+
         }
+
+        public ClientAccountInfo GetCarrierAccountInfo(int carrierAccountId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return GetCachedClientWhSAccountsInfo(userId).GetRecord(carrierAccountId);
+        }
+        public string GetCarrierAccountName(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccountInfo(carrierAccountId);
+            return carrierAccount.Name;
+        }
+
+        #endregion
+
+        #region Private Classes
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            protected override bool IsTimeExpirable
+            {
+                get { return true; }
+            }
+        }
+
         #endregion
 
         #region Private Methods
+        private Dictionary<int, ClientAccountInfo> GetCachedClientWhSAccountsInfo(int userId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(userId,
+              () =>
+              {
+                  var filter = new CarrierAccountInfoFilter
+                  {
+                      GetSuppliers = true,
+                      GetCustomers = true,
+                      UserId = userId
+                  };
+                  PortalConnectionManager connectionManager = new PortalConnectionManager();
+                  var connectionSettings = connectionManager.GetWhSConnectionSettings();
+                  IEnumerable<ClientAccountInfo> clientAccountsInfo = connectionSettings.Get<IEnumerable<ClientAccountInfo>>(string.Format("/api/WhS_BE/CarrierAccount/GetClientAccountsInfo?serializedFilter={0}", Vanrise.Common.Serializer.Serialize(filter)));
+                  return clientAccountsInfo == null ? null : clientAccountsInfo.ToDictionary(acc => acc.AccountId, acc => acc);
+              });
+        }
         private WhSCarrierAccountsBEDefinition GetWhSCarrierAccountsBEDefinition(Guid businessEntityDefinitionId)
         {
             BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
@@ -47,44 +96,36 @@ namespace CP.WhS.Business
             return null;
         }
         #endregion
+
         #region BaseBusinessEntityManager
         public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             throw new NotImplementedException();
         }
-
         public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             throw new NotImplementedException();
         }
-
         public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            PortalConnectionManager connectionManager = new PortalConnectionManager();
-            var connectionSettings = connectionManager.GetWhSConnectionSettings();
-            return connectionSettings.Get<string>(string.Format("/api/WhS_BE/CarrierAccount/GetCarrierAccountName?carrierAccountId={0}", Convert.ToInt32(context.EntityId)));
+            return GetCarrierAccountName(Convert.ToInt32(context.EntityId));
         }
-
         public override dynamic GetEntityId(IBusinessEntityIdContext context)
         {
             throw new NotImplementedException();
         }
-
         public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
-
         public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
-
         public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             throw new NotImplementedException();
         }
-
         public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();

@@ -61,7 +61,7 @@ namespace CP.WhS.Business
                   var connectionSettings = connectionManager.GetWhSConnectionSettings();
                   WhSCarrierAccountBEManager whSCarrierAccountBEManager = new WhSCarrierAccountBEManager();
                   IEnumerable<ClientAccountInfo> clientAccountsInfo = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new ClientAccountInfoFilter() { GetSuppliers = true });
-                  IEnumerable<ClientSupplierZoneInfo> clientSupplierZonesInfo = connectionSettings.Get<IEnumerable<ClientSupplierZoneInfo>>(string.Format("/api/WhS_BE/SupplierZone/GetClientSupplierZonesInfo?supplierIds={0}", clientAccountsInfo.Select(x=>x.AccountId)));
+                  IEnumerable<ClientSupplierZoneInfo> clientSupplierZonesInfo = connectionSettings.Get<IEnumerable<ClientSupplierZoneInfo>>(string.Format("/api/WhS_BE/SupplierZone/GetClientSupplierZonesInfo?supplierIds={0}", clientAccountsInfo.Select<ClientAccountInfo,int>(x=>x.AccountId)));
                   return clientSupplierZonesInfo == null ? null : clientSupplierZonesInfo.ToDictionary(x => x.SupplierId, zones => clientSupplierZonesInfo.ToList());
               });
         }

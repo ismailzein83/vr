@@ -104,7 +104,7 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadAccountViewTypeSelector])
+        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadAccountViewTypeSelector, loadCountries])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -123,7 +123,7 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         else {
             filter.SupplierIds = accountDirectiveAPI.getSelectedIds();
         }
-        //filter.CountryIds = countryDirectiveAPI.getSelectedIds();
+        filter.CountryIds = countryDirectiveAPI.getSelectedIds();
         //filter.MasterSaleZoneIds = saleZoneDirectiveAPI.getSelectedIds();
 
         return filter;
@@ -147,7 +147,11 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     function loadCountries() {
         var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
         countryReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, undefined, loadCountryPromiseDeferred);
+            var payload =
+            {
+                businessEntityDefinitionId:"4D26959F-CDFD-4E1E-916D-65C0BADFEA73"
+            };
+            VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, payload, loadCountryPromiseDeferred);
         });
 
         return loadCountryPromiseDeferred.promise;

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('cpWhsCarrieraccountsbedefinitionEditor', ['UtilsService', 'VRUIUtilsService',
+app.directive('cpWhsSupplierzonesbedefinitionEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ app.directive('cpWhsCarrieraccountsbedefinitionEditor', ['UtilsService', 'VRUIUt
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new WhSCarrierAccountsBEDefinitionCtor(ctrl, $scope, $attrs);
+                var ctor = new WhSSupplierZonesBEDefinitionCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -19,10 +19,10 @@ app.directive('cpWhsCarrieraccountsbedefinitionEditor', ['UtilsService', 'VRUIUt
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/CP_WhS/Elements/CarrierAccounts/Directives/Templates/WhSCarrierAccountsBEDefinitionTemplate.html'
+            templateUrl: '/Client/Modules/CP_WhS/Elements/SupplierZones/Directives/Templates/WhSSupplierZonesBEDefinitionTemplate.html'
         };
 
-        function WhSCarrierAccountsBEDefinitionCtor(ctrl, $scope, $attrs) {
+        function WhSSupplierZonesBEDefinitionCtor(ctrl, $scope, $attrs) {
             var connectionSelectorApi;
             var connectionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -42,13 +42,6 @@ app.directive('cpWhsCarrieraccountsbedefinitionEditor', ['UtilsService', 'VRUIUt
 
                 api.load = function (payload) {
                     var promises = [];
-
-                    if (payload != undefined) {
-                        if (payload.businessEntityDefinitionSettings != undefined) {
-                            $scope.scopeModel.includeSuppliers = payload.businessEntityDefinitionSettings.GetSuppliers;
-                            $scope.scopeModel.includeCustomers = payload.businessEntityDefinitionSettings.GetCustomers;
-                        }
-                    }
 
                     function loadConnectionSelector() {
                         var payloadSelector = {
@@ -70,10 +63,8 @@ app.directive('cpWhsCarrieraccountsbedefinitionEditor', ['UtilsService', 'VRUIUt
 
                 api.getData = function () {
                     var obj = {
-                        $type: "CP.WhS.Business.WhSCarrierAccountsBEDefinition, CP.WhS.Business",
-                        VRConnectionId: connectionSelectorApi.getSelectedIds(),
-                        GetCustomers: $scope.scopeModel.includeCustomers,
-                        GetSuppliers:$scope.scopeModel.includeSuppliers
+                        $type: "CP.WhS.Business.WhSSupplierZonesBEDefinition, CP.WhS.Business",
+                        VRConnectionId: connectionSelectorApi.getSelectedIds()
                     };
                     return obj;
                 };

@@ -107,11 +107,19 @@
     <Reference Include="TOne.WhS.Analytics.Entities">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.Analytics.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="TOne.WhS.BusinessEntity.APIEntities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.APIEntities.dll</HintPath>
+    </Reference>
     <Reference Include="TOne.WhS.BusinessEntity.Entities">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.Entities.dll</HintPath>
     </Reference>
     <Reference Include="TOne.WhS.BusinessEntity.MainExtensions">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\Output\TOne.WhS.BusinessEntity.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -132,6 +140,7 @@
     <Compile Include="Controllers\ReleaseCodeStatisticsController.cs" />
     <Compile Include="Controllers\RepeatedNumbersController.cs" />
     <Compile Include="Controllers\WhSCarrierAccountBEController.cs" />
+    <Compile Include="Controllers\WhSSupplierZoneBEController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,10 +152,15 @@
       <Project>{f2ca5f71-d417-4dfc-b4c3-57a114d3a717}</Project>
       <Name>CP.WhS.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CP.WhS.Entities\CP.WhS.Entities.csproj">
+      <Project>{641CA341-AAE6-4632-9F12-16E8BB689F2D}</Project>
+      <Name>CP.WhS.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="CP_WhS\Constants\AccountViewTypeEnum.js" />
     <Content Include="CP_WhS\Constants\BillingCDROptionMeasureEnum.js" />
+    <Content Include="CP_WhS\Constants\CarrierAccountTypeEnum.js" />
     <Content Include="CP_WhS\Constants\GenericAnalyticReleaseCodeDimensionsEnum.js" />
     <Content Include="CP_WhS\Constants\ModuleConfig.js" />
     <Content Include="CP_WhS\Constants\PhoneNumberEnum.js" />
@@ -158,7 +172,7 @@
     <Content Include="CP_WhS\Elements\BlockedAttempts\Views\BlockedAttemptsManagementController.js" />
     <Content Include="CP_WhS\Elements\CarrierAccounts\Directives\cp-whs-carrieraccounts-selector.js" />
     <Content Include="CP_WhS\Elements\CarrierAccounts\Directives\cp-whs-carrieraccountsbedefinition-editor.js" />
-    <Content Include="CP_WhS\Elements\CarrierAccounts\Directives\Templates\WhSUserSubaccountsBEDefinitionTemplate.html" />
+    <Content Include="CP_WhS\Elements\CarrierAccounts\Directives\Templates\WhSCarrierAccountsBEDefinitionTemplate.html" />
     <Content Include="CP_WhS\Elements\CarrierAccounts\Services\APIServices\CarrierAccountsAPIService.js" />
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Directives\cp-whs-callstatus-selector.js" />
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Directives\cp-whs-phonenumber-selector.js" />
@@ -173,6 +187,12 @@
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Services\APIServices\RepeatedNumbersAPIService.js" />
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Views\RepeatedNumbersManagement.html" />
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Views\RepeatedNumbersManagementController.js" />
+    <Content Include="CP_WhS\Elements\SupplierZones\Directives\cp-whs-supplierzones-selector.js" />
+    <Content Include="CP_WhS\Elements\SupplierZones\Directives\cp-whs-supplierzonesbedefinition-editor.js" />
+    <Content Include="CP_WhS\Elements\SupplierZones\Directives\Templates\WhSSupplierZonesBEDefinitionTemplate.html" />
+    <Content Include="CP_WhS\Elements\SupplierZones\Services\APIServices\SupplierZonesAPIService.js" />
+    <Content Include="CP_WhS\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\cp-whs-whsaccountqueryinterceptor.js" />
+    <Content Include="CP_WhS\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\Templates\WhSAccountQueryInterceptorTemplate.html" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

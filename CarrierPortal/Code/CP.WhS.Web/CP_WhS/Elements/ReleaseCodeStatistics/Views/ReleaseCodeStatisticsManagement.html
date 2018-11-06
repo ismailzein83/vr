@@ -6,8 +6,11 @@
                 <cp-whs-accountviewtype-selector normal-col-num="2" on-ready="onAccountViewTypeSelectorReady" isrequired="true" onselectionchanged="onAccountViewTypeSelectionChange" selectedvalues="selectedAccountViewType"></cp-whs-accountviewtype-selector>
                 <cp-whs-carrieraccounts-selector normal-col-num="2" on-ready="onAccountDirectiveReady" ismultipleselection selectedvalues="selectedCarrierAccounts" vr-disabled="selectedAccountViewType==undefined"></cp-whs-carrieraccounts-selector>
                 <cp-whs-releasecode-dimension-selector normal-col-num="2" ismultipleselection on-ready="onReleaseCodeDimenssionDirectiveReady"></cp-whs-releasecode-dimension-selector>
+                <vr-genericdata-businessentity-remoteselector on-ready="onCountryReady"
+                                                              normal-col-num="2"
+                                                              ismultipleselection>
+                </vr-genericdata-businessentity-remoteselector>
                 <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="today" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
-                <!--<vr-common-country-selector normal-col-num="2" on-ready="onCountryReady" ismultipleselection></vr-common-country-selector>-->
                 <!--<vr-whs-be-salezone-masterplan-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady"></vr-whs-be-salezone-masterplan-selector>-->
             </vr-row>
         </div>
