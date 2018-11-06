@@ -8,7 +8,8 @@ namespace TOne.WhS.BusinessEntity.APIEntities
 {
     public class ClientSupplierZoneInfo
     {
-        public int SupplierId { get; set; }
+        public long SupplierZoneId { get; set; }
         public string Name { get; set; }
+        public int SupplierId { get; set; }
     }
 }
