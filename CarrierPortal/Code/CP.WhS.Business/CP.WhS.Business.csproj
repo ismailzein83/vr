@@ -85,6 +85,8 @@
     <Compile Include="WhSCarrierAccountBEManager.cs" />
     <Compile Include="WhSCarrierAccountsBEDefinition.cs" />
     <Compile Include="PortalConnectionManager.cs" />
+    <Compile Include="WhSSupplierZoneBEManager.cs" />
+    <Compile Include="WhSSupplierZonesBEDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
