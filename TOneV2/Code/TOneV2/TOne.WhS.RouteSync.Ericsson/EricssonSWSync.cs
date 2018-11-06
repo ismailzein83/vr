@@ -492,14 +492,14 @@ namespace TOne.WhS.RouteSync.Ericsson
 
                     if (trunkGroup.TrunkTrunkGroups != null && trunkGroup.TrunkTrunkGroups.Count > 0)
                     {
-                        bool firstTrunk = !trunkGroup.TrunkTrunkGroups.Any(item => item.Percentage.HasValue);
                         foreach (var trunkGroupTrunk in trunkGroup.TrunkTrunkGroups)
                         {
                             var trunk = supplierMapping.OutTrunks.FindRecord(item => item.TrunkId == trunkGroupTrunk.TrunkId);
                             if (!trunk.IsSwitch)
                                 numberOfMappings++;
-                            routeCaseOptions.Add(GetRouteCaseOption(trunk, routeCodeGroup, option.SupplierId, option.Percentage, supplierMapping, trunkGroup, trunkGroupTrunk, groupId, numberOfMappings, firstTrunk));
-                            firstTrunk = false;
+
+                            routeCaseOptions.Add(GetRouteCaseOption(trunk, routeCodeGroup, option.SupplierId, option.Percentage, supplierMapping, trunkGroup, trunkGroupTrunk, groupId, numberOfMappings));
+
                             if (numberOfMappings == NumberOfMappings)
                             {
                                 if (option.Percentage.HasValue)
@@ -532,7 +532,9 @@ namespace TOne.WhS.RouteSync.Ericsson
                                     var trunk = backupSupplierMapping.OutTrunks.FindRecord(item => item.TrunkId == trunkGroupTrunk.TrunkId);
                                     if (!trunk.IsSwitch)
                                         numberOfMappings++;
-                                    routeCaseOptions.Add(GetRouteCaseOption(trunk, routeCodeGroup, backupOption.SupplierId, null, backupSupplierMapping, backupTrunkGroup, trunkGroupTrunk, groupId, numberOfMappings, false));
+
+                                    routeCaseOptions.Add(GetRouteCaseOption(trunk, routeCodeGroup, backupOption.SupplierId, null, backupSupplierMapping, backupTrunkGroup, trunkGroupTrunk, groupId, numberOfMappings));
+
                                     if (numberOfMappings == NumberOfMappings)
                                         return routeCaseOptions;
                                 }
@@ -540,6 +542,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                         }
                     }
                     #endregion
+
                     if (isPercentageOption)
                     {
                         numberOfMappings = 0;
@@ -556,12 +559,18 @@ namespace TOne.WhS.RouteSync.Ericsson
         {
             if (options == null || options.Count == 0)
                 return;
-            var orderedOptions = options.OrderBy(item => item.TrunkPercentage).ToList();
-            var assignedPercentage = orderedOptions.Sum(item => item.TrunkPercentage);
-            if (!assignedPercentage.HasValue)
-                throw new VRBusinessException("No trunk percentage>");
 
-            int percentageDiff = totalPercentage - assignedPercentage.Value;
+            if (!options.Any(itm => itm.TrunkPercentage.HasValue && itm.TrunkPercentage > 0))
+            {
+                options.First().TrunkPercentage = options.First().Percentage;
+                return;
+            }
+
+            var orderedOptions = options.OrderBy(item => item.TrunkPercentage).ToList();
+            var assignedPercentage = orderedOptions.Where(item => item.TrunkPercentage.HasValue).Sum(item => item.TrunkPercentage.Value);
+
+
+            int percentageDiff = totalPercentage - assignedPercentage;
             var lastIndex = orderedOptions.Count - 1;
             if (percentageDiff > 0)
             {
@@ -581,11 +590,13 @@ namespace TOne.WhS.RouteSync.Ericsson
             }
             else if (percentageDiff < 0)
             {
+                int minValue = 1;
+                int oldPercentageDiff = percentageDiff;
                 while (percentageDiff < 0)
                 {
                     for (int i = 0; i < orderedOptions.Count; i++)
                     {
-                        if (orderedOptions[i].TrunkPercentage > 1)
+                        if (orderedOptions[lastIndex - i].TrunkPercentage.HasValue && orderedOptions[i].TrunkPercentage > minValue)
                         {
                             orderedOptions[i].TrunkPercentage--;
                             percentageDiff++;
@@ -593,11 +604,16 @@ namespace TOne.WhS.RouteSync.Ericsson
                         if (percentageDiff == 0)
                             break;
                     }
+
+                    if (oldPercentageDiff == percentageDiff)
+                        minValue = 0;
+
+                    oldPercentageDiff = percentageDiff;
                 }
             }
         }
 
-        private RouteCaseOption GetRouteCaseOption(OutTrunk trunk, string routeCodeGroup, string supplierId, int? percentage, SupplierMapping supplierMapping, TrunkGroup trunkGroup, TrunkTrunkGroup trunkGroupTrunk, int groupId, int numberOfMappings, bool isFirstTrunk)
+        private RouteCaseOption GetRouteCaseOption(OutTrunk trunk, string routeCodeGroup, string supplierId, int? percentage, SupplierMapping supplierMapping, TrunkGroup trunkGroup, TrunkTrunkGroup trunkGroupTrunk, int groupId, int numberOfMappings)
         {
             RouteCaseOption routeCaseOption = new RouteCaseOption();
             int? routeCaseOptionPercentage = null;
@@ -605,10 +621,8 @@ namespace TOne.WhS.RouteSync.Ericsson
             {
                 if (trunkGroupTrunk.Percentage.HasValue)
                     routeCaseOptionPercentage = Convert.ToInt32(percentage.Value * trunkGroupTrunk.Percentage.Value / 100.0);
-                else if (isFirstTrunk)
-                    routeCaseOptionPercentage = percentage;
-                else routeCaseOptionPercentage = 0;
             }
+
             routeCaseOption.Percentage = percentage;
             routeCaseOption.IsSwitch = trunk.IsSwitch;
             routeCaseOption.OutTrunk = trunk.TrunkName;
@@ -619,13 +633,12 @@ namespace TOne.WhS.RouteSync.Ericsson
             routeCaseOption.BNT = 1;
             routeCaseOption.SP = 1;
             routeCaseOption.SupplierId = supplierId;
+
             if (string.Compare(routeCodeGroup, trunk.NationalCountryCode) == 0)
             {
-                //if ((!string.IsNullOrEmpty(InterconnectGeneralPrefix) && trunk.TrunkName.StartsWith(InterconnectGeneralPrefix)) || IncomingTrafficSuppliers.Any(item => item.SupplierId.ToString() == supplierId))
-                //{
                 routeCaseOption.BNT = 4;
                 routeCaseOption.SP = Convert.ToInt16(trunk.NationalCountryCode.Length + 1);
-                //}
+
             }
             return routeCaseOption;
         }
@@ -1518,6 +1531,11 @@ namespace TOne.WhS.RouteSync.Ericsson
                                 isCustomerSucceed = false;
                             }
                         }
+                        if (!isCustomerSucceed)
+                        {
+                            var customerMappingFailedWithCommands = customerMappingWithCommands;
+                            failedCustomerMappingsWithCommands.Add(customerMappingFailedWithCommands);
+                        }
                     }
 
                     sshCommunicator.ExecuteCommand(EricssonCommands.PNBAI_Command, CommandPrompt, out response);
@@ -1653,6 +1671,10 @@ namespace TOne.WhS.RouteSync.Ericsson
                         numberOfTriesDone++;
                         isSuccessfull = false;
                     }
+                }
+                if (!isSuccessfull)
+                {
+                    failedRouteCaseNumbers.Add(routeCaseWithCommands);
                 }
             }
 
@@ -1827,6 +1849,19 @@ namespace TOne.WhS.RouteSync.Ericsson
                             isSuccessfull = false;
                         }
                     }
+                    if (!isSuccessfull)
+                    {
+                        var allFailedEricssonRoutesWithCommands = allFailedRoutesWithCommandsByBo.GetOrCreateItem(customerBo);
+                        var failedEricssonRoutesWithCommands = failedRoutesWithCommandsByBo.GetOrCreateItem(customerBo);
+                        failedEricssonRoutesWithCommands.Add(ericssonRouteWithCommands);
+                        allFailedEricssonRoutesWithCommands.Add(ericssonRouteWithCommands);
+                        if (ericssonRouteWithCommands.ActionType == RouteActionType.DeleteCustomer)
+                        {
+                            CustomerMappingWithActionType customersToDeleteSucceed;
+                            if (customersToDeleteByBO.TryGetValue(customerBo, out customersToDeleteSucceed))
+                                customerMappingsToDeleteFailed.Add(customersToDeleteSucceed);
+                        }
+                    }
                 }
             }
 
@@ -1980,7 +2015,6 @@ namespace TOne.WhS.RouteSync.Ericsson
 
         private class CompressedEricssonConvertedRoutesByParentCode : Dictionary<string, Dictionary<string, EricssonConvertedRouteForCompression>>
         {
-
         }
 
         private class CompressedEricssonConvertedRoutesByBO : Dictionary<string, CompressedEricssonConvertedRoutes>

@@ -414,7 +414,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                                                 and route.RouteType = tempRoute.RouteType";
 
 
-        const string query_UpdateTempTable = @"UPDATE  [WhS_RouteSync_Ericsson_{0}].[{1}] 
+        const string query_UpdateTempTable = @"UPDATE  tempRoutes 
 														set tempRoutes.RCNumber = routesToUpdate.RCNumber
                                                     FROM [WhS_RouteSync_Ericsson_{0}].[{1}] as tempRoutes
                                                     JOIN @Routes as routesToUpdate on routesToUpdate.BO = tempRoutes.BO and routesToUpdate.Code = tempRoutes.Code and routesToUpdate.RouteType = tempRoutes.RouteType";
