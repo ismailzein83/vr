@@ -47,16 +47,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PageDefinition\DatetimeField.cs" />
-    <Compile Include="PageDefinition\BooleanField.cs" />
-    <Compile Include="PageDefinition\Filters\DatetimeFilter.cs" />
-    <Compile Include="PageDefinition\Filters\NumberFilter.cs" />
-    <Compile Include="PageDefinition\Filters\StringFilter.cs" />
-    <Compile Include="PageDefinition\Filters\BooleanFilter.cs" />
-    <Compile Include="PageDefinition\StringField.cs" />
-    <Compile Include="PageDefinition\NumberField.cs" />
-    <Compile Include="PageDefinition\SubViews\ChildSubView.cs" />
-    <Compile Include="PageDefinition\SubViews\RowDataSubView.cs" />
+    <Compile Include="OldEntities\PageDefinition\DatetimeField.cs" />
+    <Compile Include="OldEntities\PageDefinition\BooleanField.cs" />
+    <Compile Include="OldEntities\PageDefinition\Filters\DatetimeFilter.cs" />
+    <Compile Include="OldEntities\PageDefinition\Filters\NumberFilter.cs" />
+    <Compile Include="OldEntities\PageDefinition\Filters\StringFilter.cs" />
+    <Compile Include="OldEntities\PageDefinition\Filters\BooleanFilter.cs" />
+    <Compile Include="OldEntities\PageDefinition\StringField.cs" />
+    <Compile Include="OldEntities\PageDefinition\NumberField.cs" />
+    <Compile Include="OldEntities\PageDefinition\SubViews\ChildSubView.cs" />
+    <Compile Include="OldEntities\PageDefinition\SubViews\RowDataSubView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

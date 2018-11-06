@@ -60,21 +60,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BranchDataManager.cs" />
-    <Compile Include="CDRDataManager.cs" />
-    <Compile Include="ComplaintDataManager.cs" />
-    <Compile Include="ColorDataManager.cs" />
-    <Compile Include="DesksizeDataManager.cs" />
-    <Compile Include="PageRunTimeDataManager.cs" />
-    <Compile Include="PageDefinitionDataManager.cs" />
-    <Compile Include="SpecialityDataManager.cs" />
-    <Compile Include="InteractionDataManager.cs" />
-    <Compile Include="InvoiceDataManager.cs" />
-    <Compile Include="ServiceDataManager.cs" />
-    <Compile Include="ContractDataManager.cs" />
-    <Compile Include="CustomerInfoDataManager.cs" />
-    <Compile Include="MasterDataManager.cs" />
-    <Compile Include="CompanyDataManager.cs" />
+    <Compile Include="OldEntities\BranchDataManager.cs" />
+    <Compile Include="OldEntities\CDRDataManager.cs" />
+    <Compile Include="OldEntities\ComplaintDataManager.cs" />
+    <Compile Include="OldEntities\ColorDataManager.cs" />
+    <Compile Include="OldEntities\DesksizeDataManager.cs" />
+    <Compile Include="OldEntities\PageRunTimeDataManager.cs" />
+    <Compile Include="OldEntities\PageDefinitionDataManager.cs" />
+    <Compile Include="OldEntities\SpecialityDataManager.cs" />
+    <Compile Include="OldEntities\InteractionDataManager.cs" />
+    <Compile Include="OldEntities\InvoiceDataManager.cs" />
+    <Compile Include="OldEntities\ServiceDataManager.cs" />
+    <Compile Include="OldEntities\ContractDataManager.cs" />
+    <Compile Include="OldEntities\CustomerInfoDataManager.cs" />
+    <Compile Include="OldEntities\MasterDataManager.cs" />
+    <Compile Include="OldEntities\CompanyDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

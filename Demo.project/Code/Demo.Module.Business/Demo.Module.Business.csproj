@@ -85,21 +85,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BranchManager.cs" />
-    <Compile Include="CDRManager.cs" />
-    <Compile Include="ColorManager.cs" />
-    <Compile Include="DesksizeManager.cs" />
-    <Compile Include="PageRunTimeManager.cs" />
-    <Compile Include="PageDefinitionManager.cs" />
-    <Compile Include="SpecialityManager.cs" />
-    <Compile Include="ComplaintManager.cs" />
-    <Compile Include="InteractionManager.cs" />
-    <Compile Include="InvoiceManager.cs" />
-    <Compile Include="ServiceManager.cs" />
-    <Compile Include="ContractManager.cs" />
-    <Compile Include="CustomerInfoManager.cs" />
-    <Compile Include="MasterManager.cs" />
-    <Compile Include="CompanyManager.cs" />
+    <Compile Include="OldEntites\BranchManager.cs" />
+    <Compile Include="OldEntites\CDRManager.cs" />
+    <Compile Include="OldEntites\ColorManager.cs" />
+    <Compile Include="OldEntites\DesksizeManager.cs" />
+    <Compile Include="OldEntites\PageRunTimeManager.cs" />
+    <Compile Include="OldEntites\PageDefinitionManager.cs" />
+    <Compile Include="OldEntites\SpecialityManager.cs" />
+    <Compile Include="OldEntites\ComplaintManager.cs" />
+    <Compile Include="OldEntites\InteractionManager.cs" />
+    <Compile Include="OldEntites\InvoiceManager.cs" />
+    <Compile Include="OldEntites\ServiceManager.cs" />
+    <Compile Include="OldEntites\ContractManager.cs" />
+    <Compile Include="OldEntites\CustomerInfoManager.cs" />
+    <Compile Include="OldEntites\MasterManager.cs" />
+    <Compile Include="OldEntites\CompanyManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

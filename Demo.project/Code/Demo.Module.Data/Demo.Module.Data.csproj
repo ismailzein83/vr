@@ -51,21 +51,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoModuleFactory.cs" />
-    <Compile Include="IBranchDataManager.cs" />
-    <Compile Include="ICDRDataManager.cs" />
-    <Compile Include="IComplaintDataManager.cs" />
-    <Compile Include="IColorDataManager.cs" />
-    <Compile Include="IDesksizeDataManager.cs" />
-    <Compile Include="IPageRunTimeDataManager.cs" />
-    <Compile Include="IPageDefinitionDataManager.cs" />
-    <Compile Include="ISpecialityDataManager.cs" />
-    <Compile Include="IInteractionDataManager.cs" />
-    <Compile Include="IInvoiceDataManager.cs" />
-    <Compile Include="IServiceDataManager.cs" />
-    <Compile Include="IContractDataManager.cs" />
-    <Compile Include="ICustomerInfoDataManager.cs" />
-    <Compile Include="IMasterDataManager.cs" />
-    <Compile Include="ICompanyDataManager.cs" />
+    <Compile Include="OldEntities\IBranchDataManager.cs" />
+    <Compile Include="OldEntities\ICDRDataManager.cs" />
+    <Compile Include="OldEntities\IComplaintDataManager.cs" />
+    <Compile Include="OldEntities\IColorDataManager.cs" />
+    <Compile Include="OldEntities\IDesksizeDataManager.cs" />
+    <Compile Include="OldEntities\IPageRunTimeDataManager.cs" />
+    <Compile Include="OldEntities\IPageDefinitionDataManager.cs" />
+    <Compile Include="OldEntities\ISpecialityDataManager.cs" />
+    <Compile Include="OldEntities\IInteractionDataManager.cs" />
+    <Compile Include="OldEntities\IInvoiceDataManager.cs" />
+    <Compile Include="OldEntities\IServiceDataManager.cs" />
+    <Compile Include="OldEntities\IContractDataManager.cs" />
+    <Compile Include="OldEntities\ICustomerInfoDataManager.cs" />
+    <Compile Include="OldEntities\IMasterDataManager.cs" />
+    <Compile Include="OldEntities\ICompanyDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
