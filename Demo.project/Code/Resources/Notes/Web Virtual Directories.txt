@@ -14,3 +14,4 @@ Demo_Module				C:\TFS\Demo.project\Code\Demo.Module.Web\Demo_Module
 Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
 Demo_BestPractices		C:\TFS\Demo.project\Code\Demo.BestPractices.Web\Demo_BestPractices
+VR_Tools				C:\TFS\Demo.project\Code\Vanrise.Tools.Web\VR_Tools
