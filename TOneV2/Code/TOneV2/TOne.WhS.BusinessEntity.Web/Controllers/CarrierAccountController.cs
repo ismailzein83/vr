@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using TOne.WhS.BusinessEntity.APIEntities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
@@ -45,6 +46,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             List<int> carrierAccountIds = serializedCarrierAccountIds != null ? Vanrise.Common.Serializer.Deserialize<List<int>>(serializedCarrierAccountIds) : null;
             return manager.GetCarrierAccountInfos(carrierAccountIds);
+        }
+
+        [HttpGet]
+        [Route("GetClientAccountsInfo")]
+        public IEnumerable<ClientAccountInfo> GetClientAccountsInfo(string serializedFilter)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            return manager.GetClientAccountsInfo(Vanrise.Common.Serializer.Deserialize<CarrierAccountInfoFilter>(serializedFilter));
         }
 
         [HttpGet]

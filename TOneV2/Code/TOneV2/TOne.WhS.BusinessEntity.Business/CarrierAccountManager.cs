@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TOne.WhS.BusinessEntity.APIEntities;
 using TOne.WhS.BusinessEntity.Business.CarrierAccounts;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
@@ -124,6 +125,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new DataIntegrityValidationException(string.Format("There is no auto import email for supplier with Id '{0}'.", carrierAccount.CarrierAccountId));
 
             return autoImportEmail;
+        }
+        public IEnumerable<ClientAccountInfo> GetClientAccountsInfo(CarrierAccountInfoFilter filter)
+        {
+            var carrierAccountsInfo = GetCarrierAccountInfo(filter);
+            if (carrierAccountsInfo == null)
+                return null;
+            else
+                return carrierAccountsInfo.MapRecords(ClientAccountInfoMapper);
         }
 
         public int GetSupplierEffectiveDateDayOffset(int carrierAccountId)
@@ -1385,6 +1394,21 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
+        private ClientAccountInfo ClientAccountInfoMapper(CarrierAccountInfo account)
+        {
+            var clientAccountInfo = new ClientAccountInfo
+            {
+                AccountId = account.CarrierAccountId,
+                Name = account.Name
+            };
+            if (account.AccountType == CarrierAccountType.Exchange)
+                clientAccountInfo.CarrierAccountType = ClientAccountType.Exchange;
+            else if (account.AccountType == CarrierAccountType.Customer)
+                clientAccountInfo.CarrierAccountType = ClientAccountType.Customer;
+            else if (account.AccountType == CarrierAccountType.Supplier)
+                clientAccountInfo.CarrierAccountType = ClientAccountType.Supplier;
+            return clientAccountInfo;
+        }
         private IEnumerable<CarrierAccount> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             var carrierAccounts = this.GetCarrierAccountsByType(getCustomers, getSuppliers, null, null);
