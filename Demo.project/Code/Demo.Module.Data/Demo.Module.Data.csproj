@@ -60,28 +60,13 @@
     <Compile Include="IPageDefinitionDataManager.cs" />
     <Compile Include="ISpecialityDataManager.cs" />
     <Compile Include="IInteractionDataManager.cs" />
-    <Compile Include="IPaymentDataManager.cs" />
     <Compile Include="IInvoiceDataManager.cs" />
-    <Compile Include="IDemoCurrencyDataManager.cs" />
-    <Compile Include="IDemoCityDataManager.cs" />
-    <Compile Include="IDemoCountryDataManager.cs" />
     <Compile Include="IServiceDataManager.cs" />
     <Compile Include="IContractDataManager.cs" />
     <Compile Include="ICustomerInfoDataManager.cs" />
     <Compile Include="IMasterDataManager.cs" />
-    <Compile Include="IRoomDataManager.cs" />
-    <Compile Include="IBuildingDataManager.cs" />
-    <Compile Include="IMemberDataManager.cs" />
-    <Compile Include="ICollegeDataManager.cs" />
     <Compile Include="ICompanyDataManager.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="IItemDataManager.cs" />
-    <Compile Include="IFamilyDataManager.cs" />
-    <Compile Include="IProductDataManager.cs" />
-    <Compile Include="ISchoolDataManager.cs" />
-    <Compile Include="IEmployeeDataManager.cs" />
-    <Compile Include="IStudentDataManager.cs" />
-    <Compile Include="IUniversityDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

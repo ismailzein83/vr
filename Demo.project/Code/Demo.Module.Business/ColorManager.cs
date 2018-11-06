@@ -8,7 +8,6 @@ using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Demo.Module.Entities;
-using Demo.Module.Entities.ProductInfo;
 using Vanrise.Common.Business;
 
 public class ColorManager

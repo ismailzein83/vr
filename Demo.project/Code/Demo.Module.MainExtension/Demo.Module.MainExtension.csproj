@@ -47,12 +47,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Employee\FullTimeWork.cs" />
-    <Compile Include="Employee\PartTimeWork.cs" />
-    <Compile Include="Item\CircleShape.cs" />
-    <Compile Include="Item\SquareShape.cs" />
-    <Compile Include="Member\CircleShape.cs" />
-    <Compile Include="Member\SquareShape.cs" />
     <Compile Include="PageDefinition\DatetimeField.cs" />
     <Compile Include="PageDefinition\BooleanField.cs" />
     <Compile Include="PageDefinition\Filters\DatetimeFilter.cs" />
@@ -64,10 +58,6 @@
     <Compile Include="PageDefinition\SubViews\ChildSubView.cs" />
     <Compile Include="PageDefinition\SubViews\RowDataSubView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Room\CircleShape.cs" />
-    <Compile Include="Room\RectangleShape.cs" />
-    <Compile Include="Student\CheckMethod.cs" />
-    <Compile Include="Student\CashMethod.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.Module.Entities\Demo.Module.Entities.csproj">

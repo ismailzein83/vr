@@ -69,28 +69,13 @@
     <Compile Include="PageDefinitionDataManager.cs" />
     <Compile Include="SpecialityDataManager.cs" />
     <Compile Include="InteractionDataManager.cs" />
-    <Compile Include="PaymentDataManager.cs" />
     <Compile Include="InvoiceDataManager.cs" />
-    <Compile Include="DemoCurrencyDataManager.cs" />
-    <Compile Include="DemoCountryDataManager.cs" />
-    <Compile Include="DemoCityDataManager.cs" />
     <Compile Include="ServiceDataManager.cs" />
     <Compile Include="ContractDataManager.cs" />
     <Compile Include="CustomerInfoDataManager.cs" />
     <Compile Include="MasterDataManager.cs" />
-    <Compile Include="MemberDataManager.cs" />
-    <Compile Include="RoomDataManager.cs" />
-    <Compile Include="BuildingDataManager.cs" />
-    <Compile Include="CollegeDataManager.cs" />
     <Compile Include="CompanyDataManager.cs" />
-    <Compile Include="FamilyDataManager.cs" />
-    <Compile Include="ItemDataManager.cs" />
-    <Compile Include="ProductDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SchoolDataManager.cs" />
-    <Compile Include="EmployeetDataManager.cs" />
-    <Compile Include="StudentDataManager.cs" />
-    <Compile Include="UniversityDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.Module.Data\Demo.Module.Data.csproj">
