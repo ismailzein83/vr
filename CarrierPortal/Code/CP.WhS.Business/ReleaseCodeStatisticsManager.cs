@@ -12,10 +12,9 @@ namespace CP.WhS.Business
 {
     public class ReleaseCodeStatisticsManager
     {
-        static Guid WhSConnectionId = new Guid("B8058F6A-6545-465A-9DCA-6A4157ECFECB");
         public IDataRetrievalResult<ReleaseCodeStatDetail> GetFilteredReleaseCodeStatistics(DataRetrievalInput<ReleaseCodeQuery> query)
         {
-            var connectionSettings = GetWhSConnectionSettings();
+            var connectionSettings = new PortalConnectionManager().GetWhSConnectionSettings();
             var clonedInput = Utilities.CloneObject<DataRetrievalInput<ReleaseCodeQuery>>(query);
             clonedInput.IsAPICall = true;
             if (clonedInput.DataRetrievalResultType == DataRetrievalResultType.Excel)
@@ -27,13 +26,6 @@ namespace CP.WhS.Business
                 return connectionSettings.Post<DataRetrievalInput<ReleaseCodeQuery>, BigResult<ReleaseCodeStatDetail>>("/api/WhS_Analytics/ReleaseCode/GetAllFilteredReleaseCodes", clonedInput);
             }
             return null;
-        }
-
-        private VRInterAppRestConnection GetWhSConnectionSettings()
-        {
-            VRConnectionManager connectionManager = new VRConnectionManager();
-            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(WhSConnectionId);
-            return vrConnection.Settings as VRInterAppRestConnection;
         }
     }
 }
