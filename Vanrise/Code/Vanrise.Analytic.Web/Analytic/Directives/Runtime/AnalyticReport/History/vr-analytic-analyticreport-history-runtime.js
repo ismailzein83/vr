@@ -2,9 +2,9 @@
 
     'use strict';
 
-    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VR_GenericData_DataRecordTypeService', 'ColumnWidthEnum', 'PeriodEnum', 'VRDateTimeService', 'VR_Analytic_AdvancedFilterFieldsRelationType'];
+    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VR_GenericData_DataRecordTypeService', 'ColumnWidthEnum', 'PeriodEnum', 'VRDateTimeService', 'VR_Analytic_AdvancedFilterFieldsRelationType','VR_Analytic_AnalyticTableAPIService'];
 
-    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum, PeriodEnum, VRDateTimeService, VR_Analytic_AdvancedFilterFieldsRelationType) {
+    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum, PeriodEnum, VRDateTimeService, VR_Analytic_AdvancedFilterFieldsRelationType, VR_Analytic_AnalyticTableAPIService) {
 
         return {
             restrict: "E",
@@ -37,7 +37,7 @@
 
             var timeRangeDirectiveAPI;
             var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+            var connectionId;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -134,7 +134,7 @@
 
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
 
-                    UtilsService.waitMultipleAsyncOperations([getWidgetsTemplateConfigs, getFieldTypeConfigs, loadMeasures, loadDimensions, loadTimeRangeDirective]).then(function () {
+                    UtilsService.waitMultipleAsyncOperations([getWidgetsTemplateConfigs, getFieldTypeConfigs, loadMeasures, loadDimensions, loadTimeRangeDirective, getRemoteConnection]).then(function () {
                         UtilsService.waitMultipleAsyncOperations([loadFilters]).finally(function () {
                             loadPromiseDeffer.resolve();
                         }).catch(function (error) {
@@ -235,13 +235,21 @@
                 }
 
                 if (settings.SearchSettings.ShowCurrency) {
-                    $scope.scopeModel.showCurrency = true;
+                    if (connectionId != undefined) {
+                        $scope.scopeModel.showRemoteCurrency = true;
+                    } else {
+                        $scope.scopeModel.showCurrency = true;
+                    }
                     var loadCurrencySelectorDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     currencySelectorReadyDeferred.promise.then(function () {
 
                         var currencySelectorPayload = {
                             selectSystemCurrency: true
                         };
+
+                        if (connectionId != undefined)
+                            currencySelectorPayload.connectionId = connectionId;
+                    
                         VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, loadCurrencySelectorDirectivePromiseDeferred);
                     });
                     filterPromises.push(loadCurrencySelectorDirectivePromiseDeferred.promise);
@@ -404,6 +412,15 @@
                     LogicalOperator: 0,
                     Filters: [filterObj, widgetRecordFilter]
                 };
+            }
+
+            function getRemoteConnection() {
+                var input = {
+                    AnalyticTableIds: settings.AnalyticTableIds
+                };
+                return VR_Analytic_AnalyticTableAPIService.GetAnalyticTableConnectionId(input).then(function (response) {
+                    connectionId = response;
+                });
             }
         }
     }

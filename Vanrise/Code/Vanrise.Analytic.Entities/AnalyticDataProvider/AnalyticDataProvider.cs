@@ -6,7 +6,7 @@ namespace Vanrise.Analytic.Entities
     public abstract class AnalyticDataProvider
     {
         public abstract Guid ConfigId { get; }
-
+        public virtual Guid? ConnectionId { get; }
         public abstract IAnalyticDataManager CreateDataManager(IAnalyticTableQueryContext queryContext);
 
         public virtual IRemoteAnalyticDataProvider GetRemoteAnalyticDataProvider(IGetRemoteAnalyticDataProviderContext context)

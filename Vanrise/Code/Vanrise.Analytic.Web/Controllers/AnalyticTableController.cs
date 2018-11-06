@@ -59,5 +59,16 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticTableManager manager = new AnalyticTableManager();
             return manager.AddAnalyticTable(analyticTable);
         }
+        [HttpPost]
+        [Route("GetAnalyticTableConnectionId")]
+        public Guid? GetAnalyticTableConnectionId(AnalyticTableConnectionInput input)
+        {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            return manager.GetAnalyticTableConnectionId(input.AnalyticTableIds);
+        }
+    }
+    public class AnalyticTableConnectionInput
+    {
+        public List<Guid> AnalyticTableIds { get; set; }
     }
 }

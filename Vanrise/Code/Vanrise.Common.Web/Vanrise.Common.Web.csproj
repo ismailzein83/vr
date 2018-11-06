@@ -118,10 +118,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\SpecificDaysDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-specificdays.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-yesterday.js" />
+    <Content Include="Common\Services\APIServices\VRRestCurrencyAPIService.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +165,7 @@
     <Compile Include="Controllers\VRConnectionController.cs" />
     <Compile Include="Controllers\VRPop3MessageFilterController.cs" />
     <Compile Include="Controllers\VRPushNotificationController.cs" />
+    <Compile Include="Controllers\VRRestCurrencyController.cs" />
     <Compile Include="Controllers\VRRuleDefinitionController.cs" />
     <Compile Include="Controllers\VRTempPayloadController.cs" />
     <Compile Include="Controllers\VRTileController.cs" />

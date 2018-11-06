@@ -20,6 +20,9 @@
             <span ng-if="scopeModel.showCurrency">
                 <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" normal-col-num="2" isrequired="true" hideremoveicon></vr-common-currency-selector>
             </span>
+            <span ng-if="scopeModel.showRemoteCurrency">
+                <vr-common-currency-remoteselector on-ready="scopeModel.onCurrencySelectorReady" normal-col-num="2" isrequired="true" hideremoveicon></vr-common-currency-remoteselector>
+            </span>
             <span ng-repeat="filter in scopeModel.filters">
                 <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2" isrequired="filter.isRequired"></vr-directivewrapper>
             </span>

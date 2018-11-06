@@ -8,7 +8,13 @@ namespace Vanrise.Analytic.Business
         public override Guid ConfigId { get { return new Guid("DD11C35D-3DA8-4094-9492-678D243EFE5A"); } }
 
         public Guid VRConnectionId { get; set; }
-
+        public override Guid? ConnectionId
+        {
+            get
+            {
+                return VRConnectionId;
+            }
+        }
         public Guid RemoteAnalyticTableId { get; set; }
 
         public VRRestAPIAnalyticQueryInterceptor VRRestAPIAnalyticQueryInterceptor { get; set; }

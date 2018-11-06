@@ -121,8 +121,20 @@ namespace Vanrise.Analytic.Business
             return true;
         }
 
+        public Guid? GetAnalyticTableConnectionId(List<Guid> analyticTableIds)
+        {
+            if (analyticTableIds == null || analyticTableIds.Count == 0)
+                return null;
+            var analyticTableId = analyticTableIds.First();
+            var analyticTable = GetAnalyticTableById(analyticTableId);
+            analyticTable.ThrowIfNull("analyticTable", analyticTableId);
+            analyticTable.Settings.ThrowIfNull("analyticTable.Settings", analyticTableId);
+            analyticTable.Settings.DataProvider.ThrowIfNull("analyticTable.Settings.DataProvider", analyticTableId);
+            return analyticTable.Settings.DataProvider.ConnectionId;
+        }
+
         #endregion
-       
+
         #region Private Methods
 
         Dictionary<Guid, AnalyticTable> GetCachedAnalyticTables()

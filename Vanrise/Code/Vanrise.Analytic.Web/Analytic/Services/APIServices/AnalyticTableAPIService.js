@@ -46,6 +46,9 @@
         function HasEditAnalyticTablePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Analytic_ModuleConfig.moduleName, controllerName, ['UpdateAnalyticTable']));
         }
+        function GetAnalyticTableConnectionId(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticTableConnectionId"), input);
+        }
         return ({
             GetAnalyticTablesInfo: GetAnalyticTablesInfo,
             GetFilteredAnalyticTables: GetFilteredAnalyticTables,
@@ -54,7 +57,8 @@
             HasAddAnalyticTablePermission: HasAddAnalyticTablePermission,
             UpdateAnalyticTable: UpdateAnalyticTable,
             HasEditAnalyticTablePermission: HasEditAnalyticTablePermission,
-            GetRemoteAnalyticTablesInfo: GetRemoteAnalyticTablesInfo
+            GetRemoteAnalyticTablesInfo: GetRemoteAnalyticTablesInfo,
+            GetAnalyticTableConnectionId: GetAnalyticTableConnectionId
         });
     }
 

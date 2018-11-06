@@ -10,6 +10,54 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Security.Entities;
 namespace Vanrise.Common.Business
 {
+
+    public class VRRestCurrencyManager
+    {
+        #region Public Methods
+
+        public IEnumerable<Currency> GetRemoteAllCurrencies(Guid connectionId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRemoteAllCurrencies",
+               () =>
+               {
+                   VRInterAppRestConnection connectionSettings = GetVRInterAppRestConnection(connectionId);
+                   return connectionSettings.Get<IEnumerable<Currency>>(string.Format("/api/VRCommon/Currency/GetAllCurrencies"));
+               });
+        }
+        public Currency GetRemoteSystemCurrency(Guid connectionId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRemoteSystemCurrency",
+              () =>
+              {
+                  VRInterAppRestConnection connectionSettings = GetVRInterAppRestConnection(connectionId);
+                  return connectionSettings.Get<Currency>(string.Format("/api/VRCommon/Currency/GetSystemCurrency"));
+              });
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private VRInterAppRestConnection GetVRInterAppRestConnection(Guid connectionId)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);
+            return vrConnection.Settings as VRInterAppRestConnection;
+        }
+        #endregion
+
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            protected override bool IsTimeExpirable
+            {
+                get { return true; }
+            }
+        }
+        #endregion
+    }
     public class CurrencyManager : BaseBusinessEntityManager
     {
         #region Public Methods
@@ -49,7 +97,7 @@ namespace Vanrise.Common.Business
 
             return GetCurrency(currencyId, false);
         }
-
+        
         public Currency GetCurrencyBySymbol(string currencySymbol)
         {
             if (currencySymbol != null)
@@ -186,7 +234,7 @@ namespace Vanrise.Common.Business
             }
             return updateOperationOutput;
         }
-
+       
         #endregion
         public class CurrencyLoggableEntity : VRLoggableEntityBase
         {

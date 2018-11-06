@@ -12,7 +12,7 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFilteredCurrencies"), input);
         }
 
-        function GetAllCurrencies(currencyId) {
+        function GetAllCurrencies() {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetAllCurrencies"));
         }
 
