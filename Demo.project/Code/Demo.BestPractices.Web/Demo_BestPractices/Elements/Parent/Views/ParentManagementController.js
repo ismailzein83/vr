@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    parentManagementController.$inject = ['$scope', 'VRNotificationService', 'Demo_BestPractices_ParentService', 'UtilsService', 'VRUIUtilsService', 'Demo_Module_CompanyService'];
+    parentManagementController.$inject = ['$scope', 'VRNotificationService', 'Demo_BestPractices_ParentService', 'UtilsService', 'VRUIUtilsService'];
 
-    function parentManagementController($scope, VRNotificationService, Demo_BestPractices_ParentService, UtilsService, VRUIUtilsService, Demo_Module_CompanyService) {
+    function parentManagementController($scope, VRNotificationService, Demo_BestPractices_ParentService, UtilsService, VRUIUtilsService) {
 
        var gridApi;
         defineScope();
