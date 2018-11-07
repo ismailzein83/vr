@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Activities;
-using Mediation.Generic.Entities;
-using Mediation.Generic.Business;
+﻿using Mediation.Generic.Business;
 using Mediation.Generic.Data;
+using Mediation.Generic.Entities;
+using System;
+using System.Activities;
 using Vanrise.BusinessProcess;
-using Vanrise.Queueing;
 using Vanrise.Entities;
+using Vanrise.Queueing;
 
 namespace Mediation.Generic.BP.Activities
 {
@@ -47,8 +44,8 @@ namespace Mediation.Generic.BP.Activities
                 DateTime? sessionTimeout = inputArgument.MediationDefinition.ParsedRecordIdentificationSetting.TimeOutInterval.HasValue ? DateTime.Now - inputArgument.MediationDefinition.ParsedRecordIdentificationSetting.TimeOutInterval.Value : default(DateTime?);
                 manager.GetMediationRecordsByStatus(inputArgument.MediationDefinition.MediationDefinitionId, inputArgument.EventStatus, inputArgument.DataRecordTypeId, lastCommittedId.Value, sessionTimeout, (sessionIdLoaded) =>
                 {
-                    batch.SessionIds.Add(sessionIdLoaded);
-                    if (batch.SessionIds.Count >= 50000)
+                    batch.SessionIdentifiers.Add(sessionIdLoaded.SessionId, sessionIdLoaded);
+                    if (batch.SessionIdentifiers.Count >= 50000)
                     {
                         batch.LastCommittedId = lastCommittedId;
                         inputArgument.SessionIds.Enqueue(batch);
@@ -56,7 +53,7 @@ namespace Mediation.Generic.BP.Activities
                     }
                 });
             }
-            if (batch.SessionIds.Count > 0)
+            if (batch.SessionIdentifiers.Count > 0)
             {
                 batch.LastCommittedId = lastCommittedId;
                 inputArgument.SessionIds.Enqueue(batch);

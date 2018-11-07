@@ -12,5 +12,6 @@ namespace Mediation.Generic.Entities
         string GetMultiLegSessionId(params string[] legIds);
 
         bool NeedsMoreMediationRecords { set; }
+        bool IsTimedOut { get; }
     }
 }

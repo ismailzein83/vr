@@ -57,21 +57,26 @@ namespace Mediation.Generic.Data.SQL
             ApplyMediationRecordToDB(preparedMediationRecords);
         }
 
-        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, long lastCommittedId, DateTime? sessionTimeout, Action<string> onSessionIdLoaded)
+        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, long lastCommittedId, DateTime? sessionTimeout, Action<SessionIdentifier> onSessionIdLoaded)
         {
             ExecuteReaderSP("[Mediation_Generic].[sp_MediationRecord_GetSessionIdByStatus]", (reader) =>
             {
                 while (reader.Read())
                 {
-                    onSessionIdLoaded(MediationRecordSessionIdMapper(reader));
+                    onSessionIdLoaded(MediationRecordSessionIdentifierMapper(reader));
                 }
             }, mediationDefinitionId, (short)status, lastCommittedId, sessionTimeout);
         }
 
-        string MediationRecordSessionIdMapper(IDataReader reader)
+        SessionIdentifier MediationRecordSessionIdentifierMapper(IDataReader reader)
         {
-            return reader["SessionId"] as string;
+            return new SessionIdentifier()
+            {
+                SessionId = reader["SessionId"] as string,
+                IsTimedOut = Convert.ToBoolean(reader["IsTimedOut"])
+            };
         }
+
         public IEnumerable<MediationRecord> GetMediationRecordsByIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds, long lastCommittedId)
         {
             return GetItemsSPCmd("[Mediation_Generic].[sp_MediationRecord_GetByIds]", MediationRecordMapper, (cmd) =>

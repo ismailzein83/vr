@@ -10,10 +10,17 @@ namespace Mediation.Generic.Entities
     {
         public SessionIdsBatch()
         {
-            SessionIds = new HashSet<string>();
+            SessionIdentifiers = new Dictionary<string, SessionIdentifier>();
             LastCommittedId = null;
         }
-        public HashSet<string> SessionIds { get; set; }
+        public Dictionary<string, SessionIdentifier> SessionIdentifiers { get; set; }
         public long? LastCommittedId { get; set; }
+    }
+
+    public class SessionIdentifier
+    {
+        public string SessionId { get; set; }
+
+        public bool IsTimedOut { get; set; }
     }
 }

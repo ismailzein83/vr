@@ -13,10 +13,11 @@ namespace Mediation.Generic.Business
     {
         MediationProcessWorkflowMainContext _workflowMainContext;
 
-        public MediationProcessContext(MediationProcessWorkflowMainContext workflowMainContext)
+        public MediationProcessContext(MediationProcessWorkflowMainContext workflowMainContext, bool isTimedOut)
         {
             workflowMainContext.ThrowIfNull("workflowMainContext");
             _workflowMainContext = workflowMainContext;
+            this.IsTimedOut = isTimedOut;
         }
 
         public string GetMultiLegSessionId(params string[] legIds)
@@ -35,13 +36,15 @@ namespace Mediation.Generic.Business
             set;
             get;
         }
+
+        public bool IsTimedOut { get; set; }
     }
 
     public class MediationProcessWorkflowMainContext
     {
-         Guid _mediationDefinitionId;
+        Guid _mediationDefinitionId;
 
-         public MediationProcessWorkflowMainContext(Guid mediationDefinitionId)
+        public MediationProcessWorkflowMainContext(Guid mediationDefinitionId)
         {
             _mediationDefinitionId = mediationDefinitionId;
         }

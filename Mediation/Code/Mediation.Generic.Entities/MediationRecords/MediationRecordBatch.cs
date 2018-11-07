@@ -17,5 +17,7 @@ namespace Mediation.Generic.Entities
 
         public List<MediationRecord> MediationRecords { get; set; }
         public long LastCommittedId { get; set; }
+
+        public bool IsTimedOut { get; set; }
     }
 }

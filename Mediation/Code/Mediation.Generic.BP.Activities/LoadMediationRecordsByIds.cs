@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Mediation.Generic.Business;
+using Mediation.Generic.Entities;
+using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Activities;
-using Mediation.Generic.Entities;
-using Mediation.Generic.Business;
 using Vanrise.BusinessProcess;
-using Vanrise.Queueing;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Queueing;
 
 namespace Mediation.Generic.BP.Activities
 {
@@ -52,7 +50,7 @@ namespace Mediation.Generic.BP.Activities
                      hasItems = inputArgument.SessionIds.TryDequeue((sessionIdsBatch) =>
                       {
                           MediationRecordsManager manager = new MediationRecordsManager();
-                          var mediationRecords = manager.GetMediationRecordsByIds(inputArgument.MediationDefinition.MediationDefinitionId, sessionIdsBatch.SessionIds, inputArgument.MediationDefinition.ParsedRecordTypeId, sessionIdsBatch.LastCommittedId.Value);
+                          var mediationRecords = manager.GetMediationRecordsByIds(inputArgument.MediationDefinition.MediationDefinitionId, sessionIdsBatch.SessionIdentifiers.Keys, inputArgument.MediationDefinition.ParsedRecordTypeId, sessionIdsBatch.LastCommittedId.Value);
                           handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "{0} Mediation Records are loaded", mediationRecords.Count());
 
                           Dictionary<string, SessionRecords> recordsBySessionId = new Dictionary<string, SessionRecords>();
@@ -61,13 +59,15 @@ namespace Mediation.Generic.BP.Activities
                               SessionRecords sessionRecords = recordsBySessionId.GetOrCreateItem(stagingRecord.SessionId,
                                   () => new SessionRecords { MinEventId = stagingRecord.EventId, Records = new List<MediationRecord>() });
                               sessionRecords.Records.Add(stagingRecord);
-                             
+
                               if (stagingRecord.EventId < sessionRecords.MinEventId)
                                   sessionRecords.MinEventId = stagingRecord.EventId;//MinEventId is required to ensure sequential processing before feeding any second stage mediation
                           }
                           foreach (var sessionRecordsEntry in recordsBySessionId.OrderBy(itm => itm.Value.MinEventId))
                           {
-                              inputArgument.MediationRecords.Enqueue(new MediationRecordBatch() { LastCommittedId = sessionIdsBatch.LastCommittedId.Value, SessionId = sessionRecordsEntry.Key, MediationRecords = sessionRecordsEntry.Value.Records });
+                              string sessionId = sessionRecordsEntry.Key;
+                              var sessionIdentifier = sessionIdsBatch.SessionIdentifiers.GetRecord(sessionId);
+                              inputArgument.MediationRecords.Enqueue(new MediationRecordBatch() { LastCommittedId = sessionIdsBatch.LastCommittedId.Value, SessionId = sessionId, MediationRecords = sessionRecordsEntry.Value.Records, IsTimedOut = sessionIdentifier.IsTimedOut });
                           }
                       });
 

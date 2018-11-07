@@ -65,7 +65,7 @@ namespace Mediation.Generic.BP.Activities
                     hasItems = inputArgument.MediationRecordsBatch.TryDequeue((sessionMediationRecordBatch) =>
                     {
                         batchProxy.LastCommittedId = sessionMediationRecordBatch.LastCommittedId;
-                        var processingContext = new MediationProcessContext(workflowMainContext);
+                        var processingContext = new MediationProcessContext(workflowMainContext, sessionMediationRecordBatch.IsTimedOut);
                         var transformationOutput = dataTransformer.ExecuteDataTransformation(inputArgument.MediationDefinition.ParsedTransformationSettings.TransformationDefinitionId, (context) =>
                         {
                             if (needsContextRecord)
@@ -77,7 +77,6 @@ namespace Mediation.Generic.BP.Activities
 
                             if (needssessionIdRecord)
                                 context.SetRecordValue("sessionId", details.Select(itm => itm.MultiLegSessionId).First());
-
                         });
 
                         if (!processingContext.NeedsMoreMediationRecords)
