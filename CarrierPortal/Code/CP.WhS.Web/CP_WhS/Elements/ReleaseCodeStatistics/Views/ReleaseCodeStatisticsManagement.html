@@ -5,13 +5,16 @@
             <vr-row removeline>
                 <cp-whs-accountviewtype-selector normal-col-num="2" on-ready="onAccountViewTypeSelectorReady" isrequired="true" onselectionchanged="onAccountViewTypeSelectionChange" selectedvalues="selectedAccountViewType"></cp-whs-accountviewtype-selector>
                 <cp-whs-carrieraccounts-selector normal-col-num="2" on-ready="onAccountDirectiveReady" ismultipleselection selectedvalues="selectedCarrierAccounts" vr-disabled="selectedAccountViewType==undefined"></cp-whs-carrieraccounts-selector>
-                <cp-whs-releasecode-dimension-selector normal-col-num="2" ismultipleselection on-ready="onReleaseCodeDimenssionDirectiveReady"></cp-whs-releasecode-dimension-selector>
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="today" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
+                <cp-whs-releasecode-dimension-selector normal-col-num="2" ismultipleselection on-ready="onReleaseCodeDimenssionDirectiveReady" selectedvalues="selectedDimension"></cp-whs-releasecode-dimension-selector>
                 <vr-genericdata-businessentity-remoteselector on-ready="onCountryReady"
                                                               normal-col-num="2"
                                                               ismultipleselection>
                 </vr-genericdata-businessentity-remoteselector>
-                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="today" from="fromDate" to="toDate" isrequired="true"></vr-timerange>
-                <!--<vr-whs-be-salezone-masterplan-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady"></vr-whs-be-salezone-masterplan-selector>-->
+                <vr-genericdata-businessentity-remoteselector on-ready="onMasterSaleZoneDirectiveReady"
+                                                              normal-col-num="2"
+                                                              ismultipleselection>
+                </vr-genericdata-businessentity-remoteselector>
             </vr-row>
         </div>
 

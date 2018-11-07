@@ -29,7 +29,7 @@ app.directive('cpWhsReleasecodeDimensionSelector', ['CP_WhS_GenericAnalyticRelea
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getSelectorTemplate(attrs);
@@ -76,6 +76,9 @@ app.directive('cpWhsReleasecodeDimensionSelector', ['CP_WhS_GenericAnalyticRelea
                         selectedIds = payload.selectedIds;
                         hideSupplier = payload.hideSupplier;
                     }
+                    if (selectedIds == undefined)
+                        selectorAPI.selectItem(GenericAnalyticReleaseCodeDimensionsEnum.MasterZone);
+
                     ctrl.datasource = UtilsService.getArrayEnum(GenericAnalyticReleaseCodeDimensionsEnum);
                     if (hideSupplier) {
                         var index = ctrl.datasource.indexOf(GenericAnalyticReleaseCodeDimensionsEnum.Supplier);
@@ -84,6 +87,9 @@ app.directive('cpWhsReleasecodeDimensionSelector', ['CP_WhS_GenericAnalyticRelea
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }
+                };
+                api.clearDataSource = function () {
+                    selectorAPI.clearDataSource();
                 };
 
                 if (ctrl.onReady != null)
