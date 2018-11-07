@@ -202,7 +202,7 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiuspostgres-datamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusSynchronizer\Templates\FreeRadiusSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusSynchronizer\whs-routesync-freeradius-swsync.js" />
-    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Logger\Templates\HuaweiFTPLoggerTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Logger\Templates\HuaweiSwitchFTPLoggerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Logger\whs-routesync-huaweiswitchlogger-ftp.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Templates\HuaweiRouteSyncSetting.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\HuaweiSynchronizer\Templates\HuaweiSupplierMappingTemplate.html" />
