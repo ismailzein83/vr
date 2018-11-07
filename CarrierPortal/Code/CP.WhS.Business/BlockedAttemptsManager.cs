@@ -17,6 +17,30 @@ namespace CP.WhS.Business
             var connectionSettings = new PortalConnectionManager().GetWhSConnectionSettings();
             var clonedInput = Utilities.CloneObject<DataRetrievalInput<BlockedAttemptQuery>>(query);
             clonedInput.IsAPICall = true;
+            WhSCarrierAccountBEManager whSCarrierAccountBEManager = new WhSCarrierAccountBEManager();
+            var accessibleCarrierAccounts = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new Entities.ClientAccountInfoFilter() { GetCustomers = true});
+            if (clonedInput.Query.Filter != null)
+            {
+                if(clonedInput.Query.Filter.CustomerIds != null && query.Query.Filter.CustomerIds.Count > 0)
+                {
+                    foreach (var customerId in query.Query.Filter.CustomerIds)
+                    {
+                        if (accessibleCarrierAccounts.FindRecord(x => x.AccountId == customerId) == null)
+                            return null;
+                    }
+                }
+                else
+                {
+                    clonedInput.Query.Filter.CustomerIds = accessibleCarrierAccounts.Select(x => x.AccountId).ToList();
+                }
+            }
+            else
+            {
+                clonedInput.Query.Filter = new BlockedAttemptFilter()
+                {
+                    CustomerIds = accessibleCarrierAccounts.Select(x => x.AccountId).ToList()
+                };
+            }
             if (clonedInput.DataRetrievalResultType == DataRetrievalResultType.Excel)
             {
                 return connectionSettings.Post<DataRetrievalInput<BlockedAttemptQuery>, RemoteExcelResult<BlockedAttemptDetail>>("/api/WhS_Analytics/BlockedAttempts/GetBlockedAttemptsData", clonedInput);
