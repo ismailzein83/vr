@@ -116,7 +116,7 @@ namespace TOne.WhS.Deal.Business
             List<BillingRecord> billingRecords;
             if (billingRecordByDealZone.TryGetValue(key, out billingRecords))
             {
-                billingRecords = billingRecords.OrderByDescending(item => item.HalfHourDateTime).ToList();
+                billingRecords = billingRecords.OrderBy(item => item.HalfHourDateTime).ToList();
             }
 
             int analyticIndex = 0;
