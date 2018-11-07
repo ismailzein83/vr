@@ -15,19 +15,19 @@ namespace TOne.WhS.RouteSync.Huawei.Business
         public override void LogRouteCases(ILogRouteCasesContext context)
         {
             string errorMessage;
-            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "RouteAnalysis", this.FTPCommunicatorSettings, context.ExecutionDateTime, out errorMessage);
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "RouteCase", this.FTPCommunicatorSettings, context.ExecutionDateTime, context.ExecutionStatus, out errorMessage);
         }
 
         public override void LogRoutes(ILogRoutesContext context)
         {
             string errorMessage;
-            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, string.Format("RouteRSSN{0}", context.CustomerIdentifier), this.FTPCommunicatorSettings, context.ExecutionDateTime, out errorMessage);
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, string.Format("RouteRSSN{0}", context.CustomerIdentifier), this.FTPCommunicatorSettings, context.ExecutionDateTime, context.ExecutionStatus, out errorMessage);
         }
 
         public override void LogCommands(ILogCommandsContext context)
         {
             string errorMessage;
-            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "CommandExecution", this.FTPCommunicatorSettings, context.ExecutionDateTime, out errorMessage);
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "CommandExecution", this.FTPCommunicatorSettings, context.ExecutionDateTime, null, out errorMessage);
         }
     }
 }
