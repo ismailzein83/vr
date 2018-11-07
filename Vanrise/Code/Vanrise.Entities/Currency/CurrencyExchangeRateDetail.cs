@@ -13,5 +13,6 @@ namespace Vanrise.Entities
         public string CurrencySymbol { get; set; }
         public string CurrencyName { get; set; }
         public bool? IsMain { get; set; }
+        public string RateDescription { get; set; }
     }
 }

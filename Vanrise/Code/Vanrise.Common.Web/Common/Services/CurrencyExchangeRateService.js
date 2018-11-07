@@ -17,7 +17,7 @@ app.service('VRCommon_CurrencyExchangeRateService', ['UtilsService', 'VRModalSer
                 parameters.CurrencyId = currencyId;
             VRModalService.showModal('/Client/Modules/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateEditor.html', parameters, settings);
         }
-        function editExchangeRate(currencyExchangeRateId, onCurrencyExchangeRateUpdated) {
+        function editExchangeRate( currencyExchangeRateId, onCurrencyExchangeRateUpdated, isMainCurrency) {
             var settings = {
 
             };
@@ -26,7 +26,8 @@ app.service('VRCommon_CurrencyExchangeRateService', ['UtilsService', 'VRModalSer
                 modalScope.onCurrencyExchangeRateUpdated = onCurrencyExchangeRateUpdated;
             };
             var parameters = {
-                currencyExchangeRateId: currencyExchangeRateId
+                currencyExchangeRateId: currencyExchangeRateId,
+                isMainCurrency: isMainCurrency         
             };
 
             VRModalService.showModal('/Client/Modules/Common/Views/CurrencyExchangeRate/CurrencyExchangeRateEditor.html', parameters, settings);

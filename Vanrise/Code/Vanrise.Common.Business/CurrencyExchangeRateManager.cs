@@ -10,6 +10,7 @@ namespace Vanrise.Common.Business
 {
     public class CurrencyExchangeRateManager
     {
+        CurrencyManager _currencyManager = new CurrencyManager();
         public CurrencyExchangeRate GetEffectiveExchangeRate(int currencyId, DateTime effectiveOn)
         {
             var allCurrenciesExchangeRates = GetOrderedCachedCurrenciesExchangeRates();
@@ -104,8 +105,7 @@ namespace Vanrise.Common.Business
             var allCurrenciesExchangeRates = GetCachedCurrenciesExchangeRates();
             var filteredExchangeRates = allCurrenciesExchangeRates.FindAllRecords((prod) => (DateTime.Now >= prod.ExchangeDate));
 
-            CurrencyManager manager = new CurrencyManager();
-            var allCurrencies = manager.GetCachedCurrencies();
+            var allCurrencies = _currencyManager.GetCachedCurrencies();
 
             Dictionary<string, ExchangeRateInfo> currencyExchangeRates = new Dictionary<string, ExchangeRateInfo>();
 
@@ -181,14 +181,13 @@ namespace Vanrise.Common.Business
                     last = current;
                 }
             }
-            CurrencyManager currencyManager = new CurrencyManager();
-            var systemCurrency = currencyManager.GetSystemCurrency();
+            var systemCurrency = _currencyManager.GetSystemCurrency();
             systemCurrency.ThrowIfNull("systemCurrency");
             if (!newrates.Any(x => x.CurrencyId == systemCurrency.CurrencyId))
             {
                 newrates.Add(new ExchangeRateWithEED
                 {
-                    BED = new DateTime(2000,01,01),
+                    BED = new DateTime(2000, 01, 01),
                     CurrencyId = systemCurrency.CurrencyId,
                     Rate = 1
                 });
@@ -290,12 +289,11 @@ namespace Vanrise.Common.Business
         public void InsertExchangeRates(List<CurrencyExchangeRate> exchangeRates)
         {
             ICurrencyExchangeRateDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyExchangeRateDataManager>();
-             CurrencyManager manager = new CurrencyManager();
             foreach (var exchangeRate in exchangeRates)
             {
                 int currencyExchangeRateId = -1;
                 bool insertActionSucc = dataManager.Insert(exchangeRate, out currencyExchangeRateId);
-                var currency = manager.GetCurrency(exchangeRate.CurrencyId);
+                var currency = _currencyManager.GetCurrency(exchangeRate.CurrencyId);
                 VRActionLogger.Current.LogObjectCustomAction(Vanrise.Common.Business.CurrencyManager.CurrencyLoggableEntity.Instance, "Add Exchange Rate ", false, currency, String.Format("New exchange rate added of date {0}", exchangeRate.ExchangeDate));
             }
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -339,7 +337,7 @@ namespace Vanrise.Common.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Exchange Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 42});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 42 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Main Currency" });
 
@@ -381,18 +379,32 @@ namespace Vanrise.Common.Business
 
             currencyExchangeRateDetail.Entity = currencyExchangeRate;
 
-            CurrencyManager manager = new CurrencyManager();
             if (currencyExchangeRate != null)
             {
                 int currencyId = currencyExchangeRate.CurrencyId;
-                var currentCurrency = manager.GetCurrency(currencyId);
+                var currentCurrency = _currencyManager.GetCurrency(currencyId);
                 currencyExchangeRateDetail.CurrencyName = currentCurrency.Name;
                 currencyExchangeRateDetail.CurrencySymbol = currentCurrency.Symbol;
-                if (currencyExchangeRateDetail.CurrencySymbol == manager.GetSystemCurrency().Symbol)
+                if (currencyExchangeRateDetail.CurrencySymbol == _currencyManager.GetSystemCurrency().Symbol)
+                {
                     currencyExchangeRateDetail.IsMain = true;
+                }
+                else
+                    currencyExchangeRateDetail.RateDescription = BuildRateDescription(currencyExchangeRate.Rate, currentCurrency.Symbol);
+
             }
 
             return currencyExchangeRateDetail;
+        }
+
+        string BuildRateDescription(Decimal Rate, string currencySymbol)
+        {
+            string mainCurrencySymbol = _currencyManager.GetSystemCurrency().Symbol;
+
+            int longPrecision = GenericParameterManager.Current.GetLongPrecision(); ;
+            string rateAsString =  string.Format("{0:#,###0." + "".PadLeft(longPrecision, '0') + "}", Math.Round(Rate, longPrecision, MidpointRounding.AwayFromZero));
+            string description = string.Format("1 {0} equals {1} {2}.", mainCurrencySymbol, rateAsString, currencySymbol);
+            return description;
         }
         //private CurrencyExchangeRateDetail CurrencyExchangeRateSymbolMapper(CurrencyExchangeRate currencyExchangeRate)
         //{

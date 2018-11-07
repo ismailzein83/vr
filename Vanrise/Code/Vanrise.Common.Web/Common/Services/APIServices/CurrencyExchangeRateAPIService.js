@@ -13,6 +13,12 @@
                     currencyExchangeRateId: currencyExchangeRateId
                 });
         }
+
+        function GetAllCurrenciesExchangeRate( currencyExchangeRateId )
+        {
+            return BaseAPIService.get( UtilsService.getServiceURL( VRCommon_ModuleConfig.moduleName, "CurrencyExchangeRate", "GetAllCurrenciesExchangeRate" ));
+        }
+
         function AddCurrencyExchangeRate(object) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, "CurrencyExchangeRate", "AddCurrencyExchangeRate"), object);
         }
@@ -34,7 +40,8 @@
             GetCurrencyExchangeRate:GetCurrencyExchangeRate,
             AddCurrencyExchangeRate: AddCurrencyExchangeRate,
             HasAddCurrencyExchangeRatePermission: HasAddCurrencyExchangeRatePermission,
-            HasEditCurrencyExchangeRatePermission: HasEditCurrencyExchangeRatePermission
+            HasEditCurrencyExchangeRatePermission: HasEditCurrencyExchangeRatePermission,
+            GetAllCurrenciesExchangeRate: GetAllCurrenciesExchangeRate
         });
     }
 

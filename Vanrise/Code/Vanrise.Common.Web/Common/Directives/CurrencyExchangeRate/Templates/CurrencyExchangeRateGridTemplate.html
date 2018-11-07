@@ -9,6 +9,7 @@
     <vr-datagridcolumn headertext="'Currency'" localizedheadertext="'VRRes.Currency.VREnd'" field="'CurrencySymbol'" type="'Text'" ng-show="!hidecurrencycolumn"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" localizedheadertext="'VRRes.Name.VREnd'" field="'CurrencyName'" type="'Text'" ng-show="!hidecurrencycolumn"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Rate'" localizedheadertext="'VRRes.Rate.VREnd'" field="'Entity.Rate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" localizedheadertext="'VRRes.Name.VREnd'" field="'RateDescription'" type="'Text'" ng-show="!hidecurrencycolumn" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Main Currency'" localizedheadertext="'VRRes.ID.VREnd'" field="'IsMain'" type="'Text'" ng-if="!hidecurrencycolumn">
         <span ng-if="dataItem.IsMain == true "><vr-icon icontype="'true'"></vr-icon></span>
     </vr-datagridcolumn>

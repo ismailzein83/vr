@@ -2,16 +2,19 @@
     <vr-modalbody>
         <vr-form name="formEditor">
             <vr-row removeline>
+                <span vr-disabled="disableControls">
+                    <vr-common-currency-selector selectedvalues="selectedCurrency" on-ready="onCurrencySelectReady" isrequired="true" normal-col-num="6" showaddbutton isdisabled="disableCurrency"> </vr-common-currency-selector>
+                </span>
                 <vr-columns width="1/2row">
                     <vr-textbox value="rate" label="Rate" localizedlabel="VRRes.Rate.VREnd" type="number" minvalue="0" isrequired></vr-textbox>
                 </vr-columns>
-                <span vr-disabled="disableControls">
-                    <vr-common-currency-selector on-ready="onCurrencySelectReady" isrequired="true" normal-col-num="6" showaddbutton isdisabled="disableCurrency"> </vr-common-currency-selector>
-                </span>
             </vr-row>
             <vr-row removeline>
                 <vr-columns width="1/2row">
                     <vr-datetimepicker type="date" label="Exchange Date" value="exchangeDate" isrequired vr-disabled="disableControls" customvalidate="validateTodayDateTime()"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="1/2row" withemptyline>
+                    <vr-label isvalue largesize>{{getRateDescription()}}</vr-label>
                 </vr-columns>
             </vr-row>
         </vr-form>

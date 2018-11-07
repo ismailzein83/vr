@@ -1,1 +1,4 @@
-﻿<vr-common-currency-selector on-ready="onCurrencySelectReady" isrequired="true" normal-col-num="6" showaddbutton ></vr-common-currency-selector>
+﻿<vr-common-currency-selector onselectionchanged="onSystemCurrencySelectionChange" on-ready="onCurrencySelectReady" isrequired="true" normal-col-num="6" showaddbutton ></vr-common-currency-selector>
+<vr-columns colnum="12" withemptyline ng-show="showChangeCurrencyWarning">
+    <div class="alert alert-warning" role="alert"> Changing system currency may cause invalid currency exchange rate(s). </div>
+</vr-columns>
