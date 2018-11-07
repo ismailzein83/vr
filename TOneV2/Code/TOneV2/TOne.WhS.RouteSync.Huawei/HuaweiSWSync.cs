@@ -11,7 +11,6 @@ namespace TOne.WhS.RouteSync.Huawei
 {
     public class HuaweiSWSync : SwitchRouteSynchronizer
     {
-        const int _supplierRNLength = 3;
         const string CommandPrompt = "<";
 
         public override Guid ConfigId { get { return new Guid("376687E2-268D-4DFA-AA39-3205C3CD18E5"); } }
@@ -90,7 +89,7 @@ namespace TOne.WhS.RouteSync.Huawei
                     continue;
 
                 RouteAnalysis routeAnalysis = this.GetRouteAnalysis(customerMapping.RSSN, route.Options);
-                string rsName = Helper.GetRSName(routeAnalysis, _supplierRNLength);
+                string rsName = Helper.GetRSName(routeAnalysis, this.MinRNLength);
 
                 RouteCase routeCase;
                 if (rsName.CompareTo(HuaweiCommands.ROUTE_BLOCK) != 0 && (routeCasesByRSName == null || !routeCasesByRSName.TryGetValue(rsName, out routeCase)))
