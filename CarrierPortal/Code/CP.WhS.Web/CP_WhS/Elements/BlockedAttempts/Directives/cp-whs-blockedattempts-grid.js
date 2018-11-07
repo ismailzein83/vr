@@ -37,7 +37,6 @@ app.directive('cpWhsBlockedattemptsGrid', ['UtilsService', 'VRUIUtilsService', '
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    console.log(dataRetrievalInput);
                     return CP_WhS_BlockedAttemptsAPIService.GetFilteredBlockedAttempts(dataRetrievalInput).then(function (response) {
                         $scope.scopeModel.showNumber = ctrl.shownumber;
                         $scope.scopeModel.showCustomer = ctrl.showcustomer;

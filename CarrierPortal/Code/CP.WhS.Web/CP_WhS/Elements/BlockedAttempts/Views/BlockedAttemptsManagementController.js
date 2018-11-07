@@ -8,11 +8,8 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
     var customerAccountDirectiveAPI;
     var customerAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-    var saleZoneDirectiveAPI;
-    var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-    var switchDirectiveAPI;
-    var switchReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    var masterSaleZoneDirectiveAPI;
+    var masterSaleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     var timeRangeDirectiveAPI;
     var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -26,9 +23,7 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
         $scope.toDate;
 
         $scope.selectedPeriod = PeriodEnum.Today;
-        var maxSearchRecordCount = UISettingsService.getMaxSearchRecordCount();
-        $scope.limit = maxSearchRecordCount;
-
+        $scope.limit = 1000;
         $scope.onTimeRangeDirectiveReady = function (api) {
             timeRangeDirectiveAPI = api;
             timeRangeReadyPromiseDeferred.resolve();
@@ -44,14 +39,9 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
             carrierAccountsReadyPromiseDeferred.resolve();
         };
 
-        $scope.onSwitchDirectiveReady = function (api) {
-            switchDirectiveAPI = api;
-            switchReadyPromiseDeferred.resolve();
-        };
-
-        $scope.onSaleZoneDirectiveReady = function (api) {
-            saleZoneDirectiveAPI = api;
-            saleZoneReadyPromiseDeferred.resolve();
+        $scope.onMasterSaleZoneDirectiveReady = function (api) {
+            masterSaleZoneDirectiveAPI = api;
+            masterSaleZoneReadyPromiseDeferred.resolve();
         };
 
         $scope.onMainGridReady = function (api) {
@@ -62,11 +52,11 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
             return mainGridAPI.loadGrid(getQuery());
         };
         $scope.checkMaxNumberResords = function () {
-            if ($scope.limit <= maxSearchRecordCount && maxSearchRecordCount != undefined) {
+            if ($scope.limit <= 1000) {
                 return null;
             }
             else {
-                return "Max number can be entered is: " + maxSearchRecordCount;
+                return "The maximum number that can be entered is: " + 1000;
             }
         };
 
@@ -78,6 +68,7 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
             Filter: filter,
             From: $scope.fromDate,
             To: $scope.toDate,
+            Top: $scope.limit,
             Period: $scope.selectedPeriod.value
         };
         return query;
@@ -89,7 +80,7 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadCustomers])
+        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadCustomers, loadMasterSaleZones])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -102,29 +93,30 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
         var filter = {};
         filter.CustomerIds = customerAccountDirectiveAPI.getSelectedIds();
         filter.GroupByNumber = $scope.groupbyNumber;
+        filter.SaleZoneIds = masterSaleZoneDirectiveAPI.getSelectedIds();
         return filter;
-    }
-
-    function loadSwitches() {
-        var loadSwitchPromiseDeferred = UtilsService.createPromiseDeferred();
-        switchReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(switchDirectiveAPI, undefined, loadSwitchPromiseDeferred);
-        });
-        return loadSwitchPromiseDeferred.promise;
     }
 
     function loadCustomers() {
         var loadCustomerAccountPromiseDeferred = UtilsService.createPromiseDeferred();
         customerAccountReadyPromiseDeferred.promise.then(function () {
             var payload = {
-               // businessEntityDefinitionId:"32cc6b0b-785c-437c-9a58-bab8753e50ee"
             };
             VRUIUtilsService.callDirectiveLoad(customerAccountDirectiveAPI, payload, loadCustomerAccountPromiseDeferred);
         });
 
         return loadCustomerAccountPromiseDeferred.promise;
     }
-
+    function loadMasterSaleZones() {
+        var loadMasterSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
+        masterSaleZoneReadyPromiseDeferred.promise.then(function () {
+            var payload = {
+                businessEntityDefinitionId:"f4505536-22bc-4382-a916-20f6e19ea041"
+            };
+            VRUIUtilsService.callDirectiveLoad(masterSaleZoneDirectiveAPI, payload, loadMasterSaleZonePromiseDeferred);
+        });
+        return loadMasterSaleZonePromiseDeferred.promise;
+    }
     function loadTimeRangeSelector() {
         var timeRangeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
         timeRangeReadyPromiseDeferred.promise.then(function () {
@@ -132,9 +124,6 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, VR
         });
         return timeRangeLoadPromiseDeferred.promise;
     }
-
-
-
 };
 
 appControllers.controller("CP_WhS_BlockedAttemptsManagementController", BlockedAttemptsController);

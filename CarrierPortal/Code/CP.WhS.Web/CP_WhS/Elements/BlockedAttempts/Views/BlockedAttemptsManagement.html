@@ -3,10 +3,17 @@
 
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
-                <cp-whs-carrieraccounts-selector normal-col-num="2" on-ready="onCustomerAccountDirectiveReady" getcustomers ismultipleselection selectedvalues="selectedCarrierAccounts"></cp-whs-carrieraccounts-selector>
+                <cp-whs-carrieraccounts-selector normal-col-num="2" on-ready="onCustomerAccountDirectiveReady" getcustomers ismultipleselection selectedvalues="selectedCarrierAccounts" customlabel="Customer Accounts"></cp-whs-carrieraccounts-selector>
+                <vr-genericdata-businessentity-remoteselector on-ready="onMasterSaleZoneDirectiveReady"
+                                                              normal-col-num="2"
+                                                              ismultipleselection>
+                </vr-genericdata-businessentity-remoteselector>
                 <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="selectedPeriod" from="fromDate" to="toDate"></vr-timerange>
                 <vr-columns width="normal">
                     <vr-switch value="groupbyNumber" label="Group by Number"></vr-switch>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox label="Limit Result To" value="limit" type="number" decimalprecision="0" minvalue="0" customvalidate="checkMaxNumberResords()" isrequired="true"></vr-textbox>
                 </vr-columns>
             </vr-row>
         </div>
@@ -21,7 +28,7 @@
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <cp-whs-blockedattempts-grid on-ready="onMainGridReady" shownumber="groupbyNumber" showcustomer="selectedCarrierAccounts.length>1"></cp-whs-blockedattempts-grid>
+                <cp-whs-blockedattempts-grid on-ready="onMainGridReady" shownumber="groupbyNumber" showcustomer="selectedCarrierAccounts.length==0 || selectedCarrierAccounts.length>1"></cp-whs-blockedattempts-grid>
             </vr-columns>
         </vr-row>
     </vr-form>
