@@ -59,7 +59,6 @@
                 Number: $scope.number,
                 Status: $scope.selectedStatuses != undefined && $scope.selectedStatuses.length > 0 ? UtilsService.getPropValuesFromArray($scope.selectedStatuses, "value") : undefined
             };
-            console.log(filter);
             return filter;
         }
         function loadAllControls() {

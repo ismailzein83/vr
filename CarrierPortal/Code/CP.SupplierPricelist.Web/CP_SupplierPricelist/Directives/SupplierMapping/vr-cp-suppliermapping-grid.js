@@ -20,21 +20,20 @@ function (UtilsService, supplierMappingService , supplierMappingAPIService, VRNo
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onSupplierMappingAdded = function (supplierObject) {
                         gridAPI.itemAdded(supplierObject);
-                    }
+                    };
 
                     directiveAPI.onSupplierMappingUpdated = function (supplierObject) {
-                        console.log(supplierObject)
                         gridAPI.itemUpdated(supplierObject);
-                    }
+                    };
 
                     return directiveAPI;
                 }
 
-            }
+            };
         };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -69,7 +68,7 @@ function (UtilsService, supplierMappingService , supplierMappingAPIService, VRNo
         function deleteSupplierMaping(object) {
             var onCustomerSupplierMappingDeleted = function () {
                 gridAPI.itemDeleted(object);
-            }
+            };
             supplierMappingService.deleteSupplierMapping($scope, object.Entity.SupplierMappingId, onCustomerSupplierMappingDeleted);
         }
         function hasUpdateSupplierMappingPermission () {
