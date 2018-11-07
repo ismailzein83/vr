@@ -12,6 +12,8 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 {
     public class RouteDataManager : BaseSQLDataManager, IRouteDataManager
     {
+        #region Properties/Ctor
+
         const string RouteTableName = "Route";
         const string RouteTempTableName = "Route_temp";
         const string RouteAddedTableName = "Route_Added";
@@ -25,8 +27,12 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         public RouteDataManager()
             : base(GetConnectionStringName("TOneWhS_RouteSync_DBConnStringKey", "RouteSyncDBConnString"))
         {
-            
+
         }
+
+        #endregion
+
+        #region Public Methods
 
         public void Initialize(IRouteInitializeContext context)
         {
@@ -65,7 +71,6 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 
         public void CompareTables(IRouteCompareTablesContext context)
         {
-            var differencesByRSSN = new Dictionary<int, HuaweiConvertedRouteDifferences>();
             var differences = new Dictionary<HuaweiConvertedRouteIdentifier, List<HuaweiConvertedRouteByCompare>>();
 
             string query = string.Format(query_CompareRouteTables, SwitchId, RouteTableName, RouteTempTableName);
@@ -81,45 +86,44 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                         Code = convertedRouteByCompare.HuaweiConvertedRoute.Code,
                         DNSet = convertedRouteByCompare.HuaweiConvertedRoute.DNSet
                     };
-
                     List<HuaweiConvertedRouteByCompare> tempRouteDifferences = differences.GetOrCreateItem(routeIdentifier);
                     tempRouteDifferences.Add(convertedRouteByCompare);
                 }
             }, null);
 
-            if (differences.Count > 0)
+
+            if (differences.Count == 0)
+                return;
+
+            var differencesByRSSN = new Dictionary<int, HuaweiConvertedRouteDifferences>();
+
+            foreach (var differenceKvp in differences)
             {
-                foreach (var differenceKvp in differences)
+                var routeDifferences = differenceKvp.Value;
+                var difference = differencesByRSSN.GetOrCreateItem(differenceKvp.Key.RSSN);
+
+                if (routeDifferences.Count == 1)
                 {
-                    var routeDifferences = differenceKvp.Value;
-                    var difference = differencesByRSSN.GetOrCreateItem(differenceKvp.Key.RSSN);
-
-                    if (routeDifferences.Count == 1)
-                    {
-                        var singleRouteDifference = differenceKvp.Value[0];
-                        if (singleRouteDifference.TableName == RouteTableName)
-                            difference.RoutesToDelete.Add(new HuaweiConvertedRouteCompareResult() { NewRoute = singleRouteDifference.HuaweiConvertedRoute });
-                        else
-                            difference.RoutesToAdd.Add(new HuaweiConvertedRouteCompareResult() { NewRoute = singleRouteDifference.HuaweiConvertedRoute });
-                    }
-                    else //routeDifferences.Count = 2
-                    {
-                        var newRoute = routeDifferences.FindRecord(item => (string.Compare(item.TableName, RouteTempTableName, true) == 0));
-                        var existingRoute = routeDifferences.FindRecord(item => (string.Compare(item.TableName, RouteTableName, true) == 0));
-
-                        if (newRoute != null)
-                        {
-                            difference.RoutesToUpdate.Add(new HuaweiConvertedRouteCompareResult()
-                            {
-                                NewRoute = newRoute.HuaweiConvertedRoute,
-                                ExistingRoute = existingRoute != null ? existingRoute.HuaweiConvertedRoute : null
-                            });
-                        }
-                    }
+                    var singleRouteDifference = differenceKvp.Value[0];
+                    if (singleRouteDifference.TableName == RouteTableName)
+                        difference.RoutesToDelete.Add(new HuaweiConvertedRouteCompareResult() { Route = singleRouteDifference.HuaweiConvertedRoute });
+                    else
+                        difference.RoutesToAdd.Add(new HuaweiConvertedRouteCompareResult() { Route = singleRouteDifference.HuaweiConvertedRoute });
                 }
+                else //routeDifferences.Count = 2
+                {
+                    var newRoute = routeDifferences.FindRecord(item => (string.Compare(item.TableName, RouteTempTableName, true) == 0));
+                    var existingRoute = routeDifferences.FindRecord(item => (string.Compare(item.TableName, RouteTableName, true) == 0));
 
-                context.RouteDifferencesByRSSN = differencesByRSSN;
+                    difference.RoutesToUpdate.Add(new HuaweiConvertedRouteCompareResult()
+                    {
+                        Route = newRoute.HuaweiConvertedRoute,
+                        ExistingRoute = existingRoute.HuaweiConvertedRoute
+                    });
+                }
             }
+
+            context.RouteDifferencesByRSSN = differencesByRSSN;
         }
 
         public void InsertRoutesToTempTable(IEnumerable<HuaweiConvertedRoute> routes)
@@ -190,6 +194,8 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             InsertBulkToTable(preparedRoute as BaseBulkInsertInfo);
         }
 
+        #endregion
+
         #region IBulkApplyDataManager
 
         public object InitialiazeStreamForDBApply()
@@ -200,7 +206,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         public void WriteRecordToStream(HuaweiConvertedRoute record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.RSSN, record.Code, record.RSName);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.RSSN, record.Code, record.RSName, record.DNSet);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -215,6 +221,21 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                 KeepIdentity = false,
                 FieldSeparator = '^',
                 ColumnNames = columns
+            };
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private HuaweiConvertedRoute HuaweiConvertedRouteMapper(IDataReader reader)
+        {
+            return new HuaweiConvertedRoute()
+            {
+                RSSN = (int)reader["RSSN"],
+                Code = reader["Code"] as string,
+                RSName = reader["RSName"] as string,
+                DNSet = (int)reader["DNSet"]
             };
         }
 
@@ -238,21 +259,6 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             }
             dtRoutes.EndLoadData();
             return dtRoutes;
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        HuaweiConvertedRoute HuaweiConvertedRouteMapper(IDataReader reader)
-        {
-            return new HuaweiConvertedRoute()
-            {
-                RSSN = (int)reader["RSSN"],
-                Code = reader["Code"] as string,
-                RSName = reader["RSName"] as string,
-                DNSet = (int)reader["DNSet"]
-            };
         }
 
         #endregion
@@ -388,7 +394,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                                           END
 	                                      EXEC sp_rename 'WhS_RouteSync_Huawei_{0}.{2}', '{1}';";
 
-        const string query_UpdateTempTable = @"UPDATE [WhS_RouteSync_Huawei_{0}].[{1}] 
+        const string query_UpdateTempTable = @"UPDATE tempRoutes 
                                                SET tempRoutes.RSName = routesToUpdate.RSName, tempRoutes.DNSet = routesToUpdate.DNSet
                                                FROM [WhS_RouteSync_Huawei_{0}].[{1}] as tempRoutes
                                                JOIN @Routes as routesToUpdate on routesToUpdate.RSSN = tempRoutes.RSSN and routesToUpdate.Code = tempRoutes.Code";
@@ -398,19 +404,19 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                                                    JOIN @Routes as route ON route.RSSN = tempRoute.RSSN and route.Code = tempRoute.Code 
                                                            and route.RSName = tempRoute.RSName and route.DNSet = tempRoute.DNSet ";
 
-        const string query_CompareRouteTables = @"IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
+        const string query_CompareRouteTables = @"IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Huawei_{0}.{1}') AND s.type in (N'U'))
                                                      BEGIN
-	                                                     SELECT [RSSN],[Code],[RSName],[DNSet] max(tableName) as tableName FROM (
-		                                                     SELECT [RSSN],[Code],[RSName],[DNSet] '{1}' as tableName FROM [WhS_RouteSync_Ericsson_{0}].[{1}]
+	                                                     SELECT [RSSN],[Code],[RSName],[DNSet], max(tableName) as tableName FROM (
+		                                                     SELECT [RSSN],[Code],[RSName],[DNSet], '{1}' as tableName FROM [WhS_RouteSync_Huawei_{0}].[{1}]
 		                                                     UNION ALL
-		                                                     SELECT [RSSN],[Code],[RSName],[DNSet] '{2}' as tableName FROM [WhS_RouteSync_Ericsson_{0}].[{2}]
+		                                                     SELECT [RSSN],[Code],[RSName],[DNSet], '{2}' as tableName FROM [WhS_RouteSync_Huawei_{0}].[{2}]
 	                                                     ) v
 	                                                     GROUP BY [RSSN],[Code],[RSName],[DNSet]
 	                                                     HAVING COUNT(1) = 1
                                                      END
                                                   ELSE
                                                      BEGIN
-	                                                     SELECT [RSSN],[Code],[RSName],[DNSet], '{2}' as tableName FROM [WhS_RouteSync_Ericsson_{0}].[{2}]
+	                                                     SELECT [RSSN],[Code],[RSName],[DNSet], '{2}' as tableName FROM [WhS_RouteSync_Huawei_{0}].[{2}]
                                                      END";
 
         #endregion

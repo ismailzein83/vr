@@ -27,29 +27,20 @@ namespace TOne.WhS.RouteSync.Huawei.Business
         public Dictionary<string, RouteCase> GetCachedRouteCasesByRSName()
         {
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<RouteCaseCacheManager>();
+            var cacheName = new GetCachedRouteCasesCacheName() { SwitchId = _switchId };
 
-            return cacheManager.GetOrCreateObject(string.Concat("GetCachedRouteCasesByRSName", _switchId), RouteCaseCacheExpirationChecker.Instance, () =>
+            return cacheManager.GetOrCreateObject(cacheName, RouteCaseCacheExpirationChecker.Instance, () =>
             {
                 Dictionary<string, RouteCase> results = new Dictionary<string, RouteCase>();
 
-                List<RouteCase> routeCases = this.GetCachedRouteCases();
+                List<RouteCase> routeCases = this.GetRouteCases();
                 if (routeCases != null)
                 {
                     foreach (RouteCase routeCase in routeCases)
                         results.Add(routeCase.RSName, routeCase);
                 }
 
-                return results.Count > 0 ? results : null;
-            });
-        }
-
-        public List<RouteCase> GetCachedRouteCases()
-        {
-            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<RouteCaseCacheManager>();
-
-            return cacheManager.GetOrCreateObject(string.Concat("GetCachedRouteCases_", _switchId), RouteCaseCacheExpirationChecker.Instance, () =>
-            {
-                return _dataManager.GetAllRouteCases();
+                return results;
             });
         }
 
@@ -72,7 +63,7 @@ namespace TOne.WhS.RouteSync.Huawei.Business
             Dictionary<string, RouteCase> routeCasesByRSName = this.GetCachedRouteCasesByRSName();
 
             int maxRCNumber = 0;
-            if (routeCasesByRSName != null)
+            if (routeCasesByRSName != null && routeCasesByRSName.Count > 0)
                 maxRCNumber = routeCasesByRSName.Select(itm => itm.Value.RCNumber).Max();
 
             int retryCount = 0;
@@ -97,7 +88,7 @@ namespace TOne.WhS.RouteSync.Huawei.Business
                     Object dbApplyStream = _dataManager.InitialiazeStreamForDBApply();
                     foreach (var routeCaseToAdd in routeCasesToAdd)
                     {
-                        if (newRouteCasesByRSSN == null || !newRouteCasesByRSSN.ContainsKey(routeCaseToAdd.RSName))
+                        if (routeCasesByRSName == null || !routeCasesByRSName.ContainsKey(routeCaseToAdd.RSName))
                         {
                             routeCasesByRSName.Add(routeCaseToAdd.RSName, routeCaseToAdd);
                             _dataManager.WriteRecordToStream(routeCaseToAdd, dbApplyStream);
@@ -125,6 +116,11 @@ namespace TOne.WhS.RouteSync.Huawei.Business
             _dataManager.UpdateSyncedRouteCases(rcNumbers);
         }
 
+        private List<RouteCase> GetRouteCases()
+        {
+            return _dataManager.GetAllRouteCases();
+        }
+
         private class RouteCaseCacheManager : BaseCacheManager
         {
 
@@ -143,9 +139,9 @@ namespace TOne.WhS.RouteSync.Huawei.Business
             }
         }
 
-        //private struct GetCachedRouteCasesCacheName
-        //{
-        //    public string SwitchId { get; set; }
-        //}
+        private struct GetCachedRouteCasesCacheName
+        {
+            public string SwitchId { get; set; }
+        }
     }
 }

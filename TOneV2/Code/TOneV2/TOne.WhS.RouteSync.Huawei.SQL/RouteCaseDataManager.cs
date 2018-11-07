@@ -9,6 +9,8 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 {
     public class RouteCaseDataManager : BaseSQLDataManager, IRouteCaseDataManager
     {
+        #region Properties/Ctor
+
         readonly string[] columns = { "RSName", "RouteCase" };
 
         public string SwitchId { get; set; }
@@ -18,6 +20,10 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         {
 
         }
+
+        #endregion
+
+        #region Public Methods
 
         public List<RouteCase> GetAllRouteCases()
         {
@@ -81,6 +87,20 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             InsertBulkToTable(preparedRouteCase as BaseBulkInsertInfo);
         }
 
+        public void UpdateSyncedRouteCases(IEnumerable<int> rcNumbers)
+        {
+            if (rcNumbers == null || !rcNumbers.Any())
+                return;
+
+            string filter = string.Format(" Where RCNumber in ({0})", string.Join(",", rcNumbers));
+            string query = string.Format(query_UpdateSyncedRouteCases.Replace("#FILTER#", filter), SwitchId);
+            ExecuteNonQueryText(query, null);
+        }
+
+        #endregion
+
+        #region IBulkApplyDataManager
+
         public object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -107,6 +127,10 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             };
         }
 
+        #endregion
+
+        #region Private Methods
+
         private RouteCase RouteCaseMapper(IDataReader reader)
         {
             return new RouteCase()
@@ -117,15 +141,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             };
         }
 
-        public void UpdateSyncedRouteCases(IEnumerable<int> rcNumbers)
-        {
-            if (rcNumbers == null || !rcNumbers.Any())
-                return;
-
-            string filter = string.Format(" Where RCNumber in ({0})", string.Join(",", rcNumbers));
-            string query = string.Format(query_UpdateSyncedRouteCases.Replace("#FILTER#", filter), SwitchId);
-            ExecuteNonQueryText(query, null);
-        }
+        #endregion
 
         #region Queries
 
@@ -135,14 +151,14 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 	                                                        [RCNumber] [int] IDENTITY(1,1) NOT NULL,
 	                                                        [RSName] [varchar](max) NOT NULL,
 	                                                        [RouteCase] [varchar](max) NOT NULL,
-	                                                        [Synced] [bit] NOT NULL,
-                                                         CONSTRAINT [PK_RouteCase] PRIMARY KEY CLUSTERED 
+	                                                        [Synced] [bit] NOT NULL DEFAULT 0,
+                                                        CONSTRAINT [PK_WhS_RouteSync_Huawei_{0}.RouteCase] PRIMARY KEY CLUSTERED 
                                                         (
 	                                                        [RCNumber] ASC
                                                         )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
                                                         ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-                                                        CREATE NONCLUSTERED INDEX [WhS_RouteSync_Huawei_{0}.RouteCase_Synced] ON [WhS_RouteSync_Huawei_{0}].[RouteCase]
+                                                        CREATE NONCLUSTERED INDEX [IX_WhS_RouteSync_Huawei_{0}.RouteCase_Synced] ON [WhS_RouteSync_Huawei_{0}].[RouteCase]
                                                         (
 	                                                        [Synced] ASC
                                                         )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY];
@@ -152,7 +168,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                                                     FROM [WhS_RouteSync_Huawei_{0}].[RouteCase] rc with(nolock) 
                                                     #FILTER#";
 
-        const string query_UpdateSyncedRouteCases = @"UPDATE [WhS_RouteSync_Ericsson_{0}].[RouteCase]
+        const string query_UpdateSyncedRouteCases = @"UPDATE [WhS_RouteSync_Huawei_{0}].[RouteCase]
 													  SET [Synced] = 1
 													  #FILTER#";
 

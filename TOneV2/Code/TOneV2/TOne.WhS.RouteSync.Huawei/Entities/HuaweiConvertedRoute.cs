@@ -22,7 +22,7 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
 
     public class HuaweiConvertedRouteCompareResult
     {
-        public HuaweiConvertedRoute NewRoute { get; set; }
+        public HuaweiConvertedRoute Route { get; set; }
         public HuaweiConvertedRoute ExistingRoute { get; set; }
     }
 

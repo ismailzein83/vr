@@ -17,7 +17,7 @@ namespace TOne.WhS.RouteSync.Huawei
             if (routeAnalysis == null || routeAnalysis.RouteCaseOptions == null || routeAnalysis.RouteCaseOptions.Count == 0)
                 return HuaweiCommands.ROUTE_BLOCK;
 
-            StringBuilder sb_RSName = new StringBuilder(routeAnalysis.RSSN);
+            StringBuilder sb_RSName = new StringBuilder(routeAnalysis.RSSN.ToString());
 
             foreach (var routeCaseOption in routeAnalysis.RouteCaseOptions)
             {
@@ -46,7 +46,7 @@ namespace TOne.WhS.RouteSync.Huawei
 
             string serializedRouteCaseOptions = SerializeRouteCaseOptions(routeAnalysis.RouteCaseOptions);
 
-            return string.Format("{0}{1}{0}{2}{0}{3}", RouteCaseFieldsSeparatorAsString, routeAnalysis.RSSN, routeCaseOptionsTypeAsString, serializedRouteCaseOptions);
+            return string.Format("{1}{0}{2}{0}{3}", RouteCaseFieldsSeparatorAsString, routeAnalysis.RSSN, routeCaseOptionsTypeAsString, serializedRouteCaseOptions);
         }
 
         private static string SerializeRouteCaseOptions(List<RouteCaseOption> routeCaseOptions)

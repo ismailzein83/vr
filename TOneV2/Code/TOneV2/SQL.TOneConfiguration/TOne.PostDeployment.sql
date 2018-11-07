@@ -155,6 +155,7 @@ as (select * from (values
 ('423064C2-ACE8-4D70-8CFF-CDAA1461DBBE','WhS_RouteSync_SwitchRouteSynchronizer_TelesRadius','Teles Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'			,'{"Editor":"whs-routesync-telesradius-swsync"}'),
 ('29135479-8150-4E23-9A0D-A42AF69A13AE','WhS_RouteSync_SwitchRouteSynchronizer_TelesIdb','Teles Idb Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'		,'{"Editor":"whs-routesync-telesidb-swsync"}'),
 ('99B59E02-1305-49E5-9342-1B4E08C91439','WhS_RouteSync_SwitchRouteSynchronizer_FreeRadius','Free Radius Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-freeradius-swsync"}'),
+('376687E2-268D-4DFA-AA39-3205C3CD18E5','WhS_RouteSync_SwitchRouteSynchronizer_Huawei','Huawei Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'				,'{"Editor":"whs-routesync-huawei-swsync", "SettingsEditor":"whs-routesync-huaweisettings-editor"}'),
 ('366AB5D3-5083-420D-B5CE-5313DA025106','Whs_RouteSync_RadiusDataManager_SQL','MVTS SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'				,'{"Editor":"whs-routesync-mvtsradius-sqldatamanager"}'),
 ('09ED9252-AF87-447D-9C40-738CF222C64E','Whs_RouteSync_RadiusDataManager_SQL','Teles SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'				,'{"Editor":"whs-routesync-telesradius-sqldatamanager"}'),
 ('34F3483D-2572-4349-A6ED-3504B2D9E714','Whs_RouteSync_IdbDataManager_Postgres','Teles Postgres Idb Data Manager','WhS_RouteSync_IdbDataManagerSettings'			,'{"Editor":"whs-routesync-telesidb-postgresdatamanager"}'),
@@ -254,6 +255,7 @@ as (select * from (values
 ('114CE0AC-4848-442A-B351-BE031F22E130','WhS_AccountBalance_ActionDefinition_SendCustomerSMS','Send Customer SMS','VR_Notification_VRActionDefinition'					,'{"Editor":"whs-accountbalance-actiondefinition-send-customer-sms"}'),
 
 ('4B424B30-083C-4999-B883-AF4555ECC819','WhS_RouteSync_EricssonSwitchFTPLogger','FTP','WhS_RouteSync_EricssonSwitchLogger'		,'{"Editor":"whs-routesync-ericssonswitchlogger-ftp"}'),
+('6F5E6051-DDAB-411C-88F5-C8927417FD3C','WhS_RouteSync_HuaweiSwitchFTPLogger','FTP','WhS_RouteSync_HuaweiSwitchLogger'			,'{"Editor":"whs-routesync-huaweiswitchlogger-ftp"}'),
 ('26c8c829-8289-468e-91e0-f9e91de644f1','Point Of Interconnect','Point Of Interconnect','VR_GenericData_FieldCustomObjectTypeSettings'		,'{"Editor":"whs-be-pointofinterconnect-trunks-customobjectsettings"}'),
 ('67dd74aa-33ac-4d75-93f6-0bd1adacaf41','ProfileField','Profile Field','VR_InvoiceType_FileNameParts'		,'{"Editor":"whs-be-invoicetype-filename-carrierprofile"}'),
 

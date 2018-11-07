@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TOne.WhS.RouteSync.Huawei.Entities
 {
@@ -17,6 +13,10 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
         public const string CSA_ITT = "ITT";
 
         public const string CSA_TON = "TON";
+
+        public const string RegistrationSucceeded = "RETCODE=0SUCCESS";
+
+        public const string OperationSucceeded = "RETCODE=0OPERATIONSUCCEEDED";
     }
 
     public class RouteCaseWithCommands
@@ -28,7 +28,8 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
     public class HuaweiRouteWithCommands
     {
         public HuaweiConvertedRouteCompareResult RouteCompareResult { get; set; }
-        public List<string> Commands { get; set; }
         public RouteActionType ActionType { get; set; }
+        public List<string> Commands { get; set; }
+        public string Code { get; set; }
     }
 }

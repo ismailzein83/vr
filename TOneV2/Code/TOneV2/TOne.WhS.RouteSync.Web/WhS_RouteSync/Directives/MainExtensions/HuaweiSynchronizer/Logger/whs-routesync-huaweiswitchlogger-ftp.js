@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/HuaweiSynchronizer/Logger/Templates/HuaweiFTPLoggerTemplate.html"
+            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/HuaweiSynchronizer/Logger/Templates/HuaweiSwitchFTPLoggerTemplate.html"
 
         };
         function FTPSwitchCommunicationCtor($scope, ctrl, $attrs) {
@@ -83,6 +83,6 @@
         }
     }
 
-    app.directive('whsRoutesyncHuaweiloggerFtp', whsRoutesyncHuaweiloggerFtp);
+    app.directive('whsRoutesyncHuaweiswitchloggerFtp', whsRoutesyncHuaweiloggerFtp);
 
 })(app);
