@@ -84,7 +84,7 @@ namespace Vanrise.Analytic.Business
                         switch (aggregateType)
                         {
                             case AnalyticAggregateType.Count: aggregateValue = aggFieldValues.Count; break;
-                            case AnalyticAggregateType.Sum: aggregateValue = aggFieldValues.Where(itm => itm != null).Sum(itm => itm); break;
+                            case AnalyticAggregateType.Sum: aggregateValue = aggFieldValues.Where(itm => itm != null).Select<dynamic, Decimal>(itm => Convert.ToDecimal(itm)).Sum(itm => itm); break;
                             case AnalyticAggregateType.Max: aggregateValue = aggFieldValues.Max(); break;
                             case AnalyticAggregateType.Min: aggregateValue = aggFieldValues.Min(); break;
                             default: throw new NotSupportedException(String.Format("AggregateType '{0}'", aggregateType));
