@@ -3464,13 +3464,12 @@ vr-validator[vr-input] > div:nth-child(1) {
     min-height: 22px;
 }
 .vr-datagrid-celltext vr-validator > div:nth-child(1) {
-    height: 22px;
+    min-height: 22px;
 }
 
 
 .vr-datagrid-celltext vr-validator[vr-input] > div:nth-child(1) {
-    height: 21px;
-    min-height: initial !important;
+    min-height: 21px !important;
     position: relative;
     /*top: -2px;*/
 }
