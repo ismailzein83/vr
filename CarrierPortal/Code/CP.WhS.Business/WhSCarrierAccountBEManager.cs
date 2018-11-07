@@ -30,11 +30,18 @@ namespace CP.WhS.Business
                         var whSCarrierAccountBEDefition = GetWhSCarrierAccountsBEDefinition(filter.BusinessEntityDefinitionId.Value);
                         if(whSCarrierAccountBEDefition != null)
                         {
-                            if (whSCarrierAccountBEDefition.GetCustomers && carrierAccountInfo.CarrierAccountType != ClientAccountType.Customer)
+                            if (whSCarrierAccountBEDefition.GetCustomers && carrierAccountInfo.CarrierAccountType == ClientAccountType.Supplier)
                                 return false;
-                            if (whSCarrierAccountBEDefition.GetSuppliers && carrierAccountInfo.CarrierAccountType != ClientAccountType.Supplier)
+                            if (whSCarrierAccountBEDefition.GetSuppliers && carrierAccountInfo.CarrierAccountType == ClientAccountType.Customer)
                                 return false;
                         }
+                    }
+                    else
+                    {
+                        if (filter.GetCustomers && carrierAccountInfo.CarrierAccountType == ClientAccountType.Supplier)
+                            return false;
+                        if (filter.GetSuppliers && carrierAccountInfo.CarrierAccountType == ClientAccountType.Customer)
+                            return false;
                     }
                 }
                 return true;
