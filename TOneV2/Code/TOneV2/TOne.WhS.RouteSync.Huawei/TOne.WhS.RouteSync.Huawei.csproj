@@ -110,7 +110,6 @@
     <Compile Include="Entities\SwitchLoggerConfig.cs" />
     <Compile Include="Entities\HuaweiConvertedRoute.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="HuaweiSWSyncTemp.cs" />
     <Compile Include="HuaweiSWSync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
