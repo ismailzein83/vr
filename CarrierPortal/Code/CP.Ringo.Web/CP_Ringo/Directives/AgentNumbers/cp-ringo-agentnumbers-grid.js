@@ -33,7 +33,6 @@ app.directive('cpRingoAgentnumbersGrid', ['UtilsService', 'VRUIUtilsService', 'V
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    console.log(dataRetrievalInput);
                     return CP_Ringo_AgentNumbersAPIService.GetFilteredAgentNumbers(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
@@ -52,7 +51,6 @@ app.directive('cpRingoAgentnumbersGrid', ['UtilsService', 'VRUIUtilsService', 'V
                 };
 
                 api.onAgentNumbersAdded = function (addedAgentNumbers) {
-                    console.log(addedAgentNumbers);
                     for (var i = 0; i < addedAgentNumbers.length; i++) {
                         gridAPI.itemAdded(addedAgentNumbers[i]);
                     }
