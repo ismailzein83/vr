@@ -10,13 +10,27 @@ namespace TOne.WhS.RouteSync.Business
 {
     public static class SwitchFTPLoggerHelper
     {
-        public static bool TryLogCommnadResults(List<CommandResult> commandResults, string fileNamePrefix, FTPCommunicatorSettings ftpCommunicatorSettings, DateTime executionDateTime, out string errorMessage)
+        public static bool TryLogCommnadResults(List<CommandResult> commandResults, string fileNamePrefix, FTPCommunicatorSettings ftpCommunicatorSettings, DateTime executionDateTime, ExecutionStatus? executionStatus, out string errorMessage)
         {
             MemoryStream ms = GenerateStream(commandResults);
 
             string executionDateTimeAsString = executionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
             string executionDateAsString = executionDateTime.ToString("yyyy-MM-dd");
-            string fileName = string.Format("{0}_{1}", fileNamePrefix, executionDateTimeAsString);
+            string fileName;
+
+            if (executionStatus.HasValue)
+            {
+                switch (executionStatus)
+                {
+                    case ExecutionStatus.Succeeded: fileName = string.Format("{0}_Successful_{1}", fileNamePrefix, executionDateTimeAsString); break;
+                    case ExecutionStatus.Failed: fileName = string.Format("{0}_Unsuccessful_{1}", fileNamePrefix, executionDateTimeAsString); break;
+                    default: throw new NotSupportedException(string.Format("executionStatus '{0}' is not supported", executionStatus));
+                }
+            }
+            else
+            {
+                fileName = string.Format("{0}_{1}", fileNamePrefix, executionDateTimeAsString);
+            }
 
             bool result;
             using (FTPCommunicator communicator = new FTPCommunicator(ftpCommunicatorSettings))

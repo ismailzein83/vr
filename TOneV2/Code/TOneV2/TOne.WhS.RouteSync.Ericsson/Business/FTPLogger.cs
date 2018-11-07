@@ -16,7 +16,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
         public override void LogRouteCases(ILogRouteCasesContext context)
         {
             string errorMessage;
-            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "RouteCase", this.FTPCommunicatorSettings, context.ExecutionDateTime, out errorMessage);
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "RouteCase", this.FTPCommunicatorSettings, context.ExecutionDateTime, context.ExecutionStatus, out errorMessage);
         }
 
         public override void LogCarrierMappings(ILogCarrierMappingsContext context)
@@ -26,7 +26,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
             context.CommandResults.Add(new CommandResult() { Command = string.Format("{0};", EricssonCommands.PNBAI_Command) });
 
             string errorMessage;
-            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "PreTableScript", this.FTPCommunicatorSettings, context.ExecutionDateTime, out errorMessage);
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "PreTableScript", this.FTPCommunicatorSettings, context.ExecutionDateTime, context.ExecutionStatus, out errorMessage);
         }
 
         public override void LogRoutes(ILogRoutesContext context)
@@ -36,13 +36,13 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
             context.CommandResults.Add(new CommandResult() { Command = string.Format("{0};", EricssonCommands.ANBAI_Command) });
 
             string errorMessage;
-            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, string.Format("RouteBO{0}", context.CustomerIdentifier), this.FTPCommunicatorSettings, context.ExecutionDateTime, out errorMessage);
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, string.Format("RouteBO{0}", context.CustomerIdentifier), this.FTPCommunicatorSettings, context.ExecutionDateTime, context.ExecutionStatus, out errorMessage);
         }
 
         public override void LogCommands(ILogCommandsContext context)
         {
             string errorMessage;
-            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "CommandExecution", this.FTPCommunicatorSettings, context.ExecutionDateTime, out errorMessage);
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "CommandExecution", this.FTPCommunicatorSettings, context.ExecutionDateTime, null, out errorMessage);
         }
     }
 }
