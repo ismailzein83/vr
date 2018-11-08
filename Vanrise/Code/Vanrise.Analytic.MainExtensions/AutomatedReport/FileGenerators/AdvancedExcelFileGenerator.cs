@@ -20,6 +20,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
     public class AdvancedExcelFileGenerator : VRAutomatedReportFileGeneratorSettings
     {
         GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
+        ExcelManager excelManager = new ExcelManager();
         public override Guid ConfigId
         {
             get { return new Guid("9FAAE9B2-931E-4B3F-BDA4-B0F3B7647488"); }
@@ -1071,7 +1072,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     case ExcelCellType.Number:
                         if (!headerCell.NumberType.HasValue)
                             throw new NullReferenceException("headerCell.NumberType");
-                        style.Custom = ExcelManager.GetNumberFormat(headerCell.NumberType.Value);
+                        style.Custom = excelManager.GetNumberFormat(headerCell.NumberType.Value);
                         break;
                 }
             }

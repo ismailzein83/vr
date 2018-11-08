@@ -15,9 +15,8 @@ namespace Vanrise.Common
     {
         const string DEFAULT_EXCEL_SHEET_NAME = "Result";
 
-        static int _normalPrecision;
-        static int _longPrecision;  
-
+        int _normalPrecision;
+        int _longPrecision;  
         public ExcelManager()
         {
             IGeneralSettingsManager generalSettingsManager = BusinessManagerFactory.GetManager<IGeneralSettingsManager>();
@@ -349,7 +348,7 @@ namespace Vanrise.Common
             excelCell.SetStyle(cellStyle);
         }
 
-        public static string GetNumberFormat(Vanrise.Entities.NumberType numberType)
+        public  string GetNumberFormat(Vanrise.Entities.NumberType numberType)
         {
             switch (numberType)
             {
