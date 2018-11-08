@@ -1407,6 +1407,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 clientAccountInfo.CarrierAccountType = ClientAccountType.Customer;
             else if (account.AccountType == CarrierAccountType.Supplier)
                 clientAccountInfo.CarrierAccountType = ClientAccountType.Supplier;
+            if (account.ActivationStatus == ActivationStatus.Active)
+                clientAccountInfo.ActivationStatus = ClientActivationStatus.Active;
+            else if (account.ActivationStatus == ActivationStatus.Inactive)
+                clientAccountInfo.ActivationStatus = ClientActivationStatus.Inactive;
+            else if (account.ActivationStatus == ActivationStatus.Testing)
+                clientAccountInfo.ActivationStatus = ClientActivationStatus.Testing;
             return clientAccountInfo;
         }
         private IEnumerable<CarrierAccount> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
