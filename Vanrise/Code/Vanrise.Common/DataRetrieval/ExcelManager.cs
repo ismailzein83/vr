@@ -15,8 +15,8 @@ namespace Vanrise.Common
     {
         const string DEFAULT_EXCEL_SHEET_NAME = "Result";
 
-        int _normalPrecision;
-        int _longPrecision;  
+        static int _normalPrecision;
+        static int _longPrecision;  
 
         public ExcelManager()
         {
@@ -328,7 +328,7 @@ namespace Vanrise.Common
                     case ExcelCellType.Number:
                         if (!headerCell.NumberType.HasValue)
                             throw new NullReferenceException("headerCell.NumberType");
-                        cellStyle.Custom = this.GetNumberFormat(headerCell.NumberType.Value);
+                        cellStyle.Custom = GetNumberFormat(headerCell.NumberType.Value);
                         break;
                 }
             }
@@ -349,7 +349,7 @@ namespace Vanrise.Common
             excelCell.SetStyle(cellStyle);
         }
 
-        private string GetNumberFormat(Vanrise.Entities.NumberType numberType)
+        public static string GetNumberFormat(Vanrise.Entities.NumberType numberType)
         {
             switch (numberType)
             {

@@ -30,7 +30,8 @@ namespace Vanrise.Analytic.Entities
             VRAutomatedReportResolvedDataList resolvedDataList = new VRAutomatedReportResolvedDataList()
             {
                 FieldInfos = new Dictionary<string,VRAutomatedReportFieldInfo>(),
-                Items = new List<VRAutomatedReportResolvedDataItem>()
+                Items = new List<VRAutomatedReportResolvedDataItem>(),
+                SubTablesInfo = new Dictionary<Guid, VRAutomatedReportTableInfo>()
             };
             if (this.Queries != null && this.Queries.Count > 0)
             {
@@ -112,6 +113,15 @@ namespace Vanrise.Analytic.Entities
                                                     var subTableSchema = subTablesSchemas.GetRecord(subTable.Key);
                                                     if (subTableSchema != null && subTableSchema.FieldSchemas!=null && subTable.Value.Fields != null && subTable.Value.Fields.Count > 0)
                                                     {
+
+                                                        var subTableInfo = resolvedDataList.SubTablesInfo.GetOrCreateItem(subTable.Key, () =>
+                                                        {
+                                                            return new VRAutomatedReportTableInfo()
+                                                            {
+                                                                FieldsInfo = new Dictionary<string, VRAutomatedReportTableFieldInfo>(),
+                                                                FieldsOrder = new List<string>()
+                                                            };
+                                                        });
                                                         foreach (var measure in subTable.Value.Fields)
                                                         {
                                                             var measureSchema = subTableSchema.FieldSchemas.GetRecord(measure.Key);
@@ -130,6 +140,17 @@ namespace Vanrise.Analytic.Entities
                                                                     });
                                                                 }
                                                                 resolvedDataItemSubTable.Fields.Add(measure.Key, subTableFieldInfo);
+
+                                                                if(!subTableInfo.FieldsInfo.ContainsKey(measure.Key))
+                                                                {
+                                                                    VRAutomatedReportTableFieldInfo tableFieldInfo = new VRAutomatedReportTableFieldInfo()
+                                                                    {
+                                                                        FieldType = measureSchema.Field.Type,
+                                                                        FieldValues = new List<VRAutomatedReportResolvedDataFieldValue>(),
+                                                                    };
+                                                                    subTableInfo.FieldsInfo.Add(measure.Key, tableFieldInfo);
+                                                                }
+                                                               
                                                             }
                                                         }
                                                         resolvedItem.SubTables.Add(subTable.Key, resolvedDataItemSubTable);
@@ -142,17 +163,18 @@ namespace Vanrise.Analytic.Entities
                                 }
                                 if (mainList.ItemTables != null && mainList.ItemTables.Count > 0)
                                 {
-                                    resolvedDataList.SubTablesInfo = new Dictionary<Guid, VRAutomatedReportTableInfo>();
-                               
                                     foreach (var subTable in mainList.ItemTables)
                                     {
                                         if(subTable.Value!=null)
                                         {
-                                            VRAutomatedReportTableInfo reportTableInfo = new VRAutomatedReportTableInfo()
+                                            var reportTableInfo = resolvedDataList.SubTablesInfo.GetOrCreateItem(subTable.Key, () =>
                                             {
-                                                FieldsInfo = new Dictionary<string, VRAutomatedReportTableFieldInfo>(),
-                                                FieldsOrder = new List<string>()
-                                            };
+                                                return new VRAutomatedReportTableInfo()
+                                                {
+                                                    FieldsInfo = new Dictionary<string, VRAutomatedReportTableFieldInfo>(),
+                                                    FieldsOrder = new List<string>()
+                                                };
+                                            });
                                             var dimensionsSchema = matchingQuery.Settings.GetSubTableFields(new VRAutomatedReportQueryGetSubTableFieldsContext()
                                             {
                                                 QueryDefinitionId = matchingQuery.DefinitionId,
@@ -183,7 +205,6 @@ namespace Vanrise.Analytic.Entities
                                                     }
                                                 }
                                             }
-                                            resolvedDataList.SubTablesInfo.Add(subTable.Key, reportTableInfo);
                                         }
                                     }
                                 }

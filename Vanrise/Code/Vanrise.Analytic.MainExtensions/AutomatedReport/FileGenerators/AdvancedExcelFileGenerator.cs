@@ -13,6 +13,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using System.Collections;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 {
@@ -107,7 +108,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             int maxSubTableRow = 0;//this is used to know how many rows the headers took and hence the rowIndex of the subtable data
             subTableValuesCount = 0;
             int preColumnIndex = 0;
-           
+
             foreach (var columnIndex in context.GetSortedColumnsIndexes())
             {
                 columnIndexState += (columnIndex - preColumnIndex);//columnIndexState should be shifted by the difference between it and the next column index always
@@ -117,14 +118,15 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 {
                     if (column.FieldTitle != null)
                     {
-                        SetCellValue(rows, indexesNeeded.HeaderRowIndex, columnIndexState, column.FieldTitle, TextAlignmentType.Center, true, 14, true);
+                        SetCellValue(rows, indexesNeeded.HeaderRowIndex, columnIndexState, column.FieldTitle, TextAlignmentType.Center,null, true, 14, true);
                     }
                     else
                     {
                         var fieldInfo = context.GetFieldInfo(column.FieldName);
                         if (fieldInfo != null)
                         {
-                            SetCellValue(rows, indexesNeeded.HeaderRowIndex, columnIndexState, column.FieldTitle, TextAlignmentType.Center, true, 14, true);
+                            var headerCell = GetExportExcelHeaderCellStyle(fieldInfo.FieldType, column.FieldName);
+                            SetCellValue(rows, indexesNeeded.HeaderRowIndex, columnIndexState, column.FieldTitle, TextAlignmentType.Center, headerCell, true, 14, true);
                         }
                     }
                 }
@@ -166,6 +168,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                 List<FieldValueRange> currentRanges = new List<FieldValueRange>();
                                 if (fieldValues != null && fieldValues.FieldValues != null && fieldValues.FieldValues.Count > 0 && fieldValues.FieldType != null)
                                 {
+                                    var headerCell = GetExportExcelHeaderCellStyle(fieldValues.FieldType, null);
                                     subTableValuesCount = fieldValues.FieldValues.Count * subTableFieldsCount;//this is in case there is more than one field
                                     object previousValue = null;
                                     var fieldValueRange = new FieldValueRange
@@ -190,7 +193,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                                 var date = Convert.ToDateTime(fieldValue.Value);
                                                 fieldValueObject = date.ToString(generalSettingsManager.GetDateTimeFormat());
                                             }
-                                            SetColumnValue(rows,columnsIndices, subTableFieldsCount, currentSubTableRowIndex, subTableFirstRowIndex, parentRanges, ref fieldStartingIndex, currentRanges, ref previousValue, fieldValueRange, iteration, ref currentSubTableField, fieldValueObject, fieldValues.FieldValues.Count);
+                                            SetColumnValue(rows, headerCell, columnsIndices, subTableFieldsCount, currentSubTableRowIndex, subTableFirstRowIndex, parentRanges, ref fieldStartingIndex, currentRanges, ref previousValue, fieldValueRange, iteration, ref currentSubTableField, fieldValueObject, fieldValues.FieldValues.Count);
                                            
                                             if (subTableValuesCount == 1 && subTableFieldsCount > 1)
                                             {
@@ -205,7 +208,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                                 var subTableFieldStartingIndex = fieldStartingIndex - subTableDef.SubTableFields.Count;
                                                 foreach (var subTableField in subTableDef.SubTableFields)
                                                 {
-                                                    SetCellValue(rows, currentSubTableRowIndex + 1, subTableFieldStartingIndex, subTableField.FieldName, TextAlignmentType.Center, true, 14, true);
+                                                    SetCellValue(rows, currentSubTableRowIndex + 1, subTableFieldStartingIndex, subTableField.FieldName, TextAlignmentType.Center, headerCell, true, 14, true);
                                                     subTableFieldStartingIndex++;
                                                 }
                                             }
@@ -221,7 +224,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         #region BuildSubTableTitle
                         if (subTableDef.SubTableTitle != null)
                         {
-                            SetCellValue(rows, subTableTitleRowIndex-1, subTableTitleColIndex, subTableDef.SubTableTitle, TextAlignmentType.Center, true, 14, true, subTableValuesCount);
+                            SetCellValue(rows, subTableTitleRowIndex-1, subTableTitleColIndex, subTableDef.SubTableTitle, TextAlignmentType.Center,null, true, 14, true, subTableValuesCount);
                         }
                         #endregion
                     }
@@ -313,7 +316,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 }
             }
         }
-        private void SetCellValue(Dictionary<int, AdvancedExcelRow> rows, int rowIndex, int columnIndex, Object fieldValue, TextAlignmentType textAlignmentType, bool setBorder, int fontSize, bool isBold, int? totalColumns = null)
+        private void SetCellValue(Dictionary<int, AdvancedExcelRow> rows, int rowIndex, int columnIndex, Object fieldValue, TextAlignmentType textAlignmentType, ExportExcelHeaderCell headerCell, bool setBorder, int fontSize, bool isBold, int? totalColumns = null)
         {
             var excelRow = rows.GetOrCreateItem(rowIndex, () => { return new AdvancedExcelRow { Cells = new Dictionary<int, AdvancedExcelCell>(), RowIndex = rowIndex }; });
             var excelCell = excelRow.Cells.GetOrCreateItem(columnIndex);
@@ -325,10 +328,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 Alignment = textAlignmentType,
                 SetBorder = setBorder,
                 FontSize = fontSize,
-                IsBold = isBold
+                IsBold = isBold,
+               HeaderCell = headerCell
             };
         }
-        private void SetColumnValue(Dictionary<int, AdvancedExcelRow> rows,  Dictionary<int,RangeToReserve>  columnsIndices, int subTableFieldsCount, int currentSubTableRowIndex, int subTableFirstRowIndex, List<FieldValueRange> parentRanges, ref int fieldStartingIndex, List<FieldValueRange> currentRanges, ref object previousValue, FieldValueRange fieldValueRange, int iteration, ref int currentSubTableField, Object fieldValue, int fieldValuesCount)
+        private void SetColumnValue(Dictionary<int, AdvancedExcelRow> rows, ExportExcelHeaderCell headerCell,  Dictionary<int,RangeToReserve>  columnsIndices, int subTableFieldsCount, int currentSubTableRowIndex, int subTableFirstRowIndex, List<FieldValueRange> parentRanges, ref int fieldStartingIndex, List<FieldValueRange> currentRanges, ref object previousValue, FieldValueRange fieldValueRange, int iteration, ref int currentSubTableField, Object fieldValue, int fieldValuesCount)
         {
             while (currentSubTableField < subTableFieldsCount)
             {
@@ -340,7 +344,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         NumberOfItems = 1
                     });
                 }
-                SetCellValue(rows, currentSubTableRowIndex, fieldStartingIndex, fieldValue, TextAlignmentType.Center, true, 14, true);
+                SetCellValue(rows, currentSubTableRowIndex, fieldStartingIndex, fieldValue, TextAlignmentType.Center,  headerCell, true, 14, true);
                 CheckAndSetValue(rows, fieldValue, currentSubTableRowIndex, subTableFirstRowIndex, currentRanges, parentRanges, fieldStartingIndex, iteration, ref previousValue, fieldValueRange, currentSubTableField);
                 currentSubTableField++;
                 fieldStartingIndex++;
@@ -423,7 +427,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 {
                     foreach (var col in tableDef.ColumnDefinitions)
                     {
-                        SetCellValue(advancedExcelWorkSheet.HeaderRows, indexesNeeded.HeaderRowIndex, col.ColumnIndex, col.FieldTitle, TextAlignmentType.Left, true, 14, true);
+                        SetCellValue(advancedExcelWorkSheet.HeaderRows, indexesNeeded.HeaderRowIndex, col.ColumnIndex, col.FieldTitle, TextAlignmentType.Left,null, true, 14, true);
                     }
                 }
             }
@@ -439,7 +443,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 int titleRowIndex = tableDef.RowIndex;
                 foreach (var title in tableDef.Titles)
                 {
-                    SetCellValue(advancedExcelWorkSheet.TitleRows, titleRowIndex, titleColumnIndex, title, TextAlignmentType.Center, false, 16, true, difference);
+                    SetCellValue(advancedExcelWorkSheet.TitleRows, titleRowIndex, titleColumnIndex, title, TextAlignmentType.Center,null, false, 16, true, difference);
                     titleRowIndex++;
                 }
             }
@@ -664,6 +668,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     var fieldInfo = fieldInfos.GetRecord(column.FieldName);
                     if (summaryField != null && fieldInfo != null && fieldInfo.FieldType != null)
                     {
+                        var headerCell = GetExportExcelHeaderCellStyle(fieldInfo.FieldType, column.FieldName);
                         Object fieldValueObject = summaryField.Value;
                         var textAlignmentType = TextAlignmentType.Left;
                         if (fieldInfo.FieldType.RenderDescriptionByDefault())
@@ -683,7 +688,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                 textAlignmentType = TextAlignmentType.Right;
                             }
                         }
-                        SetCellValue(rows, summaryRowIndex, columnIndexState, fieldValueObject, textAlignmentType, true, 14, true);
+                        SetCellValue(rows, summaryRowIndex, columnIndexState, fieldValueObject, textAlignmentType, headerCell, true, 14, true);
                     }
                 }
                 else
@@ -700,6 +705,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                             for (int k = 0; k < subTableDef.SubTableFields.Count; k++)
                             {
                                 var fieldDef = subTableDef.SubTableFields[k];
+                                var fieldInfo =  subTableInfo.FieldsInfo.GetRecord(fieldDef.FieldName);
+                                var headerCell = GetExportExcelHeaderCellStyle(fieldInfo.FieldType, fieldDef.FieldName);
                                 var fieldStartingIndex = columnIndexState + k;
                                 var summaryField = (summarySubTableFields != null && summarySubTableFields.Fields != null) ? summarySubTableFields.Fields.GetRecord(fieldDef.FieldName) : null;
                                 if (summaryField != null && summaryField.FieldValues != null && summaryField.FieldValues.Count > 0)
@@ -727,7 +734,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                             textAlignmentType = TextAlignmentType.Right;
                                         }
 
-                                        SetCellValue(rows, summaryRowIndex, fieldStartingIndex, fieldValueObject, textAlignmentType, true, 14, true);
+                                        SetCellValue(rows, summaryRowIndex, fieldStartingIndex, fieldValueObject, textAlignmentType, headerCell, true, 14, true);
                                         if (subTableFieldsCount == 1)
                                             fieldStartingIndex++;
                                     }
@@ -760,6 +767,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         var fieldInfo = fieldInfos.GetRecord(column.FieldName);
                         if (field != null && fieldInfo != null && fieldInfo.FieldType != null)
                         {
+                            var headerCell = GetExportExcelHeaderCellStyle(fieldInfo.FieldType, column.FieldName);
                             Object fieldValueObject = field.Value;
                             var textAlignmentType = TextAlignmentType.Left;
                             if (fieldInfo.FieldType.RenderDescriptionByDefault())
@@ -779,7 +787,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                     textAlignmentType = TextAlignmentType.Right;
                                 }
                             }
-                            SetCellValue(rows, indexesNeeded.ColDataRowIndex, columnIndexState, fieldValueObject, textAlignmentType, true, 12, false);
+                            SetCellValue(rows, indexesNeeded.ColDataRowIndex, columnIndexState, fieldValueObject, textAlignmentType, headerCell, true, 12, false);
                         }
                     }
                     else
@@ -795,13 +803,16 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                             {
                                 int valuesCount = 0;
                                 bool insertColumns = true;
-
+                                var subTableInfo = context.GetSubTableInfo(subTableDef.SubTableId);
+                              
                                 for (int k = 0; k < subTableDef.SubTableFields.Count; k++)
                                 {
 
                                     var fieldDef = subTableDef.SubTableFields[k];
                                     var fieldStartingIndex = columnIndexState + k;
 
+                                    var fieldInfo = subTableInfo.FieldsInfo.GetRecord(fieldDef.FieldName);
+                                    var headerCell = GetExportExcelHeaderCellStyle(fieldInfo.FieldType, fieldDef.FieldName);
                                     var field = subTableItem.Fields.GetRecord(fieldDef.FieldName);
                                     if (field != null && field.FieldValues != null && field.FieldValues.Count > 0)
                                     {
@@ -847,7 +858,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                             {
                                                 textAlignmentType = TextAlignmentType.Right;
                                             }
-                                            SetCellValue(rows, subTableFirstRowIndex, fieldStartingIndex, fieldValueObject, textAlignmentType, true, 12, false);
+                                            SetCellValue(rows, subTableFirstRowIndex, fieldStartingIndex, fieldValueObject, textAlignmentType, headerCell, true, 12, false);
 
                                             if (subTableFieldsCount == 1)
                                                 fieldStartingIndex++;
@@ -867,7 +878,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
                                     for (int j = 0; j < subTableValuesCount; j++)
                                     {
-                                        SetCellValue(rows, subTableFirstRowIndex, fieldStartingIndex, null, TextAlignmentType.Left, true, 12, false);
+                                        SetCellValue(rows, subTableFirstRowIndex, fieldStartingIndex, null, TextAlignmentType.Left,null, true, 12, false);
 
                                         fieldStartingIndex++;
                                     }
@@ -944,7 +955,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                 {
                                     var cellField = worksheet.Cells[titleRow.Key, titleCell.Key];
                                     cellField.PutValue(titleCell.Value.Value);
-                                    cellField.SetStyle(GetCellStyle(cellField.GetStyle(), titleCell.Value.Style.SetBorder, titleCell.Value.Style.FontSize, titleCell.Value.Style.IsBold, titleCell.Value.Style.Alignment));
+                                    cellField.SetStyle(GetCellStyle(cellField.GetStyle(), titleCell.Value.Style.SetBorder, titleCell.Value.Style.FontSize, titleCell.Value.Style.IsBold, titleCell.Value.Style.Alignment, titleCell.Value.Style.HeaderCell));
                                 }
                             }
                         }
@@ -981,7 +992,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
                                     var cellField = worksheet.Cells[headerRow.Key, headerCell.Key];
                                     cellField.PutValue(headerCell.Value.Value);
-                                    cellField.SetStyle(GetCellStyle(cellField.GetStyle(), headerCell.Value.Style.SetBorder, headerCell.Value.Style.FontSize, headerCell.Value.Style.IsBold, headerCell.Value.Style.Alignment));
+                                    cellField.SetStyle(GetCellStyle(cellField.GetStyle(), headerCell.Value.Style.SetBorder, headerCell.Value.Style.FontSize, headerCell.Value.Style.IsBold, headerCell.Value.Style.Alignment, headerCell.Value.Style.HeaderCell));
                                 }
                             }
                         }
@@ -999,7 +1010,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                         var mergedRange = cellField.GetMergedRange();
                                         if (mergedRange != null)
                                         {
-                                            mergedRange.SetStyle(GetCellStyle(cellField.GetStyle(), headerCell.Value.Style.SetBorder, headerCell.Value.Style.FontSize, headerCell.Value.Style.IsBold, headerCell.Value.Style.Alignment));
+                                            mergedRange.SetStyle(GetCellStyle(cellField.GetStyle(), headerCell.Value.Style.SetBorder, headerCell.Value.Style.FontSize, headerCell.Value.Style.IsBold, headerCell.Value.Style.Alignment, headerCell.Value.Style.HeaderCell));
                                         }
                                     }
                                 }
@@ -1022,7 +1033,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                                         worksheet.Cells.SetColumnWidth(dataCell.Value.ColumnIndex, 20);
                                     var cellField = worksheet.Cells[dataRow.Key, dataCell.Key];
                                     cellField.PutValue(dataCell.Value.Value);
-                                    cellField.SetStyle(GetCellStyle(cellField.GetStyle(), dataCell.Value.Style.SetBorder, dataCell.Value.Style.FontSize, dataCell.Value.Style.IsBold, dataCell.Value.Style.Alignment));
+                                    cellField.SetStyle(GetCellStyle(cellField.GetStyle(), dataCell.Value.Style.SetBorder, dataCell.Value.Style.FontSize, dataCell.Value.Style.IsBold, dataCell.Value.Style.Alignment, dataCell.Value.Style.HeaderCell));
                                 }
                             }
                             isFirstRow =  false;
@@ -1036,7 +1047,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
             return memoryStream.ToArray();
         }
-        private Style GetCellStyle(Style style, bool setBorder, int fontSize, bool isBold, TextAlignmentType alignment)
+        private Style GetCellStyle(Style style, bool setBorder, int fontSize, bool isBold, TextAlignmentType alignment, ExportExcelHeaderCell headerCell)
         {
             style.Font.Name = "Times New Roman";
             style.Font.Color = Color.Black;
@@ -1047,11 +1058,35 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             {
                 SetBorder(style, true, true, true, true);
             }
+            if (headerCell != null && headerCell.CellType.HasValue)
+            {
+                switch (headerCell.CellType.Value)
+                {
+                    case ExcelCellType.DateTime:
+                        if (!headerCell.DateTimeType.HasValue)
+                            throw new NullReferenceException("headerCell.DateTimeType");
+                        style.Custom = Utilities.GetDateTimeFormat(headerCell.DateTimeType.Value);
+                        break;
+
+                    case ExcelCellType.Number:
+                        if (!headerCell.NumberType.HasValue)
+                            throw new NullReferenceException("headerCell.NumberType");
+                        style.Custom = ExcelManager.GetNumberFormat(headerCell.NumberType.Value);
+                        break;
+                }
+            }
             return style;
         }
 
-    }
+        private ExportExcelHeaderCell GetExportExcelHeaderCellStyle(DataRecordFieldType fieldType, string title)
+        {
+            var excelHeaderCell = new ExportExcelHeaderCell { Title = title };
+            var setTypeContext = new DataRecordFieldTypeSetExcelCellTypeContext { HeaderCell = excelHeaderCell };
+            fieldType.SetExcelCellType(setTypeContext);
+            return setTypeContext.HeaderCell;
+        }
 
+    }
 
     public class AdvancedExcelFileGeneratorTableDefinition
     {
@@ -1315,5 +1350,14 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         public bool IsBold { get; set; }
         public int FontSize { get; set; }
         public bool SetBorder { get; set; }
+        public ExportExcelHeaderCell HeaderCell { get; set; }
+    }
+    public class DataRecordFieldTypeSetExcelCellTypeContext : IDataRecordFieldTypeSetExcelCellTypeContext
+    {
+        public ExportExcelHeaderCell HeaderCell
+        {
+            get;
+            set;
+        }
     }
 }
