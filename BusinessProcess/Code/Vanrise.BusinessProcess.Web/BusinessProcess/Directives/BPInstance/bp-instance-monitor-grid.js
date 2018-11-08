@@ -29,14 +29,15 @@ app.directive("businessprocessBpInstanceMonitorGrid", ["BusinessProcess_BPInstan
             var isGettingDataFirstTime = true;
             var minId;
 
-            var lastUpdateHandle, lessThanID, nbOfRows, definitionsId, entityId;
+            var lastUpdateHandle, lessThanID, nbOfRows, definitionsId, entityId, taskId;
 
             var input = {
                 LastUpdateHandle: lastUpdateHandle,
                 LessThanID: lessThanID,
                 NbOfRows: nbOfRows,
                 DefinitionsId: definitionsId,
-                EntityId: entityId
+                EntityId: entityId,
+                TaskId: taskId
             };
 
             //API
@@ -73,6 +74,7 @@ app.directive("businessprocessBpInstanceMonitorGrid", ["BusinessProcess_BPInstan
                     input.DefinitionsId = query.DefinitionsId;
                     input.ParentId = query.BPInstanceID;
                     input.EntityIds = query.EntityIds;
+                    input.TaskId = query.TaskId;
 
                     $scope.bpInstances.length = 0;
                     isGettingDataFirstTime = true;

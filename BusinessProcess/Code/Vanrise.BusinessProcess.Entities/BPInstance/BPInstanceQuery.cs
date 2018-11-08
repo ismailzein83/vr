@@ -14,5 +14,6 @@ namespace Vanrise.BusinessProcess.Entities
         public DateTime? DateTo { get; set; }
 
         public int Top { get; set; }
+        public Guid? TaskId { get; set; }
     }
 }

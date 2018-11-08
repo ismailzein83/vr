@@ -68,21 +68,18 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstance != null ? bpInstance.Title : null;
         }
 
-        public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds)
+        public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, Guid? taskId)
         {
-            BPInstanceUpdateOutput bpInstanceUpdateOutput = new BPInstanceUpdateOutput();
-
-            var requiredPermissionSetManager = new RequiredPermissionSetManager();
             List<int> grantedPermissionSetIds;
-            bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
+            bool isUserGrantedAllModulePermissionSets = new RequiredPermissionSetManager().IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
 
             IBPInstanceDataManager bpInstanceDataManager = GetBPInstanceDataManager();
 
             List<BPInstance> bpInstances;
             if (maxTimeStamp == null) //first page
             {
-                bpInstances = bpInstanceDataManager.GetFirstPage(out maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
-                List<BPInstance> bpInstancesArchived = bpInstanceDataManager.GetFirstPageFromArchive(nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
+                bpInstances = bpInstanceDataManager.GetFirstPage(out maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds, taskId);
+                List<BPInstance> bpInstancesArchived = bpInstanceDataManager.GetFirstPageFromArchive(nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds, taskId);
                 if (bpInstancesArchived != null && bpInstancesArchived.Count > 0)
                 {
                     bpInstances.AddRange(bpInstancesArchived);
@@ -91,13 +88,14 @@ namespace Vanrise.BusinessProcess.Business
             }
             else
             {
-                bpInstances = bpInstanceDataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
+                bpInstances = bpInstanceDataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds, taskId);
             }
 
             List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
             foreach (BPInstance bpInstance in bpInstances)
                 bpInstanceDetails.Add(BPInstanceDetailMapper(bpInstance));
 
+            BPInstanceUpdateOutput bpInstanceUpdateOutput = new BPInstanceUpdateOutput();
             bpInstanceUpdateOutput.ListBPInstanceDetails = bpInstanceDetails;
             bpInstanceUpdateOutput.MaxTimeStamp = maxTimeStamp;
             return bpInstanceUpdateOutput;

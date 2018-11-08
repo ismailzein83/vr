@@ -6,9 +6,11 @@
     "use strict";
     BusinessProcess_BPSchedulerTaskService.$inject = ['VRModalService'];
     function BusinessProcess_BPSchedulerTaskService(VRModalService) {
+        var drillDownDefinitions = [];
 
         return ({
-            showAddTaskModal: showAddTaskModal
+            showAddTaskModal: showAddTaskModal,
+            addDrillDownDefinition: addDrillDownDefinition
         });
 
         function showAddTaskModal(bpDefinitionObj, onTaskAdded) {
@@ -29,6 +31,9 @@
   
         }
 
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
     }
     appControllers.service('BusinessProcess_BPSchedulerTaskService', BusinessProcess_BPSchedulerTaskService);
 

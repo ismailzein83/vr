@@ -1,8 +1,10 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'BusinessProcess_BPInstanceAPIService', 'UtilsService'];
-    function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, BusinessProcess_BPInstanceAPIService, UtilsService) {
+
+    BusinessProcess_BPInstanceService.$inject = ['LabelColorsEnum', 'BPInstanceStatusEnum', 'VRModalService', 'BusinessProcess_BPInstanceAPIService', 'UtilsService', 'VR_Runtime_SchedulerTaskService'];
+
+    function BusinessProcess_BPInstanceService(LabelColorsEnum, BPInstanceStatusEnum, VRModalService, BusinessProcess_BPInstanceAPIService, UtilsService, VR_Runtime_SchedulerTaskService) {
         function getStatusColor(status) {
 
             if (status === BPInstanceStatusEnum.New.value) return LabelColorsEnum.New.color;
@@ -19,17 +21,17 @@
             return LabelColorsEnum.Info.color;
         };
 
-        function openProcessTracking(processInstanceId,context) {
+        function openProcessTracking(processInstanceId, context) {
 
             //VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPTrackingModal.html', {
             VRModalService.showModal('/Client/Modules/BusinessProcess/Views/BPInstance/BPInstanceTrackingModal.html', {
                 BPInstanceID: processInstanceId,
                 context: context
             }, {
-                onScopeReady: function (modalScope) {
-                    modalScope.title = "Business Process Progress: ";
-                }
-            });
+                    onScopeReady: function (modalScope) {
+                        modalScope.title = "Business Process Progress: ";
+                    }
+                });
         };
 
         function startNewInstance(bpDefinitionObj, onProcessInputCreated, onProcessInputsCreated) {
@@ -46,8 +48,26 @@
 
             VRModalService.showModal('/Client/Modules/BusinessProcess/Views/NewInstanceEditor/NewInstanceEditor.html', parameters, modalSettings);
         }
-        function displayRunningInstancesIfExist(definitionId, entityIds, runningInstanceEditorSettings)
-        {
+
+        function registerDrillDownToSchdeulerTask() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = "Recent Instances";
+            drillDownDefinition.directive = "businessprocess-bp-instance-monitor-grid";
+            drillDownDefinition.hideDrillDownFunction = function (bpInstanceItem) {
+                return bpInstanceItem.Entity.ActionTypeId.toUpperCase() != '7A35F562-319B-47B3-8258-EC1A704A82EB';
+            };
+            drillDownDefinition.loadDirective = function (directiveAPI, bpInstanceItem) {
+                bpInstanceItem.bpInstanceGridAPI = directiveAPI;
+
+                var payload = { TaskId: bpInstanceItem.Entity.TaskId };
+                return bpInstanceItem.bpInstanceGridAPI.loadGrid(payload);
+            };
+
+            VR_Runtime_SchedulerTaskService.addDrillDownDefinition(drillDownDefinition);
+        }
+
+        function displayRunningInstancesIfExist(definitionId, entityIds, runningInstanceEditorSettings) {
             var displayRunningInstancePromiseDeferred = UtilsService.createPromiseDeferred();
             var hasRunningInstancesInput = {
                 definitionId: definitionId,
@@ -79,13 +99,15 @@
                 });
             return displayRunningInstancePromiseDeferred.promise;
         }
+
         return ({
             getStatusColor: getStatusColor,
             openProcessTracking: openProcessTracking,
             startNewInstance: startNewInstance,
+            registerDrillDownToSchdeulerTask: registerDrillDownToSchdeulerTask,
             displayRunningInstancesIfExist: displayRunningInstancesIfExist
         });
     }
-    appControllers.service('BusinessProcess_BPInstanceService', BusinessProcess_BPInstanceService);
 
+    appControllers.service('BusinessProcess_BPInstanceService', BusinessProcess_BPInstanceService);
 })(appControllers);

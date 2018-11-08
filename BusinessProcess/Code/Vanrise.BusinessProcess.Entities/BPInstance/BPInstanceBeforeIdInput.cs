@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.BusinessProcess.Entities
 {
@@ -13,5 +10,6 @@ namespace Vanrise.BusinessProcess.Entities
         public List<Guid> DefinitionsId { get; set; }
         public int ParentId { get; set; }
         public List<string> EntityIds { get; set; }
+        public Guid? TaskId { get; set; }
     }
 }

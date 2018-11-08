@@ -22,7 +22,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         {
             BPInstanceManager manager = new BPInstanceManager();
             byte[] maxTimeStamp = input.LastUpdateHandle;
-            return manager.GetUpdated(ref maxTimeStamp, input.NbOfRows, input.DefinitionsId, input.ParentId, input.EntityIds);
+            return manager.GetUpdated(ref maxTimeStamp, input.NbOfRows, input.DefinitionsId, input.ParentId, input.EntityIds, input.TaskId);
         }
 
         [HttpPost]

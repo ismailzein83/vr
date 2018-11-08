@@ -69,10 +69,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
             if (query.DateTo.HasValue)
                 filters.Add(" bp.CreatedTime <= @DateTo ");
 
+            //if (query.TaskId.HasValue)
+            //    filters.Add(string.Format(" [TaskId] = '{0}' ", query.TaskId.Value));
+
             if (filters.Count > 0)
-            {
                 queryBuilder.AppendFormat(" WHERE {0} ", String.Join(" AND ", filters));
-            }
 
             queryBuilder.Append(" ORDER BY bp.[ID] DESC");
 
@@ -89,7 +90,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 });
         }
 
-        public List<BPInstance> GetFirstPage(out byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds)
+        public List<BPInstance> GetFirstPage(out byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, Guid? taskId)
         {
             StringBuilder queryBuilder = new StringBuilder();
 
@@ -99,10 +100,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
             queryBuilder.AppendFormat("SELECT TOP({0}) {1} INTO #TEMP FROM bp.[BPInstance] bp WITH(NOLOCK)", nbOfRows, BPInstanceSELECTCOLUMNS);
             List<string> filters = BuildFilters(definitionsId, parentId, entityIds, grantedPermissionSetIds);
 
+            if (taskId.HasValue)
+                filters.Add(string.Format(" [TaskId] = '{0}' ", taskId.Value));
+
             if (filters.Count > 0)
-            {
                 queryBuilder.AppendFormat(" WHERE {0} ", String.Join(" AND ", filters));
-            }
 
             queryBuilder.Append(" ORDER BY bp.[ID] DESC");
 
@@ -138,17 +140,18 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return bpInstances;
         }
 
-        public List<Entities.BPInstance> GetFirstPageFromArchive(int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds)
+        public List<Entities.BPInstance> GetFirstPageFromArchive(int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, Guid? taskId)
         {
             StringBuilder queryBuilder = new StringBuilder();
 
             queryBuilder.AppendFormat("SELECT TOP({0}) {1} FROM bp.[BPInstance_Archived] bp WITH(NOLOCK)", nbOfRows, BPInstanceSELECTCOLUMNS);
             List<string> filters = BuildFilters(definitionsId, parentId, entityIds, grantedPermissionSetIds);
 
+            if (taskId.HasValue)
+                filters.Add(string.Format(" [TaskId] = '{0}' ", taskId.Value));
+
             if (filters.Count > 0)
-            {
                 queryBuilder.AppendFormat(" WHERE {0} ", String.Join(" AND ", filters));
-            }
 
             queryBuilder.Append(" ORDER BY bp.[ID] DESC");
 
@@ -157,17 +160,18 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsText(queryBuilder.ToString(), BPInstanceMapper, null);
         }
 
-        public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds)
+        public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, Guid? taskId)
         {
             StringBuilder queryBuilder = new StringBuilder();
 
             queryBuilder.AppendFormat("SELECT TOP({0}) {1} INTO #TEMP FROM bp.[BPInstance] bp WITH(NOLOCK)", nbOfRows, BPInstanceSELECTCOLUMNS);
             List<string> filters = BuildFilters(definitionsId, parentId, entityIds, grantedPermissionSetIds);
-
             filters.Add(" bp.[timestamp] > @TimestampAfter ");
 
-            queryBuilder.AppendFormat(" WHERE {0} ", String.Join(" AND ", filters));
+            if (taskId.HasValue)
+                filters.Add(string.Format(" [TaskId] = '{0}' ", taskId.Value));
 
+            queryBuilder.AppendFormat(" WHERE {0} ", String.Join(" AND ", filters));
 
             queryBuilder.Append(" ORDER BY bp.[timestamp] ");
 
@@ -209,7 +213,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             queryBuilder.AppendFormat("SELECT TOP({0}) {1} FROM bp.[BPInstance{2}] bp WITH(NOLOCK)", input.NbOfRows, BPInstanceSELECTCOLUMNS, (getFromArchive ? "_Archived" : ""));
             List<string> filters = new List<string>();
-
             filters.Add(String.Concat("bp.ID < ", input.LessThanID.ToString()));
 
             string definitionIdsFilter = BuildFilterFromGuids("bp.DefinitionID", input.DefinitionsId);
@@ -226,6 +229,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             if (input.ParentId != default(int))
                 filters.Add(String.Concat(" bp.ParentID = ", input.ParentId.ToString()));
+
+            if (input.TaskId.HasValue)
+                filters.Add(string.Format(" [TaskId] = '{0}' ", input.TaskId.Value));
 
             if (filters.Count > 0)
                 queryBuilder.AppendFormat(" WHERE {0} ", String.Join(" AND ", filters));
@@ -482,6 +488,7 @@ JOIN #InstancesToArchive instancesToArchive ON bp.ID = instancesToArchive.ID
 
             if (parentId != default(int))
                 filters.Add(String.Concat(" bp.ParentID = ", parentId.ToString()));
+
             return filters;
         }
 
