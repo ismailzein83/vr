@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data.SQL;
-using Vanrise.Entities;
 
 namespace Vanrise.Common.Data.SQL
 {
     public class CurrencyExchangeRateWithEEDDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ICurrencyExchangeRateWithEEDDataManager
-    {         
-        readonly string[] columns = { "CurrencyID", "Rate", "BED", "EED"};
+    {
+        readonly string[] columns = { "CurrencyID", "Rate", "BED", "EED" };
         public void ApplyExchangeRateWithEESInDB(List<Vanrise.Entities.ExchangeRateWithEED> exchangeRates)
         {
-         ExecuteNonQueryText(@" 
+            ExecuteNonQueryText(@" 
                                  IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CurrencyExchangeRate_Old]') AND type in (N'U'))
                                  BEGIN
                                     DROP TABLE [dbo].[CurrencyExchangeRate_Old]
@@ -30,11 +25,11 @@ namespace Vanrise.Common.Data.SQL
                                 Rate Decimal(18,6) NOT NULL,
                                 BED DATETIME NOT NULL,
                                 EED DATETIME) "
-            , null);
+               , null);
             var streamForBulkInsert = base.InitializeStreamForBulkInsert();
-            foreach(var rate in exchangeRates)
+            foreach (var rate in exchangeRates)
             {
-                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", rate.CurrencyId, Math.Round(rate.Rate, 6), rate.BED, rate.EED);
+                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", rate.CurrencyId, Math.Round(rate.Rate, 6), GetDateTimeForBCP(rate.BED), GetDateTimeForBCP(rate.EED));
             }
             streamForBulkInsert.Close();
             var bulkInsertInfo = new StreamBulkInsertInfo
@@ -87,7 +82,7 @@ namespace Vanrise.Common.Data.SQL
         string _connectionStringName;
         public string ConnectionStringName
         {
-            set { _connectionStringName =value; }
+            set { _connectionStringName = value; }
         }
     }
 }

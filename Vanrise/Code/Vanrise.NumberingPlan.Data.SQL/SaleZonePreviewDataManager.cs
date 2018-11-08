@@ -55,8 +55,8 @@ namespace Vanrise.NumberingPlan.Data.SQL
                 record.ZoneName,
                 record.RecentZoneName,
                 (int)record.ChangeTypeZone,
-                record.ZoneBED,
-                record.ZoneEED);
+                GetDateTimeForBCP(record.ZoneBED),
+                GetDateTimeForBCP(record.ZoneEED));
         }
 
         public object FinishDBApplyStream(object dbApplyStream)

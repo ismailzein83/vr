@@ -48,8 +48,8 @@ namespace Vanrise.NumberingPlan.Data.SQL
                        record.CountryId,
                        record.Name,
                        _sellingNumberPlanId,
-                       record.BED,
-                       record.EED);
+                       GetDateTimeForBCP(record.BED),
+                       GetDateTimeForBCP(record.EED));
         }
 
         public object FinishDBApplyStream(object dbApplyStream)

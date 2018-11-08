@@ -57,8 +57,8 @@ namespace Vanrise.NumberingPlan.Data.SQL
                        record.Code,
                        record.Zone.ZoneId,
                        record.CodeGroupId,
-                       record.BED,
-                       record.EED);
+                       GetDateTimeForBCP(record.BED),
+                       GetDateTimeForBCP(record.EED));
         }
 
 
