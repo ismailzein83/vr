@@ -6,7 +6,8 @@ app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPI
             restrict: "E",
             scope: {
                 onReady: "=",
-                normalColNum: '@'
+                normalColNum: '@',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -31,8 +32,9 @@ app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPI
                 multipleselection = "ismultipleselection";
             }
 
-            return '<vr-whs-be-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" normal-col-num="{{ctrl.normalColNum}}" ismultipleselection>'
-            + '</vr-whs-be-salezone-selector>';
+            return '<vr-whs-be-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" '
+                + 'normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" ismultipleselection> '
+                + '</vr-whs-be-salezone-selector>';
         }
 
 
@@ -91,14 +93,14 @@ app.directive('vrWhsBeSalezoneMasterplanSelector', ['WhS_BE_SellingNumberPlanAPI
 
                     var saleZonePlanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     saleZoneReadyPromiseDeferred.promise
-                            .then(function () {
-                                var directivePayload = {
-                                    sellingNumberPlanId: $scope.scopeModal.SellingNumberPlanId,
-                                    selectedIds: selectedIds
-                                };
+                        .then(function () {
+                            var directivePayload = {
+                                sellingNumberPlanId: $scope.scopeModal.SellingNumberPlanId,
+                                selectedIds: selectedIds
+                            };
 
-                                VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, directivePayload, saleZonePlanLoadPromiseDeferred);
-                            });
+                            VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, directivePayload, saleZonePlanLoadPromiseDeferred);
+                        });
                     return saleZonePlanLoadPromiseDeferred.promise;
                 }
 
