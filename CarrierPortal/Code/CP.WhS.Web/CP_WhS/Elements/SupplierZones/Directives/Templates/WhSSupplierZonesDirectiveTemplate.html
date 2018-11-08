@@ -1,0 +1,6 @@
+﻿<vr-columns width="1/3row" ng-show="!scopeModel.isSingleItem">
+    <cp-whs-carrieraccounts-selector on-ready="scopeModel.onSuppliersSelectorReady" isrequired="true"  onselectionchanged="scopeModel.onSupplierSelectionChanged" selectedvalues="scopeModel.selectedSupplier"></cp-whs-carrieraccounts-selector>
+</vr-columns>
+<vr-columns width="1/3row">
+    <cp-whs-supplierzones-selector on-ready="scopeModel.onSupplierZonesSelectorReady" isrequired="true" ismultipleselection selectedvalues="ctrl.selectedvalues"></cp-whs-supplierzones-selector>
+</vr-columns>

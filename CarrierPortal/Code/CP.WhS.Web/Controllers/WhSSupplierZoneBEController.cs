@@ -22,5 +22,19 @@ namespace CP.WhS.Web.Controllers
         {
             return _whSSupplierZoneBEManager.GetRemoteSupplierZonesInfo(Vanrise.Common.Serializer.Deserialize<ClientSupplierZoneInfoFilter>(serializedFilter));
         }
+        [HttpPost]
+        [Route("GetSupplierIdBySupplierZoneIds")]
+        public int GetSupplierIdBySupplierZoneIds(IEnumerable<long> supplierZoneIds)
+        {
+            return _whSSupplierZoneBEManager.GetSupplierIdBySupplierZoneIds(supplierZoneIds);
+        }
+
+        [HttpGet]
+        [Route("GetSupplierZoneInfoByIds")]
+        public IEnumerable<ClientSupplierZoneInfo> GetSupplierZoneInfoByIds(string serializedObj)
+        {
+            List<long> selectedIds = serializedObj != null ? Vanrise.Common.Serializer.Deserialize<List<long>>(serializedObj) : null;
+            return _whSSupplierZoneBEManager.GetSupplierZoneInfoByIds(selectedIds);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('cpWhsSupplierzonesSelector', ['UtilsService', 'VRUIUtilsService', "CP_WhS_SupplierZonesAPIService",
-    function (UtilsService, VRUIUtilsService, CP_WhS_SupplierZonesAPIService) {
+app.directive('cpWhsSalezonesSelector', ['UtilsService', 'VRUIUtilsService', "CP_WhS_SaleZonesAPIService",
+    function (UtilsService, VRUIUtilsService, CP_WhS_SaleZonesAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -19,7 +19,7 @@ app.directive('cpWhsSupplierzonesSelector', ['UtilsService', 'VRUIUtilsService',
                 ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
-                var selector = new SupplierZonesSelector(ctrl, $scope, $attrs);
+                var selector = new SaleZonesSelector(ctrl, $scope, $attrs);
                 selector.initializeController();
             },
             controllerAs: 'ctrl',
@@ -32,30 +32,31 @@ app.directive('cpWhsSupplierzonesSelector', ['UtilsService', 'VRUIUtilsService',
                 };
             },
             template: function (element, attrs) {
-                return getSupplierZonesSelectorTemplate(attrs);
+                return getSaleZonesSelectorTemplate(attrs);
             }
 
         };
 
-        function getSupplierZonesSelectorTemplate(attrs) {
+        function getSaleZonesSelectorTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Supplier Zone";
+            var label = "Sale Zone";
             if (attrs.ismultipleselection != undefined) {
-                label = "Supplier Zones";
+                label = "Sale Zones";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SupplierZoneId" isrequired="ctrl.isrequired" '
+                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="SaleZoneId" isrequired="ctrl.isrequired" '
                 + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</vr-columns>';
         }
 
-        function SupplierZonesSelector(ctrl, $scope, attrs) {
+        function SaleZonesSelector(ctrl, $scope, attrs) {
             var selectorAPI;
+
             function initializeController() {
                 $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
@@ -68,28 +69,26 @@ app.directive('cpWhsSupplierzonesSelector', ['UtilsService', 'VRUIUtilsService',
                 var api = {};
 
                 api.getSelectedIds = function () {
-                    return VRUIUtilsService.getIdSelectedIds('SupplierZoneId', attrs, ctrl);
+                    return VRUIUtilsService.getIdSelectedIds('SaleZoneId', attrs, ctrl);
                 };
 
                 api.load = function (payload) {
                     var selectedIds;
                     var businessEntityDefinitionId;
-                    var supplierId;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
-                        supplierId = payload.supplierId;
                     }
                     function getFilter() {
                         return {
-                            BusinessEntityDefinitionId: businessEntityDefinitionId,
-                            SupplierId: supplierId
+                            BusinessEntityDefinitionId: businessEntityDefinitionId
                         };
                     }
-                    return CP_WhS_SupplierZonesAPIService.GetRemoteSupplierZonesInfo(UtilsService.serializetoJson(getFilter())).then(function (response) {
+                    CP_WhS_SaleZonesAPIService.GetRemoteSaleZonesInfo(UtilsService.serializetoJson(getFilter())).then(function (response) {
                         ctrl.datasource = response;
+
                         if (selectedIds != undefined) {
-                            VRUIUtilsService.setSelectedValues(selectedIds, 'SupplierZoneId', attrs, ctrl);
+                            VRUIUtilsService.setSelectedValues(selectedIds, 'SaleZoneId', attrs, ctrl);
                         }
                     });
                 };

@@ -24,18 +24,40 @@ namespace CP.WhS.Business
                 return true;
             };
             var userId = SecurityContext.Current.GetLoggedInUserId();
-            return GetCachedClientWhSSupplierZonesInfo(userId).GetRecord(filter.SupplierId).FindAllRecords(filterExpression);
+            return GetCachedClientWhSSupplierZonesInfoBySupplierId(userId).GetRecord(filter.SupplierId).FindAllRecords(filterExpression);
         }
 
-        public List<ClientSupplierZoneInfo> GetClientSupplierZoneInfo(int supplierId)
+        public ClientSupplierZoneInfo GetClientSupplierZoneInfo(long supplierZoneId)
         {
             var userId = SecurityContext.Current.GetLoggedInUserId();
-            return GetCachedClientWhSSupplierZonesInfo(userId).GetRecord(supplierId);
+            return GetCachedClientWhSSupplierZonesInfoBySupplierZoneId(userId).GetRecord(supplierZoneId);
         }
-        public string GetSupplierZoneName(int supplierId, long supplierZoneId)
+        public string GetSupplierZoneName(long supplierZoneId)
         {
-            var supplierZones = GetClientSupplierZoneInfo(supplierId);
-            return supplierZones.FindRecord(x => x.SupplierZoneId == supplierZoneId).Name;
+            var supplierZone = GetClientSupplierZoneInfo(supplierZoneId);
+            return supplierZone!=null ? supplierZone.Name : null;
+        }
+
+        public int GetSupplierIdBySupplierZoneIds(IEnumerable<long> supplierZoneIds)
+        {
+            var userId = SecurityContext.Current.GetLoggedInUserId();
+            var supplierZones = this.GetCachedClientWhSSupplierZonesInfoBySupplierZoneId(userId);
+            return supplierZones.FindRecord(x => supplierZoneIds.Contains(x.SupplierZoneId)).SupplierId;
+        }
+        public IEnumerable<ClientSupplierZoneInfo> GetSupplierZoneInfoByIds(List<long> selectedIds)
+        {
+            var userId = SecurityContext.Current.GetLoggedInUserId();
+            List<ClientSupplierZoneInfo> supplierZones = new List<ClientSupplierZoneInfo>();
+            var supplierZonesInfo = GetCachedClientWhSSupplierZonesInfoBySupplierZoneId(userId);
+            foreach (var id in selectedIds)
+            {
+                ClientSupplierZoneInfo supplierZone;
+                if (supplierZonesInfo.TryGetValue(id, out supplierZone))
+                {
+                    supplierZones.Add(supplierZone);
+                }
+            }
+            return supplierZones;
         }
 
         #endregion
@@ -52,17 +74,48 @@ namespace CP.WhS.Business
         #endregion
 
         #region Private Methods
-        private Dictionary<int, List<ClientSupplierZoneInfo>> GetCachedClientWhSSupplierZonesInfo(int userId)
+        private Dictionary<int, List<ClientSupplierZoneInfo>> GetCachedClientWhSSupplierZonesInfoBySupplierId(int userId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedClientWhSSupplierZonesInfo_{0}", userId),
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedClientWhSSupplierZonesInfoBySupplierId_{0}", userId),
               () =>
               {
                   PortalConnectionManager connectionManager = new PortalConnectionManager();
                   var connectionSettings = connectionManager.GetWhSConnectionSettings();
                   WhSCarrierAccountBEManager whSCarrierAccountBEManager = new WhSCarrierAccountBEManager();
                   IEnumerable<ClientAccountInfo> clientAccountsInfo = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new ClientAccountInfoFilter() { GetSuppliers = true });
-                  IEnumerable<ClientSupplierZoneInfo> clientSupplierZonesInfo = connectionSettings.Get<IEnumerable<ClientSupplierZoneInfo>>(string.Format("/api/WhS_BE/SupplierZone/GetClientSupplierZonesInfo?supplierIds={0}", clientAccountsInfo.Select<ClientAccountInfo,int>(x=>x.AccountId)));
-                  return clientSupplierZonesInfo == null ? null : clientSupplierZonesInfo.ToDictionary(x => x.SupplierId, zones => clientSupplierZonesInfo.ToList());
+                  IEnumerable<int> supplierIds = clientAccountsInfo.Select<ClientAccountInfo, int>(x => x.AccountId);
+                  if(supplierIds!=null && supplierIds.Count() > 0)
+                  {
+                      IEnumerable<ClientSupplierZoneInfo> clientSupplierZonesInfo = connectionSettings.Post<ClientSupplierZonesInfoInput, IEnumerable<ClientSupplierZoneInfo>>("/api/WhS_BE/SupplierZone/GetClientSupplierZonesInfo", new ClientSupplierZonesInfoInput() { SupplierIds = supplierIds.ToList() });
+                      Dictionary<int, List<ClientSupplierZoneInfo>> dic = new Dictionary<int, List<ClientSupplierZoneInfo>>();
+                      if(clientSupplierZonesInfo!=null && clientSupplierZonesInfo.Count() > 0)
+                      {
+                          foreach (var supplierId in supplierIds)
+                          {
+                              dic.Add(supplierId, clientSupplierZonesInfo.FindAllRecords(x => x.SupplierId == supplierId).ToList());
+                          }
+                          return dic;
+                      }
+                  }
+                  return null;
+              });
+        }
+        private Dictionary<long, ClientSupplierZoneInfo> GetCachedClientWhSSupplierZonesInfoBySupplierZoneId(int userId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedClientWhSSupplierZonesInfoBySupplierZoneId_{0}", userId),
+              () =>
+              {
+                  PortalConnectionManager connectionManager = new PortalConnectionManager();
+                  var connectionSettings = connectionManager.GetWhSConnectionSettings();
+                  WhSCarrierAccountBEManager whSCarrierAccountBEManager = new WhSCarrierAccountBEManager();
+                  IEnumerable<ClientAccountInfo> clientAccountsInfo = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new ClientAccountInfoFilter() { GetSuppliers = true });
+                  IEnumerable<int> supplierIds = clientAccountsInfo.Select<ClientAccountInfo, int>(x => x.AccountId);
+                  if (supplierIds != null && supplierIds.Count() > 0)
+                  {
+                      IEnumerable<ClientSupplierZoneInfo> clientSupplierZonesInfo = connectionSettings.Post<ClientSupplierZonesInfoInput, IEnumerable<ClientSupplierZoneInfo>>("/api/WhS_BE/SupplierZone/GetClientSupplierZonesInfo", new ClientSupplierZonesInfoInput() { SupplierIds = supplierIds.ToList() });
+                      return clientSupplierZonesInfo == null ? null : clientSupplierZonesInfo.ToDictionary(x => x.SupplierZoneId, zones => zones);
+                  }
+                  return null;
               });
         }
         private WhSSupplierZonesBEDefinition GetSupplierZoneBEDefinition(Guid businessEntityDefinitionId)
@@ -91,7 +144,7 @@ namespace CP.WhS.Business
 
         public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            throw new NotImplementedException();
+            return GetSupplierZoneName(Convert.ToInt64(context.EntityId));
         }
 
         public override dynamic GetEntityId(IBusinessEntityIdContext context)

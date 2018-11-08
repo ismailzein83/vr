@@ -77,7 +77,7 @@ namespace CP.WhS.Business
         #region Private Methods
         private Dictionary<int, ClientAccountInfo> GetCachedClientWhSAccountsInfo(int userId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(userId,
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedClientWhSAccountsInfo_{0}", userId),
               () =>
               {
                   var filter = new CarrierAccountInfoFilter

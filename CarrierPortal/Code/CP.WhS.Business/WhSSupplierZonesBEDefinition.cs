@@ -16,7 +16,7 @@ namespace CP.WhS.Business
 
         public override string IdType { get { return "System.Int64"; } }
 
-        public override string SelectorUIControl { get { return "cp-whs-supplierzones-selector"; } }
+        public override string SelectorUIControl { get { return "cp-whs-supplierzones-directive"; } }
 
         public override string ManagerFQTN { get { return "CP.WhS.Business.WhSSupplierZoneBEManager, CP.WhS.Business"; } }
 

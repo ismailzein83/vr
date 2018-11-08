@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService',"CP_WhS_CarrierAccountsAPIService",
-    function (UtilsService, VRUIUtilsService, CP_WhS_CarrierAccountsAPIService) {
+app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService', "CP_WhS_CarrierAccountsAPIService","CP_WhS_CarrierAccountActivationStatusEnum",
+    function (UtilsService, VRUIUtilsService, CP_WhS_CarrierAccountsAPIService, CP_WhS_CarrierAccountActivationStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -40,19 +40,13 @@ app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService
         };
 
         function getCarrierAccountSelectorTemplate(attrs) {
-
             var multipleselection = "";
-            var label = "Carrier Account";
             if (attrs.ismultipleselection != undefined) {
-                label = "Carrier Accounts";
                 multipleselection = "ismultipleselection";
             }
-            if (attrs.customlabel != undefined)
-                label = attrs.customlabel;
-
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-                + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="AccountId" isrequired="ctrl.isrequired" '
-                + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + '<vr-select ' + multipleselection+' datatextfield="Name" datavaluefield="AccountId" isrequired="ctrl.isrequired" '
+                + ' label="{{ctrl.label}}"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityname="Account" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</vr-columns>';
         }
 
@@ -74,6 +68,18 @@ app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService
                 };
 
                 api.load = function (payload) {
+                   
+                    ctrl.label = "Carrier Account";
+                    if (attrs.ismultipleselection != undefined) {
+                        ctrl.label = "Carrier Accounts";
+                    }
+                    if (attrs.customlabel != undefined)
+                        ctrl.label = attrs.customlabel;
+                    if (payload.fieldTitle != undefined) {
+                        ctrl.label = payload.fieldTitle;
+                        if (attrs.ismultipleselection != undefined) 
+                            ctrl.label += "s";
+                    }
                     var selectedIds;
                     var businessEntityDefinitionId;
 
@@ -91,11 +97,31 @@ app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService
                         return filter;
                     }
                     return CP_WhS_CarrierAccountsAPIService.GetRemoteCarrierAccountsInfo(UtilsService.serializetoJson(getFilter())).then(function (response) {
-                        ctrl.datasource = response;
+                        ctrl.datasource.length = 0;
+
+                        angular.forEach(response, function (itm) {
+                            if (itm.ActivationStatus != CP_WhS_CarrierAccountActivationStatusEnum.Inactive.value) {
+                                ctrl.datasource.push(itm);
+                            }
+                        });
                         if (selectedIds != undefined) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'AccountId', attrs, ctrl);
                         }
                     });
+                };
+
+                api.selectIfSingleItem = function () {
+                    selectorAPI.selectIfSingleItem();
+                };
+
+                api.isSingleItem = function () {
+                    if (ctrl.datasource.length == 1)
+                        return true;
+                    return false;
+                };
+
+                api.getSingleItem = function () {
+                    return ctrl.datasource[0];
                 };
 
                 if (ctrl.onReady != null)

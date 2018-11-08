@@ -87,6 +87,7 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountDirectiveAPI, accountViewTypePayload, setLoader, undefined);
             }
+            $scope.selectedCarrierAccounts.length = 0;
         };
 
         $scope.search = function () {

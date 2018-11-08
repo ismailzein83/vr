@@ -140,6 +140,7 @@
     <Compile Include="Controllers\ReleaseCodeStatisticsController.cs" />
     <Compile Include="Controllers\RepeatedNumbersController.cs" />
     <Compile Include="Controllers\WhSCarrierAccountBEController.cs" />
+    <Compile Include="Controllers\WhSSaleZoneBEController.cs" />
     <Compile Include="Controllers\WhSSupplierZoneBEController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -160,6 +161,7 @@
   <ItemGroup>
     <Content Include="CP_WhS\Constants\AccountViewTypeEnum.js" />
     <Content Include="CP_WhS\Constants\BillingCDROptionMeasureEnum.js" />
+    <Content Include="CP_WhS\Constants\CarrierAccountActivationStatusEnum.js" />
     <Content Include="CP_WhS\Constants\CarrierAccountTypeEnum.js" />
     <Content Include="CP_WhS\Constants\GenericAnalyticReleaseCodeDimensionsEnum.js" />
     <Content Include="CP_WhS\Constants\ModuleConfig.js" />
@@ -187,9 +189,15 @@
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Services\APIServices\RepeatedNumbersAPIService.js" />
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Views\RepeatedNumbersManagement.html" />
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Views\RepeatedNumbersManagementController.js" />
+    <Content Include="CP_WhS\Elements\SaleZones\Directives\cp-whs-salezones-selector.js" />
+    <Content Include="CP_WhS\Elements\SaleZones\Directives\cp-whs-salezonesbedefinition-editor.js" />
+    <Content Include="CP_WhS\Elements\SaleZones\Directives\Templates\WhSSaleZonesBEDefinitionEditorTemplate.html" />
+    <Content Include="CP_WhS\Elements\SaleZones\Services\APIServices\SaleZonesAPIService.js" />
+    <Content Include="CP_WhS\Elements\SupplierZones\Directives\cp-whs-supplierzones-directive.js" />
     <Content Include="CP_WhS\Elements\SupplierZones\Directives\cp-whs-supplierzones-selector.js" />
     <Content Include="CP_WhS\Elements\SupplierZones\Directives\cp-whs-supplierzonesbedefinition-editor.js" />
     <Content Include="CP_WhS\Elements\SupplierZones\Directives\Templates\WhSSupplierZonesBEDefinitionTemplate.html" />
+    <Content Include="CP_WhS\Elements\SupplierZones\Directives\Templates\WhSSupplierZonesDirectiveTemplate.html" />
     <Content Include="CP_WhS\Elements\SupplierZones\Services\APIServices\SupplierZonesAPIService.js" />
     <Content Include="CP_WhS\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\cp-whs-whsaccountqueryinterceptor.js" />
     <Content Include="CP_WhS\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\Templates\WhSAccountQueryInterceptorTemplate.html" />
