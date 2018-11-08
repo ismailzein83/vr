@@ -66,7 +66,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public CarrierProfileCarrierAccounts GetCarrierProfileCarrierAccountsByUserId(int userId)
         {
-            var cachedCarrierProfilePortalAccountSettingsByUserId = GetCachedCarrierProfilePortalAccountSettingsByUserId();
+            var cachedCarrierProfilePortalAccountSettingsByUserId = GetCachedCarrierProfilePortalAccountSettingsByUserId(userId);
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var carrierProfileCarrierAccounts = new CarrierProfileCarrierAccounts
             {
@@ -543,9 +543,9 @@ namespace TOne.WhS.BusinessEntity.Business
                    return carrierProfiles;
                });
         }
-        private Dictionary<int, CarrierProfilePortalAccountSettings> GetCachedCarrierProfilePortalAccountSettingsByUserId()
+        private Dictionary<int, CarrierProfilePortalAccountSettings> GetCachedCarrierProfilePortalAccountSettingsByUserId(int userId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCarrierProfilePortalAccountSettingsByUserId",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedCarrierProfilePortalAccountSettingsByUserId_{0}", userId),
              () =>
              {
                  ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();

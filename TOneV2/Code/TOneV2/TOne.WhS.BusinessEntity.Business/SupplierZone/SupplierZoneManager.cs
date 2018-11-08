@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.APIEntities;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Caching;
@@ -104,6 +105,25 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return supplierZones.MapRecords(SupplierZoneInfoMapper, filterExpression).OrderBy(item => item.Name);
         }
+        public IEnumerable<ClientSupplierZoneInfo> GetClientSupplierZonesInfo(ClientSupplierZonesInfoInput clientSupplierZonesInfoInput)
+        {
+            clientSupplierZonesInfoInput.ThrowIfNull("clientSupplierZoneInfo");
+            if (clientSupplierZonesInfoInput.SupplierIds != null && clientSupplierZonesInfoInput.SupplierIds.Count > 0)
+            {
+                List<ClientSupplierZoneInfo> clientSupplierZoneInfo = new List<ClientSupplierZoneInfo>();
+                foreach (var supplierId in clientSupplierZonesInfoInput.SupplierIds)
+                {
+                    var supplierZonesInfo = GetSupplierZonesInfo(supplierId);
+                    if (supplierZonesInfo != null)
+                    {
+                        clientSupplierZoneInfo.AddRange(supplierZonesInfo.MapRecords(ClientSupplierZoneInfoMapper));
+                    }
+                }
+                return clientSupplierZoneInfo;
+            }
+            return null;
+        }
+
         public IEnumerable<SupplierZone> GetSupplierZonesBySupplierId(int supplierId)
         {
             IEnumerable<SupplierZone> allSupplierZones = GetCachedSupplierZones().Values;
@@ -331,6 +351,16 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Methods
+        private ClientSupplierZoneInfo ClientSupplierZoneInfoMapper(SupplierZoneInfo supplierZoneInfo)
+        {
+            return new ClientSupplierZoneInfo
+            {
+                SupplierZoneId = supplierZoneInfo.SupplierZoneId,
+                Name = supplierZoneInfo.Name,
+                SupplierId = GetSupplierZone(supplierZoneInfo.SupplierZoneId).SupplierId
+            };
+
+        }
         private IEnumerable<SupplierZone> GetSupplierZonesBySupplier(int supplierId)
         {
             IEnumerable<SupplierZone> supplierZones = GetCachedSupplierZones().Values;

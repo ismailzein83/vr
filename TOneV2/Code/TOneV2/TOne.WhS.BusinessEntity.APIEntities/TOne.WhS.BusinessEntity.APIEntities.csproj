@@ -48,6 +48,7 @@
     <Compile Include="CarrierProfileCarrierAccounts.cs" />
     <Compile Include="ClientAccountInfo.cs" />
     <Compile Include="ClientSupplierZoneInfo.cs" />
+    <Compile Include="ClientSupplierZonesInfoInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
