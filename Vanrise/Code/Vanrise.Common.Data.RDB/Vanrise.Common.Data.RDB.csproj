@@ -50,6 +50,7 @@
     <Compile Include="CurrencyDataManager.cs" />
     <Compile Include="EmailTemplateDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VRMailMessageTemplateDataManager.cs" />
     <Compile Include="VRTimeZoneDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
