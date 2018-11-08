@@ -801,6 +801,84 @@ namespace Vanrise.Common
 
             return dateRanges;
         }
+
+        public static void RedistributePercentagePerWeight(List<IPercentageItem> percentageItemList)
+        {
+            if (percentageItemList == null)
+                return;
+
+            int totalAssignedPercentage = 0;
+            List<IPercentageItem> percentageItems = new List<IPercentageItem>();
+            foreach (IPercentageItem percentageItem in percentageItemList)
+            {
+                if (!percentageItem.Percentage.HasValue)
+                    continue;
+
+                if (!percentageItem.ShouldHavePercentage())
+                {
+                    percentageItem.Percentage = null;
+                    continue;
+                }
+
+                totalAssignedPercentage += percentageItem.Percentage.Value;
+                percentageItems.Add(percentageItem);
+            }
+
+            if (percentageItems.Count == 0)
+                return;
+
+            if (totalAssignedPercentage < 0 || totalAssignedPercentage > 100)
+                throw new Exception(string.Format("Total Assigned Percentages should be between 0 and 100. Current Value: {0}", totalAssignedPercentage));
+
+            int unassignedPercentages = 100 - totalAssignedPercentage;
+            if (totalAssignedPercentage != 100)
+            {
+                List<PercentageItemWithDecimalPart> percentageItemWithDecimalPartList = new List<PercentageItemWithDecimalPart>();
+
+                int newTotalAssignedPercentage = 0;
+
+                decimal factor = unassignedPercentages / (decimal)totalAssignedPercentage;
+
+                foreach (var percentageItem in percentageItems)
+                {
+                    decimal calculatedPercentage = percentageItem.Percentage.Value * (1 + factor);
+                    percentageItem.Percentage = (int)Math.Floor(calculatedPercentage);
+
+                    PercentageItemWithDecimalPart percentageItemWithDifference = new PercentageItemWithDecimalPart() { PercentageItem = percentageItem, DecimalPart = calculatedPercentage - percentageItem.Percentage.Value };
+                    newTotalAssignedPercentage += percentageItem.Percentage.Value;
+                    percentageItemWithDecimalPartList.Add(percentageItemWithDifference);
+                }
+
+                if (newTotalAssignedPercentage == 100)
+                    return;
+
+                int remaining = 100 - newTotalAssignedPercentage;
+                percentageItemWithDecimalPartList = percentageItemWithDecimalPartList.OrderByDescending(itm => itm.DecimalPart).ToList();
+
+                foreach (PercentageItemWithDecimalPart item in percentageItemWithDecimalPartList)
+                {
+                    item.PercentageItem.Percentage++;
+                    remaining--;
+
+                    if (remaining == 0)
+                        return;
+                }
+            }
+        }
+
+        class PercentageItemWithDecimalPart
+        {
+            public IPercentageItem PercentageItem { get; set; }
+
+            public decimal DecimalPart { get; set; }
+        }
+    }
+
+    public interface IPercentageItem
+    {
+        int? Percentage { get; set; }
+
+        bool ShouldHavePercentage();
     }
 
     public interface IPropValueReader
