@@ -29,7 +29,7 @@ namespace Vanrise.Analytic.MainExtensions.DARecordAggregates
                 return;
             }
 
-            minAggregateState.Min = minAggregateState.Min > fieldValue ? minAggregateState.Min : fieldValue;
+            minAggregateState.Min = minAggregateState.Min < fieldValue ? minAggregateState.Min : fieldValue;
         }
 
         public override dynamic GetResult(IDARecordAggregateGetResultContext context)
@@ -42,7 +42,7 @@ namespace Vanrise.Analytic.MainExtensions.DARecordAggregates
             var existingMinState = context.ExistingState as MinAggregateState;
             var newMinState = context.NewState as MinAggregateState;
 
-            existingMinState.Min = existingMinState.Min > newMinState.Min ? existingMinState.Min : newMinState.Min;
+            existingMinState.Min = existingMinState.Min < newMinState.Min ? existingMinState.Min : newMinState.Min;
         }
     }
 
