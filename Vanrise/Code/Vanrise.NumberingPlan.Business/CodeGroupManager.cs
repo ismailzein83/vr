@@ -4,8 +4,6 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -277,12 +275,17 @@ namespace Vanrise.NumberingPlan.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICodeGroupDataManager _dataManager = CodePrepDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
-            object _updateHandle;
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCodeGroupUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
         }
         private CodeIterator<CodeGroup> GetCodeIterator()

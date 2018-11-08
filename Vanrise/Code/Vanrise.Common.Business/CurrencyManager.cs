@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Caching;
 using Vanrise.Entities;
@@ -317,12 +315,16 @@ namespace Vanrise.Common.Business
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICurrencyDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyDataManager>();
-            object _updateHandle;
-
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCurrenciesUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
         }
         private CurrencyDetail CurrencyDetailMapper(Currency currency)

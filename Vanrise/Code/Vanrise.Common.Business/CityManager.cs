@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.Security.Entities;
@@ -208,13 +205,18 @@ namespace Vanrise.Common.Business
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICityDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ICityDataManager>();
-            object _updateHandle;
-
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCitiesUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
+
         }
 
         private class CityLoggableEntity : VRLoggableEntityBase

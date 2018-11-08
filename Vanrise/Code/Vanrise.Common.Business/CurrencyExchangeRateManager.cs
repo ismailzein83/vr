@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 
@@ -364,12 +362,17 @@ namespace Vanrise.Common.Business
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICurrencyExchangeRateDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyExchangeRateDataManager>();
-            object _updateHandle;
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCurrenciesExchangeRateUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
         }
 

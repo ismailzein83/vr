@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using Vanrise.Common;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
@@ -206,6 +205,7 @@ namespace Vanrise.Common.Business
                         bool insertActionSucc = dataManager.Insert(country);
                         if (insertActionSucc)
                         {
+                            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                             CountryWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
                             uploadCountryLog.CountOfCountriesAdded++;
                             colIndex = 0;
@@ -497,12 +497,17 @@ namespace Vanrise.Common.Business
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICountrytDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
-            object _updateHandle;
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCountriesUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
         }
 

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Caching;
-using Vanrise.Common;
 using Vanrise.Common.Data;
 using Vanrise.Data;
 using Vanrise.Entities;
@@ -151,13 +148,16 @@ namespace Vanrise.Common.Business
 
         private class CacheManager : BaseCacheManager
         {
-            IRateTypeDataManager dataManager = CommonDataManagerFactory.GetDataManager<IRateTypeDataManager>();
-
-            object _updateHandle;
-
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return dataManager.AreRateTypesUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
         }
         private Dictionary<int, Vanrise.Entities.RateType> GetCachedRateTypes()

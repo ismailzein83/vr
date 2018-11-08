@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
@@ -161,12 +159,16 @@ namespace Vanrise.Common.Business
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            IVRTimeZoneDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRTimeZoneDataManager>();
-            object _updateHandle;
-
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreVRTimeZonesUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
         }
         private class VRTimeZoneLoggableEntity : VRLoggableEntityBase
