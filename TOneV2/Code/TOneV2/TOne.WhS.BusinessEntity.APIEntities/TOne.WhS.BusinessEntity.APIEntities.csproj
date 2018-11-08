@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="CarrierProfileCarrierAccounts.cs" />
     <Compile Include="ClientAccountInfo.cs" />
+    <Compile Include="ClientSaleZoneInfo.cs" />
     <Compile Include="ClientSupplierZoneInfo.cs" />
     <Compile Include="ClientSupplierZonesInfoInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
