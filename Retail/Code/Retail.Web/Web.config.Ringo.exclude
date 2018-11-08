@@ -5,7 +5,7 @@
   -->
 <configuration>
   <appSettings>
-    <add key="Web_ExtendedModulesNames" value="Retail_Ringo"/>
+    <add key="Web_ExtendedModulesNames" value=""/>
     <add key="RingoDBConnStringKey"                        value="ConfigurationDBConnString"/>
     <add key="MNPReportPath" value="/Client/Modules/Retail_Ringo/Reports/MNP Report.xls"/>
   </appSettings>
