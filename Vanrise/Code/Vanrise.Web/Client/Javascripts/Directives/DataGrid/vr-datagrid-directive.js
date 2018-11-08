@@ -1179,6 +1179,11 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                return retrieveData(false, false, false, DataGridRetrieveDataEventType.ExternalTrigger);
 	            };
 
+                gridApi.refreshMenuActions = function (dataItem) {
+                    dataItem.menuActionObj = undefined;
+                    ctrl.getMenuActions(dataItem);
+                };
+
 	            function addBatchItemsToBeginSource(items) {
 	                var numberOfItems = pagingOnScrollEnabled ? getPageSize() : 10;//if paging on scroll is enabled, take the page size
 	                for (var i = 0; i < numberOfItems; i++) {
