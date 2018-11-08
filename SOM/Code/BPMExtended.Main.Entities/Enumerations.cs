@@ -53,5 +53,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.ADSL)]
         ContractTakeOver = 13,
 
+        [LineOfBusiness(LineOfBusiness.LeasedLine)]
+        LeasedLineTermination = 14,
+
     }
 }

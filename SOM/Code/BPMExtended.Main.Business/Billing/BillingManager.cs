@@ -21,6 +21,7 @@ using System.Xml.XPath;
 using MigraDoc.Rendering;
 using System.Diagnostics;
 using System.IO;
+using SOM.Main.Entities;
 
 namespace BPMExtended.Main.Business
 {
@@ -121,6 +122,113 @@ namespace BPMExtended.Main.Business
             payment.amountToPay = amountToPay;
             payment.isForeigner = isForeigner;
             payment.depositAmount = depositAmount;
+
+            return payment;
+        }
+
+        public PaymentInfo SubmitToPOS(string ratePlanId)
+        {
+            //Send to POS the list of services to pay with the contract id
+
+            PaymentInfo payment = new PaymentInfo();
+
+            RatePlanManager ratePlanManager = new RatePlanManager();
+            var coreServices = ratePlanManager.GetCoreServices(ratePlanId);
+
+            decimal amountToPay = 0;
+
+            foreach (var service in coreServices)
+            {
+                amountToPay += service.SubscriptionFee;
+            }
+
+
+            //
+            payment.amountToPay = amountToPay;
+
+            return payment;
+        }
+
+        public PaymentInfo GetDepositAmount(Guid contactId, BPMExtended.Main.Entities.OperationType operationType, List<ServiceParameter> services)
+        {
+            PaymentInfo payment = new PaymentInfo();
+            bool isContractCreated;
+            decimal depositAmount = 0;
+            bool hasCallBaring = false;
+            bool isForeigner = false;
+            string depositId=null;
+
+            //TODO : Create a contract with status on hold for this customer on Billing system
+            
+            isContractCreated = true; // suppose that the contract created successfully
+
+            if (!isContractCreated)
+            {
+                payment.isContractCreated = false;
+                return payment;
+
+            }
+
+            //Check if customer is foreigner and without sponsor + check if it has a call baring service selected
+
+         
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var esqResult = new EntitySchemaQuery(connection.EntitySchemaManager, "Contact");
+            esqResult.AddColumn("Name");
+            esqResult.AddColumn("StCustomerDocumentType");
+            esqResult.AddColumn("StSponsorDocumentIDNumber");
+
+            // Execution of query to database and getting object with set identifier.
+            var entity = esqResult.GetEntity(connection, contactId);
+            object customerTypeId = entity.GetColumnValue("StCustomerDocumentTypeId");
+            object sponsorNumber = entity.GetColumnValue("StSponsorDocumentIDNumber");
+
+            //get customer type
+            var esqResult2 = new EntitySchemaQuery(connection.EntitySchemaManager, "StCustomerDocumentType");
+            esqResult2.AddColumn("Name");
+            var entity2 = esqResult2.GetEntity(connection, customerTypeId);
+            object customerType = entity2.GetColumnValue("Name");
+
+
+            if (operationType == BPMExtended.Main.Entities.OperationType.TelephonyLineSubscription)
+            {
+
+   
+                if (services != null)
+                {
+
+                    foreach (ServiceParameter service in services)
+                    {
+                        if (service.Id == "EE85D0BC-CE96-441A-A0FD-3179026423F5")
+                        {
+                            hasCallBaring = true;
+                            break;
+                        }
+                    }
+
+                }
+
+            }
+
+
+            if (customerType.Equals("أجنبي") && sponsorNumber.ToString().Equals(""))
+            {
+                if (hasCallBaring)
+                    depositAmount = 15000;
+                else 
+                    depositAmount = 20000;
+
+                isForeigner = true;
+                depositId = "A1D1F6E6-0D44-4D0B-AB2C-8DB759E8F8FF";
+            }
+
+
+            //
+            payment.isForeigner = isForeigner;
+            payment.depositAmount = depositAmount;
+            payment.depositId = depositId;
+            payment.isContractCreated = true;
+            
 
             return payment;
         }
@@ -482,8 +590,9 @@ namespace BPMExtended.Main.Business
             row.Cells[4].AddParagraph((100).ToString("0.00") + " €");
 
         }
-        public bool ValidatePayment(string requestId)
+        public bool ValidatePayment(string requestId , string depositId)
         {
+            //TODO: check if user has paid
             return true;
         }
 
@@ -510,6 +619,15 @@ namespace BPMExtended.Main.Business
         }
 
 
+        public bool addTaxesOnInvoice()
+        {
+            //TODO : add the taxes of the operation on the invoice as OCC
+            //TODO :check also if VPN service is active on the contract then CRM should add fee to the contract 
+
+            return true;
+        }
+
+
     }
 
     public class PDFDocument
@@ -525,7 +643,12 @@ namespace BPMExtended.Main.Business
 
         public decimal amountToPay { get; set; }
         public bool isForeigner { get; set; }
+
+        public bool isContractCreated { get; set; }
+
         public decimal depositAmount { get; set; }
+
+        public string depositId { get; set; }
 
 
     }

@@ -121,6 +121,8 @@ namespace BPMExtended.Main.Business
 
         public string CountOfActiveContracts(string customerId , string contractId)
         {
+            //TODO : Get the count of active contracts for this customer (customerId)
+
             Random gen = new Random();
             int prob = gen.Next(10);
             return prob <= 6? "1" : "4";
@@ -142,6 +144,13 @@ namespace BPMExtended.Main.Business
         public bool ActivateADSLISPService(string contractId, string customerId, string ispId, string port)
         {
             //TODO: Activate service
+            return true;
+        }
+
+
+        public bool ActivateLeasedLineTermination(string contractId, string customerId)
+        {
+            //TODO: terminate the leased line contract of the customer
             return true;
         }
 
@@ -171,6 +180,9 @@ namespace BPMExtended.Main.Business
             //TODO: 
             return true;
         }
+
+
+     
 
         #region mappers
 
