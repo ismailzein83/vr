@@ -4,11 +4,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
@@ -449,12 +444,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ICodeGroupDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
-            object _updateHandle;
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCodeGroupUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
         }
 

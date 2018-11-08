@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Caching;
@@ -325,7 +323,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Id" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Symbol" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Weight" });
@@ -342,7 +339,6 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ZoneServiceConfigId });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Symbol });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Name });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Settings.Weight });
@@ -358,13 +354,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private class CacheManager : BaseCacheManager
         {
-            IZoneServiceConfigDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneServiceConfigDataManager>();
-
-            object _updateHandle;
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return dataManager.AreZoneServiceConfigsUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
         }
 
