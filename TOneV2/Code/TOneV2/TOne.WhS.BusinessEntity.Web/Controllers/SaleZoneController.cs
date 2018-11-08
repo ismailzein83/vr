@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Http;
+using TOne.WhS.BusinessEntity.APIEntities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
@@ -93,6 +94,15 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SaleZoneManager manager = new SaleZoneManager();
             return manager.GetSaleZoneName(customerZoneId);
         }
+
+        [HttpGet]
+        [Route("GetClientSaleZonesInfo")]
+        public IEnumerable<ClientSaleZoneInfo> GetClientSaleZonesInfo(string serializedFilter)
+        {
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetClientSaleZonesInfo(Vanrise.Common.Serializer.Deserialize<SaleZoneInfoFilter>(serializedFilter));
+        }
+
     }
 
     public class SaleZoneInput

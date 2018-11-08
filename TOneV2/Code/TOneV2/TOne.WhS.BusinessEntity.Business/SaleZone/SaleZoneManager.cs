@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.BusinessEntity.APIEntities;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -359,6 +360,64 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
 
+        public IEnumerable<SaleZoneInfo> GetAllSaleZonesInfo(SaleZoneInfoFilter filter)
+        {
+            var allSaleZones = GetCachedSaleZones();
+            DateTime today = DateTime.Today;
+
+            HashSet<long> filteredZoneIds = null;
+
+            if (filter.SaleZoneFilterSettings != null)
+            {
+                filteredZoneIds = SaleZoneGroupContext.GetFilteredZoneIds(filter.SaleZoneFilterSettings);
+            }
+
+            var customObjects = new List<object>();
+            if (filter.Filters != null)
+            {
+                foreach (ISaleZoneFilter saleZoneFilter in filter.Filters)
+                    customObjects.Add(null);
+            }
+
+            Func<SaleZone, bool> filterPredicate = (zone) =>
+            {
+                if (!zone.IsEffective(filter.EffectiveMode, today))
+                    return false;
+
+                if (filteredZoneIds != null && !filteredZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+
+                if (filter.CountryIds != null && !filter.CountryIds.Contains(zone.CountryId))
+                    return false;
+
+                if (filter.AvailableZoneIds != null && filter.AvailableZoneIds.Count() > 0 && !filter.AvailableZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+
+                if (filter.ExcludedZoneIds != null && filter.ExcludedZoneIds.Count() > 0 && filter.ExcludedZoneIds.Contains(zone.SaleZoneId))
+                    return false;
+
+                if (filter.Filters != null)
+                {
+                    for (int i = 0; i < filter.Filters.Count(); i++)
+                    {
+                        var saleZoneFilterContext = new SaleZoneFilterContext() { SaleZone = zone, CustomData = customObjects[i] };
+                        bool filterResult = filter.Filters.ElementAt(i).IsExcluded(saleZoneFilterContext);
+                        customObjects[i] = saleZoneFilterContext.CustomData;
+                        if (filterResult)
+                            return false;
+                    }
+                }
+
+                return true;
+            };
+            return allSaleZones.MapRecords(SaleZoneInfoMapper, filterPredicate).OrderBy(x => x.Name);
+        }
+        public IEnumerable<ClientSaleZoneInfo> GetClientSaleZonesInfo(SaleZoneInfoFilter filter)
+        {
+            var saleZonesInfo = GetAllSaleZonesInfo(filter);
+            return saleZonesInfo.MapRecords(ClientSaleZoneInfoMapper);
+        }
+
         public IEnumerable<SaleZoneInfo> GetSaleZonesInfoByIds(HashSet<long> saleZoneIds, SaleZoneFilterSettings saleZoneFilterSettings)
         {
             IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetCachedSaleZones().Values;
@@ -513,7 +572,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 return _dataManager.AreZonesUpdated(ref _updateHandle);
             }
         }
-
+        private ClientSaleZoneInfo ClientSaleZoneInfoMapper(SaleZoneInfo saleZoneInfo)
+        {
+            return new ClientSaleZoneInfo()
+            {
+                Name = saleZoneInfo.Name,
+                SaleZoneId = saleZoneInfo.SaleZoneId
+            };
+        }
         private SaleZoneDetail SaleZoneDetailMapper(SaleZone saleZone)
         {
             SaleZoneDetail saleZoneDetail = new SaleZoneDetail();
