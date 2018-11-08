@@ -228,9 +228,9 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                     manipulateDataUpdated(response);
                     $scope.isLoading = false;
                 },
-                function (excpetion) {
-                    $scope.isLoading = false;
-                });
+                    function (excpetion) {
+                        $scope.isLoading = false;
+                    });
             }
 
             function manipulateDataUpdated(response) {
@@ -241,27 +241,19 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                         var schedulerTaskState = response.ListSchedulerTaskStateDetails[i];
 
                         for (var j = 0; j < $scope.schedulerTasks.length; j++) {
-                            if ($scope.schedulerTasks[j].Entity.TaskId == schedulerTaskState.Entity.TaskId) {
-                                var Entity = {
-                                    TaskId: $scope.schedulerTasks[j].Entity.TaskId,
-                                    Name: $scope.schedulerTasks[j].Entity.Name,
-                                    IsEnabled: schedulerTaskState.IsEnabled,
-                                    AllowRunIfEnabled: schedulerTaskState.AllowRunIfEnabled,
-                                    LastRunTime: schedulerTaskState.Entity.LastRunTime,
-                                    NextRunTime: schedulerTaskState.Entity.NextRunTime,
-                                    StatusDescription: schedulerTaskState.StatusDescription
-                                };
-                                var obj = {
-                                    Entity: Entity,
-                                    HasEditPermission: $scope.schedulerTasks[j].HasEditPermission,
-                                    HasRunPermission: $scope.schedulerTasks[j].HasRunPermission
-                                };
-                                gridDrillDownTabsObj.setDrillDownExtensionObject(obj);
-                                $scope.schedulerTasks[j] = obj;
+                            var currentSchedulerTask = $scope.schedulerTasks[j];
+
+                            if (currentSchedulerTask.Entity.TaskId == schedulerTaskState.Entity.TaskId) {
+                                currentSchedulerTask.Entity.IsEnabled = schedulerTaskState.IsEnabled;
+                                currentSchedulerTask.Entity.AllowRunIfEnabled = schedulerTaskState.AllowRunIfEnabled;
+                                currentSchedulerTask.Entity.LastRunTime = schedulerTaskState.Entity.LastRunTime;
+                                currentSchedulerTask.Entity.NextRunTime = schedulerTaskState.Entity.NextRunTime;
+                                currentSchedulerTask.Entity.StatusDescription = schedulerTaskState.StatusDescription;
+
                                 if (schedulerTaskState.StatusDescription == VR_Runtime_SchedulerTaskStatusEnum.InProgress.description)
                                     $scope.showLoader = false;
 
-                                continue;
+                                gridAPI.refreshMenuActions(currentSchedulerTask);
                             }
                         }
                     }

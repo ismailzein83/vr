@@ -4,20 +4,18 @@
                  pagingtype="'PagingOnScroll'"
                  on-ready="onGridReady"
                  menuactions="gridMenuActions"
-                 idfield="Entity.TaskId">
+                 idfield="Entity.TaskId" isfielddynamic="true">
 
-        <vr-datagridcolumn headertext="'ID'" field="'Entity.TaskId'" widthfactor="1"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Enabled'" field="'Entity.IsEnabled'" disablesorting="true">
+        <vr-datagridcolumn headertext="'ID'" field="'Entity.TaskId'" widthfactor="1" isfielddynamic="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" isfielddynamic="true" ></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Enabled'" field="'Entity.IsEnabled'" disablesorting="true" isfielddynamic="true" >
             <vr-icon icontype="dataItem.Entity.IsEnabled"></vr-icon>
         </vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Status'" field="'Entity.StatusDescription'" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Last Run Time'" field="'Entity.LastRunTime'" type="'LongDatetime'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Next Run Time'" field="'Entity.NextRunTime'" type="'LongDatetime'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
-        <!--<vr-datagridexpandablerow>
+        <vr-datagridcolumn headertext="'Status'" field="'Entity.StatusDescription'" disablesorting="true" isfielddynamic="true" ></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Last Run Time'" field="'Entity.LastRunTime'" type="'LongDatetime'" widthfactor="5" disablesorting="true" isfielddynamic="true" ></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Next Run Time'" field="'Entity.NextRunTime'" type="'LongDatetime'" widthfactor="5" disablesorting="true" isfielddynamic="true" ></vr-datagridcolumn>
+        <vr-datagridexpandablerow>
             <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-        </vr-datagridexpandablerow>-->
+        </vr-datagridexpandablerow>
     </vr-datagrid>
 </span>
-
-

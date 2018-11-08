@@ -9,7 +9,8 @@
         return ({
             addTask: addTask,
             editTask: editTask,
-            showAddTaskModal:showAddTaskModal,
+            showAddTaskModal: showAddTaskModal,
+            addDrillDownDefinition: addDrillDownDefinition,
             getDrillDownDefinition: getDrillDownDefinition,
             registerObjectTrackingDrillDownToSchedulerTaskService: registerObjectTrackingDrillDownToSchedulerTaskService
         });
@@ -61,7 +62,7 @@
         }
 
         function registerObjectTrackingDrillDownToSchedulerTaskService() {
-           
+
             var drillDownDefinition = {};
 
             drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
@@ -83,7 +84,7 @@
         }
         function addDrillDownDefinition(drillDownDefinition) {
 
-           // drillDownDefinitions.push(drillDownDefinition);
+            drillDownDefinitions.push(drillDownDefinition);
         }
 
         function getDrillDownDefinition() {
