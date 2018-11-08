@@ -369,7 +369,25 @@ namespace BPMExtended.Main.Business
         
         public List<ISPInfo> GetISPs()
         {
-            return RatePlanMockDataGenerator.GetAllISPInfo();
+            List<ISPInfo> result = new List<ISPInfo>();
+            List<ISPItem> phoneNumbers;
+            using (SOMClient client = new SOMClient())
+            {
+                phoneNumbers = client.Get<List<ISPItem>>(String.Format("api/SOM_Main/Inventory/GetISPs"));
+            }
+
+            if (phoneNumbers != null)
+            {
+                foreach (var phoneNumber in phoneNumbers)
+                {
+                    result.Add(new ISPInfo
+                    {
+                        Id = phoneNumber.Id,
+                        Name = phoneNumber.Name
+                    });
+                }
+            }
+            return result;
 
         }
 

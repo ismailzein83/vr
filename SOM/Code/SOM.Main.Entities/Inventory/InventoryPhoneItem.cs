@@ -166,4 +166,9 @@ namespace SOM.Main.Entities
     {
         public string Path { get; set; }
     }
+    public class ISPItem
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
 }

@@ -454,6 +454,55 @@ namespace SOM.Main.Business
             }
             return result;
         }
+        public List<ISPItem> GetISPs()
+        {
+
+            List<ISPItem> result = new List<ISPItem>();
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            List<ISP> data = connector.Get<List<ISP>>("/GetISP/Get");
+
+            if (data != null && data.Count > 0)
+            {
+                foreach (var item in data)
+                {
+                    result.Add(new ISPItem
+                    {
+                        Id = item.FIELD_VALUE,
+                        Name = item.FIELD_VALUE
+                    });
+                }
+            }
+
+            return result;
+        }
+        public List<PortItem> GetISPDSLAMPorts(string switchId,string ISP)
+        {
+            List<PortItem> result = new List<PortItem>();
+
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            List<DSLAMPortItem> data = connector.Get<List<DSLAMPortItem>>("/getispdslamport/Get?ISP=" + ISP + "&switchid=" + switchId);
+
+            if (data != null && data.Count > 0)
+            {
+                foreach (var item in data)
+                {
+                    result.Add(new PortItem
+                    {
+                        Id = item.DSLAM_PORT_ID,
+                        Name = item.DSLAM_PORT
+                    });
+                }
+            }
+
+            return result;
+        }
     }
 
 }

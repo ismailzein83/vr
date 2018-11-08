@@ -33,8 +33,30 @@ namespace BPMExtended.Main.Business
                 Name = r.Name
             }).ToList();
             //return InventoryMockDataGenerator.GetDSLAMFreePorts();
-        } 
+        }
 
+        public List<DSLAMPortInfo> GetFreeISPDSLAMPorts(string phoneNumber, string ISP)
+        {
+            InventoryPhoneItem item = null;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<InventoryPhoneItem>(String.Format("api/SOM_Main/Inventory/GetInventoryPhoneItem?phoneNumber={0}", phoneNumber));
+            }
+
+            string switchId = item.SwitchId;
+            List<PortItem> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<PortItem>>(String.Format("api/SOM_Main/Inventory/GetISPDSLAMPorts?ISP={0}&switchId={1}", ISP, switchId));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new DSLAMPortInfo
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
+            //return InventoryMockDataGenerator.GetDSLAMFreePorts();
+        }
 
     }
 }

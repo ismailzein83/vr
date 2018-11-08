@@ -232,4 +232,15 @@ namespace SOM.Main.Business
     {
         public string PATH { get; set; }
     }
+    public class ISP
+    {
+        public string FIELD_VALUE { get; set; }
+    }
+    public class DSLAMPortItem
+    {
+        public string DSLAM_PORT_ID { get; set; }
+        public string DSLAM_PORT { get; set; }
+        public string DSLAM_CARD_ID { get; set; }
+        public string DSLAM_ID { get; set; }
+    }
 }

@@ -159,5 +159,19 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.CheckADSL(phoneNumber);
         }
+        [HttpGet]
+        [Route("GetISPs")]
+        public List<ISPItem> GetISPs()
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetISPs();
+        }
+        [HttpGet]
+        [Route("GetISPDSLAMPorts")]
+        public List<PortItem> GetISPDSLAMPorts(string switchId, string ISP)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetISPDSLAMPorts(switchId,ISP);
+        }
     }
 }
