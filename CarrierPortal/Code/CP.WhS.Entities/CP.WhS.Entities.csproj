@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientAccountInfoFilter.cs" />
+    <Compile Include="ClientSaleZoneInfoFilter.cs" />
     <Compile Include="ClientSupplierZoneInfoFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
