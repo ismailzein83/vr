@@ -83,8 +83,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 record.CurrentServices != null ? Vanrise.Common.Serializer.Serialize(record.CurrentServices) : null,
                 isCurrentServiceInherited,
                 record.NewServices != null ? Vanrise.Common.Serializer.Serialize(record.NewServices) : null,
-                record.EffectiveOn,
-                record.EffectiveUntil
+                GetDateTimeForBCP(record.EffectiveOn),
+                GetDateTimeForBCP(record.EffectiveUntil)
             );
         }
 

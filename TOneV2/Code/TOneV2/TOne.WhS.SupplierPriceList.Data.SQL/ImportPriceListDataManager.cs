@@ -159,8 +159,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                        record.CountryId,
                        record.Name,
                        record.SupplierId,
-                       record.BeginEffectiveDate,
-                       record.EndEffectiveDate,
+                       GetDateTimeForBCP(record.BeginEffectiveDate),
+                       GetDateTimeForBCP(record.EndEffectiveDate),
                        (record.Status != Status.New) ? 1 : 0);
         }
         private void WriteRecordToCodesStream(Code record, object dbApplyStream)
@@ -171,8 +171,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                        record.CodeValue,
                        record.ZoneId,
                        record.CodeGroupId,
-                       record.BeginEffectiveDate,
-                       record.EndEffectiveDate,
+                       GetDateTimeForBCP(record.BeginEffectiveDate),
+                       GetDateTimeForBCP(record.EndEffectiveDate),
                         (record.Status != Status.New) ? 1 : 0);
         }
         private void WriteRecordToRatesStream(Rate record, object dbApplyStream)
@@ -184,8 +184,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                        record.ZoneId,
                        record.CurrencyID,
                        record.NormalRate,
-                       record.BeginEffectiveDate,
-                       record.EndEffectiveDate,
+                       GetDateTimeForBCP(record.BeginEffectiveDate),
+                       GetDateTimeForBCP(record.EndEffectiveDate),
                        (record.Status != Status.New)?1:0);
         }
 

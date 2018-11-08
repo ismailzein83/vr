@@ -73,8 +73,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 record.SaleEntityServiceId,
                 _processInstanceId,
                 Vanrise.Common.Serializer.Serialize(record.Services),
-                record.BED,
-                record.EED
+                GetDateTimeForBCP(record.BED),
+                GetDateTimeForBCP(record.EED)
             );
         }
 
