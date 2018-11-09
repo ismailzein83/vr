@@ -65,8 +65,7 @@ namespace TOne.WhS.Deal.Business
                             {
                                 List<RawMemoryRecord> saleRawMemoryRecords = GetRawMemoryRecords(swapDealSettings.CarrierAccountId, deal.DealId,
                                     saleZone.ZoneId, inbound.Rate, inbound.Name, true, dealDays,
-                                    saleAnalyticRecordByDealZone, dailyTotalVolume, dailyGroupVolume, estimationPerZone
-                                    , !swapDealSettings.SaleFollowSystemTimeZone);
+                                    saleAnalyticRecordByDealZone, dailyTotalVolume, dailyGroupVolume, estimationPerZone);
                                 rawMemoryRecords.AddRange(saleRawMemoryRecords);
                             }
                         }
@@ -84,8 +83,7 @@ namespace TOne.WhS.Deal.Business
                             {
                                 List<RawMemoryRecord> costRawMemoryRecords = GetRawMemoryRecords(swapDealSettings.CarrierAccountId, deal.DealId,
                                     supplierZone.ZoneId, outbound.Rate, outbound.Name, false, dealDays,
-                                    costAnalyticRecordByDealZone, dailyTotalVolume, dailyGroupVolume, estimationPerZone,
-                                    !swapDealSettings.CostFollowSystemTimeZone);
+                                    costAnalyticRecordByDealZone, dailyTotalVolume, dailyGroupVolume, estimationPerZone);
                                 rawMemoryRecords.AddRange(costRawMemoryRecords);
                             }
                         }
@@ -99,7 +97,7 @@ namespace TOne.WhS.Deal.Business
         #region Private Methods
 
         private List<RawMemoryRecord> GetRawMemoryRecords(int carrierAccountId, long dealId, long zoneId, decimal rate, string zoneGroupName, bool isSale, List<DateTime> dealDays, Dictionary<string, List<BillingRecord>> billingRecordByDealZone
-                 , Decimal dailyTotalVolume, Decimal dailyGroupVolume, bool estimationPerZone, bool hasCarrierTimeShift)
+                 , Decimal dailyTotalVolume, Decimal dailyGroupVolume, bool estimationPerZone)
         {
             Dictionary<PropertyName, string> propertyNames = BuildPropertyNames(isSale);
             List<RawMemoryRecord> rawMemoryRecords = new List<RawMemoryRecord>();
@@ -141,9 +139,6 @@ namespace TOne.WhS.Deal.Business
                     {
                         var record = billingRecords[i];
                         DateTime halfHourDateTimeShifted = record.HalfHourDateTime;
-
-                        if (hasCarrierTimeShift)
-                            halfHourDateTimeShifted = Helper.ShiftBackDateTime(carrierAccountId, isSale, halfHourDateTimeShifted).Value;
 
                         if (halfHourDateTimeShifted < day)
                             continue;
