@@ -11,7 +11,7 @@ app.directive('cpWhsAccountviewtypeSelector', ['CP_WhS_AccountViewTypeEnum', 'Ut
                 isrequired: '=',
                 isdisabled: "=",
                 selectedvalues: "=",
-                normalColNum: '@'
+                normalColNum: '@',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -29,7 +29,7 @@ app.directive('cpWhsAccountviewtypeSelector', ['CP_WhS_AccountViewTypeEnum', 'Ut
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getAccountViewTypeTemplate(attrs);
@@ -50,7 +50,7 @@ app.directive('cpWhsAccountviewtypeSelector', ['CP_WhS_AccountViewTypeEnum', 'Ut
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
                 + '<vr-select ' + multipleselection + '  datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" '
-                + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+                + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" hideremoveicon on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</vr-columns>';
         }
 

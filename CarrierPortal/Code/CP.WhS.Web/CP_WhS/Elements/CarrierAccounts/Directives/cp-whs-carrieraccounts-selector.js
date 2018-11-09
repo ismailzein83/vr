@@ -1,7 +1,6 @@
 ﻿'use strict';
 app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService', "CP_WhS_CarrierAccountsAPIService","CP_WhS_CarrierAccountActivationStatusEnum",
     function (UtilsService, VRUIUtilsService, CP_WhS_CarrierAccountsAPIService, CP_WhS_CarrierAccountActivationStatusEnum) {
-
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -19,8 +18,11 @@ app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService
                 var ctrl = this;
                 ctrl.datasource = [];
                 ctrl.selectedvalues;
-                if ($attrs.ismultipleselection != undefined)
+                ctrl.label = "Carrier Account";
+                if ($attrs.ismultipleselection != undefined) {
                     ctrl.selectedvalues = [];
+                    ctrl.label = "Carrier Accounts";
+                }
                 var selector = new CarrierAccountSelector(ctrl, $scope, $attrs);
                 selector.initializeController();
             },
@@ -40,7 +42,7 @@ app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService
         };
 
         function getCarrierAccountSelectorTemplate(attrs) {
-            var multipleselection = "";
+             var multipleselection = "";
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
             }
@@ -69,10 +71,6 @@ app.directive('cpWhsCarrieraccountsSelector', ['UtilsService', 'VRUIUtilsService
 
                 api.load = function (payload) {
                    
-                    ctrl.label = "Carrier Account";
-                    if (attrs.ismultipleselection != undefined) {
-                        ctrl.label = "Carrier Accounts";
-                    }
                     if (attrs.customlabel != undefined)
                         ctrl.label = attrs.customlabel;
                     if (payload.fieldTitle != undefined) {

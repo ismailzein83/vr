@@ -87,7 +87,6 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
                 if (releaseCodeDimensionDirectiveAPI != undefined) {
                     releaseCodeDimensionDirectiveAPI.clearDataSource();
                 }
-                $scope.selectedCarrierAccounts.length = 0;
             }
         };
        

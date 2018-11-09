@@ -97,7 +97,7 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
 
     function getQuery() {
         var filter = buildFilter();
-
+        $scope.accountViewType = accountViewTypeAPI.getSelectedIds();
         var query = {
             Filter: filter,
             From: $scope.fromDate,
