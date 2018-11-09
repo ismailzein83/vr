@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerRouteDataManager : RoutingDataManager, ICustomerRouteDataManager
     {
-        readonly string[] columns = { "CustomerId", "Code", "SaleZoneId", "IsBlocked", "ExecutedRuleId", "RouteOptions" };
+        readonly string[] columns = { "CustomerId", "Code", "SaleZoneId", "IsBlocked", "ExecutedRuleId", "SupplierIds", "RouteOptions" };
 
         public int ParentWFRuntimeProcessId { get; set; }
 
@@ -35,11 +35,12 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public void WriteRecordToStream(Entities.CustomerRoute record, object dbApplyStream)
         {
+            string supplierIds = Helper.GetConcatenatedSupplierIds(record);
             string serializedOptions = record.Options != null ? Helper.SerializeOptions(record.Options) : null;
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
 
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.CustomerId, record.Code, record.SaleZoneId, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, serializedOptions);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.Code, record.SaleZoneId, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, supplierIds, serializedOptions);
         }
 
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
@@ -85,7 +86,16 @@ namespace TOne.WhS.Routing.Data.SQL
             if (input.Query.RouteStatus.HasValue)
                 isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
 
-            queryBuilder.Replace("#FILTER#", string.Format("Where (@Code is null or cr.Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked) {0} {1}", customerIdsFilter, saleZoneIdsFilter));
+            string supplierIdsFilter = string.Empty;
+            var supplierIds = input.Query.SupplierIds;
+            if (supplierIds != null && supplierIds.Count > 0)
+            {
+                supplierIdsFilter = " AND (cr.SupplierIds like '%$";
+                supplierIdsFilter = supplierIdsFilter + string.Join("$%' OR cr.SupplierIds like '%$", supplierIds);
+                supplierIdsFilter = supplierIdsFilter + "$%')";
+            }
+
+            queryBuilder.Replace("#FILTER#", string.Format("Where (@Code is null or cr.Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked) {0} {1} {2}", customerIdsFilter, saleZoneIdsFilter, supplierIdsFilter));
 
             IEnumerable<Entities.CustomerRoute> customerRoutes = GetItemsText(queryBuilder.ToString(), CustomerRouteMapper, (cmd) =>
             {
@@ -503,6 +513,7 @@ namespace TOne.WhS.Routing.Data.SQL
             dtCustomerRoutes.Columns.Add("SaleZoneId", typeof(long));
             dtCustomerRoutes.Columns.Add("IsBlocked", typeof(int));
             dtCustomerRoutes.Columns.Add("ExecutedRuleId", typeof(int));
+            dtCustomerRoutes.Columns.Add("SupplierIds", typeof(string));
             dtCustomerRoutes.Columns.Add("RouteOptions", typeof(string));
             dtCustomerRoutes.Columns.Add("VersionNumber", typeof(int));
             dtCustomerRoutes.BeginLoadData();
@@ -518,6 +529,11 @@ namespace TOne.WhS.Routing.Data.SQL
                     dr["ExecutedRuleId"] = customerRoute.ExecutedRuleId;
                 else
                     dr["ExecutedRuleId"] = DBNull.Value;
+
+                if (!string.IsNullOrEmpty(customerRoute.SupplierIds))
+                    dr["SupplierIds"] = customerRoute.SupplierIds;
+                else
+                    dr["SupplierIds"] = DBNull.Value;
 
                 if (!string.IsNullOrEmpty(customerRoute.Options))
                     dr["RouteOptions"] = customerRoute.Options;
@@ -604,7 +620,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   #FILTER#";
 
         const string query_UpdateCustomerRoutes = @"UPDATE customerRoute set customerRoute.IsBlocked = routes.IsBlocked, customerRoute.ExecutedRuleId = routes.ExecutedRuleId, 
-                                                           customerRoute.RouteOptions = routes.RouteOptions
+                                                           customerRoute.SupplierIds = routes.SupplierIds, customerRoute.RouteOptions = routes.RouteOptions
                                                     FROM [dbo].[CustomerRoute] customerRoute WITH(INDEX(IX_CustomerRoute_CustomerId_Code))
                                                     JOIN @Routes routes on routes.CustomerId = customerRoute.CustomerId and routes.Code = customerRoute.Code                                                    UPDATE modifiedCustomerRoute set modifiedCustomerRoute.VersionNumber = routes.VersionNumber
                                                     FROM [dbo].[ModifiedCustomerRoute] modifiedCustomerRoute WITH(INDEX(IX_ModifiedCustomerRoute_CustomerId_Code))

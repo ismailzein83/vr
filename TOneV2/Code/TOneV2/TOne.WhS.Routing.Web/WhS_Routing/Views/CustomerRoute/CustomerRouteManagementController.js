@@ -22,6 +22,9 @@
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var supplierCarrierAccountDirectiveAPI;
+        var supplierCarrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var routeStatusSelectorAPI;
         var routeStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -68,6 +71,11 @@
                 carrierAccountReadyPromiseDeferred.resolve();
             };
 
+            $scope.onSupplierCarrierAccountDirectiveReady = function (api) {
+                supplierCarrierAccountDirectiveAPI = api;
+                supplierCarrierAccountReadyPromiseDeferred.resolve();
+            };
+
             $scope.onRouteStatusDirectiveReady = function (api) {
                 routeStatusSelectorAPI = api;
                 routeStatusSelectorReadyPromiseDeferred.resolve();
@@ -95,6 +103,7 @@
                     SaleZoneIds: saleZoneSelectorAPI.getSelectedIds(),
                     Code: $scope.code,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
+                    SupplierIds: supplierCarrierAccountDirectiveAPI.getSelectedIds(),
                     RouteStatus: routeStatusSelectorAPI.getSelectedIds(),
                     LimitResult: $scope.limit,
                     IncludeBlockedSuppliers: $scope.includeBlockedSuppliers
@@ -121,7 +130,7 @@
 
             var promiseDeferred = UtilsService.createPromiseDeferred();
 
-            UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadSaleZoneSection, loadCustomersSection, loadRouteStatusSelector]).then(function () {
+            UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadSaleZoneSection, loadCustomersSection, loadSuppliersSection, loadRouteStatusSelector]).then(function () {
                 gridReadyPromiseDeferred.promise.then(function () {
                     if (loadGrid) {
                         $scope.searchClicked();
@@ -153,7 +162,7 @@
         function onLoadRoutingDatabaseInfo(selectedObject) {
             selectedRoutingDatabaseObject = selectedObject;
             routingDatabaseLoadPromiseDeferred.resolve();
-        };
+        }
 
         function loadSaleZoneSection() {
             var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -186,6 +195,15 @@
 
             return loadCarrierAccountPromiseDeferred.promise;
         }
+        function loadSuppliersSection() {
+            var loadSupplierCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            supplierCarrierAccountReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(supplierCarrierAccountDirectiveAPI, undefined, loadSupplierCarrierAccountPromiseDeferred);
+            });
+
+            return loadSupplierCarrierAccountPromiseDeferred.promise;
+        }
         function loadRouteStatusSelector() {
             var loadRouteStatusPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -196,7 +214,7 @@
             return loadRouteStatusPromiseDeferred.promise;
         }
 
-        function getDatabaseEffectiveType(selectedObject) {
+        function getDatabaseEffectiveType(selectedObject)  {
             if (selectedObject == undefined) {
                 return undefined;
             }

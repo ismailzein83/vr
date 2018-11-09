@@ -6,6 +6,30 @@ namespace TOne.WhS.Routing.Entities
 {
     public static class Helper
     {
+        public static string GetConcatenatedSupplierIds(CustomerRoute route)
+        {
+            HashSet<string> supplierIdsSet = new HashSet<string>();
+
+            if (route != null && route.Options != null && route.Options.Count > 0)
+            {
+                foreach (var option in route.Options)
+                {
+                    supplierIdsSet.Add(string.Format("${0}$", option.SupplierId));
+
+                    if (option.Backups != null && option.Backups.Count > 0)
+                    {
+                        foreach (var backup in option.Backups)
+                            supplierIdsSet.Add(string.Format("${0}$", backup.SupplierId));
+                    }
+                }
+            }
+
+            string supplierIds = null;
+            if (supplierIdsSet.Count > 0)
+                supplierIds = String.Join(",", supplierIdsSet);
+
+            return supplierIds;
+        }
         public static string SerializeOptions(List<RouteOption> options)
         {
             StringBuilder str = new StringBuilder();

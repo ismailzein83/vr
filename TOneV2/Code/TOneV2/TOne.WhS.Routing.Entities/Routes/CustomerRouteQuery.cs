@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -16,10 +12,12 @@ namespace TOne.WhS.Routing.Entities
 
         public List<int> CustomerIds { get; set; }
 
+        public List<int> SupplierIds { get; set; }
+
         public RouteStatus? RouteStatus { get; set; }
 
         public int LimitResult { get; set; }
 
-        public bool IncludeBlockedSuppliers { get; set; }  
+        public bool IncludeBlockedSuppliers { get; set; }
     }
 }

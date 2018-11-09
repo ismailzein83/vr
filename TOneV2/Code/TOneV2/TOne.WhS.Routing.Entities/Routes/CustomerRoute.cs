@@ -33,5 +33,6 @@ namespace TOne.WhS.Routing.Entities
         public int? ExecutedRuleId { get; set; }
         public string Options { get; set; }
         public int VersionNumber { get; set; }
+        public string SupplierIds { get; set; }
     }
 }

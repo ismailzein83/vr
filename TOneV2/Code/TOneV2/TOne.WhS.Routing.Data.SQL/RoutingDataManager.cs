@@ -274,6 +274,7 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [SaleZoneId] [bigint] NOT NULL,
 	                                                    [IsBlocked] [bit] NOT NULL,
 	                                                    [ExecutedRuleId] [int] NULL,
+                                                        [SupplierIds] [varchar](max) NULL,
 	                                                    [RouteOptions] [varchar](max) NULL
                                                 ) ON [PRIMARY] ";
 
@@ -376,6 +377,7 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                            [SaleZoneId] [bigint] NOT NULL,
 	                                            [IsBlocked] [bit] NOT NULL,
 	                                            [ExecutedRuleId] [int] NULL,
+                                                [SupplierIds] [varchar](max) NULL,
 	                                            [RouteOptions] [varchar](max) NULL,
 	                                            [VersionNumber] [int] NULL)";
 
