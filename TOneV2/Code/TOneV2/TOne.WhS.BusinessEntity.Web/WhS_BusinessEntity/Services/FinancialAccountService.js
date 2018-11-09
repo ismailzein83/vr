@@ -137,6 +137,9 @@
                             fieldValues: {
                                 FinancialAccountId: financialAccountId,
                                 CurrencyId: currencyId
+                            },
+                            filterValues: {
+                                FinancialAccountId: financialAccountId,
                             }
                         };
                         genericBusinessEntityAPI.load(genericBusinessEntityPayload).then(function () {
@@ -172,6 +175,9 @@
                             fieldValues: {
                                 FinancialAccountId: financialAccountId,
                                 CurrencyId: currencyId
+                            },
+                            filterValues: {
+                                FinancialAccountId: financialAccountId,
                             }
                         };
                         genericBusinessEntityAPI.load(genericBusinessEntityPayload).then(function () {
