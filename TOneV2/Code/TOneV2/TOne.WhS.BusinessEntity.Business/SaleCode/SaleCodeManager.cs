@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
@@ -125,16 +123,22 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region private Methode
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ISaleCodeDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired()
+            protected override bool UseCentralizedCacheRefresher
             {
-                return _dataManager.AreZonesUpdated(ref _updateHandle);
+                get
+                {
+                    return true;
+                }
+            }
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return base.ShouldSetCacheExpired();
             }
         }
+
 
         private SaleCodeDetail SaleCodeDetailMapper(SaleCode saleCode)
         {
@@ -182,7 +186,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Code" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
@@ -196,7 +199,6 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (record.Entity != null)
                         {
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.SaleCodeId });
                             row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Code });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });

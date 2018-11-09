@@ -343,16 +343,19 @@ namespace TOne.WhS.BusinessEntity.Business
             });
         }
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             DateTime? _carrierAccountLastCheck;
-
-            ICustomerSellingProductDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
-            object _updateHandle;
-
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreCustomerSellingProductsUpdated(ref _updateHandle)
+                return base.ShouldSetCacheExpired()
                   | Vanrise.Caching.CacheManagerFactory.GetCacheManager<CarrierAccountManager.CacheManager>().IsCacheExpired(ref _carrierAccountLastCheck);
             }
         }
@@ -367,7 +370,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Customer", Width = 60 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Product", Width = 60 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Effective On", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
@@ -380,7 +382,6 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (record.Entity != null)
                         {
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.SellingProductId });
                             row.Cells.Add(new ExportExcelCell() { Value = record.CustomerName });
                             row.Cells.Add(new ExportExcelCell() { Value = record.SellingProductName });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });

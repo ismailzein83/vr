@@ -557,21 +557,25 @@ namespace TOne.WhS.BusinessEntity.Business
             IDManager.Instance.ReserveIDRange(GetSaleZoneType(), numberOfIDs, out startingId);
             return startingId;
         }
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return base.ShouldSetCacheExpired();
+            }
+        }
 
         #endregion
 
         #region Private Members
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            ISaleZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired()
-            {
-                return _dataManager.AreZonesUpdated(ref _updateHandle);
-            }
-        }
         private ClientSaleZoneInfo ClientSaleZoneInfoMapper(SaleZoneInfo saleZoneInfo)
         {
             return new ClientSaleZoneInfo()
@@ -620,7 +624,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name", Width = 35 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Country", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Selling Number Plan" });
@@ -635,7 +638,6 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (record.Entity != null)
                         {
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.SaleZoneId });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
                             row.Cells.Add(new ExportExcelCell() { Value = record.CountryName });
                             row.Cells.Add(new ExportExcelCell() { Value = record.SellingNumberPlanName });

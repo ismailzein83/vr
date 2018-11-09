@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.CodePreparation.Data;
 using Vanrise.BusinessProcess;
@@ -46,6 +47,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
            
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
             dataManager.AddPriceListAndSyncImportedDataWithDB(processInstanceID, sellingNumberPlanId, stateBackupId);
+
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeManager.CacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleZoneManager.CacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CustomerSellingProductManager.CacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SalePriceListManager.CacheManager>().SetCacheExpired();
         }
     }
 }

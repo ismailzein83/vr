@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using Vanrise.BusinessProcess;
@@ -60,6 +61,12 @@ namespace TOne.WhS.Sales.BP.Activities
 
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             ratePlanManager.SyncImportedDataWithDB(processInstanceId, reservedSalePriceListId, ownerType, ownerId, currencyId, effectiveOn, stateBackupId);
+
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeManager.CacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleZoneManager.CacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CustomerSellingProductManager.CacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SalePriceListManager.CacheManager>().SetCacheExpired();
         }
     }
 }
