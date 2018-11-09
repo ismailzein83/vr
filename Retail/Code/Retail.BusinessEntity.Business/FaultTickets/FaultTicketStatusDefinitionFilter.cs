@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace Retail.MultiNet.Entities
+namespace Retail.BusinessEntity.Business
 {
     public class FaultTicketStatusDefinitionFilter : IStatusDefinitionFilter
     {

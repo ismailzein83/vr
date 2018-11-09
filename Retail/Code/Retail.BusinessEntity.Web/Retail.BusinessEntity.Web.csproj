@@ -236,6 +236,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountPartAvailabilityOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountPartRequiredOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\FaultTicketSourceEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\RootSelectorTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\DIDNumberTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\FinancialAccountEffectiveEnum.js" />
@@ -442,7 +443,11 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\ICX\retail-be-icx-operatorwithlocal-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\Invoice\retail-be-account-invoice-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faulttickets-settings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faultticket-customobjectsettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FaultTickets\retail-be-faultticket-staticeditor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\FaultTickets\Templates\FaultTicketCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\FaultTickets\Templates\FaultTicketsSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\FaultTickets\Templates\FaultTicketStaticEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccount-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccountdefinition-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\Templates\PostpaidFinancialAccount.html" />

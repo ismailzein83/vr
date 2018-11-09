@@ -19,7 +19,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_MultiNet/Directives/FaultTicket/Templates/FaultTicketCustomObjectSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/FaultTicket/Templates/FaultTicketCustomObjectSettingsTemplate.html"
 
         };
         function FaultCtor($scope, ctrl, $attrs) {
@@ -38,7 +38,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "Retail.MultiNet.Entities.FaultTicketCustomObjectTypeSettings, Retail.MultiNet.Entities"
+                        $type: "Retail.BusinessEntity.Business.FaultTicketCustomObjectTypeSettings, Retail.BusinessEntity.Business"
                     };
                     return data;
                 };
@@ -50,6 +50,6 @@
         }
     }
 
-    app.directive('retailMultinetFaultticketCustomobjectsettings', faultTicketType);
+    app.directive('retailBeFaultticketCustomobjectsettings', faultTicketType);
 
 })(app);

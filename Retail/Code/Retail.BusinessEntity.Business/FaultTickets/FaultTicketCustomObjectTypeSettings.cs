@@ -8,7 +8,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Entities;
 
-namespace Retail.MultiNet.Entities
+namespace Retail.BusinessEntity.Business
 {
     public class FaultTicketCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {

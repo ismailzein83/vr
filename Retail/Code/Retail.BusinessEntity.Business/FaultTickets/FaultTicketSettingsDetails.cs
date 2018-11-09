@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.MultiNet.Entities
+namespace Retail.BusinessEntity.Business
 {
     public class FaultTicketSettingsDetailsCollection : List<FaultTicketDescriptionSettingDetails>
     {

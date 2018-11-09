@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService','Retail_MultiNet_FaultTicketSourceEnum',
-    function (UtilsService, VRUIUtilsService, VRDateTimeService, Retail_MultiNet_FaultTicketSourceEnum) {
+app.directive('retailBeFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService','Retail_BE_FaultTicketSourceEnum',
+    function (UtilsService, VRUIUtilsService, VRDateTimeService, Retail_BE_FaultTicketSourceEnum) {
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -17,7 +17,7 @@ app.directive('retailMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUti
             bindToController: true,
             compile: function (element, attrs) {
             },
-            templateUrl: "/Client/Modules/Retail_MultiNet/Directives/FaultTicket/Templates/FaultTicketStaticEditor.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/FaultTicket/Templates/FaultTicketStaticEditor.html"
         };
 
         function retailMultinetFaultticketStaticeditor(ctrl, $scope, $attrs) {
@@ -145,10 +145,10 @@ app.directive('retailMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUti
                         faultTicketObject.FromDate = $scope.scopeModel.fromDate;
                         faultTicketObject.ToDate = $scope.scopeModel.toDate;
                         faultTicketObject.TicketDetails = {
-                            $type: "Retail.MultiNet.Entities.FaultTicketSettingsDetailsCollection,Retail.MultiNet.Entities",
+                            $type: "Retail.BusinessEntity.Business.FaultTicketSettingsDetailsCollection,Retail.BusinessEntity.Business",
                             $values: getDescriptionSettingsListData()
                         };
-                        faultTicketObject.SourceId = Retail_MultiNet_FaultTicketSourceEnum.BackOffice.value;
+                        faultTicketObject.SourceId = Retail_BE_FaultTicketSourceEnum.BackOffice.value;
                     }
                     faultTicketObject.ContactEmails = $scope.scopeModel.email;
                     faultTicketObject.Notes = $scope.scopeModel.notes;
@@ -170,7 +170,7 @@ app.directive('retailMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUti
                     var descriptionSettingObject = $scope.scopeModel.descriptionSettings[i];
                     var faultTicketDescriptionSetting =
                         {
-                            $type: "Retail.MultiNet.Entities.FaultTicketDescriptionSettingDetails,Retail.MultiNet.Entities",
+                        $type: "Retail.BusinessEntity.Business.FaultTicketDescriptionSettingDetails,Retail.BusinessEntity.Business",
                             TicketReasonId: descriptionSettingObject.TicketReasonId,
                             TicketReasonDescription: descriptionSettingObject.TicketReasonDescription,
                             Type: descriptionSettingObject.Type,
@@ -228,7 +228,7 @@ app.directive('retailMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUti
 
             function getStatusSelectorFiter() {
                 return {
-                    $type: "Retail.MultiNet.Entities.FaultTicketStatusDefinitionFilter,Retail.MultiNet.Entities",
+                    $type: "Retail.BusinessEntity.Business.FaultTicketStatusDefinitionFilter,Retail.BusinessEntity.Business",
                     BusinessEntityDefinitionId: "0d7dd0d6-ab3c-4e58-bd5f-926a260f1891",
                     StatusId: selectedValues != undefined ? selectedValues.StatusId : undefined
                 };
