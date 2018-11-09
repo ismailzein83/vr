@@ -38,7 +38,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                     if (financialAccount.CarrierAccountId.HasValue)
                     {
-                        timeZoneId = new CarrierAccountManager().GetCustomerTimeZoneId(financialAccount.CarrierAccountId.Value);
+                        timeZoneId = new CarrierAccountManager().GetCustomerTimeZoneId(financialAccount.CarrierAccountId.Value, true);
                     }
                     else
                     {

@@ -8,5 +8,6 @@
     AlertingSMSPhoneNumbers: { value: 6, description: "SMS Phone Numbers" },
     SubjectCode: { value: 7, description: "Subject Code" },
     SupportEmail: { value: 8, description: "Support Email" },
-    TimeZone: { value: 9, description: "Time Zone" }
+    TimeZone: { value: 9, description: "Time Zone" },
+    InvoiceTimeZone: { value: 10, description: "Invoice Time Zone" }
 });

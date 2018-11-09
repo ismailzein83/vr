@@ -11,7 +11,7 @@ using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public enum CustomerField { CustomerName = 0, BillingEmail = 1, PricingEmail = 2, AccountManagerEmail = 3, BillingContact = 4, PricingContact = 5, AlertingSMSPhoneNumbers = 6, SubjectCode = 7, SupportEmail = 8, TimeZone = 9 }
+    public enum CustomerField { CustomerName = 0, BillingEmail = 1, PricingEmail = 2, AccountManagerEmail = 3, BillingContact = 4, PricingContact = 5, AlertingSMSPhoneNumbers = 6, SubjectCode = 7, SupportEmail = 8, TimeZone = 9, InvoiceTimeZone = 10 }
 
     public class CustomerPropertyEvaluator : VRObjectPropertyEvaluator
     {
@@ -52,6 +52,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 case CustomerField.TimeZone:
                     var timeZoneId = new CarrierAccountManager().GetCustomerTimeZoneId(customer.CarrierAccountId);
                     return new VRTimeZoneManager().GetVRTimeZoneName(timeZoneId);
+                case CustomerField.InvoiceTimeZone:
+                    var invoiceTimeZoneId = new CarrierAccountManager().GetCustomerTimeZoneId(customer.CarrierAccountId, true);
+                    return new VRTimeZoneManager().GetVRTimeZoneName(invoiceTimeZoneId);
             }
 
             return null;
