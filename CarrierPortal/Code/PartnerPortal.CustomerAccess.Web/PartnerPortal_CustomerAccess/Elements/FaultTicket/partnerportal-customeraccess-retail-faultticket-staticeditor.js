@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('cpMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService','CP_MultiNet_FaultTicketSourceEnum',
+app.directive('partnerportalCustomeraccessRetailFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsService', 'VRDateTimeService','CP_MultiNet_FaultTicketSourceEnum',
     function (UtilsService, VRUIUtilsService, VRDateTimeService, CP_MultiNet_FaultTicketSourceEnum) {
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -17,7 +17,7 @@ app.directive('cpMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsSe
             bindToController: true,
             compile: function (element, attrs) {
             },
-            templateUrl: "/Client/Modules/CP_MultiNet/Directives/FaultTicket/Templates/FaultTicketStaticEditor.html"
+            templateUrl: "/Client/Modules/PartnerPortal_CustomerAccess/Elements/FaultTicket/Templates/FaultTicketStaticEditor.html"
         };
 
         function retailMultinetFaultticketStaticeditor(ctrl, $scope, $attrs) {
@@ -141,7 +141,7 @@ app.directive('cpMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsSe
                         faultTicketObject.FromDate = $scope.scopeModel.fromDate;
                         faultTicketObject.ToDate = $scope.scopeModel.toDate;
                         faultTicketObject.TicketDetails = UtilsService.serializetoJson({
-                            $type: "Retail.MultiNet.Entities.FaultTicketSettingsDetailsCollection,Retail.MultiNet.Entities",
+                            $type: "Retail.BusinessEntity.Business.FaultTicketSettingsDetailsCollection,Retail.BusinessEntity.Business",
                             $values: getDescriptionSettingsListData()
                         });
                     }
@@ -164,7 +164,7 @@ app.directive('cpMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsSe
                     var descriptionSettingObject = $scope.scopeModel.descriptionSettings[i];
                     var faultTicketDescriptionSetting =
                         {
-                            $type: "Retail.MultiNet.Entities.FaultTicketDescriptionSettingDetails,Retail.MultiNet.Entities",
+                        $type: "Retail.BusinessEntity.Business.FaultTicketDescriptionSettingDetails,Retail.BusinessEntity.Business",
                             TicketReasonId: descriptionSettingObject.TicketReasonId,
                             TicketReasonDescription: descriptionSettingObject.TicketReasonDescription,
                             Type: descriptionSettingObject.Type,
@@ -223,7 +223,7 @@ app.directive('cpMultinetFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsSe
 
             function getStatusSelectorFilter() {
                 return {
-                    $type: "Retail.MultiNet.Entities.FaultTicketStatusDefinitionFilter,Retail.MultiNet.Entities",
+                    $type: "Retail.BusinessEntity.Business.FaultTicketStatusDefinitionFilter,Retail.BusinessEntity.Business",
                     BusinessEntityDefinitionId: "0d7dd0d6-ab3c-4e58-bd5f-926a260f1891",
                     StatusId: selectedValues != undefined ? selectedValues.StatusId : undefined
                 };

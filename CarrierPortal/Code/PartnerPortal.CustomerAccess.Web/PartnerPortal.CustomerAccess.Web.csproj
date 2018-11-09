@@ -191,6 +191,8 @@
     <Content Include="PartnerPortal_CustomerAccess\Elements\DID\Directives\Templates\DIDTileDefinitionSettings.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\DID\Directives\Templates\DIDTileRuntimeSettings.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\DID\Services\APIService\DIDAPIService.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\FaultTicket\partnerportal-customeraccess-retail-faultticket-staticeditor.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\FaultTicket\Templates\FaultTicketStaticEditor.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\partnerportal-customeraccess-livebalancetiledefinitionsettings.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\partnerportal-customeraccess-livebalancetileruntimesettings.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\Templates\LiveBalanceTileDefinitionSettings.html" />

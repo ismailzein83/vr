@@ -118,8 +118,6 @@
   <ItemGroup>
     <Content Include="CP_MultiNet\Constant\FaultTicketSourceEnum.js" />
     <Content Include="CP_MultiNet\Constant\ModuleConfig.js" />
-    <Content Include="CP_MultiNet\Directives\FaultTicket\cp-multinet-faultticket-staticeditor.js" />
-    <Content Include="CP_MultiNet\Directives\FaultTicket\Templates\FaultTicketStaticEditor.html" />
     <Content Include="CP_MultiNet\Directives\MainExtensions\RetailAccountQueryInterceptor\cp-multinet-retailaccount-queryinterceptor.js" />
     <Content Include="CP_MultiNet\Directives\MainExtensions\RetailAccountQueryInterceptor\Templates\RetailAccountQueryInterceptorTemplate.html" />
     <Content Include="CP_MultiNet\Elements\AccountAdditionalInfo\Directives\cp-multinet-accountadditionalinfotiledefinitionsettings.js" />
