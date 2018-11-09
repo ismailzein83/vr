@@ -118,16 +118,39 @@ namespace TOne.WhS.Analytics.Business
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Port Out" });
                     }
                 }
-
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Source" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Switch" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Attempts" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Failed Attempts" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "%" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Duration (min)" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "First Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                if(_query.Filter.ColumnsToShow!=null && _query.Filter.ColumnsToShow.Count > 0)
+                {
+                    if(_query.Filter.ColumnsToShow.Contains("ReleaseCode"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code" });
+                    if (_query.Filter.ColumnsToShow.Contains("ReleaseSource"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Source" });
+                    if (_query.Filter.ColumnsToShow.Contains("SwitchName"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Switch" });
+                    if (_query.Filter.ColumnsToShow.Contains("Attempt"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Attempts" });
+                    if (_query.Filter.ColumnsToShow.Contains("FailedAttempt"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Failed Attempts" });
+                    if (_query.Filter.ColumnsToShow.Contains("Percentage"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "%" });
+                    if (_query.Filter.ColumnsToShow.Contains("DurationInMinutes"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Duration (min)" });
+                    if (_query.Filter.ColumnsToShow.Contains("FirstAttempt"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "First Attempt" });
+                    if (_query.Filter.ColumnsToShow.Contains("LastAttempt"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Attempt" });
+                }
+                else
+                {
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Source" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Switch" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Attempts" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Failed Attempts" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "%" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Duration (min)" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "First Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Attempt", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                }
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
                 {
@@ -157,16 +180,39 @@ namespace TOne.WhS.Analytics.Business
                                     row.Cells.Add(new ExportExcelCell { Value = record.Entity.PortOut });
                                 }
                             }
-                            
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseCode });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseSource });
-                            row.Cells.Add(new ExportExcelCell { Value = record.SwitchName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Attempt });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.FailedAttempt });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Percentage });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.DurationInMinutes });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.FirstAttempt });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastAttempt });
+                            if (_query.Filter.ColumnsToShow != null && _query.Filter.ColumnsToShow.Count > 0)
+                            {
+                                if (_query.Filter.ColumnsToShow.Contains("ReleaseCode"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseCode });
+                                if (_query.Filter.ColumnsToShow.Contains("ReleaseSource"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseSource });
+                                if (_query.Filter.ColumnsToShow.Contains("SwitchName"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.SwitchName });
+                                if (_query.Filter.ColumnsToShow.Contains("Attempt"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Attempt });
+                                if (_query.Filter.ColumnsToShow.Contains("FailedAttempt"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.FailedAttempt });
+                                if (_query.Filter.ColumnsToShow.Contains("Percentage"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Percentage });
+                                if (_query.Filter.ColumnsToShow.Contains("DurationInMinutes"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.DurationInMinutes });
+                                if (_query.Filter.ColumnsToShow.Contains("FirstAttempt"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.FirstAttempt });
+                                if (_query.Filter.ColumnsToShow.Contains("LastAttempt"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastAttempt });
+                            }
+                            else
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseCode });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.ReleaseSource });
+                                row.Cells.Add(new ExportExcelCell { Value = record.SwitchName });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.Attempt });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.FailedAttempt });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.Percentage });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.DurationInMinutes });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.FirstAttempt });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastAttempt });
+                            }
                         }
                     }
                 }

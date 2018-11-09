@@ -14,7 +14,7 @@ namespace TOne.WhS.Analytics.Entities
         public List<int> SupplierIds { get; set; }
         public List<int> CountryIds { get; set; }
         public List<int> MasterSaleZoneIds { get; set; }
-
+        public List<string> ColumnsToShow { get; set; }
 
     }
 }
