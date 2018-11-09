@@ -506,41 +506,22 @@ namespace TOne.WhS.BusinessEntity.Business
             return configManager.MergePricelistSettings(configManager.GetSaleAreaPricelistSettings(), companyPricelistSettings);
         }
 
-        public int GetCarrierTimeZoneId(int carrierId, bool isCustomer)
-        {
-            var carrierAccount = GetCarrierAccount(carrierId);
-            if (carrierAccount == null)
-                throw new NullReferenceException("carrierAccount");
-
-            if (isCustomer)
-            {
-                if (carrierAccount.CustomerSettings == null)
-                    throw new NullReferenceException("carrierProfile.CustomerSettings");
-
-                if (carrierAccount.CustomerSettings.TimeZoneId.HasValue)
-                    return carrierAccount.CustomerSettings.TimeZoneId.Value;
-
-                return new CarrierProfileManager().GetCustomerTimeZoneId(carrierAccount.CarrierProfileId);
-            }
-
-            if (carrierAccount.SupplierSettings == null)
-                throw new NullReferenceException("carrierProfile.SupplierSettings");
-
-            if (carrierAccount.SupplierSettings.TimeZoneId.HasValue)
-                return carrierAccount.SupplierSettings.TimeZoneId.Value;
-
-            return new CarrierProfileManager().GetSupplierTimeZoneId(carrierAccount.CarrierProfileId);
-        }
-        public int GetCustomerTimeZoneId(int carrierAccountId)
+        public int GetCustomerTimeZoneId(int carrierAccountId, bool invoiceTimeZone = false)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);
-            if (carrierAccount == null)
-                throw new NullReferenceException("carrierAccount");
-            if (carrierAccount.CustomerSettings == null)
-                throw new NullReferenceException("carrierProfile.CustomerSettings");
-            if (carrierAccount.CustomerSettings.InvoiceTimeZone && carrierAccount.CustomerSettings.TimeZoneId.HasValue)
+            carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
+            carrierAccount.CustomerSettings.ThrowIfNull("carrierProfile.CustomerSettings", carrierAccountId);
+
+            if (!carrierAccount.CustomerSettings.TimeZoneId.HasValue)
+                return new CarrierProfileManager().GetCustomerTimeZoneId(carrierAccount.CarrierProfileId);
+
+            if (!invoiceTimeZone)
                 return carrierAccount.CustomerSettings.TimeZoneId.Value;
-            return new CarrierProfileManager().GetCustomerTimeZoneId(carrierAccount.CarrierProfileId);
+
+            if (!carrierAccount.CustomerSettings.InvoiceTimeZone)
+                return new CarrierProfileManager().GetCustomerTimeZoneId(carrierAccount.CarrierProfileId);
+
+            return carrierAccount.CustomerSettings.TimeZoneId.Value;
         }
         public int GetSupplierTimeZoneId(int carrierAccountId)
         {

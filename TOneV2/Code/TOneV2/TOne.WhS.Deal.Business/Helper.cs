@@ -81,20 +81,14 @@ namespace TOne.WhS.Deal.Business
             TimeSpan timespan = GetTimeSpan(carrierId, isSale);
             return date.Value.Subtract(timespan);
         }
-        public static DateTime? ShiftBackDateTime(int carrierId, bool isSale, DateTime? date)
-        {
-            if (!date.HasValue)
-                return null;
-
-            TimeSpan timespan = GetTimeSpan(carrierId, isSale);
-            return date.Value.Add(timespan);
-        }
         private static TimeSpan GetTimeSpan(int carrierId, bool isSale)
         {
             var timeZoneManager = new VRTimeZoneManager();
             var carrierAccountManager = new CarrierAccountManager();
 
-            int timeZoneId = carrierAccountManager.GetCarrierTimeZoneId(carrierId, isSale);
+            int timeZoneId = isSale
+                ? carrierAccountManager.GetCustomerTimeZoneId(carrierId)
+                : carrierAccountManager.GetSupplierTimeZoneId(carrierId);
 
             VRTimeZone timeZone = timeZoneManager.GetVRTimeZone(timeZoneId);
 

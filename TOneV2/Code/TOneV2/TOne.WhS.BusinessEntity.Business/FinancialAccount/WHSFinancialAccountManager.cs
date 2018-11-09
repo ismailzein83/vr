@@ -614,7 +614,7 @@ namespace TOne.WhS.BusinessEntity.Business
             financialAccount.ThrowIfNull("financialAccount", financialAccountId);
             if (financialAccount.CarrierAccountId.HasValue)
             {
-                return s_carrierAccountManager.GetCustomerTimeZoneId(financialAccount.CarrierAccountId.Value);
+                return s_carrierAccountManager.GetCustomerTimeZoneId(financialAccount.CarrierAccountId.Value, true);
             }
             else
             {
@@ -1072,7 +1072,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     EED = eedToSet
                 };
                 string errorMessage = null;
-                if (TryReflectEffectiveDateToInvoiceAndBalanceAccounts(financialAccountToEdit, out  errorMessage))
+                if (TryReflectEffectiveDateToInvoiceAndBalanceAccounts(financialAccountToEdit, out errorMessage))
                     TryUpdateFinancialAccount(financialAccountToEdit);
             }
         }
