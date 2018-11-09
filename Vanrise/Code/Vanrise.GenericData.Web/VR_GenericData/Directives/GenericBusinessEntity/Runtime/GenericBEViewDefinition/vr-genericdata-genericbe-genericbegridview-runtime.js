@@ -57,7 +57,8 @@
                             businessEntityDefinitionId = genericBEGridView.Settings.GenericBEDefinitionId;
                             payload = {
                                 businessEntityDefinitionId: businessEntityDefinitionId,
-                                fieldValues: buildMappingfields()
+                                fieldValues: buildMappingfields(),
+                                filterValues: buildMappingfields()
                             };
                         }
 
