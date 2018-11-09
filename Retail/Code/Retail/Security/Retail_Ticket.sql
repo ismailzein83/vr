@@ -1,3 +1,3 @@
 ﻿CREATE SCHEMA [Retail_Ticket]
-    AUTHORIZATION [development];
+    AUTHORIZATION [dbo];
 
