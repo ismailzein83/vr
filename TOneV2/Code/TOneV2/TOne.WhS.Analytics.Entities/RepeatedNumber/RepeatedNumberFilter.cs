@@ -11,5 +11,6 @@ namespace TOne.WhS.Analytics.Entities
         public List<int> SwitchIds { get; set; }
         public List<int> CustomerIds { get; set; }
         public List<int> SupplierIds { get; set; }
+        public List<string> ColumnsToShow { get; set; }
     }
 }

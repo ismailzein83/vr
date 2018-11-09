@@ -64,13 +64,20 @@ namespace TOne.WhS.Analytics.Business
             {
                 return new ResultProcessingHandler<RepeatedNumberDetail>
                 {
-                    ExportExcelHandler = new RepeatedNumberExcelExportHandler()
+                    ExportExcelHandler = new RepeatedNumberExcelExportHandler(input.Query)
                 };
             }
         }
 
         private class RepeatedNumberExcelExportHandler : ExcelExportHandler<RepeatedNumberDetail>
         {
+            RepeatedNumberQuery _query;
+            public RepeatedNumberExcelExportHandler(RepeatedNumberQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RepeatedNumberDetail> context)
             {
                 ExportExcelSheet sheet = new ExportExcelSheet()
@@ -78,13 +85,30 @@ namespace TOne.WhS.Analytics.Business
                     SheetName = "Repeated Numbers",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 50 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier", Width = 50 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone", Width = 50 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Attempts" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Duration (min)" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Phone Number" });
+                if(_query.Filter!=null && _query.Filter.ColumnsToShow!=null && _query.Filter.ColumnsToShow.Count > 0)
+                {
+                    if (_query.Filter.ColumnsToShow.Contains("CustomerName"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 50 });
+                    if (_query.Filter.ColumnsToShow.Contains("SupplierName"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier", Width = 50 });
+                    if (_query.Filter.ColumnsToShow.Contains("SaleZoneName"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone", Width = 50 });
+                    if (_query.Filter.ColumnsToShow.Contains("Attempt"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Attempts" });
+                    if (_query.Filter.ColumnsToShow.Contains("DurationInMinutes"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Duration (min)" });
+                    if (_query.Filter.ColumnsToShow.Contains("PhoneNumber"))
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Phone Number" });
+                }
+                else
+                {
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 50 });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier", Width = 50 });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone", Width = 50 });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Attempts" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Duration (min)" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Phone Number" });
+                }
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -95,12 +119,31 @@ namespace TOne.WhS.Analytics.Business
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.CustomerName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Attempt });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.DurationInMinutes });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.PhoneNumber });
+                            if (_query.Filter != null && _query.Filter.ColumnsToShow != null && _query.Filter.ColumnsToShow.Count > 0)
+                            {
+                                if(_query.Filter.ColumnsToShow.Contains("CustomerName"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.CustomerName });
+                                if (_query.Filter.ColumnsToShow.Contains("SupplierName"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
+                                if (_query.Filter.ColumnsToShow.Contains("SaleZoneName"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneName });
+                                if (_query.Filter.ColumnsToShow.Contains("Attempt"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.Attempt });
+                                if (_query.Filter.ColumnsToShow.Contains("DurationInMinutes"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.DurationInMinutes });
+                                if (_query.Filter.ColumnsToShow.Contains("PhoneNumber"))
+                                    row.Cells.Add(new ExportExcelCell { Value = record.Entity.PhoneNumber });
+
+                            }
+                            else
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = record.CustomerName });
+                                row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
+                                row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneName });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.Attempt });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.DurationInMinutes });
+                                row.Cells.Add(new ExportExcelCell { Value = record.Entity.PhoneNumber });
+                            }
                         }
                     }
                 }
