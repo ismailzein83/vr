@@ -134,6 +134,7 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
         else {
             filter.SupplierIds = accountDirectiveAPI.getSelectedIds();
         }
+        filter.AccountType = accountViewTypeAPI.getSelectedIds();
         return filter;
     }
 

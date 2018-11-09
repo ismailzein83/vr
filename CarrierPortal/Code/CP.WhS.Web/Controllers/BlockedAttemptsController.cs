@@ -19,7 +19,7 @@ namespace CP.WhS.Web.Controllers
         [Route("GetFilteredBlockedAttempts")]
         public object GetFilteredBlockedAttempts(DataRetrievalInput<BlockedAttemptQuery> input)
         {
-            return GetWebResponse(input, _blockedAttemptsManager.GetFilteredBlockedAttempts(input));
+            return GetWebResponse(input, _blockedAttemptsManager.GetFilteredBlockedAttempts(input), "Blocked Attempts");
         }
     }
 }

@@ -19,7 +19,7 @@ namespace CP.WhS.Web.Controllers
         [Route("GetFilteredReleaseCodeStatistics")]
         public object GetFilteredReleaseCodeStatistics(DataRetrievalInput<ReleaseCodeQuery> input)
         {
-            return GetWebResponse(input, _releaseCodeStatisticsManager.GetFilteredReleaseCodeStatistics(input));
+            return GetWebResponse(input, _releaseCodeStatisticsManager.GetFilteredReleaseCodeStatistics(input), "Release Code Statistics");
         }
     }
 }

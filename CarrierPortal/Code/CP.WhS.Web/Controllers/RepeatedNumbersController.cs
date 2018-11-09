@@ -1,4 +1,5 @@
 ﻿using CP.WhS.Business;
+using CP.WhS.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace CP.WhS.Web.Controllers
         RepeatedNumbersManager _repeatedNumbersManager = new RepeatedNumbersManager();
         [HttpPost]
         [Route("GetFilteredRepeatedNumbers")]
-        public object GetFilteredRepeatedNumbers(DataRetrievalInput<RepeatedNumberQuery> input)
+        public object GetFilteredRepeatedNumbers(DataRetrievalInput<ClientRepeatedNumberQuery> input)
         {
-            return GetWebResponse(input, _repeatedNumbersManager.GetFilteredBlockedAttempts(input));
+            return GetWebResponse(input, _repeatedNumbersManager.GetFilteredBlockedAttempts(input), "Repeated Numbers");
         }
     }
 }
