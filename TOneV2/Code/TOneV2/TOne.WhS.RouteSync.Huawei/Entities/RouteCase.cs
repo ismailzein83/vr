@@ -27,6 +27,16 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
         public int? Percentage { get; set; }
         public string ISUP { get; set; }
 
+        public decimal? GetInputPercentage()
+        {
+            return this.Percentage;
+        }
+
+        public void SetOutputPercentage(int? percentage)
+        {
+            this.Percentage = percentage;
+        }
+
         public bool ShouldHavePercentage()
         {
             return true;
