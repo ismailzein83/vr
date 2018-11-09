@@ -20,6 +20,8 @@ namespace CP.WhS.Business
             WhSCarrierAccountBEManager whSCarrierAccountBEManager = new WhSCarrierAccountBEManager();
             var accessibleCustomers = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new Entities.ClientAccountInfoFilter() { GetCustomers = true });
             var accessibleSuppliers = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new Entities.ClientAccountInfoFilter() { GetSuppliers = true });
+            List<string> columnsToShow = new List<string>() { "ReleaseCode", "ReleaseSource", "Attempt", "FailedAttempt", "Percentage", "DurationInMinutes",
+            "FirstAttempt", "LastAttempt"};
             if (clonedInput.Query.Filter != null)
             {
                 if (clonedInput.Query.Filter.CustomerIds != null && query.Query.Filter.CustomerIds.Count > 0)
@@ -43,13 +45,15 @@ namespace CP.WhS.Business
                     clonedInput.Query.Filter.CustomerIds = accessibleCustomers.Select(x => x.AccountId).ToList();
                     clonedInput.Query.Filter.SupplierIds = accessibleSuppliers.Select(x => x.AccountId).ToList();
                 }
+                clonedInput.Query.Filter.ColumnsToShow = columnsToShow;
             }
             else
             {
                 clonedInput.Query.Filter = new ReleaseCodeFilter()
                 {
                     CustomerIds = accessibleCustomers.Select(x => x.AccountId).ToList(),
-                    SupplierIds = accessibleSuppliers.Select(x => x.AccountId).ToList()
+                    SupplierIds = accessibleSuppliers.Select(x => x.AccountId).ToList(),
+                    ColumnsToShow = columnsToShow
                 };
             }
             if (clonedInput.DataRetrievalResultType == DataRetrievalResultType.Excel)
