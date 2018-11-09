@@ -40,10 +40,10 @@
                     <span>
                         <vr-row>
                             <vr-columns width="1/3row">
-                                <vr-datetimepicker label="Begin Date" type="date" value="scopeModel.beginDate" isrequired="true" customvalidate="scopeModel.validateBED()" onvaluechanged="scopeModel.onBEDchanged"></vr-datetimepicker>
+                                <vr-datetimepicker label="Begin Date" type="datetime" value="scopeModel.beginDate" isrequired="true" customvalidate="scopeModel.validateBED()" onvaluechanged="scopeModel.onBEDchanged"></vr-datetimepicker>
                             </vr-columns>
                             <vr-columns width="1/3row">
-                                <vr-datetimepicker label="End Date" type="date" value="scopeModel.endDate" isrequired="true" customvalidate="scopeModel.validateEED()" onvaluechanged="scopeModel.onEEDchanged"></vr-datetimepicker>
+                                <vr-datetimepicker label="End Date" type="datetime" value="scopeModel.endDate" isrequired="true" customvalidate="scopeModel.validateEED()" onvaluechanged="scopeModel.onEEDchanged"></vr-datetimepicker>
                             </vr-columns>
                             <span>
                                 <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectReady" isrequired="true" normal-col-num="4"></vr-common-currency-selector>
@@ -66,17 +66,29 @@
                                 </span>
                             </vr-columns>
                             <vr-row>
-                                <span ng-if="scopeModel.isInactiveStatus()">
+                                <span>
                                     <vr-columns width="1/3row">
                                         <span vr-disabled="viewMode">
-                                            <vr-datetimepicker stopreadonly label="Deactivation Date" type="date" value="scopeModel.deActivationDate" isrequired="true" customvalidate="scopeModel.validateDealStatusDate()"></vr-datetimepicker>
+                                            <vr-datetimepicker ng-if="scopeModel.isInactiveStatus()" stopreadonly label="Deactivation Date" type="date"
+                                                               value="scopeModel.deActivationDate" isrequired="true" customvalidate="scopeModel.validateDealStatusDate()"></vr-datetimepicker>
                                         </span>
                                     </vr-columns>
                                 </span>
+                                <vr-columns width="1/3row">
+                                    <vr-select label="Time Zone"
+                                               datasource="scopeModel.SwapDealTimeZone"
+                                               datavaluefield="value"
+                                               datatextfield="description"
+                                               selectedvalues="scopeModel.selectedTimeZone"
+                                               isrequired="true"
+                                               hideremoveicon="true">
+                                    </vr-select>
+                                </vr-columns>
                                 <vr-columns width="1/3row" ng-if="scopeModel.selectedContractType && (scopeModel.selectedContractType.value == 0 || scopeModel.selectedContractType.value == 1 ) ">
                                     <vr-textbox type="number" minvalue="0" maxvalue="100" value="scopeModel.difference" label="Difference %" isrequired="true">  </vr-textbox>
                                 </vr-columns>
                             </vr-row>
+                        </vr-row>
                     </span>
 
                     <span>
@@ -90,12 +102,6 @@
                 </vr-tab>
                 <vr-tab header="'Selling Part'" vr-loader="scopeModel.isLoadingInbound">
                     <vr-row>
-                        <vr-columns width="1/3">
-                            <vr-label>Follow system time zone</vr-label>
-                            <vr-switch value="scopeModel.saleFollowSystemTimeZone"></vr-switch>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row>
                         <vr-columns width="fullrow">
                             <vr-validator validate="scopeModel.validateSwapDealInbounds()">
                                 <vr-whs-deal-swapdealinbound-grid on-ready="scopeModel.onSwapDealInboundDirectiveReady" ng-show="scopeModel.dataForBoundsReady()"></vr-whs-deal-swapdealinbound-grid>
@@ -104,12 +110,6 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Buying Part'" vr-loader="scopeModel.isLoadingOutbound">
-                    <vr-row>
-                        <vr-columns width="1/3">
-                            <vr-label>Follow system time zone</vr-label>
-                            <vr-switch value="scopeModel.costFollowSystemTimeZone"></vr-switch>
-                        </vr-columns>
-                    </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-validator validate="scopeModel.validateSwapDealOutbounds()">

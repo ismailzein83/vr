@@ -182,6 +182,7 @@
     <Content Include="WhS_Deal\Constant\RecurringTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\SwapDealAnalysisType.js" />
     <Content Include="WhS_Deal\Constant\TimePeriodTypeEnum.js" />
+    <Content Include="WhS_Deal\Constant\SwapDealTimeZoneTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\VolumeCommitmentTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\SubstituteRateTypeEnum.js" />
     <Content Include="WhS_Deal\Constant\ZoneRateEvaluationTypeEnum.js" />

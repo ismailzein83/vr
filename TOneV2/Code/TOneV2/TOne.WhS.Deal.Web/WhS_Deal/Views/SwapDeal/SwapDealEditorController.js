@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum'];
+    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum'];
 
-    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum) {
+    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_SwapDealTimeZoneTypeEnum) {
         var isEditMode;
 
         var dealId;
@@ -58,13 +58,15 @@
             $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum);
             $scope.scopeModel.agreementTypes = UtilsService.getArrayEnum(WhS_Deal_DealAgreementTypeEnum);
             $scope.scopeModel.dealStatus = UtilsService.getArrayEnum(WhS_Deal_DealStatusTypeEnum);
+            $scope.scopeModel.SwapDealTimeZone = UtilsService.getArrayEnum(WhS_Deal_SwapDealTimeZoneTypeEnum);
+            $scope.scopeModel.selectedTimeZone = WhS_Deal_SwapDealTimeZoneTypeEnum.Supplier;
 
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
                 carrierAccountSelectorReadyDeferred.resolve();
             };
-            if (!isEditMode )
-                $scope.scopeModel.saleFollowSystemTimeZone = true;
+            if (!isEditMode)
+                $scope.scopeModel.followSupplierTimeZone = false;
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
                 carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
 
@@ -289,21 +291,16 @@
                 return;
             originalEED = dealEntity.Settings.EEDToStore;
             $scope.scopeModel.isCommitmentAgreement = isCommitmentAgreement();
-            //console.log(isCommitmentAgreement())
-            //if (isCommitmentAgreement())
-            //    UtilsService.setContextReadOnly($scope);
             $scope.scopeModel.description = dealEntity.Name;
-            //$scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
             $scope.scopeModel.selectedContractType = UtilsService.getItemByVal($scope.scopeModel.contractTypes, dealEntity.Settings.DealContract, 'value');
             $scope.scopeModel.selectedAgreementType = UtilsService.getItemByVal($scope.scopeModel.agreementTypes, dealEntity.Settings.DealType, 'value');
             $scope.scopeModel.selectedDealStatus = UtilsService.getItemByVal($scope.scopeModel.dealStatus, dealEntity.Settings.Status, 'value');
+            $scope.scopeModel.selectedTimeZone = UtilsService.getItemByVal($scope.scopeModel.SwapDealTimeZone, dealEntity.Settings.SwapDealTimeZone, 'value');
             $scope.scopeModel.beginDate = dealEntity.Settings.BeginDate;
             $scope.scopeModel.endDate = dealEntity.Settings.EEDToStore;
             $scope.scopeModel.deActivationDate = dealEntity.Settings.DeActivationDate;
             $scope.scopeModel.active = dealEntity.Settings.Active;
             $scope.scopeModel.difference = dealEntity.Settings.Difference;
-            $scope.scopeModel.saleFollowSystemTimeZone = dealEntity.Settings.SaleFollowSystemTimeZone;
-            $scope.scopeModel.costFollowSystemTimeZone = dealEntity.Settings.CostFollowSystemTimeZone;
         }
         function loadCarrierBoundsSection() {
             var promises = [];
@@ -338,8 +335,7 @@
                         Inbounds: dealEntity.Settings.Inbounds,
                         lastInboundGroupNumber: dealEntity.Settings.LastInboundGroupNumber,
                         context: getContext(),
-                        dealId: dealId,
-
+                        dealId: dealId
                     };
                     var payloadOutbound = {
                         carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
@@ -444,6 +440,7 @@
                     DealContract: $scope.scopeModel.selectedContractType.value,
                     DealType: $scope.scopeModel.selectedAgreementType.value,
                     Status: $scope.scopeModel.selectedDealStatus.value,
+                    TimeZone: $scope.scopeModel.selectedTimeZone.value,
                     Inbounds: inboundData != undefined ? inboundData.inbounds : undefined,
                     Outbounds: outboundData != undefined ? outboundData.outbounds : undefined,
                     LastInboundGroupNumber: inboundData != undefined ? inboundData.lastInboundGroupNumber : undefined,
@@ -452,8 +449,7 @@
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     DeActivationDate: $scope.scopeModel.deActivationDate,
                     IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable : true,
-                    CostFollowSystemTimeZone: $scope.scopeModel.costFollowSystemTimeZone,
-                    SaleFollowSystemTimeZone: $scope.scopeModel.saleFollowSystemTimeZone
+                    SwapDealTimeZone: $scope.scopeModel.swapDealTimeZone
 
                 }
             };
@@ -488,8 +484,7 @@
                         CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         DealId: dealId,
                         BED: $scope.scopeModel.beginDate,
-                        EED: $scope.scopeModel.endDate,
-                        FollowSystemTimeZone: $scope.scopeModel.costFollowSystemTimeZone
+                        EED: $scope.scopeModel.endDate
                     }];
                     return payload;
                 },
@@ -527,8 +522,7 @@
                         CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         DealId: dealId,
                         BED: $scope.scopeModel.beginDate,
-                        EED: $scope.scopeModel.endDate,
-                        FollowSystemTimeZone: $scope.scopeModel.saleFollowSystemTimeZone
+                        EED: $scope.scopeModel.endDate
                     }];
 
                     return payload;

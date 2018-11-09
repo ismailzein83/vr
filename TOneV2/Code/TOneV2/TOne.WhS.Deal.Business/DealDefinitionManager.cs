@@ -658,15 +658,15 @@ namespace TOne.WhS.Deal.Business
                             {
                                 SortedList<DateTime, DealZoneInfo> dealZoneInfos = dealZoneInfoByZoneId.GetOrCreateItem(zoneId, () => { return new SortedList<DateTime, DealZoneInfo>(new DecsendingDateTimeComparer()); });
 
-                                var overlappedItem = dealZoneInfos.FindRecord(x => IsOverlapped(x, dealDef.Settings.BeginDate, dealDef.Settings.EndDate));
+                                var overlappedItem = dealZoneInfos.FindRecord(x => IsOverlapped(x, dealDef.Settings.RealBED, dealDef.Settings.RealEED));
                                 if (overlappedItem == null)
                                 {
                                     dealZoneInfos.Add(dealDef.Settings.BeginDate, new DealZoneInfo
                                     {
                                         DealId = dealDef.DealId,
                                         ZoneId = zoneId,
-                                        BED = dealDef.Settings.BeginDate,
-                                        EED = dealDef.Settings.EndDate
+                                        BED = dealDef.Settings.RealBED,
+                                        EED = dealDef.Settings.RealEED
                                     });
                                 }
                             }
@@ -705,15 +705,15 @@ namespace TOne.WhS.Deal.Business
                             {
                                 SortedList<DateTime, DealZoneInfo> dealZoneInfos = dealZoneInfoByZoneId.GetOrCreateItem(zoneId, () => { return new SortedList<DateTime, DealZoneInfo>(new DecsendingDateTimeComparer()); });
                                 //List<DealZoneInfo> dealZoneInfos = dealZoneInfoByZoneId.GetOrCreateItem(zoneId);
-                                var overlappedItem = dealZoneInfos.FindRecord(x => IsOverlapped(x, deal.Settings.BeginDate, deal.Settings.EndDate));
+                                var overlappedItem = dealZoneInfos.FindRecord(x => IsOverlapped(x, deal.Settings.RealBED, deal.Settings.RealEED));
                                 if (overlappedItem == null)
                                 {
                                     dealZoneInfos.Add(deal.Settings.BeginDate, new DealZoneInfo
                                     {
                                         DealId = deal.DealId,
                                         ZoneId = zoneId,
-                                        BED = deal.Settings.BeginDate,
-                                        EED = deal.Settings.EndDate
+                                        BED = deal.Settings.RealBED,
+                                        EED = deal.Settings.RealEED
                                     });
                                 }
                             }

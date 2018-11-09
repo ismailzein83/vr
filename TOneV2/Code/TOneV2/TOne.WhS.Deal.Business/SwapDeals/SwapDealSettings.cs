@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Vanrise.Common;
+using Vanrise.Entities;
 using System.ComponentModel;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common.Business;
@@ -30,6 +31,11 @@ namespace TOne.WhS.Deal.Business
         Commitment = 1
     }
 
+    public enum SwapDealTimeZone
+    {
+        System = 0,
+        Supplier = 1
+    }
     public class SwapDealSettings : DealSettings
     {
         public static Guid SwapDealSettingsConfigId = new Guid("63C1310D-FDEA-4AC7-BDE1-58FD11E4EC65");
@@ -44,20 +50,39 @@ namespace TOne.WhS.Deal.Business
         public int LastOutboundGroupNumber { get; set; }
         public int GracePeriod { get; set; }
         public int CurrencyId { get; set; }
-        public bool CostFollowSystemTimeZone { get; set; }
-        public bool SaleFollowSystemTimeZone { get; set; }
+        public SwapDealTimeZone SwapDealTimeZone { get; set; }
 
         #region Public Methods
+        public override DateTime RealBED
+        {
+            get
+            {
+                if (OffSet.HasValue)
+                    return BeginDate.Subtract(OffSet.Value);
+                return BeginDate;
+            }
+        }
 
         public override DateTime? RealEED
         {
             get
             {
-                DateTime? DealEEDWithGracePeriod = EndDate.HasValue ? EndDate.Value.AddDays(GracePeriod) : EndDate;
-                DateTime? EED = DealEEDWithGracePeriod;
-                if (Status == DealStatus.Inactive)
-                    EED = DeActivationDate;
-                return EED < DealEEDWithGracePeriod ? EED : DealEEDWithGracePeriod;
+                if (EndDate.HasValue)
+                {
+                    DateTime? DealEEDWithGracePeriod = EndDate.Value.AddDays(GracePeriod);
+                    DateTime? EED = DealEEDWithGracePeriod;
+
+                    if (Status == DealStatus.Inactive)
+                        EED = DeActivationDate;
+
+                    EED = EED < DealEEDWithGracePeriod ? EED : DealEEDWithGracePeriod;
+
+                    if (OffSet != null)
+                        return EED.Value.Subtract(OffSet.Value);
+
+                    return EED;
+                }
+                return EndDate;
             }
         }
 
@@ -79,6 +104,23 @@ namespace TOne.WhS.Deal.Business
             outbound.ThrowIfNull("outbound", dealGroupNumber);
             return outbound.Name;
         }
+
+        public override TimeSpan? GetCarrierOffSet()
+        {
+            if (SwapDealTimeZone == SwapDealTimeZone.System)
+                return null;
+
+            var timeZoneManager = new VRTimeZoneManager();
+            var carrierAccountManager = new CarrierAccountManager();
+            int timZoneId = carrierAccountManager.GetSupplierTimeZoneId(CarrierAccountId);
+            VRTimeZone timeZone = timeZoneManager.GetVRTimeZone(timZoneId);
+
+            timeZone.ThrowIfNull("timeZone", CarrierAccountId);
+            timeZone.Settings.ThrowIfNull("timeZoneSettings", CarrierAccountId);
+
+            return timeZone.Settings.Offset;
+        }
+
 
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
@@ -108,25 +150,12 @@ namespace TOne.WhS.Deal.Business
                     }
                 }
             }
-            DateTime saleBED = this.BeginDate;
-            DateTime? saleEED = this.EndDate;
 
-            if (!SaleFollowSystemTimeZone)
-            {
-                saleBED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, saleBED).Value;
-                saleEED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, saleEED);
-            }
-            var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, saleBED, saleEED);
-            DateTime costBED = this.BeginDate;
-            DateTime? costEED = this.EndDate;
+            var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, RealBED, RealEED);
 
-            if (!CostFollowSystemTimeZone)
-            {
-                costBED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, costBED).Value;
-                costEED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, costEED);
-            }
-            var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, costBED, costEED);
-            if (excludedSaleZones.Count() > 0)
+            var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, RealBED, RealEED);
+
+            if (excludedSaleZones.Count > 0)
             {
                 validationResult = false;
                 var excludedSaleZoneNames = saleZoneManager.GetSaleZoneNames(excludedSaleZones);
@@ -140,7 +169,7 @@ namespace TOne.WhS.Deal.Business
                 validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following supplier zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSupplierZoneNames)));
             }
 
-            if (GracePeriod > (EndDate.Value - BeginDate).Days)
+            if (GracePeriod > (EndDate.Value - RealBED).Days)
             {
                 validationResult = false;
                 validateBeforeSaveContext.ValidateMessages.Add("Grace Period should be less than the difference between BED and EED");
@@ -150,13 +179,13 @@ namespace TOne.WhS.Deal.Business
             {
                 ValidateSaleAndCost(validateBeforeSaveContext, ref validationResult);
             }
-            var invalidCountryIds = ValidateSwapDealCountries(CarrierAccountId, BeginDate, false);
-            if (invalidCountryIds.Count() > 0)
+            var invalidCountryIds = ValidateSwapDealCountries(CarrierAccountId, RealBED, false);
+            if (invalidCountryIds.Count > 0)
             {
-                CountryManager countrymanager = new CountryManager();
-                var invalidCountryNames = countrymanager.GetCountryNames(invalidCountryIds.Distinct());
+                CountryManager countryManager = new CountryManager();
+                var invalidCountryNames = countryManager.GetCountryNames(invalidCountryIds.Distinct());
                 validationResult = false;
-                validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following countries {0} are not sold at {1}", string.Join(",", invalidCountryNames), BeginDate));
+                validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following countries {0} are not sold at {1}", string.Join(",", invalidCountryNames), RealBED));
             }
 
             return validationResult;
@@ -164,7 +193,7 @@ namespace TOne.WhS.Deal.Business
 
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
-            if (Status == DealStatus.Draft || (RealEED.HasValue && BeginDate == RealEED))
+            if (Status == DealStatus.Draft || (RealEED.HasValue && RealBED == RealEED))
                 return;
 
             switch (context.DealZoneGroupPart)
@@ -388,19 +417,10 @@ namespace TOne.WhS.Deal.Business
             if (Inbounds == null || Inbounds.Count == 0)
                 return null;
 
-            DateTime BED = BeginDate;
-            DateTime? EED = RealEED;
-
-            if (!SaleFollowSystemTimeZone)
-            {
-                BED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, BED).Value;
-                EED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, EED);
-            }
-
             List<BaseDealSaleZoneGroup> saleZoneGroups = new List<BaseDealSaleZoneGroup>();
             foreach (SwapDealInbound swapDealInbound in Inbounds)
             {
-                List<DealSaleZoneGroupZoneItem> zones = Helper.BuildSaleZones(swapDealInbound.SaleZones.Select(z => z.ZoneId), BED, EED);
+                List<DealSaleZoneGroupZoneItem> zones = Helper.BuildSaleZones(swapDealInbound.SaleZones.Select(z => z.ZoneId), RealBED, RealEED);
 
                 BaseDealSaleZoneGroup dealSaleZoneGroup;
                 if (evaluateRates)
@@ -412,8 +432,8 @@ namespace TOne.WhS.Deal.Business
                 dealSaleZoneGroup.DealSaleZoneGroupNb = swapDealInbound.ZoneGroupNumber;
                 dealSaleZoneGroup.CustomerId = CarrierAccountId;
                 dealSaleZoneGroup.Zones = zones;
-                dealSaleZoneGroup.BED = BED;
-                dealSaleZoneGroup.EED = EED;
+                dealSaleZoneGroup.BED = RealBED;
+                dealSaleZoneGroup.EED = RealEED;
 
                 saleZoneGroups.Add(dealSaleZoneGroup);
             }
@@ -486,19 +506,10 @@ namespace TOne.WhS.Deal.Business
             if (Outbounds == null || Outbounds.Count == 0)
                 return null;
 
-            DateTime BED = BeginDate;
-            DateTime? EED = RealEED;
-
-            if (!CostFollowSystemTimeZone)
-            {
-                BED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, BED).Value;
-                EED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, EED);
-            }
-
             var dealSupplierZoneGroups = new List<BaseDealSupplierZoneGroup>();
             foreach (SwapDealOutbound swapDealOutbound in Outbounds)
             {
-                List<DealSupplierZoneGroupZoneItem> zones = Helper.BuildSupplierZones(swapDealOutbound.SupplierZones.Select(z => z.ZoneId), BED, EED);
+                List<DealSupplierZoneGroupZoneItem> zones = Helper.BuildSupplierZones(swapDealOutbound.SupplierZones.Select(z => z.ZoneId), RealBED, RealEED);
                 BaseDealSupplierZoneGroup dealSupplierZoneGroup;
                 if (evaluateRates)
                     dealSupplierZoneGroup = new DealSupplierZoneGroup { Tiers = BuildSupplierTiers(swapDealOutbound, zones) };
@@ -509,8 +520,8 @@ namespace TOne.WhS.Deal.Business
                 dealSupplierZoneGroup.DealSupplierZoneGroupNb = swapDealOutbound.ZoneGroupNumber;
                 dealSupplierZoneGroup.SupplierId = CarrierAccountId;
                 dealSupplierZoneGroup.Zones = zones;
-                dealSupplierZoneGroup.BED = BED;
-                dealSupplierZoneGroup.EED = EED;
+                dealSupplierZoneGroup.BED = RealBED;
+                dealSupplierZoneGroup.EED = RealEED;
 
                 dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
             }

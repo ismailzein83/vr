@@ -47,7 +47,7 @@ namespace TOne.WhS.Deal.Business
                     List<DateTime> dealDays = new List<DateTime>();
 
                     DateTime queryToDate = query.ToTime.HasValue ? query.ToTime.Value.Date.AddDays(1) : DateTime.Today.AddDays(1);
-                    for (DateTime d = Utilities.Max(deal.Settings.BeginDate, query.FromTime.Date); d < Utilities.Min(deal.Settings.EndDate.Value, queryToDate); d = d.AddDays(1))
+                    for (DateTime d = Utilities.Max(deal.Settings.BeginDate, query.FromTime.Date); d < Utilities.Min(deal.Settings.RealEED.Value, queryToDate); d = d.AddDays(1))
                     {
                         dealDays.Add(d);
                     }

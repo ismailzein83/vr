@@ -34,17 +34,24 @@ namespace TOne.WhS.Deal.Business
 
         public Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail> AddDeal(DealDefinition deal)
         {
-            ValidateBeforeSaveContext context = new ValidateBeforeSaveContext
+            var context = new ValidateBeforeSaveContext
             {
                 IsEditMode = false,
                 DealSaleZoneIds = deal.Settings.GetDealSaleZoneIds(),
                 DealSupplierZoneIds = deal.Settings.GetDealSupplierZoneIds()
             };
-            InsertDealOperationOutput<DealDefinitionDetail> insertOperationOutput = new InsertDealOperationOutput<DealDefinitionDetail>();
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
+            var insertOperationOutput = new InsertDealOperationOutput<DealDefinitionDetail>
+            {
+                Result = Vanrise.Entities.InsertOperationResult.Failed,
+                InsertedObject = null
+            };
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
+
             int insertedId = -1;
+
+            TimeSpan? offSet = deal.Settings.GetCarrierOffSet();
+            deal.Settings.OffSet = offSet;
+
             if (deal.Settings.ValidateDataBeforeSave(context))
             {
                 deal.Settings.IsRecurrable = true;
@@ -66,10 +73,8 @@ namespace TOne.WhS.Deal.Business
             {
                 insertOperationOutput.ValidationMessages = context.ValidateMessages;
             }
-
             return insertOperationOutput;
         }
-
 
         public bool DeleteDeal(int dealId)
         {
@@ -79,7 +84,7 @@ namespace TOne.WhS.Deal.Business
 
         public Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail> UpdateDeal(DealDefinition deal)
         {
-            var dealDefinition = GetDeal(deal.DealId);
+            var existingDealDefinition = GetDeal(deal.DealId);
             UpdateDealOperationOutput updateOperationOutput = new UpdateDealOperationOutput();
             ValidateBeforeSaveContext context = new ValidateBeforeSaveContext
             {
@@ -88,6 +93,11 @@ namespace TOne.WhS.Deal.Business
                 ExistingDeal = deal,
                 DealSaleZoneIds = deal.Settings.GetDealSaleZoneIds()
             };
+
+            TimeSpan? offSet = deal.Settings.GetCarrierOffSet();
+            if (existingDealDefinition.Settings.OffSet == null)
+                deal.Settings.OffSet = offSet;
+
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
@@ -110,7 +120,6 @@ namespace TOne.WhS.Deal.Business
             {
                 updateOperationOutput.ValidationMessages = context.ValidateMessages;
             }
-
             return updateOperationOutput;
         }
 

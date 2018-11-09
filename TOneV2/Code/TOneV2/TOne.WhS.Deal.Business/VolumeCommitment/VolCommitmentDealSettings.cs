@@ -1,14 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Common;
+using TOne.WhS.Deal.Entities;
+using Vanrise.Common.Business;
+using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Deal.Entities;
-using Vanrise.Common;
-using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
+    public enum VolCommitmentTimeZone
+    {
+        System = 0,
+        Supplier = 1,
+        Customer = 2
+    }
     public class VolCommitmentDealSettings : DealSettings
     {
         public static Guid VolCommitmentDealSettingsConfigId = new Guid("B606E88C-4AE5-4BF0-BCE5-10D456A092F5");
@@ -21,20 +28,34 @@ namespace TOne.WhS.Deal.Business
         public List<VolCommitmentDealItem> Items { get; set; }
 
         public int LastGroupNumber { get; set; }
-        public bool FollowSystemTimeZone { get; set; }
-
         public int CurrencyId { get; set; }
-
+        public VolCommitmentTimeZone VolCommitmentTimeZone { get; set; }
         public override DateTime? RealEED
         {
             get
             {
-                if (DeActivationDate.HasValue)
-                    return DeActivationDate < EndDate ? DeActivationDate : EndDate;
+                if (EndDate.HasValue)
+                {
+                    DateTime? EED = EndDate;
+                    if (DeActivationDate.HasValue)
+                        EED = DeActivationDate < EndDate ? DeActivationDate : EndDate;
+
+                    if (OffSet.HasValue)
+                        return EED.Value.Subtract(OffSet.Value);
+                }
                 return EndDate;
             }
         }
 
+        public override DateTime RealBED
+        {
+            get
+            {
+                if (OffSet.HasValue)
+                    return BeginDate.Subtract(OffSet.Value);
+                return BeginDate;
+            }
+        }
         public override int GetCarrierAccountId()
         {
             return CarrierAccountId;
@@ -60,6 +81,24 @@ namespace TOne.WhS.Deal.Business
             return item.Name;
         }
 
+        public override TimeSpan? GetCarrierOffSet()
+        {
+            if (VolCommitmentTimeZone == VolCommitmentTimeZone.System)
+                return null;
+
+            var timeZoneManager = new VRTimeZoneManager();
+            var carrierAccountManager = new CarrierAccountManager();
+
+            int timZoneId = VolCommitmentTimeZone == VolCommitmentTimeZone.Supplier
+                ? carrierAccountManager.GetSupplierTimeZoneId(CarrierAccountId)
+                : carrierAccountManager.GetCustomerTimeZoneId(CarrierAccountId);
+            VRTimeZone timeZone = timeZoneManager.GetVRTimeZone(timZoneId);
+
+            timeZone.ThrowIfNull("timeZone", CarrierAccountId);
+            timeZone.Settings.ThrowIfNull("timeZoneSettings", CarrierAccountId);
+
+            return timeZone.Settings.Offset;
+        }
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
             DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
@@ -68,24 +107,9 @@ namespace TOne.WhS.Deal.Business
 
             validateBeforeSaveContext.ValidateMessages = new List<string>();
             bool validationResult = true;
-            DateTime BED = this.BeginDate;
-            DateTime? EED = this.EndDate;
 
-            if (!FollowSystemTimeZone)
-            {
-                if (this.DealType == VolCommitmentDealType.Sell)
-                {
-                    BED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, BED).Value;
-                    EED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, EED);
-                }
-                else if (this.DealType == VolCommitmentDealType.Buy)
-                {
-                    BED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, BED).Value;
-                    EED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, EED);
-                }
-            }
-            var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, BED,EED);
-            var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, BED,EED);
+            var excludedSaleZones = dealDefinitionManager.GetExcludedSaleZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSaleZoneIds, RealBED, RealEED);
+            var excludedSupplierZones = dealDefinitionManager.GetExcludedSupplierZones(validateBeforeSaveContext.DealId, this.CarrierAccountId, validateBeforeSaveContext.DealSupplierZoneIds, RealBED, RealEED);
 
             if (excludedSaleZones.Count() > 0 || excludedSupplierZones.Count > 0)
             {
@@ -178,23 +202,15 @@ namespace TOne.WhS.Deal.Business
                 case VolCommitmentDealType.Buy:
                     if (Items != null && (context.DealZoneGroupPart == DealZoneGroupPart.Both || context.DealZoneGroupPart == DealZoneGroupPart.Cost))
                     {
-                        DateTime BED = BeginDate;
-                        DateTime? EED = RealEED;
-
-                        if (!FollowSystemTimeZone)
-                        {
-                            BED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, BED).Value;
-                            EED = Helper.ShiftCarrierDateTime(CarrierAccountId, false, EED);
-                        }
                         List<BaseDealSupplierZoneGroup> dealSupplierZoneGroups = new List<BaseDealSupplierZoneGroup>();
                         foreach (VolCommitmentDealItem volCommitmentDealItem in Items)
                         {
                             var zoneIds = volCommitmentDealItem.SaleZones.Select(z => z.ZoneId);
-                            List<DealSupplierZoneGroupZoneItem> supplierZones = Helper.BuildSupplierZones(zoneIds, BED, EED);
+                            List<DealSupplierZoneGroupZoneItem> supplierZones = Helper.BuildSupplierZones(zoneIds, RealBED, RealEED);
                             BaseDealSupplierZoneGroup dealSupplierZoneGroup;
 
                             if (context.EvaluateRates)
-                                dealSupplierZoneGroup = new DealSupplierZoneGroup { Tiers = BuildSupplierTiers(volCommitmentDealItem.Tiers, supplierZones, BED, EED) };
+                                dealSupplierZoneGroup = new DealSupplierZoneGroup { Tiers = BuildSupplierTiers(volCommitmentDealItem.Tiers, supplierZones, RealBED, RealEED) };
                             else
                                 dealSupplierZoneGroup = new DealSupplierZoneGroupWithoutRate { Tiers = BuildSupplierTiersWithoutRate(volCommitmentDealItem.Tiers) };
 
@@ -202,8 +218,8 @@ namespace TOne.WhS.Deal.Business
                             dealSupplierZoneGroup.DealSupplierZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber;
                             dealSupplierZoneGroup.SupplierId = CarrierAccountId;
                             dealSupplierZoneGroup.Zones = supplierZones;
-                            dealSupplierZoneGroup.BED = BED;
-                            dealSupplierZoneGroup.EED = EED;
+                            dealSupplierZoneGroup.BED = RealBED;
+                            dealSupplierZoneGroup.EED = RealEED;
 
                             dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
                         }
@@ -214,23 +230,15 @@ namespace TOne.WhS.Deal.Business
                 case VolCommitmentDealType.Sell:
                     if (Items != null && (context.DealZoneGroupPart == DealZoneGroupPart.Both || context.DealZoneGroupPart == DealZoneGroupPart.Sale))
                     {
-                        DateTime BED = BeginDate;
-                        DateTime? EED = RealEED;
-
-                        if (!FollowSystemTimeZone)
-                        {
-                            BED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, BED).Value;
-                            EED = Helper.ShiftCarrierDateTime(CarrierAccountId, true, EED);
-                        }
                         List<BaseDealSaleZoneGroup> dealSaleZoneGroups = new List<BaseDealSaleZoneGroup>();
                         foreach (VolCommitmentDealItem volCommitmentDealItem in Items)
                         {
                             var zoneIds = volCommitmentDealItem.SaleZones.Select(z => z.ZoneId);
-                            List<DealSaleZoneGroupZoneItem> saleZones = Helper.BuildSaleZones(zoneIds, BED, EED);
+                            List<DealSaleZoneGroupZoneItem> saleZones = Helper.BuildSaleZones(zoneIds, RealBED, RealEED);
                             BaseDealSaleZoneGroup dealSaleZoneGroup;
 
                             if (context.EvaluateRates)
-                                dealSaleZoneGroup = new DealSaleZoneGroup { Tiers = BuildSaleTiers(volCommitmentDealItem.Tiers, saleZones, BED, EED) };
+                                dealSaleZoneGroup = new DealSaleZoneGroup { Tiers = BuildSaleTiers(volCommitmentDealItem.Tiers, saleZones, RealBED, RealEED) };
                             else
                                 dealSaleZoneGroup = new DealSaleZoneGroupWithoutRate { Tiers = BuildSaleTiersWithoutRate(volCommitmentDealItem.Tiers) };
 
@@ -238,8 +246,8 @@ namespace TOne.WhS.Deal.Business
                             dealSaleZoneGroup.DealSaleZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber;
                             dealSaleZoneGroup.CustomerId = CarrierAccountId;
                             dealSaleZoneGroup.Zones = saleZones;
-                            dealSaleZoneGroup.BED = BED;
-                            dealSaleZoneGroup.EED = EED;
+                            dealSaleZoneGroup.BED = RealBED;
+                            dealSaleZoneGroup.EED = RealEED;
 
                             dealSaleZoneGroups.Add(dealSaleZoneGroup);
                         }

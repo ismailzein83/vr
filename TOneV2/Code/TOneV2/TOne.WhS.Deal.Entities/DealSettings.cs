@@ -13,6 +13,7 @@ namespace TOne.WhS.Deal.Entities
         [Description("Draft")]
         Draft = 2
     }
+
     public enum DealZoneGroupPart { Both, Sale, Cost }
     public abstract class DealSettings
     {
@@ -25,7 +26,24 @@ namespace TOne.WhS.Deal.Entities
         {
             get { return EEDToStore.HasValue ? EEDToStore.Value.AddDays(1) : EEDToStore; }
         }
+        public DateTime BEDToDisplay
+        {
+            get { return OffSet.HasValue ? BeginDate.Subtract(OffSet.Value) : BeginDate; }
+
+        }
+        public DateTime? EEDToDisplay
+        {
+            get
+            {
+                if (EEDToStore.HasValue)
+                {
+                    return OffSet.HasValue ? EEDToStore.Value.Subtract(OffSet.Value) : BeginDate;
+                }
+                return EEDToStore;
+            }
+        }
         public abstract DateTime? RealEED { get; }
+        public abstract DateTime RealBED { get; }
         public abstract int GetCarrierAccountId();
         public abstract void GetZoneGroups(IDealGetZoneGroupsContext context);
         public abstract void GetRoutingZoneGroups(IDealGetRoutingZoneGroupsContext context);
@@ -34,7 +52,9 @@ namespace TOne.WhS.Deal.Entities
         public abstract bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext);
         public abstract string GetSaleZoneGroupName(int dealGroupNumber);
         public abstract string GetSupplierZoneGroupName(int dealGroupNumber);
+        public abstract TimeSpan? GetCarrierOffSet();
         public bool IsRecurrable { get; set; }
+        public TimeSpan? OffSet { get; set; }
     }
 
     public interface IDealGetZoneGroupsContext
