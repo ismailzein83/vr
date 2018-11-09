@@ -99,7 +99,7 @@ as (select * from (values
 ('39D842AB-7AFB-46EC-B43E-E7F19493CB86','Serial_Number','Serial Number','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"vr-genericdata-genericbe-beforeinserthandler-serialnumber"}'),
 ('E1C87C72-9481-4707-A73A-C511E0F35AEA','Generic_Field','Generic Field','VR_GenericData_GenericBESerialNumberPartSettings','{"Editor":"vr-genericdata-genericbe-serialnumber-genericfield"}'),
 ('277816C4-DE23-48E2-971F-46BD0436C1C6','Date_Time','Date Time','VR_GenericData_GenericBESerialNumberPartSettings','{"Editor":"vr-genericdata-genericbe-serialnumber-datetime"}'),
-('16197ED3-F3EF-4C50-9106-61A576789726','Sequence','Sequence','VR_GenericData_GenericBESerialNumberPartSettings	','{"Editor":"vr-genericdata-genericbe-serialnumber-sequence"}')	,
+('16197ED3-F3EF-4C50-9106-61A576789726','Sequence','Sequence','VR_GenericData_GenericBESerialNumberPartSettings','{"Editor":"vr-genericdata-genericbe-serialnumber-sequence"}')	,
 
 ('28411d23-ea66-47ac-a323-106be0b9da7e','CustomObject','Custom Object','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-customobject","RuntimeEditor":"","FilterEditor":"","RuleFilterEditor":""}')	,
 ('a80260fd-4492-45c9-8e60-41d91dcd4e9e','Attachment','Attachment','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-attachment","RuntimeEditor":"","FilterEditor":"","RuleFilterEditor":""}')	,
