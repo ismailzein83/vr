@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace TOne.WhS.RouteSync.Huawei.Entities
 {
@@ -20,11 +21,16 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
         public List<RouteCaseOption> RouteCaseOptions { get; set; }
     }
 
-    public class RouteCaseOption
+    public class RouteCaseOption : IPercentageItem
     {
         public string RouteName { get; set; }
         public int? Percentage { get; set; }
         public string ISUP { get; set; }
+
+        public bool ShouldHavePercentage()
+        {
+            return true;
+        }
     }
 
     public enum RouteCaseOptionsType { Sequence = 0, Percentage = 1 }

@@ -361,6 +361,9 @@ namespace TOne.WhS.RouteSync.Huawei
                 if (supplierMapping == null)
                     continue;
 
+                if (!isSequence && (!routeOption.Percentage.HasValue || routeOption.Percentage.Value == 0))
+                    continue;
+
                 RouteCaseOption routeCaseOption = new RouteCaseOption();
                 routeCaseOption.RouteName = supplierMapping.RouteName;
                 routeCaseOption.ISUP = supplierMapping.ISUP;
@@ -387,86 +390,10 @@ namespace TOne.WhS.RouteSync.Huawei
             else
             {
                 routeCaseOptionsType = RouteCaseOptionsType.Percentage;
-                routeCaseOptions = this.RedistributePercentagesByWeight(routeCaseOptions);
+                Utilities.RedistributePercentagePerWeight(routeCaseOptions.Select(itm => itm as IPercentageItem).ToList());
             }
 
-            return new RouteAnalysis()
-            {
-                RSSN = rssn,
-                RouteCaseOptionsType = routeCaseOptionsType,
-                RouteCaseOptions = routeCaseOptions
-            };
-        }
-
-        private List<RouteCaseOption> RedistributePercentagesByWeight(List<RouteCaseOption> routeCaseOptions)
-        {
-            if (routeCaseOptions == null || routeCaseOptions.Count == 0)
-                return null;
-
-            int totalAssignedPercentage = 0;
-            List<RouteCaseOption> validRouteCaseOptions = new List<RouteCaseOption>();
-            foreach (var routeCaseOption in routeCaseOptions)
-            {
-                if (routeCaseOption.Percentage.HasValue)
-                {
-                    validRouteCaseOptions.Add(routeCaseOption);
-                    totalAssignedPercentage += routeCaseOption.Percentage.Value;
-                }
-                else
-                {
-                    routeCaseOption.Percentage = 0;
-                }
-            }
-
-            int newTotalAssignedPercentage = 0;
-            int unassignedPercentages = 100 - totalAssignedPercentage;
-            RouteCaseOption RouteCaseOptionWithHighestPercentage = null;
-
-            foreach (var routeCaseOption in validRouteCaseOptions)
-            {
-                routeCaseOption.Percentage = routeCaseOption.Percentage.Value + unassignedPercentages * routeCaseOption.Percentage.Value / totalAssignedPercentage;
-                newTotalAssignedPercentage += routeCaseOption.Percentage.Value;
-
-                if (RouteCaseOptionWithHighestPercentage == null || RouteCaseOptionWithHighestPercentage.Percentage < routeCaseOption.Percentage)
-                    RouteCaseOptionWithHighestPercentage = routeCaseOption;
-            }
-
-            if (newTotalAssignedPercentage != 100)
-                RouteCaseOptionWithHighestPercentage.Percentage = RouteCaseOptionWithHighestPercentage.Percentage.Value + (100 - newTotalAssignedPercentage);
-
-            return routeCaseOptions;
-        }
-
-        private List<RouteCaseOption> RedistributePercentagesEqually(List<RouteCaseOption> routeCaseOptions)
-        {
-            if (routeCaseOptions == null || routeCaseOptions.Count == 0)
-                return null;
-
-            int assignedPercentage = 0;
-            foreach (var routeCaseOption in routeCaseOptions)
-            {
-                if (routeCaseOption.Percentage.HasValue)
-                    assignedPercentage += routeCaseOption.Percentage.Value;
-                else
-                    routeCaseOption.Percentage = 0;
-            }
-
-            int remainingPercentage = 100 - assignedPercentage;
-            if (remainingPercentage > 0)
-            {
-                while (remainingPercentage > 0)
-                {
-                    foreach (var routeCaseOption in routeCaseOptions)
-                    {
-                        routeCaseOption.Percentage++;
-                        remainingPercentage--;
-                        if (remainingPercentage == 0)
-                            break;
-                    }
-                }
-            }
-
-            return routeCaseOptions;
+            return new RouteAnalysis() { RSSN = rssn, RouteCaseOptionsType = routeCaseOptionsType, RouteCaseOptions = routeCaseOptions };
         }
 
         #region RouteCase Commands
