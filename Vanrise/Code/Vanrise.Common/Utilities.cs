@@ -807,20 +807,20 @@ namespace Vanrise.Common
             if (percentageItemList == null)
                 return;
 
-            int totalAssignedPercentage = 0;
+            decimal totalAssignedPercentage = 0;
             List<IPercentageItem> percentageItems = new List<IPercentageItem>();
             foreach (IPercentageItem percentageItem in percentageItemList)
             {
-                if (!percentageItem.Percentage.HasValue)
+                if (!percentageItem.GetInputPercentage().HasValue)
                     continue;
 
                 if (!percentageItem.ShouldHavePercentage())
                 {
-                    percentageItem.Percentage = null;
+                    percentageItem.SetOutputPercentage(null);
                     continue;
                 }
 
-                totalAssignedPercentage += percentageItem.Percentage.Value;
+                totalAssignedPercentage += percentageItem.GetInputPercentage().Value;
                 percentageItems.Add(percentageItem);
             }
 
@@ -830,7 +830,7 @@ namespace Vanrise.Common
             if (totalAssignedPercentage < 0 || totalAssignedPercentage > 100)
                 throw new Exception(string.Format("Total Assigned Percentages should be between 0 and 100. Current Value: {0}", totalAssignedPercentage));
 
-            int unassignedPercentages = 100 - totalAssignedPercentage;
+            decimal unassignedPercentages = 100 - totalAssignedPercentage;
             if (totalAssignedPercentage != 100)
             {
                 List<PercentageItemWithDecimalPart> percentageItemWithDecimalPartList = new List<PercentageItemWithDecimalPart>();
@@ -841,11 +841,18 @@ namespace Vanrise.Common
 
                 foreach (var percentageItem in percentageItems)
                 {
-                    decimal calculatedPercentage = percentageItem.Percentage.Value * (1 + factor);
-                    percentageItem.Percentage = (int)Math.Floor(calculatedPercentage);
+                    decimal calculatedPercentage = percentageItem.GetInputPercentage().Value * (1 + factor);
+                    int percentageAsInteger = (int)Math.Floor(calculatedPercentage);
+                    percentageItem.SetOutputPercentage(percentageAsInteger);
 
-                    PercentageItemWithDecimalPart percentageItemWithDifference = new PercentageItemWithDecimalPart() { PercentageItem = percentageItem, DecimalPart = calculatedPercentage - percentageItem.Percentage.Value };
-                    newTotalAssignedPercentage += percentageItem.Percentage.Value;
+                    PercentageItemWithDecimalPart percentageItemWithDifference = new PercentageItemWithDecimalPart()
+                    {
+                        PercentageItem = percentageItem,
+                        DecimalPart = calculatedPercentage - percentageAsInteger,
+                        CalculatedPercentage = percentageAsInteger
+                    };
+
+                    newTotalAssignedPercentage += percentageAsInteger;
                     percentageItemWithDecimalPartList.Add(percentageItemWithDifference);
                 }
 
@@ -857,7 +864,8 @@ namespace Vanrise.Common
 
                 foreach (PercentageItemWithDecimalPart item in percentageItemWithDecimalPartList)
                 {
-                    item.PercentageItem.Percentage++;
+                    item.CalculatedPercentage++;
+                    item.PercentageItem.SetOutputPercentage(item.CalculatedPercentage);
                     remaining--;
 
                     if (remaining == 0)
@@ -869,15 +877,15 @@ namespace Vanrise.Common
         class PercentageItemWithDecimalPart
         {
             public IPercentageItem PercentageItem { get; set; }
-
+            public int CalculatedPercentage { get; set; }
             public decimal DecimalPart { get; set; }
         }
     }
 
     public interface IPercentageItem
     {
-        int? Percentage { get; set; }
-
+        decimal? GetInputPercentage();
+        void SetOutputPercentage(int? percentage);
         bool ShouldHavePercentage();
     }
 
