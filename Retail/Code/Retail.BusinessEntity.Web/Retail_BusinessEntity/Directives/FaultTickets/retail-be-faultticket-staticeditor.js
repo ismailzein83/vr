@@ -17,7 +17,7 @@ app.directive('retailBeFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsServ
             bindToController: true,
             compile: function (element, attrs) {
             },
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/FaultTicket/Templates/FaultTicketStaticEditor.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/FaultTickets/Templates/FaultTicketStaticEditor.html"
         };
 
         function retailMultinetFaultticketStaticeditor(ctrl, $scope, $attrs) {

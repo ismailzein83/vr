@@ -19,7 +19,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/FaultTicket/Templates/FaultTicketCustomObjectSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/FaultTickets/Templates/FaultTicketCustomObjectSettingsTemplate.html"
 
         };
         function FaultCtor($scope, ctrl, $attrs) {
