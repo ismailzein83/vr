@@ -34,7 +34,7 @@
             var genericBEDefinitionSettings;
             var businessEntityDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
             var fieldValues;
-
+            var filterValues;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.showAddButton = true;
@@ -79,6 +79,7 @@
                     if (payload != undefined) {
                         businessDefinitionId = payload.businessEntityDefinitionId;
                         fieldValues = payload.fieldValues;
+                        filterValues = payload.filterValues;
                     }
 
                     promises.push(loadBusinessEntityDefinitionSettings());
@@ -163,16 +164,13 @@
             }
                 }
 
-                if (fieldValues != undefined) {
+                if (filterValues != undefined) {
                     if (filters == undefined)
                         filters = [];
-
-                    for (var key in fieldValues) {
-                        var filterValues = [];
-                        filterValues.push(fieldValues[key]);
+                    for (var key in filterValues) {
                         filters.push({
                             FieldName: key,
-                            FilterValues: filterValues
+                            FilterValues: [filterValues[key]]
                         });
                     }
                 }
