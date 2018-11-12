@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -126,6 +127,7 @@
     <Compile Include="VRComment\VRComment.cs" />
     <Compile Include="VRComment\VRCommentQuery.cs" />
     <Compile Include="VRConnection\VRHttpConnection.cs" />
+    <Compile Include="VRDynamicAPI\VRDynamicAPI.cs" />
     <Compile Include="VRNamespace\VRCustomClassType.cs" />
     <Compile Include="VRNamespace\VRNamespace.cs" />
     <Compile Include="VRNamespace\VRNamespaceDetail.cs" />
