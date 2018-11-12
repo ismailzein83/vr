@@ -727,6 +727,7 @@
     <Content Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="images\cabill-iconheader.ico" />
     <Content Include="images\cabill-logoonheader.png" />
     <Content Include="images\cabill-login.png" />
     <Content Include="images\CentralAuth-iconheader.ico" />
