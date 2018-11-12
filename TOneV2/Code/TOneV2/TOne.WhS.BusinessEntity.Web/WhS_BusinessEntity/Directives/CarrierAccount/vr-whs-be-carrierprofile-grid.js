@@ -44,7 +44,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
 
                 function getDirectiveAPI() {
                     var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
+                    directiveAPI.loadGrid = function (payload) {
                         var finalDrillDownDefinitions = [];
                         AddCarrierAccountDrillDown();
                         function AddCarrierAccountDrillDown() {
@@ -69,7 +69,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                                 finalDrillDownDefinitions.push(drillDownDefinitions[i]);
                             }
                         }
-                        if (query.showPortalUsers)
+                        if (payload.showPortalUsers)
                             AddPortalAccountDrillDown();
                         function AddPortalAccountDrillDown() {
                             var drillDownDefinition = {};
@@ -112,7 +112,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                         }
 
                         gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(finalDrillDownDefinitions, gridAPI, $scope.gridMenuActions);
-                        return gridAPI.retrieveData(query.data);
+                        return gridAPI.retrieveData(payload.query);
                     };
                     directiveAPI.onCarrierProfileAdded = function (carrierProfileObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(carrierProfileObject);

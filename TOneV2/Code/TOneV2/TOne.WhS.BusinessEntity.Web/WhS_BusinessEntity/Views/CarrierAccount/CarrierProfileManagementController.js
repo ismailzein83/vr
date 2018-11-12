@@ -69,13 +69,13 @@
                         filterSettingsData = settingsData.getItemByUniqueName("WhSCarrierProfileFilter");
                         gridSettingsData = settingsData.getItemByUniqueName("WhSCarrierProfileGrid");
                     });
+                    var showCarrierPortalUsersPromise = AllowCarrierPortalAccess();
                     return {
-                        promises: [loadActionBarPromise],
+                        promises: [loadActionBarPromise, showCarrierPortalUsersPromise],
                         getChildNode: function () {
                             var loadFilterPromise = UtilsService.waitMultipleAsyncOperations([loadCountries, loadStaticData]);
-                            var showCarrierPortalUsersPromise = DoesUserHaveCarrierPortalAccess();
                             return {
-                                promises: [loadFilterPromise, gridAPIReadyPromiseDeferred.promise, showCarrierPortalUsersPromise],
+                                promises: [loadFilterPromise, gridAPIReadyPromiseDeferred.promise],
                                 getChildNode: function () {
                                     gridAPI.setPersonalizationItem(gridSettingsData);
                                     var loadGridPromise = gridAPI.loadGrid(getFilterObject());
@@ -122,7 +122,7 @@
             WhS_BE_CarrierProfileService.addCarrierProfile(onCarrierProfileAdded);
         }
 
-        function DoesUserHaveCarrierPortalAccess() {
+        function AllowCarrierPortalAccess() {
             var carrierPortalConnectionId = WhS_BE_PortalAccountService.getPortalConnectionId();
             return WhS_BE_CarrierProfileAPIService.HasCarrierPortalAccess(carrierPortalConnectionId).then(function (response) {
                 $scope.showPortalUsers = response;
@@ -130,15 +130,15 @@
         }
 
         function getFilterObject() {
-            var filter = {
-                data: {
+            var payload = {
+                query: {
                     Name: $scope.name,
                     Company: $scope.company,
                     CountriesIds: countryDirectiveApi.getSelectedIds(),
                 },
                 showPortalUsers: $scope.showPortalUsers
             };
-            return filter;
+            return payload;
         }
 
         function buildactionBarPayload() {
