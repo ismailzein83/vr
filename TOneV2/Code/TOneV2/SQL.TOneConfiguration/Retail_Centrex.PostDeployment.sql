@@ -659,7 +659,9 @@ as (select * from (values
 ('DADC2977-A348-4504-89C9-C92F8F9008DD','Active','FB4B87A7-90FB-4CA4-95F2-CCC0838775E6','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"1e644b07-528a-47b5-a40a-a9e8a0fc868a","HasInitialCharge":true,"HasRecurringCharge":true,"IsActive":true,"IsInvoiceActive":true,"IsAccountBalanceActive":true}'),
 ('7378CDBB-F5B4-452C-8B61-E09997E4DCA1','Blocked','FB4B87A7-90FB-4CA4-95F2-CCC0838775E6','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"61a682f3-e00c-4b31-b2f5-26dd5f5e4c2f","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":true,"IsInvoiceActive":true,"IsAccountBalanceActive":true}'),
 ('931D3708-1911-4FF1-8E83-FEEF8115930F','Demo','FB4B87A7-90FB-4CA4-95F2-CCC0838775E6','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"58d24325-7136-40ab-8057-fc1b64311c40","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":true,"IsInvoiceActive":false,"IsAccountBalanceActive":true}'),
-('D2ABF349-6C3A-4333-B4DA-19ECE7DF5D29','Pending','C458D884-29B5-4F82-B528-3457222A94A6','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"fac30bbc-68b1-4e8e-b5de-93015285c012","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":true,"IsInvoiceActive":false,"IsAccountBalanceActive":false}'),('DC0B6F51-0805-4130-8C03-AC8BAEEA2539','Open','C458D884-29B5-4F82-B528-3457222A94A6','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"1e644b07-528a-47b5-a40a-a9e8a0fc868a","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":true,"IsInvoiceActive":false,"IsAccountBalanceActive":false}'),('3555F134-E88B-4520-B812-D72FCF2EB9DF','Closed','C458D884-29B5-4F82-B528-3457222A94A6','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"61a682f3-e00c-4b31-b2f5-26dd5f5e4c2f","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":false,"IsInvoiceActive":false,"IsAccountBalanceActive":false}')
+('D2ABF349-6C3A-4333-B4DA-19ECE7DF5D29','Pending','C458D884-29B5-4F82-B528-3457222A94A6','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"fac30bbc-68b1-4e8e-b5de-93015285c012","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":true,"IsInvoiceActive":false,"IsAccountBalanceActive":false}'),
+('DC0B6F51-0805-4130-8C03-AC8BAEEA2539','Open','C458D884-29B5-4F82-B528-3457222A94A6','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"1e644b07-528a-47b5-a40a-a9e8a0fc868a","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":true,"IsInvoiceActive":false,"IsAccountBalanceActive":false}'),
+('3555F134-E88B-4520-B812-D72FCF2EB9DF','Closed','C458D884-29B5-4F82-B528-3457222A94A6','{"$type":"Vanrise.Entities.StatusDefinitionSettings, Vanrise.Entities","StyleDefinitionId":"61a682f3-e00c-4b31-b2f5-26dd5f5e4c2f","HasInitialCharge":false,"HasRecurringCharge":false,"IsActive":false,"IsInvoiceActive":false,"IsAccountBalanceActive":false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[BusinessEntityDefinitionID],[Settings]))
 merge	[common].[StatusDefinition] as t
@@ -758,6 +760,28 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[MessageTypeID],[Settings])
 	values(s.[ID],s.[Name],s.[MessageTypeID],s.[Settings]);
+
+	
+--[common].[MailMessageType]------------------------------------------------------------------------
+begin
+set nocount on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('805743a7-fc4c-46dc-b99e-b4fa4ae051b1','Fault Ticket','{"$type":"Vanrise.Entities.VRMailMessageTypeSettings, Vanrise.Entities","Objects":{"$type":"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities","Fault Ticket":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"Fault Ticket","VRObjectTypeDefinitionId":"3a2f135a-4ab0-4b02-a11a-109b58d9273b"}}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[common].[MailMessageType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+end
 
 
 --[common].[Setting]--------------------------------------------------------------------------------
