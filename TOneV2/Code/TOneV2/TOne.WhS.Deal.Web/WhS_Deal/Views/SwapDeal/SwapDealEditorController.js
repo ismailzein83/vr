@@ -449,7 +449,7 @@
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
                     DeActivationDate: $scope.scopeModel.deActivationDate,
                     IsRecurrable: dealEntity != undefined && dealEntity.Settings != undefined ? dealEntity.Settings.IsRecurrable : true,
-                    SwapDealTimeZone: $scope.scopeModel.swapDealTimeZone
+                    SwapDealTimeZone: $scope.scopeModel.selectedTimeZone.value
 
                 }
             };
