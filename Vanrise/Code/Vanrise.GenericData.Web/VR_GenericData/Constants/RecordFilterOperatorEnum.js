@@ -13,18 +13,18 @@ app.constant('VR_GenericData_NumberRecordFilterOperatorEnum', {
     Equals: { value: 0, description: '=' },
     NotEquals: { value: 1, description: '<>' },
     Greater: { value: 2, description: '>' },
-    GreaterOrEquals: { value: 3, description: '>=' },
+    GreaterOrEquals: { value: 3, description: '≥' },
     Less: { value: 4, description: '<' },
-    LessOrEquals: { value: 5, description: '<=' }
+    LessOrEquals: { value: 5, description: '≤' }
 });
 
 app.constant('VR_GenericData_DateTimeRecordFilterOperatorEnum', {
     Equals: { value: 0, description: '=' },
     NotEquals: { value: 1, description: '<>' },
     Greater: { value: 2, description: '>' },
-    GreaterOrEquals: { value: 3, description: '>=' },
+    GreaterOrEquals: { value: 3, description: '≥' },
     Less: { value: 4, description: '<' },
-    LessOrEquals: { value: 5, description: '<=' },
+    LessOrEquals: { value: 5, description: '≤' },
     Between: { value: 6, description: 'Between', showSecondDateTimePicker: true },
     NotBetween: { value: 7, description: 'Not Between', showSecondDateTimePicker: true }
 });
