@@ -30,14 +30,28 @@
                 </vr-datagridcolumn>
                 <vr-datagridcolumn columnindex="1" headertext="'Settings'" disablesorting="true">
                     <span ng-if="dataItem.isSelected" vr-loader="dataItem.isSwitchSSHCommunicationLoading">
-                        <vr-common-communicatorsettings-ssh normal-col-num="2" on-ready="dataItem.onSSHCommunicatorSettingsReady"></vr-common-communicatorsettings-ssh>
+                        <vr-row>
+                            <vr-columns colnum="12" haschildcolumns>
+                                <vr-columns colnum="10" haschildcolumns>
+                                    <vr-common-communicatorsettings-ssh normal-col-num="2" on-ready="dataItem.onSSHCommunicatorSettingsReady"></vr-common-communicatorsettings-ssh>
+                                </vr-columns>
+                                <div class="col-lg-2 col-md-2 col-sm-12 parent-col-container">
+                                    <vr-columns colnum="10">
+                                        <vr-textbox value="dataItem.interfaceIP" label="Interface IP" isrequired="true" type="ip"></vr-textbox>
+                                    </vr-columns>
+                                </div>
+                            </vr-columns>
+                        </vr-row>
                     </span>
                 </vr-datagridcolumn>
-                <vr-datagridcolumn columnindex="2" disablesorting="true" fixedwidth="'140'">
+                <!--<vr-datagridcolumn columnindex="2" disablesorting="true" fixedwidth="'140'">
                     <span ng-if="dataItem.isSelected">
-                        <vr-textbox value="dataItem.interfaceIP" label="Interface IP" isrequired="true" type="ip"></vr-textbox>
+                        <vr-row>
+                            <vr-columns colnum="12" haschildcolumns>
+                            </vr-columns>
+                        </vr-row>
                     </span>
-                </vr-datagridcolumn>
+                </vr-datagridcolumn>-->
                 <vr-datagridcolumn columnindex="3" headertext="'Active'" disablesorting="true" fixedwidth="'50'">
                     <span ng-if="dataItem.isSelected">
                         <vr-switch value="dataItem.isActive"></vr-switch>

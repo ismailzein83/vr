@@ -37,9 +37,11 @@ app.directive('whsRoutesyncHuaweiSuppliermapping', ['VRNotificationService', 'VR
                 };
 
                 $scope.scopeModel.isRouteNameValidated = function (routeName) {
-                    if (context != undefined && context.isRouteNameValidated != undefined && typeof (context.isRouteNameValidated) == 'function')
-                        return context.isRouteNameValidated(routeName);
-
+                    if (context != undefined && context.isRouteNameValidated != undefined && typeof (context.isRouteNameValidated) == 'function') {
+                        var result = context.isRouteNameValidated(routeName);
+                        context.updateErrorDescription(!result, true);
+                        return result;
+                    }
                     return null;
                 };
 
