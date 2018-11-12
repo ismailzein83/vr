@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierProfileManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_CarrierProfileService', 'WhS_BE_CarrierProfileAPIService'];
+    carrierProfileManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_CarrierProfileService', 'WhS_BE_CarrierProfileAPIService','WhS_BE_PortalAccountService'];
 
-    function carrierProfileManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_CarrierProfileService, WhS_BE_CarrierProfileAPIService) {
+    function carrierProfileManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_CarrierProfileService, WhS_BE_CarrierProfileAPIService, WhS_BE_PortalAccountService) {
 
         var filterSettingsData;
         var gridSettingsData;
@@ -61,7 +61,7 @@
         }
 
         function loadAllControls() {
-            
+
             var rootPromiseNode = {
                 promises: [actionBarReadyPromiseDeferred.promise],
                 getChildNode: function () {
@@ -73,8 +73,9 @@
                         promises: [loadActionBarPromise],
                         getChildNode: function () {
                             var loadFilterPromise = UtilsService.waitMultipleAsyncOperations([loadCountries, loadStaticData]);
+                            var showCarrierPortalUsersPromise = DoesUserHaveCarrierPortalAccess();
                             return {
-                                promises: [loadFilterPromise, gridAPIReadyPromiseDeferred.promise],
+                                promises: [loadFilterPromise, gridAPIReadyPromiseDeferred.promise, showCarrierPortalUsersPromise],
                                 getChildNode: function () {
                                     gridAPI.setPersonalizationItem(gridSettingsData);
                                     var loadGridPromise = gridAPI.loadGrid(getFilterObject());
@@ -121,13 +122,23 @@
             WhS_BE_CarrierProfileService.addCarrierProfile(onCarrierProfileAdded);
         }
 
+        function DoesUserHaveCarrierPortalAccess() {
+            var carrierPortalConnectionId = WhS_BE_PortalAccountService.getPortalConnectionId();
+            return WhS_BE_CarrierProfileAPIService.HasCarrierPortalAccess(carrierPortalConnectionId).then(function (response) {
+                $scope.showPortalUsers = response;
+            });
+        }
+
         function getFilterObject() {
-            var data = {
-                Name: $scope.name,
-                Company: $scope.company,
-                CountriesIds: countryDirectiveApi.getSelectedIds()
+            var filter = {
+                data: {
+                    Name: $scope.name,
+                    Company: $scope.company,
+                    CountriesIds: countryDirectiveApi.getSelectedIds(),
+                },
+                showPortalUsers: $scope.showPortalUsers
             };
-            return data;
+            return filter;
         }
 
         function buildactionBarPayload() {

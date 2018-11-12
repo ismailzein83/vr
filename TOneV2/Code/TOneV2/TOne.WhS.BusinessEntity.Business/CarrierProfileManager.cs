@@ -92,6 +92,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetCachedCarrierProfiles().MapRecords(CarrierProfileInfoMapper).OrderBy(x => x.Name);
         }
 
+        public bool HasCarrierPortalAccess(Guid connectionId)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var carrierPortalConnection = connectionManager.GetVRConnection(connectionId);
+            return carrierPortalConnection != null;
+        }
         public CarrierContact GetCarrierContact(int carrierProfileId, CarrierContactType contactType)
         {
             var carrierProfile = GetCarrierProfile(carrierProfileId);

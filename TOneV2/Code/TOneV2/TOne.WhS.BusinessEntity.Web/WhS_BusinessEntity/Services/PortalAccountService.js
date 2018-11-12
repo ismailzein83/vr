@@ -41,12 +41,15 @@
 
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/PortalAccount/ResetPasswordEditor.html', parameters, settings);
         };
-
+        function getPortalConnectionId() {
+            return "b50314a1-7b2b-4465-917d-5a8e60bfa09e";
+        }
 
         return {
             addPortalAccount: addPortalAccount,
             resetPassword: resetPassword,
-            editPortalAccount: editPortalAccount
+            editPortalAccount: editPortalAccount,
+            getPortalConnectionId: getPortalConnectionId
         };
     }
 

@@ -55,6 +55,10 @@
         function GetAccountManagerName(accountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetAccountManagerName"), { accountId: accountId });
         }
+        function HasCarrierPortalAccess(carrierPortalConnectionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "HasCarrierPortalAccess"), { connectionId: carrierPortalConnectionId});
+        }
+
         return ({
             GetCarrierProfilesInfo: GetCarrierProfilesInfo,
             GetFilteredCarrierProfiles: GetFilteredCarrierProfiles,
@@ -66,7 +70,8 @@
             GetTaxesDefinition: GetTaxesDefinition,
             GetCarrierProfileHistoryDetailbyHistoryId: GetCarrierProfileHistoryDetailbyHistoryId,
             GetCarrierProfileTicketContactsInfo: GetCarrierProfileTicketContactsInfo,
-            GetAccountManagerName: GetAccountManagerName
+            GetAccountManagerName: GetAccountManagerName,
+            HasCarrierPortalAccess: HasCarrierPortalAccess
         });
     }
 

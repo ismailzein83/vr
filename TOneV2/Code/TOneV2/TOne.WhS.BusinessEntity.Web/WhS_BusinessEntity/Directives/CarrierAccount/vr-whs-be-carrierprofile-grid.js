@@ -37,74 +37,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
             defineMenuActions();
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                var finalDrillDownDefinitions = [];
-                AddCarrierAccountDrillDown();
-                function AddCarrierAccountDrillDown() {
-                    var drillDownDefinition = {};
-
-                    drillDownDefinition.title = "Carrier Account";
-                    drillDownDefinition.directive = "vr-whs-be-carrieraccount-gridpanel";
-
-                    drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
-                        carrierProfileItem.carrierAccountGridAPI = directiveAPI;
-                        var payload = {
-                            carrierProfileId: carrierProfileItem.Entity.CarrierProfileId
-                        };
-                        return carrierProfileItem.carrierAccountGridAPI.loadPanel(payload);
-                    };
-                    finalDrillDownDefinitions.push(drillDownDefinition);
-                }
-
-                var drillDownDefinitions = WhS_BE_CarrierProfileService.getDrillDownDefinition();
-                if (drillDownDefinitions != undefined && drillDownDefinitions.length > 0) {
-                    for (var i = 0, drillDownDefinitionslength = drillDownDefinitions.length; i < drillDownDefinitionslength; i++) {
-                        finalDrillDownDefinitions.push(drillDownDefinitions[i]);
-                    }
-                }
-
-                AddPortalAccountDrillDown();
-                function AddPortalAccountDrillDown() {
-                    var drillDownDefinition = {};
-
-                    drillDownDefinition.title = "Portal Account";
-                    drillDownDefinition.directive = "vr-whs-be-portalaccount-grid";
-
-
-                    drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
-                        carrierProfileItem.objectTrackingGridAPI = directiveAPI;
-                        var query = {
-                            ObjectId: carrierProfileItem.Entity.CarrierProfileId,
-                            EntityUniqueName: WhS_BE_CarrierProfileService.getEntityUniqueName()
-                        };
-                        return carrierProfileItem.objectTrackingGridAPI.load(query);
-                    };
-
-                    finalDrillDownDefinitions.push(drillDownDefinition);
-                }
-                AddObjectTrackingDrillDown();
-
-                function AddObjectTrackingDrillDown() {
-                    var drillDownDefinition = {};
-
-                    drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
-                    drillDownDefinition.directive = "vr-common-objecttracking-grid";
-
-
-                    drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
-                        carrierProfileItem.objectTrackingGridAPI = directiveAPI;
-                        var query = {
-                            ObjectId: carrierProfileItem.Entity.CarrierProfileId,
-                            EntityUniqueName: WhS_BE_CarrierProfileService.getEntityUniqueName()
-                        };
-                        return carrierProfileItem.objectTrackingGridAPI.load(query);
-                    };
-
-                    finalDrillDownDefinitions.push(drillDownDefinition);
-
-                }
-
-
-                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(finalDrillDownDefinitions, gridAPI, $scope.gridMenuActions);
+            
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
@@ -112,7 +45,74 @@ function (UtilsService, VRNotificationService, WhS_BE_CarrierProfileAPIService, 
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-                        return gridAPI.retrieveData(query);
+                        var finalDrillDownDefinitions = [];
+                        AddCarrierAccountDrillDown();
+                        function AddCarrierAccountDrillDown() {
+                            var drillDownDefinition = {};
+
+                            drillDownDefinition.title = "Carrier Account";
+                            drillDownDefinition.directive = "vr-whs-be-carrieraccount-gridpanel";
+
+                            drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
+                                carrierProfileItem.carrierAccountGridAPI = directiveAPI;
+                                var payload = {
+                                    carrierProfileId: carrierProfileItem.Entity.CarrierProfileId
+                                };
+                                return carrierProfileItem.carrierAccountGridAPI.loadPanel(payload);
+                            };
+                            finalDrillDownDefinitions.push(drillDownDefinition);
+                        }
+
+                        var drillDownDefinitions = WhS_BE_CarrierProfileService.getDrillDownDefinition();
+                        if (drillDownDefinitions != undefined && drillDownDefinitions.length > 0) {
+                            for (var i = 0, drillDownDefinitionslength = drillDownDefinitions.length; i < drillDownDefinitionslength; i++) {
+                                finalDrillDownDefinitions.push(drillDownDefinitions[i]);
+                            }
+                        }
+                        if (query.showPortalUsers)
+                            AddPortalAccountDrillDown();
+                        function AddPortalAccountDrillDown() {
+                            var drillDownDefinition = {};
+
+                            drillDownDefinition.title = "Portal Account";
+                            drillDownDefinition.directive = "vr-whs-be-portalaccount-grid";
+
+
+                            drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
+                                carrierProfileItem.objectTrackingGridAPI = directiveAPI;
+                                var query = {
+                                    ObjectId: carrierProfileItem.Entity.CarrierProfileId,
+                                    EntityUniqueName: WhS_BE_CarrierProfileService.getEntityUniqueName()
+                                };
+                                return carrierProfileItem.objectTrackingGridAPI.load(query);
+                            };
+
+                            finalDrillDownDefinitions.push(drillDownDefinition);
+                        }
+                        AddObjectTrackingDrillDown();
+
+                        function AddObjectTrackingDrillDown() {
+                            var drillDownDefinition = {};
+
+                            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+                            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+                            drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
+                                carrierProfileItem.objectTrackingGridAPI = directiveAPI;
+                                var query = {
+                                    ObjectId: carrierProfileItem.Entity.CarrierProfileId,
+                                    EntityUniqueName: WhS_BE_CarrierProfileService.getEntityUniqueName()
+                                };
+                                return carrierProfileItem.objectTrackingGridAPI.load(query);
+                            };
+
+                            finalDrillDownDefinitions.push(drillDownDefinition);
+
+                        }
+
+                        gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(finalDrillDownDefinitions, gridAPI, $scope.gridMenuActions);
+                        return gridAPI.retrieveData(query.data);
                     };
                     directiveAPI.onCarrierProfileAdded = function (carrierProfileObject) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(carrierProfileObject);

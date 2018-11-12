@@ -92,5 +92,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierProfileManager manager = new CarrierProfileManager();
             return manager.GetCarrierProfileCarrierAccountsByUserId(userId);
         }
+
+        [HttpGet]
+        [Route("HasCarrierPortalAccess")]
+        public bool HasCarrierPortalAccess(Guid connectionId)
+        {
+            CarrierProfileManager manager = new CarrierProfileManager();
+            return manager.HasCarrierPortalAccess(connectionId);
+        }
     }
 }
