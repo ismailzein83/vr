@@ -122,7 +122,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Porta
                     });
                 }
                 return menuActions;
-            }
+            };
         }
 
         function unlockPortalAccount(dataItem) {
