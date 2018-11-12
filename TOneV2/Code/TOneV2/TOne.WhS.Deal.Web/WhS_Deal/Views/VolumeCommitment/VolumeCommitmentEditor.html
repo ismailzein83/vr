@@ -4,7 +4,7 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-columns width="1/3row"vr-disable="scopeModel.disabelType">
+                        <vr-columns width="1/3row" vr-disable="scopeModel.disabelType">
                             <span vr-disabled="scopeModel.disabelType">
                                 <vr-select label="Type"
                                            datasource="scopeModel.volumeCommitmentTypes"
@@ -16,7 +16,7 @@
                                            hideremoveicon="true">
                                 </vr-select>
                             </span>
-                            
+
                         </vr-columns>
                         <vr-columns width="1/3row">
                             <vr-datetimepicker label="Begin Date" type="date" value="scopeModel.beginDate" isrequired="true" customvalidate="scopeModel.validateBED()" onvaluechanged="scopeModel.onBEDChanged"></vr-datetimepicker>
@@ -29,10 +29,23 @@
                         <span vr-loader="scopeModel.isLoadingDirective" vr-disabled="scopeModel.disabelType">
                             <vr-directivewrapper directive="scopeModel.selectedVolumeCommitmentType.carrierAccountSelector" selectedvalues="scopeModel.carrierAccount" hideremoveicon on-ready="scopeModel.onCarrierAccountSelectorReady" normal-col-num="4" isrequired="true" hideremoveicon="true" onselectionchanged="scopeModel.onCarrierAccountSelectionChanged"></vr-directivewrapper>
                         </span>
-                        <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectReady"  isrequired="true" normal-col-num="4"></vr-common-currency-selector>
+                        <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectReady" isrequired="true" normal-col-num="4"></vr-common-currency-selector>
                         <!--<vr-columns width="1/3row">
                             <vr-switch value="scopeModel.active" label="Active">  </vr-switch>
                         </vr-columns>-->
+
+                        <vr-columns width="1/3row">
+                            <vr-select label="Time Zone"
+                                       datasource="scopeModel.VolTimeZone"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       selectedvalues="scopeModel.selectedTimeZone"
+                                       isrequired="true"
+                                       hideremoveicon="true">
+                            </vr-select>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
                         <vr-columns width="1/3row">
                             <vr-select label="Deal Status"
                                        datasource="scopeModel.dealStatus"
@@ -45,10 +58,11 @@
                             </vr-select>
                         </vr-columns>
                         <span ng-if="scopeModel.isInactiveStatus()">
-                            
-                                <vr-columns width="1/3row">
-                                    <vr-datetimepicker label="DeActivation Date" type="date" value="scopeModel.deActivationDate" isrequired="true" customvalidate="scopeModel.validateDealStatusDate()"></vr-datetimepicker>
-                                </vr-columns>
+                            <vr-columns width="1/3row">
+                                <vr-datetimepicker label="DeActivation Date" type="date"
+                                                   value="scopeModel.deActivationDate" isrequired="true"
+                                                   customvalidate="scopeModel.validateDealStatusDate()"></vr-datetimepicker>
+                            </vr-columns>
                         </span>
                     </vr-row>
                     <vr-row>
@@ -58,12 +72,6 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Details'">
-                    <vr-row>
-                        <vr-columns width="1/3">
-                            <vr-label>Follow system time zone</vr-label>
-                            <vr-switch value="scopeModel.followSystemTimeZone"></vr-switch>
-                        </vr-columns>
-                    </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow" ng-show="scopeModel.showVolumeItemSection()">
                             <vr-whs-deal-volumecommitment-items on-ready="scopeModel.onVolumeCommitmenetItemsReady"></vr-whs-deal-volumecommitment-items>

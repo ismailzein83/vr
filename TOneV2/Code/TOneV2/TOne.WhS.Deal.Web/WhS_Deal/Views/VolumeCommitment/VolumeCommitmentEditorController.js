@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum'];
 
-    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum) {
+    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum) {
 
         var isEditMode;
 
@@ -50,6 +50,7 @@
             $scope.scopeModel.disabelType = isEditMode;
             $scope.scopeModel.volumeCommitmentTypes = UtilsService.getArrayEnum(WhS_Deal_VolumeCommitmentTypeEnum);
             $scope.scopeModel.dealStatus = UtilsService.getArrayEnum(WhS_Deal_DealStatusTypeEnum);
+
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value; };
@@ -65,12 +66,15 @@
 
             $scope.scopeModel.onVolumeCommitmentTypeChanged = function () {
                 if ($scope.scopeModel.selectedVolumeCommitmentType != undefined) {
-                    if ($scope.scopeModel.selectedVolumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Sell.value && !isEditMode) {
-                        $scope.scopeModel.followSystemTimeZone = true;
+                    var datasource = [];
+                    datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.System);
+                    if ($scope.scopeModel.selectedVolumeCommitmentType.value === WhS_Deal_VolumeCommitmentTypeEnum.Sell.value) {
+                        datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.Customer);
                     }
-                    if ($scope.scopeModel.selectedVolumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Buy.value && !isEditMode) {
-                        $scope.scopeModel.followSystemTimeZone = false;
+                    if ($scope.scopeModel.selectedVolumeCommitmentType.value === WhS_Deal_VolumeCommitmentTypeEnum.Buy.value) {
+                        datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.Supplier);
                     }
+                    $scope.scopeModel.VolTimeZone = datasource;
                 }
             };
 
@@ -140,9 +144,9 @@
                     $scope.scopeModel.deActivationDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
             };
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
-
             if (isEditMode) {
                 getVolumeCommitment().then(function () {
                     loadAllControls().finally(function () {
@@ -219,9 +223,18 @@
             $scope.scopeModel.endDate = volumeCommitmentEntity.Settings.EEDToStore;
             $scope.scopeModel.selectedDealStatus = UtilsService.getItemByVal($scope.scopeModel.dealStatus, volumeCommitmentEntity.Settings.Status, 'value');
             $scope.scopeModel.deActivationDate = volumeCommitmentEntity.Settings.DeActivationDate;
-            //$scope.scopeModel.active = volumeCommitmentEntity.Settings.Active;
             $scope.scopeModel.selectedVolumeCommitmentType = UtilsService.getItemByVal($scope.scopeModel.volumeCommitmentTypes, volumeCommitmentEntity.Settings.DealType, "value");
-            $scope.scopeModel.followSystemTimeZone = volumeCommitmentEntity.Settings.FollowSystemTimeZone
+
+            var datasource = [];
+            datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.System);
+            if ($scope.scopeModel.selectedVolumeCommitmentType.value === WhS_Deal_VolumeCommitmentTypeEnum.Sell.value) {
+                datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.Customer);
+            }
+            if ($scope.scopeModel.selectedVolumeCommitmentType.value === WhS_Deal_VolumeCommitmentTypeEnum.Buy.value) {
+                datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.Supplier);
+            }
+            $scope.scopeModel.VolTimeZone = datasource;
+            $scope.scopeModel.selectedTimeZone = UtilsService.getItemByVal($scope.scopeModel.VolTimeZone, volumeCommitmentEntity.Settings.VolCommitmentTimeZone, 'value');
         }
         function loadCarrierAccountDealItemsSection() {
             if (volumeCommitmentEntity == undefined)
@@ -340,7 +353,7 @@
                     Status: $scope.scopeModel.selectedDealStatus.value,
                     DeActivationDate: $scope.scopeModel.deActivationDate,
                     IsRecurrable: volumeCommitmentEntity != undefined && volumeCommitmentEntity.Settings != undefined ? volumeCommitmentEntity.Settings.IsRecurrable : true,
-                    FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
+                    VolCommitmentTimeZone: $scope.scopeModel.selectedTimeZone.value
                 }
             };
             return obj;
