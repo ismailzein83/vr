@@ -15,7 +15,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
     public class EricssonManualRouteDestinationCodes : EricssonManualRouteDestinations
     {
         public override Guid ConfigId { get { return new Guid("DD43F4F5-6908-4335-92AF-E2A7CC557BE4"); } }
-        public List<int> DestinationCodes { get; }
+        public List<int> DestinationCodes { get; set; }
         public override List<int> GetDestinationCodes(IEricssonManualRouteGetDestinationsContext context)
         {
             return DestinationCodes;

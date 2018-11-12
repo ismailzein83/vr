@@ -116,6 +116,7 @@
     <Compile Include="Entities\CarrierMapping.cs" />
     <Compile Include="Entities\EricssonConvertedRoutesPayload.cs" />
     <Compile Include="Entities\EricssonManualRouteAction.cs" />
+    <Compile Include="Entities\EricssonSpecialRouting.cs" />
     <Compile Include="Entities\EricssonSwitchRouteSynchronizerSettings.cs" />
     <Compile Include="Entities\EricssonCommands.cs" />
     <Compile Include="Entities\Context\CustomerMappingContext.cs" />
