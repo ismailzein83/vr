@@ -56,6 +56,7 @@
     <Compile Include="RateTypeDataManager.cs" />
     <Compile Include="RegionDataManager.cs" />
     <Compile Include="SMSMessageTypeDataManager.cs" />
+    <Compile Include="VRExclusiveSessionDataManager.cs" />
     <Compile Include="VRMailMessageTemplateDataManager.cs" />
     <Compile Include="VRMailMessageTypeDataManager.cs" />
     <Compile Include="VRTimeZoneDataManager.cs" />
