@@ -136,6 +136,7 @@
     <Compile Include="Entities\TrunkGroup.cs" />
     <Compile Include="Entities\EricssonConvertedRoute.cs" />
     <Compile Include="Entities\Context\WhSRouteSyncEricssonContext.cs" />
+    <Compile Include="EricssonSWSyncOld.cs" />
     <Compile Include="EricssonSWSyncRule.cs" />
     <Compile Include="EricssonSWSync.cs" />
     <Compile Include="Helper.cs" />
