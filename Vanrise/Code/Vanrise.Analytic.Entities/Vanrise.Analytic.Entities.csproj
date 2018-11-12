@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,6 +68,7 @@
     <Compile Include="AnalyticReport\RecordSearch\DataRecordSearchPageSettings.cs" />
     <Compile Include="AnalyticReport\RecordSearch\DRSearchPageSubviewDefinitionSettingsConfig.cs" />
     <Compile Include="AnalyticSummaryBigResult.cs" />
+    <Compile Include="AnalyticTableClientDetail.cs" />
     <Compile Include="AnalyticTableDetail.cs" />
     <Compile Include="AnalyticTableQuery.cs" />
     <Compile Include="AutomatedReportQueries.cs" />
@@ -120,6 +122,7 @@
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcAnalysisPeriod.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleFilterDefinition.cs" />
     <Compile Include="IAutomatedReportEvaluatorContext.cs" />
+    <Compile Include="Settings\KPISettings.cs" />
     <Compile Include="ValidateQueryAndHandlerSettingsInput.cs" />
     <Compile Include="ValidateQueryAndHandlerSettingsResult.cs" />
     <Compile Include="VRReportGeneration\FilterConfig.cs" />
