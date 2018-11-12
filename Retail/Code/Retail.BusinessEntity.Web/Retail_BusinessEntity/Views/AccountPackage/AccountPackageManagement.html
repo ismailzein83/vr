@@ -2,9 +2,6 @@
 
 	<vr-form name="formFilter">
 		<vr-row removeline>
-			<vr-columns colnum="2" haschildcolumns>
-				<retail-be-account-selector ismultipleselection on-ready="scopeModel.onAccountSelectorReady"></retail-be-account-selector>
-			</vr-columns>
 			<vr-columns colnum="2">
 				<vr-textbox label="Package Name" value="scopeModel.packageName"></vr-textbox>
 			</vr-columns>
@@ -12,17 +9,11 @@
 				<retail-be-packagedefinition-selector ismultipleselection on-ready="scopeModel.onPackageDefinitionSelectorReady"></retail-be-packagedefinition-selector>
 			</vr-columns>
 			<vr-columns colnum="2" haschildcolumns>
-				<vr-common-statusdefinition-selector ismultipleselection on-ready="scopeModel.onStatusDefinitionSelectorReady"></vr-common-statusdefinition-selector>
-			</vr-columns>
-			<vr-columns colnum="2" haschildcolumns>
 				<vr-common-currency-selector ismultipleselection on-ready="scopeModel.onCurrencySelectorReady"></vr-common-currency-selector>
 			</vr-columns>
 			<vr-columns colnum="2">
 				<vr-datetimepicker label="Begin Effective Date" value="scopeModel.bed"></vr-datetimepicker>
 			</vr-columns>
-		</vr-row>
-		<vr-row removeline>
-
 			<vr-columns colnum="2">
 				<vr-datetimepicker label="End Effective Date" value="scopeModel.eed"></vr-datetimepicker>
 			</vr-columns>

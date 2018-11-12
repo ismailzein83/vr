@@ -24,7 +24,6 @@
 		defineAPI();
 		load();
 
-		var accountBEDefinitionId = "9a427357-cf55-4f33-99f7-745206dee7cd";
 
 		function defineAPI() {
 			$scope.scopeModel = {};
@@ -42,16 +41,6 @@
 			$scope.scopeModel.onCurrencySelectorReady = function (api) {
 				currencySelectorAPI = api;
 				currencySelectorDirectiveReadyDeferred.resolve();
-			};
-
-			$scope.scopeModel.onStatusDefinitionSelectorReady = function (api) {
-				statusDefinitionSelectorAPI = api;
-				statusDefinitionSelectorDirectiveReadyDeferred.resolve();
-			};
-
-			$scope.scopeModel.onAccountSelectorReady = function (api) {
-				accountSelectorAPI = api;
-				accountSelectorDirectiveReadyDeferred.resolve();
 			};
 
 			$scope.scopeModel.search = function () {
@@ -72,36 +61,17 @@
 				VRUIUtilsService.callDirectiveLoad(packageDefinitionSelectorAPI, selectorPayload, undefined);
 			});
 
-			accountSelectorDirectiveReadyDeferred.promise.then(function () {
-				var selectorPayload = {
-					AccountBEDefinitionId: accountBEDefinitionId
-				};
-				VRUIUtilsService.callDirectiveLoad(accountSelectorAPI, selectorPayload, undefined);
-			});
-
 			currencySelectorDirectiveReadyDeferred.promise.then(function () {
 				var selectorPayload;
 				VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, selectorPayload, undefined);
 			});
 
-			statusDefinitionSelectorDirectiveReadyDeferred.promise.then(function () {
-				Retail_BE_AccountBEDefinitionAPIService.GetAccountBEStatusDefinitionId(accountBEDefinitionId).then(function (response) {
-
-					var selectorPayload = {
-						businessEntityDefinitionId: response
-					};
-					VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, selectorPayload, undefined);
-				});
-			});
 		}
 
 		function getFilter() {
 			return {
-				accountBEDefinitionId: accountBEDefinitionId,
 				packageName: $scope.scopeModel.packageName,
 				packageTypes: packageDefinitionSelectorAPI.getSelectedIds(),
-				accountIds: accountSelectorAPI.getSelectedIds(),
-				statusIds: statusDefinitionSelectorAPI.getSelectedIds(),
 				currencyIds: currencySelectorAPI.getSelectedIds(),
 				bed:$scope.scopeModel.bed,
 				eed: $scope.scopeModel.eed

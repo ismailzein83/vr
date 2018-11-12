@@ -31,11 +31,23 @@ namespace Retail.BusinessEntity.Business
 		{
 			Dictionary<long, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
 			PackageDefinitionManager packageDefinition = new PackageDefinitionManager();
-			
+
 			Func<AccountPackage, bool> filterExpression = (accountPackage) =>
 			{
-				if ((input.Query.PackageName != null) && !_packageManager.GetPackageName(accountPackage.PackageId).ToLower().Contains(input.Query.PackageName))
+				
+
+				if (input.Query.AccountBEDefinitionId.HasValue && input.Query.AccountBEDefinitionId.Value != accountPackage.AccountBEDefinitionId)
 					return false;
+
+				if (input.Query.PackageId.HasValue && input.Query.PackageId.Value != accountPackage.PackageId)
+					return false;
+
+				if (input.Query.PackageName != null)
+				{
+					var packageName = _packageManager.GetPackageName(accountPackage.PackageId);
+					if (!packageName.ToLower().Contains(input.Query.PackageName))
+						return false;
+				}
 
 				Package package = _packageManager.GetPackage(accountPackage.PackageId);
 				if (input.Query.PackageTypes!=null && !input.Query.PackageTypes.Contains(package.Settings.PackageDefinitionId))
@@ -44,12 +56,14 @@ namespace Retail.BusinessEntity.Business
 				if (input.Query.AccountIds!=null && !input.Query.AccountIds.Contains(accountPackage.AccountId))
 					return false;
 
-				Account account = _accountBEManager.GetAccount(input.Query.AccountBEDefinitionId, accountPackage.AccountId);
-				if (account == null)
-					return false;
-
-				if (input.Query.StatusIds!=null && !input.Query.StatusIds.Contains(account.StatusId ))
-					return false;
+				if (input.Query.AccountBEDefinitionId.HasValue)
+				{
+					Account account = _accountBEManager.GetAccount(input.Query.AccountBEDefinitionId.Value, accountPackage.AccountId);
+					if (account == null)
+						return false;
+					if (input.Query.StatusIds != null && !input.Query.StatusIds.Contains(account.StatusId))
+						return false;
+				}
 
 				var context = new PackageSettingExtraFieldsContext();
 				package.Settings.ExtendedSettings.GetExtraFields(context);
@@ -62,7 +76,7 @@ namespace Retail.BusinessEntity.Business
 				if (input.Query.EED.HasValue && accountPackage.EED.HasValue && accountPackage.EED.VRGreaterThan(input.Query.EED))
 					return false;
 
-				if (input.Query.AssignedToAccountId.HasValue && accountPackage.AccountId == input.Query.AssignedToAccountId.Value)
+				if (input.Query.AssignedToAccountId.HasValue && accountPackage.AccountId != input.Query.AssignedToAccountId.Value)
 					return false;
 
 				return true;
@@ -73,9 +87,8 @@ namespace Retail.BusinessEntity.Business
 			};
 
 			return DataRetrievalManager.Instance.ProcessResult(input, cachedAccountPackages.ToBigResult(input, filterExpression,
-					(accountPackage) => AccountPackageDetailMapper(input.Query.AccountBEDefinitionId, accountPackage)), handler);
+					(accountPackage) => AccountPackageDetailMapper(accountPackage)), handler);
 		}
-
 		public IEnumerable<AccountPackage> GetEffectiveAssignedPackages(DateTime effectiveDate, bool withFutureEntities = false)
 		{
 			Dictionary<long, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
@@ -682,7 +695,7 @@ namespace Retail.BusinessEntity.Business
 					accountPackageToAdd.AccountPackageId = accountPackageId;
 					VRActionLogger.Current.LogObjectCustomAction(new Retail.BusinessEntity.Business.AccountBEManager.AccountBELoggableEntity(accountPackageToAdd.AccountBEDefinitionId), "Assign Package", true, account, String.Format("Account -> Package {0} {1} {2}", packageName, accountPackageToAdd.BED, accountPackageToAdd.EED));
 					insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-					insertOperationOutput.InsertedObject = this.AccountPackageDetailMapper(accountPackageToAdd.AccountBEDefinitionId, accountPackageToAdd);
+					insertOperationOutput.InsertedObject = this.AccountPackageDetailMapper(accountPackageToAdd);
 				}
 				else
 				{
@@ -719,7 +732,7 @@ namespace Retail.BusinessEntity.Business
 					Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 					VRActionLogger.Current.LogObjectCustomAction(new Retail.BusinessEntity.Business.AccountBEManager.AccountBELoggableEntity(accountBEDefinitionId), "Update AccountPackage", true, account, String.Format("Account -> Package {0} {1} {2}", packageName, accountPackageToEdit.BED, accountPackageToEdit.EED));
 					updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-					updateOperationOutput.UpdatedObject = AccountPackageDetailMapper(accountBEDefinitionId, this.GetAccountPackage(accountPackageToEdit.AccountPackageId));
+					updateOperationOutput.UpdatedObject = AccountPackageDetailMapper(this.GetAccountPackage(accountPackageToEdit.AccountPackageId));
 				}
 				else
 				{
@@ -813,6 +826,17 @@ namespace Retail.BusinessEntity.Business
 		{
 			int userId = SecurityContext.Current.GetLoggedInUserId();
 			return new AccountBEDefinitionManager().DoesUserHaveViewAccountPackageAccess(userId, accountBEDefinitionId);
+		}
+		public bool DoesUserHaveViewAccountPackageAccess()
+		{
+			AccountBEDefinitionManager accountBEDefinitionManager = new AccountBEDefinitionManager();
+			int userId = SecurityContext.Current.GetLoggedInUserId();
+			var accountPackagesCache = GetCachedAccountPackages();
+			if(accountPackagesCache!=null)
+			foreach (var item in accountPackagesCache)
+				if (accountBEDefinitionManager.DoesUserHaveViewAccountPackageAccess(userId, item.Value.AccountBEDefinitionId))
+					return true;
+			return false;
 		}
 
 		public bool DoesUserHaveAddAccountPackageAccess(Guid accountBEDefinitionId)
@@ -1026,7 +1050,7 @@ namespace Retail.BusinessEntity.Business
 
 		#region Mappers
 
-		AccountPackageDetail AccountPackageDetailMapper(Guid accountBEDefinitionId, AccountPackage accountPackage)
+		AccountPackageDetail AccountPackageDetailMapper(AccountPackage accountPackage)
 		{
 			CurrencyManager currencyManager = new CurrencyManager();
 			Vanrise.Common.Business.StatusDefinitionManager statusDefinitionManager = new Vanrise.Common.Business.StatusDefinitionManager();
@@ -1038,12 +1062,12 @@ namespace Retail.BusinessEntity.Business
 			int a = 0;
 			if (context.CurrencyId.HasValue || context.ChargeValue.HasValue || context.PeriodType != null)
 				a = 1;
-			Account account = _accountBEManager.GetAccount(accountBEDefinitionId, accountPackage.AccountId);
+			Account account = _accountBEManager.GetAccount(accountPackage.AccountBEDefinitionId, accountPackage.AccountId);
 
 			return new AccountPackageDetail()
 			{
 				Entity = accountPackage,
-				AccountName = _accountBEManager.GetAccountName(accountBEDefinitionId, accountPackage.AccountId),
+				AccountName = _accountBEManager.GetAccountName(accountPackage.AccountBEDefinitionId, accountPackage.AccountId),
 				PackageName = _packageManager.GetPackageName(accountPackage.PackageId),
 				StatusName = statusDefinitionManager.GetStatusDefinitionName(account.StatusId),
 				ChargeValue = context.ChargeValue,

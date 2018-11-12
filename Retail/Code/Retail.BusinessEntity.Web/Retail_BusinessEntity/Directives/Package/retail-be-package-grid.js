@@ -21,18 +21,22 @@ function (VRNotificationService, Retail_BE_PackageAPIService, Retail_BE_PackageS
         function PackageGridCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var gridDrillDownTabsObj;
-            var gridAPI;
+			var gridAPI;
+			var finalDrillDownDefinitions = [];
 
-            function initializeController() {
+			function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.package = [];
                 $scope.scopeModel.menuActions = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
 
-                    gridAPI = api;
-                    var drillDownDefinitions = Retail_BE_PackageService.getDrillDownDefinition();
-                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+					gridAPI = api;
+					
+					finalDrillDownDefinitions.push(defineObjectPackageAccountDrillDown());
+					var drillDownDefinition = Retail_BE_PackageService.getDrillDownDefinition();
+					finalDrillDownDefinitions.push(drillDownDefinition[0]);
+					gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(finalDrillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
@@ -93,6 +97,23 @@ function (VRNotificationService, Retail_BE_PackageAPIService, Retail_BE_PackageS
             }
             function hasEditPackagePermission() {
                 return Retail_BE_PackageAPIService.HasEditPackagePermission();
-            }
+			}
+
+			function defineObjectPackageAccountDrillDown() {
+
+				var drillDownDefinition = {};
+				drillDownDefinition.title = "Account Package";
+				drillDownDefinition.directive = "retail-be-accountpackage-grid";
+				drillDownDefinition.dontLoad = true;
+				drillDownDefinition.loadDirective = function (directiveAPI, packageItem) {
+					var gridPayload = {
+						packageId: packageItem.Entity.PackageId,
+					};
+					return directiveAPI.load(gridPayload);
+				};
+				return drillDownDefinition;
+
+			}
+
         }
     }]);

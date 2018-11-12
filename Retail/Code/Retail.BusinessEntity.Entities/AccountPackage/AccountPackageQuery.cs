@@ -8,8 +8,9 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountPackageQuery
     {
-        public Guid AccountBEDefinitionId { get; set; }
+        public Guid? AccountBEDefinitionId { get; set; }
         public long? AssignedToAccountId { get; set; }
+		public int? PackageId { get; set; }
 		public string PackageName { get; set; }
 		public List<Guid> PackageTypes { get; set; }
 		public List<long> AccountIds { get; set; }

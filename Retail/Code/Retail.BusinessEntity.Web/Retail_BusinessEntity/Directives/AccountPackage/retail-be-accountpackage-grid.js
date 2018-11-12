@@ -29,6 +29,7 @@ app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService
 			var currencyIds;
 			var bed;
 			var eed;
+			var packageId;
 
 			var gridAPI;
 
@@ -67,6 +68,8 @@ app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService
 						currencyIds = payload.currencyIds;
 						bed = payload.bed;
 						eed = payload.eed;
+						packageId = payload.packageId;
+						$scope.scopeModel.isAssignedToPackageId = (packageId != undefined);
 					}
 					defineMenuActions();
 					return gridAPI.retrieveData(buildGridQuery());
@@ -81,13 +84,11 @@ app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService
 			}
 
 			function defineMenuActions() {
-				if (assignedToAccountId != undefined) {
 					$scope.scopeModel.menuActions.push({
 						name: 'Edit',
 						clicked: editAccountPackage,
 						haspermession: hasEditAccountPackagePermission
 					});
-				}
 			}
 			function hasEditAccountPackagePermission() {
 				return Retail_BE_AccountPackageAPIService.DoesUserHaveAddAccess(accountBEDefinitionId);
@@ -105,13 +106,14 @@ app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService
 				return {
 					AccountBEDefinitionId: accountBEDefinitionId,
 					AssignedToAccountId: assignedToAccountId,
+					PackageId: packageId,
 					PackageName: packageName,
 					PackageTypes: packageTypes,
 					AccountIds: accountIds,
 					StatusIds: statusIds,
 					CurrencyIds: currencyIds,
 					BED: bed,
-					EED:eed
+					EED: eed
 				};
 			}
 		}

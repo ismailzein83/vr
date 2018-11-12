@@ -4,8 +4,8 @@
 			 on-ready="scopeModel.onGridReady"
 			 menuactions="scopeModel.menuActions"
 			 idfield="Entity.AccountPackageId" enableautoexport="true">
+	<vr-datagridcolumn headertext="'Package'" field="'PackageName'" ng-show="!scopeModel.isAssignedToPackageId"></vr-datagridcolumn>
 	<vr-datagridcolumn headertext="'Account'" field="'AccountName'" ng-show="!scopeModel.isAssignedToAccountId"></vr-datagridcolumn>
-	<vr-datagridcolumn headertext="'Package'" field="'PackageName'"></vr-datagridcolumn>
 	<vr-datagridcolumn headertext="'Package Type'" field="'PackageType'"></vr-datagridcolumn>
 	<vr-datagridcolumn headertext="'Status'" field="'StatusName'" ng-show="!scopeModel.isAssignedToAccountId"></vr-datagridcolumn>
 	<vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'"></vr-datagridcolumn>
