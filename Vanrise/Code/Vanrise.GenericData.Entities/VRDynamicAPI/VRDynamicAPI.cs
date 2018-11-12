@@ -11,6 +11,10 @@ namespace Vanrise.GenericData.Entities
         public int VRDynamicAPIId { get; set; }
         public string Name { get; set; }
         public int ModuleId{ get; set; }
+        public VRDynamicAPISettings Settings { get; set; }
+    }
+    public class VRDynamicAPISettings
+    {
         public List<VRDynamicAPIMethod> Methods { get; set; }
     }
     public class VRDynamicAPIMethod
