@@ -16,7 +16,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
     {
         public override Guid ConfigId { get { return new Guid("A9497EF9-2074-4A1E-A999-08253B68F448"); } }
 
-        List<CodeGroupSuffix> CodeGroupSuffixes { get; set; }
+        public List<CodeGroupSuffix> CodeGroupSuffixes { get; set; }
     }
 
     public class CodeGroupSuffix
