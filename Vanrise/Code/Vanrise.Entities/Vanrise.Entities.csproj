@@ -127,6 +127,7 @@
     <Compile Include="VRComment\VRComment.cs" />
     <Compile Include="VRComment\VRCommentQuery.cs" />
     <Compile Include="VRConnection\VRHttpConnection.cs" />
+    <Compile Include="VRDynamicAPIModule\VRDynamicAPIModule.cs" />
     <Compile Include="VRDynamicAPI\VRDynamicAPI.cs" />
     <Compile Include="VRNamespace\VRCustomClassType.cs" />
     <Compile Include="VRNamespace\VRNamespace.cs" />

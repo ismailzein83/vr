@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -142,6 +143,7 @@
     <Compile Include="TextManipulationManager.cs" />
     <Compile Include="VRConnections\MainImplementations\VRHttpConnection.cs" />
     <Compile Include="VRConnections\MainImplementations\VRInterAppRestConnection.cs" />
+    <Compile Include="VRDynamicAPIModule\VRDynamicAPIModuleManager.cs" />
     <Compile Include="VREventHandler\VREventHandlerDetail.cs" />
     <Compile Include="VREventHandler\VREventHandlerInfo.cs" />
     <Compile Include="VREventHandler\VREventHandlerInfoFilter.cs" />
@@ -253,7 +255,9 @@
       <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DynamicAPI\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
