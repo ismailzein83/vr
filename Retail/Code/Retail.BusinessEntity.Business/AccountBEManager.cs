@@ -941,7 +941,7 @@ namespace Retail.BusinessEntity.Business
             return childAccounts.MapRecords(ClientChildAccountInfoMapper);
            
         }
-        public IEnumerable<ClientAccountInfo> GetClientAccountsInfoWithChildren(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
+        public IEnumerable<ClientAccountInfo> GetClientAccountInfoWithChildren(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
         {
             List<ClientAccountInfo> accounts = new List<ClientAccountInfo>();
             var account = GetAccount(accountBEDefinitionId, accountId);
