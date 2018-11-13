@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -121,6 +122,7 @@
     <Compile Include="User\UserInfo.cs" />
     <Compile Include="User\UserProfile.cs" />
     <Compile Include="User\UserQuery.cs" />
+    <Compile Include="User\UsersStatusesInput.cs" />
     <Compile Include="User\UserToChangeSecurityProvider.cs" />
     <Compile Include="User\UserToUpdate.cs" />
     <Compile Include="User\UserToAdd.cs" />

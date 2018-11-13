@@ -65,6 +65,12 @@ namespace Vanrise.Security.Web.Controllers
         {
             return _manager.GetUserbyId(userId, true);
         }
+        [HttpGet]
+        [Route("UnlockRemoteUser")]
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> UnlockRemoteUser(int userId)
+        {
+            return _manager.UnlockRemoteUser(userId);
+        }
 
         [HttpPost]
         [Route("UpdateUser")]
@@ -147,7 +153,6 @@ namespace Vanrise.Security.Web.Controllers
         {
             return _manager.ResetPassword(user.Email, user.Password);
         }
-
         [IsAnonymous]
         [HttpPost]
         [Route("ActivatePassword")]
@@ -155,7 +160,13 @@ namespace Vanrise.Security.Web.Controllers
         {
             return _manager.ActivatePassword(user.Email, user.Password, user.TempPassword);
         }
-
+        
+        [HttpPost]
+        [Route("GetUsersStatus")]
+        public List<UserInfo> GetUsersStatus(UsersStatusesInput input)
+        {
+            return _manager.GetUsersStatus(input);
+        }
 
         [HttpGet]
         [Route("LoadLoggedInUserProfile")]

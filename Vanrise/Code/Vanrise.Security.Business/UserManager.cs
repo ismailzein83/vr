@@ -70,6 +70,31 @@ namespace Vanrise.Security.Business
             }
             return updateOperationOutput;
         }
+        public List<UserInfo> GetUsersStatus(UsersStatusesInput input)
+        {
+            input.UserIds.ThrowIfNull("UsersStatusesInput");
+            List<UserInfo> userDetailInfo = new List<UserInfo>();
+            foreach (var userId in input.UserIds)
+            {
+                var userStatus = GetUserStatusByUserId(userId);
+                var user = GetUserbyId(userId);
+                user.ThrowIfNull("user", userId);
+                UserInfo userDetail = new UserInfo()
+                {
+                    UserId = userId,
+                    Status = userStatus,
+                    Name = user.Name
+                };
+                userDetailInfo.Add(userDetail);
+            }
+            return userDetailInfo;
+        }
+        public UserStatus GetUserStatusByUserId(int userId)
+        {
+            UserStatus userStatus;
+            IsUserEnable(userId, out userStatus);
+            return userStatus;
+        }
         public Guid? GetLoggedInUserLanguageId()
         {
             var userId = SecurityContext.Current.GetLoggedInUserId();
@@ -523,7 +548,11 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
-
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> UnlockRemoteUser(int userId)
+        {
+            var user = GetUserbyId(userId);
+            return UnlockUser(user);
+        }
         public bool IsUserDisabledTill(User user, out TimeSpan? disableTill)
         {
             disableTill = null;
