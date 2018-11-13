@@ -119,12 +119,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
+    <Content Include="Common\Directives\VRDynamicAPIModule\Templates\DynamicAPIModuleGridTemplate.html" />
+    <Content Include="Common\Directives\VRDynamicAPIModule\vr-common-dynamicapi-module-grid.js" />
+    <Content Include="Common\Directives\VRDynamicAPI\Templates\DynamicAPIGridTemplate.html" />
+    <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-grid.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\SpecificDaysDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-specificdays.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-yesterday.js" />
     <Content Include="Common\Services\APIServices\VRBulkActionDraftAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRDynamicAPIAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRDynamicAPIModuleAPIService.js" />
     <Content Include="Common\Services\APIServices\VRRestCurrencyAPIService.js" />
+    <Content Include="Common\Services\VRDynamicAPIModuleService.js" />
+    <Content Include="Common\Services\VRDynamicAPIService.js" />
+    <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleEditor.html" />
+    <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleEditorController.js" />
+    <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleManagement.html" />
+    <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleManagementController.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +159,8 @@
     <Compile Include="Controllers\SMSMessageTemplateController.cs" />
     <Compile Include="Controllers\SMSMessageTypeController.cs" />
     <Compile Include="Controllers\RemoteFileController.cs" />
+    <Compile Include="Controllers\VRDynamicAPIController.cs" />
+    <Compile Include="Controllers\VRDynamicAPIModuleController.cs" />
     <Compile Include="Controllers\VRExclusiveSessionController.cs" />
     <Compile Include="Controllers\VRExclusiveSessionTypeController.cs" />
     <Compile Include="Controllers\VRLocalizationLanguageController.cs" />
@@ -833,6 +847,10 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\Directives\VRDynamicAPI\MainExtensions\" />
+    <Folder Include="Common\Views\VRDynamicAPI\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

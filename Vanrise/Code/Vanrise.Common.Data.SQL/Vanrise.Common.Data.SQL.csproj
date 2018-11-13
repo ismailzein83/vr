@@ -81,6 +81,7 @@
     <Compile Include="VRCommentDataManager.cs" />
     <Compile Include="VRConnectionDataManager.cs" />
     <Compile Include="VRComponentTypeDataManager.cs" />
+    <Compile Include="VRDynamicAPIDataManager.cs" />
     <Compile Include="VRDynamicAPIModuleDataManager.cs" />
     <Compile Include="VREventHandlerDataManager.cs" />
     <Compile Include="VRExclusiveSessionDataManager.cs" />

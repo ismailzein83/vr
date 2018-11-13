@@ -50,6 +50,7 @@
     <Compile Include="IDBReplicationDataManager.cs" />
     <Compile Include="IEnumerationDataManager.cs" />
     <Compile Include="IVRCommentDataManager.cs" />
+    <Compile Include="IVRDynamicAPIDataManager.cs" />
     <Compile Include="IVRDynamicAPIModuleDataManager.cs" />
     <Compile Include="IVRNamespaceDataManager.cs" />
     <Compile Include="IRegionDataManager.cs" />
