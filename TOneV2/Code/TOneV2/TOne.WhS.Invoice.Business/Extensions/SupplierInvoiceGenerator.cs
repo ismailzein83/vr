@@ -299,7 +299,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             CurrencyId = item.CurrencyId,
                             Amount = item.Amount,
                             TotalRecurringChargeAmount = item.AmountAfterTaxes,
-                            TotalTrafficAmount=0                          
+                            TotalTrafficAmount = 0
 
                         });
 
@@ -313,7 +313,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
 
             List<string> listMeasures = new List<string> { "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
-            List<string> listDimensions = new List<string> { "CostCurrency" };
+            List<string> listDimensions = new List<string> { "CostCurrency", "Month" };
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, null);
             if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() != 0)
             {
@@ -332,6 +332,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     #region ReadDataFromAnalyticResult
                     DimensionValue costCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
+                    DimensionValue month = analyticRecord.DimensionValues.ElementAtOrDefault(1);
 
                     MeasureValue costNet_OrigCurr = GetMeasureValue(analyticRecord, "CostNet_OrigCurr");
                     MeasureValue costDuration = GetMeasureValue(analyticRecord, "CostDuration");
@@ -351,6 +352,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             Duration = Convert.ToDecimal(costDuration.Value ?? 0.0),
                             NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
                             Amount = costNet,
+                            Month = month.Value != null ? month.Value.ToString() : null
                         };
                         if (commission.HasValue)
                         {

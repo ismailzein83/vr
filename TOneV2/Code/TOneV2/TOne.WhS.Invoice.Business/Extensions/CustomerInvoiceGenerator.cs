@@ -238,7 +238,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             var invalidCDRFilterGroup = new RecordFilterGroup()
             {
                 LogicalOperator = RecordQueryLogicalOperator.And,
-                Filters = new List<RecordFilter>(){                
+                Filters = new List<RecordFilter>(){
                     new ObjectListRecordFilter(){FieldName = "CustomerId", CompareOperator= ListRecordFilterOperator.In, Values = values }
                 }
             };
@@ -309,7 +309,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
 
             List<string> listMeasures = new List<string> { "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
-            List<string> listDimensions = new List<string> { "SaleCurrency" };
+            List<string> listDimensions = new List<string> { "SaleCurrency", "Month" };
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, null);
             if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() != 0)
             {
@@ -328,6 +328,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     #region ReadDataFromAnalyticResult
                     DimensionValue saleCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
+                    DimensionValue month = analyticRecord.DimensionValues.ElementAtOrDefault(1);
 
                     MeasureValue saleNet_OrigCurr = GetMeasureValue(analyticRecord, "SaleNet_OrigCurr");
                     MeasureValue saleDuration = GetMeasureValue(analyticRecord, "SaleDuration");
@@ -347,6 +348,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             Duration = Convert.ToDecimal(saleDuration.Value ?? 0.0),
                             NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
                             Amount = saleNetValue,
+                            Month = month.Value != null ? month.Value.ToString() : null
                         };
                         if (commission.HasValue)
                         {

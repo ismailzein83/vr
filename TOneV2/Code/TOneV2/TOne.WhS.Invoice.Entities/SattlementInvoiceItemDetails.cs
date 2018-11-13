@@ -35,4 +35,39 @@ namespace TOne.WhS.Invoice.Entities
             return null;
         }
     }
+    public class SettlementInvoiceItemDetail
+    {
+        public long InvoiceId { get; set; }
+        public int CurrencyId { get; set; }
+        public string CurrencyIdDescription { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+
+        public decimal DueToSystemAmount { get; set; }
+        public decimal DueToSystemAmountAfterCommission { get; set; }
+        public decimal DueToSystemAmountAfterCommissionWithTaxes { get; set; }
+        public decimal DueToSystemAmountRecurringCharges { get; set; }
+        public decimal DueToSystemTotalTrafficAmount { get; set; }
+
+
+        public decimal DueToCarrierAmount { get; set; }
+        public decimal DueToCarrierAmountAfterCommission { get; set; }
+        public decimal DueToCarrierAmountAfterCommissionWithTaxes { get; set; }
+        public decimal DueToCarrierAmountRecurringCharges { get; set; }
+        public decimal DueToCarrierTotalTrafficAmount { get; set; }
+
+        public int DueToSystemNumberOfCalls { get; set; }
+        public int DueToCarrierNumberOfCalls { get; set; }
+
+        public decimal DueToSystemDifference { get; set; }
+        public decimal DueToCarrierDifference { get; set; }
+        public string Month { get; set; }
+        public string MonthDescription { get; set; }
+
+        public SettlementInvoiceItemDetail() { }
+        public IEnumerable<SettlementInvoiceItemDetail> GetSettlementInvoiceItemDetailRDLCSchema()
+        {
+            return null;
+        }
+    }
 }

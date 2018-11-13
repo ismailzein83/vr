@@ -18,6 +18,7 @@ namespace TOne.WhS.Invoice.Entities
         public decimal Duration { get; set; }
         public int CurrencyId { get; set; }
         public decimal Amount { get; set; }
-
+        public string Month { get; set; }
+        
     }
 }
