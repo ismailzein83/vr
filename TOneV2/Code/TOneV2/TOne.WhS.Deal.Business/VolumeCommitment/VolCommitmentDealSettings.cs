@@ -81,10 +81,13 @@ namespace TOne.WhS.Deal.Business
             return item.Name;
         }
 
-        public override TimeSpan? GetCarrierOffSet()
+        public override TimeSpan? GetCarrierOffSet(TimeSpan? currentOffSet)
         {
             if (VolCommitmentTimeZone == VolCommitmentTimeZone.System)
                 return null;
+
+            if (currentOffSet.HasValue)
+                return currentOffSet;
 
             var timeZoneManager = new VRTimeZoneManager();
             var carrierAccountManager = new CarrierAccountManager();
@@ -123,13 +126,13 @@ namespace TOne.WhS.Deal.Business
             }
             if (DealType == VolCommitmentDealType.Sell)
             {
-                var invalidCountryIds = ValidateVolumeCommitmentCountries(CarrierAccountId, BeginDate, false);
+                var invalidCountryIds = ValidateVolumeCommitmentCountries(CarrierAccountId, RealBED, false);
                 if (invalidCountryIds.Count() > 0)
                 {
                     CountryManager countrymanager = new CountryManager();
                     var invalidCountryNames = countrymanager.GetCountryNames(invalidCountryIds);
                     validationResult = false;
-                    validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following countries {0} are not sold at {1}", string.Join(",", invalidCountryNames), BeginDate));
+                    validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following countries {0} are not sold at {1}", string.Join(",", invalidCountryNames), RealBED));
                 }
             }
 
@@ -194,7 +197,7 @@ namespace TOne.WhS.Deal.Business
 
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
-            if (Status == DealStatus.Draft || (RealEED.HasValue && BeginDate == RealEED))
+            if (Status == DealStatus.Draft || (RealEED.HasValue && RealBED == RealEED))
                 return;
 
             switch (DealType)

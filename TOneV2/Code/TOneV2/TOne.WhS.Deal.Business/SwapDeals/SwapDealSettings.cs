@@ -105,10 +105,13 @@ namespace TOne.WhS.Deal.Business
             return outbound.Name;
         }
 
-        public override TimeSpan? GetCarrierOffSet()
+        public override TimeSpan? GetCarrierOffSet(TimeSpan? currentOffSet)
         {
             if (SwapDealTimeZone == SwapDealTimeZone.System)
                 return null;
+
+            if (currentOffSet.HasValue)
+                return currentOffSet;
 
             var timeZoneManager = new VRTimeZoneManager();
             var carrierAccountManager = new CarrierAccountManager();

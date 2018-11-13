@@ -7,6 +7,7 @@ using TOne.WhS.Deal.Data;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common.Business;
 using System.Collections.Generic;
+using System.Reflection;
 using Vanrise.GenericData.Entities;
 using TOne.WhS.BusinessEntity.Entities;
 
@@ -49,8 +50,7 @@ namespace TOne.WhS.Deal.Business
 
             int insertedId = -1;
 
-            TimeSpan? offSet = deal.Settings.GetCarrierOffSet();
-            deal.Settings.OffSet = offSet;
+            deal.Settings.OffSet = deal.Settings.GetCarrierOffSet(null);
 
             if (deal.Settings.ValidateDataBeforeSave(context))
             {
@@ -94,9 +94,7 @@ namespace TOne.WhS.Deal.Business
                 DealSaleZoneIds = deal.Settings.GetDealSaleZoneIds()
             };
 
-            TimeSpan? offSet = deal.Settings.GetCarrierOffSet();
-            if (existingDealDefinition.Settings.OffSet == null)
-                deal.Settings.OffSet = offSet;
+            deal.Settings.OffSet = deal.Settings.GetCarrierOffSet(existingDealDefinition.Settings.OffSet);
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -149,11 +147,11 @@ namespace TOne.WhS.Deal.Business
             if (deals == null || !deals.Any())
                 return null;
 
-            List<DealDefinition> effectiveDeals = deals.Where(item => item.Settings.RealEED != item.Settings.BeginDate && item.Settings.RealEED.VRGreaterThan(effectiveAfter)).ToList();
+            List<DealDefinition> effectiveDeals = deals.Where(item => item.Settings.RealEED != item.Settings.RealBED && item.Settings.RealEED.VRGreaterThan(effectiveAfter)).ToList();
             if (effectiveDeals == null || effectiveDeals.Count == 0)
                 return null;
 
-            return effectiveDeals.MinBy(item => item.Settings.BeginDate).Settings.BeginDate;
+            return effectiveDeals.MinBy(item => item.Settings.RealBED).Settings.RealBED;
         }
 
         #endregion

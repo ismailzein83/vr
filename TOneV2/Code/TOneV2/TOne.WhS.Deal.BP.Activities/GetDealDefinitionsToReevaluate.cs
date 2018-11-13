@@ -59,7 +59,7 @@ namespace TOne.WhS.Deal.BP.Activities
                         continue;
                     }
 
-                    if (dealDefinition.Settings.BeginDate == dealDefinition.Settings.RealEED)
+                    if (dealDefinition.Settings.RealBED == dealDefinition.Settings.RealEED)
                         continue;
 
                     if (dealDefinition.Settings.RealEED.VRGreaterThan(dealEffectiveAfter))

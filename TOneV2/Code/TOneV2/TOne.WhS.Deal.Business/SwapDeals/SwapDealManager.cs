@@ -39,8 +39,8 @@ namespace TOne.WhS.Deal.Business
                 SellingNumberPlanId = sellingNumberPlan.Value,
                 SaleZoneIds = saleZoneIds,
                 SupplierZoneIds = supplierZoneIds,
-                BED = swapDealSettings.BeginDate,
-                EED = swapDealSettings.EEDToStore
+                BED = swapDealSettings.BEDToDisplay,
+                EED = swapDealSettings.EEDToDisplay
             };
         }
 
@@ -69,7 +69,8 @@ namespace TOne.WhS.Deal.Business
 
             foreach (var dealDefinition in deals)
             {
-                if (dealDefinition.Settings.Status != DealStatus.Draft && (!dealDefinition.Settings.RealEED.HasValue || dealDefinition.Settings.BeginDate < endDate && dealDefinition.Settings.RealEED.Value > beginDate))
+                if (dealDefinition.Settings.Status != DealStatus.Draft
+                    && (!dealDefinition.Settings.RealEED.HasValue || dealDefinition.Settings.RealBED < endDate && dealDefinition.Settings.RealEED.Value > beginDate))
                     dealDefinitions.Add(dealDefinition);
             }
             return dealDefinitions;
@@ -201,7 +202,7 @@ namespace TOne.WhS.Deal.Business
             detail.TypeDescription = Utilities.GetEnumAttribute<DealType, DescriptionAttribute>(settings.DealType).Description;
             detail.StatusDescription = Utilities.GetEnumAttribute<DealStatus, DescriptionAttribute>(settings.Status).Description;
             detail.ContractDescription = Utilities.GetEnumAttribute<DealContract, DescriptionAttribute>(settings.DealContract).Description;
-            detail.IsEffective = settings.BeginDate <= DateTime.Now.Date && settings.EEDToStore >= DateTime.Now.Date;
+            detail.IsEffective = settings.RealBED <= DateTime.Now.Date && settings.RealEED >= DateTime.Now.Date;
             detail.BuyingAmount = settings.Outbounds.Sum(x => x.Volume * x.Rate);
             detail.BuyingVolume = settings.Outbounds.Sum(x => x.Volume);
             detail.SellingAmount = settings.Inbounds.Sum(x => x.Volume * x.Rate);
@@ -270,8 +271,8 @@ namespace TOne.WhS.Deal.Business
                                 row.Cells.Add(new ExportExcelCell { Value = record.Entity.DealId });
                                 row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
                                 row.Cells.Add(new ExportExcelCell { Value = record.CarrierAccountName });
-                                row.Cells.Add(new ExportExcelCell { Value = settings.BeginDate });
-                                row.Cells.Add(new ExportExcelCell { Value = settings.EEDToStore });
+                                row.Cells.Add(new ExportExcelCell { Value = settings.BEDToDisplay });
+                                row.Cells.Add(new ExportExcelCell { Value = settings.EEDToDisplay });
                                 row.Cells.Add(new ExportExcelCell { Value = settings.GracePeriod });
                                 row.Cells.Add(new ExportExcelCell { Value = settings.Inbounds.Sum(x => x.Volume * x.Rate) });
                                 row.Cells.Add(new ExportExcelCell { Value = settings.Inbounds.Sum(x => x.Volume) });
@@ -334,7 +335,7 @@ namespace TOne.WhS.Deal.Business
         public override string GetEntityDescription(Vanrise.GenericData.Entities.IBusinessEntityDescriptionContext context)
         {
             int dealId = Convert.ToInt32(context.EntityId);
-            DealDefinition deal =  base.GetDeal(dealId);
+            DealDefinition deal = base.GetDeal(dealId);
             if (deal != null)
                 return deal.Name;
             return null;

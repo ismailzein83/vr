@@ -44,7 +44,7 @@ namespace TOne.WhS.Deal.Business
 
             return cachedDeals.MapRecords(DealDefinitionInfoMapper, filterExpression).OrderBy(item => item.Name);
         }
-        public bool DeleteDeal (int dealId)
+        public bool DeleteDeal(int dealId)
         {
             return base.DeleteDeal(dealId);
         }
@@ -264,7 +264,7 @@ namespace TOne.WhS.Deal.Business
                     var supplierZone = new SupplierZoneManager().GetSupplierZone(zoneId);
                     if (supplierZone == null)
                         throw new NullReferenceException("supplierZone");
-                    if (supplierZone.BED>dealBED || (supplierZone.EED.HasValue && supplierZone.EED.Value < dealEED.Value))
+                    if (supplierZone.BED > dealBED || (supplierZone.EED.HasValue && supplierZone.EED.Value < dealEED.Value))
                         return true;
 
                 }
@@ -464,8 +464,11 @@ namespace TOne.WhS.Deal.Business
         public List<DealDefinition> GetRecurredDeals(DealDefinition deal, int recurringNumber, RecurringType recurringType)
         {
             var recurredDeals = new List<DealDefinition>();
-            DateTime endDealDate = deal.Settings.EEDToStore.Value;
+            DateTime endDealDate = deal.Settings.RealEED.Value;
             DateTime beginDealDate = deal.Settings.BeginDate;
+
+            if (deal.Settings.OffSet.HasValue)
+                endDealDate = endDealDate.Add(deal.Settings.OffSet.Value);
 
             var dealLifeSpan = endDealDate.Subtract(beginDealDate);
             var monthsDifference = (endDealDate.Year - beginDealDate.Year) * 12 + (endDealDate.Month - beginDealDate.Month);
@@ -503,8 +506,8 @@ namespace TOne.WhS.Deal.Business
                 {
                     DealSaleZoneIds = recurredDeal.Settings.GetDealSaleZoneIds(),
                     DealSupplierZoneIds = recurredDeal.Settings.GetDealSupplierZoneIds(),
-                    BED = recurredDeal.Settings.BeginDate,
-                    EED = recurredDeal.Settings.EEDToStore,
+                    BED = recurredDeal.Settings.BEDToDisplay,
+                    EED = recurredDeal.Settings.EEDToDisplay,
                     DealId = recurredDeal.DealId,
                     CustomerId = recurredDeal.Settings.GetCarrierAccountId(),
                 };
@@ -661,7 +664,7 @@ namespace TOne.WhS.Deal.Business
                                 var overlappedItem = dealZoneInfos.FindRecord(x => IsOverlapped(x, dealDef.Settings.RealBED, dealDef.Settings.RealEED));
                                 if (overlappedItem == null)
                                 {
-                                    dealZoneInfos.Add(dealDef.Settings.BeginDate, new DealZoneInfo
+                                    dealZoneInfos.Add(dealDef.Settings.RealBED, new DealZoneInfo
                                     {
                                         DealId = dealDef.DealId,
                                         ZoneId = zoneId,
@@ -708,7 +711,7 @@ namespace TOne.WhS.Deal.Business
                                 var overlappedItem = dealZoneInfos.FindRecord(x => IsOverlapped(x, deal.Settings.RealBED, deal.Settings.RealEED));
                                 if (overlappedItem == null)
                                 {
-                                    dealZoneInfos.Add(deal.Settings.BeginDate, new DealZoneInfo
+                                    dealZoneInfos.Add(deal.Settings.RealBED, new DealZoneInfo
                                     {
                                         DealId = deal.DealId,
                                         ZoneId = zoneId,

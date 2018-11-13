@@ -37,7 +37,7 @@ namespace TOne.WhS.Deal.Entities
             {
                 if (EEDToStore.HasValue)
                 {
-                    return OffSet.HasValue ? EEDToStore.Value.Subtract(OffSet.Value) : BeginDate;
+                    return OffSet.HasValue ? EEDToStore.Value.Subtract(OffSet.Value) : EEDToStore;
                 }
                 return EEDToStore;
             }
@@ -52,7 +52,7 @@ namespace TOne.WhS.Deal.Entities
         public abstract bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext);
         public abstract string GetSaleZoneGroupName(int dealGroupNumber);
         public abstract string GetSupplierZoneGroupName(int dealGroupNumber);
-        public abstract TimeSpan? GetCarrierOffSet();
+        public abstract TimeSpan? GetCarrierOffSet(TimeSpan? currentOffSet);
         public bool IsRecurrable { get; set; }
         public TimeSpan? OffSet { get; set; }
     }
