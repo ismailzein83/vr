@@ -191,7 +191,7 @@ app.directive('partnerportalCustomeraccessRetailFaultticketStaticeditor', ['Util
                         Filters: [getStatusSelectorFilter()]
                     },
                     selectedIds: selectedValues != undefined ? selectedValues.StatusId : undefined,
-                    selectfirstitem: false,
+                    selectfirstitem: selectedValues==undefined,
                     connectionId: "7A2044F4-B42C-44AA-BFB8-6538904E8E4C"
                 };
                 return statusSelectorAPI.load(selectorPayload);
