@@ -35,12 +35,20 @@
             var manualRouteSettingsAPI;
             var manualRouteSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var specialRoutingSettingsAPI;
+            var specialRoutingSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
-            
+
                 $scope.scopeModel.onManualRoutesReady = function (api) {
                     manualRouteSettingsAPI = api;
                     manualRouteSettingsReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onSpecialRoutingReady = function (api) {
+                    specialRoutingSettingsAPI = api;
+                    specialRoutingSettingsReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onEricssonSwitchCommunicationReady = function (api) {
@@ -56,6 +64,12 @@
                 $scope.scopeModel.onCarrierAccountMappingGridReady = function (api) {
                     carrierAccountMappingGridAPI = api;
                     carrierAccountMappingGridReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.isCodeLengthValid = function () {
+                    if ($scope.scopeModel.minCodeLength != undefined && $scope.scopeModel.maxCodeLength != undefined && $scope.scopeModel.minCodeLength > $scope.scopeModel.maxCodeLength)
+                        return 'Maximum Code Length should be greater than Minimum Code Length.';
+                    return null;
                 };
 
                 defineAPI();
@@ -94,7 +108,7 @@
                     //Loading Switch Communication
                     var switchCommunicationLoadPromise = getSwitchCommunicationLoadPromise();
                     promises.push(switchCommunicationLoadPromise);
-                    
+
                     //Loading CarrierAccountMapping Grid
                     var carrierAccountMappingGridLoadPromise = getCarrierAccountMappingGridLoadPromise();
                     promises.push(carrierAccountMappingGridLoadPromise);
@@ -103,21 +117,42 @@
                     var branchRouteSettingsLoadPromise = getBranchRouteSettingsLoadPromise();
                     promises.push(branchRouteSettingsLoadPromise);
 
-                    var manualRouteSettingsLoadPromise = getManualRouteSettingsLoadPromise();
-                    promises.push(manualRouteSettingsLoadPromise);
+                    var manualRoutesLoadPromise = getManualRouteSettingsLoadPromise();
+                    promises.push(manualRoutesLoadPromise);
+
+                    var specialRoutesLoadPromise = getSpecialRoutingSettingsLoadPromise();
+                    promises.push(specialRoutesLoadPromise);
 
                     function getManualRouteSettingsLoadPromise() {
                         var manualRouteSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         manualRouteSettingsReadyPromiseDeferred.promise.then(function () {
                             var manualRouteSettingsPayload;
-                            if (ericssonSWSync != undefined) {
-                                manualRouteSettingsPayload = ericssonSWSync.ManualRouteSettings;
+                            if (ericssonSWSync != undefined && ericssonSWSync.ManualRouteSettings != undefined) {
+                                manualRouteSettingsPayload = {
+                                    manualRoutes: ericssonSWSync.ManualRouteSettings.EricssonManualRoutes
+                                };
                             }
                             VRUIUtilsService.callDirectiveLoad(manualRouteSettingsAPI, manualRouteSettingsPayload, manualRouteSettingsLoadPromiseDeferred);
                         });
 
                         return manualRouteSettingsLoadPromiseDeferred.promise;
+                    }
+
+                    function getSpecialRoutingSettingsLoadPromise() {
+                        var specialRoutingSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        specialRoutingSettingsReadyPromiseDeferred.promise.then(function () {
+                            var specialRoutingSettingsPayload;
+                            if (ericssonSWSync != undefined && ericssonSWSync.ManualRouteSettings != undefined) {
+                                specialRoutingSettingsPayload = {
+                                    specialRoutes: ericssonSWSync.ManualRouteSettings.EricssonSpecialRoutes
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(specialRoutingSettingsAPI, specialRoutingSettingsPayload, specialRoutingSettingsLoadPromiseDeferred);
+                        });
+
+                        return specialRoutingSettingsLoadPromiseDeferred.promise;
                     }
 
                     function getSwitchCommunicationLoadPromise() {
@@ -159,7 +194,15 @@
                 };
 
                 api.getData = function () {
-                    
+
+                    function getManualRoutesSettings() {
+                        var manualRouteSettings = {
+                            EricssonManualRoutes: manualRouteSettingsAPI != undefined ? manualRouteSettingsAPI.getData() : null,
+                            EricssonSpecialRoutes: specialRoutingSettingsAPI != undefined ? specialRoutingSettingsAPI.getData() : null
+                        };
+                        return manualRouteSettings;
+                    }
+
                     var switchCommunicationData = switchCommunicationAPI.getData();
                     var data = {
                         $type: "TOne.WhS.RouteSync.Ericsson.EricssonSWSync, TOne.WhS.RouteSync.Ericsson",
@@ -167,12 +210,12 @@
                         MinCodeLength: $scope.scopeModel.minCodeLength,
                         MaxCodeLength: $scope.scopeModel.maxCodeLength,
                         InterconnectGeneralPrefix: $scope.scopeModel.interconnectGeneralPrefix,
-                       CarrierMappings: carrierAccountMappingGridAPI.getData(),
+                        CarrierMappings: carrierAccountMappingGridAPI.getData(),
                         SwitchCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.sshCommunicationList : undefined,
                         SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined,
                         FirstRCNumber: $scope.scopeModel.firstRCNumber,
                         BranchRouteSettings: (branchRouteSettingsAPI != undefined) ? branchRouteSettingsAPI.getData() : null,
-                        ManualRouteSettings: (manualRouteSettingsAPI != undefined) ? manualRouteSettingsAPI.getData() : null,
+                        ManualRouteSettings: getManualRoutesSettings(),
                         ESR: $scope.scopeModel.esr,
                         CC: $scope.scopeModel.cc,
                         PercentagePrefix: $scope.scopeModel.percentagePrefix

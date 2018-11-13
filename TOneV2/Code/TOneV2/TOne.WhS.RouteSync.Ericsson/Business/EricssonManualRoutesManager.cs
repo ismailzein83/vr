@@ -23,5 +23,11 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<EricssonManualRouteOriginationsConfig>(EricssonManualRouteOriginationsConfig.EXTENSION_TYPE);
         }
+
+        public IEnumerable<EricssonSpecialRoutingSettingConfig> GetSpecialRoutingTypeExtensionConfigs()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<EricssonSpecialRoutingSettingConfig>(EricssonSpecialRoutingSettingConfig.EXTENSION_TYPE);
+        }
     }
 }

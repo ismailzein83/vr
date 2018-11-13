@@ -1,0 +1,26 @@
+﻿<vr-button type="Add" data-onclick="scopeModel.addSpecialRoute" standalone></vr-button>
+
+<vr-validator validate="scopeModel.isValid()">
+    <vr-datagrid on-ready="scopeModel.onGridReady"
+                 datasource="scopeModel.datasource"
+                 ondeleterow="scopeModel.removerow"
+                 hidegridmenu>
+        <vr-datagridcolumn headertext="'Target BO'" widthfactor="9" disablesorting>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-textbox type="number" value="dataItem.TargetBO" decimalprecision="0" minvalue="0" isrequired customvalidate="viewScope.scopeModel.validateBOs(dataItem)"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Source BO'" widthfactor="9" disablesorting>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-textbox type="number" value="dataItem.SourceBO " decimalprecision="0" minvalue="0" isrequired customvalidate="viewScope.scopeModel.validateBOs(dataItem)"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Type'" widthfactor="15" disablesorting>
+            <whs-routesync-ericsson-specialrouting-type-selective colnum='5' on-ready="dataItem.onSpecialRouteTypeReady"></whs-routesync-ericsson-specialrouting-type-selective>
+        </vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

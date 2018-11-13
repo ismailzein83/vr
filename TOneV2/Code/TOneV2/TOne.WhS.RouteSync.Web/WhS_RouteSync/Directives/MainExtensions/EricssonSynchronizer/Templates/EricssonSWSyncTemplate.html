@@ -8,10 +8,10 @@
                 <vr-textbox value="scopeModel.numberOfMappings" label="Number Of Mappings" type="number" decimalprecision="0" minvalue="1" isrequired></vr-textbox>
             </vr-columns>
             <vr-columns width="1/4row">
-                <vr-textbox value="scopeModel.minCodeLength" label="Min Code Length" type="number" decimalprecision="0" minvalue="1" isrequired></vr-textbox>
+                <vr-textbox value="scopeModel.minCodeLength" label="Min Code Length" type="number" decimalprecision="0" minvalue="1" isrequired customvalidate="scopeModel.isCodeLengthValid()"></vr-textbox>
             </vr-columns>
             <vr-columns width="1/4row">
-                <vr-textbox value="scopeModel.maxCodeLength" label="Max Code Length" type="number" decimalprecision="0" minvalue="1" isrequired></vr-textbox>
+                <vr-textbox value="scopeModel.maxCodeLength" label="Max Code Length" type="number" decimalprecision="0" minvalue="1" isrequired customvalidate="scopeModel.isCodeLengthValid()"></vr-textbox>
             </vr-columns>
             <vr-columns width="1/4row">
                 <vr-textbox value="scopeModel.interconnectGeneralPrefix" label="Interconnect General Prefix" type="text"></vr-textbox>
@@ -40,6 +40,11 @@
         <whs-routesync-carrieraccountmapping-ericsson-grid on-ready="scopeModel.onCarrierAccountMappingGridReady"></whs-routesync-carrieraccountmapping-ericsson-grid>
     </vr-tab>
     <vr-tab header="'Manual Routes'">
-        <whs-routesync-ericsson-manualroutes on-ready="scopeModel.onManualRoutesReady"></whs-routesync-ericsson-manualroutes>
+        <vr-section header="A-Number" collapsible>
+            <whs-routesync-ericsson-manualroutes on-ready="scopeModel.onManualRoutesReady"></whs-routesync-ericsson-manualroutes>
+        </vr-section>
+        <vr-section header="Special Routing" collapsible>
+            <whs-routesync-ericsson-specialroutes on-ready="scopeModel.onSpecialRoutingReady"></whs-routesync-ericsson-specialroutes>
+        </vr-section>
     </vr-tab>
 </vr-tabs>

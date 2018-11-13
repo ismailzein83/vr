@@ -19,10 +19,14 @@
         function GetManualRouteOriginationsTypeExtensionConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_RouteSync_ModuleConfig.moduleName, controllerName, "GetManualRouteOriginationsTypeExtensionConfigs"));
         }
+        function GetSpecialRoutingTypeExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_RouteSync_ModuleConfig.moduleName, controllerName, "GetSpecialRoutingTypeExtensionConfigs"));
+        }
         return ({
             GetManualRouteActionTypeExtensionConfigs: GetManualRouteActionTypeExtensionConfigs,
             GetManualRouteDestinationsTypeExtensionConfigs: GetManualRouteDestinationsTypeExtensionConfigs,
-            GetManualRouteOriginationsTypeExtensionConfigs: GetManualRouteOriginationsTypeExtensionConfigs
+            GetManualRouteOriginationsTypeExtensionConfigs: GetManualRouteOriginationsTypeExtensionConfigs,
+            GetSpecialRoutingTypeExtensionConfigs: GetSpecialRoutingTypeExtensionConfigs
         });
     }
 

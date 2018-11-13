@@ -1,5 +1,5 @@
 ﻿<vr-row>
-    <vr-columns colnum="4" medium-spacing>
+    <vr-columns colnum="4">
         <vr-select on-ready="scopeModel.onSelectorReady"
                    datasource="scopeModel.extensionConfigs"
                    selectedvalues="scopeModel.selectedExtensionConfig"
@@ -9,12 +9,11 @@
                    hideremoveicon="true">
         </vr-select>
     </vr-columns>
-    <vr-columns colnum="8" medium-spacing>
-        <span vr-loader="scopeModel.isLoadingDirective">
-            <vr-directivewrapper directive="scopeModel.selectedExtensionConfig.Editor"
-                                 on-ready="scopeModel.onDirectiveReady"
-                                 isrequired="false">
-            </vr-directivewrapper>
-        </span>
-    </vr-columns>
+    <span vr-loader="scopeModel.isLoadingDirective">
+        <vr-directivewrapper directive="scopeModel.selectedExtensionConfig.Editor"
+                             on-ready="scopeModel.onDirectiveReady"
+                             normal-col-num="4"
+                             isrequired="true">
+        </vr-directivewrapper>
+    </span>
 </vr-row>

@@ -5,17 +5,17 @@
                  datasource="scopeModel.datasource"
                  ondeleterow="scopeModel.removerow"
                  hidegridmenu>
-        <vr-datagridcolumn headertext="'BOs'" widthfactor="10" disablesorting>
+        <vr-datagridcolumn headertext="'BOs'" widthfactor="9" disablesorting>
             <vr-row>
                 <vr-columns width="fullrow">
-                    <vr-textbox-multiple placeholder="Insert BOs" datatype="text" value="dataItem.Customers" entityname="BOs"></vr-textbox-multiple>
+                    <vr-textbox-multiple datatype="text" value="dataItem.Customers" entityname="BOs" isrequired></vr-textbox-multiple>
                 </vr-columns>
             </vr-row>
         </vr-datagridcolumn>
         <!--<vr-datagridcolumn headertext="'Destination Codes'" widthfactor="15" disablesorting>
             <whs-routesync-ericsson-manualroute-destination-selective on-ready="dataItem.onManualRouteDestinationReady"></whs-routesync-ericsson-manualroute-destination-selective>
         </vr-datagridcolumn>-->
-        <vr-datagridcolumn headertext="'Origination Codes'" widthfactor="15" disablesorting>
+        <vr-datagridcolumn headertext="'Origination Codes'" widthfactor="9" disablesorting>
             <whs-routesync-ericsson-manualroute-origination-selective on-ready="dataItem.onManualRouteOriginationsReady"></whs-routesync-ericsson-manualroute-origination-selective>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Action'" widthfactor="15" disablesorting>

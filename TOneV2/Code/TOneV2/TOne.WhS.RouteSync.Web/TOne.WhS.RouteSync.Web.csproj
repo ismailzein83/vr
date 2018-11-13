@@ -185,7 +185,12 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-originationrange.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-destinationrange.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\ManualRoutes\whs-routesync-ericsson-manualroute-originationcodes.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\SpecialRouting\Templates\EricssonSpecialroutingServicelanguageTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\SpecialRouting\Templates\EricssonSpecialroutingTypeSelectiveTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\SpecialRouting\whs-routesync-ericsson-specialrouting-servicelanguage.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\SpecialRouting\whs-routesync-ericsson-specialrouting-type-selective.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonCustomerMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonSpecialRoutesTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonManualRoutesTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonRouteSyncSetting.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonSupplierMappingTemplate.html" />
@@ -193,6 +198,7 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonTrunkTrunkGroupTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-ericsson-grid.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-customermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-specialroutes.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-suppliermapping.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-trunktrunkgroup.js" />

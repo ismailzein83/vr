@@ -62,32 +62,33 @@ app.directive('whsRoutesyncEricssonManualroutes', ['UtilsService', 'VRUIUtilsSer
 
                 api.load = function (payload) {
                     var promises = [];
-                    if (payload != undefined) {
-                        if (payload.EricssonManualRoutes != undefined) {
-                            for (var i = 0; i < payload.EricssonManualRoutes.length; i++) {
-                                promises.push(extendManualRoute(payload.EricssonManualRoutes[i]));
-                                $scope.scopeModel.datasource.push(payload.EricssonManualRoutes[i]);
-                            }
+                    if (payload != undefined && payload.manualRoutes != undefined) {
+                        for (var i = 0; i < payload.manualRoutes.length; i++) {
+                            var currentManualRoute = payload.manualRoutes[i];
+                            promises.push(extendManualRoute(currentManualRoute));
+                            $scope.scopeModel.datasource.push(currentManualRoute);
                         }
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-                    var data = { EricssonManualRoutes: [] };
+                    var ericssonManualRoutes = [];
                     if ($scope.scopeModel.datasource != undefined) {
                         for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
-                            var manualRoute = { Customers: $scope.scopeModel.datasource[i].Customers };
-                            if ($scope.scopeModel.datasource[i].actionAPI != undefined)
-                                manualRoute.ManualRouteAction = $scope.scopeModel.datasource[i].actionAPI.getData();
-                            //if ($scope.scopeModel.datasource[i].destinationsAPI != undefined)
-                            //manualRoute.ManualRouteDestinations = $scope.scopeModel.datasource[i].destinationsAPI.getData();
-                            if ($scope.scopeModel.datasource[i].originationsAPI != undefined)
-                                manualRoute.ManualRouteOriginations = $scope.scopeModel.datasource[i].originationsAPI.getData();
-                            data.EricssonManualRoutes.push(manualRoute);
+                            var currentDataSource = $scope.scopeModel.datasource[i];
+                            var manualRoute = { Customers: currentDataSource.Customers };
+
+                            if (currentDataSource.actionAPI != undefined)
+                                manualRoute.ManualRouteAction = currentDataSource.actionAPI.getData();
+
+                            if (currentDataSource.originationsAPI != undefined)
+                                manualRoute.ManualRouteOriginations = currentDataSource.originationsAPI.getData();
+
+                            ericssonManualRoutes.push(manualRoute);
                         }
                     }
-                    return data;
+                    return ericssonManualRoutes;
                 };
 
                 if (ctrl.onReady != null)

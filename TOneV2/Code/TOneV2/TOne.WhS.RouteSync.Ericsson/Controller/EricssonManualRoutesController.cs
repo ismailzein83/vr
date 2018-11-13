@@ -30,5 +30,11 @@ namespace TOne.WhS.RouteSync.Ericsson.Controller
         {
             return _manager.GetManualRouteOriginationsTypeExtensionConfigs();
         }
+        [HttpGet]
+        [Route("GetSpecialRoutingTypeExtensionConfigs")]
+        public IEnumerable<EricssonSpecialRoutingSettingConfig> GetSpecialRoutingTypeExtensionConfigs()
+        {
+            return _manager.GetSpecialRoutingTypeExtensionConfigs();
+        }
     }
 }
