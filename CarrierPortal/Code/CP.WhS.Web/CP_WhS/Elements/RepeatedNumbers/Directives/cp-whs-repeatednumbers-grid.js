@@ -110,13 +110,12 @@ app.directive('cpWhsRepeatednumbersGrid', ['UtilsService', 'VRUIUtilsService', '
                         FilterValues: dataItem.Entity.SupplierId != null ? [dataItem.Entity.SupplierId] : null
                     });
                 }
-                if (ctrl.accountviewtype == CP_WhS_AccountViewTypeEnum.Customer.value) {
-                    var salezoneId = dataItem.Entity.SaleZoneId == 0 ? undefined : dataItem.Entity.SaleZoneId;
-                    fieldFilters.push({
-                        FieldName: "MasterPlanZoneId",
-                        FilterValues: [salezoneId]
-                    });
-                }
+                var salezoneId = dataItem.Entity.SaleZoneId == 0 ? undefined : dataItem.Entity.SaleZoneId;
+                fieldFilters.push({
+                    FieldName: "MasterPlanZoneId",
+                    FilterValues: [salezoneId]
+                });
+
                 return VR_Analytic_AnalyticItemActionService.openRecordSearch(reportId, title, sourceName, fromDate, toDate, period, fieldFilters);
             }
         }
