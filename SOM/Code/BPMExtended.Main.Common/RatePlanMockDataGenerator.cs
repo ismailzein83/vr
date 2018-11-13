@@ -339,7 +339,7 @@ namespace BPMExtended.Main.Common
             return new List<TelephonyContractDetail>
             {
                  new TelephonyContractDetail
-                 {
+                 { 
                      ContractId = CONTRACT_CUST1_TL1,
                      CustomerId = CUSTOMER_ID_1,
                      PhoneNumber= PHONE_NUMBER_2,
