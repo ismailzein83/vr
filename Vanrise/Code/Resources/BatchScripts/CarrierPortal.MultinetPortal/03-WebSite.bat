@@ -16,5 +16,5 @@ xcopy "C:\TFS\CarrierPortal\Code\PartnerPortal.Invoice.Web\PartnerPortal_Invoice
 
 xcopy "C:\TFS\CarrierPortal\Code\CP.MultiNet.Web\CP_MultiNet" /S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\CP.Multinet\%YYYYMMDD%\Client\Modules\CP_MultiNet\"
 
-xcopy "C:\TFS\CarrierPortal\Code\CarrierPortal.Web\Web.config.MultinetPortal.exclude" /y /v /z /i /Q /R "\\192.168.110.185\Fixes\WebSite\CP.Multinet\%YYYYMMDD%\"
-rename "\\192.168.110.185\Fixes\WebSite\CP.Multinet\%YYYYMMDD%\Web.config.MultinetPortal.exclude" "Web.Update.MultinetPortal.config"
+::xcopy "C:\TFS\CarrierPortal\Code\CarrierPortal.Web\Web.config.MultinetPortal.exclude" /y /v /z /i /Q /R "\\192.168.110.185\Fixes\WebSite\CP.Multinet\%YYYYMMDD%\"
+::rename "\\192.168.110.185\Fixes\WebSite\CP.Multinet\%YYYYMMDD%\Web.config.MultinetPortal.exclude" "Web.Update.MultinetPortal.config"
