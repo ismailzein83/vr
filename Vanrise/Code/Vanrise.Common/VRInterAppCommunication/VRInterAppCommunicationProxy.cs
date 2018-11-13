@@ -7,14 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Vanrise.Common
-{
-    public interface IVRInterAppCommunicationProxy
-    {
-        void SendRequest(string methodName, params object[] parameters);
-        T SendRequest<T>(string methodName, params object[] parameters);
-    }
-
-    public class VRInterAppCommunicationProxy : IVRInterAppCommunicationProxy
+{    
+    public class VRInterAppCommunicationProxy
     {
         string _serviceURL;
         string _machineName;
@@ -36,13 +30,8 @@ namespace Vanrise.Common
 
         internal void Connect()
         {
-            using (var tcpClient = new TcpClient())
-            {
-                tcpClient.Connect(_machineName, _portNumber);
-                if (!SendRequest<bool>("VRInterAppCommunicationServiceManager", "PrivateSendRequest", this._serviceName))
-                    throw new Exception($"Service '{this._serviceName}' not registered on machine '{_machineName}' port number '{_portNumber}'");
-                tcpClient.Close();
-            }
+            if (!Serializer.Deserialize<bool>(PrivateSendRequest(VRInterAppCommunication.INTERAPPCOMMUNICATION_SERVICE_MANAGER, "IsServiceRegistered", true, this._serviceName)))
+                throw new Exception($"Service '{this._serviceName}' not registered on machine '{_machineName}' port number '{_portNumber}'");
         }
 
         public T SendRequest<T>(string methodName, params Object[] parameters)
@@ -95,8 +84,11 @@ namespace Vanrise.Common
                             {
                                 throw new Exception($"Error when calling method '{methodName}' on serviceUrl '{_serviceURL}'. Error is '{tcpResponse.Response}'");
                             }
+                            streamReader.Close();
                         }
+                        streamWriter.Close();
                     }
+                    
                     stream.Close();
                 }
                 tcpClient.Close();

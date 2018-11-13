@@ -16,13 +16,15 @@ namespace Vanrise.Common
     {
         #region Static
 
+        internal const string INTERAPPCOMMUNICATION_SERVICE_MANAGER = "VRInterAppCommunicationServiceManager";
+
         static int s_tcpPortRangeStart;
         static int s_tcpPortRangeEnd;
         static int s_tcpServiceHostingRetries;
 
         static Dictionary<string, VRCommunicationRegisteredServiceInfo> s_registeredServicesByName = new Dictionary<string, VRCommunicationRegisteredServiceInfo>();
 
-        static Dictionary<Type, Type> s_ProxiesByTypes = new Dictionary<Type, Type>();
+        static Dictionary<Type, Type> s_ProxyTypesByContractTypes = new Dictionary<Type, Type>();
 
         static Object s_lockObj = new object();
         static TcpListener s_tcpListener;
@@ -35,8 +37,7 @@ namespace Vanrise.Common
             if (!int.TryParse(ConfigurationManager.AppSettings["TCPPortRangeEnd"], out s_tcpPortRangeEnd))
                 s_tcpPortRangeEnd = 50000;
             if (!int.TryParse(ConfigurationManager.AppSettings["TCPServiceHostingRetries"], out s_tcpServiceHostingRetries))
-                s_tcpServiceHostingRetries = 1000;
-            AddServiceToRegisteredServices(typeof(VRInterAppCommunicationServiceManager), typeof(IVRInterAppCommunicationServiceManager), "VRInterAppCommunicationServiceManager");
+                s_tcpServiceHostingRetries = 1000;            
         }
 
         #endregion
@@ -58,19 +59,19 @@ namespace Vanrise.Common
         
         public static bool TryCreateServiceClient<T>(string serviceURL, Action<T> onClientReady) where T : class
         {
-            VRInterAppCommunicationProxy proxy = null;
+            T proxy = null;
             try
             {
-                proxy = new VRInterAppCommunicationProxy(serviceURL);
-                proxy.Connect();
+                proxy = GetProxy<T>(serviceURL);
+                proxy.CastWithValidate<VRInterAppCommunicationProxy>("proxy").Connect();
             }
-            catch
+            catch(Exception ex)
             {
-                LoggerFactory.GetLogger().WriteWarning("cannot connect to Service. Service URL '{0}'", serviceURL);
+                LoggerFactory.GetLogger().WriteWarning("cannot connect to Service. Service URL '{0}'. Error '{1}'", serviceURL, ex.ToString());
                 return false;
             }
 
-            onClientReady(GetProxy<T>(serviceURL));
+            onClientReady(proxy);
             return true;
         }
 
@@ -113,6 +114,8 @@ namespace Vanrise.Common
                 {
                     if (s_tcpListener == null)
                     {
+                        if (!s_registeredServicesByName.ContainsKey(INTERAPPCOMMUNICATION_SERVICE_MANAGER))
+                            AddServiceToRegisteredServices(typeof(VRInterAppCommunicationServiceManager), typeof(IVRInterAppCommunicationServiceManager), INTERAPPCOMMUNICATION_SERVICE_MANAGER);
                         var random = new Random();
                         for (int i = 0; i < s_tcpServiceHostingRetries; i++)
                         {
@@ -155,6 +158,7 @@ namespace Vanrise.Common
                                 sw.AutoFlush = true;
                                 string receivedValue = sr.ReadLine();
                                 VRTCPResponse response = new VRTCPResponse();
+                                string serializedTCPResponse = null;
                                 try
                                 {
                                     VRTCPRequest tcpRequest = Serializer.Deserialize(receivedValue).CastWithValidate<VRTCPRequest>("tcpRequest");
@@ -170,15 +174,19 @@ namespace Vanrise.Common
                                         response.Response = Serializer.Serialize(returnedValue);   
                                     }
                                     response.IsSucceeded = true;
+                                    serializedTCPResponse = Serializer.Serialize(response);
                                 }
                                 catch (Exception ex)
                                 {
                                     LoggerFactory.GetExceptionLogger().WriteException(ex);
                                     response.IsSucceeded = false;
                                     response.Response = ex.ToString();
+                                    serializedTCPResponse = Serializer.Serialize(response);
                                 }
-                                sw.WriteLine(Serializer.Serialize(response));
+                                sw.WriteLine(serializedTCPResponse);
+                                sw.Close();
                             }
+                            sr.Close();
                         }
                         s.Close();
                     }
@@ -191,11 +199,11 @@ namespace Vanrise.Common
         {
             Type interfaceType = typeof(T);
             Type proxyType;
-            if(!s_ProxiesByTypes.TryGetValue(interfaceType, out proxyType))
+            if(!s_ProxyTypesByContractTypes.TryGetValue(interfaceType, out proxyType))
             {
-                lock(s_ProxiesByTypes)
+                lock(s_ProxyTypesByContractTypes)
                 {
-                    if(!s_ProxiesByTypes.TryGetValue(interfaceType, out proxyType))
+                    if(!s_ProxyTypesByContractTypes.TryGetValue(interfaceType, out proxyType))
                     {
                         StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 using System;
@@ -277,7 +285,7 @@ namespace Vanrise.Common
                         }
                         proxyType = compilationOutput.OutputAssembly.GetType(fullTypeName);
                         proxyType.ThrowIfNull("proxyType");
-                        s_ProxiesByTypes.Add(interfaceType, proxyType);
+                        s_ProxyTypesByContractTypes.Add(interfaceType, proxyType);
                     }
                 }
             }
