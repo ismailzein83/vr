@@ -8,7 +8,7 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO CarrierPortal.MultinetPortal WebSite
 
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic" /S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\CP.Multinet\%YYYYMMDD%\Client\Modules\Analytic\"
-xcopy "C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData" /S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\CP.Multinet\%YYYYMMDD%\Client\Modules\VR_GenericData\"
+
 
 ::Robocopy "C:\TFS\CarrierPortal\Code\PartnerPortal.CustomerAccess.Web\PartnerPortal_CustomerAccess"  "\\192.168.110.185\Fixes\WebSite\CP.Multinet\%YYYYMMDD%\Client\Modules\PartnerPortal_CustomerAccess" /SEC /S /E /v /z
 xcopy "C:\TFS\CarrierPortal\Code\PartnerPortal.CustomerAccess.Web\PartnerPortal_CustomerAccess" /S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\CP.Multinet\%YYYYMMDD%\Client\Modules\PartnerPortal_CustomerAccess\"
