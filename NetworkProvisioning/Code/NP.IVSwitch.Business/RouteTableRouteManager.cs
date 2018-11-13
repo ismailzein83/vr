@@ -36,7 +36,6 @@ namespace NP.IVSwitch.Business
             string errorMessage;
             decimal percentage;
             Int16 preference = 0;
-            string description = "";
             if (routeTableRouteItem != null && routeTableRouteItem.RouteOptionsToAdd != null)
             {
                 foreach (var item in routeTableRouteItem.RouteOptionsToAdd)
@@ -86,7 +85,6 @@ namespace NP.IVSwitch.Business
                             if (routeTableRouteItem != null && routeTableRouteItem.RouteOptionsToAdd != null)
                                 foreach (var optionAdd in routeTableRouteItem.RouteOptionsToAdd)
                                 {
-                                    description = this.getDescription(optionAdd.RouteId);
                                     if (percentage != 0)
                                     {
                                         int bktSerial = codeMainPreference - codePreference;
@@ -103,14 +101,13 @@ namespace NP.IVSwitch.Business
                                             Percentage = optionAdd.Percentage.Value,
                                             Huntstop = (optionAdd.BackupOptions == null) ? (Int16)1 : (Int16)0,
                                             StateId = 1,
-                                            Description = description
+                                            Description = this.getDescription(optionAdd.RouteId)
 
-                                        });
+										});
                                         if (optionAdd.BackupOptions != null)
                                         {
 											foreach (var bacupOption in optionAdd.BackupOptions)
 											{
-												description = this.getDescription(bacupOption.BackupOptionRouteId);
 												routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
 												{
 													RouteId = bacupOption.BackupOptionRouteId,
@@ -123,7 +120,7 @@ namespace NP.IVSwitch.Business
 													Percentage = 0,
 													Huntstop = 0,
 													StateId = 1,
-													Description = description
+													Description = this.getDescription(bacupOption.BackupOptionRouteId)
 
 												});
 											}
@@ -146,9 +143,9 @@ namespace NP.IVSwitch.Business
                                            BKTTokens = 1,
                                            StateId = 1,
                                            Huntstop = 1,
-                                           Description = description
+                                           Description = this.getDescription(optionAdd.RouteId)
 
-                                       });
+										});
                                     }
                                 }
                             routeTableRoutes.Add(routeTableRoute);
@@ -187,7 +184,6 @@ namespace NP.IVSwitch.Business
             decimal percentage;
             Int16 preference = 0;
             Int16 mainPreference;
-            string description = "";
             if (routeTableItem != null && routeTableItem.RouteOptionsToEdit != null)
             {
                 foreach (var item in routeTableItem.RouteOptionsToEdit)
@@ -210,7 +206,6 @@ namespace NP.IVSwitch.Business
                 else
                     foreach (var optionEdit in routeTableItem.RouteOptionsToEdit)
                     {
-                        description = this.getDescription(optionEdit.RouteId);
 
                         if (percentage != 0)
                         {
@@ -228,16 +223,15 @@ namespace NP.IVSwitch.Business
                                 Percentage = optionEdit.Percentage.Value,
                                 Huntstop = (optionEdit.BackupOptions == null) ? (Int16)1 : (Int16)0,
                                 StateId = 1,
-                                Description = description
+                                Description = this.getDescription(optionEdit.RouteId)
 
 
 
-                            });
+							});
                             if (optionEdit.BackupOptions != null)
                             {
 								foreach (var bacupOption in optionEdit.BackupOptions)
 								{
-									description = this.getDescription(bacupOption.BackupOptionRouteId);
 									routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
 									{
 										RouteId = bacupOption.BackupOptionRouteId,
@@ -250,7 +244,7 @@ namespace NP.IVSwitch.Business
 										Percentage = 0,
 										Huntstop = 0,
 										StateId = 1,
-										Description = description
+										Description = this.getDescription(bacupOption.BackupOptionRouteId)
 
 									});
 								}
@@ -272,9 +266,9 @@ namespace NP.IVSwitch.Business
                                 BKTTokens = 1,
                                 StateId = 1,
                                 Huntstop = 1,
-                                Description = description
+                                Description = this.getDescription(optionEdit.RouteId)
 
-                            });
+							});
 
                         }
                     }
