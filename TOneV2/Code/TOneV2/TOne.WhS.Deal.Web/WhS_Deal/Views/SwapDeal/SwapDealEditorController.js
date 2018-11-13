@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum'];
+    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum','WhS_Deal_DealDefinitionAPIService'];
 
-    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_SwapDealTimeZoneTypeEnum) {
+    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_SwapDealTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService) {
         var isEditMode;
 
         var dealId;
@@ -29,6 +29,9 @@
         var carrierAccountInfo;
 
         var originalEED;
+
+        var offset;
+        var SwapDealTimeZone;
 
 
         loadParameters();
@@ -212,7 +215,7 @@
                     $scope.scopeModel.deActivationDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
             };
             $scope.scopeModel.dataForBoundsReady = function () {
-                return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined);
+                return (carrierAccountInfo != undefined && $scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined && $scope.scopeModel.selectedTimeZone.value != undefined);
             };
 
             //UtilsService.setContextReadOnly($scope);
@@ -259,7 +262,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierBoundsSection, loadGraceperiod, loadCurrencySelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadOffset, loadCarrierBoundsSection, loadGraceperiod, loadCurrencySelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -277,6 +280,11 @@
                         $scope.scopeModel.description = "Deal _ " + $scope.scopeModel.carrierAccount.Name + " _ " + UtilsService.getShortDate($scope.scopeModel.beginDate);
                 });
             }
+        }
+        function loadOffset() {
+            if (dealEntity == undefined || dealEntity.Settings == undefined)
+                return;
+            offset = dealEntity.Settings.Offset;
         }
         function setTitle() {
             if (isEditMode) {
@@ -440,7 +448,6 @@
                     DealContract: $scope.scopeModel.selectedContractType.value,
                     DealType: $scope.scopeModel.selectedAgreementType.value,
                     Status: $scope.scopeModel.selectedDealStatus.value,
-                    TimeZone: $scope.scopeModel.selectedTimeZone.value,
                     Inbounds: inboundData != undefined ? inboundData.inbounds : undefined,
                     Outbounds: outboundData != undefined ? outboundData.outbounds : undefined,
                     LastInboundGroupNumber: inboundData != undefined ? inboundData.lastInboundGroupNumber : undefined,
@@ -526,6 +533,10 @@
                     }];
 
                     return payload;
+                },
+                getEffectiveOnDate: function () {
+                    var isShifted = $scope.scopeModel.selectedTimeZone.value == WhS_Deal_SwapDealTimeZoneTypeEnum.Supplier ? true : false;
+                    return WhS_Deal_DealDefinitionAPIService.GetEffectiveOnDate(false, isShifted, carrierAccountSelectorAPI.getSelectedIds(), $scope.scopeModel.beginDate, offset);
                 },
                 getDealBED: function () {
                     return $scope.scopeModel.beginDate;

@@ -20,10 +20,21 @@
                     dealId: dealId
                 });
         }
+        function GetEffectiveOnDate(isSale, isShifted, carrierId, BED, offset) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetEffectiveOnDate"),
+                {
+                    isSale: isSale,
+                    isShifted: isShifted,
+                    carrierId:carrierId,
+                    BED: BED,
+                    offset: offset
+                });
+        }
 
         return ({
             GetDealDefinitionInfo: GetDealDefinitionInfo,
-            DeleteDeal: DeleteDeal
+            DeleteDeal: DeleteDeal,
+            GetEffectiveOnDate: GetEffectiveOnDate
         });
     }
 

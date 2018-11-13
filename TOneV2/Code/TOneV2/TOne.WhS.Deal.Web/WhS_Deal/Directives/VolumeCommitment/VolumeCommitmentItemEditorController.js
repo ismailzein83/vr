@@ -183,14 +183,16 @@
             var payload = {};
             if (volumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Sell.value)
             {
-                payload.filter = {
-                    Filters: [{
-                        $type: 'TOne.WhS.BusinessEntity.Business.CountrySoldToCustomerFilter,TOne.WhS.BusinessEntity.Business',
-                        CustomerId: context.getCarrierAccountId(),
-                        EffectiveOn: context.getDealBED(),
-                        IsEffectiveInFuture: false
-                    }]
-                };
+                context.getEffectiveOnDate().then(function (date) { 
+                    payload.filter = {
+                        Filters: [{
+                            $type: 'TOne.WhS.BusinessEntity.Business.CountrySoldToCustomerFilter,TOne.WhS.BusinessEntity.Business',
+                            CustomerId: context.getCarrierAccountId(),
+                            EffectiveOn: date,
+                            IsEffectiveInFuture: false
+                        }]
+                    };
+                });
             }
             if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryIds != undefined) {
                 payload.selectedIds = volumeCommitmentItemEntity != undefined ? volumeCommitmentItemEntity.CountryIds : undefined;

@@ -81,6 +81,11 @@ namespace TOne.WhS.Deal.Business
             TimeSpan timespan = GetTimeSpan(carrierId, isSale);
             return date.Value.Subtract(timespan);
         }
+        public static DateTime GetEffectiveOnDate(bool isSale,bool isShifted,int carrierId, DateTime BED, TimeSpan? offset) { //Better to change isSale, timeZone to Enum?
+            if (!isShifted)
+                return BED;
+            return offset.HasValue ? BED.Subtract(offset.Value) : ShiftCarrierDateTime(carrierId, isSale, BED).Value;
+        }
         private static TimeSpan GetTimeSpan(int carrierId, bool isSale)
         {
             var timeZoneManager = new VRTimeZoneManager();

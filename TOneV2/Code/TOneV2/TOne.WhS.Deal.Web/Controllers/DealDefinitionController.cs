@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Http;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
-using TOne.WhS.Deal.Entities.Settings;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.Deal.Web.Controllers
@@ -30,6 +29,13 @@ namespace TOne.WhS.Deal.Web.Controllers
         {
             var manager = new DealDefinitionManager();
             return manager.DeleteDeal(dealId);
+        }
+
+        [HttpGet]
+        [Route("GetEffectiveOnDate")]
+        public DateTime GetEffectiveOnDate(bool isSale, bool isShifted, int carrierId, DateTime BED, TimeSpan? offset = null)
+        {
+            return Helper.GetEffectiveOnDate(isSale, isShifted, carrierId,BED, offset);
         }
     }
 }

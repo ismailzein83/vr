@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum','WhS_Deal_DealDefinitionAPIService'];
 
-    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum) {
+    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService) {
 
         var isEditMode;
 
@@ -24,6 +24,8 @@
         var volumeCommitmenetItemsAPI;
         var volumeCommitmenetItemsReadyDeferred = UtilsService.createPromiseDeferred();
         var volumeCommitmentType;
+
+        var offset;
 
         var carrierAccountInfo;
 
@@ -200,7 +202,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCarrierAccountDealItemsSection, loadCurrencySelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadOffset, loadStaticData, loadCarrierAccountDealItemsSection, loadCurrencySelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -214,6 +216,12 @@
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Volume Commitment');
         }
+        function loadOffset() {
+            if (volumeCommitmentEntity == undefined || volumeCommitmentEntity.Settings == undefined)
+                return;
+            offset = volumeCommitmentEntity.Settings.Offset;
+        }
+
         function loadStaticData() {
             if (volumeCommitmentEntity == undefined)
                 return;
@@ -454,6 +462,17 @@
                 },
                 getVolumeType: function () {
                     return $scope.scopeModel.selectedVolumeCommitmentType;
+                },
+                getEffectiveOnDate: function () {
+                    var isSale;
+                    var isShifted;
+                    if ($scope.scopeModel.selectedTimeZone.value == WhS_Deal_VolCommitmentTimeZoneTypeEnum.System)
+                        isShifted = false;
+                    else {
+                        isShifted = true;
+                        isSale = $scope.scopeModel.selectedTimeZone.value == WhS_Deal_VolCommitmentTimeZoneTypeEnum.Customer ? true : false;
+                    }
+                    return WhS_Deal_DealDefinitionAPIService.GetEffectiveOnDate(isSale, isShifted, carrierAccountSelectorAPI.getSelectedIds(), $scope.scopeModel.beginDate, offset);
                 },
                 getDealBED: function () {
                     return $scope.scopeModel.beginDate;

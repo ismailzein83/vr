@@ -139,16 +139,16 @@
 
         function loadCountrySaleZoneSection() {
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
-
             var promises = [];
             promises.push(loadCountryPromiseDeferred.promise);
 
             var payload = {};
+            context.getEffectiveOnDate().then(function (date) {
             payload.filter = {
                 Filters: [{
                     $type: 'TOne.WhS.BusinessEntity.Business.CountrySoldToCustomerFilter,TOne.WhS.BusinessEntity.Business',
                     CustomerId: context.getCarrierAccountId(),
-                    EffectiveOn: context.getDealBED(),
+                    EffectiveOn: date,
                     IsEffectiveInFuture: false
                 }]
             };
@@ -159,9 +159,9 @@
 
             countryReadyPromiseDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
+                });
+
             });
-
-
 
             if (swapDealInboundEntity != undefined && swapDealInboundEntity.CountryIds != undefined) {
                 var loadSalesZonesPromiseDeferred = UtilsService.createPromiseDeferred();
