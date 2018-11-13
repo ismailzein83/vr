@@ -67,7 +67,7 @@ namespace Mediation.Runtime
                         {
                             if (record.IntermediateRecordNumber != null)
                             {
-                                record.SessionId = record.GlobalCallReference + "_" + record.RecordType;
+                                record.SessionId = record.GlobalCallReference + "_" + record.RecordType + "_" + record.SetupTime.ToString();
                                 multiLegRecords.Add(record);
                             }
                             else
