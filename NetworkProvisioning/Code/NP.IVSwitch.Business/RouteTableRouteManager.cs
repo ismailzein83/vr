@@ -108,23 +108,25 @@ namespace NP.IVSwitch.Business
                                         });
                                         if (optionAdd.BackupOptions != null)
                                         {
-                                            foreach (var bacupOption in optionAdd.BackupOptions)
-                                                routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
-                                                {
-                                                    RouteId = bacupOption.BackupOptionRouteId,
-                                                    RoutingMode = 8,
-                                                    Preference = codePreference--,
-                                                    TotalBKTs = codeMainPreference,
-                                                    BKTSerial = codeMainPreference - codePreference,
-                                                    BKTCapacity = evaluatedPercentage,
-                                                    BKTTokens = evaluatedPercentage,
-                                                    Percentage = 0,
-                                                    Huntstop = 0,
-                                                    StateId = 1,
-                                                    Description = description
+											foreach (var bacupOption in optionAdd.BackupOptions)
+											{
+												description = this.getDescription(bacupOption.BackupOptionRouteId);
+												routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
+												{
+													RouteId = bacupOption.BackupOptionRouteId,
+													RoutingMode = 8,
+													Preference = codePreference--,
+													TotalBKTs = codeMainPreference,
+													BKTSerial = codeMainPreference - codePreference,
+													BKTCapacity = evaluatedPercentage,
+													BKTTokens = evaluatedPercentage,
+													Percentage = 0,
+													Huntstop = 0,
+													StateId = 1,
+													Description = description
 
-                                                });
-
+												});
+											}
                                             routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
                                         }
 
@@ -233,23 +235,25 @@ namespace NP.IVSwitch.Business
                             });
                             if (optionEdit.BackupOptions != null)
                             {
-                                foreach (var bacupOption in optionEdit.BackupOptions)
-                                    routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
-                                    {
-                                        RouteId = bacupOption.BackupOptionRouteId,
-                                        RoutingMode = 8,
-                                        Preference = preference--,
-                                        TotalBKTs = mainPreference,
-                                        BKTSerial = mainPreference - preference,
-                                        BKTCapacity = evaluatedPercentage,
-                                        BKTTokens = evaluatedPercentage,
-                                        Percentage =0,
-                                        Huntstop = 0,
-                                        StateId = 1,
-                                        Description = description
+								foreach (var bacupOption in optionEdit.BackupOptions)
+								{
+									description = this.getDescription(bacupOption.BackupOptionRouteId);
+									routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
+									{
+										RouteId = bacupOption.BackupOptionRouteId,
+										RoutingMode = 8,
+										Preference = preference--,
+										TotalBKTs = mainPreference,
+										BKTSerial = mainPreference - preference,
+										BKTCapacity = evaluatedPercentage,
+										BKTTokens = evaluatedPercentage,
+										Percentage = 0,
+										Huntstop = 0,
+										StateId = 1,
+										Description = description
 
-                                    });
-
+									});
+								}
                                 routeTableRoute.RouteOptions[routeTableRoute.RouteOptions.Count - 1].Huntstop = 1;
                             }
                         }
