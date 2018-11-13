@@ -61,22 +61,22 @@ namespace SOM.Main.Business
             long? requestProcessInstanceId = s_dataManager.GetRequestProcessInstanceId(somRequestId);
             if (requestProcessInstanceId.HasValue)
             {
-                List<BPTrackingMessage> bpTrackingMessages = s_bpInstanceTrackingManager.GetRecentBPInstanceTrackings(requestProcessInstanceId.Value, nbOfRecords, lessThanId, new List<LogEntryType> { LogEntryType.Information, LogEntryType.Warning, LogEntryType.Error });
+                //List<BPTrackingMessage> bpTrackingMessages = s_bpInstanceTrackingManager.GetRecentBPInstanceTrackings(requestProcessInstanceId.Value, nbOfRecords, lessThanId, new List<LogEntryType> { LogEntryType.Information, LogEntryType.Warning, LogEntryType.Error });
                 List<SOMRequestLog> requestLogs = new List<SOMRequestLog>();
-                if (bpTrackingMessages != null)
-                {
-                    foreach (var trackingMsg in bpTrackingMessages)
-                    {
-                        requestLogs.Add(new SOMRequestLog
-                        {
-                            SOMRequestLogId = trackingMsg.Id,
-                            Severity = trackingMsg.Severity,
-                            Message = trackingMsg.TrackingMessage,
-                            ExceptionDetail = trackingMsg.ExceptionDetail,
-                            EventTime = trackingMsg.EventTime
-                        });
-                    }
-                }
+                //if (bpTrackingMessages != null)
+                //{
+                //    foreach (var trackingMsg in bpTrackingMessages)
+                //    {
+                //        requestLogs.Add(new SOMRequestLog
+                //        {
+                //            SOMRequestLogId = trackingMsg.Id,
+                //            Severity = trackingMsg.Severity,
+                //            Message = trackingMsg.TrackingMessage,
+                //            ExceptionDetail = trackingMsg.ExceptionDetail,
+                //            EventTime = trackingMsg.EventTime
+                //        });
+                //    }
+                //}
                 return requestLogs;
             }
             else
