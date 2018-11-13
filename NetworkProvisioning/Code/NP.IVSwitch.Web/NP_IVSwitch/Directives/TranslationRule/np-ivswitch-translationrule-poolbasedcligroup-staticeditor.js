@@ -40,7 +40,6 @@ app.directive('npIvswitchTranslationrulePoolbasedcligroupStaticeditor', ['UtilsS
                 };
 
                 $scope.scopeModel.getImportedCLIPatterns = function (values) {
-                    $scope.scopeModel.cliPatterns.length = 0;
                     for (var i = 0; i < values.length ; i++) {
                         if (UtilsService.getItemIndexByVal($scope.scopeModel.cliPatterns, values[i], "cliPattern") == -1)
                             $scope.scopeModel.cliPatterns.push({ cliPattern: values[i], message: null });
