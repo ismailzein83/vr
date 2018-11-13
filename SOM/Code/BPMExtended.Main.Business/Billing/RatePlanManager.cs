@@ -168,7 +168,18 @@ namespace BPMExtended.Main.Business
             return new List<ServiceDetail>();
         }
 
-        public List<ServiceDetail> GetADSLOptionalServicesByContractId(string telephonycontractid)
+        public List<ServiceDetail> GetLeasedLineOptionalServicesByContractId(string contractid)
+        {
+            ContractManager contractManager = new ContractManager();
+            string ratePlanId = contractManager.GetLeasedLineContract(contractid).RatePlanId;
+            List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
+            if (allOptionalServices.Count > 0)
+                return allOptionalServices.Take(2).ToList();
+
+            return new List<ServiceDetail>();
+        }
+
+        public List<ServiceDetail> GetADSLOptionalServicesByContractId(string telephonycontractid)//adsl contractId
         {
             ContractManager contractManager = new ContractManager();
             string ratePlanId = contractManager.GetADSLContract(telephonycontractid).RatePlanId;

@@ -42,6 +42,7 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetCustomerBalance(customerId);
         }
 
+        //old one
         public PaymentInfo SubmitToPOS(string customerId, string requestId, string ratePlanId, Guid contactId, BPMExtended.Main.Entities.OperationType operationType)
         {
             //After creating a contract with status on hold for this customer

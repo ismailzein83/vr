@@ -346,9 +346,17 @@ namespace BPMExtended.Main.Common
                      RatePlanId = RP_TL_PSTN_RES_NORMAL,
                      RatePlanName = "Normal Plan",
                      Address = "Haret hreik",
-                     Status = ContractDetailStatus.Active,
+                     ContractAddress = new Address () {Province ="prov1" , Building = "b1" , City="beirut" , Floor = "2", Region="R1", HouseNumber="2", Street="st1" , SubRegion="sub1"},
+                     Status =  ContractDetailStatus.Active,
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
                      CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3)
+                     LastModifiedTime = DateTime.Today.AddDays(-3),
+                     ContractBalance = 100,
+                     UnbilledAmount = 2002,
+                     Promotions = "promo1",
+                     FreeUnit = "unit1"
+
                  },
                  new TelephonyContractDetail
                  {
@@ -358,9 +366,16 @@ namespace BPMExtended.Main.Common
                      RatePlanId = RP_TL_PSTN_RES_NORMAL,
                      RatePlanName = "Normal Plan",
                      Address = "Beirut",
+                     ContractAddress = new Address () {Province ="prov2" , Building = "b2" , City="beirut" , Floor = "2", Region="R2", HouseNumber="4", Street="st2" , SubRegion="sub2"},
                      Status = ContractDetailStatus.Inactive,
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
                      CreatedTime = DateTime.Today.AddDays(-4),
-                     LastModifiedTime = DateTime.Today
+                     LastModifiedTime = DateTime.Today,
+                      ContractBalance = 200,
+                     UnbilledAmount = 4002,
+                     Promotions = "promo2",
+                     FreeUnit = "unit2"
                  },                 
                  new TelephonyContractDetail
                  {
@@ -370,9 +385,16 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_3,
                      RatePlanId = RP_TL_ISDN_RES_NORMAL,
                      Address = "Beirut",
+                     ContractAddress = new Address () {Province ="prov3" , Building = "b3" , City="beirut" , Floor = "5", Region="R3", HouseNumber="6", Street="st3" , SubRegion="sub3"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
                      RatePlanName = "Normal Plan (ISDN)",
                      CreatedTime = DateTime.Today,
-                     LastModifiedTime = DateTime.Today
+                     LastModifiedTime = DateTime.Today,
+                      ContractBalance = 10,
+                     UnbilledAmount = 200,
+                     Promotions = "promo3",
+                     FreeUnit = "unit3"
                  },
                   new TelephonyContractDetail
                  {
@@ -382,9 +404,16 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_4,
                      RatePlanId = RP_TL_ISDN_RES_NORMAL,
                      Address = "Hamra",
+                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
                      RatePlanName = "Normal Plan (ISDN)",
                      CreatedTime = DateTime.Today,
-                     LastModifiedTime = DateTime.Today
+                     LastModifiedTime = DateTime.Today,
+                      ContractBalance = 500,
+                     UnbilledAmount = 1002,
+                     Promotions = "promo4",
+                     FreeUnit = "unit4"
                  },
                   new TelephonyContractDetail
                  {
@@ -394,9 +423,16 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_5,
                      RatePlanId = RP_TL_PSTN_RES_NORMAL,
                      Address = "Tyr",
+                     ContractAddress = new Address () {Province ="prov5" , Building = "b5" , City="beirut" , Floor = "1", Region="R5", HouseNumber="2", Street="st5" , SubRegion="sub5"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
                      RatePlanName = "Normal Plan (ISDN)",
                      CreatedTime = DateTime.Today,
-                     LastModifiedTime = DateTime.Today
+                     LastModifiedTime = DateTime.Today,
+                      ContractBalance = 150,
+                     UnbilledAmount = 202,
+                     Promotions = "promo5",
+                     FreeUnit = "unit5"
                  },            
                  new TelephonyContractDetail
                  {
@@ -406,9 +442,16 @@ namespace BPMExtended.Main.Common
                      RatePlanId = RP_TL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
                      Address = "Tyr",
+                     ContractAddress = new Address () {Province ="prov6" , Building = "b6" , City="beirut" , Floor = "9", Region="R6", HouseNumber="8", Street="st6" , SubRegion="sub6"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
                      Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3)
+                     LastModifiedTime = DateTime.Today.AddDays(-3),
+                     ContractBalance = 1700,
+                     UnbilledAmount = 27002,
+                     Promotions = "promo6",
+                     FreeUnit = "unit6"
                  },
                  new TelephonyContractDetail
                  {
@@ -418,9 +461,16 @@ namespace BPMExtended.Main.Common
                       RatePlanId = RP_TL_PSTN_RES_NORMAL,
                       RatePlanName = "Normal Plan",
                       Address = "saida",
+                      ContractAddress = new Address () {Province ="prov7" , Building = "b7" , City="beirut" , Floor = "9", Region="R7", HouseNumber="6", Street="st7" , SubRegion="sub7"},
+                      ActivationDate = DateTime.Today.AddDays(-10),
+                      StatusDate = DateTime.Today.AddDays(-9),
                       Status = ContractDetailStatus.Inactive,
                       CreatedTime = DateTime.Today.AddDays(-4),
-                      LastModifiedTime = DateTime.Today
+                      LastModifiedTime = DateTime.Today,
+                      ContractBalance = 110,
+                      UnbilledAmount = 2092,
+                      Promotions = "promo7",
+                      FreeUnit = "unit7"
                  }
 
             };
@@ -659,7 +709,14 @@ namespace BPMExtended.Main.Common
                      ReservedLinePath = "path1",
                      Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3)
+                     LastModifiedTime = DateTime.Today.AddDays(-3),
+                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     ContractBalance = 500,
+                     UnbilledAmount = 1002,
+                     Promotions = "promo41",
+                     FreeUnit = "unit41"
                  },
                  new ADSLContractDetail
                  {
@@ -674,7 +731,14 @@ namespace BPMExtended.Main.Common
                      Speed = ADSL_SPEED_2,
                      Status = ContractDetailStatus.Inactive,
                      CreatedTime = DateTime.Today.AddDays(-4),
-                     LastModifiedTime = DateTime.Today
+                     LastModifiedTime = DateTime.Today,
+                     ContractAddress = new Address () {Province ="prov44" , Building = "b44" , City="beirut" , Floor = "1", Region="R4", HouseNumber="2", Street="st4" , SubRegion="sub4"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     ContractBalance = 500,
+                     UnbilledAmount = 1002,
+                     Promotions = "promo45",
+                     FreeUnit = "unit45"
                  },                 
                  new ADSLContractDetail
                  {
@@ -689,7 +753,14 @@ namespace BPMExtended.Main.Common
                      RatePlanId = RP_ADSL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
                      CreatedTime = DateTime.Today,
-                     LastModifiedTime = DateTime.Today
+                     LastModifiedTime = DateTime.Today,
+                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "2", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     ContractBalance = 500,
+                     UnbilledAmount = 1002,
+                     Promotions = "promo74",
+                     FreeUnit = "unit74"
                  },
                  new ADSLContractDetail
                  {
@@ -704,7 +775,14 @@ namespace BPMExtended.Main.Common
                      Speed = ADSL_SPEED_4,
                      Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3)
+                     LastModifiedTime = DateTime.Today.AddDays(-3),
+                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     ContractBalance = 500,
+                     UnbilledAmount = 1002,
+                     Promotions = "promo9",
+                     FreeUnit = "unit9"
                  },
                  new ADSLContractDetail
                  {
@@ -719,7 +797,14 @@ namespace BPMExtended.Main.Common
                       Speed = ADSL_SPEED_5,
                       Status = ContractDetailStatus.Inactive,
                       CreatedTime = DateTime.Today.AddDays(-4),
-                      LastModifiedTime = DateTime.Today
+                      LastModifiedTime = DateTime.Today,
+                      ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "7", Region="R4", HouseNumber="8", Street="st4" , SubRegion="sub4"},
+                      ActivationDate = DateTime.Today.AddDays(-10),
+                      StatusDate = DateTime.Today.AddDays(-9),
+                      ContractBalance = 500,
+                      UnbilledAmount = 1002,
+                      Promotions = "promo87",
+                      FreeUnit = "unit87"
                  }
 
             };
@@ -729,7 +814,7 @@ namespace BPMExtended.Main.Common
 
         #region Leased Line Contract
 
-        public static LeasedLineContractDetail GetLeasedLineContract(string contractId)
+        public static LeasedLineContractDetail  GetLeasedLineContract(string contractId)
         {
             return GetAllLeasedLineContracts().Find(x => x.ContractId.ToLower() == contractId.ToLower());
         }
@@ -751,6 +836,15 @@ namespace BPMExtended.Main.Common
                      Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
                      LastModifiedTime = DateTime.Today.AddDays(-3),
+                     RatePlanId = RP_LL_RES_ENG,
+                     RatePlanName = "Engineers Plan",
+                     ContractAddress = new Address () {Province ="prov1" , Building = "b1" , City="beirut" , Floor = "9", Region="R1", HouseNumber="6", Street="st1" , SubRegion="su1"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     ContractBalance = 110,
+                     UnbilledAmount = 2092,
+                     Promotions = "promo1",
+                     FreeUnit = "unit1"
                  },
                  new LeasedLineContractDetail
                  {
@@ -759,7 +853,16 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      Status = ContractDetailStatus.Inactive,
                      CreatedTime = DateTime.Today.AddDays(-4),
-                     LastModifiedTime = DateTime.Today
+                     LastModifiedTime = DateTime.Today,
+                     RatePlanId = RP_LL_RES_NORMAL,
+                     RatePlanName = "Normal Plan",
+                     ContractAddress = new Address () {Province ="prov2" , Building = "b2" , City="beirut" , Floor = "9", Region="R2", HouseNumber="6", Street="st2" , SubRegion="sub2"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     ContractBalance = 22,
+                     UnbilledAmount = 1111,
+                     Promotions = "promo2",
+                     FreeUnit = "unit2"
                  },
                  new LeasedLineContractDetail
                  {
@@ -768,7 +871,16 @@ namespace BPMExtended.Main.Common
                      Status = ContractDetailStatus.Active,
                      PhoneNumber= PHONE_NUMBER_1,
                      CreatedTime = DateTime.Today,
-                     LastModifiedTime = DateTime.Today
+                     LastModifiedTime = DateTime.Today,
+                     RatePlanId = RP_LL_RES_MAR,
+                     RatePlanName = "Family of Martyr Plan (ISDN)",
+                     ContractAddress = new Address () {Province ="prov21" , Building = "b21" , City="beirut" , Floor = "9", Region="R21", HouseNumber="6", Street="st21" , SubRegion="sub21"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     ContractBalance = 90,
+                     UnbilledAmount = 99,
+                     Promotions = "promo21",
+                     FreeUnit = "unit21"
                  },
                  new LeasedLineContractDetail
                  {
@@ -777,7 +889,16 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      Status = ContractDetailStatus.Active,
                      CreatedTime = DateTime.Today.AddDays(-5),
-                     LastModifiedTime = DateTime.Today.AddDays(-3)
+                     LastModifiedTime = DateTime.Today.AddDays(-3),
+                     RatePlanId = RP_LL_RES_MAR,
+                     RatePlanName = "Family of Martyr Plan (ISDN)",
+                     ContractAddress = new Address () {Province ="prov211" , Building = "b211" , City="beirut" , Floor = "9", Region="R211", HouseNumber="6", Street="st211" , SubRegion="sub211"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     ContractBalance = 90,
+                     UnbilledAmount = 99,
+                     Promotions = "promo211",
+                     FreeUnit = "unit211"
                  },
                  new LeasedLineContractDetail
                  {
@@ -786,7 +907,16 @@ namespace BPMExtended.Main.Common
                      PhoneNumber= PHONE_NUMBER_1,
                      Status = ContractDetailStatus.Inactive,
                      CreatedTime = DateTime.Today.AddDays(-4),
-                     LastModifiedTime = DateTime.Today
+                     LastModifiedTime = DateTime.Today,
+                     RatePlanId = RP_LL_RES_NORMAL,
+                     RatePlanName = "Normal Plan",
+                     ContractAddress = new Address () {Province ="prov9" , Building = "b9" , City="beirut" , Floor = "9", Region="R9", HouseNumber="6", Street="st9" , SubRegion="sub9"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     ContractBalance = 2290,
+                     UnbilledAmount = 2222,
+                     Promotions = "promo9",
+                     FreeUnit = "unit9"
                  }
             };
         }
