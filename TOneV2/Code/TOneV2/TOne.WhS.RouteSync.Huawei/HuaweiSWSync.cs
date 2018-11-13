@@ -345,6 +345,9 @@ namespace TOne.WhS.RouteSync.Huawei
 
         private RouteAnalysis GetRouteAnalysis(int rssn, List<RouteOption> routeOptions)
         {
+            if (routeOptions == null || routeOptions.Count == 0)
+                return null;
+
             bool isSequence = true;
             List<RouteCaseOption> routeCaseOptions = new List<RouteCaseOption>();
 
