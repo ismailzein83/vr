@@ -941,6 +941,26 @@ namespace Retail.BusinessEntity.Business
             return childAccounts.MapRecords(ClientChildAccountInfoMapper);
            
         }
+        public IEnumerable<ClientAccountInfo> GetClientAccountsInfoWithChildren(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
+        {
+            List<ClientAccountInfo> accounts = new List<ClientAccountInfo>();
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            if (account != null)
+            {
+                accounts.Add(new ClientAccountInfo()
+                {
+                    AccountId = account.AccountId,
+                    Name = account.Name,
+                    TypeId = account.TypeId
+                });
+            }
+            var childAccounts = GetClientChildAccountsInfo(accountBEDefinitionId, accountId, withSubChildren);
+            if (childAccounts != null)
+            {
+                accounts.AddRange(childAccounts);
+            }
+            return accounts;
+        }
         public List<long> GetChildAccountIds(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
         {
             List<Account> accounts = GetChildAccounts(accountBEDefinitionId, accountId, withSubChildren);
