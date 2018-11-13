@@ -27,16 +27,7 @@ namespace Vanrise.Entities
     {
         public abstract Guid ConfigId { get; }
     }
-
     public enum VRDynamicAPIMethodType { Get = 1, Post = 2 }
-    public class VRCustomCodeDynamicAPIMethod : VRDynamicAPIMethodSettings
-    {
-        public override Guid ConfigId { get { return new Guid("98B21112-0364-4646-AA26-80263481DCDD"); } }
-        public string MethodBody { get; set; }
-        public VRDynamicAPIMethodType MethodType { get; set; }
-        public List<VRDynamicAPIMethodParameter> InParameters { get; set; }
-        public string ReturnType { get; set; }
-    }
     public class VRDynamicAPIMethodParameter
     {
         public string ParameterName { get; set; }
