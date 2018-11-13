@@ -109,8 +109,12 @@ app.directive('partnerportalCustomeraccessRetailsubaccountsSelector', ['PartnerP
                     return VRUIUtilsService.getIdSelectedIds('AccountId', $attrs, ctrl);
                 };
 
-                api.hasChildAccounts = function () {
+                api.getAccountWithChildren = function () {
                     return datasourcePromiseDeferred.promise;
+                };
+
+                api.selectIfSingleItem = function () {
+                    selectorAPI.selectIfSingleItem();
                 };
 
                 if (ctrl.onReady != null)

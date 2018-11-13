@@ -96,9 +96,9 @@ app.directive('partnerportalCustomeraccessRetailFaultticketStaticeditor', ['Util
                 $scope.scopeModel.onRetailSubAccountsSelectorReady = function (api) {
                     retailSubAccountsSelectorAPI = api;
                     retailSubAccountsReadyPromiseDeferred.resolve();
-                    if (retailSubAccountsSelectorAPI != undefined && retailSubAccountsSelectorAPI.hasChildAccounts != undefined && typeof (retailSubAccountsSelectorAPI.hasChildAccounts) == 'function')
-                        retailSubAccountsSelectorAPI.hasChildAccounts().then(function (response) {
-                            $scope.scopeModel.hasChildAccounts = response;
+                    if (retailSubAccountsSelectorAPI != undefined && retailSubAccountsSelectorAPI.getAccountWithChildren != undefined && typeof (retailSubAccountsSelectorAPI.getAccountWithChildren) == 'function')
+                        retailSubAccountsSelectorAPI.getAccountWithChildren().then(function (response) {
+                            $scope.scopeModel.accountsNumber = response;
                         });
                 };
                 UtilsService.waitMultiplePromises([attachmentGridReadyPromiseDeferred.promise, reasonSelectorReadyPromiseDeferred.promise, typeSelectorReadyPromiseDeferred.promise, retailSubAccountsReadyPromiseDeferred.promise]).then(function () {
@@ -148,7 +148,7 @@ app.directive('partnerportalCustomeraccessRetailFaultticketStaticeditor', ['Util
                     faultTicketObject.Notes = $scope.scopeModel.notes;
                     faultTicketObject.StatusId = statusSelectorAPI != undefined ? statusSelectorAPI.getSelectedIds() : undefined;
                     faultTicketObject.Attachments = attachmentGridAPI != undefined ? attachmentGridAPI.getData() : undefined;
-                    faultTicketObject.SubscriberId = retailSubAccountsSelectorAPI != undefined && $scope.scopeModel.hasChildAccounts ? retailSubAccountsSelectorAPI.getSelectedIds() : undefined;
+                    faultTicketObject.SubscriberId = retailSubAccountsSelectorAPI != undefined ? retailSubAccountsSelectorAPI.getSelectedIds() : undefined;
                     faultTicketObject.SourceId = CP_MultiNet_FaultTicketSourceEnum.Portal.value;
                 };
 
@@ -217,6 +217,9 @@ app.directive('partnerportalCustomeraccessRetailFaultticketStaticeditor', ['Util
                         businessEntityDefinitionId: "f5093298-6216-4728-b462-74c5a8ccd2fb"
                     };
                     VRUIUtilsService.callDirectiveLoad(retailSubAccountsSelectorAPI, payload, retailSubAccountsSelectorLoadDeferred);
+                });
+                retailSubAccountsSelectorLoadDeferred.promise.then(function () {
+                    retailSubAccountsSelectorAPI.selectIfSingleItem();
                 });
                 return retailSubAccountsSelectorLoadDeferred.promise;
             }

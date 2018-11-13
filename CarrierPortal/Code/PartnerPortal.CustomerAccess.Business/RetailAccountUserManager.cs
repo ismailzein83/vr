@@ -131,7 +131,7 @@ namespace PartnerPortal.CustomerAccess.Business
                   VRConnectionManager connectionManager = new VRConnectionManager();
                   var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(vrConnectionId);
                   VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
-                  IEnumerable<ClientAccountInfo> clientAccountsInfo = connectionSettings.Get<IEnumerable<ClientAccountInfo>>(string.Format("/api/Retail_BE/AccountBE/GetClientChildAccountsInfo?accountBEDefinitionId={0}&accountId={1}&withSubChildren={2}", accountInfo.AccountBEDefinitionId, accountInfo.AccountId, true));
+                  IEnumerable<ClientAccountInfo> clientAccountsInfo = connectionSettings.Get<IEnumerable<ClientAccountInfo>>(string.Format("/api/Retail_BE/AccountBE/GetClientAccountInfoWithChildren?accountBEDefinitionId={0}&accountId={1}&withSubChildren={2}", accountInfo.AccountBEDefinitionId, accountInfo.AccountId, true));
                   return clientAccountsInfo == null ? null : clientAccountsInfo.ToDictionary(acc => acc.AccountId, acc => acc);
               });
         }
