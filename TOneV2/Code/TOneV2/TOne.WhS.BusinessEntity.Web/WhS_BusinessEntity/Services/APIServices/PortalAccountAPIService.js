@@ -31,12 +31,35 @@
         function ResetPassword(resetPasswordInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'ResetPassword'), resetPasswordInput);
         }
+
+        function DisablePortalAccount(carrierProfileId, userId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'DisablePortalAccount'), {
+                carrierProfileId: carrierProfileId,
+                userId: userId
+            });
+        }
+        function EnablePortalAccount(carrierProfileId, userId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'EnablePortalAccount'), {
+                carrierProfileId: carrierProfileId,
+                userId: userId
+            });
+        }
+        function UnlockPortalAccount(carrierProfileId, userId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'UnlockPortalAccount'), {
+                carrierProfileId: carrierProfileId,
+                userId: userId
+            });
+        }
+
         return ({
             GetCarrierProfilePortalAccounts: GetCarrierProfilePortalAccounts,
             AddPortalAccount: AddPortalAccount,
             UpdatePortalAccount: UpdatePortalAccount,
             GetPortalAccount: GetPortalAccount,
-            ResetPassword: ResetPassword
+            ResetPassword: ResetPassword,
+            DisablePortalAccount: DisablePortalAccount,
+            EnablePortalAccount: EnablePortalAccount,
+            UnlockPortalAccount: UnlockPortalAccount
         });
     }
 

@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Web
 
         [HttpGet]
         [Route("GetCarrierProfilePortalAccounts")]
-        public List<CarrierProfilePortalAccount> GetCarrierProfilePortalAccounts(int carrierProfileId)
+        public List<CarrierProfilePortalAccountDetail> GetCarrierProfilePortalAccounts(int carrierProfileId)
         {
             return _manager.GetCarrierProfilePortalAccounts(carrierProfileId);
         }
@@ -48,6 +48,27 @@ namespace TOne.WhS.BusinessEntity.Web
         public object ResetPassword(PortalAccountResetPasswordInput resetPasswordInput)
         {
             return _manager.ResetPassword(resetPasswordInput);
+        }
+
+        [HttpGet]
+        [Route("DisablePortalAccount")]
+        public object DisablePortalAccount(int carrierProfileId, int userId)
+        {
+            return _manager.DisablePortalAccount(carrierProfileId, userId);
+        }
+
+        [HttpGet]
+        [Route("UnlockPortalAccount")]
+        public object UnlockPortalAccount(int carrierProfileId, int userId)
+        {
+            return _manager.UnlockPortalAccount(carrierProfileId, userId);
+        }
+
+        [HttpGet]
+        [Route("EnablePortalAccount")]
+        public object EnablePortalAccount(int carrierProfileId, int userId)
+        {
+            return _manager.EnablePortalAccount(carrierProfileId, userId);
         }
     }
 }

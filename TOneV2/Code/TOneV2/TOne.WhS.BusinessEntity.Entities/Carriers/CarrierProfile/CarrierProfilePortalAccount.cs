@@ -15,6 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Email { get; set; }
         public int TenantId { get; set; }
         public PortalCarrierAccountType Type { get; set; }
+        public UserStatus UserStatus { get; set; }
         public List<PortalCarrierAccount> CarrierAccounts { get; set; }
     }
     public class PortalCarrierAccount

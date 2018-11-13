@@ -14,7 +14,10 @@
 
                     <vr-columns width="normal" haschildcolumns>
                         <vr-common-country-selector on-ready="onCountryDirectiveReady" ismultipleselection></vr-common-country-selector>
-                    </vr-columns>                    
+                    </vr-columns>
+                    <vr-columns width="normal" haschildcolumns ng-show="showPortalUsers">
+                        <vr-textbox value="email" type="email" label="E-mail"></vr-textbox>
+                    </vr-columns>
                 </vr-row>
             </vr-validation-group>
         </div>

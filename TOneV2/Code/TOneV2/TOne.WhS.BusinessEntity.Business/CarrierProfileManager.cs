@@ -37,15 +37,25 @@ namespace TOne.WhS.BusinessEntity.Business
             var allCarrierProfiles = GetCachedCarrierProfiles();
 
             Func<CarrierProfile, bool> filterExpression = (prod) =>
-                 (input.Query.Name == null || prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                 &&
-
-                  (input.Query.Company == null || prod.Settings.Company.ToLower().Contains(input.Query.Company.ToLower()))
-                 &&
-
-                 (input.Query.CountriesIds == null || input.Query.CountriesIds.Count == 0 || (prod.Settings.CountryId.HasValue && input.Query.CountriesIds.Contains(prod.Settings.CountryId.Value)))
-                 &&
-                 (input.Query.CarrierProfileIds == null || input.Query.CarrierProfileIds.Contains(prod.CarrierProfileId));
+            {
+                if (input.Query.Name != null && !prod.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.Company != null && !prod.Settings.Company.ToLower().Contains(input.Query.Company.ToLower()))
+                    return false;
+                if (input.Query.CountriesIds != null && input.Query.CountriesIds.Count != 0 && (prod.Settings.CountryId.HasValue && !input.Query.CountriesIds.Contains(prod.Settings.CountryId.Value)))
+                    return false;
+                if (input.Query.CarrierProfileIds != null && !input.Query.CarrierProfileIds.Contains(prod.CarrierProfileId))
+                    return false;
+                if (input.Query.Email != null)
+                {
+                    PortalAccountManager portalAccountManager = new PortalAccountManager();
+                    var portalAccounts = portalAccountManager.GetCarrierProfilePortalAccounts(prod.CarrierProfileId);
+                    if (portalAccounts.FindRecord(x => x.Email.ToLower().Contains(input.Query.Email.ToLower())) == null)
+                        return false;
+                }
+                return true;
+            };
+        
 
             var resultProcessingHandler = new ResultProcessingHandler<CarrierProfileDetail>()
             {

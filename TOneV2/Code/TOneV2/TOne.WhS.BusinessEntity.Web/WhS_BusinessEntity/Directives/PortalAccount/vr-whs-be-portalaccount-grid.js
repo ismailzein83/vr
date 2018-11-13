@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBePortalaccountGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_BE_PortalAccountAPIService","WhS_BE_PortalAccountService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_PortalAccountAPIService, WhS_BE_PortalAccountService) {
+app.directive("vrWhsBePortalaccountGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_BE_PortalAccountAPIService", "WhS_BE_PortalAccountService","VR_Sec_UserActivationStatusEnum",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_PortalAccountAPIService, WhS_BE_PortalAccountService, VR_Sec_UserActivationStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -77,12 +77,30 @@ app.directive("vrWhsBePortalaccountGrid", ["UtilsService", "VRNotificationServic
                     var menuActions = [{
                             name: "Edit",
                             clicked: editPortalAccount
-                    },
+                        },
                         {
                             name: "Reset Password",
                             clicked: resetAdditionalPassword
                         }
                     ];
+                    if (dataItem.UserStatus == VR_Sec_UserActivationStatusEnum.Active.value) {
+                        menuActions.push({
+                            name: "Disable",
+                            clicked: disablePortalAccount
+                        });
+                    }
+                    if (dataItem.UserStatus == VR_Sec_UserActivationStatusEnum.Inactive.value) {
+                        menuActions.push({
+                            name: "Enable",
+                            clicked: enablePortalAccount
+                        });
+                    }
+                    if (dataItem.UserStatus == VR_Sec_UserActivationStatusEnum.Locked.value) {
+                        menuActions.push({
+                            name: "Unlock",
+                            clicked: unlockPortalAccount
+                        });
+                    }
                     return menuActions;
                 };
             }
@@ -103,6 +121,69 @@ app.directive("vrWhsBePortalaccountGrid", ["UtilsService", "VRNotificationServic
                     gridAPI.itemUpdated(portalAccount);
                 };
                 WhS_BE_PortalAccountService.editPortalAccount(carrierProfileId, userId, getContext(), onPortalAccountUpdated);
+            }
+
+            function disablePortalAccount(dataItem) {
+                $scope.isLoading = true;
+                var userId;
+                if (dataItem != undefined)
+                    userId = dataItem.UserId;
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        return WhS_BE_PortalAccountAPIService.DisablePortalAccount(carrierProfileId, userId).then(function (response) {
+                            if (VRNotificationService.notifyOnItemUpdated("Portal Account", response, "Email")) {
+                                gridAPI.itemUpdated(response.UpdatedObject);
+                            }
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        }).finally(function () {
+                            $scope.isLoading = false;
+                        });
+                    }
+                    else
+                        $scope.isLoading = false;
+                });
+            }
+            function enablePortalAccount(dataItem) {
+                $scope.isLoading = true;
+                var userId;
+                if (dataItem != undefined)
+                    userId = dataItem.UserId;
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        return WhS_BE_PortalAccountAPIService.EnablePortalAccount(carrierProfileId, userId).then(function (response) {
+                            if (VRNotificationService.notifyOnItemUpdated("Portal Account", response, "Email")) {
+                                gridAPI.itemUpdated(response.UpdatedObject);
+                            }
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        }).finally(function () {
+                            $scope.isLoading = false;
+                        });
+                    }
+                    else
+                        $scope.isLoading = false;
+                });
+            }
+            function unlockPortalAccount(dataItem) {
+                $scope.isLoading = true;
+                var userId;
+                if (dataItem != undefined)
+                    userId = dataItem.UserId;
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        WhS_BE_PortalAccountAPIService.UnlockPortalAccount(carrierProfileId, userId).then(function (response) {
+                            if (VRNotificationService.notifyOnItemUpdated("Portal Account", response, "Email")) {
+                                gridAPI.itemUpdated(response.UpdatedObject);
+                            }
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        }).finally(function () {
+                            $scope.isLoading = false;
+                        });
+                    }
+                    else $scope.isLoading = false;
+                });
             }
             function getContext() {
                 var currentContext = context;
