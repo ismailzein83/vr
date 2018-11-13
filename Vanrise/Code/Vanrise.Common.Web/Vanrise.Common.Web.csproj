@@ -123,6 +123,7 @@
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-specificdays.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-yesterday.js" />
+    <Content Include="Common\Services\APIServices\VRBulkActionDraftAPIService.js" />
     <Content Include="Common\Services\APIServices\VRRestCurrencyAPIService.js" />
     <Content Include="web.config" />
   </ItemGroup>
@@ -130,6 +131,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
     <Compile Include="Controllers\CacheRefreshController.cs" />
+    <Compile Include="Controllers\VRBulkActionDraftController.cs" />
     <Compile Include="Controllers\VRCommentController.cs" />
     <Compile Include="Controllers\DBReplicationDefinitionController.cs" />
     <Compile Include="Controllers\ExcelFileParserController.cs" />
