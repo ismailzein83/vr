@@ -286,6 +286,14 @@
     <None Include="BatchScripts\CarrierPortal.RingoPortal\05-CompressFiles.bat" />
     <None Include="BatchScripts\CarrierPortal.RingoPortal\06-GroupJSFiles.bat" />
     <None Include="BatchScripts\CarrierPortal.RingoPortal\All.bat" />
+    <None Include="BatchScripts\CarrierPortal.TOne\01-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\CarrierPortal.TOne\02-Runtime.bat" />
+    <None Include="BatchScripts\CarrierPortal.TOne\03-WebSite.bat" />
+    <None Include="BatchScripts\CarrierPortal.TOne\04-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\CarrierPortal.TOne\05-CompressFiles.bat" />
+    <None Include="BatchScripts\CarrierPortal.TOne\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\CarrierPortal.TOne\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\CarrierPortal.TOne\All.bat" />
     <None Include="BatchScripts\CarrierPortal.SupplierPricelist\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\CarrierPortal.SupplierPricelist\02-Runtime.bat" />
     <None Include="BatchScripts\CarrierPortal.SupplierPricelist\30-WebSite_FullVersion.bat" />
