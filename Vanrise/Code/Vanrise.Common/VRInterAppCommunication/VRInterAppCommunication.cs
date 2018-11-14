@@ -55,8 +55,7 @@ namespace Vanrise.Common
             serviceUrl = string.Concat(Environment.MachineName, ":", s_portNumber, ":", serviceName);
             AddServiceToRegisteredServices(serviceType, contractType, serviceName);
         }
-
-        
+                
         public static bool TryCreateServiceClient<T>(string serviceURL, Action<T> onClientReady) where T : class
         {
             T proxy = null;
@@ -80,9 +79,7 @@ namespace Vanrise.Common
             T proxy = GetProxy<T>(serviceURL);
             onClientReady(proxy);
         }
-
-
-
+        
         #endregion
 
         #region Private Methods

@@ -98,7 +98,7 @@ namespace Vanrise.Common.Business
         {
             if (_distributorServiceURL == null)
                 AssignDistributor();
-            ServiceClientFactory.CreateTCPServiceClient<IDataGroupingDistributorWCFService>(_distributorServiceURL, onClientReady);
+            VRInterAppCommunication.CreateServiceClient<IDataGroupingDistributorWCFService>(_distributorServiceURL, onClientReady);
         }
 
         private void GetExecutorClient(Guid executorServiceInstanceId, Action<IDataGroupingExecutorWCFService> onClientReady)
@@ -109,7 +109,7 @@ namespace Vanrise.Common.Business
             DataGroupingExecutorServiceInstanceInfo executorServiceInstanceInfo = executorServiceInstance.InstanceInfo as DataGroupingExecutorServiceInstanceInfo;
             if (executorServiceInstanceInfo == null)
                 throw new NullReferenceException("executorServiceInstanceInfo");
-            ServiceClientFactory.CreateTCPServiceClient<IDataGroupingExecutorWCFService>(executorServiceInstanceInfo.TCPServiceURL, onClientReady);
+            VRInterAppCommunication.CreateServiceClient<IDataGroupingExecutorWCFService>(executorServiceInstanceInfo.TCPServiceURL, onClientReady);
         }
 
         string _distributorServiceURL;

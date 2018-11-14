@@ -117,47 +117,7 @@ namespace Vanrise.Runtime
         bool _receivedProcessesAndServicesChangedFromPrimaryNode;
 
         #endregion
-
-        #region WCF Host Events
-
-        static void OnServiceHostCreated(ServiceHost serviceHost)
-        {
-            serviceHost.Opening += serviceHost_Opening;
-            serviceHost.Opened += serviceHost_Opened;
-            serviceHost.Closing += serviceHost_Closing;
-            serviceHost.Closed += serviceHost_Closed;
-        }
-
-        static void OnServiceHostRemoved(ServiceHost serviceHost)
-        {
-            serviceHost.Opening -= serviceHost_Opening;
-            serviceHost.Opened -= serviceHost_Opened;
-            serviceHost.Closing -= serviceHost_Closing;
-            serviceHost.Closed -= serviceHost_Closed;
-        }
-
-        static void serviceHost_Opening(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("Runtime Manager Service is opening..");
-        }
-
-        static void serviceHost_Opened(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("Runtime Manager Service opened");
-        }
-
-        static void serviceHost_Closed(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("Runtime Manager Service closed");
-        }
-
-        static void serviceHost_Closing(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("Runtime Manager is closing..");
-        }
-
-        #endregion
-
+        
         #region Main Calls received from the RuntimeHost
 
         internal void Execute()
@@ -269,7 +229,7 @@ namespace Vanrise.Runtime
         {
             try
             {
-                ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(RuntimeManagerWCFService), typeof(IRuntimeManagerWCFService), OnServiceHostCreated, OnServiceHostRemoved, out _serviceURL);
+                VRInterAppCommunication.RegisterService(typeof(RuntimeManagerWCFService), typeof(IRuntimeManagerWCFService), out _serviceURL);
                 return true;
             }
             catch (Exception ex)
@@ -292,7 +252,7 @@ namespace Vanrise.Runtime
                     bool isNodeExistingInstanceAlive = false;
                     try
                     {
-                        ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(nodeExistingInstanceState.ServiceURL,
+                        VRInterAppCommunication.CreateServiceClient<IRuntimeManagerWCFService>(nodeExistingInstanceState.ServiceURL,
                             (client) =>
                             {
                                 isNodeExistingInstanceAlive = client.IsThisRuntimeNodeInstance(nodeExistingInstanceState.RuntimeNodeId, nodeExistingInstanceState.InstanceId);
@@ -546,7 +506,7 @@ namespace Vanrise.Runtime
                     {
                         try
                         {
-                            ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(runningNodeState.ServiceURL,
+                            VRInterAppCommunication.CreateServiceClient<IRuntimeManagerWCFService>(runningNodeState.ServiceURL,
                                 (client) =>
                                 {
                                     client.SetRuntimeProcessesAndServicesChanged();

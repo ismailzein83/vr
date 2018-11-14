@@ -20,7 +20,7 @@ namespace Vanrise.Runtime
                 throw new NullReferenceException("s_runtimeManagerServiceURL");
             try
             {
-                ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(s_runtimeManagerServiceURL,
+                VRInterAppCommunication.CreateServiceClient<IRuntimeManagerWCFService>(s_runtimeManagerServiceURL,
                     (client) =>
                     {
                         onClientReady(client, runtimeNodeInstanceId);

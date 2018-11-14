@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Vanrise.Common.Business
 {
     [ServiceContract(Namespace = "http://common.vanrise.com/IBigDataWCFService")]
-    internal interface IBigDataWCFService
+    public interface IBigDataWCFService
     {
         [OperationContract]
         string RetrieveData(string serializedInput);

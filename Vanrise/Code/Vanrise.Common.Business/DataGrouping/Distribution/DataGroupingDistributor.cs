@@ -29,7 +29,7 @@ namespace Vanrise.Common.Business
                             DataGroupingExecutorServiceInstanceInfo executorServiceInstanceInfo = executorServiceInstance.InstanceInfo as DataGroupingExecutorServiceInstanceInfo;
                             if (executorServiceInstanceInfo == null)
                                 throw new NullReferenceException("executorServiceInstanceInfo");
-                            ServiceClientFactory.CreateTCPServiceClient<IDataGroupingExecutorWCFService>(executorServiceInstanceInfo.TCPServiceURL, (executorClient) =>
+                            VRInterAppCommunication.CreateServiceClient<IDataGroupingExecutorWCFService>(executorServiceInstanceInfo.TCPServiceURL, (executorClient) =>
                                 {
                                     executorClient.InitializeDataGroupingAnalysis(dataAnalysisUniqueName, serializedGroupingHandler);
                                 });

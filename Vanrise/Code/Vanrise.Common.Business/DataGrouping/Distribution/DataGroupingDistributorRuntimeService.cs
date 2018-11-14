@@ -31,59 +31,21 @@ namespace Vanrise.Common.Business
             base.OnInitialized(context);
         }
 
-        static ServiceHost s_serviceHost;
+        static bool s_isServiceRegistered;
         static string s_serviceURL;
         static Object s_hostServiceLockObject = new object();
         private void HostServiceIfNeeded()
         {
             lock (s_hostServiceLockObject)
             {
-                if (s_serviceHost == null)
+                if (!s_isServiceRegistered)
                 {
-                    s_serviceHost = ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(DataGroupingDistributorWCFService), typeof(IDataGroupingDistributorWCFService), OnServiceHostCreated, OnServiceHostRemoved, out s_serviceURL);
+                    VRInterAppCommunication.RegisterService(typeof(DataGroupingDistributorWCFService), typeof(IDataGroupingDistributorWCFService), out s_serviceURL);
+                    s_isServiceRegistered = true;
                 }
             }
         }
-
-        #region WCF Events
-        void OnServiceHostCreated(ServiceHost serviceHost)
-        {
-            serviceHost.Opening += serviceHost_Opening;
-            serviceHost.Opened += serviceHost_Opened;
-            serviceHost.Closing += serviceHost_Closing;
-            serviceHost.Closed += serviceHost_Closed;
-        }
-
-        void OnServiceHostRemoved(ServiceHost serviceHost)
-        {
-            serviceHost.Opening -= serviceHost_Opening;
-            serviceHost.Opened -= serviceHost_Opened;
-            serviceHost.Closing -= serviceHost_Closing;
-            serviceHost.Closed -= serviceHost_Closed;
-        }
-
-        void serviceHost_Opening(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("DataGroupingDistributorWCFService is opening..");
-        }
-
-        void serviceHost_Opened(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("DataGroupingDistributorWCFService opened");
-        }
-
-        void serviceHost_Closed(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("DataGroupingDistributorWCFService closed");
-        }
-
-        void serviceHost_Closing(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("DataGroupingDistributorWCFService is closing..");
-        }
-
-        #endregion
-
+        
         public override void Execute()
         {            
         }

@@ -16,7 +16,7 @@ namespace Vanrise.Runtime
                 throw new ArgumentNullException("request");
             string serializedResponse = null;
             string serviceURL = new RunningProcessManager().GetProcessTCPServiceURL(processId);
-            ServiceClientFactory.CreateTCPServiceClient<IInterRuntimeWCFService>(serviceURL,
+            VRInterAppCommunication.CreateServiceClient<IInterRuntimeWCFService>(serviceURL,
                               (client) =>
                               {
                                   var serializedRequest = Common.Serializer.Serialize(request);

@@ -14,7 +14,6 @@ namespace Vanrise.Common.Business
 {
     public class BigDataRuntimeService : RuntimeService
     {
-        ServiceHost _serviceHost;
         IBigDataServiceDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IBigDataServiceDataManager>();
         long _bigDataServiceId;
 
@@ -35,7 +34,7 @@ namespace Vanrise.Common.Business
         public override void OnInitialized(IRuntimeServiceInitializeContext context)
         {
             BigDataManager.Instance._isBigDataHost = true;
-            _serviceHost = ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(BigDataWCFService), typeof(IBigDataWCFService), OnServiceHostCreated, OnServiceHostRemoved, out _serviceUrl);            
+            VRInterAppCommunication.RegisterService(typeof(BigDataWCFService), typeof(IBigDataWCFService), out _serviceUrl);            
             base.OnInitialized(context);
         }
 
@@ -46,52 +45,12 @@ namespace Vanrise.Common.Business
                 throw new Exception("Could not insert BigDataService into database");
             base.OnStarted(context);
         }
-
-        private void OnServiceHostCreated(ServiceHost serviceHost)
-        {
-            serviceHost.Opening += serviceHost_Opening;
-            serviceHost.Opened += serviceHost_Opened;
-            serviceHost.Closing += serviceHost_Closing;
-            serviceHost.Closed += serviceHost_Closed;
-        }
-
-        private void OnServiceHostRemoved(ServiceHost serviceHost)
-        {
-            serviceHost.Opening -= serviceHost_Opening;
-            serviceHost.Opened -= serviceHost_Opened;
-            serviceHost.Closing -= serviceHost_Closing;
-            serviceHost.Closed -= serviceHost_Closed;
-        }
-
+        
         public override void OnStopped(IRuntimeServiceStopContext context)
-        {
-            if(_serviceHost != null && _serviceHost.State == CommunicationState.Opened)
-            {
-                _serviceHost.Close();
-            }
+        {            
             base.OnStopped(context);
         }
-
-        static void serviceHost_Opening(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("BigData WCF Service is opening..");
-        }
-
-        static void serviceHost_Opened(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("BigData WCF Service opened");
-        }
-
-        static void serviceHost_Closed(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("BigData WCF Service closed");
-        }
-
-        static void serviceHost_Closing(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("BigData WCF Service is closing..");
-        }
-
+        
         public override void Execute()
         {
             if(BigDataManager.Instance._isCachedDataChanged)

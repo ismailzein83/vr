@@ -259,7 +259,7 @@ namespace Vanrise.Common.Business
 
         private bool TryCreateServiceClient(BigDataService bigDataService, Action<IBigDataWCFService> onClientReady)
         {
-            return ServiceClientFactory.TryCreateTCPServiceClient<IBigDataWCFService>(bigDataService.URL, onClientReady);            
+            return VRInterAppCommunication.TryCreateServiceClient<IBigDataWCFService>(bigDataService.URL, onClientReady);            
         }
 
         #endregion

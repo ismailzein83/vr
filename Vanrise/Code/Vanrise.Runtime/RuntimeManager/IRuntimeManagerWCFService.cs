@@ -9,7 +9,7 @@ using Vanrise.Runtime.Entities;
 namespace Vanrise.Runtime
 {
     [ServiceContract(Namespace = "http://runtime.vanrise.com/IRuntimeManagerWCFService")]
-    internal interface IRuntimeManagerWCFService
+    public interface IRuntimeManagerWCFService
     {
         [OperationContract]
         PingPrimaryNodeResponse PingPrimaryNode(PingPrimaryNodeRequest request);

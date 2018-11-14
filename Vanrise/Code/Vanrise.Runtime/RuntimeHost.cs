@@ -150,6 +150,8 @@ namespace Vanrise.Runtime
 
         public RuntimeStatus Status { get; private set; }
 
+        public DateTime StartedTime { get; private set; }
+
         public void Start()
         {
             if (this.Status != RuntimeStatus.NotStarted)
@@ -160,7 +162,7 @@ namespace Vanrise.Runtime
             {
                 LoggerFactory.GetLogger().WriteInformation("Registering Runtime Host...");
                 string currentProcessInterRuntimeServiceURL;
-                ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(InterRuntimeWCFService), typeof(IInterRuntimeWCFService), OnServiceHostCreated, OnServiceHostRemoved, out currentProcessInterRuntimeServiceURL);
+                VRInterAppCommunication.RegisterService(typeof(InterRuntimeWCFService), typeof(IInterRuntimeWCFService), out currentProcessInterRuntimeServiceURL);
 
                 List<RegisterRuntimeServiceInput> runtimeServicesRegistrationInfos = new List<RegisterRuntimeServiceInput>();
                 Dictionary<Guid, RuntimeServiceExecutor> runtimeServiceExecutorsByInstanceId = new Dictionary<Guid, RuntimeServiceExecutor>();
@@ -187,7 +189,7 @@ namespace Vanrise.Runtime
                 parentNodeState.ServiceURL.ThrowIfNull("parentNodeState.ServiceURL", _runtimeNodeId);
                 var currentProcess = System.Diagnostics.Process.GetCurrentProcess();
                 RunningProcessRegistrationOutput registrationOutput = null;
-                ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(parentNodeState.ServiceURL,
+                VRInterAppCommunication.CreateServiceClient<IRuntimeManagerWCFService>(parentNodeState.ServiceURL,
                     (client) =>
                     {
                         var input = new RunningProcessRegistrationInput
@@ -217,11 +219,13 @@ namespace Vanrise.Runtime
                 System.Threading.Thread.Sleep(3000);//wait some time to ensure that all runtimes takes the latest version of running processes and runtime services            
                 _timerServicesManager = new Timer(1000);
                 _timerServicesManager.Elapsed += timerServicesManager_Elapsed;
+                this.StartedTime = DateTime.Now;
                 _timerServicesManager.Start();
             }
             if (_timerRuntimeManager != null)
                 _timerRuntimeManager.Start();
             this.Status = RuntimeStatus.Started;
+            this.StartedTime = DateTime.Now;
             _logger.WriteInformation("Host Started");
         }
 
@@ -254,6 +258,8 @@ namespace Vanrise.Runtime
 
         void timerRuntimeManager_Elapsed(object sender, ElapsedEventArgs e)
         {
+            if (DateTime.Now - this.StartedTime < TimeSpan.FromSeconds(3))//wait 3 seconds before starting execution
+                return;
             lock (_runtimeManagerExecutingLockObj)
             {
                 if (_isRuntimeManagerExecuting)
@@ -287,6 +293,8 @@ namespace Vanrise.Runtime
 
         void timerServicesManager_Elapsed(object sender, ElapsedEventArgs e)
         {
+            if (DateTime.Now - this.StartedTime < TimeSpan.FromSeconds(3))//wait 3 seconds before starting execution
+                return;
             lock (_timerServicesManagerExecutingLockObj)
             {
                 if (_isTimerServicesManagerExecuting)
@@ -500,47 +508,7 @@ namespace Vanrise.Runtime
         }
 
         #endregion
-
-        #region WCF Host Events
-
-        static void OnServiceHostCreated(ServiceHost serviceHost)
-        {
-            serviceHost.Opening += serviceHost_Opening;
-            serviceHost.Opened += serviceHost_Opened;
-            serviceHost.Closing += serviceHost_Closing;
-            serviceHost.Closed += serviceHost_Closed;
-        }
-
-        static void OnServiceHostRemoved(ServiceHost serviceHost)
-        {
-            serviceHost.Opening -= serviceHost_Opening;
-            serviceHost.Opened -= serviceHost_Opened;
-            serviceHost.Closing -= serviceHost_Closing;
-            serviceHost.Closed -= serviceHost_Closed;
-        }
-
-        static void serviceHost_Opening(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService Service is opening..");
-        }
-
-        static void serviceHost_Opened(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService Service opened");
-        }
-
-        static void serviceHost_Closed(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService Service closed");
-        }
-
-        static void serviceHost_Closing(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService is closing..");
-        }
-
-        #endregion
-
+        
         #region Private Classes
 
         private class ChildRuntimeProcessProxy
