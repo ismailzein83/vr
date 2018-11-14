@@ -35,10 +35,10 @@ namespace NP.IVSwitch.Data.Postgres
                                                       time_frame character varying(50) NOT NULL,
                                                       preference smallint NOT NULL,
                                                       huntstop smallint,
-                                                      huntstop_rc character varying(50) DEFAULT '',
-                                                      min_profit numeric(5,5) DEFAULT 0,
+                                                      huntstop_rc character varying(50) DEFAULT NULL::character varying,
+                                                      min_profit numeric(5,5) DEFAULT NULL::numeric,
                                                       state_id smallint,
-                                                      wakeup_time timestamp without time zone DEFAULT current_timestamp,
+                                                      wakeup_time timestamp without time zone,
                                                       description character varying(50),
                                                       routing_mode integer DEFAULT 1,
                                                       total_bkts integer DEFAULT 1,
@@ -84,10 +84,10 @@ namespace NP.IVSwitch.Data.Postgres
                             time_frame character varying(50) COLLATE pg_catalog.""default"" NOT NULL,
                             preference smallint NOT NULL,
                             huntstop smallint,
-                            huntstop_rc character varying(50) COLLATE pg_catalog.""default"" DEFAULT '',
-                            min_profit numeric(5, 5) DEFAULT 0,
+                            huntstop_rc character varying(50) COLLATE pg_catalog.""default"" DEFAULT NULL::character varying,
+                            min_profit numeric(5, 5) DEFAULT NULL::numeric,
                             state_id smallint,
-                            wakeup_time timestamp without time zone DEFAULT current_timestamp,
+                            wakeup_time timestamp without time zone,
                             description character varying(50) COLLATE pg_catalog.""default"",
                             routing_mode integer DEFAULT 1,
                             total_bkts integer DEFAULT 1,
@@ -287,8 +287,8 @@ namespace NP.IVSwitch.Data.Postgres
                         int rowCount;
                         if (IsBlockedAccount == false)
                         {
-                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,description,state_id,flag_1,routing_mode,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,tech_prefix)
-                         VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@description,@stateId,@percentage,@routingMode,@totalBKTs,@BKTSerial,@BKTCapacity,@BKTTokens,@techPrefix) ;", table);
+                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,description,state_id,flag_1,routing_mode,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,tech_prefix,huntstop_rc, min_profit, wakeup_time)
+                         VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@description,@stateId,@percentage,@routingMode,@totalBKTs,@BKTSerial,@BKTCapacity,@BKTTokens,@techPrefix, @huntstop_rc, @min_profit, @wakeup_time) ;", table);
                             rowCount = (int)ExecuteNonQueryText(cmdText1, (cmd) =>
                                {
                                    cmd.Parameters.AddWithValue("@destination", item.Destination);
@@ -305,13 +305,16 @@ namespace NP.IVSwitch.Data.Postgres
                                    cmd.Parameters.AddWithValue("@huntstop", (routeOption.Huntstop == null) ? (Object)DBNull.Value : routeOption.Huntstop);
                                    cmd.Parameters.AddWithValue("@stateId", routeOption.StateId);
                                    cmd.Parameters.AddWithValue("@description", routeOption.Description);
+                                   cmd.Parameters.AddWithValue("@huntstop_rc", "");
+                                   cmd.Parameters.AddWithValue("@min_profit", 0);
+                                   cmd.Parameters.AddWithValue("@wakeup_time", GetCurrentDate());
 
                                });
                         }
                         else
                         {
-                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,state_id,description,tech_prefix)
-                            VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@stateId,@description,@techPrefix);", table);
+                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,state_id,description,tech_prefix,huntstop_rc, min_profit, wakeup_time)
+                            VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@stateId,@description,@techPrefix, @huntstop_rc, @min_profit, @wakeup_time);", table);
 
                             rowCount = (int)ExecuteNonQueryText(cmdText1, (cmd) =>
                             {
@@ -323,7 +326,9 @@ namespace NP.IVSwitch.Data.Postgres
                                 cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? "0" : item.TechPrefix);
                                 cmd.Parameters.AddWithValue("@huntstop", 1);
                                 cmd.Parameters.AddWithValue("@stateId", 1);
-
+                                cmd.Parameters.AddWithValue("@huntstop_rc", "");
+                                cmd.Parameters.AddWithValue("@min_profit", 0);
+                                cmd.Parameters.AddWithValue("@wakeup_time", GetCurrentDate());
 
                             });
 
@@ -363,8 +368,8 @@ namespace NP.IVSwitch.Data.Postgres
                         int rowCount;
                         if (IsBlockedAccount == false)
                         {
-                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,description,state_id,flag_1,routing_mode,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,tech_prefix)
-                         VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@description,@stateId,@percentage,@routingMode,@totalBKTs,@BKTSerial,@BKTCapacity,@BKTTokens,@techPrefix) ;", table);
+                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,description,state_id,flag_1,routing_mode,total_bkts,bkt_serial,bkt_capacity,bkt_tokens,tech_prefix, huntstop_rc, min_profit, wakeup_time)
+                         VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@description,@stateId,@percentage,@routingMode,@totalBKTs,@BKTSerial,@BKTCapacity,@BKTTokens,@techPrefix, @huntstop_rc, @min_profit, @wakeup_time) ;", table);
                             rowCount = (int)ExecuteNonQueryText(cmdText1, (cmd) =>
                             {
                                 cmd.Parameters.AddWithValue("@destination", routeTableRoute.Destination);
@@ -381,7 +386,9 @@ namespace NP.IVSwitch.Data.Postgres
                                 cmd.Parameters.AddWithValue("@huntstop", (option.Huntstop == null) ? (Object)DBNull.Value : option.Huntstop);
                                 cmd.Parameters.AddWithValue("@stateId", option.StateId);
                                 cmd.Parameters.AddWithValue("@description", option.Description);
-
+                                cmd.Parameters.AddWithValue("@huntstop_rc", "");
+                                cmd.Parameters.AddWithValue("@min_profit", 0);
+                                cmd.Parameters.AddWithValue("@wakeup_time", GetCurrentDate());
 
 
 
@@ -389,9 +396,9 @@ namespace NP.IVSwitch.Data.Postgres
                         }
                         else
                         {
-                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,state_id,description,tech_prefix)
-                            VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@stateId,@description,@techPrefix);", table);
-
+                            cmdText1 = string.Format(@"INSERT INTO {0}(destination,route_id,time_frame,preference,huntstop,state_id,description,tech_prefix, huntstop_rc, min_profit, wakeup_time)
+                            VALUES(@destination,@route_id,@time_frame,@preference,@huntstop,@stateId,@description,@techPrefix, @huntstop_rc, @min_profit, @wakeup_time);", table);
+                            
                             rowCount = (int)ExecuteNonQueryText(cmdText1, (cmd) =>
                             {
                                 cmd.Parameters.AddWithValue("@destination", routeTableRoute.Destination);
@@ -402,7 +409,9 @@ namespace NP.IVSwitch.Data.Postgres
                                 cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? "0" : routeTableRoute.TechPrefix);
                                 cmd.Parameters.AddWithValue("@huntstop",1);
                                 cmd.Parameters.AddWithValue("@stateId", 1);
-
+                                cmd.Parameters.AddWithValue("@huntstop_rc", "");
+                                cmd.Parameters.AddWithValue("@min_profit", 0);
+                                cmd.Parameters.AddWithValue("@wakeup_time", GetCurrentDate());
 
 
                             });
@@ -415,6 +424,11 @@ namespace NP.IVSwitch.Data.Postgres
             return true;
 
 
+        }
+        public DateTime GetCurrentDate()
+        {
+            string query = "select current_timestamp;";
+            return (DateTime)ExecuteScalarText(query, null);
         }
         public bool DropRouteTableRoute(int routeTableId)
         {
