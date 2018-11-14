@@ -67,7 +67,7 @@
                 };
 
                 $scope.scopeModel.isCodeLengthValid = function () {
-                    if ($scope.scopeModel.minCodeLength != undefined && $scope.scopeModel.maxCodeLength != undefined && $scope.scopeModel.minCodeLength > $scope.scopeModel.maxCodeLength)
+                    if ($scope.scopeModel.minCodeLength != undefined && $scope.scopeModel.maxCodeLength != undefined && parseInt($scope.scopeModel.minCodeLength) > parseInt($scope.scopeModel.maxCodeLength))
                         return 'Maximum Code Length should be greater than Minimum Code Length.';
                     return null;
                 };
