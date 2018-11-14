@@ -38,7 +38,9 @@ namespace SOM.Main.Business
                     ReceiverPort = detail.RECEIVER_PORT,
                     DPPortId = detail.DP_PORT_ID,
                     DPId = detail.DP_ID,
-                    SwitchId = detail.SWITCH_ID
+                    SwitchId = detail.SWITCH_ID,
+                    CabinetPrimaryPort = detail.PRIMARY_PORT,
+                    CabinetSecondaryPort = detail.SECONDARY_PORT
 
                 };
 
