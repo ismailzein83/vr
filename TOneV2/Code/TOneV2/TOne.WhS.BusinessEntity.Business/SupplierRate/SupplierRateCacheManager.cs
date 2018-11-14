@@ -6,9 +6,13 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierRateCacheManager : Vanrise.Caching.BaseCacheManager
     {
-        ISupplierRateDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-        object _updateHandle;
-
+        protected override bool UseCentralizedCacheRefresher
+        {
+            get
+            {
+                return true;
+            }
+        }
         public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
         {
             get
@@ -25,7 +29,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         protected override bool ShouldSetCacheExpired(object parameter)
         {
-            return _dataManager.AreSupplierRatesUpdated(ref _updateHandle);
+            return base.ShouldSetCacheExpired();
         }
         
         public SupplierRate CacheAndGetRate(SupplierRate rate)

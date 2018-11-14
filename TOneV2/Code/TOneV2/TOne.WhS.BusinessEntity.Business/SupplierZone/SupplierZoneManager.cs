@@ -294,11 +294,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ISupplierZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
-            object _updateHandle;
-
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
             public override T GetOrCreateObject<T>(object cacheName, Func<T> createObject)
             {
                 return GetOrCreateObject(cacheName, SupplierZonesCacheExpirationChecker.Instance, createObject);
@@ -314,7 +318,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreSupplierZonesUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
         }
 

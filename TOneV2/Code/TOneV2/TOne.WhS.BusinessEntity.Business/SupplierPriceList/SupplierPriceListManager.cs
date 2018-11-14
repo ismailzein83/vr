@@ -70,6 +70,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Supplier Pricelists",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Pricelist Id" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Pricelist Type" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
@@ -84,6 +85,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.PriceListId });
                             row.Cells.Add(new ExportExcelCell() { Value = record.PricelistTypeDescription });
                             row.Cells.Add(new ExportExcelCell { Value = record.SupplierName });
                             row.Cells.Add(new ExportExcelCell { Value = record.Currency });
@@ -94,11 +96,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            ISupplierPriceListDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
-            object _updateHandle;
-
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
             public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
             {
                 get
@@ -109,7 +115,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.ArGetPriceListsUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
         }
         public Dictionary<int, SupplierPriceList> GetCachedPriceLists()

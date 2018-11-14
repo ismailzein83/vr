@@ -6,6 +6,7 @@ using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -53,6 +54,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             TOne.WhS.SupplierPriceList.Business.SupplierPriceListManager manager = new Business.SupplierPriceListManager();
             manager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, stateBackupId, supplierId, currencyId, fileId, effectiveOn, userId, supplierPricelistType);
+
+
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierZoneServiceCacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierPriceListManager.CacheManager>().SetCacheExpired();
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierZoneManager.CacheManager>().SetCacheExpired();
+
         }
     }
 }
