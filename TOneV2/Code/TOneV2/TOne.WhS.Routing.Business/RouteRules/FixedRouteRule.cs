@@ -213,6 +213,42 @@ namespace TOne.WhS.Routing.Business
         {
             throw new NotSupportedException("ExecuteForSaleEntity is not supported for FixedRouteRule.");
         }
+        public override RouteRuleSettings ExtendSuppliersList(RouteRuleSettings routeRuleSettings, List<RouteOption> routeOptions)
+        {
+            var fixedRouteRule = routeRuleSettings.CastWithValidate<FixedRouteRule>("FixedRouteRule");
+            if (routeOptions == null || routeOptions.Count == 0)
+                return fixedRouteRule;
+
+            if (fixedRouteRule.Options == null)
+                fixedRouteRule.Options = new List<FixedRouteOptionSettings>();
+
+            foreach (var routeOption in routeOptions)
+            {
+                FixedRouteOptionSettings fixedRouteOptionSettings = new FixedRouteOptionSettings()
+                {
+                    Percentage = routeOption.Percentage,
+                    SupplierId = routeOption.SupplierId,
+                    NumberOfTries = routeOption.NumberOfTries
+                };
+                if (routeOption.Backups != null && routeOption.Backups.Count > 0)
+                {
+                    fixedRouteOptionSettings.Backups = new List<FixedRouteBackupOptionSettings>();
+                    foreach (var backup in routeOption.Backups)
+                    {
+                        FixedRouteBackupOptionSettings fixedRouteBackupOptionSettings = new FixedRouteBackupOptionSettings()
+                        {
+                            NumberOfTries = backup.NumberOfTries,
+                            SupplierId = backup.SupplierId
+                        };
+
+                        fixedRouteOptionSettings.Backups.Add(fixedRouteBackupOptionSettings);
+                    }
+                }
+                fixedRouteRule.Options.Add(fixedRouteOptionSettings);
+            }
+
+            return fixedRouteRule;
+        }
 
         #endregion
 

@@ -337,6 +337,10 @@ namespace TOne.WhS.Routing.Business
 
             return selectiveCountryCriteriaGroup.CountryIds != null && selectiveCountryCriteriaGroup.CountryIds.Count > 0;
         }
+        public RouteRuleSettings ExtendSuppliersList(RouteRuleSettings routeRuleSettings, List<RouteOption> routeOptions)
+        {
+            return routeRuleSettings.ExtendSuppliersList(routeRuleSettings, routeOptions);
+        }
 
         #endregion
 

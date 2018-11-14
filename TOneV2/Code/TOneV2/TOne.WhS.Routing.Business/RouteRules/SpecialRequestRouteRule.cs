@@ -126,6 +126,47 @@ namespace TOne.WhS.Routing.Business
 
             return String.Format("All Suppliers Except: {0}", string.Join(", ", supplierNames));
         }
+        public override RouteRuleSettings ExtendSuppliersList(RouteRuleSettings routeRuleSettings, List<RouteOption> routeOptions)
+        {
+            var specialRequestRouteRule = routeRuleSettings.CastWithValidate<SpecialRequestRouteRule>("SpecialRequestRouteRule");
+            if (routeOptions == null || routeOptions.Count == 0)
+                return specialRequestRouteRule;
+
+            if (specialRequestRouteRule.Options == null)
+                specialRequestRouteRule.Options = new List<SpecialRequestRouteOptionSettings>();
+
+            foreach (var routeOption in routeOptions)
+            {
+                if (ExcludedOptions != null && ExcludedOptions.Any(item => item.Value.SupplierId == routeOption.SupplierId))
+                    continue;
+
+                SpecialRequestRouteOptionSettings specialRequestRouteOptionSettings = new SpecialRequestRouteOptionSettings()
+                {
+                    Percentage = routeOption.Percentage,
+                    SupplierId = routeOption.SupplierId,
+                    NumberOfTries = routeOption.NumberOfTries
+                };
+                if (routeOption.Backups != null && routeOption.Backups.Count > 0)
+                {
+                    specialRequestRouteOptionSettings.Backups = new List<SpecialRequestRouteBackupOptionSettings>();
+                    foreach (var backup in routeOption.Backups)
+                    {
+                        if (ExcludedOptions != null && ExcludedOptions.Any(item => item.Value.SupplierId == backup.SupplierId))
+                            continue;
+
+                        SpecialRequestRouteBackupOptionSettings specialRequestRouteBackupOptionSettings = new SpecialRequestRouteBackupOptionSettings()
+                        {
+                            NumberOfTries = backup.NumberOfTries,
+                            SupplierId = backup.SupplierId
+                        };
+
+                        specialRequestRouteOptionSettings.Backups.Add(specialRequestRouteBackupOptionSettings);
+                    }
+                }
+                specialRequestRouteRule.Options.Add(specialRequestRouteOptionSettings);
+            }
+            return specialRequestRouteRule;
+        }
         #endregion
 
         #region SaleEntity Execution

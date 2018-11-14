@@ -31,11 +31,13 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService', 'VRUIUt
         };
 
         function selectiveOptionCtor(ctrl, $scope) {
-
+            var context;
             var carrierAccountDirectiveAPI;
             var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+                $scope.gridLeftMenuActions = [];
+
                 ctrl.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
                     carrierAccountReadyPromiseDeferred.resolve();
@@ -46,13 +48,39 @@ app.directive('vrWhsRoutingRouterulesettingsSelective', ['UtilsService', 'VRUIUt
                     ctrl.selectedSuppliers.splice(index, 1);
                 };
 
+                ctrl.extendSuppliersList = function () {
+                    $scope.gridLeftMenuActions.length = 0;
+                    if (context != undefined) {
+                        var suppliersList = {};
+                        context.extendSuppliersList();
+                    }
+                };
+                ctrl.showExtendSuppliersButton = false;
+
                 defineAPI();
             }
 
+
             function defineAPI() {
+                function getGridLeftMenuActions() {
+                    return $scope.gridLeftMenuActions;
+                }
+
                 var api = {};
 
                 api.load = function (payload) {
+                    $scope.gridLeftMenuActions.length = 0;
+
+                    if (ctrl.selectedSuppliers != undefined)
+                        ctrl.selectedSuppliers.length = 0;
+                    if (payload != undefined)
+                        context = payload.context;
+
+                    if (context != undefined && context.showExtendSuppliersButton())
+                        $scope.gridLeftMenuActions.push({
+                            name: "Reload",
+                            onClicked: ctrl.extendSuppliersList
+                        });
 
                     var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 

@@ -263,7 +263,7 @@ app.directive('vrWhsRoutingRouterulesettingsOrder', ['WhS_Routing_RoutRuleSettin
                     angular.forEach(ctrl.datasource, function (dataItem) {
                         var orderOption = dataItem.directiveAPI.getData();
                         orderOption.ConfigId = dataItem.configId;
-                        if (ctrl.datasource.length == 1 && $scope.scopeModel.selectedRouteRuleSettingsOrderType.showPercentageColumn)
+                        if (ctrl.datasource.length == 1 && $scope.scopeModel.selectedRouteRuleSettingsOrderType != undefined && $scope.scopeModel.selectedRouteRuleSettingsOrderType.showPercentageColumn)
                             orderOption.PercentageValue = 100;
                         else
                             orderOption.PercentageValue = showPercentage ? dataItem.percentageValue : undefined;

@@ -77,6 +77,10 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Routing_ModuleConfig.moduleName, controllerName, ['GetFilteredRouteRules']));
         }
 
+        function ExtendSuppliersList(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "ExtendSuppliersList"), input);
+        }
+
         return ({
             GetFilteredRouteRules: GetFilteredRouteRules,
             GetRule: GetRule,
@@ -93,7 +97,8 @@
             HasAddRulePermission: HasAddRulePermission,
             HasUpdateRulePermission: HasUpdateRulePermission,
             HasDeleteRulePermission: HasDeleteRulePermission,
-            HasViewRulePermission: HasViewRulePermission
+            HasViewRulePermission: HasViewRulePermission,
+            ExtendSuppliersList: ExtendSuppliersList
         });
     }
 

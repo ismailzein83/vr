@@ -2,7 +2,7 @@
     <vr-row>
         <vr-columns width="1/4row">
             <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" text="None"
-                       label="Option Type" datasource="optionSettingsGroupTemplates" selectedvalues="selectedOptionSettingsGroupTemplate">
+                       on-ready="onOptionTypeSelectorReady" label="Option Type" datasource="optionSettingsGroupTemplates" selectedvalues="selectedOptionSettingsGroupTemplate">
             </vr-select>
         </vr-columns>
         <vr-columns width="3/4row" ng-show="selectedOptionSettingsGroupTemplate" vr-loader="isLoadingOptionSettingsSection">
@@ -27,12 +27,12 @@
 <vr-section title="Percentage Settings" ng-if="scopeModel.showPercentageSettings">
     <vr-row>
         <vr-columns width="1/4row">
-            <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" text="None"
-                       label="Percentage Type" datasource="optionPercentageSettingsGroupTemplates" selectedvalues="selectedPercentageSettingsGroupTemplate">
+            <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" text="None" on-ready="onPercentageSettingsSelectorReady"
+                       label="Percentage Type" datasource="scopeModel.optionPercentageSettingsGroupTemplates" selectedvalues="scopeModel.selectedPercentageSettingsGroupTemplate">
             </vr-select>
         </vr-columns>
-        <vr-columns width="3/4row" ng-show="selectedPercentageSettingsGroupTemplate" vr-loader="isLoadingOptionPercentageSettingsSection">
-            <vr-directivewrapper directive="selectedPercentageSettingsGroupTemplate.Editor" on-ready="onOptionPercentageSettingsGroupDirectiveReady"></vr-directivewrapper>
+        <vr-columns width="3/4row" ng-show="scopeModel.selectedPercentageSettingsGroupTemplate" vr-loader="scopeModel.isLoadingOptionPercentageSettingsSection">
+            <vr-directivewrapper directive="scopeModel.selectedPercentageSettingsGroupTemplate.Editor" on-ready="scopeModel.onOptionPercentageSettingsGroupDirectiveReady"></vr-directivewrapper>
         </vr-columns>
     </vr-row>
 </vr-section>

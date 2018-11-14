@@ -9,6 +9,7 @@
         var isLinkedRouteRule;
         var customerRouteData;
         var linkedRouteRuleInput;
+        var routeOptions;
         var isEditMode;
         var isViewHistoryMode;
         var routeRuleId;
@@ -18,6 +19,7 @@
         var context;
         var minBED;
         var maxEED;
+        var showExtendSuppliersButton;
 
         var routeRuleEntity;
         var supplierZoneDetails;
@@ -52,6 +54,7 @@
                 isLinkedRouteRule = parameters.isLinkedRouteRule;
                 customerRouteData = parameters.customerRouteData;
                 defaultRouteRuleValues = parameters.defaultRouteRuleValues;
+                routeOptions = linkedRouteRuleInput != undefined ? linkedRouteRuleInput.RouteOptions : undefined;
             }
 
             isEditMode = routeRuleId != undefined && (linkedRouteRuleInput == undefined);
@@ -80,12 +83,15 @@
 
             $scope.scopeModel.onRouteRuleSettingsDirectiveReady = function (api) {
                 routeRuleSettingsAPI = api;
+                if (routeRuleSettingsReadyPromiseDeferred == undefined)
+                    showExtendSuppliersButton = true;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingRouteRuleSettings = value; };
 
                 var routeRuleSettingsPayload = {
                     SupplierFilterSettings: { RoutingProductId: routingProductId },
                     supplierZoneDetails: supplierZoneDetails,
-                    customerRouteData: customerRouteData
+                    customerRouteData: customerRouteData,
+                    context: getContext()
                 };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleSettingsAPI, routeRuleSettingsPayload, setLoader, routeRuleSettingsReadyPromiseDeferred);
@@ -108,7 +114,6 @@
             };
 
             $scope.scopeModel.onRouteRuleSettingsTypeSelectionChanged = function () {
-
                 var _selectedItem = routeRuleSettingsTypeSelectorAPI.getSelectedIds();
                 if (_selectedItem != undefined) {
                     $scope.scopeModel.showSettingsSection = true;
@@ -116,7 +121,6 @@
             };
 
             $scope.scopeModel.onRouteRuleCriteriaSelectionChanged = function () {
-
                 var _selectedItem = routeRuleCriteriaSelectorAPI.getSelectedIds();
                 if (_selectedItem != undefined) {
                     $scope.scopeModel.showCriteriaSection = true;
@@ -237,7 +241,7 @@
             });
         }
 
-        function getRouteRule() { 
+        function getRouteRule() {
             return WhS_Routing_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
                 if (routeRule != undefined) {
                     $scope.scopeModel.routeRuleName = routeRule != null ? routeRule.Name : '';
@@ -353,6 +357,7 @@
             if (routeRuleSettingsPayload != undefined) {
                 routeRuleSettingsPayload.supplierZoneDetails = supplierZoneDetails;
                 routeRuleSettingsPayload.customerRouteData = customerRouteData;
+                routeRuleSettingsPayload.context = getContext();
 
                 routeRuleSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -488,6 +493,42 @@
                 EndEffectiveTime: $scope.scopeModel.endEffectiveDate
             };
             return routeRule;
+        }
+        function getContext() {
+
+            var currentContext = context != undefined ? context : {};
+            currentContext.extendSuppliersList = function () {
+
+                showExtendSuppliersButton = false;
+                var supplierListRouteOptionRuleInput = {
+                    RouteRuleSettings: routeRuleSettingsAPI.getData(),
+                    RouteOptions: routeOptions
+                };
+                WhS_Routing_RouteRuleAPIService.ExtendSuppliersList(supplierListRouteOptionRuleInput).then(function (response) {
+                    var setLoader = function (value) {
+                        setTimeout(function () {
+                            $scope.scopeModel.isLoadingRouteRuleSettings = value;
+                            UtilsService.safeApply($scope);
+                        });
+                    };
+                    var routeRuleSettingsPayload = {
+                        RouteRuleSettings: response,
+                        context: getContext(),
+                        isExtendingSuppliers: true
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleSettingsAPI, routeRuleSettingsPayload, setLoader);
+
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
+            };
+            currentContext.showExtendSuppliersButton = function () {
+                if (isLinkedRouteRule && routeOptions != undefined) {
+                    return showExtendSuppliersButton;
+                }
+                return false;
+            };
+            return currentContext;
         }
     }
 

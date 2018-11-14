@@ -35,6 +35,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
             var supplierFilterSettings;
             var routeRuleConfiguration;
+            var context;
 
             var gridAPI;
             var gridPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -48,11 +49,16 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
             var supplierZoneDetails;
             var saleServiceViewerAPI;
 
+            var options;
+            var overallBackupOptions;
+            var customerRouteData;
+
             function initializeController() {
-                $scope.scopeModel = {};
+                $scope.scopeModel = { gridLeftMenuActions: [] };
                 $scope.scopeModel.suppliers = [];
                 $scope.scopeModel.showBackupTabs = false;
                 $scope.scopeModel.showGrid = false;
+                $scope.scopeModel.showExtendSuppliersButton = false;
 
                 $scope.getColor = function (dataItem) {
                     var cssClass = '';
@@ -160,33 +166,58 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     return $scope.scopeModel.showBackupTabs;
                 };
 
+                $scope.scopeModel.extendSuppliersList = function () {
+                    $scope.scopeModel.gridLeftMenuActions.length = 0;
+                    if (context != undefined) {
+                        context.extendSuppliersList();
+                    }
+                };
+
                 defineAPI();
             }
             function defineAPI() {
+                function getGridLeftMenuActions() {
+                    return $scope.scopeModel.gridLeftMenuActions;
+                }
+
                 var api = {};
 
                 api.load = function (payload) {
+                    $scope.scopeModel.gridLeftMenuActions.length = 0;
                     $scope.scopeModel.showRateServices = false;
-
+                    $scope.scopeModel.suppliers.length = 0;
                     var promises = [];
 
-                    var options;
-                    var overallBackupOptions;
-                    var customerRouteData;
-
                     if (payload != undefined) {
-                        customerRouteData = payload.customerRouteData;
-                        supplierZoneDetails = payload.supplierZoneDetails;
-                        if (supplierZoneDetails != undefined)
-                            $scope.scopeModel.showRateServices = true;
 
-                        supplierFilterSettings = payload.SupplierFilterSettings;
+                        context = payload.context;
+                        if (context != undefined && context.showExtendSuppliersButton())
+                            $scope.scopeModel.gridLeftMenuActions.push({
+                                name: "Reload",
+                                onClicked: $scope.scopeModel.extendSuppliersList
+                            });
 
-                        if (payload.RouteRuleSettings != undefined) {
-                            options = payload.RouteRuleSettings.Options;
-                            overallBackupOptions = payload.RouteRuleSettings.OverallBackupOptions;
+                        if (payload.isExtendingSuppliers) {
+                            if (payload.RouteRuleSettings != undefined) {
+                                options = payload.RouteRuleSettings.Options;
+                                overallBackupOptions = payload.RouteRuleSettings.OverallBackupOptions;
+                            }
+                        }
+                        else {
+                            customerRouteData = payload.customerRouteData;
+                            supplierZoneDetails = payload.supplierZoneDetails;
+
+                            supplierFilterSettings = payload.SupplierFilterSettings;
+
+                            if (payload.RouteRuleSettings != undefined) {
+                                options = payload.RouteRuleSettings.Options;
+                                overallBackupOptions = payload.RouteRuleSettings.OverallBackupOptions;
+                            }
                         }
                     }
+
+                    if (supplierZoneDetails != undefined)
+                        $scope.scopeModel.showRateServices = true;
 
                     if (customerRouteData != undefined) {
                         $scope.scopeModel.Rate = customerRouteData.Rate;

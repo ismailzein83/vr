@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
@@ -67,6 +68,14 @@ namespace TOne.WhS.Routing.Web.Controllers
             RouteRuleManager manager = new RouteRuleManager();
             return manager.BuildLinkedRouteRule(input.RuleId, input.CustomerId, input.Code, input.SaleZoneId, input.RuleByCountry, input.RouteOptions);
         }
+        
+        [HttpPost]
+        [Route("ExtendSuppliersList")]
+        public RouteRuleSettings ExtendSuppliersList(SupplierListRouteOptionRuleInput input)
+        {
+            RouteRuleManager manager = new RouteRuleManager();
+            return manager.ExtendSuppliersList(input.RouteRuleSettings, input.RouteOptions);
+        }
 
         [HttpPost]
         [Route("AddRule")]
@@ -116,6 +125,11 @@ namespace TOne.WhS.Routing.Web.Controllers
 
         public int? CustomerId { get; set; }
 
+        public List<RouteOption> RouteOptions { get; set; }
+    }
+    public class SupplierListRouteOptionRuleInput
+    {
+        public RouteRuleSettings RouteRuleSettings { get; set; }
         public List<RouteOption> RouteOptions { get; set; }
     }
 

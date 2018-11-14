@@ -63,5 +63,29 @@ namespace TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups
 
             return false;
         }
+        public override RouteRuleSettings ExtendSuppliersList(RouteRuleSettings routeRuleSettings, List<RouteOption> routeOptions)
+        {
+            var regularRouteRule = routeRuleSettings.CastWithValidate<RegularRouteRule>("RegularRouteRule");
+            var selectiveOptions = regularRouteRule.OptionsSettingsGroup.CastWithValidate<SelectiveOptions>("SelectiveOptions");
+            if (routeOptions == null || routeOptions.Count == 0)
+                return regularRouteRule;
+
+            if (selectiveOptions.Options == null)
+                selectiveOptions.Options = new List<RouteOptionSettings>();
+
+            foreach (var routeOption in routeOptions)
+            {
+                if (!selectiveOptions.Options.Any(option => option.SupplierId == routeOption.SupplierId))
+                {
+                    RouteOptionSettings routeOptionSettings = new RouteOptionSettings()
+                       {
+                           SupplierId = routeOption.SupplierId
+                       };
+
+                    selectiveOptions.Options.Add(routeOptionSettings);
+                }
+            }
+            return regularRouteRule;
+        }
     }
 }

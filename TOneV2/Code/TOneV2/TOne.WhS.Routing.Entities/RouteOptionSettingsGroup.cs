@@ -19,5 +19,9 @@ namespace TOne.WhS.Routing.Entities
         public abstract bool AreSuppliersIncluded(IRouteRuleAreSuppliersIncludedContext context);
 
         public abstract string GetDescription();
+        public virtual RouteRuleSettings ExtendSuppliersList(RouteRuleSettings routeRuleSettings, List<RouteOption> routeOptions)
+        {
+            return routeRuleSettings;
+        }
     }
 }

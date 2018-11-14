@@ -257,7 +257,14 @@ namespace TOne.WhS.Routing.Business
 
             return OptionsSettingsGroup.GetDescription();
         }
+        public override RouteRuleSettings ExtendSuppliersList(RouteRuleSettings routeRuleSettings, List<RouteOption> routeOptions)
+        {
+            var regularRouteRule = routeRuleSettings.CastWithValidate<RegularRouteRule>("RegularRouteRule");
+            if (routeOptions == null || routeOptions.Count == 0)
+                return regularRouteRule;
 
+            return regularRouteRule.OptionsSettingsGroup.ExtendSuppliersList(routeRuleSettings, routeOptions);
+        }
         #endregion
 
         #region Private Methods
