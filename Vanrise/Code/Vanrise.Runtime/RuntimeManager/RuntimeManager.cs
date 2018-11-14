@@ -7,7 +7,6 @@ using Vanrise.Runtime.Entities;
 using Vanrise.Common;
 using System.Configuration;
 using Vanrise.Runtime.Data;
-using System.ServiceModel;
 using System.Threading;
 using System.Collections.Concurrent;
 using System.Diagnostics;

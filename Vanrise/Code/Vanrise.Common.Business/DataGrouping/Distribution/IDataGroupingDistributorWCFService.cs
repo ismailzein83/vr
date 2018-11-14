@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,14 +26,12 @@ namespace Vanrise.Common.Business
         }
     }
 
-    [ServiceContract(Namespace = "http://runtime.vanrise.com/IDataGroupingDistributorWCFService")]
     public interface IDataGroupingDistributorWCFService
     {
-        [OperationContract]
         void InitializeDataGroupingAnalysisIfNeeded(string dataAnalysisUniqueName, string serializedGroupingHandler);
-        [OperationContract]
+        
         List<DataGroupingDistributionInfo> GetItemKeysDistributionInfos(string dataAnalysisUniqueName, List<string> itemKeys);
-        [OperationContract]
+        
         List<Guid> GetExecutorServiceInstanceIds(string _dataAnalysisUniqueName);
     }
 
