@@ -168,10 +168,31 @@ namespace Vanrise.Common
                                     MethodInfo methodInfo;
                                     if (!registeredService.Methods.TryGetValue(tcpRequest.MethodName, out methodInfo))
                                         throw new Exception($"Method '{tcpRequest.MethodName}' not found in service '{tcpRequest.ServiceName}'");
+                                     int prmIndex = 0;
+                                    foreach (var parameterInfo in methodInfo.GetParameters())
+                                    {
+                                        if (tcpRequest.Parameters.Count() <= prmIndex)
+                                            throw new Exception($"Received Parameters '{tcpRequest.Parameters.Count()}' are less than method parameters '{methodInfo.GetParameters().Length}'. Method Name '{methodInfo.Name}");
+                                        object parameterValue = tcpRequest.Parameters[prmIndex];
+                                        if (parameterValue != null && parameterValue.GetType() != parameterInfo.ParameterType)
+                                        {
+                                            if (parameterInfo.ParameterType == typeof(Guid))
+                                            {
+                                                string parameterValueString = parameterValue as string;
+                                                parameterValueString.ThrowIfNull("parameterValueString");
+                                                tcpRequest.Parameters[prmIndex] = Guid.Parse(parameterValueString);
+                                            }
+                                            else
+                                            {
+                                                tcpRequest.Parameters[prmIndex] = Convert.ChangeType(parameterValue, parameterInfo.ParameterType);
+                                            }
+                                        }
+                                        prmIndex++;
+                                    }
                                     var returnedValue = methodInfo.Invoke(registeredService.ServiceInstance, tcpRequest.Parameters);
                                     if (methodInfo.ReturnType != typeof(void))
                                     {
-                                        response.Response = Serializer.Serialize(returnedValue);   
+                                        response.Response = Serializer.Serialize(returnedValue);
                                     }
                                     response.IsSucceeded = true;
                                     serializedTCPResponse = Serializer.Serialize(response);
