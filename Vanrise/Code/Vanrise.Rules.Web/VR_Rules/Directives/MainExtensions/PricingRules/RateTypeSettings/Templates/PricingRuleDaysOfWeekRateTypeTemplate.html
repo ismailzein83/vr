@@ -25,10 +25,8 @@
     <vr-row removeline>
         <vr-columns width="fullrow">
             <vr-datalist maxitemsperrow="2" datasource="ctrl.times" autoremoveitem="true">
-                {{dataItem.FromTime.Hour}}:
-                <span ng-if="dataItem.FromTime.Minute >= 10">{{dataItem.FromTime.Minute}}</span><span ng-if="dataItem.FromTime.Minute < 10">0{{dataItem.FromTime.Minute}}</span>
-                to {{dataItem.ToTime.Hour}}:
-                <span ng-if="dataItem.ToTime.Minute >= 10">{{dataItem.ToTime.Minute}}</span><span ng-if="dataItem.ToTime.Minute < 10">0{{dataItem.ToTime.Minute}}</span>
+                {{dataItem.FromTime.Hour}}:<span ng-if="dataItem.FromTime.Minute >= 10">{{dataItem.FromTime.Minute}}</span><span ng-if="dataItem.FromTime.Minute < 10">0{{dataItem.FromTime.Minute}}</span>:00
+                to {{dataItem.ToTime.Hour}}:<span ng-if="dataItem.ToTime.Minute >= 10">{{dataItem.ToTime.Minute}}</span><span ng-if="dataItem.ToTime.Minute < 10">0{{dataItem.ToTime.Minute}}</span>:00
             </vr-datalist>
         </vr-columns>
     </vr-row>
