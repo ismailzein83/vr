@@ -15,6 +15,8 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
         public abstract void LogRoutes(ILogRoutesContext context);
 
+        public abstract void LogARoutes(ILogRoutesContext context);
+
         public abstract void LogCommands(ILogCommandsContext context);
     }
 }

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Ericsson.Data;
 using TOne.WhS.RouteSync.Ericsson.Entities;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.RouteSync.Ericsson.SQL
@@ -24,9 +23,12 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
         public void Initialize(IRouteCaseInitializeContext context)
         {
-            var blockedRCOption = new List<RouteCaseOption>() { Helper.GetBlockedRouteCaseOption() };
-            var branchRoutes = context.BranchRouteSettings.GenerateBranchRoutes(new GenerateBranchRoutesContext() { RouteCaseOptions = blockedRCOption });
-            var serializedBlockedRCOption = Helper.SerializeRouteCase(blockedRCOption, branchRoutes);
+
+            var blockedRC = context.BranchRouteSettings.GetBlockedBRWithRouteCaseOptions(new GetBlockedBRWithRouteCaseOptionsContext());
+            blockedRC.ThrowIfNull("blocked route case is null.");
+
+            var serializedBlockedRCOption = Helper.SerializeBRWithRouteCaseOptionsList(blockedRC);
+
             string query = string.Format(query_CreateRouteCaseTable, SwitchId, context.FirstRCNumber, serializedBlockedRCOption);
             ExecuteNonQueryText(query, null);
         }

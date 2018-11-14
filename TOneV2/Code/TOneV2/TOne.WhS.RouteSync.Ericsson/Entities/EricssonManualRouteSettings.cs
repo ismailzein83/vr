@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace TOne.WhS.RouteSync.Ericsson.Entities
 {
@@ -20,10 +18,28 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
         public EricssonManualRouteAction ManualRouteAction { get; set; }
 
     }
+
     public class EricssonSpecialRoute
     {
         public string TargetBO { get; set; }
         public string SourceBO { get; set; }
         public EricssonSpecialRoutingSetting Settings { get; set; }
+        public List<EricssonConvertedRoute> GetSpecialRoutes(IGetSpecialRoutesContext context)
+        {
+            context.ThrowIfNull("context");
+            this.Settings.ThrowIfNull("Settings");
+
+            return Settings.Execute(new EricssonSpecialRoutingSettingContext() { SourceRoutes = context.SourceRoutes, TargetBO = TargetBO });
+        }
+    }
+
+    public interface IGetSpecialRoutesContext
+    {
+        List<EricssonConvertedRoute> SourceRoutes { get; set; }
+    }
+
+    public class GetSpecialRoutesContext : IGetSpecialRoutesContext
+    {
+        public List<EricssonConvertedRoute> SourceRoutes { get; set; }
     }
 }

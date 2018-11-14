@@ -15,6 +15,36 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
         public List<RouteCaseOption> RouteCaseOptions { get; set; }
     }
 
+    public class RORangeBRWithRouteCaseOptions
+    {
+        public RORangeBRWithRouteCaseOptions()
+        {
+            RouteCaseOptions = new List<RouteCaseOption>();
+        }
+        public RORangeBranchRoute BranchRoute { get; set; }
+        public List<RouteCaseOption> RouteCaseOptions { get; set; }
+    }
+
+    public class BaseBRWithRouteCaseOptions
+    {
+        public BaseBRWithRouteCaseOptions()
+        {
+            RouteCaseOptions = new List<RouteCaseOption>();
+        }
+        public BaseBranchRoute BranchRoute { get; set; }
+        public List<RouteCaseOption> RouteCaseOptions { get; set; }
+    }
+
+    public class BRWithRouteCaseOptions
+    {
+        public BRWithRouteCaseOptions()
+        {
+            RouteCaseOptions = new List<RouteCaseOption>();
+        }
+        public BranchRoute BranchRoute { get; set; }
+        public List<RouteCaseOption> RouteCaseOptions { get; set; }
+    }
+
     public class RouteCaseOption
     {
         public string SupplierId { get; set; }

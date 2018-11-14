@@ -21,7 +21,9 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
 		public static string ANBAI_Command = "ANBAI";
 
-		public static string PNBSI_Command = "PNBSI";
+        public static string ANAAI_Command = "ANAAI";
+
+        public static string PNBSI_Command = "PNBSI";
 
 		public static string PNBAI_Command = "PNBAI";
 
@@ -30,6 +32,8 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 		public static string PNBCI_Command = "PNBCI";
 
 		public static string ANBAR_Command = "ANBAR";
+
+        public static string ANAAR_Command = "ANAAR";
 
         public static string ANASE_Command = "ANASE";
 
@@ -43,9 +47,13 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 
 		public static string ANBZI_Command = "ANBZI";
 
-		public static string ANBCI_Command = "ANBCI";
+        public static string ANBCI_Command = "ANBCI";
 
-		public static string Exit_Command = "exit;";
+        public static string ANAZI_Command = "ANAZI";
+
+        public static string ANACI_Command = "ANACI";
+
+        public static string Exit_Command = "exit;";
 
 		public static string MML_Command = "mml";
 
@@ -79,7 +87,6 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 	{
 		public CustomerMappingWithActionType CustomerMappingWithActionType { get; set; }
 		public List<string> OBACommands { get; set; }
-		//public Dictionary<Guid, string> TrunkCommandsByTrunkId { get; set; }
 	}
 	public class CustomerMappingWithActionType
 	{

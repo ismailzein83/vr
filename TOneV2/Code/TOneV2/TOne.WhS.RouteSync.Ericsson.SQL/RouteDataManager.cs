@@ -221,6 +221,28 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
             ExecuteNonQueryText(query, null);
         }
 
+        public Dictionary<string, List<EricssonConvertedRoute>> GetFilteredConvertedRouteByBO(IEnumerable<string> customerBOs)
+        {
+            var convertedRoutesByBO = new Dictionary<string, List<EricssonConvertedRoute>>();
+
+            string filter = "";
+
+            if (customerBOs != null && customerBOs.Any())
+                filter = string.Format(" Where BO in ({0})", string.Join(",", customerBOs));
+
+            string query = string.Format(query_GetFilteredRoute.Replace("#FILTER#", filter), SwitchId, RouteTempTableName);
+            ExecuteReaderText(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    var convertedRoute = EricssonConvertedRouteMapper(reader);
+                    List<EricssonConvertedRoute> convertedRoutes = convertedRoutesByBO.GetOrCreateItem(convertedRoute.BO);
+                    convertedRoutes.Add(convertedRoute);
+                }
+            }, null);
+            return convertedRoutesByBO;
+        }
+
         private DataTable BuildRouteTable(IEnumerable<EricssonConvertedRoute> routes)
         {
             DataTable dtRoutes = new DataTable();
@@ -418,6 +440,11 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 														set tempRoutes.RCNumber = routesToUpdate.RCNumber
                                                     FROM [WhS_RouteSync_Ericsson_{0}].[{1}] as tempRoutes
                                                     JOIN @Routes as routesToUpdate on routesToUpdate.BO = tempRoutes.BO and routesToUpdate.Code = tempRoutes.Code and routesToUpdate.RouteType = tempRoutes.RouteType";
+
+        const string query_GetFilteredRoute = @"Select BO,Code,RCNumber,RouteType
+                                                FROM [WhS_RouteSync_Ericsson_{0}].[{1}]
+                                                #FILTER#";
+
         #endregion
     }
 }

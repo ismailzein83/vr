@@ -282,7 +282,9 @@ as (select * from (values
 ('B53B18B1-3B53-4A2D-882A-CEC022E85320','Ericsson Manual Route Origination Range','Range','WhS_RouteSync_EricssonManualRouteOriginationsConfig','{"Editor":"whs-routesync-ericsson-manualroute-originationrange"}'),
 ('5FD9FE6B-BC13-4C82-9244-3CB5976BF448','Ericsson Manual Route Destination Range','Range','WhS_RouteSync_EricssonManualRouteDestinationsConfig','{"Editor":"whs-routesync-ericsson-manualroute-destinationrange"}'),
 ('DD43F4F5-6908-4335-92AF-E2A7CC557BE4','Ericsson Manual Route Destination Codes','Codes','WhS_RouteSync_EricssonManualRouteDestinationsConfig','{"Editor":"whs-routesync-ericsson-manualroute-destinationcodes"}'),
-('58B8076D-C69A-4019-B2AE-B32456F9560B','Ericsson Manual Route Block Action','Block','WhS_RouteSync_EricssonManualRouteActionConfig','{"Editor":"whs-routesync-ericsson-manualroute-blockaction"}')
+('58B8076D-C69A-4019-B2AE-B32456F9560B','Ericsson Manual Route Block Action','Block','WhS_RouteSync_EricssonManualRouteActionConfig','{"Editor":"whs-routesync-ericsson-manualroute-blockaction"}'),
+
+('a9497ef9-2074-4a1e-a999-08253b68f448','Ericsson Special Routing Settings Service Language','Service Language','WhS_RouteSync_EricssonSpecialRoutingServiceLanguageConfig','{"Editor":"whs-routesync-ericsson-specialrouting-servicelanguage"}')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
