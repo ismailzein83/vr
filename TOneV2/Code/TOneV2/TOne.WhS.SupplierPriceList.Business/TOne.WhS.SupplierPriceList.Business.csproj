@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -112,7 +112,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateZones\EmptyPriceListCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\OtherRateZero.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\RateIsZero.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateZones\OtherRateNegativeOrZero.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\OtherRateGreaterThanZero.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\RateGreaterThanZero.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\ZoneServicesWithDifferentBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\ZoneHasNoCodesCondition.cs" />

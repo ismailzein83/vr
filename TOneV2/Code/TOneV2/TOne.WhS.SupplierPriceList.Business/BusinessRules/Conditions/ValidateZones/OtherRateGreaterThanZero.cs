@@ -9,7 +9,7 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    class OtherRateNegativeOrZero : BusinessRuleCondition
+    class OtherRateGreaterThanZero : BusinessRuleCondition
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
