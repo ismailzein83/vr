@@ -103,7 +103,6 @@
     <Compile Include="RepeatedNumberManager.cs" />
     <Compile Include="ReportDefinitionManager.cs" />
     <Compile Include="AnalyticHelper.cs" />
-    <Compile Include="ReportGenerationCustomCodeSettings.cs" />
     <Compile Include="VariationReportViewSettings.cs" />
     <Compile Include="VariationReportManager.cs" />
   </ItemGroup>
