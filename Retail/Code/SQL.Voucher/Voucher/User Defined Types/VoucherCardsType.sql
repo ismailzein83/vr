@@ -1,0 +1,20 @@
+﻿CREATE TYPE [Voucher].[VoucherCardsType] AS TABLE (
+    [ID]                  BIGINT          NULL,
+    [VoucherTypeID]       BIGINT          NULL,
+    [Amount]              DECIMAL (22, 6) NULL,
+    [SerialNumber]        NVARCHAR (1000) NULL,
+    [ActivationDate]      DATETIME        NULL,
+    [ExpiryDate]          DATETIME        NULL,
+    [CreatedTime]         DATETIME        NULL,
+    [CreatedBy]           INT             NULL,
+    [LastModifiedTime]    DATETIME        NULL,
+    [LastModifiedBy]      INT             NULL,
+    [UsedDate]            DATETIME        NULL,
+    [PinCode]             VARCHAR (255)   NULL,
+    [ActivationCode]      VARCHAR (255)   NULL,
+    [GenerationVoucherId] BIGINT          NULL,
+    [CurrencyId]          INT             NULL,
+    [LockedBy]            NVARCHAR (255)  NULL,
+    [LockedDate]          DATETIME        NULL,
+    [UsedBy]              NVARCHAR (255)  NULL);
+
