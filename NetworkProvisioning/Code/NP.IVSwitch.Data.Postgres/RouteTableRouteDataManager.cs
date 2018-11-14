@@ -35,10 +35,10 @@ namespace NP.IVSwitch.Data.Postgres
                                                       time_frame character varying(50) NOT NULL,
                                                       preference smallint NOT NULL,
                                                       huntstop smallint,
-                                                      huntstop_rc character varying(50) DEFAULT NULL::character varying,
-                                                      min_profit numeric(5,5) DEFAULT NULL::numeric,
+                                                      huntstop_rc character varying(50) DEFAULT '',
+                                                      min_profit numeric(5,5) DEFAULT 0,
                                                       state_id smallint,
-                                                      wakeup_time timestamp without time zone,
+                                                      wakeup_time timestamp without time zone DEFAULT current_timestamp,
                                                       description character varying(50),
                                                       routing_mode integer DEFAULT 1,
                                                       total_bkts integer DEFAULT 1,
@@ -84,10 +84,10 @@ namespace NP.IVSwitch.Data.Postgres
                             time_frame character varying(50) COLLATE pg_catalog.""default"" NOT NULL,
                             preference smallint NOT NULL,
                             huntstop smallint,
-                            huntstop_rc character varying(50) COLLATE pg_catalog.""default"" DEFAULT NULL::character varying,
-                            min_profit numeric(5, 5) DEFAULT NULL::numeric,
+                            huntstop_rc character varying(50) COLLATE pg_catalog.""default"" DEFAULT '',
+                            min_profit numeric(5, 5) DEFAULT 0,
                             state_id smallint,
-                            wakeup_time timestamp without time zone,
+                            wakeup_time timestamp without time zone DEFAULT current_timestamp,
                             description character varying(50) COLLATE pg_catalog.""default"",
                             routing_mode integer DEFAULT 1,
                             total_bkts integer DEFAULT 1,
@@ -293,7 +293,7 @@ namespace NP.IVSwitch.Data.Postgres
                                {
                                    cmd.Parameters.AddWithValue("@destination", item.Destination);
                                    cmd.Parameters.AddWithValue("@route_id", routeOption.RouteId);
-                                   cmd.Parameters.AddWithValue("@time_frame", "*****");
+                                   cmd.Parameters.AddWithValue("@time_frame", "* * * * *");
                                    cmd.Parameters.AddWithValue("@preference", routeOption.Preference);
                                    cmd.Parameters.AddWithValue("@percentage", (routeOption.Percentage == null) ? 0 : routeOption.Percentage);
                                    cmd.Parameters.AddWithValue("@routingMode", routeOption.RoutingMode);
@@ -317,7 +317,7 @@ namespace NP.IVSwitch.Data.Postgres
                             {
                                 cmd.Parameters.AddWithValue("@destination", item.Destination);
                                 cmd.Parameters.AddWithValue("@route_id", routeOption.RouteId);
-                                cmd.Parameters.AddWithValue("@time_frame", "*****");
+                                cmd.Parameters.AddWithValue("@time_frame", "* * * * *");
                                 cmd.Parameters.AddWithValue("@preference", 0);
                                 cmd.Parameters.AddWithValue("@description", "BLK");
                                 cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? "0" : item.TechPrefix);
@@ -369,7 +369,7 @@ namespace NP.IVSwitch.Data.Postgres
                             {
                                 cmd.Parameters.AddWithValue("@destination", routeTableRoute.Destination);
                                 cmd.Parameters.AddWithValue("@route_id", option.RouteId);
-                                cmd.Parameters.AddWithValue("@time_frame", "*****");
+                                cmd.Parameters.AddWithValue("@time_frame", "* * * * *");
                                 cmd.Parameters.AddWithValue("@preference", option.Preference);
                                 cmd.Parameters.AddWithValue("@percentage", (option.Percentage == null) ? 0 : option.Percentage);
                                 cmd.Parameters.AddWithValue("@routingMode", option.RoutingMode);
@@ -396,7 +396,7 @@ namespace NP.IVSwitch.Data.Postgres
                             {
                                 cmd.Parameters.AddWithValue("@destination", routeTableRoute.Destination);
                                 cmd.Parameters.AddWithValue("@route_id", option.RouteId);
-                                cmd.Parameters.AddWithValue("@time_frame", "*****");
+                                cmd.Parameters.AddWithValue("@time_frame", "* * * * *");
                                 cmd.Parameters.AddWithValue("@preference", 0);
                                 cmd.Parameters.AddWithValue("@description", "BLK");
                                 cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? "0" : routeTableRoute.TechPrefix);
