@@ -464,11 +464,8 @@ namespace TOne.WhS.Deal.Business
         public List<DealDefinition> GetRecurredDeals(DealDefinition deal, int recurringNumber, RecurringType recurringType)
         {
             var recurredDeals = new List<DealDefinition>();
-            DateTime endDealDate = deal.Settings.RealEED.Value;
+            DateTime endDealDate = deal.Settings.EEDToStore.Value;
             DateTime beginDealDate = deal.Settings.BeginDate;
-
-            if (deal.Settings.OffSet.HasValue)
-                endDealDate = endDealDate.Add(deal.Settings.OffSet.Value);
 
             var dealLifeSpan = endDealDate.Subtract(beginDealDate);
             var monthsDifference = (endDealDate.Year - beginDealDate.Year) * 12 + (endDealDate.Month - beginDealDate.Month);
