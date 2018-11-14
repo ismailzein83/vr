@@ -66,11 +66,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     if(i>0)
                         fileContent.Write(Delimiter);
                     var itemField = item.Fields.GetRecord(field.FieldName);
-                    var fieldInfo = fieldInfos.GetRecord(field.FieldName);
-                    if (fieldInfo.FieldType.RenderDescriptionByDefault())
-                        fileContent.Write(itemField.Description);
-                    else
-                        fileContent.Write(itemField.Value);
+                    //var fieldInfo = fieldInfos.GetRecord(field.FieldName);
+                    fileContent.Write(itemField.Description);
                 }
                 fileContent.WriteLine();
             }
