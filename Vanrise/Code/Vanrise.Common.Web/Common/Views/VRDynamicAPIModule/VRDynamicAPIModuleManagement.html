@@ -1,10 +1,24 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-panel ng-controller="VR_Dynamic_API_ModuleManagementController" vr-loader="scopeModel.isLoading">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.addVRDynamicAPIModule"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-common-dynamicapi-module-grid on-ready="scopeModel.onGridReady"></vr-common-dynamicapi-module-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
