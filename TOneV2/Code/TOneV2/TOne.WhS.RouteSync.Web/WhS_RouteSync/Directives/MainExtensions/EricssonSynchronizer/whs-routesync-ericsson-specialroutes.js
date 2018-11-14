@@ -56,7 +56,7 @@ app.directive('whsRoutesyncEricssonSpecialroutes', ['UtilsService', 'VRUIUtilsSe
                         return 'Source and Target BOs should be different';
 
                     return null;
-                }
+                };
 
                 $scope.scopeModel.removerow = function (dataItem) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
