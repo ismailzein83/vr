@@ -1,9 +1,6 @@
 ﻿using Demo.BestPractices.Business;
 using Demo.BestPractices.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
@@ -14,33 +11,20 @@ namespace Demo.BestPractices.Web.Controllers
     [JSONWithTypeAttribute]
     public class Demo_ParentController : BaseAPIController
     {
-        ParentManager parentManager = new ParentManager();
+        ParentManager _parentManager = new ParentManager();
+
         [HttpPost]
         [Route("GetFilteredParents")]
         public object GetFilteredParents(DataRetrievalInput<ParentQuery> input)
         {
-            return GetWebResponse(input, parentManager.GetFilteredParents(input));
+            return GetWebResponse(input, _parentManager.GetFilteredParents(input));
         }
 
         [HttpGet]
         [Route("GetParentById")]
         public Parent GetParentById(long parentId)
         {
-            return parentManager.GetParentById(parentId);
-        }
-
-        [HttpPost]
-        [Route("UpdateParent")]
-        public UpdateOperationOutput<ParentDetails> UpdateParent(Parent parent)
-        {
-            return parentManager.UpdateParent(parent);
-        }
-
-        [HttpPost]
-        [Route("AddParent")]
-        public InsertOperationOutput<ParentDetails> AddParent(Parent parent)
-        {
-            return parentManager.AddParent(parent);
+            return _parentManager.GetParentById(parentId);
         }
 
         [HttpGet]
@@ -48,7 +32,21 @@ namespace Demo.BestPractices.Web.Controllers
         public IEnumerable<ParentInfo> GetParentsInfo(string filter = null)
         {
             ParentInfoFilter parentInfoFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<ParentInfoFilter>(filter) : null;
-            return parentManager.GetParentsInfo(parentInfoFilter);
+            return _parentManager.GetParentsInfo(parentInfoFilter);
+        }
+
+        [HttpPost]
+        [Route("AddParent")]
+        public InsertOperationOutput<ParentDetail> AddParent(Parent parent)
+        {
+            return _parentManager.AddParent(parent);
+        }
+
+        [HttpPost]
+        [Route("UpdateParent")]
+        public UpdateOperationOutput<ParentDetail> UpdateParent(Parent parent)
+        {
+            return _parentManager.UpdateParent(parent);
         }
     }
 }

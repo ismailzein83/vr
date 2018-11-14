@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Demo.BestPractices.Entities
 {
-    public class ChildQuery
+    public class ParentInfo
     {
+        public long ParentId { get; set; }
         public string Name { get; set; }
-        public List<long> ParentIds { get; set; }
     }
 }

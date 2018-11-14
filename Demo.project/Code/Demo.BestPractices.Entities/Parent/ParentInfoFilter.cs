@@ -10,6 +10,7 @@ namespace Demo.BestPractices.Entities
     {
         public List<IParentInfoFilter> Filters { get; set; }
     }
+
     public interface IParentInfoFilter
     {
         bool IsMatch(IParentInfoFilterContext context);
@@ -19,6 +20,7 @@ namespace Demo.BestPractices.Entities
     {
         long ParentId { get; set; }
     }
+
     public class ParentInfoFilterContext : IParentInfoFilterContext
     {
         public long ParentId { get; set; }

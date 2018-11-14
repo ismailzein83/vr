@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Demo.BestPractices.Data
 {
-    public interface IChildDataManager:IDataManager
+    public interface IChildDataManager : IDataManager
     {
-        bool AreChildsUpdated(ref object updateHandle);
         List<Child> GetChilds();
         bool Insert(Child child, out long insertedId);
         bool Update(Child child);
+        bool AreChildsUpdated(ref object updateHandle);
     }
 }

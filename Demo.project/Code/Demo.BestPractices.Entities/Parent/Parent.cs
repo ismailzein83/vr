@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Demo.BestPractices.Entities
 {
-    public class ChildDetails
+    public class Parent
     {
-        public long ChildId { get; set; }
+        public long ParentId { get; set; }
         public string Name { get; set; }
-        public string ParentName { get; set; }
-        public string AreaDescription { get; set; }
     }
 }

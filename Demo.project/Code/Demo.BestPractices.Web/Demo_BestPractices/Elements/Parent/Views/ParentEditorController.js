@@ -1,9 +1,10 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    parentEditorController.$inject = ['$scope', 'Demo_BestPractices_ParentAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function parentEditorController($scope, Demo_BestPractices_ParentAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    parentEditorController.$inject = ['$scope', 'Demo_BestPractices_ParentAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+
+    function parentEditorController($scope, Demo_BestPractices_ParentAPIService, VRNotificationService, VRNavigationService, UtilsService) {
 
         var isEditMode;
         var parentId;
@@ -15,14 +16,15 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
+
             if (parameters != undefined && parameters != null) {
                 parentId = parameters.parentId;
             }
+
             isEditMode = (parentId != undefined);
         };
 
         function defineScope() {
-
             $scope.scopeModel = {};
 
             $scope.scopeModel.saveParent = function () {
@@ -30,17 +32,16 @@
                     return updateParent();
                 else
                     return insertParent();
-
             };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-
         };
 
         function load() {
             $scope.scopeModel.isLoading = true;
+
             if (isEditMode) {
                 getParent().then(function () {
                     loadAllControls().finally(function () {
@@ -51,8 +52,9 @@
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
             }
-            else
+            else {
                 loadAllControls();
+            }
         };
 
         function getParent() {
@@ -75,29 +77,18 @@
                     $scope.scopeModel.name = parentEntity.Name;
             };
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
-             .catch(function (error) {
-                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-             })
-               .finally(function () {
-                   $scope.scopeModel.isLoading = false;
-               });
-        };
-
-        function buildParentObjectFromScope() {
-            var object = {
-                ParentId: (parentId != undefined) ? parentId : undefined,
-                Name: $scope.scopeModel.name,
-            };
-            return object;
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         };
 
         function insertParent() {
-
             $scope.scopeModel.isLoading = true;
+
             var parentObject = buildParentObjectFromScope();
-            return Demo_BestPractices_ParentAPIService.AddParent(parentObject)
-            .then(function (response) {
+            return Demo_BestPractices_ParentAPIService.AddParent(parentObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Parent", response, "Name")) {
                     if ($scope.onParentAdded != undefined) {
                         $scope.onParentAdded(response.InsertedObject);
@@ -110,11 +101,11 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-
         };
 
         function updateParent() {
             $scope.scopeModel.isLoading = true;
+
             var parentObject = buildParentObjectFromScope();
             Demo_BestPractices_ParentAPIService.UpdateParent(parentObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Parent", response, "Name")) {
@@ -128,10 +119,17 @@
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
-
             });
         };
 
+        function buildParentObjectFromScope() {
+            var object = {
+                ParentId: (parentId != undefined) ? parentId : undefined,
+                Name: $scope.scopeModel.name,
+            };
+            return object;
+        };
     };
+
     appControllers.controller('Demo_BestPractices_ParentEditorController', parentEditorController);
 })(appControllers);

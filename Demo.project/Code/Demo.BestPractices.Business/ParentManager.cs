@@ -3,8 +3,6 @@ using Demo.BestPractices.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Entities;
@@ -13,54 +11,32 @@ namespace Demo.BestPractices.Business
 {
     public class ParentManager
     {
-        
         #region Public Methods
-        public IDataRetrievalResult<ParentDetails> GetFilteredParents(DataRetrievalInput<ParentQuery> input)
+
+        public IDataRetrievalResult<ParentDetail> GetFilteredParents(DataRetrievalInput<ParentQuery> input)
         {
             var allParents = GetCachedParents();
             Func<Parent, bool> filterExpression = (parent) =>
             {
                 if (input.Query.Name != null && !parent.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
-               
+
                 return true;
             };
             return DataRetrievalManager.Instance.ProcessResult(input, allParents.ToBigResult(input, filterExpression, ParentDetailMapper));
+        }
 
-        }
-        public string GetParentName(long parentId)
-        {
-            var parent = GetParentById(parentId);
-            if (parent == null)
-                return null;
-            return parent.Name;
-        }
-        public InsertOperationOutput<ParentDetails> AddParent(Parent parent)
-        {
-            IParentDataManager parentDataManager = BestPracticesFactory.GetDataManager<IParentDataManager>();
-            InsertOperationOutput<ParentDetails> insertOperationOutput = new InsertOperationOutput<ParentDetails>();
-            insertOperationOutput.Result = InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
-            long parentId = -1;
-
-            bool insertActionSuccess = parentDataManager.Insert(parent, out parentId);
-            if (insertActionSuccess)
-            {
-                parent.ParentId = parentId;
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = ParentDetailMapper(parent);
-            }
-            else
-            {
-                insertOperationOutput.Result = InsertOperationResult.SameExists;
-            }
-            return insertOperationOutput;
-        }
         public Parent GetParentById(long parentId)
         {
             return GetCachedParents().GetRecord(parentId);
         }
+
+        public string GetParentName(long parentId)
+        {
+            var parent = GetParentById(parentId);
+            return parent != null ? parent.Name : null;
+        }
+
         public IEnumerable<ParentInfo> GetParentsInfo(ParentInfoFilter parentInfoFilter)
         {
             var allParents = GetCachedParents();
@@ -68,17 +44,14 @@ namespace Demo.BestPractices.Business
             {
                 if (parentInfoFilter != null)
                 {
-                    if(parentInfoFilter.Filters != null)
+                    if (parentInfoFilter.Filters != null)
                     {
-                        var context = new ParentInfoFilterContext{
-                            ParentId = parent.ParentId
-                        };
-                        foreach(var filter in parentInfoFilter.Filters)
+                        var context = new ParentInfoFilterContext { ParentId = parent.ParentId };
+
+                        foreach (var filter in parentInfoFilter.Filters)
                         {
-                            if(!filter.IsMatch(context))
-                            {
+                            if (!filter.IsMatch(context))
                                 return false;
-                            }
                         }
                     }
                 }
@@ -86,28 +59,71 @@ namespace Demo.BestPractices.Business
             };
             return allParents.MapRecords(ParentInfoMapper, filterFunc).OrderBy(parent => parent.Name);
         }
-        public UpdateOperationOutput<ParentDetails> UpdateParent(Parent parent)
+
+        public InsertOperationOutput<ParentDetail> AddParent(Parent parent)
         {
+            InsertOperationOutput<ParentDetail> insertOperationOutput = new InsertOperationOutput<ParentDetail>();
+            insertOperationOutput.Result = InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            long parentId = -1;
+
             IParentDataManager parentDataManager = BestPracticesFactory.GetDataManager<IParentDataManager>();
-            UpdateOperationOutput<ParentDetails> updateOperationOutput = new UpdateOperationOutput<ParentDetails>();
+            bool insertActionSuccess = parentDataManager.Insert(parent, out parentId);
+            if (insertActionSuccess)
+            {
+                parent.ParentId = parentId;
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                insertOperationOutput.InsertedObject = this.ParentDetailMapper(parent);
+            }
+            else
+            {
+                insertOperationOutput.Result = InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public UpdateOperationOutput<ParentDetail> UpdateParent(Parent parent)
+        {
+            UpdateOperationOutput<ParentDetail> updateOperationOutput = new UpdateOperationOutput<ParentDetail>();
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
+
+            IParentDataManager parentDataManager = BestPracticesFactory.GetDataManager<IParentDataManager>();
             bool updateActionSuccess = parentDataManager.Update(parent);
             if (updateActionSuccess)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = ParentDetailMapper(parent);
+                updateOperationOutput.UpdatedObject = this.ParentDetailMapper(parent);
             }
             else
             {
                 updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
+
             return updateOperationOutput;
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private Dictionary<long, Parent> GetCachedParents()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedParents", () =>
+                    {
+                        IParentDataManager parentDataManager = BestPracticesFactory.GetDataManager<IParentDataManager>();
+                        List<Parent> parents = parentDataManager.GetParents();
+                        return parents.ToDictionary(parent => parent.ParentId, parent => parent);
+                    });
+        }
+
         #endregion
 
         #region Private Classes
+
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IParentDataManager parentDataManager = BestPracticesFactory.GetDataManager<IParentDataManager>();
@@ -117,33 +133,21 @@ namespace Demo.BestPractices.Business
                 return parentDataManager.AreParentsUpdated(ref _updateHandle);
             }
         }
-        #endregion
 
-        #region Private Methods
-
-        private Dictionary<long, Parent> GetCachedParents()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
-               .GetOrCreateObject("GetCachedParents", () =>
-               {
-                   IParentDataManager parentDataManager = BestPracticesFactory.GetDataManager<IParentDataManager>();
-                   List<Parent> parents = parentDataManager.GetParents();
-                   return parents.ToDictionary(parent => parent.ParentId, parent => parent);
-               });
-        }
         #endregion
 
         #region Mappers
-        public ParentDetails ParentDetailMapper(Parent parent)
+
+        private ParentDetail ParentDetailMapper(Parent parent)
         {
-            return new ParentDetails
+            return new ParentDetail
             {
                 Name = parent.Name,
                 ParentId = parent.ParentId
             };
         }
 
-        public ParentInfo ParentInfoMapper(Parent parent)
+        private ParentInfo ParentInfoMapper(Parent parent)
         {
             return new ParentInfo
             {
@@ -151,7 +155,7 @@ namespace Demo.BestPractices.Business
                 ParentId = parent.ParentId
             };
         }
-        #endregion 
 
+        #endregion 
     }
 }

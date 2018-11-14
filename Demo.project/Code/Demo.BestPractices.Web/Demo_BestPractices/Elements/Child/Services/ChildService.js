@@ -1,37 +1,43 @@
-﻿app.service('Demo_BestPractices_ChildService', ['VRModalService', 'VRNotificationService',
-function (VRModalService, VRNotificationService) {
+﻿(function (appControllers) {
 
-    function addChild(onChildAdded, parentIdItem) {
+    "use strict";
 
-        var settings = {};
-        var parameters  = {
-            parentIdItem:parentIdItem
+    childService.$inject = ['VRModalService'];
+
+    function childService(VRModalService) {
+
+        function addChild(onChildAdded, parentIdItem) {
+
+            var parameters = {
+                parentIdItem: parentIdItem
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onChildAdded = onChildAdded;
+            };
+            VRModalService.showModal('/Client/Modules/Demo_BestPractices/Elements/Child/Views/ChildEditor.html', parameters, settings);
         };
 
-        settings.onScopeReady = function (modalScope) {
-            modalScope.onChildAdded = onChildAdded;
+        function editChild(onChildUpdated, childId, parentIdItem) {
 
+            var parameters = {
+                childId: childId,
+                parentIdItem: parentIdItem
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onChildUpdated = onChildUpdated;
+            };
+            VRModalService.showModal('/Client/Modules/Demo_BestPractices/Elements/Child/Views/ChildEditor.html', parameters, settings);
         };
-        VRModalService.showModal('/Client/Modules/Demo_BestPractices/Elements/Child/Views/ChildEditor.html', parameters, settings);
+
+        return {
+            addChild: addChild,
+            editChild: editChild
+        };
     };
 
-    function editChild(childId, onChildUpdated, parentIdItem) {
-        var settings = {};
-        var parameters = {
-            childId: childId,
-            parentIdItem: parentIdItem
-        };
-
-        settings.onScopeReady = function (modalScope) {
-            modalScope.onChildUpdated = onChildUpdated;
-
-        };
-        VRModalService.showModal('/Client/Modules/Demo_BestPractices/Elements/Child/Views/ChildEditor.html', parameters, settings);
-    };
-
-    return {
-        addChild: addChild,
-        editChild: editChild,
-    };
-
-}]);
+    appControllers.service("Demo_BestPractices_ChildService", childService);
+})(appControllers);

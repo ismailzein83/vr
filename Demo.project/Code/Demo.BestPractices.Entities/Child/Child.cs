@@ -18,14 +18,15 @@ namespace Demo.BestPractices.Entities
     {
         public ChildShape ChildShape { get; set; }
     }
+
     public abstract class ChildShape
     {
         public abstract Guid ConfigId { get; }
         public abstract string GetChildAreaDescription(IChildShapeDescriptionContext context);
     }
+
     public interface IChildShapeDescriptionContext
     {
-        Child Child { get;}
+        Child Child { get; }
     }
-
 }

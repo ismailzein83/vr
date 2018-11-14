@@ -14,7 +14,6 @@
                 customvalidate: '=',
                 isrequired: '='
             },
-
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 var ctor = new ChildShape($scope, ctrl, $attrs);
@@ -61,6 +60,7 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
+
                     var childShapeEntity;
 
                     if (payload != undefined) {
@@ -84,9 +84,7 @@
                                 if (childShapeEntity != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
                                         UtilsService.getItemByVal($scope.scopeModel.templateConfigs, childShapeEntity.ConfigId, 'ExtensionConfigurationId');
-
                                 }
-
                             }
                         });
                     }
@@ -129,10 +127,12 @@
         }
 
         function getTamplate(attrs) {
+
             var hideremoveicon = '';
             if (attrs.hideremoveicon != undefined) {
                 hideremoveicon = 'hideremoveicon';
             }
+
             var template =
                 '<vr-row>'
                     + '<vr-columns colnum="{{ctrl.normalColNum}}">'
@@ -158,6 +158,4 @@
     }
 
     app.directive('demoBestpracticesChildChildshape', ChildShapeDirective);
-
 })(app);
-

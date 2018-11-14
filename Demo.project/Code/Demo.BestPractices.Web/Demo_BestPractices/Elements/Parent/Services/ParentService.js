@@ -1,34 +1,40 @@
-﻿app.service('Demo_BestPractices_ParentService', ['VRModalService', 'VRNotificationService',
-function (VRModalService, VRNotificationService) {
-   
-    function addParent(onParentAdded) {
+﻿(function (appControllers) {
 
-        var settings = {};
-        var parameters = {};
+    "use strict";
 
-        settings.onScopeReady = function (modalScope) {
-            modalScope.onParentAdded = onParentAdded;
+    parentService.$inject = ['VRModalService'];
 
-        };
-        VRModalService.showModal('/Client/Modules/Demo_BestPractices/Elements/Parent/Views/ParentEditor.html', parameters, settings);
-    };
+    function parentService(VRModalService) {
 
-    function editParent(parentId, onParentUpdated) {
-        var settings = {};
-        var parameters = {
-            parentId: parentId
+        function addParent(onParentAdded) {
+
+            var parameters = {};
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onParentAdded = onParentAdded;
+            };
+            VRModalService.showModal('/Client/Modules/Demo_BestPractices/Elements/Parent/Views/ParentEditor.html', parameters, settings);
         };
 
-        settings.onScopeReady = function (modalScope) {
-            modalScope.onParentUpdated = onParentUpdated;
+        function editParent(onParentUpdated, parentId) {
 
+            var parameters = {
+                parentId: parentId
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onParentUpdated = onParentUpdated;
+            };
+            VRModalService.showModal('/Client/Modules/Demo_BestPractices/Elements/Parent/Views/ParentEditor.html', parameters, settings);
         };
-        VRModalService.showModal('/Client/Modules/Demo_BestPractices/Elements/Parent/Views/ParentEditor.html', parameters, settings);
+
+        return {
+            addParent: addParent,
+            editParent: editParent
+        };
     };
 
-    return {
-        addParent: addParent,
-        editParent: editParent,
-    };
-
-}]);
+    appControllers.service("Demo_BestPractices_ParentService", parentService);
+})(appControllers);

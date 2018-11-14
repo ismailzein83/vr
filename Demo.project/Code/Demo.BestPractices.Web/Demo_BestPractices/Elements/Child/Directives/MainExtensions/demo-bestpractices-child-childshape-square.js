@@ -4,25 +4,17 @@ app.directive("demoBestpracticesChildChildshapeSquare", ["UtilsService", "VRNoti
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
-
             restrict: "E",
-            scope:
-            {
-                onReady: "=",
+            scope: {
+                onReady: "="
             },
-
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
                 var ctor = new SquareShape($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
             templateUrl: "/Client/Modules/Demo_BestPractices/Elements/Child/Directives/MainExtensions/Templates/SquareShapeTemplate.html"
         };
 
@@ -42,6 +34,7 @@ app.directive("demoBestpracticesChildChildshapeSquare", ["UtilsService", "VRNoti
                         $scope.scopeModel.width = payload.childShapeEntity.Width;
                         $scope.scopeModel.height = payload.childShapeEntity.Height;
                     }
+
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -60,6 +53,5 @@ app.directive("demoBestpracticesChildChildshapeSquare", ["UtilsService", "VRNoti
         }
 
         return directiveDefinitionObject;
-
     }
 ]);
