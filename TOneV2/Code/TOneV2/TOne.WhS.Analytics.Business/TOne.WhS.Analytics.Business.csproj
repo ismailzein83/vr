@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -103,6 +103,7 @@
     <Compile Include="RepeatedNumberManager.cs" />
     <Compile Include="ReportDefinitionManager.cs" />
     <Compile Include="AnalyticHelper.cs" />
+    <Compile Include="ReportGenerationCustomCodeSettings.cs" />
     <Compile Include="VariationReportViewSettings.cs" />
     <Compile Include="VariationReportManager.cs" />
   </ItemGroup>
