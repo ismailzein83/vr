@@ -28,11 +28,33 @@ namespace TOne.WhS.Deal.Business
             var filteredDeals = swapDealManager.GetAllSwapDeals().FindAllRecords(deal => (filteredDealIds == null || filteredDealIds.Contains(deal.DealId))
                 && Utilities.AreTimePeriodsOverlapped(deal.Settings.BeginDate, deal.Settings.RealEED, query.FromTime, query.ToTime));
 
+            DateTime fromTime = query.FromTime;
+            DateTime? toTime = query.ToTime;
+
+            foreach (var dealDefinition in filteredDeals)
+            {
+                TimeSpan? offSet = dealDefinition.Settings.OffSet;
+                DateTime? dealEED = dealDefinition.Settings.EEDToStore.HasValue
+                    ? dealDefinition.Settings.EEDToStore.Value.Add((new TimeSpan(0, 23, 59, 59, 998)))
+                    : dealDefinition.Settings.EEDToStore;
+
+                if (dealDefinition.Settings.BeginDate == query.FromTime && dealEED == query.ToTime && offSet.HasValue)
+                {
+                    DateTime fromTimeToCompare = query.FromTime.Subtract(offSet.Value);
+                    fromTime = fromTime < fromTimeToCompare ? fromTime : fromTimeToCompare;
+                    if (query.ToTime.HasValue)
+                    {
+                        DateTime? toTimeToCompare = query.ToTime.Value.Subtract(offSet.Value);
+                        toTime = toTime < toTimeToCompare ? toTime : toTimeToCompare;
+                    }
+                }
+            }
+
             bool estimationPerZone = query.DimensionFields.Contains("Zone") || query.DimensionFields.Contains("ZoneGroup")
                 || (query.Filters != null && (query.Filters.Any(filter => filter.Dimension == "Zone" || filter.Dimension == "ZoneGroup")));
 
-            List<AnalyticRecord> saleAnalyticRecords = GetSaleBillingRecords(query.FromTime, query.ToTime);
-            List<AnalyticRecord> costAnalyticRecords = GetCostBillingRecords(query.FromTime, query.ToTime);
+            List<AnalyticRecord> saleAnalyticRecords = GetSaleBillingRecords(fromTime, toTime);
+            List<AnalyticRecord> costAnalyticRecords = GetCostBillingRecords(fromTime, toTime);
 
             Dictionary<string, List<BillingRecord>> saleAnalyticRecordByDealZone = StructureBillingRecordByDealZone(saleAnalyticRecords, true);
             Dictionary<string, List<BillingRecord>> costAnalyticRecordByDealZone = StructureBillingRecordByDealZone(costAnalyticRecords, false);
@@ -46,8 +68,8 @@ namespace TOne.WhS.Deal.Business
                     int nbOfDealDays = (int)(deal.Settings.EndDate.Value - deal.Settings.BeginDate).TotalDays;
                     List<DateTime> dealDays = new List<DateTime>();
 
-                    DateTime queryToDate = query.ToTime.HasValue ? query.ToTime.Value.Date.AddDays(1) : DateTime.Today.AddDays(1);
-                    for (DateTime d = Utilities.Max(deal.Settings.BeginDate, query.FromTime.Date); d < Utilities.Min(deal.Settings.RealEED.Value, queryToDate); d = d.AddDays(1))
+                    DateTime queryToDate = toTime.HasValue ? toTime.Value.Date.AddDays(1) : DateTime.Today.AddDays(1);
+                    for (DateTime d = Utilities.Max(deal.Settings.RealBED, fromTime.Date); d < Utilities.Min(deal.Settings.RealEED.Value, queryToDate); d = d.AddDays(1))
                     {
                         dealDays.Add(d);
                     }

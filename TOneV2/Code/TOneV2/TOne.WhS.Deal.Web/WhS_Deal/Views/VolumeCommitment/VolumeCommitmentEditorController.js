@@ -72,9 +72,11 @@
                     datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.System);
                     if ($scope.scopeModel.selectedVolumeCommitmentType.value === WhS_Deal_VolumeCommitmentTypeEnum.Sell.value) {
                         datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.Customer);
+                        $scope.scopeModel.selectedTimeZone = WhS_Deal_VolCommitmentTimeZoneTypeEnum.System;
                     }
                     if ($scope.scopeModel.selectedVolumeCommitmentType.value === WhS_Deal_VolumeCommitmentTypeEnum.Buy.value) {
                         datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.Supplier);
+                        $scope.scopeModel.selectedTimeZone = WhS_Deal_VolCommitmentTimeZoneTypeEnum.Supplier;
                     }
                     $scope.scopeModel.VolTimeZone = datasource;
                 }
