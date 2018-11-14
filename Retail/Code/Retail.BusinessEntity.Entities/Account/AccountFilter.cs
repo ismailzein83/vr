@@ -8,6 +8,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountFilter
     {
+        public Guid? AccountTypeId { get; set; }
         public IEnumerable<IAccountFilter> Filters { get; set; }
     }
 

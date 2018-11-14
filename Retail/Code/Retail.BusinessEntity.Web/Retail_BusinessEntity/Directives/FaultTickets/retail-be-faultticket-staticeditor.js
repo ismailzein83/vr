@@ -193,7 +193,10 @@ app.directive('retailBeFaultticketStaticeditor', ['UtilsService', 'VRUIUtilsServ
             function loadAccountSelector() {
                 var accountSelectorPayload = {
                     businessEntityDefinitionId: "9a427357-cf55-4f33-99f7-745206dee7cd",
-                    selectedIds: selectedValues != undefined ? selectedValues.SubscriberId : undefined
+                    selectedIds: selectedValues != undefined ? selectedValues.SubscriberId : undefined,
+                    filter: {
+                        AccountTypeId: "5FF96AEE-CDF0-4415-A643-6B275F47E791"
+                    }
                 };
                 return accountSelectorAPI.load(accountSelectorPayload);
             }

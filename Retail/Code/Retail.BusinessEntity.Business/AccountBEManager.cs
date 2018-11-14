@@ -386,12 +386,19 @@ namespace Retail.BusinessEntity.Business
                 if (nameFilterLower != null && !account.Name.Trim().ToLower().StartsWith(nameFilterLower))
                     return false;
 
-                if (filter != null && filter.Filters != null)
+                if (filter != null)
                 {
-                    var context = new AccountFilterContext() { Account = account, AccountBEDefinitionId = accountBEDefinitionId };
-                    if (filter.Filters.Any(x => x.IsExcluded(context)))
+                    if (filter.Filters != null)
+                    {
+                        var context = new AccountFilterContext() { Account = account, AccountBEDefinitionId = accountBEDefinitionId };
+                        if (filter.Filters.Any(x => x.IsExcluded(context)))
+                            return false;
+                    }
+              
+                    if (filter.AccountTypeId.HasValue && filter.AccountTypeId.Value != account.TypeId)
                         return false;
                 }
+           
 
                 return true;
             };
