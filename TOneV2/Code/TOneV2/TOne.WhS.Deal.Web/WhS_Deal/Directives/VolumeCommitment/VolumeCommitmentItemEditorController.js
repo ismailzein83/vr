@@ -181,6 +181,12 @@
             promises.push(loadCountryPromiseDeferred.promise);
 
             var payload = {};
+
+            if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryIds != undefined) {
+                payload.selectedIds = volumeCommitmentItemEntity != undefined ? volumeCommitmentItemEntity.CountryIds : undefined;
+                countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+            }
+
             if (volumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Sell.value)
             {
                 context.getEffectiveOnDate().then(function (date) { 
@@ -194,10 +200,7 @@
                     };
                 });
             }
-            if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryIds != undefined) {
-                payload.selectedIds = volumeCommitmentItemEntity != undefined ? volumeCommitmentItemEntity.CountryIds : undefined;
-                countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-            }
+
 
             countryReadyPromiseDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);

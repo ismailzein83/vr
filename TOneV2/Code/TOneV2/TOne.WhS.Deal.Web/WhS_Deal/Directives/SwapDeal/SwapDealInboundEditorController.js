@@ -143,6 +143,12 @@
             promises.push(loadCountryPromiseDeferred.promise);
 
             var payload = {};
+
+            if (swapDealInboundEntity != undefined && swapDealInboundEntity.CountryIds != undefined) {
+                payload.selectedIds = swapDealInboundEntity != undefined ? swapDealInboundEntity.CountryIds : undefined;
+                countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+            }
+
             context.getEffectiveOnDate().then(function (date) {
             payload.filter = {
                 Filters: [{
@@ -152,10 +158,6 @@
                     IsEffectiveInFuture: false
                 }]
             };
-            if (swapDealInboundEntity != undefined && swapDealInboundEntity.CountryIds != undefined) {
-                payload.selectedIds = swapDealInboundEntity != undefined ? swapDealInboundEntity.CountryIds : undefined;
-                countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-            }
 
             countryReadyPromiseDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
