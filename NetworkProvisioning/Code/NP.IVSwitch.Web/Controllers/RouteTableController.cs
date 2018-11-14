@@ -52,6 +52,12 @@ namespace NP.IVSwitch.Web.Controllers
 
             return _manager.GetRouteTableById(routeTableId, RouteTableViewType);
         }
+        [HttpGet]
+        [Route("GetCarrierAccountIds")]
+        public List<int> GetCarrierAccountIds(int routeTableId, RouteTableViewType routeTableViewType)
+        {
+            return _manager.GetCarrierAccountIds(routeTableId, routeTableViewType);
+        }
 
     }
 }

@@ -1,14 +1,15 @@
 ﻿(function (appControllers) {
     "use strict";
-    routeTableRouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteTableRouteAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RouteRuleCriteriaTypeEnum', 'WhS_Routing_RouteRuleAPIService', 'NP_IVSwitch_RouteTableViewTypeEnum'];
+    routeTableRouteEditorController.$inject = ['$scope', 'NP_IVSwitch_RouteTableRouteAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_RouteRuleCriteriaTypeEnum', 'WhS_Routing_RouteRuleAPIService', 'NP_IVSwitch_RouteTableViewTypeEnum', 'NP_IVSwitch_RouteTableAPIService'];
 
-    function routeTableRouteEditorController($scope, NP_IVSwitch_RouteTableRouteAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_Routing_RouteRuleCriteriaTypeEnum, WhS_Routing_RouteRuleAPIService, NP_IVSwitch_RouteTableViewTypeEnum) {
+    function routeTableRouteEditorController($scope, NP_IVSwitch_RouteTableRouteAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_Routing_RouteRuleCriteriaTypeEnum, WhS_Routing_RouteRuleAPIService, NP_IVSwitch_RouteTableViewTypeEnum, NP_IVSwitch_RouteTableAPIService) {
         var routeTableId;
+        var routeTableViewType;
         var routeTableRouteName;
         var isEditMode;
         var routeTableRouteOptions;
         $scope.scopeModel = {};
-
+        var excludedCarrierAccountIds;
         var codeListDirectiveAPI;
         var codeListDirectiveDefferedReady = UtilsService.createPromiseDeferred();
 
@@ -23,18 +24,18 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                var routeTableViewType=parameters.RouteTableViewType;
+                routeTableViewType = parameters.RouteTableViewType;
                 switch (routeTableViewType) {
                     case NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value:
-                    $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.ANumber.description;
+                        $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.ANumber.description;
 
                         break;
                     case NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.value:
-                    $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.description;
+                        $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.Whitelist.description;
 
                         break;
                     case NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value:
-                    $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.BNumber.description;
+                        $scope.scopeModel.labelName = NP_IVSwitch_RouteTableViewTypeEnum.BNumber.description;
 
                         break;
                 }
@@ -72,15 +73,15 @@
                 else {
                     var objToAdd = buildParentObjectFromScopeForAdd();
                     NP_IVSwitch_RouteTableRouteAPIService.CheckIfCodesExist(objToAdd).then(function (response) {
-                    if (response)
-                    VRNotificationService.showConfirmation("An existing route on one or more codes will be overriden").then(function (result)
-                    {
-                      if(result)
-                       return insertRouteTableRT();
+                        if (response)
+                            VRNotificationService.showConfirmation("An existing route on one or more codes will be overriden").then(function (result)
+                            {
+                                if(result)
+                                    return insertRouteTableRT();
 
-                    });
-                     else
-                      return insertRouteTableRT();
+                            });
+                        else
+                            return insertRouteTableRT();
 
 
                     });
@@ -101,7 +102,8 @@
                 $scope.scopeModel.isLoading = true;
 
                 $scope.scopeModel.addMode = false;
-                getRouteTableRouteOptions().then(function () {
+
+                UtilsService.waitMultiplePromises([getExcludedCarrierAccountIds(), getRouteTableRouteOptions()]).then(function () {
                     loadAllControls().finally(function () {
                         routeTableEntity = undefined;
                     });
@@ -112,10 +114,17 @@
             }
             else {
                 $scope.scopeModel.addMode = true;
-                loadAllControls();
+                getExcludedCarrierAccountIds().then(function () {
+                    loadAllControls();
+                });
             }
         }
-
+        function getExcludedCarrierAccountIds() {
+            return NP_IVSwitch_RouteTableAPIService.GetCarrierAccountIds(routeTableId, routeTableViewType).then(function (response) {
+                if (response != undefined)
+                    excludedCarrierAccountIds = response;
+            });
+        }
         function getRouteTableRouteOptions() {
             return NP_IVSwitch_RouteTableRouteAPIService.GetRouteTableRoutesOptions(routeTableId, $scope.scopeModel.routeTableRouteName).then(function (response) {
                 routeTableRouteOptions = response;
@@ -141,15 +150,14 @@
 
             function loadSupplierRouteGrid()
             {
-                if (isEditMode)
-                {
-                    var supplierRouteGridAPILoadDeferred = UtilsService.createPromiseDeferred();
-                    supplierRouteGridDefferedReady.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(supplierRouteGridAPI, routeTableRouteOptions, supplierRouteGridAPILoadDeferred);
-                    });
-                    return supplierRouteGridAPILoadDeferred.promise;
-                }
-
+                var supplierRouteGridAPILoadDeferred = UtilsService.createPromiseDeferred();
+                supplierRouteGridDefferedReady.promise.then(function () {
+                    if (routeTableRouteOptions == undefined)
+                        routeTableRouteOptions = {};
+                    routeTableRouteOptions.excludedCarrierAccountIds = excludedCarrierAccountIds;
+                    VRUIUtilsService.callDirectiveLoad(supplierRouteGridAPI, routeTableRouteOptions, supplierRouteGridAPILoadDeferred);
+                });
+                return supplierRouteGridAPILoadDeferred.promise;
             }
 
 

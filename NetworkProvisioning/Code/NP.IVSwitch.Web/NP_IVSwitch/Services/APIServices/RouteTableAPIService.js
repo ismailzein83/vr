@@ -42,6 +42,13 @@
                     RouteTableViewType: RouteTableViewType
                 });
         }
+        function GetCarrierAccountIds(routeTableId, routeTableViewType) {
+            return BaseAPIService.get(UtilsService.getServiceURL(NP_IVSwitch_ModuleConfig.moduleName, controllerName, "GetCarrierAccountIds"),
+                {
+                    routeTableId: routeTableId,
+                    routeTableViewType: routeTableViewType
+                });
+        }
 
 
         return ({
@@ -52,7 +59,8 @@
             HasUpdateRouteTablePermission: HasUpdateRouteTablePermission,
             DeleteRouteTable: DeleteRouteTable,
             HasDeleteRouteTablePermission: HasDeleteRouteTablePermission,
-            GetRouteTableById: GetRouteTableById
+            GetRouteTableById: GetRouteTableById,
+            GetCarrierAccountIds: GetCarrierAccountIds
         });
     }
 

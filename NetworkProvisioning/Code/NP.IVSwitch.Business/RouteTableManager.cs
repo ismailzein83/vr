@@ -263,6 +263,22 @@ namespace NP.IVSwitch.Business
             }
             return runtimeEditorEntity;
         }
+
+        public List<int> GetCarrierAccountIds(int routeTableId, RouteTableViewType routeTableViewType)
+        {
+            var routeTableEntity = GetRouteTableById(routeTableId, routeTableViewType);
+            if(routeTableEntity!=null && routeTableEntity.EndPointCarrierAccount!=null && routeTableEntity.EndPointCarrierAccount.Count>0)
+            {
+                List<int> carrierAccountIds = new List<int>();
+                foreach(var endPoint in routeTableEntity.EndPointCarrierAccount)
+                {
+                    if (endPoint.CarrierAccount.HasValue)
+                        carrierAccountIds.Add(endPoint.CarrierAccount.Value);
+                }
+                return carrierAccountIds;
+            }
+            return null;
+        }
         private void RuntimeEditorEntity(RuntimeEditorEntity runtimeEditorEntity, RouteEndPoints routeTableEntity)
         {
             if (routeTableEntity != null && routeTableEntity.EndPoints != null)

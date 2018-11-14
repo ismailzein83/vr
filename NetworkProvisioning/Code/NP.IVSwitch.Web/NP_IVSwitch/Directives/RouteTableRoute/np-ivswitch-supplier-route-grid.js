@@ -23,6 +23,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
         $scope.scopeModel = {};
         $scope.dataItem = {};
         $scope.scopeModel.columns = [];
+        var excludedIds;
 
         this.initializeController = initializeController;
 
@@ -211,7 +212,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 supplierDirectiveDefferedReady.promise.then(function () {
                     var directivePayload = {
                         filter: {
-
+                            ExcludedCarrierAccountIds: excludedIds,
                             Filters: [{ $type: "NP.IVSwitch.Business.CarrierAccountRouteFilter,NP.IVSwitch.Business" }]
                         }
                     };
@@ -235,6 +236,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
             api.load = function (payload) {
                 var promises = [];
                 if (payload != undefined) {
+                    excludedIds = payload.excludedCarrierAccountIds;
                     $scope.scopeModel.isBlockedAccount = payload.IsBlockedAccount;
                     if (payload.RouteOptionsToEdit != null)
                     {
@@ -348,7 +350,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                             directivePayload = {
                                 selectedIds: gridItem.payload.SupplierId != 0 ? gridItem.payload.SupplierId : undefined,
                                 filter: {
-
+                                    ExcludedCarrierAccountIds: excludedIds,
                                     Filters: [{ $type: "NP.IVSwitch.Business.CarrierAccountRouteFilter,NP.IVSwitch.Business" }]
                                 }
                             };
