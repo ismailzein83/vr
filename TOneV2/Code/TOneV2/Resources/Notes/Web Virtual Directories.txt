@@ -3,47 +3,47 @@
 - Make sure the Application Pool of the newly created site is set to .Net FWK 4.0
 - Expand the IIS web site of TOne.Web project:
  - Add the following virtual directory under the root site:
-	Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
+	Client			C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.Web\Client
 
  - Add the following virtual directories under "Client > Modules" folder:
-	Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common	
-	BI						C:\TFS\Vanrise\Code\Vanrise.BI.Web\BI
-	Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
-	BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
-	Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
-	Queueing				C:\TFS\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing	
-	WhS_CodePreparation		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CodePreparation.Web\WhS_CodePreparation
-	WhS_BusinessEntity		C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_BusinessEntity
-	WhS_SupplierPriceList	C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.SupplierPriceList.Web\WhS_SupplierPriceList	
-	WhS_Sales				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Sales.Web\WhS_Sales
-	WhS_Routing				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Routing.Web\WhS_Routing
-	VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
-	Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
-	WhS_Analytics		    C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Analytics.Web\WhS_Analytics
-	VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
-	Analytic				C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
-	ExcelConversion			C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
-	Reprocess				C:\TFS\BusinessProcess\Code\Vanrise.Reprocess.Web\Reprocess
-	WhS_RouteSync			C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.RouteSync.Web\WhS_RouteSync
-	VR_Invoice				C:\TFS\Vanrise\Code\Vanrise.Invoice.Web\VR_Invoice
-	WhS_Invoice				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Invoice.Web\WhS_Invoice
-	VR_Notification			C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
-	WhS_Deal				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Deal.Web\WhS_Deal
-	VR_AccountBalance		C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance
-	WhS_AccountBalance      C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.AccountBalance.Web\WhS_AccountBalance
-	NP_IVSwitch				C:\TFS\NetworkProvisioning\Code\NP.IVSwitch.Web\NP_IVSwitch
-	WhS_TOneV1Transition	C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.TOneV1Transition\WhS_TOneV1Transition
-	WhS_InvToAccBalanceRelation C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.InvToAccBalanceRelation.Web\WhS_InvToAccBalanceRelation
-	VR_InvToAccBalanceRelation  C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation
-	VR_BEBridge				C:\TFS\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge
-	VR_CaseManagement		C:\TFS\Vanrise\Code\Vanrise.CaseManagement.Web\VR_CaseManagement
-	WhS_CDRComparison	    C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CDRComparison.Web\WhS_CDRComparison
-	CDRComparison			C:\TFS\Xbooster\Code\CDRComparison.Web\CDRComparison
+	Common					C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.Common.Web\Common	
+	BI						C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.BI.Web\BI
+	Security				C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.Security.Web\Security
+	BusinessProcess			C:\TFS\Branches\TOneV2_20180914_01\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
+	Runtime					C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+	Queueing				C:\TFS\Branches\TOneV2_20180914_01\BusinessProcess\Code\Vanrise.Queueing.Web\Queueing	
+	WhS_CodePreparation		C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.CodePreparation.Web\WhS_CodePreparation
+	WhS_BusinessEntity		C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.BusinessEntity.Web\WhS_BusinessEntity
+	WhS_SupplierPriceList	C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.SupplierPriceList.Web\WhS_SupplierPriceList	
+	WhS_Sales				C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.Sales.Web\WhS_Sales
+	WhS_Routing				C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.Routing.Web\WhS_Routing
+	VR_Rules				C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
+	Integration				C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.Integration.Web\Integration
+	WhS_Analytics		    C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.Analytics.Web\WhS_Analytics
+	VR_GenericData			C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
+	Analytic				C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.Analytic.Web\Analytic
+	ExcelConversion			C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
+	Reprocess				C:\TFS\Branches\TOneV2_20180914_01\BusinessProcess\Code\Vanrise.Reprocess.Web\Reprocess
+	WhS_RouteSync			C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.RouteSync.Web\WhS_RouteSync
+	VR_Invoice				C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.Invoice.Web\VR_Invoice
+	WhS_Invoice				C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.Invoice.Web\WhS_Invoice
+	VR_Notification			C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
+	WhS_Deal				C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.Deal.Web\WhS_Deal
+	VR_AccountBalance		C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance
+	WhS_AccountBalance      C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.AccountBalance.Web\WhS_AccountBalance
+	NP_IVSwitch				C:\TFS\Branches\TOneV2_20180914_01\NetworkProvisioning\Code\NP.IVSwitch.Web\NP_IVSwitch
+	WhS_TOneV1Transition	C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.TOneV1Transition\WhS_TOneV1Transition
+	WhS_InvToAccBalanceRelation C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.InvToAccBalanceRelation.Web\WhS_InvToAccBalanceRelation
+	VR_InvToAccBalanceRelation  C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation
+	VR_BEBridge				C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge
+	VR_CaseManagement		C:\TFS\Branches\TOneV2_20180914_01\Vanrise\Code\Vanrise.CaseManagement.Web\VR_CaseManagement
+	WhS_CDRComparison	    C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.WhS.CDRComparison.Web\WhS_CDRComparison
+	CDRComparison			C:\TFS\Branches\TOneV2_20180914_01\Xbooster\Code\CDRComparison.Web\CDRComparison
 	
 	--do not create below directories
-	-removed-Main					C:\TFS\TOneV2\Code\TOneV2\TOne.Main.Web\Main
-	-removed-Analytics				C:\TFS\TOneV2\Code\TOneV2\TOne.Analytics.Web\Analytics
-	-removed-Routing					C:\TFS\TOneV2\Code\TOneV2\TOne.LCR.Web\Routing
-	-removed-BusinessEntity			C:\TFS\TOneV2\Code\TOneV2\TOne.BusinessEntity.Web\BusinessEntity
-	-removed-Billing					C:\TFS\TOneV2\Code\TOneV2\TOne.Billing.Web\Billing
-	-removed-CDR						C:\TFS\TOneV2\Code\TOneV2\TOne.CDR.Web\CDR
+	-removed-Main					C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.Main.Web\Main
+	-removed-Analytics				C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.Analytics.Web\Analytics
+	-removed-Routing					C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.LCR.Web\Routing
+	-removed-BusinessEntity			C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.BusinessEntity.Web\BusinessEntity
+	-removed-Billing					C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.Billing.Web\Billing
+	-removed-CDR						C:\TFS\Branches\TOneV2_20180914_01\TOneV2\Code\TOneV2\TOne.CDR.Web\CDR
