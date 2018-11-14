@@ -208,7 +208,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                                 Hour: selectedDate.getHours(),
                                 Minute: $attrs.type == "hour" ? unspecifiedMinute : selectedDate.getMinutes(),
                                 Second: $attrs.type == "hour" ? unspecifiedSecond : selectedDate.getSeconds(),
-                                Millisecond: $attrs.type == "hour" ? unspecifiedMillisecond : selectedDate.getMilliseconds()
+                                Millisecond: $attrs.type == "hour" || $attrs.type == "time" ? unspecifiedMillisecond : selectedDate.getMilliseconds()
                             };
                         }
 
