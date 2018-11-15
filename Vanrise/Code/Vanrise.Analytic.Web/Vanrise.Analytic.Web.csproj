@@ -80,6 +80,7 @@
     <Compile Include="Controllers\DAProfCalcOutputSettingsController.cs" />
     <Compile Include="Controllers\KPISettingsController.cs" />
     <Compile Include="Controllers\MeasureStyleRuleController.cs" />
+    <Compile Include="Controllers\ReportGenerationCustomCodeSettingsController.cs" />
     <Compile Include="Controllers\VRReportGenerationController.cs" />
     <Compile Include="Controllers\DataAnalysisDefinitionController.cs" />
     <Compile Include="Controllers\DataAnalysisItemDefinitionController.cs" />
@@ -166,6 +167,8 @@
     <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-querydefinition-automatedreport.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-automatedreportprocessquery-selector.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalc-alertrulefilterdefinition.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\CustomCode\Templates\ReportGenerationCustomCodeFileGeneratorTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\CustomCode\vr-analytic-reportgenerationcustomcode-filegenerator.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\FlatFile\Templates\FlatFileGeneratorTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\FlatFile\vr-analytic-flatfile-filegenerator.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorMappedTableGridTemplate.html" />
@@ -402,7 +405,6 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\SearchSettings\vr-analytic-reportsearchsettings-genericsearch.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Templates\VRAutomatedReportQuery.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\VRAutomatedReportFileGeneratorTemplate.html" />
-    <Content Include="Analytic\Directives\VRReportGeneration\Templates\ReportGenerationCustomCodeFileGeneratorTemplate.html" />
     <Content Include="Analytic\Directives\VRReportGeneration\Templates\VrreportgenerationSettings.html" />
     <Content Include="Analytic\Directives\VRReportGeneration\Templates\VRReportGenerationGridTemplate.html" />
     <Content Include="Analytic\Directives\AutomatedReport\vr-analytic-vrautomatedreportquery.js" />
@@ -413,7 +415,6 @@
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-settings.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-grid.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-settings-reportaction-downloadaction.js" />
-    <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgenerationcustomcode-filegenerator.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgenerationcustomcode-settings-selector.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgenerationcustomcode-settings.js" />
     <Content Include="Analytic\Directives\VRRestAPIAnalyticQueryInterceptor\Templates\VRRestAPIAnalyticQueryInterceptorSelectiveTemplate.html" />
