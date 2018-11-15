@@ -75,6 +75,7 @@
     <Compile Include="DynamicTypeGenerator.cs" />
     <Compile Include="GetDimensionValueContext.cs" />
     <Compile Include="GetMeasureValueContext.cs" />
+    <Compile Include="MeasureStyleRuleManager.cs" />
     <Compile Include="MemoryAnalyticDataProvider\MemoryAnalyticDataManager.cs" />
     <Compile Include="MemoryAnalyticDataProvider\MemoryAnalyticDataProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
