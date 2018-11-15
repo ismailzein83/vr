@@ -78,7 +78,9 @@
     <Compile Include="MemoryAnalyticDataProvider\MemoryAnalyticDataManager.cs" />
     <Compile Include="MemoryAnalyticDataProvider\MemoryAnalyticDataProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportGenerationCustomCodeDefinition.cs" />
     <Compile Include="ReportGenerationCustomCodeSettings.cs" />
+    <Compile Include="ReportGenerationCustomCodeSettingsManager.cs" />
     <Compile Include="StyleRuleConditionContext.cs" />
     <Compile Include="VRAutomatedReportHandlerManager.cs" />
     <Compile Include="VRAutomatedReportFileGeneratorManager.cs" />

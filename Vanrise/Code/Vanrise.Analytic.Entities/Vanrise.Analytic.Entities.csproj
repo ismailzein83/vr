@@ -127,6 +127,7 @@
     <Compile Include="ValidateQueryAndHandlerSettingsResult.cs" />
     <Compile Include="VRReportGeneration\FilterConfig.cs" />
     <Compile Include="VRReportGeneration\ReportActionConfig.cs" />
+    <Compile Include="VRReportGeneration\ReportGenerationCustomCodeDefinitionInfo.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationQuery.cs" />
     <Compile Include="VRReportGeneration\VRReportGeneration.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationDetail.cs" />

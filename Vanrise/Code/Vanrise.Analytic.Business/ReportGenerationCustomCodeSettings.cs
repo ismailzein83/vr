@@ -18,4 +18,6 @@ namespace Vanrise.Analytic.Business
             return CustomCode;
         }
     }
+  
+  
 }
