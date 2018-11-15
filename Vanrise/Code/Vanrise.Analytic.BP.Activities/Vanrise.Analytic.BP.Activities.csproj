@@ -17,7 +17,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
     <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -62,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAProfCalc\CreateDAProfCalcGenerateVRAlertEventsOutputProcessor.cs" />
     <Compile Include="DAProfCalc\FinaliseRecordProfiling.cs" />
     <Compile Include="DAProfCalc\GenerateDAProfCalcExecInputDetails.cs" />
     <Compile Include="DAProfCalc\GenerateDADataFromAlertRule.cs" />

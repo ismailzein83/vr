@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Notification.Business;
-using Vanrise.Notification.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Notification.Business;
+using Vanrise.Notification.Entities;
 namespace Vanrise.GenericData.Notification
 {
     public class DataRecordRuleEvaluationManager
@@ -80,8 +79,9 @@ namespace Vanrise.GenericData.Notification
             foreach (var alertNotificationDataItem in alertNotificationDataDict)
             {
                 AlertNotificationData alertNotificationData = alertNotificationDataItem.Value;
-                dataRecordAlertRuleNotificationManager.CreateAlertRuleNotifications(alertNotificationData.DataRecordAlertRuleNotifications, alertNotificationData.EventKeys.ToList(), alertNotificationData.AlertRule.RuleTypeId, dataRecordAlertRuleTypeSettings.NotificationTypeId,
-                    alertNotificationData.AlertRule.VRAlertRuleId, alertNotificationData.DataRecordAlertRuleExtendedSettings.MinNotificationInterval, dataRecordAlertRuleTypeSettings.DataRecordTypeId, string.Format("Alert Rule {0}", alertNotificationData.AlertRule.Name), alertNotificationData.AlertRule.UserId);
+                int numberOfNotificationsCreated;
+                dataRecordAlertRuleNotificationManager.TryCreateAlertRuleNotifications(alertNotificationData.DataRecordAlertRuleNotifications, alertNotificationData.EventKeys.ToList(), alertNotificationData.AlertRule.RuleTypeId, dataRecordAlertRuleTypeSettings.NotificationTypeId,
+                    alertNotificationData.AlertRule.VRAlertRuleId, alertNotificationData.DataRecordAlertRuleExtendedSettings.MinNotificationInterval, dataRecordAlertRuleTypeSettings.DataRecordTypeId, string.Format("Alert Rule {0}", alertNotificationData.AlertRule.Name), alertNotificationData.AlertRule.UserId, out numberOfNotificationsCreated);
             }
         }
 

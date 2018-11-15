@@ -1,24 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Notification;
 using Vanrise.Notification.Business;
 using Vanrise.Notification.Entities;
-using Vanrise.GenericData.Notification;
-using Vanrise.Common;
-using System.Collections.Generic;
-using System.Linq;
-using Vanrise.GenericData.Business;
 
 namespace Vanrise.Analytic.Business
 {
     public class DAProfCalcGenerateVRAlertEventsOutputProcessor : IDAProfCalcOutputRecordProcessor
     {
         public DateTime EffectiveDate { get; set; }
+        public Action<LogEntryType, string> LogMessage { get; set; }
 
-        public DAProfCalcGenerateVRAlertEventsOutputProcessor(DateTime effectiveDate)
+        public DAProfCalcGenerateVRAlertEventsOutputProcessor(DateTime effectiveDate, Action<LogEntryType, string> logMessage)
         {
             this.EffectiveDate = effectiveDate;
+            this.LogMessage = logMessage;
         }
-
         public void Initialize(IDAProfCalcOutputRecordProcessorIntializeContext context)
         {
 
@@ -94,8 +95,12 @@ namespace Vanrise.Analytic.Business
                     string description = string.Format("Analysis Period: {0}, Period Start: {1:yyyy-MM-dd HH:mm:ss}, Period End: {2:yyyy-MM-dd HH:mm:ss}, Rule: {3}", daProfCalcNotificationData.DAProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod.GetDescription(), periodStart, EffectiveDate, daProfCalcNotificationData.AlertRule.Name);
 
                     DataRecordAlertRuleNotificationManager dataRecordAlertRuleNotificationManager = new DataRecordAlertRuleNotificationManager();
-                    dataRecordAlertRuleNotificationManager.CreateAlertRuleNotifications(daProfCalcNotificationData.DataRecordAlertRuleNotifications, daProfCalcNotificationData.EventKeys, daProfCalcNotificationData.AlertRule.RuleTypeId, notificationTypeId, daProfCalcNotificationDataItem.Key,
-                         daProfCalcNotificationData.DAProfCalcAlertRuleSettings.MinNotificationInterval, daProfCalcOutputSettings.RecordTypeId, description, daProfCalcNotificationData.AlertRule.UserId);
+                    int numberOfNotificationsCreated;
+                    bool createNotification = dataRecordAlertRuleNotificationManager.TryCreateAlertRuleNotifications(daProfCalcNotificationData.DataRecordAlertRuleNotifications, daProfCalcNotificationData.EventKeys, daProfCalcNotificationData.AlertRule.RuleTypeId, notificationTypeId, daProfCalcNotificationDataItem.Key,
+                         daProfCalcNotificationData.DAProfCalcAlertRuleSettings.MinNotificationInterval, daProfCalcOutputSettings.RecordTypeId, description, daProfCalcNotificationData.AlertRule.UserId, out numberOfNotificationsCreated);
+
+                    if (createNotification)
+                        LogMessage(LogEntryType.Information, string.Format("Action Rule {0} created {1} notification(s)", daProfCalcNotificationData.AlertRule.Name, numberOfNotificationsCreated));
                 }
             }
         }

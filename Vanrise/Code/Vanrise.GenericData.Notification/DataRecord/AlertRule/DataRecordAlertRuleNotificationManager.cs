@@ -7,9 +7,12 @@ namespace Vanrise.GenericData.Notification
 {
     public class DataRecordAlertRuleNotificationManager
     {
-        public void CreateAlertRuleNotifications(List<DataRecordAlertRuleNotification> dataRecordAlertRuleNotifications, List<string> eventKeys, Guid alertRuleTypeId, 
-            Guid notificationTypeId, long alertRuleId, TimeSpan minNotificationInterval, Guid dataRecordTypeId, string alertNotificationDescription, int userId)
+        public bool TryCreateAlertRuleNotifications(List<DataRecordAlertRuleNotification> dataRecordAlertRuleNotifications, List<string> eventKeys, Guid alertRuleTypeId,
+                       Guid notificationTypeId, long alertRuleId, TimeSpan minNotificationInterval, Guid dataRecordTypeId, string alertNotificationDescription, int userId, out int numberOfNotificationsCreated)
         {
+            bool createNotification = false;
+            numberOfNotificationsCreated = 0;
+
             if (dataRecordAlertRuleNotifications != null && dataRecordAlertRuleNotifications.Count > 0)
             {
                 VRAlertRuleNotificationManager vrAlertRuleNotificationManager = new VRAlertRuleNotificationManager();
@@ -37,6 +40,9 @@ namespace Vanrise.GenericData.Notification
 
                 if (dataRecordAlertRuleNotificationsToBeExecuted != null && dataRecordAlertRuleNotificationsToBeExecuted.Count > 0)
                 {
+                    createNotification = true;
+                    numberOfNotificationsCreated = dataRecordAlertRuleNotificationsToBeExecuted.Count;
+
                     VRAlertRuleNotificationManager alertRuleNotificationManager = new VRAlertRuleNotificationManager();
                     foreach (DataRecordAlertRuleNotification dataRecordAlertRuleNotification in dataRecordAlertRuleNotificationsToBeExecuted)
                     {
@@ -60,6 +66,7 @@ namespace Vanrise.GenericData.Notification
                     }
                 }
             }
+            return createNotification;
         }
     }
 }

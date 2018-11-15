@@ -9,6 +9,7 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vab="clr-namespace:Vanrise.Analytic.Business;assembly=Vanrise.Analytic.Business"
  xmlns:vaba="clr-namespace:Vanrise.Analytic.BP.Arguments;assembly=Vanrise.Analytic.BP.Arguments"
  xmlns:vabad="clr-namespace:Vanrise.Analytic.BP.Activities.DAProfCalc;assembly=Vanrise.Analytic.BP.Activities"
  xmlns:vae="clr-namespace:Vanrise.Analytic.Entities;assembly=Vanrise.Analytic.Entities"
@@ -28,6 +29,7 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>Vanrise.Analytic.BP.Arguments</x:String>
+      <x:String>Vanrise.Analytic.Business</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -84,6 +86,7 @@
           <mca:CSharpValue x:TypeArguments="s:DateTime">new DateTime(NowDate.Year, NowDate.Month, NowDate.Day, NowDate.Hour, NowDate.Minute, NowDate.Second)</mca:CSharpValue>
         </Variable.Default>
       </Variable>
+      <Variable x:TypeArguments="vab:DAProfCalcGenerateVRAlertEventsOutputProcessor" Name="VRAlertEventsOutputProcessor" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Profiling and Calculation Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -92,6 +95,18 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
+    <vabad:CreateDAProfCalcGenerateVRAlertEventsOutputProcessor sap2010:WorkflowViewState.IdRef="CreateDAProfCalcGenerateVRAlertEventsOutputProcessor_3">
+      <vabad:CreateDAProfCalcGenerateVRAlertEventsOutputProcessor.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </vabad:CreateDAProfCalcGenerateVRAlertEventsOutputProcessor.EffectiveDate>
+      <vabad:CreateDAProfCalcGenerateVRAlertEventsOutputProcessor.OutputProcessor>
+        <OutArgument x:TypeArguments="vab:DAProfCalcGenerateVRAlertEventsOutputProcessor">
+          <mca:CSharpReference x:TypeArguments="vab:DAProfCalcGenerateVRAlertEventsOutputProcessor">VRAlertEventsOutputProcessor</mca:CSharpReference>
+        </OutArgument>
+      </vabad:CreateDAProfCalcGenerateVRAlertEventsOutputProcessor.OutputProcessor>
+    </vabad:CreateDAProfCalcGenerateVRAlertEventsOutputProcessor>
     <vabad:GenerateDADataFromAlertRule sap2010:WorkflowViewState.IdRef="GenerateDADataFromAlertRule_1">
       <vabad:GenerateDADataFromAlertRule.AlertRuleTypeId>
         <InArgument x:TypeArguments="s:Guid">
@@ -167,7 +182,7 @@
       </local:DAProfCalcSubProcess.FromTime>
       <local:DAProfCalcSubProcess.OutputRecordProcessor>
         <InArgument x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">
-          <mca:CSharpValue x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">new Vanrise.Analytic.Business.DAProfCalcGenerateVRAlertEventsOutputProcessor(EffectiveDate)</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">VRAlertEventsOutputProcessor</mca:CSharpValue>
         </InArgument>
       </local:DAProfCalcSubProcess.OutputRecordProcessor>
       <local:DAProfCalcSubProcess.RecordStorageIds>
@@ -224,12 +239,13 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0dlbmVyYXRlQWxlcnRQcm9jZXNzLnhhbWwcRgPkAQ4CAQFNC01XAgELVAtUrwECAQJYBV4gAwG6AV8FjQEpAgFojgEF2wEiAgEf3AEF4gEgAgEUWwtbhQEDAbwBWGBYjQEDAbsBbAtsZwMBsQF7C3t+AwGoAYUBC4UBaQMBnwGAAQuAAX4DAZYBZwtnfgMBjQFiC2JcAwGEAXELcVgCAXt2C3ZbAgFyigELigFZAgFpkQELkQF3AgFflgELlgFfAgFWqgELqgHAAQIBTa8BC68BYQIBRJsBC5sBdgIBO6ABC6ABWAIBMqUBC6UBUwIBKbQBC7QBUQIBIN8BC98BhQECARbcAWDcAY0BAgEV</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0dlbmVyYXRlQWxlcnRQcm9jZXNzLnhhbWwfSAPzAQ4CAQFPC09XAgEMVgtWrwECAQJbBWEgAwHjAWIFbUIDAc4BbgWcASkCAXOdAQXqASICASLrAQXxASACARZeC16FAQMB5QFbYFuNAQMB5AFqC2qXAQMB2QFlC2VYAwHPAXsLe2cDAcQBigELigF+AwG6AZQBC5QBaQMBsAGPAQuPAX4DAaYBdgt2fgMBnAFxC3FcAwGSAYABC4ABWAMBiAGFAQuFAVsCAX6ZAQuZAVkCAXSgAQugAXcCAWmlAQulAV8CAV+5AQu5AYEBAgFVvgELvgFhAgFLqgELqgF2AgFBrwELrwFYAgE3tAELtAFTAgEtwwELwwFRAgEj7gEL7gGFAQIBGOsBYOsBjQECARc=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="GenerateDADataFromAlertRule_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22.4" />
+      <sap2010:ViewStateData Id="CreateDAProfCalcGenerateVRAlertEventsOutputProcessor_3" sap:VirtualizedContainerService.HintSize="200,22.4" />
+      <sap2010:ViewStateData Id="GenerateDADataFromAlertRule_1" sap:VirtualizedContainerService.HintSize="200,22.4" />
       <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="766,22" />
       <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="766,210" />
@@ -286,16 +302,16 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ViewStateData_32" sap:VirtualizedContainerService.HintSize="828,2434" />
-      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcSubProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,332">
+      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcSubProcess_1" sap:VirtualizedContainerService.HintSize="200,22.4" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="200,22.4" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222.4,396.8">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcGenerateAlertProcess_1" sap:VirtualizedContainerService.HintSize="262,412" />
+      <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcGenerateAlertProcess_1" sap:VirtualizedContainerService.HintSize="262.4,476.8" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
