@@ -402,6 +402,7 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\SearchSettings\vr-analytic-reportsearchsettings-genericsearch.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Templates\VRAutomatedReportQuery.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\VRAutomatedReportFileGeneratorTemplate.html" />
+    <Content Include="Analytic\Directives\VRReportGeneration\Templates\ReportGenerationCustomCodeFileGeneratorTemplate.html" />
     <Content Include="Analytic\Directives\VRReportGeneration\Templates\VrreportgenerationSettings.html" />
     <Content Include="Analytic\Directives\VRReportGeneration\Templates\VRReportGenerationGridTemplate.html" />
     <Content Include="Analytic\Directives\AutomatedReport\vr-analytic-vrautomatedreportquery.js" />
@@ -412,6 +413,7 @@
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-settings.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-grid.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-settings-reportaction-downloadaction.js" />
+    <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgenerationcustomcode-filegenerator.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgenerationcustomcode-settings-selector.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgenerationcustomcode-settings.js" />
     <Content Include="Analytic\Directives\VRRestAPIAnalyticQueryInterceptor\Templates\VRRestAPIAnalyticQueryInterceptorSelectiveTemplate.html" />
