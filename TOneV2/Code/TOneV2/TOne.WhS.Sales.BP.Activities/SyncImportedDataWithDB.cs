@@ -61,11 +61,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             ratePlanManager.SyncImportedDataWithDB(processInstanceId, reservedSalePriceListId, ownerType, ownerId, currencyId, effectiveOn, stateBackupId);
-
-            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleCodeManager.CacheManager>().SetCacheExpired();
+            
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleZoneManager.CacheManager>().SetCacheExpired();
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CustomerSellingProductManager.CacheManager>().SetCacheExpired();
-            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleRateCacheManager>().SetCacheExpired();
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<SalePriceListManager.CacheManager>().SetCacheExpired();
         }
     }
