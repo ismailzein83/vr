@@ -411,10 +411,13 @@
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-settings.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-grid.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgeneration-settings-reportaction-downloadaction.js" />
+    <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgenerationcustomcode-settings-selector.js" />
+    <Content Include="Analytic\Directives\VRReportGeneration\vr-analytic-reportgenerationcustomcode-settings.js" />
     <Content Include="Analytic\Directives\VRRestAPIAnalyticQueryInterceptor\Templates\VRRestAPIAnalyticQueryInterceptorSelectiveTemplate.html" />
     <Content Include="Analytic\Directives\VRRestAPIAnalyticQueryInterceptor\vr-analytic-restapianalyticqueryinterceptor-selective.js" />
     <Content Include="Analytic\ModuleInitialization.js" />
     <Content Include="Analytic\Services\APIServices\KPISettingsAPIService.js" />
+    <Content Include="Analytic\Services\APIServices\ReportGenerationCustomCodeSettingsAPIService.js" />
     <Content Include="Analytic\Services\VRReportGenerationActionService.js" />
     <Content Include="Analytic\Services\AnalyticItemActionService.js" />
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
