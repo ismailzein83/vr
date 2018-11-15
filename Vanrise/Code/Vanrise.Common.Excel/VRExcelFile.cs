@@ -20,6 +20,12 @@ namespace Vanrise.Common.Excel
         {
             Sheets.Add(sheet);
         }
+        public VRExcelSheet CreateSheet()
+        {
+            var sheet = new VRExcelSheet();
+            Sheets.Add(sheet);
+            return sheet;
+        }
         public byte[] GenerateExcelFile()
         {
             Workbook excelTemplate = new Workbook();
@@ -42,6 +48,13 @@ namespace Vanrise.Common.Excel
                         var style = BuildSheetContainerCommonConfigs(sheetCell.Style, excelTemplate);
                         var styleFlag = BuildSheetContainerCommonConfigs();
                         cell.SetStyle(style, styleFlag);
+                    }
+                }
+                if (sheet.Tables != null && sheet.Tables.Count > 0)
+                {
+                    foreach (var table in sheet.Tables)
+                    {
+                        table.GenerateTable(templateSheet);
                     }
                 }
             }
@@ -90,7 +103,7 @@ namespace Vanrise.Common.Excel
             }
 
         }
-        Style BuildSheetContainerCommonConfigs(VRExcelContainerConfig config, Workbook excelTemplate)
+         Style BuildSheetContainerCommonConfigs(VRExcelContainerConfig config, Workbook excelTemplate)
         {
             Style style = excelTemplate.CreateStyle();
             if (config.SetBorder == true)

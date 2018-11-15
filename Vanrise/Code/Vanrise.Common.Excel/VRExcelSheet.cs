@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Aspose.Cells;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +16,14 @@ namespace Vanrise.Common.Excel
             this.RowConfigs = new Dictionary<int, VRExcelRowConfig>();
             this.ColumnConfigs = new Dictionary<int, VRExcelColumnConfig>();
             this.Images = new List<VRExcelImageConfig>();
+            this.Tables = new List<VRExcelTable>();
         }
-
         public string SheetName { get; set; }
         internal List<VRExcelCell> Cells { get; set; }
         internal Dictionary<int, VRExcelRowConfig> RowConfigs { get; set; }
         internal Dictionary<int, VRExcelColumnConfig> ColumnConfigs { get; set; }
         internal List<VRExcelImageConfig> Images { get; set; }
-
+        internal List<VRExcelTable> Tables { get; set; }
         public void SetRowConfig(VRExcelRowConfig rowConfig)
         {
             VRExcelRowConfig config;
@@ -29,7 +31,6 @@ namespace Vanrise.Common.Excel
                 throw new Exception(string.Format("Configuration for the row {0} already exist. ", rowConfig.RowIndex));
             this.RowConfigs.Add(rowConfig.RowIndex, rowConfig);
         }
-
         public void SetColumnConfig(VRExcelColumnConfig columnConfig)
         {
             VRExcelColumnConfig config;
@@ -42,11 +43,28 @@ namespace Vanrise.Common.Excel
 
             Cells.Add(cell);
         }
+        public VRExcelCell CreateCell()
+        {
+            var cell = new VRExcelCell();
+            Cells.Add(cell);
+            return cell;
+        }
+        public VRExcelImageConfig CreateImage()
+        {
+            var image = new VRExcelImageConfig();
+            Images.Add(image);
+            return image;
+        }
         public void AddImage(VRExcelImageConfig image)
         {
             Images.Add(image);
         }
-
+        public VRExcelTable CreateTable(int startingRowIndex, int startingColumnIndex)
+        {
+            var table = new VRExcelTable(startingRowIndex, startingColumnIndex);
+            Tables.Add(table);
+            return table;
+        }
     }
     public class VRExcelImageConfig
     {
@@ -73,7 +91,6 @@ namespace Vanrise.Common.Excel
 
         public VRExcelContainerHorizontalAlignment? HorizontalAlignment { get; set; }
     }
-
     public class VRExcelRowConfig : VRExcelContainerConfig
     {
         public int RowIndex { get; set; }
@@ -81,7 +98,6 @@ namespace Vanrise.Common.Excel
         public double? RowHeight { get; set; }
 
     }
-
     public class VRExcelColumnConfig : VRExcelContainerConfig
     {
         public int ColumnIndex { get; set; }
