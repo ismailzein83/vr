@@ -78,8 +78,14 @@ namespace TOne.WhS.Deal.Business
 
         public bool DeleteDeal(int dealId)
         {
+            
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
-            return dataManager.Delete(dealId);
+            if (dataManager.Delete(dealId))
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                return true;
+            }
+            return false;
         }
 
         public Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail> UpdateDeal(DealDefinition deal)
@@ -219,12 +225,17 @@ namespace TOne.WhS.Deal.Business
         #region Private Classes
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            IDealDataManager _dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
-            object _updateHandle;
+            protected override bool UseCentralizedCacheRefresher
+            {
+                get
+                {
+                    return true;
+                }
+            }
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreDealsUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired();
             }
         }
 
