@@ -16,8 +16,8 @@ namespace TestRuntime
     {
         public void Execute()
         {
-            TestPostgresQueries();
-            CallGetAnalyticRecords();
+            //TestPostgresQueries();
+            //CallGetAnalyticRecords();
             var runtimeNodeConfigSettings = new Vanrise.Runtime.Entities.RuntimeNodeConfigurationSettings
             {
                 Processes = new Dictionary<Guid, RuntimeProcessConfiguration>()
