@@ -103,13 +103,14 @@
                     if (payload != undefined) {
                         if (payload.filter != undefined) {
                             payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
-
+                            
                         }
 
                         else
                             payload.filter = {
                                 CountryIds: countryDirectiveApi.getSelectedIds(),
                             };
+                        payload.selectedIds = null;
                     }
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
 
