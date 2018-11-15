@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
-using System.Web;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -36,11 +35,11 @@ namespace Vanrise.Common.Business
 
 			return new VRMailEvaluatedTemplate
 			{
-				From = from != null ? HttpUtility.HtmlDecode(from) : null,
-				To = to != null ? HttpUtility.HtmlDecode(to) : null,
-				CC = cc != null ? HttpUtility.HtmlDecode(cc) : null,
-				BCC = bcc != null ? HttpUtility.HtmlDecode(bcc) : null,
-				Subject = subject != null ? HttpUtility.HtmlDecode(subject) : null,
+				From = from != null ? VRWebUtilities.HtmlDecode(from) : null,
+				To = to != null ? VRWebUtilities.HtmlDecode(to) : null,
+				CC = cc != null ? VRWebUtilities.HtmlDecode(cc) : null,
+				BCC = bcc != null ? VRWebUtilities.HtmlDecode(bcc) : null,
+				Subject = subject != null ? VRWebUtilities.HtmlDecode(subject) : null,
 				Body = EvaluateExpression(mailMessageTemplateId, "Body", mailMessageTemplate.Settings.Body, mailContext)
 			};
 		}

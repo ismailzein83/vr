@@ -880,6 +880,11 @@ namespace Vanrise.Common
             public int CalculatedPercentage { get; set; }
             public decimal DecimalPart { get; set; }
         }
+
+        public static bool PhysicalPathExists(string physicalPath)
+        {
+            return System.IO.Directory.Exists(physicalPath) || System.IO.File.Exists(physicalPath);
+        }
     }
 
     public interface IPercentageItem

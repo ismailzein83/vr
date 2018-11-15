@@ -78,7 +78,7 @@ namespace Vanrise.Common.Web.Controllers
 		public object DownloadCountriesTemplate()
 		{
 			var template = "~/Client/Modules/Common/Template/Country Add sample.xls";
-			string physicalPath = HttpContext.Current.Server.MapPath(template);
+            string physicalPath = VRWebContext.MapVirtualToPhysicalPath(template);
 			byte[] bytes = File.ReadAllBytes(physicalPath);
 
 			MemoryStream memStreamRate = new System.IO.MemoryStream();

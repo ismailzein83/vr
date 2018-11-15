@@ -4,7 +4,6 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Security.Entities;
 using Vanrise.Security.Business;
-using System.Web;
 using System.Collections.Generic;
 
 namespace Vanrise.Security.MainExtensions.SecurityProvider
@@ -191,9 +190,8 @@ namespace Vanrise.Security.MainExtensions.SecurityProvider
 
             var vrConnection = new VRConnectionManager().GetVRConnection<VRInterAppRestConnection>(VRConnectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
-
-            var requestURI = HttpContext.Current.Request.Url;
-            string baseURL = requestURI.GetLeftPart(UriPartial.Authority);
+                        
+            string baseURL = VRWebContext.GetCurrentRequestBaseURL();
 
             ProductInfo productInfo = new Common.Business.ConfigManager().GetProductInfo();
             RegisterApplicationInput input = new RegisterApplicationInput() { ApplicationName = productInfo.ProductName, ApplicationURL = baseURL };

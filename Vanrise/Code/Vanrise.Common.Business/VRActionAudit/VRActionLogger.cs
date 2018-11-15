@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -108,10 +107,9 @@ namespace Vanrise.Common.Business
             moduleName.ThrowIfNull("moduleName", loggableEntity.EntityUniqueName);
             entityName.ThrowIfNull("entityName", loggableEntity.EntityUniqueName);
             string baseURL = null;
-            if (HttpContext.Current != null)
-            {
-                var requestURI = HttpContext.Current.Request.Url;
-                baseURL = requestURI.GetLeftPart(UriPartial.Authority);
+            if (VRWebContext.IsInWebContext())
+            {                
+                baseURL = VRWebContext.GetCurrentRequestBaseURL();
             }
             s_actionAuditManager.AuditAction(baseURL, moduleName, loggableEntity.EntityDisplayName, action, objectId, objectName, actionDescription, objectTrackingId);
         }

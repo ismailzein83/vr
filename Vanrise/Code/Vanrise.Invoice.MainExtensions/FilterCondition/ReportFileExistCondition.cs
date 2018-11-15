@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
-using System.Web;
 using System.IO;
 
 namespace Vanrise.Invoice.MainExtensions
@@ -25,9 +24,9 @@ namespace Vanrise.Invoice.MainExtensions
                 string reportURL = openRDLCReportAction.ReportURL;
                 string reportRuntimeURL = openRDLCReportAction.ReportRuntimeURL;
                 string ReportUrl = null;
-                if (HttpContext.Current != null)
+                if (VRWebContext.IsInWebContext())
                 {
-                    ReportUrl = HttpContext.Current.Server.MapPath(reportURL);
+                    ReportUrl = VRWebContext.MapVirtualToPhysicalPath(reportURL);
                 }
                 else
                 {

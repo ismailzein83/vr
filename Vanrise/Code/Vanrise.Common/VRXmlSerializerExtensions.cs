@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
 using System.Xml.Linq;
 
 namespace Vanrise.Common.VRXmlSerializerExtensions
@@ -31,49 +30,7 @@ namespace Vanrise.Common.VRXmlSerializerExtensions
     }
 
     public static class StringExtensions
-    {
-        public static string UrlDecode(this string input)
-        {
-            return System.Web.HttpUtility.UrlDecode(input);
-        }
-        /// <summary>
-        ///     Uses Uri.EscapeDataString() based on recommendations on MSDN
-        ///     http://blogs.msdn.com/b/yangxind/archive/2006/11/09/don-t-use-net-system-uri-unescapedatastring-in-url-decoding.aspx
-        /// </summary>
-        public static string UrlEncode(this string input)
-        {
-            const int maxLength = 32766;
-            if (input == null)
-                throw new ArgumentNullException("input");
-            if (input.Length <= maxLength)
-                return Uri.EscapeDataString(input);
-            var sb = new StringBuilder(input.Length * 2);
-            var index = 0;
-            while (index < input.Length)
-            {
-                var length = Math.Min(input.Length - index, maxLength);
-                var subString = input.Substring(index, length);
-                sb.Append(Uri.EscapeDataString(subString));
-                index += subString.Length;
-            }
-            return sb.ToString();
-        }
-        public static string HtmlDecode(this string input)
-        {
-            return HttpUtility.HtmlDecode(input);
-        }
-        public static string HtmlEncode(this string input)
-        {
-            return HttpUtility.HtmlEncode(input);
-        }
-        public static string UrlEncode(this string input, Encoding encoding)
-        {
-            return HttpUtility.UrlEncode(input, encoding);
-        }
-        public static string HtmlAttributeEncode(this string input)
-        {
-            return HttpUtility.HtmlAttributeEncode(input);
-        }
+    {       
         /// <summary>
         ///     Check that a string is not null or empty
         /// </summary>

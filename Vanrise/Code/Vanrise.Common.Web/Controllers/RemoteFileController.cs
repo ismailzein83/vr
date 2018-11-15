@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Common.Business;
@@ -44,7 +47,26 @@ namespace Vanrise.Common.Web.Controllers
         [HttpGet]
         public HttpResponseMessage DownloadRemoteFile(Guid connectionId, long fileId, string moduleName = null)
         {
-            return _remoteFileManager.DownloadRemoteFile(connectionId, fileId, moduleName);
+            var file = _remoteFileManager.GetRemoteFile(connectionId, fileId, moduleName);
+            if (file != null)
+            {
+                byte[] bytes = file.Content;
+                MemoryStream memStreamRate = new System.IO.MemoryStream();
+                memStreamRate.Write(bytes, 0, bytes.Length);
+                memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
+
+                HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+                memStreamRate.Position = 0;
+                response.Content = new StreamContent(memStreamRate);
+
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = HttpUtility.UrlPathEncode(file.Name)
+                };
+                return response;
+            }
+            return null;
         }
 
         [Route("GetRemoteFileInfo")]

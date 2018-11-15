@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.Invoice.Business;
@@ -71,9 +70,9 @@ namespace Vanrise.Invoice.MainExtensions
                         reportURL = string.Format("~/Client/Modules/{0}", reportFilePath);
                         reportRuntimeURL = reportFilePath;
                     }
-                    if(HttpContext.Current != null)
+                    if(VRWebContext.IsInWebContext())
                     {
-                        reportViewer.LocalReport.ReportPath = HttpContext.Current.Server.MapPath(reportURL);
+                        reportViewer.LocalReport.ReportPath = VRWebContext.MapVirtualToPhysicalPath(reportURL);
                     }else
                     {
                         string currentDir = Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(OpenRDLCReportActionManager)).Location);

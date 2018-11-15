@@ -43,7 +43,7 @@ namespace Vanrise.Common
             referencedAssembliesFullNames.Add(runtimeBinderAssembly.FullName);
             parameters.ReferencedAssemblies.Add(runtimeBinderAssembly.Location);//this is needed for dynamic variables
             string path = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
-            if (System.Web.HttpContext.Current != null)
+            if (VRWebContext.IsInWebContext())
                 path = Path.Combine(path, "bin");
             foreach (string fileName in Directory.GetFiles(path, "*.dll"))
             {

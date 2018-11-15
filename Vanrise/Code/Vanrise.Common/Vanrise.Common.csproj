@@ -88,7 +88,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -140,6 +139,8 @@
     <Compile Include="VRInterAppCommunication\VRInterAppCommunication.cs" />
     <Compile Include="VRInterAppCommunication\VRInterAppCommunicationProxy.cs" />
     <Compile Include="VRWebAPIClient.cs" />
+    <Compile Include="VRWebContext.cs" />
+    <Compile Include="VRWebUtilities.cs" />
     <Compile Include="VRXmlSerializer.cs" />
     <Compile Include="VRXmlSerializerExtensions.cs" />
     <Compile Include="ZipUtility.cs" />

@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using Vanrise.Common;
 using Vanrise.Security.Entities;
 
@@ -131,30 +130,35 @@ namespace Vanrise.Security.Business
             try
             {
                 securityToken = null;
-                if (HttpContext.Current == null)
+                if (!VRWebContext.IsInWebContext())
                     return false;
                 string token = null;
-                if (HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME] != null)
-                    token = HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME];
-                else if (HttpContext.Current.Request.Params[SECURITY_TOKEN_NAME] != null)
-                    token = HttpUtility.HtmlDecode(HttpContext.Current.Request.Params[SECURITY_TOKEN_NAME]);
-                else
+                string tokenHeader;
+                string tokenParameter;
+                VRWebCookieCollection cookies;
+                if ((tokenHeader = VRWebContext.GetCurrentRequestHeader(SecurityContext.SECURITY_TOKEN_NAME)) != null)
                 {
-                    if (HttpContext.Current.Request.Cookies != null)
+                    token = tokenHeader;
+                }
+                else if ((tokenParameter = VRWebContext.GetCurrentRequestQueryString(SECURITY_TOKEN_NAME)) != null)
+                {
+                    token = VRWebUtilities.HtmlDecode(tokenParameter);
+                }
+                else if ((cookies = VRWebContext.GetCurrentRequestCookies()) != null)
+                {
+                    string authCookieName = s_securityManager.GetCookieName();
+                    foreach (var cookie in cookies.Values)
                     {
-                        var cookies = HttpContext.Current.Request.Cookies;
-                        foreach (var cookieKey in cookies.AllKeys)
+                        if (cookie.Name.StartsWith(authCookieName))
                         {
-                            if (cookieKey.StartsWith(s_securityManager.GetCookieName()))
-                            {
-                                var cookieValue = System.Web.HttpUtility.UrlDecode(cookies[cookieKey].Value);
-                                AuthenticationToken authenticationToken = Serializer.Deserialize<AuthenticationToken>(cookieValue);
-                                token = authenticationToken.Token;
-                                break;
-                            }
+                            var cookieValue = VRWebUtilities.UrlDecode(cookie.Value);
+                            AuthenticationToken authenticationToken = Serializer.Deserialize<AuthenticationToken>(cookieValue);
+                            token = authenticationToken.Token;
+                            break;
                         }
                     }
                 }
+
                 if (!string.IsNullOrEmpty(token))
                 {
                     string decryptionKey = s_securityManager.GetTokenDecryptionKey();

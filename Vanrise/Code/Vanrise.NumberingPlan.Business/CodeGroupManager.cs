@@ -9,7 +9,6 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.NumberingPlan.Data;
 using Vanrise.NumberingPlan.Entities;
-using System.Web;
 
 namespace Vanrise.NumberingPlan.Business
 {
@@ -241,7 +240,7 @@ namespace Vanrise.NumberingPlan.Business
         }
         public byte[] DownloadCodeGroupListTemplate()
         {
-            string physicalFilePath = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["DownloadVRCodeGroupTemplatePath"]);
+            string physicalFilePath = VRWebContext.MapVirtualToPhysicalPath(System.Configuration.ConfigurationManager.AppSettings["DownloadVRCodeGroupTemplatePath"]);
 
             byte[] bytes = File.ReadAllBytes(physicalFilePath);
 

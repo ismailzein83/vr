@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -94,19 +93,20 @@ namespace Vanrise.Common.Business
             languageId = Guid.Empty;
             if (IsLocalizationEnabled())
             {
-                if (HttpContext.Current == null)
+                if (!VRWebContext.IsInWebContext())
                     return false;
                 string languageIdAsString = null;
 
-                if (HttpContext.Current.Request["vrlangId"] != null)
+                if ((languageIdAsString = VRWebContext.GetCurrentRequestQueryString("vrlangId")) != null)
                 {
-                    languageIdAsString = HttpContext.Current.Request["vrlangId"];
                     if (Guid.TryParse(languageIdAsString, out languageId))
                         return true;
                 }
-               string languageCookieName = string.Format("VR_Common_LocalizationLangauge_{0}", HttpContext.Current.Server.UrlEncode(string.Format("{0}://{1}:{2}",HttpContext.Current.Request.Url.Scheme,HttpContext.Current.Request.Url.Host,HttpContext.Current.Request.Url.Port)));
-                if (HttpContext.Current.Request.Cookies != null  && HttpContext.Current.Request.Cookies[languageCookieName] != null)
-                    languageIdAsString = HttpContext.Current.Request.Cookies[languageCookieName].Value;
+                var urlParts = VRWebContext.GetCurrentRequestURLParts();
+                string languageCookieName = string.Format("VR_Common_LocalizationLangauge_{0}", VRWebUtilities.UrlEncode(string.Format("{0}://{1}:{2}", urlParts.Scheme, urlParts.Host, urlParts.Port)));
+                var languageCookie = VRWebContext.GetCurrentRequestCookie(languageCookieName);
+                if (languageCookie != null)
+                    languageIdAsString = languageCookie.Value;
                 if (!string.IsNullOrEmpty(languageIdAsString))
                 {
                     Guid parsedLanguagedId;
@@ -126,6 +126,7 @@ namespace Vanrise.Common.Business
             }
             return false;
         }
+
         Dictionary<string, TextResourceWithTranslation> GetTextResourcesWithTranslationsByKey()
         {
             Dictionary<string, TextResourceWithTranslation> resourcesWithTranslations = new Dictionary<string, TextResourceWithTranslation>();
