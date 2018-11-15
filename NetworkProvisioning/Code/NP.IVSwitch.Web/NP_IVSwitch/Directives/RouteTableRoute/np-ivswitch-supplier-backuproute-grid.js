@@ -19,7 +19,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
 
     function RouteTableGrid($scope, ctrl) {
         var supplierAPI;
-
+        var excludedIds;
 
 
         this.initializeController = initializeController;
@@ -89,7 +89,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                 backupSupplierDirectiveDefferedReady.promise.then(function () {
                     var directivePayload = {
                         filter: {
-
+                            ExcludedCarrierAccountIds: excludedIds,
                             Filters: [{ $type: "NP.IVSwitch.Business.CarrierAccountRouteFilter,NP.IVSwitch.Business" }]
                         }
                     };
@@ -110,9 +110,9 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
             var api = {};
 
             api.load = function (payload) {              
-
                 var promises = [];
                 if (payload != undefined) {
+                    excludedIds = payload.excludedIds;
                     if (payload.backupOptions != null) {
                         for (var i = 0; i < payload.backupOptions.length ; i++) {
                             var backupOption = payload.backupOptions[i];
@@ -172,7 +172,7 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                         directivePayload = {
                             selectedIds: gridItem.payload.BackupOptionSupplierId,
                             filter: {
-
+                                ExcludedCarrierAccountIds: excludedIds,
                                 Filters: [{ $type: "NP.IVSwitch.Business.CarrierAccountRouteFilter,NP.IVSwitch.Business" }]
                             }
                         };

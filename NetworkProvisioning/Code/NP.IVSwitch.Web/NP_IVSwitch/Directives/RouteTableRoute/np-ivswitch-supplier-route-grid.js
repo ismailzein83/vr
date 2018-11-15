@@ -207,6 +207,12 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
 
                 gridItem.onBackupRouteGridDirectiveReady = function (api) {
                     gridItem.backupRouteGridDirectiveAPI = api;
+                    var setLoader = function (value) {
+                    };
+                    var directivePayload = {
+                        excludedIds: excludedIds
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gridItem.backupRouteGridDirectiveAPI, directivePayload, setLoader, undefined);
                 };
 
                 supplierDirectiveDefferedReady.promise.then(function () {
@@ -374,17 +380,14 @@ function (UtilsService, VRNotificationService, NP_IVSwitch_RouteTableAPIService,
                         dataItem.backupRouteGridDirectiveAPI = api;
                         gridItem.backupRouteGridDirectiveReady.resolve();
                     };
-                    if (gridItem.hasPercentage)
-                    {
- 
-
-                        gridItem.backupRouteGridDirectiveReady.promise.then(function () {
-                            var directivePayload;
-                            if (gridItem.payload != undefined)
-                                directivePayload = { backupOptions: gridItem.payload.BackupOptions };
-                            VRUIUtilsService.callDirectiveLoad(dataItem.backupRouteGridDirectiveAPI, directivePayload, gridItem.backupRouteGridDirectiveLoad);
-                        });
-                    }
+                    gridItem.backupRouteGridDirectiveReady.promise.then(function () {
+                        var directivePayload = {
+                            excludedIds: excludedIds
+                        };
+                        if (gridItem.payload != undefined)
+                            directivePayload.backupOptions = gridItem.payload.BackupOptions;
+                        VRUIUtilsService.callDirectiveLoad(dataItem.backupRouteGridDirectiveAPI, directivePayload, gridItem.backupRouteGridDirectiveLoad);
+                    });
 
                 $scope.scopeModel.columns.push(dataItem);
 
