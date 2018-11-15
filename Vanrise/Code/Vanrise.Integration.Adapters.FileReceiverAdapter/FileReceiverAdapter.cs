@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
@@ -11,12 +12,36 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
 
         public enum Actions
         {
+            NoAction = -1,
             Rename = 0,
             Delete = 1,
             Move = 2 // Move to Folder
         }
 
         #region Private Functions
+        FileAdapterState SaveOrGetAdapterState(IAdapterImportDataContext context, FileAdapterArgument fileAdapterArgument, string fileName = null, DateTime? fileModifiedDate = null)
+        {
+            FileAdapterState adapterState = null;
+            context.GetStateWithLock((state) =>
+            {
+                adapterState = state as FileAdapterState;
+
+                if (adapterState == null)
+                    adapterState = new FileAdapterState();
+
+                if (fileModifiedDate.HasValue)
+                {
+                    adapterState.LastRetrievedFileTime = fileModifiedDate.Value;
+                }
+
+                if (!string.IsNullOrEmpty(fileName))
+                    adapterState.LastRetrievedFileName = fileName;
+
+                return adapterState;
+            });
+
+            return adapterState;
+        }
 
         private void CreateStreamReader(FileAdapterArgument fileAdapterArgument, Func<IImportedData, ImportedBatchProcessingOutput> receiveData, FileInfo file)
         {
@@ -60,6 +85,9 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
         public override void ImportData(IAdapterImportDataContext context)
         {
             FileAdapterArgument fileAdapterArgument = context.AdapterArgument as FileAdapterArgument;
+
+            FileAdapterState fileAdapterState = SaveOrGetAdapterState(context, fileAdapterArgument);
+
             string mask = string.IsNullOrEmpty(fileAdapterArgument.Mask) ? "" : fileAdapterArgument.Mask;
             Regex regEx = new Regex(mask);
             base.LogVerbose("Checking the following directory {0}", fileAdapterArgument.Directory);
@@ -70,17 +98,39 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                 {
                     DirectoryInfo d = new DirectoryInfo(fileAdapterArgument.Directory);//Assuming Test is your Folder
                     base.LogVerbose("Getting all files with extenstion {0}", fileAdapterArgument.Extension);
-                    FileInfo[] Files = d.GetFiles("*" + fileAdapterArgument.Extension); //Getting Text files
-                    
+                    FileInfo[] fileInfos = d.GetFiles("*" + fileAdapterArgument.Extension); //Getting Text files
+
+                    if (fileInfos == null || fileInfos.Length == 0)
+                        return;
+
                     short numberOfFilesRead = 0;
-                    foreach (FileInfo file in Files)
+                    bool newFilesStarted = false;
+
+                    foreach (FileInfo file in fileInfos.OrderBy(c => c.LastWriteTime).ThenBy(c => c.Name))
                     {
                         if (context.ShouldStopImport())
                             break;
 
                         if (regEx.IsMatch(file.Name))
                         {
+                            if (!newFilesStarted)
+                            {
+                                if (DateTime.Compare(fileAdapterState.LastRetrievedFileTime, file.LastWriteTime) > 0)
+                                {
+                                    continue;
+                                }
+                                else if (DateTime.Compare(fileAdapterState.LastRetrievedFileTime, file.LastWriteTime) == 0)
+                                {
+                                    if (!string.IsNullOrEmpty(fileAdapterState.LastRetrievedFileName) && fileAdapterState.LastRetrievedFileName.CompareTo(file.Name) >= 0)
+                                        continue;
+                                }
+                                newFilesStarted = true;
+                            }
+
                             CreateStreamReader(fileAdapterArgument, context.OnDataReceived, file);
+
+                            fileAdapterState = SaveOrGetAdapterState(context, fileAdapterArgument, file.Name, file.LastWriteTime);
+
                             AfterImport(fileAdapterArgument, file);
                             numberOfFilesRead++;
                         }

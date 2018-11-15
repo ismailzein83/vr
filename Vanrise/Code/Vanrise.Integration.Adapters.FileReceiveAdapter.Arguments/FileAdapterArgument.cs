@@ -17,4 +17,10 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments
 
         public int ActionAfterImport { get; set; }
     }
+
+    public class FileAdapterState : BaseAdapterState
+    {
+        public DateTime LastRetrievedFileTime { get; set; }
+        public string LastRetrievedFileName { get; set; }
+    }
 }
