@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrAnalyticReportgenerationcustomcodeFilegenerator", ["UtilsService",
-    function (UtilsService) {
+app.directive("vrAnalyticReportgenerationcustomcodeFilegenerator", ["UtilsService","VRUIUtilsService",
+    function (UtilsService, VRUIUtilsService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -8,24 +8,30 @@ app.directive("vrAnalyticReportgenerationcustomcodeFilegenerator", ["UtilsServic
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var flatFile = new FlatFile($scope, ctrl, $attrs);
-                flatFile.initializeController();
+                var customCode = new CustomCodeFileGenerator($scope, ctrl, $attrs);
+                customCode.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Analytic/Directives/VRRe/AutomatedReport/FileGenerator/FlatFile/Templates/FlatFileGeneratorTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/MainExtensions/AutomatedReport/FileGenerator/CustomCode/Templates/ReportGenerationCustomCodeFileGeneratorTemplate.html"
         };
 
 
-        function FlatFile($scope, ctrl, $attrs) {
+        function CustomCodeFileGenerator($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var customCodeSettingsAPI;
+            var customCodeSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+                $scope.scopeModel = {};
 
-                UtilsService.waitMultiplePromises(promises).then(function () {
-                    defineAPI();
-                });
+                $scope.scopeModel.onCustomCodeSelectorReadyDeferred = function (api) {
+                    customCodeSettingsAPI = api;
+                    customCodeSettingsReadyDeferred.resolve();
+                };
+
+                defineAPI();
             }
 
             function defineAPI() {
@@ -34,12 +40,25 @@ app.directive("vrAnalyticReportgenerationcustomcodeFilegenerator", ["UtilsServic
                 api.load = function (payload) {
                     $scope.scopeModel.isLoading = true;
                     var promises = [];
+                    var selectedCustomCodeSettingsId;
                     if (payload != undefined) {
-
+                        if (payload.fileGenerator != undefined) {
+                            selectedCustomCodeSettingsId = payload.fileGenerator.ReportGenerationCustomCodeFileGeneratorId;
+                        }
+                    }
+                    promises.push(loadCustomCodeSelector());
+                    function loadCustomCodeSelector() {
+                        var customCodeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        customCodeSettingsReadyDeferred.promise.then(function () {
+                            var selectorPayload = {
+                                selectedIds: selectedCustomCodeSettingsId
+                            };
+                            VRUIUtilsService.callDirectiveLoad(customCodeSettingsAPI, selectorPayload, customCodeSelectorLoadDeferred);
+                        });
+                        return customCodeSelectorLoadDeferred.promise;
                     }
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         $scope.scopeModel.isLoading = false;
-
                     });
 
                 };
@@ -47,7 +66,8 @@ app.directive("vrAnalyticReportgenerationcustomcodeFilegenerator", ["UtilsServic
 
                 api.getData = function () {
                     var obj = {
-                        $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.FlatFileGenerator,Vanrise.Analytic.MainExtensions",
+                        $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.ReportGenerationCustomCodeFileGenerator,Vanrise.Analytic.MainExtensions",
+                        ReportGenerationCustomCodeFileGeneratorId: customCodeSettingsAPI.getSelectedIds()
                     };
                     return obj;
                 };
@@ -56,6 +76,7 @@ app.directive("vrAnalyticReportgenerationcustomcodeFilegenerator", ["UtilsServic
                     ctrl.onReady(api);
             }
 
-            return directiveDefinitionObject;
         }
+        return directiveDefinitionObject;
+    }
 ]);
