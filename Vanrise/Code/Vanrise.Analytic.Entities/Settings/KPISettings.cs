@@ -9,6 +9,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class KPISettings : SettingData
     {
+        public static string SETTING_TYPE = "VR_Analytic_KPISettings";
         public List<AnalyticTableKPISettings> AnalyticTablesKPISettings { get; set; }
     }
     public class AnalyticTableKPISettings
