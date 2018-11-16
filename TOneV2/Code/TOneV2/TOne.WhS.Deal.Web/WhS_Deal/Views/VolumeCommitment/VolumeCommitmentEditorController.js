@@ -120,11 +120,11 @@
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
             $scope.scopeModel.validateEED = function () {
-                var today = UtilsService.createDateFromString(UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()));
+                var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
                 var eed = UtilsService.createDateFromString($scope.scopeModel.endDate);
                 var originalExpiredDate = UtilsService.createDateFromString(originalEED);
-                if (isEditMode && originalExpiredDate < today && eed < originalExpiredDate) {
-                    return "Deal expired, EED can only be extended";
+                if (originalExpiredDate.getTime() < today.getTime() && eed.getTime() < today.getTime() && originalExpiredDate.getTime() != eed.getTime()) {
+                    return "Deal expired, EED can only be extended to a date greater than today";
                 }
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
@@ -227,7 +227,7 @@
         function loadStaticData() {
             if (volumeCommitmentEntity == undefined)
                 return;
-            originalEED = volumeCommitmentEntity.Settings.EndDate;
+            originalEED = volumeCommitmentEntity.Settings.EEDToStore;
             $scope.scopeModel.description = volumeCommitmentEntity.Name;
             $scope.scopeModel.beginDate = volumeCommitmentEntity.Settings.BeginDate;
             $scope.scopeModel.endDate = volumeCommitmentEntity.Settings.EEDToStore;

@@ -174,7 +174,7 @@
                 var eed = UtilsService.createDateFromString($scope.scopeModel.endDate);
                 var originalExpiredDate = UtilsService.createDateFromString(originalEED);
                 if (originalExpiredDate.getTime() < today.getTime() && eed.getTime() < today.getTime() && originalExpiredDate.getTime() != eed.getTime()) {
-                    return "Deal expired, EED can only be extended";
+                    return "Deal expired, EED can only be extended to a date greater than today";
                 }
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
