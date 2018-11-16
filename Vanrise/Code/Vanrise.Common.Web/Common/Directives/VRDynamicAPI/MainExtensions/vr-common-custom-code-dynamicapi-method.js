@@ -1,4 +1,4 @@
-﻿"use strict"
+﻿"use strict";
 app.directive("vrCommonCustomCodeDynamicapiMethod", ["UtilsService", "VRNotificationService", "VR_Dynamic_APIService", "VRCommon_VRDynamicAPIAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
     function (UtilsService, VRNotificationService, VR_Dynamic_APIService, VRCommon_VRDynamicAPIAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
@@ -74,7 +74,7 @@ app.directive("vrCommonCustomCodeDynamicapiMethod", ["UtilsService", "VRNotifica
                             var promises = [];
                             var methodTypeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                            promises.push(methodTypeReadyPromiseDeferred.promise)
+                            promises.push(methodTypeReadyPromiseDeferred.promise);
                             UtilsService.waitMultiplePromises(promises).then(function (response) {
                                 var methodTypePayload;
                                 if (payload != undefined && payload.vrDynamicAPIMethodSettingsEntity != undefined) {

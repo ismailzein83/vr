@@ -1,4 +1,4 @@
-﻿"use strict"
+﻿"use strict";
 app.directive("vrCommonDynamicapiMethodsGrid", ["UtilsService", "VRNotificationService", "VR_Dynamic_APIService", "VRCommon_VRDynamicAPIAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
     function (UtilsService, VRNotificationService, VR_Dynamic_APIService, VRCommon_VRDynamicAPIAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
@@ -24,6 +24,7 @@ app.directive("vrCommonDynamicapiMethodsGrid", ["UtilsService", "VRNotificationS
             this.initializeController = initializeController;
 
             function initializeController() {
+                
 
                 $scope.scopeModel = {};
 

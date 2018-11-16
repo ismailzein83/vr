@@ -100,7 +100,7 @@
             var object = {
                 VRDynamicAPIMethodId: (vrDynamicAPIMethodEntity != undefined) ? vrDynamicAPIMethodEntity.VRDynamicAPIMethodId : undefined,
                 Name: $scope.scopeModel.name,
-                Settings: vrDynamicAPIMethodSettingsDirectiveAPI.getData(),
+                Settings: vrDynamicAPIMethodSettingsDirectiveAPI.getData()
             };
             return object;
         }
