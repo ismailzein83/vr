@@ -51,3 +51,30 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
+
+
+	
+DECLARE @PortalAccountID int = (SELECT ID from [sec].[User] WHERE Email = 'portalsystemaccount@nodomain.com')
+
+--[sec].[Permission]--------------------------------------------------------------------------------
+BEGIN
+set nocount on;
+;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(0, CONVERT(varchar, @PortalAccountID),1,'a611a651-b60b-483d-bc83-1c2b667a120a','[{"Name":"View","Value":1}]'),
+(0, CONVERT(varchar, @PortalAccountID),1,'ab794846-853c-4402-a8e4-6f5c3a75f5f2','[{"Name":"View","Value":1}]')
+
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
+merge	[sec].[Permission] as t
+using	cte_data as s
+on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]
+when matched then
+	update set
+	[PermissionFlags] = s.[PermissionFlags]
+when not matched by target then
+	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
+----------------------------------------------------------------------------------------------------
+END

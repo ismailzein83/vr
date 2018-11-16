@@ -325,3 +325,28 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
+
+
+
+DECLARE @TOneAccountID int = (SELECT ID from [sec].[User] WHERE Email = 'tonesystemaccount@nodomain.com')
+
+--[sec].[Permission]--------------------------------------------------------------------------------
+BEGIN
+set nocount on;
+;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(0, CONVERT(varchar, @TOneAccountID),1,'b4158657-230e-40bf-b88c-f2b2ca8835de','[{"Name":"Add","Value":1},{"Name":"Reset Password","Value":1}]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
+merge	[sec].[Permission] as t
+using	cte_data as s
+on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]
+when matched then
+	update set
+	[PermissionFlags] = s.[PermissionFlags]
+when not matched by target then
+	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
+----------------------------------------------------------------------------------------------------
+END
