@@ -113,7 +113,7 @@ namespace NP.IVSwitch.Business
 												routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
 												{
 													RouteId = bacupOption.BackupOptionRouteId,
-													RoutingMode = 8,
+													RoutingMode = 1,
 													Preference = codePreference--,
 													TotalBKTs = codeMainPreference,
 													BKTSerial = codeMainPreference - codePreference,
@@ -239,7 +239,7 @@ namespace NP.IVSwitch.Business
 									routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
 									{
 										RouteId = bacupOption.BackupOptionRouteId,
-										RoutingMode = 8,
+										RoutingMode = 1,
 										Preference = preference--,
 										TotalBKTs = mainPreference,
 										BKTSerial = mainPreference - preference,
