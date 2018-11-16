@@ -37,7 +37,6 @@ app.directive("vrCommonCustomCodeDynamicapiMethod", ["UtilsService", "VRNotifica
                             return true;
                     }
                     return false;
-                    ;
                 };
 
                 $scope.scopeModel.onCustomCodeMethodParametersGridDirectiveReady = function (api) {
@@ -54,16 +53,16 @@ app.directive("vrCommonCustomCodeDynamicapiMethod", ["UtilsService", "VRNotifica
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
-                    ctrl.onReady(getDirectiveApi());
+                    ctrl.onReady(defineAPI());
 
                 }
 
 
-                function getDirectiveApi() {
+                function defineAPI() {
 
-                    var directiveApi = {};
+                    var api = {};
 
-                    directiveApi.load = function (payload) {
+                    api.load = function (payload) {
 
                         if (payload != undefined && payload.vrDynamicAPIMethodSettingsEntity != undefined) {
                             $scope.scopeModel.isLoading = true;
@@ -91,14 +90,10 @@ app.directive("vrCommonCustomCodeDynamicapiMethod", ["UtilsService", "VRNotifica
                             var methodParametersDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
                             methodParametersReadyPromiseDeferred.promise.then(function (response) {
                                 var methodParametersPayload = {
-                                    context: {
-                                        getMethodType: function () {
-                                            return methodTypeDirectiveApi != undefined ? methodTypeDirectiveApi.getSelectedIds() : undefined;
-                                        }
-                                    }
+                                    context: getContext()
                                 };
                                 if (payload != undefined && payload.vrDynamicAPIMethodSettingsEntity != undefined) {
-                                    methodParametersPayload.InParameters: payload.vrDynamicAPIMethodSettingsEntity.InParameters;
+                                    methodParametersPayload.InParameters=payload.vrDynamicAPIMethodSettingsEntity.InParameters;
                                 }
                                 VRUIUtilsService.callDirectiveLoad(methodParametersGridApi, methodParametersPayload, methodParametersDirectiveLoadDeferred);
                             });
@@ -115,7 +110,7 @@ app.directive("vrCommonCustomCodeDynamicapiMethod", ["UtilsService", "VRNotifica
                         });
                     };
 
-                    directiveApi.getData = function () {
+                    api.getData = function () {
 
                         return {
                             $type: "Vanrise.Common.MainExtensions.VRDynamicAPI.VRCustomCodeDynamicAPIMethod,Vanrise.Common.MainExtensions",
@@ -125,9 +120,19 @@ app.directive("vrCommonCustomCodeDynamicapiMethod", ["UtilsService", "VRNotifica
                             ReturnType: $scope.scopeModel.returnType
                         };
                     };
-
-                    return directiveApi;
+                    if (ctrl.onReady != null)
+                        ctrl.onReady(api);
+                    return api;
                 }
+
+                function getContext() {
+                    return {
+                        getMethodType: function () {
+                            return methodTypeDirectiveApi != undefined ? methodTypeDirectiveApi.getSelectedIds() : undefined;
+                        }
+                    };
+                }
+
             }
         }
 
