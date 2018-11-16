@@ -43,7 +43,7 @@ app.directive("vrAnalyticReportgenerationcustomcodeFilegenerator", ["UtilsServic
                     var selectedCustomCodeSettingsId;
                     if (payload != undefined) {
                         if (payload.fileGenerator != undefined) {
-                            selectedCustomCodeSettingsId = payload.fileGenerator.ReportGenerationCustomCodeFileGeneratorId;
+                            selectedCustomCodeSettingsId = payload.fileGenerator.ReportGenerationCustomCodeId;
                         }
                     }
                     promises.push(loadCustomCodeSelector());
@@ -67,7 +67,7 @@ app.directive("vrAnalyticReportgenerationcustomcodeFilegenerator", ["UtilsServic
                 api.getData = function () {
                     var obj = {
                         $type: "Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators.ReportGenerationCustomCodeFileGenerator,Vanrise.Analytic.MainExtensions",
-                        ReportGenerationCustomCodeFileGeneratorId: customCodeSettingsAPI.getSelectedIds()
+                        ReportGenerationCustomCodeId: customCodeSettingsAPI.getSelectedIds()
                     };
                     return obj;
                 };

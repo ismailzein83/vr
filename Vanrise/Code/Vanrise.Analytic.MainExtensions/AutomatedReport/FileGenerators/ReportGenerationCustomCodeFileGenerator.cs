@@ -23,14 +23,18 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             if (customCode != null)
             {
                 var type = customCodeSettingsManager.GetOrCreateRuntimeType(customCode);
-                var reportGenerationClass = type as IReportGenerationCustomCode;
-                var reportGenerationContext = new ReportGenerationCustomCodeContext();
-                var output = reportGenerationClass.Generate(reportGenerationContext);
-                VRAutomatedReportGeneratedFile generatedFile = new VRAutomatedReportGeneratedFile()
+                if (type != null)
                 {
-                    FileContent = output,
-                    FileExtension = ".xlsx"
-                };
+                    var reportGenerator = Activator.CreateInstance(type) as IReportGenerationCustomCode;
+                    var reportGenerationContext = new ReportGenerationCustomCodeContext();
+                    var output = reportGenerator.Generate(reportGenerationContext);
+                    return new VRAutomatedReportGeneratedFile()
+                    {
+                        FileContent = output,
+                        FileExtension = ".xlsx"
+                    };
+                }
+            
             }
             return null;
         }

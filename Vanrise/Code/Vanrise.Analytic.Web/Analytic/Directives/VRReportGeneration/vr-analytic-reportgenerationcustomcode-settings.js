@@ -30,7 +30,7 @@ app.directive("vrAnalyticReportgenerationcustomcodeSettings", ["UtilsService",
                 + '<vr-tab header="\'Settings\'">'
                 + '   <vr-row>'
                 + '        <vr-columns width="fullrow">'
-                + '             <vr-textarea value="scopeModel.customCode" isrequired label="Custom Code"></vr-textarea>'
+                + '             <vr-textarea value="scopeModel.customCode" isrequired label="Custom Code" rows="20"></vr-textarea>'
                 + '        </vr-columns>'
                 + '   </vr-row>'
                 + '</vr-tab>'
