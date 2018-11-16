@@ -1,99 +1,101 @@
 ﻿'use strict';
 
 app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsService', 'VRCommon_CurrencyAPIService', 'VRNotificationService',
-	function (UtilsService, VRUIUtilsService, VRCommon_CurrencyAPIService, VRNotificationService) {
-		return {
-			restrict: 'E',
-			scope: {
-				onReady: '='
-			},
-			controller: function ($scope, $element, $attrs) {
-				var ctrl = this;
-				var purchaseAreaSettings = new PurchaseAreaSettings(ctrl, $scope, $attrs);
-				purchaseAreaSettings.initializeController();
-			},
-			controllerAs: 'ctrl',
-			bindToController: true,
-			templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/Settings/Templates/PurchaseAreaSettingsTemplate.html"
-		};
+    function (UtilsService, VRUIUtilsService, VRCommon_CurrencyAPIService, VRNotificationService) {
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '='
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var purchaseAreaSettings = new PurchaseAreaSettings(ctrl, $scope, $attrs);
+                purchaseAreaSettings.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/Settings/Templates/PurchaseAreaSettingsTemplate.html"
+        };
 
-		function PurchaseAreaSettings(ctrl, $scope, $attrs) {
-			this.initializeController = initializeController;
-			var data;
+        function PurchaseAreaSettings(ctrl, $scope, $attrs) {
+            this.initializeController = initializeController;
+            var data;
 
-			$scope.hintTextForIncrease = "(1 - OldRate / NewRate)*100 should be less than the specified percentage";
-			$scope.hintTextForDecrease = "(1 - NewRate / OldRate)*100 should be less than the specified percentage";
-			$scope.hintTextForClosing = "(ClosedZones  / TotalZones)*100 should be less than the specified percentage";
-            
+            $scope.hintTextForIncrease = "(1 - OldRate / NewRate)*100 should be less than the specified percentage";
+            $scope.hintTextForDecrease = "(1 - NewRate / OldRate)*100 should be less than the specified percentage";
+            $scope.hintTextForClosing = "(ClosedZones  / TotalZones)*100 should be less than the specified percentage";
 
-			function initializeController() {
 
-				defineAPI();
-			}
-			function defineAPI() {
-				var api = {};
+            function initializeController() {
 
-				api.load = function (payload) {
+                defineAPI();
+            }
+            function defineAPI() {
+                var api = {};
 
-					if (payload != undefined) {
-						data = payload.data;
-					}
+                api.load = function (payload) {
 
-					var promises = [];
-					load();
+                    if (payload != undefined) {
+                        data = payload.data;
+                    }
 
-					function load() {
-						loadAllControls();
-					}
+                    var promises = [];
+                    load();
 
-					function loadAllControls() {
-						return UtilsService.waitMultipleAsyncOperations([loadStaticData, getSystemCurrency])
-							.catch(function (error) {
-								VRNotificationService.notifyExceptionWithClose(error, $scope);
-							})
-							.finally(function () {
-							});
-					}
+                    function load() {
+                        loadAllControls();
+                    }
 
-				};
+                    function loadAllControls() {
+                        return UtilsService.waitMultipleAsyncOperations([loadStaticData, getSystemCurrency])
+                            .catch(function (error) {
+                                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                            })
+                            .finally(function () {
+                            });
+                    }
 
-				api.getData = function () {
-				    return {
-				        $type: "TOne.WhS.BusinessEntity.Entities.PurchaseAreaSettingsData, TOne.WhS.BusinessEntity.Entities",
-				        EffectiveDateDayOffset: ctrl.effectiveDateDayOffset,
-				        RetroactiveDayOffset: ctrl.retroactiveDayOffset,
-				        MaximumRate: ctrl.maximumRate,
-				        MaximumCodeRange: ctrl.maximumCodeRange,
-				        AcceptableIncreasedRate: ctrl.acceptableIncreasedRate, 
-				        AcceptableDecreasedRate: ctrl.acceptableDecreasedRate,
-				        AcceptableZoneClosingPercentage: ctrl.acceptableZoneClosingPercentage,
-				        CodeGroupVerfifcation: ctrl.codeGroupVerification
-				    };
-				};
+                };
 
-				if (ctrl.onReady != null)
-					ctrl.onReady(api);
-			}
+                api.getData = function () {
+                    return {
+                        $type: "TOne.WhS.BusinessEntity.Entities.PurchaseAreaSettingsData, TOne.WhS.BusinessEntity.Entities",
+                        EffectiveDateDayOffset: ctrl.effectiveDateDayOffset,
+                        RetroactiveDayOffset: ctrl.retroactiveDayOffset,
+                        MaximumRate: ctrl.maximumRate,
+                        MaximumCodeRange: ctrl.maximumCodeRange,
+                        AcceptableIncreasedRate: ctrl.acceptableIncreasedRate,
+                        AcceptableDecreasedRate: ctrl.acceptableDecreasedRate,
+                        AcceptableZoneClosingPercentage: ctrl.acceptableZoneClosingPercentage,
+                        CodeGroupVerfifcation: ctrl.codeGroupVerification,
+                        AllowRateZero: ctrl.allowRateZero
+                    };
+                };
 
-			function loadStaticData() {
-				if (data == undefined)
-				    return;
-				ctrl.effectiveDateDayOffset = data.EffectiveDateDayOffset;
-				ctrl.retroactiveDayOffset = data.RetroactiveDayOffset;
-				ctrl.maximumRate = data.MaximumRate;
-				ctrl.maximumCodeRange = data.MaximumCodeRange;
-			    ctrl.acceptableIncreasedRate = data.AcceptableIncreasedRate;
-			    ctrl.acceptableDecreasedRate = data.AcceptableDecreasedRate;
-			    ctrl.acceptableZoneClosingPercentage = data.AcceptableZoneClosingPercentage;
-				ctrl.codeGroupVerification = data.CodeGroupVerfifcation;
-			}
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
 
-			function getSystemCurrency() {
-				return VRCommon_CurrencyAPIService.GetSystemCurrency().then(function (response) {
-					if (response != undefined) {
-						ctrl.systemCurrencySymbol = response.Symbol;
-					}
-				});
-			}
-		}
-	}]);
+            function loadStaticData() {
+                if (data == undefined)
+                    return;
+                ctrl.effectiveDateDayOffset = data.EffectiveDateDayOffset;
+                ctrl.retroactiveDayOffset = data.RetroactiveDayOffset;
+                ctrl.maximumRate = data.MaximumRate;
+                ctrl.maximumCodeRange = data.MaximumCodeRange;
+                ctrl.acceptableIncreasedRate = data.AcceptableIncreasedRate;
+                ctrl.acceptableDecreasedRate = data.AcceptableDecreasedRate;
+                ctrl.acceptableZoneClosingPercentage = data.AcceptableZoneClosingPercentage;
+                ctrl.codeGroupVerification = data.CodeGroupVerfifcation;
+                ctrl.allowRateZero = data.AllowRateZero;
+            }
+
+            function getSystemCurrency() {
+                return VRCommon_CurrencyAPIService.GetSystemCurrency().then(function (response) {
+                    if (response != undefined) {
+                        ctrl.systemCurrencySymbol = response.Symbol;
+                    }
+                });
+            }
+        }
+    }]);

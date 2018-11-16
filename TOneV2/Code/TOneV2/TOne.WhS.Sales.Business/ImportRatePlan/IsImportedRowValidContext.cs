@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 
@@ -27,11 +24,12 @@ namespace TOne.WhS.Sales.Business
         public ImportedRowStatus Status { get; set; }
 
         public string DateTimeFormat { get; set; }
+        public bool AllowRateZero { get; set; }
 
         public string ErrorMessage { get; set; }
 
-		public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
-	}
+        public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+    }
 
     public class IsValidContext : IIsValidContext
     {
@@ -53,8 +51,10 @@ namespace TOne.WhS.Sales.Business
 
         public string DateTimeFormat { get; set; }
 
+        public bool AllowRateZero { get; set; }
+
         public string ErrorMessage { get; set; }
-		
-		public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
-	}
+
+        public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+    }
 }

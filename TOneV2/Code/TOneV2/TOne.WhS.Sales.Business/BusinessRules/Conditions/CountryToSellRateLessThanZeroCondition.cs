@@ -8,7 +8,7 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
-    public class CountryToSellRateLessThanOrEqualToZeroCondition : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
+    public class CountryToSellRateLessThanZeroCondition : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {

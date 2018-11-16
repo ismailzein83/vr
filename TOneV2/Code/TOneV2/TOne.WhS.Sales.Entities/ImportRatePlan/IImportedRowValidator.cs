@@ -35,5 +35,7 @@ namespace TOne.WhS.Sales.Entities
         string ErrorMessage { set; }
 
 		Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
-	}
+
+        bool AllowRateZero { get; }
+    }
 }

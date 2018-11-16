@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
@@ -85,6 +82,7 @@ namespace TOne.WhS.Sales.Business
         public string DateFormat { get; set; }
         public DateTime PriceListCreationDate { get; set; }
         public CustomerZoneRateHistoryReader CustomerZoneRateHistoryReader { get; set; }
+        public bool AllowRateZero { get; set; }
 
         #endregion
 
@@ -93,6 +91,7 @@ namespace TOne.WhS.Sales.Business
         public void setRatePlanContextPricingSettings(PricingSettings pricingSettings)
         {
             MaximumRate = pricingSettings.MaximumRate.Value;
+            AllowRateZero = pricingSettings.AllowRateZero ?? false;
             _retroactiveDate = DateTime.Now.Date.AddDays(-pricingSettings.RetroactiveDayOffset.Value);
         }
 
@@ -161,7 +160,7 @@ namespace TOne.WhS.Sales.Business
         long RootProcessInstanceId { get; }
         CustomerZoneRateHistoryReader CustomerZoneRateHistoryReader { get; }
         SaleEntityZoneRateLocator LastRateLocator { get; }
-
+        bool AllowRateZero { get; }
         #endregion
 
         #region Methods

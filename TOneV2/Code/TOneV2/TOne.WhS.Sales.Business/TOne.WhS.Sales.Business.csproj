@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -109,7 +109,8 @@
     <Compile Include="BusinessRules\Conditions\CountryToSellNewRateIsClosed.cs" />
     <Compile Include="BusinessRules\Conditions\CountryToSellRateCurrenciesConflict.cs" />
     <Compile Include="BusinessRules\Conditions\CountryToSellRateGreaterThanMaxRate.cs" />
-    <Compile Include="BusinessRules\Conditions\CountryToSellRateLessThanOrEqualToZeroCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\CountryToSellRateEqualToZeroCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\CountryToSellRateLessThanZeroCondition.cs" />
     <Compile Include="BusinessRules\Conditions\Country\ChangedCountryEEDIsLessThanToday.cs" />
     <Compile Include="BusinessRules\Conditions\Country\CountrySoldBeforePreviousEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\Country\CustomerZoneInheritsMultipleSellingProductZoneRatesCondition.cs" />
@@ -127,8 +128,9 @@
     <Compile Include="BusinessRules\Conditions\OtherRateBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateChangeOnlyCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\RateIsLessThanOrEqualToZeroCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\RateIsLessThanZeroCondition.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateDateRangeNotIncludedInSalePricingRuleRangeCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\RateIsZeroCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SellingProductZoneRateIsEndedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SPDefaultRPDoesNotExistCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneCountryIsEndedAndZoneIsChangedCondition.cs" />

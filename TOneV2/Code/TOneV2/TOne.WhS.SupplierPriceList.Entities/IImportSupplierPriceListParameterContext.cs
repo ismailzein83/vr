@@ -18,5 +18,6 @@ namespace TOne.WhS.SupplierPriceList.Entities
         decimal MaximumRate { get; }
         DateTime RetroactiveDate { get; }
         string DateFormat { get; }
-    }
+        bool AllowRateZero{ get; }
+}
 }

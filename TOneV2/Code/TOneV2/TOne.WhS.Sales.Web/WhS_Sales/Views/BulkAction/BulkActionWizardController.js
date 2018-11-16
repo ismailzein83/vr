@@ -17,6 +17,7 @@
         var tabsApi;
         var bulkActionContext;
         var pricingSettings;
+        var allowRateZero;
 
         var dropdownSectionAPI;
         var dropdownSectionReadyDeferred = UtilsService.createPromiseDeferred();
@@ -53,6 +54,8 @@
                 currencyId = parameters.currencyId;
                 longPrecision = parameters.longPrecision;
                 pricingSettings = parameters.pricingSettings;
+                allowRateZero = (parameters.pricingSettings != undefined) ? parameters.pricingSettings.AllowRateZero : false;
+                console.log(allowRateZero);
             }
         }
         function defineScope() {
@@ -318,19 +321,19 @@
             $scope.scopeModel.isLoading = true;
 
             var bulkActionApplicationInput =
-                {
-                    OwnerType: gridQuery.OwnerType,
-                    OwnerId: gridQuery.OwnerId,
-                    CurrencyId: gridQuery.CurrencyId,
-                    RoutingDatabaseId: gridQuery.RoutingDatabaseId,
-                    PolicyConfigId: gridQuery.PolicyConfigId,
-                    NumberOfOptions: gridQuery.NumberOfOptions,
-                    CostCalculationMethods: gridQuery.CostCalculationMethods,
-                    BulkAction: gridQuery.BulkAction,
-                    EffectiveOn: gridQuery.EffectiveOn,
-                    ExcludedZoneIds: excludedZoneIds,
-                    BulkActionCorrectedData: (validationDirectiveAPI != undefined) ? validationDirectiveAPI.getData() : null
-                };
+            {
+                OwnerType: gridQuery.OwnerType,
+                OwnerId: gridQuery.OwnerId,
+                CurrencyId: gridQuery.CurrencyId,
+                RoutingDatabaseId: gridQuery.RoutingDatabaseId,
+                PolicyConfigId: gridQuery.PolicyConfigId,
+                NumberOfOptions: gridQuery.NumberOfOptions,
+                CostCalculationMethods: gridQuery.CostCalculationMethods,
+                BulkAction: gridQuery.BulkAction,
+                EffectiveOn: gridQuery.EffectiveOn,
+                ExcludedZoneIds: excludedZoneIds,
+                BulkActionCorrectedData: (validationDirectiveAPI != undefined) ? validationDirectiveAPI.getData() : null
+            };
             if (gridQuery.Filter != null) {
                 bulkActionApplicationInput.BulkActionFilter = gridQuery.Filter.BulkActionFilter;
             }
@@ -352,6 +355,7 @@
             bulkActionContext.ownerId = ownerId;
             bulkActionContext.ownerSellingNumberPlanId = ownerSellingNumberPlanId;
             bulkActionContext.longPrecision = longPrecision;
+            bulkActionContext.allowRateZero = allowRateZero;
             if (gridQuery != undefined)
                 bulkActionContext.costCalculationMethods = gridQuery.CostCalculationMethods;
             bulkActionContext.getSelectedBulkAction = function () {

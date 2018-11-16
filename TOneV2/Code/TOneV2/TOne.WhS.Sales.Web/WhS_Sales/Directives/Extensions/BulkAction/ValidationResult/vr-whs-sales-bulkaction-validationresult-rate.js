@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', '$filter', function (WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, $filter) {
     return {
         restrict: "E",
         scope: {
@@ -29,6 +29,7 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
         var increasedRateDayOffset;
         var decreasedRateDayOffset;
         var maximumRateValue;
+        var allowRateZero;
 
         var h = innerHeight * 0.3;
         var pageSize = (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10) < 30 ? 30 : (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10);;
@@ -84,7 +85,9 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
                 if (!isCorrectedRateSet(dataItem))
                     return null;
                 var correctedRate = parseFloat(dataItem.correctedRate);
-                if (correctedRate <= 0)
+                if (allowRateZero && correctedRate < 0)
+                    return 'Fixed rate must be greater than or equal to zero';
+                if (!allowRateZero && correctedRate <= 0)
                     return 'Fixed rate must be greater than zero';
                 if (maximumRateValue != null && correctedRate > maximumRateValue)
                     return 'Maximum rate is ' + maximumRateValue;
@@ -94,6 +97,9 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
             };
             $scope.scopeModel.calculateCorrectedRateBED = function (dataItem) {
 
+                if (dataItem.correctedRate != undefined && dataItem.correctedRate != null && dataItem.correctedRate != '') {
+                    dataItem.correctedRate = $filter('vrtextOrNumber')(dataItem.correctedRate, $scope.scopeModel.longPrecision);
+                }
                 if (dataItem.correctedRate == undefined || dataItem.correctedRate == null || dataItem.correctedRate == '') {
                     dataItem.correctedRateBED = undefined;
                 }
@@ -173,8 +179,9 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
                     if (pricingSettings != undefined) {
                         newRateDayOffset = (pricingSettings.NewRateDayOffset != null) ? pricingSettings.NewRateDayOffset : 0;
                         increasedRateDayOffset = (pricingSettings.IncreasedRateDayOffset != null) ? pricingSettings.IncreasedRateDayOffset : 0;
-                        decreasedRateDayOffset = (pricingSettings.DecreasedRateDayOffset != null) ? pricingSettings.DecreasedRateDayOffset: 0;
-                        maximumRateValue = (pricingSettings.MaximumRate != null) ? pricingSettings.MaximumRate: undefined;
+                        decreasedRateDayOffset = (pricingSettings.DecreasedRateDayOffset != null) ? pricingSettings.DecreasedRateDayOffset : 0;
+                        maximumRateValue = (pricingSettings.MaximumRate != null) ? pricingSettings.MaximumRate : undefined;
+                        allowRateZero = (pricingSettings.AllowRateZero != null) ? pricingSettings.AllowRateZero : undefined;
                     }
                 }
 
@@ -202,7 +209,7 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
             if (sourceArray == undefined)
                 return;
             if (gridArray.length < sourceArray.length) {
-                for (var i = gridArray.length, rowIndex = 0; i < sourceArray.length && rowIndex < pageSize; i++, rowIndex++) {
+                for (var i = gridArray.length, rowIndex = 0; i < sourceArray.length && rowIndex < pageSize; i++ , rowIndex++) {
                     gridArray.push({
                         Entity: sourceArray[i]
                     });

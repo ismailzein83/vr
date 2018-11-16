@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business.BusinessRules
 {
-    public class RateIsLessThanOrEqualToZeroCondition : BusinessRuleCondition
+    public class RateIsZeroCondition : BusinessRuleCondition
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
@@ -16,6 +15,12 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
+            IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
+            ratePlanContext.ThrowIfNull("ratePlanContext");
+
+            if (ratePlanContext.AllowRateZero)
+                return true;
+
             var allDataByZone = context.Target as AllDataByZone;
 
             if (allDataByZone.DataByZoneList == null || allDataByZone.DataByZoneList.Count() == 0)
@@ -31,13 +36,13 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                 if ((zoneData.IsCustomerCountryNew.HasValue && zoneData.IsCustomerCountryNew.Value) || invalidCountryNames.Contains(countryName))
                     continue;
 
-                if (BusinessRuleUtilities.IsAnyZoneRateNegative(zoneData))
+                if (BusinessRuleUtilities.IsAnyZoneRateEqualToZero(zoneData))
                     invalidCountryNames.Add(countryName);
             }
 
             if (invalidCountryNames.Count > 0)
             {
-                context.Message = string.Format("Rates of following sold country(ies) must be greater than zero: {0}", string.Join(", ", invalidCountryNames));
+                context.Message = string.Format("Rates of following sold country(ies) are equal to zero: {0}", string.Join(", ", invalidCountryNames));
                 return false;
             }
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Entities;
 
@@ -41,27 +39,28 @@ namespace TOne.WhS.Sales.Business
             return (importedZoneName != null) ? importedZoneName.Trim().ToLower() : null;
         }
 
-		public static bool ValidateRateValue(string rate, out string errorMessage)
-		{
-			decimal rateAsDecimal;
-			if (!decimal.TryParse(rate, out rateAsDecimal))
-			{
-				errorMessage = "Rate is an invalid number.";
-				return false;
-			}
-			if (rateAsDecimal == 0)
-			{
-				errorMessage = "Rate is zero.";
-				return false;
-			}
+        public static bool ValidateRateValue(string rate, out string errorMessage, bool allowRateZero)
+        {
+            decimal rateAsDecimal;
+            if (!decimal.TryParse(rate, out rateAsDecimal))
+            {
+                errorMessage = "Rate is an invalid number.";
+                return false;
+            }
 
-			else if (rateAsDecimal < 0)
-			{
-				errorMessage = "Rate is negative.";
-				return false;
-			}
-			errorMessage = null;
-			return true;
-		}
-	}
+            if (rateAsDecimal == 0 && !allowRateZero)
+            {
+                errorMessage = "Rate is zero.";
+                return false;
+            }
+
+            else if (rateAsDecimal < 0)
+            {
+                errorMessage = "Rate is negative.";
+                return false;
+            }
+            errorMessage = null;
+            return true;
+        }
+    }
 }

@@ -27,6 +27,8 @@ namespace TOne.WhS.Sales.Entities
 
         string DateTimeFormat { get; }
 
+        bool AllowRateZero { get; }
+
         string ErrorMessage { set; }
 
 		Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }

@@ -63,7 +63,8 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
                         NewRateDayOffset: ctrl.newRateDayOffset,
                         EndCountryDayOffset: ctrl.endCountryDayOffset,
                         IncreasedRateDayOffset: ctrl.increasedRateDayOffset,
-                        DecreasedRateDayOffset: ctrl.decreasedRateDayOffset
+                        DecreasedRateDayOffset: ctrl.decreasedRateDayOffset,
+                        AllowRateZero: ctrl.allowRateZero
                     };
                 };
 
@@ -83,6 +84,7 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
                 ctrl.endCountryDayOffset = data.EndCountryDayOffset;
                 ctrl.increasedRateDayOffset = data.IncreasedRateDayOffset;
                 ctrl.decreasedRateDayOffset = data.DecreasedRateDayOffset;
+                ctrl.allowRateZero = data.AllowRateZero;
             }
 
             function getSystemCurrency() {
@@ -98,11 +100,11 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
                 var sellingProductEnumValue = WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value;
                 var customerEnumValue = WhS_BE_SaleAreaSettingsContextEnum.Customer.value;
 
-
                 ctrl.showDefaultRate = (directiveContext == systemEnumValue);
                 ctrl.showMaxSaleRate = (directiveContext == systemEnumValue);
                 ctrl.showEffectiveDateDayOffset = (directiveContext == systemEnumValue);
                 ctrl.showRetroactiveDayOffset = (directiveContext == systemEnumValue);
+                ctrl.showAllowRateZero = (directiveContext == systemEnumValue);
                 ctrl.showNewRateDayOffset = (directiveContext == systemEnumValue || directiveContext == sellingProductEnumValue || directiveContext == customerEnumValue);
                 ctrl.showEndCountryDayOffset = (directiveContext == systemEnumValue || directiveContext == sellingProductEnumValue || directiveContext == customerEnumValue);
                 ctrl.showIncreasedRateDayOffset = (directiveContext == systemEnumValue || directiveContext == sellingProductEnumValue || directiveContext == customerEnumValue);

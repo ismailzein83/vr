@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
-using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.MainExtensions
 {
@@ -43,6 +39,9 @@ namespace TOne.WhS.Sales.MainExtensions
         public override void ValidateZone(IZoneValidationContext context)
         {
             ZoneItem contextZoneItem = context.GetContextZoneItem(context.ZoneId);
+            ConfigManager configManager = new ConfigManager();
+            var allowZeroRate = configManager.GetSaleAreaAllowRateZero();
+
 
             if (contextZoneItem == null)
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("ZoneItem of Zone '{0}' was not found", context.ZoneId));
@@ -71,7 +70,7 @@ namespace TOne.WhS.Sales.MainExtensions
             {
                 roundedCalculatedRate = context.GetRoundedRate(rateCalculationContext.Rate.Value);
 
-                if (roundedCalculatedRate == 0)
+                if (roundedCalculatedRate == 0 && !allowZeroRate)
                 {
                     validationResultType = RateBulkActionValidationResultType.Zero;
                     targetInvalidRates = validationResult.ZeroRates;

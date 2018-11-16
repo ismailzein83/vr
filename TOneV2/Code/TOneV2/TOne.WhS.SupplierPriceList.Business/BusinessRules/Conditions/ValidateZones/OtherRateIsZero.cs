@@ -4,10 +4,11 @@ using System.Linq;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-	class OtherRateZero : BusinessRuleCondition
+	class OtherRateIsZero : BusinessRuleCondition
 	{
 		public override bool ShouldValidate(IRuleTarget target)
 		{
@@ -19,8 +20,13 @@ namespace TOne.WhS.SupplierPriceList.Business
 			AllImportedDataByZone allImportedDataByZone = context.Target as AllImportedDataByZone;
 			var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
 			var messages = new List<string>();
+            IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
+            importSPLContext.ThrowIfNull("importSPLContext");
 
-			foreach (var importedZone in allImportedDataByZone.ImportedDataByZoneList)
+            if (importSPLContext.AllowRateZero)
+                return true;
+
+            foreach (var importedZone in allImportedDataByZone.ImportedDataByZoneList)
 			{
 				if (importedZone != null && importedZone.ImportedOtherRates != null && importedZone.ImportedOtherRates.Count > 0)
 				{

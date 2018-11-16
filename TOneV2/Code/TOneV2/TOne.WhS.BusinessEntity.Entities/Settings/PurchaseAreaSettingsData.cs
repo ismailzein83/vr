@@ -14,7 +14,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int AcceptableDecreasedRate { get; set; }
         public int AcceptableZoneClosingPercentage { get; set; }
         public bool CodeGroupVerfifcation { get; set; }
-	}
+        public bool AllowRateZero { get; set; }
+    }
 
 	public class PricelistTypeMapping
 	{

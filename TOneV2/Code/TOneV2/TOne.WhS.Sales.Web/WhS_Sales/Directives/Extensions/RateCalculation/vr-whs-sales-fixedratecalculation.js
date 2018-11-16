@@ -33,7 +33,9 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
                 var fixedRateAsNumber = Number(ctrl.fixedRate);
                 if (isNaN(fixedRateAsNumber))
                     return 'Value is an invalid number';
-                if (fixedRateAsNumber <= 0)
+                if (ctrl.allowRateZero && fixedRateAsNumber < 0)
+                    return 'Value must be greater than or equal to zero';
+                if (!ctrl.allowRateZero && fixedRateAsNumber <= 0)
                     return 'Value must be greater than zero';
                 return null;
             };
@@ -53,7 +55,9 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
                 }
 
                 if (bulkActionContext != undefined) {
+                    console.log(bulkActionContext);
                     ctrl.longPrecision = bulkActionContext.longPrecision;
+                    ctrl.allowRateZero = bulkActionContext.allowRateZero;
                 }
 
                 if (rateCalculationMethod != undefined) {
@@ -69,7 +73,7 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
             };
 
             api.getDescription = function () {
-                return 'Value: '+UtilsService.round(ctrl.fixedRate, bulkActionContext.longPrecision);
+                return 'Value: ' + UtilsService.round(ctrl.fixedRate, bulkActionContext.longPrecision);
             };
 
             if (ctrl.onReady != null)

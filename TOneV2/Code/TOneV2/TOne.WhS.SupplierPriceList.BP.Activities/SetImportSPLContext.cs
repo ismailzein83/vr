@@ -1,11 +1,11 @@
 ﻿using System;
-using Vanrise.Entities;
 using System.Activities;
-using Vanrise.Common.Business;
 using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
-using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -68,7 +68,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         private int _priceListCurrencyId;
         private int _systemCurrencyId;
         private int _supplierId;
-        private SupplierPricelistType _SupplierPricelistType; 
+        private SupplierPricelistType _SupplierPricelistType;
         private Dictionary<int, decimal> _maximumRateConvertedByCurrency = new Dictionary<int, decimal>();
         private TOne.WhS.BusinessEntity.Business.ConfigManager _tOneConfigManager = new BusinessEntity.Business.ConfigManager();
 
@@ -113,6 +113,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public decimal MaximumRate { get; set; }
         public DateTime RetroactiveDate { get; set; }
         public string DateFormat { get; set; }
+        public bool AllowRateZero { get; set; }
 
         #endregion
 
@@ -124,6 +125,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 throw new DataIntegrityValidationException("System Currency was not found");
             _systemCurrencyId = systemCurrency.CurrencyId;
             MaximumRate = _tOneConfigManager.GetPurchaseAreaMaximumRate();
+            AllowRateZero = _tOneConfigManager.GetPurchaseAreaAllowRateZero();
             DateFormat = new Vanrise.Common.Business.GeneralSettingsManager().GetDateFormat();
         }
 
