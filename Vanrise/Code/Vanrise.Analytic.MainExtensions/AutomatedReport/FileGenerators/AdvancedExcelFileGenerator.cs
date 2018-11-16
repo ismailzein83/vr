@@ -109,10 +109,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             int maxSubTableRow = 0;//this is used to know how many rows the headers took and hence the rowIndex of the subtable data
             subTableValuesCount = 0;
             int preColumnIndex = 0;
-
+            bool isFirstColumn = true;
             foreach (var columnIndex in context.GetSortedColumnsIndexes())
             {
-                columnIndexState += (columnIndex - preColumnIndex);//columnIndexState should be shifted by the difference between it and the next column index always
+                if(!isFirstColumn)
+                    columnIndexState += (columnIndex - preColumnIndex);//columnIndexState should be shifted by the difference between it and the next column index always
 
                 var column = context.GetColumnDefinitionByColIndex(columnIndex);
                 if (column != null)
@@ -231,6 +232,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     }
                 }
                 preColumnIndex = columnIndex;
+                isFirstColumn = false;
             }
             indexesNeeded.SubTableDataRowIndex += maxSubTableRow;
         }
@@ -659,9 +661,11 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             var summaryRecord = dataList.SummaryDataItem;
             int columnIndexState = context.GetSortedColumnsIndexes().First();
             int preColumnIndex = 0;
+            bool isFirstColumn = true;
             foreach (var col in context.GetSortedColumnsIndexes())
             {
-                columnIndexState += (col - preColumnIndex);
+                if(!isFirstColumn)
+                    columnIndexState += (col - preColumnIndex);
                 var column = context.GetColumnDefinitionByColIndex(col);
                 if (column != null)
                 {
@@ -746,6 +750,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                     }
                 }
                 preColumnIndex = col;
+                isFirstColumn = false;
             }
         }
         private void BuildTableData(ITableDefinitionInfoContext context, Dictionary<int, AdvancedExcelRow> rows, Dictionary<int, RangeToReserve> columnsIndices, List<int> allColumnIndices, VRAutomatedReportResolvedDataList dataList, IndexesNeeded indexesNeeded, int subTableValuesCount, bool includeTitle, bool includeHeaders)
@@ -755,11 +760,13 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             for (int i = 0; i < items.Count; i++)
             {
                 var item = items[i];
+                bool isFirstColumn = true;
                 int columnIndexState = context.GetSortedColumnsIndexes().First();
                 int preColumnIndex = 0;
                 foreach (var col in context.GetSortedColumnsIndexes())
                 {
-                    columnIndexState += (col - preColumnIndex);
+                    if(!isFirstColumn)
+                        columnIndexState += (col - preColumnIndex);
                     var column = context.GetColumnDefinitionByColIndex(col);
                     if (column != null)
                     {
@@ -890,6 +897,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                         }
                     }
                     preColumnIndex = col;
+                    isFirstColumn = false;
                 }
                 indexesNeeded.ColDataRowIndex++;
             }
