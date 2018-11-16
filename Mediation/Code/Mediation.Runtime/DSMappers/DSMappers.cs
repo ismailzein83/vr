@@ -182,27 +182,56 @@ namespace Mediation.Runtime
                             string dateForStartCharging_01 = cdrAsString_01.Substring(46, 6);
                             if (!string.IsNullOrWhiteSpace(dateForStartCharging_01))
                             {
-                                int year = Convert.ToInt32(dateForStartCharging_01.Substring(0, 2)) + 2000;
-                                int month = Convert.ToInt32(dateForStartCharging_01.Substring(2, 2));
-                                int day = Convert.ToInt32(dateForStartCharging_01.Substring(4, 2));
+                                int year;
+                                if (!int.TryParse(dateForStartCharging_01.Substring(0, 2), out year))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Year value", dateForStartCharging_01));
+
+                                year += 2000;
+
+                                int month;
+                                if (!int.TryParse(dateForStartCharging_01.Substring(2, 2), out month))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Month value", dateForStartCharging_01));
+
+                                int day;
+                                if (!int.TryParse(dateForStartCharging_01.Substring(4, 2), out day))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Day value", dateForStartCharging_01));
+
                                 cdr_01.DateForStartCharging = new DateTime(year, month, day);
                             }
 
                             string timeForStartCharging_01 = cdrAsString_01.Substring(52, 6);
                             if (!string.IsNullOrWhiteSpace(timeForStartCharging_01))
                             {
-                                int hour = Convert.ToInt32(timeForStartCharging_01.Substring(0, 2));
-                                int minute = Convert.ToInt32(timeForStartCharging_01.Substring(2, 2));
-                                int second = Convert.ToInt32(timeForStartCharging_01.Substring(4, 2));
+                                int hour;
+                                if (!int.TryParse(timeForStartCharging_01.Substring(0, 2), out hour))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Hour value", timeForStartCharging_01));
+
+                                int minute;
+                                if (!int.TryParse(timeForStartCharging_01.Substring(2, 2), out minute))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Minute value", timeForStartCharging_01));
+
+                                int second;
+                                if (!int.TryParse(timeForStartCharging_01.Substring(4, 2), out second))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Second value", timeForStartCharging_01));
+
                                 cdr_01.TimeForStartCharging = new Time(hour, minute, second, 0);
                             }
 
                             string chargeableDuration_01 = cdrAsString_01.Substring(58, 6);
                             if (!string.IsNullOrWhiteSpace(chargeableDuration_01))
                             {
-                                int hour = Convert.ToInt32(chargeableDuration_01.Substring(0, 2));
-                                int minute = Convert.ToInt32(chargeableDuration_01.Substring(2, 2));
-                                int second = Convert.ToInt32(chargeableDuration_01.Substring(4, 2));
+                                int hour;
+                                if (!int.TryParse(chargeableDuration_01.Substring(0, 2), out hour))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Hour value", chargeableDuration_01));
+
+                                int minute;
+                                if (!int.TryParse(chargeableDuration_01.Substring(2, 2), out minute))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Minute value", chargeableDuration_01));
+
+                                int second;
+                                if (!int.TryParse(chargeableDuration_01.Substring(4, 2), out second))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Second value", chargeableDuration_01));
+
                                 cdr_01.ChargeableDuration = (int)new TimeSpan(hour, minute, second).TotalSeconds;
                             }
 
@@ -448,27 +477,56 @@ namespace Mediation.Runtime
                             string dateForStartCharging = cdrAsString.Substring(49, 6);
                             if (!string.IsNullOrWhiteSpace(dateForStartCharging))
                             {
-                                int year = Convert.ToInt32(dateForStartCharging.Substring(0, 2)) + 2000;
-                                int month = Convert.ToInt32(dateForStartCharging.Substring(2, 2));
-                                int day = Convert.ToInt32(dateForStartCharging.Substring(4, 2));
+                                int year;
+                                if (!int.TryParse(dateForStartCharging.Substring(0, 2), out year))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Year value", dateForStartCharging));
+
+                                year += 2000;
+
+                                int month;
+                                if (!int.TryParse(dateForStartCharging.Substring(2, 2), out month))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Month value", dateForStartCharging));
+
+                                int day;
+                                if (!int.TryParse(dateForStartCharging.Substring(4, 2), out day))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Day value", dateForStartCharging));
+
                                 cdr.DateForStartCharging = new DateTime(year, month, day);
                             }
 
                             string timeForStartCharging = cdrAsString.Substring(55, 6);
                             if (!string.IsNullOrWhiteSpace(timeForStartCharging))
                             {
-                                int hour = Convert.ToInt32(timeForStartCharging.Substring(0, 2));
-                                int minute = Convert.ToInt32(timeForStartCharging.Substring(2, 2));
-                                int second = Convert.ToInt32(timeForStartCharging.Substring(4, 2));
+                                int hour;
+                                if (!int.TryParse(timeForStartCharging.Substring(0, 2), out hour))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Hour value", timeForStartCharging));
+
+                                int minute;
+                                if (!int.TryParse(timeForStartCharging.Substring(2, 2), out minute))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Minute value", timeForStartCharging));
+
+                                int second;
+                                if (!int.TryParse(timeForStartCharging.Substring(4, 2), out second))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Second value", timeForStartCharging));
+
                                 cdr.TimeForStartCharging = new Time(hour, minute, second, 0);
                             }
 
                             string chargeableDuration = cdrAsString.Substring(61, 6);
                             if (!string.IsNullOrWhiteSpace(chargeableDuration))
                             {
-                                int hour = Convert.ToInt32(chargeableDuration.Substring(0, 2));
-                                int minute = Convert.ToInt32(chargeableDuration.Substring(2, 2));
-                                int second = Convert.ToInt32(chargeableDuration.Substring(4, 2));
+                                int hour;
+                                if (!int.TryParse(chargeableDuration.Substring(0, 2), out hour))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Hour value", chargeableDuration));
+
+                                int minute;
+                                if (!int.TryParse(chargeableDuration.Substring(2, 2), out minute))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Minute value", chargeableDuration));
+
+                                int second;
+                                if (!int.TryParse(chargeableDuration.Substring(4, 2), out second))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Second value", chargeableDuration));
+
                                 cdr.ChargeableDuration = (int)new TimeSpan(hour, minute, second).TotalSeconds;
                             }
 
@@ -537,6 +595,523 @@ namespace Mediation.Runtime
             return result;
         }
 
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_International_WHS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            Vanrise.Integration.Entities.StreamReaderImportedData importedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var cdrs = new List<dynamic>();
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type mediationCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("WHS_Ericsson_CDR");
+
+            var duplicatedISDNs = new Dictionary<string, Tuple<Object, List<int>>>();
+
+            System.IO.StreamReader sr = importedData.StreamReader;
+            string currentLine = sr.ReadLine();
+
+            if (!string.IsNullOrEmpty(currentLine))
+            {
+                currentLine = currentLine.Replace("\0", "");
+
+                while (true)
+                {
+                    if (currentLine.Length < 2)
+                        break;
+
+                    int lengthToRead;
+                    string recordType = currentLine.Substring(0, 2);
+                    switch (recordType)
+                    {
+                        case "07": lengthToRead = 89; break;
+                        case "08": lengthToRead = 41; break;
+                        case "01": lengthToRead = 354; break;
+                        default: lengthToRead = 115; break;
+                    }
+
+                    if (currentLine.Length < lengthToRead)
+                        break;
+
+                    switch (recordType)
+                    {
+                        case "07": break;
+                        case "08": break;
+
+                        case "01":
+                            string cdrAsString_01 = currentLine.Substring(0, lengthToRead);
+
+                            dynamic cdr_01 = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
+                            Dictionary<string, string> extraFields_01 = new Dictionary<string, string>();
+
+                            cdr_01.DataSourceId = dataSourceId;
+                            cdr_01.FileName = importedData.Name;
+                            cdr_01.RecordType = cdrAsString_01.Substring(0, 2);
+                            cdr_01.CallStatus = cdrAsString_01.Substring(2, 1);
+                            cdr_01.CauseForOutput = cdrAsString_01.Substring(3, 1);
+
+                            string aNumber_01 = cdrAsString_01.Substring(4, 18);
+                            if (!string.IsNullOrWhiteSpace(aNumber_01))
+                                cdr_01.ANumber = Utilities.ReplaceString(aNumber_01.Trim(), "F", "", StringComparison.OrdinalIgnoreCase);
+
+                            string bNumber_01 = cdrAsString_01.Substring(22, 18);
+                            if (!string.IsNullOrWhiteSpace(bNumber_01))
+                                cdr_01.BNumber = Utilities.ReplaceString(bNumber_01.Trim(), "F", "", StringComparison.OrdinalIgnoreCase);
+
+                            cdr_01.ACategory = cdrAsString_01.Substring(40, 2);
+                            cdr_01.BCategory = cdrAsString_01.Substring(42, 2);
+                            cdr_01.ChargedParty = cdrAsString_01.Substring(44, 2);
+
+                            string dateForStartCharging_01 = cdrAsString_01.Substring(46, 6);
+                            if (!string.IsNullOrWhiteSpace(dateForStartCharging_01))
+                            {
+                                int year;
+                                if (!int.TryParse(dateForStartCharging_01.Substring(0, 2), out year))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Year value", dateForStartCharging_01));
+
+                                year += 2000;
+
+                                int month;
+                                if (!int.TryParse(dateForStartCharging_01.Substring(2, 2), out month))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Month value", dateForStartCharging_01));
+
+                                int day;
+                                if (!int.TryParse(dateForStartCharging_01.Substring(4, 2), out day))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Day value", dateForStartCharging_01));
+
+                                cdr_01.DateForStartCharging = new DateTime(year, month, day);
+                            }
+
+                            string timeForStartCharging_01 = cdrAsString_01.Substring(52, 6);
+                            if (!string.IsNullOrWhiteSpace(timeForStartCharging_01))
+                            {
+                                int hour;
+                                if (!int.TryParse(timeForStartCharging_01.Substring(0, 2), out hour))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Hour value", timeForStartCharging_01));
+
+                                int minute;
+                                if (!int.TryParse(timeForStartCharging_01.Substring(2, 2), out minute))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Minute value", timeForStartCharging_01));
+
+                                int second;
+                                if (!int.TryParse(timeForStartCharging_01.Substring(4, 2), out second))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Second value", timeForStartCharging_01));
+
+                                cdr_01.TimeForStartCharging = new Time(hour, minute, second, 0);
+                            }
+
+                            string chargeableDuration_01 = cdrAsString_01.Substring(58, 6);
+                            if (!string.IsNullOrWhiteSpace(chargeableDuration_01))
+                            {
+                                int hour;
+                                if (!int.TryParse(chargeableDuration_01.Substring(0, 2), out hour))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Hour value", chargeableDuration_01));
+
+                                int minute;
+                                if (!int.TryParse(chargeableDuration_01.Substring(2, 2), out minute))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Minute value", chargeableDuration_01));
+
+                                int second;
+                                if (!int.TryParse(chargeableDuration_01.Substring(4, 2), out second))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Second value", chargeableDuration_01));
+
+                                cdr_01.ChargeableDuration = (int)new TimeSpan(hour, minute, second).TotalSeconds;
+                            }
+
+                            string faultCode_01 = cdrAsString_01.Substring(64, 5);
+                            if (!string.IsNullOrWhiteSpace(faultCode_01))
+                                cdr_01.FaultCode = faultCode_01.Trim();
+
+                            string classOfCall_01 = cdrAsString_01.Substring(69, 2);
+                            if (!string.IsNullOrWhiteSpace(classOfCall_01))
+                                extraFields_01.Add("ClassOfCall", classOfCall_01.Trim());
+
+                            string priorityOfCall_01 = cdrAsString_01.Substring(71, 1);
+                            if (!string.IsNullOrWhiteSpace(priorityOfCall_01))
+                                extraFields_01.Add("PriorityOfCall", priorityOfCall_01.Trim());
+
+                            string normalData_01 = cdrAsString_01.Substring(72, 1);
+                            if (!string.IsNullOrWhiteSpace(normalData_01))
+                                extraFields_01.Add("NormalData", normalData_01.Trim());
+
+                            string ircd_01 = cdrAsString_01.Substring(73, 1);
+                            if (!string.IsNullOrWhiteSpace(ircd_01))
+                                extraFields_01.Add("IRCD", ircd_01.Trim());
+
+                            string totalRCD_01 = cdrAsString_01.Substring(74, 4);
+                            if (!string.IsNullOrWhiteSpace(totalRCD_01))
+                                extraFields_01.Add("TotalRCD", totalRCD_01.Trim());
+
+                            string serviceIdentity_01 = cdrAsString_01.Substring(78, 1);
+                            if (!string.IsNullOrWhiteSpace(serviceIdentity_01))
+                                extraFields_01.Add("ServiceIdentity", serviceIdentity_01.Trim());
+
+                            string personalCall_01 = cdrAsString_01.Substring(79, 1);
+                            if (!string.IsNullOrWhiteSpace(personalCall_01))
+                                extraFields_01.Add("PersonalCall", personalCall_01.Trim());
+
+                            string callType_01 = cdrAsString_01.Substring(80, 2);
+                            if (!string.IsNullOrWhiteSpace(callType_01))
+                                extraFields_01.Add("CallType", callType_01.Trim());
+
+                            string chargedNumber_01 = cdrAsString_01.Substring(82, 18);
+                            if (!string.IsNullOrWhiteSpace(chargedNumber_01))
+                                extraFields_01.Add("ChargedNumber", chargedNumber_01.Trim());
+
+                            string reducedCharges_01 = cdrAsString_01.Substring(100, 2);
+                            if (!string.IsNullOrWhiteSpace(reducedCharges_01))
+                                extraFields_01.Add("ReducedCharges", reducedCharges_01.Trim());
+
+                            string signatureOfBookingOperator_01 = cdrAsString_01.Substring(102, 5);
+                            if (!string.IsNullOrWhiteSpace(signatureOfBookingOperator_01))
+                                extraFields_01.Add("SignatureOfBookingOperator", signatureOfBookingOperator_01.Trim());
+
+                            string signatureOfCallHandlingOperator_01 = cdrAsString_01.Substring(107, 5);
+                            if (!string.IsNullOrWhiteSpace(signatureOfCallHandlingOperator_01))
+                                extraFields_01.Add("SignatureOfCallHandlingOperator", signatureOfCallHandlingOperator_01.Trim());
+
+                            string call_01 = cdrAsString_01.Substring(112, 5);
+                            if (!string.IsNullOrWhiteSpace(call_01))
+                                cdr_01.Call = call_01.Trim();
+
+                            string exchange_01 = cdrAsString_01.Substring(117, 5);
+                            if (!string.IsNullOrWhiteSpace(exchange_01))
+                                cdr_01.Exchange = exchange_01.Trim();
+
+                            string code_01 = cdrAsString_01.Substring(122, 5);
+                            if (!string.IsNullOrWhiteSpace(code_01))
+                                cdr_01.Code = code_01.Trim();
+
+                            string recordNumber_01 = cdrAsString_01.Substring(127, 2);
+                            if (!string.IsNullOrWhiteSpace(recordNumber_01))
+                                extraFields_01.Add("RecordNumber", recordNumber_01.Trim());
+
+                            string outgoingRoute_01 = cdrAsString_01.Substring(129, 7);
+                            if (!string.IsNullOrWhiteSpace(outgoingRoute_01))
+                                cdr_01.OutgoingRoute = outgoingRoute_01.Trim();
+
+                            string incomingRoute_01 = cdrAsString_01.Substring(136, 7);
+                            if (!string.IsNullOrWhiteSpace(incomingRoute_01))
+                                cdr_01.IncomingRoute = incomingRoute_01.Trim();
+
+                            string isi_01 = cdrAsString_01.Substring(143, 1);
+                            if (!string.IsNullOrWhiteSpace(isi_01))
+                                extraFields_01.Add("ISI", isi_01.Trim());
+
+                            string price_01 = cdrAsString_01.Substring(144, 8);
+                            if (!string.IsNullOrWhiteSpace(price_01))
+                                extraFields_01.Add("Price", price_01.Trim());
+
+                            string originOfCharging_01 = cdrAsString_01.Substring(152, 4);
+                            if (!string.IsNullOrWhiteSpace(originOfCharging_01))
+                                extraFields_01.Add("OriginOfCharging", originOfCharging_01.Trim());
+
+                            string accountingTime_01 = cdrAsString_01.Substring(156, 6);
+                            if (!string.IsNullOrWhiteSpace(accountingTime_01))
+                            {
+                                string accountingTime_hour = accountingTime_01.Substring(0, 2);
+                                string accountingTime_minute = accountingTime_01.Substring(2, 2);
+                                string accountingTime_second = accountingTime_01.Substring(4, 2);
+                                extraFields_01.Add("AccountingTime", string.Format("{0}:{1}:{2}", accountingTime_hour, accountingTime_minute, accountingTime_second));
+                            }
+
+                            string tarrif_01 = cdrAsString_01.Substring(162, 3);
+                            if (!string.IsNullOrWhiteSpace(tarrif_01))
+                                extraFields_01.Add("Tarrif", tarrif_01.Trim());
+
+                            string eOfSASide_01 = cdrAsString_01.Substring(165, 2);
+                            if (!string.IsNullOrWhiteSpace(eOfSASide_01))
+                                extraFields_01.Add("EOfSASide", eOfSASide_01.Trim());
+
+                            string iat_01 = cdrAsString_01.Substring(167, 1);
+                            if (!string.IsNullOrWhiteSpace(iat_01))
+                                extraFields_01.Add("IAT", iat_01.Trim());
+
+                            string automaticallyTransferredANumber_01 = cdrAsString_01.Substring(168, 10);
+                            if (!string.IsNullOrWhiteSpace(automaticallyTransferredANumber_01))
+                                extraFields_01.Add("AutomaticallyTransferredANumber", automaticallyTransferredANumber_01.Trim());
+
+                            string serialCallId_01 = cdrAsString_01.Substring(178, 1);
+                            if (!string.IsNullOrWhiteSpace(serialCallId_01))
+                                extraFields_01.Add("SerialCallId", serialCallId_01.Trim());
+
+                            string serialCallIdNumber_01 = cdrAsString_01.Substring(179, 3);
+                            if (!string.IsNullOrWhiteSpace(serialCallIdNumber_01))
+                                extraFields_01.Add("SerialCallIdNumber", serialCallIdNumber_01.Trim());
+
+                            string serialCallSequenceNumber_01 = cdrAsString_01.Substring(182, 2);
+                            if (!string.IsNullOrWhiteSpace(serialCallSequenceNumber_01))
+                                extraFields_01.Add("SerialCallSequenceNumber", serialCallSequenceNumber_01.Trim());
+
+                            string dsoe_01 = cdrAsString_01.Substring(184, 1);
+                            if (!string.IsNullOrWhiteSpace(dsoe_01))
+                                extraFields_01.Add("DSOE", dsoe_01.Trim());
+
+                            string oldChargeableDuration_01 = cdrAsString_01.Substring(185, 6);
+                            if (!string.IsNullOrWhiteSpace(oldChargeableDuration_01))
+                            {
+                                string oldChargeableDuration_hour = oldChargeableDuration_01.Substring(0, 2);
+                                string oldChargeableDuration_minute = oldChargeableDuration_01.Substring(2, 2);
+                                string oldChargeableDuration_second = oldChargeableDuration_01.Substring(4, 2);
+                                extraFields_01.Add("OldChargeableDuration", string.Format("{0}:{1}:{2}", oldChargeableDuration_hour, oldChargeableDuration_minute, oldChargeableDuration_second));
+                            }
+
+                            string originalTimeForStartOfCharging_01 = cdrAsString_01.Substring(191, 6);
+                            if (!string.IsNullOrWhiteSpace(originalTimeForStartOfCharging_01))
+                            {
+                                string originalTimeForStartOfCharging_hour = originalTimeForStartOfCharging_01.Substring(0, 2);
+                                string originalTimeForStartOfCharging_minute = originalTimeForStartOfCharging_01.Substring(2, 2);
+                                string originalTimeForStartOfCharging_second = originalTimeForStartOfCharging_01.Substring(4, 2);
+                                extraFields_01.Add("OriginalTimeForStartOfCharging", string.Format("{0}:{1}:{2}", originalTimeForStartOfCharging_hour, originalTimeForStartOfCharging_minute, originalTimeForStartOfCharging_second));
+                            }
+
+                            string numberOfTimeResets_01 = cdrAsString_01.Substring(197, 3);
+                            if (!string.IsNullOrWhiteSpace(numberOfTimeResets_01))
+                                extraFields_01.Add("NumberOfTimeResets", numberOfTimeResets_01.Trim());
+
+                            string timeForTheCallRequest_01 = cdrAsString_01.Substring(200, 8);
+                            if (!string.IsNullOrWhiteSpace(timeForTheCallRequest_01))
+                            {
+                                string timeForTheCallRequest_month = timeForTheCallRequest_01.Substring(0, 2);
+                                string timeForTheCallRequest_day = timeForTheCallRequest_01.Substring(2, 2);
+                                string timeForTheCallRequest_hour = timeForTheCallRequest_01.Substring(4, 2);
+                                string timeForTheCallRequest_minute = timeForTheCallRequest_01.Substring(6, 2);
+                                extraFields_01.Add("TimeForTheCallRequest", string.Format("{0}-{1} {2}:{3}", timeForTheCallRequest_month, timeForTheCallRequest_day, timeForTheCallRequest_hour, timeForTheCallRequest_minute));
+                            }
+
+                            string timeForCancelingTheCallRequest_01 = cdrAsString_01.Substring(208, 8);
+                            if (!string.IsNullOrWhiteSpace(timeForCancelingTheCallRequest_01))
+                            {
+                                string timeForCancelingTheCallRequest_month = timeForCancelingTheCallRequest_01.Substring(0, 2);
+                                string timeForCancelingTheCallRequest_day = timeForCancelingTheCallRequest_01.Substring(2, 2);
+                                string timeForCancelingTheCallRequest_hour = timeForCancelingTheCallRequest_01.Substring(4, 2);
+                                string timeForCancelingTheCallRequest_minute = timeForCancelingTheCallRequest_01.Substring(6, 2);
+                                extraFields_01.Add("TimeForCancelingTheCallRequest", string.Format("{0}-{1} {2}:{3}", timeForCancelingTheCallRequest_month, timeForCancelingTheCallRequest_day, timeForCancelingTheCallRequest_hour, timeForCancelingTheCallRequest_minute));
+                            }
+
+                            string cri_01 = cdrAsString_01.Substring(216, 1);
+                            if (!string.IsNullOrWhiteSpace(cri_01))
+                                extraFields_01.Add("CRI", cri_01.Trim());
+
+                            string callEstablishmentNumberBSide_01 = cdrAsString_01.Substring(217, 18);
+                            if (!string.IsNullOrWhiteSpace(callEstablishmentNumberBSide_01))
+                                extraFields_01.Add("CallEstablishmentNumberBSide", callEstablishmentNumberBSide_01.Trim());
+
+                            string miscellaneousBSubscriberData_01 = cdrAsString_01.Substring(235, 18);
+                            if (!string.IsNullOrWhiteSpace(miscellaneousBSubscriberData_01))
+                                extraFields_01.Add("MiscellaneousBSubscriberData", miscellaneousBSubscriberData_01.Trim());
+
+                            string callEstablishmentNumberASide_01 = cdrAsString_01.Substring(253, 18);
+                            if (!string.IsNullOrWhiteSpace(callEstablishmentNumberASide_01))
+                                extraFields_01.Add("CallEstablishmentNumberASide", callEstablishmentNumberASide_01.Trim());
+
+                            string miscellaneousASubscriberData_01 = cdrAsString_01.Substring(271, 18);
+                            if (!string.IsNullOrWhiteSpace(miscellaneousASubscriberData_01))
+                                extraFields_01.Add("MiscellaneousASubscriberData", miscellaneousASubscriberData_01.Trim());
+
+                            string callEstablishmentNumberThreeSide_01 = cdrAsString_01.Substring(289, 18);
+                            if (!string.IsNullOrWhiteSpace(callEstablishmentNumberThreeSide_01))
+                                extraFields_01.Add("CallEstablishmentNumberThreeSide", callEstablishmentNumberThreeSide_01.Trim());
+
+                            string miscellaneousThreeSubscriberData_01 = cdrAsString_01.Substring(307, 18);
+                            if (!string.IsNullOrWhiteSpace(miscellaneousThreeSubscriberData_01))
+                                extraFields_01.Add("MiscellaneousThreeSubscriberData", miscellaneousThreeSubscriberData_01.Trim());
+
+                            string antm_01 = cdrAsString_01.Substring(325, 4);
+                            if (!string.IsNullOrWhiteSpace(antm_01))
+                                extraFields_01.Add("ANTM", antm_01.Trim());
+
+                            string hatm_01 = cdrAsString_01.Substring(329, 4);
+                            if (!string.IsNullOrWhiteSpace(hatm_01))
+                                extraFields_01.Add("HATM", hatm_01.Trim());
+
+                            string signatureOrNumberAtInquiryCall_01 = cdrAsString_01.Substring(333, 18);
+                            if (!string.IsNullOrWhiteSpace(signatureOrNumberAtInquiryCall_01))
+                                extraFields_01.Add("SignatureOrNumberAtInquiryCall", signatureOrNumberAtInquiryCall_01.Trim());
+
+                            if (extraFields_01.Count > 0)
+                                cdr_01.ExtraFields = extraFields_01;
+
+                            if (cdr_01.BNumber != null && cdr_01.BNumber.StartsWith("990"))
+                            {
+                                string serializedCdr = Serializer.Serialize(cdr_01);
+
+                                Tuple<object, List<int>> duplicatedISDN;
+
+                                if (!duplicatedISDNs.TryGetValue(serializedCdr, out duplicatedISDN))
+                                {
+                                    duplicatedISDN = Tuple.Create(cdr_01 as object, new List<int>() { 0 });
+                                    duplicatedISDNs.Add(serializedCdr, duplicatedISDN);
+                                }
+                                duplicatedISDN.Item2[0]++;
+
+                                break;
+                            }
+
+                            cdrs.Add(cdr_01);
+                            break;
+
+                        default:
+                            string cdrAsString = currentLine.Substring(0, lengthToRead);
+
+                            dynamic cdr = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
+                            cdr.DataSourceId = dataSourceId;
+                            cdr.FileName = importedData.Name;
+                            cdr.RecordType = cdrAsString.Substring(0, 2);
+                            cdr.CallStatus = cdrAsString.Substring(2, 1);
+                            cdr.CauseForOutput = cdrAsString.Substring(3, 1);
+
+                            string aNumber = cdrAsString.Substring(4, 20);
+                            if (!string.IsNullOrWhiteSpace(aNumber))
+                                cdr.ANumber = Utilities.ReplaceString(aNumber.Trim(), "F", "", StringComparison.OrdinalIgnoreCase);
+
+                            string bNumber = cdrAsString.Substring(24, 20);
+                            if (!string.IsNullOrWhiteSpace(bNumber))
+                                cdr.BNumber = Utilities.ReplaceString(bNumber.Trim(), "F", "", StringComparison.OrdinalIgnoreCase);
+
+                            cdr.ACategory = cdrAsString.Substring(44, 2);
+                            cdr.BCategory = cdrAsString.Substring(46, 2);
+                            cdr.ChargedParty = cdrAsString.Substring(48, 1);
+
+                            string dateForStartCharging = cdrAsString.Substring(49, 6);
+                            if (!string.IsNullOrWhiteSpace(dateForStartCharging))
+                            {
+                                int year;
+                                if (!int.TryParse(dateForStartCharging.Substring(0, 2), out year))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Year value", dateForStartCharging));
+
+                                year += 2000;
+
+                                int month;
+                                if (!int.TryParse(dateForStartCharging.Substring(2, 2), out month))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Month value", dateForStartCharging));
+
+                                int day;
+                                if (!int.TryParse(dateForStartCharging.Substring(4, 2), out day))
+                                    throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Day value", dateForStartCharging));
+
+                                cdr.DateForStartCharging = new DateTime(year, month, day);
+                            }
+
+                            string timeForStartCharging = cdrAsString.Substring(55, 6);
+                            if (!string.IsNullOrWhiteSpace(timeForStartCharging))
+                            {
+                                int hour;
+                                if (!int.TryParse(timeForStartCharging.Substring(0, 2), out hour))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Hour value", timeForStartCharging));
+
+                                int minute;
+                                if (!int.TryParse(timeForStartCharging.Substring(2, 2), out minute))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Minute value", timeForStartCharging));
+
+                                int second;
+                                if (!int.TryParse(timeForStartCharging.Substring(4, 2), out second))
+                                    throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Second value", timeForStartCharging));
+
+                                cdr.TimeForStartCharging = new Time(hour, minute, second, 0);
+                            }
+
+                            string chargeableDuration = cdrAsString.Substring(61, 6);
+                            if (!string.IsNullOrWhiteSpace(chargeableDuration))
+                            {
+                                int hour;
+                                if (!int.TryParse(chargeableDuration.Substring(0, 2), out hour))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Hour value", chargeableDuration));
+
+                                int minute;
+                                if (!int.TryParse(chargeableDuration.Substring(2, 2), out minute))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Minute value", chargeableDuration));
+
+                                int second;
+                                if (!int.TryParse(chargeableDuration.Substring(4, 2), out second))
+                                    throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Second value", chargeableDuration));
+
+                                cdr.ChargeableDuration = (int)new TimeSpan(hour, minute, second).TotalSeconds;
+                            }
+
+                            string faultCode = cdrAsString.Substring(67, 5);
+                            if (!string.IsNullOrWhiteSpace(faultCode))
+                                cdr.FaultCode = faultCode.Trim();
+
+
+                            string call = cdrAsString.Substring(72, 5);
+                            if (!string.IsNullOrWhiteSpace(call))
+                                cdr.Call = call.Trim();
+
+                            string exchange = cdrAsString.Substring(77, 5);
+                            if (!string.IsNullOrWhiteSpace(exchange))
+                                cdr.Exchange = exchange.Trim();
+
+                            string code = cdrAsString.Substring(82, 5);
+                            if (!string.IsNullOrWhiteSpace(code))
+                                cdr.Code = code.Trim();
+
+                            string recordNumber = cdrAsString.Substring(87, 2);
+                            if (!string.IsNullOrWhiteSpace(recordNumber))
+                                cdr.RecordNumber = Convert.ToInt32(recordNumber);
+
+                            cdr.TariffClass = cdrAsString.Substring(89, 3);
+                            cdr.TariffSwitchingIndicator = cdrAsString.Substring(92, 1);
+                            cdr.OriginForCharging = cdrAsString.Substring(93, 4);
+
+                            string outgoingRoute = cdrAsString.Substring(97, 7);
+                            if (!string.IsNullOrWhiteSpace(outgoingRoute))
+                                cdr.OutgoingRoute = outgoingRoute.Trim();
+
+                            string incomingRoute = cdrAsString.Substring(104, 7);
+                            if (!string.IsNullOrWhiteSpace(incomingRoute))
+                                cdr.IncomingRoute = incomingRoute.Trim();
+
+                            string routeId = cdrAsString.Substring(111, 4);
+                            if (!string.IsNullOrWhiteSpace(routeId))
+                                cdr.RouteId = routeId.Trim();
+
+                            if (cdr.BNumber != null && cdr.BNumber.StartsWith("990"))
+                            {
+                                string serializedCdr = Serializer.Serialize(cdr);
+
+                                Tuple<object, List<int>> duplicatedISDN;
+
+                                if (!duplicatedISDNs.TryGetValue(serializedCdr, out duplicatedISDN))
+                                {
+                                    duplicatedISDN = Tuple.Create(cdr as object, new List<int>() { 0 });
+                                    duplicatedISDNs.Add(serializedCdr, duplicatedISDN);
+                                }
+                                duplicatedISDN.Item2[0]++;
+
+                                break;
+                            }
+
+                            cdrs.Add(cdr);
+                            break;
+                    }
+
+                    currentLine = currentLine.Remove(0, lengthToRead);
+                }
+            }
+
+            foreach (var duplicatedISDN in duplicatedISDNs.Values)
+            {
+                Tuple<object, List<int>> cdr = duplicatedISDN;
+                (cdr.Item1 as dynamic).ChargeableDuration *= cdr.Item2[0];
+                cdrs.Add(cdr.Item1);
+            }
+
+            if (cdrs.Count > 0)
+            {
+                long startingId;
+                var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("WHS_Ericsson_CDR");
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);
+
+                foreach (var item in cdrs)
+                {
+                    item.Id = startingId++;
+                }
+
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "WHS_Ericsson_CDR");
+                mappedBatches.Add("CDRTransformationStage", batch);
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            return result;
+        }
         #endregion
 
         #region Teles
