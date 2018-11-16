@@ -24,7 +24,5 @@ namespace Vanrise.Tools.Web.Controllers
             SchemaInfoFilter schemaInfoFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<SchemaInfoFilter>(filter) : null;
             return schemaManager.GetSchemasInfo(schemaInfoFilter);
         }
-        
-
     }
 }

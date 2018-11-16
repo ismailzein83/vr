@@ -10,6 +10,7 @@ using Vanrise.Tools.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Entities.Tools;
 namespace Vanrise.Tools.Business
 {
     public class ColumnsManager
@@ -21,8 +22,8 @@ namespace Vanrise.Tools.Business
         {
             IColumnsDataManager columnsDataManager = VRToolsFactory.GetDataManager<IColumnsDataManager>();
 
-            Guid ConnectionId = columnInfoFilter.ConnectionId;
-            SQLConnection settings = new VRConnectionManager().GetVRConnection(ConnectionId).Settings as SQLConnection;
+            Guid connectionId = columnInfoFilter.ConnectionId;
+            SQLConnection settings = new VRConnectionManager().GetVRConnection(connectionId).Settings as SQLConnection;
             string connectionString = (settings != null) ? settings.ConnectionString : null;
 
             columnsDataManager.Connection_String = connectionString;
@@ -36,7 +37,18 @@ namespace Vanrise.Tools.Business
             return allColumns.MapRecords(ColumnsInfoMapper, filterFunc).OrderBy(columns => columns.Name);
         }
 
+        public IEnumerable<GeneratedScriptItemTableSettingsConfig> GetGeneratedScriptItemTableSettingsConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<GeneratedScriptItemTableSettingsConfig>(GeneratedScriptItemTableSettingsConfig.EXTENSION_TYPE);
+        }
 
+
+        public string GetExceptionMessage(GeneratedScriptItemTable generatedScriptItemTable)
+        {
+            return generatedScriptItemTable.GeneratedScriptItemTableSettings.ExceptionMessage(generatedScriptItemTable);
+
+        }
         #endregion
 
         #region Private Classes

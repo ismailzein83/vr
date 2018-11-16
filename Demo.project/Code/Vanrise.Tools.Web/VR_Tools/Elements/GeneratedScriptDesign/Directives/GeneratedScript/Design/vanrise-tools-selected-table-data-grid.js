@@ -19,12 +19,10 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
 
     function SelectedTableDataGrid($scope, ctrl) {
     
-
         var gridApi;
         $scope.scopeModel = {};
         $scope.scopeModel.selectedTableData = [];
         $scope.scopeModel.columnNames = [];
-        var tableRows=[];
         var name;
         this.initializeController = initializeController;
 
@@ -37,13 +35,19 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(getDirectiveApi());
                 }
-     
+
 
                 function getDirectiveApi() {
                     var directiveApi = {};
 
                     directiveApi.load = function (payload) {
-                        if (payload != undefined ) {
+                        if (payload != undefined) {
+
+                            if (payload.DataRows != undefined) {
+                                for (var i = 0; i < payload.DataRows.length; i++) {
+                                    $scope.scopeModel.selectedTableData.push({ Entity: payload.DataRows[i] });
+                                }
+                            }
 
                             var columnNames = payload.ColumnNames;
                             $scope.scopeModel.columnNames = [];
@@ -52,53 +56,72 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                                 $scope.scopeModel.columnNames.push(columnNames[j]);
                             }
 
-                            var filter = payload.Query; 
-                            if (filter.BulkActionFinalState.TargetItems.length != 0) {
-                                return VR_Tools_TableDataAPIService.GetSelectedTableData(filter).then(function (response) {
-                                    if (response) {
-                                        tableRows = [];
-                                        $scope.scopeModel.selectedTableData = [];
-                                        for (var i = 0; i < response.length; i++) {
-                                            tableRows.push(response[i]);
-                                            $scope.scopeModel.selectedTableData.push(response[i])
-                                        } 
+                            if (payload.Query != undefined) {
+                                var filter = payload.Query;
+                                if (filter.BulkActionFinalState.TargetItems.length != 0 || filter.BulkActionFinalState.IsAllSelected == true) {
+                                    return VR_Tools_TableDataAPIService.GetSelectedTableData(filter).then(function (response) {
+                                        if (response) {
 
-                                    };
-                                });
+                                            for (var i = 0; i < response.length; i++) {
+
+                                                var exists = false;
+                                                var responseIdentifierKey = "";
+                                                for (var j = 0; j < filter.IdentifierColumns.length; j++) {
+                                                    var key = filter.IdentifierColumns[j].ColumnName;
+                                                    responseIdentifierKey += response[i].FieldValues[key] + "_";
+                                                }
+
+                                                for (var k = 0; k < $scope.scopeModel.selectedTableData.length; k++) {
+                                                    var identifierKey = "";
+
+                                                    for (var l = 0; l < filter.IdentifierColumns.length; l++) {
+                                                        var key = filter.IdentifierColumns[l].ColumnName;
+                                                        identifierKey += $scope.scopeModel.selectedTableData[k].Entity.FieldValues[key] + "_";
+                                                    }
+
+                                                    if (responseIdentifierKey == identifierKey) {
+                                                        exists = true; break;
+                                                    }
+
+                                                }
+                                                if (exists == false) {
+                                                    var object = { Entity: response[i] };
+                                                    $scope.scopeModel.selectedTableData.push(object);
+                                                }
+
+                                            }
+                                        };
+                                    });
+                                }
                             }
-                            else {
-                                $scope.scopeModel.selectedTableData = [];
-                            }
+                        }
+                        else {
+                            $scope.scopeModel.selectedTableData = [];
                         }
                     };
 
                     directiveApi.getData = function () {
+                        var tableRows = [];
+                        for (var k = 0; k < $scope.scopeModel.selectedTableData.length; k++) {
+                            tableRows.push($scope.scopeModel.selectedTableData[k].Entity);
+                        }
                         return { tableRows: tableRows }
 
                     };
                     return directiveApi;
-                };
-            }
-            defineMenuActions();
+                }
+            };
 
+            $scope.scopeModel.deleteTableDataRow = function (row) {
+                var index = $scope.scopeModel.selectedTableData.indexOf(row)
+                if (index > -1) {
+                    $scope.scopeModel.selectedTableData.splice(index, 1);
+                }
+            };
         };
-        function defineMenuActions() {
-            $scope.scopeModel.gridMenuActions = [{
-                name: "Delete",
-                clicked: deleteTableDataRow,
-            }];
-        }
-
-        function deleteTableDataRow(row) {
-
-            var index = $scope.scopeModel.selectedTableData.indexOf(row)
-            if (index > -1) {
-                $scope.scopeModel.selectedTableData.splice(index, 1);
-            }
-        }
-      
     }
 
     return directiveDefinitionObject;
 
 }]);
+

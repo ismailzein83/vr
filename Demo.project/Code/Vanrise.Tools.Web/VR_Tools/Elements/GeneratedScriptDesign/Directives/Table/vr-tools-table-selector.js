@@ -1,6 +1,6 @@
 ﻿
-appControllers.directive('vanriseToolsUpdateColumnsSelector', ['VRNotificationService', 'VR_Tools_ColumnsAPIService', 'UtilsService', 'VRUIUtilsService',
-function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIUtilsService) {
+appControllers.directive('vrToolsTableSelector', ['VRNotificationService', 'VR_Tools_TableAPIService', 'UtilsService', 'VRUIUtilsService',
+function (VRNotificationService, VR_Tools_TableAPIService, UtilsService, VRUIUtilsService) {
     'use strict';
     
     var directiveDefinitionObject = {
@@ -25,35 +25,35 @@ function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIU
             if ($attrs.ismultipleselection != undefined)
                 ctrl.selectedvalues = [];
 
-            var updateColumnsSelector = new UpdateColumnsSelector(ctrl, $scope, $attrs);
-            updateColumnsSelector.initializeController();
+            var tableSelector = new TableSelector(ctrl, $scope, $attrs);
+            tableSelector.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,
         template: function (element, attrs) {
 
-            return getUpdateColumnsTemplate(attrs);
+            return getTableTemplate(attrs);
         }
     };
 
-    function getUpdateColumnsTemplate(attrs) {
+    function getTableTemplate(attrs) {
 
 
         var multipleselection = "";
-        var label = "Update Columns";
+        var label = "Table";
         if (attrs.ismultipleselection != undefined) {
-            label = "Update Columns";
+            label = "Table";
             multipleselection = "ismultipleselection";
         }
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="Name" datavaluefield="Name" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="UpdateColumns" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="Name" datavaluefield="Name" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Table" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
 
     };
 
 
-    function UpdateColumnsSelector(ctrl, $scope, attrs) {
+    function TableSelector(ctrl, $scope, attrs) {
 
 
         var selectorAPI;
@@ -73,16 +73,18 @@ function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIU
             var api = {};
 
             api.load = function (payload) { //payload is an object that has selectedids and filter
-
                 selectorAPI.clearDataSource();
 
                 var selectedIds;
                 var filter;
                 if (payload != undefined) {
-                    selectedIds = payload.selectedIds
+                    if (payload.selectedIds != undefined) {
+                        selectedIds = [];
+                        selectedIds.push(payload.selectedIds);
+                    }
                     filter = payload.filter;
-                }
-                return VR_Tools_ColumnsAPIService.GetColumnsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                } 
+                return VR_Tools_TableAPIService.GetTablesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                     if (response != null) {
                         for (var i = 0; i < response.length; i++) {
                             ctrl.datasource.push(response[i]);
@@ -95,13 +97,13 @@ function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIU
                 });
             };
 
-            api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
-            };
-
             api.clear = function () {
                 selectorAPI.clearDataSource();
             }
+
+            api.getSelectedIds = function () {
+                return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
+            };
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }

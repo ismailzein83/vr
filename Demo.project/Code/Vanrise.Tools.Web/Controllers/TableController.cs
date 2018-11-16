@@ -24,7 +24,5 @@ namespace Vanrise.Tools.Web.Controllers
             TableInfoFilter tableInfoFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<TableInfoFilter>(filter) : null;
             return tableManager.GetTablesInfo(tableInfoFilter);
         }
-        
-
     }
 }

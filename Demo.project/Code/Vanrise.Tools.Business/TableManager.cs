@@ -23,8 +23,8 @@ namespace Vanrise.Tools.Business
             ITableDataManager tableDataManager = VRToolsFactory.GetDataManager<ITableDataManager>();
 
 
-            Guid ConnectionId = tableInfoFilter.ConnectionId;
-            SQLConnection settings = new VRConnectionManager().GetVRConnection(ConnectionId).Settings as SQLConnection;
+            Guid connectionId = tableInfoFilter.ConnectionId;
+            SQLConnection settings = new VRConnectionManager().GetVRConnection(connectionId).Settings as SQLConnection;
             string connectionString = (settings != null) ? settings.ConnectionString : null;
 
             tableDataManager.Connection_String = connectionString;

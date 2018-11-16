@@ -1,6 +1,6 @@
 ﻿
-appControllers.directive('vanriseToolsColumnsSelector', ['VRNotificationService', 'VR_Tools_ColumnsAPIService', 'UtilsService', 'VRUIUtilsService',
-function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIUtilsService) {
+appControllers.directive('vrToolsSchemaSelector', ['VRNotificationService', 'VR_Tools_SchemaAPIService', 'UtilsService', 'VRUIUtilsService',
+function (VRNotificationService, VR_Tools_SchemaAPIService, UtilsService, VRUIUtilsService) {
     'use strict';
     
     var directiveDefinitionObject = {
@@ -15,8 +15,7 @@ function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIU
             ondeselectitem: "=",
             hideremoveicon: '@',
             normalColNum: '@',
-            isdisabled: '=',
-            label:'@'
+            isdisabled:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -26,33 +25,35 @@ function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIU
             if ($attrs.ismultipleselection != undefined)
                 ctrl.selectedvalues = [];
 
-            var identifierColumnsSelector = new IdentifierColumnsSelector(ctrl, $scope, $attrs);
-            identifierColumnsSelector.initializeController();
+            var schemaSelector = new SchemaSelector(ctrl, $scope, $attrs);
+            schemaSelector.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,
         template: function (element, attrs) {
 
-            return getIdentifierColumnsTemplate(attrs);
+            return getSchemaTemplate(attrs);
         }
     };
 
-    function getIdentifierColumnsTemplate(attrs) {
+    function getSchemaTemplate(attrs) {
 
 
         var multipleselection = "";
+        var label = "Schema";
         if (attrs.ismultipleselection != undefined) {
+            label = "Schema";
             multipleselection = "ismultipleselection";
         }
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="Name" datavaluefield="Name" label="{{ctrl.label}}" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Columns" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="Name" datavaluefield="Name" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Schema" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
 
     };
 
 
-    function IdentifierColumnsSelector(ctrl, $scope, attrs) {
+    function SchemaSelector(ctrl, $scope, attrs) {
 
 
         var selectorAPI;
@@ -72,16 +73,18 @@ function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIU
             var api = {};
 
             api.load = function (payload) { //payload is an object that has selectedids and filter
-
                 selectorAPI.clearDataSource();
 
                 var selectedIds;
                 var filter;
                 if (payload != undefined) {
-                    selectedIds = payload.selectedIds
+                    if (payload.selectedIds != undefined) {
+                        selectedIds = [];
+                        selectedIds.push(payload.selectedIds);
+                    }
                     filter = payload.filter;
                 }
-                return VR_Tools_ColumnsAPIService.GetColumnsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                return VR_Tools_SchemaAPIService.GetSchemasInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                     if (response != null) {
                         for (var i = 0; i < response.length; i++) {
                             ctrl.datasource.push(response[i]);
@@ -95,18 +98,8 @@ function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIU
             };
 
             api.getSelectedIds = function () {
-                var selectedIds = [];
-                selectedIds = VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
-                var selectedColumns = [];
-                for (var i = 0; i < selectedIds.length; i++) {
-                    selectedColumns.push({ ColumnName: selectedIds [i]})
-                }
-                return selectedColumns;
+                return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
             };
-
-            api.clear = function () {
-                selectorAPI.clearDataSource();
-            }
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }

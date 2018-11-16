@@ -18,13 +18,13 @@ namespace Vanrise.Tools.Data.SQL
         {
         }
 
-        public string table_Name { get; set; }
         public string Connection_String { get; set; }
         
         protected override string GetConnectionString()
         {
             return Connection_String;
         }
+        string table_Name;
         public List<TableData> GetTableData(string schemaName,string tableName,string whereCondition)
         {
             table_Name = tableName;

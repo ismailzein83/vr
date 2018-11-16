@@ -20,8 +20,8 @@ namespace Vanrise.Tools.Business
             ISchemaDataManager schemaDataManager = VRToolsFactory.GetDataManager<ISchemaDataManager>();
 
 
-            Guid ConnectionId = schemaInfoFilter.ConnectionId;
-            SQLConnection settings = new VRConnectionManager().GetVRConnection(ConnectionId).Settings as SQLConnection;
+            Guid connectionId = schemaInfoFilter.ConnectionId;
+            SQLConnection settings = new VRConnectionManager().GetVRConnection(connectionId).Settings as SQLConnection;
             string connectionString = (settings != null) ? settings.ConnectionString : null;
 
             schemaDataManager.Connection_String = connectionString;

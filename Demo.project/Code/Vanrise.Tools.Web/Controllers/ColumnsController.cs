@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.Web.Base;
 using Vanrise.Entities;
+using Vanrise.Entities.Tools;
 
 
 namespace Vanrise.Tools.Web.Controllers
@@ -25,7 +26,21 @@ namespace Vanrise.Tools.Web.Controllers
             ColumnsInfoFilter columnsInfoFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<ColumnsInfoFilter>(filter) : null;
             return columnsManager.GetColumnsInfo(columnsInfoFilter);
         }
-        
+        [HttpGet]
+
+        [Route("GetGeneratedScriptItemTableSettingsConfigs")]
+        public IEnumerable<GeneratedScriptItemTableSettingsConfig> GetGeneratedScriptItemTableSettingsConfigs()
+        {
+            return columnsManager.GetGeneratedScriptItemTableSettingsConfigs();
+        }
+
+        [HttpPost]
+        [Route("GetExceptionMessage")]
+        public string GetExceptionMessage(GeneratedScriptItemTable generatedScriptItemTable)
+        {
+            return columnsManager.GetExceptionMessage(generatedScriptItemTable);
+        }
+
 
     }
 }

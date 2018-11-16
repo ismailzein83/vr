@@ -1,14 +1,17 @@
 ﻿<vr-panel ng-controller="VR_Tools_GeneratedScriptManagementController" vr-loader="scopeModel.isLoading">
     <vr-form name="formFilter">
         <vr-tabs>
-            <vr-tab header="'Source'">
-                    <vr-textarea value="scopeModel.tableDataSource"></vr-textarea>
+            <vr-tab header="'Source'" ontabselected="scopeModel.onSourceTabSelected">
+                <vr-textarea value="scopeModel.tableDataSource" rows="30"></vr-textarea>
             </vr-tab>
-            <vr-tab header="'Design'">
+            <vr-tab header="'Design'" ontabselected="scopeModel.onDesignTabSelected">
                 <vr-row>
                     <vr-columns width="fullrow">
                         <vanrise-tools-generated-script-design-grid on-ready="scopeModel.onGridReady"></vanrise-tools-generated-script-design-grid>
                     </vr-columns>
+                </vr-row>
+                <vr-row removeline>
+                    <vr-textbox value="scopeModel.ExceptionMessage"></vr-textbox>
                 </vr-row>
             </vr-tab>
         </vr-tabs>

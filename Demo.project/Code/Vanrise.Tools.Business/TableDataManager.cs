@@ -23,46 +23,46 @@ namespace Vanrise.Tools.Business
         {
             ITableDataDataManager tableDataDataManager = VRToolsFactory.GetDataManager<ITableDataDataManager>();
 
-             Guid ConnectionId = input.Query.ConnectionId;
-            SQLConnection settings = new VRConnectionManager().GetVRConnection(ConnectionId).Settings as SQLConnection;
+            Guid connectionId = input.Query.ConnectionId;
+            SQLConnection settings = new VRConnectionManager().GetVRConnection(connectionId).Settings as SQLConnection;
             string connectionString = (settings != null) ? settings.ConnectionString : null;
             tableDataDataManager.Connection_String = connectionString;
 
-            query=input.Query;
+            query = input.Query;
             string resultKey = input.ResultKey;
             List<TableData> allTableData = tableDataDataManager.GetTableData(input.Query.SchemaName, input.Query.TableName, input.Query.WhereCondition);
             Func<TableData, bool> filterExpression = (TableData) =>
             {
                 return true;
             };
-            
+
             VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
 
-            var cachedAccountWithSelectionHandling=bulkActionDraftManager.GetOrCreateCachedWithSelectionHandling<TableData,CacheManager>(ref resultKey,input.Query.BulkActionState,()=>
-            {    
-                return allTableData.FindAllRecords(filterExpression);
-            },(tableDatas)=>
-            {
+            var cachedAccountWithSelectionHandling = bulkActionDraftManager.GetOrCreateCachedWithSelectionHandling<TableData, CacheManager>(ref resultKey, input.Query.BulkActionState, () =>
+                 {
+                     return allTableData.FindAllRecords(filterExpression);
+                 }, (tableDatas) =>
+             {
+                     List<BulkActionItem> bulkActionItems = new List<BulkActionItem>();
+                     foreach (var tableData in tableDatas)
+                     {
+                         string identifierKey = "";
+                         foreach (var identifierColumn in input.Query.IdentifierColumns)
+                         {
+                             string key = identifierColumn.ColumnName;
+                             if (tableData.FieldValues[key] != null)
+                                 identifierKey += tableData.FieldValues[key] + "_";
+                         }
 
-                List<BulkActionItem> bulkActionItems=new List<BulkActionItem>();
-            foreach(var tableData in tableDatas)
-            {
-                    string IdentifierKey="";
-                    foreach (var identifierColumn in input.Query.IdentifierColumns) {
-                        string key = identifierColumn.ColumnName;
-                    IdentifierKey += tableData.FieldValues[key] + "_";
-                }
+                         bulkActionItems.Add(new BulkActionItem
+                         {
+                             ItemId = identifierKey.ToString()
+                         });
+                     }
+                     return bulkActionItems;
+                 });
+            input.ResultKey = resultKey;
 
-                bulkActionItems.Add(new BulkActionItem
-                   {
-                        ItemId=IdentifierKey.ToString()
-                    });
-            }
-            return bulkActionItems;
-
-            });
-            input.ResultKey=resultKey;
-         
             return DataRetrievalManager.Instance.ProcessResult(input, allTableData.ToBigResult(input, filterExpression, TableDataDetailsMapper));
 
         }
@@ -71,8 +71,8 @@ namespace Vanrise.Tools.Business
         {
             ITableDataDataManager tableDataDataManager = VRToolsFactory.GetDataManager<ITableDataDataManager>();
 
-            Guid ConnectionId = query.ConnectionId;
-            SQLConnection settings = new VRConnectionManager().GetVRConnection(ConnectionId).Settings as SQLConnection;
+            Guid connectionId = query.ConnectionId;
+            SQLConnection settings = new VRConnectionManager().GetVRConnection(connectionId).Settings as SQLConnection;
             string connectionString = (settings != null) ? settings.ConnectionString : null;
             tableDataDataManager.Connection_String = connectionString;
 
@@ -80,28 +80,20 @@ namespace Vanrise.Tools.Business
             VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
             IEnumerable<VRBulkActionDraft> bulkaActionFinalState = bulkActionDraftManager.GetVRBulkActionDrafts(query.BulkActionFinalState);
 
-            List<TableData> selectedTableData=new List<TableData>();
-            
-            foreach(var row in allTableData ){
-                
-                bool exists=false;
-                 string IdentifierKey="";
-               
-                foreach (var identifierColumn in query.IdentifierColumns)
-                 {
-                 string key = identifierColumn.ColumnName;
-                 IdentifierKey += row.FieldValues[key] + "_";
-                  }
+            List<TableData> selectedTableData = new List<TableData>();
 
-                foreach (var item in bulkaActionFinalState)
+            foreach (var row in allTableData)
+            {
+
+                string identifierKey = "";
+                foreach (var identifierColumn in query.IdentifierColumns)
                 {
-                    if (item.ItemId == IdentifierKey) { 
-                        exists=true;
-                        break;
-                    }
+                    string key = identifierColumn.ColumnName;
+                    identifierKey += row.FieldValues[key] + "_";
                 }
-                if(exists) selectedTableData.Add(row);
-            };
+                if (bulkaActionFinalState.Any(x => x.ItemId == identifierKey))
+                    selectedTableData.Add(row);
+            }
 
             return selectedTableData;
 
@@ -116,7 +108,6 @@ namespace Vanrise.Tools.Business
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ITableDataDataManager tableDataDataManager = VRToolsFactory.GetDataManager<ITableDataDataManager>();
-            object _updateHandle;
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return false;
@@ -126,25 +117,15 @@ namespace Vanrise.Tools.Business
 
         #region Private Methods
 
-       
-
         #endregion
 
         #region Mappers
-        public TableInfo TableInfoMapper(Table table)
-        {
-            return new TableInfo
-            {
-                Name = table.Name,
-            };
-        }
         #endregion
-
         public TableDataDetails TableDataDetailsMapper(TableData tableData)
         {
             TableDataDetails tableDataDetails = new TableDataDetails();
             tableDataDetails.FieldValues = new Dictionary<string, object>();
-            foreach(var field in tableData.FieldValues )
+            foreach (var field in tableData.FieldValues)
             {
                 tableDataDetails.FieldValues.Add(field.Key, field.Value);
 

@@ -25,15 +25,30 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
         $scope.scopeModel.tableData = [];
         $scope.scopeModel.columnNames = [];
         var name;
-        var pushedDataRows = [];
         var context;
         var bulkActionDraftInstance;
         var gridQuery;
-        var identifierKey;
         var query;
         this.initializeController = initializeController;
 
         function initializeController() {
+
+            $scope.scopeModel.selectAll = function () {
+
+                bulkActionDraftInstance.selectAllItems();
+                gridQuery.allSelected = true;
+            };
+
+            $scope.scopeModel.deSelectAll = function () {
+
+                bulkActionDraftInstance.deselectAllItems();
+                gridQuery.allSelected = false;
+
+            };
+
+            $scope.scopeModel.disableSelectAll = true;
+
+            $scope.scopeModel.disableDeSelectAll = true;
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridApi = api;
@@ -50,37 +65,44 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                                     name = response[i].Name;
                                     $scope.scopeModel.key = 'FieldValues["' + name + '"]';
                                 }
-
                                 $scope.scopeModel.columnNames.push(response[i]); 
-
                             } 
                         }
                     });
                 }
                
-
                 function getDirectiveApi() {
 
                     var directiveApi = {};
 
                     directiveApi.load = function (payload) {
+                        var loadPromise = UtilsService.createPromiseDeferred();
                         context = payload.context;
-                        //context.setActionsEnablity(true);
+                        context.setSelectAllEnablity= function (enablity) {
+                            $scope.scopeModel.disableSelectAll = !enablity;
+                        };
+                        context.setDeselectAllEnablity = function (enablity) {
+                            $scope.scopeModel.disableDeSelectAll = !enablity;
+                        };
                          query = payload.query; 
-                        gridQuery = query;
+                         gridQuery = query;
+                         gridQuery.allSelected = false;
+
                         getColumnNames(query).then(function (response) {
                             bulkActionDraftInstance = VRCommon_VRBulkActionDraftService.createBulkActionDraft(getContext());
-                             gridApi.retrieveData(query);
+                            gridApi.retrieveData(query);
+                            loadPromise.resolve();
                         });
+                        return loadPromise.promise;
                     };
 
                     directiveApi.getData = function () {
                         if (gridQuery) {
-                            gridQuery.BulkActionState = bulkActionDraftInstance.getBulkActionState();
-                            gridQuery.BulkActionFinalState = bulkActionDraftInstance.finalizeBulkActionDraft().$$state.value;
-
-
-                            return { gridQuery: gridQuery, columnNames: $scope.scopeModel.columnNames };
+                            if (bulkActionDraftInstance) {
+                                gridQuery.BulkActionState = bulkActionDraftInstance.getBulkActionState();
+                                gridQuery.BulkActionFinalState = bulkActionDraftInstance.finalizeBulkActionDraft().$$state.value;
+                                return { gridQuery: gridQuery, columnNames: $scope.scopeModel.columnNames };
+                            }
                         };
                     };
 
@@ -100,24 +122,21 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                     };
 
                     return directiveApi;
-                };
+                }
             }
 
             function getContext() {
-                var currentContext=context
+                var currentContext = context;
                 if (currentContext==undefined)
-                 currentContext = {};
+                    currentContext = {};
+
                 currentContext.triggerRetrieveData = function () {
-
                     gridQuery.BulkActionState = bulkActionDraftInstance.getBulkActionState();
-                    gridApi.retrieveData(gridQuery)
-                }
+                    gridApi.retrieveData(gridQuery);
+                };
                 currentContext.hasItems = function () {
-
                     return $scope.scopeModel.tableData.length > 0;
                 };
-
-               
                 return currentContext;
             }
 
@@ -126,6 +145,7 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                 var identifierKey = "";
                 for (var j = 0; j < query.IdentifierColumns.length; j++) {
                     var identifierColumn = query.IdentifierColumns[j].ColumnName;
+                    if (row.FieldValues[identifierColumn] != undefined && row.FieldValues[identifierColumn] != null && row.FieldValues[identifierColumn] != ""  )
                     identifierKey += row.FieldValues[identifierColumn] + "_";
                 }
                 row.isSelected = bulkActionDraftInstance.isItemSelected(identifierKey);
@@ -151,9 +171,6 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                     });
             };
         };
-
- 
-
     }
 
     return directiveDefinitionObject;

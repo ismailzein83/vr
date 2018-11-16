@@ -12,12 +12,9 @@
                      menuactions="scopeModel.gridMenuActions"
                      idfield="ConnectionId"
                      enableautoexport="true">
-            <!--<vr-datagridcolumn headertext="'Connection String Id'" field="'ConnectionStringId'" type="'Text'"></vr-datagridcolumn>-->
-            <vr-datagridcolumn headertext="'Schema'" field="'Schema'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Table'" field="'Table'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Inserted Columns'" field="'InsertColumnNames'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Updated Columns'" field="'UpdateColumnNames'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Identifier Columns'" field="'IdentifierColumnNames'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Schema'" field="'Entity.Schema'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Table'" field="'Entity.Table'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Type'" field="'Entity.Title'" type="'Text'"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>
 </vr-row>

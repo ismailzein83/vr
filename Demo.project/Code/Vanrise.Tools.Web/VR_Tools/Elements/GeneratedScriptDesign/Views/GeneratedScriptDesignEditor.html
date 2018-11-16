@@ -3,49 +3,16 @@
         <vr-form name="formGeneratedScriptDesignEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
-                   
-                    <div>
+                    <vr-row removeline>
                         <vr-common-connection-selector on-ready="scopeModel.onConnectionStringDirectiveReady" onselectionchanged="scopeModel.onConnectionStringChanged" isrequired="true" normal-col-num="2"></vr-common-connection-selector>
-                        <vanrise-tools-schema-selector vr-loader="scopeModel.isSchemaDirectiveloading" on-ready="scopeModel.onSchemaDirectiveReady" onselectionchanged="scopeModel.onSchemaChanged" isrequired="true" normal-col-num="2"></vanrise-tools-schema-selector>
-                        <vanrise-tools-table-selector vr-loader="scopeModel.isTableDirectiveloading" on-ready="scopeModel.onTableDirectiveReady" onselectionchanged="scopeModel.onTableChanged" isrequired="true" normal-col-num="2"></vanrise-tools-table-selector>
-                        <vanrise-tools-columns-selector vr-loader="scopeModel.isIdentifierColumnsDirectiveloading" label="Identifier Columns" on-ready="scopeModel.onIdentifierColumnsDirectiveReady"  ismultipleselection isrequired="true" normal-col-num="2"></vanrise-tools-columns-selector>
-                        <vanrise-tools-columns-selector vr-loader="scopeModel.isInsertColumnsDirectiveloading" label="Insert Columns" on-ready="scopeModel.onInsertColumnsDirectiveReady" ismultipleselection isrequired="true" normal-col-num="2"></vanrise-tools-columns-selector>
-                        <vanrise-tools-columns-selector vr-loader="scopeModel.isUpdateColumnsDirectiveloading" label="Update Columns" on-ready="scopeModel.onUpdateColumnsDirectiveReady" ismultipleselection isrequired="true" normal-col-num="2"></vanrise-tools-columns-selector>
-                    </div>
-                    <vr-label></vr-label>
-                    <div ng-if=scopeModel.showGrid removeline>
-                        <vr-row removeline>
-                            <vr-columns colnum="5">
-                                <vr-actionbar>
-                                    <div transclude-to="buttons">
-                                        <vr-button type="SelectAll" data-onclick="scopeModel.selectAll" disabledbtn="scopeModel.disableSelectAll"></vr-button>
-                                        <vr-button type="DeselectAll" data-onclick="scopeModel.deSelectAll" disabledbtn="scopeModel.disableDeSelectAll"></vr-button>
-                                    </div>
-                                </vr-actionbar>
-                            </vr-columns>
-                        </vr-row>
-                        <vr-row removeline>
-                            <vr-columns colnum="5">
-                                <vanrise-tools-table-data-grid on-ready="scopeModel.onTableDataGridReady"></vanrise-tools-table-data-grid>
-                            </vr-columns>
-                            <vr-columns colnum="2">
-                                <vr-button type="Comment" standalone data-onclick="scopeModel.generateSelectedTableDataGrid" disabledbtn="false"></vr-button>
-                            </vr-columns>
-                            <vr-columns colnum="5">
-                                <div ng-if=scopeModel.showSelectedRowsGrid removeline>
-                                    <vanrise-tools-selected-table-data-grid on-ready="scopeModel.onSelectedTableDataGridReady"></vanrise-tools-selected-table-data-grid>
-                                </div>
-                            </vr-columns>
-                        </vr-row>
-                    </div>
-                        <vr-row removeline>
-                            <vr-columns colnum="5">
-                                <vr-textarea value="scopeModel.sqlFilter"></vr-textarea>
-                            </vr-columns>
-                            <vr-columns colnum="1">
-                                <vr-button type="Execute" buttontitle="Execute Query" customlabel="Execute Query" standalone data-onclick="scopeModel.executeQuery"></vr-button>
-                            </vr-columns>
-                        </vr-row>
+                        <span vr-loader="scopeModel.isSchemaDirectiveloading">
+                            <vr-tools-schema-selector on-ready="scopeModel.onSchemaDirectiveReady" onselectionchanged="scopeModel.onSchemaChanged" isrequired="true" normal-col-num="2"></vr-tools-schema-selector>
+                        </span>
+                        <span vr-loader="scopeModel.isTableDirectiveloading">
+                            <vr-tools-table-selector on-ready="scopeModel.onTableDirectiveReady" onselectionchanged="scopeModel.onTableChanged" isrequired="true" normal-col-num="2"></vr-tools-table-selector>
+                        </span>
+                    </vr-row>
+                    <vr-tools-generated-script-settings vr-loader="scopeModel.isGeneratedScriptSettingsDirectiveloading" on-ready="scopeModel.onGeneratedScriptSettingsDirectiveReady" isrequired="true" normal-col-num="2"></vr-tools-generated-script-settings>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

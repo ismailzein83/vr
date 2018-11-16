@@ -22,6 +22,7 @@ function (UtilsService, VRNotificationService, VR_Tools_GeneratedScriptService, 
 
         var gridApi;
         var addText;
+        var generatedScripts;
         $scope.scopeModel = {};
         $scope.scopeModel.designs = [];
 
@@ -41,9 +42,19 @@ function (UtilsService, VRNotificationService, VR_Tools_GeneratedScriptService, 
                     var directiveApi = {};
 
                     directiveApi.load = function (payload) {
-                        addText=payload.addText;
+                        $scope.scopeModel.designs = [];
+                        if (payload != undefined && payload.designs != undefined) {
+
+                            for (var i = 0; i < payload.designs.length; i++) {
+                                $scope.scopeModel.designs.push(payload.designs[i])
+                            }
+                        }
                     };
 
+                    directiveApi.getData = function () {
+                        return $scope.scopeModel.designs;
+
+                    }
                     return directiveApi;
                 };
             };
@@ -54,7 +65,7 @@ function (UtilsService, VRNotificationService, VR_Tools_GeneratedScriptService, 
                     $scope.scopeModel.designs.push(design);
                 };
 
-                VR_Tools_GeneratedScriptService.addGeneratedScriptDesign(onGeneratedScriptDesignAdded, addText);
+                VR_Tools_GeneratedScriptService.addGeneratedScriptDesign(onGeneratedScriptDesignAdded);
             };
 
             defineMenuActions();

@@ -1,14 +1,13 @@
 ﻿appControllers.service('VR_Tools_GeneratedScriptService', ['VRModalService', 'VRNotificationService',
 function (VRModalService, VRNotificationService) {
 
-    function addGeneratedScriptDesign(onGeneratedScriptDesignAdded,addText) {
+    function addGeneratedScriptDesign(onGeneratedScriptDesignAdded, generatedScripts) {
 
         var settings = {};
         var parameters = {};
-
         settings.onScopeReady = function (modalScope) {
+
             modalScope.onGeneratedScriptDesignAdded = onGeneratedScriptDesignAdded;
-            modalScope.addText = addText;
 
         };
         VRModalService.showModal('/Client/Modules/VR_Tools/Elements/GeneratedScriptDesign/Views/GeneratedScriptDesignEditor.html', parameters, settings);
@@ -22,7 +21,6 @@ function (VRModalService, VRNotificationService) {
 
         settings.onScopeReady = function (modalScope) {
             modalScope.onGeneratedScriptDesignUpdated = onGeneratedScriptDesignUpdated;
-
         };
         VRModalService.showModal('/Client/Modules/VR_Tools/Elements/GeneratedScriptDesign/Views/GeneratedScriptDesignEditor.html', parameters, settings);
     };

@@ -1,6 +1,6 @@
 ﻿
-appControllers.directive('vanriseToolsTableSelector', ['VRNotificationService', 'VR_Tools_TableAPIService', 'UtilsService', 'VRUIUtilsService',
-function (VRNotificationService, VR_Tools_TableAPIService, UtilsService, VRUIUtilsService) {
+appControllers.directive('vrToolsColumnsSelector', ['VRNotificationService', 'VR_Tools_ColumnsAPIService', 'UtilsService', 'VRUIUtilsService',
+function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIUtilsService) {
     'use strict';
     
     var directiveDefinitionObject = {
@@ -15,7 +15,8 @@ function (VRNotificationService, VR_Tools_TableAPIService, UtilsService, VRUIUti
             ondeselectitem: "=",
             hideremoveicon: '@',
             normalColNum: '@',
-            isdisabled:'='
+            isdisabled: '=',
+            label:'@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -25,35 +26,33 @@ function (VRNotificationService, VR_Tools_TableAPIService, UtilsService, VRUIUti
             if ($attrs.ismultipleselection != undefined)
                 ctrl.selectedvalues = [];
 
-            var tableSelector = new TableSelector(ctrl, $scope, $attrs);
-            tableSelector.initializeController();
+            var identifierColumnsSelector = new IdentifierColumnsSelector(ctrl, $scope, $attrs);
+            identifierColumnsSelector.initializeController();
         },
         controllerAs: 'ctrl',
         bindToController: true,
         template: function (element, attrs) {
 
-            return getTableTemplate(attrs);
+            return getIdentifierColumnsTemplate(attrs);
         }
     };
 
-    function getTableTemplate(attrs) {
+    function getIdentifierColumnsTemplate(attrs) {
 
 
         var multipleselection = "";
-        var label = "Table";
         if (attrs.ismultipleselection != undefined) {
-            label = "Table";
             multipleselection = "ismultipleselection";
         }
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="Name" datavaluefield="Name" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Table" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="Name" datavaluefield="Name" label="{{ctrl.label}}" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Columns" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
 
     };
 
 
-    function TableSelector(ctrl, $scope, attrs) {
+    function IdentifierColumnsSelector(ctrl, $scope, attrs) {
 
 
         var selectorAPI;
@@ -78,13 +77,11 @@ function (VRNotificationService, VR_Tools_TableAPIService, UtilsService, VRUIUti
                 var selectedIds;
                 var filter;
                 if (payload != undefined) {
-                    if (payload.selectedIds != undefined) {
-                        selectedIds = [];
-                        selectedIds.push(payload.selectedIds);
-                    }
+                    selectedIds = payload.selectedIds
                     filter = payload.filter;
-                } 
-                return VR_Tools_TableAPIService.GetTablesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                }
+
+                return VR_Tools_ColumnsAPIService.GetColumnsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                     if (response != null) {
                         for (var i = 0; i < response.length; i++) {
                             ctrl.datasource.push(response[i]);
@@ -97,13 +94,15 @@ function (VRNotificationService, VR_Tools_TableAPIService, UtilsService, VRUIUti
                 });
             };
 
+            api.getSelectedIds = function () {
+                var selectedIds = [];
+                selectedIds = VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
+                return selectedIds;
+            };
+
             api.clear = function () {
                 selectorAPI.clearDataSource();
             }
-
-            api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
-            };
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }
@@ -113,4 +112,5 @@ function (VRNotificationService, VR_Tools_TableAPIService, UtilsService, VRUIUti
     };
     return directiveDefinitionObject;
 
-}]);
+    }]);
+
