@@ -10,10 +10,10 @@ using Vanrise.Web.Base;
 namespace Vanrise.Analytic.Web.Controllers
 {
     [JSONWithTypeAttribute]
-    [RoutePrefix(Constants.ROUTE_PREFIX + "ReportGenerationCustomCodeSettings")]
-    public class ReportGenerationCustomCodeSettingsController : BaseAPIController
+    [RoutePrefix(Constants.ROUTE_PREFIX + "ReportGenerationCustomCode")]
+    public class ReportGenerationCustomCodeController : BaseAPIController
     {
-        ReportGenerationCustomCodeSettingsManager _manager = new ReportGenerationCustomCodeSettingsManager();
+        ReportGenerationCustomCodeManager _manager = new ReportGenerationCustomCodeManager();
 
         [HttpGet]
         [Route("GetReportGenerationCustomCodeSettingsInfo")]

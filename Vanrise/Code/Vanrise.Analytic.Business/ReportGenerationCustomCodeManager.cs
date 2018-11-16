@@ -9,14 +9,23 @@ using Vanrise.Analytic.Entities;
 
 namespace Vanrise.Analytic.Business
 {
+
     public interface IReportGenerationCustomCode
     {
         byte[] Generate(IReportGenerationCustomCodeContext context);
     }
-    public class ReportGenerationCustomCodeSettingsManager
+    public class ReportGenerationCustomCodeManager
     {
         VRComponentTypeManager vrComponentTypeManager = new VRComponentTypeManager();
         #region Public Methods
+
+        static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
+
+        CacheManager GetCacheManager()
+        {
+            return s_cacheManager;
+        }
+
         public IEnumerable<ReportGenerationCustomCodeDefinitionInfo> GetReportGenerationCustomCodeSettingsInfo()
         {
             Func<ReportGenerationCustomCodeSettings, bool> filterExpression = (customCodeSettings) =>
@@ -26,27 +35,55 @@ namespace Vanrise.Analytic.Business
             return vrComponentTypeManager.GetComponentTypes<ReportGenerationCustomCodeSettings, ReportGenerationCustomCodeDefinition>().MapRecords(ReportGenerationCustomCodeDefinitionInfoMapper);
 
         }
-        public Type GetOrCreateRuntimeType(string customCode)
+        public Type GetCustomCodeRuntimeType(Guid customCodeId)
+        {
+            string cacheName = String.Format("GetCustomCodeRuntimeTypeById_{0}", customCodeId);
+            var runtimeType = GetCacheManager().GetOrCreateObject(cacheName,
+                () =>
+                {
+                    var customCode = GetCustomCodeById(customCodeId);
+                    if (customCode != null)
+                    {
+                        List<string> errorMessages;
+                        var type = GetOrCreateRuntimeType(customCode, out errorMessages);
+                        if (type == null)
+                            throw new Exception(String.Format("Compile Error when building Custom Code File. Errors: {0}", string.Join(",",errorMessages)));
+                        else
+                            return type;
+                    }
+                    else
+                        return null;
+                });
+            if (runtimeType == null)
+                throw new ArgumentException(String.Format("Cannot create runtime type from Custom Code Id '{0}'", customCodeId));
+            return runtimeType;
+        }
+        public Type GetOrCreateRuntimeType(string customCode, out List<string> errorMessages)
         {
             string fullTypeName;
             var classDefinition = BuildClassDefinition(customCode, out fullTypeName);
-
             CSharpCompilationOutput compilationOutput;
+            errorMessages = new List<string>();
+
             if (!CSharpCompiler.TryCompileClass("ReportGenerationCustomCode", classDefinition, out compilationOutput))
             {
-                StringBuilder errorsBuilder = new StringBuilder();
                 if (compilationOutput.ErrorMessages != null)
                 {
                     foreach (var errorMessage in compilationOutput.ErrorMessages)
                     {
-                        errorsBuilder.AppendLine(errorMessage);
+                        errorMessages.Add(errorMessage);
                     }
+                    return null;
                 }
-
-                throw new Exception(String.Format("Compile Error when building Custom Code file. Errors: {0}", errorsBuilder));
+                else
+                {
+                    return null;
+                }
             }
             else
+            {
                 return compilationOutput.OutputAssembly.GetType(fullTypeName);
+            }
         }
         public string GetCustomCodeById(Guid vrComponentTypeId)
         {
@@ -101,5 +138,15 @@ namespace Vanrise.Analytic.Business
             return classDefinitionBuilder.ToString();
         }
         #endregion
+    }
+    public class CacheManager : Vanrise.Caching.BaseCacheManager
+    {
+        object _updateHandle;
+
+        protected override bool ShouldSetCacheExpired()
+        {
+            return base.ShouldSetCacheExpired();
+        }
+
     }
 }

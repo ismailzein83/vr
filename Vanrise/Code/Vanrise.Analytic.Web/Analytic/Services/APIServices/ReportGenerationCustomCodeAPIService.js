@@ -5,7 +5,7 @@
 
     function ReportGenerationCustomCodeSettingsAPIService(BaseAPIService, UtilsService, VR_Analytic_ModuleConfig) {
 
-        var controllerName = 'ReportGenerationCustomCodeSettings';
+        var controllerName = 'ReportGenerationCustomCode';
 
         function GetReportGenerationCustomCodeSettingsInfo() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetReportGenerationCustomCodeSettingsInfo'));
@@ -16,6 +16,6 @@
         });
     }
 
-    appControllers.service('VR_Analytic_ReportGenerationCustomCodeSettingsAPIService', ReportGenerationCustomCodeSettingsAPIService);
+    appControllers.service('VR_Analytic_ReportGenerationCustomCodeAPIService', ReportGenerationCustomCodeSettingsAPIService);
 
 })(appControllers);

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common.Excel;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 {
@@ -18,25 +19,41 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
         public Guid ReportGenerationCustomCodeId { get; set; }
         public override VRAutomatedReportGeneratedFile GenerateFile(IVRAutomatedReportFileGeneratorGenerateFileContext context)
         {
-            ReportGenerationCustomCodeSettingsManager customCodeSettingsManager = new ReportGenerationCustomCodeSettingsManager();
-            var customCode = customCodeSettingsManager.GetCustomCodeById(ReportGenerationCustomCodeId);
-            if (customCode != null)
+            ReportGenerationCustomCodeManager customCodeSettingsManager = new ReportGenerationCustomCodeManager();
+            var type = customCodeSettingsManager.GetCustomCodeRuntimeType(ReportGenerationCustomCodeId);
+            if (type != null)
             {
-                var type = customCodeSettingsManager.GetOrCreateRuntimeType(customCode);
-                if (type != null)
+                var reportGenerator = Activator.CreateInstance(type) as IReportGenerationCustomCode;
+                var reportGenerationContext = new ReportGenerationCustomCodeContext(context.HandlerContext.GetDataList);
+
+
+                //var vrExcelFile = reportGenerationContext.CreateExcelFile();
+                //var sheet = vrExcelFile.CreateSheet();
+
+                //var table = sheet.CreateTable(1, 1);
+                //table.EnableMergeHeaders();
+                //table.EnableTableBorders();
+
+                //var incomingHeaderRow = table.CreateHeaderRow();
+                //var incomingHeaderCell = incomingHeaderRow.CreateCell();
+                //incomingHeaderCell.SetValue("Incoming");
+                //var incomingHeaderCellStyle = incomingHeaderCell.CreateStyle();
+                //incomingHeaderCellStyle.BGColor = "White";
+                //incomingHeaderCellStyle.FontSize = 11;
+                //incomingHeaderCellStyle.IsBold = true;
+                //incomingHeaderCellStyle.FontColor = "Black";
+                //incomingHeaderCellStyle.HorizontalAlignment = VRExcelContainerHorizontalAlignment.Left;
+                //var emptyRow = table.CreateHeaderRow();
+
+                var output = reportGenerator.Generate(reportGenerationContext);
+                return new VRAutomatedReportGeneratedFile()
                 {
-                    var reportGenerator = Activator.CreateInstance(type) as IReportGenerationCustomCode;
-                    var reportGenerationContext = new ReportGenerationCustomCodeContext(context.HandlerContext.GetDataList);
-                    var output = reportGenerator.Generate(reportGenerationContext);
-                    return new VRAutomatedReportGeneratedFile()
-                    {
-                        FileContent = output,
-                        FileExtension = ".xlsx"
-                    };
-                }
-            
+                    FileContent = output,
+                    FileExtension = ".xlsx"
+                };
             }
             return null;
+            
         }
     }
 }

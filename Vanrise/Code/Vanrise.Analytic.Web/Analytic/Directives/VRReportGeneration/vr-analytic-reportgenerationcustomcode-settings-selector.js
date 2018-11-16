@@ -1,7 +1,7 @@
 ﻿'use strict';
-app.directive('vrAnalyticReportgenerationcustomcodeSettingsSelector', ['VR_Analytic_ReportGenerationCustomCodeSettingsAPIService', 'UtilsService', 'VRUIUtilsService',
+app.directive('vrAnalyticReportgenerationcustomcodeSettingsSelector', ['VR_Analytic_ReportGenerationCustomCodeAPIService', 'UtilsService', 'VRUIUtilsService',
 
-    function (VR_Analytic_ReportGenerationCustomCodeSettingsAPIService, UtilsService, VRUIUtilsService) {
+    function (VR_Analytic_ReportGenerationCustomCodeAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -61,7 +61,7 @@ app.directive('vrAnalyticReportgenerationcustomcodeSettingsSelector', ['VR_Analy
                     }
 
 
-                    VR_Analytic_ReportGenerationCustomCodeSettingsAPIService.GetReportGenerationCustomCodeSettingsInfo().then(function (response) {
+                    VR_Analytic_ReportGenerationCustomCodeAPIService.GetReportGenerationCustomCodeSettingsInfo().then(function (response) {
                         selectorAPI.clearDataSource();
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
