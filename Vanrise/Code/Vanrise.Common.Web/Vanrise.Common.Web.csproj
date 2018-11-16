@@ -118,10 +118,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Constant\VRCustomCodeDynamicAPIMethodTypeEnum.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\VRDynamicAPIModule\Templates\DynamicAPIModuleGridTemplate.html" />
     <Content Include="Common\Directives\VRDynamicAPIModule\vr-common-dynamicapi-module-grid.js" />
+    <Content Include="Common\Directives\VRDynamicAPI\MainExtensions\Templates\CustomCodeDynamicAPIMethod.html" />
+    <Content Include="Common\Directives\VRDynamicAPI\MainExtensions\Templates\CustomCodeDynamicAPIMethodParametersGrid.html" />
+    <Content Include="Common\Directives\VRDynamicAPI\MainExtensions\vr-common-custom-code-dynamicapi-method-type.js" />
+    <Content Include="Common\Directives\VRDynamicAPI\MainExtensions\vr-common-custom-code-dynamicapi-method.js" />
+    <Content Include="Common\Directives\VRDynamicAPI\MainExtensions\vr-common-custom-code-dynamicapi-method-parameters-grid.js" />
+    <Content Include="Common\Directives\VRDynamicAPI\Templates\DynamicAPIMethodsGridTemplate.html" />
     <Content Include="Common\Directives\VRDynamicAPI\Templates\DynamicAPIGridTemplate.html" />
+    <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-method-settings.js" />
+    <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-methods-grid.js" />
     <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-grid.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\SpecificDaysDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
@@ -137,6 +146,10 @@
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleEditorController.js" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleManagement.html" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleManagementController.js" />
+    <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIMethodEditor.html" />
+    <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIMethodEditorController.js" />
+    <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIEditor.html" />
+    <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIEditorController.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -848,10 +861,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\Directives\VRDynamicAPI\MainExtensions\" />
-    <Folder Include="Common\Views\VRDynamicAPI\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

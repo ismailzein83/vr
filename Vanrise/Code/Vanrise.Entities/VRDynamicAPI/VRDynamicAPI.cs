@@ -8,10 +8,14 @@ namespace Vanrise.Entities
 {
     public class VRDynamicAPI
     {
-        public int VRDynamicAPIId { get; set; }
+        public long VRDynamicAPIId { get; set; }
         public string Name { get; set; }
         public int ModuleId{ get; set; }
         public VRDynamicAPISettings Settings { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime LastModifiedTime { get; set; }
+        public int LastModifiedBy { get; set; }
     }
     public class VRDynamicAPISettings
     {

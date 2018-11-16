@@ -10,11 +10,11 @@ namespace Vanrise.Common.MainExtensions.VRDynamicAPI
 {
     public class VRCustomCodeDynamicAPIMethod : VRDynamicAPIMethodSettings
     {
-        public override Guid ConfigId { get { return new Guid("98B21112-0364-4646-AA26-80263481DCDD"); } }
+        public override Guid ConfigId { get { return new Guid("4EB2746B-5368-4D05-B6D3-EFD075BE2DCF"); } }
         public string MethodBody { get; set; }
         public VRDynamicAPIMethodType MethodType { get; set; }
         public List<VRDynamicAPIMethodParameter> InParameters { get; set; }
         public string ReturnType { get; set; }
     }
- 
+
 }

@@ -1,0 +1,19 @@
+﻿<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-button type="Add" data-onclick="scopeModel.AddVRDynamicAPIMethod" standalone></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="scopeModel.vrDynamicAPIMethods"
+                     on-ready="scopeModel.onGridReady"
+                     dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="scopeModel.gridMenuActions"
+                     idfield="Settings.Methods.VRDynamicAPIMethodId"
+                     enableautoexport="true"
+                     ondeleterow="scopeModel.deleteMethod">
+            <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

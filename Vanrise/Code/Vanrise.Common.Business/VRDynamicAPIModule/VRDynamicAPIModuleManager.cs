@@ -62,6 +62,13 @@ namespace Vanrise.Common.Business
             return allVRDynamicAPIModules.GetRecord(vrDynamicAPIModuleId);
         }
 
+        public string GetVRDynamicAPIModuleName(int vrDynamicAPIModuleID)
+        {
+            var vRDynamicAPIModule = GetVRDynamicAPIModuleById(vrDynamicAPIModuleID);
+            if (vRDynamicAPIModule == null)
+                return null;
+            return vRDynamicAPIModule.Name;
+        }
         public UpdateOperationOutput<VRDynamicAPIModuleDetails> UpdateVRDynamicAPIModule(VRDynamicAPIModule vrDynamicAPIModule)
         {
             IVRDynamicAPIModuleDataManager vrDynamicAPIModuleDataManager = CommonDataManagerFactory.GetDataManager<IVRDynamicAPIModuleDataManager>();

@@ -62,9 +62,9 @@
 
             function setTitle() {
                 if (isEditMode && vrDynamicAPIModuleEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrDynamicAPIModuleEntity.Name, "VR Dynamic API Module");
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrDynamicAPIModuleEntity.Name, "Dynamic API Module");
                 else
-                    $scope.title = UtilsService.buildTitleForAddEditor("VR Dynamic API Module");
+                    $scope.title = UtilsService.buildTitleForAddEditor("Dynamic API Module");
             }
 
             function loadStaticData() {
@@ -96,7 +96,7 @@
             var vrDynamicAPIModuleObject = buildVRDynamicAPIModuleObjectFromScope();
             return VRCommon_VRDynamicAPIModuleAPIService.AddVRDynamicAPIModule(vrDynamicAPIModuleObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded(" VR Dynamic API Module", response, "Name")) {
+                if (VRNotificationService.notifyOnItemAdded("Dynamic API Module", response, "Name")) {
                     if ($scope.onVRDynamicAPIModuleAdded != undefined) {
                         $scope.onVRDynamicAPIModuleAdded(response.InsertedObject);
                     }
@@ -115,7 +115,7 @@
             $scope.scopeModel.isLoading = true;
             var vrDynamicAPIModuleObject = buildVRDynamicAPIModuleObjectFromScope();
             VRCommon_VRDynamicAPIModuleAPIService.UpdateVRDynamicAPIModule(vrDynamicAPIModuleObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("VR Dynamic API Module", response, "Name")) {
+                if (VRNotificationService.notifyOnItemUpdated("Dynamic API Module", response, "Name")) {
                     if ($scope.onVRDynamicAPIModuleUpdated != undefined) {
                         $scope.onVRDynamicAPIModuleUpdated(response.UpdatedObject);
                     }

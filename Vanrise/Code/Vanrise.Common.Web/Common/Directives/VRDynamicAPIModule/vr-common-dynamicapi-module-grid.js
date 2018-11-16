@@ -33,22 +33,22 @@ function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCo
                 gridApi = api;
 
                 var drillDownDefinitions = [];
-                //AddVRDynamicAPIModuleDrillDown();
+                AddVRDynamicAPIModuleDrillDown();
 
-                //function AddVRDynamicAPIModuleDrillDown() {
-                  //  var drillDownDefinition = {};
+                function AddVRDynamicAPIModuleDrillDown() {
+                   var drillDownDefinition = {};
 
-                 //   drillDownDefinition.title = "VR Dynamic API Module";
-                //    drillDownDefinition.directive = "vr-common-dynamicapi-module-grid";
-                //    drillDownDefinition.loadDirective = function (directiveAPI, vrDynamicAPIModuleItem) {
-                 //       vrDynamicAPIModuleItem.vrDynamicAPIModuleGridAPI = directiveAPI;
-                 //       var payload = {
-                 //           vrDynamicAPIModuleId: vrDynamicAPIModuleItem.VRDynamicAPIModuleId
-                   //     };
-                //        return vrDynamicAPIModuleItem.vrDynamicAPIModuleGridAPI.load(payload);
-               //     };
-                //    drillDownDefinitions.push(drillDownDefinition);
-              //  }
+                    drillDownDefinition.title = "Dynamic APIs";
+                    drillDownDefinition.directive = "vr-common-dynamicapi-grid";
+                    drillDownDefinition.loadDirective = function (directiveAPI, vrDynamicAPIModuleItem) {
+                        vrDynamicAPIModuleItem.vrDynamicAPIModuleGridAPI = directiveAPI;
+                        var payload = {
+                            VRDynamicAPIModuleId: vrDynamicAPIModuleItem.VRDynamicAPIModuleId
+                      };
+                        return vrDynamicAPIModuleItem.vrDynamicAPIModuleGridAPI.load(payload);
+                    };
+                  drillDownDefinitions.push(drillDownDefinition);
+                }
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridApi, $scope.scopeModel.gridMenuActions);
 
 
