@@ -1,4 +1,4 @@
-﻿"use strict"
+﻿"use strict";
 app.directive("vrCommonDynamicapiModuleGrid", ["UtilsService", "VRNotificationService", "VR_Dynamic_API_ModuleService","VRCommon_VRDynamicAPIModuleAPIService" ,"VRUIUtilsService", "VRCommon_ObjectTrackingService",
 function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCommon_VRDynamicAPIModuleAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
