@@ -75,11 +75,17 @@ app.directive('whsRoutesyncCarrieraccountmappingHuaweiGrid', ['VRNotificationSer
                             continue;
 
                         if (carrierAccountMapping.customerMappingGridAPI != undefined || carrierAccountMapping.supplierMappingGridAPI != undefined) {
-                            results[carrierAccountMapping.CarrierAccountId] = {
-                                CarrierId: carrierAccountMapping.CarrierAccountId,
-                                CustomerMapping: getCustomerMapping(carrierAccountMapping.customerMappingGridAPI, carrierAccountMapping.CarrierAccountId),
-                                SupplierMapping: getSupplierMapping(carrierAccountMapping.supplierMappingGridAPI, carrierAccountMapping.CarrierAccountId)
-                            };
+                            var customerMapping = getCustomerMapping(carrierAccountMapping.customerMappingGridAPI, carrierAccountMapping.CarrierAccountId);
+                            var supplierMapping = getSupplierMapping(carrierAccountMapping.supplierMappingGridAPI, carrierAccountMapping.CarrierAccountId);
+
+                            if (customerMapping != undefined || supplierMapping != undefined) {
+                                results[carrierAccountMapping.CarrierAccountId] = {
+                                    CarrierId: carrierAccountMapping.CarrierAccountId,
+                                    CustomerMapping: customerMapping,
+                                    SupplierMapping: supplierMapping
+                                };
+                            }
+
                         } else {
                             results[carrierAccountMapping.CarrierAccountId] = carrierMappings != undefined ? carrierMappings[carrierAccountMapping.CarrierAccountId] : undefined;
                         }

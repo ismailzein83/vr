@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Vanrise.Common;
 
 namespace TOne.WhS.RouteSync.Huawei.Entities
 {
-    public class RouteCase
+    public class RouteCaseToAdd
     {
-        public int RCNumber { get; set; }
         public string RSName { get; set; }
         public string RouteCaseAsString { get; set; }
+    }
+
+    public class RouteCase : RouteCaseToAdd
+    {
+        public int RCNumber { get; set; }
     }
 
     public class RouteAnalysis

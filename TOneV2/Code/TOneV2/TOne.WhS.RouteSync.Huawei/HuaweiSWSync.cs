@@ -74,7 +74,7 @@ namespace TOne.WhS.RouteSync.Huawei
             RouteCaseManager routeCaseManager = new RouteCaseManager(context.SwitchId);
 
             List<HuaweiConvertedRoute> convertedRoutes = new List<HuaweiConvertedRoute>();
-            List<RouteCase> routeCasesToAdd = new List<RouteCase>();
+            List<RouteCaseToAdd> routeCasesToAdd = new List<RouteCaseToAdd>();
 
             Dictionary<string, RouteCase> routeCasesByRSName = routeCaseManager.GetCachedRouteCasesByRSName();
 
@@ -93,7 +93,7 @@ namespace TOne.WhS.RouteSync.Huawei
 
                 RouteCase routeCase;
                 if (rsName.CompareTo(HuaweiCommands.ROUTE_BLOCK) != 0 && (routeCasesByRSName == null || !routeCasesByRSName.TryGetValue(rsName, out routeCase)))
-                    routeCasesToAdd.Add(new RouteCase() { RSName = rsName, RouteCaseAsString = Helper.SerializeRouteCase(routeAnalysis) });
+                    routeCasesToAdd.Add(new RouteCaseToAdd() { RSName = rsName, RouteCaseAsString = Helper.SerializeRouteCase(routeAnalysis) });
 
                 HuaweiConvertedRoute huaweiConvertedRoute = new HuaweiConvertedRoute()
                 {
@@ -361,7 +361,7 @@ namespace TOne.WhS.RouteSync.Huawei
                     continue;
 
                 var supplierMapping = carrierMapping.SupplierMapping;
-                if (supplierMapping == null)
+                if (supplierMapping == null || string.IsNullOrEmpty(supplierMapping.RouteName))
                     continue;
 
                 if (!isSequence && (!routeOption.Percentage.HasValue || routeOption.Percentage.Value == 0))
@@ -527,12 +527,12 @@ namespace TOne.WhS.RouteSync.Huawei
 
             if (addedRoute.RSName.CompareTo(HuaweiCommands.ROUTE_BLOCK) != 0)
             {
-                command = string.Format("ADD CNACLD: P={0}, PFX=K'{1}, CSA={2}, RSNAME=\"{3}\", MINL=10, MAXL=32, ICLDTYPE=PS, ISERVICECHECKNAME=\"INVALID\", NUMNAME=\"INVALID\", " +
+                command = string.Format("ADD CNACLD: P={0}, PFX=K'00{1}, CSA={2}, RSNAME=\"{3}\", MINL=10, MAXL=32, ICLDTYPE=PS, ISERVICECHECKNAME=\"INVALID\", NUMNAME=\"INVALID\", " +
                     "TARIFF=CI, CHGNAME=\"INVALID\", NCN=\"INVALID\", SDCSN=\"INVALID\";", addedRoute.DNSet, addedRoute.Code, HuaweiCommands.CSA_ITT, addedRoute.RSName);
             }
             else
             {
-                command = string.Format("ADD CNACLD: P={0}, PFX=K'{1}, CSA={2}, MINL=10, MAXL=32, ICLDTYPE=PS, SDESCRIPTION=\"T-One_Blocked\", ISERVICECHECKNAME=\"INVALID\", DNPREPARE=FALSE, " +
+                command = string.Format("ADD CNACLD: P={0}, PFX=K'00{1}, CSA={2}, MINL=10, MAXL=32, ICLDTYPE=PS, SDESCRIPTION=\"T-One_Blocked\", ISERVICECHECKNAME=\"INVALID\", DNPREPARE=FALSE, " +
                     "NUMNAME=\"INVALID\", TARIFF=CI, CHGNAME=\"INVALID\", NCN=\"INVALID\", SDCSN=\"INVALID\";", addedRoute.DNSet, addedRoute.Code, HuaweiCommands.CSA_TON);
             }
 
@@ -548,15 +548,15 @@ namespace TOne.WhS.RouteSync.Huawei
 
             if (newRoute.RSName.CompareTo(HuaweiCommands.ROUTE_BLOCK) != 0 && existingRoute.RSName.CompareTo(HuaweiCommands.ROUTE_BLOCK) != 0)
             {
-                command = string.Format("MOD CNACLD: P={0}, PFX=K'{1}, ADDR=ALL, RSNAME=\"{2}\";", newRoute.DNSet, newRoute.Code, newRoute.RSName);
+                command = string.Format("MOD CNACLD: P={0}, PFX=K'00{1}, ADDR=ALL, RSNAME=\"{2}\";", newRoute.DNSet, newRoute.Code, newRoute.RSName);
             }
             else if (newRoute.RSName.CompareTo(HuaweiCommands.ROUTE_BLOCK) == 0)
             {
-                command = string.Format("MOD CNACLD: P={0}, PFX=K'{1}, ADDR=ALL, CSA={2};", newRoute.DNSet, newRoute.Code, HuaweiCommands.CSA_TON);
+                command = string.Format("MOD CNACLD: P={0}, PFX=K'00{1}, ADDR=ALL, CSA={2};", newRoute.DNSet, newRoute.Code, HuaweiCommands.CSA_TON);
             }
             else if (existingRoute.RSName.CompareTo(HuaweiCommands.ROUTE_BLOCK) == 0)
             {
-                command = string.Format("MOD CNACLD: P={0}, PFX=K'{1}, ADDR=ALL, CSA=ITT, RSNAME=\"{2}\";", newRoute.DNSet, newRoute.Code, newRoute.RSName);
+                command = string.Format("MOD CNACLD: P={0}, PFX=K'00{1}, ADDR=ALL, CSA=ITT, RSNAME=\"{2}\";", newRoute.DNSet, newRoute.Code, newRoute.RSName);
             }
 
             if (command == null)
@@ -568,7 +568,7 @@ namespace TOne.WhS.RouteSync.Huawei
         private List<string> GetDeletedRouteCommands(HuaweiConvertedRouteCompareResult routeCompareResult)
         {
             HuaweiConvertedRoute deletedRoute = routeCompareResult.Route;
-            string command = string.Format("RMV CNACLD: P={0}, PFX=K'{1}, ADDR=ALL;", deletedRoute.DNSet, deletedRoute.Code);
+            string command = string.Format("RMV CNACLD: P={0}, PFX=K'00{1}, ADDR=ALL;", deletedRoute.DNSet, deletedRoute.Code);
             return new List<string>() { command };
         }
 

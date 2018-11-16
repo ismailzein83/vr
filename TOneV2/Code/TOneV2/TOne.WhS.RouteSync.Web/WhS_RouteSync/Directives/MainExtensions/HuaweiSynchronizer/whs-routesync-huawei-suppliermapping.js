@@ -124,13 +124,15 @@ app.directive('whsRoutesyncHuaweiSuppliermapping', ['VRNotificationService', 'VR
             }
 
             function getSupplierMappingEntity() {
+                var routeName = $scope.scopeModel.routeName;
+                var isup = $scope.scopeModel.isup;
 
-                if ($scope.scopeModel.isup == undefined && $scope.scopeModel.routeName == undefined)
+                if ((routeName == undefined || routeName == "") || (isup == undefined || isup == ""))
                     return null;
 
                 return {
-                    ISUP: $scope.scopeModel.isup,
-                    RouteName: $scope.scopeModel.routeName,
+                    RouteName: routeName,
+                    ISUP: isup,
                 };
             }
         }

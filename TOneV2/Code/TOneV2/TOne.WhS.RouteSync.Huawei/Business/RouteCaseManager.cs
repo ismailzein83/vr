@@ -54,7 +54,7 @@ namespace TOne.WhS.RouteSync.Huawei.Business
             _dataManager.Initialize(new RouteCaseInitializeContext());
         }
 
-        public Dictionary<string, RouteCase> InsertAndGetRouteCases(List<RouteCase> routeCasesToAdd)
+        public Dictionary<string, RouteCase> InsertAndGetRouteCases(List<RouteCaseToAdd> routeCasesToAdd)
         {
             int maxLockRetryCount = Int32.MaxValue;
             TimeSpan lockRetryInterval = new TimeSpan(0, 0, 1);
@@ -90,8 +90,9 @@ namespace TOne.WhS.RouteSync.Huawei.Business
                     {
                         if (routeCasesByRSName == null || !routeCasesByRSName.ContainsKey(routeCaseToAdd.RSName))
                         {
-                            routeCasesByRSName.Add(routeCaseToAdd.RSName, routeCaseToAdd);
-                            _dataManager.WriteRecordToStream(routeCaseToAdd, dbApplyStream);
+                            RouteCase routeCase = new RouteCase() { RCNumber = rcNumber, RSName = routeCaseToAdd.RSName, RouteCaseAsString = routeCaseToAdd.RouteCaseAsString };
+                            routeCasesByRSName.Add(routeCaseToAdd.RSName, routeCase);
+                            _dataManager.WriteRecordToStream(routeCase, dbApplyStream);
                             rcNumber++;
                         }
                     }
@@ -121,6 +122,8 @@ namespace TOne.WhS.RouteSync.Huawei.Business
             return _dataManager.GetAllRouteCases();
         }
 
+        #region Private Classes
+
         private class RouteCaseCacheManager : BaseCacheManager
         {
 
@@ -143,5 +146,7 @@ namespace TOne.WhS.RouteSync.Huawei.Business
         {
             public string SwitchId { get; set; }
         }
+
+        #endregion
     }
 }

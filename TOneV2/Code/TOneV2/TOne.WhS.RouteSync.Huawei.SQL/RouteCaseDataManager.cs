@@ -75,7 +75,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                 while (reader.Read())
                 {
                     RouteCase routeCase = RouteCaseMapper(reader);
-                    routeCases.Add(routeCase.RouteCaseAsString, routeCase);
+                    routeCases.Add(routeCase.RSName, routeCase);
                 }
             }, null);
 
