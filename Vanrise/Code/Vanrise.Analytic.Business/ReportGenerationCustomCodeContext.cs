@@ -5,36 +5,30 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common.Excel;
-
+using Vanrise.Common;
 namespace Vanrise.Analytic.Business
 {
     public interface IReportGenerationCustomCodeContext
     {
         VRExcelFile CreateExcelFile();
-     //   VRAutomatedReportResolvedDataList GetDataList();
+        VRAutomatedReportResolvedDataList GetDataList(string queryTitle, string listName);
 
     }
     public class ReportGenerationCustomCodeContext : IReportGenerationCustomCodeContext
     {
-        VRAutomatedReportResolvedDataList _dataListResolver;
-        public ReportGenerationCustomCodeContext()
+        Func<string, string, VRAutomatedReportResolvedDataList> _dataListFunc;
+        public ReportGenerationCustomCodeContext(Func<string , string , VRAutomatedReportResolvedDataList> dataListFunc)
         {
-
-        }
-        public ReportGenerationCustomCodeContext(VRAutomatedReportResolvedDataList dataListResolver)
-        {
-            _dataListResolver = dataListResolver;
+            _dataListFunc = dataListFunc;
         }
         public VRExcelFile CreateExcelFile()
         {
             return new VRExcelFile();
         }
-
-        //public VRAutomatedReportResolvedDataList GetDataList()
-        //{
-        //    return _dataListResolver;
-        //}
-
-
+        public VRAutomatedReportResolvedDataList GetDataList(string queryTitle, string listName)
+        {
+            _dataListFunc.ThrowIfNull("_dataListFunc");
+            return _dataListFunc(queryTitle, listName);
+        }
     }
 }

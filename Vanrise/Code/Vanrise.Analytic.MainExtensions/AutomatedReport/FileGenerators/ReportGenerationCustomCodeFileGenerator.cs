@@ -26,7 +26,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
                 if (type != null)
                 {
                     var reportGenerator = Activator.CreateInstance(type) as IReportGenerationCustomCode;
-                    var reportGenerationContext = new ReportGenerationCustomCodeContext();
+                    var reportGenerationContext = new ReportGenerationCustomCodeContext(context.HandlerContext.GetDataList);
                     var output = reportGenerator.Generate(reportGenerationContext);
                     return new VRAutomatedReportGeneratedFile()
                     {

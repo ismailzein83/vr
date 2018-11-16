@@ -36,6 +36,7 @@ namespace Vanrise.Analytic.Entities
         Guid? TaskId { get; set; }
         IAutomatedReportEvaluatorContext EvaluatorContext { get; set; }
         VRAutomatedReportResolvedDataList GetDataList(Guid vrAutomatedReportQueryId, string listName);
+        VRAutomatedReportResolvedDataList GetDataList(string queryName, string listName);
 
         VRAutomatedReportResolvedDataFieldValue GetDataField(Guid vrAutomatedReportQueryId, string fieldName);
     }
