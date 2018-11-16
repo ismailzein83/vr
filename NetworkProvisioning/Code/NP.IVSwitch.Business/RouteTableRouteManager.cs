@@ -89,6 +89,8 @@ namespace NP.IVSwitch.Business
                                     {
                                         int bktSerial = codeMainPreference - codePreference;
                                         var evaluatedPercentage = Convert.ToInt32(Math.Round(optionAdd.Percentage.Value / 10));
+                                        if (evaluatedPercentage < 1)
+                                            evaluatedPercentage = 1;
                                         routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
                                         {
                                             RouteId = optionAdd.RouteId,
@@ -211,6 +213,8 @@ namespace NP.IVSwitch.Business
                         {
                             int bktSerial = routeTableItem.RouteOptionsToEdit.Count - optionEdit.Preference + 1;
                             var evaluatedPercentage = Convert.ToInt32(Math.Round(optionEdit.Percentage.Value / 10));
+                            if (evaluatedPercentage < 1)
+                                evaluatedPercentage = 1;
                             routeTableRoute.RouteOptions.Add(new RouteTableRouteOption
                             {
                                 RouteId = optionEdit.RouteId,
