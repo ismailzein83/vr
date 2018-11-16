@@ -139,8 +139,11 @@
     <Compile Include="VRInterAppCommunication\VRInterAppCommunication.cs" />
     <Compile Include="VRInterAppCommunication\VRInterAppCommunicationProxy.cs" />
     <Compile Include="VRWebAPIClient.cs" />
-    <Compile Include="VRWebContext.cs" />
-    <Compile Include="VRWebUtilities.cs" />
+    <Compile Include="Web\VRScriptWebBundle.cs" />
+    <Compile Include="Web\VRStyleWebBundle.cs" />
+    <Compile Include="Web\VRWebBundle.cs" />
+    <Compile Include="Web\VRWebContext.cs" />
+    <Compile Include="Web\VRWebUtilities.cs" />
     <Compile Include="VRXmlSerializer.cs" />
     <Compile Include="VRXmlSerializerExtensions.cs" />
     <Compile Include="ZipUtility.cs" />
