@@ -98,8 +98,8 @@ namespace Retail.Runtime.Tasks
             Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(dsRuntimeService);
 
-            //BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(bpRegulatorRuntimeService);
+            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpRegulatorRuntimeService);
 
             CachingRuntimeService cachingRuntimeService = new CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(cachingRuntimeService);
