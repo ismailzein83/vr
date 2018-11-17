@@ -672,7 +672,7 @@
         <Top>3.98792in</Top>
         <Left>0.13935in</Left>
         <Height>0.5in</Height>
-        <Width>7.93501in</Width>
+        <Width>7.935in</Width>
         <ZIndex>4</ZIndex>
         <Style>
           <Border>
@@ -1521,14 +1521,14 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox117">
+                    <Textbox Name="Textbox30">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value EvaluationMode="Constant">VAT ID</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1539,7 +1539,8 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox117</rd:DefaultName>
+                      <rd:DefaultName>Textbox1</rd:DefaultName>
+                      <ZIndex>16</ZIndex>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -1550,31 +1551,31 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox118">
+                    <Textbox Name="Textbox43">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Parameters!VatID.Value</Value>
                               <Style>
+                                <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Left</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox118</rd:DefaultName>
+                      <rd:DefaultName>Textbox5</rd:DefaultName>
+                      <ZIndex>19</ZIndex>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -1823,7 +1824,7 @@
         <Top>2.43848in</Top>
         <Left>0.13935in</Left>
         <Height>0.91825in</Height>
-        <Width>7.93501in</Width>
+        <Width>7.935in</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
