@@ -438,7 +438,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             int valueSecond;
             int valueMillisecond;
             ParseTimeValue(fieldValue, out valueHour, out valueMinute, out valueSecond, out valueMillisecond);
-            return valueHour.ToString();
+            return valueHour.ToString().PadLeft(2, '0');
         }
 
         string GetTimeDescription(object fieldValue)
