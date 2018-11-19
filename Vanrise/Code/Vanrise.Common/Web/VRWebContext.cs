@@ -171,8 +171,9 @@ namespace Vanrise.Common
             VRWebContext.AddWebBundle(new VRStyleWebBundle("~/Content/FontStyle").IncludeDirectory(
                "~/Client/FontStyle", "*.css", true));
             //Style
-            VRWebContext.AddWebBundle(new VRStyleWebBundle("~/Content/Styles").IncludeDirectory(
-               "~/Client/Styles", "*.css", true));
+            VRWebContext.AddWebBundle(new VRStyleWebBundle("~/Content/Styles").Include(
+                "~/Client/Styles/jquery-ui.css")
+                .IncludeDirectory("~/Client/Styles", "*.css", true));
 
             VRWebContext.AddWebBundle(new VRStyleWebBundle("~/Content/Themes").Include(
           "~/Client/Themes/theme.css").IncludeDirectory(
