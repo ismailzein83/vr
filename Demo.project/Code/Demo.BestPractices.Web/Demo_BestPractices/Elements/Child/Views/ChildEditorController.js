@@ -28,12 +28,12 @@
                 parentIdItem = parameters.parentIdItem;
             }
 
-            isEditMode = childId != undefined;
+            isEditMode = (childId != undefined);
         };
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.disableParent = parentIdItem != undefined;
+            $scope.scopeModel.disableParent = (parentIdItem != undefined);
 
             $scope.scopeModel.onParentDirectiveReady = function (api) {
                 parentDirectiveAPI = api;
