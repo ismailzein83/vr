@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TOne.WhS.RouteSync.Huawei.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.RouteSync.Huawei
 {
     public static class Helper
     {
-        public const string RouteCaseFieldsSeparatorAsString = "_";
-        public const string RouteCaseOptionsSeparatorAsString = "|";
-        public const string RouteCaseOptionsFieldsSeparatorAsString = "~";
+        public const string RouteCaseFieldsSeparatorAsString = "^$^$^";
+        public const string RouteCaseOptionsSeparatorAsString = "|@|@|";
+        public const string RouteCaseOptionsFieldsSeparatorAsString = "~%~%~";
 
         public static string GetRSName(RouteAnalysis routeAnalysis, int routeNameLength)
         {
@@ -69,14 +70,15 @@ namespace TOne.WhS.RouteSync.Huawei
             return sb_RouteCaseOptions.ToString();
         }
 
-        public static RouteAnalysis DeserializeRouteCase(string routeCaseAsString)
+        public static RouteAnalysis DeserializeRouteCase(string routeCaseAsString, int rcNumber)
         {
-            if (string.IsNullOrEmpty(routeCaseAsString))
-                return null;
+            routeCaseAsString.ThrowIfNull("routeCaseAsString");
 
             string[] routeCaseFields = routeCaseAsString.Split(new string[] { RouteCaseFieldsSeparatorAsString }, StringSplitOptions.None);
-            if (routeCaseFields == null || routeCaseFields.Count() != 3)
-                return null;
+            routeCaseFields.ThrowIfNull("routeCaseFields");
+
+            if (routeCaseFields.Count() != 3)
+                throw new Exception($"Invalid character in Route Case fields for RC#: '{rcNumber}'");
 
             RouteAnalysis routeAnalysis = new RouteAnalysis();
             routeAnalysis.RSSN = int.Parse(routeCaseFields[0]);

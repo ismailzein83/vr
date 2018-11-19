@@ -408,12 +408,12 @@ namespace TOne.WhS.RouteSync.Huawei
 
             List<RouteCaseWithCommands> routeCasesWithCommands = new List<RouteCaseWithCommands>();
 
-            foreach (var routeCaseToAdd in routeCases)
+            foreach (var routeCase in routeCases)
             {
                 RouteCaseWithCommands routeCaseWithCommands = new RouteCaseWithCommands()
                 {
-                    RouteCase = routeCaseToAdd,
-                    Commands = GetRouteCaseCommands(routeCaseToAdd)
+                    RouteCase = routeCase,
+                    Commands = GetRouteCaseCommands(routeCase)
                 };
                 routeCasesWithCommands.Add(routeCaseWithCommands);
             }
@@ -423,12 +423,10 @@ namespace TOne.WhS.RouteSync.Huawei
 
         private List<string> GetRouteCaseCommands(RouteCase routeCase)
         {
-            if (routeCase == null)
-                return null;
+            routeCase.ThrowIfNull("routeCase", routeCase.RCNumber);
 
-            RouteAnalysis routeAnalysis = Helper.DeserializeRouteCase(routeCase.RouteCaseAsString);
-            if (routeAnalysis == null)
-                return null;
+            RouteAnalysis routeAnalysis = Helper.DeserializeRouteCase(routeCase.RouteCaseAsString, routeCase.RCNumber);
+            routeAnalysis.ThrowIfNull("routeAnalysis", routeCase.RCNumber);
 
             string rtsm;
             switch (routeAnalysis.RouteCaseOptionsType)
