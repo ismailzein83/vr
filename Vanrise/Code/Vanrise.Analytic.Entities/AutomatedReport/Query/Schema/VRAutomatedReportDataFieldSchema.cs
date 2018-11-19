@@ -9,6 +9,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class VRAutomatedReportDataFieldSchema
     {
+        public bool IsGroupingField { get; set; }
         public DataRecordField Field { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace Vanrise.Analytic.Entities
         public VRReportGenerationFilter FilterDefinition { get; set; }
         public VRReportGenerationRuntimeFilter FilterRuntime { get; set; }
 
-       // Dictionary<string, Guid> _subTableIdsByFieldsTitle;
+        Dictionary<string, Guid> _subTableIdsByFieldsTitle;
         public VRAutomatedReportHandlerExecuteContext(List<VRAutomatedReportQuery> queries, Guid? taskId, IAutomatedReportEvaluatorContext evaluatorContext, VRReportGenerationFilter filterDefinition, VRReportGenerationRuntimeFilter filterRuntime)
         {
             Queries = queries;
@@ -298,41 +298,55 @@ namespace Vanrise.Analytic.Entities
         {
             return null;
         }
+        public Guid? GetSubTableIdByGroupingFields(List<string> groupingFields, string listName)
+        {
+            if (groupingFields != null && groupingFields.Count > 0)
+            {
+                var groupingFieldsName = string.Join(",", groupingFields.OrderBy(x => x));
 
-        //public Guid? GetSubTableId(List<string> fieldNames,string listName)
-        //{
-        //    if(fieldNames != null && fieldNames.Count > 0)
-        //    {
-        //        var fieldsTitle = string.Join(",", fieldNames.OrderBy(x => x));
-
-        //        if (_subTableIdsByFieldsTitle != null && _subTableIdsByFieldsTitle.ContainsKey(fieldsTitle))
-        //        {
-        //            return _subTableIdsByFieldsTitle.GetRecord(fieldsTitle);
-        //        }
-        //        if (Queries != null && Queries.Count > 0)
-        //        {
-        //            foreach (var query in Queries)
-        //            {
-        //                query.Settings.ThrowIfNull("query.Settings", query.QueryTitle);
-        //                var querySchema = query.Settings.GetSchema(new VRAutomatedReportQueryGetSchemaContext { QueryDefinitionId = query.DefinitionId });
-        //                var listSchema = querySchema.ListSchemas.GetRecord(listName);
-        //                foreach (var subTableQuery in listSchema.SubTablesSchemas)
-        //                {
-        //                    if (subTableQuery.Value.SubTableTitle == fieldsTitle)
-        //                    {
-        //                        if (_subTableIdsByFieldsTitle == null)
-        //                        {
-        //                            _subTableIdsByFieldsTitle = new Dictionary<string, Guid>();
-        //                        }
-        //                        _subTableIdsByFieldsTitle.Add(subTableQuery.Value.SubTableTitle, subTableQuery.Key);
-        //                        return subTableQuery.Key;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return null;
-        //}
+                if (_subTableIdsByFieldsTitle != null && _subTableIdsByFieldsTitle.ContainsKey(groupingFieldsName))
+                {
+                    return _subTableIdsByFieldsTitle.GetRecord(groupingFieldsName);
+                }
+                if (Queries != null && Queries.Count > 0)
+                {
+                    foreach (var query in Queries)
+                    {
+                        query.Settings.ThrowIfNull("query.Settings", query.QueryTitle);
+                        var querySchema = query.Settings.GetSchema(new VRAutomatedReportQueryGetSchemaContext { QueryDefinitionId = query.DefinitionId });
+                        var listSchema = querySchema.ListSchemas.GetRecord(listName);
+                        foreach (var subTableQuery in listSchema.SubTablesSchemas)
+                        {
+                            if(subTableQuery.Value.FieldSchemas != null)
+                            {
+                                var subTableGroupingFields = new List<string>();
+                                foreach (var fieldSchema in subTableQuery.Value.FieldSchemas)
+                                {
+                                    if (fieldSchema.Value.IsGroupingField)
+                                    {
+                                        subTableGroupingFields.Add(fieldSchema.Key);
+                                    }
+                                }
+                                if(subTableGroupingFields.Count > 0)
+                                {
+                                    var subTableFieldsName = string.Join(",", subTableGroupingFields.OrderBy(x => x));
+                                    if (subTableFieldsName == groupingFieldsName)
+                                    {
+                                        if (_subTableIdsByFieldsTitle == null)
+                                        {
+                                            _subTableIdsByFieldsTitle = new Dictionary<string, Guid>();
+                                        }
+                                        _subTableIdsByFieldsTitle.Add(subTableQuery.Value.SubTableTitle, subTableQuery.Key);
+                                        return subTableQuery.Key;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
 
     }
 }

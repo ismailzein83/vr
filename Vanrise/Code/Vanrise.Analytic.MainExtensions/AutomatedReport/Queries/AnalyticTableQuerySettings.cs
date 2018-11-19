@@ -196,7 +196,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
                             Name = dimensionName,
                             Title = dimension.Title,
                             Type = dimension.Config != null ? dimension.Config.FieldType : null
-                        }
+                        },
+                        IsGroupingField = true
                     };
                     listSchemaItem.FieldSchemas.Add(dimensionName, dataFieldSchema);
                 }
@@ -229,6 +230,24 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
                         SubTableTitle = subtable.Title,
                         FieldSchemas = new Dictionary<string, VRAutomatedReportDataFieldSchema>()
                     };
+                    foreach (var dimensionName in subtable.Dimensions)
+                    {
+                        var dimension = dimensions.GetRecord(dimensionName);
+                        if (dimension != null)
+                        {
+                            var dataFieldSchema = new VRAutomatedReportDataFieldSchema()
+                            {
+                                Field = new DataRecordField()
+                                {
+                                    Name = dimensionName,
+                                    Title = dimension.Title,
+                                    Type = dimension.Config != null ? dimension.Config.FieldType : null
+                                },
+                                IsGroupingField = true
+                            };
+                            subTableSchema.FieldSchemas.Add(dimensionName, dataFieldSchema);
+                        }
+                    }
                     foreach (var measureName in subtable.Measures)
                     {
                         var measure = measures.GetRecord(measureName);

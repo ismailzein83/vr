@@ -12,23 +12,34 @@ namespace Vanrise.Analytic.Business
     {
         VRExcelFile CreateExcelFile();
         VRAutomatedReportResolvedDataList GetDataList(string queryTitle, string listName);
+        Guid? GetSubTableIdByGroupingFields(List<string> groupingFields, string listName);
 
     }
     public class ReportGenerationCustomCodeContext : IReportGenerationCustomCodeContext
     {
         Func<string, string, VRAutomatedReportResolvedDataList> _dataListFunc;
-        public ReportGenerationCustomCodeContext(Func<string , string , VRAutomatedReportResolvedDataList> dataListFunc)
+        Func<List<string>, string, Guid?> _getSubTableIdByGroupingFieldsFunc;
+        VRExcelFile excelFile;
+
+        public ReportGenerationCustomCodeContext(Func<string , string , VRAutomatedReportResolvedDataList> dataListFunc, Func<List<string>, string, Guid?> getSubTableIdByGroupingFieldsFunc)
         {
             _dataListFunc = dataListFunc;
+            _getSubTableIdByGroupingFieldsFunc = getSubTableIdByGroupingFieldsFunc;
         }
         public VRExcelFile CreateExcelFile()
         {
-            return new VRExcelFile();
+            excelFile = new VRExcelFile();
+            return excelFile;
         }
         public VRAutomatedReportResolvedDataList GetDataList(string queryTitle, string listName)
         {
             _dataListFunc.ThrowIfNull("_dataListFunc");
             return _dataListFunc(queryTitle, listName);
+        }
+
+        public Guid? GetSubTableIdByGroupingFields(List<string> groupingFields, string listName)
+        {
+            return _getSubTableIdByGroupingFieldsFunc(groupingFields, listName);
         }
     }
 }
