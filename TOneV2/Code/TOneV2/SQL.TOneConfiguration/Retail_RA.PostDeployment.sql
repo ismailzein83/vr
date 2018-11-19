@@ -137,21 +137,22 @@ when not matched by target then
 --[genericdata].[DataRecordFieldChoice]--------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-;with cte_data([ID],[Name],[Settings],[CreateTime])
+;with cte_data([ID],[Name],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('37E97CDA-AEA0-49BE-808B-A370CB4F7769','RA_TrafficDirection','{"$type":"Vanrise.GenericData.Entities.DataRecordFieldChoiceSettings, Vanrise.GenericData.Entities","Choices":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":1,"Text":"IN"},{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":2,"Text":"OUT"}]}}','2018-03-19 09:29:53.127')
+('37E97CDA-AEA0-49BE-808B-A370CB4F7769','RA_TrafficDirection','{"$type":"Vanrise.GenericData.Entities.DataRecordFieldChoiceSettings, Vanrise.GenericData.Entities","Choices":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":1,"Text":"IN"},{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":2,"Text":"OUT"}]}}'),
+('147593D2-3EE0-4727-9CDD-4BAA8B924CC0','RA_Tax_Voice','{"$type":"Vanrise.GenericData.Entities.DataRecordFieldChoiceSettings, Vanrise.GenericData.Entities","Choices":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":1,"Text":"Overall Revenue"},{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":2,"Text":"Per Minute"}]}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Settings],[CreateTime]))
+)c([ID],[Name],[Settings]))
 merge	[genericdata].[DataRecordFieldChoice] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Settings] = s.[Settings],[CreateTime] = s.[CreateTime]
+	[Name] = s.[Name],[Settings] = s.[Settings]
 when not matched by target then
-	insert([ID],[Name],[Settings],[CreateTime])
-	values(s.[ID],s.[Name],s.[Settings],s.[CreateTime]);
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
 
 
 
