@@ -130,8 +130,9 @@
 
             $scope.scopeModel.validateIssueDate = function () {
                 var result = VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.issueDate);
-                if (result == null)
-                    return VRValidationService.validateTimeRange($scope.scopeModel.toDate, $scope.scopeModel.issueDate);
+                if (result != null)
+                    return result;
+                return VRValidationService.validateTimeRange($scope.scopeModel.toDate, $scope.scopeModel.issueDate);
             };
 
         }
