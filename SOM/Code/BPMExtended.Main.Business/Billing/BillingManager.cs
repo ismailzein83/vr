@@ -150,6 +150,14 @@ namespace BPMExtended.Main.Business
             return payment;
         }
 
+
+        public bool CheckIfUserPayForWaitingList(string customerId)
+        {
+            //TODO: check if user pay
+            return true;
+
+        }
+
         public PaymentInfo GetDepositAmount(Guid contactId, BPMExtended.Main.Entities.OperationType operationType, List<ServiceParameter> services)
         {
             PaymentInfo payment = new PaymentInfo();
