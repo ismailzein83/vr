@@ -46,7 +46,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             api.load = function (payload) {
                 var promises = [];
                 if (payload != undefined) {
-                    console.log(payload)
                     if (payload.ValueParser != undefined) {
                         $scope.scopeModel.fieldName = payload.ValueParser.FieldName;
                         $scope.scopeModel.aIsZero = payload.ValueParser.AIsZero;

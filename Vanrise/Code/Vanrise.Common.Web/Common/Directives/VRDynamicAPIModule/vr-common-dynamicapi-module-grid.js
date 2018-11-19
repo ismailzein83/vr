@@ -36,7 +36,7 @@ function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCo
                 AddVRDynamicAPIModuleDrillDown();
 
                 function AddVRDynamicAPIModuleDrillDown() {
-                   var drillDownDefinition = {};
+                    var drillDownDefinition = {};
 
                     drillDownDefinition.title = "Dynamic APIs";
                     drillDownDefinition.directive = "vr-common-dynamicapi-grid";
@@ -44,10 +44,10 @@ function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCo
                         vrDynamicAPIModuleItem.vrDynamicAPIModuleGridAPI = directiveAPI;
                         var payload = {
                             VRDynamicAPIModuleId: vrDynamicAPIModuleItem.VRDynamicAPIModuleId
-                      };
+                        };
                         return vrDynamicAPIModuleItem.vrDynamicAPIModuleGridAPI.load(payload);
                     };
-                  drillDownDefinitions.push(drillDownDefinition);
+                    drillDownDefinitions.push(drillDownDefinition);
                 }
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridApi, $scope.scopeModel.gridMenuActions);
 
@@ -72,7 +72,7 @@ function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCo
                     };
                     return directiveApi;
                 };
-            }
+            };
 
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) { // takes retrieveData object
 

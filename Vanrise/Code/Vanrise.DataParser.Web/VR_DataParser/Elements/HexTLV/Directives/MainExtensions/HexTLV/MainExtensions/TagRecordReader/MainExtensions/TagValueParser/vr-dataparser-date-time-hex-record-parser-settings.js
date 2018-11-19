@@ -93,7 +93,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_DataParser_D
             };
 
             api.getData = function () {
-                console.log($scope.scopeModel.selectedValue.value)
                 return {
                     $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.DateTimeParser,Vanrise.DataParser.MainExtensions",
                     FieldName: $scope.scopeModel.fieldName,
