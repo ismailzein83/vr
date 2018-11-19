@@ -264,7 +264,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Classes
 
-        internal class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IPackageDataManager _dataManager = BEDataManagerFactory.GetDataManager<IPackageDataManager>();
             object _updateHandle;

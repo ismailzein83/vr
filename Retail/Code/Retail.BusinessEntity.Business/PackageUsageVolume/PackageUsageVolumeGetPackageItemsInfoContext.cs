@@ -1,55 +1,31 @@
-﻿using Retail.BusinessEntity.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Retail.BusinessEntity.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
     public class PackageUsageVolumeGetPackageItemsInfoContext : IPackageUsageVolumeGetPackageItemsInfoContext
     {
-        public PackageUsageVolumeGetPackageItemsInfoContext(AccountPackage accountPackage, List<Guid> itemIds, DateTime eventTime)
+        public PackageUsageVolumeGetPackageItemsInfoContext(AccountPackage accountPackage, List<Guid> itemIds, DateTime eventTime, Guid volumePackageDefinitionId)
         {
             this.AccountPackage = accountPackage;
             this.ItemIds = itemIds;
             this.EventTime = eventTime;
+            this.VolumePackageDefinitionId = volumePackageDefinitionId;
         }
 
-        public AccountPackage AccountPackage
-        {
-            get;
-            private set;
-        }
+        public AccountPackage AccountPackage { get; private set; }
 
-        public List<Guid> ItemIds
-        {
-            get;
-            private set;
-        }
+        public List<Guid> ItemIds { get; private set; }
 
-        public DateTime EventTime
-        {
-            get;
-            private set;
-        }
+        public DateTime EventTime { get; private set; }
 
-        public DateTime FromTime
-        {
-            get;
-            set;
-        }
+        public Guid VolumePackageDefinitionId { get; private set; }
 
-        public DateTime ToTime
-        {
-            get;
-            set;
-        }
+        public DateTime FromTime { get; set; }
 
-        public List<PackageUsageVolumeItem> Items
-        {
-            get;
-            set;
-        }
+        public DateTime ToTime { get; set; }
+
+        public List<PackageUsageVolumeItem> Items { get; set; }
     }
 }

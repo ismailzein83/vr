@@ -95,18 +95,18 @@ namespace Retail.Voice.Business
                 foreach (var entry in chargersChargingInfos)
                 {
                     entry.Key.DeductFromBalances(new VoiceUsageChargerDeductFromBalanceContext
-                        {
-                            AccountId = accountId,
-                            ServiceTypeId = serviceTypeId,
-                            ChargeInfo = entry.Value
-                        });
+                    {
+                        AccountId = accountId,
+                        ServiceTypeId = serviceTypeId,
+                        ChargeInfo = entry.Value
+                    });
                 }
             }
 
             return voiceEventPrice;
         }
 
-        public CDRPricingInfo PriceCDR(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, Guid recordTypeId, dynamic cdr, decimal durationInSec, DateTime cdrTime)
+        public CDRPricingInfo PriceCDR(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, Guid recordTypeId, Dictionary<string, dynamic> recordsByName, dynamic billingCDR, decimal durationInSec, DateTime cdrTime, string cdrObjectName)
         {
             CDRPricingInfo pricingInfo = new CDRPricingInfo();
             Dictionary<int, List<Guid>> volumePackageItemIdsByPackageId = null;
@@ -119,13 +119,14 @@ namespace Retail.Voice.Business
                     if (packageVolumeCharging != null)
                     {
                         var volumeChargingIsApplicableToEventContext = new PackageVolumeChargingIsApplicableToEventContext(accountBEDefinitionId, accountId, processedAccountPackage.AccountPackage,
-                            processedAccountPackage.Package, serviceTypeId, recordTypeId, cdr, cdrTime);
+                            processedAccountPackage.Package, serviceTypeId, cdrTime, package.Settings.PackageDefinitionId, recordsByName);
+
                         if (packageVolumeCharging.IsApplicableToEvent(volumeChargingIsApplicableToEventContext))
                         {
                             if (volumePackageItemIdsByPackageId == null)
                                 volumePackageItemIdsByPackageId = new Dictionary<int, List<Guid>>();
                             List<Guid> volumePackageItemIds = volumePackageItemIdsByPackageId.GetOrCreateItem(package.PackageId);
-                            foreach(var itemId in volumeChargingIsApplicableToEventContext.ApplicableItemIds)
+                            foreach (var itemId in volumeChargingIsApplicableToEventContext.ApplicableItemIds)
                             {
                                 if (!volumePackageItemIds.Contains(itemId))
                                     volumePackageItemIds.Add(itemId);
@@ -139,7 +140,7 @@ namespace Retail.Voice.Business
                         var context = new PackageServiceUsageChargingPolicyContext { ServiceTypeId = serviceTypeId };
                         if (packageServiceUsageChargingPolicy.TryGetServiceUsageChargingPolicyId(context))
                         {
-                            VoiceEventPricingInfo pricingInfoFromChargingPolicy = ApplyChargingPolicyToVoiceEvent(context.ChargingPolicyId, serviceTypeId, cdr, durationInSec, cdrTime, accountBEDefinitionId, processedAccountPackage.AccountPackage.AccountId);
+                            VoiceEventPricingInfo pricingInfoFromChargingPolicy = ApplyChargingPolicyToVoiceEvent(context.ChargingPolicyId, serviceTypeId, billingCDR, durationInSec, cdrTime, accountBEDefinitionId, processedAccountPackage.AccountPackage.AccountId);
                             if (pricingInfoFromChargingPolicy != null && pricingInfoFromChargingPolicy.SaleAmount.HasValue)
                             {
                                 pricingInfo.PackageId = package.PackageId;
@@ -309,16 +310,16 @@ namespace Retail.Voice.Business
                     {
                         var package = processedAccountPackage.Package;
                         List<Guid> packageItemsIds;
-                        if(packageUsageVolumeCombination.PackageItemsByPackageId.TryGetValue(package.PackageId, out packageItemsIds))
+                        if (packageUsageVolumeCombination.PackageItemsByPackageId.TryGetValue(package.PackageId, out packageItemsIds))
                         {
                             var packageVolumeCharging = package.Settings.ExtendedSettings as IPackageUsageVolume;
                             if (packageVolumeCharging != null)
                             {
-                                var getPackageItemsInfoContext = new PackageUsageVolumeGetPackageItemsInfoContext(processedAccountPackage.AccountPackage, packageItemsIds, cdrTime);
+                                var getPackageItemsInfoContext = new PackageUsageVolumeGetPackageItemsInfoContext(processedAccountPackage.AccountPackage, packageItemsIds, cdrTime, package.Settings.PackageDefinitionId);
                                 packageVolumeCharging.GetPackageItemsInfo(getPackageItemsInfoContext);
-                                if(getPackageItemsInfoContext.Items != null && getPackageItemsInfoContext.Items.Count > 0)
+                                if (getPackageItemsInfoContext.Items != null && getPackageItemsInfoContext.Items.Count > 0)
                                 {
-                                    foreach(var itm in getPackageItemsInfoContext.Items)
+                                    foreach (var itm in getPackageItemsInfoContext.Items)
                                     {
                                         var balanceKey = new PackageUsageVolumeBalanceKey
                                         {

@@ -27,11 +27,9 @@ namespace Retail.BusinessEntity.Entities
 
         Guid ServiceTypeId { get; }
 
-        Guid RecordTypeId { get; }
+        Guid VolumePackageDefinitionId { get; }
 
-        dynamic Event { get; }
-
-        Vanrise.GenericData.Business.DataRecordObject EventDataRecordObject { get; }
+        Dictionary<string, dynamic> RecordsByName { get; }
 
         DateTime EventTime { get; }
 
@@ -45,6 +43,8 @@ namespace Retail.BusinessEntity.Entities
         List<Guid> ItemIds { get; }
 
         DateTime EventTime { get; }
+
+        Guid VolumePackageDefinitionId { get; }
 
         DateTime FromTime { set; }
 

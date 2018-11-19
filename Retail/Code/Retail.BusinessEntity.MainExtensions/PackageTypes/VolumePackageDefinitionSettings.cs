@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 {
@@ -21,7 +22,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
     {
         public Guid VolumePackageDefinitionItemId { get; set; }
 
-        public Guid RecordTypeId { get; set; }
+        public CompositeGroupConditionDefinition CompositeGroupConditionDefinition { get; set; }
 
         public List<Guid> ServiceTypeIds { get; set; }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.PackageTypes
@@ -14,7 +15,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
     {
         public List<VolumePackageItem> Items { get; set; }
 
-        public Decimal Price { get; set; }
+        public decimal Price { get; set; }
 
         public int CurrencyId { get; set; }
 
@@ -22,20 +23,14 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 
         public bool ReducePriceForIncompletePeriods { get; set; }
 
-        Dictionary<Guid, PackageItemsToEvaluateByRecordTypeId> _itemsByServiceId;
-        PackageItemsToEvaluateByRecordTypeId _itemsForAllServices;
-        Dictionary<Guid, PackageItemToEvaluate> _itemsByItemId;
-
-        static Vanrise.GenericData.Business.RecordFilterManager s_recordFilterManager = new Vanrise.GenericData.Business.RecordFilterManager();
 
         #region Public Methods
-
         public override void ValidatePackageAssignment(IPackageSettingAssignementValidateContext context)
         {
             context.IsValid = true;
-            if(this.RecurringPeriod == null)
+            if (this.RecurringPeriod == null)
             {
-                if(!context.EED.HasValue)
+                if (!context.EED.HasValue)
                 {
                     context.ErrorMessage = "Package end date must be specified.";
                     context.IsValid = false;
@@ -45,49 +40,80 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 
         public bool IsApplicableToEvent(IPackageUsageVolumeIsApplicableToEventContext context)
         {
-            var packageItemsToEvaluate = GetPackageItemsToEvaluate(context.ServiceTypeId, context.RecordTypeId);
-            if(packageItemsToEvaluate != null)
+            VolumePackageDefinitionSettings volumePackageDefinitionSettings = new VolumePackageDefinitionSettings();// get definition based on VolumePackageDefinitionId value in context
+
+            PackageItemToEvaluateData packageItemToEvaluateData = GetPackageItemToEvaluateData(context.VolumePackageDefinitionId, volumePackageDefinitionSettings);
+            if (packageItemToEvaluateData == null)
+                return false;
+
+            List<PackageItemToEvaluate> items;
+            if (packageItemToEvaluateData.ItemsByServiceId != null)
+                items = packageItemToEvaluateData.ItemsByServiceId.GetRecord(context.ServiceTypeId);
+            else
+                items = packageItemToEvaluateData.ItemsForAllServices;
+
+            if (items == null || items.Count == 0)
+                return false;
+
+            List<Guid> applicableItemIds = null;
+            foreach (var packageItem in items)
             {
-                List<Guid> applicableItemIds = null;
-                foreach (var packageItem in packageItemsToEvaluate)
+                CompositeRecordConditionEvaluateContext compositeConditionContext = null;
+                if (packageItem.CompositeGroupConditionDefinition != null && packageItem.CompositeGroupConditionDefinition.CompositeRecordConditionDefinitions != null)
                 {
-                    if (packageItem.Item.Condition == null
-                        || s_recordFilterManager.IsFilterGroupMatch(packageItem.Item.Condition, new Vanrise.GenericData.Business.DataRecordFilterGenericFieldMatchContext(context.EventDataRecordObject)))
+                    compositeConditionContext = new CompositeRecordConditionEvaluateContext()
                     {
-                        if (applicableItemIds == null)
-                            applicableItemIds = new List<Guid>();
-                        applicableItemIds.Add(packageItem.Item.VolumePackageItemId);
+                        CompositeRecordConditionFieldsByRecordName = new Dictionary<string, CompositeRecordConditionFields>()
+                    };
+
+                    foreach (CompositeRecordConditionDefinition item in packageItem.CompositeGroupConditionDefinition.CompositeRecordConditionDefinitions)
+                    {
+                        var recordConditionContext = new CompositeRecordConditionDefinitionSettingsGetFieldsContext();
+                        item.Settings.GetFields(recordConditionContext);
+
+                        CompositeRecordConditionFields conditionFields = new CompositeRecordConditionFields()
+                        {
+                            DataRecordFields = recordConditionContext.Fields,
+                            FieldValues = context.RecordsByName.GetRecord(item.Name)
+                        };
+                        compositeConditionContext.CompositeRecordConditionFieldsByRecordName.Add(item.Name, conditionFields);
                     }
                 }
-                if (applicableItemIds != null)
+
+                if (packageItem.Item.Condition == null || compositeConditionContext == null || packageItem.Item.Condition.Evaluate(compositeConditionContext))
                 {
-                    context.ApplicableItemIds = applicableItemIds;
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    if (applicableItemIds == null)
+                        applicableItemIds = new List<Guid>();
+                    applicableItemIds.Add(packageItem.Item.VolumePackageItemId);
                 }
             }
-            else
-            {
+
+            if (applicableItemIds == null)
                 return false;
-            }
+
+            context.ApplicableItemIds = applicableItemIds;
+            return true;
         }
 
         public void GetPackageItemsInfo(IPackageUsageVolumeGetPackageItemsInfoContext context)
         {
+            VolumePackageDefinitionSettings volumePackageDefinitionSettings = new VolumePackageDefinitionSettings();// get definition based on VolumePackageDefinitionId value in context
+
+            PackageItemToEvaluateData packageItemToEvaluateData = GetPackageItemToEvaluateData(context.VolumePackageDefinitionId, volumePackageDefinitionSettings);
+            if (packageItemToEvaluateData == null || packageItemToEvaluateData.ItemsByItemId == null)
+                return;
+
             List<PackageUsageVolumeItem> items = new List<PackageUsageVolumeItem>();
-            foreach(var itemId in context.ItemIds)
+            foreach (var itemId in context.ItemIds)
             {
                 PackageItemToEvaluate matchItem;
-                if(_itemsByItemId.TryGetValue(itemId, out matchItem))
+                if (packageItemToEvaluateData.ItemsByItemId.TryGetValue(itemId, out matchItem))
                 {
                     items.Add(new PackageUsageVolumeItem
-                        {
-                            ItemId = itemId,
-                            Volume = matchItem.Item.Volume
-                        });
+                    {
+                        ItemId = itemId,
+                        Volume = matchItem.Item.Volume
+                    });
                 }
             }
             context.Items = items;
@@ -120,7 +146,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
                 {
                     context.ChargingItems = new List<PackageUsageVolumeChargingItem>
                     {
-                        new PackageUsageVolumeChargingItem 
+                        new PackageUsageVolumeChargingItem
                         {
                              ChargingDate = context.AccountPackage.BED,
                              Price = this.Price,
@@ -133,10 +159,10 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
             {
                 var recurringPeriodContext = new PackageUsageVolumeRecurringPeriodGetChargingDatesContext(context.FromDate, context.ToDate, context.AccountPackage.BED, context.AccountPackage.EED);
                 this.RecurringPeriod.GetChargingDates(recurringPeriodContext);
-                if(recurringPeriodContext.ChargingDates != null && recurringPeriodContext.ChargingDates.Count > 0)
+                if (recurringPeriodContext.ChargingDates != null && recurringPeriodContext.ChargingDates.Count > 0)
                 {
                     context.ChargingItems = new List<PackageUsageVolumeChargingItem>();
-                    foreach(var recurringPeriodChargingDate in recurringPeriodContext.ChargingDates)
+                    foreach (var recurringPeriodChargingDate in recurringPeriodContext.ChargingDates)
                     {
                         var chargingItem = new PackageUsageVolumeChargingItem
                         {
@@ -152,48 +178,37 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
             }
         }
 
-		public override void GetExtraFields(IPackageSettingExtraFieldsContext context)
-		{
-			context.CurrencyId = CurrencyId;
-			context.ChargeValue = this.Price;
-			context.PeriodType = this.RecurringPeriod.GetDescription();
-		}
-
-
-		#endregion
-
-		#region Private Methods
-
-		private List<PackageItemToEvaluate> GetPackageItemsToEvaluate(Guid serviceTypeId, Guid recordTypeId)
+        public override void GetExtraFields(IPackageSettingExtraFieldsContext context)
         {
-            PackageItemsToEvaluateByRecordTypeId packageItemsForServiceType;
-            if (!_itemsByServiceId.TryGetValue(serviceTypeId, out packageItemsForServiceType))
-                packageItemsForServiceType = _itemsForAllServices;
-            if (packageItemsForServiceType != null)
-            {
-                List<PackageItemToEvaluate> packageItemsForRecordType;
-                if (packageItemsForServiceType.TryGetValue(recordTypeId, out packageItemsForRecordType))
-                {
-                    return packageItemsForRecordType;
-                }
-            }
-            return null;
+            context.CurrencyId = CurrencyId;
+            context.ChargeValue = this.Price;
+            context.PeriodType = this.RecurringPeriod.GetDescription();
         }
-
         #endregion
 
         #region Private Classes
+        private struct GetPackageItemToEvaluateDataCacheName
+        {
+            public Guid VolumePackageDefinitionId { get; set; }
+
+            public override int GetHashCode()
+            {
+                return VolumePackageDefinitionId.GetHashCode();
+            }
+        }
 
         private class PackageItemToEvaluate
         {
-            public VolumePackageDefinitionItem DefinitionItem { get; set; }
+            public CompositeGroupConditionDefinition CompositeGroupConditionDefinition { get; set; }
 
             public VolumePackageItem Item { get; set; }
         }
 
-        private class PackageItemsToEvaluateByRecordTypeId : Dictionary<Guid, List<PackageItemToEvaluate>>
+        private class PackageItemToEvaluateData
         {
-
+            public List<PackageItemToEvaluate> ItemsForAllServices { get; set; }
+            public Dictionary<Guid, PackageItemToEvaluate> ItemsByItemId { get; set; }
+            public Dictionary<Guid, List<PackageItemToEvaluate>> ItemsByServiceId { get; set; }
         }
 
         private class PackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext : IPackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext
@@ -238,7 +253,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 
         private class PackageUsageVolumeRecurringPeriodGetChargingDatesContext : IPackageUsageVolumeRecurringPeriodGetChargingDatesContext
         {
-            public PackageUsageVolumeRecurringPeriodGetChargingDatesContext(DateTime fromDate, DateTime toDate, 
+            public PackageUsageVolumeRecurringPeriodGetChargingDatesContext(DateTime fromDate, DateTime toDate,
                 DateTime packageAssignmentStartTime, DateTime? packageAssignmentEndTime)
             {
                 this.FromDate = fromDate;
@@ -279,14 +294,72 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
         }
 
         #endregion
+
+        #region Private methods
+        private PackageItemToEvaluateData GetPackageItemToEvaluateData(Guid volumePackageDefinitionId, VolumePackageDefinitionSettings volumePackageDefinitionSettings)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<PackageManager.CacheManager>().GetOrCreateObject(new GetPackageItemToEvaluateDataCacheName() { VolumePackageDefinitionId = volumePackageDefinitionId },
+               () =>
+               {
+                   if (this.Items == null || volumePackageDefinitionSettings.Items == null)
+                       return null;
+
+                   var itemsByItemId = new Dictionary<Guid, PackageItemToEvaluate>();
+                   var itemsByServiceId = new Dictionary<Guid, List<PackageItemToEvaluate>>();
+                   var itemsForAllServices = new List<PackageItemToEvaluate>();
+
+                   foreach (VolumePackageItem packageItem in this.Items)
+                   {
+                       VolumePackageDefinitionItem volumePackageDefinitionItem = volumePackageDefinitionSettings.Items.FindRecord(itm => itm.VolumePackageDefinitionItemId == packageItem.VolumePackageDefinitionItemId);
+                       PackageItemToEvaluate packageItemToEvaluate = new PackageItemToEvaluate()
+                       {
+                           Item = packageItem,
+                           CompositeGroupConditionDefinition = volumePackageDefinitionItem.CompositeGroupConditionDefinition
+                       };
+
+                       itemsByItemId.Add(packageItem.VolumePackageItemId, packageItemToEvaluate);
+
+                       if (volumePackageDefinitionItem.ServiceTypeIds != null)
+                       {
+                           foreach (Guid serviceTypeId in volumePackageDefinitionItem.ServiceTypeIds)
+                           {
+                               List<PackageItemToEvaluate> packageItemToEvaluateList = itemsByServiceId.GetOrCreateItem(serviceTypeId, () => { return itemsForAllServices != null ? new List<PackageItemToEvaluate>(itemsForAllServices) : new List<PackageItemToEvaluate>(); });
+                               packageItemToEvaluateList.Add(packageItemToEvaluate);
+                           }
+                       }
+                       else
+                       {
+                           itemsForAllServices.Add(packageItemToEvaluate);
+
+                           if (itemsByServiceId.Count > 0)
+                           {
+                               foreach (var itemKvp in itemsByServiceId)
+                               {
+                                   itemKvp.Value.Add(packageItemToEvaluate);
+                               }
+                           }
+                       }
+                   }
+
+                   return new PackageItemToEvaluateData()
+                   {
+                       ItemsByItemId = itemsByItemId,
+                       ItemsByServiceId = itemsByServiceId.Count > 0 ? itemsByServiceId : null,
+                       ItemsForAllServices = itemsForAllServices.Count > 0 ? itemsForAllServices : null
+                   };
+               });
+        }
+        #endregion
     }
 
     public class VolumePackageItem
     {
         public Guid VolumePackageItemId { get; set; }
 
-        public RecordFilterGroup Condition { get; set; }
+        public Guid VolumePackageDefinitionItemId { get; set; }
 
-        public Decimal Volume { get; set; }
+        public CompositeRecordCondition Condition { get; set; }
+
+        public decimal Volume { get; set; }
     }
 }
