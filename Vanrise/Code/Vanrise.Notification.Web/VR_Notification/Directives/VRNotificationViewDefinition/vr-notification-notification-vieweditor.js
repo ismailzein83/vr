@@ -62,7 +62,7 @@ app.directive("vrNotificationNotificationVieweditor", ["UtilsService", "VRNotifi
                             var _seletedIds = [];
                             for (var index = 0; index < settings.length; index++) {
                                 var current = settings[index];
-                                _seletedIds.push(current.VRNotificationTypeId)
+                                _seletedIds.push(current.VRNotificationTypeId);
                             }
                             return _seletedIds;
                         }
@@ -87,7 +87,7 @@ app.directive("vrNotificationNotificationVieweditor", ["UtilsService", "VRNotifi
                         var notificationTypeIds = vrNotificationTypeSettingsSelectorAPI.getSelectedIds();
                         if (notificationTypeIds != undefined) {
                             for (var index = 0; index < notificationTypeIds.length; index++) {
-                                settings.push({ VRNotificationTypeId: notificationTypeIds[index] })
+                                settings.push({ VRNotificationTypeId: notificationTypeIds[index] });
                             }
                         }
                         return settings;

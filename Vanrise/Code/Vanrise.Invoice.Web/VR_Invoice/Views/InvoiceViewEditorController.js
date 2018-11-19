@@ -55,7 +55,7 @@
                 viewCommonPropertiesReadyDeferred.resolve();
             };
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
             $scope.scopeModel.onTreeReady = function (api) {
                 treeAPI = api;
@@ -201,7 +201,7 @@
                         if (viewEntity != undefined && viewEntity.Settings != undefined) {
                             payLoad = {
                                 selectedIds: viewEntity.Settings.InvoiceTypeId
-                            }
+                            };
                         }
                         VRUIUtilsService.callDirectiveLoad(invoiceTypeSelectorAPI, payLoad, loadInvoiceTypeSelectorPromiseDeferred);
                     });

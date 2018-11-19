@@ -15,7 +15,7 @@
         var filter = {};
 
         function defineScope() {
-            $scope.effectiveOn = VRDateTimeService.getNowDateTime();;
+            $scope.effectiveOn = VRDateTimeService.getNowDateTime();
             $scope.searchClicked = function () {
                 setFilterObject();
                 return gridAPI.loadGrid(filter);

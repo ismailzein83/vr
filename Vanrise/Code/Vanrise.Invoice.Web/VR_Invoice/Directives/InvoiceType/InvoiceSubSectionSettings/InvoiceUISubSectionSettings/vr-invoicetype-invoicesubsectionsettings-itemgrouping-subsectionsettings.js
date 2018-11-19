@@ -57,7 +57,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                 Width: VRCommon_GridWidthFactorEnum.Normal.value
                             }
                         };
-                        var setLoader = function (value) { $scope.isLoadingDirective = value };
+                        var setLoader = function (value) { $scope.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dimensionGridWidthFactorAPI, dataItemPayload, setLoader);
                     };
 
@@ -87,7 +87,7 @@ app.directive("vrInvoicetypeInvoicesubsectionsettingsItemgroupingSubsectionsetti
                                 Width: VRCommon_GridWidthFactorEnum.Normal.value
                             }
                         };
-                        var setLoader = function (value) { $scope.isLoadingDirective = value };
+                        var setLoader = function (value) { $scope.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.measureGridWidthFactorAPI, dataItemPayload, setLoader);
                     };
 

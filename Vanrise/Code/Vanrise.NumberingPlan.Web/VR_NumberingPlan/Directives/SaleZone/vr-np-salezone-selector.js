@@ -227,7 +227,7 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                                             setSelectedSaleZonesPromiseDeferred.resolve();
                                         });
 
-                                    })
+                                    });
 
 
                                 });

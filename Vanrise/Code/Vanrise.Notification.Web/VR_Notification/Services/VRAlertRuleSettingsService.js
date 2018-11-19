@@ -15,7 +15,7 @@
                 context: context
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.onAlertRuleSettingsAdded = onAlertRuleSettingsAdded
+                modalScope.onAlertRuleSettingsAdded = onAlertRuleSettingsAdded;
             };
 
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRuleSettings/AlertRuleSettingsEditor.html', parameters, settings);

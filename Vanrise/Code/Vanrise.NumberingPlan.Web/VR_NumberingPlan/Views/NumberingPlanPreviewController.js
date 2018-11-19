@@ -113,7 +113,7 @@
             BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (response) {
                 processInstanceId = response.ProcessInstanceId;
                 loadAllControls();
-            })
+            });
         }
 
         function loadAllControls() {
@@ -166,7 +166,7 @@
                     ProcessInstanceId: processInstanceId,
                     OnlyModified: changeType
                 };
-                VRUIUtilsService.callDirectiveLoad(directiveWrapperAPI, payload, loadPreviewDataPromiseDeferred)
+                VRUIUtilsService.callDirectiveLoad(directiveWrapperAPI, payload, loadPreviewDataPromiseDeferred);
             });
             return loadPreviewDataPromiseDeferred.promise;
         }
@@ -179,7 +179,7 @@
                     BPInstanceID: processInstanceId,
                 };
 
-                VRUIUtilsService.callDirectiveLoad(validationMessageHistoryGridAPI, payload, loadValidationMessageHistoryPromiseDeferred)
+                VRUIUtilsService.callDirectiveLoad(validationMessageHistoryGridAPI, payload, loadValidationMessageHistoryPromiseDeferred);
             });
 
             return loadValidationMessageHistoryPromiseDeferred.promise;

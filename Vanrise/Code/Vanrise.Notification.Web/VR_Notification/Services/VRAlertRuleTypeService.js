@@ -11,7 +11,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onVRAlertRuleTypeAdded = onVRAlertRuleTypeAdded
+                modalScope.onVRAlertRuleTypeAdded = onVRAlertRuleTypeAdded;
             };
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertRuleType/VRAlertRuleTypeEditor.html', null, settings);
         };

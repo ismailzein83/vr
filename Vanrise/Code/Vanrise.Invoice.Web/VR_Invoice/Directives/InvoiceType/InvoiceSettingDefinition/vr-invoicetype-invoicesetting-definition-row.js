@@ -55,20 +55,20 @@ app.directive('vrInvoicetypeInvoicesettingDefinitionRow', ['UtilsService', 'VRUI
                 var api = {};
 
                 api.load = function (payload) {
-                   return getInvoiceSettingPartsConfigs().then(function () {
+                    return getInvoiceSettingPartsConfigs().then(function () {
                         if (payload != undefined) {
                             context = payload.context;
                             if (payload.parts != undefined) {
                                 ctrl.parts.length = 0;
                                 for (var i = 0; i < payload.parts.length; i++) {
                                     var part = payload.parts[i];
-                                    var partConfig = UtilsService.getItemByVal(invoiceSettingPartsConfigs,part.PartConfigId,"ExtensionConfigurationId");
-                                    ctrl.parts.push({ Entity: part, partName: partConfig!=undefined?partConfig.Title:undefined });
+                                    var partConfig = UtilsService.getItemByVal(invoiceSettingPartsConfigs, part.PartConfigId, "ExtensionConfigurationId");
+                                    ctrl.parts.push({ Entity: part, partName: partConfig != undefined ? partConfig.Title : undefined });
                                 }
                             }
 
                         }
-                    })
+                    });
                     
                 };
 

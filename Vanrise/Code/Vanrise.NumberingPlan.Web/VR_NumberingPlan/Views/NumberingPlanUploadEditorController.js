@@ -47,7 +47,7 @@
                         $scope.modalContext.closeModal();
                         var context = {
                             onClose: $scope.onCodePreparationUpdated
-                        }
+                        };
                     }
                     return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, context);
                 });

@@ -27,7 +27,7 @@
             };
 
             $scope.hasAddVRAlertRuleTypePermission = function () {
-                return VR_Notification_VRAlertRuleTypeAPIService.HasAddVRAlertRuleTypePermission()
+                return VR_Notification_VRAlertRuleTypeAPIService.HasAddVRAlertRuleTypePermission();
             };
 
             $scope.onGridReady = function (api) {

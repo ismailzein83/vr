@@ -69,7 +69,7 @@ app.directive("vrVoucherVouchercardsExtendedsettings", ["UtilsService", "VRNotif
                     return {
                         $type: "Vanrise.Voucher.Business.VoucharCardsExtendedSettings,Vanrise.Voucher.Business",
                         SerialNumberParts: serialNumberParts
-                    }
+                    };
                 };
 
                 api.load = function (payload) {
@@ -87,7 +87,7 @@ app.directive("vrVoucherVouchercardsExtendedsettings", ["UtilsService", "VRNotif
                 };
 
                 if (ctrl.onReady != null)
-                ctrl.onReady(api)
+                    ctrl.onReady(api);
             }
 
             function defineMenuActions() {

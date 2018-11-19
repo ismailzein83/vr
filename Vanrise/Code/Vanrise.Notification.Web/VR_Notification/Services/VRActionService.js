@@ -17,7 +17,7 @@
                 vrActionTargetType: vrActionTargetType
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.onVRActionAdded = onVRActionAdded
+                modalScope.onVRActionAdded = onVRActionAdded;
             };
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRActions/VRActionEditor.html', parameters, settings);
         };

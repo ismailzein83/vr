@@ -149,7 +149,7 @@
                         return ruleTypeSelectorApi.load(payloadSelector);
                     }
                     selectedPromiseDeferred.promise.then(function () {
-                        selectedPromiseDeferred = undefined
+                        selectedPromiseDeferred = undefined;
                     });
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -162,7 +162,7 @@
                             ViewPermission: viewPermissionAPI.getData(),
                             AddPermission: addPermissionAPI.getData(),
                             EditPermission: editPermissionAPI.getData()
-                        }
+                        };
                     }
                     var ruleTypeOverriddenConfiguration = {};
                     ruleTypeOverriddenConfiguration.$type = "Vanrise.Notification.Business.VRAlertRuleTypeOverriddenConfiguration ,Vanrise.Notification.Business";

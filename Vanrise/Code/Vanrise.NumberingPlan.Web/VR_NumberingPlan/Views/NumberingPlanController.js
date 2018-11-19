@@ -24,7 +24,7 @@
             $scope.zoneList;
             $scope.onSellingNumberPlanSelectorReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value };
+                var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, undefined, setLoader, sellingNumberPlanReadyPromiseDeferred);
             };
             $scope.upload = function () {

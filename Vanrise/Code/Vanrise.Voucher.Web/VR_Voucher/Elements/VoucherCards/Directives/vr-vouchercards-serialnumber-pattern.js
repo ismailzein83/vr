@@ -96,7 +96,7 @@ app.directive("vrVouchercardsSerialnumberPattern", ["UtilsService", "VRNotificat
                         SerialNumberPattern: ctrl.serialNumberPattern,
                         SerialNumberPartInitialSequence: ctrl.serialNumberPartInitialSequence
                     };
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

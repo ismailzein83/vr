@@ -11,7 +11,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onAlertLevelAdded = onAlertLevelAdded
+                modalScope.onAlertLevelAdded = onAlertLevelAdded;
             };
 
             VRModalService.showModal('/Client/Modules/VR_Notification/Views/VRAlertLevel/VRAlertLevelEditor.html', null, settings);

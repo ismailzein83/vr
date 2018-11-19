@@ -141,13 +141,13 @@
                     });
                     return subReportsLoadPromiseDeferred.promise;
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSubReportDataSourcesDirective, loadRecordFilterDirective,loadSubReportsDirective]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSubReportDataSourcesDirective, loadRecordFilterDirective, loadSubReportsDirective]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
+                });
             }
 
         }
@@ -166,7 +166,7 @@
                 if (reportDataSources != undefined) {
                     for (var i = 0; i < reportDataSources.length; i++) {
                         var reportDataSource = reportDataSources[i];
-                        dataSources.push({ DataSourceName: reportDataSource.DataSourceName })
+                        dataSources.push({ DataSourceName: reportDataSource.DataSourceName });
                     }
                 }
 

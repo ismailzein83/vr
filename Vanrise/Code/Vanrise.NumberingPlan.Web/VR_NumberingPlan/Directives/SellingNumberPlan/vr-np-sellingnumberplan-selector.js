@@ -36,7 +36,7 @@ app.directive('vrNpSellingnumberplanSelector', ['Vr_NP_SellingNumberPlanAPIServi
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getBeSellingNumberPlansTemplate(attrs);
