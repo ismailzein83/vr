@@ -75,7 +75,7 @@ app.directive("vrCommonDynamicapiMethodsGrid", ["UtilsService", "VRNotificationS
                 };
 
                 $scope.scopeModel.deleteMethod = function (method) {
-                    var index = $scope.scopeModel.vrDynamicAPIMethods.indexOf(method)
+                    var index = $scope.scopeModel.vrDynamicAPIMethods.indexOf(method);
                     if (index > -1) {
                         $scope.scopeModel.vrDynamicAPIMethods.splice(index, 1);
                     }
