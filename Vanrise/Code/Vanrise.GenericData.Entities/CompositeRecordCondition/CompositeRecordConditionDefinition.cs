@@ -18,22 +18,22 @@ namespace Vanrise.GenericData.Entities
     {
         public string Name { get; set; }
 
-        public CompositeRecordConditionSettings Settings { get; set; }
+        public CompositeRecordConditionDefinitionSettings Settings { get; set; }
     }
 
-    public abstract class CompositeRecordConditionSettings
+    public abstract class CompositeRecordConditionDefinitionSettings
     {
         public abstract Guid ConfigId { get; }
 
-        public abstract void GetFields(ICompositeRecordConditionSettingsGetFieldsContext context);
+        public abstract void GetFields(ICompositeRecordConditionDefinitionSettingsGetFieldsContext context);
     }
 
-    public interface ICompositeRecordConditionSettingsGetFieldsContext
+    public interface ICompositeRecordConditionDefinitionSettingsGetFieldsContext
     {
         Dictionary<string, DataRecordField> Fields { set; }
     }
 
-    public class CompositeRecordConditionSettingsGetFieldsContext : ICompositeRecordConditionSettingsGetFieldsContext
+    public class CompositeRecordConditionDefinitionSettingsGetFieldsContext : ICompositeRecordConditionDefinitionSettingsGetFieldsContext
     {
         public Dictionary<string, DataRecordField> Fields { get; set; }
     }

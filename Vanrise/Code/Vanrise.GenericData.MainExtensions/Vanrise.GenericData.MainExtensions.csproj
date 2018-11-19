@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,7 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDRCorrelationBPDefinitionSettings.cs" />
-    <Compile Include="CompositeRecordCondition\DataRecordTypeCompositeRecord.cs" />
+    <Compile Include="CompositeRecordCondition\Definition\DataRecordTypeCompositeRecord.cs" />
+    <Compile Include="CompositeRecordCondition\Runtime\CompositeRecordConditionGroup.cs" />
+    <Compile Include="CompositeRecordCondition\Runtime\FilterGroupRecordCondition.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataRecordFieldFormulas\CompareToConstantFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\DateTimeRoundFieldFormula.cs" />
