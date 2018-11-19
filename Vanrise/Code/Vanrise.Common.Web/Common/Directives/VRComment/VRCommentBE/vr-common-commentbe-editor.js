@@ -102,7 +102,7 @@ app.directive('vrCommonCommentbeEditor', ['UtilsService', 'VRUIUtilsService',
                     ViewRequiredPermission: viewPermissionAPI.getData(),
                     AddRequiredPermission: addPermissionAPI.getData()
                 };
-            };
+            }
 
 
             this.initializeController = initializeController;

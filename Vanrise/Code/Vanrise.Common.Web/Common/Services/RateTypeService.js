@@ -50,7 +50,7 @@
                 UtilsService.setContextReadOnly(modalScope);
             };
             VRModalService.showModal('/Client/Modules/Common/Views/RateType/RateTypeEditor.html', modalParameters, modalSettings);
-        };
+        }
         function registerHistoryViewAction() {
 
             var actionHistory = {

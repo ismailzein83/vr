@@ -42,7 +42,7 @@ app.service('VRCommon_SettingsService', ['VRModalService', 'UtilsService', 'VRCo
                 UtilsService.setContextReadOnly(modalScope);
             };
             VRModalService.showModal('/Client/Modules/Common/Views/Settings/SettingsEditor.html', modalParameters, modalSettings);
-        };
+        }
         function registerHistoryViewAction() {
 
             var actionHistory = {

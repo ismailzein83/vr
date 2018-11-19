@@ -75,7 +75,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRDateTimeServi
                 });
             };
 
-        };
+        }
 
 
         function loadGrid(documents) {

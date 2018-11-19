@@ -68,7 +68,7 @@ app.directive('vrCommonComment', ['VRCommon_VRCommentAPIService', 'UtilsService'
                         gridApi.itemAdded(comment);
                     };
                     return directiveApi;
-                };
+                }
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) { 
                     return VRCommon_VRCommentAPIService.GetFilteredVRComments(dataRetrievalInput)
                     .then(function (response) {

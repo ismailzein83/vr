@@ -14,7 +14,7 @@
                 UtilsService.setContextReadOnly(modalScope);
             };
             VRModalService.showModal('/Client/Modules/Common/Views/City/CityEditor.html', modalParameters, modalSettings);
-        };
+        }
 
         function editCity(cityId, onCityUpdated) {
             var settings = {

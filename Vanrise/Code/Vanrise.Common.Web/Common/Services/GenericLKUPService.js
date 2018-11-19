@@ -41,7 +41,7 @@
                 UtilsService.setContextReadOnly(modalScope);
             };
             VRModalService.showModal('/Client/Modules/Common/Views/GenericLKUP/GenericLKUPEditor.html', parameters, settings);
-        };
+        }
 
         function registerHistoryViewAction() {
 

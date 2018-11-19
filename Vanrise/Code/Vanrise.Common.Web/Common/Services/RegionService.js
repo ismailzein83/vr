@@ -22,7 +22,7 @@ app.service('VRCommon_RegionService', ['VRModalService', 'VRNotificationService'
                 UtilsService.setContextReadOnly(modalScope);
             };
             VRModalService.showModal('/Client/Modules/Common/Views/Region/RegionEditor.html', modalParameters, modalSettings);
-        };
+        }
 
         function editRegion(regionId, onRegionUpdated) {
             var settings = {

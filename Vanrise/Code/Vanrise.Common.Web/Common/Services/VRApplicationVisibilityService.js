@@ -10,7 +10,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onVRApplicationVisibilityAdded = onVRApplicationVisibilityAdded
+                modalScope.onVRApplicationVisibilityAdded = onVRApplicationVisibilityAdded;
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRApplicationVisibility/VRApplicationVisibilityEditor.html', null, settings);
         };
@@ -36,7 +36,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onVRModuleVisibilityAdded = onVRModuleVisibilityAdded
+                modalScope.onVRModuleVisibilityAdded = onVRModuleVisibilityAdded;
             };
 
             VRModalService.showModal('/Client/Modules/Common/Directives/VRApplicationVisibility/Templates/VRModuleVisibilityEditor.html', parameters, settings);

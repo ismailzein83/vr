@@ -90,7 +90,7 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
                 ctrl.showMenuOption = false;
                 $scope.$root.$digest();
             }
-        };
+        }
 
         this.initializeController = initializeController;
         var context;

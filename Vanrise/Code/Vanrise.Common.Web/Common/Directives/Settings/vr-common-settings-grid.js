@@ -97,7 +97,7 @@ function (UtilsService, VRNotificationService, VRCommon_SettingsAPIService, VRCo
                     }
                 }];
             };
-        };
+        }
 
         function editSettings(settings) {
             var onSettingsUpdated = function (settingsObj) {

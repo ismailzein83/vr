@@ -14,7 +14,7 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRConnectionInfos"), {
                 filter: filter
             });
-        };
+        }
         function GetVRConnection(vrConnectionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetVRConnection'), {
                 VRConnectionId: vrConnectionId
@@ -39,7 +39,7 @@
         }
         function GetVRConnectionConfigTypes() {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRConnectionConfigTypes"));
-        };
+        }
 
         return ({
             GetVRConnectionInfos: GetVRConnectionInfos,

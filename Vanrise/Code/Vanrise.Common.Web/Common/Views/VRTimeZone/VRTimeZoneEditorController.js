@@ -122,7 +122,7 @@
         function loadTimeOffsetSelector() {
             var timeOffsetSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             timeOffsetSelectorReadyDeferred.promise.then(function () {
-                var timevalue ;
+                var timevalue;
                 if (vrTimeZoneEntity != undefined && vrTimeZoneEntity.Settings != undefined && vrTimeZoneEntity.Settings.Offset != undefined) {
                     timevalue = vrTimeZoneEntity.Settings.Offset;
                     if (timevalue[0] == '-')

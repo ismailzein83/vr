@@ -54,7 +54,7 @@ app.directive("vrCommonTileVieweditor", ["UtilsService", "VRUIUtilsService",
                         var vrTilesPayload;
                         if (payload != undefined && payload.VRTileViewData != undefined) {
                             vrTilesPayload = { tiles: payload.VRTileViewData.VRTiles };
-                        };
+                        }
                         return vrTilesDirectiveApi.load(vrTilesPayload);
                     }
 
@@ -75,7 +75,7 @@ app.directive("vrCommonTileVieweditor", ["UtilsService", "VRUIUtilsService",
             };
 
 
-        };
+        }
 
         return directiveDefinitionObject;
     }

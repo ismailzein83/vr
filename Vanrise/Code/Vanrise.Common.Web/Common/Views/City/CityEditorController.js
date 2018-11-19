@@ -54,7 +54,7 @@
             $scope.onCountrySelectionChanged = function () {
                 var selectedCountryId = countryDirectiveApi.getSelectedIds();
                 if (selectedCountryId != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingRegions = value };
+                    var setLoader = function (value) { $scope.isLoadingRegions = value; };
                     var payload = {
                         filter: {
                             CountryId: selectedCountryId
@@ -76,7 +76,7 @@
             };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
 

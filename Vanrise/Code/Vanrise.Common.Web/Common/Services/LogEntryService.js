@@ -30,6 +30,6 @@ app.service('VRCommon_LogEntryService', ['VRCommon_MasterLogService','VRCommon_L
             if (type === 4) return LabelColorsEnum.Info.color;
             if (type === 8) return LabelColorsEnum.Primary.color;
             return LabelColorsEnum.Info.color;
-        };
+        }
 
  }]);

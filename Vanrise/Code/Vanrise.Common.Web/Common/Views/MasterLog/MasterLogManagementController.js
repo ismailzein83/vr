@@ -27,7 +27,7 @@
             $scope.isLoading = true;
             VRCommon_MasterLogAPIService.GetMasterLogDirectives(viewId).then(function (response) {
                 if (response.length > 0) {
-                    for (var i = 0 ; i < response.length; i++) {
+                    for (var i = 0; i < response.length; i++) {
                         var obj = response[i];
                         var tabDefinition = {
                             title: obj.Title,

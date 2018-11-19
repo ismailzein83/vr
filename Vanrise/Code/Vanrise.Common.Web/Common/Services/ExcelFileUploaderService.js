@@ -13,7 +13,7 @@ function (VRModalService) {
         };
 
         VRModalService.showModal('/Client/Modules/Common//Views/ExcelFileUploader/ExcelFileUploaderEditor.html', parameters, settings);
-    };
+    }
 
   
     return {

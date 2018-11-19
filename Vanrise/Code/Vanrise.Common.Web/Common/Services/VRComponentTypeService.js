@@ -16,7 +16,7 @@
                 modalScope.onVRComponentTypeAdded = onVRComponentTypeAdded;
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRComponentType/VRComponentTypeEditor.html', parameters, settings);
-        };
+        }
 
         function getEntityUniqueName(vrComponentTypeConfigId) {
             return "VR_Common_ComponentType_" + vrComponentTypeConfigId;

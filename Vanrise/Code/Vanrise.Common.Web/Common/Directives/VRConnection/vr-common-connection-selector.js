@@ -103,7 +103,7 @@ app.directive('vrCommonConnectionSelector', ['VRCommon_VRConnectionAPIService', 
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
+            }
 
             this.initializeController = initializeController;
         }

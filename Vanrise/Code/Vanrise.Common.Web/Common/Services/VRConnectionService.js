@@ -15,7 +15,7 @@
                 modalScope.onVRConnectionAdded = onVRConnectionAdded;
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRConnection/VRConnectionEditor.html', parameters, settings);
-        };
+        }
 
         function editVRConnection( vrConnectionId, onVRConnectionUpdated) {
             var settings = {};
