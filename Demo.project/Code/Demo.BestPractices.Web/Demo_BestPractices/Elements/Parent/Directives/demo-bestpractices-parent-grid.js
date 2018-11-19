@@ -1,4 +1,4 @@
-﻿"use strict"
+﻿"use strict";
 
 app.directive("demoBestpracticesParentGrid", ["VRNotificationService", "Demo_BestPractices_ParentAPIService", "Demo_BestPractices_ParentService", "VRUIUtilsService",
     function (VRNotificationService, Demo_BestPractices_ParentAPIService, Demo_BestPractices_ParentService, VRUIUtilsService) {

@@ -10,8 +10,8 @@
         var childEntity;
         var parentIdItem;
 
-        var parentDirectiveAPI;
-        var parentDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var parentSelectorAPI;
+        var parentSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var childShapeDirectiveAPI;
         var childShapeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -35,9 +35,9 @@
             $scope.scopeModel = {};
             $scope.scopeModel.disableParent = (parentIdItem != undefined);
 
-            $scope.scopeModel.onParentDirectiveReady = function (api) {
-                parentDirectiveAPI = api;
-                parentDirectiveReadyDeferred.resolve();
+			$scope.scopeModel.onParentSelectorReady = function (api) {
+                parentSelectorAPI = api;
+                parentSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onChildShapeDirectiveReady = function (api) {
@@ -115,7 +115,7 @@
             function loadParentSelector() {
                 var parentLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                parentDirectiveReadyDeferred.promise.then(function () {
+                parentSelectorReadyDeferred.promise.then(function () {
 
                     var parentPayload = {};
                     if (parentIdItem != undefined) {
@@ -124,7 +124,7 @@
                     if (childEntity != undefined) {
                         parentPayload.selectedIds = childEntity.ParentId;
                     }
-                    VRUIUtilsService.callDirectiveLoad(parentDirectiveAPI, parentPayload, parentLoadPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(parentSelectorAPI, parentPayload, parentLoadPromiseDeferred);
                 });
 
                 return parentLoadPromiseDeferred.promise;
@@ -180,7 +180,7 @@
             var object = {
                 ChildId: (childId != undefined) ? childId : undefined,
                 Name: $scope.scopeModel.name,
-                ParentId: parentDirectiveAPI.getSelectedIds(),
+                ParentId: parentSelectorAPI.getSelectedIds(),
                 Settings: {
                     ChildShape: childShapeDirectiveAPI.getData()
                 }
