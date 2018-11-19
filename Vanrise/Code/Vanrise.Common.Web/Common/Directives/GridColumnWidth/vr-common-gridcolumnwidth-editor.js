@@ -97,7 +97,7 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
                         Width: widthFactorSelectorAPI.getSelectedIds(),
                         FixedWidth: $scope.scopeModel.fixedWidth,
                         ListViewWidth: $scope.scopeModel.listViewWidth
-                    }
+                    };
 
                 };
 

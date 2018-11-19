@@ -56,8 +56,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     var selectorPayload;
                     if (businessEntityDefinitionSettings != undefined) {
                         selectorPayload = {
-                            genericLKUPDefineitionSettings : businessEntityDefinitionSettings.ExtendedSettings
-                        }
+                            genericLKUPDefineitionSettings: businessEntityDefinitionSettings.ExtendedSettings
+                        };
                     }
                     return genericLKUPBEDefinitionSelectorAPI.load(selectorPayload);
                 }

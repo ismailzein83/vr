@@ -12,7 +12,7 @@
             var parameters = {
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.onVRConnectionAdded = onVRConnectionAdded
+                modalScope.onVRConnectionAdded = onVRConnectionAdded;
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRConnection/VRConnectionEditor.html', parameters, settings);
         };

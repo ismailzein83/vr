@@ -12,7 +12,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onMailMessageTemplateAdded = onMailMessageTemplateAdded
+                modalScope.onMailMessageTemplateAdded = onMailMessageTemplateAdded;
             };
 
             var parameters = {

@@ -136,7 +136,7 @@ app.directive('vrCommonCitySelector', ['VRCommon_CityAPIService', 'VRCommon_City
 
                     if (countryId != undefined) {
                         ctrl.showCountrySelector = false;
-                        return getCitiesInfo(attrs, ctrl, selectedIds, payload.countryId)
+                        return getCitiesInfo(attrs, ctrl, selectedIds, payload.countryId);
                     }
                     else {
                         ctrl.showCountrySelector = true;

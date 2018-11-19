@@ -11,7 +11,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onVRObjectTypeDefinitionAdded = onVRObjectTypeDefinitionAdded
+                modalScope.onVRObjectTypeDefinitionAdded = onVRObjectTypeDefinitionAdded;
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRObjectTypeDefinition/VRObjectTypeDefinitionEditor.html', null, settings);
         };

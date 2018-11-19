@@ -30,8 +30,8 @@
 
         function buildFilterObject() {            
             return {
-                TypeName : $scope.typeName
-            }
+                TypeName: $scope.typeName
+            };
         }
 
 

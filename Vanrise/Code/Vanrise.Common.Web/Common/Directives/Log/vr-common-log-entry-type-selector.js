@@ -32,7 +32,7 @@ app.directive('vrCommonLogEntryTypeSelector', [ 'VRCommon_LogEntryTypeEnum', 'Ut
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTypeTemplate(attrs);

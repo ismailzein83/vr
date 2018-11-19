@@ -12,7 +12,7 @@
 
             var settings = {};
             settings.onScopeReady = function (modalScope) {
-                modalScope.onStyleDefinitionAdded = onStyleDefinitionAdded
+                modalScope.onStyleDefinitionAdded = onStyleDefinitionAdded;
             };
 
             VRModalService.showModal('/Client/Modules/Common/Views/StyleDefinition/StyleDefinitionEditor.html', null, settings);

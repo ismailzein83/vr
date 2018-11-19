@@ -131,7 +131,7 @@
                 VRConnectionId: vrConnectionId,
                 Name: $scope.scopeModel.name,
                 Settings: connectionEditorAPI.getData()
-            }
+            };
         }
 
         function updateVRConnection() {

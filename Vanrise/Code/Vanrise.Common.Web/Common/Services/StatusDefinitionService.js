@@ -11,7 +11,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onStatusDefinitionAdded = onStatusDefinitionAdded
+                modalScope.onStatusDefinitionAdded = onStatusDefinitionAdded;
             };
 
             VRModalService.showModal('/Client/Modules/Common/Views/StatusDefinition/StatusDefinitionEditor.html', null, settings);

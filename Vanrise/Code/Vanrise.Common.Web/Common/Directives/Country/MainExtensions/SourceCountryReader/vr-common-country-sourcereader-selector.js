@@ -54,7 +54,7 @@ app.directive("vrCommonCountrySourcereaderSelector", ['UtilsService', '$compile'
                 if ($scope.selectedCountrySourceTypeTemplate != undefined) {
                     if (countrySourceDirectiveAPI != undefined) {
                         sourceCountry = countrySourceDirectiveAPI.getData();
-                        sourceCountry.ConfigId = $scope.selectedCountrySourceTypeTemplate.ExtensionConfigurationId
+                        sourceCountry.ConfigId = $scope.selectedCountrySourceTypeTemplate.ExtensionConfigurationId;
 
                     }
                 }

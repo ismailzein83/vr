@@ -69,7 +69,7 @@ app.directive('vrCommonDocumentcategorySelector', ['UtilsService', 'VRUIUtilsSer
 
                 if (documentCategories != undefined) {
                     for (var i = 0; i < documentCategories.length; i++)
-                       ctrl.datasource.push(documentCategories[i])
+                        ctrl.datasource.push(documentCategories[i]);
                 }
 
                 if (selectedIds != undefined) {

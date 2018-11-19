@@ -65,7 +65,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     $type: "Vanrise.DataParser.MainExtensions.HexTLV2.FieldParsers.CoordinatesParser,Vanrise.DataParser.MainExtensions",
                     LatitudeFieldName: $scope.scopeModel.latitudeFieldName,
                     LongitudeFieldName: $scope.scopeModel.longitudeFieldName
-                }
+                };
             };
 
             if (ctrl.onReady != null) {

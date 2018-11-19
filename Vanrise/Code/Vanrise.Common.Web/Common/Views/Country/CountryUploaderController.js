@@ -31,7 +31,7 @@
                     VRNotificationService.showSuccess("Country Finished Upload");
                 }).catch(function (error) {
                     VRNotificationService.showError(error.ExceptionMessage);
-                });;
+                });
             };
 
             $scope.downloadLog = function () {

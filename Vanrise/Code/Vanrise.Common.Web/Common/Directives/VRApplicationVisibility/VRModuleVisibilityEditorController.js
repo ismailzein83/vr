@@ -79,7 +79,7 @@
                 };
                 if (vrModuleVisibilityEntity != undefined) {
                     payload.vrModuleVisibility = vrModuleVisibilityEntity,
-                    payload.vrModuleVisibilityEditorRuntime = vrModuleVisibilityEditorRuntime
+                        payload.vrModuleVisibilityEditorRuntime = vrModuleVisibilityEditorRuntime;
                 }
                 VRUIUtilsService.callDirectiveLoad(vrModuleVisibilitySelectiveAPI, payload, vrModuleVisibilitySelectiveLoadDeferred);
             });

@@ -27,7 +27,7 @@
             };
 
             $scope.hasAddVRApplicationVisibilityPermission = function () {
-                return VRCommon_VRApplicationVisibilityAPIService.HasAddVRApplicationVisibilityPermission()
+                return VRCommon_VRApplicationVisibilityAPIService.HasAddVRApplicationVisibilityPermission();
             };
 
             $scope.onGridReady = function (api) {

@@ -20,7 +20,7 @@
         }
 
         function load() {
-            loadAllControls()
+            loadAllControls();
         }
 
         function loadAllControls() {

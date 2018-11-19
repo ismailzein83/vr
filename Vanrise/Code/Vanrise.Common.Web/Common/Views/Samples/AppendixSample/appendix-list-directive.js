@@ -20,7 +20,7 @@ function (UtilsService, Common_AppendixSample_Service, VRUIUtilsService) {
 
                     dynamicAppendixItem.dynamicAppendixReady = function (api) {
                         dynamicAppendixItem.dynamicAppendixAPI = api;
-                        var setLoader = function (value) { dynamicAppendixItem.isLoading = value };
+                        var setLoader = function (value) { dynamicAppendixItem.isLoading = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dynamicAppendixItem.dynamicAppendixAPI, undefined, setLoader);
                     };
 

@@ -11,7 +11,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onMailMessageTypeAdded = onMailMessageTypeAdded
+                modalScope.onMailMessageTypeAdded = onMailMessageTypeAdded;
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRMail/VRMailMessageTypeEditor.html', null, settings);
         };

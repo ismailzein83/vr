@@ -68,7 +68,7 @@
 
             if (isEditMode) {
                 setPropertyEntityFromParameters().then(function () {
-                    loadAllControls()
+                    loadAllControls();
                 });
             }
             else {

@@ -20,7 +20,7 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.loadGrid(filter)
+                gridAPI.loadGrid(filter);
             };
             $scope.hasAddCurrencyPermission =  function(){
                 return VRCommon_CurrencyAPIService.HasAddCurrencyPermission();

@@ -46,7 +46,7 @@
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isloading = false;
-            })
+            });
         }
 
         function loadAllControls() {

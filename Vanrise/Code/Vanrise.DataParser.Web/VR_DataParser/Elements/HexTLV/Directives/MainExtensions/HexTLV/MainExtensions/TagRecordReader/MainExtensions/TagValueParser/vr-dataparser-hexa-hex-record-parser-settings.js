@@ -66,8 +66,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.HexaParser,Vanrise.DataParser.MainExtensions",
                     FieldName: $scope.scopeModel.fieldName,
                     TrimZeros: $scope.scopeModel.trimZeros,
-                    Reverse:$scope.scopeModel.reverse
-                }
+                    Reverse: $scope.scopeModel.reverse
+                };
             };
 
             if (ctrl.onReady != null) {

@@ -11,7 +11,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onGenericLKUPAdded = onGenericLKUPAdded
+                modalScope.onGenericLKUPAdded = onGenericLKUPAdded;
             };
 
             VRModalService.showModal('/Client/Modules/Common/Views/GenericLKUP/GenericLKUPEditor.html', null, settings);

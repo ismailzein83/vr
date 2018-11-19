@@ -21,7 +21,7 @@ function (UtilsService, VRNotificationService, VRModalService) {
             var standalone = '';
             if (attrs.standalone != undefined)
                 standalone = 'standalone';
-            return '<vr-button type="UploadExcel" data-onclick="openExcelFileParserEditor"  ' + standalone + ' ></vr-button>'
+            return '<vr-button type="UploadExcel" data-onclick="openExcelFileParserEditor"  ' + standalone + ' ></vr-button>';
         }
 
     };

@@ -13,7 +13,7 @@
                 extensionConfigId: extensionConfigId,
             };
             settings.onScopeReady = function (modalScope) {
-                modalScope.onVRComponentTypeAdded = onVRComponentTypeAdded
+                modalScope.onVRComponentTypeAdded = onVRComponentTypeAdded;
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRComponentType/VRComponentTypeEditor.html', parameters, settings);
         };

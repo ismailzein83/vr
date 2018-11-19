@@ -80,11 +80,10 @@ app.directive('vrCommonTimezoneSelector', ['VRCommon_VRTimeZoneAPIService', 'VRC
     function timeZoneCtor(ctrl, $scope, attrs) {
         var selectorApi;
         function initializeController() {
-            ctrl.onSelectorReady = function(api)
-            {
+            ctrl.onSelectorReady = function (api) {
                 selectorApi = api;
                 defineAPI();
-            }
+            };
            
         }
 

@@ -46,7 +46,7 @@ function (VRCommon_CompanySettingsAPIService, UtilsService, VRUIUtilsService, VR
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);

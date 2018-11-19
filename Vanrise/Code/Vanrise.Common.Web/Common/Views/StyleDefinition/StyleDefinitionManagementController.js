@@ -26,7 +26,7 @@
             };
 
             $scope.hasAddStyleDefinitionPermission = function () {
-                return VRCommon_StyleDefinitionAPIService.HasAddStyleDefinitionPermission()
+                return VRCommon_StyleDefinitionAPIService.HasAddStyleDefinitionPermission();
             };
 
             $scope.onGridReady = function (api) {

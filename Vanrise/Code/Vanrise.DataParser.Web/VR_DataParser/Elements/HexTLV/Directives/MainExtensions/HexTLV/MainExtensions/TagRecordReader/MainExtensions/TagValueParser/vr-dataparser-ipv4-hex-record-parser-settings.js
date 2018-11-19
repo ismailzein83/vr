@@ -61,7 +61,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 return {
                     $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.IPv4Parser,Vanrise.DataParser.MainExtensions",
                     FieldName: $scope.scopeModel.fieldName
-                }
+                };
             };
 
             if (ctrl.onReady != null) {

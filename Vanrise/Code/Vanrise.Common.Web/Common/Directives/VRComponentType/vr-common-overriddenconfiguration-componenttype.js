@@ -112,7 +112,7 @@
                         return componentTypeSelectorApi.load(payloadSelector);
                     }
                     selectedPromiseDeferred.promise.then(function () {
-                        selectedPromiseDeferred = undefined
+                        selectedPromiseDeferred = undefined;
                     });
                     return UtilsService.waitMultiplePromises(promises);
                 };

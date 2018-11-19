@@ -60,8 +60,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             api.getData = function () {
                 return {
                     $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.BoolFieldParser ,Vanrise.DataParser.MainExtensions",
-                    FieldName:$scope.scopeModel.fieldName
-                }
+                    FieldName: $scope.scopeModel.fieldName
+                };
             };
 
             if (ctrl.onReady != null) {

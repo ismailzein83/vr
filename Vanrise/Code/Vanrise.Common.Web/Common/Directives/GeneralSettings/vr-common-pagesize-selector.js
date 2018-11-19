@@ -75,7 +75,7 @@ app.directive('vrCommonPagesizeSelector', ['UtilsService',  'VRUIUtilsService',
                         selectedIds = payload.selectedIds;
                     }
                     if (selectedIds != undefined)
-                        ctrl.selectedvalues = payload.selectedIds;;
+                        ctrl.selectedvalues = payload.selectedIds;
                 };
 
                 if (ctrl.onReady != null)
