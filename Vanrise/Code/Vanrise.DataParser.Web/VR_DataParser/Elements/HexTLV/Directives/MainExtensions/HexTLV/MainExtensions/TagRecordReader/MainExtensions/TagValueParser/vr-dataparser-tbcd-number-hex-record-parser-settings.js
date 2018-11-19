@@ -82,7 +82,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     FieldName: $scope.scopeModel.fieldName,
                     AIsZero: $scope.scopeModel.aIsZero,
                     RemoveHexa: $scope.scopeModel.removeHexa
-                }
+                };
             };
 
             if (ctrl.onReady != null) {

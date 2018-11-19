@@ -54,7 +54,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_DataParser_N
 
 
                 defineAPI();
-            }
+            };
         }
 
         function defineAPI() {
@@ -81,7 +81,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_DataParser_N
                     $type: "Vanrise.DataParser.MainExtensions.StringFieldParsers.NumberFromTextParser,Vanrise.DataParser.MainExtensions",
                     FieldName: $scope.scopeModel.fieldName,
                     NumberType: $scope.scopeModel.selectedValue != undefined ? $scope.scopeModel.selectedValue.value : undefined
-                }
+                };
             };
 
             if (ctrl.onReady != null) {

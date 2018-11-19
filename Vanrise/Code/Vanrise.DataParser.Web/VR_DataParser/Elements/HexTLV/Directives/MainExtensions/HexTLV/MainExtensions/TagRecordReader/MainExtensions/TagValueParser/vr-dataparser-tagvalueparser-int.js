@@ -85,7 +85,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 return {
                     $type: "Vanrise.DataParser.MainExtensions.HexTLV.TagValueParsers.BoolParser ,Vanrise.DataParser.MainExtensions",
                     FieldName: fieldName
-                }
+                };
             };
 
             if (ctrl.onReady != null) {

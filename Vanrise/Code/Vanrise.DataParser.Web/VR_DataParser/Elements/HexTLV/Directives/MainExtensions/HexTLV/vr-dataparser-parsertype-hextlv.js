@@ -62,7 +62,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                         selectorPayload.recordReaderEntity = recordReaderEntity;
                     }
 
-                    return recordReaderSelectorAPI.load(selectorPayload);;
+                    return recordReaderSelectorAPI.load(selectorPayload);
                 }
 
                 return UtilsService.waitMultiplePromises(promises);

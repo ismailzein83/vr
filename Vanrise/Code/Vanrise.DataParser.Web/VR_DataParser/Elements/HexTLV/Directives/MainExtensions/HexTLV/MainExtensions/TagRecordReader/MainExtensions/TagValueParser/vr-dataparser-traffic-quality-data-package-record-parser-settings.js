@@ -68,7 +68,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     CodingStandardFieldName: $scope.scopeModel.codingStandardFieldName,
                     LocationFieldName: $scope.scopeModel.locationFieldName
 
-                }
+                };
             };
 
             if (ctrl.onReady != null) {

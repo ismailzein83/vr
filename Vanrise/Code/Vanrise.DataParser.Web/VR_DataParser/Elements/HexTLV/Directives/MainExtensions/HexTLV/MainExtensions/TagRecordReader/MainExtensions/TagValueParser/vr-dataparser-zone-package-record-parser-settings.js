@@ -61,7 +61,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 return {
                     $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers.ZonePackageParser,Vanrise.DataParser.MainExtensions",
                     ZoneFieldName: $scope.scopeModel.zoneFieldName
-                }
+                };
             };
 
             if (ctrl.onReady != null) {

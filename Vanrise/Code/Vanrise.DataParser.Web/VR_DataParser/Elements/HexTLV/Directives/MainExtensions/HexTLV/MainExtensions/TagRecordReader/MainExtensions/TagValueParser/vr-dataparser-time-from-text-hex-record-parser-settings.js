@@ -65,7 +65,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     $type: "Vanrise.DataParser.MainExtensions.StringFieldParsers.TimeFromTextParser,Vanrise.DataParser.MainExtensions",
                     FieldName: $scope.scopeModel.fieldName,
                     TimeFormat: $scope.scopeModel.timeFormat
-                }
+                };
             };
 
             if (ctrl.onReady != null) {

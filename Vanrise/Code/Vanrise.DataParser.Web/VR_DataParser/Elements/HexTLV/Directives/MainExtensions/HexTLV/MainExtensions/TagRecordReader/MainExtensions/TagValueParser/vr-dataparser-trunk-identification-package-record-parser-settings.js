@@ -66,7 +66,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     TrunkGroupNumberFieldName: $scope.scopeModel.trunkGroupNumberFieldName,
                     TrunkNumberFieldName: $scope.scopeModel.trunkNumberFieldName
 
-                }
+                };
             };
 
             if (ctrl.onReady != null) {

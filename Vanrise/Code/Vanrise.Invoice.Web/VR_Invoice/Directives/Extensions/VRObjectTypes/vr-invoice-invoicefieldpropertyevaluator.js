@@ -77,7 +77,7 @@
                                     promiseDeffered.resolve();
                                 }).catch(function (error) {
                                     promiseDeffered.reject(error);
-                                })
+                                });
 
                             }).catch(function (error) {
                                 promiseDeffered.reject(error);

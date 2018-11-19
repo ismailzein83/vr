@@ -101,13 +101,13 @@
                 return invoiceFilterConditionLoadPromiseDeferred.promise;
             }
 
-              return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceFilterConditionDirective]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceFilterConditionDirective]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
+                });
             }
 
         }

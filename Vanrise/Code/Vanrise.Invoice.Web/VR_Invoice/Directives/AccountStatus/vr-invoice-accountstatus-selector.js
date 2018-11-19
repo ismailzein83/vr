@@ -33,7 +33,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -48,7 +48,7 @@
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
 
             }
 

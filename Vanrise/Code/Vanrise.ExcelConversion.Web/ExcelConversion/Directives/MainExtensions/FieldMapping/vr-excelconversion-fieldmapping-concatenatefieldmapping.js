@@ -64,7 +64,7 @@
                         var payload = {
                             context: getContext()
                         };
-                        var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                        var setLoader = function (value) { ctrl.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
                     };
                     ctrl.datasource.push(dataItem);

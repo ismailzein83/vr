@@ -87,10 +87,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             api.getData = function () {
                 return {
                     $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.StringParser,Vanrise.DataParser.MainExtensions",
-                    FieldName:$scope.scopeModel.fieldName,
+                    FieldName: $scope.scopeModel.fieldName,
                     Parser: recordParserDirectiveAPI.getData()
-                  
-                }
+
+                };
             };
 
             if (ctrl.onReady != null) {

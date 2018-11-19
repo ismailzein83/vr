@@ -167,7 +167,7 @@ app.directive("vrInvoicesettingGrid", ["VRCommon_ObjectTrackingService", "UtilsS
                     gridDrillDownTabsObj.setDrillDownExtensionObject(invoiceSetting);
                     gridAPI.itemUpdated(invoiceSetting);
                 };
-                VR_Invoice_InvoiceSettingService.editInvoiceSetting(onInvoiceSettingUpdated, dataItem.Entity.InvoiceSettingId, dataItem.Entity.InvoiceTypeId)
+                VR_Invoice_InvoiceSettingService.editInvoiceSetting(onInvoiceSettingUpdated, dataItem.Entity.InvoiceSettingId, dataItem.Entity.InvoiceTypeId);
             }
             function setInvoiceSettingDefault(dataItem) {
                 VRNotificationService.showConfirmation().then(function (response) {

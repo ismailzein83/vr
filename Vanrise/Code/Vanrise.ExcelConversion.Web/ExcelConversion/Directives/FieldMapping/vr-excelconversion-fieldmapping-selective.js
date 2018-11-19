@@ -36,7 +36,7 @@
             var hidecell="";
             if (attrs.hidecell != undefined)
             {
-                hidecell=' ng-show="false" '
+                hidecell = ' ng-show="false" ';
             }
 
             var template =
@@ -158,8 +158,8 @@
                         data = directiveAPI.getData();
                         if (data != undefined) {
                             data.ConfigId = $scope.selectedTemplateConfig.ExtensionConfigurationId;
-                            data.FieldName = fieldMapping !=undefined?fieldMapping.FieldName:undefined,
-                            data.FieldType= fieldMapping !=undefined?fieldMapping.FieldType:undefined
+                            data.FieldName = fieldMapping != undefined ? fieldMapping.FieldName : undefined;
+                            data.FieldType = fieldMapping != undefined ? fieldMapping.FieldType : undefined;
                         }
                     }
                     return data;

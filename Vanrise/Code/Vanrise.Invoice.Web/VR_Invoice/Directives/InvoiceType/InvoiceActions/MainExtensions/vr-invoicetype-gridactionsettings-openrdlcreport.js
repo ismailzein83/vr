@@ -129,7 +129,7 @@ app.directive("vrInvoicetypeGridactionsettingsOpenrdlcreport", ["UtilsService", 
                     if (mainReportDataSources != undefined) {
                         for (var i = 0; i < mainReportDataSources.length; i++) {
                             var mainReportDataSource = mainReportDataSources[i];
-                            dataSources.push({ DataSourceName: mainReportDataSource.DataSourceName })
+                            dataSources.push({ DataSourceName: mainReportDataSource.DataSourceName });
                         }
                     }
                     return dataSources;
