@@ -670,7 +670,7 @@ Global
 		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}.Optimized|x64.ActiveCfg = Release|x86
 		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}.Optimized|x86.ActiveCfg = Release|x86
 		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}.Optimized|x86.Build.0 = Release|x86
-		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}.Release|Any CPU.ActiveCfg = Release|x86
+		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}.Release|Any CPU.ActiveCfg = Release|x64
 		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}.Release|Mixed Platforms.ActiveCfg = Release|x64
 		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}.Release|Mixed Platforms.Build.0 = Release|x64
 		{D15F5EC2-E3F0-4F67-A7EF-18CE0BF843D0}.Release|x64.ActiveCfg = Release|x86
