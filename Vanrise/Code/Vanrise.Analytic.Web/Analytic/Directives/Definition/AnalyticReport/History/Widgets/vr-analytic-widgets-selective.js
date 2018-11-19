@@ -136,7 +136,7 @@
                                     widgetEntity: widgetEntity
                                 };
                                 VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, loadDirectivePromiseDeffered);
-                            })
+                            });
                         };
 
                         var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();

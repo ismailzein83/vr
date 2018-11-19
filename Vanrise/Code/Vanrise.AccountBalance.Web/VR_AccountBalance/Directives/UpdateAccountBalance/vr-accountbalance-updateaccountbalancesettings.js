@@ -23,7 +23,7 @@ app.directive('vrAccountbalanceUpdateaccountbalancesettings', ['UtilsService', '
                 };
             },
             templateUrl: function (element, attrs) {
-                return "/Client/Modules/VR_AccountBalance/Directives/UpdateAccountBalance/Templates/UpdateAccountBalanceSettingsTemplate.html"
+                return "/Client/Modules/VR_AccountBalance/Directives/UpdateAccountBalance/Templates/UpdateAccountBalanceSettingsTemplate.html";
             }
         };
 

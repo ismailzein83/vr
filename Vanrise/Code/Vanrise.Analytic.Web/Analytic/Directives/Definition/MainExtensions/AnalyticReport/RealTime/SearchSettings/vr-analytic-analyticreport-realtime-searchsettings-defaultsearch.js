@@ -117,7 +117,7 @@
                     if($scope.scopeModel.filterDimensions  !=undefined && $scope.scopeModel.filterDimensions.length>0)
                     {
                         filterDimensions=[];
-                        for(var i=0;i<$scope.scopeModel.filterDimensions.length;i++)
+                        for(var i=0 ;i<$scope.scopeModel.filterDimensions.length ;i++)
                         {
                             var filterDimension = $scope.scopeModel.filterDimensions[i];
                             filterDimensions.push({

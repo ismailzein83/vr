@@ -70,7 +70,7 @@ app.directive("vrAccountbalanceUpdateprocessScheduled", ['UtilsService', 'VRUIUt
                 var payloadSelector;
                 if (payload != undefined && payload.data != undefined)
                 {
-                    payloadSelector = { selectedIds: payload.data.AccountTypeId }
+                    payloadSelector = { selectedIds: payload.data.AccountTypeId };
                 }
                 VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, payloadSelector, accountTypeSelectorLoadDeferred);
             });

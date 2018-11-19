@@ -72,7 +72,7 @@ app.directive("vrAnalyticDaprofcalcStoreoutputprocessinput", ['UtilsService', 'V
                     };
                     filters.push(daProfCalcDataRecordStorageFilter);
 
-                    var setSourceLoader = function (value) { $scope.scopeModel.isLoadingSourceDataRecordStorage = value };
+                    var setSourceLoader = function (value) { $scope.scopeModel.isLoadingSourceDataRecordStorage = value; };
                     var payload = {
                         filters: filters
                     };

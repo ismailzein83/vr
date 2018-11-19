@@ -31,7 +31,7 @@ function (UtilsService, VRUIUtilsService) {
             var api = {};
 
             api.load = function () {
-                var promises = []
+                var promises = [];
                 UtilsService.waitMultiplePromises(promises);
               
             };

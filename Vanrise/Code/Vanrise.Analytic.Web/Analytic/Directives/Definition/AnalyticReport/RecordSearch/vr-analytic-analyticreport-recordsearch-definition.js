@@ -58,7 +58,7 @@
                             if (reportSettings != undefined) {
                                 payLoad = {
                                     sources: reportSettings.Sources
-                                }
+                                };
                             }
 
                             VRUIUtilsService.callDirectiveLoad(sourceAPI, payLoad, loadSourcePromiseDeferred);

@@ -100,7 +100,7 @@ app.directive("vrAccountbalanceNotificationSearcheditor", ["UtilsService", "VRUI
                     var notificationTypeEntity = response;
 
                     if (notificationTypeEntity != undefined && notificationTypeEntity.ExtendedSettings != undefined) {
-                        accountBalanceNotificationTypeExtendedSettings =  notificationTypeEntity.ExtendedSettings.AccountBalanceNotificationTypeExtendedSettings
+                        accountBalanceNotificationTypeExtendedSettings = notificationTypeEntity.ExtendedSettings.AccountBalanceNotificationTypeExtendedSettings;
                     }
 
                     if (accountBalanceNotificationTypeExtendedSettings != undefined) {

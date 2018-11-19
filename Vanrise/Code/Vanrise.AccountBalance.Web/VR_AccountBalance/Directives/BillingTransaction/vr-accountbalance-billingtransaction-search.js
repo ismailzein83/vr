@@ -70,7 +70,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 var onBillingTransacationAdded = function (obj) {
                     gridAPI.onBillingTransactionAdded(obj);
                 };
-                VR_AccountBalance_BillingTransactionService.addBillingTransaction(accountsIds[0], accountTypeId, onBillingTransacationAdded)
+                VR_AccountBalance_BillingTransactionService.addBillingTransaction(accountsIds[0], accountTypeId, onBillingTransacationAdded);
             };
 
             $scope.scopeModel.validateDateTime = function () {

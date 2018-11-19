@@ -49,7 +49,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
                         if (payload != undefined) {
                             if (payload.assignmentdefinitons != undefined)
                             {
-                                for(var i= 0;i< payload.assignmentdefinitons.length;i++)
+                                for(var i= 0 ;i< payload.assignmentdefinitons.length ;i++)
                                 {
                                     var assignmentdefiniton = payload.assignmentdefinitons[i];
                                     $scope.assignmentDefinitions.push({ Entity: assignmentdefiniton });

@@ -15,7 +15,7 @@
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onDAProfCalcAggregationFieldAdded = onDAProfCalcAggregationFieldAdded
+                modalScope.onDAProfCalcAggregationFieldAdded = onDAProfCalcAggregationFieldAdded;
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/DataAnalysis/ProfilingAndCalculation/DAProfCalcAggregationFieldEditor.html', parameters, settings);
         };

@@ -85,7 +85,7 @@ app.directive('vrAccountbalanceBillingtransactionSynchronizer', ['UtilsService',
                             if (payload != undefined) {
                                 selectorPayload = {
                                     selectedIds: payload.BillingTransactionTypeIds
-                                }
+                                };
                             }
                             VRUIUtilsService.callDirectiveLoad(transactionTypeDirectiveAPI, selectorPayload, billingTransactionTypeLoadDeferred);
                         });

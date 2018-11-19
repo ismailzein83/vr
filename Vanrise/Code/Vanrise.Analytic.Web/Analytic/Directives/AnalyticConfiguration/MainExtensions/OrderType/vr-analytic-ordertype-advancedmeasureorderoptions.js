@@ -152,7 +152,7 @@
                 var dataItem = {};
                 if (measureOrder.payload != undefined) {
                     dataItem.Name = measureOrder.payload.MeasureName;
-                    dataItem.SelectedOrderDirection =  UtilsService.getItemByVal($scope.scopeModel.orderDirectionList, measureOrder.payload.OrderDirection, 'value')
+                    dataItem.SelectedOrderDirection = UtilsService.getItemByVal($scope.scopeModel.orderDirectionList, measureOrder.payload.OrderDirection, 'value');
                 }
                 $scope.scopeModel.measures.push(dataItem);
             }

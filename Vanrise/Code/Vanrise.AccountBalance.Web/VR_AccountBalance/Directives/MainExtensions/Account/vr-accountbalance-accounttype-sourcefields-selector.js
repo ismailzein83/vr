@@ -98,7 +98,7 @@ app.directive('vrAccountbalanceAccounttypeSourcefieldsSelector', ['VRUIUtilsServ
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                         context = payload.context;
-                        sourceId = payload.sourceId
+                        sourceId = payload.sourceId;
                     } 
                     if (context != undefined && context.getSourceFieldsInfo != undefined && sourceId != undefined)
                     {

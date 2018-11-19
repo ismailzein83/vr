@@ -22,7 +22,7 @@
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
 
             templateUrl: function (element, attrs) {
@@ -257,7 +257,7 @@
             }
             function getAnalyticDimensionEditorRuntime(tableId)
             {
-                return   VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticDimensionEditorRuntime({ TableId: tableId })
+                return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticDimensionEditorRuntime({ TableId: tableId });
             }
         }
     }

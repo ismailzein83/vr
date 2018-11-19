@@ -61,7 +61,7 @@
 
                 $scope.scopeModel.onTableSelectionChanged = function () {
                     if (searchSettingDirectiveAPI != undefined && tableSelectorAPI != undefined) {
-                        var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value };
+                        var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value; };
                         var payload = {
                             tableIds: tableSelectorAPI.getSelectedIds()
                         };
@@ -73,7 +73,7 @@
 
                 $scope.scopeModel.onSearchSettingsDirectiveReady = function (api) {
                     searchSettingDirectiveAPI = api;
-                    var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value };
+                    var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value; };
                     var payload = {
                         tableIds: tableSelectorAPI.getSelectedIds()
                     };
@@ -116,7 +116,7 @@
                                 payLoad = {
                                     tableIds: reportSettings.AnalyticTableIds,
                                     searchSettings: reportSettings.SearchSettings
-                                }
+                                };
                             }
 
                             VRUIUtilsService.callDirectiveLoad(searchSettingDirectiveAPI, payLoad, loadSearchSettingsPromiseDeferred);
@@ -129,7 +129,7 @@
                         if (reportSettings != undefined) {
                             payLoad = {
                                 selectedIds: reportSettings.AnalyticTableIds
-                            }
+                            };
                         }
 
                         VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoad, loadTableSelectorPromiseDeferred);

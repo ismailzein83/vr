@@ -207,7 +207,7 @@
                 };
                 VRUIUtilsService.callDirectiveLoad(accountDirectiveAPI, payload, loadAccountSelectorPromiseDeferred);
             });
-            return loadAccountSelectorPromiseDeferred.promise
+            return loadAccountSelectorPromiseDeferred.promise;
         }
 
 

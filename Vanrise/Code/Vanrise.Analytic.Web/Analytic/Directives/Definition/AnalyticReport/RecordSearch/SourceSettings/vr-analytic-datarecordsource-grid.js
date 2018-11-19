@@ -32,7 +32,7 @@
                 ctrl.sources = [];
                 ctrl.isSourceGridValid = function () {
                     if (ctrl.sources.length == 0) {
-                        return 'At least one Souce must be added.'
+                        return 'At least one Souce must be added.';
                     }
                     return null;
                 };

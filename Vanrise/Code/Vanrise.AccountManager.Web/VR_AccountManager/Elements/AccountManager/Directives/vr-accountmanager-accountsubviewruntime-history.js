@@ -25,7 +25,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
         this.initializeController = initializeController;
         var historyGridAPI;
         var accountManagerId;
-        var accountManagerDefinitionId
+        var accountManagerDefinitionId;
         function initializeController() {
             $scope.onHistoryGridReady = function (api) {
                 historyGridAPI = api;

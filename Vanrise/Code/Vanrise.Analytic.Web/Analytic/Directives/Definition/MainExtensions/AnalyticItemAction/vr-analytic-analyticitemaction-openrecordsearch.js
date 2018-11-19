@@ -63,7 +63,7 @@
                     if (reportEntity && reportEntity.Settings)
                     {
                                 
-                        for(var i=0;i<reportEntity.Settings.Sources.length;i++)
+                        for(var i=0 ;i<reportEntity.Settings.Sources.length ;i++)
                         {
                             var source = reportEntity.Settings.Sources[i];
                             $scope.scopeModel.sources.push({ Name: source.Name, Title: source.Title });
