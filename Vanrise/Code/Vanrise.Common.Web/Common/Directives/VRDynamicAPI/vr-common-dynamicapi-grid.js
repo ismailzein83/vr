@@ -40,7 +40,7 @@ function (UtilsService, VRNotificationService, VR_Dynamic_APIService,VRCommon_VR
 
                     directiveApi.load = function (payload) {
                         vrDynamicAPIModuleId = payload.VRDynamicAPIModuleId;
-                        var query = payload;
+                        var query = payload
                         return gridApi.retrieveData(query);
                     };
 
