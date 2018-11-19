@@ -21,7 +21,7 @@ namespace Vanrise.Common.Business
             Func<VRDynamicAPI, bool> filterExpression = (vrDynamicAPI) =>
             {
                 if (input.Query.VRDynamicAPIModuleId.HasValue && !(vrDynamicAPI.ModuleId == input.Query.VRDynamicAPIModuleId))
-                    return false;                
+                    return false;
                 return true;
             };
             return DataRetrievalManager.Instance.ProcessResult(input, allVRDynamicAPIs.ToBigResult(input, filterExpression, VRDynamicAPIDetailMapper));
@@ -87,6 +87,75 @@ namespace Vanrise.Common.Business
             }
             return updateOperationOutput;
         }
+
+        public string BuildAPIClassController(VRDynamicAPI vrDynamicAPI)
+        {
+            vrDynamicAPI.Name.ThrowIfNull("vrDynamicAPI.Name");
+            vrDynamicAPI.Settings.ThrowIfNull("vrDynamicAPI.Settings");
+
+            StringBuilder classControllerBuilder = new StringBuilder(@" 
+
+              using System;
+              using System.Collections.Generic;
+              using System.Linq;
+              using System.Web;
+              using System.Web.Http;
+              using Vanrise.Common.Business;
+              using Vanrise.Web.Base;
+              using Vanrise.Entities;
+
+              namespace Vanrise.Common.Web.Controllers
+              {
+                [RoutePrefix(Constants.ROUTE_PREFIX + #ControllerName#)]
+                 [JSONWithTypeAttribute]
+                public class #Controller#Controller : BaseAPIController
+                     { 
+
+                        #Methods#
+                    
+                     }
+              } 
+           ");
+
+            StringBuilder methodsBuilder = new StringBuilder();
+            
+            foreach (var method in vrDynamicAPI.Settings.Methods)
+            {
+                var context = new VRDynamicAPIMethodSettingsContext();
+                methodsBuilder.AppendLine();
+                method.Settings.Evaluate(context);
+
+                StringBuilder methodBuilder = new StringBuilder(@" 
+                [Http#MethodType#]
+                public #ReturnType# #methodName#(#InParameters#){#MethodBody#}");
+
+                StringBuilder parametersBuilder = new StringBuilder();
+
+                if(context.InParameters!=null)
+                parametersBuilder.Append(string.Join(",", context.InParameters.MapRecords(x => string.Format("{0} {1}", x.ParameterType, x.ParameterName))));
+
+                methodBuilder.Replace("#MethodType#", context.MethodType.ToString());
+
+                context.ReturnType.ThrowIfNull("context.ReturnType");
+                methodBuilder.Replace("#ReturnType#", context.ReturnType);
+
+                methodBuilder.Replace("#methodName#", method.Name);
+
+                methodBuilder.Replace("#InParameters#", parametersBuilder.ToString());
+
+                context.MethodBody.ThrowIfNull("context.MethodBody");
+                methodBuilder.Replace("#MethodBody#", context.MethodBody);
+
+                methodsBuilder.Append(methodBuilder);
+            }
+
+            classControllerBuilder.Replace("#ControllerName#", '"' + vrDynamicAPI.Name + '"');
+            classControllerBuilder.Replace("#Controller#", vrDynamicAPI.Name);
+            classControllerBuilder.Replace("#Methods#", methodsBuilder.ToString()); 
+
+            return classControllerBuilder.ToString();
+        }
+
         #endregion
 
         #region Private Classes
@@ -102,7 +171,7 @@ namespace Vanrise.Common.Business
         #endregion
 
         #region Private Methods
-
+       
         private Dictionary<long, VRDynamicAPI> GetCachedVRDynamicAPIs()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
@@ -113,6 +182,8 @@ namespace Vanrise.Common.Business
                    return vrDynamicAPIs.ToDictionary(vrDynamicAPI => vrDynamicAPI.VRDynamicAPIId, vrDynamicAPI => vrDynamicAPI);
                });
         }
+
+
         #endregion
 
         #region Mappers
@@ -137,3 +208,4 @@ namespace Vanrise.Common.Business
         #endregion
     }
 }
+

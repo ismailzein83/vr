@@ -30,11 +30,28 @@ namespace Vanrise.Entities
     public abstract class VRDynamicAPIMethodSettings
     {
         public abstract Guid ConfigId { get; }
+        public abstract void  Evaluate(IVRDynamicAPIMethodSettingsContext vrDynamicAPIMethodSettingsContext); 
     }
     public enum VRDynamicAPIMethodType { Get = 1, Post = 2 }
     public class VRDynamicAPIMethodParameter
     {
         public string ParameterName { get; set; }
         public string ParameterType { get; set; }
+    }
+    public interface IVRDynamicAPIMethodSettingsContext
+    {
+        string MethodBody { set; }
+        string ReturnType { set; }
+        List<VRDynamicAPIMethodParameter> InParameters { set; }
+        VRDynamicAPIMethodType MethodType { set; }
+
+    }
+    public class VRDynamicAPIMethodSettingsContext : IVRDynamicAPIMethodSettingsContext
+    {
+        public string MethodBody { get; set; }
+        public string ReturnType { get; set; }
+        public List<VRDynamicAPIMethodParameter> InParameters { get; set; }
+        public VRDynamicAPIMethodType MethodType { get; set; }
+
     }
 }

@@ -155,6 +155,7 @@
 
             $scope.scopeModel.isLoading = true;
             var vrDynamicAPIObject = buildVRDynamicAPIObjectFromScope();
+            //VRCommon_VRDynamicAPIAPIService.BuildAPIClassController(vrDynamicAPIObject);
             VRCommon_VRDynamicAPIAPIService.UpdateVRDynamicAPI(vrDynamicAPIObject).then(function (response) {
 
                 if (VRNotificationService.notifyOnItemUpdated("Dynamic API", response, "Name")) {

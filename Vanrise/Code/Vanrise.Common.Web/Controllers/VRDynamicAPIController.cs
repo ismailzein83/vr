@@ -52,5 +52,12 @@ namespace Vanrise.Common.Web.Controllers
             return vrDynamicAPIManager.GetVRDynamicAPIMethodSettingsConfigs();
         }
 
+        //[HttpPost]
+        //[Route("BuildAPIClassController")]
+        //public string BuildAPIClassController(VRDynamicAPI vrDynamicAPI)
+        //{
+        //    return vrDynamicAPIManager.BuildAPIClassController(vrDynamicAPI);
+        //}
+
     }
 }
