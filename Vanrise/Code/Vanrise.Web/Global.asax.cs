@@ -14,22 +14,34 @@ namespace Vanrise.Web
     {
         protected virtual void Application_Start()
         {
-            Vanrise.Common.VRWebContext.SetWebContextReader(new DOTNETVRWebRequestContextReader());
+            Vanrise.Common.VRWebContext.SetWebContextReader(new DOTNETVRWebRequestContextReader()); 
             Vanrise.Common.Utilities.CompilePredefinedPropValueReaders();
             AreaRegistration.RegisterAllAreas();
             RegisterWebAPI();
             RegisterGlobalFilters();
-            RegisterRoutes();
+            RegisterRoutes();           
             RegisterBundles();
         }
 
-        protected abstract void RegisterWebAPI();
+        protected virtual void RegisterWebAPI()
+        {
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+        }
 
-        public abstract void RegisterGlobalFilters();
+        public virtual void RegisterGlobalFilters()
+        {
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+        }
 
-        public abstract void RegisterRoutes();
-
-        public abstract void RegisterBundles();
+        public virtual void RegisterRoutes()
+        {
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+        }
+        
+        public virtual void RegisterBundles()
+        {
+            VRWebContext.RegisterApplicationWebBundles();
+        }
 
         private class DOTNETVRWebRequestContextReader : IVRWebContextReader
         {            

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Vanrise.Web
+<!DOCTYPE html>
 <html ng-app="mainModule" ng-controller="mainCtrl" ng-init="setCookieName('@ViewBag.CookieName');setLoginURL('@ViewBag.LoginURL'); spinner=true;setVersionNumber('@ViewBag.version');setLocalizationEnabled(@ViewBag.IsLocalizationEnabled);setLocalizationRTL(@ViewBag.IsRTL);">
 <head>
     <meta charset="utf-8" />
@@ -16,14 +17,14 @@
             m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
     </script>
-    @Styles.Render("~/Content/bootstrap")
-    @Styles.Render("~/Content/AngularExtensions")
-    @Styles.Render("~/Content/HandsonTable")
-    @Styles.Render("~/Content/CodeMirrorStyle")
+    @VRWebStyles.Render("~/Content/bootstrap")
+    @VRWebStyles.Render("~/Content/AngularExtensions")
+    @VRWebStyles.Render("~/Content/HandsonTable")
+    @VRWebStyles.Render("~/Content/CodeMirrorStyle")
     @*Styles.Render("~/Content/Semantic")*@
-    @Styles.Render("~/Content/FontStyle")
-    @Styles.Render("~/Content/Styles")
-    @Styles.Render("~/Content/Themes")
+    @VRWebStyles.Render("~/Content/FontStyle")
+    @VRWebStyles.Render("~/Content/Styles")
+    @VRWebStyles.Render("~/Content/Themes")
 </head>
 <body @ViewBag.RTLClass ng-class="isMobile?'vr-mobile-view':''" ng-init="isLocalizationEnabled = @ViewBag.IsLocalizationEnabled ; hasRemoteApplications = @ViewBag.HasRemoteApplications;">
     <div ng-show="spinner" class="loading-container"><img src="Client/Images/loader-mask.gif" /></div>
@@ -293,19 +294,19 @@
     </div>
 
 </body>
-@Scripts.Render("~/bundles/helpers")
-@Scripts.Render("~/bundles/JQuery")
-@Scripts.Render("~/bundles/codemirror")
-@Scripts.Render("~/bundles/Angular")
-@Scripts.Render("~/bundles/CodemirrorDirective")
-@Scripts.Render("~/bundles/AngularExtensions")
-@Scripts.Render("~/bundles/HandsonTable")
-@Scripts.Render("~/bundles/bootstrap")
-@Scripts.Render("~/bundles/highchart")
-@*@Scripts.Render("~/bundles/Semantic")*@
-@Scripts.Render("~/bundles/Javascripts")
-@Scripts.Render("~/bundles/ModulesJavascripts")
-@Scripts.Render("~/bundles/waves")
+@VRWebScripts.Render("~/bundles/helpers")
+@VRWebScripts.Render("~/bundles/JQuery")
+@VRWebScripts.Render("~/bundles/codemirror")
+@VRWebScripts.Render("~/bundles/Angular")
+@VRWebScripts.Render("~/bundles/CodemirrorDirective")
+@VRWebScripts.Render("~/bundles/AngularExtensions")
+@VRWebScripts.Render("~/bundles/HandsonTable")
+@VRWebScripts.Render("~/bundles/bootstrap")
+@VRWebScripts.Render("~/bundles/highchart")
+@*@VRWebScripts.Render("~/bundles/Semantic")*@
+@VRWebScripts.Render("~/bundles/Javascripts")
+@VRWebScripts.Render("~/bundles/ModulesJavascripts")
+@VRWebScripts.Render("~/bundles/waves")
 
 
 </html>

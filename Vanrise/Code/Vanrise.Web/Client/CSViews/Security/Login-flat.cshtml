@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Vanrise.Web
+<!DOCTYPE html>
 <html ng-app="mainModule">
 <head>
     <meta charset="utf-8" />
@@ -16,13 +17,13 @@
             m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
     </script>
-    @Styles.Render("~/Content/bootstrap")
-    @Styles.Render("~/Content/AngularExtensions")
-    @Styles.Render("~/Content/CodeMirrorStyle")
-    @*@Styles.Render("~/Content/Semantic")*@
-    @Styles.Render("~/Content/FontStyle")
-    @Styles.Render("~/Content/Styles")
-    @Styles.Render("~/Content/Themes")
+    @VRWebStyles.Render("~/Content/bootstrap")
+    @VRWebStyles.Render("~/Content/AngularExtensions")
+    @VRWebStyles.Render("~/Content/CodeMirrorStyle")
+    @*@VRWebStyles.Render("~/Content/Semantic")*@
+    @VRWebStyles.Render("~/Content/FontStyle")
+    @VRWebStyles.Render("~/Content/Styles")
+    @VRWebStyles.Render("~/Content/Themes")
 
 </head>
 <body ng-class="isMobile?'flat login-body  vr-mobile-view':' login-body flat '" ng-controller="loginCtrl" ng-init="setCookieName('@ViewBag.CookieName');redirectURL = '@ViewBag.RedirectTo';setLocalizationEnabled(@ViewBag.IsLocalizationEnabled);setLocalizationRTL(@ViewBag.IsRTL);">
@@ -80,19 +81,19 @@
     </div>
 
 </body>
-@Scripts.Render("~/bundles/helpers")
-@Scripts.Render("~/bundles/JQuery")
-@Scripts.Render("~/bundles/codemirror")
-@Scripts.Render("~/bundles/Angular")
-@Scripts.Render("~/bundles/CodemirrorDirective")
-@Scripts.Render("~/bundles/AngularExtensions")
+@VRWebStyles.Render("~/bundles/helpers")
+@VRWebStyles.Render("~/bundles/JQuery")
+@VRWebStyles.Render("~/bundles/codemirror")
+@VRWebStyles.Render("~/bundles/Angular")
+@VRWebStyles.Render("~/bundles/CodemirrorDirective")
+@VRWebStyles.Render("~/bundles/AngularExtensions")
 
-@Scripts.Render("~/bundles/bootstrap")
-@Scripts.Render("~/bundles/highchart")
-@*@Scripts.Render("~/bundles/Semantic")*@
-@Scripts.Render("~/bundles/Javascripts")
-@Scripts.Render("~/bundles/BaseModulesJavascripts")
-@Scripts.Render("~/bundles/waves")
+@VRWebStyles.Render("~/bundles/bootstrap")
+@VRWebStyles.Render("~/bundles/highchart")
+@*@VRWebStyles.Render("~/bundles/Semantic")*@
+@VRWebStyles.Render("~/bundles/Javascripts")
+@VRWebStyles.Render("~/bundles/BaseModulesJavascripts")
+@VRWebStyles.Render("~/bundles/waves")
 
 
 </html>
