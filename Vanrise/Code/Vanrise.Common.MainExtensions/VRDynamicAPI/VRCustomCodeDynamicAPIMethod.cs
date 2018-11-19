@@ -14,7 +14,7 @@ namespace Vanrise.Common.MainExtensions.VRDynamicAPI
         public override void Evaluate(IVRDynamicAPIMethodSettingsContext context)
         {
             context.MethodBody = MethodBody;
-            context.ReturnType = (ReturnType == null || ReturnType == "") ? "void": ReturnType;
+            context.ReturnType= ReturnType;
             context.MethodType = MethodType;
             context.InParameters = InParameters;
         }

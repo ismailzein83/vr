@@ -136,7 +136,10 @@ namespace Vanrise.Common.Business
 
                 methodBuilder.Replace("#MethodType#", context.MethodType.ToString());
 
-                context.ReturnType.ThrowIfNull("context.ReturnType");
+                if (context.MethodType == VRDynamicAPIMethodType.Get && context.ReturnType == null)
+                    context.ReturnType.ThrowIfNull("context.ReturnType");
+                else if (context.ReturnType == null)
+                    context.ReturnType = "void";
                 methodBuilder.Replace("#ReturnType#", context.ReturnType);
 
                 methodBuilder.Replace("#methodName#", method.Name);
