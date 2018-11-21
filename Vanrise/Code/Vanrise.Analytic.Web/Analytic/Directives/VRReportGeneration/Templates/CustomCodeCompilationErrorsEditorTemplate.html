@@ -1,1 +1,14 @@
-﻿
+﻿<div vr-modalcontent ng-controller="VR_Analytic_CustomCodeCompilationErrorsEditorController" vr-loader="isLoading" width="'30%'">
+    <vr-modalbody>
+        <vr-form name="compilationErrorsEditor">
+            <div ng-repeat="msg in scopeModel.errorMessages">{{msg}}</div>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -21,5 +21,12 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             return _manager.GetReportGenerationCustomCodeSettingsInfo();
         }
+
+        [HttpPost]
+        [Route("TryCompileCustomCode")]
+        public CustomCodeCompilationOutput TryCompileCustomCode(CustomCodeCompilationInput input)
+        {
+            return _manager.TryCompileCustomCode(input);
+        }
     }
 }

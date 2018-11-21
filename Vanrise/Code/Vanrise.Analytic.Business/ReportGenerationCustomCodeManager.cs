@@ -85,6 +85,23 @@ namespace Vanrise.Analytic.Business
                 return compilationOutput.OutputAssembly.GetType(fullTypeName);
             }
         }
+        public CustomCodeCompilationOutput TryCompileCustomCode(CustomCodeCompilationInput input)
+        {
+            List<string> errorMessages;
+            var type = GetOrCreateRuntimeType(input.CustomCode, out errorMessages);
+            if (errorMessages != null && errorMessages.Count>0)
+            {
+                return new CustomCodeCompilationOutput()
+                {
+                    CompilationSucceeded = false,
+                    ErrorMessages = errorMessages
+                };
+            }
+            return new CustomCodeCompilationOutput()
+            {
+                CompilationSucceeded = true
+            };
+        }
         public string GetCustomCodeById(Guid vrComponentTypeId)
         {
             var reportGenerationCustomCodeSettings = GetVRAutomatedReportQueryDefinitionSettings(vrComponentTypeId);
@@ -117,6 +134,7 @@ namespace Vanrise.Analytic.Business
                 using Vanrise.Analytic.Business;
                 using Vanrise.Analytic.Entities;
                 using Vanrise.Common.Excel;
+                using Vanrise.Common.Business;
 
                 namespace #NAMESPACE#
                 {

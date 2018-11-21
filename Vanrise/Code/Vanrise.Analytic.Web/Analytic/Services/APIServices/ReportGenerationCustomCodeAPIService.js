@@ -10,9 +10,12 @@
         function GetReportGenerationCustomCodeSettingsInfo() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetReportGenerationCustomCodeSettingsInfo'));
         }
-
+        function TryCompileCustomCode(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'TryCompileCustomCode'), input);
+        }
         return ({
             GetReportGenerationCustomCodeSettingsInfo: GetReportGenerationCustomCodeSettingsInfo,
+            TryCompileCustomCode: TryCompileCustomCode
         });
     }
 

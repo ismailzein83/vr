@@ -23,6 +23,7 @@ app.directive("vrAnalyticReportgenerationcustomcodeFilegenerator", ["UtilsServic
             var customCodeSettingsAPI;
             var customCodeSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var context;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -44,6 +45,10 @@ app.directive("vrAnalyticReportgenerationcustomcodeFilegenerator", ["UtilsServic
                     if (payload != undefined) {
                         if (payload.fileGenerator != undefined) {
                             selectedCustomCodeSettingsId = payload.fileGenerator.ReportGenerationCustomCodeId;
+                        }
+                        context = payload.context;
+                        if (context != undefined && context.disableTestGenerateButton != undefined && typeof (context.disableTestGenerateButton) == 'function') {
+                            context.disableTestGenerateButton(false);
                         }
                     }
                     promises.push(loadCustomCodeSelector());
