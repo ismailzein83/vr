@@ -122,7 +122,7 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        public bool ReserveDSLAMPort(string portId, string username)
+        public bool ReserveDSLAMPort(string portId)
         {
             //TODO: reserve port 
             return true;
