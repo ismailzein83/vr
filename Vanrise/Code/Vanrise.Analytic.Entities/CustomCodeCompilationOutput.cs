@@ -8,5 +8,8 @@ namespace Vanrise.Analytic.Entities
 {
     public class CustomCodeCompilationOutput
     {
+        public List<string> ErrorMessages { get; set; }
+
+        public bool CompilationSucceeded { get; set; }
     }
 }
