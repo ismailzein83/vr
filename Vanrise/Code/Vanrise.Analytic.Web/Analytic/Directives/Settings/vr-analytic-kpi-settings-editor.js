@@ -94,7 +94,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
 
                 var context = {};
                 context.getMeasures = function () {
-                    var selectedMeasures = []
+                    var selectedMeasures = [];
                     for (var i = 0; i < measures.length; i++) {
                         selectedMeasures.push(measures[i]);
                     }
