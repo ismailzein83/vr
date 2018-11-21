@@ -85,6 +85,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CityManager.cs" />
+    <Compile Include="CountryManager.cs" />
     <Compile Include="OldEntites\BranchManager.cs" />
     <Compile Include="OldEntites\CDRManager.cs" />
     <Compile Include="OldEntites\ColorManager.cs" />

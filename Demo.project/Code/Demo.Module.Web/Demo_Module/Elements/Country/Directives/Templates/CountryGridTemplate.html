@@ -1,0 +1,17 @@
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+			 datasource="scopeModel.countries"
+			 dataretrievalfunction="scopeModel.dataRetrievalFunction"
+			 pagingtype="'PagingOnScroll'"
+			 menuactions="scopeModel.gridMenuActions"
+			 idfield="CountryId"
+			 enableautoexport="true">
+
+	<vr-datagridcolumn header="'ID'" field="'CountryId'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn header="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn header="'Capital'" field="'Capital'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn header="'Population'" field="'Population'" type="'Number'"></vr-datagridcolumn>
+
+	<vr-datagridexpandablerow>
+		<vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+	</vr-datagridexpandablerow>
+</vr-datagrid>

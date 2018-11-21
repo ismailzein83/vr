@@ -1,0 +1,18 @@
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+			 datasource="scopeModel.districts"
+			 ondeleterow="scopeModel.onDeleteRow"
+			 title="District"
+			 idfield="DistrictId"
+			 vr-loader="scopeModel.isLoading" 
+			 hidegridmenu disabledraggablecolumns>
+	<vr-datagridcolumn headertext="'Name'" type="'Text'">
+		<vr-textbox value="dataItem.entity.Name" type='text' tonextinput isrequired></vr-textbox>
+	</vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Population'" type="'Number'">
+		<vr-textbox value="dataItem.entity.Population" type='number' tonextinput isrequired></vr-textbox>
+	</vr-datagridcolumn>
+
+	<vr-datagridexpandablerow>
+		<vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+	</vr-datagridexpandablerow>
+</vr-datagrid>

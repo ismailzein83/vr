@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoModuleFactory.cs" />
+    <Compile Include="ICityDataManager.cs" />
+    <Compile Include="ICountryDataManager.cs" />
     <Compile Include="OldEntities\IBranchDataManager.cs" />
     <Compile Include="OldEntities\ICDRDataManager.cs" />
     <Compile Include="OldEntities\IComplaintDataManager.cs" />

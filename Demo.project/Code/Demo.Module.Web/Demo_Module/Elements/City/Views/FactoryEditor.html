@@ -1,0 +1,22 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_FactoryEditorController" width="'50%'">
+	<vr-modalbody>
+		<vr-form name="formFactoryEditor">
+			<vr-tabs>
+				<vr-tab header="'Definition'">
+					<vr-columns width="1/2row">
+						<vr-textbox value="scopeModel.employeesNumber" type="number" label="Employees Number" isrequired></vr-textbox>
+					</vr-columns>
+					<demo-module-city-district-factorytype on-ready="scopeModel.onFactoryTypeReady" normal-col-num="6" isrequired="true"></demo-module-city-district-factorytype>
+				</vr-tab>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" formname="formFactoryEditor" data-onclick="scopeModel.saveFactory"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
+</div>

@@ -42,11 +42,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Data.SQL">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="City\BigCityType.cs" />
+    <Compile Include="City\SmallCityType.cs" />
+    <Compile Include="District\IndustrialDistrict.cs" />
+    <Compile Include="District\TouristicDistrict.cs" />
+    <Compile Include="Factory\CarFactory.cs" />
+    <Compile Include="Factory\MilitaryFactory.cs" />
     <Compile Include="OldEntities\PageDefinition\DatetimeField.cs" />
     <Compile Include="OldEntities\PageDefinition\BooleanField.cs" />
     <Compile Include="OldEntities\PageDefinition\Filters\DatetimeFilter.cs" />

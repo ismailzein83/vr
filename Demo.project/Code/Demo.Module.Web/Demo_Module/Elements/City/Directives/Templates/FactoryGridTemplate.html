@@ -1,0 +1,17 @@
+﻿<vr-row removeline>
+	<vr-columns width="normal">
+		<vr-button type="Add" data-onclick="scopeModel.addFactory" standalone></vr-button>
+	</vr-columns>
+</vr-row>
+<vr-row removeline>
+	<vr-columns width="fullrow">
+		<vr-datagrid on-ready="scopeModel.onGridReady"
+					 datasource="scopeModel.factories"
+					 ondeleterow="scopeModel.onDeleteRow"
+					 menuactions="scopeModel.gridMenuActions"
+					 idfield="FactoryId" title="Factory"
+					 hidegridmenu disabledraggablecolumns>
+			<vr-datagridcolumn headertext="'Employees Number'" field="'entity.EmployeesNumber'"></vr-datagridcolumn>
+		</vr-datagrid>
+	</vr-columns>
+</vr-row>

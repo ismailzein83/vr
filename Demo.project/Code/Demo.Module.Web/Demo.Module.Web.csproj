@@ -54,32 +54,21 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Routing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest">
-    </Reference>
-    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Http, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
@@ -91,25 +80,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Optimization">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.1\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -120,14 +90,6 @@
     </Reference>
     <Reference Include="Vanrise.Web.Base">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
-    </Reference>
-    <Reference Include="WebGrease">
-      <Private>True</Private>
-      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
-    </Reference>
-    <Reference Include="Antlr3.Runtime">
-      <Private>True</Private>
-      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +207,50 @@
     <Content Include="Demo_Module\Elements\CallCenterCustomer\Views\CallCenterCustomerManagementController.js" />
     <Content Include="Demo_Module\Elements\CallCenterCustomer\Views\CallEditor.html" />
     <Content Include="Demo_Module\Elements\CallCenterCustomer\Views\CallEditorController.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-citysettings.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-citytype.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-district-factory-management.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-district-factorytype.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-districtsettings.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-search.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-grid.js" />
+    <Content Include="Demo_Module\Elements\City\Views\FactoryEditorController.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\City\demo-module-city-citytype-big.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\City\demo-module-city-citytype-small.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\City\Templates\BigCityTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\City\Templates\SmallCityTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-district-management.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\demo-module-city-district-grid.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\Factory\demo-module-industrialdistrict-factorytype-car.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\Factory\demo-module-industrialdistrict-factorytype-military.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\District\demo-module-city-districtsettings-industrial.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\District\demo-module-city-districtsettings-touristic.js" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\Factory\Templates\CarFactoryTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\Templates\DistrictGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Views\FactoryEditor.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\Templates\FactoryGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\Factory\Templates\MilitaryFactoryTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\District\Templates\TouristicDistrictTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\District\Templates\IndustrialDistrictTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\Templates\CityGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\Templates\CitySearchTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\Templates\DistrictManagementTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\Templates\CitySettingsTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Services\APIServices\CityAPIService.js" />
+    <Content Include="Demo_Module\Elements\City\Services\CityService.js" />
+    <Content Include="Demo_Module\Elements\City\Views\CityEditorController.js" />
+    <Content Include="Demo_Module\Elements\City\Views\CityEditor.html" />
+    <Content Include="Demo_Module\Elements\City\Views\CityManagement.html" />
+    <Content Include="Demo_Module\Elements\City\Views\CityManagementController.js" />
+    <Content Include="Demo_Module\Elements\Country\Directives\demo-module-country-selector.js" />
+    <Content Include="Demo_Module\Elements\Country\Directives\Templates\CountryGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\Country\Directives\demo-module-country-grid.js" />
+    <Content Include="Demo_Module\Elements\Country\Services\APIServices\CountryAPIService.js" />
+    <Content Include="Demo_Module\Elements\Country\Services\CountryService.js" />
+    <Content Include="Demo_Module\Elements\Country\Views\CountryEditorController.js" />
+    <Content Include="Demo_Module\Elements\Country\Views\CountryEditor.html" />
+    <Content Include="Demo_Module\Elements\Country\Views\CountryManagement.html" />
+    <Content Include="Demo_Module\Elements\Country\Views\CountryManagementController.js" />
     <Content Include="Demo_Module\Elements\Master\Directives\demo-module-master-grid.js" />
     <Content Include="Demo_Module\Elements\Master\Directives\Templates\MasterGridTemplate.html" />
     <Content Include="Demo_Module\Elements\Master\Services\APIServices\MasterAPIService.js" />
@@ -264,6 +270,7 @@
     <Content Include="Demo_Module\Services\APIServices\OldEntities\SpecialityAPIService .js" />
     <Content Include="Demo_Module\Services\OldEntities\BranchService.js" />
     <Content Include="Demo_Module\Services\OldEntities\BuildingService.js" />
+    <Content Include="Demo_Module\Services\OldEntities\CompanyService.js" />
     <Content Include="Demo_Module\Services\OldEntities\DescriptionService.js" />
     <Content Include="Demo_Module\Services\OldEntities\PageRunTimeService.js" />
     <Content Include="Demo_Module\Services\OldEntities\PageDefinitionService.js" />
@@ -295,6 +302,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CityController.cs" />
+    <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\OldEntities\CDRController.cs" />
     <Compile Include="Controllers\OldEntities\ColorController.cs" />
     <Compile Include="Controllers\OldEntities\DesksizeController.cs" />
@@ -317,33 +326,13 @@
     <Content Include="Demo_Module\ModuleInitialization.js" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Demo.BestPractices.Business\Demo.BestPractices.Business.csproj">
-      <Project>{5afd4349-a7fe-4d3f-b6fe-6877ef714e36}</Project>
-      <Name>Demo.BestPractices.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Demo.BestPractices.Data.SQL\Demo.BestPractices.Data.SQL.csproj">
-      <Project>{1fb51f46-4472-49b2-a7bd-4362129ec2e8}</Project>
-      <Name>Demo.BestPractices.Data.SQL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Demo.BestPractices.Data\Demo.BestPractices.Data.csproj">
-      <Project>{c7540099-cdaa-4f75-9a6d-3b02cf0e3bbb}</Project>
-      <Name>Demo.BestPractices.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Demo.BestPractices.Entities\Demo.BestPractices.Entities.csproj">
-      <Project>{f6e779c0-8292-4e15-af3b-c713666402f1}</Project>
-      <Name>Demo.BestPractices.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Demo.BestPractices.MainExtentions\Demo.BestPractices.MainExtentions.csproj">
-      <Project>{760ef831-102a-40b9-aa3b-a5da7b1f52a3}</Project>
-      <Name>Demo.BestPractices.MainExtentions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Demo.BestPractices.Web\Demo.BestPractices.Web.csproj">
-      <Project>{acf74ab5-9aa4-4413-8307-79f707a4d719}</Project>
-      <Name>Demo.BestPractices.Web</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Demo.Module.Business\Demo.Module.Business.csproj">
       <Project>{a0190a8f-95bd-4ce5-b60e-87529661e6e8}</Project>
       <Name>Demo.Module.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Demo.Module.Data.SQL\Demo.Module.Data.SQL.csproj">
+      <Project>{6e72dc74-f79d-4f63-a6c1-444ef4ebb4b7}</Project>
+      <Name>Demo.Module.Data.SQL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Demo.Module.Data\Demo.Module.Data.csproj">
       <Project>{415c2a9e-e7d1-4c21-8862-57450e277758}</Project>
@@ -364,6 +353,10 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

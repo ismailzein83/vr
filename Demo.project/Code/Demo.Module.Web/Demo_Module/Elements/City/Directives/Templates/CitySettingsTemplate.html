@@ -1,0 +1,11 @@
+﻿<vr-tab header="'Settings'">
+	<vr-columns width="1/2row">
+		<vr-textbox value="scopeModel.population" type="number" label="Population" isrequired> </vr-textbox>
+	</vr-columns>
+	<demo-module-city-citytype on-ready="scopeModel.onCityTypeDirectiveReady" normal-col-num="6" isrequired="true"></demo-module-city-citytype>
+</vr-tab>
+<vr-tab header="'Districts'">
+	<vr-columns width="fullrow">
+		<demo-module-city-district-management on-ready="scopeModel.onDistrictManagementReady" isrequired="true"></demo-module-city-district-management>
+	</vr-columns>
+</vr-tab>

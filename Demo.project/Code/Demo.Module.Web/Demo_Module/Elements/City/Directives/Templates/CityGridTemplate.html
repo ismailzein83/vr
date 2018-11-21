@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="scopeModel.cities"
+			 on-ready="scopeModel.onGridReady"
+			 dataretrievalfunction="scopeModel.dataRetrievalFunction"
+			 pagingtype="'PagingOnScroll'"
+			 menuactions="scopeModel.gridMenuActions"
+			 idfield="CityId" enableautoexport="true">
+	<vr-datagridcolumn headertext="'ID'" field="'CityId'" type="'Text'" widthFactory="'10%'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'" ng-show="!scopeModel.hideCountryColumn"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Description'" field="'CitySettingsDescription'" type="'Text'"></vr-datagridcolumn>
+	<vr-datagridcolumn headertext="'Districts Names'" field="'DistrictsNames'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

@@ -53,6 +53,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="City\City.cs" />
+    <Compile Include="City\CityDetails.cs" />
+    <Compile Include="City\CityQuery.cs" />
+    <Compile Include="City\CitySettingsConfig.cs" />
+    <Compile Include="District\District.cs" />
+    <Compile Include="Country\Country.cs" />
+    <Compile Include="Country\CountryDetails.cs" />
+    <Compile Include="Country\CountryInfoFilter.cs" />
+    <Compile Include="Country\CountryInfo.cs" />
+    <Compile Include="Country\CountryQuery.cs" />
+    <Compile Include="District\DistrictSettingsConfig.cs" />
+    <Compile Include="Factory\Factory.cs" />
+    <Compile Include="Factory\FactoryTypeConfig.cs" />
     <Compile Include="OldEntities\Branch\Branch.cs" />
     <Compile Include="OldEntities\Branch\BranchDetails.cs" />
     <Compile Include="OldEntities\Branch\BranchQuery.cs" />

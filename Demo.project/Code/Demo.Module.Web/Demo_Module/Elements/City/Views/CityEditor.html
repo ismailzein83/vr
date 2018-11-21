@@ -1,0 +1,25 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_CityEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
+	<vr-modalbody>
+		<vr-form name="formCityEditor">
+			<vr-tabs>
+				<vr-tab header="'Definition'">
+					<vr-row removeline>
+						<vr-columns width="1/2row">
+							<vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+						</vr-columns>
+						<demo-module-country-selector on-ready="scopeModel.onCountrySelectorReady" isdisabled="scopeModel.disableCountry" isrequired="true" normal-col-num="6"></demo-module-country-selector>
+					</vr-row>
+				</vr-tab>
+				<demo-module-city-citysettings on-ready="scopeModel.onCitySettingsDirectiveReady" isrequired="true"></demo-module-city-citysettings>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" formname="formCityEditor" data-onclick="scopeModel.saveCity"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
+</div>
