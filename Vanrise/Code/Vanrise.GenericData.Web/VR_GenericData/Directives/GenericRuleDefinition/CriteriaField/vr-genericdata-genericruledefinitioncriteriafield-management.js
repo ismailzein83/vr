@@ -123,6 +123,7 @@
                             fields.push(getMappedCriteriaField(ctrl.criteriaFields[i]));
                         }
                         data = {
+                            $type: "Vanrise.GenericData.Entities.GenericRuleDefinitionCriteria, Vanrise.GenericData.Entities",
                             Fields: fields
                         };
                     }
