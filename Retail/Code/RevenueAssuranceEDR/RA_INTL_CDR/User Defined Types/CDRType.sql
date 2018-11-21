@@ -1,0 +1,22 @@
+﻿CREATE TYPE [RA_INTL_CDR].[CDRType] AS TABLE (
+    [ID]                   BIGINT           NULL,
+    [OperatorID]           INT              NULL,
+    [DataSourceID]         UNIQUEIDENTIFIER NULL,
+    [ProbeID]              BIGINT           NULL,
+    [IDOnSwitch]           VARCHAR (255)    NULL,
+    [AttemptDateTime]      DATETIME         NULL,
+    [ConnectDateTime]      DATETIME         NULL,
+    [DisconnectDateTime]   DATETIME         NULL,
+    [AlertDateTime]        DATETIME         NULL,
+    [DurationInSeconds]    DECIMAL (20, 4)  NULL,
+    [DisconnectReason]     NVARCHAR (MAX)   NULL,
+    [CGPN]                 VARCHAR (40)     NULL,
+    [CDPN]                 VARCHAR (40)     NULL,
+    [CauseToReleaseCode]   NVARCHAR (MAX)   NULL,
+    [CauseFromReleaseCode] NVARCHAR (MAX)   NULL,
+    [Trunk]                NVARCHAR (MAX)   NULL,
+    [IP]                   NVARCHAR (MAX)   NULL,
+    [ExtraFields]          NVARCHAR (MAX)   NULL,
+    [CallType]             INT              NULL,
+    [QueueItemId]          BIGINT           NULL);
+
