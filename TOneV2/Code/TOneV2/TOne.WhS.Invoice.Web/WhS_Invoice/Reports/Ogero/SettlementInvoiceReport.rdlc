@@ -1840,7 +1840,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!VatID.Value</Value>
+                              <Value>=Parameters!CustomerVatID.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1853,15 +1853,6 @@
                           <Color>LightGrey</Color>
                           <Style>None</Style>
                         </Border>
-                        <BottomBorder>
-                          <Style>None</Style>
-                        </BottomBorder>
-                        <LeftBorder>
-                          <Style>None</Style>
-                        </LeftBorder>
-                        <RightBorder>
-                          <Style>None</Style>
-                        </RightBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>

@@ -719,7 +719,7 @@
                 <Value>=Parameters!SupplierRegAddress.Value</Value>
               </Parameter>
               <Parameter Name="SupplierVatID">
-                <Value>=Parameters!SupplierVatID.Value</Value>
+                <Value>=Parameters!CustomerVatID.Value</Value>
               </Parameter>
               <Parameter Name="SerialNumber">
                 <Value>=Parameters!SerialNumber.Value</Value>
@@ -1551,7 +1551,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1563,7 +1562,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!VatID.Value</Value>
+                              <Value>=Parameters!CustomerVatID.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -2271,7 +2270,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="SupplierVatID">
+    <ReportParameter Name="CustomerVatID">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

@@ -2407,7 +2407,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!VatID.Value</Value>
+                              <Value>=Parameters!CustomerVatID.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
@@ -2430,6 +2430,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
