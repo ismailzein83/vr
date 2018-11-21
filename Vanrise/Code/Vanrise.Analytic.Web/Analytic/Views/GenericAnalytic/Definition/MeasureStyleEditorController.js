@@ -72,7 +72,8 @@
         }
 
         function addMeasureStyleRule() {
-            measure = context.getMeasure(selectedMeasure.Name);
+            var name = selectedMeasure != undefined ? selectedMeasure.Name : measure.Name;
+            measure = context.getMeasure(name);
             var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, measure.FieldType.ConfigId, "ExtensionConfigurationId");
 
             var dataItem = {
