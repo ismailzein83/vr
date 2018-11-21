@@ -43,20 +43,29 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             var bpDefinition = new BPDefinition
             {
-                BPDefinitionID = GetReaderValue<Guid>(reader,"ID"),
+                BPDefinitionID = GetReaderValue<Guid>(reader, "ID"),
                 Name = reader["Name"] as string,
                 Title = reader["Title"] as string,
                 VRWorkflowId = GetReaderValue<Guid?>(reader, "VRWorkflowId")
             };
 
             string workflowTypeAsString = reader["FQTN"] as string;
-            if(!string.IsNullOrEmpty(workflowTypeAsString))
-                bpDefinition.WorkflowType = Type.GetType(workflowTypeAsString);
+            if (!string.IsNullOrEmpty(workflowTypeAsString))
+            {
+                try
+                {
+                    bpDefinition.WorkflowType = Type.GetType(workflowTypeAsString);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
 
             string config = reader["Config"] as string;
             if (!String.IsNullOrWhiteSpace(config))
                 bpDefinition.Configuration = Serializer.Deserialize<BPConfiguration>(config);
-            
+
             return bpDefinition;
         }
         #endregion
