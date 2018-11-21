@@ -327,18 +327,30 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\DefaultCustomerInvoiceItemsReport.rdlc">
+    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\DefaultCustomerInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\DefaultCustomerInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\DefaultCustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\DefaultCustomerInvoiceItemsReport1.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\DefaultCustomerInvoiceReport1.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\CustomerInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\CustomerInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\SupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\SupplierInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\DefaultSupplierInvoiceItemsReport1.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\Old\DefaultSupplierInvoiceReport1.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\DefaultSupplierInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\DefaultSupplierInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\DefaultSupplierInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="JSLintNet.json" />

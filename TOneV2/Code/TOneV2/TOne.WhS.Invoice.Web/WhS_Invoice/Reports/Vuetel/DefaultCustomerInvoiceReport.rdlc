@@ -235,7 +235,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>2.48472in</Height>
+              <Height>1.84861in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -248,15 +248,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Bank: </Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!Bank.Value</Value>
+                                  <Value>Bank:</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -271,7 +263,7 @@
                           <Top>0.125in</Top>
                           <Left>0.07879in</Left>
                           <Height>0.2in</Height>
-                          <Width>5.61917in</Width>
+                          <Width>1.14641in</Width>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -289,15 +281,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Address: </Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!Address.Value</Value>
+                                  <Value>Address:</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -312,7 +296,7 @@
                           <Top>0.325in</Top>
                           <Left>0.07879in</Left>
                           <Height>0.2in</Height>
-                          <Width>5.61917in</Width>
+                          <Width>1.14641in</Width>
                           <ZIndex>1</ZIndex>
                           <Style>
                             <Border>
@@ -331,15 +315,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Account Holder: </Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!AccountHolder.Value</Value>
+                                  <Value>Account Holder:</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -354,7 +330,7 @@
                           <Top>0.525in</Top>
                           <Left>0.07879in</Left>
                           <Height>0.2in</Height>
-                          <Width>5.61917in</Width>
+                          <Width>1.14641in</Width>
                           <ZIndex>2</ZIndex>
                           <Style>
                             <Border>
@@ -373,15 +349,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Currency: </Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!CurrencyName.Value</Value>
+                                  <Value>Currency:</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -396,7 +364,7 @@
                           <Top>0.725in</Top>
                           <Left>0.07879in</Left>
                           <Height>0.2in</Height>
-                          <Width>5.61917in</Width>
+                          <Width>1.14641in</Width>
                           <ZIndex>3</ZIndex>
                           <Style>
                             <Border>
@@ -415,15 +383,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Account Nbr: </Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!AccountNumber.Value</Value>
+                                  <Value>Account Nbr:</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -438,7 +398,7 @@
                           <Top>0.925in</Top>
                           <Left>0.07879in</Left>
                           <Height>0.2in</Height>
-                          <Width>5.61917in</Width>
+                          <Width>1.14641in</Width>
                           <ZIndex>4</ZIndex>
                           <Style>
                             <Border>
@@ -457,15 +417,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Swift Code: </Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!SwiftCode.Value</Value>
+                                  <Value>Swift Code:</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -480,7 +432,7 @@
                           <Top>1.14444in</Top>
                           <Left>0.08682in</Left>
                           <Height>0.2in</Height>
-                          <Width>5.61114in</Width>
+                          <Width>1.14641in</Width>
                           <ZIndex>5</ZIndex>
                           <Style>
                             <Border>
@@ -499,15 +451,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Sort Code: </Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!SortCode.Value</Value>
+                                  <Value>Sort Code:</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -522,7 +466,7 @@
                           <Top>1.37222in</Top>
                           <Left>0.07879in</Left>
                           <Height>0.2in</Height>
-                          <Width>5.61917in</Width>
+                          <Width>1.14641in</Width>
                           <ZIndex>6</ZIndex>
                           <Style>
                             <Border>
@@ -541,15 +485,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>IBAN: </Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!IBAN.Value</Value>
+                                  <Value>IBAN:</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -564,7 +500,7 @@
                           <Top>1.58611in</Top>
                           <Left>0.07879in</Left>
                           <Height>0.2in</Height>
-                          <Width>5.61917in</Width>
+                          <Width>1.14641in</Width>
                           <ZIndex>7</ZIndex>
                           <Visibility>
                             <Hidden>=iif(Fields!IBAN.Value is Nothing ,true,false)</Hidden>
@@ -579,22 +515,14 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <Textbox Name="ACH">
+                        <Textbox Name="SaleAmount7">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>ACH: </Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ACH.Value</Value>
+                                  <Value>=Fields!IBAN.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -602,14 +530,16 @@
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>ACH</rd:DefaultName>
-                          <Top>1.78611in</Top>
-                          <Left>0.07879in</Left>
-                          <Height>0.20833in</Height>
-                          <Width>5.61917in</Width>
+                          <rd:DefaultName>SaleAmount</rd:DefaultName>
+                          <Top>1.58611in</Top>
+                          <Left>1.29464in</Left>
+                          <Height>0.2in</Height>
+                          <Width>4.51359in</Width>
                           <ZIndex>8</ZIndex>
                           <Style>
                             <Border>
@@ -621,22 +551,14 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <Textbox Name="ABARoutingNumber">
+                        <Textbox Name="SaleAmount9">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>ABA Routing Number: </Value>
-                                  <Style>
-                                    <FontFamily>Verdana</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Fields!ABARoutingNumber.Value</Value>
+                                  <Value>=Fields!SortCode.Value</Value>
                                   <Style>
                                     <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -644,15 +566,233 @@
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>ABARoutingNumber</rd:DefaultName>
-                          <Top>1.99444in</Top>
-                          <Left>0.07879in</Left>
-                          <Height>0.3125in</Height>
-                          <Width>5.61917in</Width>
+                          <rd:DefaultName>SaleAmount</rd:DefaultName>
+                          <Top>1.38611in</Top>
+                          <Left>1.29464in</Left>
+                          <Height>0.2in</Height>
+                          <Width>4.51359in</Width>
                           <ZIndex>9</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="SaleAmount5">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!AccountNumber.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SaleAmount</rd:DefaultName>
+                          <Top>0.94444in</Top>
+                          <Left>1.29464in</Left>
+                          <Height>0.2in</Height>
+                          <Width>4.51359in</Width>
+                          <ZIndex>10</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="SaleAmount8">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!SwiftCode.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SaleAmount</rd:DefaultName>
+                          <Top>1.14444in</Top>
+                          <Left>1.29464in</Left>
+                          <Height>0.2in</Height>
+                          <Width>4.51359in</Width>
+                          <ZIndex>11</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="SaleAmount4">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!CurrencyName.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SaleAmount</rd:DefaultName>
+                          <Top>0.725in</Top>
+                          <Left>1.29464in</Left>
+                          <Height>0.2in</Height>
+                          <Width>4.51359in</Width>
+                          <ZIndex>12</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="SaleAmount3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!AccountHolder.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SaleAmount</rd:DefaultName>
+                          <Top>0.53194in</Top>
+                          <Left>1.29464in</Left>
+                          <Height>0.2in</Height>
+                          <Width>4.51359in</Width>
+                          <ZIndex>13</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="SaleAmount2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Address.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SaleAmount</rd:DefaultName>
+                          <Top>0.325in</Top>
+                          <Left>1.29464in</Left>
+                          <Height>0.2in</Height>
+                          <Width>4.51359in</Width>
+                          <ZIndex>14</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="SaleAmount">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Bank.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SaleAmount</rd:DefaultName>
+                          <Top>0.125in</Top>
+                          <Left>1.29464in</Left>
+                          <Height>0.2in</Height>
+                          <Width>4.51359in</Width>
+                          <ZIndex>15</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -690,9 +830,9 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>5.8682in</Top>
+        <Top>5.85778in</Top>
         <Left>0.1425in</Left>
-        <Height>2.48472in</Height>
+        <Height>1.84861in</Height>
         <Width>5.86632in</Width>
         <ZIndex>7</ZIndex>
         <Style>
@@ -2427,10 +2567,10 @@
               <Parameter Name="Image">
                 <Value>=Parameters!Image.Value</Value>
               </Parameter>
-              <Parameter Name="SerialNumber">
+              <Parameter Name="InvoiceNb">
                 <Value>=Parameters!SerialNumber.Value</Value>
               </Parameter>
-              <Parameter Name="IssueDate">
+              <Parameter Name="InvoiceDate">
                 <Value>=Parameters!IssueDate.Value</Value>
               </Parameter>
               <Parameter Name="Name">
@@ -2469,8 +2609,8 @@
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>8.47653in</Top>
-        <Left>0.12875in</Left>
+        <Top>7.85153in</Top>
+        <Left>0.1425in</Left>
         <Height>3.18888in</Height>
         <Width>7.98583in</Width>
         <ZIndex>29</ZIndex>
@@ -4164,7 +4304,7 @@
             <TablixMember />
             <TablixMember>
               <Visibility>
-                <Hidden>=iif(Parameters!DisplayCommission.Value = True, False, True)</Hidden>
+                <Hidden>=Microsoft.VisualBasic.Interaction.iif(Parameters!DisplayCommission.Value = True, False, True)</Hidden>
               </Visibility>
             </TablixMember>
             <TablixMember />
@@ -4193,22 +4333,13 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>29.63014cm</Height>
+    <Height>11.51959in</Height>
     <Style />
   </Body>
-  <Width>20.98812cm</Width>
+  <Width>8.26304in</Width>
   <Page>
-    <PageHeader>
-      <Height>1cm</Height>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <Style>
-        <Border>
-          <Style>None</Style>
-        </Border>
-      </Style>
-    </PageHeader>
     <PageFooter>
-      <Height>1.16416cm</Height>
+      <Height>0.45833in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -4264,15 +4395,10 @@
         </Border>
       </Style>
     </PageFooter>
-    <PageHeight>29.7cm</PageHeight>
-    <PageWidth>21cm</PageWidth>
+    <PageHeight>11.69in</PageHeight>
+    <PageWidth>8.27in</PageWidth>
     <InteractiveHeight>11in</InteractiveHeight>
     <InteractiveWidth>8.27in</InteractiveWidth>
-    <LeftMargin>0cm</LeftMargin>
-    <RightMargin>0cm</RightMargin>
-    <TopMargin>0cm</TopMargin>
-    <BottomMargin>0cm</BottomMargin>
-    <ColumnSpacing>1.27cm</ColumnSpacing>
     <Style />
   </Page>
   <AutoRefresh>0</AutoRefresh>
@@ -4479,14 +4605,6 @@
         </Field>
         <Field Name="CorrespondentBankSwiftCode">
           <DataField>CorrespondentBankSwiftCode</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ACH">
-          <DataField>ACH</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ABARoutingNumber">
-          <DataField>ABARoutingNumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -4770,6 +4888,6 @@ oeqygI9HWqzBQZFO4+AgHxsLjk0gZRMtDqzWeFjLYCqlhOSMI+LvXRkaDIb/HdqaRMc4ypm6rru4uPjh
     </EmbeddedImage>
   </EmbeddedImages>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
-  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>cbe75953-ed41-4894-ad02-6cdafe2f9ede</rd:ReportID>
 </Report>
