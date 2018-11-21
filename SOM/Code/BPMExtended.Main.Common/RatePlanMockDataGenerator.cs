@@ -333,7 +333,10 @@ namespace BPMExtended.Main.Common
         {
             return GetAllTelephonyContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
         }
-
+        public static List<TelephonyContractDetail> GetTelephonyContractsByNumber(string phoneNumber)
+        {
+            return GetAllTelephonyContracts().FindAll(x => x.PhoneNumber.ToLower() == phoneNumber.ToLower());
+        }
         private static List<TelephonyContractDetail> GetAllTelephonyContracts()
         {
             return new List<TelephonyContractDetail>
@@ -636,7 +639,10 @@ namespace BPMExtended.Main.Common
         {
             return GetAllADSLContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
         }
-
+        public static List<ADSLContractDetail> GetADSLContractsByUsername(string userName)
+        {
+            return GetAllADSLContracts().FindAll(x => x.UserName.ToLower() == userName.ToLower());
+        }
         public static List<ADSLSpeedInfo> GetAllADSLSpeedInfo()
         {
             return new List<ADSLSpeedInfo>
@@ -823,7 +829,10 @@ namespace BPMExtended.Main.Common
         {
             return GetAllLeasedLineContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
         }
-
+        public static List<LeasedLineContractDetail> GetLeasedLineContractsByNumber(string phoneNumber)
+        {
+            return GetAllLeasedLineContracts().FindAll(x => x.PhoneNumber.ToLower() == phoneNumber.ToLower());
+        }
         private static List<LeasedLineContractDetail> GetAllLeasedLineContracts()
         {
             return new List<LeasedLineContractDetail>

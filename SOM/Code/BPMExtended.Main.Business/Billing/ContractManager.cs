@@ -19,7 +19,10 @@ namespace BPMExtended.Main.Business
         {
             return RatePlanMockDataGenerator.GetTelephonyContracts(customerId);
         }
-
+        public List<TelephonyContractDetail> GetTelephonyContractsByNumber(string phoneNumber)
+        {
+            return RatePlanMockDataGenerator.GetTelephonyContractsByNumber(phoneNumber);
+        }
         public List<TelephonyContractInfo> GetTelephonyContractsInfo(string customerId, string pilotContractId)
         {
             List<TelephonyContractDetail> contracts = RatePlanMockDataGenerator.GetTelephonyContracts(customerId);
@@ -49,7 +52,10 @@ namespace BPMExtended.Main.Business
         {
             return RatePlanMockDataGenerator.GetADSLContracts(customerId);
         }
-
+        public List<ADSLContractDetail> GetADSLContractsByUsername(string userName)
+        {
+            return RatePlanMockDataGenerator.GetADSLContractsByUsername(userName);
+        }
         public bool IsTelephonyLineHasADSLContract(string contractId, string phoneNumber)
         {
             //TODO: check if Telephony Line  mapped to an ADSL contract
@@ -118,7 +124,10 @@ namespace BPMExtended.Main.Business
         {
             return RatePlanMockDataGenerator.GetLeasedLineContracts(customerId);
         }
-
+        public List<LeasedLineContractDetail> GetLeasedLineContractsByNumber(string phoneNumber)
+        {
+            return RatePlanMockDataGenerator.GetLeasedLineContractsByNumber(phoneNumber);
+        }
         public string CountOfActiveContracts(string customerId , string contractId)
         {
             //TODO : Get the count of active contracts for this customer (customerId)
