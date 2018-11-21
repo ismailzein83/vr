@@ -16,8 +16,6 @@ xcopy "C:\TFS\Retail\Code\Retail.MultiNet.Web\bin\Retail.MultiNet.Web.dll"						
 xcopy "C:\TFS\Retail\Code\Retail.MultiNet.APIEntities\bin\Release\Retail.MultiNet.APIEntities.dll" 	/y /v /z /i /Q /R  		"\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\%YYYYMMDD%\bin\"
 xcopy "C:\TFS\Retail\Code\Retail.MultiNet.Web\Retail_MultiNet"										/S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\%YYYYMMDD%\Client\Modules\Retail_MultiNet\"
 
-xcopy "C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation"			/S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\%YYYYMMDD%\Client\Modules\VR_InvToAccBalanceRelation\"
-
 xcopy "C:\TFS\Retail\Code\Retail.Teles.Business\bin\Release\Retail.Teles.Business.dll" 				/y /v /z /i /Q /R 		"\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\%YYYYMMDD%\Bin\"
 xcopy "C:\TFS\Retail\Code\Retail.Teles.Entities\bin\Release\Retail.Teles.Entities.dll" 				/y /v /z /i /Q /R  		"\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\%YYYYMMDD%\Bin\"
 xcopy "C:\TFS\Retail\Code\Retail.Teles.Web\bin\Retail.Teles.Web.dll" 								/y /v /z /i /Q /R  		"\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\%YYYYMMDD%\Bin\"

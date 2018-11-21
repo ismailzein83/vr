@@ -18,8 +18,6 @@ ECHO Retail.Zajil WebSite Full Version
 ::xcopy "C:\TFS\Retail\Code\Retail.Zajil.Web\bin\Retail.Zajil.Web.dll" 								/y /v /z /i /Q /R  "\\192.168.110.185\FixesFullVersion\WebSite\Retail.Zajil\%YYYYMMDD%\bin\"
 ::xcopy "C:\TFS\Retail\Code\Retail.Zajil.Web\Retail_Zajil" 											/S /E /R /y /v /i /z /Q "\\192.168.110.185\FixesFullVersion\WebSite\Retail.Zajil\%YYYYMMDD%\Client\Modules\Retail_Zajil\"
 ::
-::xcopy "C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation" /S /E /R /y /v /i /z /Q		"\\192.168.110.185\FixesFullVersion\WebSite\Retail.Zajil\%YYYYMMDD%\Client\Modules\VR_InvToAccBalanceRelation\"
-::
 ::
 ::xcopy "C:\TFS\Retail\Code\Retail.Teles.Business\bin\Release\Retail.Teles.Business.dll" 	/y /v /z /i /Q /R		"\\192.168.110.185\FixesFullVersion\WebSite\Retail.Zajil\%YYYYMMDD%\Bin\"
 ::xcopy "C:\TFS\Retail\Code\Retail.Teles.Entities\bin\Release\Retail.Teles.Entities.dll" 	/y /v /z /i /Q /R		"\\192.168.110.185\FixesFullVersion\WebSite\Retail.Zajil\%YYYYMMDD%\Bin\"
