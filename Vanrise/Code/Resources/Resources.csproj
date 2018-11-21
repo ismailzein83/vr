@@ -100,7 +100,11 @@
     <Content Include="BatchScripts\ISP\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ISP\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ISP\runtime-list-of-excluded-files.txt" />
+    <Content Include="DLLs\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="DLLs\Microsoft.CodeAnalysis.dll" />
     <Content Include="DLLs\Microsoft.reportviewer.common.dll" />
+    <Content Include="DLLs\System.Collections.Immutable.dll" />
+    <Content Include="DLLs\System.Reflection.Metadata.dll" />
     <Content Include="Files\RoslynCompiler.txt" />
     <Content Include="Resources\dotnetCore\ProjectConversion.txt" />
     <Content Include="Resources\RDB\MySQL.txt" />
