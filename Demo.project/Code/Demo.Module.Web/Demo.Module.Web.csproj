@@ -228,7 +228,7 @@
     <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\Factory\Templates\CarFactoryTemplate.html" />
     <Content Include="Demo_Module\Elements\City\Directives\Templates\DistrictGridTemplate.html" />
     <Content Include="Demo_Module\Elements\City\Views\FactoryEditor.html" />
-    <Content Include="Demo_Module\Elements\City\Directives\Templates\FactoryGridTemplate.html" />
+    <Content Include="Demo_Module\Elements\City\Directives\Templates\FactoryManagementTemplate.html" />
     <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\Factory\Templates\MilitaryFactoryTemplate.html" />
     <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\District\Templates\TouristicDistrictTemplate.html" />
     <Content Include="Demo_Module\Elements\City\Directives\MainExtensions\District\Templates\IndustrialDistrictTemplate.html" />

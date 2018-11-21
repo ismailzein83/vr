@@ -46,10 +46,9 @@ app.directive("demoModuleCityDistrictsettingsIndustrial", ["UtilsService", "VRNo
 					if (payload != undefined && payload.districtSettings != undefined) {
 						districtSettings = payload.districtSettings;
 						$scope.scopeModel.numberOfFactories = districtSettings != undefined ? districtSettings.FactoriesNumber : undefined;
-
-						var loadDirectivePromise = loadFactoryGrid();
-						promises.push(loadDirectivePromise);
 					}
+					var loadDirectivePromise = loadFactoryGrid();
+					promises.push(loadDirectivePromise);
 
 					return UtilsService.waitMultiplePromises(promises);
 				};
@@ -58,7 +57,7 @@ app.directive("demoModuleCityDistrictsettingsIndustrial", ["UtilsService", "VRNo
 					return {
 						$type: "Demo.Module.MainExtension.District.IndustrialDistrict, Demo.Module.MainExtension",
 						FactoriesNumber: $scope.scopeModel.numberOfFactories,
-						Factories: factoryGridAPI.getData()
+						Factories: factoryGridAPI != undefined ? factoryGridAPI.getData() : undefined
 					};
 				};
 
@@ -72,7 +71,12 @@ app.directive("demoModuleCityDistrictsettingsIndustrial", ["UtilsService", "VRNo
 				factoryGridReadyDeferred.promise.then(function () {
 
 					var directivePayload = {
-						factories: districtSettings.Factories
+						factories: districtSettings != undefined ? districtSettings.Factories : undefined,
+						context: {
+							getFactoriesNumber: function () {
+								return $scope.scopeModel.numberOfFactories != undefined ? $scope.scopeModel.numberOfFactories : 0;
+							}
+						}
 					};
 					VRUIUtilsService.callDirectiveLoad(factoryGridAPI, directivePayload, directiveLoadDeferred);
 				});

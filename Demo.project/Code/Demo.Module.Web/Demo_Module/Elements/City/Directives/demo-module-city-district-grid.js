@@ -45,6 +45,18 @@
 					var index = $scope.scopeModel.districts.indexOf(item);
 					$scope.scopeModel.districts.splice(index, 1);
 				};
+
+				$scope.scopeModel.validateDistricts = function () {
+					if ($scope.scopeModel.districts.length == 0) {
+						return "You should add at least one District.";
+					}
+					else {
+						if (!isDistrictsTypesValid())
+							return "You should define Districts Types";
+						else
+							return null;
+					}
+				};
 			}
 
 			function defineAPI() {
@@ -84,6 +96,19 @@
 					ctrl.onReady(api);
 			}
 
+			function isDistrictsTypesValid() {
+				var isValid = true;
+				for (var i = 0; i < $scope.scopeModel.districts.length; i++) {
+					var item = $scope.scopeModel.districts[i];
+					var districtSettings = item.districtSettingsAPI != undefined ? item.districtSettingsAPI.getData() : item.entity.Settings;
+					if (districtSettings == undefined) {
+						isValid = false;
+						break;
+					}
+				}
+				return isValid;
+			}
+
 			function buildDrillDownDefinitions() {
 				var drillDownDefinitions = [];
 				drillDownDefinitions.push(buildDistrictDrillDownDefinition());
@@ -93,7 +118,7 @@
 			function buildDistrictDrillDownDefinition() {
 				var drillDownDefinition = {};
 
-				drillDownDefinition.title = "District Settings";
+				drillDownDefinition.title = "Settings";
 				drillDownDefinition.directive = "demo-module-city-districtsettings";
 
 				drillDownDefinition.loadDirective = function (directiveAPI, districtItem) {

@@ -103,7 +103,7 @@
 			var entity = factoryTypeAPI.getData();
 			entity.EmployeesNumber = $scope.scopeModel.employeesNumber;
 
-			var object = { entity: entity };
+			var object = { Entity: entity };
 			return object;
 		}
 

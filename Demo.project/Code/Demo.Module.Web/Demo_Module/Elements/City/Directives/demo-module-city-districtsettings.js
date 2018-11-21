@@ -143,7 +143,7 @@
 						+ ' datatextfield="Title"'
 						+ ' ' + hideremoveicon + ' '
 						+ '	label="District Type"'
-						+ 'isrequired ="ctrl.isrequired">'
+						+ 'isrequired ="true">'
 					+ '</vr-select>'
 				+ '</vr-columns>'
 

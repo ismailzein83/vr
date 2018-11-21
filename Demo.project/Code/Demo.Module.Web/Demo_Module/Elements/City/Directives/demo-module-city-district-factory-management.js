@@ -19,11 +19,13 @@
 			},
 			controllerAs: 'ctrl',
 			bindToController: true,
-			templateUrl: "/Client/Modules/Demo_Module/Elements/City/Directives/Templates/FactoryGridTemplate.html"
+			templateUrl: "/Client/Modules/Demo_Module/Elements/City/Directives/Templates/FactoryManagementTemplate.html"
 		};
 
 		function DistrictGridManagement($scope, ctrl, attrs) {
 			this.initializeController = initializeController;
+
+			var context;
 
 			var gridAPI;
 			var gridDrillDownTabsObj;
@@ -49,7 +51,16 @@
 				$scope.scopeModel.onDeleteRow = function (item) {
 					var index = $scope.scopeModel.factories.indexOf(item);
 					$scope.scopeModel.factories.splice(index, 1);
-				}
+				};
+
+				$scope.scopeModel.validateFactories = function () {
+					if (context != undefined) {
+						var factoriesNumber = context.getFactoriesNumber();
+						if ($scope.scopeModel.factories.length != factoriesNumber)
+							return "You should add " + factoriesNumber + "  Factory.";
+					}
+					return null;
+				};
 
 				defineMenuActions();
 			}
@@ -58,11 +69,14 @@
 				var api = {};
 
 				api.load = function (payload) {
-					if (payload != undefined && payload.factories != undefined) {
-						for (var i = 0; i < payload.factories.length; i++) {
-							var currentFactory = {};
-							currentFactory.entity = payload.factories[i];
-							$scope.scopeModel.factories.push(currentFactory);
+					if (payload != undefined) {
+						context = payload.context;
+						if (payload.factories != undefined) {
+							for (var i = 0; i < payload.factories.length; i++) {
+								var currentFactory = {};
+								currentFactory.Entity = payload.factories[i];
+								$scope.scopeModel.factories.push(currentFactory);
+							}
 						}
 					}
 				};
@@ -71,7 +85,7 @@
 					var factories = [];
 					for (var i = 0; i < $scope.scopeModel.factories.length; i++) {
 						var currentFactory = $scope.scopeModel.factories[i];
-						factories.push(currentFactory.entity);
+						factories.push(currentFactory.Entity);
 					}
 					return factories;
 				};
@@ -93,7 +107,7 @@
 					$scope.scopeModel.factories[index] = factoryUpdated;
 				};
 
-				Demo_Module_CityService.editFactory(onFactoryUpdated, factory.entity);
+				Demo_Module_CityService.editFactory(onFactoryUpdated, factory.Entity);
 			}
 		}
 	}
