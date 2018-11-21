@@ -4,7 +4,7 @@
     <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
   </configSections>
   <startup>
-    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.7.2" />
   </startup>
 
   <vanriseLogging maxLogLevel="Information">
@@ -30,7 +30,8 @@
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Transaction;User ID=sa; Password=" />
     <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Logging;User ID=sa; Password=" />
 
-    <add name="RetailRACDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_CDR;User ID=sa;Password=" />
+    <add name="RACDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_CDR;User ID=sa;Password=" />
+    <add name="RAAnalyticsDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Analytic;User ID=sa;Password="/>
     
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
@@ -67,7 +68,7 @@
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString" />    
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
     
-    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,RetailRACDRDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,RACDRDBConnString,RAAnalyticsDBConnString"/>
   </appSettings>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
