@@ -21,7 +21,7 @@
             if (parameters != undefined && parameters != null) {
                 context = parameters.context;
                 measureStyleRules = parameters.measureStyleRules;
-                analyticTableId = parameters.analyticTableId
+                analyticTableId = parameters.analyticTableId;
             }
         }
 
@@ -38,7 +38,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
         }

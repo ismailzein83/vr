@@ -28,7 +28,7 @@
                 selectedMeasure = parameters.selectedMeasure;
                 measureStyleEntity = parameters.measureStyle;
                 context = parameters.context;
-                analyticTableId = parameters.analyticTableId
+                analyticTableId = parameters.analyticTableId;
             }
             $scope.scopeModel.isEditMode = (measureStyleEntity != undefined);
         }
@@ -66,7 +66,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
         }
@@ -119,7 +119,7 @@
                                 loadPromiseDeferred: UtilsService.createPromiseDeferred()
                             };
                             promises.push(filterItem.loadPromiseDeferred.promise);
-                            addStyleConditionItemToGrid(filterItem)
+                            addStyleConditionItemToGrid(filterItem);
                         }
                         function addStyleConditionItemToGrid(styleConditionItem) {
                             measure = context.getMeasure(styleConditionItem.payload.RecordFilter.FieldName);
@@ -216,7 +216,7 @@
             var measureStyleRuleInput = {
                 AnalyticTableId: analyticTableId,
                 MeasureStyleRule: measureStyleObj
-            }
+            };
             return VR_Analytic_MeasureStyleRuleAPIService.GetMeasureStyleRuleDetail(measureStyleRuleInput).then(function (response) {
                 var measureStyleDetail = response;
                 if ($scope.onMeasureStyleAdded != undefined)
@@ -230,7 +230,7 @@
             var measureStyleRuleInput = {
                 AnalyticTableId: analyticTableId,
                 MeasureStyleRule: measureStyleObj
-            }
+            };
             return VR_Analytic_MeasureStyleRuleAPIService.GetMeasureStyleRuleDetail(measureStyleRuleInput).then(function (response) {
                 var measureStyleDetail = response;
                 if ($scope.onMeasureStyleUpdated != undefined)
