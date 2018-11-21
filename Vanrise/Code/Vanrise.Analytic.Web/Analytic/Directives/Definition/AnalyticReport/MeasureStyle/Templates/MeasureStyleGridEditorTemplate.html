@@ -1,6 +1,6 @@
 ﻿<vr-columns width="1/3row">
     <vr-select label="Measures" datasource="ctrl.measureFields" selectedvalues="ctrl.selectedMeasureName"
-               datavaluefield="Name" datatextfield="Title"  hideremoveicon></vr-select>
+               datavaluefield="Name" datatextfield="Title" hideremoveicon></vr-select>
 </vr-columns>
 <vr-columns width="normal" withemptyline>
     <vr-button type="Add" data-onclick="ctrl.addMeasureStyle" standalone></vr-button>
@@ -8,6 +8,11 @@
 <vr-columns width="fullrow">
     <vr-datagrid datasource="ctrl.measureStyles" norowhighlightonclick="true"
                  on-ready="ctrl.onGridReady" ondeleterow="ctrl.removeMeasureStyle" menuactions="ctrl.measureStylesGridMenuActions" hidegridmenu>
-        <vr-datagridcolumn headertext="'Measure Name'" field="'MeasureName'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Measure Name'" field="'MeasureStyleRuleDetail.MeasureName'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Description'" disablesorting="true">
+            <span style="display:block " ng-repeat="rule in dataItem.MeasureStyleRuleDetail.Rules">
+               {{rule.StyleValueDescription}} if {{rule.RecordFilterDescription}}
+            </span>
+        </vr-datagridcolumn>
     </vr-datagrid>
 </vr-columns>

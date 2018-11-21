@@ -82,22 +82,26 @@
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/RealTimeWidgetEditor.html', modalParameters, modalSettings);
         }
 
-        function addMeasureStyle(onMeasureStyleAdded,selectedMeasure) {
+        function addMeasureStyle(onMeasureStyleAdded, selectedMeasure, context, analyticTableId) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onMeasureStyleAdded = onMeasureStyleAdded;
             };
             var modalParameters = {
-                selectedMeasure: selectedMeasure
+                selectedMeasure: selectedMeasure,
+                context: context,
+                analyticTableId: analyticTableId
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/MeasureStyleEditor.html', modalParameters, modalSettings);
         }
 
-        function editMeasureStyle(measureStyle, onMeasureStyleUpdated, selectedMeasure) {
+        function editMeasureStyle(measureStyle, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId) {
             var modalParameters = {
                 selectedMeasure: selectedMeasure,
-                measureStyle: measureStyle
+                measureStyle: measureStyle,
+                context: context,
+                analyticTableId: analyticTableId
             };
 
             var modalSettings = {};
@@ -109,7 +113,7 @@
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/MeasureStyleEditor.html', modalParameters, modalSettings);
         }
 
-        function openGridWidgetSettings(onSaveSettings,context, measureStyleRules)
+        function openGridWidgetSettings(onSaveSettings, context, measureStyleRules, analyticTableId)
         {
             var settings = {
             };
@@ -119,7 +123,8 @@
             };
             var parameters = {
                 context: context,
-                measureStyleRules: measureStyleRules
+                measureStyleRules: measureStyleRules,
+                analyticTableId: analyticTableId
             };
 
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/AnalyticGridWidgetSettings.html', parameters, settings);

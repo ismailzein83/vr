@@ -7,15 +7,19 @@
 
         var controllerName = 'MeasureStyleRuleController';
 
-        function GetAnalytictableKPISettings(analyticTableId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetAnalytictableKPISettings'), { analyticTableId: analyticTableId });
+        function GetMeasureStyleRuleEditorRuntime(measureStuleRuleEditorRuntimeInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetMeasureStyleRuleEditorRuntime'), measureStuleRuleEditorRuntimeInput);
+        }
+        function GetMeasureStyleRuleDetail(measureStyleRuleInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'GetMeasureStyleRuleDetail'), measureStyleRuleInput);
         }
 
         return ({
-            GetAnalytictableKPISettings: GetAnalytictableKPISettings,
+            GetMeasureStyleRuleEditorRuntime: GetMeasureStyleRuleEditorRuntime,
+            GetMeasureStyleRuleDetail: GetMeasureStyleRuleDetail
         });
     }
 
     appControllers.service('VR_Analytic_MeasureStyleRuleAPIService', measureStyleRuleAPIService);
 
-})(appControllers); 
+})(appControllers);  

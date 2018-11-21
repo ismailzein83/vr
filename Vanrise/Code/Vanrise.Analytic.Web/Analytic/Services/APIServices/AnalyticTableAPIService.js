@@ -49,6 +49,10 @@
         function GetAnalyticTableConnectionId(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticTableConnectionId"), input);
         }
+        function GetClientAnalyitTableInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetClientAnalyitTableInfo"));
+        }
+       
         return ({
             GetAnalyticTablesInfo: GetAnalyticTablesInfo,
             GetFilteredAnalyticTables: GetFilteredAnalyticTables,
@@ -58,7 +62,8 @@
             UpdateAnalyticTable: UpdateAnalyticTable,
             HasEditAnalyticTablePermission: HasEditAnalyticTablePermission,
             GetRemoteAnalyticTablesInfo: GetRemoteAnalyticTablesInfo,
-            GetAnalyticTableConnectionId: GetAnalyticTableConnectionId
+            GetAnalyticTableConnectionId: GetAnalyticTableConnectionId,
+            GetClientAnalyitTableInfo: GetClientAnalyitTableInfo,
         });
     }
 

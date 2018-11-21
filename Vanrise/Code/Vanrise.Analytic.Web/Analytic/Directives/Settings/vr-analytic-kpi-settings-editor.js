@@ -63,7 +63,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
 
                 api.getData = function () {
                     var analyticTablesKPISettings = [];
-                    for (var i = 0; i < $scope.analyticTables.length; i++) {
+                    for (var i = 0; i < $scope.analyticTables.length; i++) { 
                         var analyticTable = $scope.analyticTables[i];
                         analyticTablesKPISettings.push({
                             AnalyticTableId: analyticTable.analyticTableId,
@@ -121,7 +121,8 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                     analyticItemConfigPromise.then(function () {
                         var payload = {
                             context: context,
-                            measureStyles: measuresByAnalyticTable != undefined ? measuresByAnalyticTable.MeasureStyleRules : undefined
+                            measureStyles: measuresByAnalyticTable != undefined ? measuresByAnalyticTable.MeasureStyleRules : undefined,
+                            analyticTableId: itemTab.analytictable.AnalyticTableId
                         };
                         VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.measureStyleLoadDeferred);
                     });

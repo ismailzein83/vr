@@ -31,6 +31,11 @@ namespace Vanrise.Analytic.Entities
         dynamic Value { get;}
     }
 
+    public class MeasureStyleRuleRuntime
+    {
+        public MeasureStyleRule MeasureStyleRule { get; set; }
+        public MeasureStyleRuleDetail MeasureStyleRuleDetail { get; set; }
+    }
     public class MeasureStyleRuleDetail
     {
         public string MeasureTitle { get; set; }

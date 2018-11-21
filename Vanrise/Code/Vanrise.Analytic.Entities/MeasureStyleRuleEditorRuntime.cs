@@ -9,7 +9,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class MeasureStyleRuleEditorRuntime
     {
-        public List<MeasureStyleRuleDetail> MeasureStyleRuleDetails { get; set; }
+        public List<MeasureStyleRuleRuntime> MeasureStyleRulesRuntime { get; set; }
     }
     public enum StyleCodeEnum // to be removed when the reference will be added
     {

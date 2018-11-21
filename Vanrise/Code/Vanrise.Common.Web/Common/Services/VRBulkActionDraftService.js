@@ -2,12 +2,12 @@
 
     "use strict";
 
-    VRBulkActionDraftService.$inject = ['VRModalService', 'UtilsService'];
+    VRBulkActionDraftService.$inject = ['VRModalService', 'UtilsService','VRCommon_VRBulkActionDraftAPIService'];
 
-    function VRBulkActionDraftService(VRModalService, UtilsService) {
+    function VRBulkActionDraftService(VRModalService, UtilsService, VRCommon_VRBulkActionDraftAPIService) {
 
         function createBulkActionDraft(context) {
-            return new BulkActionDraft(context.triggerRetrieveData, context.setSelectAllEnablity, context.setDeselectAllEnablity, context.setActionsEnablity, context.hasItems, UtilsService);
+            return new BulkActionDraft(context.triggerRetrieveData, context.setSelectAllEnablity, context.setDeselectAllEnablity, context.setActionsEnablity, context.hasItems, UtilsService, VRCommon_VRBulkActionDraftAPIService);
         }
 
         return {
@@ -15,7 +15,7 @@
         };
     }
 
-    function BulkActionDraft(triggerRetrieveData, setSelectAllEnablity, setDeselectAllEnablity, setActionsEnablity, hasItems, UtilsService) {
+    function BulkActionDraft(triggerRetrieveData, setSelectAllEnablity, setDeselectAllEnablity, setActionsEnablity, hasItems, UtilsService, VRCommon_VRBulkActionDraftAPIService) {
         var isAllSelected;
         var targetItems = [];
         var bulkActionDraftIdentifier;
@@ -24,7 +24,7 @@
         reEvaluateButtonsStatus();
 
         function onSelectItem(item, isSelected) {
-         if (isSelected) {
+            if (isSelected) {
                 if (isAllSelected) {
                     var index = UtilsService.getItemIndexByVal(targetItems, item.ItemId, "ItemId");
                     if (index > -1)
@@ -33,9 +33,9 @@
                 else {
                     if (UtilsService.getItemByVal(targetItems, item.ItemId, "ItemId") == undefined)
                         targetItems.push(item);
-                        }
+                }
 
-                } else {
+            } else {
                 if (isAllSelected) {
                     if (UtilsService.getItemByVal(targetItems, item.ItemId, "ItemId") == undefined)
                         targetItems.push(item);
@@ -109,7 +109,6 @@
             });
             return promise.promise;
         }
-
         function anyItemSelected() {
             return isAllSelected || targetItems.length > 0;
         }
@@ -117,7 +116,11 @@
         function allItemsSelected() {
             return isAllSelected && targetItems.length == 0;
         }
-
+        function hasSelectedItems() {
+            if (isAllSelected || targetItems.length > 0)
+                return true;
+            return false
+        }
         function reEvaluateButtonsStatus() {
             var hasInvoices = hasItems();
             if (hasInvoices) {
@@ -149,6 +152,22 @@
             }
 
         }
+        function GetVRBulkActionDrafts() {
+            var bulkActionsDraftPromise = UtilsService.createPromiseDeferred();
+            var bulkActionDrafts;
+            finalizeBulkActionDraft().then(function (response) {
+                var finaleStateObject = response;
+                VRCommon_VRBulkActionDraftAPIService.GetVRBulkActionDrafts(finaleStateObject).then(function (response) {
+                    console.log(response);
+                    bulkActionDrafts = response;
+                    bulkActionsDraftPromise.resolve({
+                        bulkActionDrafts: bulkActionDrafts
+                    });
+                });
+            });
+            return bulkActionsDraftPromise.promise;
+        }
+    
 
 
         return {
@@ -160,7 +179,9 @@
             getBulkActionState: getBulkActionState,
             finalizeBulkActionDraft: finalizeBulkActionDraft,
             getBulkActionIdentifier: getBulkActionIdentifier,
-            reEvaluateButtonsStatus: reEvaluateButtonsStatus
+            reEvaluateButtonsStatus: reEvaluateButtonsStatus,
+            hasSelectedItems: hasSelectedItems,
+            GetVRBulkActionDrafts: GetVRBulkActionDrafts
         };
 
 

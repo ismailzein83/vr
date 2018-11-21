@@ -19,6 +19,6 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             ConfigManager configManager = new ConfigManager();
             return configManager.GetAnalytictableKPISettings(analyticTableId);
-        }
+        } 
     }
 }

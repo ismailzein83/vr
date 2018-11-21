@@ -8,7 +8,7 @@
 
         var measureStyleRules;
         var context = [];
-
+        var analyticTableId;
         var measureStyleGridAPI;
         var measureStyleGridReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -21,6 +21,7 @@
             if (parameters != undefined && parameters != null) {
                 context = parameters.context;
                 measureStyleRules = parameters.measureStyleRules;
+                analyticTableId = parameters.analyticTableId
             }
         }
 
@@ -66,9 +67,10 @@
             measureStyleGridReadyDeferred.promise.then(function () {
                 var payloadMeasureStyleGridDirective = {
                     context: context,
-
+                    analyticTableId: analyticTableId,
                     measureStyles: measureStyleRules != undefined ? measureStyleRules : undefined
                 };
+
                 VRUIUtilsService.callDirectiveLoad(measureStyleGridAPI, payloadMeasureStyleGridDirective, loadMeasureStyleGridDirectivePromiseDeferred);
             });
             return loadMeasureStyleGridDirectivePromiseDeferred.promise;

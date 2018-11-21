@@ -2,9 +2,9 @@
 
     'use strict';
 
-    MeasureStyleGridEditorDirective.$inject = ['Analytic_AnalyticService','UtilsService'];
+    MeasureStyleGridEditorDirective.$inject = ['Analytic_AnalyticService', 'UtilsService', 'VR_Analytic_MeasureStyleRuleAPIService'];
 
-    function MeasureStyleGridEditorDirective(Analytic_AnalyticService, UtilsService) {
+    function MeasureStyleGridEditorDirective(Analytic_AnalyticService, UtilsService, VR_Analytic_MeasureStyleRuleAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -28,6 +28,7 @@
             var context;
             var gridAPI;
             var counter = 0;
+            var analyticTableId;
             function initializeController() {
                 ctrl.measureStyles = [];
                 ctrl.measureFields = [];
@@ -46,7 +47,7 @@
                             ctrl.measureFields = getMeasureNames();
                             ctrl.selectedMeasureName = undefined;
                         };
-                        Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, ctrl.selectedMeasureName);
+                        Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, ctrl.selectedMeasureName, context,analyticTableId);
                     }
 
                 };
@@ -65,25 +66,40 @@
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        analyticTableId = payload.analyticTableId;
                         context = payload.context;
-                        ctrl.measureStyles.length = 0;
-                        if (payload.measureStyles && payload.measureStyles.length > 0) {
-                            for (var y = 0; y < payload.measureStyles.length; y++) {
-                                var currentMeasureStyle = payload.measureStyles[y];
-                                ctrl.measureStyles.push(currentMeasureStyle);
-                            }
-                        }
+                        context.getMeasure = function (name) {
+                            var measureFields = context.getMeasures();
+                            var measure = UtilsService.getItemByVal(measureFields, name, "Name");
+                            return measure;
+                        };
                         ctrl.measureFields = getMeasureNames();
+                        ctrl.descriptons = [];
+                        if (payload.measureStyles != undefined && payload.measureStyles.length > 0) {
+                            var filter = {
+                                AnalyticTableId: analyticTableId,
+                                MeasureStyleRules: payload.measureStyles
+                            };
+                            ctrl.measureStyles.length = 0;
+                            return VR_Analytic_MeasureStyleRuleAPIService.GetMeasureStyleRuleEditorRuntime(filter).then(function (response) {
+                                if (response != undefined && response.MeasureStyleRulesRuntime != undefined) {
+                                    ctrl.measureStyles = response.MeasureStyleRulesRuntime;
+                                }
+
+                            });
+                        }
                     }
+
+
                 };
                 api.reloadMeasures = function () {
 
                     ctrl.measureFields = getMeasureNames();
                     var measureFields = context.getMeasures();
                     if (ctrl.measureStyles.length > 0) {
-                        for (var i = 0; i < ctrl.measureStyles.length ; i++) {
+                        for (var i = 0; i < ctrl.measureStyles.length; i++) {
                             var measureStyle = ctrl.measureStyles[i];
-                            if (UtilsService.getItemByVal(measureFields, measureStyle.MeasureName, "Name") == undefined) {
+                            if (UtilsService.getItemByVal(measureFields, measureStyle.MeasureStyleRule.MeasureName, "Name") == undefined) {
                                 ctrl.measureStyles.splice(ctrl.measureStyles.indexOf(measureStyle), 1);
                             }
                         }
@@ -92,12 +108,9 @@
                 };
                 api.getData = function () {
                     var measureStyles = [];
-                    for (var i = 0; i < ctrl.measureStyles.length ; i++) {
+                    for (var i = 0; i < ctrl.measureStyles.length; i++) {
                         var measureStyle = ctrl.measureStyles[i];
-                        measureStyles.push({
-                            MeasureName: measureStyle.MeasureName,
-                            Rules: measureStyle.Rules
-                        });
+                        measureStyles.push(measureStyle.MeasureStyleRule);
                     }
                     return measureStyles;
                 };
@@ -116,7 +129,7 @@
                     ctrl.measureStyles[ctrl.measureStyles.indexOf(measureStyle)] = measureStyleObj;
                 };
                 var selectedMeasure = UtilsService.getItemByVal(getMeasureNames(measureStyle), measureStyle.MeasureName, "Name");
-                Analytic_AnalyticService.editMeasureStyle(measureStyle, onMeasureStyleUpdated, selectedMeasure);
+                Analytic_AnalyticService.editMeasureStyle(measureStyle.MeasureStyleRule, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId);
             }
 
             function getMeasureNames(measureStyle) {
@@ -124,12 +137,14 @@
                 var measureFields = context.getMeasures();
                 for (var x = 0; x < measureFields.length; x++) {
                     var currentMeasureField = measureFields[x];
-                    if ((measureStyle != undefined && measureStyle.MeasureName == currentMeasureField.Name) || UtilsService.getItemByVal(ctrl.measureStyles, currentMeasureField.Name, "MeasureName") == undefined) {
+                    if ((measureStyle != undefined && measureStyle.MeasureStyleRule.MeasureName == currentMeasureField.Name) || UtilsService.getItemByVal(ctrl.measureStyles, currentMeasureField.Name, "MeasureStyleRule.MeasureName") == undefined) {
                         measures.push(currentMeasureField);
                     }
                 }
                 return measures;
             }
+
+
         }
     }
 

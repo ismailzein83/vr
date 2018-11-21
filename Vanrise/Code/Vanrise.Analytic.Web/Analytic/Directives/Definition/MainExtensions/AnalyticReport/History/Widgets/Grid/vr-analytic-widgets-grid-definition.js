@@ -245,7 +245,7 @@
                         measureStyleGridReadyDeferred.promise.then(function () {
                             var payloadMeasureStyleGridDirective = {
                                 context: getContext(),
-
+                                analyticTableId :tableIds[0],
                                 measureStyles: payload != undefined && payload.widgetEntity != undefined ? payload.widgetEntity.MeasureStyleRules : undefined
                             };
                             VRUIUtilsService.callDirectiveLoad(measureStyleGridAPI, payloadMeasureStyleGridDirective, loadMeasureStyleGridDirectivePromiseDeferred);

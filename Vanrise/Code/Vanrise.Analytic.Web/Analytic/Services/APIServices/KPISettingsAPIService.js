@@ -18,4 +18,4 @@
 
     appControllers.service('VR_Analytic_KPISettingsAPIService', kpiSettingsAPIService);
 
-})(appControllers);
+})(appControllers);  

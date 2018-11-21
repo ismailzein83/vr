@@ -24,6 +24,23 @@ namespace Vanrise.Analytic.Business
             VRActionLogger.Current.LogGetFilteredAction(AnalyticTableLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, analyticTables.ToBigResult(input, filterExpression, AnalyticTableDetailMapper));
         }
+        public IEnumerable<AnalyticTableClientDetail> GetClientAnalyitTableInfo()
+        {
+            List<AnalyticTableClientDetail> analyticTableClientDetails = new List<AnalyticTableClientDetail>();
+            var analyticTables = GetCachedAnalyticTables();
+            foreach (var analyticTable in  analyticTables.Values)
+            {
+                var analyticTableClientDetail = new AnalyticTableClientDetail()
+                {
+                    AnalyticTableId = analyticTable.AnalyticTableId,
+                    Name = analyticTable.Name
+                };
+                analyticTableClientDetails.Add(analyticTableClientDetail);
+            }
+            return analyticTableClientDetails;
+
+        }
+
         public IEnumerable<AnalyticTableInfo> GetAnalyticTablesInfo(AnalyticTableInfoFilter filter)
         {
             var analyticTables = GetCachedAnalyticTables();
