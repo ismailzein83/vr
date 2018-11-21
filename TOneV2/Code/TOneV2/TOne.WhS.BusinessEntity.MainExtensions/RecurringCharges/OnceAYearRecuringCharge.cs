@@ -18,41 +18,56 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
         public override void Execute(IRecurringChargePeriodSettingsContext context)
         {
             List<RecurringChargePeriodOutput> periodsList = new List<RecurringChargePeriodOutput>();
-
-            if (this.Date.Month >= context.FromDate.Month && this.Date.Month <= context.ToDate.Month)
+            DateTime currentDateTime = context.FromDate;
+            while(currentDateTime <= context.ToDate)
             {
-                if (context.FromDate.Month == context.ToDate.Month)
+                var dateTime = new DateTime(currentDateTime.Year, Date.Month, Date.Day);
+                if (dateTime.Date == currentDateTime.Date)
                 {
-                    if (this.Date.Day >= context.FromDate.Day && this.Date.Day <= context.ToDate.Day)
+                    var fromDate = new DateTime(currentDateTime.Year, Date.Month, Date.Day);
+                    var toDate = fromDate.AddYears(1).AddDays(-1);
+                    periodsList.Add(new RecurringChargePeriodOutput
                     {
-                        for (var i = context.FromDate.Year; i <= context.ToDate.Year; i++)
-                        {
-                            var fromDate = new DateTime(i, this.Date.Month, this.Date.Day);
-                            var toDate = fromDate.AddYears(1).AddDays(-1);
-                            periodsList.Add(new RecurringChargePeriodOutput
-                            {
-                                From = fromDate,
-                                To = toDate,
-                            });
-                        }
-                           
-                    }
+                        From = fromDate,
+                        To = toDate,
+                    });
                 }
-                else
-                {
-                    for (var i = context.FromDate.Year; i <= context.ToDate.Year; i++)
-                    {
-                        var fromDate = new DateTime(i, this.Date.Month, this.Date.Day);
-                        var toDate = fromDate.AddYears(1).AddDays(-1);
-                        periodsList.Add(new RecurringChargePeriodOutput
-                        {
-                            From = fromDate,
-                            To = toDate,
-                        });
-                    }
-                       
-                }
+                currentDateTime = currentDateTime.AddDays(1);
             }
+            //if (this.Date.Month >= context.FromDate.Month && this.Date.Month <= context.ToDate.Month)
+            //{
+            //    if (context.FromDate.Month == context.ToDate.Month)
+            //    {
+            //        if (this.Date.Day >= context.FromDate.Day && this.Date.Day <= context.ToDate.Day)
+            //        {
+            //            for (var i = context.FromDate.Year; i <= context.ToDate.Year; i++)
+            //            {
+            //                var fromDate = new DateTime(i, this.Date.Month, this.Date.Day);
+            //                var toDate = fromDate.AddYears(1).AddDays(-1);
+            //                periodsList.Add(new RecurringChargePeriodOutput
+            //                {
+            //                    From = fromDate,
+            //                    To = toDate,
+            //                });
+            //            }
+                           
+            //        }
+            //    }
+            //    else
+            //    {
+            //        for (var i = context.FromDate.Year; i <= context.ToDate.Year; i++)
+            //        {
+            //            var fromDate = new DateTime(i, this.Date.Month, this.Date.Day);
+            //            var toDate = fromDate.AddYears(1).AddDays(-1);
+            //            periodsList.Add(new RecurringChargePeriodOutput
+            //            {
+            //                From = fromDate,
+            //                To = toDate,
+            //            });
+            //        }
+                       
+            //    }
+            //}
             context.Periods = periodsList;
         }
     }
