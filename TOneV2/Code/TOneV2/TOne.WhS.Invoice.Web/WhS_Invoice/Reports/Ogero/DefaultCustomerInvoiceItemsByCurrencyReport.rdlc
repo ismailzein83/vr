@@ -1153,7 +1153,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!TotalCalls.Value, 0)</Value>
+                              <Value>=FormatNumber(System.Math.Round(Parameters!TotalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value), Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
