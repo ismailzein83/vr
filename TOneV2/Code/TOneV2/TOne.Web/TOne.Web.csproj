@@ -749,6 +749,9 @@
     <Content Include="images\CentralAuth-iconheader.ico" />
     <Content Include="images\CentralAuth-login.png" />
     <Content Include="images\CentralAuth-logoonheader.png" />
+    <Content Include="images\cloudXPoint-NewTheme-iconheader.ico" />
+    <Content Include="images\cloudXPoint-NewTheme-login.png" />
+    <Content Include="images\cloudXPoint-NewTheme-logoonheader.png" />
     <Content Include="images\menu-icons\CDR Compare Tool.png" />
     <Content Include="images\menu-icons\switch.png" />
     <Content Include="images\Ogero-iconheader.ico" />
