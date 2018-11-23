@@ -38,22 +38,8 @@
         document.onkeydown = null;
     }
 
-    function getSelectText(length, values, dlabel, labelMsg) {
-        var label;
-        if (length === 0)
-            label = dlabel;
-        else if (length === 1)
-            label = values[0];
-        else if (length === 2)
-            label = values[0] + "," + values[1];
-        else if (length === 3)
-            label = values[0] + "," + values[1] + "," + values[2];
-        else
-            label = length + " " + labelMsg;
-        if (label != undefined)
-            if (label.length > 21)
-                label = label.substring(0, 20) + "..";
-        return label;
+    function getSelectText(length, values, dlabel, labelMsg) {     
+        return length === 0 ? dlabel : length <= 3 ? values.join(",") : length + " " + labelMsg;
     }
 
     function isMenu(type) {

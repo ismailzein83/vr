@@ -431,6 +431,11 @@
                     var s = selectService.getSelectText(controller.selectedvalues.length, selectedVal, $attrs.placeholder, $attrs.selectplaceholder);
                     return s;
                 }
+                function getButtonTitle() {
+                    if (controller.selectedvalues == undefined || controller.selectedvalues == null || controller.selectedvalues.length == 0) return "";
+                    else return getLabel();
+                }
+                
                 function getSelectedSectionClass() {
                     if (!selectedSectionVisible()) return 'single-col-checklist';
                     return controller.selectedvalues.length === 0 || controller.readOnly ? 'single-col-checklist' : 'double-col-checklist';
@@ -460,6 +465,7 @@
                     clearFilter: clearFilter,
                     selectFirstItem: selectFirstItem,
                     getLabel: getLabel,
+                    getButtonTitle:getButtonTitle,
                     getSelectedSectionClass: getSelectedSectionClass,
                     onAddhandler: onAddhandler,
                     includeOnAddHandler: includeOnAddHandler,

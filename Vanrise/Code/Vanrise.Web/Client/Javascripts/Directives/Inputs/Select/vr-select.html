@@ -1,6 +1,6 @@
 ﻿<div class="dropdown-container1">
     <div class="dropdown-container2">
-        <vr-validator validate="ctrl.validate()" vr-input>
+        <vr-validator validate="ctrl.validate()" vr-input  title="{{ctrl.getButtonTitle()}}">
             <div class="dropdown drop-down-inside-modal">
                 <ul class="dropdown-menu vr-select-dropdown-menu" ng-if="!ctrl.readOnly || ctrl.isMultiple()" vr-loader="ctrl.isloading">
                     <!--<a href="" ng-click="ctrl.hideMobileDropDown(ctrl.id)" class="glyphicon glyphicon-remove hand-cursor " style="position: absolute;top: -21px;right: -1px;"></a>-->

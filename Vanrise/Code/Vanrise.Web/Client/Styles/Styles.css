@@ -2305,6 +2305,14 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     pointer-events: none;
     opacity: 0.8 !important;
 }
+.divDisabled vr-select vr-validator > div {
+    pointer-events: auto !important;
+}
+
+.divDisabled vr-select vr-validator > div button.dropdown-toggle {
+    pointer-events: none !important;
+}
+
 .divDisabled vr-validator > div .vr-dropdown-select {
     opacity: 0.8 !important;
 }
