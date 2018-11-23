@@ -42,6 +42,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         #region Public Methods
 
+        public override bool RenderDescriptionByDefault()
+        {
+            switch (DataType)
+            {
+                case FieldDateTimeDataType.YearWeek: return true;
+                case FieldDateTimeDataType.Time: return true;
+                default: return base.RenderDescriptionByDefault();
+            }
+        }
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             if (newValue == null && oldValue == null)
