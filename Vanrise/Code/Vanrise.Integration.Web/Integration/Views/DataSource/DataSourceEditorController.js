@@ -134,6 +134,7 @@
                 });
             }
             else if (isViewHistoryMode) {
+                adapterTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                 getDataSourceHistory().then(function () {
                     getDataSourceTask().then(function () {
                         loadAllControls().finally(function () {
