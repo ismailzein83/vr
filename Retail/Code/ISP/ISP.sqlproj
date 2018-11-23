@@ -82,5 +82,7 @@
     <Build Include="NetworkRentalManager\User Defined Types\ProductSaleType.sql" />
     <Build Include="Security\NetworkRentalManager.sql" />
     <Build Include="NetworkRentalManager\Tables\AccountService.sql" />
+    <Build Include="NetworkRentalManager\Tables\OrdersDefinition.sql" />
+    <Build Include="NetworkRentalManager\User Defined Types\OrdersDefinitionType.sql" />
   </ItemGroup>
 </Project>
