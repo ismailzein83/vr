@@ -42,25 +42,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (saleCodes == null || !saleCodes.Any())
                     return;
 
-                if (saleCodes == null)
-                    context.WriteMessageToWorkflowLogs("saleCodes is null");
-                else if (!saleCodes.Any())
-                    context.WriteMessageToWorkflowLogs("saleCodes size is zero");
-
                 IEnumerable<ExistingSaleCodeEntity> existingSaleCodeEntities = saleCodes.MapRecords(ExistingSaleCodeEntityMapper);
-
-                if (existingSaleCodeEntities == null)
-                    context.WriteMessageToWorkflowLogs("existingSaleCodeEntities is null");
-                else if (!existingSaleCodeEntities.Any())
-                    context.WriteMessageToWorkflowLogs("existingSaleCodeEntities size is zero");
-
                 Dictionary<string, Dictionary<string, List<ExistingSaleCodeEntity>>> existingSaleCodesByZoneName = StructureExistingSaleCodesByZoneName(existingSaleCodeEntities);
-
-                if (existingSaleCodesByZoneName == null)
-                    context.WriteMessageToWorkflowLogs("existingSaleCodesByZoneName is null");
-                else if (existingSaleCodesByZoneName.Count == 0)
-                    context.WriteMessageToWorkflowLogs("existingSaleCodesByZoneName size is zero");
-
                 Dictionary<int, List<ExistingSaleZone>> zoneWrappersByCountry = StructureZoneWrappersByCountry(existingSaleCodesByZoneName);
                 var customerIdsWithChanges = context.CustomerPriceListChanges.Select(c => c.CustomerId);
 
@@ -91,18 +74,8 @@ namespace TOne.WhS.BusinessEntity.Business
                         var customerPriceListType = _carrierAccountManager.GetCustomerPriceListType(customerId);
                         var pricelistType = priceListTypeForMultipleCurrency ?? GetSalePriceListType(customerPriceListType, context.ChangeType);
 
-                        if (customerPriceList.CountryChanges == null)
-                            context.WriteMessageToWorkflowLogs("customerPriceList.CountryChanges is null");
-                        else if (customerPriceList.CountryChanges.Count == 0)
-                            context.WriteMessageToWorkflowLogs("customerPriceList.CountryChanges size is zero");
-
-                        if (zoneWrappersByCountry == null)
-                            context.WriteMessageToWorkflowLogs("zoneWrappersByCountry is null");
-                        else if (zoneWrappersByCountry.Count == 0)
-                            context.WriteMessageToWorkflowLogs("zoneWrappersByCountry size is zero");
-
                         List<SalePLZoneNotification> customerZoneNotifications = CreateNotifications(customerId, sellingProductId.Value, pricelistType,
-                                customerPriceList.CountryChanges, zoneWrappersByCountry, out overriddenListType, customerZoneRateHistoryLocator, context);
+                                customerPriceList.CountryChanges, zoneWrappersByCountry, out overriddenListType, customerZoneRateHistoryLocator);
                         customerPriceList.PriceList.PriceListType = overriddenListType;
 
                         customerZoneNotifications = FilterSalePlZoneNotification(customerId, customerZoneNotifications);
@@ -555,23 +528,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Merge with Existing Data
         private List<SalePLZoneNotification> CreateNotifications(int customerId, int sellingProductId, SalePriceListType pricelistType, List<CountryChange> countryChanges,
-        Dictionary<int, List<ExistingSaleZone>> existingDataByCountryId, out SalePriceListType overiddenPriceListType, CustomerZoneRateHistoryLocator customerZoneRateHistoryLocator, ISalePricelistFileContext context)
+        Dictionary<int, List<ExistingSaleZone>> existingDataByCountryId, out SalePriceListType overiddenPriceListType, CustomerZoneRateHistoryLocator customerZoneRateHistoryLocator)
         {
             Dictionary<int, DateTime> customerCountriesSellDatesByCountryId = GetCustomerCountriesSellDatesDictionary(customerId);
             overiddenPriceListType = pricelistType;
-
-            if (existingDataByCountryId == null)
-                context.WriteMessageToWorkflowLogs("existingDataByCountryId is null");
-
-            else if (existingDataByCountryId.Count == 0)
-                context.WriteMessageToWorkflowLogs("existingDataByCountryId size is 0");
-
-            if (countryChanges == null)
-                context.WriteMessageToWorkflowLogs("countryChanges is null");
-
-            else if (countryChanges.Count == 0)
-                context.WriteMessageToWorkflowLogs("countryChanges size is 0");
-
             var salePlZoneNotifications = GetChangeOrCountryNotification(customerId, sellingProductId, pricelistType, existingDataByCountryId, countryChanges, customerCountriesSellDatesByCountryId, customerZoneRateHistoryLocator);
 
             if (pricelistType != SalePriceListType.Full) //Send zone changes with missing zones from their countries
@@ -968,15 +928,17 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             List<SalePLZoneNotification> salePlZoneNotifications = new List<SalePLZoneNotification>();
             SaleZoneManager saleZoneManager = new SaleZoneManager();
+
             if (existingZones == null)
-                throw new ArgumentNullException(string.Format("existingZones are null, customer Id is {0}, sellingProductId is {1}, countryId {2}, countrySellDate is {3}", customerId, sellingProductId, countryId, countrySellDate));
+                throw new ArgumentNullException(string.Format("existingZones is null for customer with Id '{0}' and countryId '{1}' with countrySellDate '{2}'", customerId, countryId, countrySellDate));
+
             if (changedZoneNames == null)
-                throw new ArgumentNullException(string.Format("changedZoneNames are null, customer Id is {0}, sellingProductId is {1}, countryId {2}, countrySellDate is {3}", customerId, sellingProductId, countryId, countrySellDate));
+                throw new ArgumentNullException(string.Format("changedZoneNames is null, customer Id is {0}, countryId {1}, countrySellDate is {2}", customerId, countryId, countrySellDate));
 
             foreach (ExistingSaleZone existingZone in existingZones)
             {
                 if (existingZone == null)
-                    throw new ArgumentNullException(string.Format("existingZone are null, customer Id is {0}, sellingProductId is {1}, countryId {2}, countrySellDate is {3}", customerId, sellingProductId, countryId, countrySellDate));
+                    throw new ArgumentNullException(string.Format("existingZone is null for customer with Id '{0}' and countryId '{1}' with countrySellDate '{2}'", customerId, countryId, countrySellDate));
 
                 var existingZoneEntity = saleZoneManager.GetSaleZone(existingZone.ZoneId);
                 if (existingZoneEntity == null)
@@ -991,9 +953,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     ZoneName = existingZone.ZoneName
                 };
 
-                if (existingZone.Codes == null)
-                    throw new ArgumentNullException(string.Format("existingZone.Codes are null, customer Id is {0}, sellingProductId is {1}, countryId {2}, countrySellDate is {3}, zone with id {4} and name", customerId, sellingProductId, countryId, countrySellDate, existingZone.ZoneId, existingZone.ZoneName));
-
+                existingZone.Codes.ThrowIfNull(string.Format("existingZone.Codes is null for customerId '{0}', countryId '{1}', ZoneId '{2}'.", customerId, countryId, existingZone.ZoneId));
 
                 zoneNotification.Codes.AddRange(existingZone.Codes.Select(item => ExistingCodeToSalePLCodeNotificationMapper(item, countrySellDate, null)));
                 zoneNotification.Rate = this.GetRateNotificationFromExistingData(customerId, sellingProductId, existingZone.ZoneId, existingZone.ZoneName, countryId, customerZoneRateHistoryLocator);
