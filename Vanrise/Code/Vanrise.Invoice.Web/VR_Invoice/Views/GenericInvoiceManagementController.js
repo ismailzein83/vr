@@ -89,6 +89,7 @@
             $scope.scopeModel.disableDeselectAll = true;
             $scope.scopeModel.disableBulkActions = true;
             $scope.scopeModel.disableSelectAll = true;
+            $scope.scopeModel.showPaidFilter = true;
 
             $scope.scopeModel.deselectAllClicked = function () {
                 gridAPI.deselectAllInvoices();
@@ -248,6 +249,8 @@
                 $scope.scopeModel.invoiceTypeEntity = response;
                 if ($scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions.length > 0)
                     $scope.scopeModel.showActionButtons = true;
+                if ($scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.HidePaidFilter)
+                    $scope.scopeModel.showPaidFilter = false;
             });
         }
 
