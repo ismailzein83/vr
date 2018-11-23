@@ -363,7 +363,8 @@
                         CurrencyFieldName: currencyFieldAPI.getSelectedIds(),
                         ItemSetNamesStorageRules: itemSetNameStorageRuleAPI.getData(),
                         InvToAccBalanceRelationId: relationDefinitionSelectorAPI.getSelectedIds(),
-                        InvoiceCommentDefinitionId: commentDefinitionAPI.getSelectedIds()
+                        InvoiceCommentDefinitionId: commentDefinitionAPI.getSelectedIds(),
+                        HidePaidFilter: $scope.scopeModel.hidePaidFilter
                     }
                 };
                 return obj;
@@ -439,6 +440,9 @@
                 function loadStaticData() {
                     if (invoiceTypeEntity != undefined) {
                         $scope.scopeModel.name = invoiceTypeEntity.Name;
+                        if (invoiceTypeEntity.Settings != undefined) {
+                            $scope.scopeModel.hidePaidFilter = invoiceTypeEntity.Settings.HidePaidFilter;
+                        }
                     }
                 }
 
