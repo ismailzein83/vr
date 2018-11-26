@@ -179,7 +179,7 @@ app.directive('vrGenericdataGenericrulesearchRuletreecriteria', ['UtilsService',
                 };
 
                 api.addGenericRule = function (addRuleObj) {
-                    VR_GenericData_GenericRule.addGenericRule(ruleDefinition.GenericRuleDefinitionId, addRuleObj.onRuleAdded);
+                    VR_GenericData_GenericRule.addGenericRule(ruleDefinition.GenericRuleDefinitionId, addRuleObj.onGenericRuleAdded);
                 };
 
                 api.uploadGenericRules = function (uploadRulesObj) {
