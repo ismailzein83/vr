@@ -19,7 +19,8 @@ delete from [sec].[View] where [Id] in ('9F5B379C-1576-4078-9999-3218B329FEAC',-
 										'E68EFF9C-879E-4A6C-B412-8E225A966571',--'Charging Policies'
 										'D3799B4D-5B86-4665-BF03-94AFF7F00E21',--'Product Families'
 										'3C53D6DC-BBE7-49CA-A222-8211AF25DD31',--'Business Rules'
-										'FF5E429A-CFF0-4095-8AD0-987FD3CAD502' --'Action Rules'
+										'FF5E429A-CFF0-4095-8AD0-987FD3CAD502', --'Action Rules'
+										'ADBB44FE-5470-413C-A5F6-8AE8C585FA31'--'Report Generation'
 										)
 --[sec].[View]-------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
