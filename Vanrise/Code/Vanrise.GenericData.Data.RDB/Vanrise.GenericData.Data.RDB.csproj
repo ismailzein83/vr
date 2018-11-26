@@ -55,6 +55,7 @@
     <Compile Include="DataStoreDataManager.cs" />
     <Compile Include="ExpressionBuilderConfigDataManager.cs" />
     <Compile Include="ExtensibleBEItemDataManager.cs" />
+    <Compile Include="GenericRuleDefinitionDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordFilterRDBBuilder.cs" />
   </ItemGroup>
