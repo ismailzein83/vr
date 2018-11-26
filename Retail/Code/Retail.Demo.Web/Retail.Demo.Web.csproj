@@ -24,10 +24,10 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-	<TargetFrameworkProfile />
-	<Use64BitIISExpress />
+    <TargetFrameworkProfile />
+    <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
-	<_HasReferenceToSystemRuntime>True</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>True</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -111,7 +111,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-	<Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
     </Reference>
@@ -135,10 +135,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Retail_Demo\Elements\InvoiceOBB\Directives\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Demo\Constants\ModuleConfig.js" />
+    <Content Include="Retail_Demo\Elements\InvoiceOBB\Directives\retail-demo-invoicetype-ispinvoicesettings.js" />
+    <Content Include="Retail_Demo\Elements\InvoiceOBB\Directives\Templates\ISPInvoiceSettingsTemplate.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
