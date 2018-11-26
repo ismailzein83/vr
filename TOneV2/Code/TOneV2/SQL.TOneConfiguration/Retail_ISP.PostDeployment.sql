@@ -10,6 +10,8 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
+Delete from [bp].[BPDefinition] where id ='92082EE6-B150-46DE-937B-1CF56B5BA453'--'CDR Correlation'
+
 --[sec].[View]--------------------------------------------------------------------------------------
 BEGIN
 set nocount on;
