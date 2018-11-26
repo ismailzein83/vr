@@ -13,7 +13,7 @@ app.directive("retailDemoInvoicetypeIspinvoicesettings", ["UtilsService", "VRNot
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new InterconnectInvoiceSettings($scope, ctrl, $attrs);
+                var ctor = new ISPInvoiceSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -25,7 +25,7 @@ app.directive("retailDemoInvoicetypeIspinvoicesettings", ["UtilsService", "VRNot
 
         };
 
-        function InterconnectInvoiceSettings($scope, ctrl, $attrs) {
+        function ISPInvoiceSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var beDefinitionSelectorAPI;
@@ -33,7 +33,6 @@ app.directive("retailDemoInvoicetypeIspinvoicesettings", ["UtilsService", "VRNot
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.invoiceType = UtilsService.getArrayEnum(retail_Interconnect_InvoiceType);
                 $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                     beDefinitionSelectorAPI = api;
                     beDefinitionSelectorPromiseDeferred.resolve();
@@ -47,9 +46,6 @@ app.directive("retailDemoInvoicetypeIspinvoicesettings", ["UtilsService", "VRNot
 
                 api.load = function (payload) {
                     var promises = [];
-                    if (payload != undefined && payload.extendedSettingsEntity != undefined) {
-                        $scope.scopeModel.selectedInvoiceType = UtilsService.getItemByVal($scope.scopeModel.invoiceType, payload.extendedSettingsEntity.Type, "value");
-                    }
                     promises.push(getBusinessEntityDefinitionSelectorLoadPromise());
 
                     function getBusinessEntityDefinitionSelectorLoadPromise() {
@@ -78,7 +74,7 @@ app.directive("retailDemoInvoicetypeIspinvoicesettings", ["UtilsService", "VRNot
                 api.getData = function () {
                     return {
                         $type: "Retail.Demo.Business.ISPInvoiceSettings, Retail.Demo.Business",
-                        AccountBEDefinitionId: beDefinitionSelectorAPI.getSelectedIds(),
+                        AccountBEDefinitionId: beDefinitionSelectorAPI.getSelectedIds()
                     };
                 };
 
