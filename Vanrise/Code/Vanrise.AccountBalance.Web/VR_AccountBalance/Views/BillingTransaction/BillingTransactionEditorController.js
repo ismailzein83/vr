@@ -229,7 +229,7 @@
                         },
                         selectedIds: billingTransactionEntity != undefined ? billingTransactionEntity.TransactionTypeId: undefined
                     };
-                    if (!isEditMode) {
+                    if (!isViewMode) {
                         payload.filter.Filters = [{
                             $type: "Vanrise.AccountBalance.Entities.ManualAddEnabledBillingTransactionTypeFilter, Vanrise.AccountBalance.Entities"
                         }];
