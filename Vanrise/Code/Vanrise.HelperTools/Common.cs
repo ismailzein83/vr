@@ -331,7 +331,7 @@ when not matched by target then
             foreach (string script in dbname.Script(scriptOptions))
             {
                 dbExist = DbExist(script, autoGeneration);
-                if (!dbExist)
+                if (!dbExist || projectName == "Component-ISP")
                 {
                     sb.AppendLine(script);
                     sb.AppendLine("GO");
@@ -348,7 +348,7 @@ when not matched by target then
             foreach (string script in scriptCollection)
             {
                 dbExist = DbExist(script, autoGeneration);
-                if (script.Contains("CREATE DATABASE") && !dbExist)
+                if ((script.Contains("CREATE DATABASE") && !dbExist) || (script.Contains("CREATE DATABASE") && projectName == "Component-ISP"))
                 {
                     sb.AppendLine(string.Format("CREATE DATABASE [{0}]", item));
                     sb.AppendLine("GO");
@@ -392,7 +392,7 @@ when not matched by target then
                 sb = sb.Replace(mainItem, "StandardInterconnectStructure");
             }
 
-            if (projectName == "ISP")
+            if (projectName == "ISP" || projectName == "Component-ISP")
             {
                 sb = sb.Replace(mainItem, "StandardISPStructure");
             }
