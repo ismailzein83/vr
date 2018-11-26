@@ -237,6 +237,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Demo.Data.SQL", "Ret
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Demo.Web", "Retail.Demo.Web\Retail.Demo.Web.csproj", "{E029764B-8859-4FBC-B0F3-3BD31124DED1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Demo.Entities", "Retail.Demo.Entities\Retail.Demo.Entities.csproj", "{F55572DD-6202-470B-B02A-1C94ACBD94EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -663,6 +665,10 @@ Global
 		{E029764B-8859-4FBC-B0F3-3BD31124DED1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E029764B-8859-4FBC-B0F3-3BD31124DED1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E029764B-8859-4FBC-B0F3-3BD31124DED1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F55572DD-6202-470B-B02A-1C94ACBD94EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F55572DD-6202-470B-B02A-1C94ACBD94EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F55572DD-6202-470B-B02A-1C94ACBD94EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F55572DD-6202-470B-B02A-1C94ACBD94EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -780,12 +786,13 @@ Global
 		{D0455BB6-B951-4C9A-9B56-F26EA218994F} = {91B6B51E-A8E9-4FA4-8B2E-1C31C9B19B95}
 		{1E3DF1C4-737B-4839-A389-07037C7F7F4A} = {91B6B51E-A8E9-4FA4-8B2E-1C31C9B19B95}
 		{E029764B-8859-4FBC-B0F3-3BD31124DED1} = {91B6B51E-A8E9-4FA4-8B2E-1C31C9B19B95}
+		{F55572DD-6202-470B-B02A-1C94ACBD94EF} = {91B6B51E-A8E9-4FA4-8B2E-1C31C9B19B95}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 99
+		SccNumberOfProjects = 100
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1181,5 +1188,9 @@ Global
 		SccProjectTopLevelParentUniqueName98 = Retail.sln
 		SccProjectName98 = Retail.Demo.Web
 		SccLocalPath98 = Retail.Demo.Web
+		SccProjectUniqueName99 = Retail.Demo.Entities\\Retail.Demo.Entities.csproj
+		SccProjectTopLevelParentUniqueName99 = Retail.sln
+		SccProjectName99 = Retail.Demo.Entities
+		SccLocalPath99 = Retail.Demo.Entities
 	EndGlobalSection
 EndGlobal
