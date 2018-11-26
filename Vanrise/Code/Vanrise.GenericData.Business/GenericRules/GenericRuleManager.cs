@@ -535,23 +535,22 @@ namespace Vanrise.GenericData.Business
                 GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
                 var genericRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(_query.RuleDefinitionId);
                 var genericRuleDefinitionCriteria = genericRuleDefinition.CriteriaDefinition as GenericRuleDefinitionCriteria;
+                var genericRuleDefinitionSettings = genericRuleDefinition.SettingsDefinition as GenericRuleDefinitionSettings;
 
-                ExportExcelSheet sheet = new ExportExcelSheet()
-                {
-                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
-                };
-
+                ExportExcelSheet sheet = new ExportExcelSheet() { Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() } };
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
 
                 if (genericRuleDefinitionCriteria != null)
                 {
                     foreach (var field in genericRuleDefinitionCriteria.Fields)
-                    {
                         sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = field.Title });
-                    }
                 }
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Settings" });
+                if (genericRuleDefinitionSettings != null && !string.IsNullOrEmpty(genericRuleDefinitionSettings.GridSettingTitle))
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = genericRuleDefinitionSettings.GridSettingTitle });
+                else
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Settings" });
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
 
@@ -591,6 +590,7 @@ namespace Vanrise.GenericData.Business
                         }
                     }
                 }
+
                 context.MainSheet = sheet;
             }
         }
