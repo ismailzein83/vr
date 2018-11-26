@@ -779,6 +779,22 @@
       <Project>{750f4fde-cada-485c-906b-841673df0300}</Project>
       <Name>Retail.Data.MainExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Demo.Business\Retail.Demo.Business.csproj">
+      <Project>{f701e2e4-b43b-4660-92e9-475a6370ff36}</Project>
+      <Name>Retail.Demo.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Demo.Data.SQL\Retail.Demo.Data.SQL.csproj">
+      <Project>{1e3df1c4-737b-4839-a389-07037c7f7f4a}</Project>
+      <Name>Retail.Demo.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Demo.Data\Retail.Demo.Data.csproj">
+      <Project>{d0455bb6-b951-4c9a-9b56-f26ea218994f}</Project>
+      <Name>Retail.Demo.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Demo.Entities\Retail.Demo.Entities.csproj">
+      <Project>{f55572dd-6202-470b-b02a-1c94acbd94ef}</Project>
+      <Name>Retail.Demo.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Interconnect.Business\Retail.Interconnect.Business.csproj">
       <Project>{2ae6da00-8341-4dbe-b7e7-53e27d06b2c9}</Project>
       <Name>Retail.Interconnect.Business</Name>
