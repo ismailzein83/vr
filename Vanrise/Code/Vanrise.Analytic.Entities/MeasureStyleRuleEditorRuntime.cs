@@ -13,22 +13,19 @@ namespace Vanrise.Analytic.Entities
     }
     public enum StyleCodeEnum // to be removed when the reference will be added
     {
-        [Description("Red")]
-        Red = 0,
+        [Description("Excellent")]
+        Excellent = 0,
 
-        [Description("Green")]
-        Green = 1,
+        [Description("Good")]
+        Good = 1,
 
-        [Description("Yellow")]
-        Yellow = 2,
+        [Description("Fair")]
+        Fair = 2,
 
-        [Description("Blue")]
-        Blue = 3,
+        [Description("Poor")]
+        Poor = 3,
 
-        [Description("Red Text Value")]
-        RedTextValue = 4,
-
-        [Description("Green Text Value")]
-        GreenTextValue = 5
+        [Description("Bad")]
+        Bad = 4,
     }
 }
