@@ -227,6 +227,16 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RevenueAssuranceAnalytic", 
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.NetworkRental", "SQL.NetworkRental\SQL.NetworkRental.sqlproj", "{790DC4D2-C0ED-4C4A-94D6-DAEE3D94186E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Retail.Demo", "Retail.Demo", "{91B6B51E-A8E9-4FA4-8B2E-1C31C9B19B95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Demo.Business", "Retail.Demo.Business\Retail.Demo.Business.csproj", "{F701E2E4-B43B-4660-92E9-475A6370FF36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Demo.Data", "Retail.Demo.Data\Retail.Demo.Data.csproj", "{D0455BB6-B951-4C9A-9B56-F26EA218994F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Demo.Data.SQL", "Retail.Demo.Data.SQL\Retail.Demo.Data.SQL.csproj", "{1E3DF1C4-737B-4839-A389-07037C7F7F4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Demo.Web", "Retail.Demo.Web\Retail.Demo.Web.csproj", "{E029764B-8859-4FBC-B0F3-3BD31124DED1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -637,6 +647,22 @@ Global
 		{790DC4D2-C0ED-4C4A-94D6-DAEE3D94186E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{790DC4D2-C0ED-4C4A-94D6-DAEE3D94186E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{790DC4D2-C0ED-4C4A-94D6-DAEE3D94186E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{F701E2E4-B43B-4660-92E9-475A6370FF36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F701E2E4-B43B-4660-92E9-475A6370FF36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F701E2E4-B43B-4660-92E9-475A6370FF36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F701E2E4-B43B-4660-92E9-475A6370FF36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0455BB6-B951-4C9A-9B56-F26EA218994F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0455BB6-B951-4C9A-9B56-F26EA218994F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0455BB6-B951-4C9A-9B56-F26EA218994F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0455BB6-B951-4C9A-9B56-F26EA218994F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E3DF1C4-737B-4839-A389-07037C7F7F4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E3DF1C4-737B-4839-A389-07037C7F7F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E3DF1C4-737B-4839-A389-07037C7F7F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E3DF1C4-737B-4839-A389-07037C7F7F4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E029764B-8859-4FBC-B0F3-3BD31124DED1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E029764B-8859-4FBC-B0F3-3BD31124DED1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E029764B-8859-4FBC-B0F3-3BD31124DED1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E029764B-8859-4FBC-B0F3-3BD31124DED1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -749,12 +775,17 @@ Global
 		{F282C122-6B2D-4D74-BEA1-7B490E75AD97} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{14B3B2D1-F3FD-4C2E-9F42-CD3EC47C2078} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{790DC4D2-C0ED-4C4A-94D6-DAEE3D94186E} = {DBCF7D23-8951-4886-9024-282788E5D24F}
+		{91B6B51E-A8E9-4FA4-8B2E-1C31C9B19B95} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{F701E2E4-B43B-4660-92E9-475A6370FF36} = {91B6B51E-A8E9-4FA4-8B2E-1C31C9B19B95}
+		{D0455BB6-B951-4C9A-9B56-F26EA218994F} = {91B6B51E-A8E9-4FA4-8B2E-1C31C9B19B95}
+		{1E3DF1C4-737B-4839-A389-07037C7F7F4A} = {91B6B51E-A8E9-4FA4-8B2E-1C31C9B19B95}
+		{E029764B-8859-4FBC-B0F3-3BD31124DED1} = {91B6B51E-A8E9-4FA4-8B2E-1C31C9B19B95}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 95
+		SccNumberOfProjects = 99
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1134,5 +1165,21 @@ Global
 		SccProjectTopLevelParentUniqueName94 = Retail.sln
 		SccProjectName94 = SQL.NetworkRental
 		SccLocalPath94 = SQL.NetworkRental
+		SccProjectUniqueName95 = Retail.Demo.Business\\Retail.Demo.Business.csproj
+		SccProjectTopLevelParentUniqueName95 = Retail.sln
+		SccProjectName95 = Retail.Demo.Business
+		SccLocalPath95 = Retail.Demo.Business
+		SccProjectUniqueName96 = Retail.Demo.Data\\Retail.Demo.Data.csproj
+		SccProjectTopLevelParentUniqueName96 = Retail.sln
+		SccProjectName96 = Retail.Demo.Data
+		SccLocalPath96 = Retail.Demo.Data
+		SccProjectUniqueName97 = Retail.Demo.Data.SQL\\Retail.Demo.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName97 = Retail.sln
+		SccProjectName97 = Retail.Demo.Data.SQL
+		SccLocalPath97 = Retail.Demo.Data.SQL
+		SccProjectUniqueName98 = Retail.Demo.Web\\Retail.Demo.Web.csproj
+		SccProjectTopLevelParentUniqueName98 = Retail.sln
+		SccProjectName98 = Retail.Demo.Web
+		SccLocalPath98 = Retail.Demo.Web
 	EndGlobalSection
 EndGlobal
