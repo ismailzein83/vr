@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActiveServices.cs" />
+    <Compile Include="InvoiceDetails.cs" />
     <Compile Include="NewOrders.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

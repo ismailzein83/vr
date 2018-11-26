@@ -62,7 +62,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DemoGenerator.cs" />
     <Compile Include="ISPInvoiceGenerator.cs" />
     <Compile Include="ISPInvoicePartnerSettings.cs" />
     <Compile Include="ISPInvoiceSettings.cs" />

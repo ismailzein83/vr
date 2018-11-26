@@ -61,7 +61,7 @@ namespace Retail.Demo.Data.SQL
             return new ActiveServices()
             {
                 ProductName = reader["Name"] as string,
-                Cycle = (DateTime)reader["BillingFrequency"],
+                Cycle = reader["BillingFrequency"] as string,
                 TotalTarrif = (decimal)reader["MRC"]
             };
         }
@@ -76,16 +76,19 @@ namespace Retail.Demo.Data.SQL
         }
         #region Queries
 
-        private StringBuilder query_GetActiveServices = new StringBuilder(@"SELECT TOP 1000 Pr.Name
-                                         , OD.BillingFrequency
-                                         ,OD.MRC
-                                         FROM[Retail_Dev_ISP].[NetworkRentalManager].[OrdersDefinition] as OD
-                                        JOin[Retail_Dev_ISP].[NetworkRentalManager].[Product] as Pr on OD.ProductId=pr.ID");
+        private StringBuilder query_GetActiveServices = new StringBuilder(@"use[Retail_Dev_ISP];
+                                                                            select Pr.Name  as ProductName, od.BillingFrequency, Sum(od.MRC) as MRC
+                                                                            FROM[Retail_Dev_ISP].[NetworkRentalManager].[OrdersDefinition] as od
+                                                                            Join[Retail_Dev_ISP].[NetworkRentalManager].[Product] as Pr on OD.ProductId=pr.ID
+                                                                            Group by Pr.Name,od.BillingFrequency
+                                                                            ");
 
-        private StringBuilder query_GetNewOrders = new StringBuilder(@"SELECT TOP 1000 Pr.Name
-                                          ,OD.NRC
-                                         FROM[Retail_Dev_ISP].[NetworkRentalManager].[OrdersDefinition] as OD
-                                        JOin[Retail_Dev_ISP].[NetworkRentalManager].[Product] as Pr on OD.ProductId=pr.ID");
+        private StringBuilder query_GetNewOrders = new StringBuilder(@"use[Retail_Dev_ISP];
+                                                                       select Pr.Name  as ProductName, Sum(od.MRC) as NRC
+                                                                       FROM[Retail_Dev_ISP].[NetworkRentalManager].[OrdersDefinition] as od
+                                                                       JOin[Retail_Dev_ISP].[NetworkRentalManager].[Product] as Pr on OD.ProductId=pr.ID
+                                                                       Group by Pr.Name,od.BillingFrequency
+                                                                       ");
 
         #endregion
     }
