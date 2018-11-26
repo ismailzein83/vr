@@ -32,6 +32,7 @@
         var attachmentFieldTypeManagementReadyDeferred = UtilsService.createPromiseDeferred();
 
         var isEditMode;
+        var isViewMode;
 
         loadParameters();
         defineScope();
@@ -44,6 +45,7 @@
                 accountTypeId = parameters.accountTypeId;
                 billingTransactionId = parameters.billingTransactionId;
                 context = parameters.context;
+                isViewMode = parameters.isViewMode;
             }
             isEditMode = billingTransactionId != undefined;
         }
@@ -127,7 +129,7 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-            if (isEditMode) {
+            if (isEditMode || isViewMode) {
                 getBillingTransactionEntity().then(function () {
                     loadAccountSettings();
                 }).catch(function (error) {
@@ -172,7 +174,12 @@
         function loadAllControls() {
 
             function setTitle() {
-                $scope.title = UtilsService.buildTitleForAddEditor('Financial Transactions');
+                if (isViewMode) {
+                    $scope.title = "View Financial Transaction";
+                }
+                else {
+                    $scope.title = UtilsService.buildTitleForAddEditor('Financial Transaction');
+                }
             }
             function loadStaticData() {
                 if (billingTransactionEntity !=undefined) {
@@ -218,13 +225,15 @@
                 billingTransactionTypeSelectorReadyDeferred.promise.then(function () {
                     var payload = {
                         filter: {
-                            AccountTypeId: accountTypeId,
-                            Filters: [{
-                                $type: "Vanrise.AccountBalance.Entities.ManualAddEnabledBillingTransactionTypeFilter, Vanrise.AccountBalance.Entities"
-                            }]
+                            AccountTypeId: accountTypeId
                         },
                         selectedIds: billingTransactionEntity != undefined ? billingTransactionEntity.TransactionTypeId: undefined
                     };
+                    if (!isEditMode) {
+                        payload.filter.Filters = [{
+                            $type: "Vanrise.AccountBalance.Entities.ManualAddEnabledBillingTransactionTypeFilter, Vanrise.AccountBalance.Entities"
+                        }];
+                    }
                     VRUIUtilsService.callDirectiveLoad(billingTransactionTypeSelectorAPI, payload, loadTransactionTypePromiseDeferred);
                 });
                 return loadTransactionTypePromiseDeferred.promise;

@@ -24,7 +24,8 @@
         function viewBillingTransaction(billingTransactionId, context) {
             var parameters = {
                 billingTransactionId: billingTransactionId,
-                context: context
+                context: context,
+                isViewMode: true
             };
             var settings = {};
 
