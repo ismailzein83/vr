@@ -3,7 +3,7 @@
         <vr-row>
             <vr-columns width="1/3row">
                 <vr-row>
-                    <partnerportal-customeraccess-retailsubaccounts-selector on-ready="scopeModel.onRetailSubAccountsSelectorReady" isrequired="true" vr-disabled="scopeModel.accountsNumber==1"></partnerportal-customeraccess-retailsubaccounts-selector>
+                    <partnerportal-customeraccess-retailsubaccounts-selector on-ready="scopeModel.onRetailSubAccountsSelectorReady" isrequired="true" vr-disabled="scopeModel.isSingleAccount"></partnerportal-customeraccess-retailsubaccounts-selector>
                 </vr-row>
                 <vr-row>
                     <vr-common-statusdefinition-remoteselector on-ready="scopeModel.onStatusSelectorReady" customlabel="Status" normal-col-num="12" isrequired="true"></vr-common-statusdefinition-remoteselector>

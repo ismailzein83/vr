@@ -96,10 +96,6 @@ app.directive('partnerportalCustomeraccessRetailFaultticketStaticeditor', ['Util
                 $scope.scopeModel.onRetailSubAccountsSelectorReady = function (api) {
                     retailSubAccountsSelectorAPI = api;
                     retailSubAccountsReadyPromiseDeferred.resolve();
-                    if (retailSubAccountsSelectorAPI != undefined && retailSubAccountsSelectorAPI.getAccountWithChildren != undefined && typeof (retailSubAccountsSelectorAPI.getAccountWithChildren) == 'function')
-                        retailSubAccountsSelectorAPI.getAccountWithChildren().then(function (response) {
-                            $scope.scopeModel.accountsNumber = response;
-                        });
                 };
                 UtilsService.waitMultiplePromises([attachmentGridReadyPromiseDeferred.promise, reasonSelectorReadyPromiseDeferred.promise, typeSelectorReadyPromiseDeferred.promise, retailSubAccountsReadyPromiseDeferred.promise]).then(function () {
                     defineApi();
@@ -220,6 +216,7 @@ app.directive('partnerportalCustomeraccessRetailFaultticketStaticeditor', ['Util
                 });
                 retailSubAccountsSelectorLoadDeferred.promise.then(function () {
                     retailSubAccountsSelectorAPI.selectIfSingleItem();
+                    $scope.scopeModel.isSingleAccount = retailSubAccountsSelectorAPI.isSingleItem();
                 });
                 return retailSubAccountsSelectorLoadDeferred.promise;
             }
