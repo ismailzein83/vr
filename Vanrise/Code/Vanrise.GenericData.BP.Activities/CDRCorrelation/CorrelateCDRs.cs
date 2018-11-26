@@ -64,6 +64,7 @@ namespace Vanrise.GenericData.BP.Activities
 
             List<MobileCDR> callForwardMobileCDRList = new List<MobileCDR>();
             Dictionary<string, List<MobileCDR>> callForwardMobileCDRsByCGPNDict = new Dictionary<string, List<MobileCDR>>();
+            Dictionary<string, List<MobileCDR>> callForwardMobileCDRsByCDPNDict = new Dictionary<string, List<MobileCDR>>();
             Dictionary<MobileCDR, CallForwardMobileCDRs> callForwardMobileCDRsDict = new Dictionary<MobileCDR, CallForwardMobileCDRs>();
 
             List<MobileCDR> uncorrelatedMobileCDRList = new List<MobileCDR>();
@@ -99,8 +100,13 @@ namespace Vanrise.GenericData.BP.Activities
                                     if (mobileCDR.RecordType == callForwardCDRRecordType)
                                     {
                                         callForwardMobileCDRList.Add(mobileCDR);
-                                        List<MobileCDR> tempCallForwardMobileCDRs = callForwardMobileCDRsByCGPNDict.GetOrCreateItem(mobileCDR.CGPN);
-                                        tempCallForwardMobileCDRs.Add(mobileCDR);
+
+                                        List<MobileCDR> tempCallForwardMobileCDRsByCGPN = callForwardMobileCDRsByCGPNDict.GetOrCreateItem(mobileCDR.CGPN);
+                                        tempCallForwardMobileCDRsByCGPN.Add(mobileCDR);
+
+                                        List<MobileCDR> tempCallForwardMobileCDRsByCDPN = callForwardMobileCDRsByCDPNDict.GetOrCreateItem(mobileCDR.CDPN);
+                                        tempCallForwardMobileCDRsByCDPN.Add(mobileCDR);
+
                                         continue;
                                     }
 
@@ -147,11 +153,11 @@ namespace Vanrise.GenericData.BP.Activities
 
                                 List<MobileCDR> outdatedMobileCDRs = GetAndCleanOutdatedMobileCDRs(uncorrelatedMobileCDRList, uncorrelatedMobileCDRsByCDPNDict, maxDateTime, dateTimeMargin);
 
-                                CheckCallForwardMatching(outdatedMobileCDRs, callForwardMobileCDRsByCGPNDict, callForwardMobileCDRsDict, dateTimeMargin, durationMargin,
-                                    originatedCDRRecordType, terminatedCDRRecordType);
+                                CheckCallForwardMatching(outdatedMobileCDRs, callForwardMobileCDRsByCGPNDict, callForwardMobileCDRsByCDPNDict, callForwardMobileCDRsDict, 
+                                    dateTimeMargin, durationMargin, originatedCDRRecordType, terminatedCDRRecordType);
 
-                                CorrelateAndCleanOutdatedCallForwardCDRs(callForwardMobileCDRList, callForwardMobileCDRsByCGPNDict, callForwardMobileCDRsDict, maxDateTime, dateTimeMargin,
-                                    cdrCorrelationBatch, cdrCorrelationDefinition);
+                                CorrelateAndCleanOutdatedCallForwardCDRs(callForwardMobileCDRList, callForwardMobileCDRsByCGPNDict, callForwardMobileCDRsByCDPNDict, callForwardMobileCDRsDict, 
+                                    maxDateTime, dateTimeMargin, cdrCorrelationBatch, cdrCorrelationDefinition);
 
                                 if (cdrCorrelationBatch.OutputRecordsToInsert.Count > 0)
                                     inputArgument.OutputQueue.Enqueue(cdrCorrelationBatch);
@@ -165,8 +171,8 @@ namespace Vanrise.GenericData.BP.Activities
             });
 
             //Finalizing CDRCorrelation
-            FinalizingCDRCorrelation(uncorrelatedMobileCDRList, callForwardMobileCDRList, callForwardMobileCDRsByCGPNDict, callForwardMobileCDRsDict, inputArgument, handle, cdrCorrelationDefinition,
-                dateTimeMargin, durationMargin, originatedCDRRecordType, terminatedCDRRecordType);
+            FinalizingCDRCorrelation(uncorrelatedMobileCDRList, callForwardMobileCDRList, callForwardMobileCDRsByCGPNDict, callForwardMobileCDRsByCDPNDict, 
+                callForwardMobileCDRsDict, inputArgument, handle, cdrCorrelationDefinition, dateTimeMargin, durationMargin, originatedCDRRecordType, terminatedCDRRecordType);
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Correlate CDRs is done.");
         }
@@ -219,7 +225,7 @@ namespace Vanrise.GenericData.BP.Activities
             return outdatedMobileCDRs.Count > 0 ? outdatedMobileCDRs : null;
         }
 
-        private void CheckCallForwardMatching(List<MobileCDR> outdatedMobileCDRs, Dictionary<string, List<MobileCDR>> callForwardMobileCDRsByCGPNDict,
+        private void CheckCallForwardMatching(List<MobileCDR> outdatedMobileCDRs, Dictionary<string, List<MobileCDR>> callForwardMobileCDRsByCGPNDict, Dictionary<string, List<MobileCDR>> callForwardMobileCDRsByCDPNDict,
             Dictionary<MobileCDR, CallForwardMobileCDRs> callForwardMobileCDRsDict, TimeSpan dateTimeMargin, TimeSpan durationMargin, int originatedCDRRecordType, int terminatedCDRRecordType)
         {
             if (outdatedMobileCDRs == null || outdatedMobileCDRs.Count == 0)
@@ -243,6 +249,15 @@ namespace Vanrise.GenericData.BP.Activities
                             tempCallForwardMobileCDRs.OriginatedMobileCDR = outdatedMobileCDR;
                             break;
                         }
+                    }
+                }
+
+                List<MobileCDR> callForwardMobileCDRsByCDPN = callForwardMobileCDRsByCDPNDict.GetRecord(outdatedMobileCDR.CDPN);
+                if (callForwardMobileCDRsByCDPN != null && callForwardMobileCDRsByCDPN.Count > 0)
+                {
+                    for (var index = 0; index < callForwardMobileCDRsByCDPN.Count; index++)
+                    {
+                        var currentCallForwardMobileCDR = callForwardMobileCDRsByCDPN[index];
 
                         if (IsTerminatedCallForwardMatching(outdatedMobileCDR, currentCallForwardMobileCDR, dateTimeMargin, durationMargin.Seconds, terminatedCDRRecordType))
                         {
@@ -258,8 +273,9 @@ namespace Vanrise.GenericData.BP.Activities
             }
         }
 
-        private void CorrelateAndCleanOutdatedCallForwardCDRs(List<MobileCDR> callForwardMobileCDRList, Dictionary<string, List<MobileCDR>> callForwardMobileCDRsByCGPNDict, Dictionary<MobileCDR, CallForwardMobileCDRs> callForwardMobileCDRsDict,
-             DateTime maxDateTime, TimeSpan dateTimeMargin, CDRCorrelationBatch cdrCorrelationBatch, CDRCorrelationDefinition cdrCorrelationDefinition)
+        private void CorrelateAndCleanOutdatedCallForwardCDRs(List<MobileCDR> callForwardMobileCDRList, Dictionary<string, List<MobileCDR>> callForwardMobileCDRsByCGPNDict,
+            Dictionary<string, List<MobileCDR>> callForwardMobileCDRsByCDPNDict, Dictionary<MobileCDR, CallForwardMobileCDRs> callForwardMobileCDRsDict, 
+            DateTime maxDateTime, TimeSpan dateTimeMargin, CDRCorrelationBatch cdrCorrelationBatch, CDRCorrelationDefinition cdrCorrelationDefinition)
         {
             DateTime minDateTime = maxDateTime.AddSeconds(-dateTimeMargin.TotalSeconds);
             for (var index = callForwardMobileCDRList.Count - 1; index >= 0; index--)
@@ -277,11 +293,17 @@ namespace Vanrise.GenericData.BP.Activities
                     callForwardMobileCDRList.Remove(currentCallForwardMobileCDR);
                     callForwardMobileCDRsDict.Remove(currentCallForwardMobileCDR);
 
-                    List<MobileCDR> tempCorrelatedCDRs = callForwardMobileCDRsByCGPNDict.GetOrCreateItem(currentCallForwardMobileCDR.CGPN);
-                    if (tempCorrelatedCDRs.Count > 1)
-                        tempCorrelatedCDRs.Remove(currentCallForwardMobileCDR);
+                    List<MobileCDR> tempCorrelatedCDRsByCGPN = callForwardMobileCDRsByCGPNDict.GetOrCreateItem(currentCallForwardMobileCDR.CGPN);
+                    if (tempCorrelatedCDRsByCGPN.Count > 1)
+                        tempCorrelatedCDRsByCGPN.Remove(currentCallForwardMobileCDR);
                     else
-                        callForwardMobileCDRsByCGPNDict.Remove(currentCallForwardMobileCDR.CDPN);
+                        callForwardMobileCDRsByCGPNDict.Remove(currentCallForwardMobileCDR.CGPN);
+
+                    List<MobileCDR> tempCorrelatedCDRsByCDPN = callForwardMobileCDRsByCDPNDict.GetOrCreateItem(currentCallForwardMobileCDR.CDPN);
+                    if (tempCorrelatedCDRsByCDPN.Count > 1)
+                        tempCorrelatedCDRsByCDPN.Remove(currentCallForwardMobileCDR);
+                    else
+                        callForwardMobileCDRsByCDPNDict.Remove(currentCallForwardMobileCDR.CDPN);
 
                     index--;
                 }
@@ -315,13 +337,13 @@ namespace Vanrise.GenericData.BP.Activities
         }
 
         private void FinalizingCDRCorrelation(List<MobileCDR> uncorrelatedMobileCDRList, List<MobileCDR> callForwardMobileCDRList, Dictionary<string, List<MobileCDR>> callForwardMobileCDRsByCGPNDict,
-            Dictionary<MobileCDR, CallForwardMobileCDRs> callForwardMobileCDRsDict, CorrelateCDRsInput inputArgument, AsyncActivityHandle handle, CDRCorrelationDefinition cdrCorrelationDefinition,
-            TimeSpan dateTimeMargin, TimeSpan durationMargin, int originatedCDRRecordType, int terminatedCDRRecordType)
+            Dictionary<string, List<MobileCDR>> callForwardMobileCDRsByCDPNDict, Dictionary<MobileCDR, CallForwardMobileCDRs> callForwardMobileCDRsDict, CorrelateCDRsInput inputArgument, 
+            AsyncActivityHandle handle, CDRCorrelationDefinition cdrCorrelationDefinition, TimeSpan dateTimeMargin, TimeSpan durationMargin, int originatedCDRRecordType, int terminatedCDRRecordType)
         {
             DateTime finalizingCDRCorrelationStartTime = DateTime.Now;
             CDRCorrelationBatch finalizingCDRCorrelationBatch = new CDRCorrelationBatch();
 
-            CheckCallForwardMatching(uncorrelatedMobileCDRList, callForwardMobileCDRsByCGPNDict, callForwardMobileCDRsDict, dateTimeMargin, durationMargin, originatedCDRRecordType, terminatedCDRRecordType);
+            CheckCallForwardMatching(uncorrelatedMobileCDRList, callForwardMobileCDRsByCGPNDict, callForwardMobileCDRsByCDPNDict, callForwardMobileCDRsDict, dateTimeMargin, durationMargin, originatedCDRRecordType, terminatedCDRRecordType);
 
             foreach (var callForwardMobileCDR in callForwardMobileCDRList)
                 CorrelateCallForwardCDR(callForwardMobileCDR, callForwardMobileCDRsDict, finalizingCDRCorrelationBatch, cdrCorrelationDefinition);
@@ -408,8 +430,8 @@ namespace Vanrise.GenericData.BP.Activities
             //if (string.Compare(firstMobileCDR.CGPN, secondMobileCDR.CGPN) != 0)
             //    return false;
 
-            if (string.Compare(mobileCDR.CDPN, callForwardMobileCDR.CDPN) != 0)
-                return false;
+            //if (string.Compare(mobileCDR.CDPN, callForwardMobileCDR.CDPN) != 0)
+            //    return false;
 
             return true;
         }
