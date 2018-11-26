@@ -1,0 +1,15 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-button type="Add" data-onclick="scopeModel.addVolumePackageDefinitionItem" standalone></vr-button>
+        <vr-datagrid on-ready="scopeModel.onGridReady"
+                     datasource="scopeModel.datasource"
+                     menuactions="scopeModel.gridMenuActions"
+                     ondeleterow="scopeModel.removeVolumePackageDefinitionItem"
+                     idfield="VolumePackageDefinitionItemId"
+                     norowhighlightonclick="true" maxheight="300px">
+          
+            <vr-datagridcolumn headertext="'ID'" field="'VolumePackageDefinitionItemId'" fixedwidth="50" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Name'" field="'Name'" fixedwidth="200" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>
