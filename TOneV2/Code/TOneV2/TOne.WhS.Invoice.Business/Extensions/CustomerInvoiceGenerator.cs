@@ -276,7 +276,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                 foreach (var item in recurringChargeItems)
                 {
-                    var customerInvoiceBySaleCurrencyItemDetail = customerInvoiceBySaleCurrencyItemDetails.FindRecord(x => x.CurrencyId == item.CurrencyId);
+                    var customerInvoiceBySaleCurrencyItemDetail = customerInvoiceBySaleCurrencyItemDetails.FindRecord(x => x.CurrencyId == item.CurrencyId && x.Month == item.RecurringChargeMonth);
                     if (customerInvoiceBySaleCurrencyItemDetail != null)
                     {
                         customerInvoiceBySaleCurrencyItemDetail.Amount += item.Amount;
@@ -297,7 +297,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             CurrencyId = item.CurrencyId,
                             Amount = item.Amount,
                             TotalRecurringChargeAmount = item.AmountAfterTaxes,
-                            TotalTrafficAmount = 0
+                            TotalTrafficAmount = 0,
+                            Month = item.RecurringChargeMonth
                         });
 
                     }

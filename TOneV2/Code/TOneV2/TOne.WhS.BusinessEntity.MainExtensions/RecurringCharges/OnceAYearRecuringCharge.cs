@@ -30,6 +30,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                     {
                         From = fromDate,
                         To = toDate,
+                        RecurringChargeDate = currentDateTime
                     });
                 }
                 currentDateTime = currentDateTime.AddDays(1);

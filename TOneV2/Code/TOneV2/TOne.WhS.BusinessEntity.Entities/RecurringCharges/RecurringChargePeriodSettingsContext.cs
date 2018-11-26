@@ -16,5 +16,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public DateTime From { get; set; }
         public DateTime To { get; set; }
+        public DateTime RecurringChargeDate { get; set; }
     }
 }

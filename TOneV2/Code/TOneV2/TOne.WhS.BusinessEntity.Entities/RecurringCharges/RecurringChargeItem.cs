@@ -22,6 +22,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public decimal AmountAfterTaxes { get; set; }
         public long RecurringChargeId { get; set; }
         public decimal VAT { get; set; }
+        public string RecurringChargeMonth { get; set; }
+        public DateTime RecurringChargeDate { get; set; }
         public IEnumerable<RecurringChargeItem> GetRecurringChargeItemRDLCSchema()
         {
             return null;

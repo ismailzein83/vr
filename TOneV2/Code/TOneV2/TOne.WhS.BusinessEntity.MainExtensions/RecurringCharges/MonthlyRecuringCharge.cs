@@ -33,7 +33,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.RecurringCharges
                 periodsList.Add(new RecurringChargePeriodOutput
                 {
                     From = fromDate,
-                    To = toDate
+                    To = toDate,
+                    RecurringChargeDate = currentDateTime
                 });
             }
             context.Periods = periodsList;

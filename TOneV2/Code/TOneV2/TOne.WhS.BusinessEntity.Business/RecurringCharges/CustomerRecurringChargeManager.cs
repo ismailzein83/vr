@@ -70,9 +70,11 @@ namespace TOne.WhS.BusinessEntity.Business
                             From = period.From,
                             To = period.To,
                             CurrencyId = effectiveCustomerRecurringCharge.CurrencyId,
-                            RecurringChargeId=effectiveCustomerRecurringCharge.ID,
+                            RecurringChargeId = effectiveCustomerRecurringCharge.ID,
                             AmountAfterTaxes = effectiveCustomerRecurringCharge.Amount,
-                            DueDate = effectiveCustomerRecurringCharge.DuePeriod.HasValue ? issueDate.AddDays(effectiveCustomerRecurringCharge.DuePeriod.Value) : issueDate
+                            DueDate = effectiveCustomerRecurringCharge.DuePeriod.HasValue ? issueDate.AddDays(effectiveCustomerRecurringCharge.DuePeriod.Value) : issueDate,
+                            RecurringChargeMonth = period.RecurringChargeDate.ToString("MMMM - yyyy"),
+                            RecurringChargeDate = period.RecurringChargeDate
                         });
                     }
                 }

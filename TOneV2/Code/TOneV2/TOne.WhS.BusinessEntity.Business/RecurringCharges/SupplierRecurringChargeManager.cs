@@ -70,15 +70,17 @@ namespace TOne.WhS.BusinessEntity.Business
                     foreach (var period in context.Periods)
                     {
                         evaluatedRecurringCharges.Add(new RecurringChargeItem
-                    {
-                        Name = supplierRecurringChargeTypeManager.GetSupplierRecurringChargeTypeName(effectiveSupplierRecurringCharge.RecurringChargeTypeId),
-                        Amount = effectiveSupplierRecurringCharge.Amount,
-                        From = period.From,
-                        To = period.To,
-                        CurrencyId = effectiveSupplierRecurringCharge.CurrencyId,
-                        AmountAfterTaxes = effectiveSupplierRecurringCharge.Amount,
-                        RecurringChargeId = effectiveSupplierRecurringCharge.ID,
-                        DueDate = effectiveSupplierRecurringCharge.DuePeriod.HasValue ? issueDate.AddDays(effectiveSupplierRecurringCharge.DuePeriod.Value) : issueDate
+                        {
+                            Name = supplierRecurringChargeTypeManager.GetSupplierRecurringChargeTypeName(effectiveSupplierRecurringCharge.RecurringChargeTypeId),
+                            Amount = effectiveSupplierRecurringCharge.Amount,
+                            From = period.From,
+                            To = period.To,
+                            CurrencyId = effectiveSupplierRecurringCharge.CurrencyId,
+                            AmountAfterTaxes = effectiveSupplierRecurringCharge.Amount,
+                            RecurringChargeId = effectiveSupplierRecurringCharge.ID,
+                            DueDate = effectiveSupplierRecurringCharge.DuePeriod.HasValue ? issueDate.AddDays(effectiveSupplierRecurringCharge.DuePeriod.Value) : issueDate,
+                            RecurringChargeMonth = period.RecurringChargeDate.ToString("MMMM - yyyy"),
+                            RecurringChargeDate = period.RecurringChargeDate
                         });
                     }
                 }
