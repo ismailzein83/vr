@@ -59,7 +59,7 @@ namespace Retail.Demo.Business
         {
             get
             {
-                return "Retail.Interconnect.Business.AssignedFinancialAccountToInvoiceSettingFilter, Retail.Interconnect.Business";
+                return "Retail.Demo.Business.AssignedFinancialAccountToInvoiceSettingFilter, Retail.Demo.Business";
             }
         }
         public override dynamic GetActualPartnerId(IActualPartnerContext context)
