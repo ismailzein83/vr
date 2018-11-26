@@ -172,8 +172,8 @@
     <Compile Include="FinancialAccount\PostpaidFinancialAccount.cs" />
     <Compile Include="FinancialAccount\PostpaidFinancialAccountDefinition.cs" />
     <Compile Include="OperatorDeclarationServices\Enums.cs" />
-    <Compile Include="OperatorDeclarationServices\PostpaidCDR.cs" />
-    <Compile Include="OperatorDeclarationServices\PostpaidSMS.cs" />
+    <Compile Include="OperatorDeclarationServices\Voice.cs" />
+    <Compile Include="OperatorDeclarationServices\SMS.cs" />
     <Compile Include="OperatorDeclarationServices\Topup.cs" />
     <Compile Include="PackageDefinitionExtendedSettings\PricingPackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageDefinitionSettings.cs" />

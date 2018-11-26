@@ -52,13 +52,13 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    var postPaidSMSEntity;
+                    var SMSEntity;
 
                     if (payload != undefined) {
 
-                        postPaidSMSEntity = payload.settings;
-
-                        $scope.scopeModel.numberOfSMSs = postPaidSMSEntity.NumberOfSMSs;
+                        SMSEntity = payload.settings;
+                        $scope.scopeModel.amount = SMSEntity.Amount;
+                        $scope.scopeModel.numberOfSMSs = SMSEntity.NumberOfSMSs;
                     }
 
                     var trafficTypeSelectorLoadPromise = loadTrafficTypeSelector();
@@ -71,9 +71,9 @@
                         var trafficTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         trafficTypeSelectorReadyDeferred.promise.then(function () {
                             var payload;
-                            if (postPaidSMSEntity != undefined)
+                            if (SMSEntity != undefined)
                                 payload = {
-                                    selectedIds: postPaidSMSEntity.TrafficType
+                                    selectedIds: SMSEntity.TrafficType
                                 };
                             VRUIUtilsService.callDirectiveLoad(trafficTypeSelectorAPI, payload, trafficTypeSelectorLoadDeferred);
                         });
@@ -85,9 +85,9 @@
                         trafficDirectionSelectorReadyDeferred.promise.then(function () {
                             var payload;
 
-                            if (postPaidSMSEntity != undefined)
+                            if (SMSEntity != undefined)
                                 payload = {
-                                    selectedIds: postPaidSMSEntity.TrafficDirection
+                                    selectedIds: SMSEntity.TrafficDirection
                                 };
                             VRUIUtilsService.callDirectiveLoad(trafficDirectionSelectorAPI, payload, trafficDirectionSelectorLoadDeferred);
                         });
@@ -100,10 +100,11 @@
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices.PostpaidSMS,Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices.SMS,Retail.BusinessEntity.MainExtensions",
                         TrafficType: trafficTypeSelectorAPI.getSelectedIds(),
                         TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
                         NumberOfSMSs: $scope.scopeModel.numberOfSMSs,
+                        Amount: $scope.scopeModel.amount
                     };
                 };
 

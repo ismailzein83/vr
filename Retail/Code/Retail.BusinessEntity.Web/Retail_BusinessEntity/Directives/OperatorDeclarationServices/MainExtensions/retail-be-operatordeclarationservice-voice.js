@@ -59,7 +59,7 @@
                         voiceEntity = payload.settings;
                         $scope.scopeModel.numberOfCalls = voiceEntity.NumberOfCalls;
                         $scope.scopeModel.duration = voiceEntity.Duration;
-                        $scope.scopeModel.amount = voiceEntity.TotalChargedDuration;
+                        $scope.scopeModel.amount = voiceEntity.Amount;
                     }
 
                     function loadTrafficTypeSelector() {

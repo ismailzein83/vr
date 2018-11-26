@@ -1,13 +1,9 @@
-﻿using Retail.BusinessEntity.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Retail.BusinessEntity.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices
 {
-    public class PostpaidSMS : OperatorDeclarationServiceSettings
+    public class SMS : OperatorDeclarationServiceSettings
     {
         public override Guid ConfigId
         {
@@ -19,5 +15,6 @@ namespace Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices
         public TrafficDirection TrafficDirection { get; set; }
 
         public long NumberOfSMSs { get; set; }
+        public Decimal Amount { get; set; }
     }
 }
