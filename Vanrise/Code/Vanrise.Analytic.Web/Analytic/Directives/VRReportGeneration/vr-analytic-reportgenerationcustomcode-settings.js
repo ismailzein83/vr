@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrAnalyticReportgenerationcustomcodeSettings", ["UtilsService",
-    function (UtilsService) {
+app.directive("vrAnalyticReportgenerationcustomcodeSettings", ["UtilsService", "VR_Analytic_ReportGenerationCustomCodeAPIService","VR_Analytic_ReportGenerationCustomCodeService",
+    function (UtilsService, VR_Analytic_ReportGenerationCustomCodeAPIService, VR_Analytic_ReportGenerationCustomCodeService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -38,7 +38,7 @@ app.directive("vrAnalyticReportgenerationcustomcodeSettings", ["UtilsService",
         }
         function CustomCodeSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var context;
 
             function initializeController() {
 
@@ -50,7 +50,7 @@ app.directive("vrAnalyticReportgenerationcustomcodeSettings", ["UtilsService",
                 var api = {};
 
                 api.load = function (payload) {
-
+                        
                     var promises = [];
                     if (payload != undefined && payload.componentType != undefined) {
                         $scope.scopeModel.name = payload.componentType.Name;
@@ -60,8 +60,28 @@ app.directive("vrAnalyticReportgenerationcustomcodeSettings", ["UtilsService",
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
+                api.validate = function () {
+                    var validatePromise = UtilsService.createPromiseDeferred();
+                    var input = {
+                        CustomCode: $scope.scopeModel.customCode
+                    };
+                    VR_Analytic_ReportGenerationCustomCodeAPIService.TryCompileCustomCode(input).then(function (output) {
+                        if (output != undefined) {
+                            if (output.CompilationSucceeded) {
+                                validatePromise.resolve(true);
+                            }
+                            else {
+                                VR_Analytic_ReportGenerationCustomCodeService.showCustomCodeCompilationErrors(output.ErrorMessages, getContext());
+                                validatePromise.reject();
+                            }
+                        }
+                        else {
+                            validatePromise.reject();
+                        }
+                    });
+                    return validatePromise.promise;
+                };
                 api.getData = function () {
-
                     return {
                         Name: $scope.scopeModel.name,
                         Settings: {
@@ -73,6 +93,12 @@ app.directive("vrAnalyticReportgenerationcustomcodeSettings", ["UtilsService",
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
             }
         }
 

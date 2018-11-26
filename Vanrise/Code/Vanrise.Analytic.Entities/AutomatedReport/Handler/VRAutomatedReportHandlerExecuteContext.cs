@@ -298,47 +298,47 @@ namespace Vanrise.Analytic.Entities
         {
             return null;
         }
-        public Guid? GetSubTableIdByGroupingFields(List<string> groupingFields, string listName)
+        public Guid? GetSubTableIdByGroupingFields(List<string> groupingFields, string queryTitle, string listName)
         {
             if (groupingFields != null && groupingFields.Count > 0)
             {
                 var groupingFieldsName = string.Join(",", groupingFields.OrderBy(x => x));
 
-                if (_subTableIdsByFieldsTitle != null && _subTableIdsByFieldsTitle.ContainsKey(groupingFieldsName))
-                {
-                    return _subTableIdsByFieldsTitle.GetRecord(groupingFieldsName);
-                }
+                //if (_subTableIdsByFieldsTitle != null && _subTableIdsByFieldsTitle.ContainsKey(groupingFieldsName))
+                //{
+                //    return _subTableIdsByFieldsTitle.GetRecord(groupingFieldsName);
+                //}
                 if (Queries != null && Queries.Count > 0)
                 {
-                    foreach (var query in Queries)
+                    var query = Queries.FindRecord(x => x.QueryTitle == queryTitle);
+                    query.ThrowIfNull("query", queryTitle);
+                    query.Settings.ThrowIfNull("query.Settings", query.QueryTitle);
+                    var querySchema = query.Settings.GetSchema(new VRAutomatedReportQueryGetSchemaContext { QueryDefinitionId = query.DefinitionId });
+                    var listSchema = querySchema.ListSchemas.GetRecord(listName);
+                    foreach (var subTableQuery in listSchema.SubTablesSchemas)
                     {
-                        query.Settings.ThrowIfNull("query.Settings", query.QueryTitle);
-                        var querySchema = query.Settings.GetSchema(new VRAutomatedReportQueryGetSchemaContext { QueryDefinitionId = query.DefinitionId });
-                        var listSchema = querySchema.ListSchemas.GetRecord(listName);
-                        foreach (var subTableQuery in listSchema.SubTablesSchemas)
+                        if (subTableQuery.Value.FieldSchemas != null)
                         {
-                            if(subTableQuery.Value.FieldSchemas != null)
+                            var subTableGroupingFields = new List<string>();
+                            foreach (var fieldSchema in subTableQuery.Value.FieldSchemas)
                             {
-                                var subTableGroupingFields = new List<string>();
-                                foreach (var fieldSchema in subTableQuery.Value.FieldSchemas)
+                                if (fieldSchema.Value.IsGroupingField)
                                 {
-                                    if (fieldSchema.Value.IsGroupingField)
-                                    {
-                                        subTableGroupingFields.Add(fieldSchema.Key);
-                                    }
+                                    subTableGroupingFields.Add(fieldSchema.Key);
                                 }
-                                if(subTableGroupingFields.Count > 0)
+                            }
+                            if (subTableGroupingFields.Count > 0)
+                            {
+                                var subTableFieldsName = string.Join(",", subTableGroupingFields.OrderBy(x => x));
+                                if (subTableFieldsName == groupingFieldsName)
                                 {
-                                    var subTableFieldsName = string.Join(",", subTableGroupingFields.OrderBy(x => x));
-                                    if (subTableFieldsName == groupingFieldsName)
+                                    if (_subTableIdsByFieldsTitle == null)
                                     {
-                                        if (_subTableIdsByFieldsTitle == null)
-                                        {
-                                            _subTableIdsByFieldsTitle = new Dictionary<string, Guid>();
-                                        }
-                                        _subTableIdsByFieldsTitle.Add(subTableQuery.Value.SubTableTitle, subTableQuery.Key);
-                                        return subTableQuery.Key;
+                                        _subTableIdsByFieldsTitle = new Dictionary<string, Guid>();
                                     }
+                                    if(_subTableIdsByFieldsTitle.ContainsKey(subTableQuery.Value.SubTableTitle))
+                                        _subTableIdsByFieldsTitle.Add(subTableQuery.Value.SubTableTitle, subTableQuery.Key);
+                                    return subTableQuery.Key;
                                 }
                             }
                         }

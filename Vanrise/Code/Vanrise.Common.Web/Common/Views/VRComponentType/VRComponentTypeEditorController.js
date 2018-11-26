@@ -145,40 +145,71 @@
 
         function updateComponentType() {
             $scope.scopeModel.isLoading = true;
-
-            var settingObject = buildComponentTypeObjFromScope();
-            settingObject.VRComponentTypeId = componentTypeEntity.VRComponentTypeId;
-            VRCommon_VRComponentTypeAPIService.UpdateVRComponentType(settingObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("Component Type", response, "Name")) {
-                    if ($scope.onVRComponentTypeUpdated != undefined)
-                        $scope.onVRComponentTypeUpdated(response.UpdatedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
+            var componentTypeValidatedPromise = UtilsService.createPromiseDeferred();
+            if (componentTypeEditorAPI != undefined && componentTypeEditorAPI.validate != undefined && typeof (componentTypeEditorAPI.validate) == 'function') {
+                componentTypeEditorAPI.validate().then(function () {
+                    componentTypeValidatedPromise.resolve();
+                }).catch(function () {
+                    componentTypeValidatedPromise.reject();
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+            }
+            else {
+                componentTypeValidatedPromise.resolve();
+            }
+            componentTypeValidatedPromise.promise.then(function () {
+                var settingObject = buildComponentTypeObjFromScope();
+                settingObject.VRComponentTypeId = componentTypeEntity.VRComponentTypeId;
+                VRCommon_VRComponentTypeAPIService.UpdateVRComponentType(settingObject)
+                .then(function (response) {
+                    if (VRNotificationService.notifyOnItemUpdated("Component Type", response, "Name")) {
+                        if ($scope.onVRComponentTypeUpdated != undefined)
+                            $scope.onVRComponentTypeUpdated(response.UpdatedObject);
+                        $scope.modalContext.closeModal();
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
             });
+            return componentTypeValidatedPromise.promise;
         }
 
         function insertComponentType() {
             $scope.scopeModel.isLoading = true;
+            var componentTypeValidatedPromise = UtilsService.createPromiseDeferred();
+            if (componentTypeEditorAPI != undefined && componentTypeEditorAPI.validate != undefined && typeof (componentTypeEditorAPI.validate) == 'function') {
+                componentTypeEditorAPI.validate().then(function () {
+                    componentTypeValidatedPromise.resolve();
+                }).catch(function () {
+                    componentTypeValidatedPromise.reject();
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+            }
+            else {
+                componentTypeValidatedPromise.resolve();
+            }
+            componentTypeValidatedPromise.promise.then(function () {
+                var settingObject = buildComponentTypeObjFromScope();
 
-            var settingObject = buildComponentTypeObjFromScope();
-
-            VRCommon_VRComponentTypeAPIService.AddVRComponentType(settingObject)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Component Type", response, "Name")) {
-                    if ($scope.onVRComponentTypeAdded != undefined)
-                        $scope.onVRComponentTypeAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
+                VRCommon_VRComponentTypeAPIService.AddVRComponentType(settingObject)
+                    .then(function (response) {
+                        if (VRNotificationService.notifyOnItemAdded("Component Type", response, "Name")) {
+                            if ($scope.onVRComponentTypeAdded != undefined)
+                                $scope.onVRComponentTypeAdded(response.InsertedObject);
+                            $scope.modalContext.closeModal();
+                        }
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                        $scope.scopeModel.isLoading = false;
+                    });
             });
+            return componentTypeValidatedPromise.promise;
+
         }
     }
 

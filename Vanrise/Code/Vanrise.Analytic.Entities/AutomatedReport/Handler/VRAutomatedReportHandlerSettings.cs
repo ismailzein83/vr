@@ -37,7 +37,7 @@ namespace Vanrise.Analytic.Entities
         IAutomatedReportEvaluatorContext EvaluatorContext { get; set; }
         VRAutomatedReportResolvedDataList GetDataList(Guid vrAutomatedReportQueryId, string listName);
         VRAutomatedReportResolvedDataList GetDataList(string queryName, string listName);
-        Guid? GetSubTableIdByGroupingFields(List<string> groupingFields, string listName);
+        Guid? GetSubTableIdByGroupingFields(List<string> groupingFields, string queryName, string listName);
         VRAutomatedReportResolvedDataFieldValue GetDataField(Guid vrAutomatedReportQueryId, string fieldName);
     }
     public enum QueryHandlerValidatorResult { Successful = 0, Failed = 1}

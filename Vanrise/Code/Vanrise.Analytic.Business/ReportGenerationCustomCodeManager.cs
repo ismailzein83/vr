@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Common;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common.Data;
 
 namespace Vanrise.Analytic.Business
 {
@@ -19,12 +20,6 @@ namespace Vanrise.Analytic.Business
         VRComponentTypeManager vrComponentTypeManager = new VRComponentTypeManager();
         #region Public Methods
 
-        static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
-
-        CacheManager GetCacheManager()
-        {
-            return s_cacheManager;
-        }
 
         public IEnumerable<ReportGenerationCustomCodeDefinitionInfo> GetReportGenerationCustomCodeSettingsInfo()
         {
@@ -38,7 +33,8 @@ namespace Vanrise.Analytic.Business
         public Type GetCustomCodeRuntimeType(Guid customCodeId)
         {
             string cacheName = String.Format("GetCustomCodeRuntimeTypeById_{0}", customCodeId);
-            var runtimeType = GetCacheManager().GetOrCreateObject(cacheName,
+            var vrComponentTypeManager = new VRComponentTypeManager();
+            var runtimeType = vrComponentTypeManager.GetCachedOrCreate(cacheName,
                 () =>
                 {
                     var customCode = GetCustomCodeById(customCodeId);
@@ -156,15 +152,5 @@ namespace Vanrise.Analytic.Business
             return classDefinitionBuilder.ToString();
         }
         #endregion
-    }
-    public class CacheManager : Vanrise.Caching.BaseCacheManager
-    {
-        object _updateHandle;
-
-        protected override bool ShouldSetCacheExpired()
-        {
-            return base.ShouldSetCacheExpired();
-        }
-
     }
 }

@@ -185,7 +185,7 @@ namespace Vanrise.Common.Excel
                     {
                         if (vrExcelTableCellMergeRange.StartIndex != vrExcelTableCellMergeRange.EndIndex)
                         {
-                            worksheet.Cells.Merge(rowIndex, vrExcelTableCellMergeRange.StartIndex + startColumnIndex, 1, (vrExcelTableCellMergeRange.EndIndex - vrExcelTableCellMergeRange.StartIndex + startColumnIndex));
+                            worksheet.Cells.Merge(rowIndex, vrExcelTableCellMergeRange.StartIndex + startColumnIndex, 1, (vrExcelTableCellMergeRange.EndIndex - vrExcelTableCellMergeRange.StartIndex +1));
                             mergeInfo.Add(vrExcelTableCellMergeRange);
                         }
                         vrExcelTableCellMergeRange = new VRExcelTableCellMergeRange
@@ -201,7 +201,7 @@ namespace Vanrise.Common.Excel
             {
                 if (vrExcelTableCellMergeRange.StartIndex != vrExcelTableCellMergeRange.EndIndex)
                 {
-                    worksheet.Cells.Merge(rowIndex, vrExcelTableCellMergeRange.StartIndex + startColumnIndex, 1, (vrExcelTableCellMergeRange.EndIndex - vrExcelTableCellMergeRange.StartIndex + startColumnIndex));
+                    worksheet.Cells.Merge(rowIndex, vrExcelTableCellMergeRange.StartIndex + startColumnIndex, 1, (vrExcelTableCellMergeRange.EndIndex - vrExcelTableCellMergeRange.StartIndex + 1));
                     mergeInfo.Add(vrExcelTableCellMergeRange);
                 }
             }

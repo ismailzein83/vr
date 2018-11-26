@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common.Excel;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 {
@@ -17,35 +19,16 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             get { return new Guid("482D20EB-78B0-4633-B6F3-4B93B2ED1190"); }
         }
         public Guid ReportGenerationCustomCodeId { get; set; }
-        public override VRAutomatedReportGeneratedFile GenerateFile(IVRAutomatedReportFileGeneratorGenerateFileContext context)
+        public override VRAutomatedReportGeneratedFile GenerateFile(IVRAutomatedReportFileGeneratorGenerateFileContext context1)
         {
             ReportGenerationCustomCodeManager customCodeSettingsManager = new ReportGenerationCustomCodeManager();
             var type = customCodeSettingsManager.GetCustomCodeRuntimeType(ReportGenerationCustomCodeId);
             if (type != null)
             {
                 var reportGenerator = Activator.CreateInstance(type) as IReportGenerationCustomCode;
-                var reportGenerationContext = new ReportGenerationCustomCodeContext(context.HandlerContext.GetDataList, context.HandlerContext.GetSubTableIdByGroupingFields);
+                var context = new ReportGenerationCustomCodeContext(context1.HandlerContext.GetDataList, context1.HandlerContext.GetSubTableIdByGroupingFields);
 
-
-                //var vrExcelFile = reportGenerationContext.CreateExcelFile();
-                //var sheet = vrExcelFile.CreateSheet();
-
-                //var table = sheet.CreateTable(1, 1);
-                //table.EnableMergeHeaders();
-                //table.EnableTableBorders();
-
-                //var incomingHeaderRow = table.CreateHeaderRow();
-                //var incomingHeaderCell = incomingHeaderRow.CreateCell();
-                //incomingHeaderCell.SetValue("Incoming");
-                //var incomingHeaderCellStyle = incomingHeaderCell.CreateStyle();
-                //incomingHeaderCellStyle.BGColor = "White";
-                //incomingHeaderCellStyle.FontSize = 11;
-                //incomingHeaderCellStyle.IsBold = true;
-                //incomingHeaderCellStyle.FontColor = "Black";
-                //incomingHeaderCellStyle.HorizontalAlignment = VRExcelContainerHorizontalAlignment.Left;
-                //var emptyRow = table.CreateHeaderRow();
-
-                var output = reportGenerator.Generate(reportGenerationContext);
+                var output = reportGenerator.Generate(context);
                 return new VRAutomatedReportGeneratedFile()
                 {
                     FileContent = output,
