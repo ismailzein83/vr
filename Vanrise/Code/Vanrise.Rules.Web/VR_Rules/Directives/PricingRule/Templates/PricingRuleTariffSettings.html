@@ -3,8 +3,8 @@
 </vr-row>
 <vr-row removeline>
     <vr-columns width="1/4row">
-        <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId"
-                   label="Tariff Type" datasource="pricingRuleTariffSettings" selectedvalues="selectedPricingRuleTariffSettings" isrequired>
+        <vr-select datasource="pricingRuleTariffSettings" selectedvalues="selectedPricingRuleTariffSettings"
+                   datatextfield="Title" datavaluefield="ExtensionConfigurationId" label="Tariff Type" isrequired>
         </vr-select>
     </vr-columns>
     <vr-columns width="3/4row" ng-show="selectedPricingRuleTariffSettings">

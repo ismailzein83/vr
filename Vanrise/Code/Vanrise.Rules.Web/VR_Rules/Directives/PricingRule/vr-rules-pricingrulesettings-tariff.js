@@ -1,127 +1,136 @@
-﻿'use strict';
+﻿"use strict";
+
 app.directive('vrRulesPricingrulesettingsTariff', ['$compile', 'VR_Rules_PricingRuleAPIService', 'UtilsService', 'VRUIUtilsService',
-function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsService) {
+    function ($compile, VR_Rules_PricingRuleAPIService, UtilsService, VRUIUtilsService) {
 
-    var directiveDefinitionObject = {
-        restrict: 'E',
-        scope: {
-            onReady: '=',
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
-            var ctor = new bePricingRuleTariffSetting(ctrl, $scope, $attrs);
-            ctor.initializeController();
-        },
-        controllerAs: 'ctrl',
-        bindToController: true,
-        compile: function (element, attrs) {
+        var directiveDefinitionObject = {
+            restrict: 'E',
+            scope: {
+                onReady: '='
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
+                var ctor = new bePricingRuleTariffSetting(ctrl, $scope, $attrs);
+                ctor.initializeController();
+            },
+            controllerAs: 'ctrl',
+            bindToController: true,
+            compile: function (element, attrs) {
 
-        },
-        templateUrl: "/Client/Modules/VR_Rules/Directives/PricingRule/Templates/PricingRuleTariffSettings.html"
+            },
+            templateUrl: "/Client/Modules/VR_Rules/Directives/PricingRule/Templates/PricingRuleTariffSettings.html"
+        };
 
-    };
+        function bePricingRuleTariffSetting(ctrl, $scope, $attrs) {
+            this.initializeController = initializeController;
 
+            var currencyDirectiveAPI;
+            var currencyDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-    function bePricingRuleTariffSetting(ctrl, $scope, $attrs) {
-        var directiveReadyAPI;
-        var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var directiveReadyAPI;
+            var directiveReadyPromiseDeferred;
 
-        var currencyDirectiveAPI;
-        var currencyDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            function initializeController() {
+                $scope.pricingRuleTariffSettings = [];
 
-        function initializeController() {
+                ctrl.onCurrencySelectReady = function (api) {
+                    currencyDirectiveAPI = api;
+                    currencyDirectiveReadyPromiseDeferred.resolve();
+                };
 
-            ctrl.onCurrencySelectReady = function (api) {
-                currencyDirectiveAPI = api;
-                currencyDirectiveReadyPromiseDeferred.resolve();
-            };
+                $scope.onPricingRuleTariffTemplateDirectiveReady = function (api) {
+                    directiveReadyAPI = api;
+                    var setLoader = function (value) {
+                        $scope.isLoadingDirective = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveReadyAPI, undefined, setLoader, directiveReadyPromiseDeferred);
+                };
 
-            $scope.pricingRuleTariffSettings = [];
+                defineAPI();
+            }
 
-            $scope.onPricingRuleTariffTemplateDirectiveReady = function (api) {
-                directiveReadyAPI = api;
-                var setLoader = function (value) { $scope.isLoadingDirective = value };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveReadyAPI, undefined, setLoader, directiveReadyPromiseDeferred);
-            };
-            defineAPI();
-        }
+            function defineAPI() {
+                var api = {};
 
-        function defineAPI() {
-            var api = {};
+                api.load = function (payload) {
 
-            api.getData = function () {
-                var obj = directiveReadyAPI.getData();
-                obj.ConfigId = $scope.selectedPricingRuleTariffSettings.ExtensionConfigurationId;
-                obj.CurrencyId = currencyDirectiveAPI.getSelectedIds();
-                return obj;
-            };
+                    var promises = [];
 
-            api.load = function (payload) {
-                var promises = [];
+                    var settings;
 
-                var settings;
+                    if (payload != undefined) {
+                        settings = payload.settings;
+                    }
 
-                if (payload != undefined) {
-                    settings = payload.settings;
-                }
+                    var loadCurrencySelectorPromise = loadCurrencySelector();
+                    promises.push(loadCurrencySelectorPromise);
 
-                var loadTariffTemplatesPromise = loadTariffTemplates();
-                promises.push(loadTariffTemplatesPromise);
+                    var loadTariffTemplatesPromise = loadTariffTemplates();
+                    promises.push(loadTariffTemplatesPromise);
 
-                var loadDirectivePromise = loadDirective();
-                promises.push(loadDirectivePromise);
+                    if (settings != undefined) {
+                        directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                loadTariffTemplatesPromise.then(function () {
-                    if (settings != undefined)
-                        $scope.selectedPricingRuleTariffSettings = UtilsService.getItemByVal($scope.pricingRuleTariffSettings, settings.ConfigId, 'ExtensionConfigurationId');
-                    else if ($scope.pricingRuleTariffSettings.length > 0)
-                        $scope.selectedPricingRuleTariffSettings = $scope.pricingRuleTariffSettings[0];
-                });
+                        var loadDirectivePromise = loadDirective();
+                        promises.push(loadDirectivePromise);
+                    }
 
-                function loadTariffTemplates() {
-                    return VR_Rules_PricingRuleAPIService.GetPricingRuleTariffTemplates().then(function (response) {
-                        if (response != null) {
-                            for (var i = 0; i < response.length; i++) {
-                                $scope.pricingRuleTariffSettings.push(response[i]);
+                    function loadCurrencySelector() {
+                        var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        currencyDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var currencyPayload;
+                            if (settings != undefined && settings.CurrencyId > 0) {
+                                currencyPayload = { selectedIds: settings.CurrencyId };
                             }
-                        }
-                    });
-                }
-                function loadDirective() {
-                    var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                            else {
+                                currencyPayload = { selectSystemCurrency: true };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred);
+                        });
 
-                    directiveReadyPromiseDeferred.promise.then(function () {
-                        directiveReadyPromiseDeferred = undefined;
-                        VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, settings, directiveLoadPromiseDeferred);
-                    });
+                        return loadCurrencySelectorPromiseDeferred.promise;
+                    }
+                    function loadTariffTemplates() {
+                        return VR_Rules_PricingRuleAPIService.GetPricingRuleTariffTemplates().then(function (response) {
+                            if (response != null) {
+                                for (var i = 0; i < response.length; i++) {
+                                    $scope.pricingRuleTariffSettings.push(response[i]);
+                                }
 
-                    return directiveLoadPromiseDeferred.promise;
-                }
+                                if (settings != undefined) {
+                                    $scope.selectedPricingRuleTariffSettings = UtilsService.getItemByVal($scope.pricingRuleTariffSettings, settings.ConfigId, 'ExtensionConfigurationId');
+                                }
+                            }
+                        });
+                    }
+                    function loadDirective() {
+                        var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                var currencyPayload;
+                        directiveReadyPromiseDeferred.promise.then(function () {
+                            directiveReadyPromiseDeferred = undefined;
 
-                if (settings != undefined && settings.CurrencyId > 0) {
-                    currencyPayload = { selectedIds: settings.CurrencyId };
-                }
-                else {
-                    currencyPayload = { selectSystemCurrency: true };
-                }
+                            VRUIUtilsService.callDirectiveLoad(directiveReadyAPI, settings, directiveLoadPromiseDeferred);
+                        });
 
-                currencyDirectiveReadyPromiseDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred);
+                        return directiveLoadPromiseDeferred.promise;
+                    }
 
-                });
-                promises.push(loadCurrencySelectorPromiseDeferred.promise);
+                    return UtilsService.waitMultiplePromises(promises);
+                };
 
-                return UtilsService.waitMultiplePromises(promises);
-            };
+                api.getData = function () {
+                    var obj = directiveReadyAPI.getData();
+                    obj.ConfigId = $scope.selectedPricingRuleTariffSettings.ExtensionConfigurationId;
+                    obj.CurrencyId = currencyDirectiveAPI.getSelectedIds();
+                    return obj;
+                };
 
-
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
+                    ctrl.onReady(api);
+            }
         }
-        this.initializeController = initializeController;
-    }
-    return directiveDefinitionObject;
-}]);
+
+        return directiveDefinitionObject;
+    }]);

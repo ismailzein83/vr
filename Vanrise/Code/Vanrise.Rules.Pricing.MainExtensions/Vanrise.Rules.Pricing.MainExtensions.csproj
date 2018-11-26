@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,6 +51,9 @@
     <Compile Include="RateType\DaysOfWeekRateTypeSettings.cs" />
     <Compile Include="RateType\SpecificDayRateTypeSettings.cs" />
     <Compile Include="RateValue\FixedRateValueSettings.cs" />
+    <Compile Include="Tariff\SixtySixtyTariffSettings.cs" />
+    <Compile Include="Tariff\SixtyOneTariffSettings.cs" />
+    <Compile Include="Tariff\CeilingTariffSettings.cs" />
     <Compile Include="Tariff\RegularTariffSettings.cs" />
     <Compile Include="Tax\PercentageTaxSettings.cs" />
   </ItemGroup>

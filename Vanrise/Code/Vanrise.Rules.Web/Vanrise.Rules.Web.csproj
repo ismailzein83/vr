@@ -26,7 +26,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
@@ -153,6 +154,12 @@
     <Content Include="VR_Rules\Constants\RemoveDirectionEnum.js" />
     <Content Include="VR_Rules\Constants\SubstringStartDirectionEnum.js" />
     <Content Include="VR_Rules\Constants\TextOccurrenceEnum.js" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TariffSettings\Templates\PricingRuleSixtysixtyTariffTemplate.html" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TariffSettings\Templates\PricingRuleSixtyoneTariffTemplate.html" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TariffSettings\Templates\PricingRuleCeilingTariffTemplate.html" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TariffSettings\vr-rules-pricingrulesettings-tarrif-sixtyone.js" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TariffSettings\vr-rules-pricingrulesettings-tarrif-sixtysixty.js" />
+    <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TariffSettings\vr-rules-pricingrulesettings-tarrif-ceiling.js" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TaxActions\Templates\PricingRulePercentageTaxTemplate.html" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TaxActions\vr-rules-pricingrulesettings-tax-percentage.js" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\Templates\PricingRuleFixedExtraChargeTemplate.html" />
