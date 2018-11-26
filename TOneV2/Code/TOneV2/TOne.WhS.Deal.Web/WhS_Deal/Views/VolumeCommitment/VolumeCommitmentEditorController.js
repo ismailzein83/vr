@@ -368,7 +368,6 @@
                     VolCommitmentTimeZone: $scope.scopeModel.selectedTimeZone.value
                 }
             };
-            console.log(obj);
             return obj;
         }
 
