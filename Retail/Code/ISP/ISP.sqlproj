@@ -76,13 +76,5 @@
     <Build Include="ISP\User Defined Types\ISPPackageType.sql" />
     <Build Include="Security\ISP.sql" />
     <Build Include="ISP\Tables\ISPEvent.sql" />
-    <Build Include="NetworkRentalManager\Tables\ProductSale.sql" />
-    <Build Include="NetworkRentalManager\Tables\Product.sql" />
-    <Build Include="NetworkRentalManager\User Defined Types\ProductType.sql" />
-    <Build Include="NetworkRentalManager\User Defined Types\ProductSaleType.sql" />
-    <Build Include="Security\NetworkRentalManager.sql" />
-    <Build Include="NetworkRentalManager\Tables\AccountService.sql" />
-    <Build Include="NetworkRentalManager\Tables\OrdersDefinition.sql" />
-    <Build Include="NetworkRentalManager\User Defined Types\OrdersDefinitionType.sql" />
   </ItemGroup>
 </Project>
