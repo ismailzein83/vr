@@ -501,11 +501,11 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\retail-be-retrievefinancialinfostep.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\Templates\RetrieveFinancialInfoStepPreviewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\Templates\RetrieveFinancialInfoStepTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-postpaidcdr.js" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-postpaidsms.js" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-voice.js" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-sms.js" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-topup.js" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServicePostPaidCDRTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServicePostPaidSMSTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServiceVoiceTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServiceSMSTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServiceTopupTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\retail-be-operatordeclarationservices-customobjectsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\retail-be-operatordeclarationservices.js" />

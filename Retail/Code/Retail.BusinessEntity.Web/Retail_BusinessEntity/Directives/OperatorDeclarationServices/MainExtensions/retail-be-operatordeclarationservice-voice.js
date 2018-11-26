@@ -2,9 +2,9 @@
 
     'use strict';
 
-    OperatorDeclarationServicePostPaidSMS.$inject = ['UtilsService', 'VRUIUtilsService'];
+    OperatorDeclarationServiceVoice.$inject = ['UtilsService', 'VRUIUtilsService'];
 
-    function OperatorDeclarationServicePostPaidSMS(UtilsService, VRUIUtilsService) {
+    function OperatorDeclarationServiceVoice(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -15,15 +15,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new OperatorDeclarationServicePostPaidSMSCtor($scope, ctrl, $attrs);
+                var ctor = new OperatorDeclarationServiceVoiceCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/OperatorDeclarationServices/MainExtensions/Templates/OperatorDeclarationServicePostPaidSMSTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/OperatorDeclarationServices/MainExtensions/Templates/OperatorDeclarationServiceVoiceTemplate.html"
         };
 
-        function OperatorDeclarationServicePostPaidSMSCtor($scope, ctrl, $attrs) {
+        function OperatorDeclarationServiceVoiceCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var trafficTypeSelectorAPI;
@@ -52,13 +52,42 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    var postPaidSMSEntity;
+                    var voiceEntity;
 
                     if (payload != undefined) {
 
-                        postPaidSMSEntity = payload.settings;
+                        voiceEntity = payload.settings;
+                        $scope.scopeModel.numberOfCalls = voiceEntity.NumberOfCalls;
+                        $scope.scopeModel.duration = voiceEntity.Duration;
+                        $scope.scopeModel.amount = voiceEntity.TotalChargedDuration;
+                    }
 
-                        $scope.scopeModel.numberOfSMSs = postPaidSMSEntity.NumberOfSMSs;
+                    function loadTrafficTypeSelector() {
+                        var trafficTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        trafficTypeSelectorReadyDeferred.promise.then(function () {
+                            var payload;
+                            if (voiceEntity != undefined)
+                                payload = {
+                                    selectedIds: voiceEntity.TrafficType
+                                };
+                            VRUIUtilsService.callDirectiveLoad(trafficTypeSelectorAPI, payload, trafficTypeSelectorLoadDeferred);
+                        });
+                        return trafficTypeSelectorLoadDeferred.promise;
+                    }
+
+                    function loadTrafficDirectionSelector() {
+
+                        var trafficDirectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        trafficDirectionSelectorReadyDeferred.promise.then(function () {
+                            var payload;
+
+                            if (voiceEntity != undefined)
+                                payload = {
+                                    selectedIds: voiceEntity.TrafficDirection
+                                };
+                            VRUIUtilsService.callDirectiveLoad(trafficDirectionSelectorAPI, payload, trafficDirectionSelectorLoadDeferred);
+                        });
+                        return trafficDirectionSelectorLoadDeferred.promise;
                     }
 
                     var trafficTypeSelectorLoadPromise = loadTrafficTypeSelector();
@@ -67,43 +96,18 @@
                     promises.push(trafficTypeSelectorLoadPromise);
                     promises.push(trafficDirectionSelectorLoadPromise);
 
-                    function loadTrafficTypeSelector() {
-                        var trafficTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                        trafficTypeSelectorReadyDeferred.promise.then(function () {
-                            var payload;
-                            if (postPaidSMSEntity != undefined)
-                                payload = {
-                                    selectedIds: postPaidSMSEntity.TrafficType
-                                };
-                            VRUIUtilsService.callDirectiveLoad(trafficTypeSelectorAPI, payload, trafficTypeSelectorLoadDeferred);
-                        });
-                        return trafficTypeSelectorLoadDeferred.promise;
-                    }
-
-                    function loadTrafficDirectionSelector() {
-                        var trafficDirectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                        trafficDirectionSelectorReadyDeferred.promise.then(function () {
-                            var payload;
-
-                            if (postPaidSMSEntity != undefined)
-                                payload = {
-                                    selectedIds: postPaidSMSEntity.TrafficDirection
-                                };
-                            VRUIUtilsService.callDirectiveLoad(trafficDirectionSelectorAPI, payload, trafficDirectionSelectorLoadDeferred);
-                        });
-                        return trafficDirectionSelectorLoadDeferred.promise;
-                    }
-
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices.PostpaidSMS,Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices.Voice,Retail.BusinessEntity.MainExtensions",
                         TrafficType: trafficTypeSelectorAPI.getSelectedIds(),
                         TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
-                        NumberOfSMSs: $scope.scopeModel.numberOfSMSs,
+                        NumberOfCalls: $scope.scopeModel.numberOfCalls,
+                        Duration: $scope.scopeModel.duration,
+                        Amount: $scope.scopeModel.amount
                     };
                 };
 
@@ -114,6 +118,6 @@
         }
     }
 
-    app.directive('retailBeOperatordeclarationservicePostpaidsms', OperatorDeclarationServicePostPaidSMS);
+    app.directive('retailBeOperatordeclarationserviceVoice', OperatorDeclarationServiceVoice);
 
 })(app);
