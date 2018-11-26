@@ -19,7 +19,7 @@
             </Parameters>
             <Top>0.04167in</Top>
             <Left>0.04383in</Left>
-            <Height>2.21666in</Height>
+            <Height>0.59166in</Height>
             <Width>7.73416in</Width>
             <Style>
               <Border>
@@ -29,9 +29,9 @@
           </Subreport>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>25.19836cm</Top>
-        <Left>0.23962cm</Left>
-        <Height>5.73616cm</Height>
+        <Top>23.12112cm</Top>
+        <Left>0.21206cm</Left>
+        <Height>1.60866cm</Height>
         <Width>19.75609cm</Width>
         <Visibility>
           <Hidden>=IIf((CountRows("InvoiceMonths") &gt; 0),False,True)</Hidden>
@@ -388,7 +388,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(CountRows()&lt;2, "", "Reccuring Charges DUE TO"+ Parameters!Carrier.Value)</Value>
+                              <Value>=IIF(CountRows()&lt;1, "", "Reccuring Charges DUE TO"+ Parameters!Carrier.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -414,7 +414,6 @@
                         <BottomBorder>
                           <Width>1.5pt</Width>
                         </BottomBorder>
-                        <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -515,7 +514,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(CountRows()&lt;2, "", "Reccuring Charges DUE TO"+ Parameters!Name.Value)</Value>
+                              <Value>=IIF(CountRows()&lt;1, "", "Reccuring Charges DUE TO"+ Parameters!Name.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -535,7 +534,6 @@
                           <Color>White</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -636,7 +634,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(CountRows()&lt;2, "", "DUE TO"+ Parameters!Carrier.Value)</Value>
+                              <Value>=IIF(CountRows()&lt;1, "", "DUE TO"+ Parameters!Carrier.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -662,7 +660,6 @@
                         <BottomBorder>
                           <Width>1.5pt</Width>
                         </BottomBorder>
-                        <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -763,7 +760,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(CountRows()&lt;2, "", "DUE TO"+ Parameters!Name.Value)</Value>
+                              <Value>=IIF(CountRows()&lt;1, "", "DUE TO"+ Parameters!Name.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -783,7 +780,6 @@
                           <Color>White</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -3019,7 +3015,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>6.62203in</Top>
+        <Top>6.36161in</Top>
         <Left>0.12732in</Left>
         <Height>2.05574in</Height>
         <Width>6.1719in</Width>
@@ -3272,7 +3268,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>23.31459cm</Top>
+        <Top>21.80647cm</Top>
         <Left>0.32339cm</Left>
         <Height>1.27938cm</Height>
         <Width>19.69509cm</Width>
@@ -3284,7 +3280,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>31.04035cm</Height>
+    <Height>24.72978cm</Height>
     <Style>
       <Border>
         <Color>White</Color>
@@ -3292,7 +3288,7 @@
       </Border>
     </Style>
   </Body>
-  <Width>20.13099cm</Width>
+  <Width>20.01849cm</Width>
   <Page>
     <PageFooter>
       <Height>1.16416cm</Height>
