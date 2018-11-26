@@ -42,6 +42,7 @@ namespace BPMExtended.Main.Business
                 Switch = item.Switch,
                 SwitchId = item.SwitchId,
                 SwitchOMC = item.SwitchOMC,
+                SWITCH_TYPE = item.SWITCH_TYPE,
                 Transmitter = item.Transmitter,
                 TransmitterPort = item.TransmitterPort,
                 VerticalMDF = item.VerticalMDF,

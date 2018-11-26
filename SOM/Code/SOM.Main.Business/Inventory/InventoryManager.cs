@@ -31,6 +31,7 @@ namespace SOM.Main.Business
                     TransmitterPort = detail.TRANSMITTER_PORT,
                     DP = detail.DP_NAME,
                     Switch = detail.SWITCH_NAME,
+                    SWITCH_TYPE = detail.SWITCH_TYPE,
                     SwitchOMC = detail.SWITCH_OMC,
                     MDFPort = detail.MDF_PORT,
                     VerticalMDF = detail.MDF_VERT,
@@ -40,8 +41,9 @@ namespace SOM.Main.Business
                     DPId = detail.DP_ID,
                     SwitchId = detail.SWITCH_ID,
                     CabinetPrimaryPort = detail.PRIMARY_PORT,
-                    CabinetSecondaryPort = detail.SECONDARY_PORT
-
+                    CabinetSecondaryPort = detail.SECONDARY_PORT,
+                    PATH_TYPE = detail.PATH_TYPE,
+                    PhoneType = detail.PATH_TYPE.ToLower().Contains("wll") ? PhoneType.WLL : detail.PATH_TYPE == "PSTN_LINK" ? PhoneType.PSTN : PhoneType.ISDN
                 };
 
             }
@@ -387,16 +389,22 @@ namespace SOM.Main.Business
 
         public bool IsManualSwitch(string phoneNumber)
         {
+            bool ismanual = false;
             
-            //AktavaraConnector connector = new AktavaraConnector
-            //{
-            //    BaseURL = "http://192.168.110.195:8901"
-            //};
-            //CPTItem data = connector.Get<CPTItem>("/SearchCPT/Get?Phonenumber=" + phoneNumber);
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            List<TechnicalReservationDetail> data = connector.Get<List<TechnicalReservationDetail>>("/Techdetails/Get?id=" + phoneNumber);
 
-            Random gen = new Random();
-            int prob = gen.Next(100);
-            return prob <= 50;
+            if (data != null && data.Count > 0)
+            {
+                TechnicalReservationDetail detail = data[0];
+                ismanual = detail.SWITCH_TYPE == "Automatic" ? false : true;
+
+            }
+
+            return ismanual;
         }
         public string ReserveTelephonyNumber(string pathtype, string Pathname, string ObjectList, string connectors)
         {

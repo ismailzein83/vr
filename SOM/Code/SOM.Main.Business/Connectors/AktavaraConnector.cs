@@ -60,6 +60,7 @@ namespace SOM.Main.Business
         public string PATH_TYPE { get; set; }
         public string SWITCH_NAME { get; set; }
         public string SWITCH_OMC { get; set; }
+        public string SWITCH_TYPE { get; set; }
         public string DEV_ID { get; set; }
         public string MDF_NAME { get; set; }
         public string MDF_VERT { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BPMExtended.Main.Entities
 {
     public enum PhoneStatus { A, F, R }
-    public enum PhoneType { ISDN = 0, DID = 1, WLL = 2, PES = 3, Fiber = 4 }
+    public enum PhoneType { ISDN = 0, DID = 1, WLL = 2, PES = 3, Fiber = 4, PSTN = 5 }
     public class InventoryPhoneItemDetail
     {
         public PhoneType PhoneType { get; set; }
@@ -23,6 +23,7 @@ namespace BPMExtended.Main.Entities
         public string Switch { get; set; }
         public string SwitchId { get; set; }
         public string SwitchOMC { get; set; }
+        public string SWITCH_TYPE { get; set; }
 
 
         public string DSlam { get; set; }

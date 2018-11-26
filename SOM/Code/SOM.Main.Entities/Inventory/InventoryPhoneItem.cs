@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 namespace SOM.Main.Entities
 {
     public enum PhoneStatus { A, F, R }
-    public enum PhoneType { ISDN = 0, DID = 1, WLL = 2, PES = 3, Fiber = 4 }
+    public enum PhoneType { ISDN = 0, DID = 1, WLL = 2, PES = 3, Fiber = 4, PSTN=5 }
     public class InventoryPhoneItem
     {
 
         public PhoneType PhoneType { get; set; }
+        public string PATH_TYPE { get; set; }
         public PhoneStatus PhoneStatus { get; set; }
         public string VerticalMDF { get; set; }
         public string MDFPort { get; set; }
@@ -24,6 +25,8 @@ namespace SOM.Main.Entities
         public string Switch { get; set; }
         public string SwitchId { get; set; }
         public string SwitchOMC { get; set; }
+        public string SWITCH_TYPE { get; set; }
+
         public string DPPortId { get; set; }
 
         public string DSlam { get; set; }
