@@ -46,11 +46,11 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
                 if (input.Query.CarrierProfileIds != null && !input.Query.CarrierProfileIds.Contains(prod.CarrierProfileId))
                     return false;
-                if (input.Query.Email != null)
+                if (input.Query.PortalAccountEmail != null)
                 {
                     PortalAccountManager portalAccountManager = new PortalAccountManager();
                     var portalAccounts = portalAccountManager.GetCarrierProfilePortalAccounts(prod.CarrierProfileId);
-                    if (portalAccounts.FindRecord(x => x.Email.ToLower().Contains(input.Query.Email.ToLower())) == null)
+                    if (portalAccounts.FindRecord(x => x.Email.ToLower().Contains(input.Query.PortalAccountEmail.ToLower())) == null)
                         return false;
                 }
                 return true;

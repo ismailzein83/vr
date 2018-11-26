@@ -135,7 +135,7 @@
                     Name: $scope.name,
                     Company: $scope.company,
                     CountriesIds: countryDirectiveApi.getSelectedIds(),
-                    Email: $scope.email
+                    PortalAccountEmail: $scope.email
                 },
                 showPortalUsers: $scope.showPortalUsers
             };
