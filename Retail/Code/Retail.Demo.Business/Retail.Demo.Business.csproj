@@ -48,13 +48,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActiveServices.cs" />
     <Compile Include="DemoGenerator.cs" />
-    <Compile Include="NewOrders.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.Demo.Data\Retail.Demo.Data.csproj">
+      <Project>{d0455bb6-b951-4c9a-9b56-f26ea218994f}</Project>
+      <Name>Retail.Demo.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Demo.Entities\Retail.Demo.Entities.csproj">
+      <Project>{F55572DD-6202-470B-B02A-1C94ACBD94EF}</Project>
+      <Name>Retail.Demo.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
