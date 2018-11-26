@@ -2,7 +2,7 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum','WhS_Deal_DealDefinitionAPIService'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService'];
 
     function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService) {
 
@@ -72,11 +72,13 @@
                     datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.System);
                     if ($scope.scopeModel.selectedVolumeCommitmentType.value === WhS_Deal_VolumeCommitmentTypeEnum.Sell.value) {
                         datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.Customer);
-                        $scope.scopeModel.selectedTimeZone = WhS_Deal_VolCommitmentTimeZoneTypeEnum.System;
+                        if (!isEditMode)
+                            $scope.scopeModel.selectedTimeZone = WhS_Deal_VolCommitmentTimeZoneTypeEnum.System;
                     }
                     if ($scope.scopeModel.selectedVolumeCommitmentType.value === WhS_Deal_VolumeCommitmentTypeEnum.Buy.value) {
                         datasource.push(WhS_Deal_VolCommitmentTimeZoneTypeEnum.Supplier);
-                        $scope.scopeModel.selectedTimeZone = WhS_Deal_VolCommitmentTimeZoneTypeEnum.Supplier;
+                        if (!isEditMode)
+                            $scope.scopeModel.selectedTimeZone = WhS_Deal_VolCommitmentTimeZoneTypeEnum.Supplier;
                     }
                     $scope.scopeModel.VolTimeZone = datasource;
                 }
@@ -366,6 +368,7 @@
                     VolCommitmentTimeZone: $scope.scopeModel.selectedTimeZone.value
                 }
             };
+            console.log(obj);
             return obj;
         }
 
