@@ -142,14 +142,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Retail_Demo\Elements\InvoiceOBB\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_Demo\Constants\ModuleConfig.js" />
     <Content Include="Retail_Demo\Elements\NetworkRental\Directives\retail-demo-invoicetype-networkrentalinvoicesettings.js" />
     <Content Include="Retail_Demo\Elements\NetworkRental\Directives\Templates\NetworkRentalInvoiceSettingsTemplate.html" />
-    <Content Include="Retail_Demo\Elements\InvoiceOBB\Directives\retail-demo-invoicetype-ispinvoicesettings.js" />
-    <Content Include="Retail_Demo\Elements\InvoiceOBB\Directives\Templates\ISPInvoiceSettingsTemplate.html" />
     <Content Include="Retail_Demo\Elements\NetworkRental\Reports\Reporting.aspx" />
   </ItemGroup>
   <ItemGroup>
