@@ -11,5 +11,14 @@ namespace Retail.Demo.Entities
         public String ProductName { get; set; }
         public int NoOfOrders { get; set; }
         public Decimal TotalTarrif { get; set; }
+        public NewOrders()
+        {
+
+        }
+        public IEnumerable<NewOrders> GetNewOrdersRDLCSchema()
+        {
+            return null;
+        }
+      
     }
 }

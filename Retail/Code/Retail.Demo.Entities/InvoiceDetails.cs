@@ -10,5 +10,14 @@ namespace Retail.Demo.Entities
     {
         public Decimal Amount { get; set; }
         public int Currency { get; set; }
+        public InvoiceDetails()
+        {
+
+        }
+        public IEnumerable<InvoiceDetails> GetInvoiceDetailsRDLCSchema()
+        {
+            return null;
+        }
+       
     }
 }
