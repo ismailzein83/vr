@@ -55,7 +55,13 @@ namespace NP.IVSwitch.Business
             var allTranslationRules = this.GetCachedTranslationRule();
             Func<TranslationRule, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
             VRActionLogger.Current.LogGetFilteredAction(TranslationRuleLoggableEntity.Instance, input);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allTranslationRules.ToBigResult(input, filterExpression, TranslationRuleDetailMapper));
+
+            var resultProcessingHandler = new ResultProcessingHandler<TranslationRuleDetail>()
+            {
+                ExportExcelHandler = new TranslationRulesDetailExportExcelHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allTranslationRules.ToBigResult(input, filterExpression, TranslationRuleDetailMapper), resultProcessingHandler);
         }
 
         public IDataRetrievalResult<CLIPatternDetail> GetFilteredCLIPatterns(DataRetrievalInput<CLIPatternQuery> input)
@@ -68,9 +74,10 @@ namespace NP.IVSwitch.Business
                 return true;
             };
             List<CLIPatternDetail> cliPatternDetails = new List<CLIPatternDetail>();
-            if (translationRule.PoolBasedCLISettings != null && translationRule.PoolBasedCLISettings.CLIPatterns!=null && translationRule.PoolBasedCLISettings.CLIPatterns.Count>0)
+            if (translationRule.PoolBasedCLISettings != null && translationRule.PoolBasedCLISettings.CLIPatterns != null && translationRule.PoolBasedCLISettings.CLIPatterns.Count > 0)
             {
-                foreach(var cliPatternItem in translationRule.PoolBasedCLISettings.CLIPatterns){
+                foreach (var cliPatternItem in translationRule.PoolBasedCLISettings.CLIPatterns)
+                {
                     cliPatternDetails.Add(new CLIPatternDetail()
                     {
                         CLIPattern = cliPatternItem,
@@ -97,7 +104,7 @@ namespace NP.IVSwitch.Business
             Helper.SetSwitchConfig(dataManager);
             int translationRuleId;
 
-            if (dataManager.Insert(translationRuleItem, out  translationRuleId))
+            if (dataManager.Insert(translationRuleItem, out translationRuleId))
             {
                 translationRuleItem.TranslationRuleId = translationRuleId;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -155,7 +162,45 @@ namespace NP.IVSwitch.Business
 
 
         #region Private Classes
+        private class TranslationRulesDetailExportExcelHandler : ExcelExportHandler<TranslationRuleDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<TranslationRuleDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Translation Rules",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
 
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Engine Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "DNIS Pattern" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "CLI Pattern" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Creation Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.TranslationRuleId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Name });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.EngineType });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.DNISPattern });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.CLIPattern });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.CreationDate });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ITranslationRuleDataManager _dataManager = IVSwitchDataManagerFactory.GetDataManager<ITranslationRuleDataManager>();
@@ -166,7 +211,7 @@ namespace NP.IVSwitch.Business
 
         }
 
-        private class  TranslationRuleLoggableEntity : VRLoggableEntityBase
+        private class TranslationRuleLoggableEntity : VRLoggableEntityBase
         {
             public static TranslationRuleLoggableEntity Instance = new TranslationRuleLoggableEntity();
 
@@ -247,7 +292,7 @@ namespace NP.IVSwitch.Business
 
         private string GetCLIPattern(TranslationRule translationRule)
         {
-            string cliPattern="";
+            string cliPattern = "";
             if (translationRule.FixedCLISettings != null)
             {
                 cliPattern = translationRule.FixedCLISettings.CLIPattern;

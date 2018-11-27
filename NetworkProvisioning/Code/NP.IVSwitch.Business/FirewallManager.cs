@@ -21,7 +21,12 @@ namespace NP.IVSwitch.Business
                      (input.Query.Description == null ||
                       x.Description.Contains(input.Query.Description)));
             VRActionLogger.Current.LogGetFilteredAction(FireWallLoggableEntity.Instance, input);
-            return DataRetrievalManager.Instance.ProcessResult(input, allFirewalls.ToBigResult(input, filterExpression, FirewallDetailMapper));
+
+            var resultProcessingHandler = new ResultProcessingHandler<FirewallDetail>()
+            {
+                ExportExcelHandler = new FirewallsDetailExportExcelHandler()
+            };
+            return DataRetrievalManager.Instance.ProcessResult(input, allFirewalls.ToBigResult(input, filterExpression, FirewallDetailMapper), resultProcessingHandler);
         }
 
         public string GetFirewallDescription(int Id)
@@ -60,7 +65,7 @@ namespace NP.IVSwitch.Business
             Helper.SetSwitchConfig(dataManager);
             int firewallId;
 
-            if (dataManager.Insert(firewall, out  firewallId))
+            if (dataManager.Insert(firewall, out firewallId))
             {
                 firewall.Id = firewallId;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -100,7 +105,41 @@ namespace NP.IVSwitch.Business
 
 
         #region Private Classes
+        private class FirewallsDetailExportExcelHandler : ExcelExportHandler<FirewallDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<FirewallDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Firewalls",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
 
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Host" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Description" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Creation Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Id });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Host });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Description });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CreationDate });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IFirewallDataManager _dataManager = IVSwitchDataManagerFactory.GetDataManager<IFirewallDataManager>();

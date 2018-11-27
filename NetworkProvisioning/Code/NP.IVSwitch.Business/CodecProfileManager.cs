@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
- 
+
 namespace NP.IVSwitch.Business
 {
     public class CodecProfileManager
@@ -55,7 +55,11 @@ namespace NP.IVSwitch.Business
             var allCodecProfiles = this.GetCachedCodecProfile();
             Func<CodecProfile, bool> filterExpression = (x) => (input.Query.Name == null || x.ProfileName.ToLower().Contains(input.Query.Name.ToLower()));
             VRActionLogger.Current.LogGetFilteredAction(CodecProfileLoggableEntity.Instance, input);
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodecProfiles.ToBigResult(input, filterExpression, CodecProfileDetailMapper));
+            var resultProcessingHandler = new ResultProcessingHandler<CodecProfileDetail>()
+            {
+                ExportExcelHandler = new CodecProfileDetailExportExcelHandler()
+            };
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodecProfiles.ToBigResult(input, filterExpression, CodecProfileDetailMapper), resultProcessingHandler);
         }
         public CodecProfileEditorRuntime GetCodecProfileEditorRuntime(int codecProfileId, bool isViewedFromUI)
         {
@@ -74,7 +78,7 @@ namespace NP.IVSwitch.Business
         public CodecProfileEditorRuntime GetCodecProfileEditorRuntime(int codecProfileId)
         {
 
-            return GetCodecProfileEditorRuntime(codecProfileId,false);
+            return GetCodecProfileEditorRuntime(codecProfileId, false);
         }
 
         public Vanrise.Entities.InsertOperationOutput<CodecProfileDetail> AddCodecProfile(CodecProfile codecProfileItem)
@@ -93,7 +97,7 @@ namespace NP.IVSwitch.Business
 
             CodecDefManager codecDefManager = new CodecDefManager();
 
-            if (dataManager.Insert(codecProfileItem, codecDefManager.GetAll(), out  codecProfileId))
+            if (dataManager.Insert(codecProfileItem, codecDefManager.GetAll(), out codecProfileId))
             {
                 codecProfileItem.CodecProfileId = codecProfileId;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -122,7 +126,7 @@ namespace NP.IVSwitch.Business
             Helper.SetSwitchConfig(dataManager);
             CodecDefManager codecDefManager = new CodecDefManager();
 
-            if (dataManager.Update(codecProfileItem,  codecDefManager.GetAll()))
+            if (dataManager.Update(codecProfileItem, codecDefManager.GetAll()))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 VRActionLogger.Current.TrackAndLogObjectUpdated(CodecProfileLoggableEntity.Instance, GetCodecProfileEditorRuntime(codecProfileItem.CodecProfileId));
@@ -135,11 +139,46 @@ namespace NP.IVSwitch.Business
             }
 
             return updateOperationOutput;
-        }   
+        }
 
         #endregion
 
         #region Private Classes
+        private class CodecProfileDetailExportExcelHandler : ExcelExportHandler<CodecProfileDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CodecProfileDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Codec Profiles",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "CodecDefId" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Creation Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CodecProfileId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.ProfileName });
+                            row.Cells.Add(new ExportExcelCell() { Value = String.Join(",",record.Entity.CodecDefId) });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CreateDate });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -226,7 +265,7 @@ namespace NP.IVSwitch.Business
             CodecProfileInfo codecProfileInfo = new CodecProfileInfo()
             {
                 CodecProfileId = codecProfile.CodecProfileId,
-                ProfileName = codecProfile.ProfileName,           
+                ProfileName = codecProfile.ProfileName,
 
             };
             return codecProfileInfo;
