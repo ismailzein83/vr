@@ -24,13 +24,13 @@
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/3row">
-                            <vr-queueing-executionflowdefinition-selector on-ready="scopeModel.onExecutionFlowDefinitionSelectorReady" isrequired="true" hideremoveicon="true" onselectionchanged="scopeModel.onExecutionFlowDefinitionSelectionChanged"></vr-queueing-executionflowdefinition-selector>
+                            <vr-queueing-executionflowdefinition-selector on-ready="scopeModel.onExecutionFlowDefinitionSelectorReady" selectedvalues="scopeModel.executionFlowSelectedValue"  onselectionchanged="scopeModel.onExecutionFlowDefinitionSelectionChanged"></vr-queueing-executionflowdefinition-selector>
                         </vr-columns>
                         <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingSatgesToHold">
-                            <vr-queueing-executionflow-stage-selector customlabel="Stages To Hold" on-ready="scopeModel.onStagesToHoldSelectorReady" isrequired="true" ismultipleselection></vr-queueing-executionflow-stage-selector>
+                            <vr-queueing-executionflow-stage-selector customlabel="Stages To Hold" on-ready="scopeModel.onStagesToHoldSelectorReady" isrequired="scopeModel.executionFlowSelectedValue != undefined" ismultipleselection></vr-queueing-executionflow-stage-selector>
                         </vr-columns>
                         <vr-columns width="1/3row" vr-loader="scopeModel.isLoadingSatgesToProcess">
-                            <vr-queueing-executionflow-stage-selector customlabel="Stages To Process" on-ready="scopeModel.onStagesToProcessSelectorReady" isrequired="true" ismultipleselection></vr-queueing-executionflow-stage-selector>
+                            <vr-queueing-executionflow-stage-selector customlabel="Stages To Process" on-ready="scopeModel.onStagesToProcessSelectorReady" isrequired="scopeModel.executionFlowSelectedValue != undefined" ismultipleselection></vr-queueing-executionflow-stage-selector>
                         </vr-columns>
                     </vr-row>
                     <vr-row>

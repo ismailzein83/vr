@@ -53,20 +53,22 @@ namespace Vanrise.Invoice.Business
             InvoiceType invoiceType = invoiceTypeManager.GetInvoiceType(invoiceGenerationProcessInput.InvoiceTypeId);
             invoiceType.ThrowIfNull("invoiceType", invoiceGenerationProcessInput.InvoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceGenerationProcessInput.InvoiceTypeId);
-
-            HoldRequest existingHoldRequest = holdRequestManager.GetHoldRequest(context.IntanceToRun.ProcessInstanceID);
-            if (existingHoldRequest == null)
+            if(invoiceType.Settings.ExecutionFlowDefinitionId.HasValue)
             {
-                holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, invoiceType.Settings.ExecutionFlowDefinitionId, invoiceMinimumFrom, invoiceMaximumTo,
-                  invoiceType.Settings.StagesToHoldNames, invoiceType.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
+                HoldRequest existingHoldRequest = holdRequestManager.GetHoldRequest(context.IntanceToRun.ProcessInstanceID);
+                if (existingHoldRequest == null)
+                {
+                    holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, invoiceType.Settings.ExecutionFlowDefinitionId.Value, invoiceMinimumFrom, invoiceMaximumTo,
+                      invoiceType.Settings.StagesToHoldNames, invoiceType.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
 
-                context.Reason = "Waiting CDR Import";
-                return false;
-            }
-            else if (existingHoldRequest.Status != HoldRequestStatus.CanBeStarted)
-            {
-                context.Reason = "Waiting CDR Import";
-                return false;
+                    context.Reason = "Waiting CDR Import";
+                    return false;
+                }
+                else if (existingHoldRequest.Status != HoldRequestStatus.CanBeStarted)
+                {
+                    context.Reason = "Waiting CDR Import";
+                    return false;
+                }
             }
 
             return true;
