@@ -7,7 +7,6 @@ using Vanrise.Entities;
 using Vanrise.Common.Data;
 using Vanrise.Caching;
 using Vanrise.Security.Entities;
-using Vanrise.Security.Business;
 using Vanrise.Common;
 namespace Vanrise.Common.Business
 {
@@ -234,7 +233,7 @@ namespace Vanrise.Common.Business
                     if (!securityManager.IsAllowed(""#requiredPermissionString#"", ContextFactory.GetContext().GetLoggedInUserId()))
                         return this.GetUnauthorizedResponse();");
 
-                    apiPermissionBuilder.Replace("#requiredPermissionString#", SecurityManager.RequiredPermissionsToString(apiPermissions.Entries).ToString());
+                  //  apiPermissionBuilder.Replace("#requiredPermissionString#", SecurityManager.RequiredPermissionsToString(apiPermissions.Entries).ToString());
                 }
             }
 
@@ -290,7 +289,7 @@ namespace Vanrise.Common.Business
                         bool returnNull=false; 
                         permissionsBuilder.Replace("#void#", (context.ReturnType=="void"? true:false).ToString().ToLower());
                         permissionsBuilder.Replace("#returnNull#", returnNull.ToString());
-                        permissionsBuilder.Replace("#requiredPermissionString#", SecurityManager.RequiredPermissionsToString(methodPermissions.Entries).ToString());
+                      //  permissionsBuilder.Replace("#requiredPermissionString#", SecurityManager.RequiredPermissionsToString(methodPermissions.Entries).ToString());
                     }
                 }
 
