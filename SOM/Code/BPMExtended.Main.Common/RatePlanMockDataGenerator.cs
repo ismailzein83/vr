@@ -238,6 +238,26 @@ namespace BPMExtended.Main.Common
 
         #endregion
 
+        #region GSHDSL Rate Plans
+
+        #region Residential
+
+        #region Normal
+
+        const string RP_GSHDSL_RES_NORMAL = "C5B0FDAD-4F95-45CE-B0B3-07A7320E9EE6";
+
+        #endregion
+
+        #region Student
+
+        const string RP_GSHDSL_RES_STUDENT = "E18CDA05-FB3F-417C-B9D1-FF2556325295";
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
         #endregion
 
         #region Service Packages
@@ -257,6 +277,14 @@ namespace BPMExtended.Main.Common
         const string PCKG_OPT_ADSL_1 = "47EED491-7787-4962-9373-6AE91883487E";
 
         const string PCKG_OPT_ADSL_2 = "BCEF4F11-F3A5-4F75-9D58-A5F36237B4FC";
+
+        const string PCKG_CORE_GSHDSL_1 = "02519BD1-D8C9-481E-81E4-166CBE839F60";
+
+        const string PCKG_OPT_GSHDSL_1 = "A968A7CD-91C6-47B1-9098-E44CD0C752F2";
+
+        const string PCKG_OPT_GSHDSL_2 = "A4C71537-04BA-4988-B663-08904A7221B2";
+
+        const string PCKG_OPT_GSHDSL_3 = "6F1498D7-5BAF-43E8-B260-69645825A688";
 
         #endregion
 
@@ -299,6 +327,16 @@ namespace BPMExtended.Main.Common
         const string SRV_OPT_ADSL_2 = "6EBB601B-2A76-4067-8EF7-27561813E511";
 
         const string SRV_OPT_ADSL_3 = "87CA1D3C-72FF-44B5-84AD-792DA0C6B3DF";
+
+        const string SRV_CORE_GSHDSL_1 = "378314F2-5305-4C04-A0ED-F5A9398046AA";
+
+        const string SRV_CORE_GSHDSL_2 = "88D9C20A-3EF5-4AD8-BF60-7207696FAE6D";
+
+        const string SRV_OPT_GSHDSL_1 = "53B0E31B-BFF2-4331-8AE6-0ADDB524550F";
+
+        const string SRV_OPT_GSHDSL_2 = "CEC79DC9-B119-416F-AC9E-E88ADD775610";
+
+        const string SRV_OPT_GSHDSL_3 = "86C91744-FBEB-4A94-B85B-8B08767E8306";
 
         #endregion
 
@@ -1138,6 +1176,24 @@ namespace BPMExtended.Main.Common
                     Category = GetCustomerCategory(CUSTOMER_CAT_RES_ENG),
                     CorePackage = GetServicePackage(PCKG_CORE_ADSL_1),
                     OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_ADSL_1, PCKG_OPT_ADSL_2 })
+                },
+                new SOM.Main.Entities.RatePlan
+                {
+                    RatePlanId = RP_GSHDSL_RES_NORMAL,
+                    Name = "Student Plan",
+                    LOB = SOM.Main.Entities.LineOfBusiness.GSHDSL,
+                    Category = GetCustomerCategory(CUSTOMER_CAT_RES_NORMAL),
+                    CorePackage = GetServicePackage(PCKG_CORE_GSHDSL_1),
+                    OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_GSHDSL_1 , PCKG_OPT_GSHDSL_3})
+                },
+                new SOM.Main.Entities.RatePlan
+                {
+                    RatePlanId = RP_GSHDSL_RES_STUDENT,
+                    Name = "Student Plan",
+                    LOB = SOM.Main.Entities.LineOfBusiness.GSHDSL,
+                    Category = GetCustomerCategory(CUSTOMER_CAT_RES_ENG),
+                    CorePackage = GetServicePackage(PCKG_CORE_GSHDSL_1),
+                    OptionalPackages = GetServicePackages(new List<string> { PCKG_OPT_GSHDSL_1, PCKG_OPT_GSHDSL_2,PCKG_OPT_GSHDSL_3 })
                 }
             };
         }
@@ -1207,7 +1263,32 @@ namespace BPMExtended.Main.Common
                     PackageId = PCKG_OPT_ADSL_2,
                     PackageName = "Gold",
                     Services = GetServices(PCKG_OPT_ADSL_2)
-                }
+                },
+                 new SOM.Main.Entities.ServicePackage
+                {
+                    PackageId = PCKG_CORE_GSHDSL_1,
+                    PackageName = "GSHDSL Core Package",
+                    Services = GetServices(PCKG_CORE_GSHDSL_1)
+                },
+                new SOM.Main.Entities.ServicePackage
+                {
+                    PackageId = PCKG_OPT_GSHDSL_1,
+                    PackageName = "Premium",
+                    Services = GetServices(PCKG_OPT_GSHDSL_1)
+                },
+                new SOM.Main.Entities.ServicePackage
+                {
+                    PackageId = PCKG_OPT_GSHDSL_2,
+                    PackageName = "Gold",
+                    Services = GetServices(PCKG_OPT_GSHDSL_2)
+                },
+                 new SOM.Main.Entities.ServicePackage
+                {
+                    PackageId = PCKG_OPT_GSHDSL_3,
+                    PackageName = "Gold",
+                    Services = GetServices(PCKG_OPT_GSHDSL_3)
+                },
+
             };
         }
 
@@ -1434,7 +1515,65 @@ namespace BPMExtended.Main.Common
                     Description = "ISP ADSL",
                     AccessFee = 200,
                     PackageId = PCKG_OPT_TL_1
-                }
+                },
+                  new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_CORE_GSHDSL_1,
+                    Name = "GSHDSL Subscription",
+                    Description = "GSHDSL Subscription",
+                    SubscriptionFee = 1500,
+                    AccessFee = 1000,
+                    IsCore = true,
+                    PackageId = PCKG_CORE_GSHDSL_1
+                },
+                new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_CORE_GSHDSL_2,
+                    Name = "War Taxes",
+                    Description = "War Taxes",
+                    SubscriptionFee = 2500,
+                    AccessFee = 150,
+                    IsCore = true,
+                    PackageId = PCKG_CORE_GSHDSL_1
+                },
+                 new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_OPT_GSHDSL_1,
+                    Name = "Paternal Control",
+                    Description = "Paternal Control",
+                    AccessFee = 200,
+                    PackageId = PCKG_OPT_GSHDSL_1
+                },
+                  new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_OPT_GSHDSL_2,
+                    Name = "Paternal Control",
+                    Description = "Paternal Control",
+                    AccessFee = 200,
+                    PackageId = PCKG_OPT_GSHDSL_2
+                },
+               new SOM.Main.Entities.Service
+                {
+                    ServiceId = SRV_OPT_GSHDSL_3,
+                    Name = "Speed",
+                    Description = "Speed",
+                    AccessFee = 150,
+                    SubscriptionFee = 300,
+                    PackageId = PCKG_OPT_GSHDSL_3,
+                    ServiceParams = new List<SOM.Main.Entities.ServiceParameter>
+                    {
+                        new SOM.Main.Entities.ServiceParameter
+                        {
+                            Id = "1",
+                            Name = "2 MB/s"
+                        },
+                        new SOM.Main.Entities.ServiceParameter
+                        {
+                            Id = "2",
+                            Name = "50 MB/s"
+                        }
+                    }
+                },
             };
         }
 

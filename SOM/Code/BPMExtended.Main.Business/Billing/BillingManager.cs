@@ -605,6 +605,12 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
+        public bool ValidatePaymentWithoutDeposit(string requestId)
+        {
+            //TODO: check if user has paid
+            return true;
+        }
+
         public bool isUserNameUnique(string userName)
         {
             //TODO: call BSCS to validate the username

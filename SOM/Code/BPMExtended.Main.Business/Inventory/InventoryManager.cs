@@ -109,6 +109,39 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        public GSHDSLTechnicalReservationDetail GSHDSLGetTechnicalReservation(string phoneNumber)
+        {
+           
+            return new GSHDSLTechnicalReservationDetail
+            {
+                Switch = "s1",
+                SwitchId = "test",
+                SwitchType ="Automatic",
+
+                MDFPort = "mdf p1",
+                MDF ="mdf1",
+                MDFPortId = "mdf port id1",
+                MDFId = "mdf id1",
+
+                Cabinet = "c4469",
+                CabinetId = "ci65",
+                PrimaryPort = "pp65",
+                PrimaryPortId = "we",
+                SecondaryPort = "89",
+                SecondaryPortId = "6891",
+
+                DP = "65",
+                DPPortId = "68767",
+                DPPort = "43",
+                DPId = "dp id1",
+
+                DSLAMPortId = "900",
+
+                CanReserve = "true",
+
+            };
+        }
+
         public DeportedNumberReservation GetDeportedNumberReservation(string phoneNumber)
         {
             return new DeportedNumberReservation

@@ -14,7 +14,10 @@ namespace SOM.Main.Entities
 
         LeasedLine = 1,
 
-        ADSL = 2
+        ADSL = 2,
+
+        GSHDSL = 3,
+
     }
 
     public class LineOfBusinessAttribute : Attribute

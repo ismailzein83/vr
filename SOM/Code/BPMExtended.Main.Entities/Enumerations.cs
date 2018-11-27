@@ -56,5 +56,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.LeasedLine)]
         LeasedLineTermination = 14,
 
+        [LineOfBusiness(LineOfBusiness.GSHDSL)]
+        GSHDSLSubscription = 15,
+
     }
 }
