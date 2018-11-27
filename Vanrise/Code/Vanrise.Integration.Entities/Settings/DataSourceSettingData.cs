@@ -11,17 +11,17 @@ namespace Vanrise.Integration.Entities
 
     public class FileDataSourceSettings
     {
-        public List<PeakDateTimeRange> PeakDateTimeRanges { get; set; }
+        public List<PeakTimeRange> PeakTimeRanges { get; set; }
 
         public List<FileDataSourceDefinition> FileDataSourceDefinitions { get; set; }
     }
 
-    public class PeakDateTimeRange
+    public class PeakTimeRange
     {
-        public Guid PeakDateTimeRangeId { get; set; }
+        public Guid PeakTimeRangeId { get; set; }
 
-        public DateTime From { get; set; }
+        public Time From { get; set; }
 
-        public DateTime To { get; set; }
+        public Time To { get; set; }
     }
 }

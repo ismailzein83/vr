@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Entities;
 using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.MainExtensions.FileDelayChecker
@@ -18,18 +19,19 @@ namespace Vanrise.Integration.MainExtensions.FileDelayChecker
             if (!context.LastRetrievedFileTime.HasValue)
                 return false;
 
-            DateTime now = DateTime.Now;
-            List<PeakDateTimeRange> peakDateTimeRanges = new List<PeakDateTimeRange>(); //GetDataFromConfigManager
+            DateTime nowDateTime = DateTime.Now;
+            Time currentTime = new Time(nowDateTime);
+            List<PeakTimeRange> peakTimeRanges = new List<PeakTimeRange>(); //GetDataFromConfigManager
 
-            if (IsPeak(now, peakDateTimeRanges))
-                return now - context.LastRetrievedFileTime.Value > this.MaxPeakDelayPeriod;
+            if (IsPeak(currentTime, peakTimeRanges))
+                return nowDateTime - context.LastRetrievedFileTime.Value > this.MaxPeakDelayPeriod;
             else
-                return now - context.LastRetrievedFileTime.Value > this.MaxOffPeakDelayPeriod;
+                return nowDateTime - context.LastRetrievedFileTime.Value > this.MaxOffPeakDelayPeriod;
         }
 
-        public bool IsPeak(DateTime date, List<PeakDateTimeRange> peakDateTimeRanges)
+        private bool IsPeak(Time currentTime, List<PeakTimeRange> peakTimeRanges)
         {
-            PeakDateTimeRange peakDateTimeRange = peakDateTimeRanges.First(itm => itm.From >= date && itm.To < date);
+            PeakTimeRange peakDateTimeRange = peakTimeRanges.First(itm => itm.From.GreaterThanOrEqual(currentTime) && itm.To.LessThanOrEqual(currentTime));
             return peakDateTimeRange != null;
         }
     }
