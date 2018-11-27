@@ -1028,7 +1028,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            buildSummaryRowHtml();
 	        }
 
-	       
+
 
 	        function buildSummaryRowHtml() {
 	            ctrl.summaryRowHtml = undefined;
@@ -1116,8 +1116,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                itemChanged(item, "Added");
 	                setUpdatedItemsViewVisible();
 	                if (ctrl.showexpand != undefined && typeof (ctrl.showexpand) == 'function') {
-	                    if(ctrl.showexpand(item))
-	                        ctrl.expandRow(item); 
+	                    if (ctrl.showexpand(item))
+	                        ctrl.expandRow(item);
 	                }
 	            };
 
@@ -1179,10 +1179,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                return retrieveData(false, false, false, DataGridRetrieveDataEventType.ExternalTrigger);
 	            };
 
-                gridApi.refreshMenuActions = function (dataItem) {
-                    dataItem.menuActionObj = undefined;
-                    ctrl.getMenuActions(dataItem);
-                };
+	            gridApi.refreshMenuActions = function (dataItem) {
+	                dataItem.menuActionObj = undefined;
+	                ctrl.getMenuActions(dataItem);
+	            };
 
 	            function addBatchItemsToBeginSource(items) {
 	                var numberOfItems = pagingOnScrollEnabled ? getPageSize() : 10;//if paging on scroll is enabled, take the page size
@@ -1523,7 +1523,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                if (dataItem.isDeleted)
 	                    return false;
 	                var actions = ctrl.getMenuActions(dataItem);
-	                return (actions != undefined && actions != null && actions.length > 0);
+	                var haseEnabledActions = actions != null && actions.length > 0 ? actions.some(function (action) {
+	                    return !action.disable;
+	                }) : false;
+	                return (actions != undefined && haseEnabledActions);
 	            };
 
 	            ctrl.adjustPosition = function (e) {
