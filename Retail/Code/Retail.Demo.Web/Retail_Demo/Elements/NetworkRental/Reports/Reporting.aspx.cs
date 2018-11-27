@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Retail.Interconnect.Web.Retail_Interconnect.Reports
+namespace Retail.Demo.Web.Retail_Demo.Elements.NetworkRental.Reports
 {
     public partial class Reporting : System.Web.UI.Page
     {

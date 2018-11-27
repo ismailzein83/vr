@@ -7,9 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Retail.Interconnect.Web.Retail_Interconnect.Reports{
-    
-    
+namespace Retail.Demo.Web.Retail_Demo.Elements.NetworkRental.Reports
+{
     public partial class Reporting {
     }
 }
