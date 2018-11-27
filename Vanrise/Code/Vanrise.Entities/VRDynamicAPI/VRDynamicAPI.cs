@@ -10,7 +10,7 @@ namespace Vanrise.Entities
     {
         public long VRDynamicAPIId { get; set; }
         public string Name { get; set; }
-        public int ModuleId{ get; set; }
+        public int ModuleId { get; set; }
         public VRDynamicAPISettings Settings { get; set; }
         public DateTime CreatedTime { get; set; }
         public int CreatedBy { get; set; }
@@ -19,18 +19,28 @@ namespace Vanrise.Entities
     }
     public class VRDynamicAPISettings
     {
+        public VRDynamicAPISecurity Security { get; set; }
         public List<VRDynamicAPIMethod> Methods { get; set; }
+    }
+    public class VRDynamicAPISecurity
+    {
+        public Object RequiredPermissions { get; set; }
     }
     public class VRDynamicAPIMethod
     {
         public Guid VRDynamicAPIMethodId { get; set; }
         public string Name { get; set; }
         public VRDynamicAPIMethodSettings Settings { get; set; }
+        public VRDynamicAPIMethodSecurity Security { get; set; }
     }
     public abstract class VRDynamicAPIMethodSettings
     {
         public abstract Guid ConfigId { get; }
-        public abstract void  Evaluate(IVRDynamicAPIMethodSettingsContext vrDynamicAPIMethodSettingsContext); 
+        public abstract void Evaluate(IVRDynamicAPIMethodSettingsContext vrDynamicAPIMethodSettingsContext);
+    }
+    public class VRDynamicAPIMethodSecurity
+    {
+        public Object RequiredPermissions { get; set; }
     }
     public enum VRDynamicAPIMethodType { Get = 1, Post = 2 }
     public class VRDynamicAPIMethodParameter
@@ -54,4 +64,13 @@ namespace Vanrise.Entities
         public VRDynamicAPIMethodType MethodType { get; set; }
 
     }
+    public class VRDynamicAPICompilationResult
+    {
+        public bool isSucceeded { get; set; }
+        public List<string> Errors { get; set; }
+
+    }
+
+
+   
 }

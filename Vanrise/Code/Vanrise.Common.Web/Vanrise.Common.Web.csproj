@@ -127,8 +127,10 @@
     <Content Include="Common\Directives\VRDynamicAPI\MainExtensions\vr-common-custom-code-dynamicapi-method-type.js" />
     <Content Include="Common\Directives\VRDynamicAPI\MainExtensions\vr-common-custom-code-dynamicapi-method.js" />
     <Content Include="Common\Directives\VRDynamicAPI\MainExtensions\vr-common-custom-code-dynamicapi-method-parameters-grid.js" />
+    <Content Include="Common\Directives\VRDynamicAPI\Templates\DynamicAPIErrorsGridTemplate.html" />
     <Content Include="Common\Directives\VRDynamicAPI\Templates\DynamicAPIMethodsGridTemplate.html" />
     <Content Include="Common\Directives\VRDynamicAPI\Templates\DynamicAPIGridTemplate.html" />
+    <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-errors-grid.js" />
     <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-method-settings.js" />
     <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-methods-grid.js" />
     <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-grid.js" />
@@ -146,6 +148,8 @@
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleEditorController.js" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleManagement.html" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleManagementController.js" />
+    <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIErrorsDisplayer.html" />
+    <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIErrorsDisplayerController.js" />
     <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIMethodEditor.html" />
     <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIMethodEditorController.js" />
     <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIEditor.html" />

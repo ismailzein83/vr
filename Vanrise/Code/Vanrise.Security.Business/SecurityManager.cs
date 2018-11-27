@@ -575,7 +575,7 @@ namespace Vanrise.Security.Business
             return result;
         }
 
-        internal static string RequiredPermissionsToString(List<RequiredPermissionEntry> requirePermissions)
+        public static string RequiredPermissionsToString(List<RequiredPermissionEntry> requirePermissions)
         {
             if (requirePermissions == null || requirePermissions.Count == 0)
                 return null;

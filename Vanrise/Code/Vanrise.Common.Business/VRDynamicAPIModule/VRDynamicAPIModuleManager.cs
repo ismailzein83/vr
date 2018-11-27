@@ -12,7 +12,6 @@ namespace Vanrise.Common.Business
 {
     public class VRDynamicAPIModuleManager
     {
-          
 
         #region Public Methods
         public IDataRetrievalResult<VRDynamicAPIModuleDetails> GetFilteredVRDynamicAPIModules(DataRetrievalInput<VRDynamicAPIModuleQuery> input)
@@ -28,7 +27,6 @@ namespace Vanrise.Common.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allVRDynamicAPIModules.ToBigResult(input, filterExpression, VRDynamicAPIModuleDetailMapper));
 
         }
-
 
         public InsertOperationOutput<VRDynamicAPIModuleDetails> AddVRDynamicAPIModule(VRDynamicAPIModule vrDynamicAPIModule)
         {
@@ -56,6 +54,7 @@ namespace Vanrise.Common.Business
             }
             return insertOperationOutput;
         }
+
         public VRDynamicAPIModule GetVRDynamicAPIModuleById(int vrDynamicAPIModuleId)
         {
             var allVRDynamicAPIModules = GetCachedVRDynamicAPIModules();
@@ -69,6 +68,7 @@ namespace Vanrise.Common.Business
                 return null;
             return vRDynamicAPIModule.Name;
         }
+
         public UpdateOperationOutput<VRDynamicAPIModuleDetails> UpdateVRDynamicAPIModule(VRDynamicAPIModule vrDynamicAPIModule)
         {
             IVRDynamicAPIModuleDataManager vrDynamicAPIModuleDataManager = CommonDataManagerFactory.GetDataManager<IVRDynamicAPIModuleDataManager>();
@@ -90,6 +90,14 @@ namespace Vanrise.Common.Business
             return updateOperationOutput;
         }
 
+        public Dictionary<int, VRDynamicAPIModule> GetAllVRDynamicAPIModules()
+        {
+            return GetCachedVRDynamicAPIModules();
+        }
+        public List<string> GetAllVRDynamicAPIModulesNames()
+        {
+            return GetCachedVRDynamicAPIModules().MapRecords(x => string.Format("Dyn{0}",x.Name)).ToList();
+        }
         #endregion
 
         #region Private Classes
@@ -102,10 +110,6 @@ namespace Vanrise.Common.Business
                 return vrDynamicAPIModuleDataManager.AreVRDynamicAPIModulesUpdated(ref _updateHandle);
             }
         }
-        #endregion
-
-        #region Private Methods
-
         private Dictionary<int, VRDynamicAPIModule> GetCachedVRDynamicAPIModules()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
@@ -116,6 +120,12 @@ namespace Vanrise.Common.Business
                    return vrDynamicAPIModules.ToDictionary(vrDynamicAPIModule => vrDynamicAPIModule.VRDynamicAPIModuleId, vrDynamicAPIModule => vrDynamicAPIModule);
                });
         }
+
+        #endregion
+
+        #region Private Methods
+
+
         #endregion
 
         #region Mappers

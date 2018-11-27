@@ -16,6 +16,6 @@ namespace Vanrise.Entities
         public string CreatedByDescription { get; set; }
         public DateTime LastModifiedTime { get; set; }
         public string LastModifiedByDescription { get; set; }
-
+        public string APIDescription { get; set; }
     }
 }
