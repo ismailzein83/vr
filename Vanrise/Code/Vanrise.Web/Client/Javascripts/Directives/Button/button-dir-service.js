@@ -36,19 +36,20 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
 
         }
         else if (attrs.standalone != undefined) {
-            return '<div style="position:relative;display:inline-block;height:28px" ng-if="ctrl.isExculdedOnreadOnly()" ng-mouseleave="ctrl.showMenuActions = false"  title="' + buttonTitle + '" '
-           + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()" ng-hide="ctrl.hideTemplate">'
+            return '<div style="position:relative;display:inline-block;height:28px" ng-if="ctrl.isExculdedOnreadOnly()" ng-show="ctrl.showMenuButton()" ng-mouseleave="ctrl.showMenuActions = false"  title="' + buttonTitle + '" '
+           + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()" ng-show="ctrl.showMenuButton()" ng-hide="ctrl.hideTemplate">'
                + '<span  style="font-size:24px" class="' + buttonAttributes.class + ' btn-label hand-cursor" aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
                + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:20px;margin-top:3px;" class="img-loader" ng-show="ctrl.showLoader()" />'
-                + actionsMenuTemplate + '</div>';
+                + ' <span  class="glyphicon  glyphicon-chevron-down vr-button-menu-icon" ng-show="ctrl.menuActions.length > 0 " ></span>'
+                actionsMenuTemplate + '</div>';
         }
         else {
-            return '<div style="position:relative;display:inline-block" ng-if="ctrl.isExculdedOnreadOnly()" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
-                + '<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom"'
+            return '<div style="position:relative;display:inline-block" ng-if="ctrl.isExculdedOnreadOnly()" ng-show="::ctrl.showMenuButton()" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
+                + '<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; "  ng-show="ctrl.showMenuButton()" type="button" class="btn btn-default btncustom"'
             + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
                 + '<span  class="' + buttonAttributes.class + ' btn-label"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
                 + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;" ng-show="ctrl.showLoader()" />'
-
+                + ' <span  class="glyphicon  glyphicon-chevron-down vr-button-menu-icon" ng-show="ctrl.menuActions.length > 0 " ></span>'
                 + '</button>'
                 + actionsMenuTemplate + '</div>';
 

@@ -24,10 +24,11 @@
         <div class="buttons-container">
             <div transclude-id="buttons" ng-show="!actionBarCtrl.isMobile"></div>
             <div ng-if="actionBarCtrl.isMobile" ng-repeat="btn in actionBarCtrl.getFirstTowButtons()" style="position:relative;display:inline-block;" ng-if="btn.isExculdedOnreadOnly()" ng-mouseleave="btn.showMenuActions = false" ng-hide="btn.hideTemplate">
-                <button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="btn.onInternalClick($event,btn)" ng-disabled="btn.isDisabled()">
+                <button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " ng-show="btn.showMenuButton()" type="button" class="btn btn-default btncustom" aria-label="Left Align" ng-click="btn.onInternalClick($event,btn)" ng-disabled="btn.isDisabled()">
                     {{btn.name}}
                     <span ng-class="btn.iconClass" aria-hidden="true" ng-show="btn.showIcon()"></span>
                     <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width: 14px;" ng-show="btn.showLoader()">
+                    <span class="glyphicon  glyphicon-chevron-down vr-button-menu-icon" ng-show="btn.menuActions.length > 0 "></span>
                 </button>
             </div>
             <div ng-show="actionBarCtrl.isMobile && actionBarCtrl.buttonsList.length > 2" style="position:relative;display:inline-block;">

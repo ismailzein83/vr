@@ -237,6 +237,10 @@
     float: right;
 }
 
+.rtl vr-actionbar .btn .vr-button-menu-icon {   
+    left: unset;
+    right:1px;
+}
 
 .rtl .btn-label {
     padding-left: unset !important;

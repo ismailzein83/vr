@@ -37,7 +37,7 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
 
                     var self = angular.element(evnt.currentTarget);
                     ctrl.showMenuActions = true;
-
+                    ctrl.showMenuActions = hasEnabledAction();
                     var selfHeight = $(self).height();
                     var selfOffset = $(self).offset();
                     var dropDown = self.parent().find('.dropdown-menu')[0];
@@ -98,6 +98,18 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
             ctrl.showIcon = function () {
                 return !ctrl.isSubmitting;
             };
+
+            ctrl.showMenuButton = function () {
+                if ($scope.$parent.$eval($attrs.menuactions) == undefined) return true;
+                return hasEnabledAction();
+            };
+            
+            function hasEnabledAction() {
+                var hasEnabledAction = ctrl.menuActions != undefined && ctrl.menuActions != null && ctrl.menuActions.length > 0 ? ctrl.menuActions.some(function (action) {
+                    return !action.disable;
+                }) : false;
+                return hasEnabledAction;
+            }
 
             ctrl.showLoader = function () {
                 return ctrl.isSubmitting;

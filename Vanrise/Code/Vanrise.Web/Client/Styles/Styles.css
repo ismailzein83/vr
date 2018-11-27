@@ -341,6 +341,13 @@ vr-actionbar .btn.active {
     box-shadow: none;
 }
 
+vr-actionbar .btn .vr-button-menu-icon {
+    font-size: 9px;
+    position: absolute;
+    top: 9px;
+    left: 1px;
+}
+
     vr-actionbar .btn:focus, vr-actionbar .btn:active:focus, vr-actionbar .btn.active:focus, vr-actionbar .btn.focus, vr-actionbar .btn:active.focus, vr-actionbar .btn.active.focus {
         outline: none;
         outline: none;
