@@ -331,7 +331,7 @@ when not matched by target then
             foreach (string script in dbname.Script(scriptOptions))
             {
                 dbExist = DbExist(script, autoGeneration);
-                if (!dbExist || projectName == "Component-ISP")
+                if (!dbExist || projectName == "Component-ISP" || projectName=="Component-NetworkRental")
                 {
                     sb.AppendLine(script);
                     sb.AppendLine("GO");
@@ -348,7 +348,10 @@ when not matched by target then
             foreach (string script in scriptCollection)
             {
                 dbExist = DbExist(script, autoGeneration);
-                if ((script.Contains("CREATE DATABASE") && !dbExist) || (script.Contains("CREATE DATABASE") && projectName == "Component-ISP"))
+                if ((script.Contains("CREATE DATABASE") && !dbExist) 
+                    || (script.Contains("CREATE DATABASE") && projectName == "Component-ISP") 
+                    || (script.Contains("CREATE DATABASE") && projectName == "Component-NetworkRental")
+                    )
                 {
                     sb.AppendLine(string.Format("CREATE DATABASE [{0}]", item));
                     sb.AppendLine("GO");
@@ -395,6 +398,11 @@ when not matched by target then
             if (projectName == "ISP" || projectName == "Component-ISP")
             {
                 sb = sb.Replace(mainItem, "StandardISPStructure");
+            }
+
+            if(projectName == "NetworkRental" || projectName == "Component-NetworkRental")
+            {
+                sb = sb.Replace(mainItem, "StandardNetworkRentalStructure");
             }
 
             if (!Directory.Exists(sqlFilesOutputPath))
