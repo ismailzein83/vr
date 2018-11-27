@@ -41,7 +41,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                + '<span  style="font-size:24px" class="' + buttonAttributes.class + ' btn-label hand-cursor" aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
                + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:20px;margin-top:3px;" class="img-loader" ng-show="ctrl.showLoader()" />'
                 + ' <span  class="glyphicon  glyphicon-chevron-down vr-button-menu-icon" ng-show="ctrl.menuActions.length > 0 " ></span>'
-                actionsMenuTemplate + '</div>';
+                + actionsMenuTemplate + '</div>';
         }
         else {
             return '<div style="position:relative;display:inline-block" ng-if="ctrl.isExculdedOnreadOnly()" ng-show="::ctrl.showMenuButton()" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
