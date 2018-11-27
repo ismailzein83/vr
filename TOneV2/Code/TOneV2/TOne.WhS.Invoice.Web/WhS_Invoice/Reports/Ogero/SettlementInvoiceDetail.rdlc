@@ -580,9 +580,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>SaleRate</rd:DefaultName>
-                      <Visibility>
-                        <Hidden>=IIF(Round(Fields!DueToSystemAmount.Value,3) &gt; 0,  False,True)</Hidden>
-                      </Visibility>
                       <Style>
                         <Border>
                           <Style>None</Style>

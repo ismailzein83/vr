@@ -29,8 +29,8 @@
           </Subreport>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>23.12112cm</Top>
-        <Left>0.21206cm</Left>
+        <Top>22.62417cm</Top>
+        <Left>0.23962cm</Left>
         <Height>1.60866cm</Height>
         <Width>19.75609cm</Width>
         <Visibility>
@@ -388,7 +388,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(CountRows()&lt;1, "", "Reccuring Charges DUE TO"+ Parameters!Carrier.Value)</Value>
+                              <Value>=IIF(CountRows()&lt;1, "", Parameters!Carrier.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -483,7 +483,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CarrierRecurringChargesSummary</DataSetName>
-        <Top>5.74833in</Top>
+        <Top>5.5887in</Top>
         <Left>2.44344in</Left>
         <Height>0.5in</Height>
         <Width>2.76972in</Width>
@@ -514,7 +514,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(CountRows()&lt;1, "", "Reccuring Charges DUE TO"+ Parameters!Name.Value)</Value>
+                              <Value>=IIF(CountRows()&lt;1, "", Parameters!Name.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -603,7 +603,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>SystemRecurringChargesSummary</DataSetName>
-        <Top>5.74833in</Top>
+        <Top>5.5887in</Top>
         <Left>5.21316in</Left>
         <Height>0.5in</Height>
         <Width>2.66813in</Width>
@@ -729,7 +729,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CarrierSummary</DataSetName>
-        <Top>5.11127in</Top>
+        <Top>5.01925in</Top>
         <Left>2.44344in</Left>
         <Height>0.5in</Height>
         <Width>2.76972in</Width>
@@ -849,7 +849,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>SystemSummary</DataSetName>
-        <Top>5.11127in</Top>
+        <Top>5.01925in</Top>
         <Left>5.21316in</Left>
         <Height>0.5in</Height>
         <Width>2.66813in</Width>
@@ -3015,7 +3015,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>6.36161in</Top>
+        <Top>6.23661in</Top>
         <Left>0.12732in</Left>
         <Height>2.05574in</Height>
         <Width>6.1719in</Width>
@@ -3268,7 +3268,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>21.80647cm</Top>
+        <Top>21.1684cm</Top>
         <Left>0.32339cm</Left>
         <Height>1.27938cm</Height>
         <Width>19.69509cm</Width>
@@ -3279,8 +3279,84 @@
           </Border>
         </Style>
       </Tablix>
+      <Tablix Name="Tablix3">
+        <TablixBody>
+          <TablixColumns>
+            <TablixColumn>
+              <Width>5.88297cm</Width>
+            </TablixColumn>
+          </TablixColumns>
+          <TablixRows>
+            <TablixRow>
+              <Height>0.6cm</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox47">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=iif((CountRows("SystemRecurringChargesSummary")&gt;0)Or(CountRows("CarrierRecurringChargesSummary")&gt;0),"Total Recurring Charges Included In:","")</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>7.5pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>#4e479c</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox42</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>White</Color>
+                          <Style>Solid</Style>
+                          <Width>0.25pt</Width>
+                        </Border>
+                        <BackgroundColor>White</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+          </TablixRows>
+        </TablixBody>
+        <TablixColumnHierarchy>
+          <TablixMembers>
+            <TablixMember />
+          </TablixMembers>
+        </TablixColumnHierarchy>
+        <TablixRowHierarchy>
+          <TablixMembers>
+            <TablixMember />
+          </TablixMembers>
+        </TablixRowHierarchy>
+        <DataSetName>BankDetails</DataSetName>
+        <Top>14.2303cm</Top>
+        <Left>0.35095cm</Left>
+        <Height>0.6cm</Height>
+        <Width>5.88297cm</Width>
+        <ZIndex>11</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Tablix>
     </ReportItems>
-    <Height>24.72978cm</Height>
+    <Height>24.23283cm</Height>
     <Style>
       <Border>
         <Color>White</Color>
