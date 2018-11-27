@@ -90,7 +90,7 @@ namespace Retail.Demo.Data.SQL
 
         private StringBuilder query_GetActiveServices = new StringBuilder(@"select Pr.Name  as ProductName,count(Pr.Name) as NoOfOrders, od.BillingFrequency, Sum(od.MRC) as MRC
                                                                             FROM [NetworkRentalManager].[OrdersDefinition] as od
-                                                                            Join[ [NetworkRentalManager].[Product] as Pr on OD.ProductId=pr.ID
+                                                                            Join [NetworkRentalManager].[Product] as Pr on OD.ProductId=pr.ID
                                                                             where AccountID =#AccountID# and od.BillStartDate >= '#FromDate#' and od.BillStartDate < '#ToDate#'
                                                                             Group by Pr.Name,od.BillingFrequency
                                                                             ");
