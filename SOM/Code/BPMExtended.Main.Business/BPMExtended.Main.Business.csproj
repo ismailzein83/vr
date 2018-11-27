@@ -98,6 +98,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Billing\RatePlanManager.cs" />
     <Compile Include="Provisioning\ProvisioningManager.cs" />
+    <Compile Include="Request Flow Management\ADSLForISPFlowManagement.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BPMExtended.Main.Common\BPMExtended.Main.Common.csproj">
