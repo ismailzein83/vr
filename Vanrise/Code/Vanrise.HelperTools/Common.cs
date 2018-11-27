@@ -90,7 +90,8 @@ namespace Vanrise.HelperTools
                         foreach (var file in allFiles)
                         {
                             fileContent.Append(File.ReadAllText(file));
-                            fileContent.Append(";");
+                            //fileContent.Append(";");
+                            fileContent.AppendLine();
                             //rename or remove file
                             File.Delete(file);
                             //File.Move(file, string.Format("{0}{1}", file, "processed"));
