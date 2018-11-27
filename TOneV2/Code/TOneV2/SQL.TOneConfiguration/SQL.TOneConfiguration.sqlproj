@@ -816,6 +816,15 @@
     <Build Include="sec\Stored Procedures\sp_SecurityProvider_SetDefault.sql" />
     <Build Include="sec\Stored Procedures\sp_SecurityProvider_GetDefault.sql" />
     <Build Include="common\Stored Procedures\sp_CacheRefreshHandle_GetByCacheTypeName.sql" />
+    <Build Include="common\Tables\VRDynamicAPIModule.sql" />
+    <Build Include="common\Tables\VRDynamicAPI.sql" />
+    <Build Include="common\Stored Procedures\sp_VRDynamicAPIModule_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_VRDynamicAPIModule_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_VRDynamicAPIModule_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_VRDynamicAPI_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_VRDynamicAPI_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_VRDynamicAPI_GetAll.sql" />
+    <Build Include="common\User Defined Types\VRDynamicAPIModuleType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
