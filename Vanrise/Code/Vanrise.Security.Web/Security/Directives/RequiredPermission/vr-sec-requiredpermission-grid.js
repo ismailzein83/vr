@@ -61,19 +61,25 @@ function (VR_Sec_RequiredPermissionService, VR_Sec_BusinessEntityNodeAPIService,
                 VR_Sec_RequiredPermissionService.editRequiredPermission(obj, ctrl.requiredPermissions, onSavePermissionObject);
             }
 
-            api.getData = function () {
+            api.getData = function (payload) {
+               
                 var entries = [];
                 for (var i = 0; i < ctrl.requiredPermissions.length; i++) {
                     entries[entries.length] = {
                         EntityId: ctrl.requiredPermissions[i].EntityId,
                         PermissionOptions: ctrl.requiredPermissions[i].PermissionOptions
                     }
-                 }
+                }
+                if (payload != undefined && payload.withType) {
+                    return {
+                        $type: "Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities",
+                        Entries: entries
+                    };
+                }
                 return {
                     Entries: entries
                 };
             };
-
 
             api.load = function (payload) {
                 if (payload != undefined && payload.data != undefined) {

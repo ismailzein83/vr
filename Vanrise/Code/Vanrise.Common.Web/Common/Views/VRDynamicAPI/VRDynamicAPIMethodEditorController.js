@@ -128,7 +128,7 @@
                 Name: $scope.scopeModel.name,
                 Settings: vrDynamicAPIMethodSettingsDirectiveAPI.getData(),
                 Security: {
-                    RequiredPermissions: vrSecRequiredPermissionGridDirectiveAPI.getWithType()
+                    RequiredPermissions: vrSecRequiredPermissionGridDirectiveAPI.getData({ withType: true })
                 }
             };
             return object;

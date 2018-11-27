@@ -152,7 +152,7 @@
                 Settings: {
                     Methods: vrDynamicAPIMethodsDirectiveAPI.getData(),
                     Security: {
-                        RequiredPermissions: vrSecRequiredPermissionGridDirectiveAPI.getWithType()
+                        RequiredPermissions: vrSecRequiredPermissionGridDirectiveAPI.getData({ withType:true})
                     }
                 }
             };

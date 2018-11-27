@@ -204,7 +204,6 @@ namespace Vanrise.Common.Business
                  [JSONWithTypeAttribute]
                  public class Dyn#ModuleName#_#ControllerName#Controller : BaseAPIController
                  { 
-                    #GeneralPermission#
                     #Methods#
 
                     private System.Net.Http.HttpResponseMessage GetUnauthorizedResponse()
@@ -213,30 +212,11 @@ namespace Vanrise.Common.Business
                         msg.Content = new System.Net.Http.StringContent(""you are not authorized to perform this request"");
                         return msg;
                     }
-    }
+                 }
               } 
            ");
 
             StringBuilder methodsBuilder = new StringBuilder();
-
-            StringBuilder apiPermissionBuilder = new StringBuilder();
-
-            apiPermissionBuilder.Append(@"
-                     SecurityManager securityManager = new SecurityManager();");
-
-            if (vrDynamicAPI.Settings.Security != null && vrDynamicAPI.Settings.Security.RequiredPermissions != null)
-            {
-                RequiredPermissionSettings apiPermissions = vrDynamicAPI.Settings.Security.RequiredPermissions.CastWithValidate<RequiredPermissionSettings>("vrDynamicAPI.Settings.Security.RequiredPermissions");
-                if (apiPermissions.Entries.Count != 0)
-                {
-                    apiPermissionBuilder.Append(@"
-
-                    if (!securityManager.IsAllowed(""#requiredPermissionString#"", ContextFactory.GetContext().GetLoggedInUserId()))
-                        return this.GetUnauthorizedResponse();");
-
-                   apiPermissionBuilder.Replace("#requiredPermissionString#", securityManager.RequiredPermissionsToString(apiPermissions.Entries).ToString());
-                }
-            }
 
             foreach (var method in vrDynamicAPI.Settings.Methods)
             {
@@ -249,18 +229,14 @@ namespace Vanrise.Common.Business
                 [Route(""#MethodName#"")]
                 public #ReturnType# #MethodName#(#InParameters#)
                 {
-
                     #Permission#
-
                     #MethodBody#
-                    
+                    #returnNull#
                 }");
 
                 if (context.MethodType == VRDynamicAPIMethodType.Get && context.ReturnType == null)
                     context.ReturnType.ThrowIfNull("context.ReturnType");
-                else if (context.ReturnType == null)
-                    context.ReturnType = "void";
-                methodBuilder.Replace("#ReturnType#", context.ReturnType);
+                 
 
                 StringBuilder parametersBuilder = new StringBuilder();
 
@@ -272,27 +248,46 @@ namespace Vanrise.Common.Business
                 permissionsBuilder.Append(@"
                      SecurityManager securityManager = new SecurityManager();");
 
+                if (vrDynamicAPI.Settings.Security != null && vrDynamicAPI.Settings.Security.RequiredPermissions != null)
+                {
+                    RequiredPermissionSettings apiPermissions = vrDynamicAPI.Settings.Security.RequiredPermissions.CastWithValidate<RequiredPermissionSettings>("vrDynamicAPI.Settings.Security.RequiredPermissions");
+                    if (apiPermissions.Entries.Count != 0)
+                    {
+                        methodBuilder.Replace("#ReturnType#", "object");
+
+                        permissionsBuilder.Append(@"
+                    if (securityManager.IsAllowed(""#requiredPermissionString#"", ContextFactory.GetContext().GetLoggedInUserId())==false)
+                        {return this.GetUnauthorizedResponse();}");
+
+                        permissionsBuilder.Replace("#requiredPermissionString#", securityManager.RequiredPermissionsToString(apiPermissions.Entries).ToString());
+                        if (context.ReturnType == null)
+                        methodBuilder.Replace("#returnNull#", "return null;");
+                        else methodBuilder.Replace("#returnNull#", "");
+                    }
+                }
                 if (method.Security != null && method.Security.RequiredPermissions != null)
                 {
                     RequiredPermissionSettings methodPermissions = method.Security.RequiredPermissions.CastWithValidate<RequiredPermissionSettings>("method.Security.RequiredPermissions");
                     if (methodPermissions.Entries.Count != 0)
                     {
-                        permissionsBuilder.Replace("#ReturnType#", "object");
+                        methodBuilder.Replace("#ReturnType#", "object");
 
                         permissionsBuilder.Append(@"
-                    if (!securityManager.IsAllowed(""#requiredPermissionString#"", ContextFactory.GetContext().GetLoggedInUserId()))
-                        return this.GetUnauthorizedResponse();
-
-                       else if(#void#){
-                           #returnNull#=true;
-                                     }
+                    if (securityManager.IsAllowed(""#requiredPermissionString#"", ContextFactory.GetContext().GetLoggedInUserId())==false)
+                        {return this.GetUnauthorizedResponse();}
                            ");
-                        bool returnNull=false; 
-                        permissionsBuilder.Replace("#void#", (context.ReturnType=="void"? true:false).ToString().ToLower());
-                        permissionsBuilder.Replace("#returnNull#", returnNull.ToString());
+
                         permissionsBuilder.Replace("#requiredPermissionString#", securityManager.RequiredPermissionsToString(methodPermissions.Entries).ToString());
+                        if(context.ReturnType==null)
+                        methodBuilder.Replace("#returnNull#","return null;" );
+                        else methodBuilder.Replace("#returnNull#", "");
+
                     }
                 }
+
+                if (context.ReturnType == null)
+                    context.ReturnType = "void";
+                methodBuilder.Replace("#ReturnType#", context.ReturnType);
 
                 methodBuilder.Replace("#MethodType#", context.MethodType.ToString());
 
@@ -305,13 +300,14 @@ namespace Vanrise.Common.Business
                 context.MethodBody.ThrowIfNull("context.MethodBody");
                 methodBuilder.Replace("#MethodBody#", context.MethodBody);
 
+                methodBuilder.Replace("#returnNull#", "");
                 methodsBuilder.Append(methodBuilder);
             }
+
             var moduleName = vrDynamicAPIModuleManager.GetVRDynamicAPIModuleName(vrDynamicAPI.ModuleId);
             classControllerBuilder.Replace("#RoutePrefix#",string.Format("api/Dyn{0}/", moduleName));
             classControllerBuilder.Replace("#ModuleName#", moduleName);
             classControllerBuilder.Replace("#ControllerName#", vrDynamicAPI.Name);
-            classControllerBuilder.Replace("#GeneralPermission#", apiPermissionBuilder.ToString());
             classControllerBuilder.Replace("#Methods#", methodsBuilder.ToString());
 
             //string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.DynamicAPI.Dyn"+ moduleName);
@@ -365,4 +361,6 @@ namespace Vanrise.Common.Business
         }
         #endregion
     }
+
+  
 }
