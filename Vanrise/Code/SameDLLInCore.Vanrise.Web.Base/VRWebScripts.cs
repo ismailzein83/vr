@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Html;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Web;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 
-namespace Vanrise.Web
+namespace Vanrise.Web.Base
 {
-    public static class VRWebStyles
+    public static class VRWebScripts
     {
-        public static IHtmlString Render(string webBundleName)
+        public static HtmlString Render(string webBundleName)
         {
             string bundleContent = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
                 .GetOrCreateObject(String.Concat("Render_", webBundleName),
@@ -25,7 +24,7 @@ namespace Vanrise.Web
 
                     foreach (var filePath in filePaths)
                     {
-                        builder.AppendLine($@"<link href=""{filePath.TrimStart('~')}?v={version}"" rel=""stylesheet""/>");
+                        builder.AppendLine($@"<script src=""{filePath.TrimStart('~')}?v={version}""></script>");
                     }
                     return builder.ToString();
                 });

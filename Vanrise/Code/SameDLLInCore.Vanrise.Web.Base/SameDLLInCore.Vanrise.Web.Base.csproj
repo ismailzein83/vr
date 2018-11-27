@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+    <AssemblyName>Vanrise.Web.Base</AssemblyName>
+    <RootNamespace>Vanrise.Web.Base</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+  </ItemGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y &quot;$(TargetPath)&quot; ..\Output\SameDLLInCore" />
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SameDLLInCore.System.Web.Http\SameDLLInCore.System.Web.Http.csproj" />
+    <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj" />
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj" />
+  </ItemGroup>
+
+</Project>

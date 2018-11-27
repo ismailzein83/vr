@@ -6,7 +6,7 @@ using System.Web;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 
-namespace Vanrise.Web
+namespace Vanrise.Web.Base
 {
     public static class VRWebScripts
     {
@@ -41,6 +41,4 @@ namespace Vanrise.Web
             }
         }
     }
-
-    
 }

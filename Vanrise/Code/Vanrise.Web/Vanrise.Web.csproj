@@ -170,8 +170,6 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\Utils.cs" />
     <Compile Include="App_Start\VRLocalizationHttpModules.cs" />
-    <Compile Include="App_Start\VRWebScripts.cs" />
-    <Compile Include="App_Start\VRWebStyles.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Client\Images\banned.png" />
     <Content Include="Client\Images\copy-icon.png" />
