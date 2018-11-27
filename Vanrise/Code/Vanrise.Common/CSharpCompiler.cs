@@ -17,7 +17,7 @@ namespace Vanrise.Common
             public string Prop { get; set; }
         }
 
-        //static string s_generatedCodePathInDevMode = ConfigurationManager.AppSettings["VRDevMode_GeneratedCodePath"];
+        static string s_generatedCodePathInDevMode = ConfigurationManager.AppSettings["VRDevMode_GeneratedCodePath"];
         static HashSet<string> expiredAssemblies = new HashSet<string>();
 
         static Dictionary<string, Assembly> s_dynamicAssembliesByName = new Dictionary<string, Assembly>();
@@ -43,7 +43,15 @@ namespace Vanrise.Common
         {
             output = new CSharpCompilationOutput();
 
-            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(classDefinition);
+            string outputFileName = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(className) && !String.IsNullOrWhiteSpace(s_generatedCodePathInDevMode))
+            {
+                outputFileName = Path.Combine(s_generatedCodePathInDevMode, String.Concat(className.Replace(" ", ""), Guid.NewGuid().ToString().Replace("-", ""), ".cs"));
+                File.WriteAllText(outputFileName, classDefinition);
+            }
+
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(classDefinition, path: outputFileName, encoding: System.Text.Encoding.UTF8);
 
             string assemblyName = String.Format("RuntimeAssembly_{0}", Guid.NewGuid().ToString("N"));
 
@@ -85,7 +93,8 @@ namespace Vanrise.Common
             bool outputResult;
             using (var ms = new MemoryStream())
             {
-                EmitResult result = compilation.Emit(ms);
+                var pdbMs = new MemoryStream();
+                EmitResult result = compilation.Emit(ms, pdbMs);
 
                 if (!result.Success)
                 {
@@ -96,21 +105,14 @@ namespace Vanrise.Common
                     output = new CSharpCompilationOutput() { Errors = new List<CSharpCompilationError>(), ErrorMessages = new List<string>() };
                     foreach (Diagnostic diagnostic in failures)
                     {
-                            CSharpCompilationError error = BuildCSharpCompilationError(diagnostic);
-                            output.ErrorMessages.Add(diagnostic.ToString());
-                            output.Errors.Add(error);
+                        CSharpCompilationError error = BuildCSharpCompilationError(diagnostic);
+                        output.ErrorMessages.Add(diagnostic.ToString());
+                        output.Errors.Add(error);
                     }
                     outputResult = false;
                 }
                 else
                 {
-                    //if (!string.IsNullOrWhiteSpace(className) && !String.IsNullOrWhiteSpace(s_generatedCodePathInDevMode))
-                    //{
-
-                    //    string outputFileName = Path.Combine(s_generatedCodePathInDevMode, String.Concat(className.Replace(" ", ""), Guid.NewGuid().ToString().Replace("-", ""), ".cs"));
-                    //    File.WriteAllText(outputFileName, classDefinition);
-                    //}
-
                     ms.Seek(0, SeekOrigin.Begin);
 
                     byte[] byteArray = ms.ToArray();
@@ -118,6 +120,11 @@ namespace Vanrise.Common
                     string formatFileName = string.Format("{0}.dll", assemblyName);
                     string fullPath = Path.Combine(Path.GetTempPath(), formatFileName);
                     File.WriteAllBytes(fullPath, byteArray);
+
+                    byte[] pdbByteArray = pdbMs.ToArray();
+                    string formatPdbFileName = string.Format("{0}.pdb", assemblyName);
+                    string pdbFullPath = Path.Combine(Path.GetTempPath(), formatPdbFileName);
+                    File.WriteAllBytes(pdbFullPath, pdbByteArray);
 
                     Assembly assembly = Assembly.LoadFrom(fullPath);
                     s_dynamicAssembliesByName.Add(assemblyName, assembly);
