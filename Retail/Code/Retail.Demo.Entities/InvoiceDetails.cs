@@ -9,5 +9,6 @@ namespace Retail.Demo.Entities
     public class InvoiceDetails
     {
         public Decimal Amount { get; set; }
+        public int Currency { get; set; }
     }
 }

@@ -7,21 +7,27 @@ using Vanrise.Data.SQL;
 using Retail.Demo.Data;
 using Retail.Demo.Entities;
 using System.Data;
+using Retail.BusinessEntity.Entities;
 
 namespace Retail.Demo.Data.SQL
 {
-    public class DemoDataManager : BaseSQLDataManager, IDemoDataManager
+    public class NetworkRentalDataManager : BaseSQLDataManager, IDemoDataManager
     {
-        public DemoDataManager()
+        public NetworkRentalDataManager()
            : base(GetConnectionStringName("ISPDBConnString", "ISPDBConnString"))
         {
 
         }
-        public List<ActiveServices> GetActiveServices()
+
+        public List<ActiveServices> GetActiveServices(long accountId, DateTime fromDate, DateTime toDate)
         {
             List<ActiveServices> activeServices = new List<ActiveServices>();
 
             string query = string.Format(query_GetActiveServices.ToString());
+            query = query.Replace("#AccountID#", accountId.ToString());
+            query = query.Replace("#FromDate#", fromDate.ToString());
+            query = query.Replace("#ToDate#", toDate.ToString());
+
             ExecuteReaderText(query, (reader) =>
             {
                 while (reader.Read())
@@ -34,11 +40,15 @@ namespace Retail.Demo.Data.SQL
             return activeServices;
         }
 
-        public List<NewOrders> GetNewOrders()
+        public List<NewOrders> GetNewOrders(long accountId, DateTime fromDate, DateTime toDate)
         {
             List<NewOrders> newOrders = new List<NewOrders>();
 
             string query = string.Format(query_GetNewOrders.ToString());
+            query = query.Replace("#AccountID#", accountId.ToString());
+            query = query.Replace("#FromDate#", fromDate.ToString());
+            query = query.Replace("#ToDate#", toDate.ToString());
+
             ExecuteReaderText(query, (reader) =>
             {
                 while (reader.Read())
@@ -82,13 +92,15 @@ namespace Retail.Demo.Data.SQL
                                                                             select Pr.Name  as ProductName,count(Pr.Name) as NoOfOrders, od.BillingFrequency, Sum(od.MRC) as MRC
                                                                             FROM[Retail_Dev_ISP].[NetworkRentalManager].[OrdersDefinition] as od
                                                                             Join[Retail_Dev_ISP].[NetworkRentalManager].[Product] as Pr on OD.ProductId=pr.ID
+                                                                            where AccountID =#AccountID# and od.BillStartDate >= '#FromDate#' and od.BillStartDate < '#ToDate#'
                                                                             Group by Pr.Name,od.BillingFrequency
                                                                             ");
 
         private StringBuilder query_GetNewOrders = new StringBuilder(@"use[Retail_Dev_ISP];
-                                                                       select Pr.Name  as ProductName,count(Pr.Name) as NoOfOrders, Sum(od.MRC) as NRC
+                                                                       select Pr.Name  as ProductName,count(Pr.Name) as NoOfOrders, Sum(od.NRC) as NRC
                                                                        FROM[Retail_Dev_ISP].[NetworkRentalManager].[OrdersDefinition] as od
-                                                                       JOin[Retail_Dev_ISP].[NetworkRentalManager].[Product] as Pr on OD.ProductId=pr.ID
+                                                                       Join[Retail_Dev_ISP].[NetworkRentalManager].[Product] as Pr on OD.ProductId=pr.ID
+                                                                       where AccountID =#AccountID# and od.BillStartDate >= '#FromDate#' and od.BillStartDate < '#ToDate#'
                                                                        Group by Pr.Name,od.BillingFrequency
                                                                        ");
 

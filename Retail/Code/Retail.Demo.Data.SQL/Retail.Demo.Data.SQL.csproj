@@ -51,10 +51,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DemoDataManager.cs" />
+    <Compile Include="NetworkRentalDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
+      <Project>{C08FD318-049C-49CE-8BC4-85BF296CBAB9}</Project>
+      <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Demo.Data\Retail.Demo.Data.csproj">
       <Project>{d0455bb6-b951-4c9a-9b56-f26ea218994f}</Project>
       <Name>Retail.Demo.Data</Name>

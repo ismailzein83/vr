@@ -96,7 +96,9 @@ namespace Retail.Demo.Business
                     AccountBEManager accountBEManager = new AccountBEManager();
                     CompanySetting companySetting = accountBEManager.GetCompanySetting(financialAccountData.Account.AccountId);
                     string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
-                    int currencyId = accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
+                    // int currencyId = accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
+                    int currencyId = currencyManager.GetSystemCurrency().CurrencyId;
+
                     string currencySymbol = currencyManager.GetCurrencySymbol(currencyId);
 
                     AddNetworkRentalInvoiceRDLCParameter(rdlcReportParameters, NetworkRentalInvoiceRDLCParameter.AccountName, accountName, true);

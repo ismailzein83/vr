@@ -9,7 +9,7 @@ namespace Retail.Demo.Data
 {
     public interface IDemoDataManager : IDataManager
     {
-        List<NewOrders> GetNewOrders();
-        List<ActiveServices> GetActiveServices();
+        List<NewOrders> GetNewOrders(long accountId, DateTime fromDate, DateTime toDate);
+        List<ActiveServices> GetActiveServices(long accountId, DateTime fromDate, DateTime toDate);
     }
 }
