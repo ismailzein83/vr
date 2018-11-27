@@ -59,6 +59,7 @@
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
     <Compile Include="BusinessManagers\IRequiredPermissionSetManager.cs" />
+    <Compile Include="BusinessManagers\ISecurityManager.cs" />
     <Compile Include="BusinessManagers\IUserManager.cs" />
     <Compile Include="BusinessManagers\IViewManager.cs" />
     <Compile Include="ChangedPasswordObject.cs" />

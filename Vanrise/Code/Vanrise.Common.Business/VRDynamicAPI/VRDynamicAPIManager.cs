@@ -182,6 +182,7 @@ namespace Vanrise.Common.Business
         }
         public string BuildAPIClassController(VRDynamicAPI vrDynamicAPI, out string fullTypeName)
         {
+            ISecurityManager securityManager = BEManagerFactory.GetManager<ISecurityManager>();
             vrDynamicAPI.Name.ThrowIfNull("vrDynamicAPI.Name");
             vrDynamicAPI.Settings.ThrowIfNull("vrDynamicAPI.Settings");
 
@@ -233,7 +234,7 @@ namespace Vanrise.Common.Business
                     if (!securityManager.IsAllowed(""#requiredPermissionString#"", ContextFactory.GetContext().GetLoggedInUserId()))
                         return this.GetUnauthorizedResponse();");
 
-                  //  apiPermissionBuilder.Replace("#requiredPermissionString#", SecurityManager.RequiredPermissionsToString(apiPermissions.Entries).ToString());
+                   apiPermissionBuilder.Replace("#requiredPermissionString#", securityManager.RequiredPermissionsToString(apiPermissions.Entries).ToString());
                 }
             }
 
@@ -289,7 +290,7 @@ namespace Vanrise.Common.Business
                         bool returnNull=false; 
                         permissionsBuilder.Replace("#void#", (context.ReturnType=="void"? true:false).ToString().ToLower());
                         permissionsBuilder.Replace("#returnNull#", returnNull.ToString());
-                      //  permissionsBuilder.Replace("#requiredPermissionString#", SecurityManager.RequiredPermissionsToString(methodPermissions.Entries).ToString());
+                        permissionsBuilder.Replace("#requiredPermissionString#", securityManager.RequiredPermissionsToString(methodPermissions.Entries).ToString());
                     }
                 }
 

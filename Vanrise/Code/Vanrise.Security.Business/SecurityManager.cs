@@ -13,7 +13,7 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Business
 {
-    public class SecurityManager
+    public class SecurityManager: ISecurityManager
     {
         static UserManager s_userManager = new UserManager();
         static ConfigManager s_configManager = new ConfigManager();
@@ -575,7 +575,7 @@ namespace Vanrise.Security.Business
             return result;
         }
 
-        public static string RequiredPermissionsToString(List<RequiredPermissionEntry> requirePermissions)
+        public string RequiredPermissionsToString(List<RequiredPermissionEntry> requirePermissions)
         {
             if (requirePermissions == null || requirePermissions.Count == 0)
                 return null;

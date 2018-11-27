@@ -14,7 +14,8 @@ namespace Vanrise.Security.Business
         #region Public Methods
         public int GetRequiredPermissionSetId(string module, RequiredPermissionSettings requiredPermission)
         {
-            string requiredPermissionString = SecurityManager.RequiredPermissionsToString(requiredPermission.Entries);
+            SecurityManager securityManager = new SecurityManager();
+            string requiredPermissionString = securityManager.RequiredPermissionsToString(requiredPermission.Entries);
             return GetRequiredPermissionSetId(module, requiredPermissionString);
         }
 
