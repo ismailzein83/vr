@@ -29,10 +29,13 @@ namespace Vanrise.Analytic.Business
         {
             SettingManager settingManager = new SettingManager();
             KPISettings kpiSettings = settingManager.GetSetting<KPISettings>(KPISettings.SETTING_TYPE);
-            kpiSettings.ThrowIfNull("KPISettings");
-            var analyticTableKPISettings = kpiSettings.AnalyticTablesKPISettings.FindRecord(x => x.AnalyticTableId == analyticTableId);
-            analyticTableKPISettings.ThrowIfNull("AnalyticTableKPISettings");
-            return analyticTableKPISettings.MeasureStyleRules;
+            if(kpiSettings != null && kpiSettings.AnalyticTablesKPISettings !=null)
+            {
+                var analyticTableKPISettings = kpiSettings.AnalyticTablesKPISettings.FindRecord(x => x.AnalyticTableId == analyticTableId);
+                if(analyticTableKPISettings != null)
+                    return analyticTableKPISettings.MeasureStyleRules;
+            }
+            return null;
         }
     }
 }
