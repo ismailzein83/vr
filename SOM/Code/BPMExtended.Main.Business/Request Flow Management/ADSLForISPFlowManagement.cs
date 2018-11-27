@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BPMExtended.Main.Business.Request_Flow_Management
+namespace BPMExtended.Main.Business
 {
     public class ADSLForISPFlowManagement
     {
