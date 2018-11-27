@@ -53,7 +53,7 @@
 
                 vrSecRequiredPermissionGridDirectiveAPI = api;
                 vrSecRequiredPermissionGridDirectiveReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {

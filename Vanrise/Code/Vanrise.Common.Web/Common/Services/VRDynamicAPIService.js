@@ -70,6 +70,6 @@
             editVRDynamicAPI: editVRDynamicAPI,
             addVRDynamicAPIMethod: addVRDynamicAPIMethod,
             editVRDynamicAPIMethod: editVRDynamicAPIMethod,
-            displayErrors: displayErrors,
+            displayErrors: displayErrors
         };
     }]);

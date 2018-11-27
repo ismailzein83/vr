@@ -68,7 +68,7 @@ function (VR_Sec_RequiredPermissionService, VR_Sec_BusinessEntityNodeAPIService,
                     entries[entries.length] = {
                         EntityId: ctrl.requiredPermissions[i].EntityId,
                         PermissionOptions: ctrl.requiredPermissions[i].PermissionOptions
-                    }
+                    };
                 }
                 if (payload != undefined && payload.withType) {
                     return {
@@ -90,7 +90,7 @@ function (VR_Sec_RequiredPermissionService, VR_Sec_BusinessEntityNodeAPIService,
                         for (var y = 0; y < payload.data.Entries.length; y++) {
                             var currentObj = payload.data.Entries[y];
                             ids[ids.length] = currentObj.EntityId;
-                            basiclist[basiclist.length] = currentObj
+                            basiclist[basiclist.length] = currentObj;
                         }
                         return VR_Sec_BusinessEntityAPIService.GetBusinessEntitiesByIds(ids).then(function (response) {
                             if (response) {

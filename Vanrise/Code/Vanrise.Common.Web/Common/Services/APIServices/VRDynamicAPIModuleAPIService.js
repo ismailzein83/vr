@@ -32,7 +32,7 @@
             GetFilteredVRDynamicAPIModules: GetFilteredVRDynamicAPIModules,
             GetVRDynamicAPIModuleById: GetVRDynamicAPIModuleById,
             UpdateVRDynamicAPIModule: UpdateVRDynamicAPIModule,
-            AddVRDynamicAPIModule: AddVRDynamicAPIModule,
+            AddVRDynamicAPIModule: AddVRDynamicAPIModule
         };
     }
     appControllers.service("VRCommon_VRDynamicAPIModuleAPIService", vrDynamicAPIModuleAPIService);

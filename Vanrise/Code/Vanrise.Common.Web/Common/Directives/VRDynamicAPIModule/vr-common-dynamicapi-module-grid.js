@@ -71,7 +71,7 @@ function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCo
 
                     };
                     return directiveApi;
-                };
+                }
             };
 
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) { // takes retrieveData object
@@ -91,7 +91,7 @@ function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCo
             };
 
             defineMenuActions();
-        };
+        }
 
         function defineMenuActions() {
             $scope.scopeModel.gridMenuActions = [{
