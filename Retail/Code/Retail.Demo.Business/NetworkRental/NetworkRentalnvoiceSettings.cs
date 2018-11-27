@@ -49,7 +49,7 @@ namespace Retail.Demo.Business
 
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            return new ISPInvoiceGenerator(this.AccountBEDefinitionId);
+            return new NetworkRentalInvoiceGenerator(this.AccountBEDefinitionId);
         }
 
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
@@ -67,7 +67,7 @@ namespace Retail.Demo.Business
 
         public override InvoicePartnerManager GetPartnerManager()
         {
-            return new ISPInvoicePartnerSettings(this.AccountBEDefinitionId);
+            return new NetworkRentalInvoicePartnerSettings(this.AccountBEDefinitionId);
         }
     }
 }

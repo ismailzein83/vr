@@ -67,9 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssignedFinancialAccountToInvoiceSettingFilter.cs" />
-    <Compile Include="ISPInvoiceGenerator.cs" />
-    <Compile Include="ISPInvoicePartnerSettings.cs" />
-    <Compile Include="ISPInvoiceSettings.cs" />
     <Compile Include="NetworkRental\NetworkRentalInvoiceGenerator.cs" />
     <Compile Include="NetworkRental\NetworkRentalInvoicePartnerSettings.cs" />
     <Compile Include="NetworkRental\NetworkRentalnvoiceSettings.cs" />
