@@ -3,10 +3,151 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Data.RDB;
+using Vanrise.GenericData.Data.SQL;
+using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.Entities.ExpressionBuilder;
 
 namespace Vanrise.GenericData.Data.RDB
 {
-    public class DataRecordTypeDataManager
+    public class DataRecordTypeDataManager : IDataRecordTypeDataManager
     {
+        #region RDB
+
+        static string TABLE_NAME = "genericdata_DataRecordType";
+        static string TABLE_ALIAS = "drt";
+        const string COL_ID = "ID";
+        const string COL_Name = "Name";
+        const string COL_ParentID = "ParentID";
+        const string COL_Fields = "Fields";
+        const string COL_ExtraFieldsEvaluator = "ExtraFieldsEvaluator";
+        const string COL_Settings = "Settings";
+        const string COL_CreatedTime = "CreatedTime";
+
+
+        static DataRecordTypeDataManager()
+        {
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 1000 });
+            columns.Add(COL_ParentID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Fields, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_ExtraFieldsEvaluator, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+            {
+                DBSchemaName = "genericdata",
+                DBTableName = "DataRecordType",
+                Columns = columns,
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
+            });
+        }
+        #endregion
+
+        #region Private Methods
+        BaseRDBDataProvider GetDataProvider()
+        {
+            return RDBDataProviderFactory.CreateProvider("VR_GenericData_DataRecordType", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+        }
+        #endregion
+        #region Mappers
+        DataRecordType DataRecordTypeMapper(IRDBDataReader reader)
+        {
+            var extraFieldsEvaluator = reader.GetStringWithEmptyHandling(COL_ExtraFieldsEvaluator);
+            var settings = reader.GetStringWithEmptyHandling(COL_Settings);
+            return new DataRecordType
+            {
+                DataRecordTypeId = reader.GetGuid(COL_ID),
+                Name = reader.GetString(COL_Name),
+                ParentId = reader.GetNullableGuid(COL_ParentID),
+                Fields = Vanrise.Common.Serializer.Deserialize<List<DataRecordField>>(reader.GetString(COL_Fields)),
+                ExtraFieldsEvaluator = extraFieldsEvaluator != null ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeExtraField>(extraFieldsEvaluator) : null,
+                Settings = settings != null ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeSettings>(settings) : null
+            };
+        }
+        #endregion
+
+        #region IDataRecordTypeDataManager
+        public bool AddDataRecordType(DataRecordType dataRecordType)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+            var ifNotExists = insertQuery.IfNotExists(TABLE_ALIAS);
+            ifNotExists.EqualsCondition(COL_Name).Value(dataRecordType.Name);
+            insertQuery.Column(COL_ID).Value(dataRecordType.DataRecordTypeId);
+            insertQuery.Column(COL_Name).Value(dataRecordType.Name);
+            if (dataRecordType.ParentId.HasValue)
+                insertQuery.Column(COL_ParentID).Value(dataRecordType.ParentId.Value);
+            else
+                insertQuery.Column(COL_ParentID).Null();
+            if (dataRecordType.Fields != null)
+                insertQuery.Column(COL_Fields).Value(Vanrise.Common.Serializer.Serialize(dataRecordType.Fields));
+            else
+                insertQuery.Column(COL_Fields).Null();
+            if (dataRecordType.ExtraFieldsEvaluator != null)
+                insertQuery.Column(COL_ExtraFieldsEvaluator).Value(Vanrise.Common.Serializer.Serialize(dataRecordType.ExtraFieldsEvaluator));
+            else
+                insertQuery.Column(COL_ExtraFieldsEvaluator).Null();
+            if (dataRecordType.Settings != null)
+                insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordType.Settings));
+            else
+                insertQuery.Column(COL_Settings).Null();
+            return queryContext.ExecuteNonQuery() > 0;
+
+        }
+
+        public bool AreDataRecordTypeUpdated(ref object updateHandle)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<DataRecordType> GetDataRecordTypes()
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_ParentID, COL_Fields, COL_ExtraFieldsEvaluator, COL_Settings);
+            selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
+            return queryContext.GetItems<DataRecordType>(DataRecordTypeMapper);
+        }
+
+        public void SetDataRecordTypeCacheExpired()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateDataRecordType(DataRecordType dataRecordType)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            var ifNotExists = updateQuery.IfNotExists(TABLE_ALIAS);
+            ifNotExists.NotEqualsCondition(COL_ID).Value(dataRecordType.DataRecordTypeId);
+            ifNotExists.EqualsCondition(COL_Name).Value(dataRecordType.Name);
+            updateQuery.Column(COL_Name).Value(dataRecordType.Name);
+            if (dataRecordType.ParentId.HasValue)
+                updateQuery.Column(COL_ParentID).Value(dataRecordType.ParentId.Value);
+            else
+                updateQuery.Column(COL_ParentID).Null();
+            if (dataRecordType.Fields != null)
+                updateQuery.Column(COL_Fields).Value(Vanrise.Common.Serializer.Serialize(dataRecordType.Fields));
+            else
+                updateQuery.Column(COL_Fields).Null();
+            if (dataRecordType.ExtraFieldsEvaluator != null)
+                updateQuery.Column(COL_ExtraFieldsEvaluator).Value(Vanrise.Common.Serializer.Serialize(dataRecordType.ExtraFieldsEvaluator));
+            else
+                updateQuery.Column(COL_ExtraFieldsEvaluator).Null();
+            if (dataRecordType.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordType.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
+            updateQuery.Where().EqualsCondition(COL_ID).Value(dataRecordType.DataRecordTypeId);
+            return queryContext.ExecuteNonQuery() > 0;
+
+        }
+        #endregion
     }
 }
