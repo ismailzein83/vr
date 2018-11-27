@@ -58,7 +58,7 @@
 
 
 .bold-label {
-    font-weight: bold  !important;
+    font-weight: bold !important;
 }
 
 .datepicker-custom button {
@@ -232,8 +232,8 @@
     right: 140px;
 }
 
-.support-call >a{
-	position:static !important;
+.support-call > a {
+    position: static !important;
 }
 
 .unpined-icon {
@@ -348,11 +348,11 @@ vr-actionbar .btn .vr-button-menu-icon {
     left: 1px;
 }
 
-    vr-actionbar .btn:focus, vr-actionbar .btn:active:focus, vr-actionbar .btn.active:focus, vr-actionbar .btn.focus, vr-actionbar .btn:active.focus, vr-actionbar .btn.active.focus {
-        outline: none;
-        outline: none;
-        outline-offset: 0px;
-    }
+vr-actionbar .btn:focus, vr-actionbar .btn:active:focus, vr-actionbar .btn.active:focus, vr-actionbar .btn.focus, vr-actionbar .btn:active.focus, vr-actionbar .btn.active.focus {
+    outline: none;
+    outline: none;
+    outline-offset: 0px;
+}
 
 
 vr-button .btn.active {
@@ -857,10 +857,10 @@ add padding .left-addon input {
     height: 25px;
 }
 
-.action-bar.include-personalization {
-    border-radius: 0px 15px 15px 0px;
-    margin-left: 15px;
-}
+    .action-bar.include-personalization {
+        border-radius: 0px 15px 15px 0px;
+        margin-left: 15px;
+    }
 
 .modal-body .panel-body {
     padding: 0px;
@@ -1751,7 +1751,7 @@ loader .outer-loader {
 
         .panel-vr > .panel-heading[expanded="false"] {
             border-bottom: 1px solid #ddd;
-            margin-bottom:unset;			
+            margin-bottom: unset;
         }
 
         .panel-vr > .panel-heading label {
@@ -1850,40 +1850,42 @@ loader .outer-loader {
 .fieldset-vr {
     margin-top: 10px;
 }
-vr-fieldset[notopspace]>.fieldset-vr {
+
+vr-fieldset[notopspace] > .fieldset-vr {
     margin-top: unset;
 }
-    .fieldset-vr > .panel-heading {
-        font-weight: bold;
-        font-size: 12px;
-        background-color: transparent;
-        margin-bottom: -2px;
-        top: -1px;
-        width: 200px;
-        position: relative;
-        border-radius: 4px 4px 0px 0px;
-        color: #333 !important;
-        /*text-shadow: 2px 2px 0px #C5C5C5;*/
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        padding: 4px 6px;
-        border-color: transparent;
+
+.fieldset-vr > .panel-heading {
+    font-weight: bold;
+    font-size: 12px;
+    background-color: transparent;
+    margin-bottom: -2px;
+    top: -1px;
+    width: 200px;
+    position: relative;
+    border-radius: 4px 4px 0px 0px;
+    color: #333 !important;
+    /*text-shadow: 2px 2px 0px #C5C5C5;*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 4px 6px;
+    border-color: transparent;
+    top: 10px;
+}
+
+    .fieldset-vr > .panel-heading .title {
+        display: inline-block;
         top: 10px;
+        background-color: #fff;
+        padding: 0px 5px;
+        text-transform: capitalize;
     }
 
-        .fieldset-vr > .panel-heading .title {
-            display: inline-block;
-            top: 10px;
-            background-color: #fff;
-            padding: 0px 5px;
-            text-transform: capitalize;
-        }
-
-    .fieldset-vr > .panel-body {
-        border: 1px solid #ddd;
-        border-radius: 0px 4px 4px 4px;
-    }
+.fieldset-vr > .panel-body {
+    border: 1px solid #ddd;
+    border-radius: 0px 4px 4px 4px;
+}
 
 .breadcrumb-vr {
     padding: 4px 0px;
@@ -2237,7 +2239,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding: 3px 2px 0px 2px;
+    padding: 2px 2px 0px 2px;
     position: relative;
     width: 100%;
     min-height: 24px;
@@ -2312,13 +2314,14 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     pointer-events: none;
     opacity: 0.8 !important;
 }
+
 .divDisabled vr-select vr-validator > div {
     pointer-events: auto !important;
 }
 
-.divDisabled vr-select vr-validator > div button.dropdown-toggle {
-    pointer-events: none !important;
-}
+    .divDisabled vr-select vr-validator > div button.dropdown-toggle {
+        pointer-events: none !important;
+    }
 
 .divDisabled vr-validator > div .vr-dropdown-select {
     opacity: 0.8 !important;
@@ -2883,9 +2886,9 @@ vr-pagination .dropdown-menu {
         color: #f53f3f;
     }
 
-    span.custom-label.item-warning {
-        color: #f53f3f;
-    }
+span.custom-label.item-warning {
+    color: #f53f3f;
+}
 
 .item-future {
     background-color: #e6e6e6;
@@ -2894,9 +2897,10 @@ vr-pagination .dropdown-menu {
     .item-future a.mark-select {
         color: #969e97;
     }
-    span.custom-label.item-future{
-        color: #969e97;
-    }
+
+span.custom-label.item-future {
+    color: #969e97;
+}
 
 .vr-disabled {
     pointer-events: none;
@@ -3472,21 +3476,27 @@ vr-validator[vr-input] > div:nth-child(1) {
     font-size: 12px !important;
     top: 2px;
 }
+
 .vr-datagrid-celltext vr-validator > div:nth-child(1) {
     min-height: 22px;
 }
+
 .vr-datagrid-celltext vr-validator > div[validator-section] > div:nth-child(1) {
     min-height: 22px;
 }
+
 .vr-datagrid-celltext vr-validator > div:nth-child(1) {
     min-height: 22px;
 }
 
 
 .vr-datagrid-celltext vr-validator[vr-input] > div:nth-child(1) {
-    min-height: 21px !important;
+    height: 21px;
     position: relative;
-    /*top: -2px;*/
+}
+
+.vr-datagrid-celltext vr-validator[vr-input] > div[validator-section] > div:nth-child(1) {
+    height: 20px;
 }
 
 .vr-datagrid-celltext .form-control {
@@ -3510,7 +3520,7 @@ vr-validator[vr-input] > div:nth-child(1) {
     width: 100%;
     text-align: left;
     position: static;
-    height: 21px !important;
+    height: 20px !important;
     padding: 0px 12px !important;
 }
 
@@ -3593,7 +3603,7 @@ vr-validator[vr-input] > div:nth-child(1) {
 }
 
 .vr-datagrid-celltext button.btn {
-    height: 21px !important;
+    height: 20px !important;
     padding: 0px 12px !important;
 }
 
@@ -4479,14 +4489,14 @@ span.option-marketprice {
     margin-top: 5px;
 }
 
-.vr-workflow .panel-vr.focus-panel, .panel-vr.vr-clickable-panel.focus-panel {
-    border: 2px solid #90afe4;
-    border-radius:4px;
-}
+    .vr-workflow .panel-vr.focus-panel, .panel-vr.vr-clickable-panel.focus-panel {
+        border: 2px solid #90afe4;
+        border-radius: 4px;
+    }
 
-.vr-workflow .panel-vr.focus-panel > .panel-heading, .panel-vr.vr-clickable-panel.focus-panel > .panel-heading {
-    top: unset;
-}
+        .vr-workflow .panel-vr.focus-panel > .panel-heading, .panel-vr.vr-clickable-panel.focus-panel > .panel-heading {
+            top: unset;
+        }
 
 .vr-workflow .fieldset-vr {
     margin-top: unset;
