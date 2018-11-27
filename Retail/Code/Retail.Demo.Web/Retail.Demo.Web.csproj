@@ -132,6 +132,13 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Retail_Demo\Elements\InvoiceOBB\Reports\Reporting.aspx.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Retail_Demo\Elements\InvoiceOBB\Reports\Reporting.aspx.designer.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
@@ -140,6 +147,12 @@
     <Content Include="Retail_Demo\Constants\ModuleConfig.js" />
     <Content Include="Retail_Demo\Elements\InvoiceOBB\Directives\retail-demo-invoicetype-ispinvoicesettings.js" />
     <Content Include="Retail_Demo\Elements\InvoiceOBB\Directives\Templates\ISPInvoiceSettingsTemplate.html" />
+    <Content Include="Retail_Demo\Elements\InvoiceOBB\Reports\Reporting.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Retail_Demo\Elements\InvoiceOBB\Reports\DemoInvoice.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -152,7 +165,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>26780</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
