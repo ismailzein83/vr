@@ -70,6 +70,9 @@
     <Compile Include="ISPInvoiceGenerator.cs" />
     <Compile Include="ISPInvoicePartnerSettings.cs" />
     <Compile Include="ISPInvoiceSettings.cs" />
+    <Compile Include="NetworkRental\NetworkRentalInvoiceGenerator.cs" />
+    <Compile Include="NetworkRental\NetworkRentalInvoicePartnerSettings.cs" />
+    <Compile Include="NetworkRental\NetworkRentalnvoiceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
