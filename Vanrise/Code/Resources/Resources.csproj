@@ -100,6 +100,9 @@
     <Content Include="BatchScripts\ISP\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ISP\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ISP\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\NetworkRental\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\NetworkRental\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\NetworkRental\runtime-list-of-excluded-files.txt" />
     <Content Include="DLLs\Microsoft.CodeAnalysis.CSharp.dll" />
     <Content Include="DLLs\Microsoft.CodeAnalysis.dll" />
     <Content Include="DLLs\Microsoft.reportviewer.common.dll" />
@@ -438,6 +441,15 @@
     <None Include="BatchScripts\MobileWebAPI\03-WebSite.bat" />
     <None Include="BatchScripts\MobileWebAPI\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\MobileWebAPI\All.bat" />
+    <None Include="BatchScripts\NetworkRental\01-Runtime.bat" />
+    <None Include="BatchScripts\NetworkRental\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\NetworkRental\03-WebSite.bat" />
+    <None Include="BatchScripts\NetworkRental\05-CompressFiles.bat" />
+    <None Include="BatchScripts\NetworkRental\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\NetworkRental\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\NetworkRental\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\NetworkRental\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\NetworkRental\All.bat" />
     <None Include="BatchScripts\ZebraV2\All.bat" />
     <None Include="BatchScripts\ZebraV2\DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\ZebraV2\WebSiteThemes.bat" />
