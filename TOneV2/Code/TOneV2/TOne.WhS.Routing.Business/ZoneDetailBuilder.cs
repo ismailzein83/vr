@@ -197,7 +197,7 @@ namespace TOne.WhS.Routing.Business
             else
             {
                 if (customerZoneRoutingProduct == null)
-                    throw new NullReferenceException(string.Format("customerZoneRoutingProduct for CustomerId: {0}", customerInfo.CustomerId));
+                    throw new NullReferenceException(string.Format("customerZoneRoutingProduct for CustomerId: {0} and SaleZoneId: {1}", customerInfo.CustomerId, customerZone.SaleZoneId));
 
                 saleZoneServices = rpRouteManager.GetSaleZoneServices(customerZoneRoutingProduct.RoutingProductId, customerZone.SaleZoneId);
 
