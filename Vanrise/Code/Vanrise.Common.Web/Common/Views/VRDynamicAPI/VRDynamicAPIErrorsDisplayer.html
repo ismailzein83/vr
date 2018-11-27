@@ -1,0 +1,14 @@
+﻿<div vr-modalcontent ng-controller="VR_Dynamic_API_Errors_DisplayerController" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-columns width="fullrow">
+            <vr-common-dynamicapi-errors-grid on-ready="scopeModel.onVRDynamicAPIErrorsGridReady"></vr-common-dynamicapi-errors-grid>
+        </vr-columns>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -23,7 +23,11 @@
         function AddVRDynamicAPIModule(vrDynamicAPIModule) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "AddVRDynamicAPIModule"), vrDynamicAPIModule);
         }
-    
+
+        function BuildAllDynamicAPIControllers() {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "BuildAllDynamicAPIControllers"),);
+        }
+
         return {
             GetFilteredVRDynamicAPIModules: GetFilteredVRDynamicAPIModules,
             GetVRDynamicAPIModuleById: GetVRDynamicAPIModuleById,

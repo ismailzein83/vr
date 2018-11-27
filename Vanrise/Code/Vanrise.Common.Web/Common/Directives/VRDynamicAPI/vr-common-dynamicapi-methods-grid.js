@@ -51,14 +51,14 @@ app.directive("vrCommonDynamicapiMethodsGrid", ["UtilsService", "VRNotificationS
                         };
 
                         directiveApi.getData = function () {
-                            var Methods = [];
+                            var methods = [];
 
                             for (var j = 0; j < $scope.scopeModel.vrDynamicAPIMethods.length; j++) {
 
-                                Methods.push($scope.scopeModel.vrDynamicAPIMethods[j].Entity);
+                                methods.push($scope.scopeModel.vrDynamicAPIMethods[j].Entity);
                             }
 
-                            return Methods;
+                            return methods;
                         };
 
                         return directiveApi;

@@ -145,7 +145,7 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + 'label="Dynamic API Module Method" '
+                            + 'label="Method" '
                             + ' ' + hideremoveicon + ' '
                              + 'isrequired ="ctrl.isrequired"'
                            + ' >'

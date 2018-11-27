@@ -1,12 +1,13 @@
 ﻿<vr-button type="Add" data-onclick="scopeModel.AddVRDynamicAPI" standalone></vr-button>
 
 <vr-datagrid datasource="scopeModel.vrDynamicAPIs"
-              on-ready="scopeModel.onGridReady"
-              dataretrievalfunction="scopeModel.dataRetrievalFunction"
-              pagingtype="'PagingOnScroll'"
-              menuactions="scopeModel.gridMenuActions"
-              idfield="VRDynamicAPIId"
-              enableautoexport="true">
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="VRDynamicAPIId"
+             enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'VRDynamicAPIId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'API'" field="'APIDescription'" type="'Text'"></vr-datagridcolumn>
 </vr-datagrid>

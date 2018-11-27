@@ -28,9 +28,12 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "GetVRDynamicAPIMethodSettingsConfigs"));
         }
 
-        //function BuildAPIClassController(vrDynamicAPI) {
-        //    return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "BuildAPIClassController"), vrDynamicAPI);
-        //}
+        function TryCompileVRDynamicAPI(vrDynamicAPI) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "TryCompileVRDynamicAPI"), vrDynamicAPI);
+        }
+        function BuildAllDynamicAPIControllers() {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "BuildAllDynamicAPIControllers"));
+        }
 
         return {
             GetFilteredVRDynamicAPIs: GetFilteredVRDynamicAPIs,
@@ -38,7 +41,8 @@
             UpdateVRDynamicAPI: UpdateVRDynamicAPI,
             AddVRDynamicAPI: AddVRDynamicAPI,
             GetVRDynamicAPIMethodSettingsConfigs: GetVRDynamicAPIMethodSettingsConfigs,
-            //BuildAPIClassController: BuildAPIClassController
+            TryCompileVRDynamicAPI: TryCompileVRDynamicAPI,
+            BuildAllDynamicAPIControllers: BuildAllDynamicAPIControllers
         };
     }
     appControllers.service("VRCommon_VRDynamicAPIAPIService", vrDynamicAPIAPIService);

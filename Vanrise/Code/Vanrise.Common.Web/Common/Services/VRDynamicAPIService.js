@@ -53,10 +53,23 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRDynamicAPI/VRDynamicAPIMethodEditor.html', parameters, settings);
         }
 
+        function displayErrors(errors) {
+
+            var settings = {};
+            var parameters = {
+                errors: errors
+            };
+
+            settings.onScopeReady = function (modalScope) {
+            };
+            VRModalService.showModal('/Client/Modules/Common/Views/VRDynamicAPI/VRDynamicAPIErrorsDisplayer.html', parameters, settings);
+
+        }
         return {
             addVRDynamicAPI: addVRDynamicAPI,
             editVRDynamicAPI: editVRDynamicAPI,
             addVRDynamicAPIMethod: addVRDynamicAPIMethod,
             editVRDynamicAPIMethod: editVRDynamicAPIMethod,
+            displayErrors: displayErrors,
         };
     }]);

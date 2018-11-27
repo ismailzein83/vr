@@ -12,6 +12,9 @@
                 <vr-tab header="'Settings'">
                     <vr-common-dynamicapi-method-settings on-ready="scopeModel.onVRDynamicAPIMethodSettingsDirectiveReady" normal-col-num="6" isrequired="true"></vr-common-dynamicapi-method-settings>
                 </vr-tab>
+                <vr-tab header="'Security'">
+                    <vr-sec-requiredpermission-grid on-ready="scopeModel.onVRSecRequiredPermissionGridDirectiveReady"></vr-sec-requiredpermission-grid>
+                </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

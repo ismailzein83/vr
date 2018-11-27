@@ -1,18 +1,27 @@
-﻿<vr-button type="Add" data-onclick="scopeModel.addMethodParameter" standalone vr-disabled="scopeModel.disableAddingParameters()"></vr-button>
+﻿<!--<vr-row>-->
 
-    <vr-validator validate="scopeModel.validateNumberOfParameters()">
-        <vr-datagrid datasource="scopeModel.parameters"
-                     on-ready="scopeModel.onGridReady"
-                     dataretrievalfunction="scopeModel.dataRetrievalFunction"
-                     pagingtype="'PagingOnScroll'"
-                     menuactions="scopeModel.gridMenuActions"
-                     enableautoexport="true"
-                     ondeleterow="scopeModel.deleteParameter">
-            <vr-datagridcolumn headertext="'Name'">
-                <vr-textbox value="dataItem.parameterName" isrequired="true"></vr-textbox>
-            </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Type'">
-                <vr-textbox value="dataItem.parameterType" isrequired="true"></vr-textbox>
-            </vr-datagridcolumn>
-        </vr-datagrid>
-    </vr-validator>
+    <!--<vr-columns width="fullrow">
+        <vr-label>Parameters</vr-label>
+    </vr-columns>-->
+    <!--<vr-columns width="fullrow">-->
+        <vr-button type="Add" data-onclick="scopeModel.addMethodParameter" standalone vr-disabled="scopeModel.disableAddingParameters()"></vr-button>
+    <!--</vr-columns>-->
+    <!--<vr-columns width="fullrow">-->
+        <vr-validator validate="scopeModel.validateNumberOfParameters()">
+            <vr-datagrid datasource="scopeModel.parameters"
+                         on-ready="scopeModel.onGridReady"
+                         dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                         pagingtype="'PagingOnScroll'"
+                         menuactions="scopeModel.gridMenuActions"
+                         enableautoexport="true"
+                         ondeleterow="scopeModel.deleteParameter">
+                <vr-datagridcolumn headertext="'Name'">
+                    <vr-textbox value="dataItem.parameterName" isrequired="true"></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Type'">
+                    <vr-textbox value="dataItem.parameterType" isrequired="true"></vr-textbox>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    <!--</vr-columns>
+</vr-row>-->

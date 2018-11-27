@@ -9,7 +9,8 @@
         var vrDynamicAPIMethodEntity;
         var vrDynamicAPIMethodSettingsDirectiveAPI;
         var vrDynamicAPIMethodSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+        var vrSecRequiredPermissionGridDirectiveAPI;
+        var vrSecRequiredPermissionGridDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -42,6 +43,12 @@
                 vrDynamicAPIMethodSettingsDirectiveAPI = api;
                 vrDynamicAPIMethodSettingsReadyPromiseDeferred.resolve();
             };
+
+            $scope.scopeModel.onVRSecRequiredPermissionGridDirectiveReady = function (api) {
+
+                vrSecRequiredPermissionGridDirectiveAPI = api;
+                vrSecRequiredPermissionGridDirectiveReadyPromiseDeferred.resolve();
+            }
         }
 
         function load() {
@@ -60,9 +67,9 @@
 
             function setTitle() {
                 if (isEditMode && vrDynamicAPIMethodEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrDynamicAPIMethodEntity.Name, "Dynamic API Method");
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(vrDynamicAPIMethodEntity.Name, "Method");
                 else
-                    $scope.title = UtilsService.buildTitleForAddEditor("Dynamic API Method");
+                    $scope.title = UtilsService.buildTitleForAddEditor("Method");
             }
 
             function loadStaticData() {
@@ -86,7 +93,27 @@
                 return vrDynamicAPIMethodSettingsDirectiveLoadDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRDynamicAPIMethodSettingsDirective])
+            function loadVRSecRequiredPermissionGridDirective() {
+
+                var promises = [];
+                var vrSecRequiredPermissionGridDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                promises.push(vrSecRequiredPermissionGridDirectiveReadyPromiseDeferred.promise);
+                UtilsService.waitMultiplePromises(promises).then(function (response) {
+                    if (isEditMode) {
+                        if (vrDynamicAPIMethodEntity.Security != undefined) {
+                            var securityPayload = { data: vrDynamicAPIMethodEntity.Security.RequiredPermissions};
+                        }
+                    }
+                    VRUIUtilsService.callDirectiveLoad(vrSecRequiredPermissionGridDirectiveAPI, securityPayload, vrSecRequiredPermissionGridDirectiveLoadPromiseDeferred);
+                });
+                return vrSecRequiredPermissionGridDirectiveLoadPromiseDeferred.promise;
+
+            }
+
+
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRDynamicAPIMethodSettingsDirective, loadVRSecRequiredPermissionGridDirective])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -96,11 +123,13 @@
         }
 
         function buildVRDynamicAPIMethodObjectFromScope() {
-
             var object = {
                 VRDynamicAPIMethodId: (vrDynamicAPIMethodEntity != undefined) ? vrDynamicAPIMethodEntity.VRDynamicAPIMethodId : undefined,
                 Name: $scope.scopeModel.name,
-                Settings: vrDynamicAPIMethodSettingsDirectiveAPI.getData()
+                Settings: vrDynamicAPIMethodSettingsDirectiveAPI.getData(),
+                Security: {
+                    RequiredPermissions: vrSecRequiredPermissionGridDirectiveAPI.getWithType()
+                }
             };
             return object;
         }

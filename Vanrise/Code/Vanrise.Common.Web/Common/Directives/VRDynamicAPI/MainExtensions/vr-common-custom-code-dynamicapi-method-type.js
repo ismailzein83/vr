@@ -40,10 +40,10 @@ app.directive('vrCommonCustomCodeDynamicapiMethodType', ['VRUIUtilsService', 'Ut
 
 
         function getTemplate(attrs) {
-            var label = "Dynamic API Method Type";
+            var label = "Method Type";
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined) {
-                label = "Dynamic API Method Types";
+                label = "Method Types";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
