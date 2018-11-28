@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="CodeGroupDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaleCodeDataManager.cs" />
     <Compile Include="SaleZoneDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
