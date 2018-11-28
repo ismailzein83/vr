@@ -97,7 +97,8 @@ namespace TOne.WhS.Deal.Business
                 DealId = deal.DealId,
                 IsEditMode = true,
                 ExistingDeal = deal,
-                DealSaleZoneIds = deal.Settings.GetDealSaleZoneIds()
+                DealSaleZoneIds = deal.Settings.GetDealSaleZoneIds(),
+                DealSupplierZoneIds = deal.Settings.GetDealSupplierZoneIds()
             };
 
             deal.Settings.OffSet = deal.Settings.GetCarrierOffSet(existingDealDefinition.Settings.OffSet);
