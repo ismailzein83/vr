@@ -130,6 +130,8 @@
     <Compile Include="Controllers\BusinessEntityController.cs" />
     <Compile Include="Controllers\BusinessObjectDataRecordStorageController.cs" />
     <Compile Include="Controllers\CDRCorrelationController.cs" />
+    <Compile Include="Controllers\CompositeRecordConditionController.cs" />
+    <Compile Include="Controllers\CompositeRecordConditionDefintionController.cs" />
     <Compile Include="Controllers\DataRecordFieldChoiceController.cs" />
     <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\DataRecordRuleEvaluatorDefinitionController.cs" />
@@ -227,6 +229,19 @@
     <Content Include="VR_GenericData\Directives\CDRCorrelation\Templates\CDRCorrelationDefinitionSettings.html" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-settings.js" />
+    <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionEditorController.js" />
+    <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionGroupTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\Templates\DataRecordTypeCompositeRecordTemplate.html" />
+    <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinitiongroup.js" />
+    <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinition-settings.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\vr-genericdata-datarecordtype-compositerecord.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\Templates\CompositeRecordConditionGroupTemplate.html" />
+    <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Runtime\Templates\CompositeRecordConditionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\Templates\RecordFilterCompositeConditionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\vr-genericdata-compositerecordconditiongroup.js" />
+    <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Runtime\vr-genericdata-compositerecordcondition.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\vr-genericdata-recordfiltercompositecondition.js" />
     <Content Include="VR_GenericData\Directives\DataProviderExtendedSettings\vr-genericdata-dataproviderextendedsettings-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordRuleEvaluator\Templates\DataRecordRuleEvaluatorDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordRuleEvaluator\vr-genericdata-datarecordruleevaluatordefinition-selector.js" />
@@ -742,6 +757,8 @@
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessObjectDataRecordStorageAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\CDRCorrelationAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\CompositeRecordConditionAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\CompositeRecordConditionDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldChoiceAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordObjectTypeConfigAPIService.js" />
@@ -769,6 +786,8 @@
     <Content Include="VR_GenericData\Services\BELookupRuleDefinitionService.js" />
     <Content Include="VR_GenericData\Services\BEParentChildRelationService.js" />
     <Content Include="VR_GenericData\Services\BusinessEntityDefinitionService.js" />
+    <Content Include="VR_GenericData\Services\CompositeRecordConditionDefinitionService.js" />
+    <Content Include="VR_GenericData\Services\CompositeRecordConditionService.js" />
     <Content Include="VR_GenericData\Services\DataRecordSourceService.js" />
     <Content Include="VR_GenericData\Services\DataRecordFieldChoiceService.js" />
     <Content Include="VR_GenericData\Services\GenericBESerialNumberService.js" />

@@ -1,0 +1,22 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_CompositeRecordConditionDefinitionEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
+    <vr-modalbody>
+        <vr-form name="formPackageEditor">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+                </vr-columns>
+                <vr-genericdata-compositerecordconditiondefinition-settings on-ready="scopeModel.onCompositeRecordConditionDefinitionSettingsDirectiveReady"
+                                                                            normal-col-num="6">
+                </vr-genericdata-compositerecordconditiondefinition-settings>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formPackageEditor" haspermission="hasSaveCompositeGroupConditionDefinitionPermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

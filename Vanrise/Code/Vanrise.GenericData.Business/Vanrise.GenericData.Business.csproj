@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -91,6 +92,8 @@
     <Compile Include="BusinessObjectDataStore\BusinessObjectDataRecordDataManager.cs" />
     <Compile Include="BusinessObjectDataStore\BusinessObjectDataRecordStorageSettings.cs" />
     <Compile Include="BusinessObjectDataStore\BusinessObjectDataStoreSettings.cs" />
+    <Compile Include="CompositeRecordConditionDefinitionManager.cs" />
+    <Compile Include="CompositeRecordConditionManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CDRCorrelationDefinitionManager.cs" />
     <Compile Include="DataRecordFieldFormulaCalculateValueContext.cs" />

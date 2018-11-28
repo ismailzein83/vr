@@ -6,11 +6,11 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.CompositeRecordCondition.Runtime
 {
-    public class FilterGroupRecordCondition : Entities.CompositeRecordCondition
+    public class RecordFilterCompositeCondition : Entities.CompositeRecordCondition 
     {
-        public RecordFilterGroup FilterGroup { get; set; }
-
         public string RecordName { get; set; }
+
+        public RecordFilterGroup FilterGroup { get; set; }
 
         public override bool Evaluate(ICompositeRecordConditionEvaluateContext context)
         {
