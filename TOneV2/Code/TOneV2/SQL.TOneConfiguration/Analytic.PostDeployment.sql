@@ -61,7 +61,9 @@ Post-Deployment Script Template
 ('F38308EF-433A-48C6-891B-34847929FD5A','FTP Action Type','FTP','VR_Analytic_AutomatedReport_HandlerSettings_ActionType','{"Editor":"vr-analytic-ftpactiontype-generatefileshandler"}'),
 ('D7D6D580-40BD-42C6-ABBB-7FA6B60A5462','Send Email Action Type','Send Email','VR_Analytic_AutomatedReport_HandlerSettings_ActionType','{"Editor":"vr-analytic-sendemailactiontype-generatefileshandler"}'),
 ('9EEBA2C1-0EC9-4DE0-B9E1-755A1D8CE0AA','Data Record Source','Data Record Source','VR_Analytic_DRSearchPageSubviewDefinitionSettingsConfig','{"Editor":"vr-analytic-datarecordsource-subviewdefinitionsettings"}'),
-('E1ECAA21-462B-4AFD-B886-34A28A35A1FE','Flat File Generator','Flat File','VR_Analytic_FileGenerator_AutomatedReport','{"Editor":"vr-analytic-flatfile-filegenerator"}')
+('E1ECAA21-462B-4AFD-B886-34A28A35A1FE','Flat File Generator','Flat File','VR_Analytic_FileGenerator_AutomatedReport','{"Editor":"vr-analytic-flatfile-filegenerator"}'),
+('482D20EB-78B0-4633-B6F3-4B93B2ED1190','Report Generation Custom Code File Generator','Custom Code','VR_Analytic_FileGenerator_AutomatedReport','{"Editor":"vr-analytic-reportgenerationcustomcode-filegenerator"}'),
+('92B03E4E-37FB-48A1-ACEE-841135C30B5E','VR_Analytic_ReportGenerationCustomCode','Report Generation Custom Code','VR_Common_VRComponentType','{"Editor":"vr-analytic-reportgenerationcustomcode-settings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
 
 --[sec].[Module]------------------------------1501 to 1600------------------------------------------------------
