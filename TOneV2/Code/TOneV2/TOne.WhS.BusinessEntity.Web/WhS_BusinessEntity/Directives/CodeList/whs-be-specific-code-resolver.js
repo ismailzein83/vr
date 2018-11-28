@@ -1,95 +1,93 @@
 ﻿'use strict';
-app.directive('whsBeSpecificCodeResolver', ['UtilsService','VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
 
-        var directiveDefinitionObject = {
+app.directive('whsBeSpecificCodeResolver', ['UtilsService', 'VRUIUtilsService',
+	function (UtilsService, VRUIUtilsService) {
 
-            restrict: "E",
-            scope: {
-                onReady: "="
-            },
-            controller: function ($scope, $element, $attrs) {
-                var ctrl = this;
-                $scope.codeCriteriaArray = [];
+		var directiveDefinitionObject = {
+			restrict: "E",
+			scope: {
+				onReady: "="
+			},
+			controller: function ($scope, $element, $attrs) {
+				var ctrl = this;
+				var ctor = new codeCriteriaCtor($scope, ctrl);
+				ctor.initializeController();
+			},
+			controllerAs: "ctrl",
+			bindToController: true,
+			compile: function (element, attrs) {
 
-                var ctor = new codeCriteriaCtor($scope, ctrl);
+			},
+			templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/CodeList/templates/SpecificCodeResolverTemplate.html"
+		};
 
+		function codeCriteriaCtor($scope, ctrl) {
+			this.initializeController = initializeController;
 
-                ctor.initializeController();
+			function initializeController() {
+				$scope.scopeModel = {};
 
+				$scope.codeCriteriaArray = [];
 
-                $scope.addCode = function () {
-                    var codeCriteria = {
-                        Code: $scope.addedCode,
-                        WithSubCodes: false
-                    };
+				$scope.scopeModel.addCode = function () {
 
-                    var codeIsValid = true;
+					var codeCriteria = {
+						Code: $scope.scopeModel.addedCode,
+						WithSubCodes: false
+					};
 
-                    if ($scope.addedCode == undefined || $scope.addedCode.length == 0) {
-                        codeIsValid = false;
-                    }
-                    else {
-                        angular.forEach($scope.codeCriteriaArray, function (item) {
-                            if ($scope.addedCode === item.Code) {
-                                codeIsValid = false;
-                            }
-                        });
-                    }
+					var codeIsValid = true;
 
-                    if (codeIsValid)
-                    {
-                        $scope.codeCriteriaArray.push(codeCriteria);
-                        $scope.addedCode = undefined;
-                    }
-                };
-                $scope.isValid = function () {
-                    if ($scope.codeCriteriaArray.length==0)
-                        return "at least choose one code";
-                    return null;
-                };
+					if ($scope.scopeModel.addedCode == undefined || $scope.scopeModel.addedCode.length == 0) {
+						codeIsValid = false;
+					}
+					else {
+						angular.forEach($scope.codeCriteriaArray, function (item) {
+							if ($scope.scopeModel.addedCode === item.Code) {
+								codeIsValid = false;
+							}
+						});
+					}
 
+					if (codeIsValid) {
+						$scope.codeCriteriaArray.push(codeCriteria);
+						$scope.scopeModel.addedCode = undefined;
+					}
+				};
 
-            },
-            controllerAs: "ctrl",
-            bindToController: true,
-            compile: function (element, attrs) {
+				$scope.isValid = function () {
+					if ($scope.codeCriteriaArray.length == 0)
+						return "at least choose one code";
+					return null;
+				};
 
-            },
-            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/CodeList/templates/SpecificCodeResolverTemplate.html"
+				defineAPI();
+			}
 
-        };
+			function defineAPI() {
+				var api = {};
 
-        function codeCriteriaCtor( $scope,ctrl) {
-            this.initializeController = initializeController;
-            function initializeController() {
+				api.load = function (payload) {
+					if (payload != undefined) {
+						$scope.scopeModel.isBNumber = payload.context.isBNumber;
+						angular.forEach(payload.Codes, function (item) {
+							$scope.codeCriteriaArray.push(item);
+						});
+					}
 
-                defineAPI();
-            }
+				};
 
-            function defineAPI() {
-                var api = {};
+				api.getData = function () {
+					return {
+						$type: "TOne.WhS.BusinessEntity.MainExtensions.CodeList.SpecificCodeResolver,TOne.WhS.BusinessEntity.MainExtensions",
+						Codes: $scope.codeCriteriaArray
+					};
+				};
 
-                api.load = function (payload) {
-                    if (payload != undefined) {
-                        angular.forEach(payload.Codes, function (item) {
-                            $scope.codeCriteriaArray.push(item);
-                        });
-                    }
-                
-                };
+				if (ctrl.onReady != null)
+					ctrl.onReady(api);
+			}
+		}
 
-                api.getData = function () {
-                    return {
-                        $type: "TOne.WhS.BusinessEntity.MainExtensions.CodeList.SpecificCodeResolver,TOne.WhS.BusinessEntity.MainExtensions",
-                        Codes: $scope.codeCriteriaArray
-                    };
-                };
-                if (ctrl.onReady != null)
-                    ctrl.onReady(api);
-            }
-
-          
-        }
-        return directiveDefinitionObject;
-    }]);
+		return directiveDefinitionObject;
+	}]);
