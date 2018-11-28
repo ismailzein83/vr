@@ -3,7 +3,7 @@
     <vr-columns colnum="{{ctrlSupplierGeneration.normalColNum / 2}}">
         <vr-textbox type="number" label="Commission (%)" value="scopeModel.commission" minvalue="-100" maxvalue="100" onvaluechanged="scopeModel.onCommissionFocusChanged"></vr-textbox>
     </vr-columns>
-    <vr-columns colnum="{{ctrlSupplierGeneration.normalColNum / 2}}">
+    <vr-columns colnum="{{ctrlSupplierGeneration.normalColNum / 2}}" ng-show="scopeModel.hasCommission">
         <vr-select datasource="scopeModel.commissionTypes"
                    datatextfield="description"
                    datavaluefield="value"

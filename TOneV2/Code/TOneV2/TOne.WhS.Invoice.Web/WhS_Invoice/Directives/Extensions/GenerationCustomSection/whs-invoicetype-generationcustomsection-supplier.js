@@ -38,7 +38,8 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
 
             var selectedCommissionTypeReadyDeferred;
             function initializeController() {
-                $scope.scopeModel = {};
+				$scope.scopeModel = {};
+				$scope.scopeModel.hasCommission = ($scope.scopeModel.commission != undefined) ? true : false;
                 $scope.scopeModel.onTimeZoneSelectorReady = function (api) {
                     timeZoneSelectorAPI = api;
                     timeZoneSelectorReadyDeferred.resolve();
@@ -64,11 +65,12 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                     }
                 };
 
-                $scope.scopeModel.onCommissionFocusChanged = function (value) {
+				$scope.scopeModel.onCommissionFocusChanged = function (value) {
                     if (oldCommission != $scope.scopeModel.commission)
                         onvaluechanged();
 
-                    oldCommission != $scope.scopeModel.commission;
+					oldCommission != $scope.scopeModel.commission;
+					$scope.scopeModel.hasCommission = (value != undefined) ? true : false;
                 };
 
                 $scope.scopeModel.onCommissionTypeSelectionChanged = function (value) {
@@ -111,7 +113,8 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                             $scope.scopeModel.selectedCommissionType = UtilsService.getItemByVal($scope.scopeModel.commissionTypes, customPayload.CommissionType, "value");
                         }
                         if (invoice != undefined && invoice.Details != undefined) {
-                            oldCommission = $scope.scopeModel.commission = invoice.Details.Commission;
+							oldCommission = $scope.scopeModel.commission = invoice.Details.Commission;
+							$scope.scopeModel.hasCommission = ($scope.scopeModel.commission != undefined) ? true : false;
                             $scope.scopeModel.selectedCommissionType = UtilsService.getItemByVal($scope.scopeModel.commissionTypes, invoice.Details.CommissionType, "value");
                         }
                         context = payload.context;
@@ -168,12 +171,12 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                     });
                 };
 
-                api.getData = function () {
+				api.getData = function () {
                     return {
                         $type: "TOne.WhS.Invoice.Entities.SupplierGenerationCustomSectionPayload,TOne.WhS.Invoice.Entities",
                         TimeZoneId: timeZoneSelectorAPI.getSelectedIds(),
                         Commission: $scope.scopeModel.commission,
-                        CommissionType: $scope.scopeModel.selectedCommissionType != undefined ? $scope.scopeModel.selectedCommissionType.value : undefined
+						CommissionType: ($scope.scopeModel.hasCommission && $scope.scopeModel.selectedCommissionType != undefined) ? $scope.scopeModel.selectedCommissionType.value : undefined
                     };
                 };
 
