@@ -156,7 +156,6 @@ namespace NP.IVSwitch.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "CodecDefId" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Creation Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
 
                 sheet.Rows = new List<ExportExcelRow>();
@@ -169,7 +168,6 @@ namespace NP.IVSwitch.Business
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CodecProfileId });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.ProfileName });
-                            row.Cells.Add(new ExportExcelCell() { Value = String.Join(",",record.Entity.CodecDefId) });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CreateDate });
                             sheet.Rows.Add(row);
                         }
