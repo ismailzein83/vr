@@ -301,7 +301,7 @@ namespace NP.IVSwitch.Data.Postgres
                                    cmd.Parameters.AddWithValue("@BKTSerial", routeOption.BKTSerial);
                                    cmd.Parameters.AddWithValue("@BKTCapacity", routeOption.BKTCapacity);
                                    cmd.Parameters.AddWithValue("@BKTTokens", routeOption.BKTTokens);
-                                   cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? "0" : item.TechPrefix);
+                                   cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? "" : item.TechPrefix);
                                    cmd.Parameters.AddWithValue("@huntstop", (routeOption.Huntstop == null) ? (Object)DBNull.Value : routeOption.Huntstop);
                                    cmd.Parameters.AddWithValue("@stateId", routeOption.StateId);
                                    cmd.Parameters.AddWithValue("@description", routeOption.Description);
@@ -323,7 +323,7 @@ namespace NP.IVSwitch.Data.Postgres
                                 cmd.Parameters.AddWithValue("@time_frame", "* * * * *");
                                 cmd.Parameters.AddWithValue("@preference", 0);
                                 cmd.Parameters.AddWithValue("@description", "BLK");
-                                cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? "0" : item.TechPrefix);
+                                cmd.Parameters.AddWithValue("@techPrefix", (item.TechPrefix == null) ? "" : item.TechPrefix);
                                 cmd.Parameters.AddWithValue("@huntstop", 1);
                                 cmd.Parameters.AddWithValue("@stateId", 1);
                                 cmd.Parameters.AddWithValue("@huntstop_rc", "");
@@ -382,7 +382,7 @@ namespace NP.IVSwitch.Data.Postgres
                                 cmd.Parameters.AddWithValue("@BKTSerial", option.BKTSerial);
                                 cmd.Parameters.AddWithValue("@BKTCapacity", option.BKTCapacity);
                                 cmd.Parameters.AddWithValue("@BKTTokens", option.BKTTokens);
-                                cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? "0" : routeTableRoute.TechPrefix);
+                                cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? "" : routeTableRoute.TechPrefix);
                                 cmd.Parameters.AddWithValue("@huntstop", (option.Huntstop == null) ? (Object)DBNull.Value : option.Huntstop);
                                 cmd.Parameters.AddWithValue("@stateId", option.StateId);
                                 cmd.Parameters.AddWithValue("@description", option.Description);
@@ -406,7 +406,7 @@ namespace NP.IVSwitch.Data.Postgres
                                 cmd.Parameters.AddWithValue("@time_frame", "* * * * *");
                                 cmd.Parameters.AddWithValue("@preference", 0);
                                 cmd.Parameters.AddWithValue("@description", "BLK");
-                                cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? "0" : routeTableRoute.TechPrefix);
+                                cmd.Parameters.AddWithValue("@techPrefix", (routeTableRoute.TechPrefix == null) ? "" : routeTableRoute.TechPrefix);
                                 cmd.Parameters.AddWithValue("@huntstop",1);
                                 cmd.Parameters.AddWithValue("@stateId", 1);
                                 cmd.Parameters.AddWithValue("@huntstop_rc", "");
