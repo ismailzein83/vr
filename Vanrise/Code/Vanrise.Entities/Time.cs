@@ -8,7 +8,13 @@ namespace Vanrise.Entities
 {
     public class Time
     {
-        #region ctor/Local Variables
+        #region Properties/Ctor
+
+        public int Hour { get; set; }
+        public int Minute { get; set; }
+        public int Second { get; set; }
+        public int MilliSecond { get; set; }
+
         static Time()
         {
             new Time();
@@ -17,6 +23,7 @@ namespace Vanrise.Entities
         }
 
         public Time() { }
+
         public Time(string time)
         {
             string[] dotParts = time.Split('.');
@@ -82,46 +89,88 @@ namespace Vanrise.Entities
         #endregion
 
         #region Public Methods
-        public int Hour { get; set; }
-        public int Minute { get; set; }
-        public int Second { get; set; }
-        public int MilliSecond { get; set; }
+
         public string ToShortTimeString()
         {
             return String.Format("{0:00}:{1:00}:{2:00}", this.Hour, this.Minute, this.Second);
         }
+
         public string ToLongTimeString()
         {
             return String.Format("{0:00}:{1:00}:{2:00}:{3:00}", this.Hour, this.Minute, this.Second, this.MilliSecond);
         }
-        public bool GreaterThan(DateTime date)
+
+        public bool GreaterThanOrEqual(Time time)
+        {
+            if (time == null)
+                throw new ArgumentException("Time should not be null");
+
+            return Equals(time) || GreaterThan(time);
+        }
+
+        public bool GreaterThanOrEqual(DateTime date)
         {
             if (date == null)
-            {
                 throw new ArgumentException("Date should not be null");
-            }
-            return CompareTime(date.Hour, date.Minute, date.Second, date.Millisecond);
+
+            Time dateAsTime = new Time(date);
+            return Equals(dateAsTime) || GreaterThan(date);
         }
+
         public bool GreaterThan(Time time)
         {
             if (time == null)
-            {
                 throw new ArgumentException("Time should not be null");
-            }
-            return CompareTime(time.Hour, time.Minute, time.Second, time.MilliSecond);
+
+            return IsGreaterThan(time.Hour, time.Minute, time.Second, time.MilliSecond);
         }
-        public bool LessThan(DateTime date)
+
+        public bool GreaterThan(DateTime date)
         {
-            return !GreaterThan(date);
+            if (date == null)
+                throw new ArgumentException("Date should not be null");
+
+            return IsGreaterThan(date.Hour, date.Minute, date.Second, date.Millisecond);
         }
-        public bool LessThan(Time time)
+
+        public bool LessThanOrEqual(Time time)
         {
+            if (time == null)
+                throw new ArgumentException("Time should not be null");
+
             return !GreaterThan(time);
         }
-        public bool Equals(Time time)
+
+        public bool LessThanOrEqual(DateTime date)
         {
+            if (date == null)
+                throw new ArgumentException("Date should not be null");
+
+            Time dateAsTime = new Time(date);
+            return !GreaterThan(dateAsTime);
+        }
+
+        public bool LessThan(Time time)
+        {
+            if (time == null)
+                throw new ArgumentException("Time should not be null");
+
+            return !GreaterThanOrEqual(time);
+        }
+
+        public bool LessThan(DateTime date)
+        {
+            if (date == null)
+                throw new ArgumentException("Date should not be null");
+
+            return !GreaterThanOrEqual(date);
+        }
+
+        public bool Equals(Time time)
+        { 
             return (time.Hour == Hour && time.Minute == Minute && time.Second == Second && time.MilliSecond == MilliSecond);
         }
+
         #endregion
 
         #region Private Methods
@@ -134,7 +183,7 @@ namespace Vanrise.Entities
                 return false;
         }
 
-        private bool CompareTime(int hour, int minute, int second, int milliSecond)
+        private bool IsGreaterThan(int hour, int minute, int second, int milliSecond)
         {
             if (this.Hour > hour)
                 return true;
@@ -150,6 +199,4 @@ namespace Vanrise.Entities
 
         #endregion
     }
-
-
 }
