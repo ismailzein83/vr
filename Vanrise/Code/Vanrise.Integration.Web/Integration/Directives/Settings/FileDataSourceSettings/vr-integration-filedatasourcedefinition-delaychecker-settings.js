@@ -47,7 +47,7 @@
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingDirective = true;
+                        $scope.scopeModel.isLoadingDirective = value;
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
                 };
@@ -136,7 +136,7 @@
                 + '	datavaluefield="ExtensionConfigurationId"'
                 + '	datatextfield="Title"'
                 + ' ' + hideremoveicon + ' '
-                + '	label="Type"'
+                + '	label="File Type"'
                 + '	isrequired="ctrl.isrequired">'
                 + '	</vr-select>'
                 + '</vr-columns>'

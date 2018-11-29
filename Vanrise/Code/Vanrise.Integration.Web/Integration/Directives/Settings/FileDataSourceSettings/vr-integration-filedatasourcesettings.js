@@ -49,15 +49,11 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
 
                 $scope.scopeModel.validatePeakTimeRanges = function () {
 
-                    if ($scope.scopeModel.peakTimeRanges.length == 0) {
-                        return "You should add at least one Peak Time Range.";
+                    if (!validateDateTime()) {
+                        return "You should enter a validate date.";
                     }
-                    else {
-                        if (!validateDateTime()) {
-                            return "You should enter a validate date.";
-                        }
-                        return null;
-                    }
+                    return null;
+
                 };
 
                 $scope.scopeModel.validateFileDataSourceDefinitions = function () {

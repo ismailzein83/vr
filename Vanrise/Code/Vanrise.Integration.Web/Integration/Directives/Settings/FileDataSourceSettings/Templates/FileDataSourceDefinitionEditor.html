@@ -11,12 +11,12 @@
                             <vr-timespan value="scopeModel.checkingDuplicateFilesMaxPeriod" label="Duplicate Files Max Period" isrequired="true"></vr-timespan>
                         </vr-columns>
                     </vr-row>
-                    <vr-section title="File Delay Checker">
-                        <vr-integration-filedatasourcedefinition-delaychecker on-ready="scopeModel.onFileDelayCheckerDirectiveReady"></vr-integration-filedatasourcedefinition-delaychecker>
-                    </vr-section>
-                    <vr-section title="File Missing Checker">
-                        <vr-integration-filedatasourcedefinition-missingchecker on-ready="scopeModel.onFileMissingCheckerDirectiveReady"></vr-integration-filedatasourcedefinition-missingchecker>
-                    </vr-section>
+                </vr-tab>
+                <vr-tab header="'File Delay Checker'">
+                    <vr-integration-filedatasourcedefinition-delaychecker on-ready="scopeModel.onFileDelayCheckerDirectiveReady"></vr-integration-filedatasourcedefinition-delaychecker>
+                </vr-tab>
+                <vr-tab header="'File Missing Checker'">
+                    <vr-integration-filedatasourcedefinition-missingchecker on-ready="scopeModel.onFileMissingCheckerDirectiveReady"></vr-integration-filedatasourcedefinition-missingchecker>
                 </vr-tab>
             </vr-tabs>
         </vr-form>
@@ -30,3 +30,11 @@
         </vr-actionbar>
     </div>
 </div>
+
+
+<!--<vr-section title="File Delay Checker">
+            <vr-integration-filedatasourcedefinition-delaychecker on-ready="scopeModel.onFileDelayCheckerDirectiveReady"></vr-integration-filedatasourcedefinition-delaychecker>
+        </vr-section>
+        <vr-section title="File Missing Checker">
+            <vr-integration-filedatasourcedefinition-missingchecker on-ready="scopeModel.onFileMissingCheckerDirectiveReady"></vr-integration-filedatasourcedefinition-missingchecker>
+        </vr-section>-->

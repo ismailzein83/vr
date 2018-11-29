@@ -136,7 +136,7 @@
                 + '	datavaluefield="ExtensionConfigurationId"'
                 + '	datatextfield="Title"'
                 + ' ' + hideremoveicon + ' '
-                + '	label="Type"'
+                + '	label="File Type"'
                 + '	isrequired="ctrl.isrequired">'
                 + '	</vr-select>'
                 + '</vr-columns>'
