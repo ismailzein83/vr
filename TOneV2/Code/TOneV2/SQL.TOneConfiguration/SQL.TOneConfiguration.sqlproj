@@ -917,6 +917,7 @@
     <None Include="Retail_ISP.PostDeployment.sql" />
     <None Include="CarrierPortal.TOnePortal.PostDeployment.sql" />
     <None Include="TOne_Portal.PostDeployment.sql" />
+    <None Include="TOne_Namibia.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
