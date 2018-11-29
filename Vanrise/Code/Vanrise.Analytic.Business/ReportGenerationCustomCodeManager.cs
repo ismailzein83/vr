@@ -37,11 +37,11 @@ namespace Vanrise.Analytic.Business
             var runtimeType = vrComponentTypeManager.GetCachedOrCreate(cacheName,
                 () =>
                 {
-                    var customCode = GetCustomCodeById(customCodeId);
-                    if (customCode != null)
+                    var customCodeSettings = GetCustomCodeSettingById(customCodeId);
+                    if (customCodeSettings != null)
                     {
                         List<string> errorMessages;
-                        var type = GetOrCreateRuntimeType(customCode, out errorMessages);
+                        var type = GetOrCreateRuntimeType(customCodeSettings.CustomCode, out errorMessages, customCodeSettings.Classes);
                         if (type == null)
                             throw new Exception(String.Format("Compile Error when building Custom Code File. Errors: {0}", string.Join(",",errorMessages)));
                         else
@@ -54,10 +54,10 @@ namespace Vanrise.Analytic.Business
                 throw new ArgumentException(String.Format("Cannot create runtime type from Custom Code Id '{0}'", customCodeId));
             return runtimeType;
         }
-        public Type GetOrCreateRuntimeType(string customCode, out List<string> errorMessages)
+        public Type GetOrCreateRuntimeType(string customCode, out List<string> errorMessages, string classes = null)
         {
             string fullTypeName;
-            var classDefinition = BuildClassDefinition(customCode, out fullTypeName);
+            var classDefinition = BuildClassDefinition(customCode, out fullTypeName, classes);
             CSharpCompilationOutput compilationOutput;
             errorMessages = new List<string>();
 
@@ -84,7 +84,7 @@ namespace Vanrise.Analytic.Business
         public CustomCodeCompilationOutput TryCompileCustomCode(CustomCodeCompilationInput input)
         {
             List<string> errorMessages;
-            var type = GetOrCreateRuntimeType(input.CustomCode, out errorMessages);
+            var type = GetOrCreateRuntimeType(input.CustomCode, out errorMessages, input.Classes);
             if (errorMessages != null && errorMessages.Count>0)
             {
                 return new CustomCodeCompilationOutput()
@@ -98,10 +98,9 @@ namespace Vanrise.Analytic.Business
                 CompilationSucceeded = true
             };
         }
-        public string GetCustomCodeById(Guid vrComponentTypeId)
+        public ReportGenerationCustomCodeSettings GetCustomCodeSettingById(Guid vrComponentTypeId)
         {
-            var reportGenerationCustomCodeSettings = GetVRAutomatedReportQueryDefinitionSettings(vrComponentTypeId);
-            return reportGenerationCustomCodeSettings.CustomCode;
+            return GetVRAutomatedReportQueryDefinitionSettings(vrComponentTypeId);
         }
         public ReportGenerationCustomCodeSettings GetVRAutomatedReportQueryDefinitionSettings(Guid vrComponentTypeId)
         {
@@ -118,7 +117,7 @@ namespace Vanrise.Analytic.Business
                 Name = reportGenerationCustomCodeDefinition.Name
             };
         }
-        private string BuildClassDefinition(string customCode, out string fullTypeName)
+        private string BuildClassDefinition(string customCode, out string fullTypeName, string classes = null)
         {
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 using System;
@@ -141,6 +140,7 @@ namespace Vanrise.Analytic.Business
                             #CUSTOMCODE#    
                         } 
                     }
+                    #CLASSES#
                 }");
 
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Analytic.Business");
@@ -148,6 +148,7 @@ namespace Vanrise.Analytic.Business
             classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
             classDefinitionBuilder.Replace("#CLASSNAME#", className);
             classDefinitionBuilder.Replace("#CUSTOMCODE#", customCode);
+            classDefinitionBuilder.Replace("#CLASSES#", classes);
             fullTypeName = String.Format("{0}.{1}", classNamespace, className);
             return classDefinitionBuilder.ToString();
         }

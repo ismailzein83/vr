@@ -9,5 +9,7 @@ namespace Vanrise.Analytic.Entities
     public class CustomCodeCompilationInput
     {
         public string CustomCode { get; set; }
+
+        public string Classes { get; set; }
     }
 }

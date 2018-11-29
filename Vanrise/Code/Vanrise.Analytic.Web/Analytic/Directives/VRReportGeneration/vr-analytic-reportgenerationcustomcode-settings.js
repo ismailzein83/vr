@@ -29,8 +29,11 @@ app.directive("vrAnalyticReportgenerationcustomcodeSettings", ["UtilsService", "
                 + ' </vr-tab>'
                 + '<vr-tab header="\'Settings\'">'
                 + '   <vr-row>'
-                + '        <vr-columns width="fullrow">'
+                + '        <vr-columns width="1/2row">'
                 + '             <vr-textarea value="scopeModel.customCode" isrequired label="Custom Code" rows="20"></vr-textarea>'
+                + '        </vr-columns>'
+                + '        <vr-columns width="1/2row">'
+                + '             <vr-textarea value="scopeModel.classes" label="Classes" rows="20"></vr-textarea>'
                 + '        </vr-columns>'
                 + '   </vr-row>'
                 + '</vr-tab>'
@@ -56,6 +59,7 @@ app.directive("vrAnalyticReportgenerationcustomcodeSettings", ["UtilsService", "
                         $scope.scopeModel.name = payload.componentType.Name;
                         if (payload.componentType.Settings != undefined) {
                             $scope.scopeModel.customCode = payload.componentType.Settings.CustomCode;
+                            $scope.scopeModel.classes = payload.componentType.Settings.Classes;
                         }
                     }
                     return UtilsService.waitMultiplePromises(promises);
@@ -63,7 +67,8 @@ app.directive("vrAnalyticReportgenerationcustomcodeSettings", ["UtilsService", "
                 api.validate = function () {
                     var validatePromise = UtilsService.createPromiseDeferred();
                     var input = {
-                        CustomCode: $scope.scopeModel.customCode
+                        CustomCode: $scope.scopeModel.customCode,
+                        Classes: $scope.scopeModel.classes
                     };
                     VR_Analytic_ReportGenerationCustomCodeAPIService.TryCompileCustomCode(input).then(function (output) {
                         if (output != undefined) {
@@ -86,7 +91,8 @@ app.directive("vrAnalyticReportgenerationcustomcodeSettings", ["UtilsService", "
                         Name: $scope.scopeModel.name,
                         Settings: {
                             $type: "Vanrise.Analytic.Business.ReportGenerationCustomCodeSettings,Vanrise.Analytic.Business",
-                            CustomCode: $scope.scopeModel.customCode
+                            CustomCode: $scope.scopeModel.customCode,
+                            Classes: $scope.scopeModel.classes
                         }
                     };
                 };
