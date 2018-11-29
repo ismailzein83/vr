@@ -1,9 +1,9 @@
 ﻿<vr-section title="Included Code">
 	<vr-row removeline ng-show="!ctrl.disableadding">
-		<vr-columns colnum="6" ng-if="scopeModel.isBNumber">
+		<vr-columns colnum="6" ng-if="scopeModel.allowTextCode">
 			<vr-textbox value="scopeModel.addedCode" type="text" label="Add a code" maxlength="20" vr-disabled="ctrl.disableadding"></vr-textbox>
 		</vr-columns>
-		<vr-columns colnum="6" ng-if="!scopeModel.isBNumber">
+		<vr-columns colnum="6" ng-if="!scopeModel.allowTextCode">
 			<vr-textbox value="scopeModel.addedCode" type="number" label="Add a code" minvalue="0" maxlength="20" decimalprecision="0" vr-disabled="ctrl.disableadding">
 			</vr-textbox>
 		</vr-columns>
