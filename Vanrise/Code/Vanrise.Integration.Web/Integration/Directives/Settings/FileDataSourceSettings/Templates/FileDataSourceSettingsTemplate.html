@@ -1,0 +1,37 @@
+﻿<vr-columns width="fullrow">
+    <vr-tabs>
+        <vr-tab header="'Peak Time Ranges'">
+            <vr-columns width="fullrow">
+                <vr-button type="Add" data-onclick="scopeModel.addPeakTimeRange" standalone></vr-button>
+
+                <vr-validator validate="scopeModel.validatePeakTimeRanges()">
+                    <vr-datagrid datasource="scopeModel.peakTimeRanges"
+                                 on-ready="onPeakTimeRangeGridReady"
+                                 ondeleterow="scopeModel.removePeakTimeRange" hidegridmenu>
+                            <vr-datagridcolumn headertext="'From Time'" widthfactor="10">
+                                <vr-datetimepicker value="dataItem.Entity.From" type="time" isrequired="true"></vr-datetimepicker>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'To Time'" widthfactor="10">
+                                <vr-datetimepicker value="dataItem.Entity.To" type="time" isrequired="true"></vr-datetimepicker>
+                            </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-tab>
+        <vr-tab header="'File Data Source Definitions'">
+            <vr-columns width="fullrow">
+                <vr-button type="Add" data-onclick="scopeModel.addFileDataSourceDefinition" standalone></vr-button>
+
+                <vr-validator validate="scopeModel.validateFileDataSourceDefinitions()">
+                    <vr-datagrid datasource="scopeModel.fileDataSourceDefinitions"
+                                 on-ready="onFileDataSourceDefinitionGridReady"
+                                 ondeleterow="scopeModel.removeFileDataSourceDefinition"
+                                 menuactions="scopeModel.gridMenuActions" hidegridmenu>
+                        <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" widthfactor="10"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Duplicate Files Max Period'" field="'Entity.CheckingDuplicateFilesMaxPeriod'" widthfactor="10"></vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-tab>
+    </vr-tabs>
+</vr-columns>

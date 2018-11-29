@@ -23,7 +23,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
@@ -102,9 +103,32 @@
     <Compile Include="Controllers\DataSourceController.cs" />
     <Compile Include="Controllers\DataSourceImportedBatchController.cs" />
     <Compile Include="Controllers\DataSourceLogController.cs" />
+    <Compile Include="Controllers\DataSourceSettingController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\Templates\SizeBasedFileDelayCheckerTemplate.html" />
+    <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\Templates\TimeBasedFileDelayCheckerTemplate.html" />
+    <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileMissingChecker\Templates\DateTimeFileMissingCheckerTemplate.html" />
+    <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileMissingChecker\Templates\SequenceFileMissingCheckerTemplate.html" />
+    <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\vr-integration-filedelaychecker-sizebased.js" />
+    <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\vr-integration-filedelaychecker-timebased.js" />
+    <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileMissingChecker\vr-integration-filemissingchecker-datetime.js" />
+    <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileMissingChecker\vr-integration-filemissingchecker-sequence.js" />
+    <Content Include="Integration\Directives\Settings\Templates\DataSourceSettingTemplate.html" />
+    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\Templates\FileDataSourceSettingsTemplate.html" />
+    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\Templates\FileDelayCheckerTemplate.html" />
+    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\Templates\FileMissingCheckerTemplate.html" />
+    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\vr-integration-filedatasourcesettings.js" />
+    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\vr-integration-filedatasourcedefinition-delaychecker.js" />
+    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\vr-integration-filedatasourcedefinition-missingchecker.js" />
+    <Content Include="Integration\Directives\Settings\vr-integration-datasourcesetting-editor.js" />
+    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\vr-integration-filedatasourcedefinition-delaychecker-settings.js" />
+    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\vr-integration-filedatasourcedefinition-missingchecker-settings.js" />
+    <Content Include="Integration\Services\APIServices\DataSourceSettingAPIService.js" />
+    <Content Include="Integration\Services\DataSourceSettingService.js" />
+    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\Templates\FileDataSourceDefinitionEditor.html" />
+    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\FileDataSourceDefinitionEditorController.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +226,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
