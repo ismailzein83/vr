@@ -9,6 +9,7 @@
 \Web.config.Zajil.exclude
 \Web.config.Interconnect.exclude
 \Web.config.ISP.exclude
+\Web.config.NR.exclude
 
 \images\nTegra-logoonheader.png
 \images\nTegra-login.png

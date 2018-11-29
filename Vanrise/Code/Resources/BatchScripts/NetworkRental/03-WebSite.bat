@@ -8,7 +8,7 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO NetworkRental WebSite
 
 xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q																	"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\NetworkRental\list-of-excluded-files.txt
-xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.exclude" /y /v /z /i /Q /R											"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.NR.exclude" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Bin\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\NetworkRental\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Modules\Security\"
@@ -27,4 +27,4 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Invoice.Web\VR_Invoice" /S /E /R /y /v /i /z 
 xcopy "C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation" /S /E /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Modules\VR_InvToAccBalanceRelation\"
 xcopy "C:\TFS\Retail\Code\Retail.BusinessEntity.Web\Retail_BusinessEntity" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Modules\Retail_BusinessEntity\"
 xcopy "C:\TFS\Retail\Code\Retail.Demo.Web\Retail_Demo" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Modules\Retail_Demo\"
-rename "\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Web.config.exclude" "Web.config"
+rename "\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Web.config.NR.exclude" "Web.config"
