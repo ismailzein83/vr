@@ -2,11 +2,7 @@
 using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
-using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.PackageTypes
@@ -59,14 +55,14 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
             foreach (var packageItem in items)
             {
                 CompositeRecordConditionEvaluateContext compositeConditionContext = null;
-                if (packageItem.CompositeGroupConditionDefinition != null && packageItem.CompositeGroupConditionDefinition.CompositeRecordConditionDefinitions != null)
+                if (packageItem.CompositeRecordConditionDefinitionGroup != null && packageItem.CompositeRecordConditionDefinitionGroup.CompositeRecordFilterDefinitions != null)
                 {
                     compositeConditionContext = new CompositeRecordConditionEvaluateContext()
                     {
                         CompositeRecordConditionFieldsByRecordName = new Dictionary<string, CompositeRecordConditionFields>()
                     };
 
-                    foreach (CompositeRecordConditionDefinition item in packageItem.CompositeGroupConditionDefinition.CompositeRecordConditionDefinitions)
+                    foreach (CompositeRecordConditionDefinition item in packageItem.CompositeRecordConditionDefinitionGroup.CompositeRecordFilterDefinitions)
                     {
                         var recordConditionContext = new CompositeRecordConditionDefinitionSettingsGetFieldsContext();
                         item.Settings.GetFields(recordConditionContext);
@@ -199,7 +195,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 
         private class PackageItemToEvaluate
         {
-            public CompositeGroupConditionDefinition CompositeGroupConditionDefinition { get; set; }
+            public CompositeRecordConditionDefinitionGroup CompositeRecordConditionDefinitionGroup { get; set; }
 
             public VolumePackageItem Item { get; set; }
         }
@@ -314,7 +310,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
                        PackageItemToEvaluate packageItemToEvaluate = new PackageItemToEvaluate()
                        {
                            Item = packageItem,
-                           CompositeGroupConditionDefinition = volumePackageDefinitionItem.CompositeGroupConditionDefinition
+                           CompositeRecordConditionDefinitionGroup = volumePackageDefinitionItem.CompositeRecordConditionDefinitionGroup
                        };
 
                        itemsByItemId.Add(packageItem.VolumePackageItemId, packageItemToEvaluate);
