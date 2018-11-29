@@ -13,16 +13,17 @@ namespace TOne.WhS.Invoice.Business
     {
         #region Public Methods
         public Dictionary<Guid, InvoiceTypeSetting> GetInvoiceTypeSettings()
-        { 
-            SettingManager settingManager = new SettingManager();
-            InvoiceSettings invoiceSettings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
-
+        {
+            InvoiceSettings invoiceSettings = GetInvoiceSettings();
             if (invoiceSettings == null)
                 return null;
-
             return invoiceSettings.InvoiceTypeSettings;
         }
-
+        public InvoiceSettings GetInvoiceSettings()
+        {
+            SettingManager settingManager = new SettingManager();
+           return settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
+        }
         public InvoiceTypeSetting GetInvoiceTypeSettingsById(Guid invoiceTypeId)
         {
             var invoiceTypeSettings = GetInvoiceTypeSettings();

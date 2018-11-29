@@ -182,8 +182,17 @@ namespace TOne.WhS.Invoice.Business
                                     originalAmount = record.OriginalAmount;
                                 }
                             }
-
-                            supplierInvoiceDetails.Add(new SupplierInvoiceDetail
+                            var supplierInvoiceDetail = supplierInvoiceDetails.FindRecord(x => x.InvoiceId == invoiceDetail.Entity.InvoiceId && x.CurrencyId == currentInvoiceItemDetail.CurrencyId);
+                            if (supplierInvoiceDetail != null)
+                            {
+                                supplierInvoiceDetail.TotalAmountAfterCommission += currentInvoiceItemDetail.AmountAfterCommissionWithTaxes;
+                                supplierInvoiceDetail.TotalNumberOfCalls += currentInvoiceItemDetail.NumberOfCalls;
+                                supplierInvoiceDetail.Duration += currentInvoiceItemDetail.Duration;
+                                supplierInvoiceDetail.OriginalAmount = originalAmount;
+                            }
+                            else
+                            {
+                                supplierInvoiceDetails.Add(new SupplierInvoiceDetail
                             {
                                 InvoiceId = invoiceDetail.Entity.InvoiceId,
                                 TotalNumberOfCalls = currentInvoiceItemDetail.NumberOfCalls,
@@ -204,6 +213,7 @@ namespace TOne.WhS.Invoice.Business
                                 UseOriginalAmount= useOriginalAmount,
                                 IsLocked = invoiceDetail.Entity.LockDate.HasValue
                             });
+                            }
                         }
                     }
                 }
@@ -250,31 +260,40 @@ namespace TOne.WhS.Invoice.Business
                                     originalAmount = record.OriginalAmount;
                                 }
                             }
-
-                            customerInvoiceDetails.Add(new CustomerInvoiceDetail
+                            var customerInvoiceDetail = customerInvoiceDetails.FindRecord(x => x.InvoiceId == invoiceDetail.Entity.InvoiceId && x.CurrencyId == currentInvoiceItemDetail.CurrencyId);
+                            if (customerInvoiceDetail != null)
                             {
-                                InvoiceId = invoiceDetail.Entity.InvoiceId,
-                                TotalNumberOfCalls = currentInvoiceItemDetail.NumberOfCalls,
-                                CurrencyId = currentInvoiceItemDetail.CurrencyId,
-                                TimeZoneId = customerDetail.TimeZoneId,
-                                TotalAmountAfterCommission = currentInvoiceItemDetail.AmountAfterCommissionWithTaxes,
-                                SaleCurrency = _currencyManager.GetCurrencySymbol(currentInvoiceItemDetail.CurrencyId),
-                                DueDate = invoiceDetail.Entity.DueDate,
-                                Commission = customerDetail.Commission,
-                                FromDate = invoiceDetail.Entity.FromDate,
-                                IssueDate = invoiceDetail.Entity.IssueDate,
-                                Duration = currentInvoiceItemDetail.Duration,
-                                Offset = customerDetail.Offset,
-                                ToDate = invoiceDetail.Entity.ToDate,
-                                SerialNumber = invoiceDetail.Entity.SerialNumber,
-                                TimeZoneDescription = customerDetail.TimeZoneId.HasValue ? vrTimeZoneManager.GetVRTimeZoneName(customerDetail.TimeZoneId.Value) : null,
-                                IsLocked = invoiceDetail.Entity.LockDate.HasValue,
-                                OriginalAmount = originalAmount,
-                                UseOriginalAmount = useOriginalAmount,
-                            });
+                                customerInvoiceDetail.TotalAmountAfterCommission += currentInvoiceItemDetail.AmountAfterCommissionWithTaxes;
+                                customerInvoiceDetail.TotalNumberOfCalls += currentInvoiceItemDetail.NumberOfCalls;
+                                customerInvoiceDetail.Duration += currentInvoiceItemDetail.Duration;
+                                customerInvoiceDetail.OriginalAmount = originalAmount;
+                            }
+                            else
+                            {
+                                customerInvoiceDetails.Add(new CustomerInvoiceDetail
+                                {
+                                    InvoiceId = invoiceDetail.Entity.InvoiceId,
+                                    TotalNumberOfCalls = currentInvoiceItemDetail.NumberOfCalls,
+                                    CurrencyId = currentInvoiceItemDetail.CurrencyId,
+                                    TimeZoneId = customerDetail.TimeZoneId,
+                                    TotalAmountAfterCommission = currentInvoiceItemDetail.AmountAfterCommissionWithTaxes,
+                                    SaleCurrency = _currencyManager.GetCurrencySymbol(currentInvoiceItemDetail.CurrencyId),
+                                    DueDate = invoiceDetail.Entity.DueDate,
+                                    Commission = customerDetail.Commission,
+                                    FromDate = invoiceDetail.Entity.FromDate,
+                                    IssueDate = invoiceDetail.Entity.IssueDate,
+                                    Duration = currentInvoiceItemDetail.Duration,
+                                    Offset = customerDetail.Offset,
+                                    ToDate = invoiceDetail.Entity.ToDate,
+                                    SerialNumber = invoiceDetail.Entity.SerialNumber,
+                                    TimeZoneDescription = customerDetail.TimeZoneId.HasValue ? vrTimeZoneManager.GetVRTimeZoneName(customerDetail.TimeZoneId.Value) : null,
+                                    IsLocked = invoiceDetail.Entity.LockDate.HasValue,
+                                    OriginalAmount = originalAmount,
+                                    UseOriginalAmount = useOriginalAmount,
+                                });
+                            }
                         }
                     }
-
                 }
             }
             return customerInvoiceDetails;
@@ -359,16 +378,27 @@ namespace TOne.WhS.Invoice.Business
                             {
                                 foreach (var invoiceItem in invoiceItems)
                                 {
-                                    var invoiceAvailableForSettlement = new InvoiceAvailableForSettlement
-                                    {
-                                        InvoiceId = partnerCustomerInvoice.InvoiceId,
-                                        IsSelected = true,
-                                    };
                                     var invoiceItemDetail = invoiceItem.Details as InvoiceBySaleCurrencyItemDetails;
+                                    var invoiceAvailableForSettlement = availableCustomerInvoices.FindRecord(x => x.InvoiceId == partnerCustomerInvoice.InvoiceId && x.CurrencyId == invoiceItemDetail.CurrencyId);
+                                    bool alreadyInvoiceAdded = false;
+                                    if (invoiceAvailableForSettlement == null)
+                                    {
+                                        invoiceAvailableForSettlement = new InvoiceAvailableForSettlement
+                                        {
+                                            InvoiceId = partnerCustomerInvoice.InvoiceId,
+                                            IsSelected = true,
+                                        };
+                                    }else
+                                    {
+                                        alreadyInvoiceAdded = true;
+                                    }
                                     if (invoiceItemDetail != null)
                                     {
                                         invoiceAvailableForSettlement.CurrencyId = invoiceItemDetail.CurrencyId;
-                                        availableCustomerInvoices.Add(invoiceAvailableForSettlement);
+                                        if(!alreadyInvoiceAdded)
+                                        {
+                                            availableCustomerInvoices.Add(invoiceAvailableForSettlement);
+                                        }
                                         if (invoiceAvailableForSettlement.IsSelected)
                                         {
                                             OriginalDataCurrrency originalDataCurrrency;
@@ -379,11 +409,16 @@ namespace TOne.WhS.Invoice.Business
 
                                                 string currencySymbol = _currencyManager.GetCurrencySymbol(invoiceItemDetail.CurrencyId);
                                                 currencySymbol.ThrowIfNull("currencySymbol", invoiceItemDetail.CurrencyId);
-                                                customerAmountByCurrency.Add(currencySymbol, Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue));
+                                                decimal amountValue;
+                                                if(!customerAmountByCurrency.TryGetValue(currencySymbol, out amountValue))
+                                                {
+                                                    customerAmountByCurrency.Add(currencySymbol, Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue));
+                                                }
                                             }
                                             else
                                             {
-                                                selectedInvoiceIds.Add(new SelectedInvoiceItem { InvoiceId = invoiceAvailableForSettlement.InvoiceId, CurrencyId = invoiceAvailableForSettlement.CurrencyId });
+                                                if(!alreadyInvoiceAdded)
+                                                  selectedInvoiceIds.Add(new SelectedInvoiceItem { InvoiceId = invoiceAvailableForSettlement.InvoiceId, CurrencyId = invoiceAvailableForSettlement.CurrencyId });
                                             }
                                         }
                                     }
@@ -457,19 +492,29 @@ namespace TOne.WhS.Invoice.Business
                             {
                                 foreach (var invoiceItem in invoiceItems)
                                 {
-
-                                    var invoiceAvailableForSettlement = new InvoiceAvailableForSettlement
-                                    {
-                                        InvoiceId = partnerSupplierInvoice.InvoiceId,
-                                        IsSelected = true,
-                                    };
-
                                     var invoiceItemDetail = invoiceItem.Details as InvoiceBySaleCurrencyItemDetails;
+                                    var invoiceAvailableForSettlement = availableSupplierInvoices.FindRecord(x => x.InvoiceId == partnerSupplierInvoice.InvoiceId && x.CurrencyId == invoiceItemDetail.CurrencyId);
+                                    bool alreadyInvoiceAdded = false;
+                                    if (invoiceAvailableForSettlement == null)
+                                    {
+                                        invoiceAvailableForSettlement = new InvoiceAvailableForSettlement
+                                        {
+                                            InvoiceId = partnerSupplierInvoice.InvoiceId,
+                                            IsSelected = true,
+                                        };
+                                    }
+                                    else
+                                    {
+                                        alreadyInvoiceAdded = true;
+                                    }
                                     if (invoiceItemDetail != null)
                                     {
                                         invoiceAvailableForSettlement.CurrencyId = invoiceItemDetail.CurrencyId;
-                                        availableSupplierInvoices.Add(invoiceAvailableForSettlement);
-                                        if (invoiceAvailableForSettlement.IsSelected)
+                                        if (!alreadyInvoiceAdded)
+                                        {
+                                            availableSupplierInvoices.Add(invoiceAvailableForSettlement);
+                                        }
+                                            if (invoiceAvailableForSettlement.IsSelected)
                                         {
                                             OriginalDataCurrrency originalDataCurrrency;
                                             if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetail.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && originalDataCurrrency.OriginalAmount.HasValue)
@@ -479,11 +524,16 @@ namespace TOne.WhS.Invoice.Business
 
                                                 string currencySymbol = _currencyManager.GetCurrencySymbol(invoiceItemDetail.CurrencyId);
                                                 currencySymbol.ThrowIfNull("currencySymbol", invoiceItemDetail.CurrencyId);
-                                                supplierAmountByCurrency.Add(currencySymbol, Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue));
+                                                decimal amountValue;
+                                                if (!supplierAmountByCurrency.TryGetValue(currencySymbol, out amountValue))
+                                                {
+                                                    supplierAmountByCurrency.Add(currencySymbol, Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue));
+                                                }
                                             }
                                             else
                                             {
-                                                selectedInvoiceIds.Add(new SelectedInvoiceItem { InvoiceId = invoiceAvailableForSettlement.InvoiceId, CurrencyId = invoiceAvailableForSettlement.CurrencyId });
+                                                if (!alreadyInvoiceAdded)
+                                                    selectedInvoiceIds.Add(new SelectedInvoiceItem { InvoiceId = invoiceAvailableForSettlement.InvoiceId, CurrencyId = invoiceAvailableForSettlement.CurrencyId });
                                             }
                                         }
                                     }
@@ -502,7 +552,6 @@ namespace TOne.WhS.Invoice.Business
                     {
                         foreach (var amount in amountsByCurrency)
                         {
-
                             if (supplierAmountByCurrency == null)
                                 supplierAmountByCurrency = new Dictionary<string, decimal>();
                             if (!supplierAmountByCurrency.ContainsKey(amount.Key))

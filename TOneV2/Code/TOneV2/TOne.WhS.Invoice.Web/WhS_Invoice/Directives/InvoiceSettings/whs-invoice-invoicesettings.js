@@ -89,23 +89,28 @@
 
                     var promises = [];
 
-                    if (payload != undefined && payload.data != undefined && payload.data.InvoiceTypeSettings != undefined) {
-                        for (var key in payload.data.InvoiceTypeSettings) {
-                            if (key != "$type")
-                            {
-                                var item =
-                                {
-                                    payload: {
-                                        InvoiceTypeId: key,
-                                        NeedApproval: payload.data.InvoiceTypeSettings[key].NeedApproval
-                                    },
-                                    readyInvoiceTypeSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                    loadInvoiceTypeSelectorPromiseDeferred: UtilsService.createPromiseDeferred()
-                                };
-                                promises.push(item.loadInvoiceTypeSelectorPromiseDeferred.promise);
-                                addItemToGrid(item);
+                    if (payload != undefined && payload.data != undefined ) {
+
+                        ctrl.requireGroupByMonth = payload.data.RequireGroupByMonth;
+
+                        if (payload.data.InvoiceTypeSettings != undefined) {
+                            for (var key in payload.data.InvoiceTypeSettings) {
+                                if (key != "$type") {
+                                    var item =
+                                    {
+                                        payload: {
+                                            InvoiceTypeId: key,
+                                            NeedApproval: payload.data.InvoiceTypeSettings[key].NeedApproval
+                                        },
+                                        readyInvoiceTypeSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                        loadInvoiceTypeSelectorPromiseDeferred: UtilsService.createPromiseDeferred()
+                                    };
+                                    promises.push(item.loadInvoiceTypeSelectorPromiseDeferred.promise);
+                                    addItemToGrid(item);
+                                }
                             }
                         }
+                        
                     }
 
                     function addItemToGrid(item) {
@@ -141,7 +146,8 @@
                 api.getData = function () {
                  return {
                         $type: "TOne.WhS.Invoice.Business.InvoiceSettings,TOne.WhS.Invoice.Business",
-                        InvoiceTypeSettings: getSettings()
+                     InvoiceTypeSettings: getSettings(),
+                     RequireGroupByMonth: ctrl.requireGroupByMonth
                     };
                 };
 

@@ -72,16 +72,28 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             ProcessItemSetName(customerInvoices, customerInvoiceItems, supplierInvoices, supplierInvoiceItems, availableCustomerInvoices, availableSupplierInvoices, out carrierRecurringChargesSummary, out systemRecurringChargesSummary, out customerInvoiceItemSet, out supplierInvoiceItemSet, out settlementInvoiceItemSummaryByCurrency, out carrierSummary, out systemSummary, out settlementInvoiceCurrencyByInvoice, out settlementInvoiceByCurrency);
 
-            context.Invoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, carrierSummary, systemSummary, carrierRecurringChargesSummary, systemRecurringChargesSummary, settlementInvoiceCurrencyByInvoice, partnerType, isApplicableToCustomer, isApplicableToSupplier, settlementInvoiceByCurrency);
-
 
             ConfigManager configManager = new ConfigManager();
             InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
-
+            var invoiceSettings = configManager.GetInvoiceSettings();
+            if (invoiceSettings.RequireGroupByMonth)
+            {
+                if (context.FromDate.Month != context.ToDate.Month)
+                {
+                    context.ErrorMessage = "Settlement invoice not supported. Reason: Specified customer and supplier invoices must be monthly generated.";
+                    context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+                    return;
+                }
+            }
             if (settings != null)
             {
                 context.NeedApproval = settings.NeedApproval;
             }
+
+            context.Invoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, carrierSummary, systemSummary, carrierRecurringChargesSummary, systemRecurringChargesSummary, settlementInvoiceCurrencyByInvoice, partnerType, isApplicableToCustomer, isApplicableToSupplier, settlementInvoiceByCurrency);
+
+
+  
         }
 
 

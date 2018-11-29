@@ -10,10 +10,11 @@ namespace TOne.WhS.Invoice.Business
     public class InvoiceSettings : SettingData
     {
         public const string SETTING_TYPE = "WhS_Invoice_InvoiceSettings";
+        public bool RequireGroupByMonth { get; set; }
         public Dictionary<Guid, InvoiceTypeSetting> InvoiceTypeSettings { get; set; }
     }
     public class InvoiceTypeSetting
-    { 
+    {
         public bool NeedApproval { get; set; }
     }
 }
