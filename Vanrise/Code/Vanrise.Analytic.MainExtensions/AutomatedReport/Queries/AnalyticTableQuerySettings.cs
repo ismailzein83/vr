@@ -147,6 +147,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
             BuildSubTableData(automatedReportDataList, resultSubTables, summaryRecord);
             BuildAutomatedReportDataListItems(dataRecords, automatedReportDataList);
             automatedReportDataResult.Lists.Add("Main", automatedReportDataList);
+            automatedReportDataResult.From = fromTime;
+            automatedReportDataResult.To = toTime;
             return automatedReportDataResult;
         }
 

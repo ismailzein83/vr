@@ -124,6 +124,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
                 }
             }
             automatedReportDataResult.Lists.Add("Main", automatedreportDataList);
+            automatedReportDataResult.From = fromTime;
+            automatedReportDataResult.To = toTime;
             return automatedReportDataResult;
         }
 

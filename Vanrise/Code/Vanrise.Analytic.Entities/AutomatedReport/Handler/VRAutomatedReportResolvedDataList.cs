@@ -13,6 +13,8 @@ namespace Vanrise.Analytic.Entities
         public Dictionary<string, VRAutomatedReportFieldInfo> FieldInfos { get; set; }
         public Dictionary<Guid, VRAutomatedReportTableInfo> SubTablesInfo { get; set; }
         public List<VRAutomatedReportResolvedDataItem> Items { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
     }
 
     public class VRAutomatedReportTableInfo

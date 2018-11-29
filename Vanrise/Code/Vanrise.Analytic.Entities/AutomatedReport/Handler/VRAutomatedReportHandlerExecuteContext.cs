@@ -289,6 +289,8 @@ namespace Vanrise.Analytic.Entities
                             }
                         }
                     }
+                    resolvedDataList.From = automatedReportDataResult.From;
+                    resolvedDataList.To = automatedReportDataResult.To;
                 }
             }
             return resolvedDataList;
