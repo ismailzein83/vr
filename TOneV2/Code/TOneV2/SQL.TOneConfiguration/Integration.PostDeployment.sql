@@ -22,9 +22,13 @@ as (select * from (values
 ('105A2927-10C2-4F20-97CE-EDBA90198553','VR_Integration_AdapterTypeConfig_Postgres','Postgres Receive Adapter'	,'VR_Integration_AdapterTypeConfig','{"AdapterTemplateURL":"/Client/Modules/Integration/Views/AdapterTemplates/AdapterPostgresTemplate.html","Editor":"vr-integration-adapter-postgres","FQTN":"Vanrise.Integration.Adapters.PostgresReceiveAdapter.PostgresReceiveAdapter, Vanrise.Integration.Adapters.PostgresReceiveAdapter"}'),
 ('A694ECE9-CB4B-42D5-9150-4DD4C499BBE6','VR_Integration_AdapterTypeConfig_MySQL','MySql Receive Adapter'	,'VR_Integration_AdapterTypeConfig','{"AdapterTemplateURL":"/Client/Modules/Integration/Views/AdapterTemplates/AdapterMySQLTemplate.html","Editor":"vr-integration-adapter-mysql","FQTN":"Vanrise.Integration.Adapters.MySQLReceiveAdapter.MySQLReceiveAdapter, Vanrise.Integration.Adapters.MySQLReceiveAdapter"}'),
 
-('EA1F0775-08B9-4638-AC42-A2FD11E008EF','VR_Common_ObjectType_FailedBatchInfo','Failed Batch Info','VR_Common_ObjectType'																			,'{"Editor":"vr-integration-faildbatchinfo-objecttype", "PropertyEvaluatorExtensionType": "VR_Integration_FailedBatchInfo_PropertyEvaluator"}'),
-('708F5F03-F14E-4487-B916-5617013E8B3E','VR_Common_PropertyEvaluator_FailedBatchInfo','Failed Batch Info Property','VR_Integration_FailedBatchInfo_PropertyEvaluator'										,'{"Editor":"vr-integration-faildbatchinfo-propertyevaluator"}')
+('EA1F0775-08B9-4638-AC42-A2FD11E008EF','VR_Common_ObjectType_FailedBatchInfo','Failed Batch Info','VR_Common_ObjectType'												,'{"Editor":"vr-integration-faildbatchinfo-objecttype", "PropertyEvaluatorExtensionType": "VR_Integration_FailedBatchInfo_PropertyEvaluator"}'),
+('708F5F03-F14E-4487-B916-5617013E8B3E','VR_Common_PropertyEvaluator_FailedBatchInfo','Failed Batch Info Property','VR_Integration_FailedBatchInfo_PropertyEvaluator'	,'{"Editor":"vr-integration-faildbatchinfo-propertyevaluator"}'),
 
+('07C4303E-2D53-4062-BEF6-9B033CABB692','SizeBasedFileDelayChecker','Size Based','VR_Integration_FileDelayCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedelaychecker-sizebased"}'),
+('A498CF7D-0D01-4384-992C-644238F11C09','TimeBasedFileDelayChecker','Time Based','VR_Integration_FileDelayCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedelaychecker-timebased"}'),	
+('AF88B648-2FAD-4A7E-8240-564019CF4BC3','DateTimeFileMissingChecker','Date Time','VR_Integration_FileMissingCheckerSettingsConfig'		,'{"Editor":"vr-integration-filemissingchecker-datetime"}'),
+('FA37168F-25B8-44B2-8D27-CA0DD3E3265E','SequenceFileDataSourceNaming','Sequence','VR_Integration_FileMissingCheckerSettingsConfig'		,'{"Editor":"vr-integration-filemissingchecker-sequence"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
@@ -344,3 +348,24 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
+
+--[common].[Setting]--------------------1 to 100----------------------------------------------------
+begin
+set nocount on;
+;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('0D693835-9A45-4D35-826B-A6DA59011B4B','Data Source','VR_Integration_DataSourceSettings','General','{"Editor":"vr-integration-datasourcesetting-editor"}',null,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
+merge	[common].[Setting] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+when not matched by target then
+	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+----------------------------------------------------------------------------------------------------
+end
