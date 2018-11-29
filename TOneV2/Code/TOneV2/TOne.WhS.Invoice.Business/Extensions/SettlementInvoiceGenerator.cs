@@ -70,33 +70,46 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             Dictionary<long, List<SettlementInvoiceDetailByCurrency>> settlementInvoiceCurrencyByInvoice;
 
-            ProcessItemSetName(customerInvoices, customerInvoiceItems, supplierInvoices, supplierInvoiceItems, availableCustomerInvoices, availableSupplierInvoices, out carrierRecurringChargesSummary, out systemRecurringChargesSummary, out customerInvoiceItemSet, out supplierInvoiceItemSet, out settlementInvoiceItemSummaryByCurrency, out carrierSummary, out systemSummary, out settlementInvoiceCurrencyByInvoice, out settlementInvoiceByCurrency);
-
-
             ConfigManager configManager = new ConfigManager();
             InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
             var invoiceSettings = configManager.GetInvoiceSettings();
             if (invoiceSettings.RequireGroupByMonth)
             {
-                if (context.FromDate.Month != context.ToDate.Month)
+                if (customerInvoices != null && customerInvoices.Count() > 0)
                 {
-                    context.ErrorMessage = "Settlement invoice not supported. Reason: Specified customer and supplier invoices must be monthly generated.";
-                    context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
-                    return;
+                    foreach (var customerInvoice in customerInvoices)
+                    {
+                        if (customerInvoice.FromDate.Year != customerInvoice.ToDate.Year  && customerInvoice.FromDate.Month != customerInvoice.ToDate.Month)
+                        {
+                            context.ErrorMessage = "Settlement invoice not supported. Reason: Specified customer invoices must be monthly generated.";
+                            context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+                            return;
+                        }
+                    }
+                }
+                if (supplierInvoices != null && supplierInvoices.Count() > 0)
+                {
+                    foreach (var supplierInvoice in supplierInvoices)
+                    {
+                        if (supplierInvoice.FromDate.Year != supplierInvoice.ToDate.Year && supplierInvoice.FromDate.Month != supplierInvoice.ToDate.Month)
+                        {
+                            context.ErrorMessage = "Settlement invoice not supported. Reason: Specified supplier invoices must be monthly generated.";
+                            context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+                            return;
+                        }
+                    }
                 }
             }
+               
+            ProcessItemSetName(customerInvoices, customerInvoiceItems, supplierInvoices, supplierInvoiceItems, availableCustomerInvoices, availableSupplierInvoices, out carrierRecurringChargesSummary, out systemRecurringChargesSummary, out customerInvoiceItemSet, out supplierInvoiceItemSet, out settlementInvoiceItemSummaryByCurrency, out carrierSummary, out systemSummary, out settlementInvoiceCurrencyByInvoice, out settlementInvoiceByCurrency);
+           
             if (settings != null)
             {
                 context.NeedApproval = settings.NeedApproval;
             }
 
             context.Invoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, carrierSummary, systemSummary, carrierRecurringChargesSummary, systemRecurringChargesSummary, settlementInvoiceCurrencyByInvoice, partnerType, isApplicableToCustomer, isApplicableToSupplier, settlementInvoiceByCurrency);
-
-
-  
         }
-
-
 
         private void ProcessItemSetName(IEnumerable<Vanrise.Invoice.Entities.Invoice> customerInvoices, IEnumerable<InvoiceItem> customerInvoiceItems, IEnumerable<Vanrise.Invoice.Entities.Invoice> supplierInvoices,
             IEnumerable<InvoiceItem> supplierInvoiceItems, List<InvoiceAvailableForSettlement> availableCustomerInvoices, List<InvoiceAvailableForSettlement> availableSupplierInvoices, out List<SettlementInvoiceDetailSummary> carrierRecurringChargesSummary,
