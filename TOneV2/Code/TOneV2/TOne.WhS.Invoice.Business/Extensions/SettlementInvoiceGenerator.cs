@@ -79,7 +79,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     foreach (var customerInvoice in customerInvoices)
                     {
-                        if (customerInvoice.FromDate.Year != customerInvoice.ToDate.Year  && customerInvoice.FromDate.Month != customerInvoice.ToDate.Month)
+                        if (customerInvoice.FromDate.Year != customerInvoice.ToDate.Year  || customerInvoice.FromDate.Month != customerInvoice.ToDate.Month)
                         {
                             context.ErrorMessage = "Settlement invoice not supported. Reason: Specified customer invoices must be monthly generated.";
                             context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
@@ -91,7 +91,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     foreach (var supplierInvoice in supplierInvoices)
                     {
-                        if (supplierInvoice.FromDate.Year != supplierInvoice.ToDate.Year && supplierInvoice.FromDate.Month != supplierInvoice.ToDate.Month)
+                        if (supplierInvoice.FromDate.Year != supplierInvoice.ToDate.Year || supplierInvoice.FromDate.Month != supplierInvoice.ToDate.Month)
                         {
                             context.ErrorMessage = "Settlement invoice not supported. Reason: Specified supplier invoices must be monthly generated.";
                             context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
