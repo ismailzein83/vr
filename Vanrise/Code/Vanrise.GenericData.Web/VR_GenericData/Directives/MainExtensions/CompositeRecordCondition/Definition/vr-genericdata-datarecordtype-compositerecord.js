@@ -62,7 +62,7 @@
                             var dataRecordTypeSelectorPayload;
                             if (payload != undefined) {
                                 dataRecordTypeSelectorPayload = {
-                                    selectedIds = payload.DataRecordTypeId
+                                    selectedIds : payload.DataRecordTypeId
                                 };
                             }
                             VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, dataRecordTypeSelectorPayload, loadDataRecordTypeSelectorPromiseDeferred);
