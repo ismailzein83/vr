@@ -51,6 +51,41 @@ namespace BPMExtended.Main.Business
 
             };
         }
+
+        public InventoryPhoneItemDetail GetGSHDSLInventoryDetailById(string contractId)
+        {
+            
+            return new InventoryPhoneItemDetail
+            {
+                Cabinet = "c1",
+                CabinetPrimaryPort = "99",
+                CabinetSecondaryPort = "80",
+                DP = "1",
+                DPPorts = new List<string> { "8989" },
+                DPSecondaryPorts = new List<string> { "9000" },
+                DSlam = "d1",
+                DSlamOMC = "o1",
+                DSlamPort = "70",
+                IsMultiplexed = false,
+                MDFPort = "900",
+                MSAN_EID = "4",
+                MSAN_TID = "5",
+                MSANType = "t1",
+                Receiver = "e1",
+                ReceiverPort = "98",
+                Switch = "s1",
+                SwitchId = "45",
+                SwitchOMC = "m",
+                SWITCH_TYPE = "Manual",
+                Transmitter = "t4",
+                TransmitterPort = "55",
+                VerticalMDF = "v1",
+                DPPortId = "900",
+                DPId = "9999"
+
+            };
+        }
+
         public TechnicalReservationDetail GetTechnicalReservation(string phoneNumber)
         {
             TechnicalReservationPhoneItem item = null;
@@ -115,7 +150,7 @@ namespace BPMExtended.Main.Business
             return new GSHDSLTechnicalReservationDetail
             {
                 Switch = "s1",
-                SwitchId = "test",
+                SwitchId = "591.0",
                 SwitchType ="Automatic",
 
                 MDFPort = "mdf p1",
@@ -141,6 +176,41 @@ namespace BPMExtended.Main.Business
 
             };
         }
+
+        public GSHDSLTechnicalReservationDetail GSHDSLGetTechnicalReservationById(string contractId)
+        {
+
+            return new GSHDSLTechnicalReservationDetail
+            {
+                Switch = "s1",
+                SwitchId = "591.0",
+                SwitchType = "Automatic",
+
+                MDFPort = "mdf p1",
+                MDF = "mdf1",
+                MDFPortId = "mdf port id1",
+                MDFId = "mdf id1",
+
+                Cabinet = "c4469",
+                CabinetId = "ci65",
+                PrimaryPort = "pp65",
+                PrimaryPortId = "we",
+                SecondaryPort = "89",
+                SecondaryPortId = "6891",
+
+                DP = "65",
+                DPPortId = "68767",
+                DPPort = "43",
+                DPId = "dp id1",
+
+                DSLAMPortId = "900",
+
+                CanReserve = "true",
+
+            };
+        }
+
+
 
         public DeportedNumberReservation GetDeportedNumberReservation(string phoneNumber)
         {
@@ -385,6 +455,14 @@ namespace BPMExtended.Main.Business
                 item = client.Get<bool>(String.Format("api/SOM_Main/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
             }
             return item;
+        }
+
+        public bool IsManualDSLAMForGSHDSL(string contractId)
+        {
+            Random gen = new Random();
+            int prob = gen.Next(10);
+            return prob <= 5;
+
         }
 
         public string ReserveTelephonyNumber(string phoneNumber, string pathType, string phoneNumberID, string deviceID, string mDFPortID, string dPPortID, string primaryPort, string secondaryPort)

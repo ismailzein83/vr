@@ -43,6 +43,16 @@ namespace BPMExtended.Main.Business
             return contracts.MapRecords(TelephonyContractDetailToInfo, filterExpression).ToList();
         }
 
+        public GSHDSLContractDetail GetGSHDSLContract(string contractId)
+        {
+            return RatePlanMockDataGenerator.GetGSHDSLContract(contractId);
+        }
+
+        public List<GSHDSLContractDetail> GetGSHDSLContracts(string customerId)
+        {
+            return RatePlanMockDataGenerator.GetGSHDSLContracts(customerId);
+        }
+
         public ADSLContractDetail GetADSLContract(string contractId)
         {
             return RatePlanMockDataGenerator.GetADSLContract(contractId);
@@ -181,6 +191,18 @@ namespace BPMExtended.Main.Business
         public bool ActivateADSLAlterSpeed(string contractId, string speed)
         {
             //TODO: Activate service
+            return true;
+        }
+
+        public bool ActivateGSHDSL(string contractId)
+        {
+            //TODO: Activate service
+            return true;
+        }
+
+        public bool ActivateGSHDSLTermination(string contractId)
+        {
+            //TODO: Terminate GSHDSL contract
             return true;
         }
 

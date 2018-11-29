@@ -72,6 +72,16 @@ namespace BPMExtended.Main.Common
 
         #endregion
 
+        #region GSHDSL
+
+        const string CONTRACT_CUST1_GSHDSL1 = "BF21223A-50A2-4386-B63A-A1BCEB16C875";
+
+        const string CONTRACT_CUST1_GSHDSL2 = "589A4F27-58A7-400D-A983-7A6C8D876FC0";
+
+
+        #endregion
+
+
         #endregion
 
         #region Contracts For CUSTOMER_ID_2
@@ -563,9 +573,73 @@ namespace BPMExtended.Main.Common
         #endregion
 
 
-        #region Pabx
+        #region GSHDSL Contract
 
-        public static List<PabxContractDetail> GetPabxContracts(string customerId)
+        public static GSHDSLContractDetail GetGSHDSLContract(string contractId)
+        {
+            return GetAllGSHDSLContracts().Find(x => x.ContractId.ToLower() == contractId.ToLower());
+        }
+
+        public static List<GSHDSLContractDetail> GetGSHDSLContracts(string customerId)
+        {
+            return GetAllGSHDSLContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
+        }
+
+
+        private static List<GSHDSLContractDetail> GetAllGSHDSLContracts()
+        {
+            return new List<GSHDSLContractDetail>
+            {
+                 new GSHDSLContractDetail
+                 {
+                     ContractId = CONTRACT_CUST1_GSHDSL1,
+                     CustomerId = CUSTOMER_ID_1,
+                     PhoneNumber= PHONE_NUMBER_1,
+                     RatePlanId = RP_GSHDSL_RES_NORMAL,
+                     RatePlanName = "Normal Plan",
+                     CSO = "None",
+                     Status = ContractDetailStatus.Active,
+                     CreatedTime = DateTime.Today.AddDays(-5),
+                     LastModifiedTime = DateTime.Today.AddDays(-3),
+                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     ContractBalance = 110,
+                     UnbilledAmount = 2092,
+                     Promotions = "promo1",
+                     FreeUnit = "unit1"
+                 },
+                  new GSHDSLContractDetail
+                 {
+                     ContractId = CONTRACT_CUST1_GSHDSL2,
+                     CustomerId = CUSTOMER_ID_1,
+                     PhoneNumber= PHONE_NUMBER_1,
+                     RatePlanId = RP_GSHDSL_RES_STUDENT,
+                     RatePlanName = "Student Plan",
+                     CSO = "None",
+                     Status = ContractDetailStatus.Active,
+                     CreatedTime = DateTime.Today.AddDays(-5),
+                     LastModifiedTime = DateTime.Today.AddDays(-3),
+                     ContractAddress = new Address () {Province ="prov9" , Building = "b9" , City="beirut" , Floor = "9", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                      ContractBalance = 21,
+                     UnbilledAmount = 44,
+                     Promotions = "promo2",
+                     FreeUnit = "unit2"
+                 }
+
+            };
+
+
+        }
+
+        #endregion
+
+
+                #region Pabx
+
+            public static List<PabxContractDetail> GetPabxContracts(string customerId)
         {
             return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
         }

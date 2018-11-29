@@ -10,6 +10,11 @@ namespace BPMExtended.Main.Entities
     {
     }
 
+    public class GSHDSLContractDetail : ContractDetail
+    {
+
+    }
+
     public class ADSLContractDetail : ContractDetail
     {
         public string TelephonyContractId { get; set; }
