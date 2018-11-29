@@ -13,6 +13,7 @@ namespace Vanrise.Analytic.Business
 
         public string CustomCode { get; set; }
 
+        public string Classes { get; set; }
         public string GetCustomCode()
         {
             return CustomCode;
