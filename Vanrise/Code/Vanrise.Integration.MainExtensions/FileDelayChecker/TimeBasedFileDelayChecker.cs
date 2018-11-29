@@ -5,7 +5,7 @@ namespace Vanrise.Integration.MainExtensions.FileDelayChecker
 {
     public class TimeBasedFileDelayChecker : FileDelayCheckerSettings
     {
-        public override Guid ConfigId { get { throw new NotImplementedException(); } }
+        public override Guid ConfigId { get { return new Guid("A498CF7D-0D01-4384-992C-644238F11C09"); } }
 
         public TimeSpan MaxDelayPeriod { get; set; }
 
