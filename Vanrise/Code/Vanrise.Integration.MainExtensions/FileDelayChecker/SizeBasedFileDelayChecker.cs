@@ -6,13 +6,13 @@ using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.MainExtensions.FileDelayChecker
 {
-    public class SizeBasedFileDelayChecker : FileDelayCheckerSettings
+    public class SizeBasedFileDelayChecker : Vanrise.Integration.Entities.FileDelayChecker
     {
         public override Guid ConfigId { get { return new Guid("07C4303E-2D53-4062-BEF6-9B033CABB692"); } }
 
-        public TimeSpan MaxPeakDelayPeriod { get; set; }
+        public TimeSpan PeakDelayInterval { get; set; } //15min
 
-        public TimeSpan MaxOffPeakDelayPeriod { get; set; }
+        public TimeSpan OffPeakDelayInterval { get; set; } //30min
 
         public override bool IsDelayed(IFileDelayCheckerIsDelayedContext context)
         {
@@ -24,9 +24,9 @@ namespace Vanrise.Integration.MainExtensions.FileDelayChecker
             List<PeakTimeRange> peakTimeRanges = new List<PeakTimeRange>(); //GetDataFromConfigManager
 
             if (IsPeak(currentTime, peakTimeRanges))
-                return nowDateTime - context.LastRetrievedFileTime.Value > this.MaxPeakDelayPeriod;
+                return nowDateTime - context.LastRetrievedFileTime.Value > this.PeakDelayInterval;
             else
-                return nowDateTime - context.LastRetrievedFileTime.Value > this.MaxOffPeakDelayPeriod;
+                return nowDateTime - context.LastRetrievedFileTime.Value > this.OffPeakDelayInterval;
         }
 
         private bool IsPeak(Time currentTime, List<PeakTimeRange> peakTimeRanges)
