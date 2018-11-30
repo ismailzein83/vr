@@ -422,6 +422,7 @@ as (select * from (values
 ('727C9780-367C-434D-94F3-D29F991748B9','Purchase Codes','Purchase Codes','#/view/WhS_BusinessEntity/Views/SupplierCode/SupplierCodeManagement'				,'8F443685-3AC6-4C48-9298-017D74221EAF','WhS_BE/SupplierCode/GetFilteredSupplierCodes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',1),
 ('488C68E1-C255-48EE-9D57-16C917D396E9','Purchase Zones','Purchase Zones','#/view/WhS_BusinessEntity/Views/SupplierZone/SupplierZoneManagement'				,'8F443685-3AC6-4C48-9298-017D74221EAF','WhS_BE/SupplierZone/GetFilteredSupplierZones',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
 ('7EA06029-AFFA-4317-9FD6-02C9227788D5','Purchase Rates','Purchase Rates','#/view/WhS_BusinessEntity/Views/SupplierRate/SupplierRateManagement'				,'8F443685-3AC6-4C48-9298-017D74221EAF','WhS_BE/SupplierRate/GetFilteredSupplierRates',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
+
 ('2C5F7879-1D71-47BF-ADFE-221CBD9A8D3E','Purchase Services','Purchase Services','#/view/WhS_BusinessEntity/Views/SupplierService/SupplierServiceManagement'	,'8F443685-3AC6-4C48-9298-017D74221EAF','WhS_BE/SupplierZoneService/GetFilteredSupplierZoneServices',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
 ('072124B2-C47E-4BE8-96BD-C9F9AE27EDA5','Purchase Pricelists','Purchase Pricelists','#/view/WhS_BusinessEntity/Views/SupplierPricelist/SupplierPricelist'	,'8F443685-3AC6-4C48-9298-017D74221EAF','WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
 
@@ -712,6 +713,7 @@ as (select * from (values
 ('WhS_BE/ZoneRoutingProduct/GetPrimarySaleEntity',null),
 
 ('WhS_BE/SaleCode/GetFilteredSaleCodes','WhS_BE_SaleZoneAndCode: View'),
+('WhS_BE/SaleCode/GetSaleCodeQueryHandlerInfo','WhS_BE_SaleZoneAndCode: View'),
 
 ('WhS_BE/SalePricelist/GetFilteredSalePriceLists','WHS_BE_SalePricelist: View'),
 
@@ -731,6 +733,8 @@ as (select * from (values
 
 ('WhS_BE/SupplierCode/GetFilteredSupplierCodes','WhS_BE_SupplierZoneAndCode: View'),
 ('WhS_BE/SupplierRate/GetFilteredSupplierRates','WhS_BE_SupplierRate: View'),
+('WhS_BE/SupplierRate/GetSupplierRateQueryHandlerInfo','WhS_BE_SupplierRate: View'),
+('WhS_BE/SupplierRate/GetSupplierRateHistoryQueryHandlerInfo','WhS_BE_SupplierRate: View'),
 ('WhS_BE/SupplierZone/GetFilteredSupplierZones','WhS_BE_SupplierZoneAndCode: View'),
 ('WhS_BE/SupplierZone/GetSupplierZoneInfo',null),
 ('WhS_BE/SupplierZone/GetSupplierZoneInfoByIds',null),

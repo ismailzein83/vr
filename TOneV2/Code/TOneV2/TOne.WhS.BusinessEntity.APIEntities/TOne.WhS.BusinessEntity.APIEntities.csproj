@@ -51,6 +51,9 @@
     <Compile Include="ClientSupplierZoneInfo.cs" />
     <Compile Include="ClientSupplierZonesInfoInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaleCodeQueryHandlerInfo.cs" />
+    <Compile Include="SupplierRateHistoryQueryHandlerInfo.cs" />
+    <Compile Include="SupplierRateQueryHandlerInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

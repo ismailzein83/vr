@@ -1380,7 +1380,8 @@ namespace TOne.WhS.BusinessEntity.Business
             var clientAccountInfo = new ClientAccountInfo
             {
                 AccountId = account.CarrierAccountId,
-                Name = account.Name
+                Name = account.Name,
+				CurrencyId=account.CurrencyId
             };
             if (account.AccountType == CarrierAccountType.Exchange)
                 clientAccountInfo.CarrierAccountType = ClientAccountType.Exchange;

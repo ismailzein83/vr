@@ -12,6 +12,7 @@ namespace TOne.WhS.BusinessEntity.APIEntities
     {
         public int AccountId { get; set; }
         public string Name { get; set; }
+		public int CurrencyId { get; set; }
         public ClientAccountType CarrierAccountType { get; set; }
         public ClientActivationStatus ActivationStatus { get; set; }
     }

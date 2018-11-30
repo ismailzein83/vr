@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Http;
+using TOne.WhS.BusinessEntity.APIEntities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
@@ -30,6 +31,34 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SaleCodeManager manager = new SaleCodeManager();
             return manager.GetSaleCodesByCodeGroups(codeGroupsIds);
         }
-    }
+
+		[HttpPost]
+		[Route("GetSaleCodeQueryHandlerInfo")]
+		public object GetSaleCodeQueryHandlerInfo(Vanrise.Entities.DataRetrievalInput<SaleCodeQueryHandlerInfo> input)
+		{
+			SaleCodeQueryHandler saleCodeQueryHandler = new SaleCodeQueryHandler
+			{
+				Query = new SaleCodeQuery
+				{
+					EffectiveOn = input.Query.EffectiveOn,
+					ZonesIds = input.Query.ZonesIds
+				}
+			};
+
+			DataRetrievalInput<BaseSaleCodeQueryHandler> mappedInput = new DataRetrievalInput<BaseSaleCodeQueryHandler>
+			{
+				IsAPICall = input.IsAPICall,
+				GetSummary = input.GetSummary,
+				IsSortDescending = input.IsSortDescending,
+				ResultKey = input.ResultKey,
+				SortByColumnName = input.SortByColumnName,
+				DataRetrievalResultType = input.DataRetrievalResultType,
+				FromRow = input.FromRow,
+				ToRow = input.ToRow,
+				Query = saleCodeQueryHandler,
+			};
+			return this.GetFilteredSaleCodes(mappedInput);
+		}
+	}
 
 }
