@@ -69,7 +69,7 @@ app.directive('whsBeSpecificCodeResolver', ['UtilsService', 'VRUIUtilsService',
 
 				api.load = function (payload) {
 					if (payload != undefined) {
-						$scope.scopeModel.allowTextCode = payload.context.isBNumber;
+						$scope.scopeModel.allowTextCode = payload.context.AllowTextCode;
 						angular.forEach(payload.Codes, function (item) {
 							$scope.codeCriteriaArray.push(item);
 						});
