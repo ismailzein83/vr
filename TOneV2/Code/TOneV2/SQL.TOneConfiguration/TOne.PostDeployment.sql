@@ -2184,7 +2184,7 @@ as (select * from (values
 ('C6CD2717-0D81-4CBE-86DC-529A87CFDBCB','VR_Invoice_Invoice_5fd8df00-71e8-4edb-bbec-108ee3cd66b3','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Invoice_Invoice_ViewHistoryItem"}'),
 ('9657D6BB-B689-46F4-ACA7-D122099C5F4A','VR_Invoice_Invoice_576ac720-4745-4a57-86b4-6b5709fe71c7','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Invoice_Invoice_ViewHistoryItem"}'),
 ('F27CEB2A-95B1-4358-BE3C-1E9D6E210EC7','VR_Invoice_PartnerInvoiceSetting_eadc10c8-ffd7-4ee3-9501-0b2ce09029ad','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Invoice_InvoiceSetting_ViewHistoryItem"}'),
-('D4778070-28D5-48BC-89D0-A893D108D031','VR_Invoice_PartnerInvoiceSetting_576ac720-4745-4a57-86b4-6b5709fe71c7','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Invoice_InvoiceSetting_ViewHistoryItem"}')
+('D4778070-28D5-48BC-89D0-A893D108D031','VR_Invoice_PartnerInvoiceSetting_576ac720-4745-4a57-86b4-6b5709fe71c7','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Invoice_InvoiceSetting_ViewHistoryItem"}'),
 ('81DE0827-1B1D-451F-B0AF-0CE51454BC18','VR_Invoice_Invoice_eadc10c8-ffd7-4ee3-9501-0b2ce09029ad','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Invoice_Invoice_ViewHistoryItem"}')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
