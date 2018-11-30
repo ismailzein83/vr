@@ -464,6 +464,18 @@
         }
 
         function getContext() {
+            var shiftedBED ;
+            var shiftedEED ;
+            var shiftedDatesPromiseDeferred = UtilsService.createPromiseDeferred();
+            if ($scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined) {
+                GetShiftedDate($scope.scopeModel.beginDate).then(function (reponse) {
+                    shiftedBED = response;
+                    GetShiftedDate($scope.scopeModel.endDate).then(function (reponse) {
+                        shiftedEED = response;
+                        shiftedDatesPromiseDeferred.resolve();
+                    });
+                });
+            }
             return {
                 getSupplierZoneSelectorPayload: function (item) {
                     var payload;
@@ -492,14 +504,17 @@
                             EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
                             ExcludePendingClosedZones: true
                         };
-                    payload.filter.Filters = [{
-                        $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
-                        CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                        DealId: dealId,
-                        BED: $scope.scopeModel.beginDate,
-                        EED: $scope.scopeModel.endDate
-                    }];
-                    return payload;
+                    shiftedDatesPromiseDeferred.promise.then(function(){
+                        payload.filter.Filters = [{
+                            $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
+                            CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                            DealId: dealId,
+                            BED: shiftedBED,
+                            EED: shiftedEED
+                        }];
+
+                        return payload;
+                    });
                 },
 
                 getSaleZoneSelectorPayload: function (item) {
@@ -530,23 +545,22 @@
                             EffectiveDate: $scope.scopeModel.beginDate,
                             ExcludePendingClosedZones: true
                         };
-
-
                     }
+                    shiftedDatesPromiseDeferred.promise.then(function () {
+                        payload.filter.Filters = [{
+                            $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
+                            CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                            DealId: dealId,
+                            BED: shiftedBED,
+                            EED: shiftedEED
+                        }];
 
-                    payload.filter.Filters = [{
-                        $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
-                        CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                        DealId: dealId,
-                        BED: $scope.scopeModel.beginDate,
-                        EED: $scope.scopeModel.endDate
-                    }];
-
-                    return payload;
+                        return payload;
+                    });
+                   
                 },
                 getEffectiveOnDate: function () {
-                    var isShifted = $scope.scopeModel.selectedTimeZone.value == WhS_Deal_SwapDealTimeZoneTypeEnum.Supplier ? true : false;
-                    return WhS_Deal_DealDefinitionAPIService.GetEffectiveOnDate(false, isShifted, carrierAccountSelectorAPI.getSelectedIds(), $scope.scopeModel.beginDate, offset);
+                    return GetShiftedDate($scope.scopeModel.beginDate);
                 },
                 getDealBED: function () {
                     return $scope.scopeModel.beginDate;
@@ -555,7 +569,7 @@
                     return $scope.scopeModel.endDate;
                 },
                 getCarrierAccountId: function () {
-                    return carrierAccountSelectorAPI.getSelectedIds();
+                    return carrierAccountSelectorAPI.getSelectedIds();   
                 },
                 getSwapDealCurrency: function () {
                     return currencyDirectiveAPI.getSelectedValues();
@@ -575,6 +589,10 @@
                 }
             }
             return filterdIds;
+        }
+        function GetShiftedDate(date) {
+            var isShifted = $scope.scopeModel.selectedTimeZone.value == WhS_Deal_SwapDealTimeZoneTypeEnum.Supplier ? true : false;
+            return WhS_Deal_DealDefinitionAPIService.GetEffectiveOnDate(false, isShifted, carrierAccountSelectorAPI.getSelectedIds(), date, offset);
         }
         function getSelectedSupplierZonesIdsFromItems(includedIds) {
             var ids = getUsedSupplierZonesIds();

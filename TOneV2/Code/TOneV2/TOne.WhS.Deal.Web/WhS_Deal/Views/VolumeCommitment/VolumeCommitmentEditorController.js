@@ -372,6 +372,19 @@
         }
 
         function getContext() {
+            var shiftedBED ;
+            var shiftedEED ;
+            var shiftedDatesPromiseDeferred = UtilsService.createPromiseDeferred();
+            var payloadLoadedPromiseDeferred = UtilsService.createPromiseDeferred();
+            if ($scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined) {
+                GetShiftedDate($scope.scopeModel.beginDate).then(function (response) {
+                    shiftedBED = response;
+                    GetShiftedDate($scope.scopeModel.endDate).then(function (reponse) {
+                        shiftedEED = response;
+                        shiftedDatesPromiseDeferred.resolve();
+                    });
+                });
+            }
             var context = {
                 lastGroupNumber: lastGroupNumber,
                 getRateEvaluatorSelective: function () {
@@ -413,14 +426,17 @@
                                         EffectiveDate: $scope.scopeModel.beginDate,
                                         ExcludePendingClosedZones: true
                                     };
-                                payload.filter.Filters = [{
-                                    $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
-                                    CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                                    DealId: dealId,
-                                    BED: $scope.scopeModel.beginDate,
-                                    EED: $scope.scopeModel.endDate,
-                                    FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
-                                }];
+                                shiftedDatesPromiseDeferred.promise.then(function () {
+                                    payload.filter.Filters = [{
+                                        $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
+                                        CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                                        DealId: dealId,
+                                        BED: $scope.scopeModel.beginDate,
+                                        EED: $scope.scopeModel.endDate,
+                                        FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
+                                    }];
+                                    payloadLoadedPromiseDeferred.resolve();
+                                });
                                 break;
                             case WhS_Deal_VolumeCommitmentTypeEnum.Sell.value:
                                 var carrierAccount = carrierAccountSelectorAPI.getSelectedValues();
@@ -449,17 +465,23 @@
                                         EffectiveDate: $scope.scopeModel.beginDate,
                                         ExcludePendingClosedZones: true
                                     };
-                                payload.filter.Filters = [{
-                                    $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
-                                    CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                                    DealId: dealId,
-                                    BED: $scope.scopeModel.beginDate,
-                                    EED: $scope.scopeModel.endDate,
-                                    FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
-                                }];
+                                shiftedDatesPromiseDeferred.promise.then(function () {
+                                    payload.filter.Filters = [{
+                                        $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
+                                        CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                                        DealId: dealId,
+                                        BED: $scope.scopeModel.beginDate,
+                                        EED: $scope.scopeModel.endDate,
+                                        FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
+                                    }];
+                                    payloadLoadedPromiseDeferred.resolve();
+                                   
+                                });
                                 break;
                         }
-                        return payload;
+                        payloadLoadedPromiseDeferred.promise.then(function () {
+                            return payload;
+                        });
                     }
                 },
                 getZoneIdAttName: function () {
@@ -480,15 +502,7 @@
                     return $scope.scopeModel.selectedVolumeCommitmentType;
                 },
                 getEffectiveOnDate: function () {
-                    var isSale;
-                    var isShifted;
-                    if ($scope.scopeModel.selectedTimeZone.value == WhS_Deal_VolCommitmentTimeZoneTypeEnum.System)
-                        isShifted = false;
-                    else {
-                        isShifted = true;
-                        isSale = $scope.scopeModel.selectedTimeZone.value == WhS_Deal_VolCommitmentTimeZoneTypeEnum.Customer ? true : false;
-                    }
-                    return WhS_Deal_DealDefinitionAPIService.GetEffectiveOnDate(isSale, isShifted, carrierAccountSelectorAPI.getSelectedIds(), $scope.scopeModel.beginDate, offset);
+                    return GetShiftedDate($scope.scopeModel.beginDate);
                 },
                 getDealBED: function () {
                     return $scope.scopeModel.beginDate;
@@ -505,6 +519,17 @@
 
             };
             return context;
+        }
+        function GetShiftedDate(date) {
+            var isSale;
+            var isShifted;
+            if ($scope.scopeModel.selectedTimeZone.value == WhS_Deal_VolCommitmentTimeZoneTypeEnum.System)
+                isShifted = false;
+            else {
+                isShifted = true;
+                isSale = $scope.scopeModel.selectedTimeZone.value == WhS_Deal_VolCommitmentTimeZoneTypeEnum.Customer ? true : false;
+            }
+            return WhS_Deal_DealDefinitionAPIService.GetEffectiveOnDate(isSale, isShifted, carrierAccountSelectorAPI.getSelectedIds(), date, offset);
         }
         function getSelectedZonesIdsFromItems(includedIds) {
             var ids = getUsedZonesIds();
