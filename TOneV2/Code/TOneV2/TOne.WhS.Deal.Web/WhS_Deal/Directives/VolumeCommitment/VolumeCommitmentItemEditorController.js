@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentItemEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_VolumeCommitmentService','WhS_Deal_VolumeCommitmentTypeEnum'];
+    VolumeCommitmentItemEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum'];
 
-    function VolumeCommitmentItemEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Deal_VolumeCommitmentService,WhS_Deal_VolumeCommitmentTypeEnum) {
+    function VolumeCommitmentItemEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum) {
         $scope.scopeModel = {};
         var volumeCommitmentItemEntity;
         var context;
@@ -102,7 +102,7 @@
                     if (payload != undefined) {
                         if (payload.filter != undefined) {
                             payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
-                            
+
                         }
 
                         else
@@ -188,9 +188,8 @@
                 countrySelectedPromiseDeferred = UtilsService.createPromiseDeferred();
             }
 
-            if (volumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Sell.value)
-            {
-                context.getEffectiveOnDate().then(function (date) { 
+            if (volumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Sell.value) {
+                context.getEffectiveOnDate().then(function (date) {
                     payload.filter = {
                         Filters: [{
                             $type: 'TOne.WhS.BusinessEntity.Business.CountrySoldToCustomerFilter,TOne.WhS.BusinessEntity.Business',
@@ -202,13 +201,16 @@
                     getEffectiveDatePromiseDeferred.resolve();
                 });
             }
+            else {
+                getEffectiveDatePromiseDeferred.resolve();
+            }
 
             getEffectiveDatePromiseDeferred.promise.then(function () {
                 countryReadyPromiseDeferred.promise.then(function () {
                     VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
                 });
             });
-           
+
             if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryIds != undefined) {
                 var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -231,7 +233,7 @@
 
         function setTitle() {
             if (isEditMode && volumeCommitmentItemEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(volumeCommitmentItemEntity.Name, 'Group');
+                $scope.title = UtilsService.buildTitleForUpdateEditor(volumeCommitmentItemEntity.Name, 'Group');
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Group');
         }
@@ -262,9 +264,9 @@
             var zoneIds = zoneDirectiveAPI.getSelectedIds();
             for (var j = 0; j < zoneIds.length; j++) {
                 saleZones.push(
-                {
-                    ZoneId: zoneIds[j]
-                });
+                    {
+                        ZoneId: zoneIds[j]
+                    });
             }
             return {
                 Name: $scope.scopeModel.name,
@@ -339,7 +341,7 @@
                 return newexrates;
 
             if (exrates) {
-                for (var i = 0 ; i < exrates.length; i++) {
+                for (var i = 0; i < exrates.length; i++) {
 
                     if (exrates[i].Zones != undefined) {
                         newexrates[newexrates.length] = {
@@ -355,7 +357,7 @@
 
         function bulidTiersData(tiers) {
             var newTiersArray = [];
-            for (var i = 0 ; i < tiers.length; i++) {
+            for (var i = 0; i < tiers.length; i++) {
                 var tier = tiers[i];
                 var tierExceptions = findExceptionZoneIds(tier.ExceptionZoneRates);
                 var tierNb = i + 1;
@@ -385,7 +387,7 @@
             }
             var deletedTierNb = index + 1;
             var newTiersArray = [];
-            for (var i = 0 ; i < $scope.scopeModel.tiers.length; i++) {
+            for (var i = 0; i < $scope.scopeModel.tiers.length; i++) {
                 var tier = $scope.scopeModel.tiers[i];
                 if (i != index) {
 
@@ -405,7 +407,7 @@
         };
 
         function rebuildTiersArray(array) {
-            for (var j = 0 ; j < array.length; j++) {
+            for (var j = 0; j < array.length; j++) {
                 var tierNb = j + 1;
                 var tier = array[j];
                 tier.tierId = tierNb;
