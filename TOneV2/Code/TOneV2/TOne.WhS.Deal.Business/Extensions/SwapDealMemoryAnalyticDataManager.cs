@@ -297,7 +297,8 @@ namespace TOne.WhS.Deal.Business
             Dictionary<PropertyName, string> propertyNames = new Dictionary<PropertyName, string>
             {
                 {PropertyName.Duration, string.Format("{0}Duration", prefix)},
-                {PropertyName.Net, string.Format("{0}NetNotNULL", prefix)},
+                {PropertyName.Net, string.Format("{0}Net", prefix)},
+                {PropertyName.NetNotNull, string.Format("{0}NetNotNULL", prefix)},
                 {PropertyName.Zone, string.Format("{0}Zone", prefix)}
             };
             return propertyNames;
