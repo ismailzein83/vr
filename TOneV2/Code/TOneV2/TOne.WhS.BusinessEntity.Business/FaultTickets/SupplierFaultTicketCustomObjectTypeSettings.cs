@@ -66,7 +66,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (var newValueItem in newValueObject)
             {
-                var oldValueItem = newValueObject.FindRecord(x => x.CodeNumber == newValueItem.CodeNumber && x.ReasonId == newValueItem.ReasonId && newValueItem.InternationalReleaseCodeId == x.InternationalReleaseCodeId);
+                var oldValueItem = oldValueObject.FindRecord(x => x.CodeNumber == newValueItem.CodeNumber && x.ReasonId == newValueItem.ReasonId && newValueItem.InternationalReleaseCodeId == x.InternationalReleaseCodeId);
                 if (oldValueItem == null)
                     return false;
             }
