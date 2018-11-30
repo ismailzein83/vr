@@ -154,6 +154,7 @@ namespace TOne.WhS.Deal.Business
 
                 decimal sumDuration = 0;
                 decimal sumNet = 0;
+                decimal sumNetNotNull = 0;
 
                 if (billingRecords != null && billingRecords.Count > 0)
                 {
@@ -172,6 +173,7 @@ namespace TOne.WhS.Deal.Business
                         }
                         sumDuration += record.Duration;
                         sumNet += record.Net;
+                        sumNetNotNull += record.NetNotNull;
                     }
                 }
 
@@ -179,11 +181,15 @@ namespace TOne.WhS.Deal.Business
                 decimal costDuration = !isSale ? sumDuration : 0;
                 decimal saleNet = isSale ? sumNet : 0;
                 decimal costNet = !isSale ? sumNet : 0;
+                decimal saleNetNotNull = isSale ? sumNetNotNull : 0;
+                decimal costNetNotNull = !isSale ? sumNetNotNull : 0;
 
                 rawMemoryRecord.FieldValues.Add("SaleDuration", saleDuration);
                 rawMemoryRecord.FieldValues.Add("SaleNet", saleNet);
                 rawMemoryRecord.FieldValues.Add("CostDuration", costDuration);
                 rawMemoryRecord.FieldValues.Add("CostNet", costNet);
+                rawMemoryRecord.FieldValues.Add("CostNetNotNull", costNetNotNull);
+                rawMemoryRecord.FieldValues.Add("SaleNetNotNull", saleNetNotNull);
                 rawMemoryRecord.FieldValues.Add("DailyEstimatedVolume", estimatedVolume);
                 rawMemoryRecord.FieldValues.Add("DailyEstimatedAmount", estimatedAmount);
                 rawMemoryRecords.Add(rawMemoryRecord);
@@ -262,11 +268,18 @@ namespace TOne.WhS.Deal.Business
                 if (net != null && net.Value != null)
                     netValue = Convert.ToDecimal(net.Value ?? 0.0);
 
+                decimal netNotNullValue = 0;
+                MeasureValue netNotNull;
+                analyticRecord.MeasureValues.TryGetValue(propertyNames[PropertyName.NetNotNull], out netNotNull);
+                if (netNotNull != null && netNotNull.Value != null)
+                    netNotNullValue = Convert.ToDecimal(netNotNull.Value ?? 0.0);
+
                 billingRecords.Add(new BillingRecord
                 {
                     HalfHourDateTime = halfHourDateTime,
                     Duration = durationValue,
-                    Net = netValue
+                    Net = netValue,
+                    NetNotNull = netNotNullValue
                 });
             }
             return analyticRecordByDealZone;
@@ -293,7 +306,8 @@ namespace TOne.WhS.Deal.Business
         {
             Duration,
             Net,
-            Zone
+            Zone,
+            NetNotNull
         }
 
         #endregion
@@ -304,6 +318,7 @@ namespace TOne.WhS.Deal.Business
             public DateTime HalfHourDateTime { get; set; }
             public decimal Duration { get; set; }
             public decimal Net { get; set; }
+            public decimal NetNotNull { get; set; }
         }
         #endregion
     }
