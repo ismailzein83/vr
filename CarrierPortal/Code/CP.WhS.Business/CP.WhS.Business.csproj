@@ -75,12 +75,21 @@
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlockedAttemptsManager.cs" />
+    <Compile Include="CustomerCodeManager.cs" />
+    <Compile Include="CustomerOtherRateManager.cs" />
+    <Compile Include="CustomerRateHistoryManager.cs" />
+    <Compile Include="CustomerRateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReleaseCodeStatisticsManager.cs" />
     <Compile Include="RepeatedNumbersManager.cs" />
+    <Compile Include="SupplierCodeManager.cs" />
+    <Compile Include="SupplierOtherRateManager.cs" />
+    <Compile Include="SupplierRateHistoryManager.cs" />
+    <Compile Include="SupplierRateManager.cs" />
     <Compile Include="WhSAccountVRRestAPIRecordQueryInterceptor.cs" />
     <Compile Include="WhSCarrierAccountBEManager.cs" />
     <Compile Include="WhSCarrierAccountsBEDefinition.cs" />

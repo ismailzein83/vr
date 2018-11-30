@@ -136,6 +136,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CustomerCodeController.cs" />
+    <Compile Include="Controllers\SupplierCodeController.cs" />
+    <Compile Include="Controllers\CustomerOtherRateController.cs" />
+    <Compile Include="Controllers\SupplierOtherRateController.cs" />
+    <Compile Include="Controllers\CustomerRateController.cs" />
+    <Compile Include="Controllers\CustomerRateHistoryController.cs" />
+    <Compile Include="Controllers\SupplierRateHistoryController.cs" />
+    <Compile Include="Controllers\SupplierRateController.cs" />
     <Compile Include="Controllers\BlockedAttemptsController.cs" />
     <Compile Include="Controllers\ReleaseCodeStatisticsController.cs" />
     <Compile Include="Controllers\RepeatedNumbersController.cs" />
@@ -163,9 +171,13 @@
     <Content Include="CP_WhS\Constants\BillingCDROptionMeasureEnum.js" />
     <Content Include="CP_WhS\Constants\CarrierAccountActivationStatusEnum.js" />
     <Content Include="CP_WhS\Constants\CarrierAccountTypeEnum.js" />
+    <Content Include="CP_WhS\Constants\CustomerPriceListOwnerTypeEnum.js" />
     <Content Include="CP_WhS\Constants\GenericAnalyticReleaseCodeDimensionsEnum.js" />
     <Content Include="CP_WhS\Constants\ModuleConfig.js" />
     <Content Include="CP_WhS\Constants\PhoneNumberEnum.js" />
+    <Content Include="CP_WhS\Constants\PrimarySaleEntityEnum.js" />
+    <Content Include="CP_WhS\Constants\RateChangeTypeEnum.js" />
+    <Content Include="CP_WhS\Constants\SalePriceListOwnerTypeEnum.js" />
     <Content Include="CP_WhS\Elements\AccountViewType\Directives\cp-whs-accountviewtype-selector.js" />
     <Content Include="CP_WhS\Elements\BlockedAttempts\Directives\cp-whs-blockedattempts-grid.js" />
     <Content Include="CP_WhS\Elements\BlockedAttempts\Directives\Templates\BlockedAttemptsGridTemplate.html" />
@@ -176,6 +188,23 @@
     <Content Include="CP_WhS\Elements\CarrierAccounts\Directives\cp-whs-carrieraccountsbedefinition-editor.js" />
     <Content Include="CP_WhS\Elements\CarrierAccounts\Directives\Templates\WhSCarrierAccountsBEDefinitionTemplate.html" />
     <Content Include="CP_WhS\Elements\CarrierAccounts\Services\APIServices\CarrierAccountsAPIService.js" />
+    <Content Include="CP_WhS\Elements\CustomerCodes\Directives\cp-whs-customercode-grid.js" />
+    <Content Include="CP_WhS\Elements\CustomerCodes\Directives\Templates\CustomerCodeGridTemplate.html" />
+    <Content Include="CP_WhS\Elements\CustomerCodes\Services\APIServices\CustomerCodeAPIService.js" />
+    <Content Include="CP_WhS\Elements\CustomerRates\Directives\cp-whs-customerrate-grid.js" />
+    <Content Include="CP_WhS\Elements\CustomerRates\Directives\cp-whs-customerrate-history-grid.js" />
+    <Content Include="CP_WhS\Elements\CustomerRates\Directives\cp-whs-customerotherrate-grid.js" />
+    <Content Include="CP_WhS\Elements\CustomerRates\Directives\Templates\CustomerRateGridTemplate.html" />
+    <Content Include="CP_WhS\Elements\CustomerRates\Directives\Templates\CustomerRateHistoryGridTemplate.html" />
+    <Content Include="CP_WhS\Elements\CustomerRates\Directives\Templates\OtherCustomerRateGridTemplate.html" />
+    <Content Include="CP_WhS\Elements\CustomerRates\Services\APIServices\CustomerRateAPIService.js" />
+    <Content Include="CP_WhS\Elements\CustomerRates\Services\APIServices\CustomerRateHistoryAPIService.js" />
+    <Content Include="CP_WhS\Elements\CustomerRates\Services\APIServices\CustomerOtherRateAPIService.js" />
+    <Content Include="CP_WhS\Elements\CustomerRates\Views\CustomerRatesManagement.html" />
+    <Content Include="CP_WhS\Elements\CustomerRates\Views\CustomerRatesManagementController.js" />
+    <Content Include="CP_WhS\Elements\SupplierRates\Directives\cp-whs-supplierotherrate-grid.js" />
+    <Content Include="CP_WhS\Elements\SupplierRates\Directives\Templates\SupplierOtherRateGridTemplate.html" />
+    <Content Include="CP_WhS\Elements\SupplierRates\Services\APIServices\CP_WhS_SupplierOtherRateAPIService.js" />
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Directives\cp-whs-callstatus-selector.js" />
     <Content Include="CP_WhS\Elements\RepeatedNumbers\Directives\cp-whs-phonenumber-selector.js" />
     <Content Include="CP_WhS\Elements\ReleaseCodeStatistics\Directives\cp-whs-releasecode-dimension-selector.js" />
@@ -193,6 +222,15 @@
     <Content Include="CP_WhS\Elements\SaleZones\Directives\cp-whs-salezonesbedefinition-editor.js" />
     <Content Include="CP_WhS\Elements\SaleZones\Directives\Templates\WhSSaleZonesBEDefinitionEditorTemplate.html" />
     <Content Include="CP_WhS\Elements\SaleZones\Services\APIServices\SaleZonesAPIService.js" />
+    <Content Include="CP_WhS\Elements\SupplierCodes\Directives\cp-whs-suppliercode-grid.js" />
+    <Content Include="CP_WhS\Elements\SupplierCodes\Directives\Templates\SupplierCodeGridTemplate.html" />
+    <Content Include="CP_WhS\Elements\SupplierCodes\Services\APIServices\SupplierCodeAPIService.js" />
+    <Content Include="CP_WhS\Elements\SupplierRates\Directives\cp-whs-supplierrate-grid.js" />
+    <Content Include="CP_WhS\Elements\SupplierRates\Directives\Templates\SupplierRateGridTemplate.html" />
+    <Content Include="CP_WhS\Elements\SupplierRates\Services\APIServices\SupplierRateAPIService.js" />
+    <Content Include="CP_WhS\Elements\SupplierRates\Services\APIServices\SupplierRateHistoryAPIService.js" />
+    <Content Include="CP_WhS\Elements\SupplierRates\Views\SupplierRatesManagement.html" />
+    <Content Include="CP_WhS\Elements\SupplierRates\Views\SupplierRatesManagementController.js" />
     <Content Include="CP_WhS\Elements\SupplierZones\Directives\cp-whs-supplierzones-directive.js" />
     <Content Include="CP_WhS\Elements\SupplierZones\Directives\cp-whs-supplierzones-selector.js" />
     <Content Include="CP_WhS\Elements\SupplierZones\Directives\cp-whs-supplierzonesbedefinition-editor.js" />
@@ -201,6 +239,19 @@
     <Content Include="CP_WhS\Elements\SupplierZones\Services\APIServices\SupplierZonesAPIService.js" />
     <Content Include="CP_WhS\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\cp-whs-whsaccountqueryinterceptor.js" />
     <Content Include="CP_WhS\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\Templates\WhSAccountQueryInterceptorTemplate.html" />
+    <Content Include="CP_WhS\Images\Closed.png" />
+    <Content Include="CP_WhS\Images\Decrease.png" />
+    <Content Include="CP_WhS\Images\Increase.png" />
+    <Content Include="CP_WhS\Images\Modified.png" />
+    <Content Include="CP_WhS\Images\MovedFrom.png" />
+    <Content Include="CP_WhS\Images\MovedTo.png" />
+    <Content Include="CP_WhS\Images\New.png" />
+    <Content Include="CP_WhS\Images\PendingClosed.png" />
+    <Content Include="CP_WhS\Images\PendingEffective.png" />
+    <Content Include="CP_WhS\Images\Renamed.png" />
+    <Content Include="CP_WhS\Images\ReOpen.png" />
+    <Content Include="CP_WhS\Images\Zone.png" />
+    <Content Include="CP_WhS\Services\TOneAccountService.js" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

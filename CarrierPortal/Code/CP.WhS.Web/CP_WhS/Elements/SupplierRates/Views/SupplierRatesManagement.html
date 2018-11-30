@@ -1,0 +1,38 @@
+﻿<vr-panel ng-controller="CP_WhS_SupplierRatesManagementController">
+	<vr-form name="formFilter" vr-loader="scopeModel.isLoading">
+		<vr-row removeline>
+			<vr-columns haschildcolumns width="normal">
+
+				<cp-whs-carrieraccounts-selector normal-col-num="row"
+												 on-ready="scopeModel.onCarrierAccountsSelectorReady"
+												 getsuppliers
+												 isrequired="true"
+												 customlabel="Supplier Accounts">
+				</cp-whs-carrieraccounts-selector>
+			</vr-columns>
+			<vr-columns width="normal" haschildcolumns>
+				<vr-common-country-remoteselector on-ready="scopeModel.onCountryReady" ismultipleselection></vr-common-country-remoteselector>
+			</vr-columns>
+			<vr-columns width="normal">
+				<vr-textbox value="scopeModel.supplierZoneName" label="Zone Name"></vr-textbox>
+			</vr-columns>
+			<vr-columns haschildcolumns width="normal">
+				<vr-datetimepicker type="datetime" label="Effective On" value="scopeModel.effectiveOn" isrequired></vr-datetimepicker>
+			</vr-columns>
+		</vr-row>
+
+
+		<vr-row removeline>
+			<vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+				<div transclude-to="buttons">
+					<vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+				</div>
+			</vr-actionbar>
+		</vr-row>
+		<vr-row>
+			<vr-columns width="fullrow">
+				<cp-whs-supplierrate-grid normal-col-num="row" on-ready="scopeModel.onSupplierRateGridReady"></cp-whs-supplierrate-grid>
+			</vr-columns>
+		</vr-row>
+	</vr-form>
+</vr-panel>
