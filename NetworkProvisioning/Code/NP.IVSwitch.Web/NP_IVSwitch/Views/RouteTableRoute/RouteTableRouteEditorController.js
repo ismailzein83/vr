@@ -138,7 +138,7 @@
 				return codeListDirectiveDefferedReady.promise.then(function () {
 					var directivePayload = {
 						context: {
-							isBNumber: (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value) ? true : false,
+							AllowTextCode: (routeTableViewType == NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value) ? true : false,
 						}
 					};
 					VRUIUtilsService.callDirectiveLoad(codeListDirectiveAPI, directivePayload, undefined);
