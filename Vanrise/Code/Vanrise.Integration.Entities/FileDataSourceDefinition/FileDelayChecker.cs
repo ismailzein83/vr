@@ -7,16 +7,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.Integration.Entities
 {
-    public class FileDelayChecker
-    {
-        public Guid FileDelayCheckerId { get; set; }
-
-        public string Name { get; set; }
-
-        public FileDelayCheckerSettings Settings { get; set; }
-    }
-
-    public abstract class FileDelayCheckerSettings
+    public abstract class FileDelayChecker
     {
         public abstract Guid ConfigId { get; }
 

@@ -3,16 +3,7 @@ using System.Collections.Generic;
 
 namespace Vanrise.Integration.Entities
 {
-    public class FileMissingChecker
-    {
-        public Guid FileMissingCheckerId { get; set; }
-
-        public string Name { get; set; }
-
-        public FileMissingCheckerSettings Settings { get; set; }
-    }
-
-    public abstract class FileMissingCheckerSettings
+    public abstract class FileMissingChecker
     {
         public abstract Guid ConfigId { get; }
 
