@@ -9,5 +9,6 @@ namespace Vanrise.Analytic.Entities
     public class AnalyticTableInfoFilter
     {
         public List<Guid> OnlySelectedIds { get; set; }
+        public bool? ShowInKPISettings { get; set; }
     }
 }

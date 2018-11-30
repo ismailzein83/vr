@@ -307,7 +307,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return saleZonesBySellingNumberPlan.MapRecords(SaleZoneInfoMapper, x => zoneName == null || x.Name.ToLower() == zoneName).OrderBy(x => x.Name);
             }
 
-            var today = DateTime.Today;
+            var today = filter.EffectiveDate.HasValue ? filter.EffectiveDate.Value : DateTime.Today;
             HashSet<long> filteredZoneIds = null;
 
             if (filter.SaleZoneFilterSettings != null)
@@ -341,7 +341,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 if (filter.ExcludedZoneIds != null && filter.ExcludedZoneIds.Count() > 0 && filter.ExcludedZoneIds.Contains(zone.SaleZoneId))
                     return false;
-
+                if (filter.ExcludePendingClosedZones && zone.EED.HasValue)
+                    return false;
                 if (filter.Filters != null)
                 {
                     for (int i = 0; i < filter.Filters.Count(); i++)

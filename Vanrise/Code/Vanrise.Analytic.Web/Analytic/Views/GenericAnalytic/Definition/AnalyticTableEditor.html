@@ -19,8 +19,8 @@
                             <vr-textbox value="scopeModel.timeColumnName" label="Time Column Name" isrequired="true"></vr-textbox>
                         </vr-columns>
                         <!--<vr-columns width="fullrow">
-                             <vr-textbox value="scopeModel.connectionString" label="Connection String" isrequired="true"></vr-textbox>
-                        </vr-columns>-->
+         <vr-textbox value="scopeModel.connectionString" label="Connection String" isrequired="true"></vr-textbox>
+    </vr-columns>-->
                         <vr-columns width="1/2row">
                             <vr-select datasource="scopeModel.connectionStringType" selectedvalues="scopeModel.selectedConnectionStringType"
                                        onselectionchanged="scopeModel.onConnectionStringTypeSelectionChanged" isrequired="true"
@@ -40,6 +40,9 @@
                                                                     hideremoveicon ismultipleselection>
                             </vr-genericdata-datarecordtype-selector>
                         </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-switch value="scopeModel.showInKPISettings" label="Show In KPI Settings"></vr-switch>
+                            </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Security'">

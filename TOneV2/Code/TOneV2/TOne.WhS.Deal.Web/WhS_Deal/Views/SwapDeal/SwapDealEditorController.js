@@ -479,12 +479,18 @@
                         payload.selectedIds = zoneIds;
                         payload.filter = {
                             ExcludedZoneIds: getSelectedSupplierZonesIdsFromItems(zoneIds),
-                            CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
+                            CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined,
+                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                            EffectiveDate: $scope.scopeModel.beginDate,
+                            ExcludePendingClosedZones: true
                         };
                     }
                     else
                         payload.filter = {
-                            ExcludedZoneIds: getSelectedSupplierZonesIdsFromItems()
+                            ExcludedZoneIds: getSelectedSupplierZonesIdsFromItems(),
+                            EffectiveDate: $scope.scopeModel.beginDate,
+                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                            ExcludePendingClosedZones: true
                         };
                     payload.filter.Filters = [{
                         $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
@@ -512,13 +518,17 @@
                         payload.filter = {
                             ExcludedZoneIds: getSelectedSaleZonesIdsFromItems(sellZoneIds),
                             CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined,
-                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.All.value
+                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                            EffectiveDate: $scope.scopeModel.beginDate,
+                            ExcludePendingClosedZones :true
                         };
                     }
                     else {
                         payload.filter = {
                             ExcludedZoneIds: getSelectedSaleZonesIdsFromItems(),
-                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.All.value
+                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                            EffectiveDate: $scope.scopeModel.beginDate,
+                            ExcludePendingClosedZones: true
                         };
 
 

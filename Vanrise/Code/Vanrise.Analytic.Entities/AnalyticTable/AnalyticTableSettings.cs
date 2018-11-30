@@ -33,6 +33,7 @@ namespace Vanrise.Analytic.Entities
         public RequiredPermissionSettings RequiredPermission { get; set; }
 
         public AnalyticDataProvider DataProvider { get; set; }
+        public bool ShowInKPISettings { get; set; }
     }
 
 

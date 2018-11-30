@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService','VRCommon_EntityFilterEffectiveModeEnum'];
 
-    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService) {
+    function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, VRCommon_EntityFilterEffectiveModeEnum) {
 
         var isEditMode;
 
@@ -400,12 +400,18 @@
                                     payload.selectedIds = zoneIds;
                                     payload.filter = {
                                         ExcludedZoneIds: getSelectedZonesIdsFromItems(zoneIds),
-                                        CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
+                                        CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined,
+                                        EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                                        EffectiveDate: $scope.scopeModel.beginDate,
+                                        ExcludePendingClosedZones: true
                                     };
                                 }
                                 else
                                     payload.filter = {
-                                        ExcludedZoneIds: getSelectedZonesIdsFromItems()
+                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(),
+                                        EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                                        EffectiveDate: $scope.scopeModel.beginDate,
+                                        ExcludePendingClosedZones: true
                                     };
                                 payload.filter.Filters = [{
                                     $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
@@ -430,12 +436,18 @@
                                     payload.selectedIds = sellZoneIds;
                                     payload.filter = {
                                         ExcludedZoneIds: getSelectedZonesIdsFromItems(sellZoneIds),
-                                        CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
+                                        CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined,
+                                         EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                                        EffectiveDate: $scope.scopeModel.beginDate,
+                                        ExcludePendingClosedZones: true
                                     };
                                 }
                                 else
                                     payload.filter = {
-                                        ExcludedZoneIds: getSelectedZonesIdsFromItems()
+                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(),
+                                        EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                                        EffectiveDate: $scope.scopeModel.beginDate,
+                                        ExcludePendingClosedZones: true
                                     };
                                 payload.filter.Filters = [{
                                     $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",

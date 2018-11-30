@@ -61,8 +61,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, int supplierId, string searchValue)
         {
             string nameFilterLower = searchValue != null ? searchValue.ToLower() : null;
-            DateTime today = DateTime.Today;
-
+            var today = filter.EffectiveDate.HasValue ? filter.EffectiveDate.Value : DateTime.Today;
             IEnumerable<SupplierZone> supplierZones = GetSupplierZonesBySupplier(supplierId);
 
             Func<SupplierZone, bool> filterExpression = (supplierZone) =>
@@ -80,6 +79,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
 
                 if (filter.ExcludedZoneIds != null && filter.ExcludedZoneIds.Contains(supplierZone.SupplierZoneId))
+                    return false;
+                if (filter.ExcludePendingClosedZones && supplierZone.EED.HasValue)
                     return false;
 
                 var customObjects = new List<object>();

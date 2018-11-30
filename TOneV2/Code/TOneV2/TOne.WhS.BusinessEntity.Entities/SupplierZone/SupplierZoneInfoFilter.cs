@@ -16,6 +16,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public IEnumerable<long> AvailableZoneIds { get; set; }
 
         public IEnumerable<long> ExcludedZoneIds { get; set; }
+        public DateTime? EffectiveDate { get; set; }
+        public bool ExcludePendingClosedZones { get; set; }
     }
     public interface ISupplierZoneFilter
     {

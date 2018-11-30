@@ -123,7 +123,7 @@
 
                         $scope.scopeModel.connectionStringName = tableEntity.Settings.ConnectionStringName;
                         $scope.scopeModel.connectionString = tableEntity.Settings.ConnectionString;
-
+                        $scope.scopeModel.showInKPISettings = tableEntity.Settings.ShowInKPISettings;
                         if ($scope.scopeModel.connectionStringName != undefined) {
                             $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionStringName;
                         } else if ($scope.scopeModel.connectionString != undefined) {
@@ -190,7 +190,8 @@
                     ConnectionString: $scope.scopeModel.showConnectionString ? $scope.scopeModel.connectionString : undefined,
                     DataRecordTypeIds: dataRecordTypeSelectorAPI.getSelectedIds(),
                     RequiredPermission: requiredPermissionAPI.getData(),
-                    DataProvider: analyticDataProviderSettingsDirectiveAPI.getData()
+                    DataProvider: analyticDataProviderSettingsDirectiveAPI.getData(),
+                    ShowInKPISettings: $scope.scopeModel.showInKPISettings
                 }
             };
             return table;

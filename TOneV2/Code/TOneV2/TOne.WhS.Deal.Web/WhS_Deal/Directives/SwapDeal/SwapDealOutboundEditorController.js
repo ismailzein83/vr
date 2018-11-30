@@ -103,7 +103,7 @@
                     if (payload != undefined) {
                         payload.supplierId = supplierId;
                         payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
-                        payload.filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.All.value;
+                        payload.filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.Current.value;
                         payload.selectedIds = zoneIds;
                     }
                     else {
@@ -111,7 +111,7 @@
                             supplierId: supplierId,
                             filter: { CountryIds: countryDirectiveApi.getSelectedIds() },
                             selectedIds: zoneIds,
-                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.All.value
+                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value
                         };
 
                     }

@@ -99,7 +99,6 @@
                 if (country != undefined) {
                     var setLoader = function (value) { $scope.isLoadingSelector = value };
                     var payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;
-
                     if (payload != undefined) {
                         if (payload.filter != undefined) {
                             payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
@@ -176,6 +175,7 @@
         }
 
         function loadCountryZoneSection() {
+            var getEffectiveDatePromiseDeferred = UtilsService.createPromiseDeferred();
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var promises = [];
@@ -199,14 +199,16 @@
                             IsEffectiveInFuture: false
                         }]
                     };
+                    getEffectiveDatePromiseDeferred.resolve();
                 });
             }
 
-
-            countryReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
+            getEffectiveDatePromiseDeferred.promise.then(function () {
+                countryReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
+                });
             });
-
+           
             if (volumeCommitmentItemEntity != undefined && volumeCommitmentItemEntity.CountryIds != undefined) {
                 var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
 

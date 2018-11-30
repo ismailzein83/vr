@@ -37,6 +37,7 @@ namespace Vanrise.Analytic.Business
                 };
                 analyticTableClientDetails.Add(analyticTableClientDetail);
             }
+         
             return analyticTableClientDetails;
 
         }
@@ -44,11 +45,15 @@ namespace Vanrise.Analytic.Business
         public IEnumerable<AnalyticTableInfo> GetAnalyticTablesInfo(AnalyticTableInfoFilter filter)
         {
             var analyticTables = GetCachedAnalyticTables();
-            if(filter !=null)
+          
+            if (filter != null)
             {
-                return analyticTables.MapRecords(AnalyticTableInfoMapper,x => filter.OnlySelectedIds.Contains(x.AnalyticTableId));
+                Func<AnalyticTable, bool> filterExpression = (item) =>
+                 (filter.OnlySelectedIds == null || filter.OnlySelectedIds.Contains(item.AnalyticTableId)) &&
+                 (filter.ShowInKPISettings == null || item.Settings.ShowInKPISettings == filter.ShowInKPISettings.Value);
+
+                return analyticTables.MapRecords(AnalyticTableInfoMapper, filterExpression);
             }
-           
             return analyticTables.MapRecords(AnalyticTableInfoMapper);
         }
         public IEnumerable<AnalyticTableInfo> GetRemoteAnalyticTablesInfo(Guid connectionId, string serializedFilter)
