@@ -71,6 +71,7 @@
     <Compile Include="BigData\BigDataWCFService.cs" />
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CacheRefreshManager.cs" />
+    <Compile Include="Country\VRRestCountryManager.cs" />
     <Compile Include="DataEncryptionKeyManager.cs" />
     <Compile Include="DBReplicationDefinitionManager.cs" />
     <Compile Include="ExcelFileUploader\ExcelFileUploaderManager.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="VRFileManager.cs" />
     <Compile Include="VRPushNotification\VRPushNotificationManager.cs" />
     <Compile Include="VRRemoteFileManager.cs" />
+    <Compile Include="VRRestInterAppRestConnectionManager.cs" />
     <Compile Include="VRRule\VRRuleDefinitionManager.cs" />
     <Compile Include="VRRule\VRRuleManager.cs" />
     <Compile Include="VRSequence\VRSequenceManager.cs" />

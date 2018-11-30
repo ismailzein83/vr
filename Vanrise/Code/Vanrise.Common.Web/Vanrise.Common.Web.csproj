@@ -119,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Constant\VRCustomCodeDynamicAPIMethodTypeEnum.js" />
+    <Content Include="Common\Directives\Country\vr-common-country-remoteselector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\VRDynamicAPIModule\Templates\DynamicAPIModuleGridTemplate.html" />
     <Content Include="Common\Directives\VRDynamicAPIModule\vr-common-dynamicapi-module-grid.js" />
@@ -141,6 +142,7 @@
     <Content Include="Common\Services\APIServices\VRBulkActionDraftAPIService.js" />
     <Content Include="Common\Services\APIServices\VRDynamicAPIAPIService.js" />
     <Content Include="Common\Services\APIServices\VRDynamicAPIModuleAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRRestCountryAPIService.js" />
     <Content Include="Common\Services\APIServices\VRRestCurrencyAPIService.js" />
     <Content Include="Common\Services\VRDynamicAPIModuleService.js" />
     <Content Include="Common\Services\VRDynamicAPIService.js" />
@@ -198,6 +200,7 @@
     <Compile Include="Controllers\VRConnectionController.cs" />
     <Compile Include="Controllers\VRPop3MessageFilterController.cs" />
     <Compile Include="Controllers\VRPushNotificationController.cs" />
+    <Compile Include="Controllers\VRRestCountryController.cs" />
     <Compile Include="Controllers\VRRestCurrencyController.cs" />
     <Compile Include="Controllers\VRRuleDefinitionController.cs" />
     <Compile Include="Controllers\VRTempPayloadController.cs" />
