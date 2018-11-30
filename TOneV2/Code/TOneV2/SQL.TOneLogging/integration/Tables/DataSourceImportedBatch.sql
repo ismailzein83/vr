@@ -1,17 +1,21 @@
 ﻿CREATE TABLE [integration].[DataSourceImportedBatch] (
-    [ID]               BIGINT           IDENTITY (1, 1) NOT NULL,
-    [DataSourceId]     UNIQUEIDENTIFIER NULL,
-    [BatchDescription] NVARCHAR (1000)  NULL,
-    [BatchSize]        DECIMAL (18, 5)  NULL,
-    [RecordsCount]     INT              NOT NULL,
-    [MappingResult]    INT              NOT NULL,
-    [MapperMessage]    NVARCHAR (MAX)   NULL,
-    [QueueItemIds]     VARCHAR (255)    NULL,
-    [LogEntryTime]     DATETIME         NOT NULL,
-    [BatchStart]       DATETIME         NULL,
-    [BatchEnd]         DATETIME         NULL,
+    [ID]                  BIGINT           IDENTITY (1, 1) NOT NULL,
+    [DataSourceId]        UNIQUEIDENTIFIER NULL,
+    [BatchDescription]    NVARCHAR (1000)  NULL,
+    [BatchSize]           DECIMAL (18, 5)  NULL,
+    [BatchState]          INT              NULL,
+    [IsDuplicateSameSize] BIT              NULL,
+    [RecordsCount]        INT              NOT NULL,
+    [MappingResult]       INT              NOT NULL,
+    [MapperMessage]       NVARCHAR (MAX)   NULL,
+    [QueueItemIds]        VARCHAR (255)    NULL,
+    [LogEntryTime]        DATETIME         NOT NULL,
+    [BatchStart]          DATETIME         NULL,
+    [BatchEnd]            DATETIME         NULL,
     CONSTRAINT [IX_DataSourceImportedBatch_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

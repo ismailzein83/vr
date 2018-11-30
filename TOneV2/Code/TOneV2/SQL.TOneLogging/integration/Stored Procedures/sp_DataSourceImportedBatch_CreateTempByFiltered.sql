@@ -20,25 +20,17 @@ BEGIN
 	
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
-			SELECT TOP(@Top) [ID],
-			[BatchDescription],
-			[BatchSize],
-			[RecordsCount],
-			[MappingResult],
-			[MapperMessage],
-			[QueueItemIds],
-			[LogEntryTime],
-			[BatchStart],
-			[BatchEnd]
+			SELECT TOP(@Top) [ID],[BatchDescription],[BatchSize],[BatchState],[RecordsCount],[MappingResult],[MapperMessage],[QueueItemIds],[LogEntryTime],[BatchStart],[BatchEnd]
 			INTO #RESULT
 			FROM [integration].[DataSourceImportedBatch] WITH(NOLOCK) 
 			WHERE 
 				(@DataSourceId IS NULL OR DataSourceId = @DataSourceId) AND
 				(@BatchName IS NULL OR BatchDescription LIKE '%' + @BatchName + '%') AND
-				MappingResult IN (SELECT MappingResult FROM @MappingResults) AND
+				(MappingResult IN (SELECT MappingResult FROM @MappingResults)) AND
 				(@From IS NULL OR LogEntryTime >= @From) AND
 				(@To IS NULL OR LogEntryTime <= @To)
-			ORDER BY ID DESC	
+			ORDER BY ID DESC
+
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
 			EXEC(@sql)

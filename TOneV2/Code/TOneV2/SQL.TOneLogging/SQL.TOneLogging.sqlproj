@@ -117,6 +117,7 @@
     <Build Include="logging\Stored Procedures\sp_LogEntry_Insert.sql" />
     <Build Include="integration\Functions\ParseStringList.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceSummary_Get.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_GetByDataSource.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
