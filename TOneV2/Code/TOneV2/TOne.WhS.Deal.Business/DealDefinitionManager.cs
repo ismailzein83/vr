@@ -994,11 +994,14 @@ namespace TOne.WhS.Deal.Business
 
         private DealDefinitionInfo DealDefinitionInfoMapper(DealDefinition dealDefinition)
         {
+            int carrierAccountId = dealDefinition.Settings.GetCarrierAccountId();
+
             return new DealDefinitionInfo()
             {
                 DealId = dealDefinition.DealId,
                 Name = dealDefinition.Name,
-                ConfigId = dealDefinition.Settings.ConfigId
+                ConfigId = dealDefinition.Settings.ConfigId,
+                SellingNumberPlanId = new CarrierAccountManager().GetCustomerSellingNumberPlanId(carrierAccountId)
             };
         }
 

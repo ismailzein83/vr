@@ -10,5 +10,7 @@ namespace TOne.WhS.Deal.Entities
         public string Name { get; set; }
 
         public Guid ConfigId { get; set; }
+
+        public int? SellingNumberPlanId { get; set; }
     }
 }

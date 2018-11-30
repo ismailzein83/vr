@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -120,7 +120,7 @@
     <Compile Include="Helper.cs" />
     <Compile Include="SaleZoneFilter.cs" />
     <Compile Include="SupplierZoneFilter.cs" />
-    <Compile Include="SwapDeals\RouteRules\SwapDealBuyRouteRuleManager.cs" />
+    <Compile Include="DealRouteRules\DealBuyRouteRuleManager.cs" />
     <Compile Include="SwapDeals\SwapDealRouteBuildInterceptor.cs" />
     <Compile Include="SwapDeals\SwapDealSettings.cs" />
     <Compile Include="SwapDeals\ValidateBeforeSaveContext.cs" />
@@ -155,7 +155,9 @@
       <Name>TOne.WhS.Routing.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="SwapDeals\RouteRules\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

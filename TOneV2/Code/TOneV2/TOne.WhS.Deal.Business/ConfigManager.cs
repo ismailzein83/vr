@@ -11,10 +11,10 @@ namespace TOne.WhS.Deal.Business
     {
         #region Public Methods
 
-        public Guid GetSwapDealBuyRouteRuleDefinitionId()
+        public Guid GetDealBuyRouteRuleDefinitionId()
         {
             SwapDealTechnicalSettingData swapDealTechnicalSettingData = GetSwapDealTechnicalSettingData();
-            return swapDealTechnicalSettingData.SwapDealBuyRouteRuleDefinitionId;
+            return swapDealTechnicalSettingData.DealBuyRouteRuleDefinitionId;
         }
 
         public DealTechnicalSettingData GetDealTechnicalSettingData()

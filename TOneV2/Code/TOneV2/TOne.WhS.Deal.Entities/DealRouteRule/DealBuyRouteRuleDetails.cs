@@ -2,11 +2,11 @@
 
 namespace TOne.WhS.Deal.Entities
 {
-    public class SwapDealBuyRouteRuleDetails
+    public class DealBuyRouteRuleDetails
     {
         public long VRRuleId { get; set; }
 
-        public int SwapDealId { get; set; }
+        public int DealId { get; set; }
 
         public string Description { get; set; }
 

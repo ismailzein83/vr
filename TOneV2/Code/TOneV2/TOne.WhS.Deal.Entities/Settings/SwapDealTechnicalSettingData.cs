@@ -9,6 +9,6 @@ namespace TOne.WhS.Deal.Entities
 {
     public class SwapDealTechnicalSettingData : SettingData
     {
-        public Guid SwapDealBuyRouteRuleDefinitionId { get; set; }
+        public Guid DealBuyRouteRuleDefinitionId { get; set; }
     }
 }

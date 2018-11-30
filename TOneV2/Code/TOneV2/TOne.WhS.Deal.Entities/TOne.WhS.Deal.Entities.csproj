@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -89,13 +89,13 @@
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Outbound\SwapDealAnalysisOutboundRateCalcMethod.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Outbound\SwapDealAnalysisOutboundRateCalcMethodConfig.cs" />
     <Compile Include="SwapDeal\IValidateBeforeSaveContext.cs" />
-    <Compile Include="SwapDeal\RouteRules\RouteRulesDefinition\SwapDealBuyRouteRuleDefinitionSettings.cs" />
-    <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRule.cs" />
-    <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleDetails.cs" />
-    <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleExtendedSettings.cs" />
-    <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleQuery.cs" />
-    <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleSettings.cs" />
-    <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleExtendedSettingsConfig.cs" />
+    <Compile Include="DealRouteRule\RouteRulesDefinition\DealBuyRouteRuleDefinitionSettings.cs" />
+    <Compile Include="DealRouteRule\DealBuyRouteRule.cs" />
+    <Compile Include="DealRouteRule\DealBuyRouteRuleDetails.cs" />
+    <Compile Include="DealRouteRule\DealBuyRouteRuleExtendedSettings.cs" />
+    <Compile Include="DealRouteRule\DealBuyRouteRuleQuery.cs" />
+    <Compile Include="DealRouteRule\DealBuyRouteRuleSettings.cs" />
+    <Compile Include="DealRouteRule\DealBuyRouteRuleExtendedSettingsConfig.cs" />
     <Compile Include="SwapDeal\SwapDealDetail.cs" />
     <Compile Include="SwapDeal\SwapDealQuery.cs" />
     <Compile Include="DealDefinition\DealDefinitionDetail.cs" />
@@ -125,6 +125,9 @@
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SwapDeal\RouteRules\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

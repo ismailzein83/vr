@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.MainExtensions.SwapDealBuyRouteRules
 {
-    public class FixedSwapDealBuyRouteRule : SwapDealBuyRouteRuleExtendedSettings
+    public class FixedDealBuyRouteRule : DealBuyRouteRuleExtendedSettings
     {
         public override Guid ConfigId { get { return new Guid("C49A0C3B-CE93-430B-BE81-8440EEBD87B0"); } }
 
@@ -17,10 +13,10 @@ namespace TOne.WhS.Deal.MainExtensions.SwapDealBuyRouteRules
 
         public Decimal Percentage { get; set; }
 
-        public override void Evaluate(ISwapDealBuyRouteRuleEvaluateContext context)
+        public override void Evaluate(IDealBuyRouteRuleEvaluateContext context)
         {
             context.EvaluationItems = context.SaleZoneIds.Select(zoneId =>
-            new SwapDealBuyRouteRuleEvaluationItem
+            new DealBuyRouteRuleEvaluationItem
             {
                 CustomerId = this.CustomerId,
                 SaleZoneId = zoneId,

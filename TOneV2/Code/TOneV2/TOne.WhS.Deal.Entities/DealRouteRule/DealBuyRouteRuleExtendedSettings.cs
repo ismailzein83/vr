@@ -1,28 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Deal.Entities
 {
-    public abstract class SwapDealBuyRouteRuleExtendedSettings
+    public abstract class DealBuyRouteRuleExtendedSettings
     {
         public abstract Guid ConfigId { get; }
 
-        public abstract void Evaluate(ISwapDealBuyRouteRuleEvaluateContext context);
+        public abstract void Evaluate(IDealBuyRouteRuleEvaluateContext context);
 
         public abstract string GetDescription();
     }
 
-    public interface ISwapDealBuyRouteRuleEvaluateContext
+    public interface IDealBuyRouteRuleEvaluateContext
     {
-        List<SwapDealBuyRouteRuleEvaluationItem> EvaluationItems { set; }
+        List<DealBuyRouteRuleEvaluationItem> EvaluationItems { set; }
 
         List<long> SaleZoneIds { get; }
     }
 
-    public class SwapDealBuyRouteRuleEvaluationItem
+    public class DealBuyRouteRuleEvaluationItem
     {
         public int CustomerId { get; set; }
 
