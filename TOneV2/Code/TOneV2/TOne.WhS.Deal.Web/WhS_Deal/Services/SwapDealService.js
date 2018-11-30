@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
+    SwapDealService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_ObjectTrackingService', 'WhS_Deal_RouteRuleService'];
 
-    function SwapDealService(VRModalService, VRNotificationService, UtilsService, VRCommon_ObjectTrackingService) {
+    function SwapDealService(VRModalService, VRNotificationService, UtilsService, VRCommon_ObjectTrackingService, WhS_Deal_RouteRuleService) {
         var editorUrl = '/Client/Modules/WhS_Deal/Views/SwapDeal/SwapDealEditor.html';
 
         var drillDownDefinitions = [];
@@ -74,54 +74,11 @@
         }
 
         function registerSwapDealSellRouteRuleViewToSwapDeal() {
-            var drillDownDefinition = {};
-
-            drillDownDefinition.title = "Sell Route Rules";
-            drillDownDefinition.directive = "vr-whs-routing-routerule-view";
-
-            drillDownDefinition.loadDirective = function (directiveAPI, swapDealItem) {
-                swapDealItem.SwapDealSellRouteRuleGridAPI = directiveAPI;
-
-                var query = {
-                    hideCustomerColumn: true,
-                    hideIncludedCodesColumn: true,
-                    Filters: []
-                };
-                var filter = {
-                    $type: 'TOne.WhS.Deal.MainExtensions.SwapDeal.SwapDealRouteRuleDefinitionFilter, TOne.WhS.Deal.MainExtensions',
-                    SwapDealId: swapDealItem.Entity.DealId
-                };
-                query.Filters.push(filter);
-
-                var payload = {
-                    defaultRouteRuleValues: {
-                        selectedCriteria: '0ce291eb-790f-4b24-9dc1-512d457546c5',
-                        criteria: { swapDealId: swapDealItem.Entity.DealId }
-                    },
-                    query: query
-                };
-                return swapDealItem.SwapDealSellRouteRuleGridAPI.load(payload);
-            };
-
-            addDrillDownDefinition(drillDownDefinition);
+            addDrillDownDefinition(WhS_Deal_RouteRuleService.registerDealSellRouteRuleViewToDeal());
         }
 
         function registerSwapDealBuyRouteRuleViewToSwapDeal() {
-            var drillDownDefinition = {};
-
-            drillDownDefinition.title = "Buy Route Rules";
-            drillDownDefinition.directive = "vr-whs-deal-swapdeal-buyrouterule-view";
-
-            drillDownDefinition.loadDirective = function (directiveAPI, swapDealItem) {
-                swapDealItem.SwapDealBuyRouteRuleGridAPI = directiveAPI;
-
-                var query = {
-                    swapDealId: swapDealItem.Entity.DealId
-                };
-                return swapDealItem.SwapDealBuyRouteRuleGridAPI.load(query);
-            };
-
-            addDrillDownDefinition(drillDownDefinition);
+            addDrillDownDefinition(WhS_Deal_RouteRuleService.registerDealBuyRouteRuleViewToDeal());
         }
 
         function addDrillDownDefinition(drillDownDefinition) {

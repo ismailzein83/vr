@@ -35,7 +35,15 @@ namespace TOne.WhS.Deal.Web.Controllers
         [Route("GetEffectiveOnDate")]
         public DateTime GetEffectiveOnDate(bool isSale, bool isShifted, int carrierId, DateTime BED, TimeSpan? offset = null)
         {
-            return Helper.GetEffectiveOnDate(isSale, isShifted, carrierId,BED, offset);
+            return Helper.GetEffectiveOnDate(isSale, isShifted, carrierId, BED, offset);
+        }
+
+        [HttpGet]
+        [Route("GetDealSettingsDetail")]
+        public DealSettingsDetail GetDealSettingsDetail(int dealId)
+        {
+            var manager = new DealDefinitionManager();
+            return manager.GetDealSettingsDetail(dealId);
         }
     }
 }

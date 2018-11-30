@@ -1,24 +1,24 @@
 ﻿using TOne.WhS.Deal.Entities;
-using TOne.WhS.Deal.MainExtensions.SwapDeal.RouteRuleCriteria;
+using TOne.WhS.Deal.MainExtensions.RouteRule.RouteRuleCriteria;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 
-namespace TOne.WhS.Deal.MainExtensions.SwapDeal
+namespace TOne.WhS.Deal.MainExtensions.RouteRule
 {
-    public class SwapDealRouteRuleDefinitionFilter : IRouteRuleFilter
+    public class DealRouteRuleDefinitionFilter : IRouteRuleFilter
     {
-        public int SwapDealId { get; set; }
+        public int DealId { get; set; }
 
         public bool IsMatched(IRouteRuleFilterContext context)
         {
             context.RouteRule.ThrowIfNull("context.RouteRule");
             context.RouteRule.Criteria.ThrowIfNull("context.RouteRule.Criteria");
-            SwapDealRouteRuleCriteria criteria = context.RouteRule.Criteria as SwapDealRouteRuleCriteria;
+            DealRouteRuleCriteria criteria = context.RouteRule.Criteria as DealRouteRuleCriteria;
 
             if (criteria == null)
                 return false;
 
-            if (criteria.SwapDealId != SwapDealId)
+            if (criteria.DealId != DealId)
                 return false;
 
             return true;

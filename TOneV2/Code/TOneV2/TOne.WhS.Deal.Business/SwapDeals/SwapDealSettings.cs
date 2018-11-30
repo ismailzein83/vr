@@ -315,6 +315,10 @@ namespace TOne.WhS.Deal.Business
             }
             return costVolume;
         }
+        public override DealZoneGroupPart GetDealZoneGroupPart()
+        {
+            return DealZoneGroupPart.Both;
+        }
 
         #endregion
 

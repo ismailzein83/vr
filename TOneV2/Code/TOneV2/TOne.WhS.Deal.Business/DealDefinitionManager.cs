@@ -526,6 +526,30 @@ namespace TOne.WhS.Deal.Business
             return (endEffectiveDate.VRGreaterThan(dealZoneInfo.BED) && dealZoneInfo.EED > beginEffectiveDate);
         }
 
+        public DealSettingsDetail GetDealSettingsDetail(int dealId)
+        {
+            var deal = this.GetDeal(dealId);
+            deal.ThrowIfNull("Deal", dealId);
+
+            var settings = deal.Settings;
+            settings.ThrowIfNull("Deal Settings", dealId);
+            var carrierAccountId = settings.GetCarrierAccountId();
+
+            CarrierAccount carrierAccount = new CarrierAccountManager().GetCarrierAccount(carrierAccountId);
+            carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
+
+            return new DealSettingsDetail()
+            {
+                DealId = dealId,
+                CarrierAccountId = carrierAccountId,
+                SellingNumberPlanId = carrierAccount.SellingNumberPlanId,
+                SaleZoneIds = settings.GetDealSaleZoneIds(),
+                SupplierZoneIds = settings.GetDealSupplierZoneIds(),
+                BED = settings.BEDToDisplay,
+                EED = settings.EEDToDisplay
+            };
+        }
+
         #endregion
 
         #region Private Methods

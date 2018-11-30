@@ -22,9 +22,6 @@
         function UpdateDeal(deal) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'UpdateDeal'), deal);
         }
-
-
-
         function HasAddDealPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Deal_ModuleConfig.moduleName, controllerName, ['AddDeal']));
         }
@@ -43,18 +40,13 @@
                 swapDealHistoryId: swapDealHistoryId
             });
         }
-        function GetSwapDealSettingsDetail(dealId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetSwapDealSettingsDetail'), {
-                dealId: dealId
-            });
-        }
 
         function RecurDeal(dealId, recurringNumber, recurringType) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "RecurDeal"), {
-                    dealId: dealId,
-                    recurringNumber: recurringNumber,
-                    recurringType: recurringType
-                });
+                dealId: dealId,
+                recurringNumber: recurringNumber,
+                recurringType: recurringType
+            });
         }
 
         return ({
@@ -67,7 +59,6 @@
             HasViewSwapDealPermission: HasViewSwapDealPermission,
             GetSwapDealSettingData: GetSwapDealSettingData,
             GetSwapDealHistoryDetailbyHistoryId: GetSwapDealHistoryDetailbyHistoryId,
-            GetSwapDealSettingsDetail: GetSwapDealSettingsDetail,
             RecurDeal: RecurDeal
         });
     }

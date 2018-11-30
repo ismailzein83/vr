@@ -214,8 +214,8 @@
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\Templates\SwapDealBusinessObjectDataProviderSettingsTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\vr-whs-swapdeal-overallprogress-businessobject-dataprovidersettings.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\vr-whs-swapdeal-businessobject-dataprovidersettings.js" />
-    <Content Include="WhS_Deal\Directives\Extensions\SwapDeal\RouteRuleCriteria\Templates\SwapDealRouteRuleCriteriaDirective.html" />
-    <Content Include="WhS_Deal\Directives\Extensions\SwapDeal\RouteRuleCriteria\vr-whs-deal-swapdealanalysis-routerulecriteria.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\RouteRule\RouteRuleCriteria\Templates\SaleDealRouteRuleCriteriaDirective.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\RouteRule\RouteRuleCriteria\vr-whs-deal-saledealanalysis-routerulecriteria.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Inbound\RateCalcMethod\Templates\FixedInboundRateCalcMethodItemEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Inbound\RateCalcMethod\Templates\SuppliersInboundRateCalcMethodEditorTemplate.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Inbound\RateCalcMethod\Templates\SuppliersInboundRateCalcMethodItemEditorTemplate.html" />
@@ -309,6 +309,7 @@
     <Content Include="WhS_Deal\Services\SwapDealBuyRouteRuleService.js" />
     <Content Include="WhS_Deal\Services\SwapDealOutboundService.js" />
     <Content Include="WhS_Deal\Services\SwapDealInboundService.js" />
+    <Content Include="WhS_Deal\Services\DealRouteRuleService.js" />
     <Content Include="WhS_Deal\Services\SwapDealService.js" />
     <Content Include="WhS_Deal\Services\VolumeCommitmentService.js" />
     <Content Include="WhS_Deal\Directives\RecurDeal\RecurDealEditor.html" />

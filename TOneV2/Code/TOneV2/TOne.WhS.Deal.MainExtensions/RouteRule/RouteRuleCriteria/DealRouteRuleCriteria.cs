@@ -7,24 +7,28 @@ using TOne.WhS.Deal.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 
-namespace TOne.WhS.Deal.MainExtensions.SwapDeal.RouteRuleCriteria
+namespace TOne.WhS.Deal.MainExtensions.RouteRule.RouteRuleCriteria
 {
-    public class SwapDealRouteRuleCriteria : BaseRouteRuleCriteria
+    public class DealRouteRuleCriteria : BaseRouteRuleCriteria
     {
         public override Guid ConfigId { get { return new Guid("0CE291EB-790F-4B24-9DC1-512D457546C5"); } }
-        public int SwapDealId { get; set; }
+        public int DealId { get; set; }
         public List<long> ZoneIds { get; set; }
 
         public override BusinessEntity.Entities.SaleZoneGroupSettings GetSaleZoneGroupSettings()
         {
-            SwapDealSettings swapDealSettings = new SwapDealManager().GetDealSettings<SwapDealSettings>(SwapDealId);
+            DealDefinitionManager dealDefinitionManager = new DealDefinitionManager();
+            DealDefinition dealDefinition = dealDefinitionManager.GetDeal(DealId);
+            dealDefinition.ThrowIfNull("dealDefinition", DealId);
+            dealDefinition.Settings.ThrowIfNull("dealDefinition.Settings", DealId);
 
-            CarrierAccount carrierAccount = new CarrierAccountManager().GetCarrierAccount(swapDealSettings.CarrierAccountId);
-            carrierAccount.ThrowIfNull("carrierAccount", swapDealSettings.CarrierAccountId);
+            int carrierAccountId = dealDefinition.Settings.GetCarrierAccountId();
+            CarrierAccount carrierAccount = new CarrierAccountManager().GetCarrierAccount(carrierAccountId);
+            carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
 
             int? sellingNumberPlan = carrierAccount.SellingNumberPlanId;
             if (!sellingNumberPlan.HasValue)
-                throw new NullReferenceException(string.Format("sellingNumberPlan. CarrierAccountId: '{0}'", swapDealSettings.CarrierAccountId));
+                throw new NullReferenceException(string.Format("sellingNumberPlan. CarrierAccountId: '{0}'", carrierAccountId));
 
             return new TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups.SelectiveSaleZoneGroup() { ZoneIds = ZoneIds, SellingNumberPlanId = sellingNumberPlan.Value };
         }

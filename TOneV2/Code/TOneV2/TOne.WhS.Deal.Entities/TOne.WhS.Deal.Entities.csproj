@@ -105,7 +105,7 @@
     <Compile Include="SwapDeal\SwapDealAnalysisDefinition.cs" />
     <Compile Include="SwapDeal\SwapDealOutbound.cs" />
     <Compile Include="SwapDeal\SwapDealInbound.cs" />
-    <Compile Include="SwapDeal\SwapDealSettingsDetail.cs" />
+    <Compile Include="SwapDeal\DealSettingsDetail.cs" />
     <Compile Include="DealRateEvaluator\BaseDealRateEvaluator.cs" />
     <Compile Include="UpdateDealOperationOutput.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealQuery.cs" />

@@ -18,32 +18,6 @@ namespace TOne.WhS.Deal.Business
     {
         #region Public Methods
 
-        public SwapDealSettingsDetail GetSwapDealSettingsDetail(int dealId)
-        {
-            SwapDealSettings swapDealSettings = GetDealSettings<SwapDealSettings>(dealId);
-
-            CarrierAccount carrierAccount = new CarrierAccountManager().GetCarrierAccount(swapDealSettings.CarrierAccountId);
-            carrierAccount.ThrowIfNull("carrierAccount", swapDealSettings.CarrierAccountId);
-
-            int? sellingNumberPlan = carrierAccount.SellingNumberPlanId;
-            if (!sellingNumberPlan.HasValue)
-                throw new NullReferenceException(string.Format("sellingNumberPlan. CarrierAccountId: '{0}'", swapDealSettings.CarrierAccountId));
-
-            List<long> saleZoneIds = swapDealSettings.Inbounds.SelectMany(itm => itm.SaleZones.Select(z => z.ZoneId)).ToList();
-            List<long> supplierZoneIds = swapDealSettings.Outbounds.SelectMany(itm => itm.SupplierZones.Select(z => z.ZoneId)).ToList();
-
-            return new SwapDealSettingsDetail()
-            {
-                SwapDealId = dealId,
-                CarrierAccountId = swapDealSettings.CarrierAccountId,
-                SellingNumberPlanId = sellingNumberPlan.Value,
-                SaleZoneIds = saleZoneIds,
-                SupplierZoneIds = supplierZoneIds,
-                BED = swapDealSettings.BEDToDisplay,
-                EED = swapDealSettings.EEDToDisplay
-            };
-        }
-
         public IEnumerable<DealDefinition> GetSwapDealsEffectiveAfterDate(DateTime effectiveAfter)
         {
             List<DealDefinition> dealDefinitions = new List<DealDefinition>();

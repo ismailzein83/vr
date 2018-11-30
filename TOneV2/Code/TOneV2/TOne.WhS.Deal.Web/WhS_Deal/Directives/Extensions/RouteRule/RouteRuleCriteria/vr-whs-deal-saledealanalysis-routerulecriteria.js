@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VRUIUtilsService', 'WhS_Deal_SwapDealAPIService',
-    function (UtilsService, VRUIUtilsService, WhS_Deal_SwapDealAPIService) {
+app.directive('vrWhsDealSaledealanalysisRouterulecriteria', ['UtilsService', 'VRUIUtilsService', 'WhS_Deal_DealDefinitionAPIService',
+    function (UtilsService, VRUIUtilsService, WhS_Deal_DealDefinitionAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -26,7 +26,7 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
                 };
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/WhS_Deal/Directives/Extensions/SwapDeal/RouteRuleCriteria/Templates/SwapDealRouteRuleCriteriaDirective.html';
+                return '/Client/Modules/WhS_Deal/Directives/Extensions/RouteRule/RouteRuleCriteria/Templates/SaleDealRouteRuleCriteriaDirective.html';
             }
         };
 
@@ -58,7 +58,7 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
 
                     if (selectedItem != undefined) {
 
-                        WhS_Deal_SwapDealAPIService.GetSwapDealSettingsDetail(selectedDealDefinitionId).then(function (response) {
+                        WhS_Deal_DealDefinitionAPIService.GetDealSettingsDetail(selectedDealDefinitionId).then(function (response) {
                             sellingNumberPlanId = response.SellingNumberPlanId;
                             availableZoneIds = response.SaleZoneIds;
                             if (routeRuleCriteriaContext != undefined && routeRuleCriteriaContext.setTimeSettings != undefined && typeof (routeRuleCriteriaContext.setTimeSettings) == 'function') {
@@ -109,22 +109,22 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
                 };
 
                 function loadDealDefinitionSelectorPromise() {
-                    if (routeRuleCriteria != undefined && routeRuleCriteria.SwapDealId != undefined)
+                    if (routeRuleCriteria != undefined && routeRuleCriteria.DealId != undefined)
                         dealDefinitionSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     var dealDefinitionSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     dealDefinitionSelectorReadyPromiseDeferred.promise.then(function () {
                         var dealDefinitionSelectorPayload = { filter: { Filters: [] } };
-                        var swapDealDefinitionFilter = {
-                            $type: "TOne.WhS.Deal.MainExtensions.SwapDeal.SwapDealDefinitionFilter, TOne.WhS.Deal.MainExtensions"
+                        var dealDefinitionFilter = {
+                            $type: "TOne.WhS.Deal.MainExtensions.DealDefinitionFilter.SaleDealFilter, TOne.WhS.Deal.MainExtensions"
                         };
-                        dealDefinitionSelectorPayload.filter.Filters.push(swapDealDefinitionFilter);
+                        dealDefinitionSelectorPayload.filter.Filters.push(dealDefinitionFilter);
 
                         if (routeRuleCriteria != undefined)
-                            dealDefinitionSelectorPayload.selectedIds = routeRuleCriteria.SwapDealId;
+                            dealDefinitionSelectorPayload.selectedIds = routeRuleCriteria.DealId;
                         else
-                            dealDefinitionSelectorPayload.selectedIds = defaultCriteriaValues != undefined ? defaultCriteriaValues.swapDealId : undefined;
+                            dealDefinitionSelectorPayload.selectedIds = defaultCriteriaValues != undefined ? defaultCriteriaValues.dealId : undefined;
 
                         VRUIUtilsService.callDirectiveLoad(dealDefinitionSelectorAPI, dealDefinitionSelectorPayload, dealDefinitionSelectorLoadPromiseDeferred);
                     });
@@ -133,7 +133,7 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
                 }
 
                 function loadSaleZoneSelectorPromise() {
-                    if (routeRuleCriteria == undefined || routeRuleCriteria.SwapDealId == undefined)
+                    if (routeRuleCriteria == undefined || routeRuleCriteria.DealId == undefined)
                         return;
 
                     var saleZoneSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -153,8 +153,8 @@ app.directive('vrWhsDealSwapdealanalysisRouterulecriteria', ['UtilsService', 'VR
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Deal.MainExtensions.SwapDeal.RouteRuleCriteria.SwapDealRouteRuleCriteria, TOne.WhS.Deal.MainExtensions",
-                        SwapDealId: dealDefinitionSelectorAPI.getSelectedIds(),
+                        $type: "TOne.WhS.Deal.MainExtensions.RouteRule.RouteRuleCriteria.DealRouteRuleCriteria, TOne.WhS.Deal.MainExtensions",
+                        DealId: dealDefinitionSelectorAPI.getSelectedIds(),
                         ZoneIds: saleZoneSelectorAPI.getSelectedIds()
                     };
                 };

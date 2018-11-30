@@ -303,6 +303,10 @@ namespace TOne.WhS.Deal.Business
             }
 
         }
+        public override DealZoneGroupPart GetDealZoneGroupPart()
+        {
+            return DealType == VolCommitmentDealType.Buy ? DealZoneGroupPart.Cost : DealZoneGroupPart.Sale;
+        }
 
         #region Sale Methods
 

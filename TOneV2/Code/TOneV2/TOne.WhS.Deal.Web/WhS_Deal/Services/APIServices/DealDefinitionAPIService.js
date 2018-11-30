@@ -9,9 +9,9 @@
 
         function GetDealDefinitionInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetDealDefinitionInfo"),
-             {
-                 serializedFilter: serializedFilter
-             });
+                {
+                    serializedFilter: serializedFilter
+                });
         }
 
         function DeleteDeal(dealId) {
@@ -25,16 +25,22 @@
                 {
                     isSale: isSale,
                     isShifted: isShifted,
-                    carrierId:carrierId,
+                    carrierId: carrierId,
                     BED: BED,
                     offset: offset
                 });
+        }
+        function GetDealSettingsDetail(dealId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, 'GetDealSettingsDetail'), {
+                dealId: dealId
+            });
         }
 
         return ({
             GetDealDefinitionInfo: GetDealDefinitionInfo,
             DeleteDeal: DeleteDeal,
-            GetEffectiveOnDate: GetEffectiveOnDate
+            GetEffectiveOnDate: GetEffectiveOnDate,
+            GetDealSettingsDetail: GetDealSettingsDetail
         });
     }
 

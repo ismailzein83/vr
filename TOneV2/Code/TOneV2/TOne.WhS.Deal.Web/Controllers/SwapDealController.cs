@@ -53,14 +53,7 @@ namespace TOne.WhS.Deal.Web.Controllers
         {
             return _manager.GetSwapDealSettingData();
         }
-        
-        [HttpGet]
-        [Route("GetSwapDealSettingsDetail")]
-        public SwapDealSettingsDetail GetSwapDealSettingsDetail(int dealId)
-        {
-            return _manager.GetSwapDealSettingsDetail(dealId);
-        }
-
+                
         [HttpGet]
         [Route("RecurDeal")]
         public InsertDealOperationOutput<RecurredDealItem> RecurDeal(int dealId, int recurringNumber, RecurringType recurringType)

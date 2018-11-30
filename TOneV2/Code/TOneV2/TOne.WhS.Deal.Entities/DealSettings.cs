@@ -53,6 +53,7 @@ namespace TOne.WhS.Deal.Entities
         public abstract string GetSaleZoneGroupName(int dealGroupNumber);
         public abstract string GetSupplierZoneGroupName(int dealGroupNumber);
         public abstract TimeSpan? GetCarrierOffSet(TimeSpan? currentOffSet);
+        public abstract DealZoneGroupPart GetDealZoneGroupPart();
         public bool IsRecurrable { get; set; }
         public TimeSpan? OffSet { get; set; }
     }
