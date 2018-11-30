@@ -9,78 +9,83 @@ using Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
 using System.Collections.Generic;
 using Vanrise.Entities;
+using Vanrise.Integration.Business;
 
 namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 {
-    public class SFTPReceiveAdapter : BaseReceiveAdapter
+    public class SFTPReceiveAdapter : BaseFileReceiveAdapter
     {
         public override void ImportData(IAdapterImportDataContext context)
         {
-            SFTPAdapterArgument SFTPAdapterArgument = context.AdapterArgument as SFTPAdapterArgument;
-            if (SFTPAdapterArgument.ActionAfterImport.HasValue && SFTPAdapterArgument.ActionAfterImport.Value == (int)SFTPAdapterArgument.Actions.NoAction
-                && SFTPAdapterArgument.FileCheckCriteria != SFTPAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck)
+            SFTPAdapterArgument sftpAdapterArgument = context.AdapterArgument as SFTPAdapterArgument;
+            if (sftpAdapterArgument.ActionAfterImport.HasValue && sftpAdapterArgument.ActionAfterImport.Value == (int)SFTPAdapterArgument.Actions.NoAction
+                && sftpAdapterArgument.FileCheckCriteria != SFTPAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck)
                 throw new VRBusinessException(string.Format("Check By Date and Name is required in case of no action after import"));
 
-            SFTPAdapterState SFTPAdapterState = SaveOrGetAdapterState(context, SFTPAdapterArgument);
+            SFTPAdapterState sftpAdapterState = SaveOrGetAdapterState(context, sftpAdapterArgument);
 
             var sftp = new Rebex.Net.Sftp();
-            string mask = string.IsNullOrEmpty(SFTPAdapterArgument.Mask) ? "" : string.Format(SFTPAdapterArgument.Mask);
+            string mask = string.IsNullOrEmpty(sftpAdapterArgument.Mask) ? "" : string.Format(sftpAdapterArgument.Mask);
             Regex regEx = new Regex(mask, RegexOptions.IgnoreCase);
 
             base.LogVerbose("Establishing SFTP Connection");
 
-            EstablishConnection(sftp, SFTPAdapterArgument);
+            EstablishConnection(sftp, sftpAdapterArgument);
             if (sftp.GetConnectionState().Connected)
             {
                 base.LogVerbose("SFTP connection is established");
 
-                if (!sftp.DirectoryExists(SFTPAdapterArgument.Directory))
+                if (!sftp.DirectoryExists(sftpAdapterArgument.Directory))
                 {
-                    base.LogError("Could not find Directory {0}", SFTPAdapterArgument.Directory);
+                    base.LogError("Could not find Directory {0}", sftpAdapterArgument.Directory);
                     throw new DirectoryNotFoundException();
                 }
 
-                sftp.ChangeDirectory(SFTPAdapterArgument.Directory);
-                SftpItemCollection sftpCollection = sftp.GetList(string.Format("{0}/*{1}", SFTPAdapterArgument.Directory, SFTPAdapterArgument.Extension));
-
-                if (sftpCollection.Count > 0)
+                sftp.ChangeDirectory(sftpAdapterArgument.Directory);
+                SftpItemCollection sftpCollection = sftp.GetList(string.Format("{0}/*{1}", sftpAdapterArgument.Directory, sftpAdapterArgument.Extension));
+                SftpItemCollection sftpCollectionToProcess = CheckAndGetFinalSftpCollection(sftpAdapterArgument, sftp, sftpCollection);
+                if (sftpCollectionToProcess != null && sftpCollectionToProcess.Count > 0)
                 {
-                    short numberOfFilesRead = 0;
+                    Dictionary<string, List<DataSourceImportedBatch>> dataSourceImportedBatchByFileNames = null;
 
-                    SftpItemCollection sftpCollectionToProcess = CheckandGetFinalSftpCollection(SFTPAdapterArgument, sftp, sftpCollection);
+                    FileDataSourceDefinition fileDataSourceDefinition = base.GetFileDataSourceDefinition(sftpAdapterArgument.FileDataSourceDefinitionId);
+                    if (fileDataSourceDefinition != null)
+                        dataSourceImportedBatchByFileNames = base.GetDataSourceImportedBatchByFileNames(context.DataSourceId, fileDataSourceDefinition.DuplicateCheckInterval);
+
+                    short numberOfFilesRead = 0;
                     bool newFilesStarted = false;
 
                     IEnumerable<SftpItem> sftpItems = null;
-                    switch (SFTPAdapterArgument.FileCheckCriteria)
+                    switch (sftpAdapterArgument.FileCheckCriteria)
                     {
                         case Arguments.SFTPAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck:
-                            sftpItems = sftpCollectionToProcess.OrderBy(c => c.Modified).ThenBy(c => c.Name);
-                            break;
+                            sftpItems = sftpCollectionToProcess.OrderBy(c => c.Modified).ThenBy(c => c.Name); break;
                         case Arguments.SFTPAdapterArgument.FileCheckCriteriaEnum.NameCheck:
-                            sftpItems = sftpCollectionToProcess.OrderBy(c => c.Name);
-                            break;
-                        default: sftpItems = sftpCollectionToProcess; break;
+                            sftpItems = sftpCollectionToProcess.OrderBy(c => c.Name); break;
+                        default:
+                            sftpItems = sftpCollectionToProcess; break;
                     }
 
                     foreach (var fileObj in sftpItems)
                     {
                         if (context.ShouldStopImport())
                             break;
+
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
-                            switch (SFTPAdapterArgument.FileCheckCriteria)
+                            switch (sftpAdapterArgument.FileCheckCriteria)
                             {
                                 case SFTPAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck:
                                     {
                                         if (!newFilesStarted)
                                         {
-                                            if (DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) > 0)
+                                            if (DateTime.Compare(sftpAdapterState.LastRetrievedFileTime, fileObj.Modified) > 0)
                                             {
                                                 continue;
                                             }
-                                            else if (DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) == 0)
+                                            else if (DateTime.Compare(sftpAdapterState.LastRetrievedFileTime, fileObj.Modified) == 0)
                                             {
-                                                if (!string.IsNullOrEmpty(SFTPAdapterState.LastRetrievedFileName) && SFTPAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                                if (!string.IsNullOrEmpty(sftpAdapterState.LastRetrievedFileName) && sftpAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
                                                     continue;
                                             }
                                             newFilesStarted = true;
@@ -92,7 +97,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                                     {
                                         if (!newFilesStarted)
                                         {
-                                            if (!string.IsNullOrEmpty(SFTPAdapterState.LastRetrievedFileName) && SFTPAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                            if (!string.IsNullOrEmpty(sftpAdapterState.LastRetrievedFileName) && sftpAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
                                                 continue;
                                             newFilesStarted = true;
                                         }
@@ -102,20 +107,48 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                                 default: break;
                             }
 
-                            if (!string.IsNullOrEmpty(SFTPAdapterArgument.LastImportedFile) && SFTPAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
+                            if (!string.IsNullOrEmpty(sftpAdapterArgument.LastImportedFile) && sftpAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
                                 continue;
 
-                            String filePath = SFTPAdapterArgument.Directory + "/" + fileObj.Name;
-                            ImportedBatchProcessingOutput output = CreateStreamReader(context.OnDataReceived, sftp, fileObj, filePath, SFTPAdapterArgument);
+                            bool isDuplicateSameSize = false;
+                            BatchState fileState = BatchState.Normal;
+                            String filePath = sftpAdapterArgument.Directory + "/" + fileObj.Name;
 
-                            SFTPAdapterState = SaveOrGetAdapterState(context, SFTPAdapterArgument, fileObj.Name, fileObj.Modified);
+                            if (fileDataSourceDefinition != null)
+                            {
+                                base.CheckMissingFiles(fileDataSourceDefinition.FileMissingChecker, fileObj.Name, sftpAdapterState.LastRetrievedFileName, context.OnDataReceived);
 
+                                if (base.IsDuplicate(fileObj.Name, fileObj.Size, dataSourceImportedBatchByFileNames, out isDuplicateSameSize))
+                                    fileState = BatchState.Duplicated;
+                                else if (base.IsDelayed(fileDataSourceDefinition.FileDelayChecker, sftpAdapterState.LastRetrievedFileTime))
+                                    fileState = BatchState.Delayed;
+                            }
 
-                            AfterImport(sftp, fileObj, filePath, SFTPAdapterArgument, output);
+                            ImportedBatchProcessingOutput output = null;
+
+                            if (fileState != BatchState.Duplicated)
+                            {
+                                output = CreateStreamReader(context.OnDataReceived, sftp, fileObj, filePath, sftpAdapterArgument, fileState);
+                            }
+                            else
+                            {
+                                output = context.OnDataReceived(new StreamReaderImportedData()
+                                {
+                                    Modified = fileObj.Modified,
+                                    Name = fileObj.Name,
+                                    Size = fileObj.Size,
+                                    BatchState = fileState,
+                                    IsDuplicateSameSize = isDuplicateSameSize
+                                });
+                            }
+
+                            sftpAdapterState = SaveOrGetAdapterState(context, sftpAdapterArgument, fileObj.Name, fileObj.Modified);
+
+                            AfterImport(sftp, fileObj, filePath, sftpAdapterArgument, output, fileState);
 
                             numberOfFilesRead++;
 
-                            if (SFTPAdapterArgument.NumberOfFiles.HasValue && SFTPAdapterArgument.NumberOfFiles.Value == numberOfFilesRead)
+                            if (sftpAdapterArgument.NumberOfFiles.HasValue && sftpAdapterArgument.NumberOfFiles.Value == numberOfFilesRead)
                             {
                                 base.LogInformation("Max number of files {0} reached", numberOfFilesRead);
                                 break;
@@ -129,13 +162,14 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
             }
             else
             {
-                base.LogError("Could not sftp connect to server {0}", SFTPAdapterArgument.ServerIP);
+                base.LogError("Could not sftp connect to server {0}", sftpAdapterArgument.ServerIP);
                 throw new Exception("SFTP adapter could not connect to SFTP Server");
             }
         }
 
         #region Private Functions
-        SFTPAdapterState SaveOrGetAdapterState(IAdapterImportDataContext context, SFTPAdapterArgument SFTPAdapterArgument, string fileName = null, DateTime? fileModifiedDate = null)
+
+        private SFTPAdapterState SaveOrGetAdapterState(IAdapterImportDataContext context, SFTPAdapterArgument SFTPAdapterArgument, string fileName = null, DateTime? fileModifiedDate = null)
         {
             SFTPAdapterState adapterState = null;
             context.GetStateWithLock((state) =>
@@ -159,31 +193,32 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
             return adapterState;
         }
 
-        ImportedBatchProcessingOutput CreateStreamReader(Func<IImportedData, ImportedBatchProcessingOutput> receiveData, Sftp sftp, SftpItem fileObj, String filePath, SFTPAdapterArgument argument)
+        private ImportedBatchProcessingOutput CreateStreamReader(Func<IImportedData, ImportedBatchProcessingOutput> onDataReceived, Sftp sftp, SftpItem fileObj, String filePath, 
+            SFTPAdapterArgument argument, BatchState fileState)
         {
             ImportedBatchProcessingOutput output = null;
             base.LogVerbose("Creating stream reader for file with name {0}", fileObj.Name);
             var stream = new MemoryStream();
             sftp.GetFile(filePath, stream);
-
             stream.Seek(0, SeekOrigin.Begin);
 
             using (var ms = GetStream(stream, argument.CompressedFiles, argument.CompressionType))
             {
                 ms.Position = 0;
-                output = receiveData(new StreamReaderImportedData()
+                output = onDataReceived(new StreamReaderImportedData()
                 {
                     Stream = ms,
                     Modified = fileObj.Modified,
                     Name = fileObj.Name,
-                    Size = fileObj.Size
+                    Size = fileObj.Size,
+                    BatchState = fileState
                 });
             }
             stream.Close();
             return output;
         }
 
-        MemoryStream GetStream(MemoryStream stream, bool isCompressed, Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments.SFTPAdapterArgument.CompressionTypes compressionType)
+        private MemoryStream GetStream(MemoryStream stream, bool isCompressed, Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments.SFTPAdapterArgument.CompressionTypes compressionType)
         {
             if (isCompressed)
             {
@@ -199,12 +234,12 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
             return stream;
         }
 
-        static void CloseConnection(Sftp sftp)
+        private void CloseConnection(Sftp sftp)
         {
             sftp.Dispose();
         }
 
-        void EstablishConnection(Sftp sftp, SFTPAdapterArgument sftpAdapterArgument)
+        private void EstablishConnection(Sftp sftp, SFTPAdapterArgument sftpAdapterArgument)
         {
             SshParameters sshParameters = BuildSshParameters(sftpAdapterArgument.SshParameters);
             if (sshParameters == null)
@@ -215,7 +250,71 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
             sftp.Login(sftpAdapterArgument.UserName, sftpAdapterArgument.Password);
         }
 
-        SshParameters BuildSshParameters(VRSshParameters vrSshParameters)
+        private void AfterImport(Sftp sftp, SftpItem fileObj, String filePath, SFTPAdapterArgument sftpAdapterArgument, ImportedBatchProcessingOutput output, BatchState fileState)
+        {
+            if (fileState == BatchState.Duplicated && !string.IsNullOrEmpty(sftpAdapterArgument.DuplicateFilesDirectory))
+            {
+                MoveFile(sftp, fileObj, filePath, sftpAdapterArgument.DuplicateFilesDirectory, sftpAdapterArgument.Extension, "duplicate");
+            }
+            if (output != null && output.MappingOutput.Result == MappingResult.Invalid && !string.IsNullOrEmpty(sftpAdapterArgument.InvalidFilesDirectory))
+            {
+                MoveFile(sftp, fileObj, filePath, sftpAdapterArgument.InvalidFilesDirectory, sftpAdapterArgument.Extension, "invalid");
+            }
+            else if (sftpAdapterArgument.ActionAfterImport == (int)SFTPAdapterArgument.Actions.Rename)
+            {
+                base.LogVerbose("Renaming file {0} after import", fileObj.Name);
+                sftp.Rename(filePath, string.Format(@"{0}.processed", filePath.Replace(sftpAdapterArgument.Extension, "")));
+            }
+            else if (sftpAdapterArgument.ActionAfterImport == (int)SFTPAdapterArgument.Actions.Delete)
+            {
+                base.LogVerbose("Deleting file {0} after import", fileObj.Name);
+                sftp.DeleteFile(filePath);
+            }
+            else if (sftpAdapterArgument.ActionAfterImport == (int)SFTPAdapterArgument.Actions.Move)
+            {
+                MoveFile(sftp, fileObj, filePath, sftpAdapterArgument.DirectorytoMoveFile, sftpAdapterArgument.Extension, "processed");
+            }
+        }
+
+        private void MoveFile(Sftp sftp, SftpItem fileObj, String filePath, string directorytoMoveFile, string extension, string newExtension)
+        {
+            base.LogVerbose("Moving file {0} after import to Directory {1}", fileObj.Name, directorytoMoveFile);
+
+            if (!sftp.DirectoryExists(directorytoMoveFile))
+                sftp.CreateDirectory(directorytoMoveFile);
+
+            sftp.Rename(filePath, directorytoMoveFile + "/" + string.Format(@"{0}.{1}", fileObj.Name.Replace(extension, ""), newExtension));
+        }
+
+        private SftpItemCollection CheckAndGetFinalSftpCollection(SFTPAdapterArgument sftpAdapterArgument, Sftp sftp, SftpItemCollection sftpCollection)
+        {
+            if (sftpCollection == null || sftpCollection.Count == 0)
+                return null;
+
+            SftpItemCollection sftpCollectionToProcess = new SftpItemCollection();
+            if (sftpAdapterArgument.FileCompletenessCheckInterval.HasValue)
+            {
+                Dictionary<string, SftpItem> firstReadFilesByName = sftpCollection.ToDictionary(itm => itm.Name, itm => itm);
+                Thread.Sleep(sftpAdapterArgument.FileCompletenessCheckInterval.Value * 1000);
+                SftpItemCollection currenctSftpCollection = sftp.GetList(string.Format("{0}/*{1}", sftpAdapterArgument.Directory, sftpAdapterArgument.Extension));
+                foreach (var ftpFile in currenctSftpCollection.OrderBy(c => c.Modified))
+                {
+                    SftpItem fileReadFirstTime = firstReadFilesByName.GetRecord(ftpFile.Name);
+                    if (fileReadFirstTime == null || fileReadFirstTime.Size != ftpFile.Size)
+                        break;
+
+                    sftpCollectionToProcess.Add(ftpFile);
+                }
+            }
+            else
+            {
+                sftpCollectionToProcess = sftpCollection;
+            }
+
+            return sftpCollectionToProcess.Count > 0 ? sftpCollectionToProcess : null;
+        }
+
+        private SshParameters BuildSshParameters(VRSshParameters vrSshParameters)
         {
             if (vrSshParameters == null || vrSshParameters.IsEmpty())
                 return null;
@@ -318,65 +417,6 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                     default: throw new NotSupportedException(string.Format("VRSshOptionsEnum {0} not supported.", sshOptions.Value));
                 }
             }
-        }
-
-        void AfterImport(Sftp sftp, SftpItem fileObj, String filePath, SFTPAdapterArgument SFTPAdapterArgument, ImportedBatchProcessingOutput output)
-        {
-            if (output != null && output.OutputResult.Result == MappingResult.Invalid && !string.IsNullOrEmpty(SFTPAdapterArgument.InvalidFilesDirectory))
-            {
-                MoveFile(sftp, fileObj, filePath, SFTPAdapterArgument.InvalidFilesDirectory, SFTPAdapterArgument.Extension, "invalid");
-
-            }
-            else if (SFTPAdapterArgument.ActionAfterImport == (int)SFTPAdapterArgument.Actions.Rename)
-            {
-                base.LogVerbose("Renaming file {0} after import", fileObj.Name);
-
-                sftp.Rename(filePath, string.Format(@"{0}.processed", filePath.Replace(SFTPAdapterArgument.Extension, "")));
-            }
-            else if (SFTPAdapterArgument.ActionAfterImport == (int)SFTPAdapterArgument.Actions.Delete)
-            {
-                base.LogVerbose("Deleting file {0} after import", fileObj.Name);
-
-                sftp.DeleteFile(filePath);
-            }
-            else if (SFTPAdapterArgument.ActionAfterImport == (int)SFTPAdapterArgument.Actions.Move)
-            {
-                MoveFile(sftp, fileObj, filePath, SFTPAdapterArgument.DirectorytoMoveFile, SFTPAdapterArgument.Extension, "processed");
-            }
-        }
-
-        void MoveFile(Sftp sftp, SftpItem fileObj, String filePath, string directorytoMoveFile, string extension, string newExtension)
-        {
-            base.LogVerbose("Moving file {0} after import to Directory {1}", fileObj.Name, directorytoMoveFile);
-
-            if (!sftp.DirectoryExists(directorytoMoveFile))
-                sftp.CreateDirectory(directorytoMoveFile);
-
-            sftp.Rename(filePath, directorytoMoveFile + "/" + string.Format(@"{0}.{1}", fileObj.Name.Replace(extension, ""), newExtension));
-        }
-
-        SftpItemCollection CheckandGetFinalSftpCollection(SFTPAdapterArgument SFTPAdapterArgument, Sftp sftp, SftpItemCollection sftpCollection)
-        {
-            SftpItemCollection sftpCollectionToProcess = new SftpItemCollection();
-            if (SFTPAdapterArgument.FileCompletenessCheckInterval.HasValue)
-            {
-                Dictionary<string, SftpItem> firstReadFilesByName = sftpCollection.ToDictionary(itm => itm.Name, itm => itm);
-                Thread.Sleep(SFTPAdapterArgument.FileCompletenessCheckInterval.Value * 1000);
-                SftpItemCollection currenctSftpCollection = sftp.GetList(string.Format("{0}/*{1}", SFTPAdapterArgument.Directory, SFTPAdapterArgument.Extension));
-                foreach (var ftpFile in currenctSftpCollection.OrderBy(c => c.Modified))
-                {
-                    SftpItem fileReadFirstTime = firstReadFilesByName.GetRecord(ftpFile.Name);
-                    if (fileReadFirstTime == null || fileReadFirstTime.Size != ftpFile.Size)
-                        break;
-
-                    sftpCollectionToProcess.Add(ftpFile);
-                }
-            }
-            else
-            {
-                sftpCollectionToProcess = sftpCollection;
-            }
-            return sftpCollectionToProcess;
         }
 
         #endregion

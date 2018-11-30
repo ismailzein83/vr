@@ -3,6 +3,6 @@ namespace Vanrise.Integration.Entities
 {
     public class ImportedBatchProcessingOutput
     {
-        public MappingOutput OutputResult { get; set; }
+        public MappingOutput MappingOutput { get; set; }
     }
 }

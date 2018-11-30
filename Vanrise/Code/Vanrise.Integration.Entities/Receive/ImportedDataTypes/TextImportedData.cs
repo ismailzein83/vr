@@ -14,6 +14,10 @@ namespace Vanrise.Integration.Entities
 
         public long? BatchSize { get { return this.Size; } }
 
+        public BatchState BatchState { get; set; }
+
+        public bool IsDuplicateSameSize { get; set; }
+
         public bool IsEmpty { get; set; }
 
         public bool IsFile { get { return true; } }

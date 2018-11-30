@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Integration.Entities
 {
@@ -11,11 +7,15 @@ namespace Vanrise.Integration.Entities
         public long ID { get; set; }
 
         public string BatchDescription { get; set; }
-        
+
         public decimal? BatchSize { get; set; }
 
+        public BatchState BatchState { get; set; }
+
+        public bool IsDuplicateSameSize { get; set; }
+
         public int RecordsCount { get; set; }
-        
+
         public MappingResult Result { get; set; }
 
         public string MapperMessage { get; set; }
@@ -26,4 +26,6 @@ namespace Vanrise.Integration.Entities
 
         public DateTime? BatchEnd { get; set; }
     }
+
+    public enum BatchState { Normal = 0, Missing = 1, Delayed = 2, Duplicated = 3 }
 }

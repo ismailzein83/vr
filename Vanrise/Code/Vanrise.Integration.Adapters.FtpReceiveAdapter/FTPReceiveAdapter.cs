@@ -9,10 +9,11 @@ using Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
 using System.Collections.Generic;
 using Vanrise.Entities;
+using Vanrise.Integration.Business;
 
 namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 {
-    public class FTPReceiveAdapter : BaseReceiveAdapter
+    public class FTPReceiveAdapter : BaseFileReceiveAdapter
     {
         public override void ImportData(IAdapterImportDataContext context)
         {
@@ -42,30 +43,34 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 
                 ftp.ChangeDirectory(ftpAdapterArgument.Directory);
                 FtpList ftpList = ftp.GetList(string.Format("*{0}", ftpAdapterArgument.Extension));
-
-                if (ftpList.Count > 0)
+                FtpList ftpListToProccess = CheckAndGetFinalFtpCollection(ftpAdapterArgument, ftp, ftpList);
+                if (ftpListToProccess != null && ftpListToProccess.Count > 0)
                 {
-                    short numberOfFilesRead = 0;
+                    Dictionary<string, List<DataSourceImportedBatch>> dataSourceImportedBatchByFileNames = null;
 
-                    FtpList ftpListToProccess = CheckandGetFinalFtpCollection(ftpAdapterArgument, ftp, ftpList);
+                    FileDataSourceDefinition fileDataSourceDefinition = base.GetFileDataSourceDefinition(ftpAdapterArgument.FileDataSourceDefinitionId);
+                    if (fileDataSourceDefinition != null)
+                        dataSourceImportedBatchByFileNames = base.GetDataSourceImportedBatchByFileNames(context.DataSourceId, fileDataSourceDefinition.DuplicateCheckInterval);
+
+                    short numberOfFilesRead = 0;
                     bool newFilesStarted = false;
 
                     IEnumerable<FtpItem> ftpItems = null;
                     switch (ftpAdapterArgument.FileCheckCriteria)
                     {
                         case Arguments.FTPAdapterArgument.FileCheckCriteriaEnum.DateAndNameCheck:
-                            ftpItems = ftpListToProccess.OrderBy(c => c.Modified).ThenBy(c => c.Name);
-                            break;
+                            ftpItems = ftpListToProccess.OrderBy(c => c.Modified).ThenBy(c => c.Name); break;
                         case Arguments.FTPAdapterArgument.FileCheckCriteriaEnum.NameCheck:
-                            ftpItems = ftpListToProccess.OrderBy(c => c.Name);
-                            break;
-                        default: ftpItems = ftpListToProccess; break;
+                            ftpItems = ftpListToProccess.OrderBy(c => c.Name); break;
+                        default:
+                            ftpItems = ftpListToProccess; break;
                     }
 
                     foreach (var fileObj in ftpItems)
                     {
                         if (context.ShouldStopImport())
                             break;
+
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
                             switch (ftpAdapterArgument.FileCheckCriteria)
@@ -105,13 +110,41 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                             if (!string.IsNullOrEmpty(ftpAdapterArgument.LastImportedFile) && ftpAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
                                 continue;
 
-                            String filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
-                            ImportedBatchProcessingOutput output = CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath, ftpAdapterArgument);
+                            bool isDuplicateSameSize = false;
+                            BatchState fileState = BatchState.Normal;
+                            string filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
+
+                            if (fileDataSourceDefinition != null)
+                            {
+                                base.CheckMissingFiles(fileDataSourceDefinition.FileMissingChecker, fileObj.Name, ftpAdapterState.LastRetrievedFileName, context.OnDataReceived);
+
+                                if (base.IsDuplicate(fileObj.Name, fileObj.Size, dataSourceImportedBatchByFileNames, out isDuplicateSameSize))
+                                    fileState = BatchState.Duplicated;
+                                else if (base.IsDelayed(fileDataSourceDefinition.FileDelayChecker, ftpAdapterState.LastRetrievedFileTime))
+                                    fileState = BatchState.Delayed;
+                            }
+
+                            ImportedBatchProcessingOutput output = null;
+
+                            if (fileState != BatchState.Duplicated)
+                            {
+                                output = CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath, ftpAdapterArgument, fileState);
+                            }
+                            else
+                            {
+                                output = context.OnDataReceived(new StreamReaderImportedData()
+                                {
+                                    Modified = fileObj.Modified,
+                                    Name = fileObj.Name,
+                                    Size = fileObj.Size,
+                                    BatchState = fileState,
+                                    IsDuplicateSameSize = isDuplicateSameSize
+                                });
+                            }
 
                             ftpAdapterState = SaveOrGetAdapterState(context, ftpAdapterArgument, fileObj.Name, fileObj.Modified);
 
-
-                            AfterImport(ftp, fileObj, filePath, ftpAdapterArgument, output);
+                            AfterImport(ftp, fileObj, filePath, ftpAdapterArgument, output, fileState);
 
                             numberOfFilesRead++;
 
@@ -125,6 +158,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 
                     base.LogInformation("{0} files have been imported", numberOfFilesRead);
                 }
+
                 CloseConnection(ftp);
             }
             else
@@ -137,7 +171,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 
         #region Private Functions
 
-        FTPAdapterState SaveOrGetAdapterState(IAdapterImportDataContext context, FTPAdapterArgument ftpAdapterArgument, string fileName = null, DateTime? fileModifiedDate = null)
+        private FTPAdapterState SaveOrGetAdapterState(IAdapterImportDataContext context, FTPAdapterArgument ftpAdapterArgument, string fileName = null, DateTime? fileModifiedDate = null)
         {
             FTPAdapterState adapterState = null;
             context.GetStateWithLock((state) =>
@@ -161,7 +195,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             return adapterState;
         }
 
-        ImportedBatchProcessingOutput CreateStreamReader(Func<IImportedData, ImportedBatchProcessingOutput> receiveData, Ftp ftp, FtpItem fileObj, String filePath, FTPAdapterArgument argument)
+        private ImportedBatchProcessingOutput CreateStreamReader(Func<IImportedData, ImportedBatchProcessingOutput> onDataReceived, Ftp ftp, FtpItem fileObj, String filePath,
+            FTPAdapterArgument argument, BatchState fileState)
         {
             ImportedBatchProcessingOutput output = null;
             base.LogVerbose("Creating stream reader for file with name {0}", fileObj.Name);
@@ -172,19 +207,20 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             using (var ms = GetStream(stream, argument.CompressedFiles, argument.CompressionType))
             {
                 ms.Position = 0;
-                output = receiveData(new StreamReaderImportedData()
-                     {
-                         Stream = ms,
-                         Modified = fileObj.Modified,
-                         Name = fileObj.Name,
-                         Size = fileObj.Size
-                     });
+                output = onDataReceived(new StreamReaderImportedData()
+                {
+                    Stream = ms,
+                    Modified = fileObj.Modified,
+                    Name = fileObj.Name,
+                    Size = fileObj.Size,
+                    BatchState = fileState
+                });
             }
             stream.Close();
             return output;
         }
 
-        MemoryStream GetStream(MemoryStream stream, bool isCompressed, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.CompressionTypes compressionType)
+        private MemoryStream GetStream(MemoryStream stream, bool isCompressed, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.CompressionTypes compressionType)
         {
             if (isCompressed)
             {
@@ -200,23 +236,26 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             return stream;
         }
 
-        static void CloseConnection(Ftp ftp)
-        {
-            ftp.Dispose();
-        }
-
-        void EstablishConnection(Ftp ftp, FTPAdapterArgument ftpAdapterArgument)
+        private void EstablishConnection(Ftp ftp, FTPAdapterArgument ftpAdapterArgument)
         {
             ftp.Connect(ftpAdapterArgument.ServerIP);
             ftp.Login(ftpAdapterArgument.UserName, ftpAdapterArgument.Password);
         }
 
-        void AfterImport(Ftp ftp, FtpItem fileObj, String filePath, FTPAdapterArgument ftpAdapterArgument, ImportedBatchProcessingOutput output)
+        private void CloseConnection(Ftp ftp)
         {
-            if (output != null && output.OutputResult.Result == MappingResult.Invalid && !string.IsNullOrEmpty(ftpAdapterArgument.InvalidFilesDirectory))
+            ftp.Dispose();
+        }
+
+        private void AfterImport(Ftp ftp, FtpItem fileObj, String filePath, FTPAdapterArgument ftpAdapterArgument, ImportedBatchProcessingOutput output, BatchState fileState)
+        {
+            if (fileState == BatchState.Duplicated && !string.IsNullOrEmpty(ftpAdapterArgument.DuplicateFilesDirectory))
+            {
+                MoveFile(ftp, fileObj, filePath, ftpAdapterArgument.DuplicateFilesDirectory, ftpAdapterArgument.Extension, "duplicate");
+            }
+            else if (output != null && output.MappingOutput.Result == MappingResult.Invalid && !string.IsNullOrEmpty(ftpAdapterArgument.InvalidFilesDirectory))
             {
                 MoveFile(ftp, fileObj, filePath, ftpAdapterArgument.InvalidFilesDirectory, ftpAdapterArgument.Extension, "invalid");
-
             }
             else if (ftpAdapterArgument.ActionAfterImport.HasValue)
             {
@@ -238,7 +277,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             }
         }
 
-        void MoveFile(Ftp ftp, FtpItem fileObj, String filePath, string directorytoMoveFile, string extension, string newExtension)
+        private void MoveFile(Ftp ftp, FtpItem fileObj, String filePath, string directorytoMoveFile, string extension, string newExtension)
         {
             base.LogVerbose("Moving file {0} after import to Directory {1}", fileObj.Name, directorytoMoveFile);
             if (!ftp.DirectoryExists(directorytoMoveFile))
@@ -246,8 +285,11 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             ftp.Rename(filePath, directorytoMoveFile + "/" + string.Format(@"{0}.{1}", fileObj.Name.Replace(extension, ""), newExtension));
         }
 
-        FtpList CheckandGetFinalFtpCollection(FTPAdapterArgument ftpAdapterArgument, Ftp ftp, FtpList ftpList)
+        private FtpList CheckAndGetFinalFtpCollection(FTPAdapterArgument ftpAdapterArgument, Ftp ftp, FtpList ftpList)
         {
+            if (ftpList == null || ftpList.Count == 0)
+                return null;
+
             FtpList ftpListToPreccess = new FtpList();
             if (ftpAdapterArgument.FileCompletenessCheckInterval.HasValue)
             {
@@ -267,10 +309,10 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             {
                 ftpListToPreccess = ftpList;
             }
-            return ftpListToPreccess;
+
+            return ftpListToPreccess.Count > 0 ? ftpListToPreccess : null;
         }
 
         #endregion
-
     }
 }

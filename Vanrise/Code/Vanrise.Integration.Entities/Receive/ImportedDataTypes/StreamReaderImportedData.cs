@@ -19,6 +19,12 @@ namespace Vanrise.Integration.Entities
 
         public object Type { get; set; }
 
+        public long? BatchSize { get { return Size; } }
+
+        public BatchState BatchState { get; set; }
+
+        public bool IsDuplicateSameSize { get; set; }
+
         public bool IsEmpty { get; set; }
 
         public bool IsFile { get { return true; } }
@@ -26,8 +32,6 @@ namespace Vanrise.Integration.Entities
         public bool IsMultipleReadings { get { return false; } }
 
         public string Description { get { return this.Name; } }
-
-        public long? BatchSize { get { return Size; } }
 
         StreamReader _streamReader;
         public StreamReader StreamReader

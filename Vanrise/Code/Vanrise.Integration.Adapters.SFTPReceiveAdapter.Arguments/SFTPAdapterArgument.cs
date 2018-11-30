@@ -5,26 +5,6 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
 {
     public class SFTPAdapterArgument : BaseAdapterArgument
     {
-        public enum CompressionTypes
-        {
-            GZip,
-            Zip
-        }
-        public enum Actions
-        {
-            NoAction = -1,
-            Rename = 0,
-            Delete = 1,
-            Move = 2,// Move to Folder
-            Copy = 3 // Copy To Folder and Keep the original file,
-        }
-        public enum FileCheckCriteriaEnum
-        {
-            DateAndNameCheck = 0,
-            NameCheck = 1,
-            None = 2
-        }
-
         #region Properties
 
         public VRSshParameters SshParameters { get; set; }
@@ -36,6 +16,13 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
         public string Password { get; set; }
         public string DirectorytoMoveFile { get; set; }
         public int? ActionAfterImport { get; set; }
+        public string LastImportedFile { get; set; }
+        public bool CompressedFiles { get; set; }
+        public CompressionTypes CompressionType { get; set; }
+        public short? NumberOfFiles { get; set; }
+        public string InvalidFilesDirectory { get; set; }
+        public string DuplicateFilesDirectory { get; set; } //Not Reflected In UI
+        public Guid? FileDataSourceDefinitionId { get; set; } //Not Reflected In UI
 
         FileCheckCriteriaEnum _fileCheckCriteria = FileCheckCriteriaEnum.DateAndNameCheck;
         public FileCheckCriteriaEnum FileCheckCriteria
@@ -49,10 +36,6 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
                 _fileCheckCriteria = value;
             }
         }
-        public string LastImportedFile { get; set; }
-        public bool CompressedFiles { get; set; }
-        public CompressionTypes CompressionType { get; set; }
-        public short? NumberOfFiles { get; set; }
 
         short? _fileCompletenessCheckInterval = 5;
 
@@ -71,8 +54,6 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
             }
         }
 
-        public string InvalidFilesDirectory { get; set; }
-
         public int _port = 22;
         public int Port
         {
@@ -85,7 +66,21 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
                 _port = value;
             }
         }
-        # endregion
+
+        #endregion
+
+        public enum CompressionTypes { GZip, Zip }
+
+        public enum FileCheckCriteriaEnum { DateAndNameCheck = 0, NameCheck = 1, None = 2 }
+
+        public enum Actions
+        {
+            NoAction = -1,
+            Rename = 0,
+            Delete = 1,
+            Move = 2,// Move to Folder
+            Copy = 3 // Copy To Folder and Keep the original file,
+        }
     }
 
     public class SFTPAdapterState : BaseAdapterState
@@ -105,7 +100,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
 
         public bool IsEmpty()
         {
-            if (!Compression.HasValue && !SshEncryptionAlgorithm.HasValue && !SshHostKeyAlgorithm.HasValue 
+            if (!Compression.HasValue && !SshEncryptionAlgorithm.HasValue && !SshHostKeyAlgorithm.HasValue
              && !SshKeyExchangeAlgorithm.HasValue && !SshMacAlgorithm.HasValue && !SshOptions.HasValue)
                 return true;
 

@@ -59,7 +59,6 @@
     <Compile Include="ImportedBatchProcessingOutput.cs" />
     <Compile Include="Receive\BaseAdapterArgument.cs" />
     <Compile Include="Receive\BaseAdapterState.cs" />
-    <Compile Include="Receive\BaseFileReceiveAdapter.cs" />
     <Compile Include="Receive\BaseReceiveAdapter.cs" />
     <Compile Include="Receive\DataSource.cs" />
     <Compile Include="Receive\DataSourceAdapterType.cs" />

@@ -101,107 +101,119 @@ namespace Vanrise.Integration.Business
             IImportedData lastReceivedBatchData = null;
             Func<IImportedData, ImportedBatchProcessingOutput> onDataReceivedAction = (data) =>
             {
-                logger.WriteInformation("New batch '{0}' imported", data.Description);
-                logger.WriteVerbose("Executing the custom code written for the mapper");
-
-                lastReceivedBatchData = data;
-                MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
-                MappingOutput outputResult = this.ExecuteCustomCode(dataSource.Entity.DataSourceId, dataSource.Entity.Settings.MapperCustomCode, data, outputItems, logger);
-
-                ImportedBatchProcessingOutput batchProcessingOutput = new ImportedBatchProcessingOutput { OutputResult = outputResult };
-
-                if (!data.IsMultipleReadings)
-                    data.OnDisposed();
-
                 bool logImportedBatchEntry = true;
-                DateTime? minBatchStart = null;
-                DateTime? maxBatchEnd = null;
 
                 ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
                 importedBatchEntry.BatchSize = data.BatchSize;
                 importedBatchEntry.BatchDescription = data.Description;
-                importedBatchEntry.Result = outputResult.Result;
-                importedBatchEntry.MapperMessage = outputResult.Message;
+                importedBatchEntry.BatchState = data.BatchState;
+                importedBatchEntry.IsDuplicateSameSize = data.IsDuplicateSameSize;
+                importedBatchEntry.Result = MappingResult.None;
 
-                if (outputResult.Result != MappingResult.Invalid)
+                MappingOutput mappingOutput = null;
+                ImportedBatchProcessingOutput importedBatchProcessingOutput = null;
+
+                if (data.BatchState != BatchState.Duplicated && data.BatchState != BatchState.Missing)
                 {
-                    List<long> queueItemsIds = new List<long>();
-                    int totalRecordsCount = 0;
+                    logger.WriteInformation("New batch '{0}' imported", data.Description);
+                    logger.WriteVerbose("Executing the custom code written for the mapper");
 
-                    if (outputItems != null && outputItems.Count > 0)
+                    lastReceivedBatchData = data;
+                    MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
+                    mappingOutput = this.ExecuteCustomCode(dataSource.Entity.DataSourceId, dataSource.Entity.Settings.MapperCustomCode, data, outputItems, logger);
+
+                    importedBatchProcessingOutput = new ImportedBatchProcessingOutput();
+                    importedBatchProcessingOutput.MappingOutput = mappingOutput;
+
+                    importedBatchEntry.Result = mappingOutput.Result;
+                    importedBatchEntry.MapperMessage = mappingOutput.Message;
+
+                    if (!data.IsMultipleReadings)
+                        data.OnDisposed();
+
+                    DateTime? minBatchStart = null;
+                    DateTime? maxBatchEnd = null;
+
+                    if (mappingOutput.Result != MappingResult.Invalid)
                     {
-                        foreach (var outputItem in outputItems)
+                        List<long> queueItemsIds = new List<long>();
+                        int totalRecordsCount = 0;
+
+                        if (outputItems != null && outputItems.Count > 0)
                         {
-                            try
+                            foreach (var outputItem in outputItems)
                             {
-                                int currentBatchItemsCount = outputItem.Item.GetRecordCount();
-                                if (currentBatchItemsCount == 0)
-                                    continue;
+                                try
+                                {
+                                    int currentBatchItemsCount = outputItem.Item.GetRecordCount();
+                                    if (currentBatchItemsCount == 0)
+                                        continue;
 
-                                outputItem.Item.DataSourceID = dataSource.Entity.DataSourceId;
-                                outputItem.Item.BatchDescription = data.Description;
-                                logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
+                                    outputItem.Item.DataSourceID = dataSource.Entity.DataSourceId;
+                                    outputItem.Item.BatchDescription = data.Description;
+                                    logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
 
-                                long queueItemId = queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
-                                logger.WriteInformation("Enqueued the item successfully");
+                                    long queueItemId = queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
+                                    logger.WriteInformation("Enqueued the item successfully");
 
-                                queueItemsIds.Add(queueItemId);
-                                totalRecordsCount += currentBatchItemsCount;
+                                    queueItemsIds.Add(queueItemId);
+                                    totalRecordsCount += currentBatchItemsCount;
 
-                                var batchStart = outputItem.Item.GetBatchStart();
-                                if (!minBatchStart.HasValue || batchStart < minBatchStart.Value)
-                                    minBatchStart = batchStart;
+                                    var batchStart = outputItem.Item.GetBatchStart();
+                                    if (!minBatchStart.HasValue || batchStart < minBatchStart.Value)
+                                        minBatchStart = batchStart;
 
-                                var batchEnd = outputItem.Item.GetBatchEnd();
-                                if (!maxBatchEnd.HasValue || batchEnd > maxBatchEnd)
-                                    maxBatchEnd = batchEnd;
+                                    var batchEnd = outputItem.Item.GetBatchEnd();
+                                    if (!maxBatchEnd.HasValue || batchEnd > maxBatchEnd)
+                                        maxBatchEnd = batchEnd;
 
+                                }
+                                catch (Exception ex)
+                                {
+                                    logger.WriteError("An error occurred while enqueuing item in stage {0}. Exception details {1}", outputItem.StageName, ex.ToString());
+                                    throw;
+                                }
                             }
-                            catch (Exception ex)
-                            {
-                                logger.WriteError("An error occurred while enqueuing item in stage {0}. Exception details {1}", outputItem.StageName, ex.ToString());
-                                throw;
-                            }
-                        }
 
-                        importedBatchEntry.BatchStart = minBatchStart;
-                        importedBatchEntry.BatchEnd = maxBatchEnd;
-                    }
-                    else
-                    {
-                        if (data.IsFile)
-                            logger.WriteWarning("No mapped items to enqueue, the written custom code should specify at least one output item to enqueue items to");
-                    }
-
-                    if (totalRecordsCount == 0)
-                    {
-                        importedBatchEntry.Result = MappingResult.Empty;
-
-                        if (data.IsFile)
-                        {
-                            if (outputItems != null && outputItems.Count > 0)
-                                logger.WriteWarning("No mapped items to enqueue");
+                            importedBatchEntry.BatchStart = minBatchStart;
+                            importedBatchEntry.BatchEnd = maxBatchEnd;
                         }
                         else
                         {
-                            logger.WriteInformation("Received Empty Batch");
-                            logImportedBatchEntry = false;
+                            if (data.IsFile)
+                                logger.WriteWarning("No mapped items to enqueue, the written custom code should specify at least one output item to enqueue items to");
                         }
-                    }
 
-                    importedBatchEntry.QueueItemsIds = string.Join(",", queueItemsIds);
-                    importedBatchEntry.RecordsCount = totalRecordsCount;
+                        if (totalRecordsCount == 0)
+                        {
+                            importedBatchEntry.Result = MappingResult.Empty;
+
+                            if (data.IsFile)
+                            {
+                                if (outputItems != null && outputItems.Count > 0)
+                                    logger.WriteWarning("No mapped items to enqueue");
+                            }
+                            else
+                            {
+                                logger.WriteInformation("Received Empty Batch");
+                                logImportedBatchEntry = false;
+                            }
+                        }
+
+                        importedBatchEntry.QueueItemsIds = string.Join(",", queueItemsIds);
+                        importedBatchEntry.RecordsCount = totalRecordsCount;
+                    }
                 }
 
-                SendErrorNotification(dataSource, data, outputResult, importedBatchEntry);
+                SendErrorNotification(dataSource, data, mappingOutput, importedBatchEntry.IsDuplicateSameSize);
 
-                if (!logImportedBatchEntry)
-                    return null;
+                if (logImportedBatchEntry)
+                {
+                    long importedBatchId = logger.LogImportedBatchEntry(importedBatchEntry);
+                    logger.LogEntry(Vanrise.Entities.LogEntryType.Information, importedBatchId, "Imported a new batch with Id '{0}'", importedBatchId);
+                }
 
-                long importedBatchId = logger.LogImportedBatchEntry(importedBatchEntry);
-                logger.LogEntry(Vanrise.Entities.LogEntryType.Information, importedBatchId, "Imported a new batch with Id '{0}'", importedBatchId);
-
-                return batchProcessingOutput;
+                return importedBatchProcessingOutput;
             };
 
             try
@@ -219,10 +231,10 @@ namespace Vanrise.Integration.Business
                 {
                     FailedBatchInfo batchInfo = new FailedBatchInfo
                     {
-                        Message = errorMessage,
                         DataSourceId = dataSource.Entity.DataSourceId,
                         DataSourceName = dataSource.Entity.Name,
-                        BatchDescription = lastReceivedBatchData != null ? lastReceivedBatchData.Description : null
+                        BatchDescription = lastReceivedBatchData != null ? lastReceivedBatchData.Description : null,
+                        Message = errorMessage
                     };
                     SendErrorNotification(dataSource, batchInfo);
                 }
@@ -230,43 +242,45 @@ namespace Vanrise.Integration.Business
             }
         }
 
-        private void SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult, ImportedBatchEntry importedBatchEntry)
+        private void SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput mappingOutput, bool isDuplicateSameSize)
         {
             if (dataSource.Entity.Settings.ErrorMailTemplateId.HasValue)
             {
-                bool isEmptyFile = false;
-                string emptyFileMessage = null;
+                if (mappingOutput.Result == MappingResult.Invalid || mappingOutput.Result == MappingResult.PartialInvalid)
+                {
+                    SendErrorNotification(dataSource, data, mappingOutput, false, null);
+                    return;
+                }
+
+                bool isEmpty = false;
+                string errorMessage = null;
 
                 if (data.IsFile)
                 {
-                    if (!data.BatchSize.HasValue || data.BatchSize.Value == 0)
+                    if (data.BatchState == BatchState.Duplicated && !isDuplicateSameSize)
                     {
-                        isEmptyFile = true;
-                        emptyFileMessage = "File is empty";
+                        errorMessage = "Duplicate File with different size";
                     }
-                    else if (importedBatchEntry.Result == MappingResult.Empty)
+                    else if (!data.BatchSize.HasValue || data.BatchSize.Value == 0)
                     {
-                        isEmptyFile = true;
-                        emptyFileMessage = "No mapped items to enqueue";
+                        isEmpty = true;
+                        errorMessage = "File is empty";
+                    }
+                    else if (mappingOutput.Result == MappingResult.Empty)
+                    {
+                        isEmpty = true;
+                        errorMessage = "No mapped items to enqueue";
                     }
                 }
 
-                if (isEmptyFile || outputResult.Result == MappingResult.Invalid || outputResult.Result == MappingResult.PartialInvalid)
-                    SendErrorNotification(dataSource, data, outputResult, isEmptyFile, emptyFileMessage);
+                if (!string.IsNullOrEmpty(errorMessage))
+                    SendErrorNotification(dataSource, data, mappingOutput, isEmpty, errorMessage);
             }
         }
 
-        private void SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult, bool isEmptyFile, string emptyFileMessage)
+        private void SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult, bool isEmpty, string errorMessage)
         {
-            FailedBatchInfo batchInfo = BuildFailedBatchInfo(dataSource, data, outputResult);
-            if (isEmptyFile)
-            {
-                batchInfo.IsEmpty = true;
-
-                if (!string.IsNullOrEmpty(emptyFileMessage))
-                    batchInfo.Message = emptyFileMessage;
-            }
-
+            FailedBatchInfo batchInfo = BuildFailedBatchInfo(dataSource, data, outputResult, isEmpty, errorMessage);
             SendErrorNotification(dataSource, batchInfo);
         }
 
@@ -284,14 +298,15 @@ namespace Vanrise.Integration.Business
             vrMailManager.SendMail(dataSource.Entity.Settings.ErrorMailTemplateId.Value, mailObjects);
         }
 
-        private FailedBatchInfo BuildFailedBatchInfo(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
+        private FailedBatchInfo BuildFailedBatchInfo(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult, bool isEmpty, string errorMessage)
         {
             FailedBatchInfo batchInfo = new FailedBatchInfo
             {
-                Message = outputResult.Message,
                 DataSourceId = dataSource.Entity.DataSourceId,
+                DataSourceName = dataSource.Entity.Name,
                 BatchDescription = data.Description,
-                DataSourceName = dataSource.Entity.Name
+                Message = !string.IsNullOrEmpty(errorMessage) ? errorMessage : outputResult.Message,
+                IsEmpty = isEmpty
             };
             return batchInfo;
         }

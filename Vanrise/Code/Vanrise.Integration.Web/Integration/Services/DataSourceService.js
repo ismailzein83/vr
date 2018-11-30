@@ -2,26 +2,10 @@
 
     'use strict';
 
-    DataSourceService.$inject = ['UtilsService', 'VRModalService', 'VR_Integration_ExecutionStatusEnum', 'VR_Integration_MappingResultEnum', 'LabelColorsEnum','VRNotificationService','VR_Integration_DataSourceAPIService','VRCommon_ObjectTrackingService'];
+    DataSourceService.$inject = ['UtilsService', 'VRModalService', 'VR_Integration_ExecutionStatusEnum', 'VR_Integration_BatchStateEnum', 'VR_Integration_MappingResultEnum', 'LabelColorsEnum','VRNotificationService','VR_Integration_DataSourceAPIService','VRCommon_ObjectTrackingService'];
 
-    function DataSourceService(UtilsService, VRModalService, VR_Integration_ExecutionStatusEnum, VR_Integration_MappingResultEnum, LabelColorsEnum, VRNotificationService, VR_Integration_DataSourceAPIService,VRCommon_ObjectTrackingService) {
+    function DataSourceService(UtilsService, VRModalService, VR_Integration_ExecutionStatusEnum, VR_Integration_BatchStateEnum, VR_Integration_MappingResultEnum, LabelColorsEnum, VRNotificationService, VR_Integration_DataSourceAPIService,VRCommon_ObjectTrackingService) {
         var drillDownDefinitions=[];
-        return {
-            
-            getExecutionStatusDescription: getExecutionStatusDescription,
-            getMappingResultDescription: getMappingResultDescription,
-            getExecutionStatusColor: getExecutionStatusColor,
-            editDataSource: editDataSource,
-            addDataSource: addDataSource,
-            deleteDataSource: deleteDataSource,
-            registerObjectTrackingDrillDownToDataSource:registerObjectTrackingDrillDownToDataSource,
-            getDrillDownDefinition: getDrillDownDefinition,
-            registerHistoryViewAction: registerHistoryViewAction,
-            registerLogToDataSource: registerLogToDataSource,
-            registerImportedBatchToDataSource: registerImportedBatchToDataSource
-
-        };
-
 
         function registerHistoryViewAction() {
 
@@ -53,6 +37,10 @@
 
         function getExecutionStatusDescription(executionStatusValue) {
             return UtilsService.getEnumDescription(VR_Integration_ExecutionStatusEnum, executionStatusValue);
+        }
+
+        function getBatchStateDescription(batchStateValue) {
+            return UtilsService.getEnumDescription(VR_Integration_BatchStateEnum, batchStateValue);
         }
 
         function getMappingResultDescription(mappingResultValue) {
@@ -193,6 +181,7 @@
             addDrillDownDefinition(drillDownDefinition);
 
         }
+
         function addDrillDownDefinition(drillDownDefinition) {
           
             drillDownDefinitions.push(drillDownDefinition);
@@ -202,9 +191,21 @@
             return drillDownDefinitions;
         }
    
-    
+        return {
+            getExecutionStatusDescription: getExecutionStatusDescription,
+            getBatchStateDescription: getBatchStateDescription,
+            getMappingResultDescription: getMappingResultDescription,
+            getExecutionStatusColor: getExecutionStatusColor,
+            editDataSource: editDataSource,
+            addDataSource: addDataSource,
+            deleteDataSource: deleteDataSource,
+            registerObjectTrackingDrillDownToDataSource: registerObjectTrackingDrillDownToDataSource,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerHistoryViewAction: registerHistoryViewAction,
+            registerLogToDataSource: registerLogToDataSource,
+            registerImportedBatchToDataSource: registerImportedBatchToDataSource
+        };    
     };
 
     appControllers.service('VR_Integration_DataSourceService', DataSourceService);
-
 })(appControllers);

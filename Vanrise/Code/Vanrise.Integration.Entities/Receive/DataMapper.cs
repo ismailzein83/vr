@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common;
 using Vanrise.Entities;
 
 namespace Vanrise.Integration.Entities
-{    
+{
     public abstract class DataMapper
     {
+        private IDataSourceLogger _logger;
+
         public abstract MappingOutput MapData(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers);
 
-        private IDataSourceLogger _logger;
         public void SetLogger(IDataSourceLogger logger)
         {
             _logger = logger;
@@ -45,17 +42,19 @@ namespace Vanrise.Integration.Entities
         }
     }
 
-    public enum MappingResult
-    {
-        Valid = 1,
-        Invalid = 2,
-        Empty = 3, 
-        PartialInvalid = 4
-    }
     public class MappingOutput
     {
         public MappingResult Result { get; set; }
 
         public string Message { get; set; }
+    }
+
+    public enum MappingResult
+    {
+        None = 0,
+        Valid = 1,
+        Invalid = 2,
+        Empty = 3,
+        PartialInvalid = 4
     }
 }

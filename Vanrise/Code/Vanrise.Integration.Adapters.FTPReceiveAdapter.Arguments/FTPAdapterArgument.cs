@@ -20,6 +20,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
         public CompressionTypes CompressionType { get; set; }
         public short? NumberOfFiles { get; set; }
         public string InvalidFilesDirectory { get; set; }
+        public string DuplicateFilesDirectory { get; set; } //Not Reflected In UI
+        public Guid? FileDataSourceDefinitionId { get; set; } //Not Reflected In UI
 
         FileCheckCriteriaEnum _fileCheckCriteria = FileCheckCriteriaEnum.DateAndNameCheck;
         public FileCheckCriteriaEnum FileCheckCriteria
@@ -53,6 +55,10 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
 
         #endregion
 
+        public enum FileCheckCriteriaEnum { DateAndNameCheck = 0, NameCheck = 1, None = 2 }
+
+        public enum CompressionTypes { GZip, Zip }
+
         public enum Actions
         {
             NoAction = -1,
@@ -60,19 +66,6 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
             Delete = 1,
             Move = 2, // Move to Folder
             Copy = 3  // Copy To Folder and Keep the original file
-        }
-
-        public enum FileCheckCriteriaEnum
-        {
-            DateAndNameCheck = 0,
-            NameCheck = 1,
-            None = 2
-        }
-
-        public enum CompressionTypes
-        {
-            GZip,
-            Zip
         }
     }
 

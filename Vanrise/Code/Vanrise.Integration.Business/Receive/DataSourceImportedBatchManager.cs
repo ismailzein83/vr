@@ -15,7 +15,7 @@ namespace Vanrise.Integration.Business
         public long WriteEntry(Entities.ImportedBatchEntry entry, Guid dataSourceId, string logEntryTime)
         {
             IDataSourceImportedBatchDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
-            return manager.InsertEntry(dataSourceId, entry.BatchDescription, entry.BatchSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds, logEntryTime, entry.BatchStart, entry.BatchEnd);
+            return manager.InsertEntry(dataSourceId, entry.BatchDescription, entry.BatchSize, entry.BatchState, entry.IsDuplicateSameSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds, logEntryTime, entry.BatchStart, entry.BatchEnd);
         }
 
         public Vanrise.Entities.IDataRetrievalResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
@@ -44,6 +44,12 @@ namespace Vanrise.Integration.Business
 
             foreach (DataSourceImportedBatch batch in bigResult.Data)
             {
+                if (batch.MappingResult == MappingResult.Invalid)
+                {
+                    batch.ExecutionStatus = ItemExecutionFlowStatus.Failed;
+                    continue;
+                }
+
                 if (string.IsNullOrEmpty(batch.QueueItemIds))
                 {
                     batch.ExecutionStatus = ItemExecutionFlowStatus.NoBatches;
@@ -61,6 +67,12 @@ namespace Vanrise.Integration.Business
             };
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult, handler);
+        }
+
+        public List<DataSourceImportedBatch> GetDataSourceImportedBatches(Guid DataSourceId, DateTime from)
+        {
+            IDataSourceImportedBatchDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
+            return dataManager.GetDataSourceImportedBatches(DataSourceId, from);
         }
 
         public List<DataSourceSummary> GetDataSourcesSummary(DateTime fromTime, List<Guid> dataSourcesIds)

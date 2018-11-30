@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -86,6 +87,10 @@
     <ProjectReference Include="..\Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments\Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments.csproj">
       <Project>{e820f143-f40e-4465-a14c-270edeb8a6b3}</Project>
       <Name>Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Integration.Business\Vanrise.Integration.Business.csproj">
+      <Project>{1f22483a-d3db-48ee-aea8-8988bdb3b9a1}</Project>
+      <Name>Vanrise.Integration.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Integration.Entities\Vanrise.Integration.Entities.csproj">
       <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>
