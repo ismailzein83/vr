@@ -81,7 +81,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     {
                         if (customerInvoice.FromDate.Year != customerInvoice.ToDate.Year  || customerInvoice.FromDate.Month != customerInvoice.ToDate.Month)
                         {
-                            context.ErrorMessage = "Settlement invoice not supported. Reason: Specified customer invoices must be monthly generated.";
+                            context.ErrorMessage = "Settlement invoice not supported. Reason: Specified customer invoices must be less than or equal to a month.";
                             context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
                             return;
                         }
@@ -93,7 +93,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     {
                         if (supplierInvoice.FromDate.Year != supplierInvoice.ToDate.Year || supplierInvoice.FromDate.Month != supplierInvoice.ToDate.Month)
                         {
-                            context.ErrorMessage = "Settlement invoice not supported. Reason: Specified supplier invoices must be monthly generated.";
+                            context.ErrorMessage = "Settlement invoice not supported. Reason: Specified supplier invoices must be less than or equal to a month.";
                             context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
                             return;
                         }
