@@ -32,10 +32,12 @@
             var idFieldType;
 
             var gridAPI;
+            var gridAPIPromiseDeferred = UtilsService.createPromiseDeferred();
             var gridDrillDownTabsObj;
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.showGrid = false;
                 $scope.scopeModel.columns = [];
                 //$scope.scopeModel.menuActions = [];
                 $scope.scopeModel.showDrillDown = function() {
@@ -58,11 +60,10 @@
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
-                    defineAPI();
+                    gridAPIPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-
                     return VR_GenericData_GenericBusinessEntityAPIService.GetFilteredGenericBusinessEntities(dataRetrievalInput).then(function (response) {
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
@@ -77,6 +78,7 @@
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
+                defineAPI();
             }
 
             //function hasEditGenericBEPermission(genericBusinessEntity) {
@@ -103,6 +105,9 @@
 
                         //Loading gridColumnsAttributes
                         var businessEntityGridColumnsLoadPromise = getBusinessEntityGridColumnsLoadPromise();
+                        businessEntityGridColumnsLoadPromise.finally(function () {
+                            $scope.scopeModel.showGrid = true;
+                        });
                         promises.push(businessEntityGridColumnsLoadPromise);
 
                         //Loading GenericBEDefinitionSettings
@@ -113,6 +118,7 @@
                         var idFieldTypeForGenericBELoadPromise = getIdFieldTypeForGenericBELoadPromise();
                         promises.push(idFieldTypeForGenericBELoadPromise);
 
+                        promises.push(gridAPIPromiseDeferred.promise);
                     }
 
                     var gridLoadDeferred = UtilsService.createPromiseDeferred();
