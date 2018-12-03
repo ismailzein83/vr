@@ -390,7 +390,7 @@ namespace BPMExtended.Main.Common
             return new List<TelephonyContractDetail>
             {
                  new TelephonyContractDetail
-                 { 
+                 {
                      ContractId = CONTRACT_CUST1_TL1,
                      CustomerId = CUSTOMER_ID_1,
                      PhoneNumber= PHONE_NUMBER_2,
@@ -427,7 +427,7 @@ namespace BPMExtended.Main.Common
                      UnbilledAmount = 4002,
                      Promotions = "promo2",
                      FreeUnit = "unit2"
-                 },                 
+                 },
                  new TelephonyContractDetail
                  {
                      ContractId = CONTRACT_CUST1_TL3,
@@ -484,7 +484,7 @@ namespace BPMExtended.Main.Common
                      UnbilledAmount = 202,
                      Promotions = "promo5",
                      FreeUnit = "unit5"
-                 },            
+                 },
                  new TelephonyContractDetail
                  {
                      ContractId = CONTRACT_CUST3_TL1,
@@ -547,7 +547,7 @@ namespace BPMExtended.Main.Common
                      ContractId = CONTRACT_CUST1_TL2,
                      CustomerId = CUSTOMER_ID_1,
                      PhoneNumber= PHONE_NUMBER_1
-                 },                 
+                 },
                  new TelephonyContractInfo
                  {
                      ContractId = CONTRACT_CUST1_TL3,
@@ -637,9 +637,9 @@ namespace BPMExtended.Main.Common
         #endregion
 
 
-                #region Pabx
+        #region Pabx
 
-            public static List<PabxContractDetail> GetPabxContracts(string customerId)
+        public static List<PabxContractDetail> GetPabxContracts(string customerId)
         {
             return GetAllPabxContracts().FindAll(x => x.CustomerId.ToLower() == customerId.ToLower());
         }
@@ -666,7 +666,7 @@ namespace BPMExtended.Main.Common
                      Address = "Haret hreik",
                      IsPilot = true,
                      PhoneNumber =PHONE_NUMBER_2,
-                     PabxOption = PabxPhoneNumberOption.MakeCall                    
+                     PabxOption = PabxPhoneNumberOption.MakeCall
 
                  },
                   new PabxContractDetail
@@ -676,10 +676,10 @@ namespace BPMExtended.Main.Common
                      Address = "Beirut",
                      IsPilot = false,
                      PhoneNumber = PHONE_NUMBER_1,
-                     PabxOption = PabxPhoneNumberOption.Both                    
+                     PabxOption = PabxPhoneNumberOption.Both
 
                  },
-               
+
                   new PabxContractDetail
                  {
                      ContractId = CONTRACT_CUST3_TL1,
@@ -687,7 +687,7 @@ namespace BPMExtended.Main.Common
                      Address = "Tyr",
                      IsPilot = false,
                      PhoneNumber = PHONE_NUMBER_6,
-                     PabxOption = PabxPhoneNumberOption.ReceiveCall   
+                     PabxOption = PabxPhoneNumberOption.ReceiveCall
                  },
                   new PabxContractDetail
                  {
@@ -696,7 +696,7 @@ namespace BPMExtended.Main.Common
                      Address = "Saida",
                      IsPilot = false,
                      PhoneNumber = PHONE_NUMBER_7,
-                     PabxOption = PabxPhoneNumberOption.ReceiveCall   
+                     PabxOption = PabxPhoneNumberOption.ReceiveCall
                  }
 
             };
@@ -709,34 +709,34 @@ namespace BPMExtended.Main.Common
         #region ISP
 
 
-         public static List<ISPInfo> GetAllISPInfo()
+        public static List<ISPInfo> GetAllISPInfo()
         {
             return new List<ISPInfo>
             {
                  new ISPInfo
                  {
                      Id = ISP_ID_1,
-                     Name = "Terranet"                
+                     Name = "Terranet"
                  },
                  new ISPInfo
                  {
                      Id = ISP_ID_2,
-                     Name = "BSNL"                
+                     Name = "BSNL"
                  },
                  new ISPInfo
                  {
                      Id = ISP_ID_3,
-                     Name = "Comcast"                
+                     Name = "Comcast"
                  },
                  new ISPInfo
                  {
                      Id = ISP_ID_4,
-                     Name = "Megapath"                
+                     Name = "Megapath"
                  }
 
             };
 
-         }
+        }
 
         #endregion
 
@@ -763,43 +763,43 @@ namespace BPMExtended.Main.Common
                  {
                      Id = "1",
                      Name = ADSL_SPEED_1
-                   
+
                  },
                   new ADSLSpeedInfo
                  {
                      Id = "2",
                      Name = ADSL_SPEED_2
-                   
+
                  },
                   new ADSLSpeedInfo
                  {
                      Id = "3",
                      Name = ADSL_SPEED_3
-                   
+
                  },
                   new ADSLSpeedInfo
                  {
                      Id = "4",
                      Name = ADSL_SPEED_4
-                   
+
                  },
                   new ADSLSpeedInfo
                  {
                      Id = "5",
                      Name = ADSL_SPEED_5
-                   
+
                  },
                   new ADSLSpeedInfo
                  {
                      Id = "6",
                      Name = ADSL_SPEED_6
-                   
+
                  },
                   new ADSLSpeedInfo
                  {
                      Id = "7",
                      Name = ADSL_SPEED_7
-                   
+
                  }
 
             };
@@ -857,7 +857,7 @@ namespace BPMExtended.Main.Common
                      UnbilledAmount = 1002,
                      Promotions = "promo45",
                      FreeUnit = "unit45"
-                 },                 
+                 },
                  new ADSLContractDetail
                  {
                      ContractId = CONTRACT_CUST1_ADSL3,
@@ -932,7 +932,7 @@ namespace BPMExtended.Main.Common
 
         #region Leased Line Contract
 
-        public static LeasedLineContractDetail  GetLeasedLineContract(string contractId)
+        public static LeasedLineContractDetail GetLeasedLineContract(string contractId)
         {
             return GetAllLeasedLineContracts().Find(x => x.ContractId.ToLower() == contractId.ToLower());
         }
@@ -1108,9 +1108,9 @@ namespace BPMExtended.Main.Common
             return new List<CustomerBalance>
             {
                 new CustomerBalance
-                { 
+                {
                     CustomerId = CUSTOMER_ID_1,
-                    Balance = 3520                    
+                    Balance = 3520
                 },
                 new CustomerBalance
                 {
@@ -1134,8 +1134,8 @@ namespace BPMExtended.Main.Common
             if (subType == null)
                 return GetAllRatePlans().FindAllRecords(x => x.LOB == lob && x.Category.CategoryId.ToLower() == customerCategoryId.ToLower()).ToList();
             else
-            return GetAllRatePlans().FindAllRecords(x => x.LOB == lob && x.Category.CategoryId.ToLower() == customerCategoryId.ToLower()
-                && x.SubType.ToLower() == subType.ToLower()).ToList();
+                return GetAllRatePlans().FindAllRecords(x => x.LOB == lob && x.Category.CategoryId.ToLower() == customerCategoryId.ToLower()
+                    && x.SubType.ToLower() == subType.ToLower()).ToList();
         }
 
         public static SOM.Main.Entities.RatePlan GetRatePlan(string ratePlanId)
@@ -1275,7 +1275,7 @@ namespace BPMExtended.Main.Common
         #endregion
 
         #region Service Packages
-        
+
         public static SOM.Main.Entities.ServicePackage GetServicePackage(string packageId)
         {
             return GetAllServicePackages().FindRecord(x => x.PackageId == packageId);
@@ -1285,7 +1285,7 @@ namespace BPMExtended.Main.Common
         {
             return GetAllServicePackages().FindAllRecords(x => packageIds.Contains(x.PackageId)).ToList();
         }
-        
+
         private static IEnumerable<SOM.Main.Entities.ServicePackage> GetAllServicePackages()
         {
             return new List<SOM.Main.Entities.ServicePackage>
@@ -1666,6 +1666,230 @@ namespace BPMExtended.Main.Common
             int index = rnd.Next(0, 2);
 
             return customerIds[index];
+        }
+
+        #endregion
+
+        #region Invoices
+
+        public static List<InvoiceDetail> GetInvoices(string customerId)
+        {
+            return GetAllInvoices().FindAll(x => x.CustomerID.ToLower() == customerId.ToLower());
+        }
+        private static List<InvoiceDetail> GetAllInvoices()
+        {
+
+            return new List<InvoiceDetail>
+            {
+                 new InvoiceDetail
+                 {
+                     BillCycle = "4/2018",
+                     CustomerID = CUSTOMER_ID_1,
+                     InvoiceAccount = "711-1",
+                     InvoiceCode="INV_1",
+                     OpenAmount = "1000",
+                     Resource = "1111",
+                     URL="www.url.com"
+
+                 },
+                 new InvoiceDetail
+                 {
+                     BillCycle = "5/2018",
+                     CustomerID = CUSTOMER_ID_1,
+                     InvoiceAccount = "711-1",
+                     InvoiceCode="INV_2",
+                     OpenAmount = "3000",
+                     Resource = "500501",
+                     URL="www.url.com"
+
+                 },
+                 new InvoiceDetail
+                 {
+                     BillCycle = "7/2018",
+                     CustomerID = CUSTOMER_ID_1,
+                     InvoiceAccount = "711-1",
+                     InvoiceCode="INV_3",
+                     OpenAmount = "2000",
+                     Resource = "500500",
+                     URL="www.url.com"
+
+                 },
+                 new InvoiceDetail
+                 {
+                     BillCycle = "3/2018",
+                     CustomerID = CUSTOMER_ID_1,
+                     InvoiceAccount = "711-1",
+                     InvoiceCode="INV_4",
+                     OpenAmount = "4000",
+                     Resource = "Test1",
+                     URL="www.url.com"
+
+                 },
+                 new InvoiceDetail
+                 {
+                     BillCycle = "4/2018",
+                     CustomerID = CUSTOMER_ID_2,
+                     InvoiceAccount = "711-1",
+                     InvoiceCode="INV_5",
+                     OpenAmount = "1000",
+                     Resource = "1111",
+                     URL="www.url.com"
+
+                 },
+                 new InvoiceDetail
+                 {
+                     BillCycle = "1/2018",
+                     CustomerID = CUSTOMER_ID_2,
+                     InvoiceAccount = "711-1",
+                     InvoiceCode="INV_6",
+                     OpenAmount = "3000",
+                     Resource = "500500",
+                     URL="www.url.com"
+
+                 },
+                 new InvoiceDetail
+                 {
+                     BillCycle = "12/2018",
+                     CustomerID = CUSTOMER_ID_2,
+                     InvoiceAccount = "711-1",
+                     InvoiceCode="INV_7",
+                     OpenAmount = "1000",
+                     Resource = "500504",
+                     URL="www.url.com"
+
+                 },
+                 new InvoiceDetail
+                 {
+                     BillCycle = "4/2018",
+                     CustomerID = CUSTOMER_ID_3,
+                     InvoiceAccount = "711-1",
+                     InvoiceCode="INV_8",
+                     OpenAmount = "1000",
+                     Resource = "1111",
+                     URL="www.url.com"
+
+                 },
+                 new InvoiceDetail
+                 {
+                     BillCycle = "4/2018",
+                     CustomerID = CUSTOMER_ID_3,
+                     InvoiceAccount = "711-1",
+                     InvoiceCode="INV_9",
+                     OpenAmount = "1000",
+                     Resource = "500500",
+                     URL="www.url.com"
+
+                 }
+
+            };
+
+        }
+
+        #endregion
+        #region Payments
+
+        public static List<PaymentDetail> GetPayments(string customerId)
+        {
+            return GetAllPayments().FindAll(x => x.CustomerID.ToLower() == customerId.ToLower());
+        }
+        private static List<PaymentDetail> GetAllPayments()
+        {
+
+            return new List<PaymentDetail>
+            {
+                 new PaymentDetail
+                 {
+                    CustomerID = CUSTOMER_ID_1,
+                    InvoiceCode="INV_1",
+                    CashierUserName ="cashier1",
+                    PaymentCode = "PAY_1",
+                    PaymentDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    PaymentType = "INVOICE"
+                 },
+                 new PaymentDetail
+                 {
+                    CustomerID = CUSTOMER_ID_1,
+                    InvoiceCode="",
+                    CashierUserName ="cashier2",
+                    PaymentCode = "PAY_2",
+                    PaymentDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    PaymentType = "CASH"
+                 },
+                 new PaymentDetail
+                 {
+                    CustomerID = CUSTOMER_ID_1,
+                    InvoiceCode="INV_2",
+                    CashierUserName ="cashier3",
+                    PaymentCode = "PAY_3",
+                    PaymentDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    PaymentType = "INVOICE"
+                 },
+                 new PaymentDetail
+                 {
+                    CustomerID = CUSTOMER_ID_1,
+                    InvoiceCode="INV_3",
+                    CashierUserName ="cashier4",
+                    PaymentCode = "PAY_4",
+                    PaymentDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    PaymentType = "INVOICE"
+                 },
+                 new PaymentDetail
+                 {
+                    CustomerID = CUSTOMER_ID_2,
+                    InvoiceCode="INV_6",
+                    CashierUserName ="cashier1",
+                    PaymentCode = "PAY_5",
+                    PaymentDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    PaymentType = "INVOICE"
+                 },
+                 new PaymentDetail
+                 {
+                    CustomerID = CUSTOMER_ID_2,
+                    InvoiceCode="INV_7",
+                    CashierUserName ="cashier2",
+                    PaymentCode = "PAY_6",
+                    PaymentDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    PaymentType = "INVOICE"
+                 },
+                 new PaymentDetail
+                 {
+                    CustomerID = CUSTOMER_ID_2,
+                    InvoiceCode="",
+                    CashierUserName ="cashier3",
+                    PaymentCode = "PAY_7",
+                    PaymentDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    PaymentType = "CASH"
+                 },
+                 new PaymentDetail
+                 {
+                    CustomerID = CUSTOMER_ID_3,
+                    InvoiceCode="INV_8",
+                    CashierUserName ="cashier1",
+                    PaymentCode = "PAY_8",
+                    PaymentDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    PaymentType = "INVOICE"
+                 },
+                 new PaymentDetail
+                 {
+                    CustomerID = CUSTOMER_ID_3,
+                    InvoiceCode="INV_9",
+                    CashierUserName ="cashier2",
+                    PaymentCode = "PAY_9",
+                    PaymentDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    PaymentType = "INVOICE"
+                 },
+                 new PaymentDetail
+                 {
+                    CustomerID = CUSTOMER_ID_3,
+                    InvoiceCode="",
+                    CashierUserName ="cashier3",
+                    PaymentCode = "PAY_10",
+                    PaymentDate = DateTime.Now.ToString("dd/MM/yyyy"),
+                    PaymentType = "CASH"
+                 }
+
+            };
+
         }
 
         #endregion
