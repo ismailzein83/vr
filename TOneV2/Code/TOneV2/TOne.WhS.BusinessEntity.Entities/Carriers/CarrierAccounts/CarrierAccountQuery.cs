@@ -14,7 +14,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public List<CarrierAccountType> AccountsTypes { get; set; }
         public List<int?> SellingNumberPlanIds { get; set; }
         public List<int?> SellingProductsIds { get; set; }
-        public List<Guid?> InvoiceTypeIds { get; set; }
+        public List<Guid?> CompanySettingsIds { get; set; }
+        public List<CarrierAccountInvoiceType> InvoiceTypes { get; set; }
+
         public List<int> Services { get; set; }
         public List<int> ActivationStatusIds { get; set; }
         public bool IsInterconnectSwitch { get; set; }

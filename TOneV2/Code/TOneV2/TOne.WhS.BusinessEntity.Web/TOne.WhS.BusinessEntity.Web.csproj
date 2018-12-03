@@ -224,6 +224,7 @@
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Constant\AutoImportEmailTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountActivationStatusEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\CarrierAccountInvoiceTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CDPNIdentificationEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CodeChangeTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CommisssionTypeEnum.js" />

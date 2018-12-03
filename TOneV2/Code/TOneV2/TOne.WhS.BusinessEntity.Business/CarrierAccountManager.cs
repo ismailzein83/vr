@@ -571,7 +571,7 @@ namespace TOne.WhS.BusinessEntity.Business
                       return false;
                   if (input.Query.IsInterconnectSwitch == true && input.Query.IsInterconnectSwitch != item.CarrierAccountSettings.IsInterconnectSwitch)
                       return false;
-                  if (input.Query.InvoiceTypeIds != null && input.Query.InvoiceTypeIds.Count > 0)
+                  if (input.Query.InvoiceTypes != null && input.Query.InvoiceTypes.Count > 0)
                   {
                       WHSCarrierFinancialAccountData financialAccountData;
                       WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
@@ -583,9 +583,11 @@ namespace TOne.WhS.BusinessEntity.Business
                       {
                           financialAccountManager.TryGetSuppAccFinancialAccountData(item.CarrierAccountId, DateTime.Now, out financialAccountData);
                       }
-                      if (financialAccountData != null && financialAccountData.InvoiceData != null && financialAccountData.InvoiceData.InvoiceTypeId != null && !input.Query.InvoiceTypeIds.Contains(financialAccountData.InvoiceData.InvoiceTypeId))
+                      if (financialAccountData != null && financialAccountData.FinancialAccount != null && !input.Query.InvoiceTypes.Contains(GetCarrierAccountInvoiceType(financialAccountData)))
                           return false;
                   }
+                  if (input.Query.CompanySettingsIds != null && input.Query.CompanySettingsIds.Count > 0 && !input.Query.CompanySettingsIds.Contains(GetCompanySetting(item.CarrierAccountId).CompanySettingId))
+                      return false;
                   return true;
               };
             var resultProcessingHandler = new ResultProcessingHandler<CarrierAccountDetail>()
@@ -1554,6 +1556,15 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
+        private CarrierAccountInvoiceType GetCarrierAccountInvoiceType(WHSCarrierFinancialAccountData financialAccountData)
+
+        {
+            if (financialAccountData.FinancialAccount.CarrierAccountId.HasValue)
+                return CarrierAccountInvoiceType.Account;
+            else
+                return CarrierAccountInvoiceType.Profile;
+        }
+
         #endregion
 
         #region Classes
@@ -1751,14 +1762,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (financialAccountData != null)
             {
-                if (financialAccountData.FinancialAccount.CarrierAccountId.HasValue)
-                {
-                    carrierAccountDetail.InvoiceTypeDescription = "Account";
-                }
-                else
-                {
-                    carrierAccountDetail.InvoiceTypeDescription = "Profile";
-                }
+
+                carrierAccountDetail.InvoiceTypeDescription = GetCarrierAccountInvoiceType(financialAccountData).ToString();
                 carrierAccountDetail.InvoiceSettingName = financialAccountManager.GetFinancialInvoiceSettingName(financialAccountData.FinancialAccount.FinancialAccountDefinitionId, financialAccountData.FinancialAccount.FinancialAccountId.ToString(), financialAccountData.InvoiceData.InvoiceTypeId);
             }
             var companySettings = GetCompanySetting(carrierAccount.CarrierAccountId);

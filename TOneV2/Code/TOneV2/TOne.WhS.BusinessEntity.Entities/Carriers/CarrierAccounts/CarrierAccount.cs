@@ -8,6 +8,7 @@ using Vanrise.Entities.EntitySynchronization;
 namespace TOne.WhS.BusinessEntity.Entities
 {
     public enum CarrierAccountType { Exchange = 1, Supplier = 2, Customer = 3 }
+    public enum CarrierAccountInvoiceType { Account = 1, Profile = 2 }
 
     public class BaseCarrierAccount
     {

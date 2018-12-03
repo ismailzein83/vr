@@ -2,9 +2,9 @@
 
     "use strict";
 
-    carrierAccountManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierAccountAPIService'];
+    carrierAccountManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierAccountInvoiceTypeEnum'];
 
-    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountService, WhS_BE_CarrierAccountAPIService) {
+    function carrierAccountManagementController($scope, UtilsService, VRNotificationService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountInvoiceTypeEnum) {
         var gridAPI;
         var carrierAccountGridReadyPromise = UtilsService.createPromiseDeferred();;
         var carrierProfileDirectiveAPI;
@@ -14,8 +14,8 @@
 
         var sellingProductSelectorAPI;
 
-        var invoiceTypeSelectorAPI;
-        var invoiceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var companySettingsSelectorAPI;
+        var companySettingsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var serviceDirectiveAPI;
 
@@ -48,9 +48,9 @@
                 sellingProductSelectorAPI = api;
             };
 
-            $scope.onInvoiceTypeSelectorReady = function (api) {
-                invoiceTypeSelectorAPI = api;
-                invoiceTypeSelectorReadyDeferred.resolve();
+            $scope.onCompanySettingsSelectorReady = function (api) {
+                companySettingsSelectorAPI = api;
+                companySettingsSelectorReadyDeferred.resolve();
             };
 
             $scope.onZoneServiceConfigSelectorReady = function (api) {
@@ -101,6 +101,7 @@
             };
 
             $scope.selectedCarrierAccountTypes = [];
+            $scope.selectedCarrierAccountInvoiceTypes = [];
             $scope.selectedSellingNumberPlans = [];
 
             $scope.AddNewCarrierAccount = AddNewCarrierAccount;
@@ -115,7 +116,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountType, loadCarrierProfiles, loadCarrierActivationStatusType, loadInvoiceTypeSelector]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountType, loadCarrierProfiles, loadCarrierActivationStatusType, loadCompanySettingsSelector, loadCarrierAccountInvoiceType]).then(function () {
                 carrierAccountGridReadyPromise.promise.then(function () {
                     gridAPI.loadGrid(getFilterObject())
 
@@ -129,20 +130,22 @@
                     $scope.isLoading = false;
                 });
         }
-
+        function loadCarrierAccountInvoiceType() {
+            $scope.carrierAccountInvoiceTypes = UtilsService.getArrayEnum(WhS_BE_CarrierAccountInvoiceTypeEnum);
+        }
         function loadCarrierAccountType() {
             $scope.carrierAccountTypes = UtilsService.getArrayEnum(WhS_BE_CarrierAccountTypeEnum);
         }
 
-        function loadInvoiceTypeSelector() {
-            var loadInvoiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-            invoiceTypeSelectorReadyDeferred.promise
+        function loadCompanySettingsSelector() {
+            var loadCompanySettingsSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            companySettingsSelectorReadyDeferred.promise
                 .then(function () {
-                    var invoiceTypeSelectorPayload = undefined;
+                    var companySettingsSelectorPayload = undefined;
 
-                    VRUIUtilsService.callDirectiveLoad(invoiceTypeSelectorAPI, invoiceTypeSelectorPayload, loadInvoiceTypeSelectorPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoad(companySettingsSelectorAPI, companySettingsSelectorPayload, loadCompanySettingsSelectorPromiseDeferred);
                 })
-            return loadInvoiceTypeSelectorPromiseDeferred.promise;
+            return loadCompanySettingsSelectorPromiseDeferred.promise;
         }
 
         function loadCarrierProfiles() {
@@ -185,7 +188,8 @@
                 ActivationStatusIds: activationStatusSelectorAPI.getSelectedIds(),
                 Services: serviceDirectiveAPI.getSelectedIds(),
                 IsInterconnectSwitch: $scope.scopeModel.isInterconnectSwitch,
-                InvoiceTypeIds: invoiceTypeSelectorAPI.getSelectedIds()
+                CompanySettingsIds: companySettingsSelectorAPI.getSelectedIds(),
+                InvoiceTypes: UtilsService.getPropValuesFromArray($scope.selectedCarrierAccountInvoiceTypes, "value")
             };
             return data;
         }
