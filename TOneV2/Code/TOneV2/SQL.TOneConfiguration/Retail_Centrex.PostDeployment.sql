@@ -729,7 +729,8 @@ set nocount on;
 ;with cte_data([ID],[UniqueName],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('7F3033EC-1E55-4E29-8B81-EF5FC4B68BB1','Retail_BusinessEntity_DID','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"Retail_BusinessEntity_DID_ViewHistoryItem"}')
+('7F3033EC-1E55-4E29-8B81-EF5FC4B68BB1','Retail_BusinessEntity_DID','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"Retail_BusinessEntity_DID_ViewHistoryItem"}'),
+('62120ED8-00B5-41C4-A261-4654772D778D','VR_GenericData_GenericBusinessEntity_0d7dd0d6-ab3c-4e58-bd5f-926a260f1891','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_GenericData_GenericBusinessEntity_ViewHistoryItem","ChangeInfoDefinition":{"$type":"Vanrise.GenericData.Business.GenericFieldsActionAuditChangeInfoDefinition, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"0d7dd0d6-ab3c-4e58-bd5f-926a260f1891","RuntimeEditor":"vr-genericdata-genericfields-actionauditchange-runtime"}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[UniqueName],[Settings]))
 merge	[logging].[LoggableEntity] as t
