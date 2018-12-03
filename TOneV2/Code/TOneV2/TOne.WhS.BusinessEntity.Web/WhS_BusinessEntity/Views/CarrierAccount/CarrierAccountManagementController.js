@@ -144,7 +144,7 @@
                     var companySettingsSelectorPayload = undefined;
 
                     VRUIUtilsService.callDirectiveLoad(companySettingsSelectorAPI, companySettingsSelectorPayload, loadCompanySettingsSelectorPromiseDeferred);
-                })
+                });
             return loadCompanySettingsSelectorPromiseDeferred.promise;
         }
 
