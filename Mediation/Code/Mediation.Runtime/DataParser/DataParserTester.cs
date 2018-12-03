@@ -15586,8 +15586,8 @@ namespace Mediation.Runtime.DataParser
 
             PositionedFieldParser dateOfCallParser = new PositionedFieldParser()
             {
-                Length = 2,
                 Position = 3,
+                Length = 2,
                 FieldParser = new BinaryFieldParser()
                 {
                     Settings = new BCDNumberParser()
@@ -15600,8 +15600,8 @@ namespace Mediation.Runtime.DataParser
 
             PositionedFieldParser timeOfCallParser = new PositionedFieldParser
             {
-                Length = 3,
                 Position = 5,
+                Length = 3,
                 FieldParser = new BinaryFieldParser
                 {
                     Settings = new TimeFieldParser
@@ -15614,14 +15614,14 @@ namespace Mediation.Runtime.DataParser
 
             PositionedFieldParser aNumberParser = new PositionedFieldParser
             {
-                Length = 4,
                 Position = 8,
+                Length = 10,
                 FieldParser = new BinaryFieldParser
                 {
-                    Settings = new BCDNumberParser
+                    Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.AlcatelParsers.FieldParsers.NumberFieldParser
                     {
                         FieldName = "ANumber",
-                        RemoveHexa = true
+                        ReservedBytesLength = 6
                     }
                 }
             };
@@ -15629,14 +15629,14 @@ namespace Mediation.Runtime.DataParser
 
             PositionedFieldParser bNumberParser = new PositionedFieldParser
             {
-                Length = 4,
                 Position = 18,
+                Length = 12,
                 FieldParser = new BinaryFieldParser
                 {
-                    Settings = new BCDNumberParser
+                    Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.AlcatelParsers.FieldParsers.NumberFieldParser
                     {
                         FieldName = "BNumber",
-                        RemoveHexa = true
+                        ReservedBytesLength = 8
                     }
                 }
             };
@@ -15644,8 +15644,8 @@ namespace Mediation.Runtime.DataParser
 
             PositionedFieldParser durationInSecondsParser = new PositionedFieldParser
             {
-                Length = 2,
                 Position = 30,
+                Length = 2,
                 FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser

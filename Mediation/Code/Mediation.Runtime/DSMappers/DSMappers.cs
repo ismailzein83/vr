@@ -67,7 +67,7 @@ namespace Mediation.Runtime
                         {
                             if (record.IntermediateRecordNumber != null)
                             {
-                                record.SessionId = record.GlobalCallReference + "_" + record.RecordType + "_" + record.SetupTime.ToString();
+                                record.SessionId = record.RecordType + "_" + record.CallingNumber + "_" + record.CalledNumber + "_" + record.SwitchId + "_" + record.GlobalCallReference;
                                 multiLegRecords.Add(record);
                             }
                             else
@@ -1112,6 +1112,7 @@ namespace Mediation.Runtime
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
             return result;
         }
+
         #endregion
 
         #region Teles
@@ -1194,7 +1195,7 @@ namespace Mediation.Runtime
                         {
                             if (record.SequenceNumber == null || record.SequenceNumber > 0)
                             {
-                                record.SessionId = record.GlobalCallReference + "_" + record.RecordType + "_" + record.ConnectDateTime.ToString();
+                                record.SessionId = record.RecordType + "_" + record.CallingNumber + "_" + record.CalledNumber + "_" + record.SwitchId + "_" + record.GlobalCallReference;
                                 multiLegRecords.Add(record);
                             }
                             else
