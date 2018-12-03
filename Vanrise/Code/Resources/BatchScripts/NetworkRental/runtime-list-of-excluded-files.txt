@@ -21,3 +21,5 @@
 
 \Retail.Interconnect.Business.dll
 \Retail.Interconnect.Entities.dll
+.aspx\
+.cs\
