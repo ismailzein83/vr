@@ -908,6 +908,10 @@
       <Project>{ce5f6fa1-bd80-4690-b728-496a0e7a0fc9}</Project>
       <Name>Retail.MultiNet.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.RA.Business\Retail.RA.Business.csproj">
+      <Project>{87cd3228-cc6d-4dd7-8f3d-3f1f9b8567e9}</Project>
+      <Name>Retail.RA.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Ringo.Business\Retail.Ringo.Business.csproj">
       <Project>{c6098267-9bb4-4f28-8a80-70132fb0bc82}</Project>
       <Name>Retail.Ringo.Business</Name>
