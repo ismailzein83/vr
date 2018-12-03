@@ -5,10 +5,14 @@
     [DurationInSeconds] INT              NULL,
     [ANumber]           VARCHAR (50)     NULL,
     [BNumber]           VARCHAR (50)     NULL,
+    [InTrunk]           VARCHAR (50)     NULL,
+    [OutTrunk]          VARCHAR (50)     NULL,
     [FileName]          VARCHAR (255)    NULL,
     [DataSourceId]      UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_AlcatelBadCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 
