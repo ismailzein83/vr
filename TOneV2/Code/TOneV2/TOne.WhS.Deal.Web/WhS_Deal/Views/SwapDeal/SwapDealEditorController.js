@@ -468,9 +468,9 @@
             var shiftedEED ;
             var shiftedDatesPromiseDeferred = UtilsService.createPromiseDeferred();
             if ($scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined) {
-                GetShiftedDate($scope.scopeModel.beginDate).then(function (reponse) {
+                GetShiftedDate($scope.scopeModel.beginDate).then(function (response) {
                     shiftedBED = response;
-                    GetShiftedDate($scope.scopeModel.endDate).then(function (reponse) {
+                    GetShiftedDate($scope.scopeModel.endDate).then(function (response) {
                         shiftedEED = response;
                         shiftedDatesPromiseDeferred.resolve();
                     });
