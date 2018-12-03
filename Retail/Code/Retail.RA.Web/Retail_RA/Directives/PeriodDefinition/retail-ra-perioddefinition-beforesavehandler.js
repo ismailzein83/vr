@@ -18,14 +18,14 @@ app.directive("retailRaPerioddefinitionBeforesavehandler", ["UtilsService", "VRN
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_RA/Directives/PeriodDefinitionOnBeforeSaveHandler/PeriodDefinitionOnBeforeSaveHandlerTemplate.html'
+            templateUrl: '/Client/Modules/Retail_RA/Directives/PeriodDefinition/PeriodDefinitionOnBeforeSaveHandlerTemplate.html'
         };
 
         function Handler($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             function initializeController() {
                 $scope.scopeModel = {};
-
+ 
                 defineAPI();
             }
 
@@ -35,7 +35,7 @@ app.directive("retailRaPerioddefinitionBeforesavehandler", ["UtilsService", "VRN
                 api.getData = function () {
 
                     return {
-                        $type: " Retail.RA.Business.RAPeriodDefinitionOnBeforeSaveHandler,Retail.RA.Business"
+                        $type: "Retail.RA.Business.RAPeriodDefinitionOnBeforeSaveHandler,Retail.RA.Business"
                     };
                 };
 
