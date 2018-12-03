@@ -37,8 +37,9 @@ namespace Retail.Demo.Business
                 context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
                 return;
             }
-
-            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(financialAccountData.Account.AccountId, context.FromDate, context.ToDate);
+            decimal totalMCR;
+            decimal totalNCR;
+            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(financialAccountData.Account.AccountId, context.FromDate, context.ToDate, out totalMCR, out totalNCR);
             decimal amount = 0;
             if (generatedInvoiceItemSets != null && generatedInvoiceItemSets.Count > 0)
                 foreach (var generatedInvoiceItemSet in generatedInvoiceItemSets)
@@ -54,18 +55,23 @@ namespace Retail.Demo.Business
                 InvoiceDetails = new InvoiceDetails()
                 {
                     Amount = amount,
-                    Currency = _currencyManager.GetSystemCurrency().CurrencyId
+                    Currency = _currencyManager.GetSystemCurrency().CurrencyId,
+                    TotalMCR = totalMCR,
+                    TotalNCR  = totalNCR
                 }
             };
         }
 
-        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(long accountId, DateTime fromDate, DateTime toDate)
+        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(long accountId, DateTime fromDate, DateTime toDate, out decimal totalMCR, out decimal totalNCR)
         {
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
             IDemoDataManager dataManager = RetailDemoDataManagerFactory.GetDataManager<IDemoDataManager>();
 
             List<NewOrders> newOrders = new List<NewOrders>();
             List<ActiveServices> activeServices = new List<ActiveServices>();
+
+            totalMCR = 0;
+            totalNCR = 0;
 
             GeneratedInvoiceItemSet newOrdersInvoiceItemSet = new GeneratedInvoiceItemSet()
             {
@@ -78,6 +84,7 @@ namespace Retail.Demo.Business
             {
                 foreach (var newOrder in newOrders)
                 {
+                    totalNCR += newOrder.TotalTarrif;
                     newOrdersInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                     {
                         Details = newOrder,
@@ -97,6 +104,7 @@ namespace Retail.Demo.Business
             activeServices = dataManager.GetActiveServices(accountId, fromDate, toDate);
             foreach (var activeService in activeServices)
             {
+                totalMCR += activeService.TotalTarrif;
                 activeServicesInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                 {
                     Details = activeService,

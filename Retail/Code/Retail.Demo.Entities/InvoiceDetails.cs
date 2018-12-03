@@ -9,6 +9,8 @@ namespace Retail.Demo.Entities
     public class InvoiceDetails
     {
         public Decimal Amount { get; set; }
+        public decimal TotalNCR { get; set; }
+        public decimal TotalMCR { get; set; }
         public int Currency { get; set; }
         public InvoiceDetails()
         {

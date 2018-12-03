@@ -73,7 +73,9 @@ namespace Retail.Demo.Data.SQL
                 ProductName = reader["ProductName"] as string,
                 NoOfOrders = (int)reader["NoOfOrders"],
                 Cycle = reader["BillingFrequency"] as string,
-                TotalTarrif = (decimal)reader["MRC"]
+                TotalTarrif = (decimal)reader["MRC"],
+                OrderID = reader["OrderID"] as string,
+                ServiceID = reader["ServiceID"] as string,
             };
         }
         private NewOrders NewOrdersMapper(IDataReader reader)
@@ -83,23 +85,25 @@ namespace Retail.Demo.Data.SQL
             {
                 ProductName = reader["ProductName"] as string,
                 NoOfOrders = (int)reader["NoOfOrders"],
-                TotalTarrif = (decimal)reader["NRC"]
+                TotalTarrif = (decimal)reader["NRC"],
+                OrderID = reader["OrderID"] as string,
+                ServiceID = reader["ServiceID"] as string,
             };
         }
         #region Queries
 
-        private StringBuilder query_GetActiveServices = new StringBuilder(@"select Pr.Name  as ProductName,count(Pr.Name) as NoOfOrders, od.BillingFrequency, Sum(od.MRC) as MRC
+        private StringBuilder query_GetActiveServices = new StringBuilder(@"select Pr.Name  as ProductName,od.OrderID,od.ServiceID,count(Pr.Name) as NoOfOrders, od.BillingFrequency, Sum(od.MRC) as MRC
                                                                             FROM [NetworkRentalManager].[OrdersDefinition] as od
                                                                             Join [NetworkRentalManager].[Product] as Pr on OD.ProductId=pr.ID
                                                                             where AccountID =#AccountID# and od.BillStartDate >= '#FromDate#' and od.BillStartDate < '#ToDate#'
-                                                                            Group by Pr.Name,od.BillingFrequency
+                                                                            Group by Pr.Name,od.BillingFrequency,od.OrderID,od.ServiceID
                                                                             ");
 
-        private StringBuilder query_GetNewOrders = new StringBuilder(@"select Pr.Name  as ProductName,count(Pr.Name) as NoOfOrders, Sum(od.NRC) as NRC
+        private StringBuilder query_GetNewOrders = new StringBuilder(@"select Pr.Name  as ProductName,od.OrderID,od.ServiceID,count(Pr.Name) as NoOfOrders, Sum(od.NRC) as NRC
                                                                        FROM [NetworkRentalManager].[OrdersDefinition] as od
                                                                        Join [NetworkRentalManager].[Product] as Pr on OD.ProductId=pr.ID
                                                                        where AccountID =#AccountID# and od.BillStartDate >= '#FromDate#' and od.BillStartDate < '#ToDate#'
-                                                                       Group by Pr.Name,od.BillingFrequency
+                                                                       Group by Pr.Name,od.OrderID,od.ServiceID
                                                                        ");
 
         #endregion
