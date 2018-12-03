@@ -33,3 +33,4 @@ VR_AccountManager		C:\TFS\Vanrise\Code\Vanrise.AccountManager.Web\VR_AccountMana
 Retail_Interconnect		C:\TFS\Retail\Code\Retail.Interconnect.Web\Retail_Interconnect
 VR_Voucher				C:\TFS\Vanrise\Code\Vanrise.Voucher.Web\VR_Voucher
 Retail_Demo				C:\TFS\Retail\Code\Retail.Demo.Web\Retail_Demo
+Retail_RA				C:\TFS\Retail\Code\Retail.RA.Web\Retail_RA
