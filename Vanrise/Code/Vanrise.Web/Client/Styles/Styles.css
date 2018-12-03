@@ -2319,10 +2319,13 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     pointer-events: auto !important;
 }
 
-    .divDisabled vr-select vr-validator > div button.dropdown-toggle {
-        pointer-events: none !important;
-    }
-
+.divDisabled vr-select vr-validator > div button.dropdown-toggle {
+    pointer-events: none !important;
+}
+.divDisabled vr-select div.dropdown .vr-select-remove {
+    pointer-events: none !important;
+    display:none !important;
+}
 .divDisabled vr-validator > div .vr-dropdown-select {
     opacity: 0.8 !important;
 }
