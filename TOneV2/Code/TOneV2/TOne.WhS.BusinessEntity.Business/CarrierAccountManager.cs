@@ -571,6 +571,21 @@ namespace TOne.WhS.BusinessEntity.Business
                       return false;
                   if (input.Query.IsInterconnectSwitch == true && input.Query.IsInterconnectSwitch != item.CarrierAccountSettings.IsInterconnectSwitch)
                       return false;
+                  if (input.Query.InvoiceTypeIds != null && input.Query.InvoiceTypeIds.Count > 0)
+                  {
+                      WHSCarrierFinancialAccountData financialAccountData;
+                      WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
+                      if (item.AccountType == CarrierAccountType.Customer || item.AccountType == CarrierAccountType.Exchange)
+                      {
+                          financialAccountManager.TryGetCustAccFinancialAccountData(item.CarrierAccountId, DateTime.Now, out financialAccountData);
+                      }
+                      else
+                      {
+                          financialAccountManager.TryGetSuppAccFinancialAccountData(item.CarrierAccountId, DateTime.Now, out financialAccountData);
+                      }
+                      if (financialAccountData != null && financialAccountData.InvoiceData != null && financialAccountData.InvoiceData.InvoiceTypeId != null && !input.Query.InvoiceTypeIds.Contains(financialAccountData.InvoiceData.InvoiceTypeId))
+                          return false;
+                  }
                   return true;
               };
             var resultProcessingHandler = new ResultProcessingHandler<CarrierAccountDetail>()
@@ -1381,7 +1396,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 AccountId = account.CarrierAccountId,
                 Name = account.Name,
-				CurrencyId=account.CurrencyId
+                CurrencyId = account.CurrencyId
             };
             if (account.AccountType == CarrierAccountType.Exchange)
                 clientAccountInfo.CarrierAccountType = ClientAccountType.Exchange;

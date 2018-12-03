@@ -2,7 +2,7 @@
 
     "use strict";
 
-    carrierAccountManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService','WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierAccountAPIService'];
+    carrierAccountManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierAccountAPIService'];
 
     function carrierAccountManagementController($scope, UtilsService, VRNotificationService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountService, WhS_BE_CarrierAccountAPIService) {
         var gridAPI;
@@ -13,6 +13,9 @@
         var sellingNumberPlanDirectiveAPI;
 
         var sellingProductSelectorAPI;
+
+        var invoiceTypeSelectorAPI;
+        var invoiceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var serviceDirectiveAPI;
 
@@ -45,10 +48,15 @@
                 sellingProductSelectorAPI = api;
             };
 
+            $scope.onInvoiceTypeSelectorReady = function (api) {
+                invoiceTypeSelectorAPI = api;
+                invoiceTypeSelectorReadyDeferred.resolve();
+            };
+
             $scope.onZoneServiceConfigSelectorReady = function (api) {
                 serviceDirectiveAPI = api;
             };
-            
+
             $scope.onCarrierProfileDirectiveReady = function (api) {
                 carrierProfileDirectiveAPI = api;
                 carrierProfileReadyPromiseDeferred.resolve();
@@ -94,6 +102,7 @@
 
             $scope.selectedCarrierAccountTypes = [];
             $scope.selectedSellingNumberPlans = [];
+
             $scope.AddNewCarrierAccount = AddNewCarrierAccount;
 
             $scope.hadAddCarrierAccountPermission = function () {
@@ -106,23 +115,34 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountType, loadCarrierProfiles, loadCarrierActivationStatusType]).then( function () {
-                    carrierAccountGridReadyPromise.promise.then(function () {
-                        gridAPI.loadGrid(getFilterObject())
+            return UtilsService.waitMultipleAsyncOperations([loadCarrierAccountType, loadCarrierProfiles, loadCarrierActivationStatusType, loadInvoiceTypeSelector]).then(function () {
+                carrierAccountGridReadyPromise.promise.then(function () {
+                    gridAPI.loadGrid(getFilterObject())
 
-                    });
-                })
+                });
+            })
                 .catch(function (error) {
                     $scope.isLoading = false;
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
-               .finally(function () {
-                   $scope.isLoading = false;
-               });
+                .finally(function () {
+                    $scope.isLoading = false;
+                });
         }
 
         function loadCarrierAccountType() {
             $scope.carrierAccountTypes = UtilsService.getArrayEnum(WhS_BE_CarrierAccountTypeEnum);
+        }
+
+        function loadInvoiceTypeSelector() {
+            var loadInvoiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+            invoiceTypeSelectorReadyDeferred.promise
+                .then(function () {
+                    var invoiceTypeSelectorPayload = undefined;
+
+                    VRUIUtilsService.callDirectiveLoad(invoiceTypeSelectorAPI, invoiceTypeSelectorPayload, loadInvoiceTypeSelectorPromiseDeferred);
+                })
+            return loadInvoiceTypeSelectorPromiseDeferred.promise;
         }
 
         function loadCarrierProfiles() {
@@ -139,10 +159,10 @@
         }
 
         function loadCarrierActivationStatusType() {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
             var loadActivationStatusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
             activationStatusSelectorReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(activationStatusSelectorAPI, { selectedIds: [WhS_BE_CarrierAccountActivationStatusEnum.Active.value]}, loadActivationStatusSelectorPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(activationStatusSelectorAPI, { selectedIds: [WhS_BE_CarrierAccountActivationStatusEnum.Active.value] }, loadActivationStatusSelectorPromiseDeferred);
             });
             return loadActivationStatusSelectorPromiseDeferred.promise;
         }
@@ -164,7 +184,8 @@
                 SellingProductsIds: sellingProductSelectorAPI.getSelectedIds(),
                 ActivationStatusIds: activationStatusSelectorAPI.getSelectedIds(),
                 Services: serviceDirectiveAPI.getSelectedIds(),
-                IsInterconnectSwitch: $scope.scopeModel.isInterconnectSwitch
+                IsInterconnectSwitch: $scope.scopeModel.isInterconnectSwitch,
+                InvoiceTypeIds: invoiceTypeSelectorAPI.getSelectedIds()
             };
             return data;
         }

@@ -26,21 +26,27 @@
                                                            ismultipleselection>
                         </vr-whs-be-sellingproduct-selector>
                     </span>
-                    <vr-whs-be-activationstatus-selector normal-col-num="2" hideselectedvaluessection ismultipleselection on-ready="onActivationStatusDirectiveReady">
-                    </vr-whs-be-activationstatus-selector>
 
-                    <vr-column colnum="2">
-                        <vr-switch label="Interconnect Only" value="scopeModel.isInterconnectSwitch" >
-                        </vr-switch>
-                    </vr-column>
+                    <vr-columns width="normal" haschildcolumns>
+                        <vr-whs-be-activationstatus-selector normal-col-num="12" hideselectedvaluessection ismultipleselection on-ready="onActivationStatusDirectiveReady">
+                        </vr-whs-be-activationstatus-selector>
+                    </vr-columns>
 
-                    <span ng-show="showZoneService">
+                    <vr-columns width="normal" haschildcolumns>
+                        <vr-invoicetype-selector on-ready="onInvoiceTypeSelectorReady" normal-col-num="12" ismultipleselection></vr-invoicetype-selector>
+                    </vr-columns>
+
+                    <vr-columns width="normal" ng-show="showZoneService" haschildcolumns>
                         <vr-whs-be-zone-service-config-selector on-ready="onZoneServiceConfigSelectorReady"
                                                                 selectedvalues="servicesValues"
-                                                                normal-col-num="2"
+                                                                normal-col-num="12"
                                                                 ismultipleselection="true">
                         </vr-whs-be-zone-service-config-selector>
-                    </span>
+                    </vr-columns>
+                    <vr-columns width="normal">
+                        <vr-switch label="Interconnect Only" value="scopeModel.isInterconnectSwitch">
+                        </vr-switch>
+                    </vr-columns>
                 </vr-row>
             </vr-validation-group>
         </div>
