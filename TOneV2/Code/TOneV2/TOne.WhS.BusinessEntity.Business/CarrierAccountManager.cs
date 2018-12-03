@@ -583,7 +583,7 @@ namespace TOne.WhS.BusinessEntity.Business
                       {
                           financialAccountManager.TryGetSuppAccFinancialAccountData(item.CarrierAccountId, DateTime.Now, out financialAccountData);
                       }
-                      if (financialAccountData != null && financialAccountData.FinancialAccount != null && !input.Query.InvoiceTypes.Contains(GetCarrierAccountInvoiceType(financialAccountData)))
+                      if (financialAccountData == null || financialAccountData.FinancialAccount == null || !input.Query.InvoiceTypes.Contains(GetCarrierAccountInvoiceType(financialAccountData)))
                           return false;
                   }
                   if (input.Query.CompanySettingsIds != null && input.Query.CompanySettingsIds.Count > 0 && !input.Query.CompanySettingsIds.Contains(GetCompanySetting(item.CarrierAccountId).CompanySettingId))
