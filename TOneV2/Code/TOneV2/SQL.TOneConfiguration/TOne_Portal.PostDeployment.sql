@@ -65,7 +65,9 @@ as (select * from (values
 (0, CONVERT(varchar, @PortalAccountID),1,'a611a651-b60b-483d-bc83-1c2b667a120a','[{"Name":"View","Value":1}]'),
 (0, CONVERT(varchar, @PortalAccountID),1,'ab794846-853c-4402-a8e4-6f5c3a75f5f2','[{"Name":"View","Value":1}]'),
 (0, CONVERT(varchar, @PortalAccountID),1,'69A42A6E-DDA8-4396-A5A2-1F540D961739','[{"Name":"View","Value":1}]'),
-(0, CONVERT(varchar, @PortalAccountID),1,'DF1DBAF9-3236-4A66-9568-A5EA429976F6','[{"Name":"View","Value":1}]')
+(0, CONVERT(varchar, @PortalAccountID),1,'DF1DBAF9-3236-4A66-9568-A5EA429976F6','[{"Name":"View","Value":1}]'),
+(0, CONVERT(varchar, @PortalAccountID),1,'09C5BF94-BDD0-4A8A-A4CD-3E524B1A705B','[{"Name":"View","Value":1}]'),
+(0, CONVERT(varchar, @PortalAccountID),1,'FB962789-B602-46DE-8B1B-A55F64D5AAF3','[{"Name":"View","Value":1}]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
 merge	[sec].[Permission] as t
