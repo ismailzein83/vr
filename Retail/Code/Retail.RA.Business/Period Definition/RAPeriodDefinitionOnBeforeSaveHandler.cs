@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 
 namespace Retail.RA.Business
@@ -17,9 +18,20 @@ namespace Retail.RA.Business
             context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
             context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
             var from = context.GenericBusinessEntity.FieldValues.GetRecord("From");
+            if (from == null)
+                throw new NullReferenceException("from");
             var to = context.GenericBusinessEntity.FieldValues.GetRecord("To");
-            var name = string.Join("-", ((DateTime)from).ToString("dd/MM/yyyy"), ((DateTime)from).ToString("dd/MM/yyyy"));
-            context.GenericBusinessEntity.FieldValues.Add("Name", name);
+            if (to == null)
+                throw new NullReferenceException("to");
+            var currentName = context.GenericBusinessEntity.FieldValues.GetRecord("Name");
+            var name = string.Join(" To ", ((DateTime)from).ToString(Utilities.GetDateTimeFormat( Vanrise.Entities.DateTimeType.Date)), ((DateTime)from).ToString(Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)));
+            if (currentName == null)
+                context.GenericBusinessEntity.FieldValues.Add("Name", name);
+            else
+            {
+                currentName = name;
+            }
+
         }
     }
-}
+} 
