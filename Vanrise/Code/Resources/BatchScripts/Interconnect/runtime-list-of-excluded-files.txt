@@ -19,5 +19,8 @@
 \Retail.Teles.Business.dll
 \Retail.Teles.Entities.dll
 
+\Retail.RA.Entities.dll
+\Retail.RA.Business.dll
+
 .aspx\
 .cs\

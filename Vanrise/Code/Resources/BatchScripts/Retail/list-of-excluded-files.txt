@@ -53,3 +53,7 @@
 \bin\Retail.Interconnect.Business.dll
 \bin\Retail.Interconnect.Entities.dll
 \bin\Retail.Interconnect.Web.dll
+
+\bin\Retail.RA.Entities.dll
+\bin\Retail.RA.Business.dll
+\bin\Retail.RA.Web.dll

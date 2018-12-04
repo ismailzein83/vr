@@ -49,3 +49,7 @@
 \bin\Retail.Teles.Business.dll
 \bin\Retail.Teles.Entities.dll
 \bin\Retail.Teles.Web.dll
+
+\bin\Retail.RA.Entities.dll
+\bin\Retail.RA.Business.dll
+\bin\Retail.RA.Web.dll

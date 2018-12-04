@@ -21,3 +21,6 @@
 
 \Retail.Interconnect.Business.dll
 \Retail.Interconnect.Entities.dll
+
+\Retail.RA.Entities.dll
+\Retail.RA.Business.dll
