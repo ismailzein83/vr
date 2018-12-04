@@ -87,6 +87,7 @@
     <Compile Include="CustomerRequestTypeInfo.cs" />
     <Compile Include="DeviceItemDetail.cs" />
     <Compile Include="Filter.cs" />
+    <Compile Include="Installment.cs" />
     <Compile Include="InventoryItemDetail.cs" />
     <Compile Include="InvoiceDetail.cs" />
     <Compile Include="ISP.cs" />

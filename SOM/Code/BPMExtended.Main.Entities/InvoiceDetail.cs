@@ -18,5 +18,8 @@ namespace BPMExtended.Main.Entities
         public string InvoiceAccount { get; set; }
         public string OpenAmount { get; set; }
         public string URL { get; set; }
+        public bool CollectionStatus { get; set; }
+        public bool InvoiceInstallmentFlag { get; set; }
+        public bool FinancialDisputes { get; set; }
     }
 }

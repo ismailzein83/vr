@@ -70,6 +70,7 @@ namespace BPMExtended.Main.Common
 
         const string CONTRACT_CUST1_ADSL3 = "BF6FA071-BF08-4BF1-9689-06973D5BB5B5";
 
+      
         #endregion
 
         #region GSHDSL
@@ -86,6 +87,15 @@ namespace BPMExtended.Main.Common
 
         #region Contracts For CUSTOMER_ID_2
 
+        #region Telephony
+
+        const string CONTRACT_CUST2_TL1 = "270E26F4-5C9F-48FD-8648-52A0351DFCB1";
+
+        const string CONTRACT_CUST2_TL2 = "5BE95E4F-E2F0-4500-9725-DB2F85815119";
+
+
+        #endregion
+
         #region Leased Line
 
         const string CONTRACT_CUST2_LL1 = "B14D5937-3660-4C41-A05E-5CD50F1398DA";
@@ -96,7 +106,11 @@ namespace BPMExtended.Main.Common
 
         #region ADSL
 
-        const string CONTRACT_CUST2_ADSL1 = "8B105141-9800-4922-9627-72B64DD21950";
+        const string CONTRACT_CUST2_ADSL1 = "53D73D55-494F-4A78-A3D9-B632D95E1ECF";
+
+        const string CONTRACT_CUST2_ADSL2 = "9CF7C7B5-5821-490F-8F40-A958DD26D003";
+
+      
 
         #endregion
 
@@ -134,7 +148,10 @@ namespace BPMExtended.Main.Common
 
         #region ADSL
 
-        const string CONTRACT_CUST3_ADSL1 = "53D73D55-494F-4A78-A3D9-B632D95E1ECF";
+        const string CONTRACT_CUST3_ADSL1 = "5E2F256C-8A9A-47DC-AC0D-0D8659A224A6";
+
+        const string CONTRACT_CUST3_ADSL2 = "B8B164DE-72B2-4525-BBDD-2044FF59E8C1";
+
 
         #endregion
 
@@ -151,6 +168,8 @@ namespace BPMExtended.Main.Common
         const string PHONE_NUMBER_5 = "500502";
         const string PHONE_NUMBER_6 = "500504";
         const string PHONE_NUMBER_7 = "500503";
+        const string PHONE_NUMBER_8 = "500504";
+        const string PHONE_NUMBER_9 = "500505";
 
         #endregion
 
@@ -509,6 +528,44 @@ namespace BPMExtended.Main.Common
                       ContractId = CONTRACT_CUST3_TL2,
                       CustomerId = CUSTOMER_ID_3,
                       PhoneNumber= PHONE_NUMBER_7,
+                      RatePlanId = RP_TL_PSTN_RES_NORMAL,
+                      RatePlanName = "Normal Plan",
+                      Address = "saida",
+                      ContractAddress = new Address () {Province ="prov7" , Building = "b7" , City="beirut" , Floor = "9", Region="R7", HouseNumber="6", Street="st7" , SubRegion="sub7"},
+                      ActivationDate = DateTime.Today.AddDays(-10),
+                      StatusDate = DateTime.Today.AddDays(-9),
+                      Status = ContractDetailStatus.Inactive,
+                      CreatedTime = DateTime.Today.AddDays(-4),
+                      LastModifiedTime = DateTime.Today,
+                      ContractBalance = 110,
+                      UnbilledAmount = 2092,
+                      Promotions = "promo7",
+                      FreeUnit = "unit7"
+                 },
+                  new TelephonyContractDetail
+                 {
+                     ContractId = CONTRACT_CUST2_TL1,
+                     CustomerId = CUSTOMER_ID_2,
+                     PhoneNumber= PHONE_NUMBER_8,
+                     RatePlanId = RP_TL_RES_NORMAL,
+                     RatePlanName = "Normal Plan",
+                     Address = "Tyr",
+                     ContractAddress = new Address () {Province ="prov6" , Building = "b6" , City="beirut" , Floor = "9", Region="R6", HouseNumber="8", Street="st6" , SubRegion="sub6"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     Status = ContractDetailStatus.Active,
+                     CreatedTime = DateTime.Today.AddDays(-5),
+                     LastModifiedTime = DateTime.Today.AddDays(-3),
+                     ContractBalance = 1700,
+                     UnbilledAmount = 27002,
+                     Promotions = "promo6",
+                     FreeUnit = "unit6"
+                 },
+                 new TelephonyContractDetail
+                 {
+                      ContractId = CONTRACT_CUST2_TL2,
+                      CustomerId = CUSTOMER_ID_2,
+                      PhoneNumber= PHONE_NUMBER_9,
                       RatePlanId = RP_TL_PSTN_RES_NORMAL,
                       RatePlanName = "Normal Plan",
                       Address = "saida",
@@ -882,6 +939,50 @@ namespace BPMExtended.Main.Common
                  },
                  new ADSLContractDetail
                  {
+                     ContractId = CONTRACT_CUST2_ADSL1,
+                     TelephonyContractId = CONTRACT_CUST2_TL1,
+                     CustomerId = CUSTOMER_ID_2,
+                     PhoneNumber= PHONE_NUMBER_6,
+                     RatePlanId = RP_ADSL_RES_NORMAL,
+                     RatePlanName = "Normal Plan",
+                     UserName = "Test4",
+                     Password = "pass4",
+                     Speed = ADSL_SPEED_4,
+                     Status = ContractDetailStatus.Active,
+                     CreatedTime = DateTime.Today.AddDays(-5),
+                     LastModifiedTime = DateTime.Today.AddDays(-3),
+                     ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "1", Region="R4", HouseNumber="7", Street="st4" , SubRegion="sub4"},
+                     ActivationDate = DateTime.Today.AddDays(-10),
+                     StatusDate = DateTime.Today.AddDays(-9),
+                     ContractBalance = 500,
+                     UnbilledAmount = 1002,
+                     Promotions = "promo9",
+                     FreeUnit = "unit9"
+                 },
+                 new ADSLContractDetail
+                 {
+                      ContractId = CONTRACT_CUST2_ADSL2,
+                      TelephonyContractId = CONTRACT_CUST2_TL2,
+                      CustomerId = CUSTOMER_ID_2,
+                      PhoneNumber= PHONE_NUMBER_7,
+                      RatePlanId = RP_ADSL_RES_STUDENT,
+                      RatePlanName = "Student Plan",
+                      UserName = "Test5",
+                      Password = "pass5",
+                      Speed = ADSL_SPEED_5,
+                      Status = ContractDetailStatus.Inactive,
+                      CreatedTime = DateTime.Today.AddDays(-4),
+                      LastModifiedTime = DateTime.Today,
+                      ContractAddress = new Address () {Province ="prov4" , Building = "b4" , City="beirut" , Floor = "7", Region="R4", HouseNumber="8", Street="st4" , SubRegion="sub4"},
+                      ActivationDate = DateTime.Today.AddDays(-10),
+                      StatusDate = DateTime.Today.AddDays(-9),
+                      ContractBalance = 500,
+                      UnbilledAmount = 1002,
+                      Promotions = "promo87",
+                      FreeUnit = "unit87"
+                 },
+                   new ADSLContractDetail
+                 {
                      ContractId = CONTRACT_CUST3_ADSL1,
                      TelephonyContractId = CONTRACT_CUST3_TL1,
                      CustomerId = CUSTOMER_ID_3,
@@ -904,7 +1005,7 @@ namespace BPMExtended.Main.Common
                  },
                  new ADSLContractDetail
                  {
-                      ContractId = CONTRACT_CUST2_ADSL1,
+                      ContractId = CONTRACT_CUST3_ADSL2,
                       TelephonyContractId = CONTRACT_CUST3_TL2,
                       CustomerId = CUSTOMER_ID_3,
                       PhoneNumber= PHONE_NUMBER_7,
@@ -1670,9 +1771,59 @@ namespace BPMExtended.Main.Common
 
         #endregion
 
-        #region Invoices
+        #region Invoice Installments
 
-        public static List<InvoiceDetail> GetInvoices(string customerId)
+        public static List<Installment> GetInstallmentsByInvoiceId(string invoiceId)
+        {
+            return GetAllInstallments().FindAll(x => x.InvoiceId.ToLower() == invoiceId.ToLower());
+        }
+
+        private static List<Installment> GetAllInstallments()
+        {
+
+            return new List<Installment>
+            {
+                 new Installment
+                 {
+                    Id ="INST_1",
+                    InvoiceId = "INV_ID_1",
+                    Template = "t1",
+                    Amount ="200",
+                    Date ="01/01/2019"                   
+                 },
+                  new Installment
+                 {
+                    Id ="INST_2",
+                    InvoiceId = "INV_ID_1",
+                    Template = "t1",
+                    Amount ="400",
+                    Date ="04/04/2019"
+                 },
+                   new Installment
+                 {
+                    Id ="INST_3",
+                    InvoiceId = "INV_ID_2",
+                    Template = "t2",
+                    Amount ="600",
+                    Date ="02/02/2019"
+                 },
+                    new Installment
+                 {
+                    Id ="INST_4",
+                    InvoiceId = "INV_ID_2",
+                    Template = "t2",
+                    Amount ="500",
+                    Date ="04/04/2019"
+                 }
+            };
+
+         }
+
+        #endregion
+
+                #region Invoices
+
+            public static List<InvoiceDetail> GetInvoices(string customerId)
         {
             return GetAllInvoices().FindAll(x => x.CustomerID.ToLower() == customerId.ToLower());
         }

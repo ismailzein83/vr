@@ -645,7 +645,17 @@ namespace BPMExtended.Main.Business
 
         public List<InvoiceDetail> GetInvoices(string customerId)
         {
-            return RatePlanMockDataGenerator.GetInvoices(customerId);
+            //TODO:Get invoices
+            List<InvoiceDetail> invoices =  RatePlanMockDataGenerator.GetInvoices(customerId);
+
+            foreach (InvoiceDetail invoice in invoices)
+            {
+                invoice.CollectionStatus = GetCollectionStatus(invoice.InvoiceId);
+                invoice.InvoiceInstallmentFlag = GetInvoiceInstallmentFlag(invoice.InvoiceId);
+                invoice.FinancialDisputes = GetFinancialDisputes(invoice.InvoiceId);
+            }
+
+            return invoices;
         }
 
         public InvoiceDetail GetInvoiceById(string invoiceId)
@@ -656,6 +666,11 @@ namespace BPMExtended.Main.Business
         public List<PaymentDetail> GetPayments(string customerId)
         {
             return RatePlanMockDataGenerator.GetPayments(customerId);
+        }
+
+        public List<Installment> GetInstallmentsByInvoiceId(string invoiceId)
+        {
+            return RatePlanMockDataGenerator.GetInstallmentsByInvoiceId(invoiceId);
         }
 
         public bool GetCollectionStatus(string invoiceId)
