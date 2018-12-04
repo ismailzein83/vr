@@ -11,7 +11,9 @@ namespace BPMExtended.Main.Entities
         public string CustomerID { get; set; }
         public string InvoiceCode { get; set; }
         public string InvoiceId { get; set; }
+        public string InvoiceNumber { get; set; }
         public string BillCycle { get; set; }
+        public string DueDate { get; set; }
         public string Resource { get; set; }
         public string InvoiceAccount { get; set; }
         public string OpenAmount { get; set; }

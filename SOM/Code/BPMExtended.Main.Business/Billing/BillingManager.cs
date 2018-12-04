@@ -658,6 +658,27 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetPayments(customerId);
         }
 
+        public bool GetCollectionStatus(string invoiceId)
+        {
+            //TODO:Get collection status by invoice Id
+            Random value = new Random();
+            return value.Next(10) <= 5 ? true : false;
+        }
+
+        public bool GetInvoiceInstallmentFlag(string invoiceId)
+        {
+            //TODO:Get installment flag by invoice Id
+            Random value = new Random();
+            return value.Next(10) <= 5 ? true : false;
+        }
+
+        public bool GetFinancialDisputes(string invoiceId)
+        {
+            //TODO: Get financial disputes requests related to this invoice
+            Random value = new Random();
+            return value.Next(10) <= 5 ? true : false;
+        }
+
     }
 
     public class PDFDocument

@@ -1115,7 +1115,7 @@ namespace BPMExtended.Main.Common
                 new CustomerBalance
                 {
                     CustomerId = CUSTOMER_ID_2,
-                    Balance = 0
+                    Balance = -100
                 },
                 new CustomerBalance
                 {
@@ -1693,6 +1693,8 @@ namespace BPMExtended.Main.Common
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_1",
                      InvoiceId="INV_ID_1",
+                     InvoiceNumber="INV_N_1",
+                     DueDate="01/01/2019",
                      OpenAmount = "1000",
                      Resource = "1111",
                      URL="www.google.com"
@@ -1704,6 +1706,8 @@ namespace BPMExtended.Main.Common
                      CustomerID = CUSTOMER_ID_1,
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_2",
+                     InvoiceNumber="INV_N_2",
+                     DueDate="01/01/2019",
                      InvoiceId="INV_ID_2",
                      OpenAmount = "3000",
                      Resource = "500501",
@@ -1716,6 +1720,8 @@ namespace BPMExtended.Main.Common
                      CustomerID = CUSTOMER_ID_1,
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_3",
+                     InvoiceNumber="INV_N_3",
+                     DueDate="01/01/2019",
                      InvoiceId="INV_ID_3",
                      OpenAmount = "2000",
                      Resource = "500500",
@@ -1729,6 +1735,8 @@ namespace BPMExtended.Main.Common
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_4",
                      InvoiceId="INV_ID_4",
+                     InvoiceNumber="INV_N_4",
+                     DueDate="01/01/2019",
                      OpenAmount = "4000",
                      Resource = "Test1",
                      URL="www.url.com"
@@ -1741,6 +1749,8 @@ namespace BPMExtended.Main.Common
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_5",
                      InvoiceId="INV_ID_5",
+                     InvoiceNumber="INV_N_5",
+                     DueDate="02/01/2019",
                      OpenAmount = "1000",
                      Resource = "1111",
                      URL="www.url.com"
@@ -1753,6 +1763,8 @@ namespace BPMExtended.Main.Common
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_6",
                      InvoiceId="INV_ID_6",
+                     InvoiceNumber="INV_N_6",
+                     DueDate="01/01/2019",
                      OpenAmount = "3000",
                      Resource = "500500",
                      URL="www.url.com"
@@ -1765,6 +1777,8 @@ namespace BPMExtended.Main.Common
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_7",
                      InvoiceId="INV_ID_7",
+                     InvoiceNumber="INV_N_7",
+                     DueDate="01/01/2019",
                      OpenAmount = "1000",
                      Resource = "500504",
                      URL="www.url.com"
@@ -1777,6 +1791,8 @@ namespace BPMExtended.Main.Common
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_8",
                      InvoiceId="INV_ID_8",
+                     InvoiceNumber="INV_N_8",
+                     DueDate="01/01/2019",
                      OpenAmount = "1000",
                      Resource = "1111",
                      URL="www.url.com"
@@ -1789,6 +1805,8 @@ namespace BPMExtended.Main.Common
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_9",
                      InvoiceId="INV_ID_9",
+                     InvoiceNumber="INV_N_9",
+                     DueDate="01/01/2019",
                      OpenAmount = "1000",
                      Resource = "500500",
                      URL="www.url.com"
