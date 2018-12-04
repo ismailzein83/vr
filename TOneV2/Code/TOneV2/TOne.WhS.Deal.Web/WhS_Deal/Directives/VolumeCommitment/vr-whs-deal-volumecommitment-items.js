@@ -42,12 +42,14 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                 };
 
                 ctrl.addItem = function () {
+                    context.shiftBEDandEED().then(function () {
                     var onVolumeCommitmentItemAdded = function (volumeCommitmentItem) {
                         lastGroupNumber = lastGroupNumber + 1;
                         volumeCommitmentItem.ZoneGroupNumber = lastGroupNumber;
                         ctrl.datasource.push({ Entity: volumeCommitmentItem });
                     };
-                    WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItem(onVolumeCommitmentItemAdded, getContext());
+                        WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItem(onVolumeCommitmentItemAdded, getContext());
+                    });
                 };
 
                 ctrl.removeItem = function (dataItem) {
@@ -87,6 +89,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
+                        console.log(context);
                         lastGroupNumber = context.lastGroupNumber;
                         if (payload.volumeCommitmentItems != undefined) {
                             for (var i = 0; i < payload.volumeCommitmentItems.length; i++) {
@@ -116,12 +119,14 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
             }
 
             function editVolumeCommitmentItem(volumeCommitmentItemObj) {
-                var onVolumeCommitmentItemUpdated = function (volumeCommitmentItem) {
-                    volumeCommitmentItem.ZoneGroupNumber = volumeCommitmentItemObj.Entity.ZoneGroupNumber;
-                    var index = ctrl.datasource.indexOf(volumeCommitmentItemObj);
-                    ctrl.datasource[index] = { Entity: volumeCommitmentItem };
-                };
-                WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItem(volumeCommitmentItemObj.Entity, onVolumeCommitmentItemUpdated, getContext());
+                context.shiftBEDandEED().then(function () {
+                    var onVolumeCommitmentItemUpdated = function (volumeCommitmentItem) {
+                        volumeCommitmentItem.ZoneGroupNumber = volumeCommitmentItemObj.Entity.ZoneGroupNumber;
+                        var index = ctrl.datasource.indexOf(volumeCommitmentItemObj);
+                        ctrl.datasource[index] = { Entity: volumeCommitmentItem };
+                    };
+                    WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItem(volumeCommitmentItemObj.Entity, onVolumeCommitmentItemUpdated, getContext());
+                });
             }
             function getContext() {
                 return context;

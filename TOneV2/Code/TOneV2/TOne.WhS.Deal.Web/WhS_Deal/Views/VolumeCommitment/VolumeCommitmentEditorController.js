@@ -2,7 +2,7 @@
 
     'use strict';
 
-    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService','VRCommon_EntityFilterEffectiveModeEnum'];
+    VolumeCommitmentEditorController.$inject = ['$scope', 'WhS_Deal_VolCommitmentDealAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum', 'VRValidationService', 'VRDateTimeService', 'WhS_Deal_DealStatusTypeEnum', 'WhS_Deal_VolCommitmentTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService', 'VRCommon_EntityFilterEffectiveModeEnum'];
 
     function VolumeCommitmentEditorController($scope, WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum, VRValidationService, VRDateTimeService, WhS_Deal_DealStatusTypeEnum, WhS_Deal_VolCommitmentTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService, VRCommon_EntityFilterEffectiveModeEnum) {
 
@@ -13,6 +13,10 @@
         var lastGroupNumber = 0;
         var context;
         var isViewHistoryMode;
+        var carrierAccountId;
+        var shiftedBED;
+        var shiftedEED;
+
 
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred;
@@ -59,9 +63,11 @@
                 var payload = {
                     context: context
                 };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, carrierAccountSelectorAPI, payload, setLoader, carrierAccountSelectorReadyDeferred);
-                var payload = { context: getContext() };
-                volumeCommitmenetItemsAPI.load(payload);
+                VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, payload, carrierAccountSelectorReadyDeferred);
+                setTimeout(function () {
+                    var payload = { context: getContext() };
+                    volumeCommitmenetItemsAPI.load(payload);
+                });
                 if (!carrierAccountSelectedPromise)
                     $scope.scopeModel.description = undefined;
             };
@@ -90,10 +96,9 @@
                 currencyDirectiveReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.onBEDChanged = function () {
-                updateDescription();
+                        updateDescription();
             };
             $scope.scopeModel.onEEDChanged = function () {
-
             };
 
             $scope.scopeModel.onCarrierAccountSelectionChanged = function () {
@@ -201,6 +206,7 @@
         function getVolumeCommitment() {
             return WhS_Deal_VolCommitmentDealAPIService.GetDeal(dealId).then(function (response) {
                 volumeCommitmentEntity = response;
+                carrierAccountId = volumeCommitmentEntity.Settings.CarrierAccountId
                 lastGroupNumber = volumeCommitmentEntity.Settings.LastGroupNumber;
             });
         }
@@ -253,7 +259,6 @@
                 return;
 
             var promises = [];
-
             carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             promises.push(carrierAccountSelectorLoadDeferred.promise);
@@ -372,19 +377,7 @@
         }
 
         function getContext() {
-            var shiftedBED ;
-            var shiftedEED ;
-            var shiftedDatesPromiseDeferred = UtilsService.createPromiseDeferred();
-            var payloadLoadedPromiseDeferred = UtilsService.createPromiseDeferred();
-            if ($scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined) {
-                GetShiftedDate($scope.scopeModel.beginDate).then(function (response) {
-                    shiftedBED = response;
-                    GetShiftedDate($scope.scopeModel.endDate).then(function (reponse) {
-                        shiftedEED = response;
-                        shiftedDatesPromiseDeferred.resolve();
-                    });
-                });
-            }
+
             var context = {
                 lastGroupNumber: lastGroupNumber,
                 getRateEvaluatorSelective: function () {
@@ -398,91 +391,87 @@
                 getZoneSelectorPayload: function (item) {
                     if ($scope.scopeModel.selectedVolumeCommitmentType != undefined) {
                         var payload;
-                        switch ($scope.scopeModel.selectedVolumeCommitmentType.value) {
-                            case WhS_Deal_VolumeCommitmentTypeEnum.Buy.value:
+                        if ($scope.scopeModel.selectedVolumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Buy.value) {
+                            payload = {
+                                supplierId: carrierAccountSelectorAPI.getSelectedIds()
+                            };
+                            if (item != undefined) {
+                                var zoneIds = [];
+                                var itemZones = item.SaleZones != undefined ? item.SaleZones : item.Zones;
+                                for (var x = 0; x < itemZones.length; x++) {
+                                    zoneIds.push(itemZones[x].ZoneId);
+                                }
+                                payload.selectedIds = zoneIds;
+                                payload.filter = {
+                                    ExcludedZoneIds: getSelectedZonesIdsFromItems(zoneIds),
+                                    CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined,
+                                    EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                                    EffectiveDate: $scope.scopeModel.beginDate,
+                                    ExcludePendingClosedZones: true
+                                };
+                            }
+                            else
+                                payload.filter = {
+                                    ExcludedZoneIds: getSelectedZonesIdsFromItems(),
+                                    EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                                    EffectiveDate: $scope.scopeModel.beginDate,
+                                    ExcludePendingClosedZones: true
+                                };
 
-                                payload = {
-                                    supplierId: carrierAccountSelectorAPI.getSelectedIds()
-                                };
-                                if (item != undefined) {
-                                    var zoneIds = [];
-                                    var itemZones = item.SaleZones != undefined ? item.SaleZones : item.Zones;
-                                    for (var x = 0; x < itemZones.length; x++) {
-                                        zoneIds.push(itemZones[x].ZoneId);
-                                    }
-                                    payload.selectedIds = zoneIds;
-                                    payload.filter = {
-                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(zoneIds),
-                                        CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined,
-                                        EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
-                                        EffectiveDate: $scope.scopeModel.beginDate,
-                                        ExcludePendingClosedZones: true
-                                    };
-                                }
-                                else
-                                    payload.filter = {
-                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(),
-                                        EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
-                                        EffectiveDate: $scope.scopeModel.beginDate,
-                                        ExcludePendingClosedZones: true
-                                    };
-                                shiftedDatesPromiseDeferred.promise.then(function () {
-                                    payload.filter.Filters = [{
-                                        $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
-                                        CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                                        DealId: dealId,
-                                        BED: $scope.scopeModel.beginDate,
-                                        EED: $scope.scopeModel.endDate,
-                                        FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
-                                    }];
-                                    payloadLoadedPromiseDeferred.resolve();
-                                });
-                                break;
-                            case WhS_Deal_VolumeCommitmentTypeEnum.Sell.value:
-                                var carrierAccount = carrierAccountSelectorAPI.getSelectedValues();
-                                payload = {
-                                    sellingNumberPlanId: carrierAccount != undefined ? carrierAccount.SellingNumberPlanId : undefined
-                                };
-                                if (item != undefined) {
-                                    var sellZoneIds = [];
-                                    var itemZones = item.SaleZones != undefined ? item.SaleZones : item.Zones;
-                                    for (var j = 0; j < itemZones.length; j++) {
-                                        sellZoneIds.push(itemZones[j].ZoneId);
-                                    }
-                                    payload.selectedIds = sellZoneIds;
-                                    payload.filter = {
-                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(sellZoneIds),
-                                        CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined,
-                                         EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
-                                        EffectiveDate: $scope.scopeModel.beginDate,
-                                        ExcludePendingClosedZones: true
-                                    };
-                                }
-                                else
-                                    payload.filter = {
-                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(),
-                                        EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
-                                        EffectiveDate: $scope.scopeModel.beginDate,
-                                        ExcludePendingClosedZones: true
-                                    };
-                                shiftedDatesPromiseDeferred.promise.then(function () {
-                                    payload.filter.Filters = [{
-                                        $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
-                                        CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                                        DealId: dealId,
-                                        BED: $scope.scopeModel.beginDate,
-                                        EED: $scope.scopeModel.endDate,
-                                        FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
-                                    }];
-                                    payloadLoadedPromiseDeferred.resolve();
-                                   
-                                });
-                                break;
-                        }
-                        payloadLoadedPromiseDeferred.promise.then(function () {
+                            payload.filter.Filters = [{
+                                $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
+                                CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                                DealId: dealId,
+                                BED: shiftedBED != undefined ? shiftedBED : $scope.scopeModel.beginDate,
+                                EED: shiftedEED != undefined ? shiftedEED : $scope.scopeModel.endDate,
+                                FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
+                            }];
                             return payload;
-                        });
+
+                        }
+                        else if ($scope.scopeModel.selectedVolumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Sell.value) {
+
+                            var carrierAccount = carrierAccountSelectorAPI.getSelectedValues();
+                            payload = {
+                                sellingNumberPlanId: carrierAccount != undefined ? carrierAccount.SellingNumberPlanId : undefined
+                            };
+                            if (item != undefined) {
+                                var sellZoneIds = [];
+                                var itemZones = item.SaleZones != undefined ? item.SaleZones : item.Zones;
+                                for (var j = 0; j < itemZones.length; j++) {
+                                    sellZoneIds.push(itemZones[j].ZoneId);
+                                }
+                                payload.selectedIds = sellZoneIds;
+                                payload.filter = {
+                                    ExcludedZoneIds: getSelectedZonesIdsFromItems(sellZoneIds),
+                                    CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined,
+                                    EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                                    EffectiveDate: $scope.scopeModel.beginDate,
+                                    ExcludePendingClosedZones: true
+                                };
+                            }
+                            else
+                                payload.filter = {
+                                    ExcludedZoneIds: getSelectedZonesIdsFromItems(),
+                                    EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
+                                    EffectiveDate: $scope.scopeModel.beginDate,
+                                    ExcludePendingClosedZones: true
+                                };
+
+                            payload.filter.Filters = [{
+                                $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
+                                CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                                DealId: dealId,
+                                BED: shiftedBED != undefined ? shiftedBED : $scope.scopeModel.beginDate,
+                                EED: shiftedEED != undefined ? shiftedEED : $scope.scopeModel.endDate,
+                                FollowSystemTimeZone: $scope.scopeModel.followSystemTimeZone
+                            }];
+                            return payload;
+
+
+                        }
                     }
+                  
                 },
                 getZoneIdAttName: function () {
                     if ($scope.scopeModel.selectedVolumeCommitmentType != undefined) {
@@ -515,21 +504,44 @@
                 },
                 getVolumeCommitmentCurrency: function () {
                     return currencyDirectiveAPI.getSelectedValues();
+                },
+                shiftBEDandEED() {
+                    var newShiftedBED;
+                    var newShiftedEED;
+                    var shiftedDatesPromiseDeferred = UtilsService.createPromiseDeferred();
+                    if ($scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined && $scope.scopeModel.beginDate <= $scope.scopeModel.endDate && $scope.scopeModel.selectedTimeZone.value != WhS_Deal_VolCommitmentTimeZoneTypeEnum.System.value) {
+                        GetShiftedDate($scope.scopeModel.beginDate).then(function (response) {
+                            newShiftedBED = response;
+                            GetShiftedDate($scope.scopeModel.endDate).then(function (response) {
+                                newShiftedEED = response;
+                                shiftedDatesPromiseDeferred.resolve();
+                            });
+                        });
+                    }
+                    else
+                        shiftedDatesPromiseDeferred.resolve();
+                    return shiftedDatesPromiseDeferred.promise.then(function () {
+                        shiftedBED = newShiftedBED;
+                        shiftedEED = newShiftedEED;
+                    });
                 }
 
             };
             return context;
         }
         function GetShiftedDate(date) {
-            var isSale;
+            var isSale = $scope.scopeModel.selectedVolumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Sell.value ;
             var isShifted;
-            if ($scope.scopeModel.selectedTimeZone.value == WhS_Deal_VolCommitmentTimeZoneTypeEnum.System)
+            if ($scope.scopeModel.selectedTimeZone.value == WhS_Deal_VolCommitmentTimeZoneTypeEnum.System.value)
                 isShifted = false;
-            else {
+            else 
                 isShifted = true;
-                isSale = $scope.scopeModel.selectedTimeZone.value == WhS_Deal_VolCommitmentTimeZoneTypeEnum.Customer ? true : false;
+            
+            if (carrierAccountSelectorAPI != undefined && carrierAccountSelectorAPI.getSelectedIds() != undefined)
+                carrierAccountId = carrierAccountSelectorAPI.getSelectedIds();
+            if (carrierAccountId != undefined) {
+                return WhS_Deal_DealDefinitionAPIService.GetEffectiveOnDate(isSale, isShifted, carrierAccountId, date, offset);
             }
-            return WhS_Deal_DealDefinitionAPIService.GetEffectiveOnDate(isSale, isShifted, carrierAccountSelectorAPI.getSelectedIds(), date, offset);
         }
         function getSelectedZonesIdsFromItems(includedIds) {
             var ids = getUsedZonesIds();

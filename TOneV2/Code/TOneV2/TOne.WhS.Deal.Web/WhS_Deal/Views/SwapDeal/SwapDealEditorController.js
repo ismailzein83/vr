@@ -159,8 +159,7 @@
             $scope.scopeModel.validateDealStatusDate = function () {
                 var date = UtilsService.createDateFromString($scope.scopeModel.deActivationDate);
                 var beginDate = UtilsService.createDateFromString($scope.scopeModel.beginDate);
-                var endDate = UtilsService.createDateFromString($scope.scopeModel.endDate);
-                if (date < beginDate)
+                var endDate = UtilsService.createDateFromString($scope.scopeModel.endDate); 
                     return "Deactivation date must be greater than deal BED";
                 if (date > endDate)
                     return "Deactivation date must be less than deal EED";
@@ -591,7 +590,7 @@
             return filterdIds;
         }
         function GetShiftedDate(date) {
-            var isShifted = $scope.scopeModel.selectedTimeZone.value == WhS_Deal_SwapDealTimeZoneTypeEnum.Supplier ? true : false;
+            var isShifted = $scope.scopeModel.selectedTimeZone.value == WhS_Deal_SwapDealTimeZoneTypeEnum.Supplier.value ? true : false;
             return WhS_Deal_DealDefinitionAPIService.GetEffectiveOnDate(false, isShifted, carrierAccountSelectorAPI.getSelectedIds(), date, offset);
         }
         function getSelectedSupplierZonesIdsFromItems(includedIds) {
