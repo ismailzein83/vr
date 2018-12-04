@@ -25,10 +25,10 @@ as (select * from (values
 ('EA1F0775-08B9-4638-AC42-A2FD11E008EF','VR_Common_ObjectType_FailedBatchInfo','Failed Batch Info','VR_Common_ObjectType'												,'{"Editor":"vr-integration-faildbatchinfo-objecttype", "PropertyEvaluatorExtensionType": "VR_Integration_FailedBatchInfo_PropertyEvaluator"}'),
 ('708F5F03-F14E-4487-B916-5617013E8B3E','VR_Common_PropertyEvaluator_FailedBatchInfo','Failed Batch Info Property','VR_Integration_FailedBatchInfo_PropertyEvaluator'	,'{"Editor":"vr-integration-faildbatchinfo-propertyevaluator"}'),
 
-('07C4303E-2D53-4062-BEF6-9B033CABB692','SizeBasedFileDelayChecker','Size Based','VR_Integration_FileDelayCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedelaychecker-sizebased"}'),
-('A498CF7D-0D01-4384-992C-644238F11C09','TimeBasedFileDelayChecker','Time Based','VR_Integration_FileDelayCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedelaychecker-timebased"}'),	
-('AF88B648-2FAD-4A7E-8240-564019CF4BC3','DateTimeFileMissingChecker','Date Time','VR_Integration_FileMissingCheckerSettingsConfig'		,'{"Editor":"vr-integration-filemissingchecker-datetime"}'),
-('FA37168F-25B8-44B2-8D27-CA0DD3E3265E','SequenceFileDataSourceNaming','Sequence','VR_Integration_FileMissingCheckerSettingsConfig'		,'{"Editor":"vr-integration-filemissingchecker-sequence"}')
+('07C4303E-2D53-4062-BEF6-9B033CABB692','SizeBasedFileDelayChecker','Size Based','VR_Integration_FileDelayCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedatasourcedefinition-delaychecker-sizebased"}'),
+('A498CF7D-0D01-4384-992C-644238F11C09','TimeBasedFileDelayChecker','Time Based','VR_Integration_FileDelayCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedatasourcedefinition-delaychecker-timebased"}'),	
+('AF88B648-2FAD-4A7E-8240-564019CF4BC3','DateTimeFileMissingChecker','Date Time','VR_Integration_FileMissingCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedatasourcedefinition-missingchecker-datetime"}'),
+('FA37168F-25B8-44B2-8D27-CA0DD3E3265E','SequenceFileDataSourceNaming','Sequence','VR_Integration_FileMissingCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedatasourcedefinition-missingchecker-sequence"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
