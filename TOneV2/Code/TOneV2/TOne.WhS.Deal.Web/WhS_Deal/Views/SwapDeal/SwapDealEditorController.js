@@ -160,6 +160,7 @@
                 var date = UtilsService.createDateFromString($scope.scopeModel.deActivationDate);
                 var beginDate = UtilsService.createDateFromString($scope.scopeModel.beginDate);
                 var endDate = UtilsService.createDateFromString($scope.scopeModel.endDate); 
+                if(date < beginDate)
                     return "Deactivation date must be greater than deal BED";
                 if (date > endDate)
                     return "Deactivation date must be less than deal EED";
