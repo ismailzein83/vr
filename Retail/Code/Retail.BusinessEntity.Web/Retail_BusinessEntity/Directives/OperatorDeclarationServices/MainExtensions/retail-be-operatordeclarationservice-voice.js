@@ -26,19 +26,11 @@
         function OperatorDeclarationServiceVoiceCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var trafficTypeSelectorAPI;
-            var trafficTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
             var trafficDirectionSelectorAPI;
             var trafficDirectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
-
-                $scope.scopeModel.onTrafficTypeSelectorReady = function (api) {
-                    trafficTypeSelectorAPI = api;
-                    trafficTypeSelectorReadyDeferred.resolve();
-                };
 
                 $scope.scopeModel.onTrafficDirectionSelectorReady = function (api) {
                     trafficDirectionSelectorAPI = api;
@@ -62,19 +54,6 @@
                         $scope.scopeModel.amount = voiceEntity.Amount;
                     }
 
-                    function loadTrafficTypeSelector() {
-                        var trafficTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                        trafficTypeSelectorReadyDeferred.promise.then(function () {
-                            var payload;
-                            if (voiceEntity != undefined)
-                                payload = {
-                                    selectedIds: voiceEntity.TrafficType
-                                };
-                            VRUIUtilsService.callDirectiveLoad(trafficTypeSelectorAPI, payload, trafficTypeSelectorLoadDeferred);
-                        });
-                        return trafficTypeSelectorLoadDeferred.promise;
-                    }
-
                     function loadTrafficDirectionSelector() {
 
                         var trafficDirectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -90,10 +69,10 @@
                         return trafficDirectionSelectorLoadDeferred.promise;
                     }
 
-                    var trafficTypeSelectorLoadPromise = loadTrafficTypeSelector();
+                    //var trafficTypeSelectorLoadPromise = loadTrafficTypeSelector();
                     var trafficDirectionSelectorLoadPromise = loadTrafficDirectionSelector();
 
-                    promises.push(trafficTypeSelectorLoadPromise);
+                    //promises.push(trafficTypeSelectorLoadPromise);
                     promises.push(trafficDirectionSelectorLoadPromise);
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -103,7 +82,6 @@
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices.Voice,Retail.BusinessEntity.MainExtensions",
-                        TrafficType: trafficTypeSelectorAPI.getSelectedIds(),
                         TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
                         NumberOfCalls: $scope.scopeModel.numberOfCalls,
                         Duration: $scope.scopeModel.duration,

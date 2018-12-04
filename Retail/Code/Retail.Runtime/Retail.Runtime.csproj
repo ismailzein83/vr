@@ -826,6 +826,10 @@
       <Project>{ddebca68-714f-4334-9b05-55476145dec8}</Project>
       <Name>Retail.MultiNet.MainExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.RA.Business\Retail.RA.Business.csproj">
+      <Project>{87cd3228-cc6d-4dd7-8f3d-3f1f9b8567e9}</Project>
+      <Name>Retail.RA.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Ringo.ProxyAPI\Retail.Ringo.ProxyAPI.csproj">
       <Project>{fbbf1c80-97f3-47ac-82fc-8ba7c74fb034}</Project>
       <Name>Retail.Ringo.ProxyAPI</Name>
