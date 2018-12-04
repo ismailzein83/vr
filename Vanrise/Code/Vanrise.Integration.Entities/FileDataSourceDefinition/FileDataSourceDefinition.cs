@@ -8,7 +8,7 @@ namespace Vanrise.Integration.Entities
 
         public string Name { get; set; }
 
-        public TimeSpan DuplicateCheckInterval { get; set; } //2Days
+        public TimeSpan? DuplicateCheckInterval { get; set; } //2Days
 
         public FileDelayChecker FileDelayChecker { get; set; }
 

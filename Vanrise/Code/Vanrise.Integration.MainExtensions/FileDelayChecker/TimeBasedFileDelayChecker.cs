@@ -7,7 +7,7 @@ namespace Vanrise.Integration.MainExtensions.FileDelayChecker
     {
         public override Guid ConfigId { get { return new Guid("A498CF7D-0D01-4384-992C-644238F11C09"); } }
 
-        public TimeSpan FileInterval { get; set; } //15min
+        public TimeSpan FileInterval { get; set; } 
 
         public override bool IsDelayed(IFileDelayCheckerIsDelayedContext context)
         {

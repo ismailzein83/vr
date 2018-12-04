@@ -1,19 +1,29 @@
-﻿<vr-row>
-    <vr-columns width="1/3row">
-        <vr-textbox value="extension" label="Extension" isrequired />
-    </vr-columns>
-    <vr-columns width="1/3row">
-        <vr-textbox value="mask" label="Mask" />
-    </vr-columns>
-    <vr-columns width="1/3row">
-        <vr-textbox value="directory" label="Directory Path" isrequired />
-    </vr-columns>
-</vr-row>
-<vr-row>
-    <vr-columns width="1/3row">
-        <vr-select datasource="actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action After Import" selectedvalues="selectedAction" isrequired hideremoveicon></vr-select>
-    </vr-columns>
-    <vr-columns width="1/3row">
-        <vr-textbox ng-show="selectedAction.value == 2" value="directorytoMoveFile" label="Directory to Move File" />
-    </vr-columns>
-</vr-row>
+﻿<vr-section header="Settings">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-textbox value="scopeModel.extension" label="Extension" isrequired />
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox value="scopeModel.mask" label="Mask" />
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox value="scopeModel.directory" label="Directory Path" isrequired />
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-integration-filedatasourcedefinitions-selector on-ready="scopeModel.onFileDataSourceDefinitionsSelectorReady"
+                                                           onselectionchanged="scopeModel.onFileDataSourceDefinitionSelectionChanged"
+                                                           customlabel="Import Exception Setting" normal-col-num="4" showaddbutton>
+        </vr-integration-filedatasourcedefinitions-selector>
+    </vr-row>
+</vr-section>
+<vr-section header="After Import">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-select datasource="scopeModel.actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action" selectedvalues="scopeModel.selectedAction" isrequired hideremoveicon></vr-select>
+        </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox ng-show="scopeModel.selectedAction.value == 2" value="scopeModel.directorytoMoveFile" label="Directory to Move File" />
+        </vr-columns>
+    </vr-row>
+</vr-section>

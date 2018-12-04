@@ -20,8 +20,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
         public CompressionTypes CompressionType { get; set; }
         public short? NumberOfFiles { get; set; }
         public string InvalidFilesDirectory { get; set; }
-        public string DuplicateFilesDirectory { get; set; } //Not Reflected In UI
-        public Guid? FileDataSourceDefinitionId { get; set; } //Not Reflected In UI
+        public Guid? FileDataSourceDefinitionId { get; set; }
+        public string DuplicatedFilesDirectory { get; set; }
 
         FileCheckCriteriaEnum _fileCheckCriteria = FileCheckCriteriaEnum.DateAndNameCheck;
         public FileCheckCriteriaEnum FileCheckCriteria

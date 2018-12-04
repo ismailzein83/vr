@@ -2,20 +2,20 @@
 
     'use strict';
 
-    DataSourceSettingService.$inject = ['VRModalService', 'UtilsService'];
+    DataSourceSettingService.$inject = ['VRModalService'];
 
-    function DataSourceSettingService(VRModalService, UtilsService) {
+    function DataSourceSettingService(VRModalService) {
 
-        function addFileDataSourceDefinition(onFileDataSourceDefinitionAdded) {
+        function addFileDataSourceDefinition(onFileDataSourceDefinitionAdded, isSingleInsert) {
             var modalParameters = {
+                isSingleInsert: isSingleInsert
             };
 
             var modalSettings = {};
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onFileDataSourceDefinitionAdded = onFileDataSourceDefinitionAdded;
             };
-
-            VRModalService.showModal('/Client/Modules/Integration/Directives/Settings/FileDataSourceSettings/Templates/FileDataSourceDefinitionEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Integration/Directives/Settings/FileDataSourceSettings/Templates/FileDataSourceDefinitionEditorTemplate.html', modalParameters, modalSettings);
         }
 
         function editFileDataSourceDefinition(onFileDataSourceDefinitionUpdated, fileDataSourceDefinitionEntity) {
@@ -29,7 +29,7 @@
                 modalScope.onFileDataSourceDefinitionUpdated = onFileDataSourceDefinitionUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Integration/Directives/Settings/FileDataSourceSettings/Templates/FileDataSourceDefinitionEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Integration/Directives/Settings/FileDataSourceSettings/Templates/FileDataSourceDefinitionEditorTemplate.html', modalParameters, modalSettings);
         }
 
         return {

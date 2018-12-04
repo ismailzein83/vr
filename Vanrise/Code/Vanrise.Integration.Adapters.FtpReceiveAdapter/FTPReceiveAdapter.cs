@@ -49,8 +49,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                     Dictionary<string, List<DataSourceImportedBatch>> dataSourceImportedBatchByFileNames = null;
 
                     FileDataSourceDefinition fileDataSourceDefinition = base.GetFileDataSourceDefinition(ftpAdapterArgument.FileDataSourceDefinitionId);
-                    if (fileDataSourceDefinition != null)
-                        dataSourceImportedBatchByFileNames = base.GetDataSourceImportedBatchByFileNames(context.DataSourceId, fileDataSourceDefinition.DuplicateCheckInterval);
+                    if (fileDataSourceDefinition != null && fileDataSourceDefinition.DuplicateCheckInterval.HasValue)
+                        dataSourceImportedBatchByFileNames = base.GetDataSourceImportedBatchByFileNames(context.DataSourceId, fileDataSourceDefinition.DuplicateCheckInterval.Value);
 
                     short numberOfFilesRead = 0;
                     bool newFilesStarted = false;
@@ -249,9 +249,9 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 
         private void AfterImport(Ftp ftp, FtpItem fileObj, String filePath, FTPAdapterArgument ftpAdapterArgument, ImportedBatchProcessingOutput output, BatchState fileState)
         {
-            if (fileState == BatchState.Duplicated && !string.IsNullOrEmpty(ftpAdapterArgument.DuplicateFilesDirectory))
+            if (fileState == BatchState.Duplicated && !string.IsNullOrEmpty(ftpAdapterArgument.DuplicatedFilesDirectory))
             {
-                MoveFile(ftp, fileObj, filePath, ftpAdapterArgument.DuplicateFilesDirectory, ftpAdapterArgument.Extension, "duplicate");
+                MoveFile(ftp, fileObj, filePath, ftpAdapterArgument.DuplicatedFilesDirectory, ftpAdapterArgument.Extension, "duplicate");
             }
             else if (output != null && output.MappingOutput.Result == MappingResult.Invalid && !string.IsNullOrEmpty(ftpAdapterArgument.InvalidFilesDirectory))
             {

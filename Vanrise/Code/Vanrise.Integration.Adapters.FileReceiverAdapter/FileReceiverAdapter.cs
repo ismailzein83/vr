@@ -35,8 +35,8 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                     Dictionary<string, List<DataSourceImportedBatch>> dataSourceImportedBatchByFileNames = null;
 
                     FileDataSourceDefinition fileDataSourceDefinition = base.GetFileDataSourceDefinition(fileAdapterArgument.FileDataSourceDefinitionId);
-                    if (fileDataSourceDefinition != null)
-                        dataSourceImportedBatchByFileNames = base.GetDataSourceImportedBatchByFileNames(context.DataSourceId, fileDataSourceDefinition.DuplicateCheckInterval);
+                    if (fileDataSourceDefinition != null && fileDataSourceDefinition.DuplicateCheckInterval.HasValue)
+                        dataSourceImportedBatchByFileNames = base.GetDataSourceImportedBatchByFileNames(context.DataSourceId, fileDataSourceDefinition.DuplicateCheckInterval.Value);
 
                     short numberOfFilesRead = 0;
                     bool newFilesStarted = false;

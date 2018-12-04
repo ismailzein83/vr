@@ -25,5 +25,22 @@ namespace Vanrise.Integration.Web.Controllers
         {
             return dataSourceSettingsManager.GetFileMissingCheckerSettingsConfigs();
         }
+
+        [HttpGet]
+        [Route("GetFileDataSourceDefinitionInfo")]
+        public IEnumerable<FileDataSourceDefinitionInfo> GetFileDataSourceDefinitionInfo(string filter = null)
+        {
+            FileDataSourceDefinitionInfoFilter fileDataSourceDefinitionInfoFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<FileDataSourceDefinitionInfoFilter>(filter) : null;
+            return dataSourceSettingsManager.GetFileDataSourceDefinitionInfo(fileDataSourceDefinitionInfoFilter);
+        }
+
+        [HttpPost]
+        [Route("AddFileDataSourceDefinition")]
+        public Vanrise.Entities.InsertOperationOutput<FileDataSourceDefinition> AddFileDataSourceDefinition(FileDataSourceDefinition fileDataSourceDefinition)
+        {
+            ConfigManager configManager = new ConfigManager();
+            return configManager.AddFileDataSourceDefinition(fileDataSourceDefinition);
+        }
+
     }
 }

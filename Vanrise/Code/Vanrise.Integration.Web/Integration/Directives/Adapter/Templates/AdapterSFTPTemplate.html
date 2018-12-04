@@ -1,5 +1,5 @@
 ﻿<vr-section header="SFTP Server Info">
-    <vr-row>
+    <vr-row removeline>
         <vr-columns width="1/3row">
             <vr-textbox value="serverIP" label="Server IPs" isrequired />
         </vr-columns>
@@ -9,9 +9,8 @@
         <vr-columns width="1/3row">
             <vr-textbox value="directory" label="Directory Path" isrequired />
         </vr-columns>
-        
     </vr-row>
-    <vr-row>
+    <vr-row removeline>
         <vr-columns width="1/3row">
             <vr-textbox value="userName" label="Username" isrequired />
         </vr-columns>
@@ -21,17 +20,19 @@
         <vr-columns width="1/3row">
             <vr-textbox value="extension" label="Extension" isrequired />
         </vr-columns>
+    </vr-row>
+    <vr-row removeline>
         <vr-columns width="1/3row">
             <vr-textbox value="mask" label="Mask" />
         </vr-columns>
         <vr-columns width="1/3row">
             <vr-textbox value="invalidDirectory" label="Invalid Directory Path" />
         </vr-columns>
-    </vr-row>
-    <vr-row>
         <vr-columns width="1/3row">
             <vr-switch label="Sshparameters" value="scopeModel.hasSshParameters"></vr-switch>
         </vr-columns>
+    </vr-row>
+    <vr-row removeline>
         <vr-columns width="1/3row" ng-if="scopeModel.hasSshParameters">
             <vr-select datasource="scopeModel.compression" datatextfield="description" datavaluefield="value" label="Compression" selectedvalues="scopeModel.selectedCompression"></vr-select>
         </vr-columns>
@@ -41,6 +42,8 @@
         <vr-columns width="1/3row" ng-if="scopeModel.hasSshParameters">
             <vr-select datasource="scopeModel.sshHostKeyAlgorithm" datatextfield="description" datavaluefield="value" label="HostKey Algorithm" selectedvalues="scopeModel.selectedSshHostKeyAlgorithm"></vr-select>
         </vr-columns>
+    </vr-row>
+    <vr-row removeline>
         <vr-columns width="1/3row" ng-if="scopeModel.hasSshParameters">
             <vr-select datasource="scopeModel.sshKeyExchangeAlgorithm" datatextfield="description" datavaluefield="value" label="Key Exchange Algorithm" selectedvalues="scopeModel.selectedSshKeyExchangeAlgorithm"></vr-select>
         </vr-columns>
@@ -52,8 +55,8 @@
         </vr-columns>
     </vr-row>
 </vr-section>
-<vr-section header="Settings">
-    <vr-row>
+<vr-section header="File Options">
+    <vr-row removeline>
         <vr-columns width="1/3row">
             <vr-textbox value="maxNumberOfFiles" label="Max Number Of Files" type="number" min="1" />
         </vr-columns>
@@ -63,24 +66,38 @@
         <vr-columns width="1/3row">
             <vr-textbox value="lastImportedFile" label="Last Imported File" />
         </vr-columns>
+    </vr-row>
+    <vr-row removeline>
         <vr-columns width="1/3row">
             <vr-switch label="Compressed" value="compressed"></vr-switch>
         </vr-columns>
         <vr-columns width="1/3row" ng-show="compressed">
             <vr-select datasource="compressionTypes" datatextfield="description" datavaluefield="value" label="Compression Type" selectedvalues="selectedCompressionType" isrequired="compressed"></vr-select>
         </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-select datasource="actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action After Import" selectedvalues="selectedAction" onselectionchanged="onSelectedActionChanged" isrequired hideremoveicon></vr-select>
+    </vr-row>
+    <vr-row removeline>
+        <vr-integration-filedatasourcedefinitions-selector on-ready="scopeModel.onFileDataSourceDefinitionsSelectorReady" customlabel="Import Exception Setting" normal-col-num="4" 
+                                                           onselectionchanged="scopeModel.onFileDataSourceDefinitionSelectionChanged" showaddbutton>
+        </vr-integration-filedatasourcedefinitions-selector>
+        <vr-columns ng-show="scopeModel.selectedFileDataSourceDefinition" width="1/3row">
+            <vr-textbox value="scopeModel.duplicatedFilesDirectory" label="Duplicated Files Directory Path" />
         </vr-columns>
+    </vr-row>
+</vr-section>
+<vr-section header="After Import">
+    <vr-row removeline>
         <vr-columns width="1/3row">
-            <vr-textbox ng-show="selectedAction.value == 2" value="directorytoMoveFile" label="Directory to Move File" />
+            <vr-select datasource="actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action" selectedvalues="selectedAction" onselectionchanged="onSelectedActionChanged" isrequired hideremoveicon></vr-select>
         </vr-columns>
         <vr-columns width="1/3row">
             <vr-select ng-show="selectedAction.value != undefined && selectedAction.value != -1" datasource="fileCheckCriterias" datatextfield="description" datavaluefield="value"
                        label="Import File Check Criteria" selectedvalues="selectedFileCheckCriteria" isrequired="selectedAction.value != undefined && selectedAction.value != -1" hideremoveicon></vr-select>
         </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox ng-show="selectedAction.value == 2" value="directorytoMoveFile" label="Processed File Directory Path" />
+        </vr-columns>
     </vr-row>
-    <vr-row>
+    <vr-row removeline>
         <vr-columns width="fullrow">
             <label class="alert alert-danger" vr-alert ng-show="selectedFileCheckCriteria.value == 2">This option might cause duplicate data in case of post action failure</label>
         </vr-columns>

@@ -15,9 +15,21 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, controllerName, "GetFileMissingCheckerSettingsConfigs"));
         }
 
+        function GetFileDataSourceDefinitionInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, controllerName, "GetFileDataSourceDefinitionInfo"), {
+                filter: filter
+            });
+        }
+
+        function AddFileDataSourceDefinition(fileDataSourceDefinition) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, controllerName, "AddFileDataSourceDefinition"), fileDataSourceDefinition);
+        }
+
         return {
             GetFileDelayCheckerSettingsConfigs: GetFileDelayCheckerSettingsConfigs,
-            GetFileMissingCheckerSettingsConfigs: GetFileMissingCheckerSettingsConfigs
+            GetFileMissingCheckerSettingsConfigs: GetFileMissingCheckerSettingsConfigs,
+            GetFileDataSourceDefinitionInfo: GetFileDataSourceDefinitionInfo,
+            AddFileDataSourceDefinition: AddFileDataSourceDefinition
         };
     }
 

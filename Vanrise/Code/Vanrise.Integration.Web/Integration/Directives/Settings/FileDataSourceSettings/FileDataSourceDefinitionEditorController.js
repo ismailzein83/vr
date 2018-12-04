@@ -2,18 +2,19 @@
 
     "use strict";
 
-    fileDataSourceDefinitionEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    fileDataSourceDefinitionEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Integration_DataSourceSettingAPIService'];
 
-    function fileDataSourceDefinitionEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function fileDataSourceDefinitionEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Integration_DataSourceSettingAPIService) {
 
         var editMode;
+        var isSingleInsert;
         var fileDataSourceDefinitionEntity;
 
         var fileDelayCheckerDirectiveAPI;
-        var fileDelayCheckerDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var fileDelayCheckerDirectiveReadyPromiseDeferred;
 
         var fileMissingCheckerDirectiveAPI;
-        var fileMissingCheckerDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var fileMissingCheckerDirectiveReadyPromiseDeferred;
 
         loadParameters();
         defineScope();
@@ -24,6 +25,7 @@
 
             if (parameters != undefined && parameters != null) {
                 fileDataSourceDefinitionEntity = parameters.fileDataSourceDefinitionEntity;
+                isSingleInsert = parameters.isSingleInsert;
             }
 
             editMode = (fileDataSourceDefinitionEntity != undefined);
@@ -32,14 +34,26 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.onDuplicateSettingsSwitchChanged = function () {
+                $scope.scopeModel.duplicateCheckInterval = "2.00:00:00";
+            };
+
             $scope.scopeModel.onFileDelayCheckerDirectiveReady = function (api) {
                 fileDelayCheckerDirectiveAPI = api;
-                fileDelayCheckerDirectiveReadyPromiseDeferred.resolve();
+
+                var setLoader = function (value) {
+                    $scope.scopeModel.isFileDelayCheckerDirectiveLoading = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, fileDelayCheckerDirectiveAPI, undefined, setLoader, fileDelayCheckerDirectiveReadyPromiseDeferred);
             };
 
             $scope.scopeModel.onFileMissingCheckerDirectiveReady = function (api) {
                 fileMissingCheckerDirectiveAPI = api;
-                fileMissingCheckerDirectiveReadyPromiseDeferred.resolve();
+
+                var setLoader = function (value) {
+                    $scope.scopeModel.isFileMissingCheckerDirectiveLoading = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, fileMissingCheckerDirectiveAPI, undefined, setLoader, fileMissingCheckerDirectiveReadyPromiseDeferred);
             };
 
             $scope.scopeModel.saveDataSourceSettings = function () {
@@ -57,48 +71,49 @@
         function load() {
             $scope.isLoading = true;
 
-            if (editMode) {
-                loadAllControls().finally(function () {
-                    fileDataSourceDefinitionEntity = undefined;
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
-                });
-            }
-            else {
-                loadAllControls().finally(function () {
-                    fileDataSourceDefinitionEntity = undefined;
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.isLoading = false;
-                });
-            }
+            loadAllControls().catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.isLoading = false;
+            }).finally(function () {
+                fileDataSourceDefinitionEntity = undefined;
+            });
         }
 
         function loadAllControls() {
 
             function setTitle() {
                 if (editMode && fileDataSourceDefinitionEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(fileDataSourceDefinitionEntity.Name, "File Data Source Definition");
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(fileDataSourceDefinitionEntity.Name, "File Import Exception Setting");
                 else
-                    $scope.title = UtilsService.buildTitleForAddEditor("File Data Source Definition");
+                    $scope.title = UtilsService.buildTitleForAddEditor("File Import Exception Setting");
             }
 
             function loadStaticData() {
-                if (fileDataSourceDefinitionEntity == undefined)
-                    return;
-                $scope.scopeModel.name = fileDataSourceDefinitionEntity.Name;
-                $scope.scopeModel.checkingDuplicateFilesMaxPeriod = fileDataSourceDefinitionEntity.CheckingDuplicateFilesMaxPeriod;
+                if (fileDataSourceDefinitionEntity != undefined) {
+                    $scope.scopeModel.name = fileDataSourceDefinitionEntity.Name;
+
+                    if (fileDataSourceDefinitionEntity.DuplicateCheckInterval != undefined) {
+                        $scope.scopeModel.duplicateCheckInterval = fileDataSourceDefinitionEntity.DuplicateCheckInterval;
+                        $scope.scopeModel.showDuplicateSettings = true;
+                    }
+                }
             }
 
             function loadFileDelayCheckerDirective() {
+                if (fileDataSourceDefinitionEntity == undefined || fileDataSourceDefinitionEntity.FileDelayChecker == undefined)
+                    return;
+
+                fileDelayCheckerDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                $scope.scopeModel.showDelaySettings = true;
+
                 var fileDelayCheckerLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 fileDelayCheckerDirectiveReadyPromiseDeferred.promise.then(function () {
-                    var payload;
-                    if (fileDataSourceDefinitionEntity != undefined && fileDataSourceDefinitionEntity.FileDelayChecker != undefined) {
-                        payload = { fileDelayChecker: fileDataSourceDefinitionEntity.FileDelayChecker };
-                    }
+                    fileDelayCheckerDirectiveReadyPromiseDeferred = undefined;
+
+                    var payload = {
+                        fileDelayChecker: fileDataSourceDefinitionEntity.FileDelayChecker
+                    };
                     VRUIUtilsService.callDirectiveLoad(fileDelayCheckerDirectiveAPI, payload, fileDelayCheckerLoadPromiseDeferred);
                 });
 
@@ -106,13 +121,19 @@
             }
 
             function loadFileMissingCheckerDirective() {
+                if (fileDataSourceDefinitionEntity == undefined || fileDataSourceDefinitionEntity.FileMissingChecker == undefined)
+                    return;
+
+                fileMissingCheckerDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                $scope.scopeModel.showMissingSettings = true;
+
                 var fileMissingCheckerLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 fileMissingCheckerDirectiveReadyPromiseDeferred.promise.then(function () {
-                    var payload;
-                    if (fileDataSourceDefinitionEntity != undefined && fileDataSourceDefinitionEntity.FileMissingChecker != undefined) {
-                        payload = { fileMissingChecker: fileDataSourceDefinitionEntity.FileMissingChecker };
-                    }
+                    fileMissingCheckerDirectiveReadyPromiseDeferred = undefined;
+
+                    var payload = { fileMissingChecker: fileDataSourceDefinitionEntity.FileMissingChecker };
+
                     VRUIUtilsService.callDirectiveLoad(fileMissingCheckerDirectiveAPI, payload, fileMissingCheckerLoadPromiseDeferred);
                 });
 
@@ -120,28 +141,47 @@
             }
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFileDelayCheckerDirective, loadFileMissingCheckerDirective])
-                    .catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    }).finally(function () {
-                        $scope.isLoading = false;
-                    });
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                }).finally(function () {
+                    $scope.isLoading = false;
+                });
         }
 
         function buildFileDataSourceDefinitionObjFromScope() {
             var obj = {
+                FileDataSourceDefinitionId: fileDataSourceDefinitionEntity != undefined ? fileDataSourceDefinitionEntity.FileDataSourceDefinitionId : UtilsService.guid(),
                 Name: $scope.scopeModel.name,
-                CheckingDuplicateFilesMaxPeriod: $scope.scopeModel.checkingDuplicateFilesMaxPeriod,
-                FileDelayChecker: fileDelayCheckerDirectiveAPI != undefined ? fileDelayCheckerDirectiveAPI.getData() : undefined,
-                FileMissingChecker: fileMissingCheckerDirectiveAPI != undefined ? fileMissingCheckerDirectiveAPI.getData() : undefined
+                DuplicateCheckInterval: $scope.scopeModel.showDuplicateSettings ? $scope.scopeModel.duplicateCheckInterval : undefined,
+                FileDelayChecker: fileDelayCheckerDirectiveAPI != undefined && $scope.scopeModel.showDelaySettings ? fileDelayCheckerDirectiveAPI.getData() : undefined,
+                FileMissingChecker: fileMissingCheckerDirectiveAPI != undefined && $scope.scopeModel.showMissingSettings ? fileMissingCheckerDirectiveAPI.getData() : undefined
             };
             return obj;
         }
 
         function insertFileDataSourceDefinition() {
+
             var fileDataSourceDefinitionObject = buildFileDataSourceDefinitionObjFromScope();
-            if ($scope.onFileDataSourceDefinitionAdded != undefined)
-                $scope.onFileDataSourceDefinitionAdded(fileDataSourceDefinitionObject);
-            $scope.modalContext.closeModal();
+
+            if (isSingleInsert) {
+                $scope.scopeModel.isLoading = true;
+                return VR_Integration_DataSourceSettingAPIService.AddFileDataSourceDefinition(fileDataSourceDefinitionObject).then(function (response) {
+                    if (VRNotificationService.notifyOnItemAdded("File Import Exception Setting", response, "Name")) {
+                        if ($scope.onFileDataSourceDefinitionAdded != undefined)
+                            $scope.onFileDataSourceDefinitionAdded(fileDataSourceDefinitionObject);
+                        $scope.modalContext.closeModal();
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
+            }
+            else {
+                if ($scope.onFileDataSourceDefinitionAdded != undefined)
+                    $scope.onFileDataSourceDefinitionAdded(fileDataSourceDefinitionObject);
+                $scope.modalContext.closeModal();
+            }
         }
 
         function updateFileDataSourceDefinition() {

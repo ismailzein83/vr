@@ -1,19 +1,20 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationFiledelaycheckerSizebased", ["UtilsService",
+app.directive("vrIntegrationFiledatasourcedefinitionDelaycheckerSizebased", ["UtilsService",
     function (UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
-                onReady: "="
+                onReady: "=",
+                normalColNum: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 var ctor = new SizeBasedCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: "sizeBasedCtrl",
             bindToController: true,
             templateUrl: "/Client/Modules/Integration/Directives/MainExtensions/Settings/FileDataSourceSettings/FileDelayChecker/Templates/SizeBasedFileDelayCheckerTemplate.html"
         };
@@ -30,9 +31,14 @@ app.directive("vrIntegrationFiledelaycheckerSizebased", ["UtilsService",
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.fileDelayCheckerSettings != undefined) {
-                        $scope.scopeModel.maxPeakDelayPeriod = payload.fileDelayCheckerSettings.MaxPeakDelayPeriod;
-                        $scope.scopeModel.maxOffPeakDelayPeriod = payload.fileDelayCheckerSettings.MaxOffPeakDelayPeriod;
+
+                    if (payload != undefined && payload.fileDelayChecker != undefined) {
+                        $scope.scopeModel.peakDelayInterval = payload.fileDelayChecker.PeakDelayInterval;
+                        $scope.scopeModel.offPeakDelayInterval = payload.fileDelayChecker.OffPeakDelayInterval;
+                    }
+                    else {
+                        $scope.scopeModel.peakDelayInterval = "00:15:00";
+                        $scope.scopeModel.offPeakDelayInterval = "00:30:00";
                     }
 
                     var promises = [];
@@ -42,12 +48,12 @@ app.directive("vrIntegrationFiledelaycheckerSizebased", ["UtilsService",
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Integration.MainExtensions.FileDelayChecker.SizeBasedFileDelayChecker, Vanrise.Integration.MainExtensions",
-                        MaxPeakDelayPeriod: $scope.scopeModel.maxPeakDelayPeriod,
-                        MaxOffPeakDelayPeriod: $scope.scopeModel.maxOffPeakDelayPeriod
+                        PeakDelayInterval: $scope.scopeModel.peakDelayInterval,
+                        OffPeakDelayInterval: $scope.scopeModel.offPeakDelayInterval
                     };
                 };
 
-                if (ctrl.onReady != null && typeof ctrl.onReady == "function") {
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(api);
                 }
             }

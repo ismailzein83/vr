@@ -1,124 +1,171 @@
 ﻿"use strict";
 
 app.directive("vrIntegrationAdapterFtp", ['UtilsService', 'VR_Integration_CompressionTypeEnum', 'VRUIUtilsService', 'FileCheckCriteriaEnum',
-function (UtilsService, VR_Integration_CompressionTypeEnum, VRUIUtilsService, FileCheckCriteriaEnum) {
+    function (UtilsService, VR_Integration_CompressionTypeEnum, VRUIUtilsService, FileCheckCriteriaEnum) {
 
-    var directiveDefinitionObject = {
-        restrict: "E",
-        scope: {
-            onReady: "="
-        },
-        controller: function ($scope, $element, $attrs) {
-            var ctrl = this;
+        var directiveDefinitionObject = {
+            restrict: "E",
+            scope: {
+                onReady: "="
+            },
+            controller: function ($scope, $element, $attrs) {
+                var ctrl = this;
 
-            var directiveConstructor = new DirectiveConstructor($scope, ctrl);
-            directiveConstructor.initializeController();
-        },
-        controllerAs: "ctrl",
-        bindToController: true,
-        compile: function (element, attrs) {
-            return {
-                pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                }
-            };
-        },
-        templateUrl: "/Client/Modules/Integration/Directives/Adapter/Templates/AdapterFTPTemplate.html"
-    };
-    function DirectiveConstructor($scope, ctrl) {
-        this.initializeController = initializeController;
-
-
-        function initializeController() {
-
-            $scope.compressionTypes = UtilsService.getArrayEnum(VR_Integration_CompressionTypeEnum);
-
-            $scope.actionsAfterImport = [{ value: -1, name: 'No Action' }, { value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
-
-            $scope.actionIsRequired = function () {
-                return !$scope.basedOnTime;
-            };
-
-
-            $scope.fileCheckCriterias = UtilsService.getArrayEnum(FileCheckCriteriaEnum);
-
-            $scope.onSelectedActionChanged = function (selectedAction) {
-                if (selectedAction != undefined && selectedAction.value == -1) {
-                    $scope.selectedFileCheckCriteria = undefined;
-                }
-            };
-
-            defineAPI();
-        }
-
-        function defineAPI() {
-
-            var api = {};
-
-            api.getData = function () {
-
-                var extension;
-
-                if ($scope.extension.indexOf(".") == 0)
-                    extension = $scope.extension;
-                else
-                    extension = "." + $scope.extension;
-
+                var directiveConstructor = new DirectiveConstructor($scope, ctrl);
+                directiveConstructor.initializeController();
+            },
+            controllerAs: "ctrl",
+            bindToController: true,
+            compile: function (element, attrs) {
                 return {
-                    $type: "Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments",
-                    Extension: extension,
-                    Mask: $scope.mask == undefined ? "" : $scope.mask,
-                    Directory: $scope.directory,
-                    ServerIP: $scope.serverIP,
-                    UserName: $scope.userName,
-                    Password: $scope.password,
-                    DirectorytoMoveFile: $scope.directorytoMoveFile,
-                    ActionAfterImport: $scope.selectedAction ? $scope.selectedAction.value : undefined,
-                    FileCheckCriteria: $scope.selectedFileCheckCriteria != undefined ? $scope.selectedFileCheckCriteria.value : $scope.fileCheckCriterias[0].value,
-                    LastImportedFile: $scope.lastImportedFile,
-                    CompressedFiles: $scope.compressed,
-                    CompressionType: $scope.selectedCompressionType != undefined ? $scope.selectedCompressionType.value : undefined,
-                    FileCompletenessCheckInterval: $scope.fileCompletenessCheckInterval,
-                    NumberOfFiles: $scope.maxNumberOfFiles,
-                    InvalidFilesDirectory: $scope.invalidDirectory
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
+
+                    }
                 };
-            };
-            api.getStateData = function () {
-                return null;
-            };
+            },
+            templateUrl: "/Client/Modules/Integration/Directives/Adapter/Templates/AdapterFTPTemplate.html"
+        };
+        function DirectiveConstructor($scope, ctrl) {
+            this.initializeController = initializeController;
+
+            var fileDataSourceDefinitionsSelectorAPI;
+            var fileDataSourceDefinitionsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
-            api.load = function (payload) {
+            function initializeController() {
+                $scope.scopeModel = {};
 
-                if (payload != undefined) {
+                $scope.scopeModel.compressionTypes = UtilsService.getArrayEnum(VR_Integration_CompressionTypeEnum);
 
-                    var argumentData = payload.adapterArgument;
+                $scope.scopeModel.actionsAfterImport = [{ value: -1, name: 'No Action' }, { value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
 
-                    if (argumentData != null) {
-                        $scope.extension = argumentData.Extension;
-                        $scope.mask = argumentData.Mask;
-                        $scope.directory = argumentData.Directory;
-                        $scope.serverIP = argumentData.ServerIP;
-                        $scope.userName = argumentData.UserName;
-                        $scope.password = argumentData.Password;
-                        $scope.directorytoMoveFile = argumentData.DirectorytoMoveFile;
-                        $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, argumentData.ActionAfterImport, "value");
-                        $scope.selectedFileCheckCriteria = UtilsService.getItemByVal($scope.fileCheckCriterias, argumentData.FileCheckCriteria, "value");
-                        $scope.lastImportedFile = argumentData.LastImportedFile;
-                        $scope.compressed = argumentData.CompressedFiles;
-                        $scope.selectedCompressionType = UtilsService.getEnum(VR_Integration_CompressionTypeEnum, "value", argumentData.CompressionType);
-                        $scope.fileCompletenessCheckInterval = argumentData.FileCompletenessCheckInterval;
-                        $scope.maxNumberOfFiles = argumentData.NumberOfFiles;
-                        $scope.invalidDirectory = argumentData.InvalidFilesDirectory;
+                $scope.scopeModel.actionIsRequired = function () {
+                    return !$scope.basedOnTime;
+                };
+
+                $scope.scopeModel.fileCheckCriterias = UtilsService.getArrayEnum(FileCheckCriteriaEnum);
+
+                $scope.scopeModel.onSelectedActionChanged = function (selectedAction) {
+                    if (selectedAction != undefined && selectedAction.value == -1) {
+                        $scope.selectedFileCheckCriteria = undefined;
+                    }
+                };
+
+                $scope.scopeModel.onFileDataSourceDefinitionsSelectorReady = function (api) {
+                    fileDataSourceDefinitionsSelectorAPI = api;
+                    fileDataSourceDefinitionsSelectorReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onFileDataSourceDefinitionSelectionChanged = function () {
+                    var beforeSelection = $scope.scopeModel.selectedFileDataSourceDefinition == undefined ? false : $scope.scopeModel.selectedFileDataSourceDefinition ;
+                    $scope.scopeModel.selectedFileDataSourceDefinition = fileDataSourceDefinitionsSelectorAPI != undefined && fileDataSourceDefinitionsSelectorAPI.getSelectedIds() != undefined ?
+                        true : false;
+                    if (beforeSelection && !$scope.scopeModel.selectedFileDataSourceDefinition)
+                        $scope.scopeModel.duplicatedFilesDirectory = undefined;
+                };
+
+                defineAPI();
+            }
+
+            function defineAPI() {
+
+                var api = {};
+
+                api.load = function (payload) {
+                    var promises = [];
+                    var argumentData;
+
+                    if (payload != undefined) {
+
+                        argumentData = payload.adapterArgument;
+
+                        if (argumentData != null) {
+                            $scope.scopeModel.extension = argumentData.Extension;
+                            $scope.scopeModel.mask = argumentData.Mask;
+                            $scope.scopeModel.directory = argumentData.Directory;
+                            $scope.scopeModel.serverIP = argumentData.ServerIP;
+                            $scope.scopeModel.userName = argumentData.UserName;
+                            $scope.scopeModel.password = argumentData.Password;
+                            $scope.scopeModel.directorytoMoveFile = argumentData.DirectorytoMoveFile;
+                            $scope.scopeModel.selectedAction = UtilsService.getItemByVal($scope.scopeModel.actionsAfterImport, argumentData.ActionAfterImport, "value");
+                            $scope.scopeModel.selectedFileCheckCriteria = UtilsService.getItemByVal($scope.scopeModel.fileCheckCriterias, argumentData.FileCheckCriteria, "value");
+                            $scope.scopeModel.lastImportedFile = argumentData.LastImportedFile;
+                            $scope.scopeModel.compressed = argumentData.CompressedFiles;
+                            $scope.scopeModel.selectedCompressionType = UtilsService.getEnum(VR_Integration_CompressionTypeEnum, "value", argumentData.CompressionType);
+                            $scope.scopeModel.fileCompletenessCheckInterval = argumentData.FileCompletenessCheckInterval;
+                            $scope.scopeModel.maxNumberOfFiles = argumentData.NumberOfFiles;
+                            $scope.scopeModel.invalidDirectory = argumentData.InvalidFilesDirectory;
+                            $scope.scopeModel.duplicatedFilesDirectory = argumentData.DuplicatedFilesDirectory;
+                        }
                     }
 
-                }
-            };
+                    var loadFileDataSourceDefinitionsSelectorPromise = loadFileDataSourceDefinitionsSelector();
+                    promises.push(loadFileDataSourceDefinitionsSelectorPromise);
 
-            if (ctrl.onReady != null)
-                ctrl.onReady(api);
+                    return UtilsService.waitMultiplePromises(promises)
+                        .catch(function (error) {
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        }).finally(function () {
+                            $scope.isLoading = false;
+                        });
+
+
+                    function loadFileDataSourceDefinitionsSelector() {
+
+                        var fileDataSourceDefinitionsSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        fileDataSourceDefinitionsSelectorReadyPromiseDeferred.promise.then(function () {
+
+                            var payload;
+
+                            if (argumentData != undefined && argumentData != null)
+                                payload = { selectedIds: argumentData.FileDataSourceDefinitionId };
+
+                            VRUIUtilsService.callDirectiveLoad(fileDataSourceDefinitionsSelectorAPI, payload, fileDataSourceDefinitionsSelectorLoadPromiseDeferred);
+                        });
+
+                        return fileDataSourceDefinitionsSelectorLoadPromiseDeferred.promise;
+                    }
+                };
+
+                api.getData = function () {
+
+                    var extension;
+
+                    if ($scope.scopeModel.extension.indexOf(".") == 0)
+                        extension = $scope.scopeModel.extension;
+                    else
+                        extension = "." + $scope.scopeModel.extension;
+
+                    return {
+                        $type: "Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments",
+                        Extension: extension,
+                        Mask: $scope.scopeModel.mask == undefined ? "" : $scope.scopeModel.mask,
+                        Directory: $scope.scopeModel.directory,
+                        ServerIP: $scope.scopeModel.serverIP,
+                        UserName: $scope.scopeModel.userName,
+                        Password: $scope.scopeModel.password,
+                        DirectorytoMoveFile: $scope.scopeModel.directorytoMoveFile,
+                        ActionAfterImport: $scope.scopeModel.selectedAction ? $scope.scopeModel.selectedAction.value : undefined,
+                        FileCheckCriteria: $scope.scopeModel.selectedFileCheckCriteria != undefined ? $scope.scopeModel.selectedFileCheckCriteria.value : $scope.scopeModel.fileCheckCriterias[0].value,
+                        LastImportedFile: $scope.scopeModel.lastImportedFile,
+                        CompressedFiles: $scope.scopeModel.compressed,
+                        CompressionType: $scope.scopeModel.selectedCompressionType != undefined ? $scope.scopeModel.selectedCompressionType.value : undefined,
+                        FileCompletenessCheckInterval: $scope.scopeModel.fileCompletenessCheckInterval,
+                        NumberOfFiles: $scope.scopeModel.maxNumberOfFiles,
+                        InvalidFilesDirectory: $scope.scopeModel.invalidDirectory,
+                        FileDataSourceDefinitionId: fileDataSourceDefinitionsSelectorAPI != undefined ? fileDataSourceDefinitionsSelectorAPI.getSelectedIds() : undefined,
+                        DuplicatedFilesDirectory: fileDataSourceDefinitionsSelectorAPI != undefined ? $scope.scopeModel.duplicatedFilesDirectory : undefined
+                    };
+                };
+                api.getStateData = function () {
+                    return null;
+                };
+
+                if (ctrl.onReady != null && typeof ctrl.onReady == "function")
+                    ctrl.onReady(api);
+            }
         }
-    }
 
-    return directiveDefinitionObject;
-}]);
+        return directiveDefinitionObject;
+    }]);

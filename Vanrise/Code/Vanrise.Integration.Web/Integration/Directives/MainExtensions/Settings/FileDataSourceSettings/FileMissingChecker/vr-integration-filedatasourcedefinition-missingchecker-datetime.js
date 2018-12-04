@@ -1,24 +1,24 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationFilemissingcheckerSequence", ["UtilsService",
+app.directive("vrIntegrationFiledatasourcedefinitionMissingcheckerDatetime", ["UtilsService",
     function (UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
-                onReady: "="
+                onReady: "=",
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new SequenceCtor($scope, ctrl, $attrs);
+                var ctor = new DateTimeCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Integration/Directives/MainExtensions/Settings/FileDataSourceSettings/FileMissingChecker/Templates/SequenceFileMissingCheckerTemplate.html"
+            templateUrl: "/Client/Modules/Integration/Directives/MainExtensions/Settings/FileDataSourceSettings/FileMissingChecker/Templates/DateTimeFileMissingCheckerTemplate.html"
         };
 
-        function SequenceCtor($scope, ctrl, $attrs) {
+        function DateTimeCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -30,17 +30,18 @@ app.directive("vrIntegrationFilemissingcheckerSequence", ["UtilsService",
                 var api = {};
 
                 api.load = function (payload) {
+
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Integration.MainExtensions.FileMissingChecker.SequenceFileMissingChecker, Vanrise.Integration.MainExtensions"
+                        $type: "Vanrise.Integration.MainExtensions.FileMissingChecker.DateTimeFileMissingChecker, Vanrise.Integration.MainExtensions"
                     };
                 };
 
-                if (ctrl.onReady != null && typeof ctrl.onReady == "function") {
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(api);
                 }
             }

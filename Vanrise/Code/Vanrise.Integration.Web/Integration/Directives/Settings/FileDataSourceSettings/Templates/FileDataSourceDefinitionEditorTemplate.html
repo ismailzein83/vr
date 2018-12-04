@@ -1,0 +1,60 @@
+﻿<div vr-modalcontent ng-controller="VR_Integration_FileDataSourceDefinitionEditorController" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formFileDataSourceDefinitionEditor">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModel.name" type="text" label="Name" isrequired="true"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-section title="Duplicate Settings">
+                <vr-row>
+                    <vr-columns colnum="1">
+                        <vr-switch value="scopeModel.showDuplicateSettings" label="Enable" onvaluechanged="scopeModel.onDuplicateSettingsSwitchChanged"></vr-switch>
+                    </vr-columns>
+                    <vr-columns colnum="11" haschildcolumns>
+                        <vr-columns colnum="4">
+                            <vr-timespan ng-if="scopeModel.showDuplicateSettings" value="scopeModel.duplicateCheckInterval" label="Duplicate Check Interval" isrequired="true"></vr-timespan>
+                        </vr-columns>
+                    </vr-columns>
+                </vr-row>
+            </vr-section>
+            <vr-section title="Delay Settings">
+                <vr-row>
+                    <vr-columns colnum="1">
+                        <vr-switch value="scopeModel.showDelaySettings" label="Enable"></vr-switch>
+                    </vr-columns>
+                    <vr-columns colnum="11" haschildcolumns ng-if="scopeModel.showDelaySettings">
+                        <span vr-loader="scopeModel.isFileDelayCheckerDirectiveLoading">
+                            <vr-integration-filedatasourcedefinition-delaychecker on-ready="scopeModel.onFileDelayCheckerDirectiveReady"
+                                                                                  isrequired="true" normal-col-num="4" hideremoveicon>
+                            </vr-integration-filedatasourcedefinition-delaychecker>
+                        </span>
+                    </vr-columns>
+                </vr-row>
+            </vr-section>
+            <vr-section title="Missing Settings">
+                <vr-row>
+                    <vr-columns colnum="1">
+                        <vr-switch value="scopeModel.showMissingSettings" label="Enable"></vr-switch>
+                    </vr-columns>
+                    <vr-columns colnum="11" haschildcolumns ng-if="scopeModel.showMissingSettings">
+                        <span vr-loader="scopeModel.isFileMissingCheckerDirectiveLoading">
+                            <vr-integration-filedatasourcedefinition-missingchecker on-ready="scopeModel.onFileMissingCheckerDirectiveReady"
+                                                                                    isrequired="true" normal-col-num="4" hideremoveicon>
+                            </vr-integration-filedatasourcedefinition-missingchecker>
+                        </span>
+                    </vr-columns>
+                </vr-row>
+            </vr-section>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" haspermission="hasSaveDataSourceSettingsPermission" formname="formFileDataSourceDefinitionEditor" data-onclick="scopeModel.saveDataSourceSettings"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+

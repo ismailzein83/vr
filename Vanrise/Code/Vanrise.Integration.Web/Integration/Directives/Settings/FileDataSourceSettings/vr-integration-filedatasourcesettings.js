@@ -26,7 +26,7 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
                 $scope.scopeModel.fileDataSourceDefinitions = [];
 
                 $scope.scopeModel.addPeakTimeRange = function () {
-                    var peakTimeRange = { Entity: { From: undefined, To: undefined } };
+                    var peakTimeRange = { Entity: { PeakTimeRangeId : UtilsService.guid(), From: undefined, To: undefined } };
                     $scope.scopeModel.peakTimeRanges.push(peakTimeRange);
                 };
 
@@ -34,25 +34,29 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
                     var onFileDataSourceDefinitionAdded = function (fileDataSourceDefinition) {
                         $scope.scopeModel.fileDataSourceDefinitions.push({ Entity: fileDataSourceDefinition });
                     };
-                    VR_Integration_DataSourceSettingService.addFileDataSourceDefinition(onFileDataSourceDefinitionAdded);
+                    VR_Integration_DataSourceSettingService.addFileDataSourceDefinition(onFileDataSourceDefinitionAdded, false);
                 };
 
                 $scope.scopeModel.removePeakTimeRange = function (item) {
+                    //VRNotificationService.showConfirmation().then(function (confirmed) {
+                    //    if (confirmed) {
                     var index = $scope.scopeModel.peakTimeRanges.indexOf(item);
                     $scope.scopeModel.peakTimeRanges.splice(index, 1);
+                    //    }
+                    //});
                 };
 
                 $scope.scopeModel.removeFileDataSourceDefinition = function (item) {
+                    //VRNotificationService.showConfirmation().then(function (confirmed) {
+                    //    if (confirmed) {
                     var index = $scope.scopeModel.fileDataSourceDefinitions.indexOf(item);
                     $scope.scopeModel.fileDataSourceDefinitions.splice(index, 1);
+                    //    }
+                    //});
                 };
 
                 $scope.scopeModel.validatePeakTimeRanges = function () {
-
-                    if (!validateDateTime()) {
-                        return "You should enter a validate date.";
-                    }
-                    return null;
+                    return validateDateTime();
 
                 };
 
@@ -103,7 +107,6 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
                     if (peakTimeRanges != undefined) {
                         for (var i = 0; i < peakTimeRanges.length; i++) {
                             var currentPeakTimeRange = peakTimeRanges[i].Entity;
-                            currentPeakTimeRange.PeakTimeRangeId = UtilsService.guid();
                             peakTimeRangesToReturn.push(currentPeakTimeRange);
                         }
                     }
@@ -111,7 +114,6 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
                     if (fileDataSourceDefinitions != undefined) {
                         for (var j = 0; j < fileDataSourceDefinitions.length; j++) {
                             var currentFileDataSourceDefinition = fileDataSourceDefinitions[j].Entity;
-                            currentFileDataSourceDefinition.FileDataSourceDefinitionId = UtilsService.guid();
                             fileDataSourceDefinitionsToReturn.push(currentFileDataSourceDefinition);
                         }
                     }
@@ -122,7 +124,7 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
                     };
                 };
 
-                if (ctrl.onReady != null && typeof ctrl.onReady == "function")
+                if (ctrl.onReady != null && typeof(ctrl.onReady) == "function")
                     ctrl.onReady(api);
             }
 
@@ -143,16 +145,14 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
             }
 
             function validateDateTime() {
-                var isValid = true;
                 var peakTimeRanges = $scope.scopeModel.peakTimeRanges;
                 for (var i = 0; i < peakTimeRanges.length; i++) {
                     var currentPeakTimeRanges = peakTimeRanges[i];
-                    if (!VRValidationService.validateTimeRange(currentPeakTimeRanges.Entity.To, currentPeakTimeRanges.Entity.From)) {
-                        isValid = false;
-                        break;
-                    }
+                    var errorMessage = VRValidationService.validateTimeRange(currentPeakTimeRanges.Entity.From, currentPeakTimeRanges.Entity.To);
+                    if (errorMessage != null)
+                        return errorMessage;
                 }
-                return isValid;
+                return null;
             }
         }
 

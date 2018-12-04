@@ -49,8 +49,8 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                     Dictionary<string, List<DataSourceImportedBatch>> dataSourceImportedBatchByFileNames = null;
 
                     FileDataSourceDefinition fileDataSourceDefinition = base.GetFileDataSourceDefinition(sftpAdapterArgument.FileDataSourceDefinitionId);
-                    if (fileDataSourceDefinition != null)
-                        dataSourceImportedBatchByFileNames = base.GetDataSourceImportedBatchByFileNames(context.DataSourceId, fileDataSourceDefinition.DuplicateCheckInterval);
+                    if (fileDataSourceDefinition != null && fileDataSourceDefinition.DuplicateCheckInterval.HasValue)
+                        dataSourceImportedBatchByFileNames = base.GetDataSourceImportedBatchByFileNames(context.DataSourceId, fileDataSourceDefinition.DuplicateCheckInterval.Value);
 
                     short numberOfFilesRead = 0;
                     bool newFilesStarted = false;
@@ -252,9 +252,9 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 
         private void AfterImport(Sftp sftp, SftpItem fileObj, String filePath, SFTPAdapterArgument sftpAdapterArgument, ImportedBatchProcessingOutput output, BatchState fileState)
         {
-            if (fileState == BatchState.Duplicated && !string.IsNullOrEmpty(sftpAdapterArgument.DuplicateFilesDirectory))
+            if (fileState == BatchState.Duplicated && !string.IsNullOrEmpty(sftpAdapterArgument.DuplicatedFilesDirectory))
             {
-                MoveFile(sftp, fileObj, filePath, sftpAdapterArgument.DuplicateFilesDirectory, sftpAdapterArgument.Extension, "duplicate");
+                MoveFile(sftp, fileObj, filePath, sftpAdapterArgument.DuplicatedFilesDirectory, sftpAdapterArgument.Extension, "duplicate");
             }
             if (output != null && output.MappingOutput.Result == MappingResult.Invalid && !string.IsNullOrEmpty(sftpAdapterArgument.InvalidFilesDirectory))
             {

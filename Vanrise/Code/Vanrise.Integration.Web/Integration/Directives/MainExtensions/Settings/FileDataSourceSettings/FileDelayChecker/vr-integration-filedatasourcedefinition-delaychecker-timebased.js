@@ -1,19 +1,20 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationFiledelaycheckerTimebased", ["UtilsService",
+app.directive("vrIntegrationFiledatasourcedefinitionDelaycheckerTimebased", ["UtilsService",
     function (UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
-                onReady: "="
+                onReady: "=",
+                normalColNum: "@"
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 var ctor = new TimeBasedCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: "timeBasedCtrl",
             bindToController: true,
             templateUrl: "/Client/Modules/Integration/Directives/MainExtensions/Settings/FileDataSourceSettings/FileDelayChecker/Templates/TimeBasedFileDelayCheckerTemplate.html"
         };
@@ -30,8 +31,11 @@ app.directive("vrIntegrationFiledelaycheckerTimebased", ["UtilsService",
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.fileDelayCheckerSettings != undefined) {
-                        $scope.scopeModel.maxDelayPeriod = payload.fileDelayCheckerSettings.MaxDelayPeriod;
+
+                    $scope.scopeModel.fileInterval = "00:15:00";
+
+                    if (payload != undefined && payload.fileDelayChecker != undefined) {
+                        $scope.scopeModel.fileInterval = payload.fileDelayChecker.FileInterval;
                     }
 
                     var promises = [];
@@ -41,11 +45,11 @@ app.directive("vrIntegrationFiledelaycheckerTimebased", ["UtilsService",
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Integration.MainExtensions.FileDelayChecker.TimeBasedFileDelayChecker, Vanrise.Integration.MainExtensions",
-                        MaxDelayPeriod: $scope.scopeModel.maxDelayPeriod                      
+                        FileInterval: $scope.scopeModel.fileInterval
                     };
                 };
 
-                if (ctrl.onReady != null && typeof ctrl.onReady == "function") {
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(api);
                 }
             }

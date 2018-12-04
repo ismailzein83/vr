@@ -75,7 +75,7 @@ app.directive("vrIntegrationDatasourcesettingEditor", ["UtilsService", "VRValida
                     };
                 };
 
-                if (ctrl.onReady != null && typeof ctrl.onReady == "function")
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
             }
         }
