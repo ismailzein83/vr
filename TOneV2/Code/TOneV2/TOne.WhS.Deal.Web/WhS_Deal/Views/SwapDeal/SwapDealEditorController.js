@@ -2,7 +2,7 @@
 
     'use strict';
 
-    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum','WhS_Deal_DealDefinitionAPIService'];
+    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum', 'VRDateTimeService', 'VRCommon_EntityFilterEffectiveModeEnum', 'WhS_Deal_SwapDealTimeZoneTypeEnum', 'WhS_Deal_DealDefinitionAPIService'];
 
     function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum, VRDateTimeService, VRCommon_EntityFilterEffectiveModeEnum, WhS_Deal_SwapDealTimeZoneTypeEnum, WhS_Deal_DealDefinitionAPIService) {
         var isEditMode;
@@ -33,6 +33,8 @@
         var offset;
         var SwapDealTimeZone;
 
+        var shiftedBED;
+        var shiftedEED;
 
         loadParameters();
         defineScope();
@@ -159,8 +161,8 @@
             $scope.scopeModel.validateDealStatusDate = function () {
                 var date = UtilsService.createDateFromString($scope.scopeModel.deActivationDate);
                 var beginDate = UtilsService.createDateFromString($scope.scopeModel.beginDate);
-                var endDate = UtilsService.createDateFromString($scope.scopeModel.endDate); 
-                if(date < beginDate)
+                var endDate = UtilsService.createDateFromString($scope.scopeModel.endDate);
+                if (date < beginDate)
                     return "Deactivation date must be greater than deal BED";
                 if (date > endDate)
                     return "Deactivation date must be less than deal EED";
@@ -464,18 +466,6 @@
         }
 
         function getContext() {
-            var shiftedBED ;
-            var shiftedEED ;
-            var shiftedDatesPromiseDeferred = UtilsService.createPromiseDeferred();
-            if ($scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined) {
-                GetShiftedDate($scope.scopeModel.beginDate).then(function (response) {
-                    shiftedBED = response;
-                    GetShiftedDate($scope.scopeModel.endDate).then(function (response) {
-                        shiftedEED = response;
-                        shiftedDatesPromiseDeferred.resolve();
-                    });
-                });
-            }
             return {
                 getSupplierZoneSelectorPayload: function (item) {
                     var payload;
@@ -504,17 +494,15 @@
                             EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
                             ExcludePendingClosedZones: true
                         };
-                    shiftedDatesPromiseDeferred.promise.then(function(){
-                        payload.filter.Filters = [{
-                            $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
-                            CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                            DealId: dealId,
-                            BED: shiftedBED,
-                            EED: shiftedEED
-                        }];
+                    payload.filter.Filters = [{
+                        $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
+                        CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                        DealId: dealId,
+                        BED: shiftedBED != undefined ? shiftedBED : $scope.scopeModel.beginDate,
+                        EED: shiftedEED != undefined ? shiftedBED : $scope.scopeModel.endDate,
+                    }];
 
-                        return payload;
-                    });
+                    return payload;
                 },
 
                 getSaleZoneSelectorPayload: function (item) {
@@ -535,7 +523,7 @@
                             CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined,
                             EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value,
                             EffectiveDate: $scope.scopeModel.beginDate,
-                            ExcludePendingClosedZones :true
+                            ExcludePendingClosedZones: true
                         };
                     }
                     else {
@@ -545,19 +533,17 @@
                             EffectiveDate: $scope.scopeModel.beginDate,
                             ExcludePendingClosedZones: true
                         };
+                       
                     }
-                    shiftedDatesPromiseDeferred.promise.then(function () {
-                        payload.filter.Filters = [{
-                            $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
-                            CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
-                            DealId: dealId,
-                            BED: shiftedBED,
-                            EED: shiftedEED
-                        }];
+                    payload.filter.Filters = [{
+                        $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
+                        CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                        DealId: dealId,
+                        BED: shiftedBED != undefined ? shiftedBED : $scope.scopeModel.beginDate,
+                        EED: shiftedEED != undefined ? shiftedEED : $scope.scopeModel.endDate,
+                    }];
+                    return payload;
 
-                        return payload;
-                    });
-                   
                 },
                 getEffectiveOnDate: function () {
                     return GetShiftedDate($scope.scopeModel.beginDate);
@@ -569,10 +555,30 @@
                     return $scope.scopeModel.endDate;
                 },
                 getCarrierAccountId: function () {
-                    return carrierAccountSelectorAPI.getSelectedIds();   
+                    return carrierAccountSelectorAPI.getSelectedIds();
                 },
                 getSwapDealCurrency: function () {
                     return currencyDirectiveAPI.getSelectedValues();
+                },
+                shiftBEDandEED() {
+                    var newShiftedBED;
+                    var newShiftedEED;
+                    var shiftedDatesPromiseDeferred = UtilsService.createPromiseDeferred();
+                    if ($scope.scopeModel.beginDate != undefined && $scope.scopeModel.endDate != undefined && $scope.scopeModel.beginDate <= $scope.scopeModel.endDate && $scope.scopeModel.selectedTimeZone.value != WhS_Deal_SwapDealTimeZoneTypeEnum.System.value) {
+                        GetShiftedDate($scope.scopeModel.beginDate).then(function (response) {
+                            newShiftedBED = response;
+                            GetShiftedDate($scope.scopeModel.endDate).then(function (response) {
+                                newShiftedEED = response;
+                                shiftedDatesPromiseDeferred.resolve();
+                            });
+                        });
+                    }
+                    else
+                        shiftedDatesPromiseDeferred.resolve();
+                    return shiftedDatesPromiseDeferred.promise.then(function () {
+                        shiftedBED = newShiftedBED;
+                        shiftedEED = newShiftedEED;
+                    });
                 }
             };
         }

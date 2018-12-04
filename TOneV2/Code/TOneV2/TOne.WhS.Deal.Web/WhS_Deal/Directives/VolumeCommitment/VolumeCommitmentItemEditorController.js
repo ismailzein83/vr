@@ -102,7 +102,6 @@
                     if (payload != undefined) {
                         if (payload.filter != undefined) {
                             payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
-
                         }
 
                         else
@@ -218,6 +217,9 @@
 
                 UtilsService.waitMultiplePromises([zoneReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
                     var payload = context != undefined ? context.getZoneSelectorPayload(volumeCommitmentItemEntity) : undefined;
+                    if (payload != undefined) {
+                        payload.filter.CountryIds = volumeCommitmentItemEntity.CountryIds;
+                    }
                     VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred);
                     loadZonePromiseDeferred.promise.then(function () {
                         if (volumeCommitmentItemEntity != undefined)

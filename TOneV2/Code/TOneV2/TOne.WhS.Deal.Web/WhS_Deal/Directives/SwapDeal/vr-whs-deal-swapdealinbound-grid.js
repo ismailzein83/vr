@@ -40,13 +40,15 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                 ctrl.datasource = [];
 
                 ctrl.addSwapDealInbound = function () {
+                    context.shiftBEDandEED().then(function () { 
                     var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
                     var onSwapDealInboundAdded = function (addedSwapDealInbound) {
                         lastInboundGroupNumber = lastInboundGroupNumber + 1;
                         addedSwapDealInbound.ZoneGroupNumber = lastInboundGroupNumber;
                         ctrl.datasource.push(addedSwapDealInbound);
                     };
-                    WhS_Deal_SwapDealInboundService.addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId, context, carrierAccountId, dealId);
+                        WhS_Deal_SwapDealInboundService.addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId, context, carrierAccountId, dealId);
+                    });
                 };
 
                 $scope.onGridReady = function (api) {
@@ -133,14 +135,16 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
             }
 
             function editSwapDealInbound(dealInboundObj) {
-                var onDealInboundUpdated = function (dealInbound) {
-                    dealInbound.ZoneGroupNumber = dealInboundObj.ZoneGroupNumber;
-                    var index = ctrl.datasource.indexOf(dealInboundObj);
-                    ctrl.datasource[index] = dealInbound;
-                };
-                var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
+                context.shiftBEDandEED().then(function () {
+                    var onDealInboundUpdated = function (dealInbound) {
+                        dealInbound.ZoneGroupNumber = dealInboundObj.ZoneGroupNumber;
+                        var index = ctrl.datasource.indexOf(dealInboundObj);
+                        ctrl.datasource[index] = dealInbound;
+                    };
+                    var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
 
-                WhS_Deal_SwapDealInboundService.editSwapDealInbound(dealInboundObj, sellingNumberPlanId, onDealInboundUpdated, context, carrierAccountId,dealId);
+                    WhS_Deal_SwapDealInboundService.editSwapDealInbound(dealInboundObj, sellingNumberPlanId, onDealInboundUpdated, context, carrierAccountId, dealId);
+                });
             }
 
             function viewSwapDealInbound(dealInboundObj) {

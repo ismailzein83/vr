@@ -20,9 +20,9 @@
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var carrierAccountId;
+        var countrySelectorEntity;
 
         var countrySelectedPromiseDeferred;
-        var saleZoneSelectorPayload;
         loadParameters();
         defineScope();
         load();
@@ -32,8 +32,8 @@
             if (parameters != undefined && parameters != null) {
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
                 swapDealInboundEntity = parameters.swapDealInbound;
+                countrySelectorEntity = swapDealInboundEntity;
                 context = parameters.context;
-                saleZoneSelectorPayload = parameters.context != undefined ? parameters.context.getSaleZoneSelectorPayload() : undefined;
             }
 
             isEditMode = (swapDealInboundEntity != undefined);
@@ -60,7 +60,7 @@
 
                 if (country != undefined) {
                     var setLoader = function (value) { $scope.isLoadingSelector = value; };
-                    var payload = context != undefined ? context.getSaleZoneSelectorPayload(swapDealInboundEntity != undefined ? swapDealInboundEntity : undefined) : undefined;
+                    var payload = context != undefined ? context.getSaleZoneSelectorPayload(countrySelectorEntity != undefined ? countrySelectorEntity : undefined) : undefined;
                     if (payload != undefined) {
                         payload.sellingNumberPlanId = sellingNumberPlanId;
                         payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
@@ -73,7 +73,7 @@
                             filter: {
                                 CountryIds: countryDirectiveApi.getSelectedIds(),
                             },
-                            selectedIds:  getSelectedIdsFromEntity(swapDealInboundEntity)
+                            selectedIds: getSelectedIdsFromEntity(swapDealInboundEntity)
                         };
                     }
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
