@@ -33,6 +33,7 @@ xcopy "C:\TFS\Retail\Code\Retail.Voice.Web\Retail_Voice" /S /E /R /y /v /i /z /Q
 xcopy "C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_SMS\"
 xcopy "C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_Data\"
 xcopy "C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_Invoice\"
+xcopy "C:\TFS\Retail\Code\Retail.RA.Web\Retail_RA" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_RA\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-logoonheader.png" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-login.png" /S /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-iconheader.ico" /S /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\"
