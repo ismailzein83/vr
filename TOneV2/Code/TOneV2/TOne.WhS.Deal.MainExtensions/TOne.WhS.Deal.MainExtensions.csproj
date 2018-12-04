@@ -104,13 +104,14 @@
     <Compile Include="DealRateEvaluator\SaleRateEvaluator\FixedSaleRateEvaluator.cs" />
     <Compile Include="DealRateEvaluator\SupplierRateEvaluator\DiscountSupplierRateEvaluator.cs" />
     <Compile Include="DealRateEvaluator\SupplierRateEvaluator\FixedSupplierRateEvaluator.cs" />
+    <Compile Include="DealSaleZonesFilter.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueActivators\EvaluateDealActivator.cs" />
     <Compile Include="QueueActivators\EvaluateSMSDealActivator.cs" />
     <Compile Include="ReprocessFilterDefinition\DealReprocessFilter.cs" />
     <Compile Include="ReprocessFilterDefinition\DealReprocessFilterDefinition.cs" />
-    <Compile Include="RouteRule\RouteRuleCriteria\DealRouteRuleCriteria.cs" />
+    <Compile Include="RouteRules\RouteRuleCriteria\DealRouteRuleCriteria.cs" />
     <Compile Include="SwapDealAnalysis\Inbound\SwapDealAnalysisInboundItemRateFixed.cs" />
     <Compile Include="SwapDealAnalysis\Inbound\SwapDealAnalysisInboundItemRateSuppliers.cs" />
     <Compile Include="SwapDealAnalysis\Inbound\SwapDealAnalysisInboundRateFixed.cs" />
@@ -121,9 +122,9 @@
     <Compile Include="SwapDealAnalysis\Outbound\SwapDealAnalysisOutboundRateCustomers.cs" />
     <Compile Include="SwapDealAnalysis\Outbound\SwapDealAnalysisOutboundRateFixed.cs" />
     <Compile Include="SwapDealAnalysis\Outbound\SwapDealAnalysisOutboundRateSuppliers.cs" />
-    <Compile Include="SwapDealBuyRouteRules\FixedSwapDealBuyRouteRule.cs" />
-    <Compile Include="SwapDealBuyRouteRules\BySaleDealSwapDealBuyRouteRule.cs" />
-    <Compile Include="RouteRule\DealRouteRuleDefinitionFilter.cs" />
+    <Compile Include="RouteRules\FixedDealBuyRouteRule.cs" />
+    <Compile Include="RouteRules\BySaleDealBuyRouteRule.cs" />
+    <Compile Include="RouteRules\DealRouteRuleDefinitionFilter.cs" />
     <Compile Include="SwapDeal\SwapDealDefinitionFilter.cs" />
     <Compile Include="SwapDeal\SwapDealCarrierFilter.cs" />
   </ItemGroup>
@@ -157,7 +158,9 @@
       <Name>TOne.WhS.Routing.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="SwapDealBuyRouteRules\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

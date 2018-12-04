@@ -120,7 +120,7 @@
     <Compile Include="Helper.cs" />
     <Compile Include="SaleZoneFilter.cs" />
     <Compile Include="SupplierZoneFilter.cs" />
-    <Compile Include="DealRouteRules\DealBuyRouteRuleManager.cs" />
+    <Compile Include="RouteRules\DealBuyRouteRuleManager.cs" />
     <Compile Include="SwapDeals\SwapDealRouteBuildInterceptor.cs" />
     <Compile Include="SwapDeals\SwapDealSettings.cs" />
     <Compile Include="SwapDeals\ValidateBeforeSaveContext.cs" />

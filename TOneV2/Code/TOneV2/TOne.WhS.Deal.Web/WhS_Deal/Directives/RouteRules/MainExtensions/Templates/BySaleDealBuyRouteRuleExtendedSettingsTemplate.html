@@ -1,0 +1,13 @@
+﻿<vr-whs-deal-dealdefinition-selector on-ready="scopeModel.onDealDefinitionSelectorReady"
+                                     onselectionchanged="scopeModel.onDealDefinitionSelectionChanged"
+                                     selectedvalues="scopeModel.selectedDeal"
+                                     normal-col-num="6" isrequired="true" hideremoveicon>
+</vr-whs-deal-dealdefinition-selector>
+
+<vr-columns colnum="{{controller.normalColNum}}">
+    <vr-textbox value="scopeModel.percentage" label="Percentage" type="number" minvalue="0" maxvalue="100" isrequired="true"></vr-textbox>
+</vr-columns>
+
+<vr-whs-be-salezone-selector ng-if="scopeModel.showSaleZoneSelector" vr-loader="scopeModel.isSaleZoneSelectorLoading"
+                             on-ready="scopeModel.onSaleZoneSelectorReady" normal-col-num="6" ismultipleselection>
+</vr-whs-be-salezone-selector>

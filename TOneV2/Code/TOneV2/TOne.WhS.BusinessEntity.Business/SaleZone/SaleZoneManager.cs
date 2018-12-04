@@ -347,7 +347,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     for (int i = 0; i < filter.Filters.Count(); i++)
                     {
-                        var saleZoneFilterContext = new SaleZoneFilterContext() { SaleZone = zone, CustomData = customObjects[i] };
+                        var saleZoneFilterContext = new SaleZoneFilterContext() { SaleZone = zone, CustomData = customObjects[i], SellingNumberPlanId = sellingNumberPlanId };
                         bool filterResult = filter.Filters.ElementAt(i).IsExcluded(saleZoneFilterContext);
                         customObjects[i] = saleZoneFilterContext.CustomData;
                         if (filterResult)

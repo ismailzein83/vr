@@ -61,7 +61,7 @@ app.directive('vrWhsDealSwapdealTechnicalsettingsEditor', ['UtilsService', 'VRUI
                             var vrRuleDefinitionSelectorPayload;
                             if (swapDealTechnicalSettingData != undefined) {
                                 vrRuleDefinitionSelectorPayload = {
-                                    selectedIds: swapDealTechnicalSettingData.SwapDealBuyRouteRuleDefinitionId
+                                    selectedIds: swapDealTechnicalSettingData.DealBuyRouteRuleDefinitionId
                                 };
                             }
                             VRUIUtilsService.callDirectiveLoad(vrRuleDefinitionSelectorAPI, vrRuleDefinitionSelectorPayload, vrRuleDefinitionSelectorLoadDeferred);
@@ -77,7 +77,7 @@ app.directive('vrWhsDealSwapdealTechnicalsettingsEditor', ['UtilsService', 'VRUI
 
                     var data = {
                         $type: 'TOne.WhS.Deal.Entities.SwapDealTechnicalSettingData, TOne.WhS.Deal.Entities',
-                        SwapDealBuyRouteRuleDefinitionId: vrRuleDefinitionSelectorAPI.getSelectedIds()
+                        DealBuyRouteRuleDefinitionId: vrRuleDefinitionSelectorAPI.getSelectedIds()
                     };
                     return data;
                 };

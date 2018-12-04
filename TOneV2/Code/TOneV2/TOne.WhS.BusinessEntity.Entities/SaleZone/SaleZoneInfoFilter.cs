@@ -30,6 +30,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public interface ISaleZoneFilterContext
     {
+        int SellingNumberPlanId { get; }
         SaleZone SaleZone { get; }
 
         object CustomData { get; set; }
@@ -37,6 +38,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public class SaleZoneFilterContext : ISaleZoneFilterContext
     {
+        public int SellingNumberPlanId { get; set; }
+
         public SaleZone SaleZone { get; set; }
 
         public object CustomData { get; set; }

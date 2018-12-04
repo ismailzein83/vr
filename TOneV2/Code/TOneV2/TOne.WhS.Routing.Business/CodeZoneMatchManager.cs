@@ -13,12 +13,12 @@ namespace TOne.WhS.Routing.Business
 		#region Public Methods
        
 
-		public IEnumerable<CodeSaleZoneMatch> GetSaleZonesMatchedToSupplierZones(IEnumerable<long> supplierZoneIds)
+		public IEnumerable<SaleZoneDefintion> GetSaleZonesMatchedToSupplierZones(IEnumerable<long> supplierZoneIds, int? sellingNumberPlanId = null)
 		{
 			if (supplierZoneIds == null)
 				throw new NullReferenceException("supplierZoneIds");
 			ICodeZoneMatchDataManager dataManager = GetDataManager();
-			return dataManager.GetSaleZonesMatchedToSupplierZones(supplierZoneIds);
+			return dataManager.GetSaleZonesMatchedToSupplierZones(supplierZoneIds, sellingNumberPlanId);
 		}
 
 		public IEnumerable<CodeSupplierZoneMatch> GetSupplierZonesMatchedToSaleZones(IEnumerable<long> saleZoneIds, IEnumerable<int> supplierIds)

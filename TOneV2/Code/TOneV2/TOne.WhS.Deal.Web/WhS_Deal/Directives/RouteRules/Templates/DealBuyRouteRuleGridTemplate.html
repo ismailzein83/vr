@@ -1,0 +1,14 @@
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.dealBuyRouteRules"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="VRRuleId">
+    
+    <vr-datagridcolumn headertext="'Id'" field="'VRRuleId'" fixedwidth="'20'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Description'" fixedwidth="'150'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Rule Type'" field="'RuleType'" fixedwidth="'60'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Settings'" field="'Settings'" expendablecolumn expendablecolumndescription="'Settings'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'LongDatetime'" fixedwidth="'120'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'LongDatetime'" fixedwidth="'120'"></vr-datagridcolumn>
+</vr-datagrid>

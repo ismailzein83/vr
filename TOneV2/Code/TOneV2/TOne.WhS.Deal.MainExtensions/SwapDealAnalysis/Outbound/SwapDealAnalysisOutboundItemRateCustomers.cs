@@ -23,7 +23,7 @@ namespace TOne.WhS.Deal.MainExtensions
 		public override decimal? Execute(ISwapDealAnalysisOutboundRateCalcMethodContext context)
 		{
 			var codeZoneMatchManager = new CodeZoneMatchManager();
-			IEnumerable<CodeSaleZoneMatch> codeSaleZoneMatches = codeZoneMatchManager.GetSaleZonesMatchedToSupplierZones(context.SupplierZoneIds);
+			IEnumerable<SaleZoneDefintion> codeSaleZoneMatches = codeZoneMatchManager.GetSaleZonesMatchedToSupplierZones(context.SupplierZoneIds);
 
 			if (codeSaleZoneMatches == null || codeSaleZoneMatches.Count() == 0)
 				return null;
@@ -63,11 +63,11 @@ namespace TOne.WhS.Deal.MainExtensions
 
 		}
 
-		private ZonesBySellingNumberPlan GetZonesBySellingNumberPlan(IEnumerable<CodeSaleZoneMatch> codeSaleZoneMatches)
+		private ZonesBySellingNumberPlan GetZonesBySellingNumberPlan(IEnumerable<SaleZoneDefintion> codeSaleZoneMatches)
 		{
 			var zonesBySellingNumberPlan = new ZonesBySellingNumberPlan();
 
-			foreach (CodeSaleZoneMatch codeSaleZoneMatch in codeSaleZoneMatches)
+			foreach (SaleZoneDefintion codeSaleZoneMatch in codeSaleZoneMatches)
 			{
 				List<long> saleZoneIds;
 				if (!zonesBySellingNumberPlan.TryGetValue(codeSaleZoneMatch.SellingNumberPlanId, out saleZoneIds))

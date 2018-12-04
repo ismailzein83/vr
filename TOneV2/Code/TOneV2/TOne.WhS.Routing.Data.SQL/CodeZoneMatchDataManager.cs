@@ -27,9 +27,15 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #endregion
 
-        public IEnumerable<CodeSaleZoneMatch> GetSaleZonesMatchedToSupplierZones(IEnumerable<long> supplierZoneIds)
+        public IEnumerable<SaleZoneDefintion> GetSaleZonesMatchedToSupplierZones(IEnumerable<long> supplierZoneIds, int? sellingNumberPlanId)
         {
-            return base.GetItemsText<CodeSaleZoneMatch>(query_GetSaleZonesMatchedToSupplierZones, CodeSaleZoneMatchMapper, (cmd) =>
+            string sellingNumberPlanFilter = string.Empty;
+            if (sellingNumberPlanId.HasValue)
+                sellingNumberPlanFilter = string.Format(" AND SellingNumberPlanId = {0}", sellingNumberPlanId.Value);
+
+            string query = query_GetSaleZonesMatchedToSupplierZones.Replace("#SELLINGNUMBERPLAN#", sellingNumberPlanFilter);
+
+            return base.GetItemsText<SaleZoneDefintion>(query, SaleZoneDefintionMapper, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter()
                 {
@@ -194,7 +200,6 @@ namespace TOne.WhS.Routing.Data.SQL
         #endregion
 
         #region Queries
-
         private const string query_GetSaleZonesMatchedToSupplierZones =
         @"
 			declare @SupplierZoneIdTable table (SupplierZoneId bigint not null)
@@ -203,16 +208,17 @@ namespace TOne.WhS.Routing.Data.SQL
 			
 			with CodeCTE as (select Code from dbo.CodeSupplierZoneMatch where SupplierZoneId in (select SupplierZoneId from @SupplierZoneIdTable))
 			
-			select Code, SellingNumberPlanId, SaleZoneId, CodeMatch
-			from dbo.CodeSaleZoneMatch
-			where Code in (select Code from CodeCTE)
+			select SellingNumberPlanId, SaleZoneId
+			from dbo.CodeSaleZoneMatch with(nolock)
+			where Code in (select Code from CodeCTE) #SELLINGNUMBERPLAN#
+            group by SellingNumberPlanId, SaleZoneId
 		";
 
 
         private const string query_GetSaleZoneMatchBySellingNumberPlanId =
         @"
 			select Code,SellingNumberPlanID,SaleZoneID,CodeMatch
-			from dbo.CodeSaleZoneMatch
+			from dbo.CodeSaleZoneMatch with(nolock)
 			where SellingNumberPlanID = @SellingNumberPlanId 
                 And( @CodeStartWith is null OR Code like @CodeStartWith+'%')
 		";
@@ -224,7 +230,7 @@ namespace TOne.WhS.Routing.Data.SQL
 			select ParsedString from dbo.ParseStringList(@SupplierIds);
 		
 			select Code,SupplierID,SupplierZoneID,CodeMatch
-			from dbo.CodeSupplierZoneMatch
+			from dbo.CodeSupplierZoneMatch with(nolock)
 			where SupplierID in (select SupplierId from @SupplierIdsTable)
                 And( @CodeStartWith is null OR Code like @CodeStartWith+'%')
 		";
@@ -256,7 +262,7 @@ namespace TOne.WhS.Routing.Data.SQL
 			with CodeCTE as (select Code from dbo.CodeSaleZoneMatch where SaleZoneID in (select SaleZoneId from @SaleZoneIdTable))
 			
 			select Code, SupplierId, SupplierZoneId, CodeMatch
-			from dbo.CodeSupplierZoneMatch
+			from dbo.CodeSupplierZoneMatch with(nolock)
 			where Code in (select Code from CodeCTE) and (@SupplierIds is null or SupplierID in (select SupplierId from @SupplierIdTable))
 		";
 
@@ -276,13 +282,21 @@ namespace TOne.WhS.Routing.Data.SQL
 			with CodeCTE as (select Code from dbo.CodeSupplierZoneMatch where SupplierZoneID in (select SupplierZoneId from @SupplierZoneIdTable))
 			
 			select Code, SupplierId, SupplierZoneId
-			from dbo.CodeSupplierZoneMatch
+			from dbo.CodeSupplierZoneMatch with(nolock)
 			where SupplierID != @SupplierId and Code in (select Code from CodeCTE) and (@OtherSupplierIds is null or SupplierID in (select OtherSupplierId from @OtherSupplierIdTable))
 		";
 
         #endregion
 
         #region Mappers
+        private SaleZoneDefintion SaleZoneDefintionMapper(IDataReader reader)
+        {
+            return new SaleZoneDefintion()
+            {
+                SellingNumberPlanId = (int)reader["SellingNumberPlanId"],
+                SaleZoneId = (long)reader["SaleZoneId"]
+            };
+        }
 
         private CodeSaleZoneMatch CodeSaleZoneMatchMapper(IDataReader reader)
         {
