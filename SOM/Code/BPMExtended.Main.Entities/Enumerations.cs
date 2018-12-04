@@ -62,5 +62,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.GSHDSL)]
         GSHDSLTermination = 16,
 
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        DeportedNumber = 17,
+
     }
 }

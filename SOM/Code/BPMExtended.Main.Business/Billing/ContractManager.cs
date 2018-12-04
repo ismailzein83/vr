@@ -3,13 +3,22 @@ using BPMExtended.Main.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
+using Terrasoft.Core;
+using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
 {
     public class ContractManager
     {
+        public UserConnection BPM_UserConnection
+        {
+            get
+            {
+                return (UserConnection)HttpContext.Current.Session["UserConnection"];
+            }
+        }
+
         public TelephonyContractDetail GetTelephonyContract(string contractId)
         {
             return RatePlanMockDataGenerator.GetTelephonyContract(contractId);
@@ -149,7 +158,30 @@ namespace BPMExtended.Main.Business
 
         public bool ContractTakeOver(string customerId, string contractId , string targetCustomerId , bool isAdslTakenOver , string username, string pass)
         {
-            //TODO: 
+            //TODO: Activate the operation
+
+
+            //TODO:Get taxes
+
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+
+            esq.AddColumn("StServiceCode");
+            esq.AddColumn("Id");
+
+            int requestType = (int)OperationType.ContractTakeOver;
+
+            // Query data filtering.
+            var esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", requestType.ToString());
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var serviceCode = entities[0].GetColumnValue("StServiceCode");
+
+            }
+
 
             return true;
         }
@@ -170,6 +202,30 @@ namespace BPMExtended.Main.Business
         public bool ActivateLeasedLineTermination(string contractId, string customerId)
         {
             //TODO: terminate the leased line contract of the customer
+
+
+            //TODO:Get taxes
+
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+
+            esq.AddColumn("StServiceCode");
+            esq.AddColumn("Id");
+
+            int requestType = (int)OperationType.LeasedLineTermination;
+
+            // Query data filtering.
+            var esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", requestType.ToString());
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var serviceCode = entities[0].GetColumnValue("StServiceCode");
+
+            }
+
+
             return true;
         }
 
@@ -177,6 +233,29 @@ namespace BPMExtended.Main.Business
         public bool ActivateADSLLineMoving(string telephonyContractId, string customerId, string port)
         {
             //TODO: Activate service
+
+
+            //TODO:Get taxes
+
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+
+            esq.AddColumn("StServiceCode");
+            esq.AddColumn("Id");
+
+            int requestType = (int)OperationType.ADSLLineMoving;
+
+            // Query data filtering.
+            var esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", requestType.ToString());
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var serviceCode = entities[0].GetColumnValue("StServiceCode");
+
+            }
+
             return true;
         }
 
@@ -184,6 +263,29 @@ namespace BPMExtended.Main.Business
         public bool ActivateADSLLineTermination(string contractId , string reason , string phoneNumber)
         {
             //TODO: Activate service
+
+
+            //TODO:Get taxes
+
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+
+            esq.AddColumn("StServiceCode");
+            esq.AddColumn("Id");
+
+            int requestType = (int)OperationType.ADSLLineTermination;
+
+            // Query data filtering.
+            var esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", requestType.ToString());
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var serviceCode = entities[0].GetColumnValue("StServiceCode");
+
+            }
+
             return true;
         }
 
@@ -191,18 +293,210 @@ namespace BPMExtended.Main.Business
         public bool ActivateADSLAlterSpeed(string contractId, string speed)
         {
             //TODO: Activate service
+
+            //TODO:Get taxes
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+
+            esq.AddColumn("StServiceCode");
+            esq.AddColumn("Id");
+
+            int requestType = (int)OperationType.ADSLAlterSpeed;
+
+            // Query data filtering.
+            var esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", requestType.ToString());
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var serviceCode = entities[0].GetColumnValue("StServiceCode");
+
+            }
+
+
+
             return true;
         }
 
         public bool ActivateGSHDSL(string contractId)
         {
             //TODO: Activate service
+
+            //TODO:Get taxes
+
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+
+            esq.AddColumn("StServiceCode");
+            esq.AddColumn("Id");
+
+            int requestType = (int)OperationType.GSHDSLSubscription;
+
+            // Query data filtering.
+            var esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", requestType.ToString());
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var serviceCode = entities[0].GetColumnValue("StServiceCode");
+                                                                       
+            }
+
+
             return true;
         }
 
         public bool ActivateGSHDSLTermination(string contractId)
         {
             //TODO: Terminate GSHDSL contract
+            return true;
+        }
+
+        public bool ActivateLineTermination(string contractId)
+        {
+            //TODO: Terminate GSHDSL contract
+
+
+            //TODO:Get taxes
+
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+
+            esq.AddColumn("StServiceCode");
+            esq.AddColumn("Id");
+
+            int requestType = (int)OperationType.TelephonyLineTermination;
+
+            // Query data filtering.
+            var esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", requestType.ToString());
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var serviceCode = entities[0].GetColumnValue("StServiceCode");
+
+            }
+
+            return true;
+        }
+
+
+        public bool ActivateLineMovingSameSwitch(string contractId)
+        {
+            //TODO: Terminate GSHDSL contract
+
+
+            //TODO:Get taxes
+
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+
+            esq.AddColumn("StServiceCode");
+            esq.AddColumn("Id");
+
+            int requestType = (int)OperationType.TelephonyLineMovingSameSwitch;
+
+            // Query data filtering.
+            var esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", requestType.ToString());
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var serviceCode = entities[0].GetColumnValue("StServiceCode");
+
+            }
+
+            return true;
+        }
+
+        public bool ActivateChangePhoneNumberRequest(string contractId)
+        {
+            //TODO: Terminate GSHDSL contract
+
+
+            //TODO:Get taxes
+
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+
+            esq.AddColumn("StServiceCode");
+            esq.AddColumn("Id");
+
+            int requestType = (int)OperationType.TelephonyChangePhoneNumber;
+
+            // Query data filtering.
+            var esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", requestType.ToString());
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var serviceCode = entities[0].GetColumnValue("StServiceCode");
+
+            }
+
+            return true;
+        }
+
+        public bool ActivateLineMovingNewSwitch(string contractId)
+        {
+            //TODO: Terminate GSHDSL contract
+
+
+            //TODO:Get taxes
+
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+
+            esq.AddColumn("StServiceCode");
+            esq.AddColumn("Id");
+
+            int requestType = (int)OperationType.TelephonyLineMovingNewSwitch;
+
+            // Query data filtering.
+            var esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", requestType.ToString());
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var serviceCode = entities[0].GetColumnValue("StServiceCode");
+
+            }
+
+            return true;
+        }
+
+        public bool ActivateDeportedNumber(string contractId)
+        {
+            //TODO: Terminate GSHDSL contract
+
+
+            //TODO:Get taxes
+
+            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StOperationOCC");
+
+            esq.AddColumn("StServiceCode");
+            esq.AddColumn("Id");
+
+            int requestType = (int)OperationType.DeportedNumber;
+
+            // Query data filtering.
+            var esqFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StOperationType", requestType.ToString());
+            esq.Filters.Add(esqFilter);
+
+            var entities = esq.GetEntityCollection(BPM_UserConnection);
+
+            if (entities.Count > 0)
+            {
+                var serviceCode = entities[0].GetColumnValue("StServiceCode");
+
+            }
+
             return true;
         }
 

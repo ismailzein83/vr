@@ -643,6 +643,21 @@ namespace BPMExtended.Main.Business
         }
 
 
+        public List<InvoiceDetail> GetInvoices(string customerId)
+        {
+            return RatePlanMockDataGenerator.GetInvoices(customerId);
+        }
+
+        public InvoiceDetail GetInvoiceById(string invoiceId)
+        {
+            return RatePlanMockDataGenerator.GetInvoiceById(invoiceId);
+        }
+
+        public List<PaymentDetail> GetPayments(string customerId)
+        {
+            return RatePlanMockDataGenerator.GetPayments(customerId);
+        }
+
     }
 
     public class PDFDocument

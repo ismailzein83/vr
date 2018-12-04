@@ -1676,6 +1676,11 @@ namespace BPMExtended.Main.Common
         {
             return GetAllInvoices().FindAll(x => x.CustomerID.ToLower() == customerId.ToLower());
         }
+        public static InvoiceDetail GetInvoiceById(string invoiceId)
+        {
+            return GetAllInvoices().Find(x => x.InvoiceId.ToLower() == invoiceId.ToLower());
+        }
+
         private static List<InvoiceDetail> GetAllInvoices()
         {
 
@@ -1687,9 +1692,10 @@ namespace BPMExtended.Main.Common
                      CustomerID = CUSTOMER_ID_1,
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_1",
+                     InvoiceId="INV_ID_1",
                      OpenAmount = "1000",
                      Resource = "1111",
-                     URL="www.url.com"
+                     URL="www.google.com"
 
                  },
                  new InvoiceDetail
@@ -1698,6 +1704,7 @@ namespace BPMExtended.Main.Common
                      CustomerID = CUSTOMER_ID_1,
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_2",
+                     InvoiceId="INV_ID_2",
                      OpenAmount = "3000",
                      Resource = "500501",
                      URL="www.url.com"
@@ -1709,6 +1716,7 @@ namespace BPMExtended.Main.Common
                      CustomerID = CUSTOMER_ID_1,
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_3",
+                     InvoiceId="INV_ID_3",
                      OpenAmount = "2000",
                      Resource = "500500",
                      URL="www.url.com"
@@ -1720,6 +1728,7 @@ namespace BPMExtended.Main.Common
                      CustomerID = CUSTOMER_ID_1,
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_4",
+                     InvoiceId="INV_ID_4",
                      OpenAmount = "4000",
                      Resource = "Test1",
                      URL="www.url.com"
@@ -1731,6 +1740,7 @@ namespace BPMExtended.Main.Common
                      CustomerID = CUSTOMER_ID_2,
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_5",
+                     InvoiceId="INV_ID_5",
                      OpenAmount = "1000",
                      Resource = "1111",
                      URL="www.url.com"
@@ -1742,6 +1752,7 @@ namespace BPMExtended.Main.Common
                      CustomerID = CUSTOMER_ID_2,
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_6",
+                     InvoiceId="INV_ID_6",
                      OpenAmount = "3000",
                      Resource = "500500",
                      URL="www.url.com"
@@ -1753,6 +1764,7 @@ namespace BPMExtended.Main.Common
                      CustomerID = CUSTOMER_ID_2,
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_7",
+                     InvoiceId="INV_ID_7",
                      OpenAmount = "1000",
                      Resource = "500504",
                      URL="www.url.com"
@@ -1764,6 +1776,7 @@ namespace BPMExtended.Main.Common
                      CustomerID = CUSTOMER_ID_3,
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_8",
+                     InvoiceId="INV_ID_8",
                      OpenAmount = "1000",
                      Resource = "1111",
                      URL="www.url.com"
@@ -1775,6 +1788,7 @@ namespace BPMExtended.Main.Common
                      CustomerID = CUSTOMER_ID_3,
                      InvoiceAccount = "711-1",
                      InvoiceCode="INV_9",
+                     InvoiceId="INV_ID_9",
                      OpenAmount = "1000",
                      Resource = "500500",
                      URL="www.url.com"

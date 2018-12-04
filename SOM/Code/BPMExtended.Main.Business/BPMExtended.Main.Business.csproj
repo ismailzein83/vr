@@ -101,7 +101,6 @@
     <Compile Include="Request Flow Management\ADSLForISPFlowManagement.cs" />
     <Compile Include="Request Flow Management\ADSLLineMovingFlowManagement.cs" />
     <Compile Include="Request Flow Management\ADSLLineTerminationFlowManagement.cs" />
-    <Compile Include="Request Flow Management\TelephonyLineSubscriptionFlowManagement.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BPMExtended.Main.Common\BPMExtended.Main.Common.csproj">
