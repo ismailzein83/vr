@@ -68,40 +68,40 @@
                 dnisPrefixSignReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onEngineTypeSelectionChanged = function (engineTypeSelected) {
-                if (engineTypeSelected != undefined) {
-                    if (engineTypeSelectedPromiseDeferred != undefined) {
-                        engineTypeSelectedPromiseDeferred.resolve();
-                        engineTypeSelectedPromiseDeferred = undefined;
-                    }
-                    else {
-                        $scope.scopeModel.fixedCLISettingsSelectedPrefixSign = undefined;
-                        $scope.scopeModel.cliPattern = undefined;
-                        $scope.scopeModel.poolBasedCLISettingsPrefix = undefined;
-                        $scope.scopeModel.poolBasedCLISettingsDestination = undefined;
-                        $scope.scopeModel.poolBasedCLISettingsRandMin = undefined;
-                        $scope.scopeModel.poolBasedCLISettingsRandMax = undefined;
-                        $scope.scopeModel.poolBasedCLISettingsDisplayName = undefined;
-                        $scope.scopeModel.cliPatterns.length = 0;
-                        $scope.scopeModel.selectedCLIType = undefined;
+			$scope.scopeModel.onEngineTypeSelectionChanged = function (engineTypeSelected) {
+				if (engineTypeSelected != undefined) {
+					if (engineTypeSelectedPromiseDeferred != undefined) {
+						engineTypeSelectedPromiseDeferred.resolve();
+						engineTypeSelectedPromiseDeferred = undefined;
+					}
+					else {
+						$scope.scopeModel.fixedCLISettingsSelectedPrefixSign = undefined;
+						$scope.scopeModel.cliPattern = undefined;
+						$scope.scopeModel.poolBasedCLISettingsPrefix = undefined;
+						$scope.scopeModel.poolBasedCLISettingsDestination = undefined;
+						$scope.scopeModel.poolBasedCLISettingsRandMin = undefined;
+						$scope.scopeModel.poolBasedCLISettingsRandMax = undefined;
+						$scope.scopeModel.poolBasedCLISettingsDisplayName = undefined;
+						$scope.scopeModel.cliPatterns.length = 0;
+						$scope.scopeModel.selectedCLIType = undefined;
 
-                        if (engineTypeSelected === NP_IVSwitch_EngineTypeEnum.Fast) {
-                            $scope.scopeModel.cliTypes = UtilsService.getArrayEnum(NP_IVSwitch_CLITypeEnum);
-                        }
-                        else if (engineTypeSelected === NP_IVSwitch_EngineTypeEnum.Regex) {
-                            $scope.scopeModel.cliTypes = UtilsService.getArrayEnum(NP_IVSwitch_CLITypeEnum);
-                            var index = $scope.scopeModel.cliTypes.indexOf(NP_IVSwitch_CLITypeEnum.PoolBasedCLI);
-                            $scope.scopeModel.cliTypes.splice(index, 1);
-                        }
-                        dnisPrefixSignReadyDeferred.promise.then(function () {
-                            dnisPrefixSignAPI.selectFirstItem();
-                        });
-                        cliPatternPrefixSignReadyDeferred.promise.then(function () {
-                            cliPatternPrefixSignAPI.selectFirstItem();
-                        });
-                    }
-                }
-            };
+						if (engineTypeSelected === NP_IVSwitch_EngineTypeEnum.Fast) {
+							$scope.scopeModel.cliTypes = UtilsService.getArrayEnum(NP_IVSwitch_CLITypeEnum);
+						}
+						else if (engineTypeSelected === NP_IVSwitch_EngineTypeEnum.Regex) {
+							$scope.scopeModel.cliTypes = UtilsService.getArrayEnum(NP_IVSwitch_CLITypeEnum);
+							var index = $scope.scopeModel.cliTypes.indexOf(NP_IVSwitch_CLITypeEnum.PoolBasedCLI);
+							$scope.scopeModel.cliTypes.splice(index, 1);
+						}
+						dnisPrefixSignReadyDeferred.promise.then(function () {
+							dnisPrefixSignAPI.selectFirstItem();
+						});
+						cliPatternPrefixSignReadyDeferred.promise.then(function () {
+							cliPatternPrefixSignAPI.selectFirstItem();
+						});
+					}
+				}
+			};
 
             $scope.scopeModel.onCLIPatternPrefixSignReady = function (api) {
                 cliPatternPrefixSignAPI = api;
@@ -306,10 +306,10 @@
             }
             function loadStaticData() {
                 if (translationRuleEntity == undefined)
-                    return;
+					return;
                 $scope.scopeModel.name = translationRuleEntity.Name;
                 $scope.scopeModel.dnisPattern = translationRuleEntity.DNISPattern;
-                $scope.scopeModel.cliPattern = translationRuleEntity.CLIPattern;
+				$scope.scopeModel.cliPattern = translationRuleEntity.CLIPattern;
                 $scope.scopeModel.selectedEngineType=UtilsService.getItemByVal($scope.scopeModel.engineTypes,translationRuleEntity.EngineType,'value');
                 if ($scope.scopeModel.selectedEngineType === NP_IVSwitch_EngineTypeEnum.Fast) {
                     $scope.scopeModel.cliTypes = UtilsService.getArrayEnum(NP_IVSwitch_CLITypeEnum);
@@ -318,7 +318,9 @@
                     $scope.scopeModel.cliTypes = UtilsService.getArrayEnum(NP_IVSwitch_CLITypeEnum);
                     var index = $scope.scopeModel.cliTypes.indexOf(NP_IVSwitch_CLITypeEnum.PoolBasedCLI);
                     $scope.scopeModel.cliTypes.splice(index, 1);
-                }
+				}
+				if (translationRuleEntity.DNISPatternSign == undefined)
+					translationRuleEntity.DNISPatternSign = NP_IVSwitch_PrefixSignEnum.Plus.value;
                 $scope.scopeModel.selectedPrefixSign=UtilsService.getItemByVal($scope.scopeModel.prefixSigns, translationRuleEntity.DNISPatternSign, 'value');
                 $scope.scopeModel.dnisPattern = translationRuleEntity.DNISPattern;
                 if (translationRuleEntity.CLIType!=undefined) {
@@ -388,7 +390,7 @@
             });
         }
 
-        function buildTranslationRuleObjFromScope() {
+		function buildTranslationRuleObjFromScope() {
             var fixedCLISettings;
             var poolBasedCLISettings;
             if ($scope.scopeModel.selectedCLIType != undefined) {

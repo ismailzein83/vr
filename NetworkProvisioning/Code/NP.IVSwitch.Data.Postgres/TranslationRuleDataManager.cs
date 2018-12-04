@@ -55,13 +55,13 @@ namespace NP.IVSwitch.Data.Postgres
                 cliPattern = null;
             if (!String.IsNullOrEmpty(cliPattern))
             {
-                if (cliPattern.StartsWith("*") && translationRule.EngineType!=EngineType.Regex)
+                if (cliPattern.StartsWith("*") && (String.IsNullOrEmpty(dnisPattern) || translationRule.EngineType!=EngineType.Regex))
                 {
                     translationRule.CLIType = CLIType.PoolBasedCLI;
                     var poolId = int.Parse(cliPattern.Replace("*", ""));
                     translationRule.PoolBasedCLISettings = GetPoolBasedCLISettings(poolId);
-                }
-                else
+				}
+				else
                 {
                     translationRule.CLIType = CLIType.FixedCLI;
                     translationRule.FixedCLISettings = new FixedCLISettings();
@@ -69,19 +69,29 @@ namespace NP.IVSwitch.Data.Postgres
                     {
                         translationRule.FixedCLISettings.CLIPatternSign = PrefixSign.Plus;
                         translationRule.FixedCLISettings.CLIPattern = cliPattern.Replace("+", "");
-                    }
-                    else if (cliPattern.Contains("-"))
+					}
+					else if (cliPattern.Contains("-"))
                     {
                         translationRule.FixedCLISettings.CLIPatternSign = PrefixSign.Minus;
                         translationRule.FixedCLISettings.CLIPattern = cliPattern.Replace("-", "");
-                    }
-                    else
+					}
+					else
                     {
                         translationRule.FixedCLISettings.CLIPattern = cliPattern;
                     }
-                }
-            }
-            return translationRule;
+				}
+			}
+			switch (translationRule.CLIType)
+			{
+				case CLIType.PoolBasedCLI :
+					translationRule.EngineType = EngineType.Fast;
+					break;
+				case CLIType.FixedCLI:
+					if(cliPattern.Contains("-")|| cliPattern.Contains("+"))
+						translationRule.EngineType = EngineType.Fast;
+					break;
+			}
+			return translationRule;
         }
         private string CLIPatternMapper(IDataReader reader)
         {
