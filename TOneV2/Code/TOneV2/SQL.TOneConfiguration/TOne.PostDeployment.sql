@@ -437,7 +437,7 @@ as (select * from (values
 
 ('4DC9F2F1-2D59-4402-899F-AFD8C6EB113A','Sale Codes','Sale Codes','#/view/WhS_BusinessEntity/Views/SaleCode/SaleCodeManagement'														,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SaleCode/GetFilteredSaleCodes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
 ('4BDF2F4E-4CFB-487F-84F4-B5B7E74B8DC5','Sale Zones','Sale Zones','#/view/WhS_BusinessEntity/Views/SaleZone/SaleZoneManagement'														,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SaleZone/GetFilteredSaleZones',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
-('BC2A5FF3-3C15-42C8-BA07-DC5ABA9D735E','Sale Rates','Sale Rates','#/view/WhS_BusinessEntity/Views/SaleRate/SaleRateManagement'														,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SaleRate/GetFilteredSaleRate',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',25),
+('BC2A5FF3-3C15-42C8-BA07-DC5ABA9D735E','Sale Rates','Sale Rates','#/view/WhS_BusinessEntity/Views/SaleRate/SaleRateManagement'														,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SaleRate/GetFilteredSaleRates',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',25),
 --('3FB29A16-7107-42B7-851F-97ABA49C2EDF','Services','Sale Services','#/view/WhS_BusinessEntity/Views/SaleService/SaleServiceManagement'											,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SaleEntityZoneService/GetFilteredSaleEntityZoneServices',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',30),
 ('2B913255-F217-4975-ABB7-765EE7FC733F','Sale Pricelists','Sale Pricelists','#/view/Whs_BusinessEntity/views/SalePriceList/SalePriceListManagement'									,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SalePricelist/GetFilteredSalePriceLists',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',35),
 ('A309D744-7798-4D62-9C85-29E5EFCF6352','Pricelist Template','Pricelist Template','#/view/WhS_BusinessEntity/Views/SalePriceListTemplate/SalePriceListTemplateManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','WhS_BE/SalePriceListTemplate/GetFilteredSalePriceListTemplates',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',25),
@@ -717,7 +717,7 @@ as (select * from (values
 
 ('WhS_BE/SalePricelist/GetFilteredSalePriceLists','WHS_BE_SalePricelist: View'),
 
-('WhS_BE/SaleRate/GetFilteredSaleRate','WhS_BE_SaleRate: View'),
+('WhS_BE/SaleRate/GetFilteredSaleRates','WhS_BE_SaleRate: View'),
 ('WhS_BE/CustomerSoldZones/GetFilteredCustomerSoldZones','WhS_BE_SaleRate: View'),
 
 ('WhS_BE/SaleZone/GetFilteredSaleZones','WhS_BE_SaleZoneAndCode: View'),
