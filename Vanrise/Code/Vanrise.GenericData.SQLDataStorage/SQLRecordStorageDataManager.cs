@@ -865,37 +865,39 @@ namespace Vanrise.GenericData.SQLDataStorage
             foreach (var fieldValue in fieldValues)
             {
                 var sqlDataRecordStorageColumn = GetColumnFromFieldName(fieldValue.Key);
-
-                var parameter = GenerateParameterName(ref parameterIndex);
-                DataRecordField matchingField = DataRecordType.Fields.FindRecord(itm => itm.Name == fieldValue.Key);
-                if (matchingField.Type.StoreValueSerialized)
+                if(sqlDataRecordStorageColumn != null)
                 {
-                    parameterValues.Add(parameter, matchingField.Type.SerializeValue(new SerializeDataRecordFieldValueContext
+                    var parameter = GenerateParameterName(ref parameterIndex);
+                    DataRecordField matchingField = DataRecordType.Fields.FindRecord(itm => itm.Name == fieldValue.Key);
+                    if (matchingField.Type.StoreValueSerialized)
                     {
-                        Object = fieldValue.Value
-                    }));
-                }
-                else
-                    parameterValues.Add(parameter, fieldValue.Value);
-
-                if (sqlDataRecordStorageColumn.IsUnique)
-                {
-                    if (idColumn.Name != fieldValue.Key)
-                    {
-                        if (ifNotExistsQueryBuilder.Length > 0)
+                        parameterValues.Add(parameter, matchingField.Type.SerializeValue(new SerializeDataRecordFieldValueContext
                         {
-                            ifNotExistsQueryBuilder.Append(" AND ");
-                        }
-                        ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                            Object = fieldValue.Value
+                        }));
                     }
+                    else
+                        parameterValues.Add(parameter, fieldValue.Value);
+
+                    if (sqlDataRecordStorageColumn.IsUnique)
+                    {
+                        if (idColumn.Name != fieldValue.Key)
+                        {
+                            if (ifNotExistsQueryBuilder.Length > 0)
+                            {
+                                ifNotExistsQueryBuilder.Append(" AND ");
+                            }
+                            ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                        }
+                    }
+                    if (parameterIndex != 1)
+                    {
+                        columnNamesBuilder.Append(",");
+                        valuesQuery.Append(",");
+                    }
+                    columnNamesBuilder.AppendFormat(@" {0} ", sqlDataRecordStorageColumn.ColumnName);
+                    valuesQuery.AppendFormat(@" {0} ", parameter);
                 }
-                if (parameterIndex != 1)
-                {
-                    columnNamesBuilder.Append(",");
-                    valuesQuery.Append(",");
-                }
-                columnNamesBuilder.AppendFormat(@" {0} ", sqlDataRecordStorageColumn.ColumnName);
-                valuesQuery.AppendFormat(@" {0} ", parameter);
             }
             if (idColumn != null)
             {
@@ -1127,47 +1129,50 @@ namespace Vanrise.GenericData.SQLDataStorage
             foreach (var fieldValue in fieldValues)
             {
                 var sqlDataRecordStorageColumn = GetColumnFromFieldName(fieldValue.Key);
-                var parameter = GenerateParameterName(ref parameterIndex);
-
-                DataRecordField matchingField = DataRecordType.Fields.FindRecord(itm => itm.Name == fieldValue.Key);
-                if (matchingField.Type.StoreValueSerialized)
+                if(sqlDataRecordStorageColumn != null)
                 {
-                    parameterValues.Add(parameter, matchingField.Type.SerializeValue(new SerializeDataRecordFieldValueContext
+                    var parameter = GenerateParameterName(ref parameterIndex);
+
+                    DataRecordField matchingField = DataRecordType.Fields.FindRecord(itm => itm.Name == fieldValue.Key);
+                    if (matchingField.Type.StoreValueSerialized)
                     {
-                        Object = fieldValue.Value
-                    }));
-                }
-                else
-                    parameterValues.Add(parameter, fieldValue.Value);
+                        parameterValues.Add(parameter, matchingField.Type.SerializeValue(new SerializeDataRecordFieldValueContext
+                        {
+                            Object = fieldValue.Value
+                        }));
+                    }
+                    else
+                        parameterValues.Add(parameter, fieldValue.Value);
 
-                if (sqlDataRecordStorageColumn.IsUnique)
-                {
-                    if(idColumn.Name!=fieldValue.Key)
+                    if (sqlDataRecordStorageColumn.IsUnique)
+                    {
+                        if (idColumn.Name != fieldValue.Key)
+                        {
+                            if (ifNotExistsQueryBuilder.Length > 0)
+                            {
+                                ifNotExistsQueryBuilder.Append(" AND ");
+                            }
+                            shouldAddIfExist = true;
+                            ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                        }
+                    }
+                    if (idColumn.Name == fieldValue.Key)
                     {
                         if (ifNotExistsQueryBuilder.Length > 0)
                         {
                             ifNotExistsQueryBuilder.Append(" AND ");
                         }
-                        shouldAddIfExist = true;
-                        ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                        ifNotExistsQueryBuilder.AppendFormat("{0} != {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                        if (whereQuery.Length != 0)
+                            whereQuery.Append(" AND ");
+                        whereQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
                     }
-                }
-                if (idColumn.Name == fieldValue.Key)
-                {
-                    if (ifNotExistsQueryBuilder.Length > 0)
+                    else
                     {
-                        ifNotExistsQueryBuilder.Append(" AND ");
+                        if (valuesQuery.Length != 0)
+                            valuesQuery.Append(",");
+                        valuesQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
                     }
-                    ifNotExistsQueryBuilder.AppendFormat("{0} != {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
-                    if (whereQuery.Length != 0)
-                        whereQuery.Append(" AND ");
-                    whereQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
-                }
-                else
-                {
-                    if (valuesQuery.Length != 0)
-                        valuesQuery.Append(",");
-                    valuesQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
                 }
             }
 
