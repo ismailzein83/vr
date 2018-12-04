@@ -42,8 +42,7 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
 				};
 
 				$scope.scopeModel.onDeselectSwitchConfig = function (deletedSwitchConfig) {
-
-					var index = UtilsService.getItemIndexByVal($scope.scopeModel.switchSettings, deletedSwitchConfig.ConfigId, 'ConfigId');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.switchSettings, deletedSwitchConfig.ExtensionConfigurationId, 'ExtensionConfigurationId');
 					$scope.scopeModel.switchSettings.splice(index, 1);
 					deletedSwitchConfig.Settings = undefined;
 				};
