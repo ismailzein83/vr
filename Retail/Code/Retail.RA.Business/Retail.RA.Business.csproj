@@ -55,9 +55,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\INTLReconcilationObjectDataProviderSettings.cs" />
+    <Compile Include="Period Definition\PeriodDefinitionManager.cs" />
     <Compile Include="Period Definition\RAPeriodDefinitionOnBeforeSaveHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.RA.Entities\Retail.RA.Entities.csproj">
+      <Project>{35b73ae6-bbc8-408c-ab01-3bf3574b28e0}</Project>
+      <Name>Retail.RA.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
