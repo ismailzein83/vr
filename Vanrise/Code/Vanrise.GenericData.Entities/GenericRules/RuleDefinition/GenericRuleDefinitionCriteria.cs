@@ -9,5 +9,6 @@ namespace Vanrise.GenericData.Entities
         public override Guid ConfigId { get { return s_configId; } }
 
         public List<GenericRuleDefinitionCriteriaField> Fields { get; set; }
+        public List<GenericRuleDefinitionCriteriaGroup> Groups { get; set; }
     }
 }

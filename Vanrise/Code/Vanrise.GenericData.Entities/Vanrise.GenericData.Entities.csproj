@@ -151,6 +151,7 @@
     <Compile Include="GenericRules\ParsedGenericRuleRow.cs" />
     <Compile Include="GenericRules\RuleDefinition\CriteriaDefinition.cs" />
     <Compile Include="GenericRules\RuleDefinition\CriteriaDefinitionConfig.cs" />
+    <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionCriteriaGroup.cs" />
     <Compile Include="GenericRules\UploadGenericRulesInput.cs" />
     <Compile Include="GenericRules\UploadGenericRulesOutput.cs" />
     <Compile Include="IFieldBusinessEntityType.cs" />
