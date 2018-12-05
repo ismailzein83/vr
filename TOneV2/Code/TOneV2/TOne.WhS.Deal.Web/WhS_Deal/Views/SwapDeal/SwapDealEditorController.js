@@ -579,8 +579,8 @@
                         newShiftedEED = undefined;
                         shiftedDatesPromiseDeferred.resolve();
                     }
-                    console.log(newShiftedBED);
-                    console.log(newShiftedEED);
+                    //console.log(newShiftedBED);
+                    //console.log(newShiftedEED);
                     return shiftedDatesPromiseDeferred.promise.then(function () {
                         shiftedBED = newShiftedBED;
                         shiftedEED = newShiftedEED;

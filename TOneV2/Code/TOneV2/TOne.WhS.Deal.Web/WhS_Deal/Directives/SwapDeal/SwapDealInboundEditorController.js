@@ -54,7 +54,6 @@
             $scope.onCountrySelectionChanged = function () {
                 var country = countryDirectiveApi.getSelectedIds();
                 if (country != undefined) {
-                    console.log("country change");
                     if (countrySelectedPromiseDeferred != undefined) {
                         countrySelectedPromiseDeferred.resolve();
                         return;
@@ -76,7 +75,6 @@
                             selectedIds: undefined
                         };
                     }
-                    console.log("call load from on country change");
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
                 }
                 else if (saleZoneDirectiveAPI != undefined)
@@ -180,7 +178,6 @@
                             filter: { CountryIds: swapDealInboundEntity.CountryIds },
                             selectedIds: zoneIds,
                         };
-                    console.log("call load from load all control");
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSalesZonesPromiseDeferred);
                     loadSalesZonesPromiseDeferred.promise.then(function () {
                         countrySelectedPromiseDeferred = undefined;

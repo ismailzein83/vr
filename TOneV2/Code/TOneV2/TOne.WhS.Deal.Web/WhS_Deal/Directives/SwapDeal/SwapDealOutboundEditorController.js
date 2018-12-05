@@ -91,12 +91,9 @@
             $scope.onCountrySelectionChanged = function () {
                 var country = countryDirectiveApi.getSelectedIds();
                 if (country != undefined) {
-                    var zoneIds = undefined;
-                    if (swapDealOutboundEntity != undefined) {
-                        zoneIds = [];
-                        for (var i = 0; i < swapDealOutboundEntity.SupplierZones.length; i++) {
-                            zoneIds.push(swapDealOutboundEntity.SupplierZones[i].ZoneId);
-                        }
+                    if (countrySelectedPromiseDeferred != undefined) {
+                        countrySelectedPromiseDeferred.resolve();
+                        return;
                     }
                     var setLoader = function (value) { $scope.isLoadingSelector = value; };
                     var payload = context != undefined ? context.getSupplierZoneSelectorPayload(swapDealOutboundEntity != undefined ? swapDealOutboundEntity : undefined) : undefined;
@@ -104,18 +101,18 @@
                         payload.supplierId = supplierId;
                         payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
                         payload.filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.Current.value;
-                        payload.selectedIds = zoneIds;
+                        payload.selectedIds = undefined;
                     }
                     else {
                         payload = {
                             supplierId: supplierId,
                             filter: { CountryIds: countryDirectiveApi.getSelectedIds() },
-                            selectedIds: zoneIds,
+                            selectedIds: undefined,
                             EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.Current.value
                         };
 
                     }
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
 
                 }
                 else if (supplierZoneDirectiveAPI != undefined)
@@ -137,7 +134,7 @@
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySupplierZoneSection, loadSubstituteRateTypeSelector]).then(function () {
-                swapDealOutboundEntity = undefined;
+
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -204,7 +201,9 @@
                         };
                     }
                     VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, payload, loadSupplierZonePromiseDeferred);
-                    countrySelectedPromiseDeferred = undefined;
+                    loadSupplierZonePromiseDeferred.then(function () {
+                        countrySelectedPromiseDeferred = undefined;
+                    });
                 });
             }
 

@@ -89,7 +89,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
-                        console.log(context);
+                        //console.log(context);
                         lastGroupNumber = context.lastGroupNumber;
                         if (payload.volumeCommitmentItems != undefined) {
                             for (var i = 0; i < payload.volumeCommitmentItems.length; i++) {
