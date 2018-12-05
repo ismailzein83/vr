@@ -1,0 +1,12 @@
+﻿<vr-button type="Add" data-onclick="scopeModel.addVRDynamicCode" standalone></vr-button>
+
+<vr-datagrid datasource="scopeModel.vrNamespaceSettings"
+             on-ready="scopeModel.onGridReady"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="VRDynamicCodeId"
+             ondeleterow="scopeModel.deleteDynamicCode"
+             hidegridmenu>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.VRDynamicCodeId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

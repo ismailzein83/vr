@@ -66,5 +66,13 @@ namespace Vanrise.Common.Web.Controllers
 
             return base.GetExcelResponse(errorsByte.ToArray(), "CompilationResult.xls");
         }
+
+        [HttpGet]
+
+        [Route("GetVRDynamicCodeSettingsConfigs")]
+        public IEnumerable<VRDynamicCodeConfig> GetVRDynamicCodeSettingsConfigs()
+        {
+            return _manager.GetVRDynamicCodeSettingsConfigs();
+        }
     }
 }

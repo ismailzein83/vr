@@ -46,6 +46,10 @@
             });
         }
 
+        function GetVRDynamicCodeSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRDynamicCodeSettingsConfigs"));
+        }
+
 
         return ({
             GetFilteredVRNamespaces: GetFilteredVRNamespaces,
@@ -55,7 +59,8 @@
             HasAddVRNamespacePermission: HasAddVRNamespacePermission,
             HasEditVRNamespacePermission: HasEditVRNamespacePermission,
             TryCompileNamespace: TryCompileNamespace,
-            ExportCompilationResult: ExportCompilationResult
+            ExportCompilationResult: ExportCompilationResult,
+            GetVRDynamicCodeSettingsConfigs: GetVRDynamicCodeSettingsConfigs
         });
     }
 

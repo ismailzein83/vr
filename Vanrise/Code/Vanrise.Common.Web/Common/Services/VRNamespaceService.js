@@ -29,6 +29,26 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRNamespace/VRNamespaceEditor.html', parameters, settings);
         }
 
+        function addVRDynamicCode(onVRDynamicCodeAdded) {
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onVRDynamicCodeAdded = onVRDynamicCodeAdded;
+            };
+            VRModalService.showModal('/Client/Modules/Common/Views/VRNamespace/VRDynamicCodeEditor.html', null, settings);
+        }
+
+        function editVRDynamicCode(onVRDynamicCodeUpdated, vrDynamicCodeEntity) {
+            var settings = {};
+            var parameters = {
+                vrDynamicCodeEntity: vrDynamicCodeEntity
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onVRDynamicCodeUpdated = onVRDynamicCodeUpdated;
+            };
+            VRModalService.showModal('/Client/Modules/Common/Views/VRNamespace/VRDynamicCodeEditor.html', parameters, settings);
+        }
         function getEntityUniqueName() {
             return "VR_Common_VRNamespace";
         }
@@ -80,7 +100,9 @@
             editVRNamespace: editVRNamespace,
             registerObjectTrackingDrillDownToVRNamespace: registerObjectTrackingDrillDownToVRNamespace,
             getDrillDownDefinition: getDrillDownDefinition,
-            tryCompilationResult: tryCompilationResult
+            tryCompilationResult: tryCompilationResult,
+            addVRDynamicCode: addVRDynamicCode,
+            editVRDynamicCode: editVRDynamicCode
         };
     }
 
