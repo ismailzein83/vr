@@ -88,6 +88,10 @@
     <Content Include="Retail_RA\Directives\OperatorDeclarationServices\Templates\OperatorDirectionServicesCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnBeforeSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\retail-ra-perioddefinition-beforesavehandler.js" />
+    <Content Include="Retail_RA\Directives\SpecialNumbers\retail-ra-specialnumbers-customobjectsettings.js" />
+    <Content Include="Retail_RA\Directives\SpecialNumbers\retail-ra-specialnumbers.js" />
+    <Content Include="Retail_RA\Directives\SpecialNumbers\Template\SpecialNumbersCustomObjectSettingsTemplate.html" />
+    <Content Include="Retail_RA\Directives\SpecialNumbers\Template\SpecialNumbersTemplate.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
