@@ -155,29 +155,6 @@ namespace TOne.WhS.Routing.Business
             return routeSettingsData.QualityConfiguration;
         }
 
-        public List<AnalyticMeasureInfo> GetQualityConfigurationFields()
-        {
-            Guid qualityAnalyticTableId = GetQualityAnalyticTableId();
-            AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
-            Dictionary<string, AnalyticMeasure> analyticItemConfigs = analyticItemConfigManager.GetMeasures(qualityAnalyticTableId);
-            List<AnalyticMeasureInfo> analyticMeasureInfos = new List<AnalyticMeasureInfo>();
-            if (analyticItemConfigs != null)
-            {
-                foreach (var analyticItemConfig in analyticItemConfigs)
-                {
-                    analyticMeasureInfos.Add(new AnalyticMeasureInfo { Name = analyticItemConfig.Key, Title = analyticItemConfig.Value.Title });
-                }
-            }
-
-            return analyticMeasureInfos;
-        }
-
-        public Guid GetQualityAnalyticTableId()
-        {
-            TechnicalQualityConfiguration technicalQualityConfiguration = GetTechnicalQualityConfiguration();
-            return technicalQualityConfiguration.QualityAnalyticTableId;
-        }
-
         public RouteRuleConfiguration GetRouteRuleConfiguration()
         {
             RouteSettingsData routeSettingsData = GetRouteSettingData();
@@ -204,13 +181,6 @@ namespace TOne.WhS.Routing.Business
         #endregion
 
         #region Private Methods
-
-        private TechnicalQualityConfiguration GetTechnicalQualityConfiguration()
-        {
-            RouteTechnicalSettingData routeTechnicalSettingData = GetRouteTechnicalSettingData();
-            routeTechnicalSettingData.TechnicalQualityConfiguration.ThrowIfNull("routeTechnicalSettingData.TechnicalQualityConfiguration");
-            return routeTechnicalSettingData.TechnicalQualityConfiguration;
-        }
 
         private RouteRuleDataTransformation GetRouteRuleDataTransformation()
         {

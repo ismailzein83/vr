@@ -6,7 +6,7 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -15,25 +15,21 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
             templateUrl: "/Client/Modules/WhS_Routing/Directives/RouteTechnicalSettings/Templates/RouteTechnicalSettingsTemplate.html"
         };
 
         function settingEditorCtor(ctrl, $scope, $attrs) {
+            this.initializeController = initializeController;
+
             var customerTransformationSelectorAPI;
             var customerTransformationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var supplierTransformationSelectorAPI;
             var supplierTransformationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var qualityAnalyticTableSelectorAPI;
-            var qualityAnalyticTableReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
             function initializeController() {
-
                 $scope.scopeModel = {};
+
                 $scope.onCustomerDataTransformationDefinitionReady = function (api) {
                     customerTransformationSelectorAPI = api;
                     customerTransformationReadyPromiseDeferred.resolve();
@@ -44,22 +40,14 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                     supplierTransformationReadyPromiseDeferred.resolve();
                 };
 
-                $scope.onQualityAnalyticTableReady = function (api) {
-                    qualityAnalyticTableSelectorAPI = api;
-                    qualityAnalyticTableReadyPromiseDeferred.resolve();
-                };
-
-                UtilsService.waitMultiplePromises([qualityAnalyticTableReadyPromiseDeferred.promise]).then(function () {
-                    defineAPI();
-                });
-
+                defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
+
                     var customerTransformationPayload;
                     var supplierTransformationPayload;
 
@@ -75,34 +63,19 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                         }
                     }
 
+                    var promises = [];
+
                     var customerTransformationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                    customerTransformationReadyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(customerTransformationSelectorAPI, customerTransformationPayload, customerTransformationLoadPromiseDeferred);
-                        });
-
+                    customerTransformationReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(customerTransformationSelectorAPI, customerTransformationPayload, customerTransformationLoadPromiseDeferred);
+                    });
                     promises.push(customerTransformationLoadPromiseDeferred.promise);
 
                     var supplierTransformationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    supplierTransformationReadyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(supplierTransformationSelectorAPI, supplierTransformationPayload, supplierTransformationLoadPromiseDeferred);
-                        });
-
+                    supplierTransformationReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(supplierTransformationSelectorAPI, supplierTransformationPayload, supplierTransformationLoadPromiseDeferred);
+                    });
                     promises.push(supplierTransformationLoadPromiseDeferred.promise);
-
-
-                    function loadQualityAnalyticTableSelector() {
-                        var qualityAnalyticTablePayload;
-                        if (payload != undefined && payload.data != undefined && payload.data.TechnicalQualityConfiguration != undefined) {
-                            qualityAnalyticTablePayload = {
-                                selectedIds: payload.data.TechnicalQualityConfiguration.QualityAnalyticTableId
-                            }
-                        }
-                        return qualityAnalyticTableSelectorAPI.load(qualityAnalyticTablePayload);
-                    }
-                    promises.push(loadQualityAnalyticTableSelector());
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -117,9 +90,6 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                         TechnicalPartialRouting: {
                             PartialRoutesPercentageLimit: $scope.scopeModel.partialRoutesPercentageLimit,
                             PartialRoutesUpdateBatchSize: $scope.scopeModel.partialRoutesUpdateBatchSize
-                        },
-                        TechnicalQualityConfiguration: {
-                            QualityAnalyticTableId: qualityAnalyticTableSelectorAPI.getSelectedIds(),
                         }
                     };
                 };
@@ -127,9 +97,7 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
-
         }
+
         return directiveDefinitionObject;
     }]);
