@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', 'VRNotificationService',
+    function (UtilsService, VRUIUtilsService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -109,7 +109,7 @@ app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService',
                     return null;
                 };
 
-                if (ctrl.onReady != null && typeof ctrl.onReady == "function")
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
             }
         }

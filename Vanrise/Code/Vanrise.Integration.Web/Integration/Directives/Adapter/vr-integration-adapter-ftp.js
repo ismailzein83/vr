@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationAdapterFtp", ['UtilsService', 'VR_Integration_CompressionTypeEnum', 'VRUIUtilsService', 'FileCheckCriteriaEnum',
-    function (UtilsService, VR_Integration_CompressionTypeEnum, VRUIUtilsService, FileCheckCriteriaEnum) {
+app.directive("vrIntegrationAdapterFtp", ['UtilsService', 'VR_Integration_CompressionTypeEnum', 'VRUIUtilsService', 'FileCheckCriteriaEnum', 'VRNotificationService',
+    function (UtilsService, VR_Integration_CompressionTypeEnum, VRUIUtilsService, FileCheckCriteriaEnum, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -57,7 +57,7 @@ app.directive("vrIntegrationAdapterFtp", ['UtilsService', 'VR_Integration_Compre
                 };
 
                 $scope.scopeModel.onFileDataSourceDefinitionSelectionChanged = function () {
-                    var beforeSelection = $scope.scopeModel.selectedFileDataSourceDefinition == undefined ? false : $scope.scopeModel.selectedFileDataSourceDefinition ;
+                    var beforeSelection = $scope.scopeModel.selectedFileDataSourceDefinition == undefined ? false : $scope.scopeModel.selectedFileDataSourceDefinition;
                     $scope.scopeModel.selectedFileDataSourceDefinition = fileDataSourceDefinitionsSelectorAPI != undefined && fileDataSourceDefinitionsSelectorAPI.getSelectedIds() != undefined ?
                         true : false;
                     if (beforeSelection && !$scope.scopeModel.selectedFileDataSourceDefinition)
@@ -162,7 +162,7 @@ app.directive("vrIntegrationAdapterFtp", ['UtilsService', 'VR_Integration_Compre
                     return null;
                 };
 
-                if (ctrl.onReady != null && typeof ctrl.onReady == "function")
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
             }
         }

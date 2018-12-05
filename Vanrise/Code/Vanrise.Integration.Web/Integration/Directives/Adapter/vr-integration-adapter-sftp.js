@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_CompressionTypeEnum', 'VR_Integration_CompressionEnum', 'VR_Integration_SshEncryptionAlgorithmEnum', 'VR_Integration_SshHostKeyAlgorithmEnum', 'VR_Integration_SshKeyExchangeAlgorithmEnum', 'VR_Integration_SshMacAlgorithmEnum', 'VR_Integration_SshOptionsEnum', 'FileCheckCriteriaEnum', 'VRUIUtilsService',
-    function (UtilsService, VR_Integration_CompressionTypeEnum, VR_Integration_CompressionEnum, VR_Integration_SshEncryptionAlgorithmEnum, VR_Integration_SshHostKeyAlgorithmEnum, VR_Integration_SshKeyExchangeAlgorithmEnum, VR_Integration_SshMacAlgorithmEnum, VR_Integration_SshOptionsEnum, FileCheckCriteriaEnum, VRUIUtilsService) {
+app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_CompressionTypeEnum', 'VR_Integration_CompressionEnum', 'VR_Integration_SshEncryptionAlgorithmEnum', 'VR_Integration_SshHostKeyAlgorithmEnum', 'VR_Integration_SshKeyExchangeAlgorithmEnum', 'VR_Integration_SshMacAlgorithmEnum', 'VR_Integration_SshOptionsEnum', 'FileCheckCriteriaEnum', 'VRUIUtilsService', 'VRNotificationService',
+    function (UtilsService, VR_Integration_CompressionTypeEnum, VR_Integration_CompressionEnum, VR_Integration_SshEncryptionAlgorithmEnum, VR_Integration_SshHostKeyAlgorithmEnum, VR_Integration_SshKeyExchangeAlgorithmEnum, VR_Integration_SshMacAlgorithmEnum, VR_Integration_SshOptionsEnum, FileCheckCriteriaEnum, VRUIUtilsService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -222,7 +222,7 @@ app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_Compr
                     return null;
                 };
 
-                if (ctrl.onReady != null && typeof ctrl.onReady == "function")
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
             }
         }
