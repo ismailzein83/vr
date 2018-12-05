@@ -387,6 +387,35 @@ namespace BPMExtended.Main.Common
 
         #endregion
 
+        #region Friend And Family
+
+        const string FAF_Id_1 = "C8AF007B-FAD4-4E33-A74C-B575A7ED259D";
+
+        const string FAF_Id_2 = "E8ACE3D5-7185-4652-A6D2-72ED08283974";
+
+        const string FAF_Id_3 = "723E3E4B-F087-4F3A-8A1C-0D46F767E6FA";
+
+        const string FAF_Id_4 = "6DFE19AE-7B7E-450F-92F3-92A6188DF01E";
+
+        const string FAF_Id_5 = "322151F8-B52A-4C54-98B7-ACEC393C618D";
+
+        const string FAF_Id_6 = "3C666377-FDFA-4B16-9B28-3E23EE84CD1C";
+
+        const string FAF_Id_7 = "CD401F1A-FC90-4ADB-9C84-CC8073DD82A1";
+
+        const string FAF_Id_8 = "E063AEAC-4223-4FA4-8F00-4A60E8B9FED0";
+
+        const string FAF_Id_9 = "86F59CD0-3D80-4B43-B02B-59483D58C5B1";
+
+        const string FAF_Id_10 = "6DDFC2C5-4C52-478D-B0D4-408AFE0E7D5C";
+
+        const string FAF_Id_11 = "F743E48C-5E8A-4919-9DF3-EC2172055F40";
+
+        const string FAF_Id_12 = "79A6C001-493B-4B2C-AE4D-7E421682F2EF";
+
+
+        #endregion
+
         #endregion
 
         #region Telephony Contract
@@ -1031,9 +1060,98 @@ namespace BPMExtended.Main.Common
 
         #endregion
 
-        #region Leased Line Contract
+        #region Friend And Family
 
-        public static LeasedLineContractDetail GetLeasedLineContract(string contractId)
+        public static List<FriendAndFamily> GetFriendAndFamilyNumbers(string contractId)
+        {
+            return GetAllFriendAndFamilyNumbers().FindAll(x => x.ContractId.ToLower() == contractId.ToLower());
+        }
+
+        private static List<FriendAndFamily> GetAllFriendAndFamilyNumbers()
+        {
+            return new List<FriendAndFamily>
+            {
+                 new FriendAndFamily
+                 {
+                     Id = FAF_Id_1,
+                     ContractId = CONTRACT_CUST1_TL1,
+                     PhoneNumber = "9990"                    
+                 },
+                  new FriendAndFamily
+                 {
+                     Id = FAF_Id_2,
+                     ContractId = CONTRACT_CUST1_TL1,
+                     PhoneNumber = "9990"
+                 },
+                   new FriendAndFamily
+                 {
+                     Id = FAF_Id_3,
+                     ContractId = CONTRACT_CUST1_TL2,
+                     PhoneNumber = "9990"
+                 },
+                    new FriendAndFamily
+                 {
+                     Id = FAF_Id_4,
+                     ContractId = CONTRACT_CUST1_TL2,
+                     PhoneNumber = "9990"
+                 },
+                     new FriendAndFamily
+                 {
+                     Id = FAF_Id_5,
+                     ContractId = CONTRACT_CUST1_TL3,
+                     PhoneNumber = "9990"
+                 },
+                    new FriendAndFamily
+                 {
+                     Id = FAF_Id_6,
+                     ContractId = CONTRACT_CUST1_TL3,
+                     PhoneNumber = "9990"
+                 },
+                     new FriendAndFamily
+                 {
+                     Id = FAF_Id_7,
+                     ContractId = CONTRACT_CUST2_TL1,
+                     PhoneNumber = "9990"
+                 },
+                  new FriendAndFamily
+                 {
+                     Id = FAF_Id_8,
+                     ContractId = CONTRACT_CUST2_TL1,
+                     PhoneNumber = "9990"
+                 },
+                   new FriendAndFamily
+                 {
+                     Id = FAF_Id_9,
+                     ContractId = CONTRACT_CUST2_TL2,
+                     PhoneNumber = "9990"
+                 },
+                    new FriendAndFamily
+                 {
+                     Id = FAF_Id_10,
+                     ContractId = CONTRACT_CUST2_TL2,
+                     PhoneNumber = "9990"
+                 },
+                     new FriendAndFamily
+                 {
+                     Id = FAF_Id_11,
+                     ContractId = CONTRACT_CUST3_TL1,
+                     PhoneNumber = "9990"
+                 },
+                    new FriendAndFamily
+                 {
+                     Id = FAF_Id_12,
+                     ContractId = CONTRACT_CUST3_TL1,
+                     PhoneNumber = "9990"
+                 }
+
+            };
+
+        }
+        #endregion
+
+                #region Leased Line Contract
+
+            public static LeasedLineContractDetail GetLeasedLineContract(string contractId)
         {
             return GetAllLeasedLineContracts().Find(x => x.ContractId.ToLower() == contractId.ToLower());
         }

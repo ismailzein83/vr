@@ -71,6 +71,7 @@ namespace BPMExtended.Main.Business
         {
             return RatePlanMockDataGenerator.GetADSLContracts(customerId);
         }
+
         public List<ADSLContractDetail> GetADSLContractsByUsername(string userName)
         {
             return RatePlanMockDataGenerator.GetADSLContractsByUsername(userName);
@@ -229,6 +230,10 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
+        public List<FriendAndFamily> GetFriendAndFamilyNumbers(string contractId)
+        {
+            return RatePlanMockDataGenerator.GetFriendAndFamilyNumbers(contractId);
+        }
 
         public bool ActivateADSLLineMoving(string telephonyContractId, string customerId, string port)
         {
