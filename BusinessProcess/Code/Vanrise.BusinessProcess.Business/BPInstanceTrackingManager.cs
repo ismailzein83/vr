@@ -45,6 +45,11 @@ namespace Vanrise.BusinessProcess.Business
             return bpTrackingUpdateOutput;
         }
 
+        public List<BPTrackingMessage> GetRecentBPInstanceTrackings(long processInstanceId, int nbOfRecords, long? lessThanId, List<LogEntryType> severities)
+        {
+            IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
+            return dataManager.GetRecentBPInstanceTrackings(processInstanceId, nbOfRecords, lessThanId, severities);
+        }
         #endregion
 
         #region mapper

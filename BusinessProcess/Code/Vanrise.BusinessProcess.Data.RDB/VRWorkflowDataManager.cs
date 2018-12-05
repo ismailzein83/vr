@@ -112,7 +112,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
                 LastModifiedTime = reader.GetDateTime(COL_LastModifiedTime)
             };
 
-            string settings = reader.GetStringWithEmptyHandling(COL_Settings);
+            string settings = reader.GetString(COL_Settings);
             if (!string.IsNullOrEmpty(settings))
                 vrWorkflow.Settings = Serializer.Deserialize<VRWorkflowSettings>(settings);
 

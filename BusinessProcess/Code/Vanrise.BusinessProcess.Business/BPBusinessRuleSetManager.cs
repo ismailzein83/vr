@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
-using System;
 using Vanrise.Entities;
-using System.Linq;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -134,12 +134,11 @@ namespace Vanrise.BusinessProcess.Business
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            IBPBusinessRuleSetDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPBusinessRuleSetDataManager>();
-            object _updateHandle;
+            protected override bool UseCentralizedCacheRefresher { get { return true; } }
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return dataManager.AreBPBusinessRuleSetsUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired(parameter);
             }
         }
 

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
-using Vanrise.Data.SQL;
-using Vanrise.Common;
 using Vanrise.BusinessProcess.Entities;
-using System;
+using Vanrise.Common;
+using Vanrise.Data.SQL;
 
 namespace Vanrise.BusinessProcess.Data.SQL
 {
@@ -37,10 +37,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return (recordesEffected > 0);
         }
 
-        public bool AreBPBusinessRuleSetsUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("[bp].[BPBusinessRuleSet]", ref updateHandle);
-        }
         #endregion
 
         #region Mappers

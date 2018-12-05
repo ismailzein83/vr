@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
-using System.Linq;
 using Vanrise.Common;
-using System;
-using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.Business
@@ -39,7 +38,7 @@ namespace Vanrise.BusinessProcess.Business
                 return effectiveAction;
             }
         }
-        
+
         public Dictionary<Guid, BPBusinessRuleEffectiveAction> GetDefaultBusinessRulesActions(Guid businessProcessId)
         {
             Dictionary<Guid, BPBusinessRuleEffectiveAction> defaultActions = new Dictionary<Guid, BPBusinessRuleEffectiveAction>();
@@ -84,12 +83,11 @@ namespace Vanrise.BusinessProcess.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            IBPBusinessRuleActionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPBusinessRuleActionDataManager>();
-            object _updateHandle;
+            protected override bool UseCentralizedCacheRefresher { get { return true; } }
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return dataManager.AreBPBusinessRuleActionsUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired(parameter);
             }
         }
         #endregion

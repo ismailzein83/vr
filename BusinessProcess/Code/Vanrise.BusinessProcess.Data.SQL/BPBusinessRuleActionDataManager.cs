@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
-using Vanrise.Data.SQL;
-using Vanrise.Common;
 using Vanrise.BusinessProcess.Entities;
-using System;
+using Vanrise.Common;
+using Vanrise.Data.SQL;
 
 namespace Vanrise.BusinessProcess.Data.SQL
 {
@@ -20,10 +20,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("bp.sp_BPBusinessRuleAction_GetAll", BPBusinessRuleActionMapper);
         }
 
-        public bool AreBPBusinessRuleActionsUpdated(ref object updateHandle)
-        {
-            return base.IsDataUpdated("[bp].[BPBusinessRuleAction]", ref updateHandle);
-        }
         #endregion
 
         #region Mappers

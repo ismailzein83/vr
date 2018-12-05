@@ -111,11 +111,11 @@ namespace Vanrise.BusinessProcess.Data.RDB
                 VRWorkflowId = reader.GetNullableGuid(COL_VRWorkflowId)
             };
 
-            string workflowTypeAsString = reader.GetStringWithEmptyHandling(COL_FQTN);
+            string workflowTypeAsString = reader.GetString(COL_FQTN);
             if (!string.IsNullOrEmpty(workflowTypeAsString))
                 bpDefinition.WorkflowType = Type.GetType(workflowTypeAsString);
 
-            string config = reader.GetStringWithEmptyHandling(COL_Config);
+            string config = reader.GetString(COL_Config);
             if (!String.IsNullOrWhiteSpace(config))
                 bpDefinition.Configuration = Serializer.Deserialize<BPConfiguration>(config);
 

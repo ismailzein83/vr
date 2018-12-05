@@ -7,8 +7,6 @@ namespace Vanrise.BusinessProcess.Data
     {
         List<BPBusinessRuleSet> GetBPBusinessRuleSets();
 
-        bool AreBPBusinessRuleSetsUpdated(ref object updateHandle);
-
         bool AddBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj, out int bpBusinessRuleSetId);
 
         bool UpdateBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj);
