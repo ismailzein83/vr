@@ -58,6 +58,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -65,6 +68,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Vanrise.Web.Base">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
@@ -72,11 +78,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-sms.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-voice.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServiceSMSTemplate.html" />
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServiceVoiceTemplate.html" />
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\retail-be-operatordeclarationservices-customobjectsettings.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\retail-be-operatordeclarationservices.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\Templates\OperationDirectionServicesTemplate.html" />
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\Templates\OperatorDirectionServicesCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnBeforeSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\retail-ra-perioddefinition-beforesavehandler.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\OperatorDirectionServicesController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +107,13 @@
       <Project>{87cd3228-cc6d-4dd7-8f3d-3f1f9b8567e9}</Project>
       <Name>Retail.RA.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.RA.Entities\Retail.RA.Entities.csproj">
+      <Project>{35b73ae6-bbc8-408c-ab01-3bf3574b28e0}</Project>
+      <Name>Retail.RA.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
