@@ -76,7 +76,7 @@
                             selectedIds: undefined
                         };
                     }
-                    //console.log("call load from on country change");
+                    console.log("call load from on country change");
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
                 }
                 else if (saleZoneDirectiveAPI != undefined)
@@ -180,7 +180,7 @@
                             filter: { CountryIds: swapDealInboundEntity.CountryIds },
                             selectedIds: zoneIds,
                         };
-                    //console.log("call load from load all control");
+                    console.log("call load from load all control");
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSalesZonesPromiseDeferred);
                     loadSalesZonesPromiseDeferred.promise.then(function () { countrySelectedPromiseDeferred = undefined; });
                 });
