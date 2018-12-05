@@ -31,25 +31,27 @@ namespace BPMExtended.Main.Business
         {
             string nextStepId = "";
             bool ismanualswitch = false;
-            //get request from bpm
-            Guid idd = new Guid(id.ToUpper());
-            // Creation of query instance with "City" root schema. 
-            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLLineMoving");
-            esq.AddColumn("Id");
-            esq.AddColumn("StContractId");
-            // Creation of the first filter instance.
-            var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
-            // Adding created filters to query collection. 
-            esq.Filters.Add(esqFirstFilter);
-            // Objects, i.e. query results, filtered by two filters, will be included into this collection.
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
+            if (id != "")
             {
-                var contractId = entities[0].GetColumnValue("StContractId");
-                InventoryManager manager = new InventoryManager();
-                ismanualswitch = manager.IsManualSwitch(contractId.ToString());
+                //get request from bpm
+                Guid idd = new Guid(id.ToUpper());
+                // Creation of query instance with "City" root schema. 
+                var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLLineMoving");
+                esq.AddColumn("Id");
+                esq.AddColumn("StContractId");
+                // Creation of the first filter instance.
+                var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
+                // Adding created filters to query collection. 
+                esq.Filters.Add(esqFirstFilter);
+                // Objects, i.e. query results, filtered by two filters, will be included into this collection.
+                var entities = esq.GetEntityCollection(BPM_UserConnection);
+                if (entities.Count > 0)
+                {
+                    var contractId = entities[0].GetColumnValue("StContractId");
+                    InventoryManager manager = new InventoryManager();
+                    ismanualswitch = manager.IsManualSwitch(contractId.ToString());
+                }
             }
-
             switch (currentStepId.ToLower())
             {
                 ///welcome step

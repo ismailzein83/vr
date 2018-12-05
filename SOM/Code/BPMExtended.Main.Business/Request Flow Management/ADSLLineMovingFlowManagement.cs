@@ -34,27 +34,29 @@ namespace BPMExtended.Main.Business
         {
             string nextStepId = "";
             bool isonsameswitch = false;
-            //get request from bpm
-            Guid idd = new Guid(id.ToUpper());
-            // Creation of query instance with "City" root schema. 
-            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLLineMoving");
-            esq.AddColumn("Id");
-            esq.AddColumn("StSelectedTelephonyContract");
-            esq.AddColumn("StTelephonyContractId");
-            // Creation of the first filter instance.
-            var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
-            // Adding created filters to query collection. 
-            esq.Filters.Add(esqFirstFilter);
-            // Objects, i.e. query results, filtered by two filters, will be included into this collection.
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
-            if (entities.Count > 0)
+            if (id != "")
             {
-                var selectedcontract = entities[0].GetColumnValue("StSelectedTelephonyContract");
-                var pilotcontract = entities[0].GetColumnValue("StTelephonyContractId");
-                InventoryManager manager = new InventoryManager();
-                isonsameswitch = manager.IsNumbersOnSameSwitch(selectedcontract.ToString(), pilotcontract.ToString());
+                //get request from bpm
+                Guid idd = new Guid(id.ToUpper());
+                // Creation of query instance with "City" root schema. 
+                var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLLineMoving");
+                esq.AddColumn("Id");
+                esq.AddColumn("StSelectedTelephonyContract");
+                esq.AddColumn("StTelephonyContractId");
+                // Creation of the first filter instance.
+                var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
+                // Adding created filters to query collection. 
+                esq.Filters.Add(esqFirstFilter);
+                // Objects, i.e. query results, filtered by two filters, will be included into this collection.
+                var entities = esq.GetEntityCollection(BPM_UserConnection);
+                if (entities.Count > 0)
+                {
+                    var selectedcontract = entities[0].GetColumnValue("StSelectedTelephonyContract");
+                    var pilotcontract = entities[0].GetColumnValue("StTelephonyContractId");
+                    InventoryManager manager = new InventoryManager();
+                    isonsameswitch = manager.IsNumbersOnSameSwitch(selectedcontract.ToString(), pilotcontract.ToString());
+                }
             }
-
             switch (currentStepId.ToLower())
             {
                 ///welcome step
@@ -62,9 +64,7 @@ namespace BPMExtended.Main.Business
                 ///choose contract step
                 case "BE540720-169E-456B-B0D0-6D243D5B7F82": nextStepId = printStep; break;
                 ///print step
-                case "4F032C27-BBB9-420B-A064-6A88E7E532A0":
-                    
-                    nextStepId = isonsameswitch ? paymentStep :  DSLAMPortStep; break;
+                case "4F032C27-BBB9-420B-A064-6A88E7E532A0":nextStepId = isonsameswitch ? paymentStep :  DSLAMPortStep; break;
                 /// DSLAM Step
                 case "0E26138A-89CA-4A06-9370-D4EB9060B639": nextStepId = paymentStep; break;
                 /*payment step*/
