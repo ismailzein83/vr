@@ -6,6 +6,7 @@ using Vanrise.Entities;
 using Vanrise.Web.Base;
 using System.Web;
 using System.IO;
+using Vanrise.Common;
 
 namespace QM.BusinessEntity.Web.Controllers
 {
@@ -77,8 +78,8 @@ namespace QM.BusinessEntity.Web.Controllers
         public object DownloadImportSupplierTemplate()
         {
             var templatePath = "~/Client/Modules/QM_BusinessEntity/Templates/ImportSupplierTemplate.xls";
-            string physicalPath = HttpContext.Current.Server.MapPath(templatePath);
-            byte[] fileInBytes = File.ReadAllBytes(physicalPath);
+            string physicalPath = VRWebContext.MapVirtualToPhysicalPath(templatePath);
+            byte[] fileInBytes = System.IO.File.ReadAllBytes(physicalPath);
 
             MemoryStream memorystream = new MemoryStream();
             memorystream.Write(fileInBytes, 0, fileInBytes.Length);
