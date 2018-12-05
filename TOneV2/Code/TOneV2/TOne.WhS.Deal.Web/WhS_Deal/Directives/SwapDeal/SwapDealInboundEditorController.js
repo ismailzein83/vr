@@ -52,13 +52,13 @@
             };
 
             $scope.onCountrySelectionChanged = function () {
-                if (countrySelectedPromiseDeferred != undefined) {
-                    countrySelectedPromiseDeferred.resolve();
-                    return;
-                }
                 var country = countryDirectiveApi.getSelectedIds();
-
                 if (country != undefined) {
+                    console.log("country change");
+                    if (countrySelectedPromiseDeferred != undefined) {
+                        countrySelectedPromiseDeferred.resolve();
+                        return;
+                    }
                     var setLoader = function (value) { $scope.isLoadingSelector = value; };
                     var payload = context != undefined ? context.getSaleZoneSelectorPayload(swapDealInboundEntity != undefined ? swapDealInboundEntity : undefined) : undefined;
                     if (payload != undefined) {
@@ -182,7 +182,9 @@
                         };
                     console.log("call load from load all control");
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSalesZonesPromiseDeferred);
-                    loadSalesZonesPromiseDeferred.promise.then(function () { countrySelectedPromiseDeferred = undefined; });
+                    loadSalesZonesPromiseDeferred.promise.then(function () {
+                        countrySelectedPromiseDeferred = undefined;
+                    });
                 });
             }
 
