@@ -113,10 +113,6 @@ namespace Vanrise.Common.Business
 
         }
 
-        //public List<VRDynamicAPI> GetVRDynamicAPIsByModuleId(int moduleId)
-        //{
-        //    return GetCachedVRDynamicAPIsByModuleId().GetRecord(moduleId);
-        //}
         #endregion
 
         #region Private Classes
@@ -198,11 +194,11 @@ namespace Vanrise.Common.Business
               using Vanrise.Security.Entities;
               using Vanrise.Security.Business;
 
-              namespace Vanrise.DynamicAPI.Dyn#ModuleName#
+              namespace #NAMESPACE#
               {
-                 [RoutePrefix(""#RoutePrefix#"" + ""Dyn#ModuleName#_#ControllerName#"")]
+                 [RoutePrefix(""#RoutePrefix#"" + ""#ControllerName#"")]
                  [JSONWithTypeAttribute]
-                 public class Dyn#ModuleName#_#ControllerName#Controller : BaseAPIController
+                 public class #CLASSNAME# : BaseAPIController
                  { 
                     #Methods#
 
@@ -260,7 +256,7 @@ namespace Vanrise.Common.Business
                         {return this.GetUnauthorizedResponse();}");
 
                         permissionsBuilder.Replace("#requiredPermissionString#", securityManager.RequiredPermissionsToString(apiPermissions.Entries).ToString());
-                        if (context.ReturnType == null)
+                        if (context.ReturnType == null || context.ReturnType=="void")
                         methodBuilder.Replace("#returnNull#", "return null;");
                         else methodBuilder.Replace("#returnNull#", "");
                     }
@@ -278,7 +274,7 @@ namespace Vanrise.Common.Business
                            ");
 
                         permissionsBuilder.Replace("#requiredPermissionString#", securityManager.RequiredPermissionsToString(methodPermissions.Entries).ToString());
-                        if(context.ReturnType==null)
+                        if(context.ReturnType==null || context.ReturnType == "void")
                         methodBuilder.Replace("#returnNull#","return null;" );
                         else methodBuilder.Replace("#returnNull#", "");
 
@@ -305,33 +301,22 @@ namespace Vanrise.Common.Business
             }
 
             var moduleName = vrDynamicAPIModuleManager.GetVRDynamicAPIModuleName(vrDynamicAPI.ModuleId);
-            classControllerBuilder.Replace("#RoutePrefix#",string.Format("api/Dyn{0}/", moduleName));
+            classControllerBuilder.Replace("#RoutePrefix#",string.Format("api/{0}/", moduleName));
             classControllerBuilder.Replace("#ModuleName#", moduleName);
             classControllerBuilder.Replace("#ControllerName#", vrDynamicAPI.Name);
             classControllerBuilder.Replace("#Methods#", methodsBuilder.ToString());
 
-            //string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.DynamicAPI.Dyn"+ moduleName);
-            fullTypeName = String.Format("Vanrise.DynamicAPI.Dyn{0}.Dyn{0}_{1}Controller", moduleName, vrDynamicAPI.Name);
+            string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.DynamicAPI");
+            var className = string.Format("{0}Controller",vrDynamicAPI.Name);
+            classControllerBuilder.Replace("#NAMESPACE#", classNamespace);
+            classControllerBuilder.Replace("#CLASSNAME#", className);
+
+            fullTypeName = String.Format("{0}.{1}", classNamespace, className);
+
             return classControllerBuilder.ToString();
         }
 
-        //private Dictionary<int, List<VRDynamicAPI>> GetCachedVRDynamicAPIsByModuleId()
-        //{
-        //    return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
-        //       .GetOrCreateObject("GetCachedVRDynamicAPIsByModuleId", () =>
-        //       {
-        //           var allVRDynamicAPIs = GetCachedVRDynamicAPIs();
 
-        //           Dictionary<int, List<VRDynamicAPI>> vrDynamicApiDic = new Dictionary<int, List<VRDynamicAPI>>();
-        //           foreach (var vrDynamicAPI in allVRDynamicAPIs)
-        //           {
-        //               var vrDynamicApis = vrDynamicApiDic.GetOrCreateItem(vrDynamicAPI.Value.ModuleId);
-        //               vrDynamicApis.Add(vrDynamicAPI.Value);
-        //           }
-
-        //           return vrDynamicApiDic;
-        //       });
-        //}
 
         #endregion
 
@@ -357,7 +342,7 @@ namespace Vanrise.Common.Business
 
         private string GetAPIDescription(string moduleName, string contorllerName)
         {
-            return string.Format("api/Dyn{0}/Dyn{0}_{1}", moduleName, contorllerName);
+            return string.Format("api/{0}/{1}", moduleName, contorllerName);
         }
         #endregion
     }

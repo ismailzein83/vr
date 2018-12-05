@@ -36,6 +36,12 @@ namespace Vanrise.Common.Web.Controllers
             return vrDynamicAPIModuleManager.UpdateVRDynamicAPIModule(vrDynamicAPIModule);
         }
 
+        [HttpPost]
+        [Route("AddVRDynamicAPIModule")]
+        public InsertOperationOutput<VRDynamicAPIModuleDetails> AddVRDynamicAPIModule(VRDynamicAPIModule vrDynamicAPIModule)
+        {
+            return vrDynamicAPIModuleManager.AddVRDynamicAPIModule(vrDynamicAPIModule);
+        }
 
 
     }

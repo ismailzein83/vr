@@ -132,6 +132,12 @@ namespace Vanrise.Common.Business
                });
         }
 
+        public IEnumerable<VRDynamicCodeConfig> GetVRDynamicCodeSettingsConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<VRDynamicCodeConfig>(VRDynamicCodeConfig.EXTENSION_TYPE);
+        }
+
         private string BuildClassDefinition(VRNamespace vrNamespace)
         {
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
@@ -149,8 +155,21 @@ namespace Vanrise.Common.Business
                     #CLASSCODE#
                 }");
 
+            StringBuilder classCodes = new StringBuilder();
+            if (vrNamespace.Settings != null && vrNamespace.Settings.Codes != null)
+            {
+                foreach (var code in vrNamespace.Settings.Codes)
+                {
+                    if (code.Settings != null)
+                    {
+                        classCodes.Append(code.Settings.Generate(new VRDynamicCodeSettingsContext()));
+                        classCodes.AppendLine();
+                    }
+                }
+            }
+
             classDefinitionBuilder.Replace("#NAMESPACE#", vrNamespace.Name);
-            classDefinitionBuilder.Replace("#CLASSCODE#", vrNamespace.Settings.Code);
+            classDefinitionBuilder.Replace("#CLASSCODE#", classCodes.ToString());
 
             return classDefinitionBuilder.ToString();
         }

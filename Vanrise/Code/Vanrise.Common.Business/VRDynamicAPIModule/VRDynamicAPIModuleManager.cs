@@ -96,7 +96,7 @@ namespace Vanrise.Common.Business
         }
         public List<string> GetAllVRDynamicAPIModulesNames()
         {
-            return GetCachedVRDynamicAPIModules().MapRecords(x => string.Format("Dyn{0}",x.Name)).ToList();
+            return GetCachedVRDynamicAPIModules().MapRecords(x => x.Name).ToList();
         }
         #endregion
 

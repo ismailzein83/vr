@@ -8,7 +8,13 @@
                             <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
                     </vr-row>
-                    <vr-common-dynamicapi-methods-grid on-ready="scopeModel.onVRDynamicAPIMethodsDirectiveReady"></vr-common-dynamicapi-methods-grid>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section header="Methods">
+                                <vr-common-dynamicapi-methods-grid on-ready="scopeModel.onVRDynamicAPIMethodsDirectiveReady"></vr-common-dynamicapi-methods-grid>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Security'">
                     <vr-sec-requiredpermission-grid on-ready="scopeModel.onVRSecRequiredPermissionGridDirectiveReady"></vr-sec-requiredpermission-grid>

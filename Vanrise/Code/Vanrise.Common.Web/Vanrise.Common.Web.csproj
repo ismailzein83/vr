@@ -135,6 +135,11 @@
     <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-method-settings.js" />
     <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-methods-grid.js" />
     <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-grid.js" />
+    <Content Include="Common\Directives\VRNamespace\MainExtensions\Templates\VRCustomCodeDynamicCode.html" />
+    <Content Include="Common\Directives\VRNamespace\MainExtensions\vr-common-custom-code-dynamic-code.js" />
+    <Content Include="Common\Directives\VRNamespace\Templates\VRNamespaceSettingsGridTemplate.html" />
+    <Content Include="Common\Directives\VRNamespace\vr-common-custom-code-settings.js" />
+    <Content Include="Common\Directives\VRNamespace\vr-common-namespace-settings-grid.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\SpecificDaysDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-specificdays.js" />
@@ -156,6 +161,8 @@
     <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIMethodEditorController.js" />
     <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIEditor.html" />
     <Content Include="Common\Views\VRDynamicAPI\VRDynamicAPIEditorController.js" />
+    <Content Include="Common\Views\VRNamespace\VRDynamicCodeEditor.html" />
+    <Content Include="Common\Views\VRNamespace\VRDynamicCodeEditorController.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
