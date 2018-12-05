@@ -6,12 +6,15 @@ using Retail.RA.Entities;
 
 namespace Retail.RA.Web.Controller
 {
-    public class OperatorDirectionServicesController : BaseAPIController
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "OperatorDirectionServices")]
+    public class RA_OperatorDirectionServicesController : BaseAPIController
     {
         [HttpGet]
         [Route("GetMappedCellsExtensionConfigs")]
         public IEnumerable<OperatorDirectionServicesMappedCellExtensionConfiguration> GetMappedCellsExtensionConfigs()
         {
+            return null;
             var manager = new OperatorDeclarationServicesManager();
             return manager.GetMappedCellsExtensionConfigs();
         }
