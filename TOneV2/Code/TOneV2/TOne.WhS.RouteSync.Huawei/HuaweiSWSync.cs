@@ -460,7 +460,7 @@ namespace TOne.WhS.RouteSync.Huawei
             if (percentages.Count > 0)
                 percentagesAsString = string.Concat(", ", string.Join(", ", percentages));
 
-            string command = string.Format("ADD RTANA: RSN=\"{0}\", RSSN=\"{1}\", TSN=\"DEFAULT”, RTSM={2}, {3}{4}, ISUP={5};", routeCase.RSName, routeAnalysis.RSSN, rtsm,
+            string command = string.Format("ADD RTANA: RSN=\"{0}\", RSSN=\"{1}\", TSN=\"DEFAULT\", RTSM={2}, {3}{4}, ISUP={5};", routeCase.RSName, routeAnalysis.RSSN, rtsm,
                 routeNamesAsString, percentagesAsString, firstRouteCaseOption.ISUP);
 
             return new List<string>() { command };
