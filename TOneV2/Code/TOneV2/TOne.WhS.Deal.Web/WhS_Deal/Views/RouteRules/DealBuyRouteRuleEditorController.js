@@ -12,6 +12,7 @@
         var dealBuyRouteRuleEntity;
         var dealId;
         var dealBED;
+        var dealEED;
 
         var dealBuyRouteRuleSettingsDirectiveAPI;
         var dealBuyRouteRuleSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -25,18 +26,19 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters != undefined && parameters != null) {
                 dealBuyRouteRuleId = parameters.dealBuyRouteRuleId;
                 dealId = parameters.dealId;
-                dealBED = parameters.dealBED
+                dealBED = parameters.dealBED;
+                dealEED = parameters.dealEED;
             }
 
             isEditMode = (dealBuyRouteRuleId != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.beginEffectiveDate = VRDateTimeService.getCurrentDateWithoutMilliseconds();
+            $scope.scopeModel.beginEffectiveDate = dealBED;
+            $scope.scopeModel.endEffectiveDate = dealEED;
 
             $scope.scopeModel.onDealBuyRouteRuleSettingsDirectiveReady = function (api) {
                 dealBuyRouteRuleSettingsDirectiveAPI = api;

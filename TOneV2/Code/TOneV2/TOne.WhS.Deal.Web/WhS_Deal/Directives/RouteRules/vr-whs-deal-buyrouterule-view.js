@@ -32,6 +32,7 @@
 
             var dealId;
             var dealBED;
+            var dealEED;
 
             var gridAPI;
 
@@ -48,7 +49,7 @@
                         gridAPI.onDealBuyRouteRuleAdded(addedDealBuyRouteRulet);
                     };
 
-                    WhS_Deal_BuyRouteRuleService.addDealBuyRouteRule(dealId, dealBED, onDealBuyRouteRuleAdded);
+                    WhS_Deal_BuyRouteRuleService.addDealBuyRouteRule(dealId, dealBED, dealEED, onDealBuyRouteRuleAdded);
                 };
             }
             function defineAPI() {
@@ -61,6 +62,7 @@
                     if (payload != undefined) {
                         dealId = payload.DealId;
                         dealBED = payload.BED;
+                        dealEED = payload.EED;
                     }
 
                     return gridAPI.load(buildGridPayload(payload)).then(function () {

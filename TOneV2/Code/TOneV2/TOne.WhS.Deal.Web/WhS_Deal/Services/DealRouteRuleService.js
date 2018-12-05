@@ -50,7 +50,8 @@
 
                 var query = {
                     DealId: dealItem.Entity.DealId,
-                    BED: dealItem.Entity.Settings.RealBED
+                    BED: dealItem.Entity.Settings.RealBED,
+                    EED: dealItem.Entity.Settings.RealEED
                 };
                 return dealItem.DealBuyRouteRuleGridAPI.load(query);
             };

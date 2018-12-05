@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -36,6 +35,24 @@ namespace TOne.WhS.Deal.Business
             return deal.Settings.GetCarrierAccountId();
         }
 
+        public bool DeleteDealBuyRouteRules (int dealId)
+        {
+            var dealBuyRouteRules = GetCachedVRRules();
+
+            if (dealBuyRouteRules.Values != null && dealBuyRouteRules.Values.Count > 0)
+            {
+                List<long> ruleIdsToBeDeleted = new List<long>();
+                foreach (DealBuyRouteRule rule in dealBuyRouteRules.Values)
+                {
+                    if (dealId == rule.Settings.DealId)
+                        ruleIdsToBeDeleted.Add(rule.VRRuleId);
+                }
+
+                if (ruleIdsToBeDeleted.Count > 0)
+                    return base.SetRulesDeleted(ruleIdsToBeDeleted).Result == Vanrise.Entities.DeleteOperationResult.Succeeded;
+            }
+            return true;
+        }
         protected override Guid GetVRRuleDefinitionId()
         {
             return new ConfigManager().GetDealBuyRouteRuleDefinitionId();

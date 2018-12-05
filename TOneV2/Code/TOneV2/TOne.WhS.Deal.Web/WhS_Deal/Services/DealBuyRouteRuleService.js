@@ -6,11 +6,12 @@
 
     function DealBuyRouteRuleService(VRModalService) {
 
-        function addDealBuyRouteRule(dealId, dealBED, onDealBuyRouteRuleAdded) {
+        function addDealBuyRouteRule(dealId, dealBED, dealEED, onDealBuyRouteRuleAdded) {
 
             var parameters = {
                 dealId: dealId,
-                dealBED: dealBED
+                dealBED: dealBED,
+                dealEED: dealEED
             };
 
             var settings = {};
@@ -22,12 +23,13 @@
             VRModalService.showModal('/Client/Modules/WhS_Deal/Views/RouteRules/DealBuyRouteRuleEditor.html', parameters, settings);
         }
 
-        function editDealBuyRouteRule(dealBuyRouteRuleId, dealId, dealBED, onDealBuyRouteRuleUpdated) {
+        function editDealBuyRouteRule(dealBuyRouteRuleId, dealId, dealBED, dealEED, onDealBuyRouteRuleUpdated) {
 
             var parameters = {
                 dealBuyRouteRuleId: dealBuyRouteRuleId,
                 dealId: dealId,
-                dealBED: dealBED
+                dealBED: dealBED,
+                dealEED: dealEED
             };
 
             var settings = {};

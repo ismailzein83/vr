@@ -23,6 +23,7 @@ app.directive('vrWhsDealBuyrouteruleGrid', ['VRNotificationService', 'VRUIUtilsS
             var gridAPI;
 
             var dealBED;
+            var dealEED;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -50,6 +51,7 @@ app.directive('vrWhsDealBuyrouteruleGrid', ['VRNotificationService', 'VRUIUtilsS
 
                 api.load = function (query) {
                     dealBED = query.BED;
+                    dealEED = query.EED;
                     return gridAPI.retrieveData(query);
                 };
 
@@ -73,7 +75,7 @@ app.directive('vrWhsDealBuyrouteruleGrid', ['VRNotificationService', 'VRUIUtilsS
                     gridAPI.itemUpdated(updatedDealBuyRouteRule);
                 };
 
-                WhS_Deal_BuyRouteRuleService.editDealBuyRouteRule(dealBuyRouteRuleItem.VRRuleId, dealBuyRouteRuleItem.DealId, dealBED, onDealBuyRouteRuleUpdated);
+                WhS_Deal_BuyRouteRuleService.editDealBuyRouteRule(dealBuyRouteRuleItem.VRRuleId, dealBuyRouteRuleItem.DealId, dealBED, dealEED, onDealBuyRouteRuleUpdated);
             }
             //function hasEditDealBuyRouteRulePermission() {
             //    return VRCommon_DealBuyRouteRuleAPIService.HasEditDealBuyRouteRulePermission();
