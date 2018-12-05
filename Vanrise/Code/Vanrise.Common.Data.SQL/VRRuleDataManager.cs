@@ -50,6 +50,13 @@ namespace Vanrise.Common.Data.SQL
             return base.IsDataUpdated("[common].[VRRule]", "RuleDefinitionId", vrRuleDefinitionId, ref updateHandle);
         }
 
+        public bool DeleteVRRules(List<long> vrRuleIds)
+        {
+            string vrRuleIdsString = null;
+            if (vrRuleIds != null && vrRuleIds.Count() > 0)
+                vrRuleIdsString = string.Join(",", vrRuleIds);
+            return ExecuteNonQuerySP("[common].[sp_VRRule_Delete]", vrRuleIdsString) > 0;
+        }
         #endregion
 
         #region Mappers

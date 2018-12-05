@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -50,6 +51,7 @@ namespace Vanrise.Common.Business
 
             if (_dataManager.Insert(vrRule, out vrRuleId))
             {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(_vrRuleDefinitionId);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 vrRuleAsT.VRRuleId = vrRuleId;
                 insertOperationOutput.InsertedObject = VRRuleDetailMapper(vrRuleAsT);
@@ -81,7 +83,7 @@ namespace Vanrise.Common.Business
 
             if (_dataManager.Update(vrRule))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(_vrRuleDefinitionId);
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(_vrRuleDefinitionId);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = VRRuleDetailMapper(vrRuleAsT);
             }
@@ -99,12 +101,29 @@ namespace Vanrise.Common.Business
             return cachedVRRules.GetRecord(vrRuleId);
         }
 
+        public Vanrise.Entities.DeleteOperationOutput<Q> SetRulesDeleted(List<long> vrRuleIds)
+        {
+            DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
+            deleteOperationOutput.Result = DeleteOperationResult.Failed;
+
+            IVRRuleDataManager ruleDataManager = CommonDataManagerFactory.GetDataManager<IVRRuleDataManager>();
+
+            if (ruleDataManager.DeleteVRRules(vrRuleIds))
+            {
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(_vrRuleDefinitionId);
+            }
+
+            return deleteOperationOutput;
+        }
+
         private struct GetCachedVRRulesCacheName
         {
             public string VRRuleFQTN { get; set; }
             public string VRRuleSettingsFQTN { get; set; }
             public Guid VRRuleDefinitionId { get; set; }
         }
+
         public Dictionary<long, T> GetCachedVRRules()
         {
             var cacheName = new GetCachedVRRulesCacheName
@@ -115,17 +134,17 @@ namespace Vanrise.Common.Business
             };
 
             return s_cacheManager.GetOrCreateObject(cacheName, _vrRuleDefinitionId,
-                () =>
-                {
-                    return GetCachedVRRules(_vrRuleDefinitionId).Values.Select(itm =>
-                    {
-                        var vrRuleAsR = Activator.CreateInstance<T>();
-                        vrRuleAsR.VRRuleId = itm.VRRuleId;
-                        vrRuleAsR.VRRuleDefinitionId = itm.VRRuleDefinitionId;
-                        vrRuleAsR.Settings = itm.Settings as S;
-                        return vrRuleAsR;
-                    }).ToDictionary(itm => itm.VRRuleId, itm => itm);
-                });
+                  () =>
+                  {
+                      return GetCachedVRRules(_vrRuleDefinitionId).Values.Select(itm =>
+                      {
+                          var vrRuleAsR = Activator.CreateInstance<T>();
+                          vrRuleAsR.VRRuleId = itm.VRRuleId;
+                          vrRuleAsR.VRRuleDefinitionId = itm.VRRuleDefinitionId;
+                          vrRuleAsR.Settings = itm.Settings as S;
+                          return vrRuleAsR;
+                      }).ToDictionary(itm => itm.VRRuleId, itm => itm);
+                  });
         }
 
         #endregion
