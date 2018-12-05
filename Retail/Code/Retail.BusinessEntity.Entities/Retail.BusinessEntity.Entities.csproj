@@ -151,6 +151,7 @@
     <Compile Include="OperatorDirectionServicesMappedCellExtensionConfiguration.cs" />
     <Compile Include="Package\Definition\PackageDefinitionFilter.cs" />
     <Compile Include="Package\IPackageFilter.cs" />
+    <Compile Include="Package\UsageVolume\PackageUsageVolumeRecurringPeriodConfig.cs" />
     <Compile Include="Package\UsageVolume\IPackageUsageVolume.cs" />
     <Compile Include="Package\UsageVolume\AccountPackageUsageVolumeBalance.cs" />
     <Compile Include="Package\UsageVolume\PackageUsageVolumeCombination.cs" />
