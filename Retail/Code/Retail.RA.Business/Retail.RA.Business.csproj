@@ -47,6 +47,10 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -60,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\INTLReconcilationObjectDataProviderSettings.cs" />
+    <Compile Include="OperatorDeclaration\OperatorDeclarationManager.cs" />
+    <Compile Include="OperatorDeclaration\OperatorDeclarationServicesCustomObjectTypeSettings.cs" />
+    <Compile Include="OperatorDeclaration\OperatorDeclarationServicesManager.cs" />
     <Compile Include="Period Definition\PeriodDefinitionManager.cs" />
     <Compile Include="Period Definition\RAPeriodDefinitionOnBeforeSaveHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
