@@ -96,7 +96,7 @@
                 currencyDirectiveReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.onBEDChanged = function () {
-                        updateDescription();
+                updateDescription();
             };
             $scope.scopeModel.onEEDChanged = function () {
             };
@@ -471,7 +471,7 @@
 
                         }
                     }
-                  
+
                 },
                 getZoneIdAttName: function () {
                     if ($scope.scopeModel.selectedVolumeCommitmentType != undefined) {
@@ -518,8 +518,11 @@
                             });
                         });
                     }
-                    else
+                    else {
+                        newShiftedBED = undefined;
+                        newShiftedEED = undefined;
                         shiftedDatesPromiseDeferred.resolve();
+                    }
                     return shiftedDatesPromiseDeferred.promise.then(function () {
                         shiftedBED = newShiftedBED;
                         shiftedEED = newShiftedEED;
@@ -530,13 +533,13 @@
             return context;
         }
         function GetShiftedDate(date) {
-            var isSale = $scope.scopeModel.selectedVolumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Sell.value ;
+            var isSale = $scope.scopeModel.selectedVolumeCommitmentType.value == WhS_Deal_VolumeCommitmentTypeEnum.Sell.value;
             var isShifted;
             if ($scope.scopeModel.selectedTimeZone.value == WhS_Deal_VolCommitmentTimeZoneTypeEnum.System.value)
                 isShifted = false;
-            else 
+            else
                 isShifted = true;
-            
+
             if (carrierAccountSelectorAPI != undefined && carrierAccountSelectorAPI.getSelectedIds() != undefined)
                 carrierAccountId = carrierAccountSelectorAPI.getSelectedIds();
             if (carrierAccountId != undefined) {
