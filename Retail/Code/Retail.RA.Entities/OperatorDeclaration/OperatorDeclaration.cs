@@ -1,4 +1,4 @@
-﻿using Retail.BusinessEntity.Entities;
+﻿using System;
 
 namespace Retail.RA.Entities
 {
