@@ -25,11 +25,19 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, controllerName, "AddFileDataSourceDefinition"), fileDataSourceDefinition);
         }
 
+        function GetFileDataSourceDefinition(fileDataSourceDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, controllerName, "GetFileDataSourceDefinition"), {
+                fileDataSourceDefinitionId: fileDataSourceDefinitionId
+            });
+        }
+
         return {
+
             GetFileDelayCheckerSettingsConfigs: GetFileDelayCheckerSettingsConfigs,
             GetFileMissingCheckerSettingsConfigs: GetFileMissingCheckerSettingsConfigs,
             GetFileDataSourceDefinitionInfo: GetFileDataSourceDefinitionInfo,
-            AddFileDataSourceDefinition: AddFileDataSourceDefinition
+            AddFileDataSourceDefinition: AddFileDataSourceDefinition,
+            GetFileDataSourceDefinition: GetFileDataSourceDefinition
         };
     }
 

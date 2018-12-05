@@ -83,7 +83,7 @@
 
             function setTitle() {
                 if (editMode && fileDataSourceDefinitionEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(fileDataSourceDefinitionEntity.Name, "File Import Exception Setting");
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(fileDataSourceDefinitionEntity.Name, "File Import Exception Setting", $scope);
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor("File Import Exception Setting");
             }

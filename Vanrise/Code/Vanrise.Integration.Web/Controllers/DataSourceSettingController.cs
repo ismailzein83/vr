@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Integration.Business;
 using Vanrise.Integration.Entities;
@@ -40,6 +41,13 @@ namespace Vanrise.Integration.Web.Controllers
         {
             ConfigManager configManager = new ConfigManager();
             return configManager.AddFileDataSourceDefinition(fileDataSourceDefinition);
+        }
+
+        [HttpGet]
+        [Route("GetFileDataSourceDefinition")]
+        public FileDataSourceDefinition GetFileDataSourceDefinition(Guid fileDataSourceDefinitionId)
+        {
+            return new ConfigManager().GetFileDataSourceDefinition(fileDataSourceDefinitionId);
         }
 
     }

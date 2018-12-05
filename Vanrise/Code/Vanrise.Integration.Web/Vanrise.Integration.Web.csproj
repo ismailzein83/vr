@@ -116,7 +116,7 @@
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\vr-integration-filedatasourcedefinition-delaychecker-timebased.js" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileMissingChecker\vr-integration-filedatasourcedefinition-missingchecker-datetime.js" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileMissingChecker\vr-integration-filedatasourcedefinition-missingchecker-sequence.js" />
-    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\vr-integration-filedatasourcedefinitions-selector.js" />
+    <Content Include="Integration\Directives\Settings\FileDataSourceSettings\vr-integration-filedatasourcedefinition-selector.js" />
     <Content Include="Integration\Directives\Settings\Templates\DataSourceSettingTemplate.html" />
     <Content Include="Integration\Directives\Settings\FileDataSourceSettings\Templates\FileDataSourceSettingsTemplate.html" />
     <Content Include="Integration\Directives\Settings\FileDataSourceSettings\vr-integration-filedatasourcesettings.js" />

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive('vrIntegrationFiledatasourcedefinitionsSelector', ['VR_Integration_DataSourceSettingAPIService', 'UtilsService', 'VRUIUtilsService','VR_Integration_DataSourceSettingService',
+app.directive('vrIntegrationFiledatasourcedefinitionSelector', ['VR_Integration_DataSourceSettingAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_Integration_DataSourceSettingService',
     function (VR_Integration_DataSourceSettingAPIService, UtilsService, VRUIUtilsService, VR_Integration_DataSourceSettingService) {
 
         var directiveDefinitionObject = {
@@ -16,7 +16,8 @@ app.directive('vrIntegrationFiledatasourcedefinitionsSelector', ['VR_Integration
                 hideremoveicon: '@',
                 normalColNum: '@',
                 isdisabled: '=',
-                customlabel: '@'
+                customlabel: '@',
+                includeviewhandler : '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -58,6 +59,10 @@ app.directive('vrIntegrationFiledatasourcedefinitionsSelector', ['VR_Integration
                             ctrl.selectedvalues = fileDataSourceDefinitionObj;
                     };
                     VR_Integration_DataSourceSettingService.addFileDataSourceDefinition(onFileDataSourceDefinitionAdded, true);
+                };
+
+                $scope.scopeModel.onViewIconClicked = function (item) {
+                    VR_Integration_DataSourceSettingService.viewFileDataSourceDefinition(item.FileDataSourceDefinitionId, true);
                 };
             }
 
@@ -117,10 +122,14 @@ app.directive('vrIntegrationFiledatasourcedefinitionsSelector', ['VR_Integration
                 hideremoveicon = "hideremoveicon";
             }
 
+            var onviewclicked = "";
+            if (attrs.includeviewhandler != undefined)
+                onviewclicked = "onviewclicked='scopeModel.onViewIconClicked'";
+
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + '<span vr-disabled="ctrl.isdisabled">'
                 + '<vr-select  on-ready="scopeModel.onSelectorReady" ' + multipleselection + '  datatextfield= "Name" datavaluefield="FileDataSourceDefinitionId" isrequired= "ctrl.isrequired"'
-                + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"' + addCliked + ' entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"' + hideremoveicon + '>'
+                + ' label="' + label + '" ' + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"' + addCliked + ' ' + onviewclicked + ' entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"' + hideremoveicon + '>'
                 + '</vr-select></span></vr-columns>';
         }
 
