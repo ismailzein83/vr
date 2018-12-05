@@ -4,9 +4,9 @@
 
     'use strict';
 
-    operatorDirectionServices.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService', 'Retail_BE_OperatorDirectionServicesAPIService'];
+    operatorDirectionService.$inject = ["UtilsService", 'VRUIUtilsService', 'Retail_RA_OperatorDirectionServicesAPIService'];
 
-    function operatorDirectionServices(UtilsService, VRUIUtilsService, VRNotificationService, Retail_BE_OperatorDirectionServicesAPIService) {
+    function operatorDirectionService(UtilsService, VRUIUtilsService, Retail_RA_OperatorDirectionServicesAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -19,7 +19,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/OperatorDeclarationServices/Templates/OperationDirectionServicesTemplate.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclarationServices/Templates/OperationDirectionServicesTemplate.html"
 
         };
         function OperatorDirectionServicesCtor($scope, ctrl, $attrs) {
@@ -89,9 +89,8 @@
 
                     promises.push(loadOperationDeclarationServicesConfigs());
 
-
                     function loadOperationDeclarationServicesConfigs() {
-                        return Retail_BE_OperatorDirectionServicesAPIService.GetMappedCellsExtensionConfigs().then(function (response) {
+                        return Retail_RA_OperatorDirectionServicesAPIService.GetMappedCellsExtensionConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++)
                                     $scope.scopeModel.extensionConfigs.push(response[i]);
@@ -105,9 +104,6 @@
 
                         });
                     }
-
-
-
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -135,13 +131,12 @@
                     $scope.scopeModel.operatorDeclarationServices.push(dataItem);
                 }
 
-
                 api.setData = function (Object) {
 
                     Object.OperatorDeclarationServices = {
-                        $type: "Retail.BusinessEntity.Entities.OperatorDeclarationServices,Retail.BusinessEntity.Entities",
+                        $type: "Retail.RA.Entities.OperatorDeclarationServices,Retail.RA.Entities",
                         Services: {
-                            $type: "Retail.BusinessEntity.Entities.OperatorDeclarationServicesCollection,Retail.BusinessEntity.Entities",
+                            $type: "Retail.RA.Entities.OperatorDeclarationServicesCollection,Retail.RA.Entities",
                             $values: getServices()
                         }
                     };
@@ -157,17 +152,16 @@
                 for (var i = 0; i < $scope.scopeModel.operatorDeclarationServices.length; i++) {
                     var operatorDeclarationService = $scope.scopeModel.operatorDeclarationServices[i];
                     services.push({
-                        $type: "Retail.BusinessEntity.Entities.OperatorDeclarationService,Retail.BusinessEntity.Entities",
+                        $type: "Retail.RA.Entities.OperatorDeclarationService,Retail.RA.Entities",
                         Revenue: operatorDeclarationService.Revenue,
                         Settings: operatorDeclarationService.directiveAPI.getData()
                     });
                 }
-
                 return services;
             }
         }
     }
 
-    app.directive('retailBeOperatordeclarationservices', operatorDirectionServices);
+    app.directive('retailRaOperatordeclarationservice', operatorDirectionService);
 
 })(app);

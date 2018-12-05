@@ -78,12 +78,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-sms.js" />
-    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-voice.js" />
+    <Content Include="Retail_RA\Constant\ModuleConfig.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\retail-ra-operatordeclarationservice-sms.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\retail-ra-operatordeclarationservice-voice.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServiceSMSTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServiceVoiceTemplate.html" />
-    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\retail-be-operatordeclarationservices-customobjectsettings.js" />
-    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\retail-be-operatordeclarationservices.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\retail-ra-operatordeclarationservices-customobjectsettings.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclarationServices\retail-ra-operatordeclarationservice.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclarationServices\Templates\OperationDirectionServicesTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclarationServices\Templates\OperatorDirectionServicesCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnBeforeSaveHandlerTemplate.html" />
@@ -92,10 +93,12 @@
     <Content Include="Retail_RA\Directives\SpecialNumbers\retail-ra-specialnumbers.js" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\Template\SpecialNumbersCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\Template\SpecialNumbersTemplate.html" />
+    <Content Include="Retail_RA\Services\APIServices\OperatorDirectionServicesAPIService.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\OperatorDirectionServicesController.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controller\RAOperatorDirectionServicesController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

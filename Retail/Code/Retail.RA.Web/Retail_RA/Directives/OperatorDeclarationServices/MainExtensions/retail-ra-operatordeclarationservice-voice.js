@@ -2,9 +2,9 @@
 
     'use strict';
 
-    OperatorDeclarationServiceSMS.$inject = ['UtilsService', 'VRUIUtilsService'];
+    OperatorDeclarationServiceVoice.$inject = ['UtilsService', 'VRUIUtilsService'];
 
-    function OperatorDeclarationServiceSMS(UtilsService, VRUIUtilsService) {
+    function OperatorDeclarationServiceVoice(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -15,15 +15,15 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new OperatorDeclarationServiceSMSCtor($scope, ctrl, $attrs);
+                var ctor = new OperatorDeclarationServiceVoiceCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclarationServices/MainExtensions/Templates/OperatorDeclarationServiceSMSTemplate.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclarationServices/MainExtensions/Templates/OperatorDeclarationServiceVoiceTemplate.html"
         };
 
-        function OperatorDeclarationServiceSMSCtor($scope, ctrl, $attrs) {
+        function OperatorDeclarationServiceVoiceCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var trafficDirectionSelectorAPI;
@@ -44,32 +44,36 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    var SMSEntity;
+                    var voiceEntity;
 
                     if (payload != undefined) {
 
-                        SMSEntity = payload.settings;
-                        $scope.scopeModel.amount = SMSEntity.Amount;
-                        $scope.scopeModel.numberOfSMSs = SMSEntity.NumberOfSMSs;
+                        voiceEntity = payload.settings;
+                        $scope.scopeModel.numberOfCalls = voiceEntity.NumberOfCalls;
+                        $scope.scopeModel.duration = voiceEntity.Duration;
+                        $scope.scopeModel.amount = voiceEntity.Amount;
                     }
 
-                    var trafficDirectionSelectorLoadPromise = loadTrafficDirectionSelector();
-
-                    promises.push(trafficDirectionSelectorLoadPromise);
-
                     function loadTrafficDirectionSelector() {
+
                         var trafficDirectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         trafficDirectionSelectorReadyDeferred.promise.then(function () {
                             var payload;
 
-                            if (SMSEntity != undefined)
+                            if (voiceEntity != undefined)
                                 payload = {
-                                    selectedIds: SMSEntity.TrafficDirection
+                                    selectedIds: voiceEntity.TrafficDirection
                                 };
                             VRUIUtilsService.callDirectiveLoad(trafficDirectionSelectorAPI, payload, trafficDirectionSelectorLoadDeferred);
                         });
                         return trafficDirectionSelectorLoadDeferred.promise;
                     }
+
+                    //var trafficTypeSelectorLoadPromise = loadTrafficTypeSelector();
+                    var trafficDirectionSelectorLoadPromise = loadTrafficDirectionSelector();
+
+                    //promises.push(trafficTypeSelectorLoadPromise);
+                    promises.push(trafficDirectionSelectorLoadPromise);
 
                     return UtilsService.waitMultiplePromises(promises);
 
@@ -77,9 +81,10 @@
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.RA.MainExtensions.SMS,Retail.RA.MainExtensions",
+                        $type: "Retail.RA.MainExtensions.Voice,Retail.RA.MainExtensions",
                         TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
-                        NumberOfSMSs: $scope.scopeModel.numberOfSMSs,
+                        NumberOfCalls: $scope.scopeModel.numberOfCalls,
+                        Duration: $scope.scopeModel.duration,
                         Amount: $scope.scopeModel.amount
                     };
                 };
@@ -91,6 +96,6 @@
         }
     }
 
-    app.directive('retailBeOperatordeclarationserviceSms', OperatorDeclarationServiceSMS);
+    app.directive('retailRaOperatordeclarationserviceVoice', OperatorDeclarationServiceVoice);
 
 })(app);

@@ -48,6 +48,6 @@
         }
     }
 
-    app.directive('retailBeOperatordeclarationservicesCustomobjectsettings', operatorDirectionServicesType);
+    app.directive('retailRaOperatordeclarationservicesCustomobjectsettings', operatorDirectionServicesType);
 
 })(app);
