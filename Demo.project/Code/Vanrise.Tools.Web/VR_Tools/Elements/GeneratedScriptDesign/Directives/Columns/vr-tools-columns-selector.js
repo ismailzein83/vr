@@ -49,7 +49,7 @@ function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIU
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="Name" datavaluefield="Name" label="{{ctrl.label}}" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Columns" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>';
 
-    };
+    }
 
 
     function IdentifierColumnsSelector(ctrl, $scope, attrs) {
@@ -66,7 +66,7 @@ function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIU
                 selectorAPI = api;
                 defineAPI();
             };
-        };
+        }
 
         function defineAPI() {
             var api = {};
@@ -77,7 +77,7 @@ function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIU
                 var selectedIds;
                 var filter;
                 if (payload != undefined) {
-                    selectedIds = payload.selectedIds
+                    selectedIds = payload.selectedIds;
                     filter = payload.filter;
                 }
 
@@ -102,14 +102,14 @@ function (VRNotificationService, VR_Tools_ColumnsAPIService, UtilsService, VRUIU
 
             api.clear = function () {
                 selectorAPI.clearDataSource();
-            }
+            };
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }
-        };
+        }
 
         this.initializeController = initializeController;
-    };
+    }
     return directiveDefinitionObject;
 
     }]);

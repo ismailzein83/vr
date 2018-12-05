@@ -8,7 +8,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
             restrict: "E",
             scope:
             {
-                onReady: "=",
+                onReady: "="
             },
 
             controller: function ($scope, $element, $attrs) {
@@ -71,6 +71,23 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                     return null;
                 };
 
+                function loadIdentifierColumnDirective() {
+                    var promises = [];
+                    var identifierColumnsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    promises.push(identifierColumnsReadyPromiseDeferred.promise);
+                    UtilsService.waitMultiplePromises(promises).then(function (response) {
+
+                        var identifierColumnsPayload = {
+                            filter: entity.filter
+                        };
+                        if (entity.Settings.IdentifierColumn != undefined)
+                            identifierColumnsPayload.selectedIds = entity.Settings.IdentifierColumn.ColumnName;
+                        VRUIUtilsService.callDirectiveLoad(identifierColumnsDirectiveApi, identifierColumnsPayload, identifierColumnsDirectiveLoadDeferred);
+                    });
+
+                    return identifierColumnsDirectiveLoadDeferred.promise;
+                }
                 function defineAPI() {
                     var api = {};
 
@@ -85,24 +102,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                             for (var j = 0; j < entity.Settings.KeyValues.length; j++) {
                                 $scope.keyValues.push(entity.Settings.KeyValues[j]);
                             }
-
-                            function loadIdentifierColumnDirective() {
-                                var promises = [];
-                                var identifierColumnsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                                promises.push(identifierColumnsReadyPromiseDeferred.promise)
-                                UtilsService.waitMultiplePromises(promises).then(function (response) {
-
-                                    var identifierColumnsPayload = {
-                                        filter: entity.filter
-                                    }
-                                    if (entity.Settings.IdentifierColumn != undefined)
-                                        identifierColumnsPayload.selectedIds = entity.Settings.IdentifierColumn.ColumnName;
-                                    VRUIUtilsService.callDirectiveLoad(identifierColumnsDirectiveApi, identifierColumnsPayload, identifierColumnsDirectiveLoadDeferred);
-                                });
-
-                                return identifierColumnsDirectiveLoadDeferred.promise;
-                            }
+                           
                             promises.push(loadIdentifierColumnDirective());
                             return UtilsService.waitMultiplePromises(promises);
                         }
@@ -124,7 +124,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                     api.getData = function () {
                   
                         return {
-                            $type: "Vanrise.Entities.Tools.DeleteGeneratedScriptItem,Vanrise.Entities.Tools",
+                            $type: "Vanrise.Tools.Business.DeleteGeneratedScriptItem, Vanrise.Tools.Business",
                             IdentifierColumn: { ColumnName: identifierColumnsDirectiveApi.getSelectedIds() },
                             KeyValues:$scope.keyValues
                         };

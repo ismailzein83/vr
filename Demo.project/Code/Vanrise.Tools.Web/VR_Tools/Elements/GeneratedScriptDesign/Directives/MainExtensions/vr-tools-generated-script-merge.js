@@ -8,7 +8,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
             restrict: "E",
             scope:
             {
-                onReady: "=",
+                onReady: "="
             },
 
             controller: function ($scope, $element, $attrs) {
@@ -48,6 +48,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
             var identifierColumnsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var identifierColumnsChangedPromiseDeferred;
 
+            var queryTypeDirectiveApi;
+            var queryTypeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -65,6 +68,11 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                 $scope.scopeModel.onIdentifierColumnsDirectiveReady = function (api) {
                     identifierColumnsDirectiveApi = api;
                     identifierColumnsReadyPromiseDeferred.resolve();
+                };
+                 
+                $scope.scopeModel.onQueryTypeDirectiveReady = function (api) {
+                    queryTypeDirectiveApi = api;
+                    queryTypeReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onSelectedTableDataGridReady = function (api) {
@@ -135,7 +143,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                     var selectedColumnsNames = [];
                     if (selectedColumns != undefined) {
                         for (var i = 0; i < selectedColumns.length; i++) {
-                            selectedColumnsNames.push({ ColumnName: selectedColumns[i] })
+                            selectedColumnsNames.push({ ColumnName: selectedColumns[i] });
                         }
                     }
                     return {
@@ -143,7 +151,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                         context :{
                             triggerRetrieveData: function () {
                                 gridQuery.BulkActionState = bulkActionDraftInstance.getBulkActionState();
-                                gridApi.retrieveData(gridQuery)
+                                gridApi.retrieveData(gridQuery);
                             },
                             hasItems: function () {
                                 return $scope.scopeModel.tableData.length > 0;
@@ -162,7 +170,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                     };
                 }
 
-                UtilsService.waitMultiplePromises([insertColumnsReadyPromiseDeferred.promise, updateColumnsReadyPromiseDeferred.promise, identifierColumnsReadyPromiseDeferred.promise,
+                UtilsService.waitMultiplePromises([insertColumnsReadyPromiseDeferred.promise, updateColumnsReadyPromiseDeferred.promise, identifierColumnsReadyPromiseDeferred.promise, queryTypeReadyPromiseDeferred.promise,
                 selectTableDataGridReadyPromiseDeferred.promise, tableDataGridPromiseDeferred.promise, selectTableDataGridReadyPromiseDeferred.promise]).then(function () {
                     defineAPI();
                 });
@@ -181,7 +189,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                         var promises = [];
                         var insertColumnsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        promises.push(insertColumnsReadyPromiseDeferred.promise)
+                        promises.push(insertColumnsReadyPromiseDeferred.promise);
                         UtilsService.waitMultiplePromises(promises).then(function (response) {
 
                             
@@ -194,7 +202,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                         var promises = [];
                         var updateColumnsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        promises.push(updateColumnsReadyPromiseDeferred.promise)
+                        promises.push(updateColumnsReadyPromiseDeferred.promise);
                         UtilsService.waitMultiplePromises(promises).then(function (response) {
                            
 
@@ -207,7 +215,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                         var promises = [];
                         var identifierColumnsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        promises.push(identifierColumnsReadyPromiseDeferred.promise)
+                        promises.push(identifierColumnsReadyPromiseDeferred.promise);
                         UtilsService.waitMultiplePromises(promises).then(function (response) {
                            
                             VRUIUtilsService.callDirectiveLoad(identifierColumnsDirectiveApi, identifierColumnsPayload, identifierColumnsDirectiveLoadDeferred);
@@ -215,71 +223,88 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
 
                         return identifierColumnsDirectiveLoadDeferred.promise;
                     }
+                    function loadQueryTypeDirective(queryTypePayload) {
+                        var promises = [];
+                        var queryTypeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
+                        promises.push(queryTypeReadyPromiseDeferred.promise);
+                        UtilsService.waitMultiplePromises(promises).then(function (response) {
 
+                            VRUIUtilsService.callDirectiveLoad(queryTypeDirectiveApi, queryTypePayload, queryTypeDirectiveLoadDeferred);
+                        });
+
+                        return queryTypeDirectiveLoadDeferred.promise;
+                    }
+
+                    function loadSelectedDataRows() {
+                        var columnNames = [];
+                        var selectTableDataGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        VR_Tools_ColumnsAPIService.GetColumnsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                            if (response != null) {
+                                for (var i = 0; i < response.length; i++) {
+                                    columnNames.push(response[i]);
+                                }
+                                selectTableDataGridReadyPromiseDeferred.promise.then(function () {
+                                    selectedTableDataGridApi.load({ DataRows: entity.Settings.DataRows, ColumnNames: columnNames });
+                                    selectTableDataGridLoadPromiseDeferred.resolve();
+                                });
+                            }
+
+                        });
+                        return selectTableDataGridLoadPromiseDeferred.promise;
+                    }
                     if (isEditMode) {
 
+                        $scope.scopeModel.IsIdentity = entity.Settings.IsIdentity;
 
                         var insertColumnsNames = [];
                         var updateColumnsNames = [];
                         var identifierColumnsNames = [];
 
                             for (var i = 0; i < entity.Settings.InsertColumns.length; i++) {
-                                insertColumnsNames.push(entity.Settings.InsertColumns[i].ColumnName)
+                                insertColumnsNames.push(entity.Settings.InsertColumns[i].ColumnName);
                             }
                         var insertColumnsPayload = {
                             filter: entity.filter,
                             selectedIds: insertColumnsNames
-                        }
+                        };
                         promises.push(loadInsertColumnsDirective(insertColumnsPayload));
 
-                            for (var i = 0; i < entity.Settings.UpdateColumns.length; i++) {
-                                updateColumnsNames.push(entity.Settings.UpdateColumns[i].ColumnName)
+                            for (var j = 0; j < entity.Settings.UpdateColumns.length; j++) {
+                                updateColumnsNames.push(entity.Settings.UpdateColumns[j].ColumnName);
                             }
                         var updateColumnsPayload = {
                             filter: entity.filter,
                             selectedIds: updateColumnsNames
-                        }
+                        };
                         promises.push(loadUpdateColumnsDirective(updateColumnsPayload));
 
-                            for (var i = 0; i < entity.Settings.IdentifierColumns.length; i++) {
-                                identifierColumnsNames.push(entity.Settings.IdentifierColumns[i].ColumnName)
+                            for (var k = 0; k < entity.Settings.IdentifierColumns.length; k++) {
+                                identifierColumnsNames.push(entity.Settings.IdentifierColumns[k].ColumnName);
                             }
                         var identifierColumnsPayload = {
                             filter: entity.filter,
                             selectedIds: identifierColumnsNames
-                        }
+                        };
                         promises.push(loadIdentifierColumnsDirective(identifierColumnsPayload));
 
-                        function loadSelectedDataRows() {
-                            var columnNames = [];
-                            var selectTableDataGridLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadQueryTypeDirective({ selectedIds: entity.Settings.QueryType }));
 
-                            VR_Tools_ColumnsAPIService.GetColumnsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-                                if (response != null) {
-                                    for (var i = 0; i < response.length; i++) {
-                                        columnNames.push(response[i]);
-                                    }
-                                    selectTableDataGridReadyPromiseDeferred.promise.then(function () {
-                                        selectedTableDataGridApi.load({ DataRows: entity.Settings.DataRows, ColumnNames: columnNames });
-                                        selectTableDataGridLoadPromiseDeferred.resolve();
-                                    });
-                                }
-
-                            });
-                            return selectTableDataGridLoadPromiseDeferred.promise;
-                        }
                         promises.push(loadSelectedDataRows());
+
                         return UtilsService.waitMultiplePromises(promises);
                     }
 
                     else {
                         var columnsPayload = {
                             filter: entity.filter
-                        }
+                        };
+
                         promises.push(loadInsertColumnsDirective(columnsPayload));
                         promises.push(loadUpdateColumnsDirective(columnsPayload));
                         promises.push(loadIdentifierColumnsDirective(columnsPayload));
+                        promises.push(loadQueryTypeDirective());
                         return UtilsService.waitMultiplePromises(promises);
                     }
 
@@ -293,17 +318,17 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
 
                     var insertColumnsToJson = [];
                     for (var j = 0; j < insertColumnsData.length; j++) {
-                        insertColumnsToJson.push({ ColumnName: insertColumnsData[j] })
+                        insertColumnsToJson.push({ ColumnName: insertColumnsData[j] });
 
                     }
                     var updateColumnsToJson = [];
-                    for (var j = 0; j < updateColumnsData.length; j++) {
-                        updateColumnsToJson.push({ ColumnName: updateColumnsData[j] })
+                    for (var k = 0; k < updateColumnsData.length; k++) {
+                        updateColumnsToJson.push({ ColumnName: updateColumnsData[k] });
 
                     }
                     var identifierColumnsToJson = [];
-                    for (var j = 0; j < identifierColumnsData.length; j++) {
-                        identifierColumnsToJson.push({ ColumnName: identifierColumnsData[j] })
+                    for (var l = 0; l < identifierColumnsData.length; l++) {
+                        identifierColumnsToJson.push({ ColumnName: identifierColumnsData[l] });
 
                     }
 
@@ -313,11 +338,13 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                     }
 
                     return {
-                        $type: "Vanrise.Entities.Tools.MergeGeneratedScriptItem,Vanrise.Entities.Tools",
+                        $type: "Vanrise.Tools.Business.MergeGeneratedScriptItem, Vanrise.Tools.Business",
                         IdentifierColumns: identifierColumnsToJson,
                         InsertColumns: insertColumnsToJson,
                         UpdateColumns: updateColumnsToJson,
                         DataRows: dataRows,
+                        QueryType: queryTypeDirectiveApi.getSelectedIds(),
+                        IsIdentity: $scope.scopeModel.IsIdentity
                     };
                 };
 

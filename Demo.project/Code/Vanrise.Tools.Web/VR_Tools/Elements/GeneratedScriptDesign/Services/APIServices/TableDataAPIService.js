@@ -17,7 +17,7 @@
             GetFilteredTableData: GetFilteredTableData,
             GetSelectedTableData: GetSelectedTableData
         };
-    };
+    }
     appControllers.service("VR_Tools_TableDataAPIService", tableDataAPIService);
 
 })(appControllers);

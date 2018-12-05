@@ -25,21 +25,21 @@ namespace Vanrise.Tools.Data.SQL
             return Connection_String;
         }
         string table_Name;
-        public List<TableData> GetTableData(string schemaName,string tableName,string whereCondition)
+        public List<GeneratedScriptItemTableRow> GetTableData(string schemaName,string tableName,string whereCondition)
         {
             table_Name = tableName;
             return GetItemsText("select * from [" + schemaName + "].[" + tableName + "]" + whereCondition, TableDataMapper, null);
         }
 
 
-        TableData TableDataMapper(IDataReader reader)
+        GeneratedScriptItemTableRow TableDataMapper(IDataReader reader)
         {
             IColumnsDataManager columnsDataManager = VRToolsFactory.GetDataManager<IColumnsDataManager>();
 
             columnsDataManager.Connection_String = Connection_String;
 
             List<Columns> columns= columnsDataManager.GetColumns(table_Name);
-            TableData tableData = new TableData();
+            GeneratedScriptItemTableRow tableData = new GeneratedScriptItemTableRow();
             tableData.FieldValues = new Dictionary<string, object>();
 
 

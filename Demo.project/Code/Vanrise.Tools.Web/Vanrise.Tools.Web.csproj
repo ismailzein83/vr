@@ -139,6 +139,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="VR_Tools\Constant\GeneratedScriptQueryType.js" />
+    <Content Include="VR_Tools\Constant\GenertedScriptType.js" />
     <Content Include="VR_Tools\Constant\ModuleConfig.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\Columns\vr-tools-columns-selector.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\GeneratedScript\Design\Templates\SelectedTableDataGridTemplate.html" />
@@ -150,6 +152,8 @@
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\MainExtensions\vr-tools-generated-script-delete.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\MainExtensions\vr-tools-generated-script-merge.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\Settings\vr-tools-generated-script-settings.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\Settings\vr-tools-generated-script-query-type-selector.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\Settings\vr-tools-generated-script-type-selector.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\Table\vr-tools-table-selector.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\Schema\vr-tools-schema-selector.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Directives\GeneratedScript\Design\vanrise-tools-generated-script-design-grid.js" />
@@ -159,6 +163,8 @@
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Services\APIServices\TableAPIService.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Services\APIServices\SchemaAPIService.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Services\GeneratedScriptService.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptQueriesDisplayer.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptQueriesDisplayer.html" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptManagement.html" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptDesignEditorController.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptManagementController.js" />

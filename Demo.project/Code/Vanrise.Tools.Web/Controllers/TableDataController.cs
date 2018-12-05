@@ -28,7 +28,7 @@ namespace Vanrise.Tools.Web.Controllers
 
         [HttpPost]
         [Route("GetSelectedTableData")]
-        public IEnumerable<TableData> GetSelectedTableData(TableDataQuery query)
+        public IEnumerable<GeneratedScriptItemTableRow> GetSelectedTableData(TableDataQuery query)
         {
             return tableDataManager.GetSelectedTableData(query);
         }

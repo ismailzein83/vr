@@ -1,6 +1,6 @@
 ﻿appControllers.directive("vanriseToolsSelectedTableDataGrid", ["UtilsService", "VRNotificationService", "VR_Tools_TableDataAPIService","VR_Tools_ColumnsAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
 function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_Tools_ColumnsAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
-    "use strict"
+    "use strict";
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -75,8 +75,8 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                                                     var identifierKey = "";
 
                                                     for (var l = 0; l < filter.IdentifierColumns.length; l++) {
-                                                        var key = filter.IdentifierColumns[l].ColumnName;
-                                                        identifierKey += $scope.scopeModel.selectedTableData[k].Entity.FieldValues[key] + "_";
+                                                        var idKey = filter.IdentifierColumns[l].ColumnName;
+                                                        identifierKey += $scope.scopeModel.selectedTableData[k].Entity.FieldValues[idKey] + "_";
                                                     }
 
                                                     if (responseIdentifierKey == identifierKey) {
@@ -85,12 +85,11 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
 
                                                 }
                                                 if (exists == false) {
-                                                    var object = { Entity: response[i] };
-                                                    $scope.scopeModel.selectedTableData.push(object);
+                                                    $scope.scopeModel.selectedTableData.push({ Entity: response[i] });
                                                 }
 
                                             }
-                                        };
+                                        }
                                     });
                                 }
                             }
@@ -104,8 +103,8 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                         var tableRows = [];
                         for (var k = 0; k < $scope.scopeModel.selectedTableData.length; k++) {
                             tableRows.push($scope.scopeModel.selectedTableData[k].Entity);
-                        }
-                        return { tableRows: tableRows }
+                        } 
+                        return { tableRows: tableRows };
 
                     };
                     return directiveApi;
@@ -113,12 +112,12 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
             };
 
             $scope.scopeModel.deleteTableDataRow = function (row) {
-                var index = $scope.scopeModel.selectedTableData.indexOf(row)
+                var index = $scope.scopeModel.selectedTableData.indexOf(row);
                 if (index > -1) {
                     $scope.scopeModel.selectedTableData.splice(index, 1);
                 }
             };
-        };
+        }
     }
 
     return directiveDefinitionObject;

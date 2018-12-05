@@ -85,7 +85,7 @@
                                     ConnectionId: connectionStringDirectiveApi.getSelectedIds()
                                 }
                             };
-                            var setLoader = function (value) { $scope.scopeModel.isSchemaDirectiveloading = value; }
+                            var setLoader = function (value) { $scope.scopeModel.isSchemaDirectiveloading = value; };
                             var schemaDirectiveLoadDeferred;
 
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, schemaDirectiveApi, schemaPayload, setLoader, schemaDirectiveLoadDeferred);
@@ -98,7 +98,7 @@
 
             $scope.scopeModel.onSchemaChanged = function (value) {
                 if (schemaDirectiveApi != undefined) {
-                    var data = schemaDirectiveApi.getSelectedIds()
+                    var data = schemaDirectiveApi.getSelectedIds();
                     if (data != undefined) {
                         if (schemaSelectedPromiseDeferred != undefined) {
                             schemaSelectedPromiseDeferred.resolve();
@@ -115,7 +115,7 @@
                                 }
                             };
 
-                            var setLoader = function (value) { $scope.scopeModel.isTableDirectiveloading = value; }
+                            var setLoader = function (value) { $scope.scopeModel.isTableDirectiveloading = value; };
                             var tableDirectiveLoadDeferred;
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, tableDirectiveApi, tablePayload, setLoader, tableDirectiveLoadDeferred);
                         }
@@ -126,7 +126,7 @@
 
             $scope.scopeModel.onTableChanged = function (value) {
                 if (tableDirectiveApi != undefined) {
-                    var data = tableDirectiveApi.getSelectedIds()
+                    var data = tableDirectiveApi.getSelectedIds();
                     if (data != undefined) {
                         if (tableSelectedPromiseDeferred != undefined) {
                             tableSelectedPromiseDeferred.resolve();
@@ -185,85 +185,84 @@
                 return connectionStringLoadPromiseDeferred.promise;
             }
 
+            function loadSchemaDirective() {
+                var promises = [];
+                var schemaDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                if (connectionStringSelectedPromiseDeferred != undefined)
+                    promises.push(connectionStringSelectedPromiseDeferred.promise);
+                promises.push(schemaReadyPromiseDeferred.promise);
+                UtilsService.waitMultiplePromises(promises).then(function (response) {
+                    var schemaPayload = {
+                        selectedIds: designEntity.Schema,
+                        filter: {
+                            ConnectionId: designEntity.ConnectionId
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(schemaDirectiveApi, schemaPayload, schemaDirectiveLoadDeferred);
+                    connectionStringSelectedPromiseDeferred = undefined;
+                });
+
+                return schemaDirectiveLoadDeferred.promise;
+            }
+
+            function loadTableDirective() {
+                var promises = [];
+                var tableDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                if (schemaSelectedPromiseDeferred != undefined)
+                    promises.push(schemaSelectedPromiseDeferred.promise);
+                promises.push(tableReadyPromiseDeferred.promise);
+                UtilsService.waitMultiplePromises(promises).then(function (response) {
+                    var tableDirectivePayload = {
+                        filter: {
+                            ConnectionId: designEntity.ConnectionId,
+                            SchemaName: designEntity.Schema
+                        },
+                        selectedIds: designEntity.TableName
+                    };
+                    VRUIUtilsService.callDirectiveLoad(tableDirectiveApi, tableDirectivePayload, tableDirectiveLoadDeferred);
+                    schemaSelectedPromiseDeferred = undefined;
+                });
+
+                return tableDirectiveLoadDeferred.promise;
+            }
+
+
+            function loadGeneratedScriptSettingsDirective() {
+                var promises = [];
+                var generatedScriptSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                if (tableSelectedPromiseDeferred != undefined)
+                    promises.push(tableSelectedPromiseDeferred.promise);
+                promises.push(generatedScriptSettingsPromiseDeferred.promise);
+                UtilsService.waitMultiplePromises(promises).then(function (response) {
+
+                    var settingsPayload = {
+                        filter: {
+                            ConnectionId: designEntity.ConnectionId,
+                            SchemaName: designEntity.Schema,
+                            TableName: designEntity.TableName
+                        },
+                        Settings: designEntity.Settings,
+                        isEditMode: isEditMode,
+                    };
+                    VRUIUtilsService.callDirectiveLoad(generatedScriptSettingsDirectiveApi, settingsPayload, generatedScriptSettingsDirectiveLoadDeferred);
+                    tableSelectedPromiseDeferred = undefined;
+
+                });
+                return generatedScriptSettingsDirectiveLoadDeferred.promise;
+            }
+
             function loadDirectives() {
                 if (isEditMode) {
                     var promises = [];
-
-                    function loadSchemaDirective() {
-                        var promises = [];
-                        var schemaDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        if (connectionStringSelectedPromiseDeferred != undefined)
-                            promises.push(connectionStringSelectedPromiseDeferred.promise);
-                        promises.push(schemaReadyPromiseDeferred.promise)
-                        UtilsService.waitMultiplePromises(promises).then(function (response) {
-                            var schemaPayload = {
-                                selectedIds: designEntity.Schema,
-                                filter: {
-                                    ConnectionId: designEntity.ConnectionId
-                                }
-                            };
-                            VRUIUtilsService.callDirectiveLoad(schemaDirectiveApi, schemaPayload, schemaDirectiveLoadDeferred);
-                            connectionStringSelectedPromiseDeferred = undefined;
-                        });
-
-                        return schemaDirectiveLoadDeferred.promise;
-                    }
+           
                     promises.push(loadSchemaDirective());
-
-                    function loadTableDirective() {
-                        var promises = [];
-                        var tableDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        if (schemaSelectedPromiseDeferred != undefined)
-                            promises.push(schemaSelectedPromiseDeferred.promise);
-                        promises.push(tableReadyPromiseDeferred.promise)
-                        UtilsService.waitMultiplePromises(promises).then(function (response) {
-                            var tableDirectivePayload = {
-                                filter: {
-                                    ConnectionId: designEntity.ConnectionId,
-                                    SchemaName: designEntity.Schema
-                                },
-                                selectedIds: designEntity.TableName
-                            };
-                            VRUIUtilsService.callDirectiveLoad(tableDirectiveApi, tableDirectivePayload, tableDirectiveLoadDeferred);
-                            schemaSelectedPromiseDeferred = undefined;
-                        });
-
-                        return tableDirectiveLoadDeferred.promise;
-                    }
                     promises.push(loadTableDirective());
-
-                    function loadGeneratedScriptSettingsDirective() {
-
-
-                        var promises = [];
-                            var generatedScriptSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                            if (tableSelectedPromiseDeferred != undefined)
-                                promises.push(tableSelectedPromiseDeferred.promise);
-                            promises.push(generatedScriptSettingsPromiseDeferred.promise)
-                            UtilsService.waitMultiplePromises(promises).then(function (response) {
-                                
-                                var settingsPayload = {
-                                    filter: {
-                                        ConnectionId: designEntity.ConnectionId,
-                                        SchemaName:designEntity.Schema,
-                                        TableName: designEntity.TableName
-                                    },
-                                    Settings: designEntity.GeneratedScriptItemTableSettings,
-                                    isEditMode:isEditMode,
-                                }
-                                VRUIUtilsService.callDirectiveLoad(generatedScriptSettingsDirectiveApi, settingsPayload, generatedScriptSettingsDirectiveLoadDeferred);
-                                tableSelectedPromiseDeferred = undefined;
-
-                            });
-                            return generatedScriptSettingsDirectiveLoadDeferred.promise;
-                          }
                     promises.push(loadGeneratedScriptSettingsDirective());
 
                     return UtilsService.waitMultiplePromises(promises);
                 }
-
             }
 
             function setTitle() {
@@ -292,7 +291,7 @@
                     ConnectionId: connectionStringDirectiveApi.getSelectedIds(),
                     Schema: schemaDirectiveApi.getSelectedIds(),
                     TableName: tableDirectiveApi.getSelectedIds(),
-                    GeneratedScriptItemTableSettings: generatedScriptSettingsDirectiveApi.getData().data,
+                    Settings: generatedScriptSettingsDirectiveApi.getData().data,
                     Title: generatedScriptSettingsDirectiveApi.getData().Title
                 }
             };
@@ -313,6 +312,6 @@
             $scope.modalContext.closeModal();
         }
 
-    };
+    }
     appControllers.controller('Vanrise_Tools_GeneratedScriptDesignEditorController', generatedScriptDesignEditorController);
 })(appControllers);

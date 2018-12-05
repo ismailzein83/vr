@@ -7,7 +7,6 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.Web.Base;
 using Vanrise.Entities;
-using Vanrise.Entities.Tools;
 
 
 namespace Vanrise.Tools.Web.Controllers
@@ -35,12 +34,31 @@ namespace Vanrise.Tools.Web.Controllers
         }
 
         [HttpPost]
-        [Route("GetExceptionMessage")]
-        public string GetExceptionMessage(GeneratedScriptItemTable generatedScriptItemTable)
+        [Route("Validate")]
+        public List<GeneratedScriptItemValidatorOutput> Validate(GeneratedScriptItemTables generatedScriptItemTables)
         {
-            return columnsManager.GetExceptionMessage(generatedScriptItemTable);
+            return columnsManager.Validate(generatedScriptItemTables);
         }
 
+        [HttpPost]
+        [Route("GenerateQueries")]
+        public string GenerateQueries(GeneratedScriptItem generatedScriptItem)
+        {
+            return columnsManager.GenerateQueries(generatedScriptItem);
+        }
 
+        [HttpGet]
+        [Route("GetGeneratedQueries")]
+        public string GetGeneratedQueries(string jsonScripts, GeneratedScriptType type)
+        {
+            return columnsManager.GetGeneratedQueries(jsonScripts, type);
+        }
+
+        [HttpGet]
+        [Route("GenerateQueriesFromTextFile")]
+        public string GenerateQueriesFromTextFile(string filePath,GeneratedScriptType type)
+        {
+            return columnsManager.GenerateQueriesFromTextFile(filePath,type);
+        }
     }
 }

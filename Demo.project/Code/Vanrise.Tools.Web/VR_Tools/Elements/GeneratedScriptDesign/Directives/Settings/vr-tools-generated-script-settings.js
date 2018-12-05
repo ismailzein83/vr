@@ -148,7 +148,7 @@
 
                     selectorAPI.clearDataSource();
 
-                }
+                };
                 if (ctrl.onReady != null) {
 
                     ctrl.onReady(api);
@@ -169,7 +169,7 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + 'label="Generated Script Item Table Settings" '
+                            + 'label="Type" '
                             + ' ' + hideremoveicon + ' '
                              + 'isrequired ="ctrl.isrequired"'
                            + ' >'

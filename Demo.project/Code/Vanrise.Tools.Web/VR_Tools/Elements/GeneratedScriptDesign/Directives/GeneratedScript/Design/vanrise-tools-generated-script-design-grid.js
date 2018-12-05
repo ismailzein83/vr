@@ -1,6 +1,6 @@
 ﻿appControllers.directive("vanriseToolsGeneratedScriptDesignGrid", ["UtilsService", "VRNotificationService", "VR_Tools_GeneratedScriptService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
 function (UtilsService, VRNotificationService, VR_Tools_GeneratedScriptService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
-    "use strict"
+    "use strict";
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -23,6 +23,7 @@ function (UtilsService, VRNotificationService, VR_Tools_GeneratedScriptService, 
         var gridApi;
         var addText;
         var generatedScripts;
+
         $scope.scopeModel = {};
         $scope.scopeModel.designs = [];
 
@@ -42,21 +43,24 @@ function (UtilsService, VRNotificationService, VR_Tools_GeneratedScriptService, 
                     var directiveApi = {};
 
                     directiveApi.load = function (payload) {
+                        var promises = [];
                         $scope.scopeModel.designs = [];
                         if (payload != undefined && payload.designs != undefined) {
 
                             for (var i = 0; i < payload.designs.length; i++) {
-                                $scope.scopeModel.designs.push(payload.designs[i])
+                                $scope.scopeModel.designs.push(payload.designs[i]);
                             }
                         }
+
+                        return UtilsService.waitMultiplePromises(promises);
                     };
 
                     directiveApi.getData = function () {
                         return $scope.scopeModel.designs;
 
-                    }
+                    };
                     return directiveApi;
-                };
+                }
             };
 
 

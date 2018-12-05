@@ -7,20 +7,30 @@
 
         function GetColumnsInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Tools_ModuleConfig.moduleName, controller, "GetColumnsInfo"), { filter: filter });
-        };
+        }
         function GetGeneratedScriptItemTableSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Tools_ModuleConfig.moduleName, controller, "GetGeneratedScriptItemTableSettingsConfigs"));
-        };
-        function GetExceptionMessage(generatedScriptItemTable) {
-            console.log(generatedScriptItemTable)
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Tools_ModuleConfig.moduleName, controller, "GetExceptionMessage"), generatedScriptItemTable);
-        };
+        }
+        function Validate(generatedScriptItemTables) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Tools_ModuleConfig.moduleName, controller, "Validate"), generatedScriptItemTables);
+        }
+        function GenerateQueries(generatedScriptItem) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Tools_ModuleConfig.moduleName, controller, "GenerateQueries"), generatedScriptItem);
+        }
+        function GenerateQueriesFromTextFile(filePath,type) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Tools_ModuleConfig.moduleName, controller, "GenerateQueriesFromTextFile"), {
+                filePath: filePath,
+                type: type
+            });
+        }
         return {
             GetColumnsInfo: GetColumnsInfo,
             GetGeneratedScriptItemTableSettingsConfigs: GetGeneratedScriptItemTableSettingsConfigs,
-            GetExceptionMessage: GetExceptionMessage
+            Validate: Validate,
+            GenerateQueries: GenerateQueries,
+            GenerateQueriesFromTextFile: GenerateQueriesFromTextFile
         };
-    };
+    }
     appControllers.service("VR_Tools_ColumnsAPIService", columnsAPIService);
 
 })(appControllers);

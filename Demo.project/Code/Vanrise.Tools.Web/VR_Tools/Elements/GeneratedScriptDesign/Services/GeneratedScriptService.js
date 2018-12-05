@@ -11,7 +11,7 @@ function (VRModalService, VRNotificationService) {
 
         };
         VRModalService.showModal('/Client/Modules/VR_Tools/Elements/GeneratedScriptDesign/Views/GeneratedScriptDesignEditor.html', parameters, settings);
-    };
+    }
 
     function editGeneratedScriptDesign(onGeneratedScriptDesignUpdated, design) {
         var settings = {};
@@ -23,12 +23,23 @@ function (VRModalService, VRNotificationService) {
             modalScope.onGeneratedScriptDesignUpdated = onGeneratedScriptDesignUpdated;
         };
         VRModalService.showModal('/Client/Modules/VR_Tools/Elements/GeneratedScriptDesign/Views/GeneratedScriptDesignEditor.html', parameters, settings);
-    };
+    }
 
+    function displayQueries(queries) {
+        var settings = {};
+        var parameters = {
+            queries: queries
+        };
+
+        settings.onScopeReady = function (modalScope) {
+        };
+        VRModalService.showModal('/Client/Modules/VR_Tools/Elements/GeneratedScriptDesign/Views/GeneratedScriptQueriesDisplayer.html', parameters, settings);
+    }
    
     return {
         addGeneratedScriptDesign: addGeneratedScriptDesign,
         editGeneratedScriptDesign: editGeneratedScriptDesign,
+        displayQueries: displayQueries
     };
 
 }]);

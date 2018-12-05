@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TableData\TableDataQuery.cs" />
-    <Compile Include="TableData\TableData.cs" />
     <Compile Include="TableData\TableDataDetails.cs" />
     <Compile Include="TableData\TableDataInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

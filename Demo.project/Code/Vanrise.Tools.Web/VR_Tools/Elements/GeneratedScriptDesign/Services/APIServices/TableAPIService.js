@@ -7,13 +7,13 @@
 
         function GetTablesInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Tools_ModuleConfig.moduleName, controller, "GetTablesInfo"), { filter: filter });
-        };
+        }
 
 
         return {
             GetTablesInfo: GetTablesInfo
         };
-    };
+    }
     appControllers.service("VR_Tools_TableAPIService", tableAPIService);
 
 })(appControllers);

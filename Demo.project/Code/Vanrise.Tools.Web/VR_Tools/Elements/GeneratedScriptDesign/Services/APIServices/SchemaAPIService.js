@@ -7,13 +7,13 @@
 
         function GetSchemasInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Tools_ModuleConfig.moduleName, controller, "GetSchemasInfo"), { filter: filter });
-        };
+        }
 
 
         return {
             GetSchemasInfo: GetSchemasInfo
         };
-    };
+    }
     appControllers.service("VR_Tools_SchemaAPIService", schemaAPIService);
     
 })(appControllers);

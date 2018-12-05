@@ -1,7 +1,12 @@
 ﻿<vr-row removeline>
     <vr-tools-columns-selector vr-loader="scopeModel.isIdentifierColumnsDirectiveloading" label="Identifier Columns" onselectionchanged="scopeModel.onIdentifierColumnsChanged" on-ready="scopeModel.onIdentifierColumnsDirectiveReady" ismultipleselection isrequired="true" normal-col-num="2"></vr-tools-columns-selector>
+    <vr-columns colnum="2">
+        <vr-label>Identity</vr-label>
+        <vr-switch value="scopeModel.IsIdentity"></vr-switch>
+    </vr-columns>
     <vr-tools-columns-selector vr-loader="scopeModel.isInsertColumnsDirectiveloading" label="Insert Columns" on-ready="scopeModel.onInsertColumnsDirectiveReady" ismultipleselection isrequired="true" normal-col-num="2"></vr-tools-columns-selector>
     <vr-tools-columns-selector vr-loader="scopeModel.isUpdateColumnsDirectiveloading" label="Update Columns" on-ready="scopeModel.onUpdateColumnsDirectiveReady" ismultipleselection isrequired="true" normal-col-num="2"></vr-tools-columns-selector>
+    <vr-tools-generated-script-query-type-selector vr-loader="scopeModel.isQueryTypeDirectiveloading" label="Query Type" on-ready="scopeModel.onQueryTypeDirectiveReady"  normal-col-num="2"></vr-tools-generated-script-query-type-selector>
 </vr-row>
 <vr-label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Where Condition:</vr-label>
 <vr-row removeline>

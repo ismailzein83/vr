@@ -30,15 +30,15 @@ namespace Vanrise.Tools.Business
 
             query = input.Query;
             string resultKey = input.ResultKey;
-            List<TableData> allTableData = tableDataDataManager.GetTableData(input.Query.SchemaName, input.Query.TableName, input.Query.WhereCondition);
-            Func<TableData, bool> filterExpression = (TableData) =>
+            List<GeneratedScriptItemTableRow> allTableData = tableDataDataManager.GetTableData(input.Query.SchemaName, input.Query.TableName, input.Query.WhereCondition);
+            Func<GeneratedScriptItemTableRow, bool> filterExpression = (TableData) =>
             {
                 return true;
             };
 
             VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
 
-            var cachedAccountWithSelectionHandling = bulkActionDraftManager.GetOrCreateCachedWithSelectionHandling<TableData, CacheManager>(ref resultKey, input.Query.BulkActionState, () =>
+            var cachedAccountWithSelectionHandling = bulkActionDraftManager.GetOrCreateCachedWithSelectionHandling<GeneratedScriptItemTableRow, CacheManager>(ref resultKey, input.Query.BulkActionState, () =>
                  {
                      return allTableData.FindAllRecords(filterExpression);
                  }, (tableDatas) =>
@@ -67,7 +67,7 @@ namespace Vanrise.Tools.Business
 
         }
 
-        public IEnumerable<TableData> GetSelectedTableData(TableDataQuery query)
+        public IEnumerable<GeneratedScriptItemTableRow> GetSelectedTableData(TableDataQuery query)
         {
             ITableDataDataManager tableDataDataManager = VRToolsFactory.GetDataManager<ITableDataDataManager>();
 
@@ -76,11 +76,11 @@ namespace Vanrise.Tools.Business
             string connectionString = (settings != null) ? settings.ConnectionString : null;
             tableDataDataManager.Connection_String = connectionString;
 
-            List<TableData> allTableData = tableDataDataManager.GetTableData(query.SchemaName, query.TableName, query.WhereCondition);
+            List<GeneratedScriptItemTableRow> allTableData = tableDataDataManager.GetTableData(query.SchemaName, query.TableName, query.WhereCondition);
             VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
             IEnumerable<VRBulkActionDraft> bulkaActionFinalState = bulkActionDraftManager.GetVRBulkActionDrafts(query.BulkActionFinalState);
 
-            List<TableData> selectedTableData = new List<TableData>();
+            List<GeneratedScriptItemTableRow> selectedTableData = new List<GeneratedScriptItemTableRow>();
 
             foreach (var row in allTableData)
             {
@@ -121,7 +121,7 @@ namespace Vanrise.Tools.Business
 
         #region Mappers
         #endregion
-        public TableDataDetails TableDataDetailsMapper(TableData tableData)
+        public TableDataDetails TableDataDetailsMapper(GeneratedScriptItemTableRow tableData)
         {
             TableDataDetails tableDataDetails = new TableDataDetails();
             tableDataDetails.FieldValues = new Dictionary<string, object>();

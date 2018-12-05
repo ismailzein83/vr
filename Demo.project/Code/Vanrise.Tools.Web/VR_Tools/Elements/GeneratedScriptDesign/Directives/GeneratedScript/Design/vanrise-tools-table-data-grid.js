@@ -1,6 +1,6 @@
 ﻿appControllers.directive("vanriseToolsTableDataGrid", ["UtilsService", "VRNotificationService", "VR_Tools_TableDataAPIService","VR_Tools_ColumnsAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService","VRCommon_VRBulkActionDraftService",
 function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_Tools_ColumnsAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService,VRCommon_VRBulkActionDraftService) {
-    "use strict"
+    "use strict";
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -65,12 +65,12 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                                     name = response[i].Name;
                                     $scope.scopeModel.key = 'FieldValues["' + name + '"]';
                                 }
-                                $scope.scopeModel.columnNames.push(response[i]); 
-                            } 
+                                $scope.scopeModel.columnNames.push(response[i]);
+                            }
                         }
                     });
                 }
-               
+
                 function getDirectiveApi() {
 
                     var directiveApi = {};
@@ -78,15 +78,15 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                     directiveApi.load = function (payload) {
                         var loadPromise = UtilsService.createPromiseDeferred();
                         context = payload.context;
-                        context.setSelectAllEnablity= function (enablity) {
+                        context.setSelectAllEnablity = function (enablity) {
                             $scope.scopeModel.disableSelectAll = !enablity;
                         };
                         context.setDeselectAllEnablity = function (enablity) {
                             $scope.scopeModel.disableDeSelectAll = !enablity;
                         };
-                         query = payload.query; 
-                         gridQuery = query;
-                         gridQuery.allSelected = false;
+                        query = payload.query;
+                        gridQuery = query;
+                        gridQuery.allSelected = false;
 
                         getColumnNames(query).then(function (response) {
                             bulkActionDraftInstance = VRCommon_VRBulkActionDraftService.createBulkActionDraft(getContext());
@@ -103,27 +103,27 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                                 gridQuery.BulkActionFinalState = bulkActionDraftInstance.finalizeBulkActionDraft().$$state.value;
                                 return { gridQuery: gridQuery, columnNames: $scope.scopeModel.columnNames };
                             }
-                        };
+                        }
                     };
 
-                    directiveApi.deselectAllAcounts=function(){
+                    directiveApi.deselectAllAcounts = function () {
 
                         bulkActionDraftInstance.deselectAllItems();
                     };
 
-                    directiveApi.selectAllAcounts=function(){
+                    directiveApi.selectAllAcounts = function () {
 
                         bulkActionDraftInstance.selectAllItems();
                     };
 
-                    directiveApi.finalizeBulkActionDraft=function(){
+                    directiveApi.finalizeBulkActionDraft = function () {
 
                         bulkActionDraftInstance.finalizeBulkActionDraft();
                     };
 
                     return directiveApi;
                 }
-            }
+            };
 
             function getContext() {
                 var currentContext = context;
@@ -162,7 +162,7 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                                 var row = response.Data[i];
                                 prepareRow(row);
                             }
-                        };
+                        }
                         onResponseReady(response);
                         bulkActionDraftInstance.reEvaluateButtonsStatus();
                     })
@@ -170,7 +170,7 @@ function (UtilsService, VRNotificationService, VR_Tools_TableDataAPIService,VR_T
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
-        };
+        }
     }
 
     return directiveDefinitionObject;

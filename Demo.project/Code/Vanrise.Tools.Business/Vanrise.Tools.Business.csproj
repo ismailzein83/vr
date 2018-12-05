@@ -63,6 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColumnsManager.cs" />
+    <Compile Include="DeleteGeneratedScriptItem.cs" />
+    <Compile Include="MergeGeneratedScriptItem.cs" />
     <Compile Include="TableDataManager.cs" />
     <Compile Include="TableManager.cs" />
     <Compile Include="SchemaManager.cs" />

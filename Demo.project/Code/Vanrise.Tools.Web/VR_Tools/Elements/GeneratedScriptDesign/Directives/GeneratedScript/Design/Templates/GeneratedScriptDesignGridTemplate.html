@@ -1,9 +1,6 @@
-﻿<vr-row removeline>
-    <vr-columns width="1/2row">
+﻿    <vr-columns width="1/2row">
         <vr-button type="Add" standalone data-onclick="scopeModel.onGeneratedScriptDesignAdded"></vr-button>
     </vr-columns>
-</vr-row>
-<vr-row removeline>
     <vr-columns width="fullrow">
         <vr-datagrid datasource="scopeModel.designs"
                      on-ready="scopeModel.onGridReady"
@@ -13,8 +10,7 @@
                      idfield="ConnectionId"
                      enableautoexport="true">
             <vr-datagridcolumn headertext="'Schema'" field="'Entity.Schema'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Table'" field="'Entity.Table'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Table'" field="'Entity.TableName'" type="'Text'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Type'" field="'Entity.Title'" type="'Text'"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>
-</vr-row>
