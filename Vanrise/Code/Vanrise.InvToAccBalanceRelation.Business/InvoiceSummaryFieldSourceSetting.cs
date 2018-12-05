@@ -23,7 +23,7 @@ namespace Vanrise.InvToAccBalanceRelation.Business
         public List<Guid> TransactionTypeIds { get; set; }
         CurrencyExchangeRateManager currencyExchangeRateManager;
         BillingTransactionTypeManager billingTransactionTypeManager;
-        AccountManager accountManager;
+        Vanrise.AccountBalance.Business.AccountManager accountManager;
 
         public override List<AccountBalanceFieldDefinition> GetFieldDefinitions(IAccountBalanceFieldSourceGetFieldDefinitionsContext context)
         {
@@ -99,7 +99,7 @@ namespace Vanrise.InvToAccBalanceRelation.Business
                 {
                     currencyExchangeRateManager = new CurrencyExchangeRateManager();
                     billingTransactionTypeManager = new BillingTransactionTypeManager();
-                    accountManager = new AccountManager();
+                    accountManager = new Vanrise.AccountBalance.Business.AccountManager();
                     var billingTransactions = GetBillingTransactionPaidData(context.AccountTypeId, billingTransactionsByTime);
                     Dictionary<string, decimal> amountsByAccount = new Dictionary<string, decimal>();
                     if (billingTransactions != null)

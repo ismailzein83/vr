@@ -74,7 +74,7 @@ namespace Vanrise.Web.Base
 
         public void IncludeModule(string moduleName, string physicalPath)
         {
-            AddVirtualDirectory($"/Client/{moduleName}", physicalPath);
+            AddVirtualDirectory($"/Client/Modules/{moduleName}", physicalPath);
         }
 
         public void AddVirtualDirectory(string virtualPath, string physicalPath)

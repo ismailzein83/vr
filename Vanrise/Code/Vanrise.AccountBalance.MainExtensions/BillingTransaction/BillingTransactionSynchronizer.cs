@@ -53,7 +53,7 @@ namespace Vanrise.AccountBalance.MainExtensions.BillingTransaction
         public override void InsertBEs(ITargetBESynchronizerInsertBEsContext context)
         {
             context.TargetBE.ThrowIfNull("context.TargetBE", "");
-            var accountManager = new AccountManager();
+            var accountManager = new Vanrise.AccountBalance.Business.AccountManager();
             var billingTransactionTypeManager = new BillingTransactionTypeManager();
             var currencyManager = new Vanrise.Common.Business.CurrencyManager();
             BillingTransactionManager billingTransactionManager = new BillingTransactionManager();

@@ -73,7 +73,7 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
                 case "ID": return context.AccountBalance.AccountBalanceId;
                 case "CurrentBalance": return Math.Abs(context.AccountBalance.CurrentBalance);
                 case "CurrencyId": return context.AccountBalance.CurrencyId;
-                case "AccountName": return new AccountManager().GetAccountName(context.AccountBalance.AccountTypeId, context.AccountBalance.AccountId);
+                case "AccountName": return new Vanrise.AccountBalance.Business.AccountManager().GetAccountName(context.AccountBalance.AccountTypeId, context.AccountBalance.AccountId);
                 case "Actions": return vrBalanceAlertRuleManager.GetBalanceAlertRuleSettingDescription(context.AccountBalance.AlertRuleID);
                 case "BalanceFlagDescription": return LiveBalanceManager.GetBalanceFlagDescription(context.AccountBalance.CurrentBalance);
                 default: return null;

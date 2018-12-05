@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -64,7 +63,7 @@ namespace Vanrise.Common.MainExtensions
             notsupportedCount = new List<string>();            
             string urlTemp = string.Format("{0}/xGlobalCurrencies.json/GetRealTimeRates?_token={1}&Symbols={2}", this._baseUrl, this._token, GetSymbols());
             string resultString = GetApiObject(urlTemp);
-            List<XigniteFormatCurrency> realTimeRates = JsonConvert.DeserializeObject<List<XigniteFormatCurrency>>(resultString);
+            List<XigniteFormatCurrency> realTimeRates = Serializer.Deserialize<List<XigniteFormatCurrency>>(resultString);
             List<XigniteCurrency> formatedCurrencies = new List<XigniteCurrency>();
             foreach (var rc in realTimeRates)
             {

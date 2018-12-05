@@ -44,7 +44,11 @@ namespace Vanrise.Web
         }
 
         private class DOTNETVRWebRequestContextReader : IVRWebContextReader
-        {            
+        {
+            public DOTNETVRWebRequestContextReader()
+            {
+            }
+
             public string MapVirtualToPhysicalPath(string virtualPath)
             {
                 HttpContext.Current.ThrowIfNull("HttpContext.Current");
@@ -98,6 +102,16 @@ namespace Vanrise.Web
                 HttpContext.Current.ThrowIfNull("HttpContext.Current");
                 HttpContext.Current.Request.ThrowIfNull("HttpContext.Current.Request");
                 return HttpContext.Current.Request;
+            }
+
+            public bool AreDllsInBinFolder()
+            {
+                return true;
+            }
+
+            public string DecodeCookieValue(string cookieValue)
+            {
+                return VRWebUtilities.UrlDecode(cookieValue);
             }
         }
     }

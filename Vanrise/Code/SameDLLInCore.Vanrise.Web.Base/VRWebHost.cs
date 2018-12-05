@@ -14,7 +14,6 @@ namespace Vanrise.Web.Base
         static VRWebHost()
         {
             VRWebContext.SetWebContextReader(new ASPNETCoreVRWebRequestContextReader());
-            VRWebContext.RegisterApplicationWebBundles();
         }
 
         static VRWebHostOptions s_webHostOptions;
@@ -38,16 +37,18 @@ namespace Vanrise.Web.Base
             return s_rootPhysicalPath;
         }
 
-        public static void Run(VRWebHostOptions options, string[] args)
+        public static void Run<T>(VRWebHostOptions options, string[] args) where T : VRWebStartup
         {
             s_webHostOptions = options;
-            BuildWebHost(args).Run();
+            BuildWebHost<T>(args).Run();
         }
 
-        private static IWebHost BuildWebHost(string[] args) =>
+        private static IWebHost BuildWebHost<T>(string[] args) where T : VRWebStartup =>
            WebHost.CreateDefaultBuilder(args)
                .UseWebRoot("")
-               .UseStartup<VRWebStartup>()
+               .UseContentRoot(@"C:\TFS\Vanrise\Code\Vanrise.Web")
+               .UseStartup<T>()
+               //.UseKestrel(opt => opt.ApplicationSchedulingMode = Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions.Internal.SchedulingMode.ThreadPool)
                .Build();
 
         private class ASPNETCoreVRWebRequestContextReader : IVRWebContextReader
@@ -126,8 +127,19 @@ namespace Vanrise.Web.Base
 
             private HttpContext GetCurrentHttpContextWithValidate()
             {
-                VRWebStartup.s_currentRequestContext.ThrowIfNull("s_currentRequestContext");
-                return VRWebStartup.s_currentRequestContext;
+                var currentRequestContext = VRWebStartup.GetCurrentRequestContext();
+                currentRequestContext.ThrowIfNull("currentRequestContext");
+                return currentRequestContext;
+            }
+
+            public bool AreDllsInBinFolder()
+            {
+                return false;
+            }
+
+            public string DecodeCookieValue(string cookieValue)
+            {
+                return VRWebUtilities.HtmlDecode(cookieValue);
             }
         }
     }

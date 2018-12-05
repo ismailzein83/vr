@@ -20,7 +20,7 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
 
         CurrencyExchangeRateManager currencyExchangeRateManager;
         BillingTransactionTypeManager billingTransactionTypeManager;
-        AccountManager accountManager;
+        Vanrise.AccountBalance.Business.AccountManager accountManager;
         public override List<AccountBalanceFieldDefinition> GetFieldDefinitions(IAccountBalanceFieldSourceGetFieldDefinitionsContext context)
         {
             List<AccountBalanceFieldDefinition> accountBalanceFieldDefinitions = new List<AccountBalanceFieldDefinition> ();
@@ -59,7 +59,7 @@ namespace Vanrise.AccountBalance.MainExtensions.AccountBalanceFieldSource
             }
             billingTransactionTypeManager = new BillingTransactionTypeManager();
             currencyExchangeRateManager = new CurrencyExchangeRateManager();
-            accountManager = new AccountManager();
+            accountManager = new Vanrise.AccountBalance.Business.AccountManager();
             BillingTransactionManager billingTransactionManager = new Business.BillingTransactionManager();
             var billingTransactions = billingTransactionManager.GetBillingTransactionsByAccountIds(context.AccountTypeId, transactionTypes, accountIds);
             AccountUsageManager accountUsageManager = new AccountUsageManager();

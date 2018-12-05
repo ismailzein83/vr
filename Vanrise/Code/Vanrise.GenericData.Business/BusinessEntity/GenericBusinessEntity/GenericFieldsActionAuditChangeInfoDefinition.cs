@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 namespace Vanrise.GenericData.Business
 {

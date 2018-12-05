@@ -66,6 +66,17 @@ namespace Vanrise.Common
             return s_requestContextReader.GetCurrentRequestURLParts();
         }
 
+        public static bool AreDllsInBinFolder()
+        {
+            return s_requestContextReader != null && s_requestContextReader.AreDllsInBinFolder();
+        }
+
+        public static string DecodeCookieValue(string cookieValue)
+        {
+            s_requestContextReader.ThrowIfNull("s_requestContextReader");
+            return s_requestContextReader.DecodeCookieValue(cookieValue);
+        }
+
         public static void AddWebBundle(VRWebBundle bundle)
         {
             s_webBundles.Add(bundle.Name, bundle);
@@ -313,6 +324,8 @@ namespace Vanrise.Common
         string GetCurrentRequestBaseURL();
 
         VRURLParts GetCurrentRequestURLParts();
+        bool AreDllsInBinFolder();
+        string DecodeCookieValue(string cookieValue);
     }
 
     public class VRWebCookie

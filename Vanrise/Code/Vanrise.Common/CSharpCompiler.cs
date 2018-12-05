@@ -58,7 +58,7 @@ namespace Vanrise.Common
             List<MetadataReference> references = new List<MetadataReference>();
 
             string path = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
-            if (VRWebContext.IsInWebContext())
+            if (VRWebContext.AreDllsInBinFolder())
                 path = Path.Combine(path, "bin");
 
             foreach (string fileName in Directory.GetFiles(path, "*.dll"))

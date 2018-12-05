@@ -151,7 +151,7 @@ namespace Vanrise.Security.Business
                     {
                         if (cookie.Name.StartsWith(authCookieName))
                         {
-                            var cookieValue = VRWebUtilities.UrlDecode(cookie.Value);
+                            var cookieValue = VRWebContext.DecodeCookieValue(cookie.Value);
                             AuthenticationToken authenticationToken = Serializer.Deserialize<AuthenticationToken>(cookieValue);
                             token = authenticationToken.Token;
                             break;
