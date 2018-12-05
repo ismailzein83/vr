@@ -19,8 +19,6 @@
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var countrySelectorEntity;
-
         var countrySelectedPromiseDeferred;
         loadParameters();
         defineScope();
@@ -31,7 +29,6 @@
             if (parameters != undefined && parameters != null) {
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
                 swapDealInboundEntity = parameters.swapDealInbound;
-                countrySelectorEntity = swapDealInboundEntity;
                 context = parameters.context;
             }
 
@@ -63,7 +60,7 @@
 
                 if (country != undefined) {
                     var setLoader = function (value) { $scope.isLoadingSelector = value; };
-                    var payload = context != undefined ? context.getSaleZoneSelectorPayload(countrySelectorEntity != undefined ? countrySelectorEntity : undefined) : undefined;
+                    var payload = context != undefined ? context.getSaleZoneSelectorPayload(swapDealInboundEntity != undefined ? swapDealInboundEntity : undefined) : undefined;
                     if (payload != undefined) {
                         payload.sellingNumberPlanId = sellingNumberPlanId;
                         payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
