@@ -2,7 +2,7 @@
 
     'use strict';
 
-    SwapDealInboundEditorController.$inject = ['$scope', 'UtilsService', 'UISettingsService', 'Whs_Deal_SubstituteRateTypeEnum','VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    SwapDealInboundEditorController.$inject = ['$scope', 'UtilsService', 'UISettingsService', 'Whs_Deal_SubstituteRateTypeEnum', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
     function SwapDealInboundEditorController($scope, UtilsService, UISettingsService, Whs_Deal_SubstituteRateTypeEnum, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
@@ -19,7 +19,6 @@
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var carrierAccountId;
         var countrySelectorEntity;
 
         var countrySelectedPromiseDeferred;
@@ -56,6 +55,10 @@
             };
 
             $scope.onCountrySelectionChanged = function () {
+                if (countrySelectedPromiseDeferred != undefined) {
+                    countrySelectedPromiseDeferred.resolve();
+                    return;
+                }
                 var country = countryDirectiveApi.getSelectedIds();
 
                 if (country != undefined) {
@@ -64,19 +67,20 @@
                     if (payload != undefined) {
                         payload.sellingNumberPlanId = sellingNumberPlanId;
                         payload.filter.CountryIds = countryDirectiveApi.getSelectedIds();
-                        payload.selectedIds = getSelectedIdsFromEntity(swapDealInboundEntity);
+                        payload.selectedIds = undefined;
                     }
                     else {
-                       
+
                         payload = {
                             sellingNumberPlanId: sellingNumberPlanId,
                             filter: {
                                 CountryIds: countryDirectiveApi.getSelectedIds(),
                             },
-                            selectedIds: getSelectedIdsFromEntity(swapDealInboundEntity)
+                            selectedIds: undefined
                         };
                     }
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
+                    //console.log("call load from on country change");
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
                 }
                 else if (saleZoneDirectiveAPI != undefined)
                     $scope.salezones.length = 0;
@@ -108,17 +112,11 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-            if (isEditMode) {
-                loadAllControls();
-            }
-            else {
-                loadAllControls();
-            }
+            loadAllControls();
         }
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySaleZoneSection, loadSubstituteRateTypeSelector]).then(function () {
-                swapDealInboundEntity = undefined;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
@@ -150,17 +148,17 @@
             }
 
             context.getEffectiveOnDate().then(function (date) {
-            payload.filter = {
-                Filters: [{
-                    $type: 'TOne.WhS.BusinessEntity.Business.CountrySoldToCustomerFilter,TOne.WhS.BusinessEntity.Business',
-                    CustomerId: context.getCarrierAccountId(),
-                    EffectiveOn: date,
-                    IsEffectiveInFuture: false
-                }]
-            };
+                payload.filter = {
+                    Filters: [{
+                        $type: 'TOne.WhS.BusinessEntity.Business.CountrySoldToCustomerFilter,TOne.WhS.BusinessEntity.Business',
+                        CustomerId: context.getCarrierAccountId(),
+                        EffectiveOn: date,
+                        IsEffectiveInFuture: false
+                    }]
+                };
 
-            countryReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
+                countryReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
                 });
 
             });
@@ -171,13 +169,7 @@
                 promises.push(loadSalesZonesPromiseDeferred.promise);
 
                 UtilsService.waitMultiplePromises([saleZoneReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
-                    var zoneIds = undefined;
-                    if (swapDealInboundEntity != undefined) {
-                        zoneIds = [];
-                        for (var i = 0; i < swapDealInboundEntity.SaleZones.length; i++) {
-                            zoneIds.push(swapDealInboundEntity.SaleZones[i].ZoneId);
-                        }
-                    }
+                    var zoneIds = getSelectedIdsFromEntity(swapDealInboundEntity);
                     var payload = context != undefined ? context.getSaleZoneSelectorPayload(swapDealInboundEntity != undefined ? swapDealInboundEntity : undefined) : undefined;
                     if (payload != undefined) {
                         payload.sellingNumberPlanId = sellingNumberPlanId;
@@ -188,21 +180,20 @@
                     else
                         payload = {
                             sellingNumberPlanId: sellingNumberPlanId,
-                            filter: { CountryIds: swapDealInboundEntity.CountryIds   },
+                            filter: { CountryIds: swapDealInboundEntity.CountryIds },
                             selectedIds: zoneIds,
                         };
+                    //console.log("call load from load all control");
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, payload, loadSalesZonesPromiseDeferred);
-                   // VRUIUtilsService.callDirectiveLoad($scope, saleZoneDirectiveAPI, payload, loadSalesZonesPromiseDeferred);
-                    countrySelectedPromiseDeferred = undefined;
+                    loadSalesZonesPromiseDeferred.promise.then(function () { countrySelectedPromiseDeferred = undefined; });
                 });
             }
 
             return UtilsService.waitMultiplePromises(promises);
         }
 
-        function getSelectedIdsFromEntity (swapDealInboundEntity)
-        {
-            if (swapDealInboundEntity != undefined) {
+        function getSelectedIdsFromEntity(swapDealInboundEntity) {
+            if (swapDealInboundEntity != undefined && swapDealInboundEntity.SaleZones != undefined) {
                 var zoneIds = [];
                 for (var i = 0; i < swapDealInboundEntity.SaleZones.length; i++) {
                     zoneIds.push(swapDealInboundEntity.SaleZones[i].ZoneId);
@@ -211,7 +202,7 @@
             }
             return undefined;
         }
-    
+
         function setTitle() {
             if (isEditMode) {
                 if (swapDealInboundEntity != undefined)
@@ -251,12 +242,13 @@
         function buildSwapDealInboundObjFromScope() {
             var saleZones = [];
             var zoneIds = saleZoneDirectiveAPI.getSelectedIds();
-            for (var j = 0; j < zoneIds.length; j++) {
-                saleZones.push(
-                {
-                    ZoneId: zoneIds[j]
-                });
-            }
+            if (zoneIds != undefined)
+                for (var j = 0; j < zoneIds.length; j++) {
+                    saleZones.push(
+                        {
+                            ZoneId: zoneIds[j]
+                        });
+                }
             var obj = {
                 Name: $scope.scopeModel.name,
                 SaleZones: saleZones,

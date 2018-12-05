@@ -514,10 +514,11 @@
                     if (item != undefined) {
                         var sellZoneIds = [];
                         var itemZones = item.SaleZones != undefined ? item.SaleZones : item.Zones;
-                        for (var j = 0; j < itemZones.length; j++) {
-                            sellZoneIds.push(itemZones[j].ZoneId);
+                        if (itemZones != undefined) {
+                            for (var j = 0; j < itemZones.length; j++) {
+                                sellZoneIds.push(itemZones[j].ZoneId);
+                            }
                         }
-                        payload.selectedIds = sellZoneIds;
                         payload.filter = {
                             ExcludedZoneIds: getSelectedSaleZonesIdsFromItems(sellZoneIds),
                             CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined,
@@ -533,7 +534,7 @@
                             EffectiveDate: $scope.scopeModel.beginDate,
                             ExcludePendingClosedZones: true
                         };
-                       
+
                     }
                     payload.filter.Filters = [{
                         $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
@@ -573,8 +574,13 @@
                             });
                         });
                     }
-                    else
+                    else {
+                        newShiftedBED = undefined;
+                        newShiftedEED = undefined;
                         shiftedDatesPromiseDeferred.resolve();
+                    }
+                    console.log(newShiftedBED);
+                    console.log(newShiftedEED);
                     return shiftedDatesPromiseDeferred.promise.then(function () {
                         shiftedBED = newShiftedBED;
                         shiftedEED = newShiftedEED;
