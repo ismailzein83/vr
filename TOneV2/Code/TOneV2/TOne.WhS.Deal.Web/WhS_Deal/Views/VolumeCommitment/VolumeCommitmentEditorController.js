@@ -206,7 +206,7 @@
         function getVolumeCommitment() {
             return WhS_Deal_VolCommitmentDealAPIService.GetDeal(dealId).then(function (response) {
                 volumeCommitmentEntity = response;
-                carrierAccountId = volumeCommitmentEntity.Settings.CarrierAccountId
+                carrierAccountId = volumeCommitmentEntity.Settings.CarrierAccountId;
                 lastGroupNumber = volumeCommitmentEntity.Settings.LastGroupNumber;
             });
         }
