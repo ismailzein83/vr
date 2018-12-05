@@ -33,64 +33,78 @@ namespace NP.IVSwitch.Data.Postgres
             var dnisPattern = reader["dnis_pattern"] as string;
             if (dnisPattern == "[null]")
                 dnisPattern = null;
-            translationRule.DNISPattern = dnisPattern;
-            translationRule.EngineType = EngineType.Regex;
-            if (!String.IsNullOrEmpty(dnisPattern))
+
+			var cliPattern = reader["cli_pattern"] as string;
+			if (cliPattern == "[null]")
+				cliPattern = null;
+
+			var engineId = (Int16)reader["engine_id"];
+			if(engineId==1)
+				translationRule.EngineType = EngineType.Regex;
+			else
+				translationRule.EngineType = EngineType.Fast;
+
+			if (!String.IsNullOrEmpty(dnisPattern))
             {
-                if (dnisPattern.Contains("+"))
-                {
-                    translationRule.DNISPatternSign = PrefixSign.Plus;
-                    translationRule.DNISPattern = dnisPattern.Replace("+", "");
-                    translationRule.EngineType = EngineType.Fast;
-                }
-                else if (dnisPattern.Contains("-"))
-                {
-                    translationRule.DNISPatternSign = PrefixSign.Minus;
-                    translationRule.DNISPattern = dnisPattern.Replace("-", "");
-                    translationRule.EngineType = EngineType.Fast;
-                }
-            }
-            var cliPattern = reader["cli_pattern"] as string;
-            if (cliPattern == "[null]")
-                cliPattern = null;
-            if (!String.IsNullOrEmpty(cliPattern))
-            {
-                if (cliPattern.StartsWith("*") && (String.IsNullOrEmpty(dnisPattern) || translationRule.EngineType!=EngineType.Regex))
-                {
-                    translationRule.CLIType = CLIType.PoolBasedCLI;
-                    var poolId = int.Parse(cliPattern.Replace("*", ""));
-                    translationRule.PoolBasedCLISettings = GetPoolBasedCLISettings(poolId);
+				if (translationRule.EngineType == EngineType.Regex)
+				{
+					translationRule.CLIType = CLIType.FixedCLI;
+					translationRule.DNISPattern = dnisPattern;
+					if (dnisPattern.StartsWith("+"))
+						translationRule.DNISPatternSign = PrefixSign.Plus;
+
+					if (dnisPattern.StartsWith("-"))
+						translationRule.DNISPatternSign = PrefixSign.Minus;
 				}
 				else
-                {
-                    translationRule.CLIType = CLIType.FixedCLI;
-                    translationRule.FixedCLISettings = new FixedCLISettings();
-                    if (cliPattern.Contains("+"))
-                    {
-                        translationRule.FixedCLISettings.CLIPatternSign = PrefixSign.Plus;
-                        translationRule.FixedCLISettings.CLIPattern = cliPattern.Replace("+", "");
+				{
+					if (dnisPattern.StartsWith("+"))
+					{
+						translationRule.DNISPatternSign = PrefixSign.Plus;
+						translationRule.DNISPattern = dnisPattern.Replace("+","");
 					}
-					else if (cliPattern.Contains("-"))
-                    {
-                        translationRule.FixedCLISettings.CLIPatternSign = PrefixSign.Minus;
-                        translationRule.FixedCLISettings.CLIPattern = cliPattern.Replace("-", "");
+					if (dnisPattern.StartsWith("-"))
+					{
+						translationRule.DNISPatternSign = PrefixSign.Minus;
+						translationRule.DNISPattern = dnisPattern.Replace("-", "");
+					}
+				}
+            }
+
+			if (!String.IsNullOrEmpty(cliPattern))
+			{
+				translationRule.FixedCLISettings = new FixedCLISettings();
+				if (translationRule.EngineType == EngineType.Regex)
+				{
+					translationRule.CLIType = CLIType.FixedCLI;
+					translationRule.FixedCLISettings.CLIPattern = cliPattern;
+				}
+				else
+				{
+					if (cliPattern.StartsWith("*"))
+					{
+						int poolId = int.Parse(cliPattern.Replace("*", ""));
+						translationRule.PoolBasedCLISettings = GetPoolBasedCLISettings(poolId);
+						translationRule.CLIType = CLIType.PoolBasedCLI;
 					}
 					else
-                    {
-                        translationRule.FixedCLISettings.CLIPattern = cliPattern;
-                    }
+					{
+						translationRule.CLIType = CLIType.FixedCLI;
+
+						if (cliPattern.StartsWith("+"))
+						{
+							translationRule.FixedCLISettings.CLIPatternSign = PrefixSign.Plus;
+							translationRule.FixedCLISettings.CLIPattern = cliPattern.Replace("+", "");
+						}
+
+						else if (cliPattern.StartsWith("-"))
+						{
+							translationRule.FixedCLISettings.CLIPatternSign = PrefixSign.Minus;
+							translationRule.FixedCLISettings.CLIPattern = cliPattern.Replace("-", "");
+						}
+					}
 				}
-			}
-			switch (translationRule.CLIType)
-			{
-				case CLIType.PoolBasedCLI :
-					translationRule.EngineType = EngineType.Fast;
-					break;
-				case CLIType.FixedCLI:
-					if(cliPattern.Contains("-")|| cliPattern.Contains("+"))
-						translationRule.EngineType = EngineType.Fast;
-					break;
-			}
+			}	
 			return translationRule;
         }
         private string CLIPatternMapper(IDataReader reader)
