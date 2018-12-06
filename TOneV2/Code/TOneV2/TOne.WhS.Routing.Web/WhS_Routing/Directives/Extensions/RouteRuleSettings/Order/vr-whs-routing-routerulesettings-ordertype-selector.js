@@ -35,9 +35,9 @@ app.directive('vrWhsRoutingRouterulesettingsOrdertypeSelector', ['WhS_Routing_Or
 
         };
         function getTemplate(attrs) {
-            var label = 'Order Type';
-            if (attrs.ismultipleselection != undefined)
-                label = 'Order Types';
+            var label = 'Apply';
+            //if (attrs.ismultipleselection != undefined)
+            //    label = 'Types';
 
             var hideremoveicon = "";
             if (attrs.hideremoveicon != undefined)

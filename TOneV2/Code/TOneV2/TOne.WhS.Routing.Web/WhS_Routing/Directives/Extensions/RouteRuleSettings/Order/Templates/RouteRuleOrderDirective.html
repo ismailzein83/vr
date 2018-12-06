@@ -1,6 +1,8 @@
 ﻿<vr-row>
-    <vr-columns width="2/3row">
-        <vr-toolbox label="Order By" medium datasource="ctrl.optionOrderSettingsGroupTemplates" datatextfield="Title" datavaluefield="ExtensionConfigurationId" groupname="{{ctrl.dragdropGroupCorrelation.getGroupName()}}"></vr-toolbox>
+    <vr-columns colnum="8" withemptyline haschildcolumns>
+        <vr-columns colnum="11">
+            <vr-toolbox medium datasource="ctrl.optionOrderSettingsGroupTemplates" datatextfield="Title" datavaluefield="ExtensionConfigurationId" groupname="{{ctrl.dragdropGroupCorrelation.getGroupName()}}"></vr-toolbox>
+        </vr-columns>
     </vr-columns>
     <vr-columns width="1/3row">
         <vr-whs-routing-routerulesettings-ordertype-selector on-ready="scopeModel.onRouteRuleSettingsOrderTypeSelectorReady"

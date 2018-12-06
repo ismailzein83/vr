@@ -1,8 +1,10 @@
 ﻿<div>
     <vr-row>
-         <vr-columns width="fullrow">
-             <vr-toolbox label="Filter Type" medium datasource="ctrl.optionFilterSettingsGroupTemplates" datatextfield="Title" datavaluefield="ExtensionConfigurationId" groupname="{{ctrl.dragdropGroupCorrelation.getGroupName()}}"></vr-toolbox>
-        </vr-columns>    
+        <vr-columns colnum="8" withemptyline haschildcolumns>
+            <vr-columns colnum="11">
+                <vr-toolbox label="Filter Type" medium datasource="ctrl.optionFilterSettingsGroupTemplates" datatextfield="Title" datavaluefield="ExtensionConfigurationId" groupname="{{ctrl.dragdropGroupCorrelation.getGroupName()}}"></vr-toolbox>
+            </vr-columns>
+        </vr-columns>
     </vr-row>
     <vr-row>
         <vr-columns width="fullrow" vr-loader="ctrl.isLoadingDirective">
