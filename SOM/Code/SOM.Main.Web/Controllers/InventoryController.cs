@@ -13,6 +13,7 @@ namespace SOM.Main.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "Inventory")]
     public class InventoryController : BaseAPIController
     {
+        #region needed 
         [HttpGet]
         [Route("GetInventoryPhoneItem")]
         public InventoryPhoneItem GetInventoryPhoneItem(string phoneNumber)
@@ -27,23 +28,6 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.GetTechnicalReservation(phoneNumber);
         }
-
-        [HttpGet]
-        [Route("GetFreePorts")]
-        public List<DPPortItem> GetFreePorts(string dpPortId)
-        {
-            InventoryManager manager = new InventoryManager();
-            return manager.GetFreePorts(dpPortId);
-        }
-
-
-        [HttpGet]
-        [Route("GetAvailableNumbers")]
-        public List<PhoneNumberItem> GetAvailableNumbers(string cabinetPort, string dpPort, bool isGold, bool isISDN, string startsWith)
-        {
-            InventoryManager manager = new InventoryManager();
-            return manager.GetAvailableNumbers(cabinetPort, dpPort, isGold, isISDN, startsWith);
-        }
         [HttpGet]
         [Route("GetAvailableNumbers")]
         public List<PhoneNumberItem> GetAvailableNumbers(string switchId, string category, string type, int top)
@@ -51,14 +35,6 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.GetAvailableNumbers(switchId, category, type, top);
         }
-        [HttpGet]
-        [Route("GetDevices")]
-        public List<DeviceItem> GetDevices(string switchId, string type, int top)
-        {
-            InventoryManager manager = new InventoryManager();
-            return manager.GetDevices(switchId, type, top);
-        }
-
         [HttpPost]
         [Route("ReservePhoneNumber")]
         public ReserveLineRequestOutput ReservePhoneNumber(ReserveLineRequestInput input)
@@ -66,30 +42,12 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.ReservePhoneNumber(input);
         }
-
-        [HttpPost]
-        [Route("InitiateTelephonyLineSubscriptionRequest")]
-        public TelephonyLineSubscriptionOutput InitiateTelephonyLineSubscriptionRequest(TelephonyLineSubscriptionInput input)
-        {
-            throw new NotImplementedException();
-            //InventoryManager manager = new InventoryManager();
-            //return manager.InitiateTelephonyLineSubscriptionRequest(input);
-        }
-
         [HttpGet]
-        [Route("GetTelephonyStatusDetails")]
-        public string GetTelephonyStatusDetails(string phoneNumber)
+        [Route("GetDevices")]
+        public List<DeviceItem> GetDevices(string switchId, string type, int top)
         {
             InventoryManager manager = new InventoryManager();
-            return manager.GetTelephonyStatusDetails(phoneNumber);
-        }
-
-        [HttpGet]
-        [Route("TestPhoneLine")]
-        public string TestPhoneLine(string phoneNumber)
-        {
-            InventoryManager manager = new InventoryManager();
-            return manager.TestPhoneLine(phoneNumber);
+            return manager.GetDevices(switchId, type, top);
         }
         [HttpGet]
         [Route("ReserveCPT")]
@@ -132,6 +90,13 @@ namespace SOM.Main.Web.Controllers
             return manager.GetCabinetSecondaryPorts(cabinetId);
         }
         [HttpGet]
+        [Route("GetFreePorts")]
+        public List<DPPortItem> GetFreePorts(string dpPortId)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetFreePorts(dpPortId);
+        }
+        [HttpGet]
         [Route("GetDPPorts")]
         public List<DPPortItem> GetDPPorts(string dpId)
         {
@@ -143,7 +108,7 @@ namespace SOM.Main.Web.Controllers
         public string ReserveTelephonyNumber(string pathtype, string Pathname, string ObjectList, string connectors)
         {
             InventoryManager manager = new InventoryManager();
-            return manager.ReserveTelephonyNumber(pathtype,Pathname,ObjectList,connectors);
+            return manager.ReserveTelephonyNumber(pathtype, Pathname, ObjectList, connectors);
         }
         [HttpGet]
         [Route("GetDSLAMPorts")]
@@ -171,7 +136,47 @@ namespace SOM.Main.Web.Controllers
         public List<PortItem> GetISPDSLAMPorts(string switchId, string ISP)
         {
             InventoryManager manager = new InventoryManager();
-            return manager.GetISPDSLAMPorts(switchId,ISP);
+            return manager.GetISPDSLAMPorts(switchId, ISP);
         }
+        #endregion
+
+
+
+
+
+        [HttpGet]
+        [Route("GetAvailableNumbers")]
+        public List<PhoneNumberItem> GetAvailableNumbers(string cabinetPort, string dpPort, bool isGold, bool isISDN, string startsWith)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetAvailableNumbers(cabinetPort, dpPort, isGold, isISDN, startsWith);
+        }
+                       
+        [HttpPost]
+        [Route("InitiateTelephonyLineSubscriptionRequest")]
+        public TelephonyLineSubscriptionOutput InitiateTelephonyLineSubscriptionRequest(TelephonyLineSubscriptionInput input)
+        {
+            throw new NotImplementedException();
+            //InventoryManager manager = new InventoryManager();
+            //return manager.InitiateTelephonyLineSubscriptionRequest(input);
+        }
+
+        [HttpGet]
+        [Route("GetTelephonyStatusDetails")]
+        public string GetTelephonyStatusDetails(string phoneNumber)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetTelephonyStatusDetails(phoneNumber);
+        }
+
+        [HttpGet]
+        [Route("TestPhoneLine")]
+        public string TestPhoneLine(string phoneNumber)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.TestPhoneLine(phoneNumber);
+        }
+        
+        
     }
 }

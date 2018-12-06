@@ -33,6 +33,27 @@ namespace BPMExtended.Main.Business
         public string GetNextStep(string id, string currentStepId)
         {
             string nextStepId = "";
+            switch (currentStepId.ToLower())
+            {
+                ///welcome step
+                case "013b161f-fb2c-4072-82cc-60852fe53039": nextStepId = chooseContractStep; break;
+                ///choose contract step
+                case "be540720-169e-456b-b0d0-6d243d5b7f82": nextStepId = printStep; break;
+                ///print step
+                case "4f032c27-bbb9-420b-a064-6a88e7e532a0": nextStepId = SameSwitch(id) ? paymentStep :  DSLAMPortStep; break;
+                /// DSLAM Step
+                case "0e26138a-89ca-4a06-9370-d4eb9060b639": nextStepId = paymentStep; break;
+                /*payment step*/
+                case "ed21ba09-a2bb-4e4f-920a-26912132265a": nextStepId = SameSwitch(id) ? mDFStep : destinationMDFStep ; break;
+                /// MDF Step
+                case "6935960e-b310-49ff-835c-3333e2eeb73b": nextStepId = destinationMDFStep; break;
+                /// Destination MDF Step
+                case "adb8bbec-c23a-430e-bf3a-221444f0e589": nextStepId = completedStep; break;
+            }
+            return nextStepId;
+        }
+        public bool SameSwitch(string id)
+        {
             bool isonsameswitch = false;
             if (id != "")
             {
@@ -57,24 +78,7 @@ namespace BPMExtended.Main.Business
                     isonsameswitch = manager.IsNumbersOnSameSwitch(selectedcontract.ToString(), pilotcontract.ToString());
                 }
             }
-            switch (currentStepId.ToLower())
-            {
-                ///welcome step
-                case "013B161F-FB2C-4072-82CC-60852FE53039": nextStepId = chooseContractStep; break;
-                ///choose contract step
-                case "BE540720-169E-456B-B0D0-6D243D5B7F82": nextStepId = printStep; break;
-                ///print step
-                case "4F032C27-BBB9-420B-A064-6A88E7E532A0":nextStepId = isonsameswitch ? paymentStep :  DSLAMPortStep; break;
-                /// DSLAM Step
-                case "0E26138A-89CA-4A06-9370-D4EB9060B639": nextStepId = paymentStep; break;
-                /*payment step*/
-                case "ED21BA09-A2BB-4E4F-920A-26912132265A": nextStepId = isonsameswitch? mDFStep : destinationMDFStep ; break;
-                /// MDF Step
-                case "6935960E-B310-49FF-835C-3333E2EEB73B": nextStepId = destinationMDFStep; break;
-                /// Destination MDF Step
-                case "ADB8BBEC-C23A-430E-BF3A-221444F0E589": nextStepId = completedStep; break;
-            }
-            return nextStepId;
+            return isonsameswitch;
         }
     }
 }
