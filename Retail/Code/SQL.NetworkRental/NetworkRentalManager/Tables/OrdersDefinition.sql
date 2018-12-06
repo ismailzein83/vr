@@ -17,8 +17,11 @@
     [MRC]                    DECIMAL (20, 4) NULL,
     [NRC]                    DECIMAL (20, 4) NULL,
     [OneTimeHardwareCharges] DECIMAL (20, 4) NULL,
+    [OrderID]                NVARCHAR (255)  NULL,
     CONSTRAINT [PK_OrdersDefinition] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

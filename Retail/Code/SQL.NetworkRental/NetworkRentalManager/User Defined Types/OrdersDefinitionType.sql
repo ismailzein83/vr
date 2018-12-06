@@ -16,7 +16,10 @@
     [InstallationDate]       DATETIME        NULL,
     [MRC]                    DECIMAL (20, 4) NULL,
     [NRC]                    DECIMAL (20, 4) NULL,
-    [OneTimeHardwareCharges] DECIMAL (20, 4) NULL);
+    [OneTimeHardwareCharges] DECIMAL (20, 4) NULL,
+    [OrderID]                NVARCHAR (255)  NULL);
+
+
 
 
 

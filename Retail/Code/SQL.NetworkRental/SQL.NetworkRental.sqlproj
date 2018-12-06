@@ -75,5 +75,11 @@
     <Build Include="NetworkRentalManager\User Defined Types\ProductSaleType.sql" />
     <Build Include="NetworkRentalManager\User Defined Types\ProductType.sql" />
     <Build Include="Security\NetworkRentalManager.sql" />
+    <Build Include="NetworkRentalManager\Tables\DisputeType.sql" />
+    <Build Include="NetworkRentalManager\Tables\DisputeReason.sql" />
+    <Build Include="NetworkRentalManager\Tables\Dispute.sql" />
+    <Build Include="NetworkRentalManager\User Defined Types\DisputeTypeType.sql" />
+    <Build Include="NetworkRentalManager\User Defined Types\DisputeType.sql" />
+    <Build Include="NetworkRentalManager\User Defined Types\DisputeReasonType.sql" />
   </ItemGroup>
 </Project>
