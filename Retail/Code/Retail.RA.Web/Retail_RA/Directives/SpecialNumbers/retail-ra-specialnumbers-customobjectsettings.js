@@ -6,7 +6,7 @@
 
     specialNumbers.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function faultTicketType(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function specialNumbers(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -19,7 +19,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_RA/Directives/SpecialNumbers/SpecialNumbersCustomObjectSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_RA/Directives/SpecialNumbers/Template/SpecialNumbersCustomObjectSettingsTemplate.html'
 
         };
         function FaultCtor($scope, ctrl, $attrs) {
