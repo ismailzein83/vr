@@ -153,9 +153,9 @@ app.directive('vrWhsRoutingRproutebycodeGrid', ['VRNotificationService', 'UISett
                 rpRouteOption.title = buildTooltip(rpRouteOption, roundedConvertedSupplierRate);
                 rpRouteOption.titleToDisplay = buildTitleToDisplay(rpRouteOption, roundedConvertedSupplierRate);
 
-                if (rpRouteOption.ConvertedSupplierRate == 0) {
-                    rpRouteOption.ConvertedSupplierRate = 'N/A';
-                }
+                //if (rpRouteOption.ConvertedSupplierRate == 0) {
+                //    rpRouteOption.ConvertedSupplierRate = 'N/A';
+                //}
                 rpRouteOption.SupplierStatusDescription = UtilsService.getEnumDescription(WhS_Routing_SupplierStatusEnum, rpRouteOption.SupplierStatus);
                 rpRouteOption.IsBlocked = rpRouteOption.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value;
 
