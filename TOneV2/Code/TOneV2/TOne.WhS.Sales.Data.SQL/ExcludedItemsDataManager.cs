@@ -13,7 +13,7 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         private readonly string[] _ExcludedItems =
         {
-            "ID","ItemType","ItemName","Description","ParentId","ProcessInstanceId"
+            "ItemID","ItemType","ItemName","Description","ParentId","ProcessInstanceId"
         };
         #region Public Methods
         public ExcludedItemsDataManager() :
@@ -95,7 +95,7 @@ namespace TOne.WhS.Sales.Data.SQL
         {
             ExcludedItem excludedItem = new ExcludedItem
             {
-                ItemId = reader["ID"] as string,
+                ItemId = reader["ItemID"] as string,
                 ItemType = (ExcludedItemTypeEnum)reader["ItemType"],
                 ItemName = reader["ItemName"] as string,
                 Reason = reader["Description"] as string,
