@@ -21,10 +21,13 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
 
                 var ctrl = this;
                 ctrl.datasource = [];
-
+                ctrl.label = "Status Definition";
                 ctrl.selectedvalues;
-                if ($attrs.ismultipleselection != undefined)
+                if ($attrs.ismultipleselection != undefined) {
+                    ctrl.label = "Status Definitions";
                     ctrl.selectedvalues = [];
+                }
+                    
 
                 var statusDefinitionSelector = new StatusDefinitionSelector(ctrl, $scope, $attrs);
                 statusDefinitionSelector.initializeController();
@@ -58,6 +61,8 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
                     var selectfirstitem;
                     var filter;
                     if (payload != undefined) {
+                        if (payload.fieldTitle != undefined)
+                            ctrl.label = payload.fieldTitle;
                         selectedIds = payload.selectedIds;
                         selectfirstitem = payload.selectfirstitem != undefined && payload.selectfirstitem == true;
                         filter = payload.filter;
@@ -101,10 +106,9 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Status Definition";
+            var label = "{{ctrl.label}}";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "Status Definitions";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)
@@ -112,8 +116,7 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
                    '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="StatusDefinitionId" isrequired="ctrl.isrequired" label="' + label +
-                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                       '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Status" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                    '</vr-select>' +
                    '</vr-columns>';
         }
