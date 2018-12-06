@@ -22,7 +22,7 @@ app.directive('vrGenericdataFieldtypeDictionaryRuntimeeditor', ['UtilsService', 
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getDirectiveTemplate(attrs);
@@ -69,7 +69,8 @@ app.directive('vrGenericdataFieldtypeDictionaryRuntimeeditor', ['UtilsService', 
             var api = {};
 
             api.load = function (payload) {
-
+                $scope.scopeModel.values = [];
+                $scope.scopeModel.value = undefined;
                 var fieldType;
                 var fieldValue;
 

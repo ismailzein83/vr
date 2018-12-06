@@ -26,12 +26,40 @@
             </vr-datagrid>
             <!--</vr-validator>-->
         </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-datagrid datasource="ctrl.priorities"
-                         enabledraggablerow="true"
-                         hidegridmenu>
-                <vr-datagridcolumn headertext="'Field Priority'" type="'Text'" field="'FieldName'" disablesorting></vr-datagridcolumn>
-            </vr-datagrid>
+        <vr-columns width="1/3row" haschildcolumns>
+            <vr-columns width="fullrow">
+                <vr-datagrid datasource="ctrl.priorities"
+                             enabledraggablerow="true"
+                             hidegridmenu>
+                    <vr-datagridcolumn headertext="'Field Priority'" type="'Text'" field="'FieldName'" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+            <vr-columns width="fullrow" withemptyrow>
+                <vr-section title="Groups">
+                    <vr-button type="Add" data-onclick="ctrl.addCriteriaGroup" standalone vr-disabled="ctrl.criteriaFields.length==0"></vr-button>
+                    <vr-validator validate="ctrl.validateCriteriaGroupFields()">
+                        <vr-datagrid datasource="ctrl.criteriaGroups"
+                                     enabledraggablerow="true"
+                                     hidegridmenu
+                                     ondeleterow="ctrl.onDeleteCriteriaGroup">
+                            <vr-datagridcolumn headertext="'Group Title'" type="'Text'">
+                                <vr-textbox value="dataItem.groupTitle" isrequired></vr-textbox>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Criteria Fields'" type="'Text'">
+                                <vr-select on-ready="dataItem.onFieldSelectorReady"
+                                           datasource="dataItem.fields"
+                                           datatextfield="description"
+                                           datavaluefield="value"
+                                           selectedvalues="dataItem.selectedFields"
+                                           entityname="Fields"
+                                           ismultipleselection
+                                           isrequired>
+                                </vr-select>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-section>
+            </vr-columns>
         </vr-columns>
     </vr-row>
 </div>

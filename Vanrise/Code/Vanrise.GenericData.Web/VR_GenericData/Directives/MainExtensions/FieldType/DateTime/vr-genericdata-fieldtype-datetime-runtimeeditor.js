@@ -24,7 +24,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
@@ -89,8 +89,8 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                 var api = {};
 
                 api.load = function (payload) {
-
                     $scope.scopeModel.value = undefined;
+                    $scope.scopeModel.values = [];
 
                     var fieldType;
                     var fieldValue;
@@ -137,7 +137,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRuntimeeditor', ['UtilsService', 'V
                     }
                     else if (ctrl.selectionmode == "multiple") {
                         if ($scope.scopeModel.values.length > 0) {
-                            retVal = UtilsService.getPropValuesFromArray($scope.scopeModel.values, 'value')
+                            retVal = UtilsService.getPropValuesFromArray($scope.scopeModel.values, 'value');
                         }
                     }
                     else {

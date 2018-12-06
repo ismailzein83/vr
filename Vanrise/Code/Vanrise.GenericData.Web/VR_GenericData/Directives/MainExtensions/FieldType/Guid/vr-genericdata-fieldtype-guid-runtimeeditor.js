@@ -69,6 +69,8 @@ app.directive('vrGenericdataFieldtypeGuidRuntimeeditor', ['UtilsService', functi
             var api = {};
 
             api.load = function (payload) {
+                $scope.scopeModel.values = [];
+                $scope.scopeModel.value = undefined;
                 var fieldType;
                 var fieldValue;
 
@@ -131,18 +133,14 @@ app.directive('vrGenericdataFieldtypeGuidRuntimeeditor', ['UtilsService', functi
             return getSingleSelectionModeTemplate();
         }
         else {
-            return '<vr-columns colnum="{{ctrl.normalColNum * 4}}">'
-                    + '<vr-row>'
+            return '<vr-columns colnum="{{ctrl.normalColNum * 4}}" haschildcolumns>'
                         + getSingleSelectionModeTemplate()
                         + '<vr-columns withemptyline>'
                             + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>'
                         + '</vr-columns>'
-                    + '</vr-row>'
-                    + '<vr-row>'
-                        + '<vr-columns colnum="{{ctrl.normalColNum * 2}}">'
+                        + '<vr-columns colnum="{{ctrl.normalColNum * 4}}">'
                             + '<vr-datalist maxitemsperrow="6" datasource="scopeModel.values" autoremoveitem="true">{{dataItem}}</vr-datalist>'
                         + '</vr-columns>'
-                    + '</vr-row>'
                 + '</vr-columns>';
         }
 

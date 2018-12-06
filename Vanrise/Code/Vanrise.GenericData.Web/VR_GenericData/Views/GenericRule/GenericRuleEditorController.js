@@ -15,6 +15,7 @@
         var genericRuleEntity;
         var genericRuleTypeConfig;
         var criteriaDefinitionFields;
+        var criteriaDefinitionGroups;
         var criteriaFieldsValues;
 
         var preDefinedData;
@@ -73,7 +74,7 @@
             $scope.scopeModel.onCriteriaDirectiveReady = function (api) {
                 criteriaDirectiveAPI = api;
                 criteriaDirectiveReadyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function load() {
@@ -106,6 +107,7 @@
             return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(genericRuleDefinitionId).then(function (response) {
                 genericRuleDefintion = response;
                 criteriaDefinitionFields = (genericRuleDefintion != null && genericRuleDefintion.CriteriaDefinition != null) ? genericRuleDefintion.CriteriaDefinition.Fields : undefined;
+                criteriaDefinitionGroups = (genericRuleDefintion != null && genericRuleDefintion.CriteriaDefinition != null) ? genericRuleDefintion.CriteriaDefinition.Groups : undefined;
             });
         }
 
@@ -147,7 +149,8 @@
             criteriaDirectiveReadyPromiseDeferred.promise.then(function () {
                 var payload = {
                     criteriaDefinitionFields: criteriaDefinitionFields,
-                    criteriaFieldsValues: criteriaFieldsValues
+                    criteriaFieldsValues: criteriaFieldsValues,
+                    criteriaDefinitionGroups: criteriaDefinitionGroups
                 };
                 if (accessibility != undefined)
                     payload.criteriaAccessibility = accessibility.criteriaAccessibility;

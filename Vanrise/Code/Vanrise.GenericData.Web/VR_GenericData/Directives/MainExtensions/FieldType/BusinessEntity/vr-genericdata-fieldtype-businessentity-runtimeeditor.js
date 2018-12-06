@@ -38,7 +38,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                 return {
                     pre: function ($scope, iElem, iAttrs, ctrl) {
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
@@ -58,7 +58,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
              if (attrs.enableadd != undefined)
             { 
-                showaddbutton =' showaddbutton="true" '
+                 showaddbutton = ' showaddbutton="true" ';
             }
             if (attrs.selectionmode == "dynamic") {
                 return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
@@ -139,9 +139,11 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                     });
                                 }
                                 else {
-                                    $scope.selector = {};
-                                    $scope.selector.directive = businessEntityDef.Settings.SelectorUIControl;
-                                    $scope.selector.directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    if ($scope.selector == undefined) {
+                                        $scope.selector = {};
+                                        $scope.selector.directive = businessEntityDef.Settings.SelectorUIControl;
+                                        $scope.selector.directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                                    }
                                     $scope.selector.onDirectiveReady = function (api) {
                                         $scope.selector.directiveAPI = api;
                                         $scope.selector.directiveReadyPromiseDeferred.resolve();

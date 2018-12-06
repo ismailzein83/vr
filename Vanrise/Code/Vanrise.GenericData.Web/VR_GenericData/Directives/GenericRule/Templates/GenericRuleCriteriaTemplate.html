@@ -1,4 +1,27 @@
-﻿<span ng-repeat="field in criteriaFields">
-    <vr-directivewrapper directive="field.runtimeEditor.directive" on-ready="field.runtimeEditor.onDirectiveReady"
-                         selectionmode="dynamic" normal-col-num="3" ng-hide="field.notAccessible"></vr-directivewrapper>
+﻿<span ng-repeat="group in criteriaGroups" ng-if="criteriaGroups.length > 0">
+    <vr-section title="{{group.groupTitle}}">
+        <vr-row>
+            <vr-columns width="1/4row">
+                <vr-label>{{group.groupTitle}}</vr-label>
+                <vr-select datasource="group.fields"
+                           datatextfield="Title"
+                           datavaluefield="FieldName"
+                           onselectionchanged="onGroupCriteriaFieldSelectionChanged"
+                           selectedValues="group.selectedField"
+                           hideremoveicon
+                           on-ready="onGroupCriteriaFieldSelectorReady">
+                </vr-select>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <span ng-repeat="field in group.fields">
+                <vr-directivewrapper directive="field.runtimeEditor.directive" on-ready="field.runtimeEditor.onDirectiveReady"
+                                     selectionmode="dynamic" normal-col-num="3" ng-hide="field.notAccessible || field != group.selectedField"></vr-directivewrapper>
+            </span>
+        </vr-row>
+    </vr-section>
+</span>
+<span ng-repeat="remainingField in remainingCriteriaFields">
+    <vr-directivewrapper directive="remainingField.runtimeEditor.directive" on-ready="remainingField.runtimeEditor.onDirectiveReady"
+                            selectionmode="dynamic" normal-col-num="3" ng-hide="remainingField.notAccessible"></vr-directivewrapper>
 </span>

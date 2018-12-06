@@ -142,6 +142,7 @@ app.directive("vrGenericdataGenericruledefinitionSettings", ["UtilsService", "VR
 
                             if (criteriaDefinition != null) {
                                 criteriaDirectivePayload.GenericRuleDefinitionCriteriaFields = criteriaDefinition.Fields;
+                                criteriaDirectivePayload.GenericRuleDefinitionCriteriaGroups = criteriaDefinition.Groups;
                             }
 
                             VRUIUtilsService.callDirectiveLoad(criteriaDirectiveAPI, criteriaDirectivePayload, criteriaDirectiveLoadDeferred);
