@@ -99,6 +99,8 @@ as (select * from (values
 ('12E2CAD6-ABD9-4D2B-B2F3-51C3DF501DE9','Fixed','Fixed','WhS_Routing_RouteRuleSettingsType'																			,'{"Editor":"vr-whs-routing-routerulesettings-fixed", "DisplayOrder":"11"}'),
 ('BBB0CA31-0FCD-4035-A8ED-5D4BAD06C662','Block','Block','WhS_Routing_RouteRuleSettingsType'																			,'{"Editor":"vr-whs-routing-routerulesettings-block", "DisplayOrder":"31","Priority":1}'),
 ('DD2B8C20-C9D2-44BE-9EF5-0890B52FCB9C','By Service Match','By Service Match','WhS_Routing_RouteRuleOptionFilterSettings'											,'{"Editor":"vr-whs-routing-routerulesettings-filter-service"}'),
+('A4CC3BEC-B983-4283-8C82-1C354BBE103C','By Quality','By Quality','WhS_Routing_RouteRuleOptionFilterSettings'														,'{"Editor":"vr-whs-routing-routerulesettings-filter-quality"}'),
+
 ('0D42AFB5-92E2-43A4-85EE-6A51079AEDC3','Margin','Margin','WhS_Routing_RoutingOptimizerSettings'																	,'{"Editor":"vr-whs-routing-routingoptimizersettings-margin"}'),
 ('0166E5C4-0F13-4741-BD77-2C771BCAFA24','SpecialRequest','Special Request','WhS_Routing_RouteRuleSettingsType'														,'{"Editor":"vr-whs-routing-routerulesettings-specialrequest", "DisplayOrder":"2"}'),
 ('6FD3F59F-33F1-4D42-8364-7030AE79B249','WhS_Routing_DefaultRouteRuleCriteria','Default','WhS_Routing_RouteRuleCriteriaType'										,'{"Editor":"vr-whs-routing-routerulecriteria-default", "IsDefault":true}'),
