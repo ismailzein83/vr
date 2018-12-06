@@ -201,7 +201,7 @@
                         };
                     }
                     VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, payload, loadSupplierZonePromiseDeferred);
-                    loadSupplierZonePromiseDeferred.then(function () {
+                    loadSupplierZonePromiseDeferred.promise.then(function () {
                         countrySelectedPromiseDeferred = undefined;
                     });
                 });
