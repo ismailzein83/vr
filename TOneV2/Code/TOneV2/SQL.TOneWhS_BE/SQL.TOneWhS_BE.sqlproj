@@ -653,5 +653,8 @@
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfImportedCodes.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListRateChangeNew_GetCustomerRatePreviewZonePairs.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_Deal_Delete.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_ExcludedItems.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_ExcludedItems_GetProcessInstanceIds.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_ExcludedItems_GetAll.sql" />
   </ItemGroup>
 </Project>
