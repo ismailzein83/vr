@@ -37,7 +37,7 @@ app.directive('vrCommonCustomCodeDynamicCode', ['VRUIUtilsService', 'VRNotificat
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Entities.CustomCodeDynamicCodeSettings,Vanrise.Entities",
+                        $type: "Vanrise.Common.MainExtensions.VRDynamicCode.CustomCodeDynamicCodeSettings,Vanrise.Common.MainExtensions",
                         CustomCode: $scope.scopeModel.customCode
                     };
                 };

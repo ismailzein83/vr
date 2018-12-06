@@ -80,6 +80,8 @@
     <Compile Include="TextManipulationAction\SubstringActionSettings.cs" />
     <Compile Include="VRActionAuditLKUPBEDefinitionSettings.cs" />
     <Compile Include="VRDynamicAPI\VRCustomCodeDynamicAPIMethod.cs" />
+    <Compile Include="VRDynamicCode\CustomCodeDynamicCodeSettings.cs" />
+    <Compile Include="VRDynamicCode\HttpProxyDynamicCodeSettings.cs" />
     <Compile Include="VRObjectTypes\CompanySettingObjectType.cs" />
     <Compile Include="VRObjectTypes\CompanySettingPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\ProductInfoPropertyEvaluator.cs" />
