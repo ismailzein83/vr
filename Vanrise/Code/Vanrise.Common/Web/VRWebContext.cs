@@ -218,8 +218,8 @@ namespace Vanrise.Common
 
             VRWebContext.AddWebBundle(new VRScriptWebBundle("~/bundles/BaseModulesJavascripts").IncludeDirectory(
              "~/Client/Modules/Common", "*.js", true).IncludeDirectory(
-             "~/Client/Modules/Security", "*.js", true).IncludeDirectory(
-             "~/Client/Modules/VR_GenericData", "*.js", true));
+             "~/Client/Modules/VR_GenericData", "*.js", true).IncludeDirectory(
+             "~/Client/Modules/Security", "*.js", true));
 
             AddModulesVRScriptWebBundle();
         }
