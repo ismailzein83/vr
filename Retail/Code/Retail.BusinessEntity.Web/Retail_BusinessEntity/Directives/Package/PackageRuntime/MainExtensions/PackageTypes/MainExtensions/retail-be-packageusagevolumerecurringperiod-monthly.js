@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RecurchargeEvaluatorPeriodicDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_PeriodicRecurringChargePeriodTypeEnum'];
+    MonthlyPackageUsageVolumeRecurringPeriodDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_PeriodicRecurringChargePeriodTypeEnum'];
 
-    function RecurchargeEvaluatorPeriodicDirective(UtilsService, VRNotificationService, Retail_BE_PeriodicRecurringChargePeriodTypeEnum) {
+    function MonthlyPackageUsageVolumeRecurringPeriodDirective(UtilsService, VRNotificationService, Retail_BE_PeriodicRecurringChargePeriodTypeEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -13,7 +13,7 @@
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new RecurChargePackageSettings($scope, ctrl);
+                var ctor = new MonthlyPackageUsageVolumeRecurringPeriodDirective($scope, ctrl);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -28,7 +28,7 @@
             templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageRuntime/MainExtensions/PackageTypes/MainExtensions/Templates/MonthlyPackageUsageVolumeRecurringPeriodTemplate.html'
         };
 
-        function RecurChargePackageSettings($scope, ctrl) {
+        function MonthlyPackageUsageVolumeRecurringPeriodDirective($scope, ctrl) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -48,7 +48,6 @@
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.PackageUsageVolumeRecurringPeriods.MonthlyPackageUsageVolumeRecurringPeriod, Retail.BusinessEntity.MainExtensions"
                     };
-                    
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -58,6 +57,5 @@
         }
     }
 
-    app.directive('retailBePackagesettingsRecurchargeEvaluatorPeriodic', RecurchargeEvaluatorPeriodicDirective);
-
+    app.directive('retailBePackageusagevolumerecurringperiodMonthly', MonthlyPackageUsageVolumeRecurringPeriodDirective);
 })(app);
