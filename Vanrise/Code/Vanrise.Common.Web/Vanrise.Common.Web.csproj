@@ -119,6 +119,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Constant\VRCustomCodeDynamicAPIMethodTypeEnum.js" />
+    <Content Include="Common\Constant\VRHttpMessageFormatEnum.js" />
+    <Content Include="Common\Constant\VRHttpMethodEnum.js" />
     <Content Include="Common\Directives\Country\vr-common-country-remoteselector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\VRDynamicAPIModule\Templates\DynamicAPIModuleGridTemplate.html" />
