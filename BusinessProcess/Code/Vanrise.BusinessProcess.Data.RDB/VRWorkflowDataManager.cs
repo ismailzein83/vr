@@ -59,8 +59,6 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
         public bool InsertVRWorkflow(VRWorkflowToAdd vrWorkflow, Guid vrWorkflowId, int createdBy)
         {
-            string serializedSettings = vrWorkflow.Settings != null ? Vanrise.Common.Serializer.Serialize(vrWorkflow.Settings) : null;
-
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var insertQuery = queryContext.AddInsertQuery();
@@ -68,7 +66,10 @@ namespace Vanrise.BusinessProcess.Data.RDB
             insertQuery.Column(COL_ID).Value(vrWorkflowId);
             insertQuery.Column(COL_Name).Value(vrWorkflow.Name);
             insertQuery.Column(COL_Title).Value(vrWorkflow.Title);
-            insertQuery.Column(COL_Settings).Value(serializedSettings);
+
+            if (vrWorkflow.Settings != null)
+                insertQuery.Column(COL_Settings).Value(Serializer.Serialize(vrWorkflow.Settings));
+
             insertQuery.Column(COL_CreatedBy).Value(createdBy);
             insertQuery.Column(COL_LastModifiedBy).Value(createdBy);
 

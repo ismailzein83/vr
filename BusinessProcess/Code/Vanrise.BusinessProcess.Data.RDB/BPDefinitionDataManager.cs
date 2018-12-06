@@ -58,8 +58,6 @@ namespace Vanrise.BusinessProcess.Data.RDB
             if (!bpDefinition.VRWorkflowId.HasValue)
                 throw new NullReferenceException("bpDefinition.VRWorkflowId");
 
-            string serializedConfiguration = bpDefinition.Configuration != null ? Vanrise.Common.Serializer.Serialize(bpDefinition.Configuration) : null;
-
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var insertQuery = queryContext.AddInsertQuery();
@@ -69,7 +67,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
             insertQuery.Column(COL_Title).Value(bpDefinition.Title);
             insertQuery.Column(COL_VRWorkflowId).Value(bpDefinition.VRWorkflowId.Value);
 
-            insertQuery.Column(COL_Config).Value(serializedConfiguration);
+            if (bpDefinition.Configuration != null)
+                insertQuery.Column(COL_Config).Value(Serializer.Serialize(bpDefinition.Configuration));
 
             queryContext.ExecuteNonQuery();
 
