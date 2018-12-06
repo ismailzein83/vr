@@ -44,6 +44,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Analytic.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
@@ -75,6 +81,10 @@
     <ProjectReference Include="..\Retail.RA.Entities\Retail.RA.Entities.csproj">
       <Project>{35b73ae6-bbc8-408c-ab01-3bf3574b28e0}</Project>
       <Name>Retail.RA.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.RA.MainExtensions\Retail.RA.MainExtensions.csproj">
+      <Project>{dbd0a58b-94ac-4224-98f7-55b29a09bb55}</Project>
+      <Name>Retail.RA.MainExtensions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
