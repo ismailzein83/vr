@@ -8,6 +8,7 @@ using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Business;
 using Vanrise.Entities;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -15,6 +16,8 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         public BaseQueue<Object> InputQueue { get; set; }
         public int RoutingDatabaseId { get; set; }
+        public IEnumerable<RoutingCustomerInfo> RoutingCustomerInfos { get; set; }
+
     }
 
     public class ApplyProductRoutesToDB : DependentAsyncActivity<ApplyProductRoutesToDBInput>
@@ -24,9 +27,15 @@ namespace TOne.WhS.Routing.BP.Activities
 
         [RequiredArgument]
         public InArgument<int> RoutingDatabaseId { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<RoutingCustomerInfo>> RoutingCustomerInfos { get; set; }
         protected override void DoWork(ApplyProductRoutesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
+
+            bool generateCostAnalysisByCustomer = new ConfigManager().GetProductRouteBuildGenerateCostAnalysisByCustomer();
+            if (generateCostAnalysisByCustomer)
+                dataManager.RoutingCustomerInfo = inputArgument.RoutingCustomerInfos;
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
@@ -49,7 +58,8 @@ namespace TOne.WhS.Routing.BP.Activities
             return new ApplyProductRoutesToDBInput
             {
                 InputQueue = this.InputQueue.Get(context),
-                RoutingDatabaseId = this.RoutingDatabaseId.Get(context)
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context),
+                RoutingCustomerInfos = this.RoutingCustomerInfos.Get(context)
             };
         }
     }

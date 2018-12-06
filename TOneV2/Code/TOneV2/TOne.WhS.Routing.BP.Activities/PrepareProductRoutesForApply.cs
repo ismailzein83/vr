@@ -8,6 +8,8 @@ using Vanrise.BusinessProcess;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Routing.Data;
 using Vanrise.Entities;
+using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Business;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -18,6 +20,8 @@ namespace TOne.WhS.Routing.BP.Activities
         public BaseQueue<RPRouteBatch> InputQueue { get; set; }
 
         public BaseQueue<Object> OutputQueue { get; set; }
+        public IEnumerable<RoutingCustomerInfo> RoutingCustomerInfos { get; set; }
+
     }
 
     public sealed class PrepareProductRoutesForApply : DependentAsyncActivity<PrepareProductRoutesForApplyInput>
@@ -27,11 +31,16 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<BaseQueue<RPRouteBatch>> InputQueue { get; set; }
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<RoutingCustomerInfo>> RoutingCustomerInfos { get; set; }
 
         protected override void DoWork(PrepareProductRoutesForApplyInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             IRPRouteDataManager productRoutesDataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            PrepareDataForDBApply(previousActivityStatus, handle, productRoutesDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, ProductRoutesBatch => ProductRoutesBatch.RPRoutes);
+            bool generateCostAnalysisByCustomer = new ConfigManager().GetProductRouteBuildGenerateCostAnalysisByCustomer();
+            if (generateCostAnalysisByCustomer)
+                productRoutesDataManager.RoutingCustomerInfo = inputArgument.RoutingCustomerInfos;
+            PrepareDataForDBApply(previousActivityStatus, handle, productRoutesDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, ProductRoutesBatch => ProductRoutesBatch.RPRouteByCustomers);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Product Routes For Apply is done", null);
         }
 
@@ -40,7 +49,8 @@ namespace TOne.WhS.Routing.BP.Activities
             return new PrepareProductRoutesForApplyInput
             {
                 InputQueue = this.InputQueue.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                RoutingCustomerInfos = this.RoutingCustomerInfos.Get(context)
             };
         }
 

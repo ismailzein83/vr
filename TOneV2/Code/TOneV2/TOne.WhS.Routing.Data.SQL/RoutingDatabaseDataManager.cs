@@ -24,7 +24,7 @@ namespace TOne.WhS.Routing.Data.SQL
         /// <param name="type">Routing Database Type</param>
         /// <param name="effectiveTime">Effective Date</param>
         /// <returns>Created Routing Database Id</returns>
-        public int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime, RoutingDatabaseInformation information, RoutingDatabaseSettings settings)
+        public int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime, RoutingDatabaseInformation information, RoutingDatabaseSettings settings, IEnumerable<BusinessEntity.Entities.RoutingCustomerInfo> routingCustomerInfos)
         {
             object obj;
             if (ExecuteNonQuerySP("TOneWhS_Routing.sp_RoutingDatabase_Insert", out obj, name, (byte)type, (byte)processType, effectiveTime, information != null ? Vanrise.Common.Serializer.Serialize(information) : null) > 0)
@@ -37,7 +37,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 if (settings == null)
                     settings = new RoutingDatabaseSettings();
 
-                settings.DatabaseName = routingDataManager.CreateDatabase(databaseId, processType);
+                settings.DatabaseName = routingDataManager.CreateDatabase(databaseId, processType,routingCustomerInfos);
 
                 ExecuteNonQuerySP("TOneWhS_Routing.sp_RoutingDatabase_UpdateSettings", databaseId, Vanrise.Common.Serializer.Serialize(settings));
                 return databaseId;

@@ -30,14 +30,20 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public OutArgument<int> DatabaseId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<IEnumerable<RoutingCustomerInfo>> RoutingCustomerInfos { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             RoutingProcessType processType = this.ProcessType.Get(context);
             RoutingDatabaseInformation information = GetDatabaseInformation(processType, this.Policies.Get(context));
             RoutingDatabaseSettings settings = BuildRoutingDatabaseSettings();
 
+            bool generateCostAnalysisByCustomer = new TOne.WhS.Routing.Business.ConfigManager().GetProductRouteBuildGenerateCostAnalysisByCustomer();
+            IEnumerable<RoutingCustomerInfo> routingCustomerInfos = generateCostAnalysisByCustomer ? this.RoutingCustomerInfos.Get(context) : null;
+
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            int databaseId = routingDatabaseManager.CreateDatabase(String.Format("{0}_{1}_{2:yyyyMMdd-HHmm}", this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context)), this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context), information, settings);
+            int databaseId = routingDatabaseManager.CreateDatabase(String.Format("{0}_{1}_{2:yyyyMMdd-HHmm}", this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context)), this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context), information, settings, routingCustomerInfos);
 
             Thread.Sleep(2000);
 
@@ -87,7 +93,7 @@ namespace TOne.WhS.Routing.BP.Activities
         }
 
         /// <summary>
-        /// For futur use
+        /// For future use
         /// </summary>
         /// <returns></returns>
         private RoutingDatabaseSettings BuildRoutingDatabaseSettings()

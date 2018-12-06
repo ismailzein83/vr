@@ -25,7 +25,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         /// <param name="type">Routing Database Type</param>
         /// <param name="effectiveTime">Effective Date</param>
         /// <returns>Created Routing Database Id</returns>
-        public int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime, RoutingDatabaseInformation information, RoutingDatabaseSettings settings)
+        public int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime, RoutingDatabaseInformation information, RoutingDatabaseSettings settings, IEnumerable<WhS.BusinessEntity.Entities.RoutingCustomerInfo> routingCustomerInfos)
         {
             int databaseId = default(int);
 

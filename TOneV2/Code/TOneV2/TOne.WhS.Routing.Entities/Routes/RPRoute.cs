@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RPRoute
+    public class BaseRPRoute
     {
         public int RoutingProductId { get; set; }
 
@@ -19,19 +19,28 @@ namespace TOne.WhS.Routing.Entities
 
         public decimal? EffectiveRateValue { get; set; }
 
-        public Dictionary<int, RPRouteOptionSupplier> OptionsDetailsBySupplier { get; set; }
-
         public Dictionary<Guid, IEnumerable<RPRouteOption>> RPOptionsByPolicy { get; set; }
+    }
+
+    public class RPRoute : BaseRPRoute
+    {
+        public Dictionary<int, RPRouteOptionSupplier> OptionsDetailsBySupplier { get; set; }
+    }
+
+    public class RPRouteByCustomer
+    {
+        public int? CustomerId { get; set; }
+        public List<RPRoute> RPRoutes { get; set; }
     }
 
     public class RPRouteBatch
     {
         public RPRouteBatch()
         {
-            this.RPRoutes = new List<RPRoute>();
+            this.RPRouteByCustomers = new List<RPRouteByCustomer>();
         }
 
-        public List<RPRoute> RPRoutes { get; set; }
+        public List<RPRouteByCustomer> RPRouteByCustomers { get; set; }
     }
 
     public class RPRouteByCode : BaseRoute

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using TOne.Data.SQL;
 using TOne.WhS.BusinessEntity.Entities;
@@ -29,7 +30,7 @@ namespace TOne.WhS.Routing.Data.SQL
         /// <summary>
         /// Create Routing Database.
         /// </summary>
-        internal string CreateDatabase(int databaseId, RoutingProcessType routingProcessType)
+        internal string CreateDatabase(int databaseId, RoutingProcessType routingProcessType, IEnumerable<RoutingCustomerInfo> routingCustomerInfos)
         {
             _databaseId = databaseId;
             _routingProcessType = routingProcessType;
@@ -39,7 +40,7 @@ namespace TOne.WhS.Routing.Data.SQL
             switch (routingProcessType)
             {
                 case RoutingProcessType.RoutingProductRoute:
-                    CreateProductRoutingDatabaseSchema();
+                    CreateProductRoutingDatabaseSchema(routingCustomerInfos);
                     break;
                 case RoutingProcessType.CustomerRoute:
                     CreateCustomerRoutingDatabaseSchema();
@@ -147,7 +148,7 @@ namespace TOne.WhS.Routing.Data.SQL
             ExecuteNonQueryText(query.ToString(), null);
         }
 
-        private void CreateProductRoutingDatabaseSchema()
+        private void CreateProductRoutingDatabaseSchema(IEnumerable<RoutingCustomerInfo> routingCustomerInfos)
         {
             StringBuilder query = new StringBuilder();
 
@@ -163,6 +164,11 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_CodeSupplierZoneMatchTable);
             query.AppendLine(query_SaleZoneTable);
             query.AppendLine(query_ZoneCodeGroupTable);
+            if (routingCustomerInfos != null && routingCustomerInfos.Count() > 0)
+            {
+                foreach (var customer in routingCustomerInfos)
+                    query.AppendLine(query_RoutingProductByCustomerTable.Replace("#CustomerID#", customer.CustomerId.ToString()));
+            }
             ExecuteNonQueryText(query.ToString(), null);
 
             //CREATE FUNCTION must be the only statement in the batch
@@ -419,6 +425,15 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         SaleZoneServices varchar(max) NULL,
                                                         ExecutedRuleId int Null,
                                                         OptionsDetailsBySupplier nvarchar(max) NULL,
+                                                        OptionsByPolicy nvarchar(max) NULL,
+                                                        IsBlocked bit NULL
+                                                    )ON [PRIMARY]";
+        const string query_RoutingProductByCustomerTable = @"
+                                                    Create Table ProductRouteByCustomer_#CustomerID#(
+                                                        RoutingProductId int Not Null,
+                                                        SaleZoneId bigint Not Null,
+                                                        SaleZoneServices varchar(max) NULL,
+                                                        ExecutedRuleId int Null,
                                                         OptionsByPolicy nvarchar(max) NULL,
                                                         IsBlocked bit NULL
                                                     )ON [PRIMARY]";

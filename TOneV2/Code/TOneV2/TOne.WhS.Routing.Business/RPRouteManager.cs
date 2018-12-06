@@ -53,7 +53,7 @@ namespace TOne.WhS.Routing.Business
 
             IRPRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             manager.RoutingDatabase = latestRoutingDatabase;
-            Dictionary<Guid, IEnumerable<RPRouteOption>> allOptions = manager.GetRouteOptions(input.Query.RoutingProductId, input.Query.SaleZoneId);
+            Dictionary<Guid, IEnumerable<RPRouteOption>> allOptions = manager.GetRouteOptions(input.Query.RoutingProductId, input.Query.SaleZoneId, input.Query.CustomerId);
             if (allOptions == null || !allOptions.ContainsKey(input.Query.PolicyOptionConfigId))
                 return null;
 
@@ -71,8 +71,6 @@ namespace TOne.WhS.Routing.Business
                     toCurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(input.Query.CustomerId.Value);
                 }
             }
-
-
 
             IEnumerable<RPRouteOption> routeOptionsByPolicy = allOptions[input.Query.PolicyOptionConfigId];
             if (routeOptionsByPolicy == null || !routeOptionsByPolicy.Any())
@@ -169,7 +167,7 @@ namespace TOne.WhS.Routing.Business
 
             IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
             dataManager.RoutingDatabase = latestRoutingDatabase;
-            IEnumerable<RPRoute> rpRoutes = dataManager.GetRPRoutes(rpZones);
+            IEnumerable<BaseRPRoute> rpRoutes = dataManager.GetRPRoutes(rpZones, customerId);
 
             int systemCurrencyId = GetSystemCurrencyId();
             DateTime effectiveDate = DateTime.Now;
@@ -504,16 +502,16 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        private class RPRouteByZoneRequestHandler : BigDataRequestHandler<RPRouteQueryByZone, RPRoute, RPRouteDetailByZone>
+        private class RPRouteByZoneRequestHandler : BigDataRequestHandler<RPRouteQueryByZone, BaseRPRoute, RPRouteDetailByZone>
         {
             RPRouteManager _manager = new RPRouteManager();
 
-            public override RPRouteDetailByZone EntityDetailMapper(RPRoute entity)
+            public override RPRouteDetailByZone EntityDetailMapper(BaseRPRoute entity)
             {
                 throw new NotImplementedException();
             }
 
-            public override IEnumerable<RPRoute> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByZone> input)
+            public override IEnumerable<BaseRPRoute> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByZone> input)
             {
                 var latestRoutingDatabase = _manager.GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
                 if (latestRoutingDatabase == null)
@@ -524,7 +522,7 @@ namespace TOne.WhS.Routing.Business
                 return dataManager.GetFilteredRPRoutesByZone(input);
             }
 
-            protected override BigResult<RPRouteDetailByZone> AllRecordsToBigResult(DataRetrievalInput<RPRouteQueryByZone> input, IEnumerable<RPRoute> allRecords)
+            protected override BigResult<RPRouteDetailByZone> AllRecordsToBigResult(DataRetrievalInput<RPRouteQueryByZone> input, IEnumerable<BaseRPRoute> allRecords)
             {
                 int? systemCurrencyId = null;
                 int? toCurrencyId = null;
@@ -711,7 +709,7 @@ namespace TOne.WhS.Routing.Business
 
         #region Mappers
 
-        private RPRouteDetailByZone RPRouteDetailMapper(RPRoute rpRoute, Guid policyConfigId, int? numberOfOptions, int? systemCurrencyId, int? toCurrencyId, int? customerProfileId, DateTime effectiveDate,
+        private RPRouteDetailByZone RPRouteDetailMapper(BaseRPRoute rpRoute, Guid policyConfigId, int? numberOfOptions, int? systemCurrencyId, int? toCurrencyId, int? customerProfileId, DateTime effectiveDate,
             bool includeBlockedSuppliers, decimal? maxSupplierRate)
         {
             CurrencyManager currencyManager = new CurrencyManager();

@@ -6,6 +6,7 @@ using System.Activities;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Business;
 using Vanrise.BusinessProcess;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -14,6 +15,7 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         [RequiredArgument]
         public InArgument<int> RoutingDatabaseId { get; set; }
+        public InArgument<IEnumerable<RoutingCustomerInfo>> RoutingCustomerInfos { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -22,10 +24,15 @@ namespace TOne.WhS.Routing.BP.Activities
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(this.RoutingDatabaseId.Get(context));
 
             ConfigManager routingConfigManager = new ConfigManager();
+
+            bool generateCostAnalysisByCustomer = routingConfigManager.GetProductRouteBuildGenerateCostAnalysisByCustomer();
+            if (generateCostAnalysisByCustomer)
+                dataManager.RoutingCustomerInfo = this.RoutingCustomerInfos.Get(context);
+
             int commandTimeoutInSeconds = routingConfigManager.GetProductRouteIndexesCommandTimeoutInSeconds();
             int? maxDOP = routingConfigManager.GetProductRouteMaxDOP();
 
-            dataManager.FinalizeProductRoute((message) => 
+            dataManager.FinalizeProductRoute((message) =>
             {
                 context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, message, null);
             }, commandTimeoutInSeconds, maxDOP);

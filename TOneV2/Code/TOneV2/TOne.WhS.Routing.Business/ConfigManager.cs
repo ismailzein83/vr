@@ -177,6 +177,10 @@ namespace TOne.WhS.Routing.Business
 
             return triggerThresholdByRouteRuleQualityConfiguration;
         }
+        public bool GetProductRouteBuildGenerateCostAnalysisByCustomer()
+        {
+            return GetProductRouteBuildConfiguration().GenerateCostAnalysisByCustomer;
+        }
 
         #endregion
 

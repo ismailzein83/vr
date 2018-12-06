@@ -22,5 +22,7 @@ namespace TOne.WhS.Routing.Entities
         bool EntitiesEffectiveInFuture { get; }
 
         RoutingDatabase RoutingDatabase { get; }
+
+        IEnumerable<RoutingCustomerInfo> RoutingCustomerInfos { get; }
     }
 }

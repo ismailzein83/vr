@@ -20,6 +20,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public DateTime? EffectiveDate { get; set; }
         public bool IsFuture { get; set; }
         public int RoutingDatabaseId { get; set; }
+        public IEnumerable<RoutingCustomerInfo> RoutingCustomerInfos { get; set; }
     }
 
     public sealed class RPBuildRoutes : DependentAsyncActivity<RPBuildRoutesInput>
@@ -42,6 +43,8 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<int> RoutingDatabaseId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<IEnumerable<RoutingCustomerInfo>> RoutingCustomerInfos { get; set; }
 
         protected override void DoWork(RPBuildRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
@@ -63,12 +66,12 @@ namespace TOne.WhS.Routing.BP.Activities
                         if (matchingRoutingProducts != null)
                         {
                             var routingProductContext = new BuildRoutingProductRoutesContext(preparedRPCodeMatch, matchingRoutingProducts.Values, inputArgument.SupplierZoneRPOptionPolicies,
-                                inputArgument.EffectiveDate, inputArgument.IsFuture, routingDatabase);
+                                inputArgument.EffectiveDate, inputArgument.IsFuture, routingDatabase, inputArgument.RoutingCustomerInfos);
 
                             RouteBuilder builder = new RouteBuilder(RoutingProcessType.RoutingProductRoute);
-                            IEnumerable<RPRoute> productRoutes = builder.BuildRoutes(routingProductContext, preparedRPCodeMatch.SaleZoneId);
+                            IEnumerable<RPRouteByCustomer> productRoutes = builder.BuildRoutes(routingProductContext, preparedRPCodeMatch.SaleZoneId);
 
-                            productRoutesBatch.RPRoutes.AddRange(productRoutes);
+                            productRoutesBatch.RPRouteByCustomers.AddRange(productRoutes);
                             inputArgument.OutputQueue.Enqueue(productRoutesBatch);
                             productRoutesBatch = new RPRouteBatch();
                         }
@@ -88,7 +91,8 @@ namespace TOne.WhS.Routing.BP.Activities
                 OutputQueue = this.OutputQueue.Get(context),
                 EffectiveDate = this.EffectiveDate.Get(context),
                 IsFuture = this.IsFuture.Get(context),
-                RoutingDatabaseId = this.RoutingDatabaseId.Get(context)
+                RoutingDatabaseId = this.RoutingDatabaseId.Get(context),
+                RoutingCustomerInfos = this.RoutingCustomerInfos.Get(context)
             };
         }
 
@@ -110,9 +114,11 @@ namespace TOne.WhS.Routing.BP.Activities
         public DateTime? EntitiesEffectiveOn { get; set; }
         public bool EntitiesEffectiveInFuture { get; set; }
         public RoutingDatabase RoutingDatabase { get; set; }
+        public IEnumerable<RoutingCustomerInfo> RoutingCustomerInfos { get; set; }
+
 
         public BuildRoutingProductRoutesContext(RPCodeMatchesByZone codeMatch, IEnumerable<RoutingProduct> routingProducts, IEnumerable<SupplierZoneToRPOptionPolicy> policies,
-            DateTime? effectiveDate, bool isFuture, RoutingDatabase routingDatabase)
+            DateTime? effectiveDate, bool isFuture, RoutingDatabase routingDatabase, IEnumerable<RoutingCustomerInfo> routingCustomerInfos)
         {
             this.RoutingProducts = routingProducts;
             this.SupplierCodeMatches = (codeMatch.SupplierCodeMatches != null) ? codeMatch.SupplierCodeMatches.ToList() : null;
@@ -121,6 +127,7 @@ namespace TOne.WhS.Routing.BP.Activities
             this.EntitiesEffectiveOn = effectiveDate;
             this.EntitiesEffectiveInFuture = isFuture;
             this.RoutingDatabase = routingDatabase;
+            this.RoutingCustomerInfos = routingCustomerInfos;
         }
     }
 }

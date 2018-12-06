@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.BP.Arguments
@@ -15,6 +16,7 @@ namespace TOne.WhS.Routing.BP.Arguments
         public List<SupplierZoneToRPOptionPolicy> SupplierOptionPolicies { get; set; }
         public DateTime? EffetiveDate { get; set; }
         public bool IsFuture { get; set; }
+        public IEnumerable<RoutingCustomerInfo> RoutingCustomerInfos { get; set; }
 
         public override string GetTitle()
         {

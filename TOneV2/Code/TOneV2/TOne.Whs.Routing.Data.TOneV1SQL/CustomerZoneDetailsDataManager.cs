@@ -228,7 +228,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         private RouteRule GetRouteRule(RouteRuleTarget routeRuleTarget)
         {
             if (_ruleTreesForCustomerRoutes == null)
-                _ruleTreesForCustomerRoutes = new RouteRuleManager().GetRuleTreesByPriority(null);
+                _ruleTreesForCustomerRoutes = new RouteRuleManager().GetRuleTreesByPriority();
 
             if (_ruleTreesForCustomerRoutes != null)
             {

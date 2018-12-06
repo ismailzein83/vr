@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Caching;
@@ -100,10 +101,10 @@ namespace TOne.WhS.Routing.Business
             CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
 
-        public int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime, RoutingDatabaseInformation information, RoutingDatabaseSettings settings)
+        public int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime, RoutingDatabaseInformation information, RoutingDatabaseSettings settings,IEnumerable<RoutingCustomerInfo> routingCustomerInfos)
         {
             IRoutingDatabaseDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRoutingDatabaseDataManager>();
-            int databaseId = dataManager.CreateDatabase(name, type, processType, effectiveTime, information, settings);
+            int databaseId = dataManager.CreateDatabase(name, type, processType, effectiveTime, information, settings, routingCustomerInfos);
             CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             return databaseId;
         }

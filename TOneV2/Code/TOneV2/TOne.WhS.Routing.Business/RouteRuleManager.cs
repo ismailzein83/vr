@@ -193,9 +193,9 @@ namespace TOne.WhS.Routing.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails), handler);
         }
 
-        public RouteRule GetMatchRule(RouteRuleTarget target, int? routingProductId)
+        public RouteRule GetMatchRule(RouteRuleTarget target)
         {
-            var ruleTrees = GetRuleTreesByPriority(routingProductId);
+            var ruleTrees = GetRuleTreesByPriority();
             if (ruleTrees != null)
             {
                 foreach (var ruleTree in ruleTrees)
@@ -208,9 +208,9 @@ namespace TOne.WhS.Routing.Business
             return null;
         }
 
-        public Vanrise.Rules.RuleTree[] GetRuleTreesByPriority(int? routingProductId)
+        public Vanrise.Rules.RuleTree[] GetRuleTreesByPriority()
         {
-            return GetCachedOrCreate(string.Format("GetRuleTreesByPriority_{0}", routingProductId.HasValue ? routingProductId.Value : 0),
+            return GetCachedOrCreate("GetRuleTreesByPriority",
                 () =>
                 {
                     List<Vanrise.Rules.RuleTree> ruleTrees = new List<Vanrise.Rules.RuleTree>();
@@ -229,8 +229,7 @@ namespace TOne.WhS.Routing.Business
                             currentPriority = priority;
                             currentRules = new List<Vanrise.Rules.IVRRule>();
                         }
-                        var ruleTypeRules = GetFilteredRules(itm => itm.Settings.ConfigId == ruleType.ExtensionConfigurationId
-                                                         && (!routingProductId.HasValue || (itm.Criteria.GetRoutingProductId().HasValue && routingProductId.Value == itm.Criteria.GetRoutingProductId().Value)));
+                        var ruleTypeRules = GetFilteredRules(itm => itm.Settings.ConfigId == ruleType.ExtensionConfigurationId);
                         if (ruleTypeRules != null)
                             currentRules.AddRange(ruleTypeRules);
                     }
