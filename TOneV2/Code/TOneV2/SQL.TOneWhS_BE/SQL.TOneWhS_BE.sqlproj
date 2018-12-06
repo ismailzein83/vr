@@ -656,5 +656,6 @@
     <Build Include="TOneWhS_Sales\Tables\RP_ExcludedItems.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_ExcludedItems_GetProcessInstanceIds.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_ExcludedItems_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListRateChangeNew_GetCustomerOtherRatePreviews.sql" />
   </ItemGroup>
 </Project>
