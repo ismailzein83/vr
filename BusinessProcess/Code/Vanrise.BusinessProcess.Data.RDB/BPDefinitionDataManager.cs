@@ -112,7 +112,16 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             string workflowTypeAsString = reader.GetString(COL_FQTN);
             if (!string.IsNullOrEmpty(workflowTypeAsString))
-                bpDefinition.WorkflowType = Type.GetType(workflowTypeAsString);
+            {
+                try
+                {
+                    bpDefinition.WorkflowType = Type.GetType(workflowTypeAsString);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
 
             string config = reader.GetString(COL_Config);
             if (!String.IsNullOrWhiteSpace(config))
