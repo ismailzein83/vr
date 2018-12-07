@@ -128,7 +128,13 @@ as (select * from (values
 ('VRCommon/VRNamespace/GetVRNamespace','VR_SystemConfiguration:View'),
 ('VRCommon/VRNamespace/UpdateVRNamespace','VR_SystemConfiguration:Edit'),
 ('VRCommon/VRNamespace/AddVRNamespace','VR_SystemConfiguration:Add'),
-('VRCommon/VRNamespace/GetFilteredVRNamespaces','VR_SystemConfiguration:View')
+('VRCommon/VRNamespace/GetFilteredVRNamespaces','VR_SystemConfiguration:View'),
+('VRCommon/VRDynamicAPI/AddVRDynamicAPI','VRDynamicAPI: Add'),
+('VRCommon/VRDynamicAPI/UpdateVRDynamicAPI','VRDynamicAPI: Edit'),
+('VRCommon/VRDynamicAPI/GetFilteredVRDynamicAPIs','VRDynamicAPI: View'),
+('VRCommon/VRDynamicAPIModule/AddVRDynamicAPIModule','VRDynamicAPIModule: Add'),
+('VRCommon/VRDynamicAPIModule/UpdateVRDynamicAPIModule','VRDynamicAPIModule: Edit'),
+('VRCommon/VRDynamicAPIModule/GetFilteredVRDynamicAPIModules','VRDynamicAPIModule: View')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -159,7 +165,8 @@ as (select * from (values
 ('16419FE1-ED56-49BA-B609-284A5E21FC07','Traffic'				,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0),
 ('5B13C15E-C118-41DC-A2D4-437C9E93F13B','Security'				,'61451603-E7B9-40C6-AE27-6CBA974E1B3B',0),
 ('0BA03544-A3D8-4570-8855-5162B42B50AB','System Settings'		,'61451603-E7B9-40C6-AE27-6CBA974E1B3B',0),
-('9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF','Rules'					,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0)
+('9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF','Rules'					,'5A9E78AE-229E-41B9-9DBF-492997B42B61',0),
+('57E206E7-7B53-4CFF-8165-C97F960BE70C','VRDynamicAPI'			,'61451603-E7B9-40C6-AE27-6CBA974E1B3B',0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[ParentId],[BreakInheritance]))
 merge	[sec].[BusinessEntityModule] as t
@@ -202,7 +209,9 @@ as (select * from (values
 ('4DFD6381-A5AE-443A-8E2A-0A747BBC8037','FaultTicket','Fault Ticket'						,'16419FE1-ED56-49BA-B609-284A5E21FC07',0,'["View","Add","Edit"]'),
 
 ('AB794846-853C-4402-A8E4-6F5C3A75F5F2','BillingData','Billing Data'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
-('8DCD6E7B-7F93-4FB5-86C1-77A40939DEC7','CDR_Problems','CDR Problems'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]')
+('8DCD6E7B-7F93-4FB5-86C1-77A40939DEC7','CDR_Problems','CDR Problems'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View"]'),
+('C2029536-B819-4A10-B293-EA11670DE357','VRDynamicAPIModule','VRDynamicAPIModule'			,'57E206E7-7B53-4CFF-8165-C97F960BE70C',0,'["View","Add","Edit"]'),
+('C3D56166-1778-413F-9615-4F39129DA824','VRDynamicAPI','VRDynamicAPI'			            ,'57E206E7-7B53-4CFF-8165-C97F960BE70C',0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
@@ -285,7 +294,8 @@ as (select * from (values
 ('52C580DE-C91F-45E2-8E3A-46E0BA9E7EFD','Component Types','Component Types','#/view/Common/Views/VRComponentType/VRComponentTypeManagement'									,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRComponentType/GetFilteredVRComponentTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',24),
 ('2CF7E0BE-1396-4305-AA27-11070ACFC18F','Application Visibilities','Application Visibilities','#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',26),
 ('2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF','Locked Sessions','Locked Sessions','#/view/Common/Views/VRExclusiveSession/VRExclusiveSessionManagement'							,'525B77DC-F097-4BF1-930A-034B9BBE1AC4','VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
-('32495D59-E401-4AF0-81A3-829F9C442036','Custom Namespaces','Custom Namespaces','#/view/Common/Views/VRNamespace/VRNamespaceManagement'										,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRNamespace/GetFilteredVRNamespaces',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',19)
+('32495D59-E401-4AF0-81A3-829F9C442036','Custom Namespaces','Custom Namespaces','#/view/Common/Views/VRNamespace/VRNamespaceManagement'										,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRNamespace/GetFilteredVRNamespaces',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',19),
+('AF4FF1BA-C026-4CC7-ADE2-B684453DBB8C','Dynamic API Module','Dynamic API Module','#/view/Common/Views/VRDynamicAPIModule/VRDynamicAPIModuleManagement','89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/VRDynamicAPIModule/GetFilteredVRDynamicAPIModules',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -409,7 +419,9 @@ as (select * from (values
 ('A6B961D2-84F3-4772-94BC-67328FCA0C05','Comment Section','Comment Section','VR_Invoice_InvoiceType_InvoiceUISubSectionSettings','{"Editor":"vr-invoicetype-invoicesubsectionsettings-comment","RuntimeEditor":"vr-invoice-commentsubsection-grid"}'),
 ('98154422-B815-4843-9304-CE63930CED84','VRCommon_Comment','VRComment','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"vr-common-commentbe-editor"}'),
 ('D72E97C0-73BA-4BB9-AA37-4889A4C3386F','Yesterday','Yesterday','VRCommon_VRTimePeriod','{"Editor":"vr-common-timeperiod-yesterday"}'),
-('FB9B7430-6FE8-418C-98EB-49730B562DE8','SpecificDaysTimePeriod','Specific Days','VRCommon_VRTimePeriod','{"Editor":"vr-common-timeperiod-specificdays"}')
+('FB9B7430-6FE8-418C-98EB-49730B562DE8','SpecificDaysTimePeriod','Specific Days','VRCommon_VRTimePeriod','{"Editor":"vr-common-timeperiod-specificdays"}'),
+('4EB2746B-5368-4D05-B6D3-EFD075BE2DCF','Custom Code ',' Custom Code ','VRCommon_DynamicAPIMethod','{"Editor":"vr-common-dynamicapi-customcode-method"}'),
+('BDD289DF-573C-44A1-9A95-D0DE2ED9DD71','Custom Code','Custom Code','VRCommon_DynamicCode','{"Editor":"vr-common-dynamiccode-customcode"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
