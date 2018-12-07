@@ -1,6 +1,6 @@
 ﻿<vr-panel vr-loader="scopeModel.isLoading">
     <vr-row removeline>
-        <vr-common-custom-code-dynamicapi-method-type on-ready="scopeModel.onCustomCodeMethodTypeDirectiveReady" normal-col-num="6" isrequired="true"></vr-common-custom-code-dynamicapi-method-type>
+        <vr-common-dynamicapi-customcode-method-type on-ready="scopeModel.onCustomCodeMethodTypeDirectiveReady" normal-col-num="6" isrequired="true"></vr-common-dynamicapi-customcode-method-type>
         <vr-columns width="1/2row">
             <vr-label>Return Type</vr-label>
             <vr-textbox value="scopeModel.returnType" isrequired="scopeModel.isReturnTypeRequired()"></vr-textbox>
@@ -9,7 +9,7 @@
     <vr-row removeline>
         <vr-columns width="fullrow">
             <vr-section header="Parameters">
-                <vr-common-custom-code-dynamicapi-method-parameters-grid on-ready="scopeModel.onCustomCodeMethodParametersGridDirectiveReady"></vr-common-custom-code-dynamicapi-method-parameters-grid>
+                <vr-common-dynamicapi-customcode-method-parameters-grid on-ready="scopeModel.onCustomCodeMethodParametersGridDirectiveReady"></vr-common-dynamicapi-customcode-method-parameters-grid>
                 </vr-section>
         </vr-columns>
     </vr-row>

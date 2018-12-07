@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrCommonCustomCodeDynamicapiMethodType', ['VRUIUtilsService', 'UtilsService', 'VRCommon_CustomCodeDynamicAPIMethodTypeEnum',
+app.directive('vrCommonDynamicapiCustomcodeMethodType', ['VRUIUtilsService', 'UtilsService', 'VRCommon_CustomCodeDynamicAPIMethodTypeEnum',
     function (VRUIUtilsService, UtilsService, VRCommon_CustomCodeDynamicAPIMethodTypeEnum) {
 
         var directiveDefinitionObject = {

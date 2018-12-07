@@ -1,5 +1,5 @@
 ﻿"use strict";
-app.directive("vrCommonCustomCodeDynamicapiMethodParametersGrid", ["UtilsService", "VRNotificationService", "VRCommon_VRDynamicAPIAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
+app.directive("vrCommonDynamicapiCustomcodeMethodParametersGrid", ["UtilsService", "VRNotificationService", "VRCommon_VRDynamicAPIAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
     function (UtilsService, VRNotificationService, VRCommon_VRDynamicAPIAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
         var directiveDefinitionObject = {

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrCommonCustomCodeDynamicCode', ['VRUIUtilsService', 'VRNotificationService',  'VRCommon_VRNamespaceService',
+app.directive('vrCommonDynamiccodeCustomcode', ['VRUIUtilsService', 'VRNotificationService',  'VRCommon_VRNamespaceService',
     function (VRUIUtilsService, VRNotificationService,  VRCommon_VRNamespaceService) {
         return {
             restrict: 'E',
@@ -22,7 +22,7 @@ app.directive('vrCommonCustomCodeDynamicCode', ['VRUIUtilsService', 'VRNotificat
 
             var gridAPI;
             function initializeController() {
-                $scope.scopeModel = {};
+                $scope.scopeModel = {}; 
                 $scope.scopeModel.menuActions = [];
                 defineAPI();
             }
