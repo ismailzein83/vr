@@ -44,12 +44,8 @@
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-                var defFilter = {
-                    RuleDefinitionId: genericRuleDefinitionAPI.getSelectedIds(),
-                    EffectiveDate: $scope.scopeModel.effectiveDate,
-                    Description: $scope.scopeModel.description,
-                    ReportName: ruleDefinition.Name
-                };
+                var defFilter = {};
+                appendFilterObject(defFilter);
                 gridAPI.loadGrid(defFilter);
             };
 
@@ -71,10 +67,7 @@
 
             $scope.scopeModel.search = function () {
                 var filter = searchDirectiveAPI.getSearchObject();
-                filter.RuleDefinitionId = genericRuleDefinitionAPI.getSelectedIds();
-                filter.EffectiveDate = $scope.scopeModel.effectiveDate;
-                filter.Description = $scope.scopeModel.description;
-
+                appendFilterObject(filter);
                 return gridAPI.loadGrid(filter);
             };
 
@@ -93,6 +86,14 @@
             };
 
         }
+
+        function appendFilterObject(filter) {
+            filter.RuleDefinitionId = genericRuleDefinitionAPI.getSelectedIds();
+            filter.EffectiveDate = $scope.scopeModel.effectiveDate;
+            filter.Description = $scope.scopeModel.description;
+            filter.ReportName = ruleDefinition.Name
+        }
+
         function load() {
             $scope.isLoading = true;
 
