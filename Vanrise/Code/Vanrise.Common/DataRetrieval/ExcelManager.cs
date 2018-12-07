@@ -16,7 +16,7 @@ namespace Vanrise.Common
         const string DEFAULT_EXCEL_SHEET_NAME = "Result";
 
         int _normalPrecision;
-        int _longPrecision;  
+        int _longPrecision;
         public ExcelManager()
         {
             IGeneralSettingsManager generalSettingsManager = BusinessManagerFactory.GetManager<IGeneralSettingsManager>();
@@ -191,6 +191,7 @@ namespace Vanrise.Common
             colIndex = 0;
 
             //filling result
+            bool showTruncatedCellWarning = false;
             foreach (var excelRow in excelSheet.Rows)
             {
                 if (excelRow.Cells == null)
@@ -205,7 +206,21 @@ namespace Vanrise.Common
                         throw new Exception(String.Format("Cell Index '{0}' in row '{1}' is greater than header cell count '{2}'", colIndex, rowIndex, excelSheet.Header.Cells.Count));
                     var headerCell = excelSheet.Header.Cells[colIndex];
                     SetExcelCellFormat(excelCell, headerCell, cell.Style);
-                    excelCell.PutValue(cell.Value);
+
+                    string cellValueAsString = cell.Value != null ? cell.Value.ToString() : string.Empty;
+                    if (cellValueAsString.Length > 32767)
+                    {
+                        string truncatedString = cellValueAsString.Substring(0, 32762);
+                        truncatedString += "...";
+                        excelCell.PutValue(truncatedString);
+                        if (!showTruncatedCellWarning)
+                            showTruncatedCellWarning = true;
+                    }
+                    else
+                    {
+                        excelCell.PutValue(cell.Value);
+                    }
+
                     colIndex++;
                 }
 
@@ -214,6 +229,20 @@ namespace Vanrise.Common
 
             if (excelSheet.AutoFitColumns)
                 RateWorkSheet.AutoFitColumns();
+            if (showTruncatedCellWarning)
+            {
+                RateWorkSheet.Cells.InsertRow(0);
+                RateWorkSheet.Cells.InsertRow(0);
+                Range range = RateWorkSheet.Cells.CreateRange("A1:E1");
+                Style s = wbk.Styles[wbk.Styles.Add()];
+                s.Font.Name = "Times New Roman";
+                s.Font.Color = Color.FromArgb(255, 0, 0);
+                s.Font.Size = 14;
+                s.Font.IsBold = true;
+                range.SetStyle(s);
+                range.PutValue("The sheet includes truncated data for cells having more than 32k.", false, true);
+                range.Merge();
+            }
 
             MemoryStream memoryStream = new MemoryStream();
 
@@ -348,7 +377,7 @@ namespace Vanrise.Common
             excelCell.SetStyle(cellStyle);
         }
 
-        public  string GetNumberFormat(Vanrise.Entities.NumberType numberType)
+        public string GetNumberFormat(Vanrise.Entities.NumberType numberType)
         {
             switch (numberType)
             {
