@@ -1,0 +1,10 @@
+﻿SQLDataRecordStorageSettings		RDBDataRecordStorageSettings
+SQLDataStorage						RDBDataStorage
+SQLDataRecordStorageColumn			RDBDataRecordStorageColumn
+ValueExpression						FieldName
+"SQLDataType":"varchar(max)"		"DataType":0
+"SQLDataType":"nvarchar(max)"		"DataType":1
+"SQLDataType":"int"					"DataType":2
+"SQLDataType":"bigint"				"DataType":3
+"SQLDataType":"datetime"			"DataType":5
+"SQLDataType":"uniqueidentifier"	"DataType":6

@@ -243,19 +243,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             updateQuery.Join("rec");
             throw new NotImplementedException();
         }
-
-        private static void AddColumnsToTempTableQuery(RDBTempTableQuery tempTableQuery, List<string> fields, bool addAsPrimaryKey, RDBRegistrationInfo rdbRegistrationInfo)
-        {
-            foreach (var fld in fields)
-            {
-                RDBDataRecordStorageColumn colDef;
-                if (!rdbRegistrationInfo.ColumnsByFieldName.TryGetValue(fld, out colDef))
-                    throw new NullReferenceException($"colDef '{fld}'");
-                RDBTableColumnDefinition rdbColDef = colDef.RDBColumnDefinition;
-                tempTableQuery.AddColumn(fld, rdbColDef.DataType, rdbColDef.Size, rdbColDef.Precision, addAsPrimaryKey);
-            }
-        }
-
+        
         public void WriteRecordToStream(object record, object dbApplyStream)
         {
             RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
@@ -303,8 +291,14 @@ namespace Vanrise.GenericData.RDBDataStorage
 
                     foreach(var col in _dataRecordStorageSettings.Columns)
                     {
-                        col.RDBColumnDefinition.ThrowIfNull("col.RDBColumnDefinition", col.FieldName);
-                        rdbTableDefinition.Columns.Add(col.FieldName, col.RDBColumnDefinition);
+                        var rdbColDef = new RDBTableColumnDefinition
+                        {
+                            DBColumnName = col.ColumnName,
+                            DataType = col.DataType,
+                            Size = col.Size,
+                            Precision = col.Precision
+                        };
+                        rdbTableDefinition.Columns.Add(col.FieldName, rdbColDef);
                         fieldNamesForBulkInsert.Add(col.FieldName);
                         columnsByFieldName.Add(col.FieldName, col);
                         if(col.FieldName == idFieldName)

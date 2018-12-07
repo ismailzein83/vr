@@ -111,6 +111,7 @@
     <Content Include="Files\RoslynCompiler.txt" />
     <Content Include="Resources\dotnetCore\ProjectConversion.txt" />
     <Content Include="Resources\RDB\MySQL.txt" />
+    <Content Include="Resources\RDB\RDBRecordStorageReplacements.txt" />
     <Content Include="StandardNetFramework_DLLs\System.Data.SqlClient.dll" />
   </ItemGroup>
   <ItemGroup>

@@ -26,8 +26,14 @@ namespace Vanrise.GenericData.RDBDataStorage
     {
         public string FieldName { get; set; }
         
-        public RDBTableColumnDefinition RDBColumnDefinition { get; set; }
-        
+        public string ColumnName { get; set; }
+
+        public RDBDataType DataType { get; set; }
+
+        public int? Size { get; set; }
+
+        public int? Precision { get; set; }
+
         public bool IsUnique { get; set; }
 
         public bool IsIdentity { get; set; }
