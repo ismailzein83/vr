@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    vrDynamicAPIModuleManagementController.$inject = ['$scope', 'VRNotificationService', 'VR_Dynamic_API_ModuleService', 'VRCommon_VRDynamicAPIModuleAPIService','VRCommon_VRDynamicAPIAPIService','UtilsService', 'VRUIUtilsService'];
+    vrDynamicAPIModuleManagementController.$inject = ['$scope', 'VRNotificationService', 'VRCommon_DynamicAPIModuleService', 'VRCommon_VRDynamicAPIModuleAPIService','VRCommon_VRDynamicAPIAPIService','UtilsService', 'VRUIUtilsService'];
 
-    function vrDynamicAPIModuleManagementController($scope, VRNotificationService, VR_Dynamic_API_ModuleService, VRCommon_VRDynamicAPIModuleAPIService, VRCommon_VRDynamicAPIAPIService, UtilsService, VRUIUtilsService) {
+    function vrDynamicAPIModuleManagementController($scope, VRNotificationService, VRCommon_DynamicAPIModuleService, VRCommon_VRDynamicAPIModuleAPIService, VRCommon_VRDynamicAPIAPIService, UtilsService, VRUIUtilsService) {
 
         var gridApi;
         defineScope();
@@ -29,7 +29,11 @@
                         gridApi.onVRDynamicAPIModuleAdded(dynamicAPI);
                     }
                 };
-                VR_Dynamic_API_ModuleService.addVRDynamicAPIModule(onVRDynamicAPIModuleAdded);
+                VRCommon_DynamicAPIModuleService.addVRDynamicAPIModule(onVRDynamicAPIModuleAdded);
+            };
+
+            $scope.scopeModel.hasAddVRDynamicAPIModulePermission = function () {
+                return VRCommon_VRDynamicAPIModuleAPIService.HasAddVRDynamicAPIModulePermission();
             };
         }
 

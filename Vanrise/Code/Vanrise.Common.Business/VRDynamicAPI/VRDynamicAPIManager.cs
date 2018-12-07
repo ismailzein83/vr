@@ -31,6 +31,7 @@ namespace Vanrise.Common.Business
                     return false;
                 return true;
             };
+            VRActionLogger.Current.LogGetFilteredAction(VRDynamicAPILoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allVRDynamicAPIs.ToBigResult(input, filterExpression, VRDynamicAPIDetailMapper));
 
         }
@@ -58,6 +59,7 @@ namespace Vanrise.Common.Business
             {
                 vrDynamicAPI.VRDynamicAPIId = vrDynamicAPIId;
                 GetCacheManager().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(VRDynamicAPILoggableEntity.Instance, vrDynamicAPI);
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = VRDynamicAPIDetailMapper(vrDynamicAPI);
             }
@@ -74,6 +76,10 @@ namespace Vanrise.Common.Business
             return allVRDynamicAPIs.GetRecord(vrDynamicAPIId);
         }
 
+        public string GetVRDynamicAPIName(VRDynamicAPI vrDynamicAPI)
+        {
+            return (vrDynamicAPI != null) ? vrDynamicAPI.Name : null;
+        }
         public UpdateOperationOutput<VRDynamicAPIDetails> UpdateVRDynamicAPI(VRDynamicAPI vrDynamicAPI)
         {
             IVRDynamicAPIDataManager vrDynamicAPIDataManager = CommonDataManagerFactory.GetDataManager<IVRDynamicAPIDataManager>();
@@ -85,6 +91,7 @@ namespace Vanrise.Common.Business
             if (updateActionSuccess)
             {
                 GetCacheManager().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(VRDynamicAPILoggableEntity.Instance, vrDynamicAPI);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = VRDynamicAPIDetailMapper(vrDynamicAPI);
             }
@@ -139,6 +146,7 @@ namespace Vanrise.Common.Business
                    return vrDynamicAPIs.ToDictionary(vrDynamicAPI => vrDynamicAPI.VRDynamicAPIId, vrDynamicAPI => vrDynamicAPI);
                });
         }
+
 
         private Type GetOrCreateAPIClass(VRDynamicAPI vrDynamicAPI, out List<string> Errors)
         {
@@ -316,6 +324,37 @@ namespace Vanrise.Common.Business
             return classControllerBuilder.ToString();
         }
 
+        private class VRDynamicAPILoggableEntity : VRLoggableEntityBase
+        {
+            public static VRDynamicAPILoggableEntity Instance = new VRDynamicAPILoggableEntity();
+
+            private VRDynamicAPILoggableEntity()
+            {
+
+            }
+
+            static VRDynamicAPIManager _vrDynamicAPIManager = new VRDynamicAPIManager();
+
+            public override string EntityUniqueName { get { return "VR_Common_VRDynamicAPI"; } }
+
+            public override string ModuleName { get { return "Common"; } }
+
+            public override string EntityDisplayName { get { return "VRDynamicAPI"; } }
+
+            public override string ViewHistoryItemClientActionName { get { return "VR_Common_VRDynamicAPI_ViewHistoryItem"; } }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRDynamicAPI vrDynamicAPI = context.Object.CastWithValidate<VRDynamicAPI>("context.Object");
+                return vrDynamicAPI.VRDynamicAPIId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRDynamicAPI vrDynamicAPI = context.Object.CastWithValidate<VRDynamicAPI>("context.Object");
+                return _vrDynamicAPIManager.GetVRDynamicAPIName(vrDynamicAPI);
+            }
+        }
 
 
         #endregion

@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    vrDynamicAPIEditorController.$inject = ['$scope', 'VRCommon_VRDynamicAPIAPIService','VR_Dynamic_APIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    vrDynamicAPIEditorController.$inject = ['$scope', 'VRCommon_VRDynamicAPIAPIService','VRCommon_DynamicAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function vrDynamicAPIEditorController($scope, VRCommon_VRDynamicAPIAPIService, VR_Dynamic_APIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function vrDynamicAPIEditorController($scope, VRCommon_VRDynamicAPIAPIService, VRCommon_DynamicAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var isEditMode;
         var vrDynamicAPIId;
@@ -183,7 +183,7 @@
                             });
                     }
                     else {
-                        VR_Dynamic_APIService.displayErrors(response.Errors);
+                    VRCommon_DynamicAPIService.displayErrors(response.Errors);
                         $scope.scopeModel.isLoading = false;
                     }
             }).catch(function (error) {
@@ -216,7 +216,7 @@
                     }
                     else
                     {
-                        VR_Dynamic_APIService.displayErrors(response.Errors);
+                        VRCommon_DynamicAPIService.displayErrors(response.Errors);
                     }
             }).catch(function (error) {
                 $scope.scopeModel.isLoading = false;

@@ -1,4 +1,4 @@
-﻿<vr-button type="Add" data-onclick="scopeModel.AddVRDynamicAPI" standalone></vr-button>
+﻿<vr-button type="Add" data-onclick="scopeModel.AddVRDynamicAPI" standalone haspermission="hasAddVRDynamicAPIPermission"></vr-button>
 
 <vr-datagrid datasource="scopeModel.vrDynamicAPIs"
              on-ready="scopeModel.onGridReady"
@@ -10,4 +10,7 @@
     <vr-datagridcolumn headertext="'ID'" field="'VRDynamicAPIId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'API'" field="'APIDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

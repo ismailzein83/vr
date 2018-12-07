@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrCommonDynamicapiModuleGrid", ["UtilsService", "VRNotificationService", "VR_Dynamic_API_ModuleService","VRCommon_VRDynamicAPIModuleAPIService" ,"VRUIUtilsService", "VRCommon_ObjectTrackingService",
-function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCommon_VRDynamicAPIModuleAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
+app.directive("vrCommonDynamicapiModuleGrid", ["UtilsService", "VRNotificationService","VRCommon_VRDynamicAPIAPIService", "VRCommon_DynamicAPIModuleService","VRCommon_VRDynamicAPIModuleAPIService" ,"VRUIUtilsService", "VRCommon_ObjectTrackingService",
+    function (UtilsService, VRNotificationService, VRCommon_VRDynamicAPIAPIService, VRCommon_DynamicAPIModuleService,VRCommon_VRDynamicAPIModuleAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -32,7 +32,7 @@ function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCo
             $scope.scopeModel.onGridReady = function (api) {
                 gridApi = api;
 
-                var drillDownDefinitions = [];
+                var drillDownDefinitions =[];
                 AddVRDynamicAPIModuleDrillDown();
 
                 function AddVRDynamicAPIModuleDrillDown() {
@@ -40,6 +40,9 @@ function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCo
 
                     drillDownDefinition.title = "Dynamic APIs";
                     drillDownDefinition.directive = "vr-common-dynamicapi-grid";
+                    drillDownDefinition.haspermission = function () {
+                        return VRCommon_VRDynamicAPIAPIService.HasGetFilteredVRDynamicAPIsPermission();
+                    };
                     drillDownDefinition.loadDirective = function (directiveAPI, vrDynamicAPIModuleItem) {
                         vrDynamicAPIModuleItem.vrDynamicAPIModuleGridAPI = directiveAPI;
                         var payload = {
@@ -48,6 +51,7 @@ function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCo
                         return vrDynamicAPIModuleItem.vrDynamicAPIModuleGridAPI.load(payload);
                     };
                     drillDownDefinitions.push(drillDownDefinition);
+                    drillDownDefinitions.push(VRCommon_DynamicAPIModuleService.getDrillDownDefinition()[0]);
                 }
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridApi, $scope.scopeModel.gridMenuActions);
 
@@ -97,7 +101,7 @@ function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCo
             $scope.scopeModel.gridMenuActions = [{
                 name: "Edit",
                 clicked: editVRDynamicAPIModule,
-
+                haspermission: hasEditVRDynamicAPIModulePermission
             }];
         }
 
@@ -107,7 +111,11 @@ function (UtilsService, VRNotificationService, VR_Dynamic_API_ModuleService,VRCo
                 gridDrillDownTabsObj.setDrillDownExtensionObject(vrDynamicAPIModule);
 
             };
-            VR_Dynamic_API_ModuleService.editVRDynamicAPIModule(vrDynamicAPIModule.VRDynamicAPIModuleId, onVRDynamicAPIModuleUpdated);
+            VRCommon_DynamicAPIModuleService.editVRDynamicAPIModule(vrDynamicAPIModule.VRDynamicAPIModuleId, onVRDynamicAPIModuleUpdated);
+        }
+
+        function hasEditVRDynamicAPIModulePermission() {
+            return VRCommon_VRDynamicAPIModuleAPIService.HasEditVRDynamicAPIModulePermission();
         }
 
     }

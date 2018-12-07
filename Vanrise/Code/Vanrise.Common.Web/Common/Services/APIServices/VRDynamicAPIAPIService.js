@@ -34,6 +34,17 @@
         function BuildAllDynamicAPIControllers() {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "BuildAllDynamicAPIControllers"));
         }
+        function HasAddVRDynamicAPIPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controller, ['AddVRDynamicAPI']));
+        }
+
+        function HasEditVRDynamicAPIPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controller, ['UpdateVRDynamicAPI']));
+        }
+
+        function HasGetFilteredVRDynamicAPIsPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controller, ['GetFilteredVRDynamicAPIs']));
+        }
 
         return {
             GetFilteredVRDynamicAPIs: GetFilteredVRDynamicAPIs,
@@ -42,7 +53,10 @@
             AddVRDynamicAPI: AddVRDynamicAPI,
             GetVRDynamicAPIMethodSettingsConfigs: GetVRDynamicAPIMethodSettingsConfigs,
             TryCompileVRDynamicAPI: TryCompileVRDynamicAPI,
-            BuildAllDynamicAPIControllers: BuildAllDynamicAPIControllers
+            BuildAllDynamicAPIControllers: BuildAllDynamicAPIControllers,
+            HasAddVRDynamicAPIPermission: HasAddVRDynamicAPIPermission,
+            HasEditVRDynamicAPIPermission: HasEditVRDynamicAPIPermission,
+            HasGetFilteredVRDynamicAPIsPermission: HasGetFilteredVRDynamicAPIsPermission
         };
     }
     appControllers.service("VRCommon_VRDynamicAPIAPIService", vrDynamicAPIAPIService);

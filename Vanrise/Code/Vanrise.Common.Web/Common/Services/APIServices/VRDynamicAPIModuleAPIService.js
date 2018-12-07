@@ -27,12 +27,21 @@
         function BuildAllDynamicAPIControllers() {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controller, "BuildAllDynamicAPIControllers"),);
         }
+        function HasAddVRDynamicAPIModulePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controller, ['AddVRDynamicAPIModule']));
+        }
+
+        function HasEditVRDynamicAPIModulePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controller, ['UpdateVRDynamicAPIModule']));
+        }
 
         return {
             GetFilteredVRDynamicAPIModules: GetFilteredVRDynamicAPIModules,
             GetVRDynamicAPIModuleById: GetVRDynamicAPIModuleById,
             UpdateVRDynamicAPIModule: UpdateVRDynamicAPIModule,
-            AddVRDynamicAPIModule: AddVRDynamicAPIModule
+            AddVRDynamicAPIModule: AddVRDynamicAPIModule,
+            HasAddVRDynamicAPIModulePermission: HasAddVRDynamicAPIModulePermission,
+            HasEditVRDynamicAPIModulePermission: HasEditVRDynamicAPIModulePermission
         };
     }
     appControllers.service("VRCommon_VRDynamicAPIModuleAPIService", vrDynamicAPIModuleAPIService);

@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrCommonCustomCodeDynamicapiMethod", ["UtilsService", "VRNotificationService", "VR_Dynamic_APIService", "VRCommon_VRDynamicAPIAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
-    function (UtilsService, VRNotificationService, VR_Dynamic_APIService, VRCommon_VRDynamicAPIAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
+app.directive("vrCommonCustomCodeDynamicapiMethod", ["UtilsService", "VRNotificationService", "VRCommon_VRDynamicAPIAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
+    function (UtilsService, VRNotificationService, VRCommon_VRDynamicAPIAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
         var directiveDefinitionObject = {
             restrict: "E",

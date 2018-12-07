@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrCommonDynamicapiGrid", ["UtilsService", "VRNotificationService", "VR_Dynamic_APIService","VRCommon_VRDynamicAPIAPIService" ,"VRUIUtilsService", "VRCommon_ObjectTrackingService",
-function (UtilsService, VRNotificationService, VR_Dynamic_APIService,VRCommon_VRDynamicAPIAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
+app.directive("vrCommonDynamicapiGrid", ["UtilsService", "VRNotificationService", "VRCommon_DynamicAPIService","VRCommon_VRDynamicAPIAPIService" ,"VRUIUtilsService", "VRCommon_ObjectTrackingService",
+    function (UtilsService, VRNotificationService, VRCommon_DynamicAPIService,VRCommon_VRDynamicAPIAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -21,6 +21,7 @@ function (UtilsService, VRNotificationService, VR_Dynamic_APIService,VRCommon_VR
 
         var gridApi;
         var vrDynamicAPIModuleId;
+        var gridDrillDownTabsObj;
 
         this.initializeController = initializeController;
 
@@ -32,6 +33,8 @@ function (UtilsService, VRNotificationService, VR_Dynamic_APIService,VRCommon_VR
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridApi = api;
+                var drillDownDefinitions = VRCommon_DynamicAPIService.getDrillDownDefinition();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridApi, $scope.scopeModel.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(getDirectiveApi());
                 }
@@ -52,6 +55,12 @@ function (UtilsService, VRNotificationService, VR_Dynamic_APIService,VRCommon_VR
 
                 return VRCommon_VRDynamicAPIAPIService.GetFilteredVRDynamicAPIs(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                $scope.scopeModel.vrDynamicAPIs.push(response.Data[i]);
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -62,10 +71,10 @@ function (UtilsService, VRNotificationService, VR_Dynamic_APIService,VRCommon_VR
             $scope.scopeModel.AddVRDynamicAPI = function () {
 
                 var onVRDynamicAPIAdded = function (vrDynamicAPI) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(vrDynamicAPI);
                     $scope.scopeModel.vrDynamicAPIs.push(vrDynamicAPI);
-
                 };
-                VR_Dynamic_APIService.addVRDynamicAPI(onVRDynamicAPIAdded, vrDynamicAPIModuleId);
+                VRCommon_DynamicAPIService.addVRDynamicAPI(onVRDynamicAPIAdded, vrDynamicAPIModuleId);
             };
 
             defineMenuActions();
@@ -76,15 +85,21 @@ function (UtilsService, VRNotificationService, VR_Dynamic_APIService,VRCommon_VR
             $scope.scopeModel.gridMenuActions = [{
                 name: "Edit",
                 clicked: editVRDynamicAPI,
+                haspermission: hasEditVRDynamicAPIPermission
             }];
         }
 
         function editVRDynamicAPI(vrDynamicAPI) {
 
             var onVRDynamicAPIUpdated = function (vrDynamicAPI) {
+                gridDrillDownTabsObj.setDrillDownExtensionObject(vrDynamicAPI);
                 gridApi.itemUpdated(vrDynamicAPI); 
             };
-            VR_Dynamic_APIService.editVRDynamicAPI(vrDynamicAPI.VRDynamicAPIId, onVRDynamicAPIUpdated, vrDynamicAPIModuleId);
+            VRCommon_DynamicAPIService.editVRDynamicAPI(vrDynamicAPI.VRDynamicAPIId, onVRDynamicAPIUpdated, vrDynamicAPIModuleId);
+        }
+
+        function hasEditVRDynamicAPIPermission() {
+            return VRCommon_VRDynamicAPIAPIService.HasEditVRDynamicAPIPermission();
         }
     }
 

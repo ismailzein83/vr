@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    vrDynamicAPIErrorsDisplayerController.$inject = ['$scope','VR_Dynamic_APIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    vrDynamicAPIErrorsDisplayerController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function vrDynamicAPIErrorsDisplayerController($scope,VR_Dynamic_APIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function vrDynamicAPIErrorsDisplayerController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
        
         var errors;
         loadParameters();

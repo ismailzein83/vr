@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrCommonDynamicapiMethodsGrid", ["UtilsService", "VRNotificationService", "VR_Dynamic_APIService", "VRCommon_VRDynamicAPIAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
-    function (UtilsService, VRNotificationService, VR_Dynamic_APIService, VRCommon_VRDynamicAPIAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
+app.directive("vrCommonDynamicapiMethodsGrid", ["UtilsService", "VRNotificationService", "VRCommon_DynamicAPIService", "VRCommon_VRDynamicAPIAPIService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
+    function (UtilsService, VRNotificationService, VRCommon_DynamicAPIService, VRCommon_VRDynamicAPIAPIService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -70,7 +70,7 @@ app.directive("vrCommonDynamicapiMethodsGrid", ["UtilsService", "VRNotificationS
                     var onVRDynamicAPIMethodAdded = function (method) {
                         $scope.scopeModel.vrDynamicAPIMethods.push({ Entity: method });
                     };
-                    VR_Dynamic_APIService.addVRDynamicAPIMethod(onVRDynamicAPIMethodAdded);
+                    VRCommon_DynamicAPIService.addVRDynamicAPIMethod(onVRDynamicAPIMethodAdded);
 
                 };
 
@@ -96,7 +96,7 @@ app.directive("vrCommonDynamicapiMethodsGrid", ["UtilsService", "VRNotificationS
                 var onVRDynamicAPIMethodUpdated = function (method) {
                     $scope.scopeModel.vrDynamicAPIMethods[index] = { Entity: method };
                 };
-                VR_Dynamic_APIService.editVRDynamicAPIMethod(vrDynamicAPIMethod.Entity, onVRDynamicAPIMethodUpdated);
+                VRCommon_DynamicAPIService.editVRDynamicAPIMethod(vrDynamicAPIMethod.Entity, onVRDynamicAPIMethodUpdated);
             }
         }
 

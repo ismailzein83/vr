@@ -1,5 +1,6 @@
-﻿app.service('VR_Dynamic_APIService', ['VRModalService', 'VRNotificationService',
-    function (VRModalService, VRNotificationService) {
+﻿app.service('VRCommon_DynamicAPIService', ['VRModalService', 'VRCommon_ObjectTrackingService',
+    function (VRModalService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
 
         function addVRDynamicAPI(onVRDynamicAPIAdded, vrDynamicAPIModuleId) {
 
@@ -65,11 +66,47 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRDynamicAPI/VRDynamicAPIErrorsDisplayer.html', parameters, settings);
 
         }
+
+        function getEntityUniqueName() {
+            return "VR_Common_VRDynamicAPI";
+        }
+
+        function registerObjectTrackingDrillDownToVRDynamicAPI() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, vrDynamicAPIItem) {
+                vrDynamicAPIItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: vrDynamicAPIItem.VRDynamicAPIId,
+                    EntityUniqueName: getEntityUniqueName()
+
+                };
+                return vrDynamicAPIItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
         return {
             addVRDynamicAPI: addVRDynamicAPI,
             editVRDynamicAPI: editVRDynamicAPI,
             addVRDynamicAPIMethod: addVRDynamicAPIMethod,
             editVRDynamicAPIMethod: editVRDynamicAPIMethod,
-            displayErrors: displayErrors
+            displayErrors: displayErrors,
+            registerObjectTrackingDrillDownToVRDynamicAPI: registerObjectTrackingDrillDownToVRDynamicAPI,
+            getDrillDownDefinition: getDrillDownDefinition
         };
     }]);
