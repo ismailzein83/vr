@@ -24,7 +24,7 @@ namespace Vanrise.Data.RDB
         RDBSelectColumnsContext _selectColumnsContext;
         public RDBSelectColumnsContext Select()
         {
-            if (_selectColumnsContext != null)
+            if (_selectColumnsContext == null)
             {
                 _groupBy.Columns = new List<RDBSelectColumn>();
                 _selectColumnsContext = new RDBSelectColumnsContext(_queryBuilderContext, _groupBy.Columns, _table, _tableAlias);
