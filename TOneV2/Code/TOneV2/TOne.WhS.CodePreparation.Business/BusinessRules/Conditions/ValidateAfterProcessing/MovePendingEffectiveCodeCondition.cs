@@ -21,11 +21,10 @@ namespace TOne.WhS.CodePreparation.Business
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
             var invalidCodes = new List<string>();
-            ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
 
             foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
             {
-                if (codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.BED > cpContext.EffectiveDate))
+                if (codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
                 invalidCodes.Add(codeToMove.Code);
             }
 

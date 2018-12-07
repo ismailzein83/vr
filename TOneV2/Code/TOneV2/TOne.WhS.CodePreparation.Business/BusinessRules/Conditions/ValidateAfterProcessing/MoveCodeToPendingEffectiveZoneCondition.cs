@@ -20,10 +20,9 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
             var invalidCodes = new List<string>();
-            if (zoneToProcess.ChangeType == ZoneChangeType.New || zoneToProcess.ChangeType == ZoneChangeType.Renamed || zoneToProcess.BED <= cpContext.EffectiveDate)
+            if (zoneToProcess.ChangeType == ZoneChangeType.New || zoneToProcess.ChangeType == ZoneChangeType.Renamed || zoneToProcess.BED <= DateTime.Today)
                 return true;
 
             if (zoneToProcess.CodesToAdd.Count() > 0 )
@@ -34,7 +33,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             if(invalidCodes.Count>0)
             {
-                context.Message = string.Format("Can not add or move code(s) ({0}) to zone '{1}' which is pending effective in {2}. Adding or moving code to this zone must be on {2} or after.",string.Join(", ",invalidCodes),zoneToProcess.ZoneName,zoneToProcess.BED);
+                context.Message = string.Format("Can not add or move code(s) ({0}) to zone '{1}' which is pending effective in {2}.",string.Join(", ",invalidCodes),zoneToProcess.ZoneName,zoneToProcess.BED);
                 return false;
             }
             return true;

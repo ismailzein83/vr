@@ -22,7 +22,6 @@ namespace TOne.WhS.CodePreparation.Business
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
             var invalidCodes = new List<string>();
-            ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
 
             foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
             {
