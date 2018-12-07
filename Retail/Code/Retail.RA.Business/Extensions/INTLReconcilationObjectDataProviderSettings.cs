@@ -2,7 +2,7 @@
 using System.Linq;
 using Vanrise.Common;
 using Retail.RA.Entities;
-using Retail.RA.MainExtensions;
+//using Retail.RA.MainExtensions;
 using Vanrise.Analytic.Entities;
 using Vanrise.Analytic.Business;
 using System.Collections.Generic;
