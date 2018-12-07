@@ -20,6 +20,7 @@ namespace CP.WhS.Business
 			var accessibleCarrierAccounts = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new Entities.ClientAccountInfoFilter() { GetCustomers = true });
 			if (accessibleCarrierAccounts.FindRecord(x => x.AccountId == clonedInput.Query.OwnerId) == null)
 				return null;
+			clonedInput.Query.ColumnsToShow = new List<string>(){ "Zone", "Rate", "RateChange", "RateInherited", "Currency", "BED", "EED" };
 
 			if (clonedInput.DataRetrievalResultType == DataRetrievalResultType.Excel)
 			{
