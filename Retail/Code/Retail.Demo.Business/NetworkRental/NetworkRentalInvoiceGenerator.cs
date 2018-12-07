@@ -49,17 +49,33 @@ namespace Retail.Demo.Business
                         amount += item.Details.TotalTarrif;
                     }
                 }
+
+            var invoiceDetail= new InvoiceDetails()
+            {
+                Amount = amount,
+                Currency = _currencyManager.GetSystemCurrency().CurrencyId,
+                TotalMCR = totalMCR,
+                TotalNCR = totalNCR
+            };
             context.Invoice = new GeneratedInvoice
             {
                 InvoiceItemSets = generatedInvoiceItemSets,
-                InvoiceDetails = new InvoiceDetails()
-                {
-                    Amount = amount,
-                    Currency = _currencyManager.GetSystemCurrency().CurrencyId,
-                    TotalMCR = totalMCR,
-                    TotalNCR  = totalNCR
-                }
+                InvoiceDetails = invoiceDetail
             };
+            SetInvoiceBillingTransactions(context, invoiceDetail);
+
+        }
+        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, InvoiceDetails invoiceDetails)
+        {
+            var billingTransaction = new GeneratedInvoiceBillingTransaction()
+            {
+                AccountTypeId = new Guid("F260AEFF-2283-49B6-B371-8B314EFE8009"),
+                AccountId = context.PartnerId,
+                TransactionTypeId = new Guid("2B3D86AB-1689-49E8-A5FA-F65227A1EC4C"),
+                Amount = invoiceDetails.Amount,
+                CurrencyId = invoiceDetails.Currency
+            };
+            context.BillingTransactions = new List<GeneratedInvoiceBillingTransaction>() { billingTransaction };
         }
 
         private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(long accountId, DateTime fromDate, DateTime toDate, out decimal totalMCR, out decimal totalNCR)
