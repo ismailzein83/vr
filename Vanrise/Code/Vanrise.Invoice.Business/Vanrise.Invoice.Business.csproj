@@ -61,7 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutomaticInvoiceBulkActionBPDefinitionSettings.cs" />
     <Compile Include="BillingPeriodInfoManager.cs" />
     <Compile Include="Context\AutomaticSendEmailActionRuntimeSettingsContext.cs" />
     <Compile Include="Context\BillingPeriodContext.cs" />

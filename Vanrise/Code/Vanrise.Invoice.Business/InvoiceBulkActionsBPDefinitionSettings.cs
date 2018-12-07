@@ -8,6 +8,7 @@ using Vanrise.Invoice.BP.Arguments;
 using Vanrise.Invoice.Entities;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Invoice.Business
 {
@@ -23,6 +24,25 @@ namespace Vanrise.Invoice.Business
         {
             context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
             InvoiceBulkActionProcessInput invoiceBulkActionProcessInput = context.IntanceToRun.InputArgument.CastWithValidate<InvoiceBulkActionProcessInput>("context.IntanceToRun.InputArgument");
+
+
+            var bulkActionTypes = new InvoiceTypeManager().GetInvoiceBulkActionsByBulkActionId(invoiceBulkActionProcessInput.InvoiceTypeId);
+
+            if (invoiceBulkActionProcessInput != null && invoiceBulkActionProcessInput.InvoiceBulkActions != null && invoiceBulkActionProcessInput.InvoiceBulkActions.Count != 0)
+            {
+                foreach (var bulkAction in invoiceBulkActionProcessInput.InvoiceBulkActions)
+                {
+                    var invoiceBulkAction = bulkActionTypes.GetRecord(bulkAction.InvoiceBulkActionId);
+                    var bulkActionCheckAccessContext = new AutomaticInvoiceActionSettingsCheckAccessContext
+                    {
+                        UserId = ContextFactory.GetContext().GetLoggedInUserId(),
+                        InvoiceBulkAction = invoiceBulkAction
+                    };
+                    if (!invoiceBulkAction.Settings.DoesUserHaveAccess(bulkActionCheckAccessContext))
+                        context.Reason = String.Format("'{0}' Action. Reason : You do not have access.", invoiceBulkAction.Title);
+                    return false;
+                }
+            }
 
             DateTime invoiceMinimumFrom = invoiceBulkActionProcessInput.MinimumFrom;
             DateTime invoiceMaximumTo = invoiceBulkActionProcessInput.MaximumTo.AddDays(1);
