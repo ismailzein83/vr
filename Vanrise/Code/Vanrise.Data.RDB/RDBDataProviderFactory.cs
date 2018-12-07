@@ -12,12 +12,19 @@ namespace Vanrise.Data.RDB
         static bool s_appendRDBToConnStringName = ConfigurationManager.AppSettings["RDB_AppendRDBToConnStringName"] == "true";
         public static BaseRDBDataProvider CreateProvider(string moduleName, string appSettingWithConnectionStringName, string defaultConnectionStringName)
         {
-            return new DataProvider.Providers.MSSQLRDBDataProvider(GetConnectionString(appSettingWithConnectionStringName, defaultConnectionStringName));
+            var connString = GetConnectionString(appSettingWithConnectionStringName, defaultConnectionStringName);
+            return CreateProviderFromConnString(moduleName, connString);
         }
 
         public static BaseRDBDataProvider CreateProvider(string moduleName, string connectionStringName)
         {
-            return new DataProvider.Providers.MSSQLRDBDataProvider(ConfigurationManager.ConnectionStrings[GetConnectionStringName(connectionStringName)].ConnectionString);
+            var connString = ConfigurationManager.ConnectionStrings[GetConnectionStringName(connectionStringName)].ConnectionString;
+            return CreateProviderFromConnString(moduleName, connString);
+        }
+
+        public static BaseRDBDataProvider CreateProviderFromConnString(string moduleName, string connectionString)
+        {
+            return new DataProvider.Providers.MSSQLRDBDataProvider(connectionString);
         }
 
         private static string GetConnectionString(string appSettingWithConnectionStringName, string defaultConnectionStringName)

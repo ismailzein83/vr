@@ -41,6 +41,8 @@ namespace Vanrise.Data.RDB
 
         public abstract void Value(Guid value);
 
+        public abstract void NullValue();
+
         public abstract void WriteRecord();
     }
 }

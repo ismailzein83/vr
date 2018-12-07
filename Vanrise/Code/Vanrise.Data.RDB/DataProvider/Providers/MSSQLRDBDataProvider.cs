@@ -426,92 +426,97 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
              }
          }
 
-         private class MSSQLRDBStreamRecordForBulkInsert : BaseRDBStreamRecordForBulkInsert
-         {
-             Vanrise.Data.SQL.StreamForBulkInsert _streamForBulkInsert;
-             char _fieldSeparator;
-             StringBuilder _valuesBuilder = new StringBuilder();
+        private class MSSQLRDBStreamRecordForBulkInsert : BaseRDBStreamRecordForBulkInsert
+        {
+            Vanrise.Data.SQL.StreamForBulkInsert _streamForBulkInsert;
+            char _fieldSeparator;
+            StringBuilder _valuesBuilder = new StringBuilder();
 
-             public MSSQLRDBStreamRecordForBulkInsert(Vanrise.Data.SQL.StreamForBulkInsert streamForBulkInsert, char fieldSeparator)
-             {
-                 _streamForBulkInsert = streamForBulkInsert;
-                 _fieldSeparator = fieldSeparator;
-             }
+            public MSSQLRDBStreamRecordForBulkInsert(Vanrise.Data.SQL.StreamForBulkInsert streamForBulkInsert, char fieldSeparator)
+            {
+                _streamForBulkInsert = streamForBulkInsert;
+                _fieldSeparator = fieldSeparator;
+            }
 
-             public override void Value(string value)
-             {
-                 AppendValue(value);
-             }
+            public override void Value(string value)
+            {
+                AppendValue(value);
+            }
 
-             public override void Value(int value)
-             {
-                 AppendValue(value.ToString());
-             }
+            public override void Value(int value)
+            {
+                AppendValue(value.ToString());
+            }
 
-             public override void Value(long value)
-             {
-                 AppendValue(value.ToString());
-             }
+            public override void Value(long value)
+            {
+                AppendValue(value.ToString());
+            }
 
-             public override void Value(decimal value)
-             {
-                 AppendValue(BaseDataManager.GetDecimalForBCP(value));
-             }
+            public override void Value(decimal value)
+            {
+                AppendValue(BaseDataManager.GetDecimalForBCP(value));
+            }
 
-             public override void Value(float value)
-             {
-                 AppendValue(value.ToString());
-             }
+            public override void Value(float value)
+            {
+                AppendValue(value.ToString());
+            }
 
-             public override void Value(DateTime? value)
-             {
-                 AppendValue(BaseDataManager.GetDateTimeForBCP(value));
-             }
+            public override void Value(DateTime? value)
+            {
+                AppendValue(BaseDataManager.GetDateTimeForBCP(value));
+            }
 
-             public override void Value(DateTime value)
-             {
-                 AppendValue(BaseDataManager.GetDateTimeForBCP(value));
-             }
+            public override void Value(DateTime value)
+            {
+                AppendValue(BaseDataManager.GetDateTimeForBCP(value));
+            }
 
-             public override void ValueDateOnly(DateTime? value)
-             {
-                 AppendValue(BaseDataManager.GetDateForBCP(value));
-             }
+            public override void ValueDateOnly(DateTime? value)
+            {
+                AppendValue(BaseDataManager.GetDateForBCP(value));
+            }
 
-             public override void ValueDateOnly(DateTime value)
-             {
-                 AppendValue(BaseDataManager.GetDateForBCP(value));
-             }
+            public override void ValueDateOnly(DateTime value)
+            {
+                AppendValue(BaseDataManager.GetDateForBCP(value));
+            }
 
-             public override void Value(Vanrise.Entities.Time value)
-             {
-                 AppendValue(BaseDataManager.GetTimeForBCP(value));
-             }
+            public override void Value(Vanrise.Entities.Time value)
+            {
+                AppendValue(BaseDataManager.GetTimeForBCP(value));
+            }
 
-             public override void Value(bool value)
-             {
-                 AppendValue(value ? "1" : "0");
-             }
+            public override void Value(bool value)
+            {
+                AppendValue(value ? "1" : "0");
+            }
 
-             public override void Value(Guid value)
-             {
-                 AppendValue(value.ToString());
-             }
+            public override void Value(Guid value)
+            {
+                AppendValue(value.ToString());
+            }
 
-             bool _anyValueAdded;
-             public void AppendValue(object value)
-             {
-                 if (_anyValueAdded)
-                     _valuesBuilder.Append(_fieldSeparator);
-                 _valuesBuilder.Append(value);
-                 _anyValueAdded = true;                 
-             }
+            public override void NullValue()
+            {
+                Value("");
+            }
 
-             public override void WriteRecord()
-             {
-                 _streamForBulkInsert.WriteRecord(_valuesBuilder.ToString());
-             }
-         }
+            bool _anyValueAdded;
+            public void AppendValue(object value)
+            {
+                if (_anyValueAdded)
+                    _valuesBuilder.Append(_fieldSeparator);
+                _valuesBuilder.Append(value);
+                _anyValueAdded = true;
+            }
+
+            public override void WriteRecord()
+            {
+                _streamForBulkInsert.WriteRecord(_valuesBuilder.ToString());
+            }
+        }
 
          #endregion
      }

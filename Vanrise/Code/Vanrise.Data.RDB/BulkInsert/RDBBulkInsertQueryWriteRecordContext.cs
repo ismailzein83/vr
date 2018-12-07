@@ -45,6 +45,11 @@ namespace Vanrise.Data.RDB
             _currentRecord.Value(value);
         }
 
+        public void Value(Vanrise.Entities.Time time)
+        {
+            _currentRecord.Value(time);
+        }
+
         public void Value(bool value)
         {
             _currentRecord.Value(value);
@@ -53,6 +58,11 @@ namespace Vanrise.Data.RDB
         public void Value(Guid value)
         {
             _currentRecord.Value(value);
+        }
+
+        public void NullValue()
+        {
+            _currentRecord.NullValue();
         }
     }
 }

@@ -733,9 +733,14 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
              public override void Value(Guid value)
              {
                  AppendValue(value.ToString());
-             }
+            }
 
-             bool _anyValueAdded;
+            public override void NullValue()
+            {
+                Value("");
+            }
+
+            bool _anyValueAdded;
              public void AppendValue(object value)
              {
                  if (_anyValueAdded)
@@ -748,7 +753,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
              {
                  _streamForBulkInsert.WriteRecord(_valuesBuilder.ToString());
              }
-         }
+        }
 
          #endregion
     }
