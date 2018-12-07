@@ -165,7 +165,8 @@
 .flat .vr-dateclock-item {
     display: inline-block;
     width: 120px;
-    padding-left: 25px
+    padding-left: 25px ;
+    text-align: right;
 }
 
 .flat .vr-date-container {
@@ -184,8 +185,6 @@
 .flat .vr-clock-item {
     color: #6a6a6a;
     font-weight: bold;
-    position: absolute;
-    right: 7px;
     color: #9FA0A2
 }
 
