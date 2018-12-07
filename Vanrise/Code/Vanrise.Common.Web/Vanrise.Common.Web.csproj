@@ -137,6 +137,8 @@
     <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-method-settings.js" />
     <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-methods-grid.js" />
     <Content Include="Common\Directives\VRDynamicAPI\vr-common-dynamicapi-grid.js" />
+    <Content Include="Common\Directives\VRNamespace\MainExtensions\HttpProxyMethodEditorController.js" />
+    <Content Include="Common\Directives\VRNamespace\MainExtensions\Templates\HttpProxyMethodEditor.html" />
     <Content Include="Common\Directives\VRNamespace\MainExtensions\Templates\VRCustomCodeDynamicCode.html" />
     <Content Include="Common\Directives\VRNamespace\MainExtensions\Templates\VRHttpProxyDynamicCodeTemplate.html" />
     <Content Include="Common\Directives\VRNamespace\MainExtensions\vr-common-custom-code-dynamic-code.js" />
@@ -153,6 +155,7 @@
     <Content Include="Common\Services\APIServices\VRDynamicAPIModuleAPIService.js" />
     <Content Include="Common\Services\APIServices\VRRestCountryAPIService.js" />
     <Content Include="Common\Services\APIServices\VRRestCurrencyAPIService.js" />
+    <Content Include="Common\Services\HttpProxyMethodService.js" />
     <Content Include="Common\Services\VRDynamicAPIModuleService.js" />
     <Content Include="Common\Services\VRDynamicAPIService.js" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleEditor.html" />
