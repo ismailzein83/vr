@@ -361,6 +361,9 @@
     <Reference Include="Vanrise.GenericData.QueueActivators">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.QueueActivators.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.RDBDataStorage">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.RDBDataStorage.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.SQLDataStorage">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.SQLDataStorage.dll</HintPath>
     </Reference>
