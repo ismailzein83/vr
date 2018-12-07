@@ -53,12 +53,13 @@ Retail.Ntegra.PostDeployment.sql
 Retail_Zajil
 Retail_Centrex.PostDeployment.sql
 Retail_Teles.PostDeployment1.sql
-Retail_Zajil.PostDeployment.sql
 Retail_Zajil_Overridden.PostDeployment.sql
+Retail_Zajil.PostDeployment.sql
+
 
 Retail_Multinet
-Retail_Multinet.PostDeployment.sql
 Retail_Multinet_Overridden.PostDeployment.sql
+Retail_Multinet.PostDeployment.sql
 Retail_Cost.PostDeployment.sql
 
 REtail_Ringo
@@ -109,8 +110,8 @@ SOM
 SOM.PostDeployment.sql
 
 RA
-Retail_RA.PostDeployment.sql
 Retail_RA_Overridden.PostDeployment.sql
+Retail_RA.PostDeployment.sql
 
 Interconnect
 InterConnect.PostDeployment.sql
