@@ -124,6 +124,24 @@ namespace Vanrise.Invoice.Entities
         public abstract Guid ConfigId { get; }
         public abstract string RuntimeEditor { get;  }
         public abstract void Execute(IAutomaticInvoiceActionSettingsContext contex);
+        public virtual bool DoesUserHaveAccess(IAutomaticInvoiceActionSettingsCheckAccessContext context)
+        {
+
+            return ContextFactory.GetContext().IsAllowed(context.InvoiceBulkAction.RequiredPermission, context.UserId);
+        }
+    }
+
+    public interface IAutomaticInvoiceActionSettingsCheckAccessContext
+    {
+        int UserId { get; }
+        InvoiceBulkAction InvoiceBulkAction { get; set; }
+
+    }
+    public class AutomaticInvoiceActionSettingsCheckAccessContext : IAutomaticInvoiceActionSettingsCheckAccessContext
+    {
+        public int UserId { get; set; }
+        public InvoiceBulkAction InvoiceBulkAction { get; set; }
+
     }
     public interface IAutomaticInvoiceActionSettingsContext
     {
@@ -134,6 +152,8 @@ namespace Vanrise.Invoice.Entities
         public Guid InvoiceBulkActionId { get; set; }
         public string Title { get; set; }
         public AutomaticInvoiceActionSettings Settings { get; set; }
+        public RequiredPermissionSettings RequiredPermission { get; set; }
+
     }
 
     public enum ItemGroupingOrderType { ByAllDimensions = 1, ByAllMeasures = 2 }

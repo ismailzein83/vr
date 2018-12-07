@@ -750,6 +750,37 @@ namespace Vanrise.Invoice.Business
             return dataManager.ApproveInvoice(invoiceId, ApprovedDate, ApprovedBy);
         }
 
+        public List<Guid> GetAvailableMenualBulkActionIds(Guid invoiceTypeId)
+        {
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+            if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.InvoiceBulkActions != null && invoiceType.Settings.InvoiceBulkActions.Count > 0)
+            {
+                var allowedBulkActionIds = new List<Guid>();
+                var bulkActionTypes = new InvoiceTypeManager().GetInvoiceBulkActionsByBulkActionId(invoiceType.InvoiceTypeId);
+                bulkActionTypes.ThrowIfNull("bulkActionTypes", invoiceTypeId);
+
+                foreach (var menualBulkAction in invoiceType.Settings.InvoiceMenualBulkActions)
+                {
+                    var invoiceBulkAction = bulkActionTypes.GetRecord(menualBulkAction.InvoiceBulkActionId);
+                    invoiceBulkAction.ThrowIfNull("invoiceBulkAction", menualBulkAction.InvoiceBulkActionId);
+                    invoiceBulkAction.Settings.ThrowIfNull("invoiceBulkAction.Settings", menualBulkAction.InvoiceBulkActionId);
+
+                    var bulkActionCheckAccessContext = new AutomaticInvoiceActionSettingsCheckAccessContext
+                    {
+                        UserId = ContextFactory.GetContext().GetLoggedInUserId(),
+                        InvoiceBulkAction = invoiceBulkAction
+                    };
+                    if (invoiceBulkAction.Settings.DoesUserHaveAccess(bulkActionCheckAccessContext))
+                        allowedBulkActionIds.Add(invoiceBulkAction.InvoiceBulkActionId);
+                }
+                return allowedBulkActionIds;
+            }
+            return null;
+        }
+
+       
+
+
         #endregion
 
         #region Security

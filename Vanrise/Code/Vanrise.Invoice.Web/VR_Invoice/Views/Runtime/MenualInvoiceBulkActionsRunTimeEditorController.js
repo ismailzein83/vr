@@ -9,6 +9,7 @@
         var menualInvoiceBulkActionsDefinitions;
         var selectedMenualInvoiceBulkAction;
         var context;
+        var allowedMenualBulkActionIds = [];
         var directiveAPI;
 
         loadParameters();
@@ -20,6 +21,7 @@
             if (parameters != undefined && parameters != null) {
                 invoiceTypeId = parameters.invoiceTypeId;
                 context = parameters.context;
+                allowedMenualBulkActionIds = parameters.allowedMenualBulkActionIds;
             }
         }
         function defineScope() {
@@ -84,7 +86,7 @@
                 var payload = {
                     invoiceTypeId: invoiceTypeId,
                     invoiceAttachments: selectedMenualInvoiceBulkAction.InvoiceAttachments,
-                    emailActionSettings: selectedMenualInvoiceBulkAction.InvoiceBulkAction.Settings,
+                    emailActionSettings: selectedMenualInvoiceBulkAction.InvoiceBulkAction.Settings
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, api, payload, setLoader);
             };
@@ -99,7 +101,13 @@
         function getInvoiceBulkActionsDefinitions()
         {
             return VR_Invoice_InvoiceTypeAPIService.GetMenualInvoiceBulkActionsDefinitions(invoiceTypeId).then(function (response) {
-                menualInvoiceBulkActionsDefinitions = response;
+                if (response && response.length != 0 && allowedMenualBulkActionIds != undefined && allowedMenualBulkActionIds.length != 0) {
+                    menualInvoiceBulkActionsDefinitions = [];
+                        for (var i = 0; i < response.length; i++) {
+                            if (UtilsService.contains(allowedMenualBulkActionIds, response[i].InvoiceBulkAction.InvoiceBulkActionId)) 
+                                menualInvoiceBulkActionsDefinitions.push(response[i]);
+                    }
+                    }
             });
         }
 

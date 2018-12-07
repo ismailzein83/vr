@@ -112,6 +112,11 @@
                 isApproved: isApproved
             });
         } 
+        function GetAvailableMenualBulkActionIds(invoiceTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetAvailableMenualBulkActionIds'), {
+                invoiceTypeId: invoiceTypeId
+            });
+        }
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -133,7 +138,8 @@
             DeleteGeneratedInvoice: DeleteGeneratedInvoice,
             ExecuteMenualInvoiceActions: ExecuteMenualInvoiceActions,
             ReGenerateInvoiceGenerationDraft: ReGenerateInvoiceGenerationDraft,
-            ApproveInvoice: ApproveInvoice
+            ApproveInvoice: ApproveInvoice,
+            GetAvailableMenualBulkActionIds: GetAvailableMenualBulkActionIds
         });
     }
 

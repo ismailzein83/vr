@@ -38,6 +38,19 @@ namespace Vanrise.Invoice.Business
                   return invoiceType.Settings.InvoiceActions.ToDictionary(c => c.InvoiceActionId, c => c);
               });
         }
+
+        public Dictionary<Guid, InvoiceBulkAction> GetInvoiceBulkActionsByBulkActionId(Guid invoiceTypeId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("InvoiceTypeManager_GetInvoiceBulkActionsByBulkActionId_{0}", invoiceTypeId),
+              () =>
+              {
+                  var invoiceType = GetInvoiceType(invoiceTypeId);
+                  invoiceType.ThrowIfNull("Invoice Type", invoiceTypeId);
+                  invoiceType.Settings.ThrowIfNull("Invoice Type Settings", invoiceTypeId);
+                  invoiceType.Settings.InvoiceBulkActions.ThrowIfNull("Invoice Type Settings Bulk Actions", invoiceTypeId);
+                  return invoiceType.Settings.InvoiceBulkActions.ToDictionary(c => c.InvoiceBulkActionId, c => c);
+              });
+        }
         public InvoiceTypeExtendedSettings GetInvoiceTypeExtendedSettings(Guid invoiceTypeId)
         {
             var invoiceType = GetInvoiceType(invoiceTypeId);

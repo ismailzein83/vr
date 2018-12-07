@@ -14,6 +14,9 @@
         var invoiceBulkActionSettingsAPI;
         var invoiceBulkActionSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var bulkActionPermissionAPI;
+        var bulkActionPermissionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -29,9 +32,14 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.showSecurityGrid = true;
             $scope.scopeModel.onInvoiceBulkActionSettingsReady = function (api) {
                 invoiceBulkActionSettingsAPI = api;
                 invoiceBulkActionSettingsReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onBulkActionRequiredPermissionReady = function (api) {
+                bulkActionPermissionAPI = api;
+                bulkActionPermissionReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateInvoiceBulkAction() : addInvoiceBulkAction();
@@ -45,6 +53,7 @@
                     Title: $scope.scopeModel.actionTitle,
                     InvoiceBulkActionId: invoiceBulkActionEntity != undefined ? invoiceBulkActionEntity.InvoiceBulkActionId : UtilsService.guid(),
                     Settings: invoiceBulkActionSettingsAPI.getData(),
+                    RequiredPermission: !$scope.scopeModel.showSecurityGrid ? null : bulkActionPermissionAPI.getData()
                 };
             }
             function addInvoiceBulkAction() {
@@ -92,7 +101,20 @@
                 });
                 return invoiceBulkActionSettingsLoadPromiseDeferred.promise;
             }
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceBulkActionSettingsDirective]).then(function () {
+            function loadBulkActionPermissionDirective() {
+                var bulkActionPermissionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                bulkActionPermissionReadyPromiseDeferred.promise.then(function () {
+                    var payload;
+                    if (invoiceBulkActionEntity != undefined) {
+                        payload = {
+                            data: invoiceBulkActionEntity.RequiredPermission
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(bulkActionPermissionAPI, payload, bulkActionPermissionLoadPromiseDeferred);
+                });
+                return bulkActionPermissionLoadPromiseDeferred.promise;
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceBulkActionSettingsDirective, loadBulkActionPermissionDirective]).then(function () {
 
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -105,6 +127,13 @@
             var currentContext = context;
             if (currentContext == undefined)
                 currentContext = {};
+
+            currentContext.showSecurityGridCallBack = function (showGrid) {
+                if (bulkActionPermissionAPI != undefined && $scope.scopeModel.showSecurityGrid != showGrid) {
+                    bulkActionPermissionAPI.load({ data: null });
+                }
+                $scope.scopeModel.showSecurityGrid = showGrid;
+            };
             return currentContext;
         }
 

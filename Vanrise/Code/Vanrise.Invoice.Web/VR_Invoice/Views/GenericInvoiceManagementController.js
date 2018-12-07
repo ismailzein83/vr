@@ -6,6 +6,7 @@
 
     function genericInvoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VR_Invoice_InvoiceActionService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRNotificationService, VRDateTimeService, VR_Invoice_InvoiceBulkActionService, VRValidationService) {
         var invoiceTypeId;
+        var allowedMenualBulkActionIds = [];
         $scope.scopeModel = {};
 
         $scope.scopeModel.invoiceTypeEntity;
@@ -38,6 +39,8 @@
         }
 
         function defineScope() {
+
+
 
             $scope.scopeModel.onAccountStatusSelectorReady = function (api) {
                 accountStatusSelectorAPI = api;
@@ -101,7 +104,7 @@
                 var onBulkActionExecuted = function () {
 
                 };
-                VR_Invoice_InvoiceBulkActionService.openMenualInvoiceBulkActions(onBulkActionExecuted, invoiceTypeId, getContext());
+                VR_Invoice_InvoiceBulkActionService.openMenualInvoiceBulkActions(onBulkActionExecuted, invoiceTypeId, allowedMenualBulkActionIds, getContext());
             };
 
             $scope.scopeModel.onInvoicePaidSelectorReady = function (api) {
@@ -138,10 +141,11 @@
 
         }
 
+
         function load() {
             $scope.scopeModel.isLoadingFilters = true;
-            getInvoiceTypeRuntime().then(function () {
-                loadAllControls();
+            UtilsService.waitMultipleAsyncOperations([getInvoiceTypeRuntime, GetAvailableMenualBulkActionIds]).then(function () {
+                    loadAllControls();
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.scopeModel.isLoadingFilters = false;
@@ -181,8 +185,6 @@
             return filter;
         }
         function loadAllControls() {
-
-
             function loadPartnerSelectorDirective() {
                 var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
                 partnerSelectorReadyDeferred.promise.then(function () {
@@ -244,10 +246,19 @@
                 });
         }
 
+        function GetAvailableMenualBulkActionIds() {
+
+            VR_Invoice_InvoiceAPIService.GetAvailableMenualBulkActionIds(invoiceTypeId).then(function (response) {
+                if (response == undefined || response.length != 0) {
+                    allowedMenualBulkActionIds = response;
+                    $scope.scopeModel.showActionButtons = false;
+                }
+            });
+        }
         function getInvoiceTypeRuntime() {
             return VR_Invoice_InvoiceTypeAPIService.GetInvoiceTypeRuntime(invoiceTypeId).then(function (response) {
                 $scope.scopeModel.invoiceTypeEntity = response;
-                if ($scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions.length > 0)
+                if ($scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions.length > 0 && allowedMenualBulkActionIds != undefined && allowedMenualBulkActionIds.length!=0)
                     $scope.scopeModel.showActionButtons = true;
                 if (!$scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.HidePaidFilter)
                     $scope.scopeModel.showPaidFilter = true;

@@ -55,7 +55,7 @@ app.service('VR_Invoice_InvoiceBulkActionService', ['VRModalService', 'UtilsServ
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/MenualBulkAction/Templates/MenualBulkActionEditor.html', parameters, settings);
         }
-        function openMenualInvoiceBulkActions(onBulkActionExecuted, invoiceTypeId, context)
+        function openMenualInvoiceBulkActions(onBulkActionExecuted, invoiceTypeId, allowedMenualBulkActionIds, context)
         {
             var settings = {
 
@@ -65,7 +65,8 @@ app.service('VR_Invoice_InvoiceBulkActionService', ['VRModalService', 'UtilsServ
             };
             var parameters = {
                 context: context,
-                invoiceTypeId:invoiceTypeId
+                invoiceTypeId: invoiceTypeId,
+                allowedMenualBulkActionIds: allowedMenualBulkActionIds
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/MenualInvoiceBulkActionsRunTimeEditor.html', parameters, settings);
         }

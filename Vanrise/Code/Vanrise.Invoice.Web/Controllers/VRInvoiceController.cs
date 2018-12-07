@@ -221,6 +221,15 @@ namespace Vanrise.Invoice.Web.Controllers
             return manager.ApproveInvoice(invoiceId, isApproved);
         }
 
+        [HttpGet]
+        [Route("GetAvailableMenualBulkActionIds")]
+        public object GetAvailableMenualBulkActionIds(Guid invoiceTypeId)
+        {
+            if (!_invoiceTypeManager.DoesUserHaveViewAccess(invoiceTypeId))
+                return GetUnauthorizedResponse();
+            InvoiceManager manager = new InvoiceManager();
+            return manager.GetAvailableMenualBulkActionIds(invoiceTypeId);
+        }
 
     }
 
