@@ -26,7 +26,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
             {
-                if (codeToClose.ChangedExistingCodes != null && codeToClose.ChangedExistingCodes.Any(item => item.BED > cpContext.EffectiveDate))
+                if (codeToClose.ChangedExistingCodes != null && codeToClose.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
                     invalidCodes.Add(codeToClose.Code);
             }
 
