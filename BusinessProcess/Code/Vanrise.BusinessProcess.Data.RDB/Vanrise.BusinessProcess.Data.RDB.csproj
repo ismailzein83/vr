@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BPBusinessRuleActionDataManager.cs" />
+    <Compile Include="BPBusinessRuleActionTypeDataManager.cs" />
     <Compile Include="BPBusinessRuleSetDataManager.cs" />
     <Compile Include="BPDefinitionArgumentStateDataManager.cs" />
     <Compile Include="BPDefinitionDataManager.cs" />
