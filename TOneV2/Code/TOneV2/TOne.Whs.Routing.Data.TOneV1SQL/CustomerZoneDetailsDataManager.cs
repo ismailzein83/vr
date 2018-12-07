@@ -23,7 +23,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 
         Guid blockedRuleConfigId = new Guid("bbb0ca31-0fcd-4035-a8ed-5d4bad06c662");
 
-        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "SaleZoneServiceIds", "DealId" };
+        readonly string[] columns = { "CustomerId", "SaleZoneId", "SellingNumberPlanId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "SaleZoneServiceIds", "DealId" };
 
         readonly string[] zoneRatesColumns = { "ZoneID", "SupplierID", "CustomerID", "ServicesFlag", "ProfileId", "ActiveRate", "IsTOD", "IsBlock", "CodeGroup" };
 
@@ -106,8 +106,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             string saleZoneServiceIds = record.SaleZoneServiceIds != null ? string.Join(",", record.SaleZoneServiceIds) : null;
 
             CustomerZoneDetailBulkInsert customerZoneDetailBulkInsert = dbApplyStream as CustomerZoneDetailBulkInsert;
-            customerZoneDetailBulkInsert.CustomerZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", record.CustomerId, record.SaleZoneId, record.RoutingProductId,
-                (int)record.RoutingProductSource, record.SellingProductId, decimal.Round(record.EffectiveRateValue, 8), (int)record.RateSource, saleZoneServiceIds, record.DealId);
+            customerZoneDetailBulkInsert.CustomerZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", record.CustomerId, record.SaleZoneId, record.SellingNumberPlanId,
+                record.RoutingProductId, (int)record.RoutingProductSource, record.SellingProductId, decimal.Round(record.EffectiveRateValue, 8), (int)record.RateSource, saleZoneServiceIds, record.DealId);
 
             if (!IsFuture.HasValue)
                 throw new ArgumentNullException("IsFuture");
@@ -148,7 +148,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 SaleZoneId = (Int64)reader["SaleZoneId"],
                 SellingProductId = GetReaderValue<int>(reader, "SellingProductId"),
                 SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServiceIds) ? new HashSet<int>(saleZoneServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
-                DealId = GetReaderValue<int?>(reader, "DealId")
+                DealId = GetReaderValue<int?>(reader, "DealId"),
+                SellingNumberPlanId = (int)reader["SellingNumberPlanId"]
             };
         }
 
@@ -197,6 +198,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                   ,zd.[RateSource]
                                                   ,zd.[SaleZoneServiceIds]
                                                   ,zd.[DealId]
+                                                  ,zd.[SellingNumberPlanId]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)";
 
         const string query_GetFilteredCustomerZoneDetailsByZone = @"                                                       
@@ -209,6 +211,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                                                   ,zd.[RateSource]
                                                   ,zd.[SaleZoneServiceIds]
                                                   ,zd.[DealId]
+                                                  ,zd.[SellingNumberPlanId]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)
                                               JOIN @ZoneList z ON z.ID = zd.SaleZoneID";
 

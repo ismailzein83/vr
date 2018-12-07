@@ -12,7 +12,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerZoneDetailsDataManager : RoutingDataManager, ICustomerZoneDetailsDataManager
     {
-        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "SaleZoneServiceIds", "DealId", "VersionNumber" };
+        readonly string[] columns = { "CustomerId", "SaleZoneId", "SellingNumberPlanId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "SaleZoneServiceIds", "DealId", "VersionNumber" };
         public DateTime? EffectiveDate { get; set; }
         public bool? IsFuture { get; set; }
 
@@ -29,7 +29,7 @@ namespace TOne.WhS.Routing.Data.SQL
             string saleZoneServiceIds = record.SaleZoneServiceIds != null ? string.Join(",", record.SaleZoneServiceIds) : null;
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource,
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}", record.CustomerId, record.SaleZoneId, record.SellingNumberPlanId, record.RoutingProductId, (int)record.RoutingProductSource,
                 record.SellingProductId, decimal.Round(record.EffectiveRateValue, 8), (int)record.RateSource, saleZoneServiceIds, record.DealId, record.VersionNumber);
         }
 
@@ -147,7 +147,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 SellingProductId = GetReaderValue<int>(reader, "SellingProductId"),
                 SaleZoneServiceIds = new HashSet<int>((reader["SaleZoneServiceIds"] as string).Split(',').Select(itm => int.Parse(itm))),
                 DealId = GetReaderValue<int?>(reader, "DealId"),
-                VersionNumber = (int)reader["VersionNumber"]
+                VersionNumber = (int)reader["VersionNumber"],
+                SellingNumberPlanId = (int)reader["SellingNumberPlanId"]
             };
         }
 
@@ -239,6 +240,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[SaleZoneServiceIds]
                                                   ,zd.[DealId]
                                                   ,zd.[VersionNumber]
+                                                  ,zd.[SellingNumberPlanId]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)
                                               #FILTER#";
 
@@ -253,6 +255,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[SaleZoneServiceIds]
                                                   ,zd.[DealId]
                                                   ,zd.[VersionNumber]
+                                                  ,zd.[SellingNumberPlanId]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)
                                               JOIN @ZoneList z ON z.ID = zd.SaleZoneID";
 
@@ -267,6 +270,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[SaleZoneServiceIds]
                                                   ,zd.[DealId]
                                                   ,zd.[VersionNumber]
+                                                  ,zd.[SellingNumberPlanId]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)
                                               JOIN @CustomerZoneList cz ON cz.CustomerId = zd.CustomerId and  cz.SaleZoneId = zd.SaleZoneId";
 

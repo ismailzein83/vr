@@ -221,7 +221,8 @@ namespace TOne.WhS.Routing.Business
                 RateSource = salePriceListOwnerType,
                 SaleZoneServiceIds = saleZoneServices,
                 DealId = dealId,
-                VersionNumber = versionNumber
+                VersionNumber = versionNumber,
+                SellingNumberPlanId = customerZone.SellingNumberPlanId
             };
 
             onCustomerZoneDetailAvailable(customerZoneDetail);

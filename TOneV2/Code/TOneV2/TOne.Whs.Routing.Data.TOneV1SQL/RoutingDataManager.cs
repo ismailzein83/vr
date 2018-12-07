@@ -253,6 +253,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         const string query_CustomerZoneDetailTable = @" CREATE TABLE [dbo].[CustomerZoneDetail](
 	                                                    [CustomerId] [int] NOT NULL,
 	                                                    [SaleZoneId] [bigint] NOT NULL,
+                                                        [SellingNumberPlanId] [int] NOT NULL,
 	                                                    [RoutingProductId] [int] NULL,
 	                                                    [RoutingProductSource] [tinyint] NULL,
 	                                                    [SellingProductId] [int] NULL,

@@ -24,6 +24,8 @@ namespace TOne.WhS.Routing.Entities
 
         public int? DealId { get; set; }
 
+        public int SellingNumberPlanId { get; set; }
+
         public int VersionNumber { get; set; }
     }
 
