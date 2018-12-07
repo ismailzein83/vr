@@ -472,7 +472,7 @@ namespace TOne.WhS.BusinessEntity.Business
 			{
 				return new ResultProcessingHandler<SaleRateDetail>
 				{
-					ExportExcelHandler = new SaleRateDetailExportExcelHandler()
+					ExportExcelHandler = new SaleRateDetailExportExcelHandler(input.Query)
 				};
 			}
 
@@ -544,6 +544,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
 		private class SaleRateDetailExportExcelHandler : ExcelExportHandler<SaleRateDetail>
 		{
+			SaleRateQuery query;
+			public SaleRateDetailExportExcelHandler(SaleRateQuery query)
+			{
+				this.query = query;
+			}
 			public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SaleRateDetail> context)
 			{
 				var sheet = new ExportExcelSheet()
@@ -551,37 +556,87 @@ namespace TOne.WhS.BusinessEntity.Business
 					SheetName = "Sales Rates",
 					Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
 				};
-
-				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
-				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate" });
-				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Change" });
-				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Inherited" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Pricelist Id" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
-				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
-				sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
-
-				sheet.Rows = new List<ExportExcelRow>();
-				if (context.BigResult != null && context.BigResult.Data != null)
+				if (query.ColumnsToShow != null && query.ColumnsToShow.Count > 0)
 				{
-					foreach (var record in context.BigResult.Data)
+					if (query.ColumnsToShow.Contains("Zone"))
+						sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
+					if (query.ColumnsToShow.Contains("Rate"))
+						sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate" });
+					if (query.ColumnsToShow.Contains("RateChange"))
+						sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Change" });
+					if (query.ColumnsToShow.Contains("RateInherited"))
+						sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Inherited" });
+					if (query.ColumnsToShow.Contains("PricelistId"))
+						sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Pricelist Id" });
+					if (query.ColumnsToShow.Contains("Currency"))
+						sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
+					if (query.ColumnsToShow.Contains("BED"))
+						sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+					if (query.ColumnsToShow.Contains("EED"))
+						sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+					sheet.Rows = new List<ExportExcelRow>();
+					if (context.BigResult != null && context.BigResult.Data != null)
 					{
-						if (record.Entity != null)
+						foreach (var record in context.BigResult.Data)
 						{
-							var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-							row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
-							row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedRate });
-							row.Cells.Add(new ExportExcelCell() { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange) });
-							row.Cells.Add(new ExportExcelCell() { Value = string.Format("{0}", record.IsRateInherited == true ? "Inherited" : "Explicit") });
-                            row.Cells.Add(new ExportExcelCell() { Value = record.PriceListFileId });
-                            row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedCurrency });
-							row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
-							row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
-							sheet.Rows.Add(row);
+							if (record.Entity != null)
+							{
+								var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+								if (query.ColumnsToShow.Contains("Zone"))
+									row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
+								if (query.ColumnsToShow.Contains("Rate"))
+									row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedRate });
+								if (query.ColumnsToShow.Contains("RateChange"))
+									row.Cells.Add(new ExportExcelCell() { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange) });
+								if (query.ColumnsToShow.Contains("RateInherited"))
+									row.Cells.Add(new ExportExcelCell() { Value = string.Format("{0}", record.IsRateInherited == true ? "Inherited" : "Explicit") });
+								if (query.ColumnsToShow.Contains("PricelistId"))
+									row.Cells.Add(new ExportExcelCell() { Value = record.PriceListFileId });
+								if (query.ColumnsToShow.Contains("Currency"))
+									row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedCurrency });
+								if (query.ColumnsToShow.Contains("BED"))
+									row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
+								if (query.ColumnsToShow.Contains("EED"))
+									row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
+								sheet.Rows.Add(row);
+							}
 						}
 					}
 				}
 
+				else
+				{
+					sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone" });
+					sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate" });
+					sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Change" });
+					sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Rate Inherited" });
+					sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Pricelist Id" });
+					sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
+					sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+					sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+					sheet.Rows = new List<ExportExcelRow>();
+					if (context.BigResult != null && context.BigResult.Data != null)
+					{
+						foreach (var record in context.BigResult.Data)
+						{
+							if (record.Entity != null)
+							{
+								var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+								row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
+								row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedRate });
+								row.Cells.Add(new ExportExcelCell() { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange) });
+								row.Cells.Add(new ExportExcelCell() { Value = string.Format("{0}", record.IsRateInherited == true ? "Inherited" : "Explicit") });
+								row.Cells.Add(new ExportExcelCell() { Value = record.PriceListFileId });
+								row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedCurrency });
+								row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
+								row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
+								sheet.Rows.Add(row);
+							}
+						}
+					}
+				}
 				context.MainSheet = sheet;
 			}
 		}

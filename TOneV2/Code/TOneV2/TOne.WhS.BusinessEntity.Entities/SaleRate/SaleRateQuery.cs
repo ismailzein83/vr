@@ -23,5 +23,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int? CurrencyId { get; set; }
 
         public bool IsSystemCurrency { get; set; }
+
+		public List<string> ColumnsToShow { get; set; }
     }
 }
