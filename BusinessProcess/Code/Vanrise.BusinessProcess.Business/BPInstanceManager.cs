@@ -68,7 +68,7 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstance != null ? bpInstance.Title : null;
         }
 
-        public BPInstanceUpdateOutput GetUpdated(ref object lastUpdateHandle, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, Guid? taskId)
+        public BPInstanceUpdateOutput GetUpdated(object lastUpdateHandle, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, Guid? taskId)
         {
             List<int> grantedPermissionSetIds;
             bool isUserGrantedAllModulePermissionSets = new RequiredPermissionSetManager().IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);

@@ -21,8 +21,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public BPInstanceUpdateOutput GetUpdated(BPInstanceUpdateInput input)
         {
             BPInstanceManager manager = new BPInstanceManager();
-            object lastUpdateHandle = input.LastUpdateHandle;
-            return manager.GetUpdated(ref lastUpdateHandle, input.NbOfRows, input.DefinitionsId, input.ParentId, input.EntityIds, input.TaskId);
+            return manager.GetUpdated(input.LastUpdateHandle, input.NbOfRows, input.DefinitionsId, input.ParentId, input.EntityIds, input.TaskId);
         }
 
         [HttpPost]
