@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
@@ -141,11 +142,19 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         }
         private void SetRowData(Worksheet worksheet, SalePricelistTemplateTableRow row, int currentRow)
         {
+            ExcelManager excelManager = new ExcelManager();
             if (row != null)
             {
+
+
                 foreach (SalePriceListTemplateTableCell cell in row.RowCells)
                 {
-                    worksheet.Cells[currentRow, cell.ColumnIndex].PutValue(cell.Value);
+                    var excelCell = worksheet.Cells[currentRow, cell.ColumnIndex];
+                    var cellStyle = excelCell.GetDisplayStyle();
+                    if (cell.IsNumber)
+                        cellStyle.Custom = excelManager.GetNumberFormat(Vanrise.Entities.NumberType.LongDecimal);
+                    excelCell.SetStyle(cellStyle);
+                    excelCell.PutValue(cell.Value);
                 }
             }
             else

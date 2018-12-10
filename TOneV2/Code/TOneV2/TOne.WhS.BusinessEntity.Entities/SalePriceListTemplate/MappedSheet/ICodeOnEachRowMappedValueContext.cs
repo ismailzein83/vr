@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Entities
 {
     public interface ICodeOnEachRowMappedValueContext
@@ -20,5 +22,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         string Increment { get; set; }
         Dictionary<int, SalePLOtherRateNotification> OtherRateByRateTypeId { get; set; }
         long? ZoneId { get; set; }
+        bool IsNumber { get; set; }
     }
 }

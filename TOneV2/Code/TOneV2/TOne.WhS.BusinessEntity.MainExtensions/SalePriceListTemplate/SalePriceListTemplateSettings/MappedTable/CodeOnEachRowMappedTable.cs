@@ -95,8 +95,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 			return (new SalePriceListTemplateTableCell
 			{
 				ColumnIndex = mappedCol.ColumnIndex,
-				Value = mappedValueContext.Value
-			});
+				Value = mappedValueContext.Value,
+                IsNumber = mappedValueContext.IsNumber
+            });
 		}
 	}
 }

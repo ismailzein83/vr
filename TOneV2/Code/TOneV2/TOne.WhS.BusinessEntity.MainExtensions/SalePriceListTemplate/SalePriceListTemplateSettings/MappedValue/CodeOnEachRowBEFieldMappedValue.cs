@@ -55,6 +55,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     break;
                 case CodeOnEachRowBEFieldType.Rate:
                     context.Value = context.Rate;
+                    context.IsNumber = true;
                     break;
                 case CodeOnEachRowBEFieldType.RateBED:
                     context.Value = context.RateBED;

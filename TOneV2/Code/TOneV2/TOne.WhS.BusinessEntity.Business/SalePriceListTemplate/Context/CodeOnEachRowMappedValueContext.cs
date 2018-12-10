@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -23,5 +24,6 @@ namespace TOne.WhS.BusinessEntity.Business
         public string Increment { get; set; }
         public Dictionary<int, SalePLOtherRateNotification> OtherRateByRateTypeId { get; set; }
         public long? ZoneId { get; set; }
+        public bool IsNumber { get; set; }
     }
 }

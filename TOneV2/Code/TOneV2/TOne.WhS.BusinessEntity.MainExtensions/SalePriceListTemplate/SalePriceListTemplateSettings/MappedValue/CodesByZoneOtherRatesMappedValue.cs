@@ -19,6 +19,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         public override void Execute(ICodesByZoneMappedValueContext context)
         {
             var otherRate = context.ZoneNotification.OtherRateByRateTypeId.GetRecord(RateTypeId);
+            context.IsNumber = true;
             if (otherRate != null)
                 context.Value = otherRate.Rate;
             else

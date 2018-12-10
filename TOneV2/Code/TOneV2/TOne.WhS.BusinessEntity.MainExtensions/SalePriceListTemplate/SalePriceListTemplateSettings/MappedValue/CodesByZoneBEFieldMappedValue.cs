@@ -49,6 +49,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 				case CodesByZoneBEFieldType.Rate:
 					if (context.ZoneNotification.Rate != null)
 						context.Value = context.ZoneNotification.Rate.Rate;
+                    context.IsNumber = true;
 					break;
 				case CodesByZoneBEFieldType.RateBED:
 					DateTime maxOtherRateBED = DateTime.MinValue;

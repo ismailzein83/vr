@@ -15,5 +15,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         bool IsCommaDecimalSeparator { get; set; }
         object Value { get; set; }
         int CustomerId { get; set; }
+        bool IsNumber { get; set; }
     }
 }

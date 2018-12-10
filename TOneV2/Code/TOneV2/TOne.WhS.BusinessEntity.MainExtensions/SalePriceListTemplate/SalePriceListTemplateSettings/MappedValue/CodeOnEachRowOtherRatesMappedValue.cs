@@ -15,6 +15,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         public override void Execute(ICodeOnEachRowMappedValueContext context)
         {
             var otherRate = context.OtherRateByRateTypeId.GetRecord(RateTypeId);
+            context.IsNumber = true;
             if (otherRate != null)
                 context.Value = otherRate.Rate;
             else
