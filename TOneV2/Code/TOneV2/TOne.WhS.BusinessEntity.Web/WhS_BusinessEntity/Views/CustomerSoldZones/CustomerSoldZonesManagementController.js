@@ -41,6 +41,11 @@
                 
                 sellingReadyPromiseDeferred.resolve();
             };
+
+            $scope.scopeModel.onCurrencySelectorChanged = function () {
+                if (gridAPI != undefined)
+                 gridAPI.loadGrid(buildGridQuery());
+            };
             $scope.scopeModel.onSellingNumberPlanSelectionChanged = function () {
                 $scope.scopeModel.selectedCustomers = [];
                 $scope.scopeModel.selectedRoutingProducts = [];

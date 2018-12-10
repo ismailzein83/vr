@@ -23,7 +23,7 @@
                 <vr-columns width="normal">
                     <vr-textbox value="scopeModel.top" label="Top" isrequired type="number" minvalue="1" decimalprecision="0"></vr-textbox>
                 </vr-columns>
-                <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true" hideremoveicon normal-col-num="2"></vr-common-currency-selector>
+                <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true" onselectionchanged="scopeModel.onCurrencySelectorChanged" hideremoveicon normal-col-num="2"></vr-common-currency-selector>
             </vr-row>
         </div>
         <vr-row removeline>

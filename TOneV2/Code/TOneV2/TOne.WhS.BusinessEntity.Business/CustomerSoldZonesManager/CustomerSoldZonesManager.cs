@@ -28,6 +28,8 @@ namespace TOne.WhS.BusinessEntity.Business
             private SaleCodeManager _saleCodeManager;
             private CurrencyExchangeRateManager _currencyExchangeRateManager;
             private Vanrise.Common.Business.ConfigManager _configManager;
+            private int longPrecision;
+            private int currencyId;
             #endregion
 
             public CustomerSoldZonesRequestHandler()
@@ -43,6 +45,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override IEnumerable<CustomersSoldZone> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<CustomerSoldZonesQuery> input)
             {
+                var generalSettingsManager = new Vanrise.Common.Business.GeneralSettingsManager();
+                longPrecision = generalSettingsManager.GetLongPrecisionValue();
+                currencyId = input.Query.CurrencyId;
 
                 DateTime? dataBaseEffectiveTime = RoutingManagerFactory.GetManager<IRoutingDatabaseManager>().GetLatestRoutingDatabaseEffectiveTime(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
                 if (!dataBaseEffectiveTime.HasValue)
@@ -179,7 +184,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return new CustomerZoneDataDetail()
                 {
                     CustomerName = _carrierAccountManager.GetCarrierAccountName(customerZoneData.CustomerId),
-                    Rate = customerZoneData.Rate,
+                    Rate =  decimal.Round(_currencyExchangeRateManager.ConvertValueToCurrency(customerZoneData.Rate, currencyId,DateTime.Today),longPrecision),
                     RoutingProductId = customerZoneData.RoutingProductId,
                     Services = customerZoneData.Services,
                     HasExtraCharge = customerZoneData.HasExtraCharge
