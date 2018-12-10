@@ -18,10 +18,9 @@ namespace Vanrise.NumberingPlan.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
             var invalidCodes = new List<string>();
-            if (zoneToProcess.ChangeType == ZoneChangeType.New || zoneToProcess.ChangeType == ZoneChangeType.Renamed || zoneToProcess.BED <= cpContext.EffectiveDate)
+            if (zoneToProcess.ChangeType == ZoneChangeType.New || zoneToProcess.ChangeType == ZoneChangeType.Renamed || zoneToProcess.BED <= DateTime.Today)
                 return true;
 
             if (zoneToProcess.CodesToAdd.Count() > 0)

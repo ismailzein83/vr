@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
-using Vanrise.Common;
 using Vanrise.NumberingPlan.Entities;
 
 namespace Vanrise.NumberingPlan.Business
@@ -20,11 +17,10 @@ namespace Vanrise.NumberingPlan.Business
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
             var invalidCodes = new List<string>();
-            ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
 
             foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
             {
-                if (codeToClose.ChangedExistingCodes != null && codeToClose.ChangedExistingCodes.Any(item => item.BED > cpContext.EffectiveDate))
+                if (codeToClose.ChangedExistingCodes != null && codeToClose.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
                     invalidCodes.Add(codeToClose.Code);
             }
 
