@@ -148,27 +148,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return bpInstances;
         }
 
-        private object BuildLastUpdateHandle(DateTime? statusUpdateTime, long? id)
-        {
-            if (statusUpdateTime.HasValue && id.HasValue)
-                return string.Concat(statusUpdateTime.Value.ToString("yyyyMMddHHmmssfff"), "@", id.Value);
-
-            return null;
-        }
-
-        private void SplitLastUpdateHandle(object lastUpdateHandle, out DateTime? statusUpdateTime, out long? id)
-        {
-            statusUpdateTime = null;
-            id = null;
-
-            if (lastUpdateHandle != null)
-            {
-                string[] data = lastUpdateHandle.ToString().Split('@');
-                statusUpdateTime = DateTime.ParseExact(data[0], "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
-                id = long.Parse(data[1]);
-            }
-        }
-
         public List<Entities.BPInstance> GetFirstPageFromArchive(int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, Guid? taskId)
         {
             StringBuilder queryBuilder = new StringBuilder();
@@ -482,6 +461,26 @@ JOIN #InstancesToArchive instancesToArchive ON bp.ID = instancesToArchive.ID
         #endregion
 
         #region Private Methods
+        private object BuildLastUpdateHandle(DateTime? statusUpdateTime, long? id)
+        {
+            if (statusUpdateTime.HasValue && id.HasValue)
+                return string.Concat(statusUpdateTime.Value.ToString("yyyyMMddHHmmssfff"), "@", id.Value);
+
+            return null;
+        }
+
+        private void SplitLastUpdateHandle(object lastUpdateHandle, out DateTime? statusUpdateTime, out long? id)
+        {
+            statusUpdateTime = null;
+            id = null;
+
+            if (lastUpdateHandle != null)
+            {
+                string[] data = lastUpdateHandle.ToString().Split('@');
+                statusUpdateTime = DateTime.ParseExact(data[0], "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
+                id = long.Parse(data[1]);
+            }
+        }
 
         private string BuildStatusesFilter(IEnumerable<BPInstanceStatus> statuses)
         {
