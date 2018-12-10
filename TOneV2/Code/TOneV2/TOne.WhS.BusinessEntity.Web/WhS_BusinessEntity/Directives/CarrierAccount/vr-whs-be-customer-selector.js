@@ -81,13 +81,13 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
             var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-
                 $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
                     carrierAccountReadyPromiseDeferred.resolve();
+                    defineAPI();
                 };
 
-                defineAPI();
+               
             }
 
             function defineAPI() {
