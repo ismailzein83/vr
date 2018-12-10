@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
-using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierRateManager
@@ -210,7 +210,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return new SupplierRateDetail
                 {
                     Entity = supplierRate,
-                    SupplierId=priceList.SupplierId,
+                    SupplierId = priceList.SupplierId,
                     SupplierZoneName = _supplierRateManager.GetSupplierZoneName(supplierRate.ZoneId),
                     DisplayedCurrency = _currencyManager.GetCurrencySymbol(currencyValueId),
                     DisplayedRate = (systemCurrencyId != null) ? _currencyExchangeRateManager.ConvertValueToCurrency(supplierRate.Rate, currencyId, currencyValueId, effectiveOn) : supplierRate.Rate,
@@ -249,7 +249,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate", CellType = ExcelCellType.Number, NumberType = NumberType.LongDecimal });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate Change" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
