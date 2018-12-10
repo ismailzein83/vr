@@ -24,6 +24,8 @@
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_BPInstance_Archived_ViewReqPrmSet]
     ON [bp].[BPInstance_Archived]([ViewRequiredPermissionSetId] ASC);
@@ -47,4 +49,9 @@ CREATE NONCLUSTERED INDEX [IX_BPInstance_Archived_CreatedTime]
 GO
 CREATE NONCLUSTERED INDEX [IX_BPInstance_Archived_TaskId]
     ON [bp].[BPInstance_Archived]([TaskId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BPInstance_Archived_StatusUpdatedTime_ID]
+    ON [bp].[BPInstance_Archived]([StatusUpdatedTime] DESC, [ID] DESC);
 

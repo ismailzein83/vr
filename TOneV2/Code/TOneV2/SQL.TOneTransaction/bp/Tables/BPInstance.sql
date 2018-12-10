@@ -60,6 +60,8 @@
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_BPInstance_DefinitionID]
     ON [bp].[BPInstance]([DefinitionID] ASC);
@@ -100,4 +102,9 @@ CREATE NONCLUSTERED INDEX [IX_BPInstance_ExecutionStatus]
 GO
 CREATE NONCLUSTERED INDEX [IX_BPInstance_TaskId]
     ON [bp].[BPInstance]([TaskId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BPInstance_StatusUpdatedTime_ID]
+    ON [bp].[BPInstance]([StatusUpdatedTime] DESC, [ID] DESC);
 
