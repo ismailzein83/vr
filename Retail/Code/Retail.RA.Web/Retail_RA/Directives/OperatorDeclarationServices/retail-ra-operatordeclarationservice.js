@@ -157,6 +157,7 @@
                         Settings: operatorDeclarationService.directiveAPI.getData()
                     });
                 }
+                console.log(services);
                 return services;
             }
         }

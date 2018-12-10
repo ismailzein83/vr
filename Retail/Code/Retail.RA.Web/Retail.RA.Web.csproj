@@ -79,6 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Retail_RA\Constant\ModuleConfig.js" />
+    <Content Include="Retail_RA\Directives\Extensions\INTL\retail-ra-intl-businessobject-dataprovidersettings.js" />
+    <Content Include="Retail_RA\Directives\Extensions\INTL\Templates\INTLBusinessObjectDataProviderSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\retail-ra-operatordeclarationservice-sms.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\retail-ra-operatordeclarationservice-voice.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServiceSMSTemplate.html" />
