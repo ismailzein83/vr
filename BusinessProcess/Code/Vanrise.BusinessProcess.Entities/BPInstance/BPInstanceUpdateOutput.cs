@@ -9,6 +9,6 @@ namespace Vanrise.BusinessProcess.Entities
     public class BPInstanceUpdateOutput
     {
         public List<BPInstanceDetail> ListBPInstanceDetails { get; set; }
-        public byte[] MaxTimeStamp { get; set; }
+        public object LastUpdateHandle { get; set; }
     }
 }

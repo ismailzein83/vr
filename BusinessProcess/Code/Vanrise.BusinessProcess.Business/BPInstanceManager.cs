@@ -68,7 +68,7 @@ namespace Vanrise.BusinessProcess.Business
             return bpInstance != null ? bpInstance.Title : null;
         }
 
-        public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, Guid? taskId)
+        public BPInstanceUpdateOutput GetUpdated(ref object lastUpdateHandle, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, Guid? taskId)
         {
             List<int> grantedPermissionSetIds;
             bool isUserGrantedAllModulePermissionSets = new RequiredPermissionSetManager().IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
@@ -76,9 +76,9 @@ namespace Vanrise.BusinessProcess.Business
             IBPInstanceDataManager bpInstanceDataManager = GetBPInstanceDataManager();
 
             List<BPInstance> bpInstances;
-            if (maxTimeStamp == null) //first page
+            if (lastUpdateHandle == null) //first page
             {
-                bpInstances = bpInstanceDataManager.GetFirstPage(out maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds, taskId);
+                bpInstances = bpInstanceDataManager.GetFirstPage(out lastUpdateHandle, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds, taskId);
                 List<BPInstance> bpInstancesArchived = bpInstanceDataManager.GetFirstPageFromArchive(nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds, taskId);
                 if (bpInstancesArchived != null && bpInstancesArchived.Count > 0)
                 {
@@ -88,7 +88,7 @@ namespace Vanrise.BusinessProcess.Business
             }
             else
             {
-                bpInstances = bpInstanceDataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds, taskId);
+                bpInstances = bpInstanceDataManager.GetUpdated(ref lastUpdateHandle, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds, taskId);
             }
 
             List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
@@ -97,7 +97,7 @@ namespace Vanrise.BusinessProcess.Business
 
             BPInstanceUpdateOutput bpInstanceUpdateOutput = new BPInstanceUpdateOutput();
             bpInstanceUpdateOutput.ListBPInstanceDetails = bpInstanceDetails;
-            bpInstanceUpdateOutput.MaxTimeStamp = maxTimeStamp;
+            bpInstanceUpdateOutput.LastUpdateHandle = lastUpdateHandle;
             return bpInstanceUpdateOutput;
         }
 

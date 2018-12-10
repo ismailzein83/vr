@@ -5,7 +5,7 @@ namespace Vanrise.BusinessProcess.Entities
 {
     public class BPInstanceUpdateInput
     {
-        public byte[] LastUpdateHandle { get; set; }
+        public object LastUpdateHandle { get; set; }
         public int NbOfRows { get; set; }
         public List<Guid> DefinitionsId { get; set; }
         public int ParentId { get; set; }

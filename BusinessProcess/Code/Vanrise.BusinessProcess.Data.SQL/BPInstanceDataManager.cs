@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Vanrise.BusinessProcess.Entities;
@@ -90,11 +91,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 });
         }
 
-        public List<BPInstance> GetFirstPage(out byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, Guid? taskId)
+        public List<BPInstance> GetFirstPage(out object lastUpdateHandle, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, Guid? taskId)
         {
             StringBuilder queryBuilder = new StringBuilder();
 
-            queryBuilder.Append(" SELECT MAX(timestamp) MaxGlobalTimeStamp FROM [BP].[BPInstance] WITH(NOLOCK) ");
+            queryBuilder.Append(" SELECT TOP 1 StatusUpdatedTime as MaxGlobalStatusUpdatedTime, ID as GlobalId FROM [BP].[BPInstance] WITH(NOLOCK) order by StatusUpdatedTime, ID desc ");
             queryBuilder.AppendLine();
 
             queryBuilder.AppendFormat("SELECT TOP({0}) {1} INTO #TEMP FROM bp.[BPInstance] bp WITH(NOLOCK)", nbOfRows, BPInstanceSELECTCOLUMNS);
@@ -112,32 +113,60 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             queryBuilder.Append(" SELECT * FROM #TEMP ");
 
-            queryBuilder.AppendLine();
+            DateTime? maxStatusUpdatedTime_local = null;
+            long? id_local = null;
 
-            queryBuilder.Append(@" SELECT MAX([timestamp]) MaxTimestamp FROM #TEMP ");
-
-            byte[] maxTimeStamp_local = null;
             List<BPInstance> bpInstances = new List<BPInstance>();
+
             ExecuteReaderText(queryBuilder.ToString(),
                 (reader) =>
                 {
                     if (reader.Read())
-                        maxTimeStamp_local = GetReaderValue<byte[]>(reader, "MaxGlobalTimeStamp");
+                    {
+                        maxStatusUpdatedTime_local = GetReaderValue<DateTime>(reader, "MaxGlobalStatusUpdatedTime");
+                        id_local = GetReaderValue<long>(reader, "GlobalId");
+                    }
                     reader.NextResult();
 
                     while (reader.Read())
                     {
-                        bpInstances.Add(BPInstanceMapper(reader));
-                    }
-                    reader.NextResult();
-                    if (reader.Read() && bpInstances.Count > 0)
-                    {
-                        maxTimeStamp_local = GetReaderValue<byte[]>(reader, "MaxTimestamp");
+                        BPInstance bpInstance = BPInstanceMapper(reader);
+                        if (!maxStatusUpdatedTime_local.HasValue || maxStatusUpdatedTime_local.Value < bpInstance.StatusUpdatedTime)
+                        {
+                            maxStatusUpdatedTime_local = bpInstance.StatusUpdatedTime;
+                            id_local = bpInstance.ProcessInstanceID;
+                        }
+                        else if (maxStatusUpdatedTime_local.Value == bpInstance.StatusUpdatedTime && bpInstance.ProcessInstanceID > id_local.Value)
+                        {
+                            id_local = bpInstance.ProcessInstanceID;
+                        }
+                        bpInstances.Add(bpInstance);
                     }
                 },
                 null);
-            maxTimeStamp = maxTimeStamp_local;
+            lastUpdateHandle = BuildLastUpdateHandle(maxStatusUpdatedTime_local, id_local);
             return bpInstances;
+        }
+
+        private object BuildLastUpdateHandle(DateTime? statusUpdateTime, long? id)
+        {
+            if (statusUpdateTime.HasValue && id.HasValue)
+                return string.Concat(statusUpdateTime.Value.ToString("yyyyMMddHHmmssfff"), "@", id.Value);
+
+            return null;
+        }
+
+        private void SplitLastUpdateHandle(object lastUpdateHandle, out DateTime? statusUpdateTime, out long? id)
+        {
+            statusUpdateTime = null;
+            id = null;
+
+            if (lastUpdateHandle != null)
+            {
+                string[] data = lastUpdateHandle.ToString().Split('@');
+                statusUpdateTime = DateTime.ParseExact(data[0], "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
+                id = long.Parse(data[1]);
+            }
         }
 
         public List<Entities.BPInstance> GetFirstPageFromArchive(int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, Guid? taskId)
@@ -160,50 +189,66 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsText(queryBuilder.ToString(), BPInstanceMapper, null);
         }
 
-        public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, Guid? taskId)
+        public List<BPInstance> GetUpdated(ref object lastUpdateHandle, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, Guid? taskId)
         {
             StringBuilder queryBuilder = new StringBuilder();
 
             queryBuilder.AppendFormat("SELECT TOP({0}) {1} INTO #TEMP FROM bp.[BPInstance] bp WITH(NOLOCK)", nbOfRows, BPInstanceSELECTCOLUMNS);
             List<string> filters = BuildFilters(definitionsId, parentId, entityIds, grantedPermissionSetIds);
-            filters.Add(" bp.[timestamp] > @TimestampAfter ");
+            filters.Add(" (bp.[StatusUpdatedTime] > @StatusUpdatedTime OR (bp.[StatusUpdatedTime] = @StatusUpdatedTime AND bp.ID > @BPInstanceId))");
 
             if (taskId.HasValue)
                 filters.Add(string.Format(" [TaskId] = '{0}' ", taskId.Value));
 
             queryBuilder.AppendFormat(" WHERE {0} ", String.Join(" AND ", filters));
 
-            queryBuilder.Append(" ORDER BY bp.[timestamp] ");
+            queryBuilder.Append(" ORDER BY bp.[StatusUpdatedTime], bp.ID ");
 
             queryBuilder.AppendLine();
 
             queryBuilder.Append(" SELECT * FROM #TEMP ");
 
-            queryBuilder.AppendLine();
+            object lastUpdateHandle_local = lastUpdateHandle;
 
-            queryBuilder.Append(@" SELECT MAX([timestamp]) MaxTimestamp FROM #TEMP ");
+            DateTime? maxStatusUpdatedTime_local = null;
+            long? id_local = null;
 
-            byte[] maxTimeStamp_local = maxTimeStamp;
             List<BPInstance> bpInstances = new List<BPInstance>();
             ExecuteReaderText(queryBuilder.ToString(),
                 (reader) =>
                 {
                     while (reader.Read())
                     {
-                        bpInstances.Add(BPInstanceMapper(reader));
-                    }
-                    reader.NextResult();
-                    if (reader.Read() && bpInstances.Count > 0)
-                    {
-                        maxTimeStamp_local = GetReaderValue<byte[]>(reader, "MaxTimestamp");
+                        BPInstance bpInstance = BPInstanceMapper(reader);
+
+                        if (!maxStatusUpdatedTime_local.HasValue || maxStatusUpdatedTime_local.Value < bpInstance.StatusUpdatedTime)
+                        {
+                            maxStatusUpdatedTime_local = bpInstance.StatusUpdatedTime;
+                            id_local = bpInstance.ProcessInstanceID;
+                        }
+                        else if (maxStatusUpdatedTime_local.Value == bpInstance.StatusUpdatedTime && bpInstance.ProcessInstanceID > id_local.Value)
+                        {
+                            id_local = bpInstance.ProcessInstanceID;
+                        }
+
+                        bpInstances.Add(bpInstance);
                     }
                 },
                 (cmd) =>
                 {
-                    if (maxTimeStamp_local != null)
-                        cmd.Parameters.Add(new SqlParameter("@TimestampAfter", maxTimeStamp_local));
+                    if (lastUpdateHandle_local != null)
+                    {
+                        DateTime? statusUpdateTime;
+                        long? id;
+                        SplitLastUpdateHandle(lastUpdateHandle_local, out statusUpdateTime, out id);
+
+                        cmd.Parameters.Add(new SqlParameter("@StatusUpdatedTime", statusUpdateTime.Value));
+                        cmd.Parameters.Add(new SqlParameter("@BPInstanceId", id.Value));
+                    }
                 });
-            maxTimeStamp = maxTimeStamp_local;
+            object handle = BuildLastUpdateHandle(maxStatusUpdatedTime_local, id_local);
+
+            lastUpdateHandle = handle != null ? handle : lastUpdateHandle_local;
             return bpInstances;
         }
 
@@ -513,8 +558,7 @@ JOIN #InstancesToArchive instancesToArchive ON bp.ID = instancesToArchive.ID
                                                     ,[InitiatorUserId]
 	                                                ,[ServiceInstanceID]
                                                     ,[TaskId]
-                                                    ,[CancellationRequestUserId]
-	                                                ,[timestamp] ";
+                                                    ,[CancellationRequestUserId]";
 
         private BPInstance BPInstanceMapper(IDataReader reader)
         {

@@ -166,7 +166,7 @@ app.directive("businessprocessBpInstanceMonitorGrid", ["BusinessProcess_BPInstan
                         }
                     }
                 }
-                input.LastUpdateHandle = response.MaxTimeStamp;
+                input.LastUpdateHandle = response.LastUpdateHandle;
             }
         }
 
