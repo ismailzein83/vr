@@ -43,8 +43,6 @@
             };
 
             $scope.scopeModel.onCurrencySelectorChanged = function () {
-                if (gridAPI != undefined)
-                 gridAPI.loadGrid(buildGridQuery());
             };
             $scope.scopeModel.onSellingNumberPlanSelectionChanged = function () {
                 $scope.scopeModel.selectedCustomers = [];
