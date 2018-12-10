@@ -74,8 +74,10 @@
     <Compile Include="OperatorDeclaration\OperatorDeclarationServicesCustomObjectTypeSettings.cs" />
     <Compile Include="OperatorDeclaration\OperatorDeclarationServicesManager.cs" />
     <Compile Include="Period Definition\PeriodDefinitionManager.cs" />
+    <Compile Include="Period Definition\RAPeriodDefinitionOnAfterSaveHandler.cs" />
     <Compile Include="Period Definition\RAPeriodDefinitionOnBeforeSaveHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecialNumbers\SpecialNumbersManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.RA.Entities\Retail.RA.Entities.csproj">
