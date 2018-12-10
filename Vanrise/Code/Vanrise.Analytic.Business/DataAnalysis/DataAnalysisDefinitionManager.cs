@@ -134,12 +134,10 @@ namespace Vanrise.Analytic.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            IDataAnalysisDefinitionDataManager _dataManager = AnalyticDataManagerFactory.GetDataManager<IDataAnalysisDefinitionDataManager>();
-            object _updateHandle;
-
+            protected override bool UseCentralizedCacheRefresher { get { return true; } }
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreDataAnalysisDefinitionUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired(parameter);
             }
         }
 

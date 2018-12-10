@@ -1,0 +1,106 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Analytic.Entities;
+using Vanrise.Data.RDB;
+
+namespace Vanrise.Analytic.Data.RDB
+{
+    public class AnalyticTableDataManager : IAnalyticTableDataManager
+    {
+
+        static string TABLE_NAME = "VR_Analytic_AnalyticTable";
+        const string COL_ID = "ID";
+        const string COL_Name = "Name";
+        const string COL_Settings = "Settings";
+        const string COL_CreatedTime = "CreatedTime";
+
+        static AnalyticTableDataManager()
+        {
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+            {
+                DBSchemaName = "Analytic",
+                DBTableName = "AnalyticTable",
+                Columns = columns,
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime
+            });
+        }
+        #region Private Methods
+        BaseRDBDataProvider GetDataProvider()
+        {
+            return RDBDataProviderFactory.CreateProvider("VR_Analytic", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+        }
+        AnalyticTable AnalyticTableMapper(IRDBDataReader reader)
+        {
+            AnalyticTable analyticTable = new AnalyticTable
+            {
+                AnalyticTableId = reader.GetGuid(COL_ID),
+                Name = reader.GetString(COL_Name),
+                Settings = Vanrise.Common.Serializer.Deserialize<AnalyticTableSettings>(reader.GetString(COL_Settings)),
+            };
+            return analyticTable;
+        }
+        #endregion
+
+        #region IAnalyticTableDataManager
+
+        public bool AddAnalyticTable(Analytic.Entities.AnalyticTable analyticTable)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+
+            var ifNotExists = insertQuery.IfNotExists("vrAnalyticTable");
+            ifNotExists.EqualsCondition(COL_Name).Value(analyticTable.Name);
+
+            insertQuery.Column(COL_ID).Value(analyticTable.AnalyticTableId);
+            insertQuery.Column(COL_Name).Value(analyticTable.Name);
+            if (analyticTable.Settings != null)
+                insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
+
+            return queryContext.ExecuteNonQuery() > 0;
+        }
+
+        public bool AreAnalyticTableUpdated(ref object updateHandle)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Analytic.Entities.AnalyticTable> GetAnalyticTables()
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "vrAnalyticTable", null, true);
+            selectQuery.SelectColumns().AllTableColumns("vrAnalyticTable");
+            selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
+            return queryContext.GetItems(AnalyticTableMapper);
+        }
+
+        public bool UpdateAnalyticTable(Analytic.Entities.AnalyticTable analyticTable)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+
+            var notExistsCondition = updateQuery.IfNotExists("vrAnalyticTable");
+            notExistsCondition.NotEqualsCondition(COL_ID).Value(analyticTable.AnalyticTableId);
+            notExistsCondition.EqualsCondition(COL_Name).Value(analyticTable.Name);
+
+            updateQuery.Column(COL_Name).Value(analyticTable.Name);
+            updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
+
+            updateQuery.Where().EqualsCondition(COL_ID).Value(analyticTable.AnalyticTableId);
+
+            return queryContext.ExecuteNonQuery() > 0;
+        }
+        #endregion
+    }
+}

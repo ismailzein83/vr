@@ -168,13 +168,10 @@ namespace Vanrise.Analytic.Business
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-
-            IAnalyticReportDataManager _dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticReportDataManager>();
-            object _updateHandle;
-
+            protected override bool UseCentralizedCacheRefresher { get { return true; } }
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreAnalyticReportUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired(parameter);
             }
         }
 

@@ -459,13 +459,13 @@ namespace Vanrise.Analytic.Business
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            IAnalyticItemConfigDataManager _dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticItemConfigDataManager>();
-            object _updateHandle;
-
+            
+            protected override bool UseCentralizedCacheRefresher { get { return true; } }
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreAnalyticItemConfigUpdated(ref _updateHandle);
+                return base.ShouldSetCacheExpired(parameter);
             }
+           
         }
 
         private class AnalyticItemConfigLoggableEntity : VRLoggableEntityBase
