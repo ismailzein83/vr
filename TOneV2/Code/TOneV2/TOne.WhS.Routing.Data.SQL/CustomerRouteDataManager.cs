@@ -74,17 +74,21 @@ namespace TOne.WhS.Routing.Data.SQL
             StringBuilder queryBuilder = new StringBuilder(query_GetCustomerRoutes);
             queryBuilder.Replace("#LimitResult#", string.Format("Top {0}", input.Query.LimitResult.ToString()));
 
-            string customerIdsFilter = string.Empty;
-            if (input.Query.CustomerIds != null && input.Query.CustomerIds.Count > 0)
-                customerIdsFilter = string.Format("AND cr.CustomerId In({0})", string.Join(",", input.Query.CustomerIds));
-
-            string saleZoneIdsFilter = string.Empty;
-            if (input.Query.SaleZoneIds != null && input.Query.SaleZoneIds.Count > 0)
-                saleZoneIdsFilter = string.Format("AND cr.SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
-
             bool? isBlocked = null;
             if (input.Query.RouteStatus.HasValue)
                 isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
+
+            string customerIdsFilter = string.Empty;
+            if (input.Query.CustomerIds != null && input.Query.CustomerIds.Count > 0)
+                customerIdsFilter = string.Format("AND cr.CustomerId In ({0})", string.Join(",", input.Query.CustomerIds));
+
+            string saleZoneIdsFilter = string.Empty;
+            if (input.Query.SaleZoneIds != null && input.Query.SaleZoneIds.Count > 0)
+                saleZoneIdsFilter = string.Format("AND cr.SaleZoneId In ({0})", string.Join(",", input.Query.SaleZoneIds));
+
+            string sellingNumberPlanId = string.Empty;
+            if (input.Query.SellingNumberPlanId.HasValue)
+                sellingNumberPlanId = string.Format("AND czd.SellingNumberPlanId = {0}", input.Query.SellingNumberPlanId.Value);
 
             string supplierIdsFilter = string.Empty;
             var supplierIds = input.Query.SupplierIds;
@@ -95,7 +99,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 supplierIdsFilter = supplierIdsFilter + "$%')";
             }
 
-            queryBuilder.Replace("#FILTER#", string.Format("Where (@Code is null or cr.Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked) {0} {1} {2}", customerIdsFilter, saleZoneIdsFilter, supplierIdsFilter));
+            queryBuilder.Replace("#FILTER#", string.Format("Where (@Code is null or cr.Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked) {0} {1} {2} {3}", customerIdsFilter, saleZoneIdsFilter, sellingNumberPlanId, supplierIdsFilter));
 
             IEnumerable<Entities.CustomerRoute> customerRoutes = GetItemsText(queryBuilder.ToString(), CustomerRouteMapper, (cmd) =>
             {

@@ -142,6 +142,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
             string routingProductIdsFilter = string.Empty;
             string saleZoneIdsFilter = string.Empty;
+            string sellingNumberPlanIdFilter = string.Empty;
             string customerIdFilter = string.Empty;
 
             string joinCustomerZoneDetail = string.Empty;
@@ -155,6 +156,9 @@ namespace TOne.WhS.Routing.Data.SQL
 
             if (input.Query.SaleZoneIds != null && input.Query.SaleZoneIds.Count > 0)
                 saleZoneIdsFilter = string.Format(" AND pr.SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
+
+            if (input.Query.SellingNumberPlanId.HasValue)
+                sellingNumberPlanIdFilter = string.Format("AND czd.SellingNumberPlanId = {0}", input.Query.SellingNumberPlanId.Value);
 
             if (input.Query.CustomerId.HasValue)
             {
@@ -173,6 +177,8 @@ namespace TOne.WhS.Routing.Data.SQL
             }
             else
             {
+                if (input.Query.SellingNumberPlanId.HasValue)
+                    joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId and pr.RoutingProductId = czd.RoutingProductId ";
                 effectiveRateValue = "null as EffectiveRateValue ";
             }
 
@@ -181,6 +187,7 @@ namespace TOne.WhS.Routing.Data.SQL
             query = query.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
             query = query.Replace("#SIMULATE_ROUTING_PRODUCT_ID#", simulatedRoutingProductIdFilter);
             query = query.Replace("#SALE_ZONE_IDS#", saleZoneIdsFilter);
+            query = query.Replace("#SELLING_NUMBER_PLAN_ID#", sellingNumberPlanIdFilter);
             query = query.Replace("#CUSTOMER_IDS#", customerIdFilter);
             query = query.Replace("#CUSTOMERZONEDETAILS#", joinCustomerZoneDetail);
             query = query.Replace("#EFFECTIVERATE#", effectiveRateValue);
@@ -264,6 +271,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
             string routingProductIdsFilter = string.Empty;
             string saleZoneIdsFilter = string.Empty;
+            string sellingNumberPlanIdFilter = string.Empty;
             string customerIdFilter = string.Empty;
 
             string joinCustomerZoneDetail = string.Empty;
@@ -276,6 +284,9 @@ namespace TOne.WhS.Routing.Data.SQL
 
             if (input.Query.SaleZoneIds != null && input.Query.SaleZoneIds.Count > 0)
                 saleZoneIdsFilter = string.Format(" AND pr.SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
+
+            if (input.Query.SellingNumberPlanId.HasValue)
+                sellingNumberPlanIdFilter = string.Format("AND czd.SellingNumberPlanId = {0}", input.Query.SellingNumberPlanId.Value);
 
             if (input.Query.CustomerId.HasValue)
             {
@@ -294,6 +305,8 @@ namespace TOne.WhS.Routing.Data.SQL
             }
             else
             {
+                if (input.Query.SellingNumberPlanId.HasValue)
+                    joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId and pr.RoutingProductId = czd.RoutingProductId ";
                 effectiveRateValue = " ,null as EffectiveRateValue ";
             }
 
@@ -302,6 +315,8 @@ namespace TOne.WhS.Routing.Data.SQL
             query = query.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
             query = query.Replace("#SIMULATE_ROUTING_PRODUCT_ID#", simulatedRoutingProductIdFilter);
             query = query.Replace("#SALE_ZONE_IDS#", saleZoneIdsFilter);
+            query = query.Replace("#SELLING_NUMBER_PLAN_ID#", sellingNumberPlanIdFilter);
+
             query = query.Replace("#CUSTOMER_IDS#", customerIdFilter);
             query = query.Replace("#CUSTOMERZONEDETAILS#", joinCustomerZoneDetail);
             query = query.Replace("#EFFECTIVERATE#", effectiveRateValue);
@@ -731,7 +746,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                                     FROM [dbo].#TABLENAME# as pr with(nolock)
                                                                                     JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
                                                                                     #LEFT# #CUSTOMERZONEDETAILS# #CUSTOMER_IDS#
-                                                                                    Where (@IsBlocked is null or IsBlocked = @IsBlocked) #ROUTING_PRODUCT_IDS# #SIMULATE_ROUTING_PRODUCT_ID# #SALE_ZONE_IDS#");
+                                                                                    Where (@IsBlocked is null or IsBlocked = @IsBlocked) #ROUTING_PRODUCT_IDS# #SIMULATE_ROUTING_PRODUCT_ID# #SALE_ZONE_IDS# #SELLING_NUMBER_PLAN_ID#");
 
         private StringBuilder query_GetFilteredRPRoutesByCode = new StringBuilder(@"SELECT TOP #LimitResult# pr.[RoutingProductId], 
                                                                                     pr.[SaleZoneId], 
@@ -747,7 +762,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                                     JOIN [dbo].[CodeSaleZoneMatch] cszm on pr.SaleZoneId = cszm.SaleZoneID
                                                                                     JOIN [dbo].[SaleZone] as sz ON cszm.SaleZoneID = sz.ID
                                                                                     #LEFT# #CUSTOMERZONEDETAILS# #CUSTOMER_IDS#
-                                                                                    Where (@IsBlocked is null or IsBlocked = @IsBlocked) #ROUTING_PRODUCT_IDS# #SIMULATE_ROUTING_PRODUCT_ID# #SALE_ZONE_IDS# #CodeFilter#
+                                                                                    Where (@IsBlocked is null or IsBlocked = @IsBlocked) #ROUTING_PRODUCT_IDS# #SIMULATE_ROUTING_PRODUCT_ID# #SALE_ZONE_IDS# #SELLING_NUMBER_PLAN_ID# #CodeFilter#
 
                                                                                     select distinct code into #distinctCodes from #routes
 

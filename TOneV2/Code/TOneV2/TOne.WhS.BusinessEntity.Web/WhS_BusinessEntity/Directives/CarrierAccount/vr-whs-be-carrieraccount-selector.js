@@ -10,6 +10,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 onselectionchanged: '=',
                 onselectitem: "=",
                 ondeselectitem: "=",
+                onremoveitem: "=",
                 ondeselectallitems: '=',
                 onblurdropdown: '=',
                 selectedvalues: "=",
@@ -119,7 +120,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + '> ' +
                 '<vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" ' +
-                ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  ondeselectallitems="ctrl.ondeselectallitems" onblurdropdown="ctrl.onblurdropdown" ' +
+                ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onremoveitem="ctrl.onremoveitem"  ondeselectallitems="ctrl.ondeselectallitems" onblurdropdown="ctrl.onblurdropdown" ' +
                 ' datatooltipfield="additionalInfo"' +
                 ' datastylefield="colorStyle" ' +
                 ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" ' +

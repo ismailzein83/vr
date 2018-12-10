@@ -11,8 +11,9 @@
             </vr-row>
             <vr-row removeline>
                 <vr-columns colnum="2">
-                    <vr-whs-routing-routingdatabase-selector onselectionchanged="onRoutingDatabaseSelectorChange" getroutingproductroutes on-ready="onRoutingDatabaseSelectorReady" isrequired hideremoveicon
-                                                             selectedvalues="selectedRoutingDatabase" />
+                    <vr-whs-routing-routingdatabase-selector on-ready="onRoutingDatabaseSelectorReady" onselectionchanged="onRoutingDatabaseSelectorChange"
+                                                             selectedvalues="selectedRoutingDatabase" getroutingproductroutes isrequired hideremoveicon>
+                    </vr-whs-routing-routingdatabase-selector>
                 </vr-columns>
 
                 <vr-columns colnum="2">
@@ -38,7 +39,9 @@
                 <vr-whs-routing-routestatus-selector ng-show="advancedSelected" on-ready="onRouteStatusDirectiveReady" normal-col-num="2"></vr-whs-routing-routestatus-selector>
 
                 <vr-span vr-loader="isLoadingCustomerSelector">
-                    <vr-whs-be-customer-selector ng-show="advancedSelected" on-ready="onCustomerSelectorReady" normal-col-num="2" selectedvalues="selectedCustomer"></vr-whs-be-customer-selector>
+                    <vr-whs-be-customer-selector ng-show="advancedSelected" on-ready="onCustomerSelectorReady" onselectionchanged="onCustomerSelectionChanged" onremoveitem="onRemoveCustomer"
+                                                 normal-col-num="2" selectedvalues="selectedCustomer">
+                    </vr-whs-be-customer-selector>
                 </vr-span>
 
                 <vr-columns colnum="2" ng-show="selectedCustomer!=undefined && advancedSelected">
@@ -52,7 +55,7 @@
                 </vr-columns>
 
                 <vr-columns colnum="2" ng-show="advancedSelected && (selectedRoutingProductFilter.value == 0 || selectedCustomer == undefined)">
-                    <vr-whs-be-routingproduct-selector ismultipleselection on-ready="onMultipleRoutingProductSelectorReady" />
+                    <vr-whs-be-routingproduct-selector  on-ready="onMultipleRoutingProductSelectorReady" ismultipleselection></vr-whs-be-routingproduct-selector>
                 </vr-columns>
 
                 <vr-columns colnum="2" ng-show="advancedSelected && selectedRoutingProductFilter.value == 1 && selectedCustomer != undefined">

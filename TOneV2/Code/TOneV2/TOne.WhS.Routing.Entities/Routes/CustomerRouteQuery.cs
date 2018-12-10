@@ -6,6 +6,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public int RoutingDatabaseId { get; set; }
 
+        public int? SellingNumberPlanId { get; set; }
+
         public List<long> SaleZoneIds { get; set; }
 
         public string Code { get; set; }

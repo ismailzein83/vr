@@ -88,11 +88,11 @@
 
             function getLegendContent() {
                 return '<div style="font-size:12px; margin:10px">' +
-					'<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #FF0000; margin: 0px 3px"></div> Blocked </div>' +
-					'<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #FFA500; margin: 0px 3px"></div> Lossy </div>' +
-					'<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #0000FF; margin: 0px 3px"></div> Forced </div>' +
-					'<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #28A744; margin: 0px 3px"></div> Market Price </div>' +
-					'</div>';
+                    '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #FF0000; margin: 0px 3px"></div> Blocked </div>' +
+                    '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #FFA500; margin: 0px 3px"></div> Lossy </div>' +
+                    '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #0000FF; margin: 0px 3px"></div> Forced </div>' +
+                    '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #28A744; margin: 0px 3px"></div> Market Price </div>' +
+                    '</div>';
             }
 
             function getFilterObject() {
@@ -100,6 +100,7 @@
                 var query = {
                     isDatabaseTypeCurrent: routingDatabaseSelectorAPI.isDatabaseTypeCurrent(),
                     RoutingDatabaseId: routingDatabaseSelectorAPI.getSelectedIds(),
+                    SellingNumberPlanId: saleZoneSelectorAPI.getSellingNumberPlanId(),
                     SaleZoneIds: saleZoneSelectorAPI.getSelectedIds(),
                     Code: $scope.code,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
@@ -167,12 +168,14 @@
         function loadSaleZoneSection() {
             var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var payload = {};
-
-            if (parametersZoneIds != null)
-                payload.selectedIds = parametersZoneIds;
-
             UtilsService.waitMultiplePromises([routingDatabaseLoadPromiseDeferred.promise, saleZoneReadyPromiseDeferred.promise]).then(function () {
+                var payload = {
+                    onSellingNumberPlanSelectionChanged: onSellingNumberPlanSelectionchanged,
+                    areSaleZonesRequired: false
+                };
+
+                if (parametersZoneIds != null)
+                    payload.selectedIds = parametersZoneIds;
                 var databaseType = getDatabaseEffectiveType(selectedRoutingDatabaseObject);
                 if (databaseType != undefined)
                     payload.filter = { EffectiveMode: databaseType };
@@ -214,7 +217,7 @@
             return loadRouteStatusPromiseDeferred.promise;
         }
 
-        function getDatabaseEffectiveType(selectedObject)  {
+        function getDatabaseEffectiveType(selectedObject) {
             if (selectedObject == undefined) {
                 return undefined;
             }
@@ -225,6 +228,20 @@
             if (selectedObject.Type == WhS_Routing_RoutingDatabaseTypeEnum.Future.value) {
                 return VRCommon_EntityFilterEffectiveModeEnum.Future.value;
             }
+        }
+
+        function onSellingNumberPlanSelectionchanged(selectedSellingNumberPlan) {
+
+            var selectedSellingNumberPlanId = selectedSellingNumberPlan != undefined ? selectedSellingNumberPlan.SellingNumberPlanId : undefined;
+
+            var customerSelectorPayload = {};
+            if (selectedSellingNumberPlanId != undefined) {
+                customerSelectorPayload.filter = { SellingNumberPlanId: selectedSellingNumberPlanId };
+            }
+            if ($scope.selectedCustomer != undefined && (selectedSellingNumberPlanId == undefined || selectedSellingNumberPlanId == $scope.selectedCustomer.SellingNumberPlanId)) {
+                customerSelectorPayload.selectedIds = $scope.selectedCustomer.CarrierAccountId;
+            }
+            VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, customerSelectorPayload, undefined);
         }
     }
 

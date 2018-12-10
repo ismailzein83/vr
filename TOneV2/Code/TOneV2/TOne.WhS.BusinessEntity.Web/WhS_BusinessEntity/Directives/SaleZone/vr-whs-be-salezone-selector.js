@@ -52,26 +52,26 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
             }
 
             return '<span ng-show="ctrl.isSellingNumberPlanVisible" vr-disabled="ctrl.isSellingNumberPlanDisabled">' +
-                       ' <vr-whs-be-sellingnumberplan-selector on-ready="ctrl.onSellingNumberReady" isrequired="ctrl.isrequired && ctrl.isSellingNumberPlanVisible" normal-col-num="{{ctrl.normalColNum}}"' +
-                            ' onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged" selectedvalues="ctrl.selectedSellingNumberPlan" onselectitem="ctrl.onselectSNP" ondeselectitem="ctrl.ondeselectSNP">' +
-                       '</vr-whs-be-sellingnumberplan-selector>' +
-                   '</span>' +
-                   '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                     '<span vr-disabled="ctrl.isdisabled"> ' +
-                        '<vr-select on-ready="ctrl.onSelectorReady"' +
-                           '  onselectionchanged="ctrl.onselectionchanged"' +
-                           '  onblurdropdown="ctrl.onblurdropdown" ' +
-                           '  selectedvalues="ctrl.selectedvalues"' +
-                           '  datasource="ctrl.search"' +
-                           '  datavaluefield="SaleZoneId"' +
-                           '  datatextfield="Name"' + multipleselection + '  ' + label +
-                           '  limitcharactercount="ctrl.limitcharactercount"' +
-                           '  isrequired="ctrl.isSaleZoneRequired()"' +
-                           '  onselectitem="ctrl.onselectitem"' +
-                           '  ondeselectitem="ctrl.ondeselectitem">' +
-                        '</vr-select>' +
-                     '</span>' +
-                   '</vr-columns>';
+                ' <vr-whs-be-sellingnumberplan-selector on-ready="ctrl.onSellingNumberReady" isrequired="ctrl.isrequired && ctrl.isSellingNumberPlanVisible" normal-col-num="{{ctrl.normalColNum}}"' +
+                ' onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged" selectedvalues="ctrl.selectedSellingNumberPlan" onselectitem="ctrl.onselectSNP" ondeselectitem="ctrl.ondeselectSNP">' +
+                '</vr-whs-be-sellingnumberplan-selector>' +
+                '</span>' +
+                '<vr-columns colnum="{{ctrl.normalColNum}}">' +
+                '<span vr-disabled="ctrl.isdisabled"> ' +
+                '<vr-select on-ready="ctrl.onSelectorReady"' +
+                '  onselectionchanged="ctrl.onselectionchanged"' +
+                '  onblurdropdown="ctrl.onblurdropdown" ' +
+                '  selectedvalues="ctrl.selectedvalues"' +
+                '  datasource="ctrl.search"' +
+                '  datavaluefield="SaleZoneId"' +
+                '  datatextfield="Name"' + multipleselection + '  ' + label +
+                '  limitcharactercount="ctrl.limitcharactercount"' +
+                '  isrequired="ctrl.isSaleZoneRequired()"' +
+                '  onselectitem="ctrl.onselectitem"' +
+                '  ondeselectitem="ctrl.ondeselectitem">' +
+                '</vr-select>' +
+                '</span>' +
+                '</vr-columns>';
         }
 
         function saleZoneCtor(saleZoneSelectorCtrl, $scope, attrs) {
@@ -174,6 +174,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
 
                 api.load = function (payload) {
                     selectorApi.clearDataSource();
+
                     var selectedIds;
                     var showSellingNumberPlanIfMultiple;
 
@@ -186,6 +187,9 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                         genericUIContext = payload.genericUIContext;
                         showSellingNumberPlanIfMultiple = payload.showSellingNumberPlanIfMultiple;
                         onSellingNumberPlanSelectionChanged = payload.onSellingNumberPlanSelectionChanged;
+
+                        if (payload.areSaleZonesRequired != undefined)
+                            areSaleZonesRequired = payload.areSaleZonesRequired;
                     }
 
                     if (payloadSellingNumberPlanId != undefined) {
@@ -277,9 +281,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                                                                 var selectedSellingNumberPlan = saleZoneSelectorCtrl.selectedSellingNumberPlan;
                                                                 if (selectedSellingNumberPlan != undefined) {
 
-                                                                    if (selectedSellingNumberPlan.SellingNumberPlanId == newSellingNumberPlanId) {
-
-                                                                    } else {
+                                                                    if (selectedSellingNumberPlan.SellingNumberPlanId != newSellingNumberPlanId) {
                                                                         sellingDirectiveApi.setSelectedIds(newSellingNumberPlanId);
                                                                         selectorApi.clearDataSource();
                                                                     }
@@ -325,7 +327,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                                 var loadSaleZonePromise = WhS_BE_SaleZoneAPIService.GetSellingNumberPlanIdBySaleZoneIds(selectedSaleZoneIds).then(function (response) {
 
                                     var selectedSellingNumberPlanIds = [];
-                                    for (var i = 0 ; i < response.length; i++) {
+                                    for (var i = 0; i < response.length; i++) {
                                         if (selectedSellingNumberPlanIds.indexOf(response[i].SellingNumberPlanId) < 0)
                                             selectedSellingNumberPlanIds.push(response[i].SellingNumberPlanId);
                                     }
@@ -375,6 +377,20 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                     }
                 };
 
+                api.reLoadSaleZoneSelector = function (payload) {
+                    if (selectorApi != undefined)
+                        selectorApi.clearDataSource();
+
+                    if (filter == undefined)
+                        filter = {};
+
+                    if (payload != undefined)
+                        filter.EffectiveMode = payload.effectiveMode;
+
+                    if (filter.EffectiveMode == undefined)
+                        filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.Current.value;
+                };
+
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('SaleZoneId', attrs, saleZoneSelectorCtrl);
                 };
@@ -390,20 +406,6 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
 
                 api.getSellingNumberPlanId = function () {
                     return sellingNumberPlanId;
-                };
-
-                api.reLoadSaleZoneSelector = function (payload) {
-                    if (selectorApi != undefined)
-                        selectorApi.clearDataSource();
-
-                    if (filter == undefined)
-                        filter = {};
-
-                    if (payload != undefined)
-                        filter.EffectiveMode = payload.effectiveMode;
-
-                    if (filter.EffectiveMode == undefined)
-                        filter.EffectiveMode = VRCommon_EntityFilterEffectiveModeEnum.Current.value;
                 };
 
                 if (saleZoneSelectorCtrl.onReady != null)
