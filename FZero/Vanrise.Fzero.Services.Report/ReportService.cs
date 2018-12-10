@@ -21,9 +21,9 @@ namespace Vanrise.Fzero.Services.Report
         private static System.Timers.Timer aTimer;
 
         public ReportService()
-	    {
-		    InitializeComponent();
-	    }
+        {
+            InitializeComponent();
+        }
 
         private void ErrorLog(string message)
         {
@@ -82,7 +82,7 @@ namespace Vanrise.Fzero.Services.Report
                                         cliWithoutCountryCode = string.Format("{0}", v.CLI.Substring(1));
                                     }
                                 }
-                            
+
                                 if (!DistinctCLIsWitoutCountryCode.Contains(cli))
                                 {
                                     DistinctCLIsWitoutCountryCode.Add(cliWithoutCountryCode);
@@ -113,10 +113,10 @@ namespace Vanrise.Fzero.Services.Report
                             {
                                 GeneratedCall.UpdateReportStatus(listDistinctFraudCases, (int)Enums.ReportingStatuses.TobeReported, null);
                                 string reportCounter;
-                                SendReport(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT), out  reportCounter);
+                                SendReport(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT), out reportCounter);
                                 if (i.EnableFTP.HasValue && i.EnableFTP.Value)
                                 {
-                                    SaveToFTPFile(i.FTPAddress, i.FTPUserName, i.FTPPassword, i.FTPPort, i.FTPType, i.User.FullName, DistinctCLIsWitoutCountryCode, reportCounter,i.Compression,i.SshEncryptionAlgorithm,i.SshHostKeyAlgorithm,i.SshKeyExchangeAlgorithm,i.SshMacAlgorithm,i.SshOptions);
+                                    SaveToFTPFile(i.FTPAddress, i.FTPUserName, i.FTPPassword, i.FTPPort, i.FTPType, i.User.FullName, DistinctCLIsWitoutCountryCode, reportCounter, i.Compression, i.SshEncryptionAlgorithm, i.SshHostKeyAlgorithm, i.SshKeyExchangeAlgorithm, i.SshMacAlgorithm, i.SshOptions);
                                 }
                             }
                         }
@@ -170,7 +170,7 @@ namespace Vanrise.Fzero.Services.Report
 
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ErrorLog("OnTimedEvent: " + ex.Message);
                 ErrorLog("OnTimedEvent: " + ex.InnerException);
@@ -178,11 +178,11 @@ namespace Vanrise.Fzero.Services.Report
             }
 
 
-          
+
         }
 
 
-        private void SaveToFTPFile(string ftpAddress, string ftpUserName, string ftpPassword, string ftpPort, int? ftpType, string mobileOperatorName, HashSet<string> distinctCLIs, string reportCounter, int? compression,int? sshEncryptionAlgorithm,int? sshHostKeyAlgorithm, int? sshKeyExchangeAlgorithm,int? sshMacAlgorithm, int? sshOptions)
+        private void SaveToFTPFile(string ftpAddress, string ftpUserName, string ftpPassword, string ftpPort, int? ftpType, string mobileOperatorName, HashSet<string> distinctCLIs, string reportCounter, int? compression, int? sshEncryptionAlgorithm, int? sshHostKeyAlgorithm, int? sshKeyExchangeAlgorithm, int? sshMacAlgorithm, int? sshOptions)
         {
 
             try
@@ -192,7 +192,7 @@ namespace Vanrise.Fzero.Services.Report
 
                 if (ftpAddress != null && ftpUserName != null & ftpPassword != null)
                 {
-                    string fileName = string.Format("AutoSuspend_{0:yyyyMMdd}_{1}_Vanrise.txt", DateTime.Now, reportCounter);
+                    string fileName = string.Format("AutoSuspend_{0:yyyyMMdd}_{1}_Vanrise.temp", DateTime.Now, reportCounter);
                     StringBuilder stringBuilder = new StringBuilder();
                     foreach (var item in distinctCLIs)
                     {
@@ -206,7 +206,7 @@ namespace Vanrise.Fzero.Services.Report
 
 
 
-                        FtpWebRequest ftpWebRequest = (System.Net.FtpWebRequest)FtpWebRequest.Create(String.Format("ftp://{0}/{1}", ftpAddress, fileName));
+                        FtpWebRequest ftpWebRequest = (System.Net.FtpWebRequest)FtpWebRequest.Create(String.Format("ftp://{0}/{1}", ftpAddress, fileName.Replace(".temp", ".txt")));
                         ftpWebRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
                         ftpWebRequest.KeepAlive = false;
                         ftpWebRequest.Timeout = 20000;
@@ -268,6 +268,17 @@ namespace Vanrise.Fzero.Services.Report
                             }
                             fileName = string.Format("{0}/{1}", filePath, fileName);
                         }
+                        client.TransferProgress += (sender, e) =>
+                        {
+                            if (e.Finished)
+                            {
+                                var sftp = sender as Sftp;
+                                if (sftp != null)
+                                {
+                                    sftp.Rename(fileName, fileName.Replace(".temp",".txt"));
+                                }
+                            }
+                        };
                         client.PutFile(ms, fileName);
                     }
                 }
@@ -280,8 +291,8 @@ namespace Vanrise.Fzero.Services.Report
             }
 
         }
-
-
+     
+      
         private void TrySetCompression(SshParameters sshParameters, VRCompressionEnum? compression)
         {
             if (compression.HasValue)
