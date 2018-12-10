@@ -48,6 +48,7 @@
                 onselectionchanged: '=',
                 onselectitem: '=',
                 ondeselectitem: '=',
+                onremoveitem:'=',
                 ondeselectallitems: '=',
                 onaddclicked: "=",
                 hint: '@',
@@ -962,6 +963,9 @@
                                 ctrl.selectedvalues = undefined;
                                 if (ctrl.ondeselectitem && typeof (ctrl.ondeselectitem) == 'function') {
                                     ctrl.ondeselectitem(ctrl.selectedvalues);
+                                }
+                                if (ctrl.onremoveitem && typeof (ctrl.onremoveitem) == 'function') {
+                                    ctrl.onremoveitem();
                                 }
                             }
 
