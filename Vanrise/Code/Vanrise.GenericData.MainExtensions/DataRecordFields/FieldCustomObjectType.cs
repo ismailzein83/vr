@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -77,8 +78,30 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
         {
-            throw new NotImplementedException();
-        }
+			if (fieldValue == null)
+				return false;
+			StringRecordFilter stringRecordFilter = recordFilter as StringRecordFilter;
+			if (stringRecordFilter == null)
+				throw new NullReferenceException("stringRecordFilter");
+			string valueAsString = GetDescription(fieldValue) as string;
+			if (valueAsString == null)
+				throw new NullReferenceException("valueAsString");
+			string filterValue = stringRecordFilter.Value;
+			if (filterValue == null)
+				throw new NullReferenceException("filterValue");
+			switch (stringRecordFilter.CompareOperator)
+			{
+				case StringRecordFilterOperator.Equals: return String.Compare(valueAsString, filterValue, true) == 0;
+				case StringRecordFilterOperator.NotEquals: return String.Compare(valueAsString, filterValue, true) != 0;
+				case StringRecordFilterOperator.Contains: return valueAsString.IndexOf(filterValue, StringComparison.OrdinalIgnoreCase) >= 0;
+				case StringRecordFilterOperator.NotContains: return valueAsString.IndexOf(filterValue, StringComparison.OrdinalIgnoreCase) < 0;
+				case StringRecordFilterOperator.StartsWith: return valueAsString.StartsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
+				case StringRecordFilterOperator.NotStartsWith: return !valueAsString.StartsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
+				case StringRecordFilterOperator.EndsWith: return valueAsString.EndsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
+				case StringRecordFilterOperator.NotEndsWith: return !valueAsString.EndsWith(filterValue, StringComparison.InvariantCultureIgnoreCase);
+			}
+			return false;
+		}
 
         public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
         {
@@ -87,8 +110,23 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override RecordFilter ConvertToRecordFilter(IDataRecordFieldTypeConvertToRecordFilterContext context)
         {
-            throw new NotImplementedException();
-        }
+			if (context.FilterValues == null || context.FilterValues.Count == 0)
+				return null;
+
+			var values = context.FilterValues.Select(x => x.ToString()).ToList();
+			List<RecordFilter> recordFilters = new List<RecordFilter>();
+
+			foreach (var value in values)
+			{
+				recordFilters.Add(new StringRecordFilter
+				{
+					CompareOperator = context.StrictEqual ? StringRecordFilterOperator.Equals : StringRecordFilterOperator.Contains,
+					Value = value,
+					FieldName = context.FieldName
+				});
+			}
+			return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();
+		}
 
         protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
         {
