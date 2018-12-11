@@ -2,6 +2,8 @@
 using Vanrise.Common;
 using Retail.RA.Entities;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Vanrise.GenericData.Entities;
 
 namespace Retail.RA.Business
@@ -27,6 +29,30 @@ namespace Retail.RA.Business
             return null;
         }
 
+        public List<PeriodDefinition> GetPeriodDefinitionsBetweenDate(DateTime fromDate, DateTime toDate, out DateTime minDate, out DateTime maxDate)
+        {
+            var cachedPeriods = GetCachedPeriodDefinitions();
+            minDate = new DateTime();
+            maxDate = new DateTime();
+
+            if (cachedPeriods == null || cachedPeriods.Count == 0)
+                return null;
+
+            var periodDefinitions = new List<PeriodDefinition>();
+            foreach (var periodDefinition in cachedPeriods.Values)
+            {
+                if (periodDefinition.ToDate >= fromDate && periodDefinition.FromDate < toDate)
+                    periodDefinitions.Add(periodDefinition);
+            }
+
+            if (periodDefinitions.Count > 0)
+            {
+                minDate = periodDefinitions.Min(item => item.FromDate);
+                maxDate = periodDefinitions.Max(item => item.ToDate);
+            }
+
+            return periodDefinitions;
+        }
         #endregion
 
         #region Private Methods
