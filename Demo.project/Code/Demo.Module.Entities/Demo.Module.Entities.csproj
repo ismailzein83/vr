@@ -57,6 +57,7 @@
     <Compile Include="City\CityDetails.cs" />
     <Compile Include="City\CityQuery.cs" />
     <Compile Include="City\CitySettingsConfig.cs" />
+    <Compile Include="Company\Company.cs" />
     <Compile Include="District\District.cs" />
     <Compile Include="Country\Country.cs" />
     <Compile Include="Country\CountryDetails.cs" />
@@ -66,11 +67,6 @@
     <Compile Include="District\DistrictSettingsConfig.cs" />
     <Compile Include="Factory\Factory.cs" />
     <Compile Include="Factory\FactoryTypeConfig.cs" />
-    <Compile Include="OldEntities\Branch\Branch.cs" />
-    <Compile Include="OldEntities\Branch\BranchDetails.cs" />
-    <Compile Include="OldEntities\Branch\BranchQuery.cs" />
-    <Compile Include="OldEntities\Branch\Setting\Dimensions\Dimensions.cs" />
-    <Compile Include="OldEntities\Branch\Setting\Dimensions\DimensionsConfig.cs" />
     <Compile Include="OldEntities\CallCenterCustomer\CDR.cs" />
     <Compile Include="OldEntities\CallCenterCustomer\CDRQuery.cs" />
     <Compile Include="OldEntities\CallCenterCustomer\Complaint.cs" />
@@ -106,12 +102,6 @@
     <Compile Include="OldEntities\Master\Master.cs" />
     <Compile Include="OldEntities\Master\MasterDetails.cs" />
     <Compile Include="OldEntities\Master\MasterQuery.cs" />
-    <Compile Include="OldEntities\Company\Company.cs" />
-    <Compile Include="OldEntities\Company\CompanyDetails.cs" />
-    <Compile Include="OldEntities\Company\CompanyInfoFilter.cs" />
-    <Compile Include="OldEntities\Company\CompanyQuery.cs" />
-    <Compile Include="OldEntities\Branch\Setting\Setting.cs" />
-    <Compile Include="OldEntities\Branch\Setting\SettingConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

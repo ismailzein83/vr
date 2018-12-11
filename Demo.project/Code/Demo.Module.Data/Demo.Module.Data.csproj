@@ -53,7 +53,6 @@
     <Compile Include="DemoModuleFactory.cs" />
     <Compile Include="ICityDataManager.cs" />
     <Compile Include="ICountryDataManager.cs" />
-    <Compile Include="OldEntities\IBranchDataManager.cs" />
     <Compile Include="OldEntities\ICDRDataManager.cs" />
     <Compile Include="OldEntities\IComplaintDataManager.cs" />
     <Compile Include="OldEntities\IColorDataManager.cs" />
@@ -67,7 +66,6 @@
     <Compile Include="OldEntities\IContractDataManager.cs" />
     <Compile Include="OldEntities\ICustomerInfoDataManager.cs" />
     <Compile Include="OldEntities\IMasterDataManager.cs" />
-    <Compile Include="OldEntities\ICompanyDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

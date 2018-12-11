@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="CityDataManager.cs" />
     <Compile Include="CountryDataManager.cs" />
-    <Compile Include="OldEntities\BranchDataManager.cs" />
     <Compile Include="OldEntities\CDRDataManager.cs" />
     <Compile Include="OldEntities\ComplaintDataManager.cs" />
     <Compile Include="OldEntities\ColorDataManager.cs" />
@@ -76,7 +75,6 @@
     <Compile Include="OldEntities\ContractDataManager.cs" />
     <Compile Include="OldEntities\CustomerInfoDataManager.cs" />
     <Compile Include="OldEntities\MasterDataManager.cs" />
-    <Compile Include="OldEntities\CompanyDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

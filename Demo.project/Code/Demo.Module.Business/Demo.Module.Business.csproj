@@ -87,7 +87,6 @@
   <ItemGroup>
     <Compile Include="CityManager.cs" />
     <Compile Include="CountryManager.cs" />
-    <Compile Include="OldEntites\BranchManager.cs" />
     <Compile Include="OldEntites\CDRManager.cs" />
     <Compile Include="OldEntites\ColorManager.cs" />
     <Compile Include="OldEntites\DesksizeManager.cs" />
@@ -101,7 +100,6 @@
     <Compile Include="OldEntites\ContractManager.cs" />
     <Compile Include="OldEntites\CustomerInfoManager.cs" />
     <Compile Include="OldEntites\MasterManager.cs" />
-    <Compile Include="OldEntites\CompanyManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

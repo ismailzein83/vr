@@ -99,11 +99,6 @@
     <Content Include="Demo_Module\Directives\Description\DescriptionEditorController.js" />
     <Content Include="Demo_Module\Directives\Description\Templates\DescriptionTemplate.html" />
     <Content Include="Demo_Module\Directives\Description\Templates\DescriptionEditor.html" />
-    <Content Include="Demo_Module\Directives\Branch\demo-module-branch-grid.js" />
-    <Content Include="Demo_Module\Directives\Branch\Templates\BranchGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\Company\demo-module-company-grid.js" />
-    <Content Include="Demo_Module\Directives\Company\demo-module-company-selector.js" />
-    <Content Include="Demo_Module\Directives\Company\Templates\CompanyGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Color\demo-module-color-selector.js" />
     <Content Include="Demo_Module\Directives\MainExtensions\Templates\CircleShapeTemplate.html" />
     <Content Include="Demo_Module\Directives\MainExtensions\Templates\SquareShapeTemplate.html" />
@@ -260,17 +255,13 @@
     <Content Include="Demo_Module\Elements\Master\Views\MasterManagement.html" />
     <Content Include="Demo_Module\Elements\Master\Views\MasterManagementController.js" />
     <Content Include="Demo_Module\Services\OldEntities\AdvancedGridService.js" />
-    <Content Include="Demo_Module\Services\APIServices\OldEntities\BranchAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\OldEntities\CompanyAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\PageRunTimeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\PageDefinitionAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\SettingConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\ColorAPIService .js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\DesksizeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\SpecialityAPIService .js" />
-    <Content Include="Demo_Module\Services\OldEntities\BranchService.js" />
     <Content Include="Demo_Module\Services\OldEntities\BuildingService.js" />
-    <Content Include="Demo_Module\Services\OldEntities\CompanyService.js" />
     <Content Include="Demo_Module\Services\OldEntities\DescriptionService.js" />
     <Content Include="Demo_Module\Services\OldEntities\PageRunTimeService.js" />
     <Content Include="Demo_Module\Services\OldEntities\PageDefinitionService.js" />
@@ -278,14 +269,6 @@
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
     <Content Include="Demo_Module\Views\AdvancedGridEditor.html" />
     <Content Include="Demo_Module\Views\AdvancedGridEditorController.js" />
-    <Content Include="Demo_Module\Views\BranchEditor.html" />
-    <Content Include="Demo_Module\Views\BranchEditorController.js" />
-    <Content Include="Demo_Module\Views\BranchManagement.html" />
-    <Content Include="Demo_Module\Views\BranchManagementController.js" />
-    <Content Include="Demo_Module\Views\CompanyEditor.html" />
-    <Content Include="Demo_Module\Views\CompanyEditorController.js" />
-    <Content Include="Demo_Module\Views\CompanyManagement.html" />
-    <Content Include="Demo_Module\Views\CompanyManagementController.js" />
     <Content Include="Demo_Module\Views\PageDefinitionSubviewEditor.html" />
     <Content Include="Demo_Module\Views\PageDefinitionSubviewEditor.js" />
     <Content Include="Demo_Module\Views\PageRunTimeEditor.html" />
@@ -317,8 +300,6 @@
     <Compile Include="Controllers\OldEntities\ContractController.cs" />
     <Compile Include="Controllers\OldEntities\CustomerInfoController.cs" />
     <Compile Include="Controllers\OldEntities\MasterController.cs" />
-    <Compile Include="Controllers\OldEntities\BranchController.cs" />
-    <Compile Include="Controllers\OldEntities\CompanyController.cs" />
     <Compile Include="Controllers\OldEntities\SettingConfigsController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
