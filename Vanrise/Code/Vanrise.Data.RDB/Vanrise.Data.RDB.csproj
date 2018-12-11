@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,6 +71,7 @@
     <Compile Include="ExecuteNonQuery\RDBCreateIndexQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBCreateTableQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBDeleteQuery.cs" />
+    <Compile Include="ExecuteNonQuery\RDBDropTableQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBIfQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBParameterDeclarationQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBSetParameterValuesQuery.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="BaseAndDefs\RDBTableColumnDefinition.cs" />
     <Compile Include="BaseAndDefs\RDBTableDefinition.cs" />
     <Compile Include="ExecuteNonQuery\RDBUpdateQuery.cs" />
+    <Compile Include="Select\RDBSelectTableRowsCountQuery.cs" />
     <Compile Include="Sorting\RDBSortContext.cs" />
     <Compile Include="TempTable\RDBTempTableQuery.cs" />
   </ItemGroup>

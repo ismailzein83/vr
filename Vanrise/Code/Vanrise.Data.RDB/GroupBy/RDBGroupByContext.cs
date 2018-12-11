@@ -38,7 +38,7 @@ namespace Vanrise.Data.RDB
             if (_selectAggregatesContext == null)
             {
                 _groupBy.AggregateColumns = new List<RDBSelectColumn>();
-                _selectAggregatesContext = new RDBSelectAggregateContext(_groupBy.AggregateColumns, _table, _tableAlias);
+                _selectAggregatesContext = new RDBSelectAggregateContext(_queryBuilderContext, _groupBy.AggregateColumns, _table, _tableAlias);
             }
             return _selectAggregatesContext;
         }

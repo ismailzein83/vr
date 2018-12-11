@@ -44,6 +44,8 @@ namespace Vanrise.Data.RDB
 
         public abstract RDBResolvedQuery ResolveSelectQuery(IRDBDataProviderResolveSelectQueryContext context);
 
+        public abstract RDBResolvedQuery ResolveSelectTableRowsCountQuery(IRDBDataProviderResolveSelectTableRowsCountQueryContext context);
+
         public abstract RDBResolvedQuery ResolveInsertQuery(IRDBDataProviderResolveInsertQueryContext context);
 
         public abstract RDBResolvedQuery ResolveUpdateQuery(IRDBDataProviderResolveUpdateQueryContext context);
@@ -51,6 +53,8 @@ namespace Vanrise.Data.RDB
         public abstract RDBResolvedQuery ResolveDeleteQuery(IRDBDataProviderResolveDeleteQueryContext context);
 
         public abstract RDBResolvedQuery ResolveTableCreationQuery(IRDBDataProviderResolveTableCreationQueryContext context);
+
+        public abstract RDBResolvedQuery ResolveTableDropQuery(IRDBDataProviderResolveTableDropQueryContext context);
 
         public virtual RDBResolvedQuery ResolveIndexCreationQuery(IRDBDataProviderResolveIndexCreationQueryContext context)
         {
@@ -122,6 +126,8 @@ namespace Vanrise.Data.RDB
         RDBGroupBy GroupBy { get; }
 
         List<RDBSelectSortColumn> SortColumns { get; }
+
+        bool WithNoLock { get; }
     }
 
     public class RDBDataProviderResolveSelectQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveSelectQueryContext
@@ -141,7 +147,7 @@ namespace Vanrise.Data.RDB
         //}
 
         public RDBDataProviderResolveSelectQueryContext(bool isMainStatement, IRDBTableQuerySource table, string tableAlias, long? nbOfRecords, List<RDBSelectColumn> columns, List<RDBJoin> joins,
-            BaseRDBCondition condition, RDBGroupBy groupBy, List<RDBSelectSortColumn> sortColumns, IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
+            BaseRDBCondition condition, RDBGroupBy groupBy, List<RDBSelectSortColumn> sortColumns, bool withNoLock, IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
             : base(parentContext)
         {
             this.QueryBuilderContext = queryBuilderContext;
@@ -154,6 +160,7 @@ namespace Vanrise.Data.RDB
             this.Condition = condition;
             this.GroupBy = groupBy;
             this.SortColumns = sortColumns;
+            this.WithNoLock = withNoLock;
         }
 
         public RDBQueryBuilderContext QueryBuilderContext
@@ -208,6 +215,38 @@ namespace Vanrise.Data.RDB
 
         public List<RDBSelectSortColumn> SortColumns { get; private set; }
 
+        public bool WithNoLock { get; private set; }
+
+    }
+
+    public interface IRDBDataProviderResolveSelectTableRowsCountQueryContext : IBaseRDBResolveQueryContext
+    {
+        string SchemaName { get; }
+
+        string TableName { get; }
+    }
+
+    public class RDBDataProviderResolveSelectTableRowsCountQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveSelectTableRowsCountQueryContext
+    {
+        public RDBDataProviderResolveSelectTableRowsCountQueryContext(string schemaName, string tableName,
+            IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {
+            this.SchemaName = schemaName;
+            this.TableName = tableName;
+        }
+
+        public string SchemaName
+        {
+            get;
+            private set;
+        }
+
+        public string TableName
+        {
+            get;
+            private set;
+        }
     }
 
     public class RDBResolvedQuery
@@ -409,6 +448,36 @@ namespace Vanrise.Data.RDB
         }
 
         public bool PrimaryKeyIndexNonClustered
+        {
+            get;
+            private set;
+        }
+    }
+
+    public interface IRDBDataProviderResolveTableDropQueryContext : IBaseRDBResolveQueryContext
+    {
+        string SchemaName { get; }
+
+        string TableName { get; }
+    }
+
+    public class RDBDataProviderResolveTableDropQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveTableDropQueryContext
+    {
+        public RDBDataProviderResolveTableDropQueryContext(string schemaName, string tableName,
+            IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {
+            this.SchemaName = schemaName;
+            this.TableName = tableName;
+        }
+
+        public string SchemaName
+        {
+            get;
+            private set;
+        }
+
+        public string TableName
         {
             get;
             private set;

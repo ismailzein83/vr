@@ -735,7 +735,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                  AppendValue(value.ToString());
             }
 
-            public override void NullValue()
+            public override void Null()
             {
                 Value("");
             }

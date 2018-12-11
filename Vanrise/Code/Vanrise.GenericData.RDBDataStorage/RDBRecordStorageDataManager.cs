@@ -11,7 +11,7 @@ using Vanrise.GenericData.Data.RDB;
 
 namespace Vanrise.GenericData.RDBDataStorage
 {
-    public class RDBRecordStorageDataManager : IDataRecordDataManager
+    public class RDBRecordStorageDataManager : IDataRecordDataManager, ISummaryRecordDataManager
     {
         #region ctor/Fields
 
@@ -19,7 +19,7 @@ namespace Vanrise.GenericData.RDBDataStorage
         RDBDataRecordStorageSettings _dataRecordStorageSettings;
         DataRecordStorage _dataRecordStorage;
         SummaryTransformationDefinition _summaryTransformationDefinition;
-        RDBTempStorageInformation _sqlTempStorageInformation;
+        RDBTempStorageInformation _rdbTempStorageInformation;
 
         DataRecordType _dataRecordType;
         DataRecordType DataRecordType
@@ -76,7 +76,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             this._dataStoreSettings = dataStoreSettings;
             this._dataRecordStorageSettings = dataRecordStorageSettings;
             this._dataRecordStorage = dataRecordStorage;
-            this._sqlTempStorageInformation = sqlTempStorageInformation;
+            this._rdbTempStorageInformation = sqlTempStorageInformation;
         }
 
         internal RDBRecordStorageDataManager(RDBDataStoreSettings dataStoreSettings, RDBDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage, SummaryTransformationDefinition summaryTransformationDefinition, RDBTempStorageInformation sqlTempStorageInformation)
@@ -101,17 +101,17 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         public bool Delete(List<object> recordFieldIds)
         {
-            throw new NotImplementedException();
+            return DeleteRecords_Private(null, null, null, null, recordFieldIds) > 0;
         }
 
         public void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
         {
-            throw new NotImplementedException();
+            DeleteRecords_Private(from, to, null, recordFilterGroup, null);
         }
 
         public void DeleteRecords(DateTime dateTime, RecordFilterGroup recordFilterGroup)
         {
-            throw new NotImplementedException();
+            DeleteRecords_Private(null, null, dateTime, recordFilterGroup, null);
         }
 
         public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete, string idFieldName, string dateTimeFieldName)
@@ -191,7 +191,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             var queryContext = new RDBQueryContext(GetDataProvider());
             var streamForBulkInsert = queryContext.StartBulkInsert();
             var rdbRegistrationInfo = GetRDBRegistrationInfo();
-            streamForBulkInsert.IntoTable(rdbRegistrationInfo.RDBTableUniqueName, '^', rdbRegistrationInfo.FieldNamesForBulkInsert);
+            streamForBulkInsert.IntoTable(rdbRegistrationInfo.SchemaManager, rdbRegistrationInfo.RDBTableUniqueName, '^', rdbRegistrationInfo.FieldNamesForBulkInsert);
             return streamForBulkInsert;
         }
 
@@ -238,10 +238,22 @@ namespace Vanrise.GenericData.RDBDataStorage
                 insertToTempQuery.IntoTable(tempTableQuery);
                 dynamicManager.SetRDBInsertColumnsFromRecord(record, insertToTempQuery);
             }
+
             var updateQuery = queryContext.AddUpdateQuery();
-            updateQuery.FromTable(rdbRegistrationInfo.RDBTableUniqueName);
-            updateQuery.Join("rec");
-            throw new NotImplementedException();
+            updateQuery.FromTable(rdbRegistrationInfo.RDBTableQuerySource);
+
+            var joinContext = updateQuery.Join("rec");
+            var joinCondition = joinContext.Join(tempTableQuery, "updatedTable").On();
+            foreach(var fldToJoin in fieldsToJoin)
+            {
+                joinCondition.EqualsCondition(fldToJoin).Column("updatedTable", fldToJoin);
+            }
+            
+            foreach(var fldtoUpdate in fieldsToUpdate)
+            {
+                updateQuery.Column(fldtoUpdate).Column("updatedTable", fldtoUpdate);
+            }
+            queryContext.ExecuteNonQuery();
         }
         
         public void WriteRecordToStream(object record, object dbApplyStream)
@@ -253,12 +265,117 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         #endregion
 
+        #region ISummaryRecordDataManager
+
+        public IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart)
+        {
+            _summaryTransformationDefinition.ThrowIfNull("_summaryTransformationDefinition");
+            _summaryTransformationDefinition.SummaryBatchStartFieldName.ThrowIfNull("_summaryTransformationDefinition.SummaryBatchStartFieldName", _summaryTransformationDefinition.SummaryTransformationDefinitionId);
+
+            var rdbRegistrationInfo = GetRDBRegistrationInfo();
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+
+            selectQuery.From(rdbRegistrationInfo.RDBTableQuerySource, "rec");
+            selectQuery.SelectColumns().AllTableColumns("rec");
+
+            selectQuery.Where().EqualsCondition(_summaryTransformationDefinition.SummaryBatchStartFieldName).Value(batchStart);
+
+            var dynamicManager = this.DynamicManager;
+            return queryContext.GetItems(dynamicManager.GetDynamicRecordFromReader);
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal RDBTempStorageInformation CreateTempRDBRecordStorageTable(long processId)
+        {
+            string tableName = string.Format("{0}_Temp_{1}", _dataRecordStorageSettings.TableName, processId);
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var createTableQuery = queryContext.AddCreateTableQuery();
+            createTableQuery.DBTableName(_dataRecordStorageSettings.TableSchema, tableName);
+            foreach (var col in _dataRecordStorageSettings.Columns)
+            {
+                createTableQuery.AddColumn(col.FieldName, col.ColumnName, col.DataType, col.Size, col.Precision, false, false, false);
+            }
+            if (_dataRecordStorageSettings.IncludeQueueItemId)
+            {
+                createTableQuery.AddColumn("QueueItemId", RDBDataType.BigInt);
+            }
+            queryContext.ExecuteNonQuery();
+
+            return new RDBTempStorageInformation()
+            {
+                Schema = _dataRecordStorageSettings.TableSchema,
+                TableName = tableName
+            };
+        }
+
+        internal void DropStorage()
+        {
+            var rdbRegistrationInfo = GetRDBRegistrationInfo();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var dropTableQuery = queryContext.AddDropTableQuery();
+            dropTableQuery.TableName(rdbRegistrationInfo.RDBTableUniqueName, rdbRegistrationInfo.SchemaManager);
+            queryContext.ExecuteNonQuery();
+        }
+
+        internal void FillDataRecordStorageFromTempStorage(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
+        {
+            _rdbTempStorageInformation.ThrowIfNull("_rdbTempStorageInformation");
+            var tempStorageRDBRegistrationInfo = GetRDBRegistrationInfo();
+            var mainStorageRDBRegistrationInfo = GetMainStorageRegistrationInfo();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(mainStorageRDBRegistrationInfo.RDBTableQuerySource);
+            var deleteWhere = deleteQuery.Where();
+            _dataRecordStorageSettings.DateTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
+            deleteWhere.GreaterOrEqualCondition(_dataRecordStorageSettings.DateTimeField).Value(from);
+            deleteWhere.LessThanCondition(_dataRecordStorageSettings.DateTimeField).Value(to);
+
+            if (recordFilterGroup != null)
+            {
+                var recordFilterRDBBuilder = new RecordFilterRDBBuilder((fieldName, expressionContext) => expressionContext.Column(fieldName));
+                recordFilterRDBBuilder.RecordFilterGroupCondition(deleteWhere, recordFilterGroup);
+            }
+
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(mainStorageRDBRegistrationInfo.RDBTableQuerySource);
+            var selectFromTempQuery = insertQuery.FromSelect();
+            selectFromTempQuery.From(tempStorageRDBRegistrationInfo.RDBTableQuerySource, "tmp");
+            selectFromTempQuery.SelectColumns().AllTableColumns("tmp");
+
+            var selectWhere = selectFromTempQuery.Where();
+            selectWhere.GreaterOrEqualCondition(_dataRecordStorageSettings.DateTimeField).Value(from);
+            selectWhere.LessThanCondition(_dataRecordStorageSettings.DateTimeField).Value(to);
+
+            if (recordFilterGroup != null)
+            {
+                var recordFilterRDBBuilder = new RecordFilterRDBBuilder((fieldName, expressionContext) => expressionContext.Column(fieldName));
+                recordFilterRDBBuilder.RecordFilterGroupCondition(selectWhere, recordFilterGroup);
+            }
+            queryContext.ExecuteNonQuery(true);
+        }
+
+        internal int GetStorageRowCount()
+        {
+            var rdbRegistrationInfo = GetRDBRegistrationInfo();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectRowsCountQuery = queryContext.AddSelectTableRowsCountQuery();
+            selectRowsCountQuery.TableName(rdbRegistrationInfo.RDBTableUniqueName, rdbRegistrationInfo.SchemaManager);
+            return queryContext.ExecuteScalar().IntValue;
+        }
+
+        #endregion
+
         #region Private Methods
 
         BaseRDBDataProvider GetDataProvider()
         {
             _dataStoreSettings.ThrowIfNull("_dataStoreSettings");
-            _dataStoreSettings.ModuleName.ThrowIfNull("_dataStoreSettings.ModuleName");
+            //_dataStoreSettings.ModuleName.ThrowIfNull("_dataStoreSettings.ModuleName");
             if (!String.IsNullOrEmpty(_dataStoreSettings.ConnectionString))
             {
                 return RDBDataProviderFactory.CreateProviderFromConnString(_dataStoreSettings.ModuleName, _dataStoreSettings.ConnectionString);
@@ -271,74 +388,122 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         private RDBRegistrationInfo GetRDBRegistrationInfo()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordStorageManager.CacheManager>().GetOrCreateObject(
-                string.Concat("RDBRecordStorageDataManager_GetRDBRegistrationInfo_", _dataRecordStorage.DataRecordStorageId),
-                () =>
+            var mainStorageRegistrationInfo = GetMainStorageRegistrationInfo();
+            if (_rdbTempStorageInformation == null)
+            {
+                return mainStorageRegistrationInfo;
+            }
+            else
+            {
+                var schemaManager = new RDBSchemaManager();
+                var mainStorageRDBTableDefinition = mainStorageRegistrationInfo.RDBTableDefinition;
+                var tempStorageRDBTableDefinition = new RDBTableDefinition
                 {
-                    string rdbTableName = string.Concat(_dataRecordStorageSettings.TableSchema, _dataRecordStorageSettings.TableName, Guid.NewGuid());
-
-                    var rdbTableDefinition = new RDBTableDefinition
-                    {
-                        DBSchemaName = _dataRecordStorageSettings.TableSchema,
-                        DBTableName = _dataRecordStorageSettings.TableName,
-                        Columns = new Dictionary<string, RDBTableColumnDefinition>()
-                    };
-                    List<string> fieldNamesForBulkInsert = new List<string>();
-                    Dictionary<string, RDBDataRecordStorageColumn> columnsByFieldName = new Dictionary<string, RDBDataRecordStorageColumn>();
-                    string idFieldName = this.DataRecordType.Settings.IdField;
-                    string createdTimeFieldName = _dataRecordStorageSettings.CreatedTimeField;
-                    string lastModifiedTimeFieldName = _dataRecordStorageSettings.LastModifiedTimeField;
-
-                    foreach(var col in _dataRecordStorageSettings.Columns)
-                    {
-                        var rdbColDef = new RDBTableColumnDefinition
-                        {
-                            DBColumnName = col.ColumnName,
-                            DataType = col.DataType,
-                            Size = col.Size,
-                            Precision = col.Precision
-                        };
-                        rdbTableDefinition.Columns.Add(col.FieldName, rdbColDef);
-                        fieldNamesForBulkInsert.Add(col.FieldName);
-                        columnsByFieldName.Add(col.FieldName, col);
-                        if(col.FieldName == idFieldName)
-                            rdbTableDefinition.IdColumnName = col.FieldName;
-                        if (col.FieldName == createdTimeFieldName)
-                            rdbTableDefinition.CreatedTimeColumnName = col.FieldName;
-                        if (col.FieldName == lastModifiedTimeFieldName)
-                            rdbTableDefinition.ModifiedTimeColumnName = col.FieldName;
-                    }
-
-                    if(_dataRecordStorageSettings.IncludeQueueItemId)
-                    {
-                        string fieldName = "QueueItemId";
-                        var rdbColumnDef = new RDBTableColumnDefinition
-                        {
-                            DBColumnName = fieldName,
-                            DataType = RDBDataType.BigInt
-                        };
-                        rdbTableDefinition.Columns.Add(fieldName, rdbColumnDef);
-                        fieldNamesForBulkInsert.Add(fieldName);
-                    }
-
-                    RDBSchemaManager.Current.RegisterDefaultTableDefinition(rdbTableName, rdbTableDefinition);
-                    RDBRegistrationInfo registrationInfo = new RDBRegistrationInfo
-                    {
-                        RDBTableUniqueName = rdbTableName,
-                        FieldNamesForBulkInsert = fieldNamesForBulkInsert.ToArray(),
-                        ColumnsByFieldName = columnsByFieldName
-                    };
-                    return registrationInfo;
-                });
+                    DBSchemaName = _rdbTempStorageInformation.Schema,
+                    DBTableName = _rdbTempStorageInformation.TableName,
+                    Columns = mainStorageRDBTableDefinition.Columns,
+                    IdColumnName = mainStorageRDBTableDefinition.IdColumnName,
+                    CreatedTimeColumnName = mainStorageRDBTableDefinition.CreatedTimeColumnName,
+                    ModifiedTimeColumnName = mainStorageRDBTableDefinition.ModifiedTimeColumnName
+                };
+                schemaManager.RegisterDefaultTableDefinition(mainStorageRegistrationInfo.RDBTableUniqueName, tempStorageRDBTableDefinition);
+                return new RDBRegistrationInfo
+                {
+                    SchemaManager = schemaManager,
+                    RDBTableUniqueName = mainStorageRegistrationInfo.RDBTableUniqueName,
+                    RDBTableDefinition = tempStorageRDBTableDefinition,
+                    ColumnsByFieldName = mainStorageRegistrationInfo.ColumnsByFieldName,
+                    FieldNamesForBulkInsert = mainStorageRegistrationInfo.FieldNamesForBulkInsert
+                };
+            }
         }
 
+        private RDBRegistrationInfo GetMainStorageRegistrationInfo()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordStorageManager.CacheManager>().GetOrCreateObject(
+                                string.Concat("RDBRecordStorageDataManager_GetRDBRegistrationInfo_", _dataRecordStorage.DataRecordStorageId),
+                                () =>
+                                {
+                                    var tableSchema = _dataRecordStorageSettings.TableSchema;
+                                    var tableName = _dataRecordStorageSettings.TableName;
+                                    string rdbTableName = string.Concat(tableSchema, "_", tableName, Guid.NewGuid());
+
+                                    var rdbTableDefinition = new RDBTableDefinition
+                                    {
+                                        DBSchemaName = tableSchema,
+                                        DBTableName = tableName,
+                                        Columns = new Dictionary<string, RDBTableColumnDefinition>()
+                                    };
+                                    List<string> fieldNamesForBulkInsert = new List<string>();
+                                    Dictionary<string, RDBDataRecordStorageColumn> columnsByFieldName = new Dictionary<string, RDBDataRecordStorageColumn>();
+                                    string idFieldName = this.DataRecordType.Settings.IdField;
+                                    string createdTimeFieldName = _dataRecordStorageSettings.CreatedTimeField;
+                                    string lastModifiedTimeFieldName = _dataRecordStorageSettings.LastModifiedTimeField;
+
+                                    foreach (var col in _dataRecordStorageSettings.Columns)
+                                    {
+                                        var rdbColDef = new RDBTableColumnDefinition
+                                        {
+                                            DBColumnName = col.ColumnName,
+                                            DataType = col.DataType,
+                                            Size = col.Size,
+                                            Precision = col.Precision
+                                        };
+                                        rdbTableDefinition.Columns.Add(col.FieldName, rdbColDef);
+                                        fieldNamesForBulkInsert.Add(col.FieldName);
+                                        columnsByFieldName.Add(col.FieldName, col);
+                                        if (col.FieldName == idFieldName)
+                                            rdbTableDefinition.IdColumnName = col.FieldName;
+                                        if (col.FieldName == createdTimeFieldName)
+                                            rdbTableDefinition.CreatedTimeColumnName = col.FieldName;
+                                        if (col.FieldName == lastModifiedTimeFieldName)
+                                            rdbTableDefinition.ModifiedTimeColumnName = col.FieldName;
+                                    }
+
+                                    if (_dataRecordStorageSettings.IncludeQueueItemId)
+                                    {
+                                        string fieldName = "QueueItemId";
+                                        var rdbColumnDef = new RDBTableColumnDefinition
+                                        {
+                                            DBColumnName = fieldName,
+                                            DataType = RDBDataType.BigInt
+                                        };
+                                        rdbTableDefinition.Columns.Add(fieldName, rdbColumnDef);
+                                        fieldNamesForBulkInsert.Add(fieldName);
+                                    }
+
+                                    RDBSchemaManager.Current.RegisterDefaultTableDefinition(rdbTableName, rdbTableDefinition);
+                                    RDBRegistrationInfo registrationInfo = new RDBRegistrationInfo
+                                    {
+                                        SchemaManager = RDBSchemaManager.Current,
+                                        RDBTableUniqueName = rdbTableName,
+                                        RDBTableDefinition = rdbTableDefinition,
+                                        FieldNamesForBulkInsert = fieldNamesForBulkInsert.ToArray(),
+                                        ColumnsByFieldName = columnsByFieldName
+                                    };
+                                    return registrationInfo;
+                                });
+        }
+        
         private class RDBRegistrationInfo
         {
+            public RDBSchemaManager SchemaManager { get; set; }
+
             public string RDBTableUniqueName { get; set; }
+
+            public RDBTableDefinitionQuerySource RDBTableQuerySource
+            {
+                get
+                {
+                    return new RDBTableDefinitionQuerySource(this.RDBTableUniqueName, this.SchemaManager);
+                }
+            }
 
             public string[] FieldNamesForBulkInsert { get; set; }
 
             public Dictionary<string, RDBDataRecordStorageColumn> ColumnsByFieldName { get; set; }
+
+            public RDBTableDefinition RDBTableDefinition { get; set; }
         }
 
         void SelectRecords(List<string> fieldNames, int? numberOfRecords, 
@@ -346,10 +511,10 @@ namespace Vanrise.GenericData.RDBDataStorage
             OrderDirection? orderDirection, string orderByFieldName,
             Action<IRDBDataReader> onReaderReady)
         {
-            var queryContext = new RDBQueryContext(GetDataProvider());
             var rdbRegistrationInfo = GetRDBRegistrationInfo();
+            var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(rdbRegistrationInfo.RDBTableUniqueName, "rec", numberOfRecords, true);
+            selectQuery.From(rdbRegistrationInfo.RDBTableQuerySource, "rec", numberOfRecords, true);
             var selectColumns = selectQuery.SelectColumns();
             if (fieldNames != null)
             {                
@@ -366,16 +531,16 @@ namespace Vanrise.GenericData.RDBDataStorage
             var where = selectQuery.Where();
             if (fromtime.HasValue)
             {
-                _dataRecordStorageSettings.CreatedTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
-                where.GreaterOrEqualCondition(_dataRecordStorageSettings.CreatedTimeField).Value(fromtime.Value);
+                _dataRecordStorageSettings.DateTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
+                where.GreaterOrEqualCondition(_dataRecordStorageSettings.DateTimeField).Value(fromtime.Value);
             }
             if(toTime.HasValue)
             {
-                _dataRecordStorageSettings.CreatedTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
+                _dataRecordStorageSettings.DateTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
                 if (toTimeLessOrEqual)
-                    where.LessOrEqualCondition(_dataRecordStorageSettings.CreatedTimeField).Value(toTime.Value);
+                    where.LessOrEqualCondition(_dataRecordStorageSettings.DateTimeField).Value(toTime.Value);
                 else
-                    where.LessThanCondition(_dataRecordStorageSettings.CreatedTimeField).Value(toTime.Value);
+                    where.LessThanCondition(_dataRecordStorageSettings.DateTimeField).Value(toTime.Value);
             }
 
             if(filterGroup != null)
@@ -387,12 +552,52 @@ namespace Vanrise.GenericData.RDBDataStorage
             if(orderDirection.HasValue)
             {
                 if (orderByFieldName == null)
-                    orderByFieldName = _dataRecordStorageSettings.CreatedTimeField;
+                    orderByFieldName = _dataRecordStorageSettings.DateTimeField;
                 orderByFieldName.ThrowIfNull("orderByFieldName", _dataRecordStorage.DataRecordStorageId);
                 selectQuery.Sort().ByColumn(orderByFieldName, orderDirection.Value == OrderDirection.Ascending ? RDBSortDirection.ASC : RDBSortDirection.DESC);
             }
 
             queryContext.ExecuteReader(onReaderReady);
+        }
+
+        int DeleteRecords_Private(DateTime? fromtime, DateTime? toTime, DateTime? time, RecordFilterGroup filterGroup, List<object> ids)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var rdbRegistrationInfo = GetRDBRegistrationInfo();
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(rdbRegistrationInfo.RDBTableQuerySource);
+            var where = deleteQuery.Where();
+            if(fromtime.HasValue)
+            {
+                _dataRecordStorageSettings.DateTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
+                where.GreaterOrEqualCondition(_dataRecordStorageSettings.DateTimeField).Value(fromtime.Value);
+            }
+            if (toTime.HasValue)
+            {
+                _dataRecordStorageSettings.DateTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
+                where.LessThanCondition(_dataRecordStorageSettings.DateTimeField).Value(toTime.Value);
+            }
+            if(time.HasValue)
+            {
+                _dataRecordStorageSettings.DateTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
+                where.EqualsCondition(_dataRecordStorageSettings.DateTimeField).Value(time.Value);
+            }
+            if (filterGroup != null)
+            {
+                var recordFilterRDBBuilder = new RecordFilterRDBBuilder((fieldName, expressionContext) => expressionContext.Column(fieldName));
+                recordFilterRDBBuilder.RecordFilterGroupCondition(where, filterGroup);
+            }
+            if(ids != null)
+            {
+                this.DataRecordType.Settings.IdField.ThrowIfNull("this.DataRecordType.Settings.IdField", this.DataRecordType.DataRecordTypeId);
+                var idsExpressions = new List<BaseRDBExpression>();
+                foreach (var id in ids)
+                {
+                    where.CreateExpressionContext((expression) => idsExpressions.Add(expression)).ObjectValue(id);
+                }
+                where.ListCondition(this.DataRecordType.Settings.IdField, RDBListConditionOperator.IN, idsExpressions);
+            }
+            return queryContext.ExecuteNonQuery();
         }
 
         #endregion

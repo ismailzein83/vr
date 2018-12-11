@@ -28,17 +28,34 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         public override void CreateTempStorage(ICreateTempStorageContext context)
         {
-            throw new NotImplementedException();
+            var rdbDataStoreSettings = context.DataStore.Settings.CastWithValidate<RDBDataStoreSettings>("context.DataStore.Settings", context.DataStore.DataStoreId);
+            var rdbDataRecordStorageSettings = context.DataRecordStorage.Settings.CastWithValidate<RDBDataRecordStorageSettings>("context.DataRecordStorage.Settings", context.DataRecordStorage.DataRecordStorageId);
+
+            RDBRecordStorageDataManager dataManager = new RDBRecordStorageDataManager(rdbDataStoreSettings, rdbDataRecordStorageSettings, context.DataRecordStorage, null);
+            context.TempStorageInformation = dataManager.CreateTempRDBRecordStorageTable(context.ProcessId);
         }
 
         public override void DropStorage(IDropStorageContext context)
         {
-            throw new NotImplementedException();
+            var rdbDataStoreSettings = context.DataStore.Settings.CastWithValidate<RDBDataStoreSettings>("context.DataStore.Settings", context.DataStore.DataStoreId);
+            var rdbDataRecordStorageSettings = context.DataRecordStorage.Settings.CastWithValidate<RDBDataRecordStorageSettings>("context.DataRecordStorage.Settings", context.DataRecordStorage.DataRecordStorageId);
+
+            RDBTempStorageInformation rdbTempStorageInformation = null;
+            if (context.TempStorageInformation != null)
+                rdbTempStorageInformation = context.TempStorageInformation.CastWithValidate<RDBTempStorageInformation>("context.TempStorageInformation");
+
+            RDBRecordStorageDataManager dataManager = new RDBRecordStorageDataManager(rdbDataStoreSettings, rdbDataRecordStorageSettings, context.DataRecordStorage, rdbTempStorageInformation);
+            dataManager.DropStorage();
         }
 
         public override void FillDataRecordStorageFromTempStorage(IFillDataRecordStorageFromTempStorageContext context)
         {
-            throw new NotImplementedException();
+            var rdbDataStoreSettings = context.DataStore.Settings.CastWithValidate<RDBDataStoreSettings>("context.DataStore.Settings", context.DataStore.DataStoreId);
+            var rdbDataRecordStorageSettings = context.DataRecordStorage.Settings.CastWithValidate<RDBDataRecordStorageSettings>("context.DataRecordStorage.Settings", context.DataRecordStorage.DataRecordStorageId);
+            var rdbTempStorageInformation = context.TempStorageInformation.CastWithValidate<RDBTempStorageInformation>("context.TempStorageInformation", context.DataRecordStorage.DataRecordStorageId);
+
+            RDBRecordStorageDataManager dataManager = new RDBRecordStorageDataManager(rdbDataStoreSettings, rdbDataRecordStorageSettings, context.DataRecordStorage, rdbTempStorageInformation);
+            dataManager.FillDataRecordStorageFromTempStorage(context.From, context.To, context.RecordFilterGroup);
         }
 
         public override IDataRecordDataManager GetDataRecordDataManager(IGetRecordStorageDataManagerContext context)
@@ -53,12 +70,29 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         public override int GetStorageRowCount(IGetStorageRowCountContext context)
         {
-            throw new NotImplementedException();
+            var rdbDataStoreSettings = context.DataStore.Settings.CastWithValidate<RDBDataStoreSettings>("context.DataStore.Settings", context.DataStore.DataStoreId);
+            var rdbDataRecordStorageSettings = context.DataRecordStorage.Settings.CastWithValidate<RDBDataRecordStorageSettings>("context.DataRecordStorage.Settings", context.DataRecordStorage.DataRecordStorageId);
+
+
+            RDBTempStorageInformation rdbTempStorageInformation = null;
+            if (context.TempStorageInformation != null)
+                rdbTempStorageInformation = context.TempStorageInformation.CastWithValidate<RDBTempStorageInformation>("context.TempStorageInformation");
+
+            RDBRecordStorageDataManager dataManager = new RDBRecordStorageDataManager(rdbDataStoreSettings, rdbDataRecordStorageSettings, context.DataRecordStorage, rdbTempStorageInformation);
+            return dataManager.GetStorageRowCount();
         }
 
         public override ISummaryRecordDataManager GetSummaryDataRecordDataManager(IGetSummaryRecordStorageDataManagerContext context)
         {
-            throw new NotImplementedException();
+            var rdbDataStoreSettings = context.DataStore.Settings.CastWithValidate<RDBDataStoreSettings>("context.DataStore.Settings", context.DataStore.DataStoreId);
+            var rdbDataRecordStorageSettings = context.DataRecordStorage.Settings.CastWithValidate<RDBDataRecordStorageSettings>("context.DataRecordStorage.Settings", context.DataRecordStorage.DataRecordStorageId);
+            
+            RDBTempStorageInformation rdbTempStorageInformation = null;
+            if (context.TempStorageInformation != null)
+                rdbTempStorageInformation = context.TempStorageInformation.CastWithValidate<RDBTempStorageInformation>("context.TempStorageInformation", context.DataRecordStorage.DataRecordStorageId);
+
+            return new RDBRecordStorageDataManager(rdbDataStoreSettings, rdbDataRecordStorageSettings,
+                                                    context.DataRecordStorage, context.SummaryTransformationDefinition, rdbTempStorageInformation);
         }
 
         public override void UpdateRecordStorage(IUpdateRecordStorageContext context)

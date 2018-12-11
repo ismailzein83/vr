@@ -73,7 +73,13 @@ namespace Vanrise.Data.RDB
             Queries.Add(query);
             return query;
         }
-
+        
+        public RDBSelectTableRowsCountQuery AddSelectTableRowsCountQuery()
+        {
+            var query = new RDBSelectTableRowsCountQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
 
         public RDBInsertQuery AddInsertQuery()
         {
@@ -114,6 +120,13 @@ namespace Vanrise.Data.RDB
         public RDBCreateTableQuery AddCreateTableQuery()
         {
             var query = new RDBCreateTableQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
+        public RDBDropTableQuery AddDropTableQuery()
+        {
+            var query = new RDBDropTableQuery(QueryBuilderContext.CreateChildContext());
             Queries.Add(query);
             return query;
         }

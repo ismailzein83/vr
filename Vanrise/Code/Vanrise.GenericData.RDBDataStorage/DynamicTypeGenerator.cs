@@ -47,19 +47,21 @@ namespace Vanrise.GenericData.RDBDataStorage
                             #FillRECORDTYPEFIELDTYPES#
                         }
 
-                        public void WriteFieldsToRecordStream(dynamic record, Vanrise.Data.RDB.RDBBulkInsertQueryWriteRecordContext bulkInsertRecordContext)
+                        public void WriteFieldsToRecordStream(dynamic dynamicRecord, Vanrise.Data.RDB.RDBBulkInsertQueryWriteRecordContext bulkInsertRecordContext)
                         {
+                            #DATARECORD_RUNTIMETYPE# record = Vanrise.Common.ExtensionMethods.CastWithValidate<#DATARECORD_RUNTIMETYPE#>(dynamicRecord, ""dynamicRecord"");
                             #SetRDBBulkInsertColumnsFromRecordImplementation#
                         }
 
-                        public void SetRDBInsertColumnsFromRecord(dynamic record, Vanrise.Data.RDB.RDBInsertQuery insertQuery)
+                        public void SetRDBInsertColumnsFromRecord(dynamic dynamicRecord, Vanrise.Data.RDB.RDBInsertQuery insertQuery)
                         {
+                            #DATARECORD_RUNTIMETYPE# record = Vanrise.Common.ExtensionMethods.CastWithValidate<#DATARECORD_RUNTIMETYPE#>(dynamicRecord, ""dynamicRecord"");
                             #SetRDBInsertColumnsFromRecordImplementation#
                         }
 
                         public dynamic GetDynamicRecordFromReader(Vanrise.Data.RDB.IRDBDataReader reader)
                         {
-                            dynamic dataRecord = new #DATARECORD_RUNTIMETYPE#();
+                            #DATARECORD_RUNTIMETYPE# dataRecord = new #DATARECORD_RUNTIMETYPE#();
                             #DynamicRecordMapperImplementation#
                             return dataRecord;
                         }
@@ -100,16 +102,16 @@ namespace Vanrise.GenericData.RDBDataStorage
                         matchField.ThrowIfNull("matchField", columnSettings.FieldName);
                         if (!columnSettings.IsIdentity)
                             AppendSetRDBValueFromRecordField(setRDBBulkInsertColumnsValuesBuilder, matchField, "bulkInsertRecordContext");
-                        AppendSetRDBValueFromRecordField(setRDBInsertColumnsFromRecordBuilder, matchField, "insertQuery");
+                        AppendSetRDBValueFromRecordField(setRDBInsertColumnsFromRecordBuilder, matchField, $@"insertQuery.Column(""{matchField.Name}"")");
                     }
 
                     if (dataRecordStorageSettings.IncludeQueueItemId)
                     {                        
                         setRDBBulkInsertColumnsValuesBuilder.AppendLine(
                                     @"  if(record.QueueItemId != null && record.QueueItemId != default(long))
-                                            bulkInsertRecordContext.Value(record.QueueItemId));
+                                            bulkInsertRecordContext.Value(record.QueueItemId);
                                         else
-                                            bulkInsertRecordContext.NullValue();");
+                                            bulkInsertRecordContext.Null();");
                     }
 
                     classDefinitionBuilder.Replace("#SetRDBBulkInsertColumnsFromRecordImplementation#", setRDBBulkInsertColumnsValuesBuilder.ToString());
@@ -167,13 +169,13 @@ namespace Vanrise.GenericData.RDBDataStorage
                 {
                     rdbBulkInsertColumnsValuesBuilder.AppendLine(
                         $@" if(record.{fieldName}.HasValue)
-                                {rdbContextName}.Value(record.{fieldName}.Value));
+                                {rdbContextName}.Value(record.{fieldName}.Value);
                             else
-                                {rdbContextName}.NullValue();");
+                                {rdbContextName}.Null();");
                 }
                 else
                 {
-                    rdbBulkInsertColumnsValuesBuilder.AppendLine($"{rdbContextName}.Value(record.{fieldName}));");
+                    rdbBulkInsertColumnsValuesBuilder.AppendLine($"{rdbContextName}.Value(record.{fieldName});");
                 }
             }
         }
@@ -210,7 +212,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                 }                
                 dynamicRecordMapperBuilder.AppendLine($@"dataRecord.{matchField.Name} = {valueExpression};");
                 dataRecordMapperBuilder.AppendLine($@"fieldValues.Add(""{matchField.Name}"", {valueExpression});");
-                if(column.FieldName == dataRecordStorageSettings.CreatedTimeField)
+                if(column.FieldName == dataRecordStorageSettings.DateTimeField)
                 {
                     dataRecordMapperBuilder.AppendLine($@"dataRecord.RecordTime = {valueExpression};");
                 }

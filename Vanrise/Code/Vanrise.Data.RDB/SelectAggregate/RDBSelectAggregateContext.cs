@@ -9,12 +9,14 @@ namespace Vanrise.Data.RDB
     public enum RDBNonCountAggregateType { SUM = 0, AVG = 1, MAX = 2, MIN = 3 }
     public class RDBSelectAggregateContext
     {
+        RDBQueryBuilderContext _queryBuilderContext;
         List<RDBSelectColumn> _columns;
         IRDBTableQuerySource _table;
         string _tableAlias;
 
-        internal RDBSelectAggregateContext(List<RDBSelectColumn> columns, IRDBTableQuerySource table, string tableAlias)
+        internal RDBSelectAggregateContext(RDBQueryBuilderContext queryBuilderContext, List<RDBSelectColumn> columns, IRDBTableQuerySource table, string tableAlias)
         {
+            _queryBuilderContext = queryBuilderContext;
             _columns = columns;
             _table = table;
             _tableAlias = tableAlias;
@@ -67,6 +69,11 @@ namespace Vanrise.Data.RDB
         public void Aggregate(RDBNonCountAggregateType aggregateType, string columnName)
         {
              Aggregate(aggregateType, columnName, columnName);
+        }
+
+        public RDBExpressionContext ExpressionAggregate(RDBNonCountAggregateType aggregateType, string alias)
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (exp) => Aggregate(aggregateType, exp, alias), _tableAlias);
         }
     }
 }

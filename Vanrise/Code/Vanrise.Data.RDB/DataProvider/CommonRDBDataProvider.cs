@@ -22,7 +22,7 @@ namespace Vanrise.Data.RDB.DataProvider
         {
             _connString = connString;
         }
-
+        
         public virtual bool UseLimitForTopRecords
         {
             get
@@ -85,6 +85,9 @@ namespace Vanrise.Data.RDB.DataProvider
             {
                 queryBuilder.Append(" FROM ");
                 AddTableToDBQueryBuilder(queryBuilder, context.Table, context.TableAlias, context);
+                var tableHint = GetTableHintForSelectQuery(context);
+                if (tableHint != null)
+                    queryBuilder.Append(string.Concat(" ", tableHint, " "));
             }
             if (context.Joins != null && context.Joins.Count > 0)
                 AddJoinsToQuery(context, queryBuilder, context.Joins, rdbConditionToDBQueryContext);
@@ -175,6 +178,19 @@ namespace Vanrise.Data.RDB.DataProvider
                 queryBuilder.AppendFormat(" Limit {0} ", context.NbOfRecords.Value);
             var resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
+            return resolvedQuery;
+        }
+
+        protected virtual string GetTableHintForSelectQuery(IRDBDataProviderResolveSelectQueryContext context)
+        {
+            return null;
+        }
+
+        public override RDBResolvedQuery ResolveSelectTableRowsCountQuery(IRDBDataProviderResolveSelectTableRowsCountQueryContext context)
+        {
+            string tableDBName = GetTableDBName(context.SchemaName, context.TableName);
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = string.Concat("SELECT COUNT(*) FROM ", tableDBName) });
             return resolvedQuery;
         }
 
@@ -481,6 +497,14 @@ namespace Vanrise.Data.RDB.DataProvider
 
             var resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = string.Concat("CREATE TABLE ", tableDBName, " ", columnsQueryBuilder.ToString()) });
+            return resolvedQuery;
+        }
+
+        public override RDBResolvedQuery ResolveTableDropQuery(IRDBDataProviderResolveTableDropQueryContext context)
+        {
+            string tableDBName = GetTableDBName(context.SchemaName, context.TableName);
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = string.Concat("DROP TABLE ", tableDBName) });
             return resolvedQuery;
         }
 

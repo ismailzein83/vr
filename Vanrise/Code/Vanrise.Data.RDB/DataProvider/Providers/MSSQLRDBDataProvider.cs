@@ -11,7 +11,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 {
      public class MSSQLRDBDataProvider : CommonRDBDataProvider
      {
-
          public MSSQLRDBDataProvider(string connString)
              : base(connString)
          {
@@ -45,8 +44,28 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
          {
              return new MSSQLRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters, context.ExecuteTransactional));
          }
-         
-         public override string NowDateTimeFunction
+
+        protected override string GetTableHintForSelectQuery(IRDBDataProviderResolveSelectQueryContext context)
+        {
+            if (context.WithNoLock)
+                return "with(nolock)";
+            else
+                return null;
+        }
+        public override RDBResolvedQuery ResolveSelectTableRowsCountQuery(IRDBDataProviderResolveSelectTableRowsCountQueryContext context)
+        {            
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(new RDBResolvedQueryStatement
+            {
+                TextStatement = $@"SELECT CAST(p.rows AS int)
+                                    FROM sys.tables AS tbl
+                                    INNER JOIN sys.indexes AS idx ON idx.object_id = tbl.object_id and idx.index_id < 2
+                                    INNER JOIN sys.partitions AS p ON p.object_id = CAST(tbl.object_id AS int) and p.index_id = idx.index_id
+                                    WHERE ((tbl.name=N'{context.TableName}' AND SCHEMA_NAME(tbl.schema_id)=N'{context.SchemaName}'))" });
+            return resolvedQuery;
+        }
+
+        public override string NowDateTimeFunction
          {
              get { return " GETDATE() "; }
          }
@@ -118,9 +137,9 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
              return resolvedQuery;
          }
 
-         #region Private Classes
+        #region Private Classes
 
-         private class SQLDataManager : Vanrise.Data.SQL.BaseSQLDataManager
+        private class SQLDataManager : Vanrise.Data.SQL.BaseSQLDataManager
          {
              string _connString;
             MSSQLRDBDataProvider _dataProvider;
@@ -498,7 +517,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 AppendValue(value.ToString());
             }
 
-            public override void NullValue()
+            public override void Null()
             {
                 Value("");
             }

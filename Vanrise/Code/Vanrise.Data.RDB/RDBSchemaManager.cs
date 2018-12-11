@@ -21,7 +21,7 @@ namespace Vanrise.Data.RDB
             }
         }
 
-        private RDBSchemaManager()
+        public RDBSchemaManager()
         {
 
         }

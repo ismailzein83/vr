@@ -118,7 +118,7 @@ namespace Vanrise.Data.RDB
             {
                 if (this._columns == null)
                     this._columns = new List<RDBSelectColumn>();
-                _selectAggregateContext = new RDBSelectAggregateContext(this._columns, this._table, this._tableAlias);
+                _selectAggregateContext = new RDBSelectAggregateContext(_queryBuilderContext, this._columns, this._table, this._tableAlias);
             }
             return _selectAggregateContext;
         }
@@ -192,7 +192,7 @@ namespace Vanrise.Data.RDB
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
             var resolveSelectQueryContext = new RDBDataProviderResolveSelectQueryContext(this._isMainStatement, this._table, this._tableAlias, this._nbOfRecords, this._columns, this._joins,
-             this._conditionGroup, this._groupBy, this._sortColumns, context, _queryBuilderContext);
+             this._conditionGroup, this._groupBy, this._sortColumns, this._withNoLock, context, _queryBuilderContext);
             return context.DataProvider.ResolveSelectQuery(resolveSelectQueryContext);
         }
 

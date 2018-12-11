@@ -186,6 +186,14 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             return resolvedQuery;
         }
 
+        public override RDBResolvedQuery ResolveSelectTableRowsCountQuery(IRDBDataProviderResolveSelectTableRowsCountQueryContext context)
+        {
+            string tableDBName = GetTableDBName(context.SchemaName, context.TableName);
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = string.Concat("SELECT COUNT(*) FROM ", tableDBName) });
+            return resolvedQuery;
+        }
+
         public override RDBResolvedQuery ResolveInsertQuery(IRDBDataProviderResolveInsertQueryContext context)
         {
             context.Table.ThrowIfNull("context.Table");
@@ -531,6 +539,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
         }
 
         public override RDBResolvedQuery ResolveTableCreationQuery(IRDBDataProviderResolveTableCreationQueryContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override RDBResolvedQuery ResolveTableDropQuery(IRDBDataProviderResolveTableDropQueryContext context)
         {
             throw new NotImplementedException();
         }

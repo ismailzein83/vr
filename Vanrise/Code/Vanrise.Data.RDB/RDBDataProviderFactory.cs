@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Vanrise.Data.RDB
 {
@@ -29,14 +27,19 @@ namespace Vanrise.Data.RDB
 
         private static string GetConnectionString(string appSettingWithConnectionStringName, string defaultConnectionStringName)
         {
-            if (String.IsNullOrEmpty(appSettingWithConnectionStringName))
-                throw new ArgumentNullException("appSettingWithConnectionStringName");
-            if (String.IsNullOrEmpty(defaultConnectionStringName))
-                throw new ArgumentNullException("defaultConnectionStringName");
+            if (appSettingWithConnectionStringName == null && defaultConnectionStringName == null)
+                throw new NullReferenceException("appSettingWithConnectionStringName & defaultConnectionStringName");
+            string connStringName = null;
+            if (appSettingWithConnectionStringName != null)
+                connStringName = ConfigurationManager.AppSettings[appSettingWithConnectionStringName];
+            if (connStringName == null)
+                connStringName = defaultConnectionStringName;
 
-            string connStringName = ConfigurationManager.AppSettings[appSettingWithConnectionStringName] ?? defaultConnectionStringName;
-
-            return ConfigurationManager.ConnectionStrings[GetConnectionStringName(connStringName)].ConnectionString;
+            connStringName = GetConnectionStringName(connStringName);
+            var connString = ConfigurationManager.ConnectionStrings[connStringName];
+            connString.ThrowIfNull("connString", connStringName);
+            
+            return connString.ConnectionString;
         }
 
         private static string GetConnectionStringName(string origConnStringName)
