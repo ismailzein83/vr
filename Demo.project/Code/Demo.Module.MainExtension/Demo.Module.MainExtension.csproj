@@ -44,10 +44,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Branch\MediumBranch.cs" />
+    <Compile Include="Branch\SmallBranch.cs" />
     <Compile Include="City\BigCityType.cs" />
     <Compile Include="City\SmallCityType.cs" />
+    <Compile Include="Department\DevDepartment.cs" />
+    <Compile Include="Department\QADepartment.cs" />
     <Compile Include="District\IndustrialDistrict.cs" />
     <Compile Include="District\TouristicDistrict.cs" />
+    <Compile Include="Employee\FullTimeEmployee.cs" />
+    <Compile Include="Employee\PartTimeEmployee.cs" />
     <Compile Include="Factory\CarFactory.cs" />
     <Compile Include="Factory\MilitaryFactory.cs" />
     <Compile Include="OldEntities\PageDefinition\DatetimeField.cs" />
@@ -68,6 +74,7 @@
       <Name>Demo.Module.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

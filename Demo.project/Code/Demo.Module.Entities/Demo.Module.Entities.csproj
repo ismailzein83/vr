@@ -53,11 +53,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Branch\Branch.cs" />
     <Compile Include="City\City.cs" />
     <Compile Include="City\CityDetails.cs" />
     <Compile Include="City\CityQuery.cs" />
     <Compile Include="City\CitySettingsConfig.cs" />
     <Compile Include="Company\Company.cs" />
+    <Compile Include="Department\Department.cs" />
     <Compile Include="District\District.cs" />
     <Compile Include="Country\Country.cs" />
     <Compile Include="Country\CountryDetails.cs" />
@@ -65,6 +67,7 @@
     <Compile Include="Country\CountryInfo.cs" />
     <Compile Include="Country\CountryQuery.cs" />
     <Compile Include="District\DistrictSettingsConfig.cs" />
+    <Compile Include="Employee\Employee.cs" />
     <Compile Include="Factory\Factory.cs" />
     <Compile Include="Factory\FactoryTypeConfig.cs" />
     <Compile Include="OldEntities\CallCenterCustomer\CDR.cs" />

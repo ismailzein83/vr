@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Demo.Module.MainExtension.Employee
+{
+    public class PartTimeEmployee : Demo.Module.Entities.Employee
+    {
+        public override Guid ConfigId => throw new NotImplementedException();
+
+        public int NumberOfHourPerMonth { get; set; }
+
+        public int HourRate { get; set; }
+    }
+}
