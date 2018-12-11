@@ -152,6 +152,7 @@
     <Content Include="Common\Directives\VRNamespace\vr-common-namespace-selector.js" />
     <Content Include="Common\Directives\VRNamespace\vr-common-namespace-settings-grid.js" />
     <Content Include="Common\Directives\VRNamespace\vr-common-namespaceclass-selector.js" />
+    <Content Include="Common\Directives\VRNamespace\vr-common-namespaceclassmethod-selector.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\SpecificDaysDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-specificdays.js" />
