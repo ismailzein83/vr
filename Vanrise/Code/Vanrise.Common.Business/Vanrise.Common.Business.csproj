@@ -115,6 +115,7 @@
     <Compile Include="VRComment\VRCommentBEDefinitionSettings.cs" />
     <Compile Include="VRComment\VRCommentDefinitionManager.cs" />
     <Compile Include="VRComment\VRCommentManager.cs" />
+    <Compile Include="VRConnections\MainImplementations\VRFTPConnection.cs" />
     <Compile Include="VRConnections\MainImplementations\SQLConnection.cs" />
     <Compile Include="VRConnections\VRConnectionManager.cs" />
     <Compile Include="DataGrouping\DataGroupingAnalysisInfoManager.cs" />
