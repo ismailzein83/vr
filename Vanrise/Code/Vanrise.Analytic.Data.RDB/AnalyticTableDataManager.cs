@@ -12,6 +12,8 @@ namespace Vanrise.Analytic.Data.RDB
     {
 
         static string TABLE_NAME = "VR_Analytic_AnalyticTable";
+        static string TABLE_ALIAS = "vrAnalyticTable";
+
         const string COL_ID = "ID";
         const string COL_Name = "Name";
         const string COL_Settings = "Settings";
@@ -58,7 +60,7 @@ namespace Vanrise.Analytic.Data.RDB
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
 
-            var ifNotExists = insertQuery.IfNotExists("vrAnalyticTable");
+            var ifNotExists = insertQuery.IfNotExists(TABLE_ALIAS);
             ifNotExists.EqualsCondition(COL_Name).Value(analyticTable.Name);
 
             insertQuery.Column(COL_ID).Value(analyticTable.AnalyticTableId);
@@ -78,8 +80,8 @@ namespace Vanrise.Analytic.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "vrAnalyticTable", null, true);
-            selectQuery.SelectColumns().AllTableColumns("vrAnalyticTable");
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
             return queryContext.GetItems(AnalyticTableMapper);
         }
@@ -90,7 +92,7 @@ namespace Vanrise.Analytic.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            var notExistsCondition = updateQuery.IfNotExists("vrAnalyticTable");
+            var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.NotEqualsCondition(COL_ID).Value(analyticTable.AnalyticTableId);
             notExistsCondition.EqualsCondition(COL_Name).Value(analyticTable.Name);
 

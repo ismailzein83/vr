@@ -11,6 +11,8 @@ namespace Vanrise.Analytic.Data.RDB
     public class AnalyticItemConfigDataManager : IAnalyticItemConfigDataManager
     {
         static string TABLE_NAME = "VR_Analytic_AnalyticItemConfig";
+        static string TABLE_ALIAS = "vrAnalyticItemConfig";
+
         const string COL_ID = "ID";
         const string COL_TableId = "TableId";
         const string COL_ItemType = "ItemType";
@@ -68,7 +70,7 @@ namespace Vanrise.Analytic.Data.RDB
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
 
-            var ifNotExists = insertQuery.IfNotExists("vrAnalyticItemConfig");
+            var ifNotExists = insertQuery.IfNotExists(TABLE_ALIAS);
             ifNotExists.EqualsCondition(COL_Name).Value(analyticItemConfig.Name);
             ifNotExists.EqualsCondition(COL_TableId).Value(analyticItemConfig.TableId);
             ifNotExists.EqualsCondition(COL_ItemType).Value((int)analyticItemConfig.ItemType);
@@ -93,8 +95,8 @@ namespace Vanrise.Analytic.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "vrAnalyticItemConfig", null, true);
-            selectQuery.SelectColumns().AllTableColumns("vrAnalyticItemConfig");
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
 
             var whereCondition = selectQuery.Where();
@@ -111,7 +113,7 @@ namespace Vanrise.Analytic.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            var notExistsCondition = updateQuery.IfNotExists("vrAnalyticItemConfig");
+            var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.NotEqualsCondition(COL_ID).Value(analyticItemConfig.AnalyticItemConfigId);
             notExistsCondition.EqualsCondition(COL_Name).Value(analyticItemConfig.Name);
             notExistsCondition.EqualsCondition(COL_TableId).Value(analyticItemConfig.TableId);

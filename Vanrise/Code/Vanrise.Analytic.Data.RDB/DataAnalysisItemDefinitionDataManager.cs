@@ -12,6 +12,8 @@ namespace Vanrise.Analytic.Data.RDB
     {
 
         static string TABLE_NAME = "Analytic_DataAnalysisItemDefinition";
+        static string TABLE_ALIAS = "vrDataAnalysisItemDefinition";
+
         const string COL_ID = "ID";
         const string COL_DataAnalysisDefinitionID = "DataAnalysisDefinitionID";
         const string COL_Name = "Name";
@@ -66,8 +68,8 @@ namespace Vanrise.Analytic.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "vrDataAnalysisItemDefinition", null, true);
-            selectQuery.SelectColumns().AllTableColumns("vrDataAnalysisItemDefinition");
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
             return queryContext.GetItems(DataAnalysisItemDefinitionMapper);
         }
@@ -78,7 +80,7 @@ namespace Vanrise.Analytic.Data.RDB
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
 
-            var ifNotExists = insertQuery.IfNotExists("vrDataAnalysisItemDefinition");
+            var ifNotExists = insertQuery.IfNotExists(TABLE_ALIAS);
             ifNotExists.EqualsCondition(COL_Name).Value(dataAnalysisDefinitionItem.Name);
             ifNotExists.EqualsCondition(COL_DataAnalysisDefinitionID).Value(dataAnalysisDefinitionItem.DataAnalysisDefinitionId);
 
@@ -97,7 +99,7 @@ namespace Vanrise.Analytic.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            var notExistsCondition = updateQuery.IfNotExists("vrDataAnalysisDefinition");
+            var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.NotEqualsCondition(COL_ID).Value(dataAnalysisDefinitionItem.DataAnalysisItemDefinitionId);
             notExistsCondition.EqualsCondition(COL_Name).Value(dataAnalysisDefinitionItem.Name);
             notExistsCondition.EqualsCondition(COL_DataAnalysisDefinitionID).Value(dataAnalysisDefinitionItem.DataAnalysisDefinitionId);

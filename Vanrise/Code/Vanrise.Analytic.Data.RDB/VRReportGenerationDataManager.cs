@@ -11,6 +11,8 @@ namespace Vanrise.Analytic.Data.RDB
     public class VRReportGenerationDataManager : IVRReportGenerationDataManager
     {
         static string TABLE_NAME = "VR_Analytic_VRReportGeneration";
+        static string TABLE_ALIAS = "vrReportGeneration";
+
         const string COL_ID = "ID";
         const string COL_Name = "Name";
         const string COL_Description = "Description";
@@ -80,8 +82,8 @@ namespace Vanrise.Analytic.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "vrReportGeneration", null, true);
-            selectQuery.SelectColumns().AllTableColumns("vrReportGeneration");
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
             return queryContext.GetItems(VRReportGenerationMapper);
         }
@@ -92,7 +94,7 @@ namespace Vanrise.Analytic.Data.RDB
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
             insertQuery.AddSelectGeneratedId();
-            var ifNotExists = insertQuery.IfNotExists("vrReportGeneration");
+            var ifNotExists = insertQuery.IfNotExists(TABLE_ALIAS);
             ifNotExists.EqualsCondition(COL_Name).Value(vrReportGeneration.Name);
 
             insertQuery.Column(COL_Description).Value(vrReportGeneration.Description);
@@ -120,7 +122,7 @@ namespace Vanrise.Analytic.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            var notExistsCondition = updateQuery.IfNotExists("vrReportGeneration");
+            var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.NotEqualsCondition(COL_ID).Value(vrReportGeneration.ReportId);
             notExistsCondition.EqualsCondition(COL_Name).Value(vrReportGeneration.Name);
 
