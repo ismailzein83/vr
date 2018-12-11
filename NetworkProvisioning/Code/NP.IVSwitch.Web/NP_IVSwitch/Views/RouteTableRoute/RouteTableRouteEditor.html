@@ -1,36 +1,41 @@
 ﻿<div vr-modalcontent ng-controller="NP_IVSwitch_RouteTableRouteEditorController" vr-loader="scopeModel.isLoading">
-    <vr-modalbody>
-        <vr-form name="formRouteTableEditor">
-            <vr-tabs>
-                <vr-tab header="'Criteria'">
-                    <vr-row removeline>
-                        <vr-columns width="1/2row" ng-show="!scopeModel.addMode">
-                            <vr-textbox readonly value="scopeModel.routeTableRouteName" label="{{scopeModel.labelName}}"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModel.bNumber" label="BNumber" maxlength="20" ng-show="scopeModel.isANumber"></vr-textbox>
-                        </vr-columns>
-                    </vr-row>
-                    <div ng-show="scopeModel.addMode">
-                        <whs-be-code-list-resolver on-ready="onCodeListDirectiveReady" isrequired="scopeModel.addMode"></whs-be-code-list-resolver>
-                    </div>
-                </vr-tab>
-                <vr-tab header="'Settings'">
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <np-ivswitch-supplier-route-grid on-ready="onSupplierRouteGridDirectiveReady"></np-ivswitch-supplier-route-grid>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-            </vr-tabs>
-        </vr-form>
-    </vr-modalbody>
-    <div>
-        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-            <div transclude-to="buttons">
-                <vr-button type="Save" formname="formRouteTableEditor" data-onclick="scopeModel.saveRouteTableRT" haspermission="scopeModel.hasSaveRouteTableRoutePermission"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-            </div>
-        </vr-actionbar>
-    </div>
+	<vr-modalbody>
+		<vr-form name="formRouteTableEditor">
+			<vr-tabs>
+				<vr-tab header="'Criteria'">
+					<vr-row removeline>
+						<vr-columns width="1/2row" ng-show="!scopeModel.addMode">
+							<vr-textbox readonly value="scopeModel.routeTableRouteName" label="{{scopeModel.labelName}}"></vr-textbox>
+						</vr-columns>
+						<vr-columns width="1/2row">
+							<vr-textbox value="scopeModel.bNumber" label="BNumber" maxlength="20" ng-show="scopeModel.isANumber"></vr-textbox>
+						</vr-columns>
+					</vr-row>
+					<vr-row>
+						<vr-columns width="1/2row">
+							<vr-textbox value="scopeModel.techPrefix" label="Tech Prefix" ng-if="scopeModel.isBNumber" maxlength="20"></vr-textbox>
+						</vr-columns>
+					</vr-row>
+					<div ng-show="scopeModel.addMode">
+						<whs-be-code-list-resolver on-ready="onCodeListDirectiveReady" isrequired="scopeModel.addMode"></whs-be-code-list-resolver>
+					</div>
+				</vr-tab>
+				<vr-tab header="'Settings'">
+					<vr-row removeline>
+						<vr-columns width="fullrow">
+							<np-ivswitch-supplier-route-grid on-ready="onSupplierRouteGridDirectiveReady"></np-ivswitch-supplier-route-grid>
+						</vr-columns>
+					</vr-row>
+				</vr-tab>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" formname="formRouteTableEditor" data-onclick="scopeModel.saveRouteTableRT" haspermission="scopeModel.hasSaveRouteTableRoutePermission"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
 </div>

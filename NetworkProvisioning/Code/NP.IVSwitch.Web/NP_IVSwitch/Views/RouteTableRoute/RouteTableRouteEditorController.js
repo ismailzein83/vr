@@ -43,6 +43,7 @@
 				$scope.scopeModel.routeTableRouteName = parameters.Destination;
 				routeTableRouteName = parameters.Destination;
 				$scope.scopeModel.isANumber = (NP_IVSwitch_RouteTableViewTypeEnum.ANumber.value == parameters.RouteTableViewType) ? true : false;
+				$scope.scopeModel.isBNumber = (NP_IVSwitch_RouteTableViewTypeEnum.BNumber.value == parameters.RouteTableViewType) ? true : false;
 			}
 			isEditMode = $scope.scopeModel.routeTableRouteName != undefined ? true : false;
 		}
@@ -128,7 +129,10 @@
 		function getRouteTableRouteOptions() {
 			return NP_IVSwitch_RouteTableRouteAPIService.GetRouteTableRoutesOptions(routeTableId, $scope.scopeModel.routeTableRouteName).then(function (response) {
 				routeTableRouteOptions = response;
-				$scope.scopeModel.bNumber = routeTableRouteOptions.TechPrefix;
+				if ($scope.scopeModel.isBNumber == true)
+					$scope.scopeModel.techPrefix = routeTableRouteOptions.TechPrefix;
+				else
+					$scope.scopeModel.bNumber = routeTableRouteOptions.TechPrefix;
 			});
 		}
 
@@ -237,7 +241,7 @@
 				Destination: routeTableRouteName,
 				RouteOptionsToEdit: routeOptionsToEdit,
 				IsBlockedAccount: isBlockedAccount,
-				TechPrefix: $scope.scopeModel.bNumber
+				TechPrefix: ($scope.scopeModel.bNumber != undefined) ? $scope.scopeModel.bNumber : $scope.scopeModel.techPrefix
 			};
 			return objectScopeForEdit;
 		}
@@ -266,7 +270,7 @@
 				IsBlockedAccount: isBlockedAccount,
 				RouteOptionsToAdd: routeOptionsToAdd,
 				RouteTableId: routeTableId,
-				TechPrefix: $scope.scopeModel.bNumber
+				TechPrefix: ($scope.scopeModel.bNumber != undefined) ? $scope.scopeModel.bNumber : $scope.scopeModel.techPrefix
 			};
 			return objectScopeForAdd;
 		}

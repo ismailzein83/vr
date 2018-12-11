@@ -1,45 +1,47 @@
 ﻿<vr-row removeline>
     <vr-columns width="fullrow">
-        <vr-datagrid datasource="scopeModel.routeTablesRT"
-                     on-ready="scopeModel.onGridReady"
-                     dataretrievalfunction="scopeModel.dataRetrievalFunction"
-                     pagingtype="'PagingOnScroll'"
-                     menuactions="scopeModel.gridMenuActions"
-                     idfield="RouteOptionsDetailId"
-                     enableautoexport>
+		<vr-datagrid datasource="scopeModel.routeTablesRT"
+					 on-ready="scopeModel.onGridReady"
+					 dataretrievalfunction="scopeModel.dataRetrievalFunction"
+					 pagingtype="'PagingOnScroll'"
+					 menuactions="scopeModel.gridMenuActions"
+					 idfield="RouteOptionsDetailId"
+					 enableautoexport>
 
-            <vr-datagridcolumn headertext="scopeModel.name" field="'Destination'" tooltipfield="'Description'" type="'text'" widthfactor="10" columnindex="'0'">
-            </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'B Number'" field="'TechPrefix'" ng-show="scopeModel.isANumber" type="'text'" widthfactor="10">
-            </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Options'" type="'text'" widthfactor="40">
-                <div class="responsive-container" style="white-space: normal;">
-                    <span ng-repeat="routeOption in dataItem.RouteOptionsDetails" style="font-size:11px; display:inline-block; padding: 0 35px 0 0;">
-                        <span style="display: inline-block; width: 100px;font-weight: bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align: bottom;" title="{{routeOption.SupplierName}}">
-                            {{routeOption.SupplierName}}
-                        </span>
-                        <span style="display: inline-block; width: 85px;">
-                            {{routeOption.RouteName}}
-                        </span>
-                        <span style="display: inline-block; width: 25px;">
-                            <span ng-if="routeOption.Percentage">{{routeOption.Percentage}}%</span>
-                        </span>
-                        <span ng-if="routeOption.BackupsOptionsDetails != null && routeOption.BackupsOptionsDetails.length > 0" style="font-weight:bold;font-size:9px">
-                            &lt;
-                            <span ng-repeat="backup in routeOption.BackupsOptionsDetails">
-                                <span style="display: inline-block; width: 75px;font-weight: bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align: bottom;" title="{{backup.SupplierName}}">
-                                    {{backup.SupplierName}}
-                                </span>
-                                <span style="display: inline-block; width: 75px;font-weight:normal">
-                                    {{backup.RouteName}}
-                                </span>
-                                <span ng-if="!$last">,</span>
-                            </span>
-                            &gt;
-                        </span>
-                    </span>
-                </div>
-            </vr-datagridcolumn>
-        </vr-datagrid>
+			<vr-datagridcolumn headertext="scopeModel.name" field="'Destination'" tooltipfield="'Description'" type="'text'" widthfactor="10" columnindex="'0'">
+			</vr-datagridcolumn>
+			<vr-datagridcolumn headertext="'Tech Prefix'" field="'TechPrefix'" ng-if="scopeModel.isBNumber" type="'text'" widthfactor="10"  columnindex="'1'">
+			</vr-datagridcolumn>
+			<vr-datagridcolumn headertext="'B Number'" field="'TechPrefix'" ng-if="scopeModel.isANumber" type="'text'" widthfactor="10"  columnindex="'1'">
+			</vr-datagridcolumn>
+			<vr-datagridcolumn headertext="'Options'" type="'text'" widthfactor="40">
+				<div class="responsive-container" style="white-space: normal;">
+					<span ng-repeat="routeOption in dataItem.RouteOptionsDetails" style="font-size:11px; display:inline-block; padding: 0 35px 0 0;">
+						<span style="display: inline-block; width: 100px;font-weight: bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align: bottom;" title="{{routeOption.SupplierName}}">
+							{{routeOption.SupplierName}}
+						</span>
+						<span style="display: inline-block; width: 85px;">
+							{{routeOption.RouteName}}
+						</span>
+						<span style="display: inline-block; width: 25px;">
+							<span ng-if="routeOption.Percentage">{{routeOption.Percentage}}%</span>
+						</span>
+						<span ng-if="routeOption.BackupsOptionsDetails != null && routeOption.BackupsOptionsDetails.length > 0" style="font-weight:bold;font-size:9px">
+							&lt;
+							<span ng-repeat="backup in routeOption.BackupsOptionsDetails">
+								<span style="display: inline-block; width: 75px;font-weight: bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align: bottom;" title="{{backup.SupplierName}}">
+									{{backup.SupplierName}}
+								</span>
+								<span style="display: inline-block; width: 75px;font-weight:normal">
+									{{backup.RouteName}}
+								</span>
+								<span ng-if="!$last">,</span>
+							</span>
+							&gt;
+						</span>
+					</span>
+				</div>
+			</vr-datagridcolumn>
+		</vr-datagrid>
     </vr-columns>
 </vr-row>
