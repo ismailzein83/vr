@@ -25,3 +25,10 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BPTask_LastUpdatedTime_ID]
+    ON [bp].[BPTask]([LastUpdatedTime] ASC, [ID] ASC);
+
