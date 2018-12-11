@@ -146,18 +146,6 @@
     <Content Include="Demo_Module\Directives\PageRunTime\Templates\RowData.html" />
     <Content Include="Demo_Module\Directives\PageRunTime\MainExtensions\Templates\StringField.html" />
     <Content Include="Demo_Module\Directives\PageRunTime\Templates\PageRunTimeGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\Setting\demo-module-medium-setting.js" />
-    <Content Include="Demo_Module\Directives\Setting\demo-module-setting-selector.js" />
-    <Content Include="Demo_Module\Directives\Setting\demo-module-small-setting.js" />
-    <Content Include="Demo_Module\Directives\Setting\Dimensions\demo-module-advanced-dimensions.js" />
-    <Content Include="Demo_Module\Directives\Setting\Dimensions\demo-module-advanced-grid.js" />
-    <Content Include="Demo_Module\Directives\Setting\Dimensions\demo-module-dimensions-selector.js" />
-    <Content Include="Demo_Module\Directives\Setting\Dimensions\demo-module-standard-dimensions.js" />
-    <Content Include="Demo_Module\Directives\Setting\Dimensions\Templates\AdvancedDimensionsGridTemplate.html" />
-    <Content Include="Demo_Module\Directives\Setting\Dimensions\Templates\AdvancedDimensionsTemplate.html" />
-    <Content Include="Demo_Module\Directives\Setting\Dimensions\Templates\StandardDimensionsTemplate.html" />
-    <Content Include="Demo_Module\Directives\Setting\Templates\MediumSettingTemplate.html" />
-    <Content Include="Demo_Module\Directives\Setting\Templates\SmallSettingTemplate.html" />
     <Content Include="Demo_Module\Directives\DeskSize\demo-module-desksize-selector.js" />
     <Content Include="Demo_Module\Directives\PageDefinition\demo-module-page-definition-selector.js" />
     <Content Include="Demo_Module\Directives\Speciality\demo-module-speciality-selector.js" />
@@ -257,7 +245,6 @@
     <Content Include="Demo_Module\Services\OldEntities\AdvancedGridService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\PageRunTimeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\PageDefinitionAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\OldEntities\SettingConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\ColorAPIService .js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\DesksizeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\OldEntities\SpecialityAPIService .js" />
@@ -300,7 +287,6 @@
     <Compile Include="Controllers\OldEntities\ContractController.cs" />
     <Compile Include="Controllers\OldEntities\CustomerInfoController.cs" />
     <Compile Include="Controllers\OldEntities\MasterController.cs" />
-    <Compile Include="Controllers\OldEntities\SettingConfigsController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
