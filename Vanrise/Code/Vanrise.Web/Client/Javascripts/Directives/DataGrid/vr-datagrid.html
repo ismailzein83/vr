@@ -106,7 +106,7 @@
             </div>
 
             <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event,dataItem);showMenu=$parent.ctrl.isActionMenuVisible(dataItem) ; " ng-mouseleave="showMenu = false">
-                <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;"></div>
+                <div ng-class="::$parent.ctrl.hasDefinedMenuAction(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;"></div>
                 <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" showMenu == true"
                     ng-style="{'position': 'fixed', 'left': ctrl.menuLeft,'top': ctrl.menuTop}">
                     <li role="presentation" ng-if="showMenu==true">
@@ -124,7 +124,7 @@
             </div>
         </div>
         <div ng-if="ctrl.isMobile" style="width:100%" class="mobile-grid-row">
-            <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" ng-click="$parent.ctrl.rowClickDetails ==  true ? $parent.ctrl.expandRow(dataItem,$event) : ''" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;">
+            <div ng-class="::$parent.ctrl.hasDefinedMenuAction(dataItem)?'vr-datagrid-datacells' : ''" class="grid-base-row" ng-click="$parent.ctrl.rowClickDetails ==  true ? $parent.ctrl.expandRow(dataItem,$event) : ''" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;">
 
             </div>
         </div>

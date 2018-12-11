@@ -1518,15 +1518,27 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            ctrl.actionsColumnWidth = actionMenuWidth + 'px';
 
 	            ctrl.isActionMenuVisible = function (dataItem) {
-	                if (!hasActionMenu)
+	                var actions = ctrl.getActionMenuArray(dataItem);
+	                if (!actions || actions.length == 0)
 	                    return false;
-	                if (dataItem.isDeleted)
-	                    return false;
-	                var actions = ctrl.getMenuActions(dataItem);
-	                var haseEnabledActions = actions != null && actions.length > 0 ? actions.some(function (action) {
+	                var haseEnabledActions = actions.some(function (action) {
 	                    return !action.disable;
-	                }) : false;
-	                return (actions != undefined && haseEnabledActions);
+	                });
+	                return (haseEnabledActions);
+	            };
+
+	            ctrl.getActionMenuArray = function (dataItem) {
+	                if (!hasActionMenu || dataItem.isDeleted)
+	                    return [];
+	                var actions = ctrl.getMenuActions(dataItem);
+	                if (actions == undefined || actions == null)
+	                    return [];
+	                if (actions.length > 0)
+	                    return actions;
+	            };
+
+	            ctrl.hasDefinedMenuAction = function (dataItem) {
+	                return ctrl.getActionMenuArray(dataItem) != undefined && ctrl.getActionMenuArray(dataItem).length > 0;
 	            };
 
 	            ctrl.adjustPosition = function (e) {
