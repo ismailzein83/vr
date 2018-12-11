@@ -149,6 +149,7 @@
     <Content Include="Common\Directives\VRNamespace\MainExtensions\vr-common-dynamiccode-httpproxy.js" />
     <Content Include="Common\Directives\VRNamespace\Templates\VRNamespaceSettingsGridTemplate.html" />
     <Content Include="Common\Directives\VRNamespace\vr-common-custom-code-settings.js" />
+    <Content Include="Common\Directives\VRNamespace\vr-common-namespace-selector.js" />
     <Content Include="Common\Directives\VRNamespace\vr-common-namespace-settings-grid.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\SpecificDaysDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
