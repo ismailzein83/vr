@@ -42,7 +42,7 @@ namespace Retail.Teles.Web.Controllers
         public object GetFilteredEnterpriseDIDs(Vanrise.Entities.DataRetrievalInput<EnterpriseDIDsQuery> input)
         {
 
-            return GetWebResponse(input, _manager.GetFilteredEnterpriseDIDs(input));
+            return GetWebResponse(input, _manager.GetFilteredEnterpriseDIDs(input), "Enterprise DIDs");
         }
 
         [HttpPost]
@@ -50,14 +50,14 @@ namespace Retail.Teles.Web.Controllers
         public object GetFilteredEnterpriseBusinessTrunks(Vanrise.Entities.DataRetrievalInput<EnterpriseBusinessTrunksQuery> input)
         {
 
-            return GetWebResponse(input, _manager.GetFilteredEnterpriseBusinessTrunks(input));
+            return GetWebResponse(input, _manager.GetFilteredEnterpriseBusinessTrunks(input), "Enterprise Business Trunks");
         }
         [HttpPost]
         [Route("GetFilteredAccountEnterprisesDIDs")]
         public object GetFilteredAccountEnterprisesDIDs(Vanrise.Entities.DataRetrievalInput<AccountEnterpriseDIDQuery> input)
         {
 
-            return GetWebResponse(input, _manager.GetFilteredAccountEnterprisesDIDs(input));
+            return GetWebResponse(input, _manager.GetFilteredAccountEnterprisesDIDs(input), "Account Enterprises DIDs");
         }
         [HttpPost]
         [Route("SaveAccountEnterprisesDIDs")]

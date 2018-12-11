@@ -18,13 +18,13 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredDIDs")]
         public object GetFilteredDIDs(Vanrise.Entities.DataRetrievalInput<DIDQuery> input)
         {
-            return GetWebResponse(input, manager.GetFilteredDIDs(input));
+            return GetWebResponse(input, manager.GetFilteredDIDs(input), "DIDs");
         }
         [HttpPost]
         [Route("GetFilteredClientDIDs")]
         public object GetFilteredClientDIDs(Vanrise.Entities.DataRetrievalInput<DIDQuery> input)
         {
-            return GetWebResponse(input, manager.GetFilteredClientDIDs(input));
+            return GetWebResponse(input, manager.GetFilteredClientDIDs(input), "Client DIDs");
         }
         [HttpGet]
         [Route("GetDIDRuntimeEditor")]

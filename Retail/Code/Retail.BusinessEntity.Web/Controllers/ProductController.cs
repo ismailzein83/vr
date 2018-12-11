@@ -24,7 +24,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             if (!_defManager.DoesUserHaveViewProductDefinitions())
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredProducts(input));
+            return GetWebResponse(input, _manager.GetFilteredProducts(input), "Products");
         }
 
         [HttpGet]

@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredRevenueComparisons")]
         public object GetFilteredRevenueComparisons(Vanrise.Entities.DataRetrievalInput<RevenueComparisonQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredRevenueComparisons(input));
+            return GetWebResponse(input, _manager.GetFilteredRevenueComparisons(input), "Revenue Comparisons");
         }
 
     }

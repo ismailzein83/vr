@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredChargingPolicies")]
         public object GetFilteredChargingPolicies(Vanrise.Entities.DataRetrievalInput<ChargingPolicyQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredChargingPolicies(input));
+            return GetWebResponse(input, _manager.GetFilteredChargingPolicies(input), "Charging Policies");
         }
         [HttpGet]
         [Route("GetChargingPoliciesInfo")]

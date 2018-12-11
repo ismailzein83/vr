@@ -24,7 +24,7 @@ namespace Retail.BusinessEntity.Web.Controllers
 
             if (!_beManager.DoesUserHaveViewAccess(input.Query.AccountBEDefinitionId))
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredClientAccounts(input));
+            return GetWebResponse(input, _manager.GetFilteredClientAccounts(input), "Client Accounts");
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace Retail.BusinessEntity.Web.Controllers
 
             if (!_beManager.DoesUserHaveViewAccess(input.Query.AccountBEDefinitionId))
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredAccounts(input));
+            return GetWebResponse(input, _manager.GetFilteredAccounts(input) , "Accounts");
         }
 
         [HttpGet]

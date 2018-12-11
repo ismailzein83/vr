@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredStatusChargingSet")]
         public object GetFilteredStatusChargingSet(DataRetrievalInput<StatusChargingSetQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredStatusChargingSet(input));
+            return GetWebResponse(input, _manager.GetFilteredStatusChargingSet(input), "Status Charging Set");
         }
         [HttpPost]
         [Route("AddStatusChargingSet")]

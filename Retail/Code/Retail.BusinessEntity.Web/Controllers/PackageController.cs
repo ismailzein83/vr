@@ -19,11 +19,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         [HttpPost]
         [Route("GetFilteredPackages")]
         public object GetFilteredPackages(Vanrise.Entities.DataRetrievalInput<PackageQuery> input)
-        {          
+        {
             if (!_packageDefinitionManager.DoesUserHaveViewPackageDefinitions())
                 return GetUnauthorizedResponse();
             PackageManager manager = new PackageManager();
-            return GetWebResponse(input, manager.GetFilteredPackages(input));
+            return GetWebResponse(input, manager.GetFilteredPackages(input), "Filtered Packages");
         }
 
         [HttpGet]
@@ -98,7 +98,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         public object GetFilteredPackageServices(Vanrise.Entities.DataRetrievalInput<PackageServiceQuery> input)
         {
             PackageManager manager = new PackageManager();
-            return GetWebResponse(input, manager.GetFilteredPackageServices(input));
+            return GetWebResponse(input, manager.GetFilteredPackageServices(input), "Package Services");
         }
     }
 }

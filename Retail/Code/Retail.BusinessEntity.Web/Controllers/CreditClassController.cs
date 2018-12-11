@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredCreditClasses")]
         public object GetFilteredCreditClasses(Vanrise.Entities.DataRetrievalInput<CreditClassQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredCreditClasses(input));
+            return GetWebResponse(input, _manager.GetFilteredCreditClasses(input), "Credit Classes");
         }
 
         [HttpGet]

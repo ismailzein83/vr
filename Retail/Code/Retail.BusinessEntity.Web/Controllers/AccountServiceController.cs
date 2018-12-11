@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         public object GetFilteredAccountServices(Vanrise.Entities.DataRetrievalInput<AccountServiceQuery> input)
         {
             AccountServiceManager manager = new AccountServiceManager();
-            return GetWebResponse(input, manager.GetFilteredAccountServices(input));
+            return GetWebResponse(input, manager.GetFilteredAccountServices(input), "Account Services");
         }
 
         [HttpGet]

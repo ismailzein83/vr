@@ -33,7 +33,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredActionDefinitions")]
         public object GetFilteredActionDefinitions(Vanrise.Entities.DataRetrievalInput<ActionDefinitionQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredActionDefinitions(input));
+            return GetWebResponse(input, _manager.GetFilteredActionDefinitions(input), "Action Definitions");
         }
 
         [HttpGet]

@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredOperatorDeclaredInfos")]
         public object GetFilteredOperatorDeclaredInfos(Vanrise.Entities.DataRetrievalInput<OperatorDeclaredInfoQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredOperatorDeclaredInfos(input));
+            return GetWebResponse(input, _manager.GetFilteredOperatorDeclaredInfos(input), "Operator Declared Infos");
         }
 
         [HttpGet]

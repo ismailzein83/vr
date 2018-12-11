@@ -20,7 +20,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredAccountPartDefinitions")]
         public object GetFilteredAccountPartDefinitions(Vanrise.Entities.DataRetrievalInput<AccountPartDefinitionQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredAccountPartDefinitions(input));
+            return GetWebResponse(input, _manager.GetFilteredAccountPartDefinitions(input), "Account Part Definitions");
         }
 
         [HttpGet]

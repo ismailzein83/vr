@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         public object GetFilteredRecurringChargeDefinitions(Vanrise.Entities.DataRetrievalInput<RecurringChargeDefinitionQuery> input)
         {
             RecurringChargeDefinitionManager manager = new RecurringChargeDefinitionManager();
-            return GetWebResponse(input, manager.GetFilteredRecurringChargeDefinitions(input));
+            return GetWebResponse(input, manager.GetFilteredRecurringChargeDefinitions(input), "Recurring Charge Definitions");
         }
 
         [HttpGet]

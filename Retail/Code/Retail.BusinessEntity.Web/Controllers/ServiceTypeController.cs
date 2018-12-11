@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredServiceTypes")]
         public object GetFilteredServiceTypes(Vanrise.Entities.DataRetrievalInput<ServiceTypeQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredServiceTypes(input));
+            return GetWebResponse(input, _manager.GetFilteredServiceTypes(input), "Service Types");
         }
 
         [HttpGet]

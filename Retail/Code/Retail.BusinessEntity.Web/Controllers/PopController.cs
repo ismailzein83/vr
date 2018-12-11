@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         public object GetFilteredPops(Vanrise.Entities.DataRetrievalInput<PopQuery> input)
         {
             PopManager manager = new PopManager();
-            return GetWebResponse(input, manager.GetFilteredPops(input));
+            return GetWebResponse(input, manager.GetFilteredPops(input), "Pops");
         }
         
         [HttpGet]

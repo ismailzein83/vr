@@ -20,7 +20,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredStatusDefinitions")]
         public object GetFilteredStatusDefinitions(Vanrise.Entities.DataRetrievalInput<Retail.BusinessEntity.Entities.StatusDefinitionQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredStatusDefinitions(input));
+            return GetWebResponse(input, _manager.GetFilteredStatusDefinitions(input), "Status Definitions");
         }
 
         [HttpPost]

@@ -22,7 +22,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredAccountTypes")]
         public object GetFilteredAccountTypes(Vanrise.Entities.DataRetrievalInput<AccountTypeQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredAccountTypes(input));
+            return GetWebResponse(input, _manager.GetFilteredAccountTypes(input), "Account Types");
         }
 
         [HttpGet]

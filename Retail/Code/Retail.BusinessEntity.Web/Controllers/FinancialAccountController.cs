@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetFilteredFinancialAccounts")]
         public object GetFilteredFinancialAccounts(Vanrise.Entities.DataRetrievalInput<FinancialAccountQuery> input)
         {
-            return GetWebResponse(input, _manager.GetFilteredFinancialAccounts(input));
+            return GetWebResponse(input, _manager.GetFilteredFinancialAccounts(input), "Financial Accounts");
         }
         [HttpPost]
         [Route("AddFinancialAccount")]

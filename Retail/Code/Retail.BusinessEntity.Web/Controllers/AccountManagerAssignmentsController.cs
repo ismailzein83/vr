@@ -25,7 +25,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             if (!HasViewAssignmentPermission(input.Query.AccountManagerDefinitionId))
                 return GetUnauthorizedResponse();
-            return GetWebResponse(input, _manager.GetFilteredAccountManagerAssignments(input));
+            return GetWebResponse(input, _manager.GetFilteredAccountManagerAssignments(input), "Account Manager Assignments");
         }
         [HttpPost]
         [Route("AddAccountManagerAssignment")]
