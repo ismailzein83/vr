@@ -2,17 +2,21 @@
 
     "use strict";
 
-    portalAccountEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_BE_PortalCarrierAccountTypeEnum','WhS_BE_PortalAccountAPIService'];
+    portalAccountEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_BE_PortalCarrierAccountTypeEnum', 'WhS_BE_PortalAccountAPIService', 'WhS_BE_PortalAccountService','VR_Sec_RemoteGroupAPIService'];
 
-    function portalAccountEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_BE_PortalCarrierAccountTypeEnum, WhS_BE_PortalAccountAPIService) {
+    function portalAccountEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_BE_PortalCarrierAccountTypeEnum, WhS_BE_PortalAccountAPIService, WhS_BE_PortalAccountService, VR_Sec_RemoteGroupAPIService) {
 
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var portalCarrierAccountTypeSelectedDefered;
 
+        var remoteGroupSelectorAPI;
+        var remoteGroupSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var userId;
         var portalAccountEntity;
+        var groupIds;
         var isEditMode;
         var carrierProfileId;
         var context;
@@ -38,6 +42,10 @@
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
                 carrierAccountSelectorReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onRemoteGroupSelectorReady = function (api) {
+                remoteGroupSelectorAPI = api;
+                remoteGroupSelectorReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.onPortalCarrierAccountTypeSelectionChanged = function (value) {
                 if (value != undefined) {
@@ -65,8 +73,9 @@
             if (isEditMode) {
                 $scope.scopeModel.isLoading = true;
                 portalCarrierAccountTypeSelectedDefered = UtilsService.createPromiseDeferred();
-                WhS_BE_PortalAccountAPIService.GetPortalAccount(carrierProfileId, userId).then(function (response) {
-                    portalAccountEntity = response;
+                WhS_BE_PortalAccountAPIService.GetPortalAccountEditorRuntime(carrierProfileId, userId).then(function (response) {
+                    portalAccountEntity = response.CarrierProfilePortalAccount;
+                    groupIds = response.GroupIds;
                     loadAllControls();
                 });
             }
@@ -75,9 +84,11 @@
             }
         }
 
+
+
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRemoteGroupSelectorDirective, loadCarrierAccountSelector])
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 })
@@ -87,6 +98,21 @@
                 });
         }
 
+        function loadRemoteGroupSelectorDirective() {
+
+            var promises = [];
+            var remoteGroupSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            var connectionId = WhS_BE_PortalAccountService.getPortalConnectionId();
+            promises.push(remoteGroupSelectorReadyPromiseDeferred.promise);
+            UtilsService.waitMultiplePromises(promises).then(function (response) {
+                var remoteGroupPayload = {
+                    connectionId: connectionId,
+                    selectedIds: groupIds
+                };
+                VRUIUtilsService.callDirectiveLoad(remoteGroupSelectorAPI, remoteGroupPayload, remoteGroupSelectorLoadPromiseDeferred);
+            });
+            return remoteGroupSelectorLoadPromiseDeferred.promise;
+        }
         function loadCarrierAccountSelector() {
 
             function getCarrierAccountsSelectedIds() {
@@ -163,6 +189,7 @@
         function buildPortalAccountObjFromScope() {
             var obj = {
                 CarrierProfileId: carrierProfileId,
+                GroupIds: remoteGroupSelectorAPI.getSelectedIds(),
                 Entity: {
                     Name: $scope.scopeModel.name,
                     Email: $scope.scopeModel.email,

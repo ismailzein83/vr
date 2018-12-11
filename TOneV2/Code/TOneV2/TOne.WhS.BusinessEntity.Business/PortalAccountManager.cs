@@ -56,6 +56,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 TenantId = 1,
                 Email = portalAccountEditorObject.Entity.Email,
                 Name = portalAccountEditorObject.Entity.Name,
+                GroupIds=portalAccountEditorObject.GroupIds
             });
             insertOperationOutput.Result = userDetails.Result;
             insertOperationOutput.Message = userDetails.Message;
@@ -99,7 +100,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var portalAccountSettings = _carrierProfileManager.GetExtendedSettings<PortalAccountSettings>(portalAccountEditorObject.CarrierProfileId);
             var carrierProfilePortalAccount = portalAccountSettings.CarrierProfilePortalAccounts.FindRecord(x => x.UserId == portalAccountEditorObject.Entity.UserId);
 
-            if (!CheckUserInfoChange(carrierProfilePortalAccount, portalAccountEditorObject.Entity))
+            if (!CheckUserInfoChange(carrierProfilePortalAccount, portalAccountEditorObject))
             {
                 UpdateCarrierProfileExtendedSettings(portalAccountSettings, carrierProfilePortalAccount, portalAccountEditorObject.Entity, portalAccountEditorObject.CarrierProfileId, portalAccountEditorObject.Entity.UserStatus);
                 updateOperationOutput.UpdatedObject = CarrierProfilePortalAccountDetailMapper(portalAccountEditorObject.Entity.UserId, portalAccountEditorObject.Entity.Name, portalAccountEditorObject.Entity.Email, 1, portalAccountEditorObject.Entity.UserStatus);
@@ -111,6 +112,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 UserId = user.UserId,
                 Name = portalAccountEditorObject.Entity.Name,
                 Email = portalAccountEditorObject.Entity.Email,
+                GroupIds=portalAccountEditorObject.GroupIds,
                 TenantId = user.TenantId,
                 Description = user.Description,
                 EnabledTill = user.EnabledTill,
@@ -139,6 +141,14 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return null;
         }
+        public CarrierProfilePortalAccountEditorRuntime GetPortalAccountEditorRuntime(int carrierProfileId, int userId)
+        {
+            return new CarrierProfilePortalAccountEditorRuntime
+            {
+                CarrierProfilePortalAccount = GetPortalAccount(carrierProfileId, userId),
+                GroupIds = new RestGroupManager().GetRemoteAssignedUserGroups(_carrierPortalConnectionId, userId)
+            };
+        }   
         public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(PortalAccountResetPasswordInput resetPasswordInput)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
@@ -207,10 +217,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Result = userDetail.Result;
                 var portalAccountUpdated = GetPortalAccount(carrierProfileId, userId);
                 UpdateCarrierProfileExtendedSettings(portalAccountSettings, portalAccountUpdated, portalAccountUpdated, carrierProfileId, userDetail.UpdatedObject.Status);
-                updateOperationOutput.UpdatedObject = CarrierProfilePortalAccountDetailMapper(portalAccountUpdated.UserId, portalAccountUpdated.Name, portalAccountUpdated.Email, portalAccountUpdated.TenantId, userDetail.UpdatedObject.Status);
+                updateOperationOutput.UpdatedObject = CarrierProfilePortalAccountDetailMapper(portalAccountUpdated.UserId, portalAccountUpdated.Name, portalAccountUpdated.Email,portalAccountUpdated.TenantId, userDetail.UpdatedObject.Status);
             }
             return updateOperationOutput;
         }
+
+     
         #endregion
         #region Private Methods
         private void UpdateCarrierProfileExtendedSettings(PortalAccountSettings portalAccountSettings, CarrierProfilePortalAccount oldCarrierProfilePortalAccount, CarrierProfilePortalAccount newCarrierProfilePortalAccount, int carrierProfileId, UserStatus userStatus)
@@ -228,10 +240,28 @@ namespace TOne.WhS.BusinessEntity.Business
             });
             _carrierProfileManager.UpdateCarrierProfileExtendedSetting<PortalAccountSettings>(carrierProfileId, portalAccountSettings);
         }
-        private bool CheckUserInfoChange(CarrierProfilePortalAccount oldPortalAccount, CarrierProfilePortalAccount newPortalAccount)
+        private bool CheckUserInfoChange(CarrierProfilePortalAccount oldPortalAccount, PortalAccountEditorObject newPortalAccountObject)
         {
-            if (oldPortalAccount.Email != newPortalAccount.Email || oldPortalAccount.Name != newPortalAccount.Name)
+          
+            if (oldPortalAccount.Email != newPortalAccountObject.Entity.Email || oldPortalAccount.Name != newPortalAccountObject.Entity.Name )
                 return true;
+
+            var oldPortalAccountGroupIds = new RestGroupManager().GetRemoteAssignedUserGroups(_carrierPortalConnectionId, oldPortalAccount.UserId);
+
+            int oldCount = 0;
+            if(oldPortalAccountGroupIds != null)
+                oldCount = oldPortalAccountGroupIds.Count;
+
+            int newCount = 0;
+            if (newPortalAccountObject != null && newPortalAccountObject.GroupIds != null)
+                newCount = newPortalAccountObject.GroupIds.Count;
+
+            if (oldCount != newCount)
+                return true;
+
+            if(oldCount > 0 && newCount > 0  && oldPortalAccountGroupIds.Any(x => !newPortalAccountObject.GroupIds.Any(y => y == x)))
+                return true;
+           
             return false;
         }
         private VRInterAppRestConnection GetCarrierPortalConnectionSettings()
@@ -242,7 +272,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #endregion
         #region Mappers 
-        public CarrierProfilePortalAccountDetail CarrierProfilePortalAccountDetailMapper(int userId, string name, string email, int tenantId, UserStatus userStatus)
+        public CarrierProfilePortalAccountDetail CarrierProfilePortalAccountDetailMapper(int userId, string name, string email,int tenantId, UserStatus userStatus)
         {
             return new CarrierProfilePortalAccountDetail()
             {

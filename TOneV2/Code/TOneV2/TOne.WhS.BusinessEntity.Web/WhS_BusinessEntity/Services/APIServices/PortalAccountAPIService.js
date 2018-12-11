@@ -28,6 +28,12 @@
                 userId: userId
             });
         }
+        function GetPortalAccountEditorRuntime(carrierProfileId, userId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetPortalAccountEditorRuntime'), {
+                carrierProfileId: carrierProfileId,
+                userId: userId
+            });
+        }
         function ResetPassword(resetPasswordInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'ResetPassword'), resetPasswordInput);
         }
@@ -56,6 +62,7 @@
             AddPortalAccount: AddPortalAccount,
             UpdatePortalAccount: UpdatePortalAccount,
             GetPortalAccount: GetPortalAccount,
+            GetPortalAccountEditorRuntime: GetPortalAccountEditorRuntime,
             ResetPassword: ResetPassword,
             DisablePortalAccount: DisablePortalAccount,
             EnablePortalAccount: EnablePortalAccount,

@@ -10,5 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public CarrierProfilePortalAccount Entity { get; set; }
         public int CarrierProfileId { get; set; }
+        public List<int> GroupIds { get; set; }
+
     }
 }

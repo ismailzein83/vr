@@ -8,6 +8,12 @@ using Vanrise.Security.Entities;
 namespace TOne.WhS.BusinessEntity.Entities
 {
     public enum PortalCarrierAccountType { All = 0, Specific = 1 }
+
+    public class CarrierProfilePortalAccountEditorRuntime
+    {
+        public CarrierProfilePortalAccount CarrierProfilePortalAccount { get; set; }
+        public List<int> GroupIds { get; set; }
+    }
     public class CarrierProfilePortalAccount
     {
         public int UserId { get; set; }
@@ -28,6 +34,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int UserId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public List<int> GroupIds { get; set; }
         public int TenantId { get; set; }
         public UserStatus UserStatus { get; set; }
         public string UserStatusDescription { get; set; }

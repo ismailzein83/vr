@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Web.Base;
 
+
 namespace TOne.WhS.BusinessEntity.Web
 {
     [JSONWithTypeAttribute]
@@ -43,6 +44,13 @@ namespace TOne.WhS.BusinessEntity.Web
             return _manager.GetPortalAccount(carrierProfileId, userId);
         }
 
+        [HttpGet]
+        [Route("GetPortalAccountEditorRuntime")]
+        public CarrierProfilePortalAccountEditorRuntime GetPortalAccountEditorRuntime(int carrierProfileId, int userId)
+        {
+            return _manager.GetPortalAccountEditorRuntime(carrierProfileId, userId);
+        }
+
         [HttpPost]
         [Route("ResetPassword")]
         public object ResetPassword(PortalAccountResetPasswordInput resetPasswordInput)
@@ -70,5 +78,6 @@ namespace TOne.WhS.BusinessEntity.Web
         {
             return _manager.EnablePortalAccount(carrierProfileId, userId);
         }
+
     }
 }
