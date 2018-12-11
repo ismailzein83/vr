@@ -79,6 +79,7 @@
     <Compile Include="TextManipulationAction\ReplaceStringActionSettings.cs" />
     <Compile Include="TextManipulationAction\SubstringActionSettings.cs" />
     <Compile Include="VRActionAuditLKUPBEDefinitionSettings.cs" />
+    <Compile Include="VRDynamicAPI\VRCallMethodDynamicAPI.cs" />
     <Compile Include="VRDynamicAPI\VRCustomCodeDynamicAPIMethod.cs" />
     <Compile Include="VRDynamicCode\CustomCodeDynamicCodeSettings.cs" />
     <Compile Include="VRDynamicCode\HttpProxyDynamicCodeSettings.cs" />
