@@ -89,7 +89,9 @@
     <Content Include="Retail_RA\Directives\OperatorDeclarationServices\retail-ra-operatordeclarationservice.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclarationServices\Templates\OperationDirectionServicesTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclarationServices\Templates\OperatorDirectionServicesCustomObjectSettingsTemplate.html" />
+    <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnAfterSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnBeforeSaveHandlerTemplate.html" />
+    <Content Include="Retail_RA\Directives\PeriodDefinition\retail-ra-perioddefinition-aftersavehandler.js" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\retail-ra-perioddefinition-beforesavehandler.js" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\retail-ra-specialnumbers-customobjectsettings.js" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\retail-ra-specialnumbers.js" />
