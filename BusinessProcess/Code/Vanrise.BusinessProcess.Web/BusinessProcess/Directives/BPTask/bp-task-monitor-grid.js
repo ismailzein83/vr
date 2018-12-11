@@ -124,7 +124,7 @@ function (BusinessProcess_BPTaskAPIService, BusinessProcess_GridMaxSize, Busines
                         }
 
                     }
-                    input.LastUpdateHandle = response.MaxTimeStamp;
+                    input.LastUpdateHandle = response.LastUpdateHandle;
 
                     if (ctrl.enableAutoOpenTask && autoTask != undefined)
                         BusinessProcess_BPTaskService.openTask(autoTask.Entity.BPTaskId);

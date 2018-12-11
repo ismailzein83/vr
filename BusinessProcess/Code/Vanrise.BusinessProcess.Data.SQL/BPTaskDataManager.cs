@@ -5,6 +5,7 @@ using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
 using System.Linq;
+using System.Globalization;
 
 namespace Vanrise.BusinessProcess.Data.SQL
 {
@@ -46,21 +47,42 @@ namespace Vanrise.BusinessProcess.Data.SQL
             ExecuteNonQuerySP("[bp].[sp_BPTask_UpdateTaskExecution]", input.TaskId, input.ExecutedBy, (int)bpTaskStatus, input.ExecutionInformation != null ? Serializer.Serialize(input.ExecutionInformation) : null, input.Notes, input.Decision);
         }
 
-        public List<BPTask> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int? processInstanceId, int? userId)
+        public List<BPTask> GetUpdated(ref object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId)
         {
             List<BPTask> bpTasks = new List<BPTask>();
-            byte[] timestamp = null;
+
+            DateTime? afterLastUpdateTime;
+            long? afterId;
+            SplitLastUpdateHandle(lastUpdateHandle, out afterLastUpdateTime, out afterId);
+
+            DateTime? maxLastUpdateTime_local = null;
+            long? id_local = null;
 
             ExecuteReaderSP("[bp].[sp_BPTask_GetUpdated]", (reader) =>
             {
                 while (reader.Read())
-                    bpTasks.Add(BPTaskMapper(reader));
-                if (reader.NextResult())
-                    while (reader.Read())
-                        timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
-            },
-               maxTimeStamp, nbOfRows, processInstanceId, userId);
-            maxTimeStamp = timestamp;
+                {
+                    BPTask bpTask = BPTaskMapper(reader);
+
+                    if (!maxLastUpdateTime_local.HasValue || maxLastUpdateTime_local.Value < bpTask.LastUpdatedTime)
+                    {
+                        maxLastUpdateTime_local = bpTask.LastUpdatedTime;
+                        id_local = bpTask.BPTaskId;
+                    }
+                    else if (maxLastUpdateTime_local.Value == bpTask.LastUpdatedTime && bpTask.BPTaskId > id_local.Value)
+                    {
+                        id_local = bpTask.BPTaskId;
+                    }
+
+                    bpTasks.Add(bpTask);
+                }
+            }, afterLastUpdateTime, afterId, nbOfRows, processInstanceId, userId);
+
+            object lastUpdateHandle_local = BuildLastUpdateHandle(maxLastUpdateTime_local, id_local);
+
+            if (lastUpdateHandle_local != null)
+                lastUpdateHandle = lastUpdateHandle_local;
+
             return bpTasks;
         }
 
@@ -74,6 +96,29 @@ namespace Vanrise.BusinessProcess.Data.SQL
             ExecuteNonQuerySP("bp.sp_BPTask_CancelNotCompleted", processInstanceId);
         }
 
+        #endregion
+
+        #region Private Methods
+        private object BuildLastUpdateHandle(DateTime? lastUpdateTime, long? id)
+        {
+            if (lastUpdateTime.HasValue && id.HasValue)
+                return string.Concat(lastUpdateTime.Value.ToString("yyyyMMddHHmmssfff"), "@", id.Value);
+
+            return null;
+        }
+
+        private void SplitLastUpdateHandle(object lastUpdateHandle, out DateTime? lastUpdateTime, out long? id)
+        {
+            lastUpdateTime = null;
+            id = null;
+
+            if (lastUpdateHandle != null)
+            {
+                string[] data = lastUpdateHandle.ToString().Split('@');
+                lastUpdateTime = DateTime.ParseExact(data[0], "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
+                id = long.Parse(data[1]);
+            }
+        }
         #endregion
 
         #region Mappers

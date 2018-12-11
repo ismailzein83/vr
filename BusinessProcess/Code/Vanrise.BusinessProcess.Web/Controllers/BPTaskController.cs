@@ -15,8 +15,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public BPTaskUpdateOutput GetProcessTaskUpdated(BPTaskUpdateInput input)
         {
             BPTaskManager manager = new BPTaskManager();
-            byte[] maxTimeStamp = input.LastUpdateHandle;
-            return manager.GetProcessTaskUpdated(ref maxTimeStamp, input.NbOfRows, input.ProcessInstanceId);
+            return manager.GetProcessTaskUpdated(input.LastUpdateHandle, input.NbOfRows, input.ProcessInstanceId);
         }
 
         [HttpPost]
@@ -32,8 +31,7 @@ namespace Vanrise.BusinessProcess.Web.Controllers
         public BPTaskUpdateOutput GetMyTasksUpdated(BPTaskUpdateInput input)
         {
             BPTaskManager manager = new BPTaskManager();
-            byte[] maxTimeStamp = input.LastUpdateHandle;
-            return manager.GetMyTasksUpdated(ref maxTimeStamp, input.NbOfRows);
+            return manager.GetMyTasksUpdated(input.LastUpdateHandle, input.NbOfRows);
         }
 
         [HttpPost]

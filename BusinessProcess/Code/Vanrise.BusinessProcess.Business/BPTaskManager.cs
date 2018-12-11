@@ -50,10 +50,10 @@ namespace Vanrise.BusinessProcess.Business
             task = taskDataManager.GetTask(executeBPTaskInput.TaskId);
         }
 
-        public BPTaskUpdateOutput GetMyTasksUpdated(ref byte[] maxTimeStamp, int nbOfRows)
+        public BPTaskUpdateOutput GetMyTasksUpdated(object lastUpdateHandle, int nbOfRows)
         {
             int userId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
-            return GetUpdated(ref maxTimeStamp, nbOfRows, null, userId);
+            return GetUpdated(lastUpdateHandle, nbOfRows, null, userId);
         }
 
         public List<BPTaskDetail> GetMyTasksBeforeId(BPTaskBeforeIdInput input)
@@ -62,9 +62,9 @@ namespace Vanrise.BusinessProcess.Business
             return GetBeforeId(input.LessThanID, input.NbOfRows, null, userId);
         }
 
-        public BPTaskUpdateOutput GetProcessTaskUpdated(ref byte[] maxTimeStamp, int nbOfRows, int processInstanceId)
+        public BPTaskUpdateOutput GetProcessTaskUpdated(object lastUpdateHandle, int nbOfRows, int processInstanceId)
         {
-            return GetUpdated(ref maxTimeStamp, nbOfRows, processInstanceId, null);
+            return GetUpdated(lastUpdateHandle, nbOfRows, processInstanceId, null);
         }
 
         public List<BPTaskDetail> GetProcessTaskBeforeId(BPTaskBeforeIdInput input)
@@ -118,14 +118,14 @@ namespace Vanrise.BusinessProcess.Business
             return bpTaskDetails;
         }
 
-        private BPTaskUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int? processInstanceId, int? userId)
+        private BPTaskUpdateOutput GetUpdated(object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId)
         {
             BPTaskUpdateOutput bpTaskUpdateOutput = new BPTaskUpdateOutput();
             int loggedInUser = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
 
             IBPTaskDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTaskDataManager>();
 
-            List<BPTask> bpTasks = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, processInstanceId, userId);
+            List<BPTask> bpTasks = dataManager.GetUpdated(ref lastUpdateHandle, nbOfRows, processInstanceId, userId);
             List<BPTaskDetail> bpTaskDetails = new List<BPTaskDetail>();
             foreach (BPTask bpTask in bpTasks)
             {
@@ -133,7 +133,7 @@ namespace Vanrise.BusinessProcess.Business
             }
 
             bpTaskUpdateOutput.ListBPTaskDetails = bpTaskDetails;
-            bpTaskUpdateOutput.MaxTimeStamp = maxTimeStamp;
+            bpTaskUpdateOutput.LastUpdateHandle = lastUpdateHandle;
             return bpTaskUpdateOutput;
         }
 
