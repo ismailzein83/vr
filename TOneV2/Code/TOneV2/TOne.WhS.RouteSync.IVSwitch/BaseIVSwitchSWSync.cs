@@ -252,25 +252,31 @@ namespace TOne.WhS.RouteSync.IVSwitch
                             ivOption.BktToken = ivOption.BktCapacity;
                         }
                         routes.Add(ivOption);
+                        if (option.Backups != null && option.Backups.Count > 0)
+                        {
+                            routes.AddRange(GetBackupRoutes(route.Code, preparedData._switchTime,
+                                preparedData.BlockRouteId, option.Backups, preparedData.SupplierDefinitions, ref priority, ref serial));
+                        }
                     }
-                    routes.AddRange(GetBackupRoutes(route.Code, preparedData._switchTime, preparedData.BlockRouteId, option.Backups, preparedData.SupplierDefinitions, ref priority, ref serial));
                 }
                 int totalCount = routes.Count;
                 routes.ForEach(r => r.TotalBkts = totalCount);
-                if (option.Percentage != null && option.Percentage > 0)
+
+                if (routes.Any() && (option.Backups == null || option.Backups.Count == 0))
                 {
-                    if (routes.Any())
-                        routes.Last().HuntStop = 1;
+                    foreach (var ivSwitchRoute in routes)
+                    {
+                        ivSwitchRoute.HuntStop = 1;
+                    }
                 }
+
             }
             return routes;
         }
+
         private List<IVSwitchRoute> GetBackupRoutes(string code, DateTime wakeUpTime, int blockedRouteId, List<BackupRouteOption> backups, Dictionary<string, SupplierDefinition> suppliersDefinition, ref int priority, ref int serial)
         {
             var backupRoutes = new List<IVSwitchRoute>();
-
-            if (backups == null)
-                return backupRoutes;
 
             foreach (var backupRouteOption in backups)
             {
@@ -304,20 +310,22 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     }
                 }
             }
+            if (backupRoutes.Any())
+                backupRoutes.Last().HuntStop = 1;
             return backupRoutes;
         }
 
         private IVSwitchRoute BuildBlockedRoute(int blockedRouteId, DateTime switchDate, string code, ref int priority)
         {
             return new IVSwitchRoute
-             {
-                 Description = "BLK",
-                 RouteId = blockedRouteId,
-                 WakeUpTime = switchDate,
-                 Destination = code,
-                 Preference = priority--,
-                 StateId = 1
-             };
+            {
+                Description = "BLK",
+                RouteId = blockedRouteId,
+                WakeUpTime = switchDate,
+                Destination = code,
+                Preference = priority--,
+                StateId = 1
+            };
         }
 
         #endregion
