@@ -12,18 +12,18 @@ namespace Vanrise.Integration.Entities
 
     public interface ICheckMissingFilesContext
     {
-        string CurrentFileName { get; }
-
         string LastRetrievedFileName { get; }
+
+        string CurrentFileName { get; }
 
         List<string> MissingFileNames { set; }
     }
 
     public class CheckMissingFilesContext : ICheckMissingFilesContext
     {
-        public string CurrentFileName { get; set; }
-
         public string LastRetrievedFileName { get; set; }
+
+        public string CurrentFileName { get; set; }
 
         public List<string> MissingFileNames { get; set; }
     }

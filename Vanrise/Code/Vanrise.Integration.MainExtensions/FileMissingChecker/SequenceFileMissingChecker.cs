@@ -49,7 +49,7 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
                     {
                         FileNamePart = fileNamePart,
                         ValueAsString = fileNamePartValue,
-                        Value = ParseIntWithValidate(fileNamePartValue)
+                        Value = ParseLongWithValidate(fileNamePartValue)
                     };
                     break;
 
@@ -81,16 +81,16 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
             return missingFileName;
         }
 
-        private int ParseIntWithValidate(string valueAsString)
+        private long ParseLongWithValidate(string valueAsString)
         {
-            int result;
-            if (!int.TryParse(valueAsString, out result))
+            long result;
+            if (!long.TryParse(valueAsString, out result))
                 throw new Exception(string.Format("invalid integer format {0}", valueAsString));
 
             return result;
         }
 
-        private int ParseMonthWithValidate(string monthAsString)
+        private long ParseMonthWithValidate(string monthAsString)
         {
             switch(monthAsString)
             {
@@ -109,7 +109,7 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
         {
             public string FileNamePart { get; set; }
             public int StartIndex { get; set; }
-            public int Length { get; set; }
+            public int Length { get; set; } 
         }
 
         private class SequencialFileNameParts
@@ -127,7 +127,7 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
         {
             public string FileNamePart { get; set; }
             public string ValueAsString { get; set; }
-            public int Value { get; set; }
+            public long Value { get; set; }
         }
 
         #endregion
