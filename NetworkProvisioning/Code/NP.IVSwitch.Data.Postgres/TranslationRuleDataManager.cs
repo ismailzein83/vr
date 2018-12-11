@@ -48,13 +48,7 @@ namespace NP.IVSwitch.Data.Postgres
             {
 				if (translationRule.EngineType == EngineType.Regex)
 				{
-					translationRule.CLIType = CLIType.FixedCLI;
 					translationRule.DNISPattern = dnisPattern;
-					if (dnisPattern.StartsWith("+"))
-						translationRule.DNISPatternSign = PrefixSign.Plus;
-
-					if (dnisPattern.StartsWith("-"))
-						translationRule.DNISPatternSign = PrefixSign.Minus;
 				}
 				else
 				{
