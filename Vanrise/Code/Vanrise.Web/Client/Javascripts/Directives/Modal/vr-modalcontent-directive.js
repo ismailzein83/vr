@@ -12,7 +12,7 @@ app.directive('vrModalcontent', ['VRLocalizationService', 'MobileService', funct
             tElement.attr['aria-hidden'] = "true";
             var resClass = "";
             var classmodal = "";
-            var titleShowValue= 'ng-show="title"'
+            var titleShowValue = 'ng-show="title"';
             if (tAttrs.resclass != undefined)
                 resClass = 'ng-class="' + tAttrs.resclass + '"';
             else {
