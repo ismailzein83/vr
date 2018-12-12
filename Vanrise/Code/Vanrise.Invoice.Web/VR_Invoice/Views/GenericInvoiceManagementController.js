@@ -179,7 +179,8 @@
                     Status: accountStatusObj != undefined ? accountStatusObj.Status : undefined,
                     IsSent: invoiceSentSelectorAPI.getSelectedIds(),
                     IsPaid: invoicePaidSelectorAPI.getSelectedIds(),
-                    InvoiceSettingIds: invoiceSettingSelectorAPI.getSelectedIds()
+                    InvoiceSettingIds: invoiceSettingSelectorAPI.getSelectedIds(),
+                    SerialNumber: $scope.scopeModel.serialNumber
                 }
             };
             return filter;

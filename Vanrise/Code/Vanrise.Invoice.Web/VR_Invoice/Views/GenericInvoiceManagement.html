@@ -13,16 +13,18 @@
                     <vr-datetimepicker type="date" applytimemax label="To" customvalidate="scopeModel.validateToDate()" value="scopeModel.toDate"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" label="Issue Date"customvalidate="scopeModel.validateIssueDate()"  value="scopeModel.issueDate"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" label="Issue Date" customvalidate="scopeModel.validateIssueDate()" value="scopeModel.issueDate"></vr-datetimepicker>
                 </vr-columns>
 
                 <vr-common-boolean-selector label="Sent" on-ready="scopeModel.onInvoiceSentSelectorReady" normal-col-num="2"></vr-common-boolean-selector>
                 <span ng-show="scopeModel.showPaidFilter">
                     <vr-common-boolean-selector label="Paid" on-ready="scopeModel.onInvoicePaidSelectorReady" normal-col-num="2"></vr-common-boolean-selector>
                 </span>
-                                
+
                 <vr-invoice-invoicesetting-selector on-ready="scopeModel.onInvoiceSettingSelectorReady" normal-col-num="2" ismultipleselection></vr-invoice-invoicesetting-selector>
-               
+                <vr-columns width="normal">
+                    <vr-textbox value="scopeModel.serialNumber" label="Invoice Number"></vr-textbox>
+                </vr-columns>
 
             </vr-row>
         </div>

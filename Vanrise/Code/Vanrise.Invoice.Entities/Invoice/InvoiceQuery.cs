@@ -19,12 +19,12 @@ namespace Vanrise.Invoice.Entities
         public bool? IsEffectiveInFuture { get; set; }
         public VRAccountStatus? Status { get; set; }
         public bool IncludeAllFields { get; set; }
-
         public bool? IsSelectAll { get; set; }
         public Guid? InvoiceBulkActionIdentifier { get; set; }
         public bool? IsPaid { get; set; }
         public bool? IsSent { get; set; }
         public List<string> InvoiceSettingIds { get; set; }
+        public string SerialNumber { get; set; }
 
     }
 }

@@ -74,7 +74,7 @@ namespace Vanrise.Invoice.Data.SQL
                 partnerIds = string.Join<string>(",", input.Query.PartnerIds);
             if (input.Query.InvoiceSettingIds != null && input.Query.InvoiceSettingIds.Count() > 0)
                 invoiceSettingIds = string.Join<string>(",", input.Query.InvoiceSettingIds);
-            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds,invoiceSettingIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, input.Query.Status, input.Query.IsSelectAll, input.Query.InvoiceBulkActionIdentifier, input.Query.IsSent, input.Query.IsPaid);
+            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds,invoiceSettingIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, input.Query.Status, input.Query.IsSelectAll, input.Query.InvoiceBulkActionIdentifier, input.Query.IsSent, input.Query.IsPaid,input.Query.SerialNumber);
         }
 
         public List<Entities.Invoice> GetPartnerInvoicesByDate(Guid invoiceTypeId, IEnumerable<string> partnerIds, DateTime fromDate, DateTime toDate)
