@@ -825,6 +825,7 @@
     <Build Include="common\Stored Procedures\sp_VRDynamicAPI_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_VRDynamicAPI_GetAll.sql" />
     <Build Include="common\User Defined Types\VRDynamicAPIModuleType.sql" />
+    <Build Include="common\Stored Procedures\sp_VRRule_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
