@@ -3,7 +3,7 @@
     <vr-tab ng-repeat="analyticTable in analyticTables" header="analyticTable.title" dontload="true">
         <vr-row>
             
-                <span ng-show="true">
+                <span ng-show="true" vr-loader="analyticTable.isLoading">
                     <vr-analytic-measurestyle-grid-editor on-ready="analyticTable.onMeasureStyleGridReady"></vr-analytic-measurestyle-grid-editor>
                 </span>
            

@@ -8,7 +8,6 @@
 
         var measureStyleEntity;
         var fieldTypeConfigs = [];
-        var selectedMeasure;
 
         var measure;
         $scope.scopeModel = {};
@@ -18,6 +17,7 @@
         var countId = 0;
         var context;
         var analyticTableId;
+        var measureName;
         loadParameters();
         defineScope();
         load();
@@ -25,12 +25,12 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                selectedMeasure = parameters.selectedMeasure;
                 measureStyleEntity = parameters.measureStyle;
                 context = parameters.context;
                 analyticTableId = parameters.analyticTableId;
+                measureName = parameters.measureName;
             }
-            $scope.scopeModel.isEditMode = (measureStyleEntity != undefined);
+            $scope.scopeModel.isEditMode = parameters.isEditMode;
         }
 
         function defineScope() {
@@ -72,8 +72,7 @@
         }
 
         function addMeasureStyleRule() {
-            var name = selectedMeasure != undefined ? selectedMeasure.Name : measure.Name;
-            measure = context.getMeasure(name);
+            measure = context.getMeasure(measureName);
             var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, measure.FieldType.ConfigId, "ExtensionConfigurationId");
 
             var dataItem = {
@@ -81,7 +80,7 @@
                 configId: fieldType != undefined ? fieldType.ExtensionConfigurationId : undefined,
                 editor: fieldType != undefined ? fieldType.RuleFilterEditor : undefined,
                 name: measure.Name,
-                selectedStyleColor: VR_Analytic_StyleCodeEnum.Red,
+                selectedStyleColor: VR_Analytic_StyleCodeEnum.Excellent,
                 onDirectiveReady: function (api) {
                     dataItem.directiveAPI = api;
                     var payload = getPayload(measure);
@@ -105,15 +104,15 @@
 
                 function setTitle() {
                     if ($scope.scopeModel.isEditMode && measureStyleEntity != undefined)
-                        $scope.title = UtilsService.buildTitleForUpdateEditor("Measure Style", measureStyleEntity.MeasureName);
+                        $scope.title = UtilsService.buildTitleForUpdateEditor("Measure Style", measureStyleEntity.Entity.MeasureStyleRuleDetail.MeasureName);
                     else
                         $scope.title = UtilsService.buildTitleForAddEditor("Measure Style");
                 }
                 function loadSelectedMeasureStyles() {
                     var promises = [];
-                    if (measureStyleEntity != undefined && measureStyleEntity.Rules != undefined) {
-                        for (var i = 0; i < measureStyleEntity.Rules.length; i++) {
-                            var rule = measureStyleEntity.Rules[i];
+                    if (measureStyleEntity != undefined && measureStyleEntity.Entity.MeasureStyleRuleDetail.Rules != undefined) {
+                        for (var i = 0; i < measureStyleEntity.Entity.MeasureStyleRuleDetail.Rules.length; i++) {
+                            var rule = measureStyleEntity.Entity.MeasureStyleRuleDetail.Rules[i];
                             var filterItem = {
                                 payload: rule,
                                 readyPromiseDeferred: UtilsService.createPromiseDeferred(),
@@ -159,8 +158,9 @@
 
                 return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, getFieldTypeConfigs]).then(function () {
                     loadSelectedMeasureStyles().then(function () {
-                        if (!$scope.scopeModel.isEditMode)
+                        if (!$scope.scopeModel.isEditMode) {
                             addMeasureStyleRule();
+                        }
                     }).finally(function () {
                         $scope.scopeModel.isLoading = false;
                     }).catch(function (error) {
@@ -204,6 +204,7 @@
                     StyleCode: measurestyle.selectedStyleColor.value,
                     StyleValue: measurestyle.selectedStyleColor.styleValue
                 });
+                console.log(rules);
             }
             var measureStyleRule = {
                 MeasureName: measure.Name,
@@ -220,8 +221,9 @@
             };
             return VR_Analytic_MeasureStyleRuleAPIService.GetMeasureStyleRuleDetail(measureStyleRuleInput).then(function (response) {
                 var measureStyleDetail = response;
-                if ($scope.onMeasureStyleAdded != undefined)
+                if ($scope.onMeasureStyleAdded != undefined) {
                     $scope.onMeasureStyleAdded(measureStyleDetail);
+                }
                 $scope.modalContext.closeModal();
             });
         }

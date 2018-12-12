@@ -40,34 +40,51 @@
                     }
                 };
 
-                ctrl.addMeasureStyle = function () {
-                    if (ctrl.selectedMeasureName != undefined) {
-                        var onMeasureStyleAdded = function (measureStyleObj) {
-                            ctrl.measureStyles.push(measureStyleObj);
-                            ctrl.measureFields = getMeasureNames();
-                            ctrl.selectedMeasureName = undefined;
+              
+
+                $scope.onResetClicked = function (dataItem) {
+                    ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
+                        MeasureName: dataItem.MeasureName
+                    };
+                }
+                ctrl.saveMeasureStyle = function (dataItem) {
+                    if (dataItem.Entity != undefined) {
+                        var isEditMode = true;
+                        var onMeasureStyleUpdated = function (measureStyleObj) {
+                            ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
+                                MeasureName: dataItem.MeasureName,
+                                Entity: measureStyleObj
+                            };
                         };
-                        Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, ctrl.selectedMeasureName, context,analyticTableId);
+                        var measureNames = getMeasureNames(dataItem);
+                        var measureName = dataItem.Entity.MeasureStyleRuleDetail.MeasureName;
+                        var selectedMeasure = UtilsService.getItemByVal(measureNames, dataItem.Entity.MeasureStyleRuleDetail.MeasureName, "Name");
+                        Analytic_AnalyticService.editMeasureStyle(dataItem, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId, isEditMode, measureName);
                     }
-
+                    else {
+                        var onMeasureStyleAdded = function (measureStyleObj) {
+                            ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
+                                MeasureName: dataItem.MeasureName,
+                                Entity: measureStyleObj
+                            };
+                        };
+                        var measureName = dataItem.MeasureName;
+                        Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, context, analyticTableId, measureName);
+                    }
                 };
-
-                ctrl.removeMeasureStyle = function (measureStyle) {
-                    var measures = getMeasureNames();
-                    ctrl.measureFields = getMeasureNames(measureStyle);
-                    ctrl.measureStyles.splice(ctrl.measureStyles.indexOf(measureStyle), 1);
-                };
-
-                defineMenuActions();
             }
 
             function getDirectiveAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
+                    var measureStyleRuleEditorRuntime;
+                    var measureStyleRuleEditorRuntimePromiseDeferred = UtilsService.createPromiseDeferred();
                     if (payload != undefined) {
                         analyticTableId = payload.analyticTableId;
                         context = payload.context;
+                        var measureNames = context.getMeasures();
                         context.getMeasure = function (name) {
                             var measureFields = context.getMeasures();
                             var measure = UtilsService.getItemByVal(measureFields, name, "Name");
@@ -81,16 +98,38 @@
                                 MeasureStyleRules: payload.measureStyles
                             };
                             ctrl.measureStyles.length = 0;
-                            return VR_Analytic_MeasureStyleRuleAPIService.GetMeasureStyleRuleEditorRuntime(filter).then(function (response) {
+                            VR_Analytic_MeasureStyleRuleAPIService.GetMeasureStyleRuleEditorRuntime(filter).then(function (response) {
                                 if (response != undefined && response.MeasureStyleRulesRuntime != undefined) {
-                                    ctrl.measureStyles = response.MeasureStyleRulesRuntime;
+                                    measureStyleRuleEditorRuntime = response;
+                                    console.log(response);
+                                    measureStyleRuleEditorRuntimePromiseDeferred.resolve();
+
                                 }
 
                             });
                         }
+                        else
+                            measureStyleRuleEditorRuntimePromiseDeferred.resolve();
+                        measureStyleRuleEditorRuntimePromiseDeferred.promise.then(function () {
+                            for (var i = 0; i < measureNames.length; i++) {
+                                var measure = measureNames[i];
+                                var detail;
+                                if (measureStyleRuleEditorRuntime != undefined) {
+                                    detail = UtilsService.getItemByVal(measureStyleRuleEditorRuntime.MeasureStyleRulesRuntime, measureNames[i].Name, "MeasureStyleRule.MeasureName");
+                                }
+                                if (detail != undefined) {
+                                    ctrl.measureStyles.push({
+                                        MeasureName: measure.Name,
+                                        Entity: detail
+                                    });
+                                } else {
+                                    ctrl.measureStyles.push({
+                                        MeasureName: measure.Name
+                                    });
+                                }
+                            }
+                        });
                     }
-
-
                 };
                 api.reloadMeasures = function () {
 
@@ -104,32 +143,19 @@
                             }
                         }
                     }
-
                 };
                 api.getData = function () {
                     var measureStyles = [];
                     for (var i = 0; i < ctrl.measureStyles.length; i++) {
                         var measureStyle = ctrl.measureStyles[i];
-                        measureStyles.push(measureStyle.MeasureStyleRule);
+                        if (measureStyle.Entity != undefined) {
+                            measureStyles.push(measureStyle.Entity.MeasureStyleRule);
+
+                        }
                     }
                     return measureStyles;
                 };
                 return api;
-            }
-
-            function defineMenuActions() {
-                ctrl.measureStylesGridMenuActions = [{
-                    name: 'Edit',
-                    clicked: editMeasureStyle
-                }];
-            }
-
-            function editMeasureStyle(measureStyle) {
-                var onMeasureStyleUpdated = function (measureStyleObj) {
-                    ctrl.measureStyles[ctrl.measureStyles.indexOf(measureStyle)] = measureStyleObj;
-                };
-                var selectedMeasure = UtilsService.getItemByVal(getMeasureNames(measureStyle), measureStyle.MeasureName, "Name");
-                Analytic_AnalyticService.editMeasureStyle(measureStyle.MeasureStyleRule, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId);
             }
 
             function getMeasureNames(measureStyle) {
@@ -137,14 +163,12 @@
                 var measureFields = context.getMeasures();
                 for (var x = 0; x < measureFields.length; x++) {
                     var currentMeasureField = measureFields[x];
-                    if ((measureStyle != undefined && measureStyle.MeasureStyleRule.MeasureName == currentMeasureField.Name) || UtilsService.getItemByVal(ctrl.measureStyles, currentMeasureField.Name, "MeasureStyleRule.MeasureName") == undefined) {
+                    if ((measureStyle != undefined && measureStyle.MeasureName == currentMeasureField.Name) || UtilsService.getItemByVal(ctrl.measureStyles, currentMeasureField.Name, "MeasureName") == undefined) {
                         measures.push(currentMeasureField);
                     }
                 }
                 return measures;
             }
-
-
         }
     }
 

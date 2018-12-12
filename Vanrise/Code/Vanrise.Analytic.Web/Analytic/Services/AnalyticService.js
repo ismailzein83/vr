@@ -82,26 +82,28 @@
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/RealTimeWidgetEditor.html', modalParameters, modalSettings);
         }
 
-        function addMeasureStyle(onMeasureStyleAdded, selectedMeasure, context, analyticTableId) {
+        function addMeasureStyle(onMeasureStyleAdded, context, analyticTableId, measureName) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onMeasureStyleAdded = onMeasureStyleAdded;
             };
             var modalParameters = {
-                selectedMeasure: selectedMeasure,
                 context: context,
-                analyticTableId: analyticTableId
+                analyticTableId: analyticTableId,
+                measureName: measureName
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/MeasureStyleEditor.html', modalParameters, modalSettings);
         }
 
-        function editMeasureStyle(measureStyle, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId) {
+        function editMeasureStyle(measureStyle, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId, isEditMode,measureName) {
             var modalParameters = {
                 selectedMeasure: selectedMeasure,
                 measureStyle: measureStyle,
                 context: context,
-                analyticTableId: analyticTableId
+                analyticTableId: analyticTableId,
+                isEditMode: isEditMode,
+                measureName: measureName
             };
 
             var modalSettings = {};

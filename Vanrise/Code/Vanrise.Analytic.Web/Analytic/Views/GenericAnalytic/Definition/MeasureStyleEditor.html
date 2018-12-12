@@ -13,7 +13,7 @@
                             <vr-validator validate="scopeModel.isValidMeasureStyles()">
                                 <vr-datagrid datasource="scopeModel.measureStyles" norowhighlightonclick="true" enabledraggablerow="true"
                                              on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removeMeasureStyle" menuactions="scopeModel.measureStylesGridMenuActions" hidegridmenu>
-                                    <vr-datagridcolumn headertext="'Style Color'" field="" disablesorting="true" widthfactor="5">
+                                    <vr-datagridcolumn headertext="'Level'" field="" disablesorting="true" widthfactor="5">
                                         <vr-columns width="fullrow">
                                             <vr-select datasource="viewScope.scopeModel.styleColors" selectedvalues="dataItem.selectedStyleColor"
                                                        datavaluefield="value" datatextfield="description" isrequired="true" hideremoveicon></vr-select>
