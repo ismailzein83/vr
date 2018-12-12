@@ -19,7 +19,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclarationServices/Templates/OperationDirectionServicesTemplate.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/Templates/OperationDirectionServicesTemplate.html"
 
         };
         function OperatorDirectionServicesCtor($scope, ctrl, $attrs) {
@@ -39,6 +39,13 @@
                     $scope.scopeModel.operatorDeclarationServices.splice(index, 1);
                 };
 
+                $scope.scopeModel.isValid = function () {
+                    console.log($scope.scopeModel.operatorDeclarationServices);
+                    if ($scope.scopeModel.operatorDeclarationServices != undefined && $scope.scopeModel.operatorDeclarationServices.length > 0)
+                        return null;
+                    return "You Should add at least one item.";
+                };
+
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                 };
@@ -50,7 +57,7 @@
                     };
                     operatorDeclarationService.onDirectiveReady = function (api) {
                         operatorDeclarationService.directiveAPI = api;
-                        var setLoader = function (value) { operatorDeclarationService.isLoadingDirective = value };
+                        var setLoader = function (value) { operatorDeclarationService.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, operatorDeclarationService.directiveAPI, undefined, setLoader);
                     };
                     $scope.scopeModel.operatorDeclarationServices.push(operatorDeclarationService);

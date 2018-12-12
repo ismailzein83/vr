@@ -20,7 +20,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclarationServices/MainExtensions/Templates/OperatorDeclarationServiceSMSTemplate.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/MainExtensions/Templates/OperatorDeclarationServiceSMSTemplate.html"
         };
 
         function OperatorDeclarationServiceSMSCtor($scope, ctrl, $attrs) {
@@ -77,7 +77,7 @@
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.RA.MainExtensions.SMS,Retail.RA.MainExtensions",
+                        $type: "Retail.RA.Business.SMS,Retail.RA.Business",
                         TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
                         NumberOfSMSs: $scope.scopeModel.numberOfSMSs,
                         Amount: $scope.scopeModel.amount

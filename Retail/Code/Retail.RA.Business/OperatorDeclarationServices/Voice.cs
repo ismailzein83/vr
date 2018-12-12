@@ -1,7 +1,7 @@
 ﻿using System;
-using Retail.BusinessEntity.Entities;
+using Retail.RA.Entities;
 
-namespace Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices
+namespace Retail.RA.Business
 {
     public class Voice : OperatorDeclarationServiceSettings
     {
@@ -18,6 +18,5 @@ namespace Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices
 
         public Decimal Duration { get; set; }
         public Decimal Amount { get; set; }
-
     }
 }

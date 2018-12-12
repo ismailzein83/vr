@@ -922,10 +922,6 @@
       <Project>{35b73ae6-bbc8-408c-ab01-3bf3574b28e0}</Project>
       <Name>Retail.RA.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Retail.RA.MainExtensions\Retail.RA.MainExtensions.csproj">
-      <Project>{dbd0a58b-94ac-4224-98f7-55b29a09bb55}</Project>
-      <Name>Retail.RA.MainExtensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Retail.RA.Web\Retail.RA.Web.csproj">
       <Project>{93613bfd-1f1c-46e4-a5e0-c14135e3b807}</Project>
       <Name>Retail.RA.Web</Name>

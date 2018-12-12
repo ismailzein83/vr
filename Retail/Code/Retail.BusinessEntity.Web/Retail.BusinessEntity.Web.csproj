@@ -180,7 +180,6 @@
     <Compile Include="Controllers\AccountSynchronizerHandlerController.cs" />
     <Compile Include="Controllers\FinancialAccountController.cs" />
     <Compile Include="Controllers\FinancialAccountDefinitionController.cs" />
-    <Compile Include="Controllers\OperatorDirectionServicesController.cs" />
     <Compile Include="Controllers\OperatorWithLocalController.cs" />
     <Compile Include="Controllers\PackageDefinitionController.cs" />
     <Compile Include="Controllers\OperatorDeclaredInfoController.cs" />
@@ -501,16 +500,6 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\retail-be-retrievefinancialinfostep.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\Templates\RetrieveFinancialInfoStepPreviewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\Templates\RetrieveFinancialInfoStepTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-voice.js" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-sms.js" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\retail-be-operatordeclarationservice-topup.js" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServiceVoiceTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServiceSMSTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\MainExtensions\Templates\OperatorDeclarationServiceTopupTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\retail-be-operatordeclarationservices-customobjectsettings.js" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\retail-be-operatordeclarationservices.js" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\Templates\OperationDirectionServicesTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\OperatorDeclarationServices\Templates\OperatorDirectionServicesCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-traffictype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\MainExtensions\retail-be-packagedefinition-recurcharge-evaluator-onetime.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\MainExtensions\retail-be-packagedefinition-recurcharge-evaluator-periodic.js" />

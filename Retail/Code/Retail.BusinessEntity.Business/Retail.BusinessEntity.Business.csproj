@@ -184,8 +184,6 @@
     <Compile Include="Filters\Invoice\FinancialAccountInvoiceTypeFilter.cs" />
     <Compile Include="FinancialAccount\FinancialAccountDefinitionFilter.cs" />
     <Compile Include="FinancialAccount\FinancialAccountDefinitionFilterContext.cs" />
-    <Compile Include="OperatorDeclarationServicesCustomObjectTypeSettings.cs" />
-    <Compile Include="OperatorDeclarationServicesManager.cs" />
     <Compile Include="PackageUsageVolume\AccountPackageUsageVolumeManager.cs" />
     <Compile Include="PackageUsageVolume\PackageUsageVolumeCombinationManager.cs" />
     <Compile Include="PackageUsageVolume\PackageUsageVolumeGetPackageItemsInfoContext.cs" />

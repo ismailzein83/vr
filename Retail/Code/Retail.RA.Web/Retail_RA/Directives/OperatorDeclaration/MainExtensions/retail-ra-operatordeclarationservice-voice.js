@@ -20,7 +20,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclarationServices/MainExtensions/Templates/OperatorDeclarationServiceVoiceTemplate.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/MainExtensions/Templates/OperatorDeclarationServiceVoiceTemplate.html"
         };
 
         function OperatorDeclarationServiceVoiceCtor($scope, ctrl, $attrs) {
@@ -81,7 +81,7 @@
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.RA.MainExtensions.Voice,Retail.RA.MainExtensions",
+                        $type: "Retail.RA.Business.Voice,Retail.RA.Business",
                         TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
                         NumberOfCalls: $scope.scopeModel.numberOfCalls,
                         Duration: $scope.scopeModel.duration,

@@ -13,6 +13,12 @@ namespace Retail.RA.Business
         static Guid beDefinitionId = new Guid("74A31C7E-E38C-46DE-960C-97A38A7E7107");
 
         #region Public Methods
+
+        public PeriodDefinition GetPeriodDefinition(int periodDefinitionId)
+        {
+            var cachedPeriodDefinitions = GetCachedPeriodDefinitions();
+            return cachedPeriodDefinitions.GetRecord(periodDefinitionId);
+        }
         public int? GetPeriodDefinitionIdByDay(DateTime day)
         {
             var cachedPeriodDefinition = GetCachedPeriodDefinitions();
