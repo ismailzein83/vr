@@ -32,6 +32,7 @@
             var limitResult;
             var dateTimeFieldValue;
             var analyticReportSource;
+            var reportName;
 
             var gridAPI;
 
@@ -53,6 +54,7 @@
                         subviewDefinition = payload.subviewDefinition;
                         parentDataRecordTypeId = payload.parentDataRecordTypeId;
                         limitResult = payload.limitResult;
+                        reportName = payload.ReportName
                     }
 
                     var loadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -114,6 +116,7 @@
                     LimitResult: limitResult,
                     FromTime: dateTimeFieldValue,
                     ToTime: dateTimeFieldValue,
+                    ReportName: reportName
                     //Direction: $scope.selectedOrderDirection.value,
                     //sortDirection: $scope.selectedOrderDirection.sortDirection,
                 };

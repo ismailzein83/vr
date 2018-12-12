@@ -304,7 +304,8 @@
                             subviewDefinition: subviewDefinition,
                             dataRecordStorageLog: dataRecordStorageLog,
                             parentDataRecordTypeId: parentDataRecordTypeId,
-                            limitResult: limitResult
+                            limitResult: limitResult,
+                            ReportName: subviewDefinition.Name
                         };
 
                         return dataRecordStorageLog.dataRecordStorageLogSubviewGridAPI.load(payload);
