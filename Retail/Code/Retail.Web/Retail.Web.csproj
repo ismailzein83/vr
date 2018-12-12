@@ -253,6 +253,9 @@
     <Reference Include="Vanrise.Analytic.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Analytic.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Analytic.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.SQL.dll</HintPath>
     </Reference>
