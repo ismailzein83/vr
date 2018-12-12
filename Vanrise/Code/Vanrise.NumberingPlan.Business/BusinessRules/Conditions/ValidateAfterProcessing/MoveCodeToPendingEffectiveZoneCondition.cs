@@ -31,7 +31,7 @@ namespace Vanrise.NumberingPlan.Business
 
             if (invalidCodes.Count > 0)
             {
-                context.Message = string.Format("Can not add or move code(s) ({0}) to zone '{1}' which is pending effective in {2}. Adding or moving code to this zone must be on {2} or after.", string.Join(", ", invalidCodes), zoneToProcess.ZoneName, zoneToProcess.BED);
+                context.Message = string.Format("Can not add or move code(s) ({0}) to zone '{1}' which is pending effective in {2}.", string.Join(", ", invalidCodes), zoneToProcess.ZoneName, zoneToProcess.BED);
                 return false;
             }
             return true;
