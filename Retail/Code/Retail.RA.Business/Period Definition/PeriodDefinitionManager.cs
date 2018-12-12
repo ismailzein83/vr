@@ -85,6 +85,24 @@ namespace Retail.RA.Business
                 return periodDefinitionById;
             });
         }
+        public bool IsPeriodOverlapping(DateTime bed, DateTime eed)
+        {
+            var cacehdPeriodDefintions = GetCachedPeriodDefinitions();
+            List<PeriodDefinition> overlappingPeriodDefinitions = new List<PeriodDefinition>();
+            if (cacehdPeriodDefintions != null)
+            {
+                var periodDefinitions = cacehdPeriodDefintions.Values;
+                periodDefinitions.ThrowIfNull("periodDefinitions");
+                foreach (var periodDefinition in periodDefinitions)
+                {
+                    if (periodDefinition.ToDate > bed && eed > periodDefinition.FromDate && periodDefinition.FromDate != periodDefinition.ToDate)
+                        overlappingPeriodDefinitions.Add(periodDefinition);
+                }
+            }
+            if (overlappingPeriodDefinitions.Count() > 0)
+                return true;
+            return false;
+        }
 
         #endregion
     }
