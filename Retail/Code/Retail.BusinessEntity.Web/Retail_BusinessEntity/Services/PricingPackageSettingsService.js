@@ -20,7 +20,7 @@
                 modalScope.onPricingPackageSettingsAdded = onPricingPackageSettingsAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageExtendedSettings/PricingPackageSettingsEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageExtendedSettings/PricingPackageSettingsEditor.html', parameters, modalSettings);
         }
 
         function editPricingPackageSetting(pricingPackageSetting, onPricingPackageSettingsUpdated, context) {
@@ -36,7 +36,7 @@
                 modalScope.onPricingPackageSettingsUpdated = onPricingPackageSettingsUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Package/PackageExtendedSettings/PricingPackageSettingsEditor.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageExtendedSettings/PricingPackageSettingsEditor.html', parameters, modalSettings);
         }
 
 

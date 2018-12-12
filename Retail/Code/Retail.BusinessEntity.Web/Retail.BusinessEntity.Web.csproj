@@ -819,6 +819,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountSynchronizerHandlerAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\VolumePackageAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\VRAccountBalanceAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\FinancialAccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\PortalAccountService.js" />
@@ -893,10 +894,10 @@
     <Content Include="Retail_BusinessEntity\Views\Account\ChangeStatusActionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\FinancialAccount\FinancialAccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\FinancialAccount\FinancialAccountEditorController.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\Templates\VolumePackageDefinitionSettingsEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\Templates\VolumePackageDefinitionSettingsEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\VolumePackageDefinitionSettingsEditorController.js" />
-    <Content Include="Retail_BusinessEntity\Views\Package\PackageExtendedSettings\VolumePackageSettingsEditor.html" />
-    <Content Include="Retail_BusinessEntity\Views\Package\PackageExtendedSettings\VolumePackageSettingsEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageExtendedSettings\VolumePackageSettingsEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageExtendedSettings\VolumePackageSettingsEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyManagement.html" />
@@ -935,8 +936,8 @@
     <Content Include="Retail_BusinessEntity\Views\CreditClass\CreditClassEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageEditorController.js" />
-    <Content Include="Retail_BusinessEntity\Views\Package\PackageExtendedSettings\PricingPackageSettingsEditor.html" />
-    <Content Include="Retail_BusinessEntity\Views\Package\PackageExtendedSettings\PricingPackageSettingsEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageExtendedSettings\PricingPackageSettingsEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageExtendedSettings\PricingPackageSettingsEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageItemEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageItemEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagement.html" />
