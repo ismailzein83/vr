@@ -7,7 +7,7 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
 {
-    public class SendFTPActFion : InvoiceActionSettings
+    public class SendFTPAction : InvoiceActionSettings
     {
         public override Guid ConfigId { get { return new Guid("42550809-9516-4A0E-ACE9-166B1A7CFE71"); } }
         public override string ActionTypeName
