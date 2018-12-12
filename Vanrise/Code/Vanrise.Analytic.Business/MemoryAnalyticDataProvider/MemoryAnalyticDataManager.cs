@@ -23,12 +23,14 @@ namespace Vanrise.Analytic.Business
                 _analyticTableQueryContext = value;
             }
         }
-        public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(AnalyticQuery query, out HashSet<string> includedSQLDimensions)
+
+        public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(IAnalyticDataManagerGetAnalyticRecordsContext context)
         {
-            includedSQLDimensions = GetIncludedSQLDimensionNames(query.DimensionFields, query.MeasureFields, query.Filters, query.FilterGroup);
+            var query = context.Query;
+            var includedSQLDimensions = context.AllQueryDBDimensions;
             var includedSQLDimensionsList = includedSQLDimensions.ToList();
             List<AnalyticDimension> dimensionConfigs = includedSQLDimensions.Select(dimName => GetDimensionConfig(dimName)).ToList();
-            HashSet<string> includedSQLAggregateNames = GetIncludedSQLAggregateNames(query.MeasureFields);
+            HashSet<string> includedSQLAggregateNames = context.AllQueryDBAggregates;
             List<AnalyticAggregate> aggregateConfigs = includedSQLAggregateNames.Select(aggName => GetAggregateConfig(aggName)).ToList();
             List<DBAnalyticRecord> groupedRecords = new List<DBAnalyticRecord>();
             List<string> neededFieldNames = new List<string>();
@@ -58,7 +60,7 @@ namespace Vanrise.Analytic.Business
                     }
                     else
                     {
-                        stagingGroupedRecord = new StagingGroupedMemoryRecord { Time = rawRecord.Time, GroupingValuesByDimensionName = groupingValuesByDimName, AggFieldValues = new Dictionary<string, List<dynamic>>() };                        
+                        stagingGroupedRecord = new StagingGroupedMemoryRecord { Time = rawRecord.Time, GroupingValuesByDimensionName = groupingValuesByDimName, AggFieldValues = new Dictionary<string, List<dynamic>>() };
                         foreach (var aggConfig in aggregateConfigs)
                         {
                             var aggFieldValue = GetRawRecordFieldValueFromAggregate(rawRecord, aggConfig);
@@ -96,7 +98,7 @@ namespace Vanrise.Analytic.Business
             }
             return groupedRecords;
         }
-
+        
         private dynamic GetRawRecordFieldValueFromDimension(RawMemoryRecord rawRecord, AnalyticDimension dimensionConfig)
         {
             return GetRawRecordFieldValue(rawRecord, dimensionConfig.Config.SQLExpression);
@@ -118,77 +120,7 @@ namespace Vanrise.Analytic.Business
         public abstract List<RawMemoryRecord> GetRawRecords(AnalyticQuery query, List<string> neededFieldNames);
 
         #region Private Methods
-
-        private HashSet<string> GetIncludedSQLDimensionNames(List<string> requestedDimensionNames, List<string> measureNames, List<DimensionFilter> dimensionFilters, RecordFilterGroup filterGroup)
-        {
-            HashSet<string> sqlDimensions = new HashSet<string>();
-            if (requestedDimensionNames != null)
-            {
-                foreach (var dimensionName in requestedDimensionNames)
-                {
-                    AddSQLDimensions(dimensionName, sqlDimensions);
-                }
-            }
-            if (measureNames != null)
-            {
-                foreach (var measureName in measureNames)
-                {
-                    var measureConfig = GetMeasureConfig(measureName);
-                    if (measureConfig.Config.DependentDimensions != null)
-                    {
-                        foreach (var measureDepDim in measureConfig.Config.DependentDimensions)
-                        {
-                            AddSQLDimensions(measureDepDim, sqlDimensions);
-                        }
-                    }
-                }
-            }
-            var filterDimensions = GetDimensionNamesFromQueryFilters();
-            if (filterDimensions != null)
-            {
-                foreach (var filterDimension in filterDimensions)
-                {
-                    AddSQLDimensions(filterDimension, sqlDimensions);
-                }
-            }
-            //TODO: add dimensions from FilterGroup
-            return sqlDimensions;
-        }
-
-        private void AddSQLDimensions(string dimensionName, HashSet<string> sqlDimensionNames)
-        {
-            var dimensionConfig = GetDimensionConfig(dimensionName);
-            if (!String.IsNullOrEmpty(dimensionConfig.Config.SQLExpression))
-                sqlDimensionNames.Add(dimensionConfig.Name);
-            if (dimensionConfig.Config.DependentDimensions != null)
-            {
-                foreach (var dependentDimensionName in dimensionConfig.Config.DependentDimensions)
-                {
-                    if (!sqlDimensionNames.Contains(dependentDimensionName))
-                    {
-                        AddSQLDimensions(dependentDimensionName, sqlDimensionNames);
-                    }
-                }
-            }
-        }
-
-        private HashSet<string> GetIncludedSQLAggregateNames(List<string> measureNames)
-        {
-            HashSet<string> aggregateNames = new HashSet<string>();
-            foreach (var measureName in measureNames)
-            {
-                var measureConfig = GetMeasureConfig(measureName);
-                if (measureConfig.Config.DependentAggregateNames != null)
-                {
-                    foreach (var aggName in measureConfig.Config.DependentAggregateNames)
-                    {
-                        aggregateNames.Add(aggName);
-                    }
-                }
-            }
-            return aggregateNames;
-        }
-
+        
         AnalyticTable GetTable()
         {
             if (_analyticTableQueryContext == null)

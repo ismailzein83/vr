@@ -17,7 +17,16 @@ namespace Vanrise.Analytic.Entities
 
     public interface IAnalyticDataManager
     {
-        IEnumerable<DBAnalyticRecord> GetAnalyticRecords(AnalyticQuery query, out  HashSet<string> includedSQLDimensions);
+        IEnumerable<DBAnalyticRecord> GetAnalyticRecords(IAnalyticDataManagerGetAnalyticRecordsContext context);
+    }
+
+    public interface IAnalyticDataManagerGetAnalyticRecordsContext
+    {
+        AnalyticQuery Query { get; }
+
+        HashSet<string> AllQueryDBDimensions { get; }
+
+        HashSet<string> AllQueryDBAggregates { get; }
     }
 
     public interface IGetRemoteAnalyticDataProviderContext

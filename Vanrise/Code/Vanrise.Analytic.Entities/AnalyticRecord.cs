@@ -81,6 +81,16 @@ namespace Vanrise.Analytic.Entities
         AnalyticQuery Query { get; }
         AnalyticTable GetTable();
 
+        Dictionary<string, AnalyticDimension> Dimensions { get; }
+
+        Dictionary<string, AnalyticAggregate> Aggregates { get; }
+
+        Dictionary<string, AnalyticMeasure> Measures { get; }
+
+        Dictionary<string, AnalyticJoin> Joins { get; }
+
+        Dictionary<string, AnalyticMeasureExternalSource> MeasureExternalSources { get; }
+
         AnalyticDimension GetDimensionConfig(string dimensionName);
 
         AnalyticAggregate GetAggregateConfig(string aggregateName);
@@ -93,12 +103,14 @@ namespace Vanrise.Analytic.Entities
 
         AnalyticMeasureExternalSourceResult GetMeasureExternalSourceResult(string sourceName);
 
-        DateTime FromTime{ get; }
+        DateTime FromTime { get; }
 
         DateTime ToTime { get; }
 
         TimeGroupingUnit? TimeGroupingUnit { get; }
 
         int? TopRecords { get; }
+
+        T GetOrCreateCachedObjectBasedOnItemConfig<T>(object cacheName, Func<T> createObject);
     }
 }

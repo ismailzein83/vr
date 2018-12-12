@@ -13,10 +13,52 @@ namespace Vanrise.Analytic.Business
         AnalyticQuery _query;
         AnalyticTable _table;
         Dictionary<string, AnalyticDimension> _dimensions;
+
+        public Dictionary<string, AnalyticDimension> Dimensions
+        {
+            get
+            {
+                return _dimensions;
+            }
+        }
+
         Dictionary<string, AnalyticAggregate> _aggregates;
+
+        public Dictionary<string, AnalyticAggregate> Aggregates
+        {
+            get
+            {
+                return _aggregates;
+            }
+        }
+
         Dictionary<string, AnalyticMeasure> _measures;
+        public Dictionary<string, AnalyticMeasure> Measures
+        {
+            get
+            {
+                return _measures;
+            }
+        }
+
         Dictionary<string, AnalyticJoin> _joins;
+        public Dictionary<string, AnalyticJoin> Joins
+        {
+            get
+            {
+                return _joins;
+            }
+        }
+
         Dictionary<string, AnalyticMeasureExternalSource> _measureExternalSources;
+        public Dictionary<string, AnalyticMeasureExternalSource> MeasureExternalSources
+        {
+            get
+            {
+                return _measureExternalSources;
+            }
+        }
+
         Dictionary<string, AnalyticMeasureExternalSourceResult> _measureExternalSourceResults;
         List<string> _dimensionNamesFromQueryFilters;
         DateTime _queryToTime;
@@ -82,7 +124,7 @@ namespace Vanrise.Analytic.Business
             if (!_dimensions.TryGetValue(dimensionName, out dimension))
                 throw new NullReferenceException(String.Format("dimension '{0}'", dimensionName));
             return dimension;
-        }
+        }         
 
         public AnalyticAggregate GetAggregateConfig(string aggregateName)
         {
@@ -187,6 +229,11 @@ namespace Vanrise.Analytic.Business
                 _measureExternalSourceResults.Add(sourceName, rslt);
             }
             return rslt;
+        }
+
+        public T GetOrCreateCachedObjectBasedOnItemConfig<T>(object cacheName, Func<T> createObject)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AnalyticItemConfigManager.CacheManager>().GetOrCreateObject(cacheName, createObject);
         }
 
         #region Private Classes

@@ -52,8 +52,13 @@
     <Compile Include="RDBDataStoreSettings.cs" />
     <Compile Include="RDBRecordStorageDataManager.cs" />
     <Compile Include="RDBTempStorageInformation.cs" />
+    <Compile Include="RecordStorageRDBAnalyticDataProviderTable.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Analytic.Data.RDB\Vanrise.Analytic.Data.RDB.csproj">
+      <Project>{cbd3d9c6-7fb8-40c2-b895-389a1b97ca78}</Project>
+      <Name>Vanrise.Analytic.Data.RDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
       <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
       <Name>Vanrise.Caching</Name>

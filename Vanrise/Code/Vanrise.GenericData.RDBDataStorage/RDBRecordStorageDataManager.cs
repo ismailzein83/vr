@@ -368,6 +368,11 @@ namespace Vanrise.GenericData.RDBDataStorage
             return queryContext.ExecuteScalar().IntValue;
         }
 
+        internal string GetMainStorageRDBTableName()
+        {
+            return GetMainStorageRegistrationInfo().RDBTableUniqueName;
+        }
+
         #endregion
 
         #region Private Methods

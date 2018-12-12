@@ -38,15 +38,17 @@ namespace Vanrise.Analytic.Data.Postgres
             };
 
         }
-        public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(AnalyticQuery query, out HashSet<string> includedSQLDimensions)
+
+        public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(IAnalyticDataManagerGetAnalyticRecordsContext context)
         {
-            HashSet<string> includedSQLDimensions_Local;
-            HashSet<string> includedSQLAggregates;
+            var query = context.Query;
+            HashSet<string> includedSQLDimensions = context.AllQueryDBDimensions;
+            HashSet<string> includedSQLAggregates = context.AllQueryDBAggregates;
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-            string querySQL = BuildAnalyticQuery(query, out includedSQLDimensions_Local, out includedSQLAggregates, parameterValues);
+            string querySQL = BuildAnalyticQuery(query, includedSQLDimensions, includedSQLAggregates, parameterValues);
 
 
-            List<DBAnalyticRecord> dbRecords = GetItemsText(querySQL, (reader) => SQLRecordMapper(reader, query.TimeGroupingUnit, includedSQLDimensions_Local, includedSQLAggregates), (cmd) =>
+            List<DBAnalyticRecord> dbRecords = GetItemsText(querySQL, (reader) => SQLRecordMapper(reader, query.TimeGroupingUnit, includedSQLDimensions, includedSQLAggregates), (cmd) =>
             {
                 foreach (var prm in parameterValues)
                 {
@@ -55,25 +57,22 @@ namespace Vanrise.Analytic.Data.Postgres
                 if (query.CurrencyId.HasValue)
                     cmd.Parameters.Add(new Npgsql.NpgsqlParameter("@Currency", query.CurrencyId.Value));
             });
-            includedSQLDimensions = includedSQLDimensions_Local;
             return dbRecords;
         }
-
+        
         #endregion
 
         #region Private Methods
 
         #region Query Builder
 
-        string BuildAnalyticQuery(AnalyticQuery query, out HashSet<string> includedSQLDimensionNames, out HashSet<string> includedSQLAggregateNames, Dictionary<string, Object> parameterValues)
+        string BuildAnalyticQuery(AnalyticQuery query, HashSet<string> includedSQLDimensionNames, HashSet<string> includedSQLAggregateNames, Dictionary<string, Object> parameterValues)
         {
             StringBuilder selectPartBuilder = new StringBuilder();
             HashSet<string> includeJoinConfigNames = new HashSet<string>();
-            includedSQLDimensionNames = GetIncludedSQLDimensionNames(query.DimensionFields, query.MeasureFields, query.Filters, query.FilterGroup);
             int parameterIndex = 0;
             string groupByPart = null;
             groupByPart = BuildQueryGrouping(selectPartBuilder, includedSQLDimensionNames, query.TimeGroupingUnit, includeJoinConfigNames);
-            includedSQLAggregateNames = GetIncludedSQLAggregateNames(query.MeasureFields);
             HashSet<string> joinStatements = new HashSet<string>();
             var toTime = query.ToTime.HasValue ? query.ToTime.Value : DateTime.Now;
             BuildQueryAggregates(selectPartBuilder, query.CurrencyId, includedSQLAggregateNames, includeJoinConfigNames, joinStatements, query.FromTime, toTime, parameterValues, ref parameterIndex);
@@ -89,77 +88,7 @@ namespace Vanrise.Analytic.Data.Postgres
 
             return queryBuilder.ToString();
         }
-
-        private HashSet<string> GetIncludedSQLDimensionNames(List<string> requestedDimensionNames, List<string> measureNames, List<DimensionFilter> dimensionFilters, RecordFilterGroup filterGroup)
-        {
-            HashSet<string> sqlDimensions = new HashSet<string>();
-            if (requestedDimensionNames != null)
-            {
-                foreach (var dimensionName in requestedDimensionNames)
-                {
-                    AddSQLDimensions(dimensionName, sqlDimensions);
-                }
-            }
-            if (measureNames != null)
-            {
-                foreach (var measureName in measureNames)
-                {
-                    var measureConfig = GetMeasureConfig(measureName);
-                    if (measureConfig.Config.DependentDimensions != null)
-                    {
-                        foreach (var measureDepDim in measureConfig.Config.DependentDimensions)
-                        {
-                            AddSQLDimensions(measureDepDim, sqlDimensions);
-                        }
-                    }
-                }
-            }
-            var filterDimensions = GetDimensionNamesFromQueryFilters();
-            if (filterDimensions != null)
-            {
-                foreach (var filterDimension in filterDimensions)
-                {
-                    AddSQLDimensions(filterDimension, sqlDimensions);
-                }
-            }
-            //TODO: add dimensions from FilterGroup
-            return sqlDimensions;
-        }
-
-        private void AddSQLDimensions(string dimensionName, HashSet<string> sqlDimensionNames)
-        {
-            var dimensionConfig = GetDimensionConfig(dimensionName);
-            if (!String.IsNullOrEmpty(dimensionConfig.Config.SQLExpression))
-                sqlDimensionNames.Add(dimensionConfig.Name);
-            if (dimensionConfig.Config.DependentDimensions != null)
-            {
-                foreach (var dependentDimensionName in dimensionConfig.Config.DependentDimensions)
-                {
-                    if (!sqlDimensionNames.Contains(dependentDimensionName))
-                    {
-                        AddSQLDimensions(dependentDimensionName, sqlDimensionNames);
-                    }
-                }
-            }
-        }
-
-        private HashSet<string> GetIncludedSQLAggregateNames(List<string> measureNames)
-        {
-            HashSet<string> aggregateNames = new HashSet<string>();
-            foreach (var measureName in measureNames)
-            {
-                var measureConfig = GetMeasureConfig(measureName);
-                if (measureConfig.Config.DependentAggregateNames != null)
-                {
-                    foreach (var aggName in measureConfig.Config.DependentAggregateNames)
-                    {
-                        aggregateNames.Add(aggName);
-                    }
-                }
-            }
-            return aggregateNames;
-        }
-
+        
         private StringBuilder BuildGlobalQuery(DateTime fromTime, DateTime toTime, Dictionary<string, Object> parameterValues, string selectPartBuilder, string joinPartBuilder, string filterPartBuilder, string groupByPartBuilder, string recordFilter, ref int parameterIndex)
         {
             List<TimeRangeTableName> timePeriodTableNames = GetTimeRangeTableNames(fromTime, toTime);
