@@ -39,7 +39,8 @@ namespace Vanrise.Invoice.Entities
         SetInvoiceDeleted = 5,
         Download = 6,
         CustomActionType = 7,
-        Approve = 8
+        Approve = 8,
+        SendFTP=9
     }
 
     public interface IInvoiceActionSettingsCheckAccessContext

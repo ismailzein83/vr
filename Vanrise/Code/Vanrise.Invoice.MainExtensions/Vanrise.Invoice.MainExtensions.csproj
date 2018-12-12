@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -89,6 +90,7 @@
     <Compile Include="InvoiceActionSettings\EmailAction\InvoiceFileConvertor\InvoiceRDLCFileConverter.cs" />
     <Compile Include="Convertors\InvoiceToVRObjectConvertor.cs" />
     <Compile Include="InvoiceActionSettings\DownloadFileInvoiceAction.cs" />
+    <Compile Include="InvoiceActionSettings\SendFTPAction.cs" />
     <Compile Include="InvoiceActionSettings\SetInvoiceDeletedAction.cs" />
     <Compile Include="InvoiceDataSourceSettings\ItemGroupingDataSourceSettings.cs" />
     <Compile Include="InvoiceDataSourceSettings\LastInvoicesDataSourceSettings.cs" />
