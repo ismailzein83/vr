@@ -12,6 +12,7 @@ app.directive('vrModalcontent', ['VRLocalizationService', 'MobileService', funct
             tElement.attr['aria-hidden'] = "true";
             var resClass = "";
             var classmodal = "";
+            var titleShowValue= 'ng-show="title"'
             if (tAttrs.resclass != undefined)
                 resClass = 'ng-class="' + tAttrs.resclass + '"';
             else {
@@ -43,8 +44,12 @@ app.directive('vrModalcontent', ['VRLocalizationService', 'MobileService', funct
             }
             var modalCssClass = "";
             if (MobileService.isMobile() ) {
-                if (tAttrs.ismenu != undefined)
+                if (tAttrs.ismenu != undefined){
+                    titleShowValue = "";
                     modalCssClass = "centered-model";
+                }
+                else if  (tAttrs.textboxmultiple != undefined)
+                    titleShowValue = "";
                 else
                     modalCssClass = "full-view";
             }
@@ -61,7 +66,7 @@ app.directive('vrModalcontent', ['VRLocalizationService', 'MobileService', funct
             }
                var newElement = '<div class="modal-dialog ' + classmodal  +' '+' '+ modalCssClass +'" ' + resClass + ' style="' + style + '" >'
                                   + '  <div class="modal-content" >'
-                                    + '    <div class="modal-header vr-modal-header" ng-show="title">'
+                                    + '    <div class="modal-header vr-modal-header" ' + titleShowValue + '>'
                                       + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">&times;</span></button>'
                                         + '    <h5 class="modal-title" ng-bind="title"></h5>'
                                         + '</div>'

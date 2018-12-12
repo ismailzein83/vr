@@ -6,6 +6,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	    var paddingDirection = VRLocalizationService.isLocalizationRTL() ? "'padding-left'" : "'padding-right'";
 	    var normaltextDirection = VRLocalizationService.isLocalizationRTL() ? "right" : "left";
 	    var numbertextDirection = "right";
+	    var isMobileView = MobileService.isMobile();
 	    var columnVisibilities = [];
 	    var baseColumnVisibilities = [];
 	    var directiveDefinitionObject = {
@@ -25,7 +26,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            norowhighlightonhover: '=',
 	            gridmenuactions: '=',
 	            margin: '=',
-	            dragdropsetting: '='
+	            dragdropsetting: '=',
+	            mobilegridlayout: '='
 	        },
 	        controller: function ($scope, $element, $attrs) {
 	            columnVisibilities = [];
@@ -38,7 +40,11 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            });
 	            var ctrl = this;
 	            ctrl.isMobile = MobileService.isMobile();
-	            ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
+	            ctrl.mobileGridView = ctrl.mobilegridlayout != undefined ? ctrl.mobilegridlayout : false;
+	            ctrl.mobileSwitchBtn = true;
+	            ctrl.itemsSortable = {
+	                handle: '.handeldrag', animation: 150
+	            };
 	            if (ctrl.dragdropsetting != undefined && typeof (ctrl.dragdropsetting) == 'object') {
 	                ctrl.itemsSortable.group = {
 	                    name: ctrl.dragdropsetting.groupCorrelation.getGroupName(),
@@ -83,6 +89,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            var pagingType;
 	            if ($attrs.pagingtype != undefined)
 	                pagingType = $scope.$parent.$eval($attrs.pagingtype);
+	            if (ctrl.isMobile)
+	                pagingType = "PagingOnScroll";
 
 	            //var defaultSortDirection;
 	            //if ($attrs.defaultsortdirection != undefined)
@@ -130,9 +138,13 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    setTimeout(function () {
 	                        var selfHeight = $(self).height();
 	                        var selfOffset = $(self).offset();
-	                        $(menu).css({ display: 'block' });
+	                        $(menu).css({
+	                            display: 'block'
+	                        });
 	                        $(menu).addClass("open-grid-menu");
-	                        $(menu).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + 5, left: 'auto' });
+	                        $(menu).css({
+	                            position: 'fixed', top: selfOffset.top - $(window).scrollTop() + 5, left: 'auto'
+	                        });
 	                        ctrl.showgmenu = true;
 	                        $scope.$root.$digest();
 	                    }, 1);
@@ -159,7 +171,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	            function hideGridColumnsMenu() {
 	                var menu = $('.vr-grid-menu');
-	                menu.css({ display: 'none' });
+	                menu.css({
+	                    display: 'none'
+	                });
 	                $('out-div').removeClass("open-grid-menu");
 	                if (ctrl.showgmenu == true) {
 	                    ctrl.showgmenu = false;
@@ -169,7 +183,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            };
 	            ctrl.hidePagingInfo = ($attrs.hidepaginginfo != undefined);
 	            ctrl.rotateHeader = true;
-	            ctrl.cellLayoutStyle = $attrs.normalcell != undefined ? { 'white-space': 'normal' } : { 'white-space': 'pre' };
+	            ctrl.cellLayoutStyle = $attrs.normalcell != undefined ? {
+	                'white-space': 'normal'
+	            } : { 'white-space': 'pre' };
 
 	            if ($attrs.rotate == undefined) {
 	                ctrl.rotateHeader = false;
@@ -231,8 +247,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 			+ ''
 			+ '</div>';
 
+	    var onSortClick = isMobileView ? "" : "ng-click=\"colDef.onSort()\"";
 
-	    var headerTemplate = '<div ng-click="colDef.onSort()" class="vr-datagrid-header-cell" >'
+	    var headerTemplate = '<div ' + onSortClick + ' class="vr-datagrid-header-cell" >'
 			+ ' <div col-index="renderIndex" style="width:100%">'
 			+ '   <div class="vr-datagrid-celltext" style="overflow: hidden;"  ng-class="::colDef.textAlignmentClass" title="{{colDef.description}}" >'
 			+ '    <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
@@ -302,7 +319,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	            lastAddedColumnId++;
 	            colDef.columnId = lastAddedColumnId;
-
+	            colDef.filter = getColumnFilter(colDef);
 	            colDef.textAlignmentClass = colDef.type == "Number" ? 'vr-grid-cell-number' : '';
 	            if (col.onSortChanged == undefined) {
 	                col.onSortChanged = function (colDef_internal, sortDirection_internal) {
@@ -399,39 +416,20 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	        }
 
 	        function getCellTemplateWithFilter(template, colDef) {
-	            if (colDef.type == "Number") {
-	                var numberPrecision = UISettingsService.getNormalPrecision() || 2;
-	                if (colDef.numberPrecision != undefined) {
-	                    if (colDef.numberPrecision == "NoDecimal")
-	                        numberPrecision = 0;
-	                    else if (colDef.numberPrecision == "LongPrecision")
-	                        numberPrecision = UISettingsService.getUIParameterValue('LongPrecision') || 4;
-	                    else if (Number.isInteger(colDef.numberPrecision))
-	                        numberPrecision = parseInt(colDef.numberPrecision);
-	                }
-	                template = template.replace("#TEXTALIGN#", numbertextDirection + ";" + paddingDirection + ":2px");
-	                template = UtilsService.replaceAll(template, "#CELLFILTER#", "| vrtextOrNumber:" + numberPrecision);
-	                template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
-	            }
-	            else if (colDef.type == "Progress" || colDef.type == "MultiProgress") {
+
+	            if (colDef.type == "Progress" || colDef.type == "MultiProgress") {
 	                template = template.replace("#TEXTALIGN#", "center;position:absolute;color:#666;");
 	                template = UtilsService.replaceAll(template, "#CELLFILTER#", "| vrtextOrNumber:1");
 	                template = UtilsService.replaceAll(template, "#PERCENTAGE#", "%");
 	            }
 	            else {
+	                if (colDef.type == "Number") {
+	                    template = template.replace("#TEXTALIGN#", numbertextDirection + ";" + paddingDirection + ":2px");
+	                    template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
+	                }
 	                template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
 	                template = template.replace("#TEXTALIGN#", normaltextDirection);
-	                if (colDef.type == "LongDatetime")
-	                    template = UtilsService.replaceAll(template, "#CELLFILTER#", " | date:'yyyy-MM-dd HH:mm:ss'");
-	                else if (colDef.type == "Datetime")
-	                    template = UtilsService.replaceAll(template, "#CELLFILTER#", " | date:'yyyy-MM-dd HH:mm'");
-	                else if (colDef.type == "Date")
-	                    template = UtilsService.replaceAll(template, "#CELLFILTER#", " | date:'yyyy-MM-dd'");
-	                else if (colDef.type == "Yearmonth")
-	                    template = UtilsService.replaceAll(template, "#CELLFILTER#", " | date:'yyyy-MM'");
-	                else
-	                    template = UtilsService.replaceAll(template, "#CELLFILTER#", "");
-
+	                template = UtilsService.replaceAll(template, "#CELLFILTER#", colDef.filter);
 	            }
 	            return template;
 	        }
@@ -523,17 +521,21 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                            { colFixWidth = 65 }
 	                            else if (col.numberPrecision == "LongPrecision")
 	                            { colFixWidth = 65 }
-	                            else { colFixWidth = 65 }
+	                            else {
+	                                colFixWidth = 65
+	                            }
 	                        }
 	                        else {
 	                            if (col.type == "LongDatetime")
 	                            { colFixWidth = 120 }
 	                            else if (col.type == "Datetime")
 	                            { colFixWidth = 100 }
-	                            else if (col.type == "Date")
-	                            { colFixWidth = 80 }
-	                            else if (col.type == "Yearmonth")
-	                            { colFixWidth = 50 }
+	                            else if (col.type == "Date") {
+	                                colFixWidth = 80
+	                            }
+	                            else if (col.type == "Yearmonth") {
+	                                colFixWidth = 50
+	                            }
 	                        }
 	                        valueWidth = colFixWidth;
 	                    }
@@ -578,7 +580,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	        function initializeController() {
 	            ctrl.updateItems = [];
 	            ctrl.columnDefs = [];
-	            ctrl.gridStyle = {};
+	            ctrl.gridStyle = {
+	            };
 	            if (ctrl.maxheight != undefined && ctrl.maxheight != '') {
 	                setMaxHeight(ctrl.maxheight);
 	            }
@@ -828,7 +831,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                var dataSourceLength = ctrl.isMainItemsShown ? ctrl.datasource.length : ctrl.updateItems.length;
 	                mh = mh && parseInt(mh.substring(0, mh.length - 1)) || 0;
 	                if (dataSourceLength * 25 < mh || dataSourceLength == 0 || mh == 0) {
-	                    $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
+	                    $(div).css({
+	                        "overflow-y": 'auto', "overflow-x": 'hidden'
+	                    });
 
 	                    if (VRLocalizationService.isLocalizationRTL())
 	                        ctrl.headerStyle = {
@@ -840,7 +845,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                        };
 	                }
 	                else {
-	                    $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
+	                    $(div).css({
+	                        "overflow-y": 'auto', "overflow-x": 'hidden'
+	                    });
 	                    if (VRLocalizationService.isLocalizationRTL())
 	                        ctrl.headerStyle = {
 	                            "padding-left": getScrollbarWidth() + "px"
@@ -890,6 +897,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            function onDataSourceChanged(newDataSource, oldNames) {
 	                for (var i = 0; i < newDataSource.length; i++) {
 	                    var dataItem = newDataSource[i];
+	                    dataItem.rowIndex = i;
 	                    if (!dataItem.isColumnValuesFilled) {
 	                        for (var j = 0; j < ctrl.columnDefs.length; j++) {
 	                            var colDef = ctrl.columnDefs[j];
@@ -925,11 +933,12 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            ctrl.rowHtml = '';
 	            var gridvalue;
 	            for (var i = 0; i < ctrl.columnDefs.length; i++) {
+	                var tooltipFilter = "";
 	                var currentColumn = ctrl.columnDefs[i];
 	                var currentColumnHtml = '$parent.ctrl.columnDefs[' + i + ']';
 	                var dataItemColumnPropertyPath = "dataItem.columnsValues." + getDataItemColumnProperty(currentColumn);
 	                var cellWidth = ctrl.isMobile ? 'mobileWidth' : 'width';
-	                ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.' + cellWidth + ', \'display\':\'inline-flex\',\'vertical-align\':\'top\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"" ng-class="ctrl.getCellContainerClass(dataItem, ' + currentColumnHtml + ')" class="vr-datagrid-cell-container">';
+	                ctrl.rowHtml += '<div ng-if="!' + currentColumnHtml + '.isHidden" ng-style="{ \'width\': ' + currentColumnHtml + '.' + cellWidth + ', \'display\':\'inline-flex\',\'vertical-align\':\'top\'' + (i != 0 ? (',\'border-left\': \'' + currentColumn.borderRight) + '\'' : '') + '}"" ng-class="ctrl.getCellContainerClass(dataItem, ' + currentColumnHtml + ')" class="vr-datagrid-cell-container {{::ctrl.mobileGridView ?\'grid-view-cell\':\'list-view-cell\'}}">';
 	                if (currentColumn.type == "MultiProgress") {
 	                    var values = currentColumn.field.split("|");
 	                    ctrl.rowHtml += '<vr-progressbar gridvalue="';
@@ -946,30 +955,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    gridvalue = "{{::" + dataItemColumnPropertyPath + ".dataValue}}";
 	                    ctrl.rowHtml += '<vr-progressbar gridvalue="' + gridvalue + '" ></vr-progressbar></div>';
 	                } else {
-	                    var tooltipFilter = "";
+	                    tooltipFilter = currentColumn.filter;
 	                    var mobileStyle = "{width:" + currentColumnHtml + ".mobileWidth}";
-
-	                    if (currentColumn.type == "Number") {
-	                        var numberPrecision = UISettingsService.getNormalPrecision() || 2;
-	                        if (currentColumn.numberPrecision == "NoDecimal") {
-	                            numberPrecision = 0;
-	                        }
-	                        else if (currentColumn.numberPrecision == "LongPrecision") {
-	                            numberPrecision = UISettingsService.getUIParameterValue('LongPrecision') || 4;
-	                        }
-	                        tooltipFilter = " | vrtextOrNumber:" + numberPrecision;
-	                    }
-	                    else {
-	                        if (currentColumn.type == "LongDatetime")
-	                        { tooltipFilter = " | date:'yyyy-MM-dd HH:mm:ss'" }
-	                        else if (currentColumn.type == "Datetime")
-	                        { tooltipFilter = " | date:'yyyy-MM-dd HH:mm'" }
-	                        else if (currentColumn.type == "Date")
-	                        { tooltipFilter = " | date:'yyyy-MM-dd'" }
-	                        else if (currentColumn.type == "Yearmonth")
-	                        { tooltipFilter = " | date:'yyyy-MM'" }
-
-	                    }
 
 	                    var cellTemplate = currentColumn.cellTemplate;
 	                    if (ctrl.hasExpendableColumn(currentColumn))
@@ -996,7 +983,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	                    cellTemplate = UtilsService.replaceAll(cellTemplate, "colDef", currentColumnHtml);
 	                    cellTemplate = getCellTemplateWithFilter(cellTemplate, currentColumn);
-	                    ctrl.rowHtml += ctrl.isMobile ? '<div class="mobile-label-container"><label class="mobile-label" >' + currentColumn.name + ': </label></div> <div ng-style=' + mobileStyle + '>'
+	                    var tooltipSection = ctrl.mobileGridView ? 'bs-tooltip data-title="' + currentColumn.name + ' : {{dataItem.' + currentColumn.field + ' ' + tooltipFilter + '}}" ' : '';
+	                    ctrl.rowHtml += ctrl.isMobile ? '<div class="mobile-label-container" ng-hide="ctrl.mobileGridView"><label class="mobile-label" >' + currentColumn.name + ': </label></div><div ' + tooltipSection + '  class="mobile-value-container" ng-style=' + mobileStyle + '>'
 							+ '<div class="vr-datagrid-celltext ">'
 							+ cellTemplate
 							+ '</div>'
@@ -1021,7 +1009,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 						+ '<i class="glyphicon glyphicon-circle-arrow-up hand-cursor" ng-show="!$first" ng-click="ctrl.moveRowUp($index)" ></i>'
 						+ '<i class="glyphicon glyphicon-circle-arrow-down hand-cursor" ng-show="!$last" ng-click="ctrl.moveRowDown($index)"></i>'
 						+ '</span>'
-						+ '<i class="glyphicon glyphicon-circle-arrow-right hand-cursor" ng-click="$parent.ctrl.expandRow(dataItem,$event)" style="padding: 2px;" ng-if="$parent.ctrl.expandableColumnWidth != undefined || $parent.ctrl.isActionMenuVisible(dataItem)"></i>'
+						+ '<i class="glyphicon glyphicon-circle-arrow-right hand-cursor" ng-click="$parent.ctrl.expandRow(dataItem,$event)" style="padding: 2px;top: 5px;" ng-if="$parent.ctrl.expandableColumnWidth != undefined || $parent.ctrl.isActionMenuVisible(dataItem)"></i>'
 						+ '</div>'
 						+ '</div>';
 	            }
@@ -1041,11 +1029,13 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    var cellWidth = ctrl.isMobile ? 'mobileWidth' : 'width';
 	                    var mobileStyle = "{width:" + currentColumnHtml + ".mobileWidth}";
 
-	                    var cellClass = ctrl.isMobile ? 'vr-datagrid-cell-container' : '';
+	                    var cellClass = ctrl.isMobile ? 'vr-datagrid-cell-container {{ctrl.mobileGridView ?\'grid-view-cell\':\'list-view-cell\'}}"' : '';
 
-	                    var tooltipFilter = getSummaryColumnTooltipFilter(currentColumn);
-	                    var innerSummaryRow = ctrl.isMobile ? '<div class="mobile-label-container" ><label class="mobile-label" >' + currentColumn.name + ': </label></div>'
-							+ '<div ng-style=' + mobileStyle + '>'
+	                    var tooltipFilter = currentColumn.filter;
+	                    var mobilelableTemplate = '<div class="mobile-label-container" ng-hide="ctrl.mobileGridView" ><label class="mobile-label" >' + currentColumn.name + ': </label></div>';
+	                    var tooltipSection = ctrl.mobileGridView ? 'bs-tooltip data-title="' + currentColumn.name + ' : {{' + dataItemColumnPropertyPath + '.dataValue' + tooltipFilter + '}}" ' : '';
+	                    var innerSummaryRow = ctrl.isMobile ? mobilelableTemplate
+							+ '<div ng-style=' + mobileStyle + ' class="mobile-value-container" ' + tooltipSection + ' >'
 							+ '<div class="vr-datagrid-cell">'
 							+ ' <div class="vr-datagrid-celltext">'
 							+ UtilsService.replaceAll(currentColumn.summaryCellTemplate, "#COLUMNVALUES#", dataItemColumnPropertyPath)
@@ -1066,32 +1056,37 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            }
 	        }
 
-
-	        function getSummaryColumnTooltipFilter(currentColumn) {
+	        function getColumnFilter(colDef) {
 	            var tooltipFilter = "";
-	            if (currentColumn.type == "Number") {
+	            if (colDef.type == "Number") {
 	                var numberPrecision = UISettingsService.getNormalPrecision() || 2;
-	                if (currentColumn.numberPrecision == "NoDecimal") {
+	                if (colDef.numberPrecision == "NoDecimal") {
 	                    numberPrecision = 0;
 	                }
-	                else if (currentColumn.numberPrecision == "LongPrecision") {
+	                else if (colDef.numberPrecision == "LongPrecision") {
 	                    numberPrecision = UISettingsService.getUIParameterValue('LongPrecision') || 4;
 	                }
-	                tooltipFilter = " | vrtextOrNumber:" + numberPrecision;
+	                tooltipFilter = "vrtextOrNumber:" + numberPrecision;
 	            }
 	            else {
-	                if (currentColumn.type == "LongDatetime")
-	                { tooltipFilter = " | date:'yyyy-MM-dd HH:mm:ss'" }
-	                else if (currentColumn.type == "Datetime")
-	                { tooltipFilter = " | date:'yyyy-MM-dd HH:mm'" }
-	                else if (currentColumn.type == "Date")
-	                { tooltipFilter = " | date:'yyyy-MM-dd'" }
-	                else if (currentColumn.type == "Yearmonth")
-	                { tooltipFilter = " | date:'yyyy-MM'" }
+	                if (colDef.type == "LongDatetime") {
+	                    tooltipFilter = "date:'yyyy-MM-dd HH:mm:ss'"
+	                }
+	                else if (colDef.type == "Datetime") {
+	                    tooltipFilter = "date:'yyyy-MM-dd HH:mm'"
+	                }
+	                else if (colDef.type == "Date") {
+	                    tooltipFilter = "date:'yyyy-MM-dd'"
+	                }
+	                else if (colDef.type == "Yearmonth") {
+	                    tooltipFilter = "date:'yyyy-MM'"
+	                }
 	            }
-
+	            if (tooltipFilter != "")
+	                tooltipFilter = " | " + tooltipFilter;
 	            return tooltipFilter;
 	        }
+
 	        function setMainItemsViewVisible() {
 	            ctrl.selectedView = 0;
 	            ctrl.isMainItemsShown = true;
@@ -1177,6 +1172,19 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                setMainItemsViewVisible();
 	                retrieveDataResultKey = null;
 	                return retrieveData(false, false, false, DataGridRetrieveDataEventType.ExternalTrigger);
+	            };
+
+	            ctrl.redrawGridlayout = function (isGridView) {
+	                ctrl.mobileSwitchBtn = false;
+	                gridApi.showLoader();
+	                setTimeout(function () {
+	                    ctrl.mobileGridView = isGridView;
+	                    setMainItemsViewVisible();
+	                    retrieveDataResultKey = null;
+	                    return retrieveData(true, false, false, DataGridRetrieveDataEventType.ExternalTrigger).then(function () {
+	                        ctrl.mobileSwitchBtn = true;
+	                    });
+	                }, 1);
 	            };
 
 	            gridApi.refreshMenuActions = function (dataItem) {
@@ -1321,7 +1329,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	        function filldataItemColumnValues(dataItem, colDef) {
 	            try {
 
-	                var colValuesObj = {};
+	                var colValuesObj = {
+	                };
 	                if (colDef.field != undefined)
 	                    colValuesObj.dataValue = ctrl.getCellValue(dataItem, colDef);
 	                colValuesObj.tooltip = ctrl.getCellTooltip(dataItem, colDef);
@@ -1333,7 +1342,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                colValuesObj.expendableColumn = ctrl.hasExpendableColumn(colDef);
 
 	                if (dataItem.columnsValues == undefined)
-	                    dataItem.columnsValues = {};
+	                    dataItem.columnsValues = {
+	                    };
 
 	                dataItem.columnsValues[getDataItemColumnProperty(colDef)] = colValuesObj;
 	            }
@@ -1347,7 +1357,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                if (ctrl.summaryDataItem == undefined)
 	                    return;
 	                if (ctrl.summaryDataItem.columnsValues == undefined)
-	                    ctrl.summaryDataItem.columnsValues = {};
+	                    ctrl.summaryDataItem.columnsValues = {
+	                    };
 	                var colValuesObj = {};
 	                if (colDef.field != undefined)
 	                    colValuesObj.dataValue = eval('ctrl.summaryDataItem.' + colDef.summaryField);
@@ -1375,7 +1386,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    setMaxHeight(ctrl.maxheight);
 	                }
 	                else if (ctrl.isMobile) {
-	                    setMaxHeight(800);
+	                    setMaxHeight(400);
 	                }
 	                else {
 	                    var sh = innerHeight;
@@ -1418,6 +1429,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	        }
 
 	        function getPageSize() {
+	            if (ctrl.isMobile) return 20;
 	            var h;
 	            if (isInModal() == true)
 	                h = innerHeight * 0.3;
@@ -1480,7 +1492,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            };
 	            ctrl.expandRow = function (dataItem, evnt) {
 	                if (expandableRowTemplate != undefined || (ctrl.isActionMenuVisible(dataItem) && ctrl.isMobile)) {
+	                    dataItem.showRow = false;
 	                    if (evnt) {
+	                        $(".tooltip ").remove();
 	                        var self = angular.element(evnt.currentTarget);
 
 	                        self.parents('.expandable-row-content').addClass('full-mobile-body');
@@ -1493,12 +1507,17 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                        }
 	                    }
 	                    dataItem.expandableRowTemplate = expandableRowTemplate;
-	                    dataItem.isRowExpanded = true;
+	                    setTimeout(function () {
+	                        dataItem.showRow = true;
+	                        dataItem.isRowExpanded = true;
+	                        scope.$apply();
+	                    }, 300);
 	                }
 	            };
 
 	            ctrl.collapseRow = function (dataItem, evnt) {
 	                if (ctrl.isMobile) {
+	                    $(".tooltip ").remove();
 	                    var self = angular.element(evnt.currentTarget);
 	                    var expandparent = self.parents('.expandable-row-content').eq(1);
 	                    $(expandparent).removeClass('full-mobile-body');
@@ -1527,6 +1546,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                return (haseEnabledActions);
 	            };
 
+	            ctrl.hasDefinedMenuAction = function (dataItem) {
+	                return ctrl.getActionMenuArray(dataItem) != undefined && ctrl.getActionMenuArray(dataItem).length > 0;
+	            };
+
 	            ctrl.getActionMenuArray = function (dataItem) {
 	                if (!hasActionMenu || dataItem.isDeleted)
 	                    return [];
@@ -1537,10 +1560,6 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    return actions;
 	            };
 
-	            ctrl.hasDefinedMenuAction = function (dataItem) {
-	                return ctrl.getActionMenuArray(dataItem) != undefined && ctrl.getActionMenuArray(dataItem).length > 0;
-	            };
-
 	            ctrl.adjustPosition = function (e) {
 	                var self = angular.element(e.currentTarget);
 	                var selfHeight = $(this).parent().height() + 12;
@@ -1549,7 +1568,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                var w = $(window);
 	                var selfOffsetRigth = $(document).width() - selfOffset.left - selfWidth;
 	                var dropDown = self.parent().find('ul');
-	                $(dropDown).css({ position: 'fixed', top: (selfOffset.top - w.scrollTop()) + selfHeight, left: 'auto' });
+	                $(dropDown).css({
+	                    position: 'fixed', top: (selfOffset.top - w.scrollTop()) + selfHeight, left: 'auto'
+	                });
 	            };
 
 	            var menuActionsArrays = [];
@@ -1775,7 +1796,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                }
 	            };
 
-	            var retrieveDataContext = { eventType: eventType, isDataSorted: sortColumn != undefined };
+	            var retrieveDataContext = {
+	                eventType: eventType, isDataSorted: sortColumn != undefined
+	            };
 	            var promise = retrieveDataFunction(retrieveDataInput, onResponseReady, retrieveDataContext);//this function should return a promise in case it is getting data
 
 	            if (promise != undefined && promise != null) {

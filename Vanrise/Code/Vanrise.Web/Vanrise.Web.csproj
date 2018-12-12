@@ -411,6 +411,7 @@
     <Content Include="Client\Javascripts\Services\vr-pushnotification-service.js" />
     <Content Include="Client\Javascripts\Services\VRDateTimeService.js" />
     <Content Include="Client\Javascripts\Services\VRLocalization\VRLocalizationService.js" />
+    <Content Include="Client\Libraries\Angular\angular-touch.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\bootstrap-datetimepicker.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\moment-with-locales.js" />
     <Content Include="Client\Libraries\AngularExtensions\GoJs\go.js" />

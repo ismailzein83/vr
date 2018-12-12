@@ -1,7 +1,7 @@
 ﻿<div ng-show="analyticrecordsctrl.showGrid">
     <vr-datagrid datasource="analyticrecordsctrl.datasource" defaultsortbyfieldname="analyticrecordsctrl.sortField" normalcell
                  pagingtype="'Pager'" dataretrievalfunction="analyticrecordsctrl.dataRetrievalFunction" menuactions="gridMenuActions"
-                 on-ready="analyticrecordsctrl.gridReady" enableautoexport="true" gridmenuactions="analyticrecordsctrl.gridLeftMenuActions" showexpand="isExpandable" rowclickdetails>
+                 on-ready="analyticrecordsctrl.gridReady" enableautoexport="true" gridmenuactions="analyticrecordsctrl.gridLeftMenuActions" showexpand="isExpandable" rowclickdetails mobilegridlayout="true">
 
         <vr-datagridcolumn ng-if="analyticrecordsctrl.groupingDimensions.length>0" ng-repeat="dimension in analyticrecordsctrl.groupingDimensions" headertext="dimension.Title" type="dimension.Type"
                            field="dimension.Type.indexOf('Date') > -1 || dimension.Type.indexOf('Number') > -1 ? 'DimensionValues[' + $index + '].Value' : 'DimensionValues[' + $index + '].Name'"

@@ -67,7 +67,9 @@
     .vr-mobile-view #page-content-wrapper {
         padding: unset;
     }
-  
+
+
+
     .vr-mobile-view .tooltip-error:before {
         border-color: rgba(136, 183, 213, 0) rgba(136, 183, 213, 0) #D5AB88 rgba(136, 183, 213, 0);
         border-width: 4px;
@@ -139,6 +141,29 @@
         top: 50%;
         transform: translate(0%,-50%);
     }
+
+    .vr-mobile-view .modal-dialog.centered-model .vr-modal-header,
+    div[textboxmultiple].modal .modal-dialog .vr-modal-header {
+        height: 30px;
+        background-color: #fff !important;
+        color: #333 !important;
+    }
+
+    .vr-mobile-view .modal-dialog.centered-model .vr-modal-header .close,
+    div[textboxmultiple].modal .modal-dialog .vr-modal-header .close {
+        color: #333 !important;
+        font-size: 21px;
+        text-shadow: none;
+    }
+
+    .vr-mobile-view .modal-dialog.centered-model .vr-modal-header .close span,
+    div[textboxmultiple].modal .modal-dialog .vr-modal-header .close span {
+        font-size: 40px;
+    }
+
+    .vr-mobile-view .modal-dialog.centered-model .modal-body {
+       padding:0px 15px 15px 15px!important;
+    }
     .vr-mobile-view .modal-dialog.full-view {
        margin:0px;
        width: 100%;
@@ -162,21 +187,91 @@
         border: none;
     }
 
+    .vr-mobile-view .vr-datagrid-header{
+        min-height:28px;
+        height:auto;
+    }
+
     .vr-mobile-view .grid-base-row {
         display: flex !important;
         flex-wrap: wrap;
-        width:100%;
+        width: 100%;
+        min-height: 24px;
     }
 
     .vr-mobile-view .vr-datagrid-cell-container {
         display: inline-flex !important;
         max-width: 100%;
-        width: unset !important;
         padding: 0px 2px;
+        flex-grow: 1;
+    }
+
+    .vr-mobile-view .vr-datagrid-cell-container.list-view-cell {
+        width: unset !important;
+    }
+    .vr-mobile-view .vr-datagrid-cell-container .mobile-value-container {
+        flex-grow: 1;
+    }
+    .vr-mobile-view .vr-datagrid-cell-container.grid-view-cell .mobile-value-container {
+        width: 100% !important;
+    }
+
+    .vr-mobile-view .mobile-grid-view.vr-datagrid .vr-datagrid-cell-container {
+        flex-grow: 1;
+    }
+
+    .vr-mobile-view .mobile-grid-view.vr-datagrid .vr-datagrid-body {
+        border-bottom: 1px solid #D0D0D0 !important;
+    }
+
+    .vr-mobile-view .mobile-grid-view.vr-datagrid .vr-datagrid-body .vr-datagrid-cell-container {
+        border-bottom: 1px solid #D0D0D0;
+        border-right: 1px solid #D0D0D0;
+    }
+
+    .vr-mobile-view .vr-datagrid.mobile-grid-view{
+        padding-top: 25px;
+        
+    }
+
+    .vr-mobile-view .mobile-grid-view .vr-grid-menu-box {
+        left: unset;
+        right: 0px;
+        height: 24px;
+        width: 80px;
+        top: -27px;
+    }
+
+    .vr-mobile-view .mobile-grid-view .vr-grid-menu-h-circle {
+        height: 15px;
+        width: 20px;
+        position: relative;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        border-bottom-left-radius:0px;
+        border-bottom-right-radius:0px;
+        top: 10px;
+    }
+
+    .vr-mobile-view .mobile-grid-view .vr-grid-menu-h-dote {
+        left: 3px;
+        top: -7px;
+    }
+
+    .vr-mobile-view .mobile-grid-view .vr-datagrid-header vr-datagridcell {
+        overflow: hidden;
+    }
+
+    .vr-mobile-view .mobile-grid-view .vr-datagrid-celltext {
+        text-align: unset !important;
     }
 
     .vr-mobile-view .vr-datagrid-celltext > div {
         text-align: unset !important;
+    }
+
+    .vr-mobile-view .vr-datagrid-celltext > div span.span-summary {
+        white-space: nowrap !important;
     }
 
     .vr-mobile-view .vr-datagrid-cell {
@@ -185,12 +280,33 @@
         min-height: unset;
     }
 
+    .vr-mobile-view .mobile-grid-view .vr-datagrid-cell {
+        padding: 2px 2px 0px 0px;
+    }
+
     .vr-mobile-view .mobile-label-container {
         display: inline-flex !important;
         margin: 1px 2px;
         font-size: 11px;
     }
 
+    .vr-mobile-view .mobile-grid-view.vr-datagrid:first-child .mobile-label-container.ng-hide{
+        display: none !important;
+    }
+
+    .vr-mobile-view .mobile-grid-view .row-full-view .mobile-label-container {
+        display: inline-flex !important;
+    }
+
+    .vr-mobile-view .row-full-view .vr-datagrid-cell-container {
+        width: unset !important;
+        border-bottom: none !important;
+        border-right: none !important;
+    }
+
+    .vr-mobile-view .mobile-grid-view .mobile-label-container.action-main-container {
+        display: inline-flex !important;
+    }
     .vr-mobile-view .expandable-row-content {
         position: fixed;
         width: 100%;
@@ -226,8 +342,8 @@
         text-transform: uppercase;
         color: #333;
         font-weight: bold;
-        background-color: #f8f6f6;
-        text-decoration:underline;
+        background-color: inherit;
+        text-decoration: underline;
         margin-top: 2px;
     }
 

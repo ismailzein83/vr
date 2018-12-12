@@ -103,6 +103,7 @@ namespace Vanrise.Common
             VRWebContext.AddWebBundle(new VRScriptWebBundle("~/bundles/Angular").Include(
                "~/Client/Libraries/Bower/angular/angular.js",
                "~/Client/Libraries/angular/angular-websocket.js",
+               "~/Client/Libraries/angular/angular-touch.js",
                "~/Client/Libraries/Bower/angular-cookies/angular-cookies.js",
                "~/Client/Libraries/Bower/angular-route/angular-route.js",
                "~/Client/Libraries/Bower/angular-messages/angular-messages.js",
