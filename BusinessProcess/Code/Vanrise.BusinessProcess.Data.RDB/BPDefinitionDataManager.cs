@@ -9,6 +9,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
     public class BPDefinitionDataManager : IBPDefinitionDataManager
     {
         static string TABLE_NAME = "bp_BPDefinition";
+        static string TABLE_ALIAS = "bp";
         const string COL_ID = "ID";
         const string COL_Name = "Name";
         const string COL_Title = "Title";
@@ -46,12 +47,11 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bp");
-            selectQuery.SelectColumns().AllTableColumns("bp");
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             return queryContext.GetItems(BPDefinitionMapper);
         }
-
 
         public bool InsertBPDefinition(BPDefinition bpDefinition)
         {
@@ -62,6 +62,10 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
+
+            var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
+            notExistsCondition.EqualsCondition(COL_Title).Value(bpDefinition.Title);
+
             insertQuery.Column(COL_ID).Value(bpDefinition.BPDefinitionID);
             insertQuery.Column(COL_Name).Value(bpDefinition.Name);
             insertQuery.Column(COL_Title).Value(bpDefinition.Title);
@@ -70,9 +74,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             if (bpDefinition.Configuration != null)
                 insertQuery.Column(COL_Config).Value(Serializer.Serialize(bpDefinition.Configuration));
 
-            queryContext.ExecuteNonQuery();
-
-            return true;
+            return queryContext.ExecuteNonQuery() > 0;
         }
 
         public bool UpdateBPDefinition(BPDefinition bpDefinition)
@@ -83,6 +85,11 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
+
+            var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
+            notExistsCondition.NotEqualsCondition(COL_ID).Value(bpDefinition.BPDefinitionID);
+            notExistsCondition.EqualsCondition(COL_Title).Value(bpDefinition.Title);
+
             updateQuery.Column(COL_Title).Value(bpDefinition.Title);
 
             if (bpDefinition.VRWorkflowId.HasValue)
@@ -95,9 +102,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             var where = updateQuery.Where();
             where.EqualsCondition(COL_ID).Value(bpDefinition.BPDefinitionID);
 
-            queryContext.ExecuteNonQuery();
-
-            return true;
+            return queryContext.ExecuteNonQuery() > 0;
         }
 
         BPDefinition BPDefinitionMapper(IRDBDataReader reader)

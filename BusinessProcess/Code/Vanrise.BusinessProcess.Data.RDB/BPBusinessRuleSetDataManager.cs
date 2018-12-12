@@ -41,7 +41,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             return queryContext.GetItems(BPBusinessRuleSetMapper);
@@ -55,6 +55,9 @@ namespace Vanrise.BusinessProcess.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
             insertQuery.AddSelectGeneratedId();
 
+            var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
+            notExistsCondition.EqualsCondition(COL_Name).Value(businessRuleSetObj.Name);
+
             insertQuery.Column(COL_Name).Value(businessRuleSetObj.Name);
 
             if (businessRuleSetObj.ParentId.HasValue)
@@ -67,7 +70,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             bpBusinessRuleSetId = queryContext.ExecuteScalar().IntWithNullHandlingValue;
 
-            return bpBusinessRuleSetId != 0;
+            return bpBusinessRuleSetId > 0;
         }
 
         public bool UpdateBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj)
@@ -76,6 +79,10 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
+
+            var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
+            notExistsCondition.NotEqualsCondition(COL_ID).Value(businessRuleSetObj.BPBusinessRuleSetId);
+            notExistsCondition.EqualsCondition(COL_Name).Value(businessRuleSetObj.Name);
 
             updateQuery.Column(COL_Name).Value(businessRuleSetObj.Name);
 
@@ -105,7 +112,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
                 BPBusinessRuleSetId = reader.GetInt(COL_ID),
                 Name = reader.GetString(COL_Name),
                 ParentId = reader.GetNullableInt(COL_ParentID),
-                Details = !string.IsNullOrEmpty(details) ? Serializer.Deserialize<BPBusinessRuleSetDetails>(details) : null,
+                Details = Serializer.Deserialize<BPBusinessRuleSetDetails>(details),
                 BPDefinitionId = reader.GetGuid(COL_BPDefinitionId)
             };
         }

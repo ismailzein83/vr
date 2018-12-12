@@ -35,7 +35,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             return queryContext.GetItems(BPDefinitionArgumentStateMapper);

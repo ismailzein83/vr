@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
@@ -10,6 +9,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
     public class VRWorkflowDataManager : IVRWorkflowDataManager
     {
         static string TABLE_NAME = "bp_VRWorkflow";
+        static string TABLE_ALIAS = "wf";
         const string COL_ID = "ID";
         const string COL_Name = "Name";
         const string COL_Title = "Title";
@@ -51,8 +51,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "wf");
-            selectQuery.SelectColumns().AllTableColumns("wf");
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             return queryContext.GetItems(VRWorkflowMapper);
         }
@@ -63,6 +63,10 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
+
+            var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
+            notExistsCondition.EqualsCondition(COL_Name).Value(vrWorkflow.Name);
+
             insertQuery.Column(COL_ID).Value(vrWorkflowId);
             insertQuery.Column(COL_Name).Value(vrWorkflow.Name);
             insertQuery.Column(COL_Title).Value(vrWorkflow.Title);
@@ -73,31 +77,34 @@ namespace Vanrise.BusinessProcess.Data.RDB
             insertQuery.Column(COL_CreatedBy).Value(createdBy);
             insertQuery.Column(COL_LastModifiedBy).Value(createdBy);
 
-            queryContext.ExecuteNonQuery();
-
-            return true;
+            return queryContext.ExecuteNonQuery() > 0;
         }
 
         public bool UpdateVRWorkflow(VRWorkflowToUpdate vrWorkflow, int lastModifiedBy)
         {
-            string serializedSettings = vrWorkflow.Settings != null ? Vanrise.Common.Serializer.Serialize(vrWorkflow.Settings) : null;
-
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
+            var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
+            notExistsCondition.NotEqualsCondition(COL_ID).Value(vrWorkflow.VRWorkflowId);
+            notExistsCondition.EqualsCondition(COL_Name).Value(vrWorkflow.Name);
+
             updateQuery.Column(COL_Name).Value(vrWorkflow.Name);
             updateQuery.Column(COL_Title).Value(vrWorkflow.Title);
-            updateQuery.Column(COL_Settings).Value(serializedSettings);
+
+            if (vrWorkflow.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Serializer.Serialize(vrWorkflow.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
+
             updateQuery.Column(COL_LastModifiedBy).Value(lastModifiedBy);
 
             var where = updateQuery.Where();
             where.EqualsCondition(COL_ID).Value(vrWorkflow.VRWorkflowId);
 
-            queryContext.ExecuteNonQuery();
-
-            return true;
+            return queryContext.ExecuteNonQuery() > 0;
         }
 
         VRWorkflow VRWorkflowMapper(IRDBDataReader reader)

@@ -37,7 +37,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             return queryContext.GetItems(BPBusinessRuleActionMapper);
@@ -45,7 +45,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
         BPBusinessRuleAction BPBusinessRuleActionMapper(IRDBDataReader reader)
         {
-            return  new BPBusinessRuleAction
+            return new BPBusinessRuleAction
             {
                 BPBusinessRuleActionId = reader.GetInt(COL_ID),
                 Details = new BPBusinessRuleActionDetails

@@ -48,10 +48,10 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            List<int> severitiesValues = input.Severities != null && input.Severities.Count > 0 ? input.Severities.Select(itm => (int)itm).ToList() : null;
+            IEnumerable<int> severitiesValues = input.Severities != null && input.Severities.Count > 0 ? input.Severities.Select(itm => (int)itm) : null;
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, input.NbOfRows);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, input.NbOfRows, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var where = selectQuery.Where();
@@ -70,10 +70,10 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            List<int> severitiesValues = severities != null && severities.Count > 0 ? severities.Select(itm => (int)itm).ToList() : null;
+            IEnumerable<int> severitiesValues = severities != null && severities.Count > 0 ? severities.Select(itm => (int)itm) : null;
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var where = selectQuery.Where();
@@ -91,10 +91,10 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            List<int> severitiesValues = input.Severities != null && input.Severities.Count > 0 ? input.Severities.Select(itm => (int)itm).ToList() : null;
+            IEnumerable<int> severitiesValues = input.Severities != null && input.Severities.Count > 0 ? input.Severities.Select(itm => (int)itm) : null;
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, input.NbOfRows);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, input.NbOfRows, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var where = selectQuery.Where();
@@ -115,14 +115,15 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             return queryContext.GetItems(BPTrackingMapper);
         }
+
         public List<BPTrackingMessage> GetRecentBPInstanceTrackings(long bpInstanceId, int nbOfRecords, long? lessThanId, List<LogEntryType> severities)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            List<int> severitiesValues = severities != null && severities.Count > 0 ? severities.Select(itm => (int)itm).ToList() : null;
+            IEnumerable<int> severitiesValues = severities != null && severities.Count > 0 ? severities.Select(itm => (int)itm) : null;
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, nbOfRecords);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, nbOfRecords, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var where = selectQuery.Where();
@@ -133,8 +134,6 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             if (severitiesValues != null)
                 where.ListCondition(COL_Severity, RDBListConditionOperator.IN, severitiesValues);
-
-            where.ListCondition(COL_Severity, RDBListConditionOperator.IN, severitiesValues);
 
             selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.DESC);
 
@@ -150,27 +149,29 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            foreach (var msg in lstTrackingMsgs)
+            if (lstTrackingMsgs != null)
             {
-                var insertQuery = queryContext.AddInsertQuery();
-                insertQuery.IntoTable(TABLE_NAME);
-                insertQuery.AddSelectGeneratedId();
+                foreach (var msg in lstTrackingMsgs)
+                {
+                    var insertQuery = queryContext.AddInsertQuery();
+                    insertQuery.IntoTable(TABLE_NAME);
 
-                insertQuery.Column(COL_ProcessInstanceID).Value(msg.ProcessInstanceId);
+                    insertQuery.Column(COL_ProcessInstanceID).Value(msg.ProcessInstanceId);
 
-                if (msg.ParentProcessId.HasValue)
-                    insertQuery.Column(COL_ParentProcessID).Value(msg.ParentProcessId.Value);
+                    if (msg.ParentProcessId.HasValue)
+                        insertQuery.Column(COL_ParentProcessID).Value(msg.ParentProcessId.Value);
 
-                if (!string.IsNullOrEmpty(msg.TrackingMessage))
-                    insertQuery.Column(COL_TrackingMessage).Value(msg.TrackingMessage);
+                    if (!string.IsNullOrEmpty(msg.TrackingMessage))
+                        insertQuery.Column(COL_TrackingMessage).Value(msg.TrackingMessage);
 
-                if (!string.IsNullOrEmpty(msg.ExceptionDetail))
-                    insertQuery.Column(COL_ExceptionDetail).Value(msg.ExceptionDetail);
+                    if (!string.IsNullOrEmpty(msg.ExceptionDetail))
+                        insertQuery.Column(COL_ExceptionDetail).Value(msg.ExceptionDetail);
 
-                insertQuery.Column(COL_Severity).Value((int)msg.Severity);
-                insertQuery.Column(COL_EventTime).Value(msg.EventTime);
+                    insertQuery.Column(COL_Severity).Value((int)msg.Severity);
+                    insertQuery.Column(COL_EventTime).Value(msg.EventTime);
+                }
+                queryContext.ExecuteNonQuery();
             }
-            queryContext.ExecuteNonQuery();
         }
 
         BPTrackingMessage BPTrackingMapper(IRDBDataReader reader)
