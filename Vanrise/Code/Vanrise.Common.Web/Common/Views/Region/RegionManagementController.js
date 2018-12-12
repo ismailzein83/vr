@@ -2,9 +2,9 @@
 
     "use strict";
 
-    regionManagementController.$inject = ['$scope', 'VRCommon_RegionService','VRCommon_RegionAPIService', 'UtilsService', 'VRUIUtilsService'];
+    regionManagementController.$inject = ['$scope', 'VRCommon_RegionService', 'VRCommon_RegionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function regionManagementController($scope, VRCommon_RegionService, VRCommon_RegionAPIService, UtilsService, VRUIUtilsService) {
+    function regionManagementController($scope, VRCommon_RegionService, VRCommon_RegionAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
         var gridAPI;
         var filter = {};
 
@@ -77,5 +77,5 @@
 
     }
 
-    appControllers.controller('VRCommon_RegionManagementController', regionManagementController); 
+    appControllers.controller('VRCommon_RegionManagementController', regionManagementController);
 })(appControllers);

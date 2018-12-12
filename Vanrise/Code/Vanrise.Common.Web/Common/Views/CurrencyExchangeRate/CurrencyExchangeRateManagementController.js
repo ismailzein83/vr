@@ -2,9 +2,9 @@
 
     "use strict";
 
-    currencyExchangeRateManagementController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateService', 'VRCommon_CurrencyExchangeRateAPIService', 'UtilsService', 'VRUIUtilsService', 'VRDateTimeService'];
+    currencyExchangeRateManagementController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateService', 'VRCommon_CurrencyExchangeRateAPIService', 'UtilsService', 'VRUIUtilsService', 'VRDateTimeService', 'VRNotificationService'];
 
-    function currencyExchangeRateManagementController($scope, VRCommon_CurrencyExchangeRateService, VRCommon_CurrencyExchangeRateAPIService, UtilsService, VRUIUtilsService, VRDateTimeService) {
+    function currencyExchangeRateManagementController($scope, VRCommon_CurrencyExchangeRateService, VRCommon_CurrencyExchangeRateAPIService, UtilsService, VRUIUtilsService, VRDateTimeService, VRNotificationService) {
         var gridAPI;
 
         var currencySelectorAPI;
