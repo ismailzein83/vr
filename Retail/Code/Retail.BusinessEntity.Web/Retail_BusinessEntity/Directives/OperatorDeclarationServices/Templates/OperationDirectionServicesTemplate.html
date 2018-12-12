@@ -13,20 +13,24 @@
     </vr-columns>
 </vr-row>
 <vr-row>
+   
     <vr-columns width="fullrow">
-        <vr-datagrid datasource="scopeModel.operatorDeclarationServices"
-                     pagingtype="'PagingOnScroll'"
-                     on-ready="scopeModel.onGridReady"
-                     ondeleterow="removerow"
-                     maxheight="300px"
-                     hidegridmenu ="true"
-                     menuactions="scopeModel.menuActions">
-            <vr-datagridcolumn headertext="'Title'" field="'Title'" fixedwidth="'60'"></vr-datagridcolumn>           
-            <vr-datagridcolumn headertext="'Settings'" >
+        <vr-validator validate="scopeModel.isValid()">
+            <vr-datagrid datasource="scopeModel.operatorDeclarationServices"
+                         pagingtype="'PagingOnScroll'"
+                         on-ready="scopeModel.onGridReady"
+                         ondeleterow="removerow"
+                         maxheight="300px"
+                         hidegridmenu="true"
+                         menuactions="scopeModel.menuActions">
+                <vr-datagridcolumn headertext="'Title'" field="'Title'" fixedwidth="'60'"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Settings'">
                     <span vr-loader="dataItem.isLoadingDirective">
                         <vr-directivewrapper directive="dataItem.Editor" on-ready="dataItem.onDirectiveReady" isrequired="true"></vr-directivewrapper>
                     </span>
-</vr-datagridcolumn>
-        </vr-datagrid>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
     </vr-columns>
+       
 </vr-row>

@@ -38,7 +38,11 @@
                     var index = $scope.scopeModel.operatorDeclarationServices.indexOf(dataItem);
                     $scope.scopeModel.operatorDeclarationServices.splice(index, 1);
                 };
-
+                $scope.scopeModel.isValid = function () {
+                    if ($scope.scopeModel.datasource != undefined && $scope.scopeModel.datasource.length > 0)
+                        return null;
+                    return "You Should add at least one item.";
+                };
                 $scope.scopeModel.onGridReady = function(api){
                     gridAPI=api;
                 };
@@ -50,7 +54,7 @@
                     };
                     operatorDeclarationService.onDirectiveReady = function (api) {
                         operatorDeclarationService.directiveAPI = api;
-                        var setLoader = function (value) { operatorDeclarationService.isLoadingDirective = value };
+                        var setLoader = function (value) { operatorDeclarationService.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, operatorDeclarationService.directiveAPI, undefined, setLoader);
                     };
                     $scope.scopeModel.operatorDeclarationServices.push(operatorDeclarationService);
