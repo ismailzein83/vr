@@ -101,7 +101,7 @@ as (select * from (values
 ('277816C4-DE23-48E2-971F-46BD0436C1C6','Date_Time','Date Time','VR_GenericData_GenericBESerialNumberPartSettings','{"Editor":"vr-genericdata-genericbe-serialnumber-datetime"}'),
 ('16197ED3-F3EF-4C50-9106-61A576789726','Sequence','Sequence','VR_GenericData_GenericBESerialNumberPartSettings','{"Editor":"vr-genericdata-genericbe-serialnumber-sequence"}')	,
 
-('28411d23-ea66-47ac-a323-106be0b9da7e','CustomObject','Custom Object','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-customobject","RuntimeEditor":"","FilterEditor":"","RuleFilterEditor":""}')	,
+('28411d23-ea66-47ac-a323-106be0b9da7e','CustomObject','Custom Object','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-customobject","RuntimeEditor":"","FilterEditor":"vr-genericdata-fieldtype-customobject-filtereditor","RuleFilterEditor":""}')	,
 ('a80260fd-4492-45c9-8e60-41d91dcd4e9e','Attachment','Attachment','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-attachment","RuntimeEditor":"vr-genericdata-fieldtype-attachment-runtimeeditor","FilterEditor":"","RuleFilterEditor":""}')	,
 ('ebd22f77-6275-4194-8710-7bf3063dcb68','Guid','Guid','VR_GenericData_DataRecordFieldType','{"Editor":"vr-genericdata-fieldtype-guid","RuntimeEditor":"vr-genericdata-fieldtype-guid-runtimeeditor","FilterEditor":"vr-genericdata-fieldtype-guid-filtereditor","RuleFilterEditor":"vr-genericdata-fieldtype-guid-rulefiltereditor"}'),
 ('aa969bad-225d-4d83-b76c-68bfdbc0f045','DataRecordRuleEvaluatorDefinition','Data Record Rule Evaluator','VR_Common_VRComponentType','{"Editor":"vr-genericdata-datarecordruleevaluatordefinition-settings"}'),
