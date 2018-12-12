@@ -8,9 +8,9 @@ using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class VRNamespaceManager
+    public class VRNamespaceManager : IVRNamespaceManager
     {
-        static Dictionary<string, AssemblyObject> vrNamespaceAssemblies = new Dictionary<string, AssemblyObject>();
+        static AssemblyObject assemblyObject = new AssemblyObject();
 
         #region Public Methods
 
@@ -92,7 +92,7 @@ namespace Vanrise.Common.Business
         public VRNamespaceCompilationOutput TryCompileNamespace(VRNamespace vrNamespace)
         {
             VRNamespaceCompilationOutput output;
-            if (TryCompileNamespace(vrNamespace, out output))
+            if (TryCompileNamespace(new List<VRNamespace>() { vrNamespace }, null, out output))
                 CSharpCompiler.SetExpiredAssembly(output.OutputAssembly.FullName);
 
             return output;
@@ -104,8 +104,13 @@ namespace Vanrise.Common.Business
             if (vrNamespace == null)
                 return null;
 
-            var outputAssembly = GetCachedAssembly(vrNamespaceName);
+            var outputAssembly = GetCachedAssembly();
             return outputAssembly.GetType(string.Format("{0}.{1}", vrNamespaceName, className));
+        }
+
+        public void CompileVRNamespacesAssembly()
+        {
+            GetCachedAssembly();
         }
 
         #endregion
@@ -141,15 +146,6 @@ namespace Vanrise.Common.Business
         private string BuildClassDefinition(VRNamespace vrNamespace)
         {
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
-                using System;
-                using System.Collections.Generic;
-                using System.IO;
-                using System.Data;
-                using System.Linq;
-                using Vanrise.Common;
-                using Vanrise.GenericData.Business;
-                using Vanrise.GenericData.Entities;
-
                 namespace #NAMESPACE#
                 {
                     #CLASSCODE#
@@ -174,22 +170,21 @@ namespace Vanrise.Common.Business
             return classDefinitionBuilder.ToString();
         }
 
-        private Assembly GetCachedAssembly(string vrNamespaceName)
+        private Assembly GetCachedAssembly()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(vrNamespaceName, () =>
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("CachedVRNamespacesAssembly", () =>
               {
-                  VRNamespace vrNamespace = GetVRNamespaceByName(vrNamespaceName);
-                  vrNamespace.ThrowIfNull("vrNamespace", vrNamespaceName);
-
-                  AssemblyObject existingAssembly = vrNamespaceAssemblies.GetOrCreateItem(vrNamespaceName);
-                  if (!string.IsNullOrEmpty(existingAssembly.AssemblyName))
-                      CSharpCompiler.SetExpiredAssembly(existingAssembly.AssemblyName);
-
                   VRNamespaceCompilationOutput namespaceCompilationOutput;
 
-                  if (TryCompileNamespace(vrNamespace, out namespaceCompilationOutput))
+                  string uniqueNamespaceName = string.Format("ns.Gen_{0}", Guid.NewGuid().ToString("N"));
+                  if (TryCompileNamespace(GetCachedVRNamespaces().Values, uniqueNamespaceName, out namespaceCompilationOutput))
                   {
-                      existingAssembly.AssemblyName = namespaceCompilationOutput.OutputAssembly.FullName;
+                      if (!string.IsNullOrEmpty(assemblyObject.AssemblyName))
+                          CSharpCompiler.SetExpiredAssembly(assemblyObject.AssemblyName);
+
+                      Type.GetType(string.Format("{0}.{1}", uniqueNamespaceName, "DummyClass"));
+
+                      assemblyObject.AssemblyName = namespaceCompilationOutput.OutputAssembly.FullName;
                       return namespaceCompilationOutput.OutputAssembly;
                   }
                   else
@@ -200,26 +195,38 @@ namespace Vanrise.Common.Business
                           errorsBuilder.AppendLine(errorMessage);
                       }
 
-                      throw new Exception(String.Format("Compile Error when building for Namespace '{0}'. Errors: {1}", vrNamespaceName, errorsBuilder));
+                      throw new Exception(String.Format("Compile Error when building Namespaces. Errors: {0}", errorsBuilder));
                   }
               });
         }
 
-        private bool TryCompileNamespace(VRNamespace vrNamespace, out VRNamespaceCompilationOutput namespaceCompilationOutput)
+        private bool TryCompileNamespace(IEnumerable<VRNamespace> vrNamespaces, string uniqueNamespaceName, out VRNamespaceCompilationOutput namespaceCompilationOutput)
         {
-            var classDefinition = BuildClassDefinition(vrNamespace);
+            StringBuilder classDefinition = new StringBuilder(@"using System;
+            using System.Collections.Generic;
+            using System.IO;
+            using System.Data;
+            using System.Linq;
+            using Vanrise.Common;
+            using Vanrise.GenericData.Business;
+            using Vanrise.GenericData.Entities;");
+
+            foreach (VRNamespace vrNamespace in vrNamespaces)
+                classDefinition.AppendLine(BuildClassDefinition(vrNamespace));
+
+            if (!string.IsNullOrEmpty(uniqueNamespaceName))
+                classDefinition.AppendLine(GenerateDummyNamespace(uniqueNamespaceName));
 
             CSharpCompilationOutput compilationOutput;
-            if (!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
+            if (!CSharpCompiler.TryCompileClass(classDefinition.ToString(), out compilationOutput, true))
             {
                 StringBuilder errorsBuilder = new StringBuilder();
                 if (compilationOutput.ErrorMessages != null)
                 {
                     foreach (var errorMessage in compilationOutput.ErrorMessages)
-                    {
                         errorsBuilder.AppendLine(errorMessage);
-                    }
                 }
+
                 namespaceCompilationOutput = new VRNamespaceCompilationOutput
                 {
                     OutputAssembly = compilationOutput.OutputAssembly,
@@ -239,6 +246,10 @@ namespace Vanrise.Common.Business
             return namespaceCompilationOutput.Result;
         }
 
+        private string GenerateDummyNamespace(string uniqueNamespaceName)
+        {
+            return string.Concat("namespace ", uniqueNamespaceName, "{public class DummyClass{", "}}");
+        }
         #endregion
 
         #region Classes

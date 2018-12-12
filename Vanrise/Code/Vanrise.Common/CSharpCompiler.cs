@@ -34,13 +34,19 @@ namespace Vanrise.Common
             return s_dynamicAssembliesByName[args.Name.Substring(0, args.Name.IndexOf(','))];
         }
 
-        public static bool TryCompileClass(string classDefinition, out CSharpCompilationOutput output)
+        public static bool TryCompileClass(string classDefinition, out CSharpCompilationOutput output, bool ignoreNamespacesCompilation = false)
         {
-            return TryCompileClass(null, classDefinition, out output);
+            return TryCompileClass(null, classDefinition, out output, ignoreNamespacesCompilation);
         }
 
-        public static bool TryCompileClass(string className, string classDefinition, out CSharpCompilationOutput output)
+        public static bool TryCompileClass(string className, string classDefinition, out CSharpCompilationOutput output, bool ignoreNamespacesCompilation = false)
         {
+            if (!ignoreNamespacesCompilation)
+            {
+                IVRNamespaceManager vrNamespaceManager = BusinessManagerFactory.GetManager<IVRNamespaceManager>();
+                vrNamespaceManager.CompileVRNamespacesAssembly();
+            }
+
             output = new CSharpCompilationOutput();
 
             string outputFileName = string.Empty;

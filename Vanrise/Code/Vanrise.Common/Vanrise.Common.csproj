@@ -112,6 +112,7 @@
     <Compile Include="BusinessManagers\IGeneralSettingsManager.cs" />
     <Compile Include="BusinessManagers\ISecurityRequiredPermissionSetManager.cs" />
     <Compile Include="BusinessManagers\ITypeManager.cs" />
+    <Compile Include="BusinessManagers\IVRNamespaceManager.cs" />
     <Compile Include="BusinessManagers\IVRActionLogger.cs" />
     <Compile Include="BusinessManagers\SecBusinessManagerFactory.cs" />
     <Compile Include="DataRetrieval\ConvertResultToExcelDataContext.cs" />
