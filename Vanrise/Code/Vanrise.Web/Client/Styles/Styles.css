@@ -342,10 +342,9 @@ vr-actionbar .btn.active {
 }
 
 vr-actionbar .btn .vr-button-menu-icon {
-    font-size: 9px;
     position: absolute;
-    top: 9px;
-    left: 1px;
+    top: 6px;
+    right: -5px;
 }
 
 vr-actionbar .btn:focus, vr-actionbar .btn:active:focus, vr-actionbar .btn.active:focus, vr-actionbar .btn.focus, vr-actionbar .btn:active.focus, vr-actionbar .btn.active.focus {
