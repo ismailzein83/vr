@@ -35,19 +35,24 @@ namespace Vanrise.Security.Business
         {
             var groups = GetCachedGroups();
 
-            if (filter != null)
+            IEnumerable<int> excludedGroupIds = null;
+            if (filter != null && filter.EntityType != null && filter.EntityId != null)
             {
-                if (filter.EntityType != null && filter.EntityId != null)
-                {
-                    PermissionManager permissionManager = new PermissionManager();
-                    IEnumerable<Permission> entityPermissions = permissionManager.GetEntityPermissions((EntityType)filter.EntityType, filter.EntityId);
-
-                    IEnumerable<int> excludedGroupIds = entityPermissions.MapRecords(permission => Convert.ToInt32(permission.HolderId), permission => permission.HolderType == HolderType.GROUP);
-                    return groups.MapRecords(GroupInfoMapper, group => !excludedGroupIds.Contains(group.GroupId));
-                }
+                PermissionManager permissionManager = new PermissionManager();
+                IEnumerable<Permission> entityPermissions = permissionManager.GetEntityPermissions((EntityType)filter.EntityType, filter.EntityId);
+                excludedGroupIds = entityPermissions.MapRecords(permission => Convert.ToInt32(permission.HolderId), permission => permission.HolderType == HolderType.GROUP);
             }
 
-            return groups.MapRecords(GroupInfoMapper);
+            Func<Group, bool> filterExpression = (itemObject) =>
+            {
+                if (filter != null)
+                {
+                    if ((excludedGroupIds != null && excludedGroupIds.Contains(itemObject.GroupId)) || (filter.onlyStatic && !(itemObject.Settings is StaticGroup)))
+                        return false;
+                }
+                return true;
+            };
+            return groups.MapRecords(GroupInfoMapper, filterExpression);
         }
 
         public Group GetGroup(int groupId, bool isViewedFromUI)

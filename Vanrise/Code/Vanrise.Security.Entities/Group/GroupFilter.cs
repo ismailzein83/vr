@@ -10,5 +10,6 @@ namespace Vanrise.Security.Entities
     {
         public EntityType? EntityType { get; set; }
         public string EntityId { get; set; }
+        public bool onlyStatic { get; set; }
     }
 }
