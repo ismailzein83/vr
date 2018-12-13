@@ -339,6 +339,10 @@ public partial class ToBeReportedCases : BasePage
                 {
                     rvToOperator.LocalReport.ReportPath = "Reports\\rptToOperator.rdlc";
                 }
+                else if (ddlSearchClient.SelectedValue.ToInt() == (int)Enums.Clients.Etisalat)//-- ITPC
+                {
+                    rvToOperator.LocalReport.ReportPath = "Reports\\rptToEtisalatOperator.rdlc";
+                }
                 else
                 {
                     rvToOperator.LocalReport.ReportPath = "Reports\\rptDefaultToOperator.rdlc";

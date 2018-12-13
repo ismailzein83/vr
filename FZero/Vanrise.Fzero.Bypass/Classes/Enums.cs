@@ -55,7 +55,8 @@ namespace Vanrise.Fzero.Bypass
             Zain = 2,
             ST = 3,
             Madar = 7,
-            Sudatel = 8
+            Sudatel = 8,
+            Etisalat = 9
         }
 
         public enum RecommendedAction : int

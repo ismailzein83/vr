@@ -266,8 +266,12 @@ namespace Vanrise.Fzero.Services.Report
                             {
                                 filePath += string.Format("/{0}", ftpAddressArray[i]);
                             }
-                            fileName = string.Format("{0}/{1}", filePath, fileName);
+                            if(!string.IsNullOrEmpty(filePath))
+                            {
+                                fileName = string.Format("{0}/{1}", filePath, fileName);
+                            }
                         }
+
                         client.TransferProgress += (sender, e) =>
                         {
                             if (e.Finished)
@@ -275,7 +279,7 @@ namespace Vanrise.Fzero.Services.Report
                                 var sftp = sender as Sftp;
                                 if (sftp != null)
                                 {
-                                    sftp.Rename(fileName, fileName.Replace(".temp",".txt"));
+                                    sftp.Rename(e.RemotePath, e.RemotePath.Replace(".temp",".txt"));
                                 }
                             }
                         };
@@ -483,6 +487,10 @@ namespace Vanrise.Fzero.Services.Report
                 {
                     reportPath = Path.Combine(exeFolder, @"Reports\rptToMadarOperator.rdlc");
                     ErrorLog("reportPath: " + reportPath);
+                }
+                else if(ClientID == (int)Enums.Clients.Etisalat)//-- Madar
+                {
+                    reportPath = Path.Combine(exeFolder, @"Reports\rptToEtisalatOperator.rdlc");
                 }
                 else
                 {
