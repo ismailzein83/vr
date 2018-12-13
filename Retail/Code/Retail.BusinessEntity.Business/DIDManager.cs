@@ -285,7 +285,7 @@ namespace Retail.BusinessEntity.Business
 
             if (did.Settings.Numbers != null && did.Settings.Numbers.Count > 0)
             {
-                if (did.Settings.Numbers.Select(itm => itm.ToLower()).Contains(lowerNumber))
+                if (did.Settings.Numbers.Select(itm => itm.ToLower()).Any(x=>x.Contains(lowerNumber)))
                     return true;
             }
 
