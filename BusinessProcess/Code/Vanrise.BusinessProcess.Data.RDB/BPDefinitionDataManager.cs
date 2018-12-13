@@ -79,8 +79,6 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
         public bool UpdateBPDefinition(BPDefinition bpDefinition)
         {
-            string serializedConfiguration = bpDefinition.Configuration != null ? Vanrise.Common.Serializer.Serialize(bpDefinition.Configuration) : null;
-
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var updateQuery = queryContext.AddUpdateQuery();
@@ -97,7 +95,10 @@ namespace Vanrise.BusinessProcess.Data.RDB
             else
                 updateQuery.Column(COL_VRWorkflowId).Null();
 
-            updateQuery.Column(COL_Config).Value(serializedConfiguration);
+            if (bpDefinition.Configuration != null)
+                updateQuery.Column(COL_Config).Value(Serializer.Serialize(bpDefinition.Configuration));
+            else
+                updateQuery.Column(COL_Config).Null();
 
             var where = updateQuery.Where();
             where.EqualsCondition(COL_ID).Value(bpDefinition.BPDefinitionID);
