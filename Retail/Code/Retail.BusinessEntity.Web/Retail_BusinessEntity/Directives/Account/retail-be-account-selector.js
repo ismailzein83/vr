@@ -42,7 +42,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                    + '<vr-select on-ready="ctrl.onSelectorReady" ng-if="ctrl.useRemoteSelector"' //Remote Selector
                    + '  selectedvalues="ctrl.selectedvalues"'
                    + '  onselectionchanged="ctrl.onselectionchanged"'
-                   + '  datasource="ctrl.search"'
+                + '  datasource="ctrl.search"'
                    + '  datavaluefield="AccountId"'
                    + '  datatextfield="Name"'
                    + '  ' + multipleselection
@@ -56,7 +56,7 @@ app.directive('retailBeAccountSelector', ['Retail_BE_AccountBEAPIService', 'VRUI
                    + '  onselectionchanged="ctrl.onselectionchanged"'
                    + '  datasource="ctrl.datasource"'
                    + '  datavaluefield="AccountId"'
-                   + '  datatextfield="Name"'
+                + '  datatextfield="Name" hideselectall'
                    + '  ' + multipleselection
                    + '  isrequired="ctrl.isrequired"'
             //       + ' entityName="ctrl.fieldTitle"'
