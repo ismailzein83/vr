@@ -21,9 +21,9 @@ app.directive('vrCommonNamespaceSettingsGrid', ['VRUIUtilsService', 'VRNotificat
             this.initializeController = initializeController;
 
             var gridAPI;
-            $scope.scopeModel = {};
 
             function initializeController() {
+                $scope.scopeModel = {};
                 $scope.scopeModel.vrNamespaceSettings = [];
                 $scope.scopeModel.menuActions = [];
 
@@ -32,6 +32,12 @@ app.directive('vrCommonNamespaceSettingsGrid', ['VRUIUtilsService', 'VRNotificat
                     defineAPI();
                 };
 
+                $scope.scopeModel.deleteDynamicCode = function (code) {
+                    var index = $scope.scopeModel.vrNamespaceSettings.indexOf(code);
+                    if (index > -1) {
+                        $scope.scopeModel.vrNamespaceSettings.splice(index, 1);
+                    }
+                };
                 defineMenuActions();
             }
 
@@ -74,18 +80,14 @@ app.directive('vrCommonNamespaceSettingsGrid', ['VRUIUtilsService', 'VRNotificat
 
             function editVRDynamicCode(vrDynamicCodeObj) {
                 var onVRDynamicCodeUpdated = function (updatedVRDynamicCode) {
-                    gridAPI.itemUpdated({ Entity: updatedVRDynamicCode });
+                    var index = $scope.scopeModel.vrNamespaceSettings.indexOf(vrDynamicCodeObj);
+                    $scope.scopeModel.vrNamespaceSettings[index] = { Entity: updatedVRDynamicCode };
                 };
 
                 VRCommon_VRNamespaceService.editVRDynamicCode(onVRDynamicCodeUpdated, vrDynamicCodeObj.Entity);
             }
 
-            $scope.scopeModel.deleteDynamicCode = function (code) {
-                var index = $scope.scopeModel.vrNamespaceSettings.indexOf(code);
-                if (index > -1) {
-                    $scope.scopeModel.vrNamespaceSettings.splice(index, 1);
-                }
-            };
+          
          
         }
     }]);

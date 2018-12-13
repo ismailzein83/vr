@@ -1,1 +1,25 @@
-﻿
+﻿<vr-columns width="fullrow" haschildcolumns>
+    <vr-common-connection-selector normal-col-num="6" on-ready="scopeModel.onConnectionSelectorReady" hideremoveicon isrequired="true"></vr-common-connection-selector>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.className" isrequired="true" label="Class Name"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-textarea value="scopeModel.freeCode" label="Free Code" rows="10"></vr-textarea>
+    </vr-columns>
+    <vr-columns width="fullrow" withemptyrow>
+        <vr-section title="Methods">
+            <vr-button type="Add" data-onclick="scopeModel.addHttpProxyMethod" standalone withemptyrow></vr-button>
+            <vr-validator validate="scopeModel.validateHttpProxyMethods()">
+                <vr-datagrid datasource="scopeModel.httpProxyMethods"
+                             menuactions="scopeModel.menuActions"
+                             pagingtype="'PagingOnScroll'"
+                             hidegridmenu
+                             ondeleterow="scopeModel.onDeleteHttpMethod">
+                    <vr-datagridcolumn headertext="'Method Name'" field="'Entity.MethodName'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
+        </vr-section>
+    </vr-columns>
+</vr-columns>
+
+

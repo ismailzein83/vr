@@ -1,1 +1,100 @@
-﻿
+﻿<div vr-modalcontent ng-controller="VRCommon_HttpProxyMethodEditorController" width="'100%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formHttpProxyMethodEditor">
+            <vr-columns width="1/4row">
+                <vr-textbox value="scopeModel.methodName" isrequired="true" label="Method Name"></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/4row">
+                <vr-select datasource="scopeModel.httpMethodTypes" datavaluefield="value" datatextfield="description"
+                           label="Method" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedHttpMethodType">
+            </vr-columns>
+            <vr-columns width="1/4row">
+                <vr-select datasource="scopeModel.httpMessageFormats" datavaluefield="value" datatextfield="description"
+                           label="Message Format" isrequired="true" hideremoveicon selectedvalues="scopeModel.selectedHttpMethodFormat">
+            </vr-columns>
+            <vr-columns width="1/4row">
+                <vr-textbox value="scopeModel.returnType" label="Return Type"></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/2row">
+                <vr-textbox value="scopeModel.actionPath" label="Action Path" isrequired="true"></vr-textbox>
+            </vr-columns>
+            <vr-columns width="fullrow">
+                <vr-textarea value="scopeModel.body" label="Body Logic" vr-disabled="scopeModel.isBodyDisabled" rows="10"></vr-textarea>
+            </vr-columns>
+            <vr-columns width="fullrow">
+                <vr-textarea value="scopeModel.responseLogic" label="Response Logic" rows="10"></vr-textarea>
+            </vr-columns>
+            <vr-columns width="fullrow">
+                <vr-section title="Parameters">
+                    <vr-button type="Add" data-onclick="scopeModel.addParameter" standalone></vr-button>
+                    <vr-validator validate="scopeModel.validateParameters()">
+                        <vr-datagrid datasource="scopeModel.parameters"
+                                     enabledraggablerow="true"
+                                     hidegridmenu
+                                     ondeleterow="scopeModel.onDeleteParameter">
+                            <vr-datagridcolumn headertext="'Name'" type="'Text'">
+                                <vr-textbox value="dataItem.name" isrequired="true"></vr-textbox>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Type'" type="'Text'">
+                                <vr-textbox value="dataItem.type" isrequired="true"></vr-textbox>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Include in Header'" type="'Text'">
+                                <vr-switch value="dataItem.includeInHeader"></vr-switch>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Include in Body'" type="'Text'">
+                                <vr-switch value="dataItem.includeInBody" isrequired></vr-switch>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Include in URL'" type="'Text'">
+                                <vr-switch value="dataItem.includeInURL" isrequired></vr-switch>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-section>
+            </vr-columns>
+            <vr-columns width="1/2row">
+                <vr-section title="Headers">
+                    <vr-button type="Add" data-onclick="scopeModel.addHeader" standalone></vr-button>
+                    <vr-validator validate="scopeModel.validateHeaders()">
+                        <vr-datagrid datasource="scopeModel.headers"
+                                     enabledraggablerow="true"
+                                     hidegridmenu
+                                     ondeleterow="scopeModel.onDeleteHeader">
+                            <vr-datagridcolumn headertext="'Name'" type="'Text'">
+                                <vr-textbox value="dataItem.name" isrequired></vr-textbox>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Value'" type="'Text'">
+                                <vr-textbox value="dataItem.value" isrequired></vr-textbox>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-section>
+            </vr-columns>
+            <vr-columns width="1/2row">
+                <vr-section title="URL Parameters">
+                    <vr-button type="Add" data-onclick="scopeModel.addURLParameter" standalone></vr-button>
+                    <vr-validator validate="scopeModel.validateURLParameters()">
+                        <vr-datagrid datasource="scopeModel.urlParameters"
+                                     enabledraggablerow="true"
+                                     hidegridmenu
+                                     ondeleterow="scopeModel.onDeleteURLParameter">
+                            <vr-datagridcolumn headertext="'Name'" type="'Text'">
+                                <vr-textbox value="dataItem.name" isrequired></vr-textbox>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Type'" type="'Text'">
+                                <vr-textbox value="dataItem.type" isrequired></vr-textbox>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-section>
+            </vr-columns>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formHttpProxyMethodEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

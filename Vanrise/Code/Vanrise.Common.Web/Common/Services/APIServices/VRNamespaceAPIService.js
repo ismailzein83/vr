@@ -50,6 +50,15 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRDynamicCodeSettingsConfigs"));
         }
 
+        function GetVRNamespacesInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRNamespacesInfo"));
+        }
+        function GetVRNamespaceClassesInfo(vrNamespaceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRNamespaceClassesInfo"), { vrNamespaceId: vrNamespaceId});
+        }
+        function GetVRNamespaceClassMethodsInfo(vrNamespaceId, className) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRNamespaceClassMethodsInfo"), { vrNamespaceId: vrNamespaceId, className: className });
+        }
 
         return ({
             GetFilteredVRNamespaces: GetFilteredVRNamespaces,
@@ -60,7 +69,10 @@
             HasEditVRNamespacePermission: HasEditVRNamespacePermission,
             TryCompileNamespace: TryCompileNamespace,
             ExportCompilationResult: ExportCompilationResult,
-            GetVRDynamicCodeSettingsConfigs: GetVRDynamicCodeSettingsConfigs
+            GetVRDynamicCodeSettingsConfigs: GetVRDynamicCodeSettingsConfigs,
+            GetVRNamespacesInfo: GetVRNamespacesInfo,
+            GetVRNamespaceClassesInfo: GetVRNamespaceClassesInfo,
+            GetVRNamespaceClassMethodsInfo: GetVRNamespaceClassMethodsInfo
         });
     }
 

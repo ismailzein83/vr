@@ -1,1 +1,17 @@
-﻿
+﻿<vr-panel vr-loader="scopeModel.isLoading">
+    <vr-row removeline>
+        <vr-common-namespace-selector on-ready="scopeModel.onNamespaceSelectorReady" normal-col-num="3" onselectionchanged="scopeModel.onNamespaceSelectionChange" isrequired="true" hideremoveicon="true"></vr-common-namespace-selector>
+        <vr-common-namespaceclass-selector on-ready="scopeModel.onClassSelectorReady" normal-col-num="3" onselectionchanged="scopeModel.onClassSelectionChange" isrequired="true" hideremoveicon="true"></vr-common-namespaceclass-selector>
+        <vr-common-namespaceclassmethod-selector on-ready="scopeModel.onMethodSelectorReady" normal-col-num="3" isrequired="true" hideremoveicon="true"></vr-common-namespaceclassmethod-selector>
+        <vr-columns colnum="3">
+            <vr-select datasource="scopeModel.methodTypes"
+                       datatextfield="description"
+                       datavaluefield="value"
+                       label="Method Type"
+                       selectedvalues="scopeModel.selectedMethodType"
+                       isrequired="true"
+                       hideremoveicon="true">
+            </vr-select>
+        </vr-columns>
+    </vr-row>
+</vr-panel>

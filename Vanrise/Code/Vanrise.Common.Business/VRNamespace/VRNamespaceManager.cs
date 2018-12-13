@@ -113,6 +113,48 @@ namespace Vanrise.Common.Business
             GetCachedAssembly();
         }
 
+        public IEnumerable<VRNamespaceInfo> GetVRNamespacesInfo()
+        {
+            var vrNamespaces = GetCachedVRNamespaces();
+            if (vrNamespaces != null && vrNamespaces.Count > 0)
+            {
+               return vrNamespaces.MapRecords(VRNamespaceInfoMapper).OrderBy(ns => ns.Name);
+            }
+            return null;
+        }
+        public IEnumerable<VRNamespaceClassInfo> GetVRNamespaceClassesInfo(Guid vrNamespaceId)
+        {
+            var assemblyClasses = GetAssemblyClasses(vrNamespaceId);
+            if(assemblyClasses!=null && assemblyClasses.Count > 0)
+            {
+                return assemblyClasses.Keys.MapRecords(VRNamespaceClassInfoMapper).OrderBy(x => x.Name);
+            }
+            return null;
+        }
+
+        public IEnumerable<VRNamespaceClassMethodInfo> GetVRNamespaceClassMethodsInfo(Guid vrNamespaceId, string className)
+        {
+            var assemblyClassMethods = GetAssemblyClassMethods(vrNamespaceId, className);
+            if(assemblyClassMethods!=null && assemblyClassMethods.Count > 0)
+            {
+                return assemblyClassMethods.Keys.MapRecords(VRNamespaceClassMethodInfoMapper).OrderBy(x => x.Name);
+            }
+            return null;
+        }
+        public Dictionary<string, MethodInfo> GetAssemblyClassMethods(Guid vrNamespaceId, string className)
+        {
+            var classType = GetAssemblyClassType(vrNamespaceId, className);
+            Dictionary<string, MethodInfo> methods = new Dictionary<string, MethodInfo>();
+            if (classType != null)
+            {
+                MethodInfo[] methodInfos = classType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                if (methodInfos != null && methodInfos.Length > 0)
+                {
+                    return methodInfos.ToDictionary(key => key.Name, value => value);
+                }
+            }
+            return methods;
+        }
         #endregion
 
         #region Private Methods
@@ -169,7 +211,28 @@ namespace Vanrise.Common.Business
 
             return classDefinitionBuilder.ToString();
         }
-
+        private Dictionary<string, Type> GetAssemblyClasses(Guid vrNamespaceId)
+        {
+            var vrNamespace = GetVRNamespace(vrNamespaceId);
+            var compiledNamespace = TryCompileNamespace(vrNamespace);
+            Dictionary<string, Type> assemblyClasses = new Dictionary<string, Type>();
+            if (compiledNamespace.Result)
+            {
+                foreach (Type type in compiledNamespace.OutputAssembly.GetTypes())
+                {
+                    if (type.IsClass && type.IsPublic)
+                    {
+                        assemblyClasses.Add(type.Name, type);
+                    }
+                }
+            }
+            return assemblyClasses;
+        }
+        private Type GetAssemblyClassType(Guid vrNamespaceId, string className)
+        {
+            return GetAssemblyClasses(vrNamespaceId).GetRecord(className);
+        }
+     
         private Assembly GetCachedAssembly()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("CachedVRNamespacesAssembly", () =>
@@ -321,6 +384,30 @@ namespace Vanrise.Common.Business
                 Name = vrNamespace.Name
             };
             return vrNamespaceDetail;
+        }
+
+        public VRNamespaceInfo VRNamespaceInfoMapper(VRNamespace vrNamespace)
+        {
+            return new VRNamespaceInfo()
+            {
+                Name = vrNamespace.Name,
+                VRNamespaceId = vrNamespace.VRNamespaceId
+            };
+        }
+
+        public VRNamespaceClassInfo VRNamespaceClassInfoMapper(string className)
+        {
+            return new VRNamespaceClassInfo()
+            {
+                Name = className
+            };
+        }
+        public VRNamespaceClassMethodInfo VRNamespaceClassMethodInfoMapper(string methodName)
+        {
+            return new VRNamespaceClassMethodInfo()
+            {
+                Name = methodName
+            };
         }
 
         #endregion

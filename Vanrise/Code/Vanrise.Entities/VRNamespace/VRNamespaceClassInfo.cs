@@ -8,6 +8,6 @@ namespace Vanrise.Entities
 {
     public class VRNamespaceClassInfo
     {
-
+        public string Name { get; set; }
     }
 }

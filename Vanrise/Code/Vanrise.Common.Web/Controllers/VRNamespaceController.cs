@@ -74,5 +74,26 @@ namespace Vanrise.Common.Web.Controllers
         {
             return _manager.GetVRDynamicCodeSettingsConfigs();
         }
+
+        [HttpGet]
+        [Route("GetVRNamespacesInfo")]
+        public IEnumerable<VRNamespaceInfo> GetVRNamespaceInfo()
+        {
+            return _manager.GetVRNamespacesInfo();
+        }
+        [HttpGet]
+        [Route("GetVRNamespaceClassesInfo")]
+        public IEnumerable<VRNamespaceClassInfo> GetVRNamespaceClassesInfo(Guid vrNamespaceId)
+        {
+            return _manager.GetVRNamespaceClassesInfo(vrNamespaceId);
+        }
+
+        [HttpGet]
+        [Route("GetVRNamespaceClassMethodsInfo")]
+        public IEnumerable<VRNamespaceClassMethodInfo> GetVRNamespaceClassMethodsInfo(Guid vrNamespaceId, string className)
+        {
+            return _manager.GetVRNamespaceClassMethodsInfo(vrNamespaceId, className);
+        }
+
     }
 }
