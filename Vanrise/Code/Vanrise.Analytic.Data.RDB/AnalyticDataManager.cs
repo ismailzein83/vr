@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
+using Vanrise.GenericData.Data.RDB;
 
 namespace Vanrise.Analytic.Data.RDB
 {
@@ -64,7 +65,7 @@ namespace Vanrise.Analytic.Data.RDB
                 {
                     var dimConfig = GetDimensionConfigWithValidate(dimName);
                     dimConfig.DimensionConfig.Config.SQLExpression.ThrowIfNull("dimensionConfig.Config.SQLExpression", dimName);
-                    string dimAlias = $"{dimName}_{dimConfig.DimensionConfig.AnalyticDimensionConfigId}";
+                    string dimAlias = $"{dimName}_{dimConfig.DimensionConfig.AnalyticDimensionConfigId.ToString().Replace("-", "")}";
                     var dimInfo = new QueryDimensionInfo
                     {
                         DimensionName = dimName,
@@ -86,7 +87,7 @@ namespace Vanrise.Analytic.Data.RDB
                 {
                     var aggConfig = GetAggregateConfigWithValidate(aggName);
                     aggConfig.AggregateConfig.Config.SQLColumn.ThrowIfNull("aggregateConfig.Config.SQLColumn", aggName);
-                    string aggAlias = $"{aggName}_{aggConfig.AggregateConfig.AnalyticAggregateConfigId}";
+                    string aggAlias = $"{aggName}_{aggConfig.AggregateConfig.AnalyticAggregateConfigId.ToString().Replace("-", "")}";
                     var aggInfo = new QueryAggregateInfo
                     {
                         AggregateName = aggName,
@@ -121,6 +122,63 @@ namespace Vanrise.Analytic.Data.RDB
             where.GreaterOrEqualCondition(timeColumnName).Value(query.FromTime);
             if (query.ToTime.HasValue)
                 where.LessOrEqualCondition(timeColumnName).Value(query.ToTime.Value);
+
+            if(context.DBFilters != null)
+            {
+                foreach(var dbFilter in context.DBFilters)
+                {
+                    if (dbFilter.FilterValues != null && dbFilter.FilterValues.Count() > 0)
+                    {
+                        bool hasNullValue = false;
+                        List<string> parameterNames = new List<string>();
+                        List<BaseRDBExpression> filterValueExpressions = new List<BaseRDBExpression>();
+                        var expressionContext = where.CreateExpressionContext((exp) => filterValueExpressions.Add(exp));
+                        foreach (var filterValue in dbFilter.FilterValues)
+                        {
+                            if (filterValue == null)
+                                hasNullValue = true;
+                            else
+                                expressionContext.ObjectValue(filterValue);
+                        }
+                        
+                        var conditionContext = where;
+                        if (filterValueExpressions.Count > 0 && hasNullValue)
+                            conditionContext = where.ChildConditionGroup(RDBConditionGroupOperator.OR);
+
+                        var dimConfig = GetDimensionConfigWithValidate(dbFilter.Dimension);
+
+                        if (filterValueExpressions.Count > 0)
+                        {
+                            if (dimConfig.RDBExpressionSetter != null)
+                                dimConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(conditionContext.ListCondition(RDBListConditionOperator.IN, filterValueExpressions)));
+                            else
+                                conditionContext.ListCondition(dimConfig.DimensionConfig.Config.SQLExpression, RDBListConditionOperator.IN, filterValueExpressions);
+                        }
+
+                        if(hasNullValue)
+                        {
+                            if (dimConfig.RDBExpressionSetter != null)
+                                dimConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(conditionContext.NullCondition()));
+                            else
+                                conditionContext.NullCondition(dimConfig.DimensionConfig.Config.SQLExpression);
+                        }
+                    }
+                }
+            }
+
+            if (context.DBFilterGroup != null)
+            {
+                var recordFilterRDBBuilder = new RecordFilterRDBBuilder(
+                    (fieldName, expressionContext) =>
+                    {
+                        var dimConfig = GetDimensionConfigWithValidate(fieldName);
+                        if (dimConfig.RDBExpressionSetter != null)
+                            dimConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(expressionContext));
+                        else
+                            expressionContext.Column(dimConfig.DimensionConfig.Config.SQLExpression);
+                    });
+                recordFilterRDBBuilder.RecordFilterGroupCondition(where, context.DBFilterGroup);
+            }
 
             return queryContext.GetItems(reader => DBAnalyticRecordMapper(reader, dimensionInfos, aggregateInfos));
         }

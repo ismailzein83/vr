@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -27,6 +28,10 @@ namespace Vanrise.Analytic.Entities
         HashSet<string> AllQueryDBDimensions { get; }
 
         HashSet<string> AllQueryDBAggregates { get; }
+
+        List<DimensionFilter> DBFilters { get; }
+
+        RecordFilterGroup DBFilterGroup { get; }
     }
 
     public interface IGetRemoteAnalyticDataProviderContext

@@ -197,16 +197,17 @@ namespace Vanrise.Data.RDB
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
             StringBuilder builder = new StringBuilder();
-            int whenIndex = 0;
+            bool isFirstItem = true;
             var conditionContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);
             foreach (var when in this.Whens)
             {
-                if (whenIndex == 0)
+                if (isFirstItem)
                     builder.Append(" CASE ");
                 builder.Append(" WHEN ");
                 builder.Append(when.ConditionGroup.ToDBQuery(conditionContext));
                 builder.Append(" THEN ");
                 builder.Append(when.ValueExpression.ToDBQuery(context));
+                isFirstItem = false;
             }
             if (this.DefaultValueExpression != null)
             {

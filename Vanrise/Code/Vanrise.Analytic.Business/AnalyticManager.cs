@@ -95,12 +95,11 @@ namespace Vanrise.Analytic.Business
             var dataManager = dataProvider.CreateDataManager(queryContext);
             
             var queryForDataManager = BuildQueryForDataManager(query);
-            var allDBDimensions = GetIncludedDBDimensionNames(queryContext, queryForDataManager.DimensionFields, queryForDataManager.MeasureFields);
-            var allDBAggregates = GetIncludedDBAggregateNames(queryContext, queryForDataManager.MeasureFields);
-            var getAnalyticRecordsContext = new AnalyticDataManagerGetAnalyticRecordsContext(queryForDataManager, allDBDimensions, allDBAggregates);
+            var getAnalyticRecordsContext = new AnalyticDataManagerGetAnalyticRecordsContext(queryContext, queryForDataManager);
             IEnumerable<DBAnalyticRecord> dbRecords = dataManager.GetAnalyticRecords(getAnalyticRecordsContext);
 
-            List<string> allDimensionNamesList = new List<string>();
+            var allDBDimensions = getAnalyticRecordsContext.AllQueryDBDimensions;
+            List <string> allDimensionNamesList = new List<string>();
 
             if (query.DimensionFields != null)
                 allDimensionNamesList.AddRange(query.DimensionFields);
@@ -376,77 +375,6 @@ namespace Vanrise.Analytic.Business
                 return DateTime.Today.AddDays(1);
             else
                 return fromTime.AddDays(1);
-        }
-
-        private HashSet<string> GetIncludedDBDimensionNames(IAnalyticTableQueryContext analyticTableQueryContext, List<string> requestedDimensionNames, List<string> measureNames)
-        {
-            HashSet<string> dbDimensions = new HashSet<string>();
-            if (requestedDimensionNames != null)
-            {
-                foreach (var dimensionName in requestedDimensionNames)
-                {
-                    AddDBDimensions(analyticTableQueryContext, dimensionName, dbDimensions);
-                }
-            }
-            if (measureNames != null)
-            {
-                foreach (var measureName in measureNames)
-                {
-                    var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
-                    if (measureConfig.Config.DependentDimensions != null)
-                    {
-                        foreach (var measureDepDim in measureConfig.Config.DependentDimensions)
-                        {
-                            AddDBDimensions(analyticTableQueryContext, measureDepDim, dbDimensions);
-                        }
-                    }
-                }
-            }
-            //retrieving dimensions from DimensionFilters and FilterGroup
-            var filterDimensions = analyticTableQueryContext.GetDimensionNamesFromQueryFilters();
-            if (filterDimensions != null)
-            {
-                foreach (var filterDimension in filterDimensions)
-                {
-                    AddDBDimensions(analyticTableQueryContext, filterDimension, dbDimensions);
-                }
-            }
-            
-            return dbDimensions;
-        }
-
-        private void AddDBDimensions(IAnalyticTableQueryContext analyticTableQueryContext, string dimensionName, HashSet<string> dbDimensionNames)
-        {
-            var dimensionConfig = analyticTableQueryContext.GetDimensionConfig(dimensionName);
-            if (!String.IsNullOrEmpty(dimensionConfig.Config.SQLExpression))
-                dbDimensionNames.Add(dimensionConfig.Name);
-            if (dimensionConfig.Config.DependentDimensions != null)
-            {
-                foreach (var dependentDimensionName in dimensionConfig.Config.DependentDimensions)
-                {
-                    if (!dbDimensionNames.Contains(dependentDimensionName))
-                    {
-                        AddDBDimensions(analyticTableQueryContext, dependentDimensionName, dbDimensionNames);
-                    }
-                }
-            }
-        }
-
-        private HashSet<string> GetIncludedDBAggregateNames(IAnalyticTableQueryContext analyticTableQueryContext, List<string> measureNames)
-        {
-            HashSet<string> aggregateNames = new HashSet<string>();
-            foreach (var measureName in measureNames)
-            {
-                var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
-                if (measureConfig.Config.DependentAggregateNames != null)
-                {
-                    foreach (var aggName in measureConfig.Config.DependentAggregateNames)
-                    {
-                        aggregateNames.Add(aggName);
-                    }
-                }
-            }
-            return aggregateNames;
         }
 
         private Dictionary<string, MeasureStyleRule> BuildMeasureStyleRulesDictionary(List<MeasureStyleRule> measureStyleRules)
@@ -1154,11 +1082,17 @@ namespace Vanrise.Analytic.Business
 
         private class AnalyticDataManagerGetAnalyticRecordsContext : IAnalyticDataManagerGetAnalyticRecordsContext
         {
-            public AnalyticDataManagerGetAnalyticRecordsContext(AnalyticQuery query, HashSet<string> allQueryDBDimensions, HashSet<string> allQueryDBAggregates)
+            IAnalyticTableQueryContext _queryContext;
+
+            static RecordFilterManager s_recordFilterManager = new RecordFilterManager();
+            public AnalyticDataManagerGetAnalyticRecordsContext(IAnalyticTableQueryContext queryContext, AnalyticQuery query)
             {
+                _queryContext = queryContext;
                 this.Query = query;
-                this.AllQueryDBDimensions = allQueryDBDimensions;
-                this.AllQueryDBAggregates = allQueryDBAggregates;
+                this.AllQueryDBDimensions = GetIncludedDBDimensionNames(queryContext, query.DimensionFields, query.MeasureFields);
+                this.AllQueryDBAggregates = GetIncludedDBAggregateNames(queryContext, query.MeasureFields);
+                this.DBFilters = GetDBFilters(query.Filters);
+                this.DBFilterGroup = GetDBFilterGroup(query.FilterGroup);
             }
 
             public AnalyticQuery Query { get; private set; }
@@ -1166,6 +1100,119 @@ namespace Vanrise.Analytic.Business
             public HashSet<string> AllQueryDBDimensions { get; private set; }
 
             public HashSet<string> AllQueryDBAggregates { get; private set; }
+
+            public List<DimensionFilter> DBFilters { get; private set; }
+
+            public RecordFilterGroup DBFilterGroup { get; private set; }
+
+            private HashSet<string> GetIncludedDBDimensionNames(IAnalyticTableQueryContext analyticTableQueryContext, List<string> requestedDimensionNames, List<string> measureNames)
+            {
+                HashSet<string> dbDimensions = new HashSet<string>();
+                if (requestedDimensionNames != null)
+                {
+                    foreach (var dimensionName in requestedDimensionNames)
+                    {
+                        AddDBDimensions(analyticTableQueryContext, dimensionName, dbDimensions);
+                    }
+                }
+                if (measureNames != null)
+                {
+                    foreach (var measureName in measureNames)
+                    {
+                        var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
+                        if (measureConfig.Config.DependentDimensions != null)
+                        {
+                            foreach (var measureDepDim in measureConfig.Config.DependentDimensions)
+                            {
+                                AddDBDimensions(analyticTableQueryContext, measureDepDim, dbDimensions);
+                            }
+                        }
+                    }
+                }
+                //retrieving dimensions from DimensionFilters and FilterGroup
+                var filterDimensions = analyticTableQueryContext.GetDimensionNamesFromQueryFilters();
+                if (filterDimensions != null)
+                {
+                    foreach (var filterDimension in filterDimensions)
+                    {
+                        AddDBDimensions(analyticTableQueryContext, filterDimension, dbDimensions);
+                    }
+                }
+
+                return dbDimensions;
+            }
+
+            private void AddDBDimensions(IAnalyticTableQueryContext analyticTableQueryContext, string dimensionName, HashSet<string> dbDimensionNames)
+            {
+                var dimensionConfig = analyticTableQueryContext.GetDimensionConfig(dimensionName);
+                if (!String.IsNullOrEmpty(dimensionConfig.Config.SQLExpression))
+                    dbDimensionNames.Add(dimensionConfig.Name);
+                if (dimensionConfig.Config.DependentDimensions != null)
+                {
+                    foreach (var dependentDimensionName in dimensionConfig.Config.DependentDimensions)
+                    {
+                        if (!dbDimensionNames.Contains(dependentDimensionName))
+                        {
+                            AddDBDimensions(analyticTableQueryContext, dependentDimensionName, dbDimensionNames);
+                        }
+                    }
+                }
+            }
+
+            private HashSet<string> GetIncludedDBAggregateNames(IAnalyticTableQueryContext analyticTableQueryContext, List<string> measureNames)
+            {
+                HashSet<string> aggregateNames = new HashSet<string>();
+                foreach (var measureName in measureNames)
+                {
+                    var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
+                    if (measureConfig.Config.DependentAggregateNames != null)
+                    {
+                        foreach (var aggName in measureConfig.Config.DependentAggregateNames)
+                        {
+                            aggregateNames.Add(aggName);
+                        }
+                    }
+                }
+                return aggregateNames;
+            }
+            
+            private List<DimensionFilter> GetDBFilters(List<DimensionFilter> filters)
+            {
+                List<DimensionFilter> dbFilters = null;
+                if (filters != null)
+                {
+                    foreach(var filter in filters)
+                    {
+                        var dimensionConfig = _queryContext.GetDimensionConfig(filter.Dimension);
+                        if (!String.IsNullOrEmpty(dimensionConfig.Config.SQLExpression))
+                        {
+                            if (dbFilters == null)
+                                dbFilters = new List<DimensionFilter>();
+                            dbFilters.Add(filter);
+                        }
+                    }
+                    
+                }
+                return dbFilters;
+            }
+
+            private RecordFilterGroup GetDBFilterGroup(RecordFilterGroup filterGroup)
+            {
+                RecordFilterGroup dbFilterGroup = null;
+                if(filterGroup != null)
+                {
+                    List<string> nonDBDimensionNames = _queryContext.Dimensions.Values.Where(dimConfig => string.IsNullOrEmpty(dimConfig.Config.SQLExpression)).Select(dimConfig => dimConfig.Name).ToList();
+                    if(nonDBDimensionNames.Count == 0)
+                    {
+                        dbFilterGroup = filterGroup;
+                    }
+                    else
+                    {
+                        dbFilterGroup = s_recordFilterManager.ReBuildRecordFilterGroupWithExcludedFields(filterGroup, nonDBDimensionNames);
+                    }
+                }
+                return dbFilterGroup;
+            }
         }
         private class AnalyticRecordRequestHandler : BigDataRequestHandler<AnalyticQuery, AnalyticRecord, AnalyticRecord>
         {

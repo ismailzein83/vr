@@ -102,25 +102,55 @@ namespace Vanrise.Data.RDB
         public void ObjectValue(Object value)
         {
             if (value == null)
+            {
                 Expression(new RDBNullExpression());
+                return;
+            }
             if (value is string)
+            {
                 Expression(new RDBFixedTextExpression { Value = value as string });
+                return;
+            }
             if (value is int)
+            {
                 Expression(new RDBFixedIntExpression { Value = (int)value });
+                return;
+            }
             if (value is long)
+            {
                 Expression(new RDBFixedLongExpression { Value = (long)value });
+                return;
+            }
             if (value is decimal)
+            {
                 Expression(new RDBFixedDecimalExpression { Value = (decimal)value });
+                return;
+            }
             if (value is float)
+            {
                 Expression(new RDBFixedFloatExpression { Value = (float)value });
+                return;
+            }
             if (value is Guid)
+            {
                 Expression(new RDBFixedGuidExpression { Value = (Guid)value });
+                return;
+            }
             if (value is DateTime)
+            {
                 Expression(new RDBFixedDateTimeExpression { Value = (DateTime)value });
+                return;
+            }
             if (value is bool)
+            {
                 Expression(new RDBFixedBooleanExpression { Value = (bool)value });
+                return;
+            }
             if (value is byte[])
+            {
                 Expression(new RDBFixedBytesExpression { Value = (byte[])value });
+                return;
+            }
             throw new NotSupportedException(string.Format("value type '{0}'", value.GetType()));
         }
 

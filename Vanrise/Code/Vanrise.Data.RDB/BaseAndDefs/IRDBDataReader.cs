@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Data.RDB
 {
@@ -62,6 +63,8 @@ namespace Vanrise.Data.RDB
         byte[] GetBytes(string fieldName);
 
         byte[] GetNullableBytes(string fieldName);
+
+        Vanrise.Entities.Time GetTime(string fieldName);
     }
 
     public class CommonRDBDataReader : IRDBDataReader
@@ -240,6 +243,23 @@ namespace Vanrise.Data.RDB
         public virtual byte[] GetNullableBytes(string fieldName)
         {
             return GetFieldValueWithNullHandling<byte[]>(fieldName);
+        }
+
+        public Vanrise.Entities.Time GetTime(string fieldName)
+        {
+            var value = _originalReader[fieldName];
+            if (value == null || value == DBNull.Value)
+                return null;
+            else if(value is DateTime)
+            {
+                return new Vanrise.Entities.Time((DateTime)value);                
+            }
+            else
+            {
+                string valueAsString = value as string;
+                return new Vanrise.Entities.Time(valueAsString);
+            }
+            throw new NotSupportedException($"Invalid Time value '{value}' value type is '{value.GetType()}");
         }
     }
 }
