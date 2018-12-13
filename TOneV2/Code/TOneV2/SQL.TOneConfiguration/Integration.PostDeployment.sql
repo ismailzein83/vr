@@ -27,8 +27,8 @@ as (select * from (values
 
 ('07C4303E-2D53-4062-BEF6-9B033CABB692','SizeBasedFileDelayChecker','Size Based','VR_Integration_FileDelayCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedatasourcedefinition-delaychecker-sizebased"}'),
 ('A498CF7D-0D01-4384-992C-644238F11C09','TimeBasedFileDelayChecker','Time Based','VR_Integration_FileDelayCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedatasourcedefinition-delaychecker-timebased"}'),	
-('AF88B648-2FAD-4A7E-8240-564019CF4BC3','DateTimeFileMissingChecker','Date Time','VR_Integration_FileMissingCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedatasourcedefinition-missingchecker-datetime"}'),
-('FA37168F-25B8-44B2-8D27-CA0DD3E3265E','SequenceFileDataSourceNaming','Sequence','VR_Integration_FileMissingCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedatasourcedefinition-missingchecker-sequence"}')
+
+('FA37168F-25B8-44B2-8D27-CA0DD3E3265E','SequencialFileMissingChecker','Sequence','VR_Integration_FileMissingCheckerSettingsConfig'		,'{"Editor":"vr-integration-filedatasourcedefinition-missingchecker-sequence"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
