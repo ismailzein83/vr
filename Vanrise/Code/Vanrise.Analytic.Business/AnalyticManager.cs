@@ -93,7 +93,7 @@ namespace Vanrise.Analytic.Business
             if (dataProvider == null)
                 dataProvider = Activator.CreateInstance(Type.GetType("Vanrise.Analytic.Data.SQL.SQLAnalyticDataProvider, Vanrise.Analytic.Data.SQL")) as AnalyticDataProvider;
             var dataManager = dataProvider.CreateDataManager(queryContext);
-            
+
             var queryForDataManager = BuildQueryForDataManager(query);
             var getAnalyticRecordsContext = new AnalyticDataManagerGetAnalyticRecordsContext(queryContext, queryForDataManager);
             IEnumerable<DBAnalyticRecord> dbRecords = dataManager.GetAnalyticRecords(getAnalyticRecordsContext);
@@ -521,7 +521,7 @@ namespace Vanrise.Analytic.Business
             List<SubTableAnalyticRecordInProcessByParentGroupingKey> subTablesRecordsByParentGroupingKey;
             List<SubTableAnalyticRecordInProcessByGroupingKey> subTablesSummaryRecordsByGroupingKey;
             List<List<string>> subTablesOrderedDimensionKeys;
-            BuildSubTablesRecordsFromDBRecords(subTablesDBRecords, subTablesSummaryDBRecords, analyticTableQueryContext, allDimensionNames, measureStyleRulesDictionary, 
+            BuildSubTablesRecordsFromDBRecords(subTablesDBRecords, subTablesSummaryDBRecords, analyticTableQueryContext, allDimensionNames, measureStyleRulesDictionary,
                 querySubTables, buildSummaryRecord, out resultSubTables, out subTablesRecordsByParentGroupingKey, out subTablesSummaryRecordsByGroupingKey, out subTablesOrderedDimensionKeys);
             foreach (var dbRecordEntry in groupedRecordsByDimensionsKey)
             {
@@ -558,7 +558,7 @@ namespace Vanrise.Analytic.Business
             if (withSummary && summaryDBRecord != null)
             {
                 bool allSummaryMeasuresAreNull;
-                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summaryDBRecord, null, allDimensionNames, measureNames, measureStyleRulesDictionary, 
+                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, summaryDBRecord, null, allDimensionNames, measureNames, measureStyleRulesDictionary,
                     true, null, null, null, out allSummaryMeasuresAreNull);
                 if (querySubTables != null)
                     AddSubTablesMeasuresToSummaryRecord(summaryRecord, analyticTableQueryContext, measureStyleRulesDictionary, querySubTables, subTablesSummaryRecordsByGroupingKey, subTablesOrderedDimensionKeys);
@@ -584,7 +584,7 @@ namespace Vanrise.Analytic.Business
             }
         }
 
-        private void ReflectDBRecordToSubTablesDBRecords(DBAnalyticRecord dbRecord, IAnalyticTableQueryContext analyticTableQueryContext, string recordGroupingKey, List<AnalyticQuerySubTable> querySubTables, 
+        private void ReflectDBRecordToSubTablesDBRecords(DBAnalyticRecord dbRecord, IAnalyticTableQueryContext analyticTableQueryContext, string recordGroupingKey, List<AnalyticQuerySubTable> querySubTables,
             List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesDBRecords, List<Dictionary<string, SubTableDBAnalyticRecordInProcess>> subTablesSummaryDBRecords,
             bool buildSummaryRecord)
         {
@@ -674,7 +674,7 @@ namespace Vanrise.Analytic.Business
                     {
                         bool subTableAllMeasuresAreNull;
                         AnalyticRecord subTableAnalyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, subtableDBRecord.Record, null,
-                    allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, false, subTableIndex, subtableDBRecord.ParentRecordGroupingKey, subtableDBRecord.GroupingKey, 
+                    allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, false, subTableIndex, subtableDBRecord.ParentRecordGroupingKey, subtableDBRecord.GroupingKey,
                     out subTableAllMeasuresAreNull);//no need to fill dimensions values for sub table records 
                         var subTableAnalyticRecordInProcess = new SubTableAnalyticRecordInProcess
                         {
@@ -693,7 +693,7 @@ namespace Vanrise.Analytic.Business
                     {
                         bool subTableSummaryAllMeasuresAreNull;
                         AnalyticRecord subTableSummaryAnalyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, subTableSummaryDBRecord.Record, querySubTable.Dimensions,
-                    allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, true, subTableIndex, null, subTableSummaryDBRecord.GroupingKey, 
+                    allQueryAndSubTableDimensions, querySubTable.Measures, measureStyleRulesDictionary, true, subTableIndex, null, subTableSummaryDBRecord.GroupingKey,
                     out subTableSummaryAllMeasuresAreNull);//dimensions values are needed for summary sub table records to sort sub table records at the final stages
                         var subTableSummaryAnalyticRecordInProcess = new SubTableAnalyticRecordInProcess
                         {
@@ -720,7 +720,7 @@ namespace Vanrise.Analytic.Business
             }
         }
 
-        private void AddSubTablesMeasuresToRecord(AnalyticRecord analyticRecord, string recordGroupingKey, IAnalyticTableQueryContext analyticTableQueryContext, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, 
+        private void AddSubTablesMeasuresToRecord(AnalyticRecord analyticRecord, string recordGroupingKey, IAnalyticTableQueryContext analyticTableQueryContext, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
             List<AnalyticQuerySubTable> querySubTables, List<SubTableAnalyticRecordInProcessByParentGroupingKey> subTablesRecordsByParentGroupingKey, List<List<string>> subTablesOrderedDimensionKeys)
         {
             analyticRecord.SubTables = new List<AnalyticRecordSubTable>();
@@ -781,7 +781,7 @@ namespace Vanrise.Analytic.Business
 
         private AnalyticRecord CreateAnalyticRecordFilledWithDefaultValues(IAnalyticTableQueryContext analyticTableQueryContext, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, DateTime dateTime)
         {
-            AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dateTime, MeasureValues = CreateMeasuresFilledWithDefaultValues(analyticTableQueryContext, measureNames, measureStyleRulesDictionary) };            
+            AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dateTime, MeasureValues = CreateMeasuresFilledWithDefaultValues(analyticTableQueryContext, measureNames, measureStyleRulesDictionary) };
             return analyticRecord;
         }
 
@@ -925,7 +925,7 @@ namespace Vanrise.Analytic.Business
         }
 
         private AnalyticRecord BuildAnalyticRecordFromSQLRecord(IAnalyticTableQueryContext analyticTableQueryContext, DBAnalyticRecord dbRecord, List<string> dimensionNames,
-            HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, 
+            HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
             bool isSummaryRecord, int? subTableIndex, string recordGroupingKey, string subTableRecordGroupingKey, out bool allMeasuresAreNull)
         {
             AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dbRecord.Time, MeasureValues = new MeasureValues() };
@@ -1175,7 +1175,7 @@ namespace Vanrise.Analytic.Business
                 }
                 return aggregateNames;
             }
-            
+
             private List<DimensionFilter> GetDBFilters(List<DimensionFilter> filters)
             {
                 List<DimensionFilter> dbFilters = null;
@@ -1191,7 +1191,7 @@ namespace Vanrise.Analytic.Business
                             dbFilters.Add(filter);
                         }
                     }
-                    
+
                 }
                 return dbFilters;
             }
@@ -1299,7 +1299,9 @@ namespace Vanrise.Analytic.Business
                 {
                     foreach (var dimName in _query.DimensionFields)
                     {
-                        var excelHeaderCell = new ExportExcelHeaderCell { Title = dimName };
+                        int index = _query.DimensionFields.IndexOf(dimName);
+                        string dimensionTitle = !string.IsNullOrEmpty(_query.DimensionTitles[index]) ? _query.DimensionTitles[index] : dimName;
+                        var excelHeaderCell = new ExportExcelHeaderCell { Title = dimensionTitle };
                         var setTypeContext = new DataRecordFieldTypeSetExcelCellTypeContext { HeaderCell = excelHeaderCell };
 
                         var dimension = dimensions.GetRecord(dimName);
@@ -1315,7 +1317,9 @@ namespace Vanrise.Analytic.Business
                 {
                     foreach (var measureName in _query.MeasureFields)
                     {
-                        var excelHeaderCell = new ExportExcelHeaderCell { Title = measureName };
+                        int index = _query.MeasureFields.IndexOf(measureName);
+                        string measureTitle = !string.IsNullOrEmpty(_query.MeasureTitles[index]) ? _query.MeasureTitles[index] : measureName;
+                        var excelHeaderCell = new ExportExcelHeaderCell { Title = measureTitle };
                         var setTypeContext = new DataRecordFieldTypeSetExcelCellTypeContext { HeaderCell = excelHeaderCell };
 
                         var measure = measures.GetRecord(measureName);
@@ -1336,7 +1340,17 @@ namespace Vanrise.Analytic.Business
                     {
                         var totalrow = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                         for (int k = 0; k < _query.DimensionFields.Count(); k++)
-                            totalrow.Cells.Add(new ExportExcelCell() { Value = "" });
+                        {
+                            totalrow.Cells.Add(new ExportExcelCell()
+                            {
+                                Value  = k == 0 ? "Total" : string.Empty,
+                                Style = new ExcelCellStyle()
+                                {
+                                    IsBold = true,
+                                    Color = LabelColor.Info
+                                }
+                            });
+                        }
 
                         if (_query.MeasureFields != null)
                         {
@@ -1345,8 +1359,14 @@ namespace Vanrise.Analytic.Business
                                 MeasureValue measureValue;
                                 if (!summary.MeasureValues.TryGetValue(measureName, out measureValue))
                                     throw new NullReferenceException(String.Format("measureValue. measureName '{0}'", measureName));
-
-                                totalrow.Cells.Add(new ExportExcelCell { Value = measureValue.Value });
+                                totalrow.Cells.Add(new ExportExcelCell
+                                {
+                                    Value = measureValue.Value,
+                                    Style = new ExcelCellStyle()
+                                    {
+                                        IsBold = true
+                                    }
+                                });
                             }
                         }
                         sheet.Rows.Add(totalrow);
