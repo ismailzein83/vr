@@ -11,6 +11,13 @@ namespace Retail.RA.Business
     {
         static readonly Guid BeDefinitionId = new Guid("6E73A6E0-B3E2-4930-86ED-9EF509D56960");
 
+        public IEnumerable<OperatorDeclaration> GetAllOperatorDecalarations()
+        {
+            var cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+            cachedOperatorDeclarations.ThrowIfNull("cachedOperatorDeclarations");
+            return cachedOperatorDeclarations;
+        }
+
         public IEnumerable<VoiceDeclarationService> GetVoiceDeclarationServices(List<PeriodDefinition> periodDefinitions)
         {
             List<VoiceDeclarationService> operatorDeclarations = new List<VoiceDeclarationService>();
