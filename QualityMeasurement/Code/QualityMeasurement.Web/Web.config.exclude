@@ -74,7 +74,7 @@
   <system.web>
     <compilation debug="false" targetFramework="4.7.2" />
     <customErrors mode="On" defaultRedirect="~/Client/Views/ErrorPage.htm"/>
-    <httpRuntime targetFramework="4.7.2" enableVersionHeader="false" />
+    <httpRuntime targetFramework="4.7.2" executionTimeout="900" maxRequestLength="1048576" enableVersionHeader="false"/>
   </system.web>
   <system.webServer>
     <validation validateIntegratedModeConfiguration="false" />
