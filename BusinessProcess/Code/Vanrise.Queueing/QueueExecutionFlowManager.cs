@@ -162,7 +162,7 @@ namespace Vanrise.Queueing
             Func<QueueExecutionFlow, bool> filterExpression = (priceList) =>
 
                       (input.Query.DefinitionId == null || input.Query.DefinitionId.Contains(priceList.DefinitionId)) &&
-                      (input.Query.Name == null || priceList.Name.Contains(input.Query.Name));
+                      (input.Query.Name == null || priceList.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
             VRActionLogger.Current.LogGetFilteredAction(QueueExecutionFlowLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, queueExecutionFlows.ToBigResult(input, filterExpression, QueueExecutionFlowMapper));
