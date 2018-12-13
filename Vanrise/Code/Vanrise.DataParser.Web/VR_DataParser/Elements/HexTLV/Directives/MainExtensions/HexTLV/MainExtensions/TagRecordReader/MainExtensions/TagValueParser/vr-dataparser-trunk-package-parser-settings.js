@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrDataparserTrunkIdentificationPackageRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrDataparserTrunkPackageParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {

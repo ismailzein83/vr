@@ -25,7 +25,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
@@ -190,7 +191,7 @@
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-time-from-text-hex-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-time-hex-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-traffic-quality-data-package-record-parser-settings.js" />
-    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-trunk-identification-package-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-trunk-package-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-zone-package-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\Templates\RecordReaderTagRecordReader.html" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\Templates\RecordReaderTagRecordReaderGrid.html" />
