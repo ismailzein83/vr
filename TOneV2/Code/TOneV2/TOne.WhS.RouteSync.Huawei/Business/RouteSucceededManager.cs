@@ -21,7 +21,7 @@ namespace TOne.WhS.RouteSync.Huawei.Business
             _dataManager.SwitchId = switchId;
         }
 
-        public void SaveRoutesSucceededToDB(Dictionary<int, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN)
+        public void SaveRoutesSucceededToDB(Dictionary<string, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN)
         {
             _dataManager.SaveRoutesSucceededToDB(routesWithCommandsByRSSN);
         }

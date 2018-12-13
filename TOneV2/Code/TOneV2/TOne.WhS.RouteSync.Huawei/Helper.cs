@@ -9,16 +9,16 @@ namespace TOne.WhS.RouteSync.Huawei
 {
     public static class Helper
     {
-        public const string RouteCaseFieldsSeparatorAsString = "^$^$^";
-        public const string RouteCaseOptionsSeparatorAsString = "|@|@|";
-        public const string RouteCaseOptionsFieldsSeparatorAsString = "~%~%~";
+        const string RouteCaseFieldsSeparatorAsString = "^$^$^";
+        const string RouteCaseOptionsSeparatorAsString = "|@|@|";
+        const string RouteCaseOptionsFieldsSeparatorAsString = "~%~%~";
 
         public static string GetRSName(RouteAnalysis routeAnalysis, int routeNameLength)
         {
             if (routeAnalysis == null || routeAnalysis.RouteCaseOptions == null || routeAnalysis.RouteCaseOptions.Count == 0)
                 return HuaweiCommands.ROUTE_BLOCK;
 
-            StringBuilder sb_RSName = new StringBuilder(routeAnalysis.RSSN.ToString());
+            StringBuilder sb_RSName = new StringBuilder(routeAnalysis.RSSN);
 
             foreach (var routeCaseOption in routeAnalysis.RouteCaseOptions)
             {
@@ -81,7 +81,7 @@ namespace TOne.WhS.RouteSync.Huawei
                 throw new Exception($"Invalid character in Route Case fields for RC#: '{rcNumber}'");
 
             RouteAnalysis routeAnalysis = new RouteAnalysis();
-            routeAnalysis.RSSN = int.Parse(routeCaseFields[0]);
+            routeAnalysis.RSSN = routeCaseFields[0];
 
             string routeCaseOptionsTypeAsString = routeCaseFields[1];
             switch (routeCaseOptionsTypeAsString)

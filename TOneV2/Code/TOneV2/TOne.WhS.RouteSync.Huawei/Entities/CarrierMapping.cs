@@ -17,7 +17,7 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
      
     public class CustomerMapping
     {
-        public int RSSN { get; set; }
+        public string RSSN { get; set; }
 
         public string CSCName { get; set; }
 

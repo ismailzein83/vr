@@ -30,7 +30,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 
         #region Public Methods
 
-        public void SaveRoutesSucceededToDB(Dictionary<int, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN)
+        public void SaveRoutesSucceededToDB(Dictionary<string, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN)
         {
             if (routesWithCommandsByRSSN == null || routesWithCommandsByRSSN.Count == 0)
                 return;

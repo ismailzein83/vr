@@ -30,6 +30,5 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
         public HuaweiConvertedRouteCompareResult RouteCompareResult { get; set; }
         public RouteActionType ActionType { get; set; }
         public List<string> Commands { get; set; }
-        public string Code { get; set; }
     }
 }

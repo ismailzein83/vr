@@ -10,6 +10,6 @@ namespace TOne.WhS.RouteSync.Huawei.Data
     public interface IRouteSucceededDataManager : IDataManager
     {
         string SwitchId { get; set; } 
-        void SaveRoutesSucceededToDB(Dictionary<int, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN);
+        void SaveRoutesSucceededToDB(Dictionary<string, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN);
     }
 }

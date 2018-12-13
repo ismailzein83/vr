@@ -5,13 +5,13 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
 {
     public class HuaweiConvertedRoute : ConvertedRouteWithCode
     {
-        public int RSSN { get; set; }
+        public string RSSN { get; set; }
         public string RSName { get; set; }
         public int DNSet { get; set; }
 
         public override string GetCustomer()
         {
-            return this.RSSN.ToString();
+            return this.RSSN;
         }
 
         public override string GetRouteOptionsIdentifier()
@@ -42,7 +42,7 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
      
     public struct HuaweiConvertedRouteIdentifier
     {
-        public int RSSN { get; set; }
+        public string RSSN { get; set; }
         public string Code { get; set; }
         public int DNSet { get; set; }
 

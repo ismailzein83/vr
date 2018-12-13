@@ -16,7 +16,7 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
 
     public class RouteAnalysis
     {
-        public int RSSN { get; set; }
+        public string RSSN { get; set; }
         public RouteCaseOptionsType RouteCaseOptionsType { get; set; }
         public List<RouteCaseOption> RouteCaseOptions { get; set; }
     }

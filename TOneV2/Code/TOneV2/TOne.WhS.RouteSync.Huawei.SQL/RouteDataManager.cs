@@ -95,7 +95,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
             if (differences.Count == 0)
                 return;
 
-            var differencesByRSSN = new Dictionary<int, HuaweiConvertedRouteDifferences>();
+            var differencesByRSSN = new Dictionary<string, HuaweiConvertedRouteDifferences>();
 
             foreach (var differenceKvp in differences)
             {
@@ -147,6 +147,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 
             ExecuteNonQueryText(query_CreateHuaweiRouteTableType, null);
             DataTable dtRoutes = BuildRouteTable(routes);
+
             string query = string.Format(query_UpdateTempTable, SwitchId, RouteTempTableName, RouteTableName);
             ExecuteNonQueryText(query, (cmd) =>
             {
@@ -164,6 +165,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 
             ExecuteNonQueryText(query_CreateHuaweiRouteTableType, null);
             DataTable dtRoutes = BuildRouteTable(routes);
+
             string query = string.Format(query_DeleteFromTempTable, SwitchId, RouteTempTableName);
             ExecuteNonQueryText(query, (cmd) =>
             {
@@ -232,7 +234,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         {
             return new HuaweiConvertedRoute()
             {
-                RSSN = (int)reader["RSSN"],
+                RSSN = reader["RSSN"] as string,
                 Code = reader["Code"] as string,
                 RSName = reader["RSName"] as string,
                 DNSet = (int)reader["DNSet"]
@@ -282,7 +284,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                                                     END
                                                     
                                                     CREATE TABLE [WhS_RouteSync_Huawei_{0}].[{2}](
-                                                          [RSSN] int NOT NULL,
+                                                          [RSSN] nvarchar(255) NOT NULL,
 	                                                      [Code] varchar(20) NOT NULL,
 	                                                      [RSName] varchar(max) NOT NULL,
                                                           [DNSet] int NOT NULL
@@ -295,7 +297,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         const string query_CreateRouteTable = @"IF NOT EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Huawei_{0}.{2}') AND s.type in (N'U'))
                                                 BEGIN
                                                     CREATE TABLE [WhS_RouteSync_Huawei_{0}].[{2}](
-                                                          [RSSN] int NOT NULL,
+                                                          [RSSN] nvarchar(255) NOT NULL,
 	                                                      [Code] varchar(20) NOT NULL,
 	                                                      [RSName] varchar(max) NOT NULL,
                                                           [DNSet] int NOT NULL
@@ -307,10 +309,10 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 												END";
 
         const string query_CreateSucceedRouteTable = @"CREATE TABLE [WhS_RouteSync_Huawei_{0}].[{2}](
-                                                          [RSSN] int NOT NULL,
-	                                                      [Code] varchar(20) NOT NULL,
-	                                                      [RSName] varchar(max) NOT NULL,
-                                                          [DNSet] int NOT NULL
+                                                             [RSSN] nvarchar(255) NOT NULL,
+	                                                         [Code] varchar(20) NOT NULL,
+	                                                         [RSName] varchar(max) NOT NULL,
+                                                             [DNSet] int NOT NULL
                                                        CONSTRAINT [PK_WhS_RouteSync_Huawei_{0}.{2}{1}] PRIMARY KEY CLUSTERED 
                                                        (
                                                            [RSSN] ASC, [Code] ASC
@@ -320,10 +322,10 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         const string query_CreateHuaweiRouteTableType = @"IF NOT EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'HuaweiRouteTableType')
                                                           BEGIN
                                                               CREATE TYPE [HuaweiRouteTableType] AS TABLE(
-	                                                          [RSSN] int NOT NULL,
-	                                                          [Code] [varchar](20) NOT NULL,
-	                                                          [RSName] [varchar](max) NOT NULL, 
-                                                              [DNSet] int NOT NULL
+	                                                              [RSSN] nvarchar(255) NOT NULL,
+	                                                              [Code] [varchar](20) NOT NULL,
+	                                                              [RSName] [varchar](max) NOT NULL, 
+                                                                  [DNSet] int NOT NULL
                                                               PRIMARY KEY CLUSTERED 
                                                               (
 											                     [RSSN] ASC, [Code] ASC
@@ -335,7 +337,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 														 	DELETE WhS_RouteSync_Huawei_{0}.{1} 
 														 	FROM WhS_RouteSync_Huawei_{0}.{1} as routes 
                                                             JOIN WhS_RouteSync_Huawei_{0}.{2} as deletedRoutes  
-														 	ON routes.RSSN = deletedRoutes.RSSN and routes.Code = deletedRoutes.Code 
+														 	ON routes.RSSN = deletedRoutes.RSSN and routes.Code = deletedRoutes.Code and routes.DNSet = deletedRoutes.DNSet
                                                          
 														 	DROP TABLE WhS_RouteSync_Huawei_{0}.{2} 
 														 END";
@@ -344,8 +346,8 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
                                                          BEGIN
 														     MERGE INTO WhS_RouteSync_Huawei_{0}.{1} as routes 
 														     USING WhS_RouteSync_Huawei_{0}.{2} as updatedRoutes
-														     ON routes.RSSN = updatedRoutes.RSSN and routes.Code = updatedRoutes.Code
-														     WHEN MATCHED THEN UPDATE SET routes.RSName = updatedRoutes.RSName, routes.DNSet = updatedRoutes.DNSet;
+														     ON routes.RSSN = updatedRoutes.RSSN and routes.Code = updatedRoutes.Code and routes.DNSet = updatedRoutes.DNSet
+														     WHEN MATCHED THEN UPDATE SET routes.RSName = updatedRoutes.RSName;
 
 														     DROP TABLE WhS_RouteSync_Huawei_{0}.{2}
                                                          END";
@@ -356,7 +358,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
 													   	  BEGIN TRY
 													   	      INSERT INTO  WhS_RouteSync_Huawei_{0}.{1} (RSSN, Code, RSName, DNSet)
 													   	      SELECT RSSN, Code, RSName, DNSet
-                                                                    FROM WhS_RouteSync_Huawei_{0}.{2}
+                                                              FROM WhS_RouteSync_Huawei_{0}.{2}
 													       
 													   	      DROP TABLE WhS_RouteSync_Huawei_{0}.{2}
 													   	      COMMIT Transaction
@@ -397,12 +399,13 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         const string query_UpdateTempTable = @"UPDATE tempRoutes 
                                                SET tempRoutes.RSName = routesToUpdate.RSName, tempRoutes.DNSet = routesToUpdate.DNSet
                                                FROM [WhS_RouteSync_Huawei_{0}].[{1}] as tempRoutes
-                                               JOIN @Routes as routesToUpdate on routesToUpdate.RSSN = tempRoutes.RSSN and routesToUpdate.Code = tempRoutes.Code";
+                                               JOIN @Routes as routesToUpdate 
+                                               ON routesToUpdate.RSSN = tempRoutes.RSSN and routesToUpdate.Code = tempRoutes.Code and routesToUpdate.DNSet = tempRoutes.DNSet";
 
         const string query_DeleteFromTempTable = @"DELETE tempRoute
 												   FROM WhS_RouteSync_Huawei_{0}.{1} as tempRoute 
-                                                   JOIN @Routes as route ON route.RSSN = tempRoute.RSSN and route.Code = tempRoute.Code 
-                                                           and route.RSName = tempRoute.RSName and route.DNSet = tempRoute.DNSet ";
+                                                   JOIN @Routes as route 
+                                                   ON route.RSSN = tempRoute.RSSN and route.Code = tempRoute.Code and route.RSName = tempRoute.RSName and route.DNSet = tempRoute.DNSet";
 
         const string query_CompareRouteTables = @"IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Huawei_{0}.{1}') AND s.type in (N'U'))
                                                      BEGIN

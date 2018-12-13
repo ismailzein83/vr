@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Huawei.Business;
 using TOne.WhS.RouteSync.Huawei.Entities;
 using Vanrise.Common;
-using Vanrise.Entities;
 
 namespace TOne.WhS.RouteSync.Huawei
 {
@@ -25,8 +25,8 @@ namespace TOne.WhS.RouteSync.Huawei
 
         public List<SwitchLogger> SwitchLoggerList { get; set; }
 
-        private Dictionary<int, CustomerMapping> _customerMappingsByRSSN;
-        private Dictionary<int, CustomerMapping> CustomerMappingsByRSSN
+        private Dictionary<string, CustomerMapping> _customerMappingsByRSSN;
+        private Dictionary<string, CustomerMapping> CustomerMappingsByRSSN
         {
             get
             {
@@ -36,7 +36,7 @@ namespace TOne.WhS.RouteSync.Huawei
                 if (CarrierMappings == null || CarrierMappings.Count == 0)
                     return null;
 
-                _customerMappingsByRSSN = new Dictionary<int, CustomerMapping>();
+                _customerMappingsByRSSN = new Dictionary<string, CustomerMapping>();
 
                 foreach (var carrierMappingKvp in CarrierMappings)
                 {
@@ -206,8 +206,8 @@ namespace TOne.WhS.RouteSync.Huawei
             //Execute and Log Routes
             IEnumerable<string> failedRSNames = failedRouteCasesWithCommands == null ? null : failedRouteCasesWithCommands.Select(item => item.RouteCase.RSName);
 
-            Dictionary<int, List<HuaweiRouteWithCommands>> succeedRoutesWithCommandsByRSSN;
-            Dictionary<int, List<HuaweiRouteWithCommands>> failedRoutesWithCommandsByRSSN;
+            Dictionary<string, List<HuaweiRouteWithCommands>> succeedRoutesWithCommandsByRSSN;
+            Dictionary<string, List<HuaweiRouteWithCommands>> failedRoutesWithCommandsByRSSN;
 
             ExecuteRoutesCommands(routesWithCommandsByRSSN, huaweiSSHCommunication, sshCommunicator, commandResults, failedRSNames, maxNumberOfTries,
                 out succeedRoutesWithCommandsByRSSN, out failedRoutesWithCommandsByRSSN);
@@ -263,52 +263,70 @@ namespace TOne.WhS.RouteSync.Huawei
             if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
                 return true;
 
-            HashSet<int> allRSSNs = new HashSet<int>();
-            HashSet<int> duplicatedRSSNs = new HashSet<int>();
-
+            HashSet<string> allRSSNs = new HashSet<string>();
             HashSet<string> allCSCNames = new HashSet<string>();
+            HashSet<string> duplicatedRSSNs = new HashSet<string>();
             HashSet<string> duplicatedCSCNames = new HashSet<string>();
+            HashSet<int> invalidMappingCustomerIds = new HashSet<int>();
 
-            HashSet<string> allRouteNames = new HashSet<string>();
+            HashSet<string> allModifiedRouteNames = new HashSet<string>();
             HashSet<string> duplicatedRouteNames = new HashSet<string>();
-            HashSet<string> shortRouteNames = new HashSet<string>();
+            HashSet<int> invalidMappingSupplierIds = new HashSet<int>();
 
-            foreach (var carrierMapping in this.CarrierMappings)
+            foreach (var carrierMappingKvp in this.CarrierMappings)
             {
-                CustomerMapping customerMapping = carrierMapping.Value.CustomerMapping;
-                if (customerMapping != null && !string.IsNullOrEmpty(customerMapping.CSCName))
+                CarrierMapping carrierMapping = carrierMappingKvp.Value;
+
+                CustomerMapping customerMapping = carrierMapping.CustomerMapping;
+                if (customerMapping != null)
                 {
+                    if (string.IsNullOrEmpty(customerMapping.RSSN) || string.IsNullOrEmpty(customerMapping.CSCName))
+                    {
+                        invalidMappingCustomerIds.Add(carrierMapping.CarrierId);
+                        continue;
+                    }
+
+                    if(customerMapping.RSSN.Length > 50)
+                    {
+                        invalidMappingCustomerIds.Add(carrierMapping.CarrierId);
+                        continue;
+                    }
+
+                    var isRSSNDuplicated = allRSSNs.Any(rssn => string.Compare(rssn, customerMapping.RSSN, true) == 0);
+                    if (!isRSSNDuplicated)
+                        allRSSNs.Add(customerMapping.RSSN);
+                    else
+                        duplicatedRSSNs.Add(customerMapping.RSSN);
+
                     var isCSCNameDuplicated = allCSCNames.Any(cscName => string.Compare(cscName, customerMapping.CSCName, true) == 0);
                     if (!isCSCNameDuplicated)
                         allCSCNames.Add(customerMapping.CSCName);
                     else
                         duplicatedCSCNames.Add(customerMapping.CSCName);
-
-
-                    if (!allRSSNs.Contains(customerMapping.RSSN))
-                        allRSSNs.Add(customerMapping.RSSN);
-                    else
-                        duplicatedRSSNs.Add(customerMapping.RSSN);
                 }
 
-                SupplierMapping supplierMapping = carrierMapping.Value.SupplierMapping;
-                if (supplierMapping != null && !string.IsNullOrEmpty(supplierMapping.RouteName))
+                SupplierMapping supplierMapping = carrierMapping.SupplierMapping;
+                if (supplierMapping != null)
                 {
-                    string supplierRouteNameWithoutEmptySpaces = supplierMapping.RouteName.Replace(" ", "");
+                    if (string.IsNullOrEmpty(supplierMapping.RouteName))
+                    {
+                        invalidMappingSupplierIds.Add(carrierMapping.CarrierId);
+                        continue;
+                    }
 
-                    if (supplierRouteNameWithoutEmptySpaces.Length >= this.MinRNLength)
+                    string routeNameWithoutEmptySpaces = supplierMapping.RouteName.Replace(" ", "");
+                    if (routeNameWithoutEmptySpaces.Length < this.MinRNLength)
                     {
-                        string modifiedSupplierRouteName = supplierRouteNameWithoutEmptySpaces.Substring(0, this.MinRNLength);
-                        var isRouteNameDuplicated = allRouteNames.Any(routeName => !string.IsNullOrEmpty(routeName) && string.Compare(routeName.Replace(" ", "").Substring(0, this.MinRNLength), modifiedSupplierRouteName, true) == 0);
-                        if (!isRouteNameDuplicated)
-                            allRouteNames.Add(supplierMapping.RouteName);
-                        else
-                            duplicatedRouteNames.Add(supplierMapping.RouteName);
+                        invalidMappingSupplierIds.Add(carrierMapping.CarrierId);
+                        continue;
                     }
+
+                    string modifiedRouteName = routeNameWithoutEmptySpaces.Substring(0, this.MinRNLength);
+                    var isModifiedRouteNameDuplicated = allModifiedRouteNames.Any(itm => string.Compare(itm, modifiedRouteName, true) == 0);
+                    if (!isModifiedRouteNameDuplicated)
+                        allModifiedRouteNames.Add(modifiedRouteName);
                     else
-                    {
-                        shortRouteNames.Add(supplierMapping.RouteName);
-                    }
+                        duplicatedRouteNames.Add(supplierMapping.RouteName);
                 }
             }
 
@@ -322,8 +340,25 @@ namespace TOne.WhS.RouteSync.Huawei
             if (duplicatedRouteNames.Count > 0)
                 validationMessages.Add(string.Format("Duplicated Route Names: {0}", string.Join(", ", duplicatedRouteNames)));
 
-            if (shortRouteNames.Count > 0)
-                validationMessages.Add(string.Format("Invalid Route Names: {0}. Length should be greater than {1}", string.Join(", ", shortRouteNames), this.MinRNLength));
+            if (invalidMappingCustomerIds.Count > 0)
+            {
+                List<string> invalidMappingCustomers = new List<string>();
+
+                foreach (var customerId in invalidMappingCustomerIds)
+                    invalidMappingCustomers.Add(string.Format("'{0}'", context.GetCarrierAccountNameById(customerId)));
+
+                validationMessages.Add(string.Format("Invalid Mappings for Customers: {0}", string.Join(", ", invalidMappingCustomers)));
+            }
+
+            if (invalidMappingSupplierIds.Count > 0)
+            {
+                List<string> invalidMappingSuppliers = new List<string>();
+
+                foreach (var supplierId in invalidMappingSupplierIds)
+                    invalidMappingSuppliers.Add(string.Format("'{0}'", context.GetCarrierAccountNameById(supplierId)));
+
+                validationMessages.Add(string.Format("Invalid Mappings for Suppliers: {0}", string.Join(", ", invalidMappingSuppliers)));
+            }
 
             context.ValidationMessages = validationMessages.Count > 0 ? validationMessages : null;
             return validationMessages.Count == 0;
@@ -338,12 +373,12 @@ namespace TOne.WhS.RouteSync.Huawei
             if (CustomerMappingsByRSSN == null)
                 throw new NullReferenceException("CustomerMappingsByRSSN");
 
-            int rssn = int.Parse(context.Customer);
+            string rssn = context.Customer;
             var customerMapping = CustomerMappingsByRSSN.GetRecord(rssn); ;
             return new HuaweiConvertedRoute() { RSSN = rssn, Code = context.Code, RSName = context.RouteOptionIdentifier, DNSet = customerMapping.DNSet };
         }
 
-        private RouteAnalysis GetRouteAnalysis(int rssn, List<RouteOption> routeOptions)
+        private RouteAnalysis GetRouteAnalysis(string rssn, List<RouteOption> routeOptions)
         {
             if (routeOptions == null || routeOptions.Count == 0)
                 return null;
@@ -470,16 +505,16 @@ namespace TOne.WhS.RouteSync.Huawei
 
         #region Route Commands
 
-        private Dictionary<int, List<HuaweiRouteWithCommands>> GetRoutesWithCommands(string switchId, RouteCaseManager routeCaseManager, RouteManager routeManager)
+        private Dictionary<string, List<HuaweiRouteWithCommands>> GetRoutesWithCommands(string switchId, RouteCaseManager routeCaseManager, RouteManager routeManager)
         {
             RouteCompareTablesContext routeCompareTablesContext = new RouteCompareTablesContext();
             routeManager.CompareTables(routeCompareTablesContext);
 
-            Dictionary<int, HuaweiConvertedRouteDifferences> routeDifferencesByRSSN = routeCompareTablesContext.RouteDifferencesByRSSN;
+            Dictionary<string, HuaweiConvertedRouteDifferences> routeDifferencesByRSSN = routeCompareTablesContext.RouteDifferencesByRSSN;
             if (routeDifferencesByRSSN == null || routeDifferencesByRSSN.Count == 0)
                 return null;
 
-            Dictionary<int, List<HuaweiRouteWithCommands>> results = new Dictionary<int, List<HuaweiRouteWithCommands>>();
+            Dictionary<string, List<HuaweiRouteWithCommands>> results = new Dictionary<string, List<HuaweiRouteWithCommands>>();
 
             foreach (var routeDifferencesKvp in routeDifferencesByRSSN)
             {
@@ -592,14 +627,14 @@ namespace TOne.WhS.RouteSync.Huawei
             }
         }
 
-        private static void LogHuaweiRouteCommands(Dictionary<int, List<HuaweiRouteWithCommands>> succeedRoutesWithCommandsByRSSN, Dictionary<int, List<HuaweiRouteWithCommands>> failedRoutesWithCommandsByRSSN,
+        private static void LogHuaweiRouteCommands(Dictionary<string, List<HuaweiRouteWithCommands>> succeedRoutesWithCommandsByRSSN, Dictionary<string, List<HuaweiRouteWithCommands>> failedRoutesWithCommandsByRSSN,
             SwitchLogger ftpLogger, DateTime dateTime)
         {
             if (succeedRoutesWithCommandsByRSSN != null && succeedRoutesWithCommandsByRSSN.Count > 0)
             {
                 foreach (var succeedRoutesWithCommandsByKvp in succeedRoutesWithCommandsByRSSN)
                 {
-                    int rssn = succeedRoutesWithCommandsByKvp.Key;
+                    string rssn = succeedRoutesWithCommandsByKvp.Key;
                     var customerRoutesWithCommands = succeedRoutesWithCommandsByKvp.Value;
 
                     var commandResults = customerRoutesWithCommands.Select(item => new CommandResult() { Command = string.Join(Environment.NewLine, item.Commands) }).ToList();
@@ -608,7 +643,7 @@ namespace TOne.WhS.RouteSync.Huawei
                         ExecutionDateTime = dateTime,
                         ExecutionStatus = ExecutionStatus.Succeeded,
                         CommandResults = commandResults,
-                        CustomerIdentifier = rssn.ToString()
+                        CustomerIdentifier = rssn
                     };
                     ftpLogger.LogRoutes(logRoutesContext);
                 }
@@ -618,7 +653,7 @@ namespace TOne.WhS.RouteSync.Huawei
             {
                 foreach (var failedRoutesWithCommandsKvp in failedRoutesWithCommandsByRSSN)
                 {
-                    int rssn = failedRoutesWithCommandsKvp.Key;
+                    string rssn = failedRoutesWithCommandsKvp.Key;
                     var customerRoutesWithCommands = failedRoutesWithCommandsKvp.Value;
 
                     var commandResults = customerRoutesWithCommands.Select(item => new CommandResult() { Command = string.Join(Environment.NewLine, item.Commands) }).ToList();
@@ -627,7 +662,7 @@ namespace TOne.WhS.RouteSync.Huawei
                         ExecutionDateTime = dateTime,
                         ExecutionStatus = ExecutionStatus.Failed,
                         CommandResults = commandResults,
-                        CustomerIdentifier = rssn.ToString()
+                        CustomerIdentifier = rssn
                     };
                     ftpLogger.LogRoutes(logRoutesContext);
                 }
@@ -722,9 +757,9 @@ namespace TOne.WhS.RouteSync.Huawei
                 routeCaseManager.UpdateSyncedRouteCases(routeCaseNumbersToUpdate);
         }
 
-        private void ExecuteRoutesCommands(Dictionary<int, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN, HuaweiSSHCommunication huaweiSSHCommunication,
+        private void ExecuteRoutesCommands(Dictionary<string, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN, HuaweiSSHCommunication huaweiSSHCommunication,
             SSHCommunicator sshCommunicator, List<CommandResult> commandResults, IEnumerable<string> failedRSNames, int maxNumberOfTries,
-            out Dictionary<int, List<HuaweiRouteWithCommands>> succeededRoutesWithCommandsByRSSN, out Dictionary<int, List<HuaweiRouteWithCommands>> failedRoutesWithCommandsByRSSN)
+            out Dictionary<string, List<HuaweiRouteWithCommands>> succeededRoutesWithCommandsByRSSN, out Dictionary<string, List<HuaweiRouteWithCommands>> failedRoutesWithCommandsByRSSN)
         {
             succeededRoutesWithCommandsByRSSN = null;
             failedRoutesWithCommandsByRSSN = null;
@@ -744,8 +779,8 @@ namespace TOne.WhS.RouteSync.Huawei
                 return;
             }
 
-            succeededRoutesWithCommandsByRSSN = new Dictionary<int, List<HuaweiRouteWithCommands>>();
-            failedRoutesWithCommandsByRSSN = new Dictionary<int, List<HuaweiRouteWithCommands>>();
+            succeededRoutesWithCommandsByRSSN = new Dictionary<string, List<HuaweiRouteWithCommands>>();
+            failedRoutesWithCommandsByRSSN = new Dictionary<string, List<HuaweiRouteWithCommands>>();
 
             foreach (var routeWithCommandsKvp in routesWithCommandsByRSSN)
             {

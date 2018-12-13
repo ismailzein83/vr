@@ -114,6 +114,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">
       <Project>{31466bbd-3579-4033-b991-12d044564a32}</Project>
       <Name>TOne.WhS.RouteSync.Business</Name>
