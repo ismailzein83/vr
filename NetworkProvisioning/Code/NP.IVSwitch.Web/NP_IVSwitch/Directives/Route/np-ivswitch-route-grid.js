@@ -85,21 +85,34 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
                     name: 'Edit',
                     clicked: editRoute,
                     haspermission: hasEditRoutePermission
-                });
+				});
+
+				$scope.scopeModel.menuActions.push({
+					name: 'Clone',
+					clicked: cloneRoute
+				});
             }
             function editRoute(RouteItem) {
                 var onRouteUpdated = function (updatedRoute) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(updatedRoute);
                     gridAPI.itemUpdated(updatedRoute);
                 };         
-            
-
                 NP_IVSwitch_RouteService.editRoute(RouteItem.Entity.RouteId, carrierAccountId, onRouteUpdated);
-            }
+			}
+
+			function cloneRoute(RouteItem) {
+				var onRouteAdded = function (updatedRoute) {
+					gridDrillDownTabsObj.setDrillDownExtensionObject(updatedRoute);
+					gridAPI.itemUpdated(updatedRoute);
+				};
+
+
+				NP_IVSwitch_RouteService.cloneRoute(RouteItem.Entity.RouteId,carrierAccountId,onRouteAdded);
+			}
+
             function hasEditRoutePermission() {
                 return NP_IVSwitch_RouteAPIService.HasEditRoutePermission();
-            }
-
+			}
         }
     }]);
 

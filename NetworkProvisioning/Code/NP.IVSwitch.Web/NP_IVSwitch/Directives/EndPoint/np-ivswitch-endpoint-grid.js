@@ -81,7 +81,7 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
                     return gridAPI.retrieveData(query);
                 };
 
-                api.onEndPointAdded = function (addedEndPoint) {
+				api.onEndPointAdded = function (addedEndPoint) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(addedEndPoint);
                     gridAPI.itemAdded(addedEndPoint);
                 };
@@ -97,7 +97,11 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
                     name: 'Edit',
                     clicked: editEndPoint,
                     haspermission: hasEditEndPointPermission
-                });
+				});
+				$scope.scopeModel.menuActions.push({
+					name: 'Clone',
+					clicked: cloneEndPoint
+				});
             }
             function editEndPoint(EndPointItem) {
                 var onEndPointUpdated = function (updatedEndPoint) {
@@ -105,7 +109,17 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
                     gridAPI.itemUpdated(updatedEndPoint);
                 };
                 NP_IVSwitch_EndPointService.editEndPoint(EndPointItem.Entity.EndPointId, onEndPointUpdated);
-            }
+			}
+
+			function cloneEndPoint(EndPointItem) {
+				var onEndPointAdded= function (addedEndPoint) {
+					gridDrillDownTabsObj.setDrillDownExtensionObject(addedEndPoint);
+					gridAPI.itemUpdated(addedEndPoint);
+				};
+				NP_IVSwitch_EndPointService.cloneEndPoint(carrierAccountId,EndPointItem.Entity.EndPointId, onEndPointAdded);
+			}
+
+
             function hasEditEndPointPermission() {
                 return NP_IVSwitch_EndPointAPIService.HasEditEndPointPermission();
             }

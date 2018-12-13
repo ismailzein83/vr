@@ -1,87 +1,116 @@
 ﻿<div vr-modalcontent ng-controller="NP_IVSwitch_EndPointEditorController" width="'60%'" vr-loader="scopeModel.isLoading">
-    <vr-modalbody>
-        <vr-form name="formEndPointEditor">
-            <vr-tabs>
-                <vr-tab header="'Info'">
+	<vr-modalbody>
+		<vr-form name="formEndPointEditor">
+			<vr-tabs>
+				<vr-tab header="'Info'">
 
-                    <np-ivswitch-endpointtype-selector vr-disabled="scopeModel.DisableSelector" on-ready="scopeModel.onSelectorEndPointReady" onselectionchanged="scopeModel.onSelectionEndPointChanged"
-                                                   normal-col-num="6" isrequired="true"></np-ivswitch-endpointtype-selector>
+					<np-ivswitch-endpointtype-selector vr-disabled="scopeModel.DisableSelector" on-ready="scopeModel.onSelectorEndPointReady" onselectionchanged="scopeModel.onSelectionEndPointChanged"
+													   normal-col-num="6" isrequired="true"></np-ivswitch-endpointtype-selector>
 
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Description" value="scopeModel.description" isrequired></vr-textbox>
-                    </vr-columns>
+					<vr-columns width="1/2row">
+						<vr-textbox label="Description" value="scopeModel.description" isrequired></vr-textbox>
+					</vr-columns>
 
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Log Alias" value="scopeModel.logalias" isrequired maxlength="20"></vr-textbox>
-                    </vr-columns>
-                    <np-ivswitch-codecprofile-selector on-ready="scopeModel.onSelectorCodecProfileReady" onselectionchanged="scopeModel.onSelectionCodecProfileChanged"
-                                                       normal-col-num="6"></np-ivswitch-codecprofile-selector>
-                    <vr-columns width="1/2row">
-                        <vr-switch label="Route Table Based Rule" value="scopeModel.routeTableBasedRule"></vr-switch>
-                    </vr-columns>
-                    <div vr-loader="scopeModel.isLoadingRules">
-                        <np-ivswitch-translationrule-selector ng-if="!scopeModel.routeTableBasedRule"
-                                                              on-ready="scopeModel.onSelectorTranslationRuleReady" onselectionchanged="scopeModel.onSelectionTranslationRuleChanged"
-                                                              normal-col-num="6"></np-ivswitch-translationrule-selector>
-                    </div>
-                </vr-tab>
-                <vr-tab header="'Control'">
-                    <vr-columns width="1/2row">
-                        <vr-select datatextfield="description" datavaluefield="value" label="Current State"
-                                   datasource="scopeModel.states" selectedvalues="scopeModel.currentstate" onselectionchanged="scopeModel.onSelectionChangedState"></vr-select>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Channels Limit" value="scopeModel.channelslimit" type="number" isrequired minvalue="1"></vr-textbox>
-                    </vr-columns>
-
-
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Max Call Duration" value="scopeModel.maxcallduration" type="number"></vr-textbox>
-                    </vr-columns>
+					<vr-columns width="1/2row">
+						<vr-textbox label="Log Alias" value="scopeModel.logalias" isrequired maxlength="20"></vr-textbox>
+					</vr-columns>
+					<np-ivswitch-codecprofile-selector on-ready="scopeModel.onSelectorCodecProfileReady" onselectionchanged="scopeModel.onSelectionCodecProfileChanged"
+													   normal-col-num="6"></np-ivswitch-codecprofile-selector>
+					<vr-columns width="1/2row">
+						<vr-switch label="Route Table Based Rule" value="scopeModel.routeTableBasedRule"></vr-switch>
+					</vr-columns>
+					<div vr-loader="scopeModel.isLoadingRules">
+						<np-ivswitch-translationrule-selector ng-if="!scopeModel.routeTableBasedRule"
+															  on-ready="scopeModel.onSelectorTranslationRuleReady" onselectionchanged="scopeModel.onSelectionTranslationRuleChanged"
+															  normal-col-num="6"></np-ivswitch-translationrule-selector>
+					</div>
+				</vr-tab>
+				<vr-tab header="'Control'">
+					<vr-columns width="1/2row">
+						<vr-select datatextfield="description" datavaluefield="value" label="Current State"
+								   datasource="scopeModel.states" selectedvalues="scopeModel.currentstate" onselectionchanged="scopeModel.onSelectionChangedState"></vr-select>
+					</vr-columns>
+					<vr-columns width="1/2row">
+						<vr-textbox label="Channels Limit" value="scopeModel.channelslimit" type="number" isrequired minvalue="1"></vr-textbox>
+					</vr-columns>
 
 
-                    <np-ivswitch-domain-selector on-ready="scopeModel.onSelectorDomainReady" onselectionchanged="scopeModel.onSelectionDomainChanged" isrequired="true"
-                                                 normal-col-num="6"></np-ivswitch-domain-selector>
+					<vr-columns width="1/2row">
+						<vr-textbox label="Max Call Duration" value="scopeModel.maxcallduration" type="number"></vr-textbox>
+					</vr-columns>
 
 
-                    <vr-columns width="1/2row" haschildcolumns>
-                        <vr-columns colnum="8">
-                            <vr-textbox label="Host/Network Address" type="ip" value="scopeModel.host" ng-if="scopeModel.ShowACL" isrequired></vr-textbox>
-                        </vr-columns>
-                        <vr-columns colnum="4">
-                            <vr-textbox type="number" label="SubNet Mask" value="scopeModel.subnet" ng-if="scopeModel.ShowACL" minvalue="1" maxvalue="32">
-                            </vr-textbox>
-                        </vr-columns>
-                    </vr-columns>
-
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="Tech Prefix" value="scopeModel.techprefix" ng-if="scopeModel.ShowACL"></vr-textbox>
-                    </vr-columns>
-
-                    <vr-columns width="1/2row">
-                        <vr-select label="RTP Mode" datatextfield="description" datavaluefield="value" datasource="scopeModel.rtpmodes" hideremoveicon="true"
-                                   selectedvalues=" scopeModel.selectedrtpmode" onselectionchanged="scopeModel.onSelectionChangedRtpMode" isrequired></vr-select>
-                    </vr-columns>
-
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="SIP Login" value="scopeModel.siplogin" ng-if="scopeModel.ShowSIP" isrequired></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox label="SIP Password" value="scopeModel.sippassword" ng-if="scopeModel.ShowSIP" isrequired></vr-textbox>
-                    </vr-columns>
+					<np-ivswitch-domain-selector on-ready="scopeModel.onSelectorDomainReady" onselectionchanged="scopeModel.onSelectionDomainChanged" isrequired="true"
+												 normal-col-num="6"></np-ivswitch-domain-selector>
 
 
+					<vr-columns width="1/2row" haschildcolumns>
+						<vr-columns colnum="8" ng-if="(scopeModel.isEditMode && !scopeModel.isClone)">
+							<vr-textbox label="Host/Network Address" type="ip" value="scopeModel.host" ng-if="scopeModel.ShowACL" isrequired></vr-textbox>
+						</vr-columns>
+						<vr-columns colnum="8" ng-if="(scopeModel.isClone || !scopeModel.isEditMode)">
+							<vr-textbox-multiple datatype="ip" label="Hosts/Network Address's" value="scopeModel.hosts" ng-if="scopeModel.ShowACL" isrequired></vr-textbox-multiple>
+						</vr-columns>
+						<vr-columns colnum="4">
+							<vr-textbox type="number" label="SubNet Mask" value="scopeModel.subnet" ng-if="scopeModel.ShowACL" minvalue="1" maxvalue="32">
+							</vr-textbox>
+						</vr-columns>
+					</vr-columns>
 
-                </vr-tab>
-            </vr-tabs>
-        </vr-form>
-    </vr-modalbody>
-    <div>
-        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-            <div transclude-to="buttons">
-                <vr-button type="Save" formname="formEndPointEditor" data-onclick="scopeModel.save"></vr-button>
-                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-            </div>
-        </vr-actionbar>
-    </div>
+					<vr-columns width="1/2row">
+						<vr-textbox label="Tech Prefix" value="scopeModel.techprefix" ng-if="scopeModel.ShowACL"></vr-textbox>
+					</vr-columns>
+
+					<vr-columns width="1/2row">
+						<vr-select label="RTP Mode" datatextfield="description" datavaluefield="value" datasource="scopeModel.rtpmodes" hideremoveicon="true"
+								   selectedvalues=" scopeModel.selectedrtpmode" onselectionchanged="scopeModel.onSelectionChangedRtpMode" isrequired></vr-select>
+					</vr-columns>
+					<vr-row>
+						<vr-columns width="1/2row">
+							<vr-textbox label="SIP Login" value="scopeModel.siplogin" ng-if="scopeModel.ShowSIP && scopeModel.isEditMode && !scopeModel.isClone" isrequired></vr-textbox>
+						</vr-columns>
+						<vr-columns width="1/2row">
+							<vr-textbox label="SIP Password" value="scopeModel.sippassword" ng-if="scopeModel.ShowSIP && scopeModel.isEditMode && !scopeModel.isClone" isrequired></vr-textbox>
+						</vr-columns>
+					</vr-row>
+					<vr-row>
+
+						<vr-section title="SIP Login/Password" ng-if="scopeModel.ShowSIP && (scopeModel.isClone || !scopeModel.isEditMode )">
+							<vr-row>
+								<vr-columns width="1/3row">
+									<vr-button type="Add" data-onclick="scopeModel.addSipLoginPassword" standalone></vr-button>
+								</vr-columns>
+							</vr-row>
+							<vr-validator validate="scopeModel.isGridValid()">
+								<vr-datagrid on-ready="scopeModel.onGridBackupReady"
+											 datasource="scopeModel.sipLoginPasswords"
+											 enabledraggablerow="true"
+											 ondeleterow="scopeModel.removeSipLoginPassword"
+											 maxheight="400px"
+											 disablesorting="true"
+											 rowdeleteicontitle="Delete SIP "
+											 hidegridmenu
+											 disabledraggablecolumns>
+									<vr-datagridcolumn headertext="'SIP Login'" field="SIPLogin">
+										<vr-textbox value="dataItem.SIPLogin" isrequired customvalidate="viewScope.scopeModel.onSipLoginValueChanged(dataItem)"></vr-textbox>
+									</vr-datagridcolumn>
+									<vr-datagridcolumn headertext="'SIP Password'" field="SIPPassword">
+										<vr-textbox value="dataItem.SIPPassword" isrequired></vr-textbox>
+									</vr-datagridcolumn>
+								</vr-datagrid>
+							</vr-validator>
+						</vr-section>
+					</vr-row>
+				</vr-tab>
+			</vr-tabs>
+		</vr-form>
+	</vr-modalbody>
+	<div>
+		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+			<div transclude-to="buttons">
+				<vr-button type="Save" formname="formEndPointEditor" data-onclick="scopeModel.save"></vr-button>
+				<vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+			</div>
+		</vr-actionbar>
+	</div>
 </div>

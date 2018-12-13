@@ -38,9 +38,9 @@ namespace NP.IVSwitch.Web.Controllers
         }
         [HttpPost]
         [Route("AddEndPoint")]
-        public Vanrise.Entities.InsertOperationOutput<EndPointDetail> AddEndPoint(EndPointToAdd endPointItem)
+        public Vanrise.Entities.InsertOperationOutput<List<EndPointDetail>> AddEndPoint(MultipleEndPointsToAdd endPointsToAdd)
         {
-            return _manager.AddEndPoint(endPointItem);
+            return _manager.AddEndPoint(endPointsToAdd);
         }
 
         [HttpPost]

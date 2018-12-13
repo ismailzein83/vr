@@ -11,11 +11,12 @@
             var settings = {};
 
             var parameters = {
-                CarrierAccountId: CarrierAccountId,
+				CarrierAccountId: CarrierAccountId,
+				IsClone: false
             };
 
              settings.onScopeReady = function (modalScope) {
-                modalScope.onRouteAdded = onRouteAdded
+				 modalScope.onRouteAdded = onRouteAdded;
             };
             NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/Route/RouteEditor.html', parameters, settings);
         };
@@ -25,14 +26,31 @@
 
             var parameters = {
                 RouteId: RouteId,
-                CarrierAccountId: CarrierAccountId,
+				CarrierAccountId: CarrierAccountId,
+				IsClone: false
             };
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.onRouteUpdated = onRouteUpdated;
             };
             NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/Route/RouteEditor.html', parameters, settings);
-        }
+		}
+
+		function cloneRoute(RouteId, carrierAccountId, onRouteAdded) {
+			var settings = {};
+
+			var parameters = {
+				RouteId: RouteId,
+				CarrierAccountId: carrierAccountId,
+				IsClone:true
+			};
+
+			settings.onScopeReady = function (modalScope) {
+				modalScope.onRouteAdded = onRouteAdded;
+			};
+			NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/Route/RouteEditor.html', parameters, settings);
+		}
+
 
         function registerDrillDownToCarrierAccount() {
             var drillDownDefinition = {};
@@ -123,7 +141,8 @@
 
         return {
             addRoute: addRoute,
-            editRoute: editRoute,
+			editRoute: editRoute,
+			cloneRoute: cloneRoute,
             registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount,
             registerObjectTrackingDrillDownToRoute: registerObjectTrackingDrillDownToRoute,
             getDrillDownDefinition: getDrillDownDefinition,

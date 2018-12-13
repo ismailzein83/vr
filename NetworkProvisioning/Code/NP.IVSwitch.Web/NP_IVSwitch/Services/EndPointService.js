@@ -15,10 +15,10 @@
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onEndPointAdded = onEndPointAdded
+				modalScope.onEndPointAdded = onEndPointAdded;
             };
             NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', parameters, settings);
-        };
+        }
         function editEndPoint(EndPointId, onEndPointUpdated) {
             var settings = {};
 
@@ -30,7 +30,22 @@
                 modalScope.onEndPointUpdated = onEndPointUpdated;
             };
             NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', parameters, settings);
-        }
+		}
+		function cloneEndPoint(CarrierAccountId, EndPointId, onEndPointAdded) {
+			var settings = {};
+
+			var parameters = {
+				CarrierAccountId: CarrierAccountId,
+				EndPointId: EndPointId,
+				IsClone:true
+			};
+
+			settings.onScopeReady = function (modalScope) {
+				modalScope.onEndPointAdded = onEndPointAdded;
+			};
+			NPModalService.showModal('/Client/Modules/NP_IVSwitch/Views/EndPoint/EndPointEditor.html', parameters, settings);
+		}
+
 
         function registerDrillDownToCarrierAccount() {
             var drillDownDefinition = {};
@@ -127,7 +142,8 @@
             registerDrillDownToCarrierAccount: registerDrillDownToCarrierAccount,
             getDrillDownDefinition: getDrillDownDefinition,
             registerObjectTrackingDrillDownToEndPoint: registerObjectTrackingDrillDownToEndPoint,
-            registerHistoryViewAction: registerHistoryViewAction
+			registerHistoryViewAction: registerHistoryViewAction,
+			cloneEndPoint: cloneEndPoint
         };
     }
 
