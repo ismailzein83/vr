@@ -12,7 +12,7 @@ using System.Net;
 using System.Text;
 using System.Linq;
 using Rebex.Net;
-
+using System.Threading;
 
 namespace Vanrise.Fzero.Services.Report
 {
@@ -192,7 +192,7 @@ namespace Vanrise.Fzero.Services.Report
 
                 if (ftpAddress != null && ftpUserName != null & ftpPassword != null)
                 {
-                    string fileName = string.Format("AutoSuspend_{0:yyyyMMdd}_{1}_Vanrise.temp", DateTime.Now, reportCounter);
+                    string fileName = string.Format("AutoSuspend_{0:yyyyMMdd}_{1}_Vanrise.tmp", DateTime.Now, reportCounter);
                     StringBuilder stringBuilder = new StringBuilder();
                     foreach (var item in distinctCLIs)
                     {
@@ -204,21 +204,18 @@ namespace Vanrise.Fzero.Services.Report
                     if (!ftpType.HasValue || ftpType.Value == (int)FTPTypeEnum.FTP)
                     {
 
-
-
-                        FtpWebRequest ftpWebRequest = (System.Net.FtpWebRequest)FtpWebRequest.Create(String.Format("ftp://{0}/{1}", ftpAddress, fileName.Replace(".temp", ".txt")));
+                        Rebex.Net.FtpWebRequest ftpWebRequest = (Rebex.Net.FtpWebRequest)Rebex.Net.FtpWebRequest.Create(String.Format("ftp://{0}/{1}", ftpAddress, fileName.Replace(".tmp", ".txt")));
                         ftpWebRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
-                        ftpWebRequest.KeepAlive = false;
+                    //   ftpWebRequest..KeepAlive = false;
                         ftpWebRequest.Timeout = 20000;
                         ftpWebRequest.Method = WebRequestMethods.Ftp.UploadFile;
-                        ftpWebRequest.UseBinary = true;
+                      //  ftpWebRequest.UseBinary = true;
                         Stream stream = ftpWebRequest.GetRequestStream();
                         ftpWebRequest.ContentLength = buffer.Length;
                         stream.Write(buffer, 0, buffer.Length);
                         int contentLen = buffer.Length;
                         stream.Close();
                         stream.Dispose();
-
                     }
                     else if (ftpType.Value == (int)FTPTypeEnum.SFTP)
                     {
@@ -271,19 +268,23 @@ namespace Vanrise.Fzero.Services.Report
                                 fileName = string.Format("{0}/{1}", filePath, fileName);
                             }
                         }
-
-                        client.TransferProgress += (sender, e) =>
+                        bool isTransferDone = false;
+                        string remotePath = null;
+                        client.TransferProgress += (sender1, e1) =>
                         {
-                            if (e.Finished)
+                            if (e1.Finished)
                             {
-                                var sftp = sender as Sftp;
-                                if (sftp != null)
-                                {
-                                    sftp.Rename(e.RemotePath, e.RemotePath.Replace(".temp",".txt"));
-                                }
+                                isTransferDone = true;
+                                remotePath = e1.RemotePath;
                             }
                         };
                         client.PutFile(ms, fileName);
+                        while (!isTransferDone)
+                        {
+                            System.Threading.Thread.Sleep(200);
+                        }
+                        client.Rename(remotePath, remotePath.Replace(".tmp", ".txt"));
+                        client.Dispose();
                     }
                 }
             }
