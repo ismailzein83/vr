@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.Data.RDB
 {
@@ -72,6 +73,15 @@ namespace Vanrise.Data.RDB
         public abstract int ExecuteNonQuery(IRDBDataProviderExecuteNonQueryContext context);
 
         public abstract BaseRDBStreamForBulkInsert InitializeStreamForBulkInsert(IRDBDataProviderInitializeStreamForBulkInsertContext context);
+
+        public virtual DateTimeRange GetRDBProviderDateTimeRange()
+        {
+            return new DateTimeRange()
+            {
+                From = new DateTime(1753, 1, 1, 0, 0, 0),
+                To = new DateTime(9999, 12, 31, 23, 59, 59)
+            };
+        }
     }
 
     //public interface IRDBDataProviderResolveParameterDeclarationsContext : IBaseRDBResolveQueryContext
