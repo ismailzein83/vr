@@ -17,7 +17,8 @@ CREATE PROCEDURE [VR_Invoice].[sp_Invoice_GetFiltered]
 	@IsSelectAll bit = null,
 	@InvoiceBulkActionIdentifier uniqueidentifier = null,
 	@IsSent bit = null,
-	@IsPaid bit = null
+	@IsPaid bit = null,
+	@SerialNumber nvarchar(50)
 AS
 BEGIN
 DECLARE @PartnerIdsTable TABLE (PartnerId nvarchar(50))
@@ -29,7 +30,8 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@In
 	
 	SELECT	vrIn.ID,
 			vrIn.InvoiceTypeID,
-			vrIn.PartnerID,SerialNumber,
+			vrIn.PartnerID,
+			vrIn.SerialNumber,
 			vrIn.FromDate,
 			vrIn.ToDate,
 			vrIn.SettlementInvoiceId,
@@ -69,6 +71,7 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@In
 			 ISNULL( vrIn.IsDeleted,0) = 0 AND ISNULL(vrIn.IsDraft, 0) = 0
 			 AND (@IsPaid IS NULL OR (vrIn.PaidDate IS NULL AND  @IsPaid = 0) OR (vrIn.PaidDate IS NOT NULL AND  @IsPaid = 1))
 			 AND (@IsSent IS NULL OR (vrIn.SentDate IS NULL AND  @IsSent = 0) OR (vrIn.SentDate IS NOT NULL AND  @IsSent = 1))
+			 AND (@SerialNumber is null Or vrIn.SerialNumber like  ('%' + @SerialNumber +'%'))
 
 	IF(@IsSelectAll IS NOT NULL AND @IsSelectAll = 1 AND @InvoiceBulkActionIdentifier IS NOT NULL)
 	BEGIN
