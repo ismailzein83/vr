@@ -1,5 +1,5 @@
 ﻿"use strict";
-app.directive("vrDataparserStringHexRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrDataparserStringHexParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {

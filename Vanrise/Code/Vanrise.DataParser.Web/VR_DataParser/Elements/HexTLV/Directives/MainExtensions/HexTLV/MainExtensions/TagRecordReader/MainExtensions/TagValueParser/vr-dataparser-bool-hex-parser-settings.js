@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrDataparserTimeFieldHexRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrDataparserBoolHexParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new TimeParserEditor($scope, ctrl);
+            var ctor = new boolParserEditor($scope, ctrl);
             ctor.initializeController();
         },
         controllerAs: "ctrl",
@@ -19,12 +19,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexTimeFieldParser.html"
+        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexBoolFieldParser.html"
 
 
     };
 
-    function TimeParserEditor($scope, ctrl) {
+    function boolParserEditor($scope, ctrl) {
 
         var context;
         var dataRecordTypeFieldSelectorAPI;
@@ -43,9 +43,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         function defineAPI() {
             var api = {};
-            //console.log(api)
             api.load = function (payload) {
-                console.log("gdfgdfgdf")
                 var promises = [];
                 if (payload != undefined) {
                     if (payload.ValueParser != undefined)
@@ -53,29 +51,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     context = payload.context;
 
                 }
+            
 
-
-                //function loadDataRecordTypeFieldSelector() {
-                //    var dataRecordTypeFieldLoadDeferred = UtilsService.createPromiseDeferred();
-                //    dataRecordTypeFieldSelectorReadyPromiseDeferred.promise.then(function () {
-                //        dataRecordTypeFieldSelectorReadyPromiseDeferred = undefined;
-                //        var dataRecordTypeFieldPayload = {};
-                //        if (payload != undefined && payload.ValueParser != undefined)
-                //            dataRecordTypeFieldPayload.selectedIds = payload.ValueParser.FieldName;
-                //        if (context != undefined)
-                //            dataRecordTypeFieldPayload.dataRecordTypeId = context.recordTypeId();
-                //        VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldSelectorAPI, dataRecordTypeFieldPayload, dataRecordTypeFieldLoadDeferred);
-                //    });
-
-                //    return dataRecordTypeFieldLoadDeferred.promise;
-                //}
                 return UtilsService.waitMultiplePromises(promises);
 
             };
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.TimeFieldParser,Vanrise.DataParser.MainExtensions",
+                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.BoolFieldParser ,Vanrise.DataParser.MainExtensions",
                     FieldName: $scope.scopeModel.fieldName
                 };
             };

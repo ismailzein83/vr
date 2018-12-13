@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrDataparserDateTimeHexRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_DataParser_DateTimeParsingType",
+app.directive("vrDataparserDateTimeHexParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_DataParser_DateTimeParsingType",
 function (UtilsService, VRNotificationService, VRUIUtilsService, VR_DataParser_DateTimeParsingType) {
 
     var directiveDefinitionObject = {

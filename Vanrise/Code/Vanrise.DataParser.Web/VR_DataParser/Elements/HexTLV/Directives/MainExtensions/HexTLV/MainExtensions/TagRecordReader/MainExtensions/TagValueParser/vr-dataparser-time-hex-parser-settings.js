@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrDataparserCoordinatesHexRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrDataparserTimeHexParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new coordinatesParserEditor($scope, ctrl);
+            var ctor = new TimeParserEditor($scope, ctrl);
             ctor.initializeController();
         },
         controllerAs: "ctrl",
@@ -19,12 +19,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexCoordinatesFieldParser.html"
+        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexTimeParser.html"
 
 
     };
 
-    function coordinatesParserEditor($scope, ctrl) {
+    function TimeParserEditor($scope, ctrl) {
 
         var context;
         var dataRecordTypeFieldSelectorAPI;
@@ -47,24 +47,34 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 var promises = [];
                 if (payload != undefined) {
                     if (payload.ValueParser != undefined)
-                    {
-                        $scope.scopeModel.latitudeFieldName = payload.ValueParser.LatitudeFieldName;
-                        $scope.scopeModel.longitudeFieldName = payload.ValueParser.LongitudeFieldName;
-                    }
+                    { $scope.scopeModel.fieldName = payload.ValueParser.FieldName; }
                     context = payload.context;
 
                 }
 
 
+                //function loadDataRecordTypeFieldSelector() {
+                //    var dataRecordTypeFieldLoadDeferred = UtilsService.createPromiseDeferred();
+                //    dataRecordTypeFieldSelectorReadyPromiseDeferred.promise.then(function () {
+                //        dataRecordTypeFieldSelectorReadyPromiseDeferred = undefined;
+                //        var dataRecordTypeFieldPayload = {};
+                //        if (payload != undefined && payload.ValueParser != undefined)
+                //            dataRecordTypeFieldPayload.selectedIds = payload.ValueParser.FieldName;
+                //        if (context != undefined)
+                //            dataRecordTypeFieldPayload.dataRecordTypeId = context.recordTypeId();
+                //        VRUIUtilsService.callDirectiveLoad(dataRecordTypeFieldSelectorAPI, dataRecordTypeFieldPayload, dataRecordTypeFieldLoadDeferred);
+                //    });
+
+                //    return dataRecordTypeFieldLoadDeferred.promise;
+                //}
                 return UtilsService.waitMultiplePromises(promises);
 
             };
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.DataParser.MainExtensions.HexTLV2.FieldParsers.CoordinatesParser,Vanrise.DataParser.MainExtensions",
-                    LatitudeFieldName: $scope.scopeModel.latitudeFieldName,
-                    LongitudeFieldName: $scope.scopeModel.longitudeFieldName
+                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.TimeParser,Vanrise.DataParser.MainExtensions",
+                    FieldName: $scope.scopeModel.fieldName
                 };
             };
 

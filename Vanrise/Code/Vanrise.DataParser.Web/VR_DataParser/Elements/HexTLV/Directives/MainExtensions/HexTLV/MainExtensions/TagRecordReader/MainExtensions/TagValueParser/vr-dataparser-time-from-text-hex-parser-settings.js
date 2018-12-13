@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrDataparserNumberFromTextHexRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VR_DataParser_NumberType",
-function (UtilsService, VRNotificationService, VRUIUtilsService, VR_DataParser_NumberType) {
+app.directive("vrDataparserTimeFromTextHexParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
 
@@ -19,53 +19,37 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_DataParser_N
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/NumberFromTextHexParser.html"
+        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/TimeFromTextHexParser.html"
 
 
     };
 
     function timeFromTextEditor($scope, ctrl) {
-        var recordTypeFieldTypeDirectiveAPI;
 
         var context;
         var dataRecordTypeFieldSelectorAPI;
-        var recordTypeFieldTypeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
         var dataRecordTypeFieldSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         this.initializeController = initializeController;
 
         function initializeController() {
 
             $scope.scopeModel = {};
-            $scope.scopeModel.recordTypeFieldType = UtilsService.getArrayEnum(VR_DataParser_NumberType);
             $scope.scopeModel.onDataRecordTypeFieldsSelectorReady = function (api) {
                 dataRecordTypeFieldSelectorAPI = api;
                 dataRecordTypeFieldSelectorReadyPromiseDeferred.resolve();
             };
-
-
-
-
-            $scope.scopeModel.onRecordTypeFieldTypeDirectiveReady = function (api) {
-                recordTypeFieldTypeDirectiveAPI = api;
-                recordTypeFieldTypeDirectiveReadyDeferred.resolve();
-
-
-
-
-
-                defineAPI();
-            };
+            defineAPI();
         }
 
         function defineAPI() {
             var api = {};
 
             api.load = function (payload) {
+                console.log(payload)
                 var promises = [];
-                
                 if (payload != undefined) {
                     if (payload.ValueParser != undefined) {
-                        $scope.scopeModel.selectedValue = UtilsService.getItemByVal($scope.scopeModel.recordTypeFieldType, payload.ValueParser.NumberType, "value");
+                        $scope.scopeModel.timeFormat = payload.ValueParser.TimeFormat;
                         $scope.scopeModel.fieldName = payload.ValueParser.FieldName;
                     }
                     context = payload.context;
@@ -78,9 +62,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_DataParser_N
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.DataParser.MainExtensions.StringFieldParsers.NumberFromTextParser,Vanrise.DataParser.MainExtensions",
+                    $type: "Vanrise.DataParser.MainExtensions.StringFieldParsers.TimeFromTextParser,Vanrise.DataParser.MainExtensions",
                     FieldName: $scope.scopeModel.fieldName,
-                    NumberType: $scope.scopeModel.selectedValue != undefined ? $scope.scopeModel.selectedValue.value : undefined
+                    TimeFormat: $scope.scopeModel.timeFormat
                 };
             };
 

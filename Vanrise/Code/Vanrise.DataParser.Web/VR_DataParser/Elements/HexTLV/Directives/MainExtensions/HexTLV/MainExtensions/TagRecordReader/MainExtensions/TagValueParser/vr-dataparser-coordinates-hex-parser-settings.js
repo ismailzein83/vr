@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrDataparserZonePackageRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrDataparserCoordinatesHexParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new zonePackageParserEditor($scope, ctrl);
+            var ctor = new coordinatesParserEditor($scope, ctrl);
             ctor.initializeController();
         },
         controllerAs: "ctrl",
@@ -19,12 +19,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexZonePackageParser.html"
+        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexCoordinatesFieldParser.html"
 
 
     };
 
-    function zonePackageParserEditor($scope, ctrl) {
+    function coordinatesParserEditor($scope, ctrl) {
 
         var context;
         var dataRecordTypeFieldSelectorAPI;
@@ -47,7 +47,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 var promises = [];
                 if (payload != undefined) {
                     if (payload.ValueParser != undefined)
-                    { $scope.scopeModel.zoneFieldName = payload.ValueParser.ZoneFieldName; }
+                    {
+                        $scope.scopeModel.latitudeFieldName = payload.ValueParser.LatitudeFieldName;
+                        $scope.scopeModel.longitudeFieldName = payload.ValueParser.LongitudeFieldName;
+                    }
                     context = payload.context;
 
                 }
@@ -59,8 +62,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers.ZonePackageParser,Vanrise.DataParser.MainExtensions",
-                    ZoneFieldName: $scope.scopeModel.zoneFieldName
+                    $type: "Vanrise.DataParser.MainExtensions.HexTLV2.FieldParsers.CoordinatesParser,Vanrise.DataParser.MainExtensions",
+                    LatitudeFieldName: $scope.scopeModel.latitudeFieldName,
+                    LongitudeFieldName: $scope.scopeModel.longitudeFieldName
                 };
             };
 

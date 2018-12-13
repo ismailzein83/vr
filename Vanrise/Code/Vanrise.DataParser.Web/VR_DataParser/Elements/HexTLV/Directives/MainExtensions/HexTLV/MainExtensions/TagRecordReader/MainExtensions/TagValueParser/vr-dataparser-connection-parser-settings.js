@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrDataparserPartyNumberFieldnameRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrDataparserConnectionParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new partyNumberFieldnameParserEditor($scope, ctrl);
+            var ctor = new connectionIdentificationPackageParserEditor($scope, ctrl);
             ctor.initializeController();
         },
         controllerAs: "ctrl",
@@ -19,12 +19,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexPartyNumberFieldname.html"
+        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexConnectionIdentificationPackageFieldParser.html"
 
 
     };
 
-    function partyNumberFieldnameParserEditor($scope, ctrl) {
+    function connectionIdentificationPackageParserEditor($scope, ctrl) {
 
         var context;
         var dataRecordTypeFieldSelectorAPI;
@@ -47,7 +47,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 var promises = [];
                 if (payload != undefined) {
                     if (payload.ValueParser != undefined)
-                    { $scope.scopeModel.partyNumberFieldName = payload.ValueParser.PartyNumberFieldName; }
+                    { $scope.scopeModel.connectionIdentificationFieldName = payload.ValueParser.ConnectionIdentificationFieldName; }
                     context = payload.context;
 
                 }
@@ -59,8 +59,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers.PartyNumberPackageParser,Vanrise.DataParser.MainExtensions",
-                    PartyNumberFieldName: $scope.scopeModel.partyNumberFieldName
+                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers.ConnectionIdentificationPackageParser,Vanrise.DataParser.MainExtensions",
+                    ConnectionIdentificationFieldName: $scope.scopeModel.connectionIdentificationFieldName
                 };
             };
 

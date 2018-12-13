@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrDataparserTimeHexRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrDataparserTbcdNumberHexParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new TimeParserEditor($scope, ctrl);
+            var ctor = new boolParserEditor($scope, ctrl);
             ctor.initializeController();
         },
         controllerAs: "ctrl",
@@ -19,12 +19,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexTimeParser.html"
+        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexTBCDNumberParser.html"
 
 
     };
 
-    function TimeParserEditor($scope, ctrl) {
+    function boolParserEditor($scope, ctrl) {
 
         var context;
         var dataRecordTypeFieldSelectorAPI;
@@ -46,8 +46,13 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             api.load = function (payload) {
                 var promises = [];
                 if (payload != undefined) {
+                    console.log(payload)
                     if (payload.ValueParser != undefined)
-                    { $scope.scopeModel.fieldName = payload.ValueParser.FieldName; }
+                    {
+                        $scope.scopeModel.fieldName = payload.ValueParser.FieldName;
+                        $scope.scopeModel.aIsZero = payload.ValueParser.AIsZero;
+                        $scope.scopeModel.removeHexa = payload.ValueParser.RemoveHexa;
+                    }
                     context = payload.context;
 
                 }
@@ -73,8 +78,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.TimeParser,Vanrise.DataParser.MainExtensions",
-                    FieldName: $scope.scopeModel.fieldName
+                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.TBCDNumberParser,Vanrise.DataParser.MainExtensions",
+                    FieldName: $scope.scopeModel.fieldName,
+                    AIsZero: $scope.scopeModel.aIsZero,
+                    RemoveHexa: $scope.scopeModel.removeHexa
                 };
             };
 

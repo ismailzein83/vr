@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrDataparserDataFromTextHexRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrDataparserHexaHexParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new dateFromTextEditor($scope, ctrl);
+            var ctor = new Ipv4ParserEditor($scope, ctrl);
             ctor.initializeController();
         },
         controllerAs: "ctrl",
@@ -19,12 +19,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/DataFromTextHexParser.html"
+        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexHexaFieldParser.html"
 
 
     };
 
-    function dateFromTextEditor($scope, ctrl) {
+    function Ipv4ParserEditor($scope, ctrl) {
 
         var context;
         var dataRecordTypeFieldSelectorAPI;
@@ -43,18 +43,19 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         function defineAPI() {
             var api = {};
-            
             api.load = function (payload) {
                 var promises = [];
                 if (payload != undefined) {
                     if (payload.ValueParser != undefined)
                     {
-                        $scope.scopeModel.dateFormat = payload.ValueParser.DateFormat;
                         $scope.scopeModel.fieldName = payload.ValueParser.FieldName;
+                        $scope.scopeModel.trimZeros = payload.ValueParser.TrimZeros;
+                        $scope.scopeModel.reverse = payload.ValueParser.Reverse;
                     }
                     context = payload.context;
 
                 }
+
 
                 return UtilsService.waitMultiplePromises(promises);
 
@@ -62,10 +63,11 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.DataParser.MainExtensions.StringFieldParsers.DateFromTextParser,Vanrise.DataParser.MainExtensions",
+                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.HexaParser,Vanrise.DataParser.MainExtensions",
                     FieldName: $scope.scopeModel.fieldName,
-                    DateFormat:$scope.scopeModel.dateFormat
-                }
+                    TrimZeros: $scope.scopeModel.trimZeros,
+                    Reverse: $scope.scopeModel.reverse
+                };
             };
 
             if (ctrl.onReady != null) {

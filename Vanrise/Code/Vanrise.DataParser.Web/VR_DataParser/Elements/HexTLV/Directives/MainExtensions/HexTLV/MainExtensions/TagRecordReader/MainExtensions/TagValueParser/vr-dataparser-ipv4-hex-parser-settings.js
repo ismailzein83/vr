@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrDataparserTrafficQualityDataPackageRecordParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrDataparserIpv4HexParserSettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new trafficQualityDataParserEditor($scope, ctrl);
+            var ctor = new Ipv4ParserEditor($scope, ctrl);
             ctor.initializeController();
         },
         controllerAs: "ctrl",
@@ -19,12 +19,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexTrafficQualityDataFieldParser.html"
+        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexIpv4FieldParser.html"
 
 
     };
 
-    function trafficQualityDataParserEditor($scope, ctrl) {
+    function Ipv4ParserEditor($scope, ctrl) {
 
         var context;
         var dataRecordTypeFieldSelectorAPI;
@@ -47,11 +47,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 var promises = [];
                 if (payload != undefined) {
                     if (payload.ValueParser != undefined)
-                    {
-                        $scope.scopeModel.causeValueFieldName = payload.ValueParser.CauseValueFieldName;
-                        $scope.scopeModel.codingStandardFieldName = payload.ValueParser.CodingStandardFieldName;
-                        $scope.scopeModel.locationFieldName = payload.ValueParser.LocationFieldName;
-                    }
+                    { $scope.scopeModel.fieldName = payload.ValueParser.FieldName; }
                     context = payload.context;
 
                 }
@@ -63,11 +59,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers.TrafficQualityDataPackageParser,Vanrise.DataParser.MainExtensions",
-                    CauseValueFieldName: $scope.scopeModel.causeValueFieldName,
-                    CodingStandardFieldName: $scope.scopeModel.codingStandardFieldName,
-                    LocationFieldName: $scope.scopeModel.locationFieldName
-
+                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.IPv4Parser,Vanrise.DataParser.MainExtensions",
+                    FieldName: $scope.scopeModel.fieldName
                 };
             };
 
