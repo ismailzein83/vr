@@ -136,6 +136,42 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
              resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
              return resolvedQuery;
          }
+        
+        public override bool IsDataUpdated(string tableName, RDBTableDefinition tableDefinition, ref object lastReceivedDataInfo)
+        {
+            string query = String.Format("SELECT MAX(timestamp) FROM {0} WITH(NOLOCK)", GetTableDBName(tableDefinition.DBSchemaName, tableDefinition.DBTableName));
+            var newReceivedDataInfo = _dataManager.ExecuteScalar(query, null);
+            return IsDataUpdated(ref lastReceivedDataInfo, newReceivedDataInfo);
+        }
+
+        public override bool IsDataUpdated<T>(string tableName, RDBTableDefinition tableDefinition, string columnName, T columnValue, ref object lastReceivedDataInfo)
+        {
+            string query = String.Format("SELECT MAX(timestamp) FROM {0} WITH(NOLOCK) WHERE {1} = @ColumnValue", GetTableDBName(tableDefinition.DBSchemaName, tableDefinition.DBTableName), columnName);
+            
+            var newReceivedDataInfo = _dataManager.ExecuteScalar(query, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@ColumnValue", columnValue));
+            });
+            return IsDataUpdated(ref lastReceivedDataInfo, newReceivedDataInfo);
+        }
+
+        bool IsDataUpdated(ref object lastReceivedDataInfo, object newReceivedDataInfo)
+        {
+            if (newReceivedDataInfo == null)
+                return false;
+            else
+            {
+                byte[] newTimeStamp = (byte[])newReceivedDataInfo;
+                if (lastReceivedDataInfo == null || !newTimeStamp.SequenceEqual((byte[])lastReceivedDataInfo))
+                {
+                    lastReceivedDataInfo = newTimeStamp;
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+
 
         #region Private Classes
 
@@ -263,6 +299,25 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                          cmd.Parameters.Add(new SqlParameter(prm.Value.DBParameterName, prm.Value.Value != null ? prm.Value.Value : DBNull.Value));
                  }
              }
+
+            public Object ExecuteScalar(string queryText, Action<SqlCommand> onCommandReady)
+            {
+                Object retValue;
+                using (var connection = new SqlConnection(_connString))
+                {
+                    connection.Open();
+
+                    using (var cmd = new SqlCommand(queryText, connection))
+                    {
+                        if (onCommandReady != null)
+                            onCommandReady(cmd);
+                        retValue = cmd.ExecuteScalar();
+                    }
+
+                    connection.Close();
+                }
+                return retValue;
+            }
 
              //protected override string GetConnectionString()
              //{

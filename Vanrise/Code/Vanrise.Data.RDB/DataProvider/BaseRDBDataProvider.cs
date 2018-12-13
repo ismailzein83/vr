@@ -82,6 +82,46 @@ namespace Vanrise.Data.RDB
                 To = new DateTime(9999, 12, 31, 23, 59, 59)
             };
         }
+
+
+        public virtual bool IsDataUpdated(string tableName, RDBTableDefinition tableDefinition, ref object lastReceivedDataInfo)
+        {
+            var queryContext = new RDBQueryContext(this);
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(tableName, "tab", null, true);
+            selectQuery.SelectAggregates().Aggregate(RDBNonCountAggregateType.MAX, tableDefinition.ModifiedTimeColumnName);
+            var newReceivedDataInfo = queryContext.ExecuteScalar().NullableDateTimeValue;
+            return IsDataUpdated(ref lastReceivedDataInfo, newReceivedDataInfo);
+        }
+
+        public virtual bool IsDataUpdated<T>(string tableName, RDBTableDefinition tableDefinition, string columnName, T columnValue, ref object lastReceivedDataInfo)
+        {
+            var queryContext = new RDBQueryContext(this);
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(tableName, "tab", null, true);
+            selectQuery.SelectAggregates().Aggregate(RDBNonCountAggregateType.MAX, tableDefinition.ModifiedTimeColumnName);
+            selectQuery.Where().EqualsCondition(columnName).ObjectValue(columnValue);
+            var newReceivedDataInfo = queryContext.ExecuteScalar().NullableDateTimeValue;
+            return IsDataUpdated(ref lastReceivedDataInfo, newReceivedDataInfo);
+        }
+
+        protected bool IsDataUpdated(ref object lastReceivedDataInfo, DateTime? newReceivedDataInfo)
+        {
+            if (!newReceivedDataInfo.HasValue)
+            {
+                return false;
+            }
+            else
+            {
+                if (lastReceivedDataInfo == null || newReceivedDataInfo != (DateTime?)lastReceivedDataInfo)
+                {
+                    lastReceivedDataInfo = newReceivedDataInfo;
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
     }
 
     //public interface IRDBDataProviderResolveParameterDeclarationsContext : IBaseRDBResolveQueryContext

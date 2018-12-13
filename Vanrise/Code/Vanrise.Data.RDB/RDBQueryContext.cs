@@ -138,6 +138,20 @@ namespace Vanrise.Data.RDB
             return query;
         }
 
+        public bool IsDataUpdated(string tableName, ref object lastReceivedDataInfo)
+        {
+            var tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(this.DataProvider, tableName);
+            tableDefinition.ModifiedTimeColumnName.ThrowIfNull("tableDefinition.ModifiedTimeColumnName", tableName);
+            return this.DataProvider.IsDataUpdated(tableName, tableDefinition, ref lastReceivedDataInfo);
+        }
+
+        protected bool IsDataUpdated<T>(string tableName, string columnName, T columnValue, ref object lastReceivedDataInfo)
+        {
+            var tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(this.DataProvider, tableName);
+            tableDefinition.ModifiedTimeColumnName.ThrowIfNull("tableDefinition.ModifiedTimeColumnName", tableName);
+            return this.DataProvider.IsDataUpdated(tableName, tableDefinition, columnName, columnValue, ref lastReceivedDataInfo);
+        }
+
         //public RDBSetParameterValuesQuery SetParameterValues()
         //{
         //    var query = new RDBSetParameterValuesQuery(this.QueryBuilderContext.CreateChildContext());
