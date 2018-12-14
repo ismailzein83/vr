@@ -31,6 +31,9 @@ namespace Vanrise.HelperTools
         public static string VersionNumber { get { return ConfigurationManager.AppSettings["VersionNumber"]; } }
         public static string SQLUsername { get { return ConfigurationManager.AppSettings["SQLUsername"]; } }
         public static string SQLPassword { get { return ConfigurationManager.AppSettings["SQLPassword"]; } }
+        public static string CheckPathLengthOutputPath { get { return ConfigurationManager.AppSettings["checkPathLengthOutputPath"]; } }
+        public static string CheckPathLengthSourcePath { get { return ConfigurationManager.AppSettings["checkPathLengthSourcePath"]; } }
+        public static int MaxPathLength { get { return int.Parse(ConfigurationManager.AppSettings["maxPathLength"]); } }
 
         public static List<string> GetDBs(string projectName)
         {
@@ -89,7 +92,7 @@ namespace Vanrise.HelperTools
                         //add folder content to created file
                         foreach (var file in allFiles)
                         {
-                            fileContent.Append(File.ReadAllText(file));
+                            fileContent.AppendLine(File.ReadAllText(file));
                             fileContent.Append(";");
                             fileContent.AppendLine();
                             //rename or remove file
@@ -103,7 +106,97 @@ namespace Vanrise.HelperTools
             }
         }
 
+        public static void CheckPathLength(string currentDateShort, string sourcePath, string outputPath, string projectName, int maxLength)
+        {
+            if (maxLength == 0)
+            {
+                maxLength = Common.MaxPathLength;
+            }
 
+            if (string.IsNullOrEmpty(outputPath))
+            {
+                outputPath = Common.CheckPathLengthOutputPath;
+            }
+
+            if (string.IsNullOrEmpty(sourcePath))
+            {
+                sourcePath = Common.CheckPathLengthSourcePath;
+
+                if (string.IsNullOrEmpty(projectName))
+                {
+                    projectName = "Vanrise";
+                }
+                if (projectName == "TOneV2")
+                {
+                    sourcePath = sourcePath + "\\TOneV2";
+                }
+            }
+
+            var allDirectories = Directory.GetDirectories(string.Format(sourcePath, projectName), "Directives", SearchOption.AllDirectories);
+
+            Parallel.ForEach(allDirectories, directory =>
+            {
+                if (!directory.Contains("Libraries"))
+                {
+                    var allFiles = Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories);
+
+                    StringBuilder fileContent = new StringBuilder();
+                    //fileContent.AppendLine(string.Format("Files exceeded the limit of {0} characters for the directory and file name.", maxLength));
+
+                    //add file path to created file that matched the criteria
+                    foreach (var file in allFiles)
+                    {
+                        //File.WriteAllText(string.Format("{0}\\{1}{2}{3}", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file)), p.Pack(File.ReadAllText(Path.GetFullPath(file))));
+                        var fileLength = file.ToString().Length;
+
+                        if (fileLength > maxLength)
+                        {
+                            //fileContent.AppendLine("Files exceeded the limit of 248 characters for the directory or 259 for the directory and file name.");
+                            fileContent.AppendLine(file.ToString());
+                            //fileContent.AppendLine();
+                        }
+                    }
+                    if (fileContent.Length > 0)
+                    {
+                        Directory.CreateDirectory(string.Format("{0}\\{1}\\{2}", outputPath, currentDateShort, projectName));
+                        var directoryName = Path.GetFileName(Directory.GetParent(directory).ToString());
+                        File.WriteAllText(string.Format("{0}\\{1}\\{2}\\{3}{4}", outputPath, currentDateShort, projectName, directoryName, ".txt"), fileContent.ToString());
+                    }
+                }
+            });
+        }
+
+        public static void GroupCheckPathLengthFiles(string currentDateShort, string filesOutputPath)
+        {
+            if (string.IsNullOrEmpty(filesOutputPath))
+            {
+                filesOutputPath = string.Format("{0}\\{1}", Common.CheckPathLengthOutputPath, currentDateShort);
+            }
+
+            var allDirectories = Directory.GetDirectories(filesOutputPath, "*", SearchOption.TopDirectoryOnly);
+
+            foreach (var directory in allDirectories)
+            {
+                var directoryName = Path.GetFileName(directory);
+
+                StringBuilder fileContent = new StringBuilder();
+
+                string[] allFiles = Directory.GetFiles(directory, "*.txt", SearchOption.AllDirectories);
+
+                //add folder content to created file
+                foreach (var file in allFiles)
+                {
+                    if (File.Exists(file))
+                    {
+                        fileContent.AppendLine(File.ReadAllText(file));
+                        //rename or remove file
+                        File.Delete(file);
+                    }
+                }
+
+                File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".txt"), fileContent.ToString());
+            }
+        }
 
         #endregion
 
@@ -219,7 +312,7 @@ namespace Vanrise.HelperTools
                 }
                 scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", enumeration.NameSpace, enumeration.Name, enumeration.Description);
             }
-            string script =string.Format(@"--[common].[Enumerations]---------------------------------------------------------------------------
+            string script = string.Format(@"--[common].[Enumerations]---------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([NameSpace],[Name],[Description])
@@ -237,7 +330,7 @@ when matched then
 when not matched by target then
 	insert([NameSpace],[Name],[Description])
 	values(s.[NameSpace],s.[Name],s.[Description]);", scriptBuilder.ToString());
-            
+
             File.WriteAllText(string.Format(sqlFilesOutputPath, currentDateShort, "Configuration\\Enumerations.sql", projectName), script.ToString());
         }
 
@@ -251,25 +344,25 @@ when not matched by target then
                 var assemblyTypes = assembly.GetTypes();
                 foreach (Type type in assemblyTypes)
                 {
-                        if (type.IsEnum)
-                        {
-                            if (type.Namespace == null)
-                                continue;
-                            Enumeration enumeration = new Enumeration();
-                            enumeration.NameSpace = type.Namespace;
-                            enumeration.Name = type.Name;
+                    if (type.IsEnum)
+                    {
+                        if (type.Namespace == null)
+                            continue;
+                        Enumeration enumeration = new Enumeration();
+                        enumeration.NameSpace = type.Namespace;
+                        enumeration.Name = type.Name;
 
-                            var enumerationValues = new List<string>();
-                            foreach (var enumValue in type.GetEnumValues())
-                            {
-                                int enumerationValueInteger = Convert.ToInt32(enumValue);
-                                string enumerationValueName = enumValue.ToString();
-                                enumerationValues.Add(string.Format("{0}:{1}", enumerationValueName, enumerationValueInteger));
-                            }
-                            enumeration.Description = string.Join(", ", enumerationValues);
-                            result.Add(enumeration);
+                        var enumerationValues = new List<string>();
+                        foreach (var enumValue in type.GetEnumValues())
+                        {
+                            int enumerationValueInteger = Convert.ToInt32(enumValue);
+                            string enumerationValueName = enumValue.ToString();
+                            enumerationValues.Add(string.Format("{0}:{1}", enumerationValueName, enumerationValueInteger));
                         }
-                    
+                        enumeration.Description = string.Join(", ", enumerationValues);
+                        result.Add(enumeration);
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -332,7 +425,7 @@ when not matched by target then
             foreach (string script in dbname.Script(scriptOptions))
             {
                 dbExist = DbExist(script, autoGeneration);
-                if (!dbExist || projectName == "Component-ISP" || projectName=="Component-NetworkRental")
+                if (!dbExist || projectName == "Component-ISP" || projectName == "Component-NetworkRental")
                 {
                     sb.AppendLine(script);
                     sb.AppendLine("GO");
@@ -349,8 +442,8 @@ when not matched by target then
             foreach (string script in scriptCollection)
             {
                 dbExist = DbExist(script, autoGeneration);
-                if ((script.Contains("CREATE DATABASE") && !dbExist) 
-                    || (script.Contains("CREATE DATABASE") && projectName == "Component-ISP") 
+                if ((script.Contains("CREATE DATABASE") && !dbExist)
+                    || (script.Contains("CREATE DATABASE") && projectName == "Component-ISP")
                     || (script.Contains("CREATE DATABASE") && projectName == "Component-NetworkRental")
                     )
                 {
@@ -401,7 +494,7 @@ when not matched by target then
                 sb = sb.Replace(mainItem, "StandardISPStructure");
             }
 
-            if(projectName == "NetworkRental" || projectName == "Component-NetworkRental")
+            if (projectName == "NetworkRental" || projectName == "Component-NetworkRental")
             {
                 sb = sb.Replace(mainItem, "StandardNetworkRentalStructure");
             }

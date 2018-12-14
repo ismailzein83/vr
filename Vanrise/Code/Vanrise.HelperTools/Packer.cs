@@ -51,6 +51,8 @@ namespace Dean.Edwards
         private Button bnGenerateDBScript;
         private CheckedListBox chklstDatabases;
         private Button btnEnums;
+        private Button CheckPathLength;
+        private Button btnGRPPath;
 
         /// <summary>
         /// Required designer variable.
@@ -116,6 +118,8 @@ namespace Dean.Edwards
             this.bnGenerateDBScript = new System.Windows.Forms.Button();
             this.chklstDatabases = new System.Windows.Forms.CheckedListBox();
             this.btnEnums = new System.Windows.Forms.Button();
+            this.CheckPathLength = new System.Windows.Forms.Button();
+            this.btnGRPPath = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbSource
@@ -399,12 +403,40 @@ namespace Dean.Edwards
             this.btnEnums.UseVisualStyleBackColor = false;
             this.btnEnums.Click += new System.EventHandler(this.btnEnums_Click);
             // 
+            // CheckPathLength
+            // 
+            this.CheckPathLength.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.CheckPathLength.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CheckPathLength.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CheckPathLength.Location = new System.Drawing.Point(12, 111);
+            this.CheckPathLength.Name = "CheckPathLength";
+            this.CheckPathLength.Size = new System.Drawing.Size(119, 23);
+            this.CheckPathLength.TabIndex = 18;
+            this.CheckPathLength.Text = "Check Path";
+            this.CheckPathLength.UseVisualStyleBackColor = false;
+            this.CheckPathLength.Click += new System.EventHandler(this.CheckPathLength_Click);
+            // 
+            // btnGRPPath
+            // 
+            this.btnGRPPath.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnGRPPath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnGRPPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGRPPath.Location = new System.Drawing.Point(137, 111);
+            this.btnGRPPath.Name = "btnGRPPath";
+            this.btnGRPPath.Size = new System.Drawing.Size(119, 23);
+            this.btnGRPPath.TabIndex = 19;
+            this.btnGRPPath.Text = "GRP Path";
+            this.btnGRPPath.UseVisualStyleBackColor = false;
+            this.btnGRPPath.Click += new System.EventHandler(this.btnGRPPath_Click);
+            // 
             // Packer
             // 
             this.AcceptButton = this.pack;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.bClear;
             this.ClientSize = new System.Drawing.Size(774, 253);
+            this.Controls.Add(this.btnGRPPath);
+            this.Controls.Add(this.CheckPathLength);
             this.Controls.Add(this.btnEnums);
             this.Controls.Add(this.chklstDatabases);
             this.Controls.Add(this.bnGenerateDBScript);
@@ -749,6 +781,34 @@ namespace Dean.Edwards
             Thread.Sleep(1000);
             pBar1.PerformStep();
             Common.GenerateEnumerationsScript(Common.BinPath, currentDateShort,false, sqlFilesOutputPath, "TOneV2");
+            pBar1.PerformStep();
+        }
+
+        private void CheckPathLength_Click(object sender, EventArgs e)
+        {
+            string sourcePath = txtDirectory.Text;
+            if (!string.IsNullOrEmpty(sourcePath))
+            {
+                DisplayProgressBar(2);
+                Thread.Sleep(1000);
+                pBar1.PerformStep();
+                string currentDateShort = DateTime.Now.ToString("yyyMMdd");
+                Common.CheckPathLength(currentDateShort, sourcePath, "","", Common.MaxPathLength);
+                pBar1.PerformStep();
+            }
+            else
+            {
+                MessageBox.Show("Please select a directory!");
+            }
+        }
+
+        private void btnGRPPath_Click(object sender, EventArgs e)
+        {
+            DisplayProgressBar(2);
+            Thread.Sleep(1000);
+            pBar1.PerformStep();
+            string currentDateShort = DateTime.Now.ToString("yyyMMdd");
+            Common.GroupCheckPathLengthFiles(currentDateShort, null);
             pBar1.PerformStep();
         }
     }

@@ -45,6 +45,12 @@ namespace Vanrise.HelperTools
                     case "Enumerations":
                         Common.GenerateEnumerationsScript(Common.BinPath, currentDateShort, false, null, args[1]);
                         break;
+                    case "CheckPathLength":
+                        Common.CheckPathLength(currentDateShort, Common.CheckPathLengthSourcePath, Common.CheckPathLengthOutputPath, args[1], int.Parse(args[2]));
+                        break;
+                    case "GRPCheckPathLength":
+                        Common.GroupCheckPathLengthFiles(currentDateShort, null);
+                        break;
                     default:
                         Console.WriteLine("Invalid argument: {0} or {1}", args[0], args[1]);
                         break;
