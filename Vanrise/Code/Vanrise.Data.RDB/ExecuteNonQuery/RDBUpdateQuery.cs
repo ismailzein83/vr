@@ -125,7 +125,7 @@ namespace Vanrise.Data.RDB
             if (this._notExistConditionGroup != null)
             {
                 var notExistsSelectQuery = this.Where().NotExistsCondition();
-                notExistsSelectQuery.From(this._table, _notExistConditionTableAlias, 1);
+                notExistsSelectQuery.From(this._table, _notExistConditionTableAlias, 1, true);
                 notExistsSelectQuery.SelectColumns().Expression("nullColumn").Null();
                 notExistsSelectQuery.Where().Condition(this._notExistConditionGroup);
             }
