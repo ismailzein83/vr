@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Activities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common.Business;
-using Vanrise.BusinessProcess;
-using Vanrise.Entities;
 using System.IO;
 using Aspose.Cells;
-using TOne.WhS.CodePreparation.Entities.Processing;
-using Vanrise.Common;
 using TOne.WhS.CodePreparation.Entities;
-using System.Collections;
+using Vanrise.BusinessProcess;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 
 namespace TOne.WhS.CodePreparation.BP.Activities
@@ -53,26 +47,21 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             Worksheet worksheet = objExcel.Worksheets[0];
 
             int count = (hasHeader) ? 1 : 0;
-
-            int rowsCount = worksheet.Cells.Rows.Count;
-            if (string.IsNullOrEmpty(worksheet.Cells[0, 0].StringValue.Trim()) && string.IsNullOrEmpty(worksheet.Cells[0, 1].StringValue.Trim())
-                && string.IsNullOrEmpty(worksheet.Cells[0, 2].StringValue.Trim()))
-                rowsCount++;
-
-
+            int maxRowIndex = worksheet.Cells.MaxRow;
 
             DateTime minimumDate = EffectiveDate.Get(context);
-
 
             List<ImportedCode> importedCodes = new List<ImportedCode>();
             int totalRowsCount = 0;
 
-            while (count < rowsCount)
+            while (count <= maxRowIndex)
             {
-
                 string zoneName = worksheet.Cells[count, 0].StringValue.Trim();
                 string code = worksheet.Cells[count, 1].StringValue.Trim();
                 string status = worksheet.Cells[count, 2].StringValue.Trim();
+
+                if (string.IsNullOrEmpty(zoneName) && string.IsNullOrEmpty(code) && string.IsNullOrEmpty(status))
+                    break;
 
                 if (string.IsNullOrEmpty(zoneName) && string.IsNullOrEmpty(code))
                 {
