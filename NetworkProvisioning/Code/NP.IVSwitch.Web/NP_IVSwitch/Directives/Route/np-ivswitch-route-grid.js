@@ -89,7 +89,8 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 
 				$scope.scopeModel.menuActions.push({
 					name: 'Clone',
-					clicked: cloneRoute
+					clicked: cloneRoute,
+					haspermission: hasCloneRoutePermission
 				});
             }
             function editRoute(RouteItem) {
@@ -112,6 +113,10 @@ app.directive('npIvswitchRouteGrid', ['NP_IVSwitch_RouteAPIService', 'NP_IVSwitc
 
             function hasEditRoutePermission() {
                 return NP_IVSwitch_RouteAPIService.HasEditRoutePermission();
+			}
+
+			function hasCloneRoutePermission() {
+				return NP_IVSwitch_RouteAPIService.HasEditRoutePermission();
 			}
         }
     }]);

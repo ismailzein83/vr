@@ -100,7 +100,8 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 				});
 				$scope.scopeModel.menuActions.push({
 					name: 'Clone',
-					clicked: cloneEndPoint
+					clicked: cloneEndPoint,
+					haspermission: hasCloneEndPointPermisssion
 				});
             }
             function editEndPoint(EndPointItem) {
@@ -122,7 +123,11 @@ app.directive('npIvswitchEndpointGrid', ['NP_IVSwitch_EndPointAPIService', 'NP_I
 
             function hasEditEndPointPermission() {
                 return NP_IVSwitch_EndPointAPIService.HasEditEndPointPermission();
-            }
+			}
+
+			function hasCloneEndPointPermisssion() {
+				return NP_IVSwitch_EndPointAPIService.HasAddEndPointPermission();
+			}
 
         }
     }]);
