@@ -67,6 +67,11 @@
                     VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessDefinitionId, editorSize, fieldValues);
                 };
 
+                $scope.scopeModel.uploadBusinessEntity = function () {
+                    var editorSize = undefined;
+                    VR_GenericData_GenericBusinessEntityService.uploadGenericBusinessEntity(businessDefinitionId, editorSize);
+                };
+
                 defineAPI();
             }
 
@@ -93,8 +98,9 @@
                             if (genericBEDefinitionSettings != undefined) {
                                 if (genericBEDefinitionSettings.FilterDefinition != undefined && genericBEDefinitionSettings.FilterDefinition.Settings != undefined) {
                                     $scope.scopeModel.filterDirective = genericBEDefinitionSettings.FilterDefinition.Settings.RuntimeEditor;
-                                    $scope.scopeModel.showAddButton = !genericBEDefinitionSettings.HideAddButton;
                                 }
+                                $scope.scopeModel.showAddButton = !genericBEDefinitionSettings.HideAddButton;
+                                $scope.scopeModel.showUploadButton = genericBEDefinitionSettings.ShowUpload; 
                             }
                         });
                     }

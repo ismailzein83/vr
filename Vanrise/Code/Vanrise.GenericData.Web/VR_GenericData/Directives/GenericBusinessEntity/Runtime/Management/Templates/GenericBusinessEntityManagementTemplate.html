@@ -3,6 +3,7 @@
     <vr-columns withemptyline>
         <vr-button type="Search" formname="formFilter" data-onclick="search" standalone></vr-button>
         <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton" standalone></vr-button>
+        <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton" standalone></vr-button>
     </vr-columns>
 </vr-row>
 <vr-row>
@@ -10,3 +11,4 @@
         <vr-genericdata-genericbusinessentity-grid on-ready="scopeModel.onGridDirectiveReady"></vr-genericdata-genericbusinessentity-grid>
     </vr-columns>
 </vr-row>
+
