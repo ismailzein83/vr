@@ -120,12 +120,15 @@ public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValue
 
         private static void GenerateAndAddRDBExpressionSetterClass(string sqlExpression, Guid itemId, string itemName, IResolvedAnalyticItemConfig resolvedDimensionConfig, List<string> classes, List<Action<Assembly, string>> actionsAfterCompilation)
         {
-            if(String.IsNullOrWhiteSpace(sqlExpression) || !sqlExpression.Contains("RDBExpressionContext."))
+            if(String.IsNullOrWhiteSpace(sqlExpression))
                 return;
             StringBuilder rdbExpressionSetterClassBuilder = new StringBuilder(RDBExpressionSetter_CLASS_CODETEMPLATE);
             string className = string.Concat("RDBExpressionSetter", itemName, "_", itemId.ToString().Replace("-", ""));
             rdbExpressionSetterClassBuilder.Replace("#CLASSNAME#", className);
-            rdbExpressionSetterClassBuilder.Replace("#CODE#", sqlExpression);
+            if (sqlExpression.Contains("RDBExpressionContext."))
+                rdbExpressionSetterClassBuilder.Replace("#CODE#", sqlExpression);
+            else
+                rdbExpressionSetterClassBuilder.Replace("#CODE#", $@"context.RDBExpressionContext.Column(""{sqlExpression}"");");
             classes.Add(rdbExpressionSetterClassBuilder.ToString());
             actionsAfterCompilation.Add((assbly, nmspace) =>
             {

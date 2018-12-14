@@ -10,6 +10,105 @@ using Vanrise.GenericData.Data.RDB;
 
 namespace Vanrise.Analytic.Data.RDB
 {
+    /// <summary>
+    /// TODO: this class should be moved to Vanrise.Common.Data.RDB
+    /// </summary>
+    public class CurrencyExchangeRateWithEEDDataManager
+    {
+        public static string TABLE_NAME = "VR_Common_CurrencyExchangeRateWithEED";
+        static string TABLE_ALIAS = "curExchRate";
+
+        const string COL_CurrencyID = "CurrencyID";
+        const string COL_Rate = "Rate";
+        const string COL_BED = "BED";
+        const string COL_EED = "EED";
+
+        static CurrencyExchangeRateWithEEDDataManager()
+        {
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Rate, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size =  18, Precision = 6});
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+            {
+                DBTableName = "CurrencyExchangeRate",
+                Columns = columns,
+                IdColumnName = COL_CurrencyID
+            });
+        }
+
+        public void SetSelectQueryForExchangeRatesConvertedToCurrency(RDBSelectQuery selectQuery, int currencyId, DateTime fromTime, DateTime? toTime)
+        {
+            string exRate1Alias = "exRate1";
+            string exRate2Alias = "exRate2";
+            selectQuery.From(TABLE_NAME, exRate1Alias);
+
+            var joinStatement = selectQuery.Join().Join(TABLE_NAME, exRate2Alias);
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(exRate2Alias, COL_CurrencyID).Value(currencyId);
+            var joinSubCondition1 = joinCondition.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            var joinSubCondition11 = joinSubCondition1.ChildConditionGroup(RDBConditionGroupOperator.AND);
+            joinSubCondition11.GreaterOrEqualCondition(exRate1Alias, COL_BED).Column(exRate2Alias, COL_BED);
+            joinSubCondition11.ConditionIfColumnNotNull(exRate2Alias, COL_EED).GreaterThanCondition(exRate2Alias, COL_EED).Column(exRate1Alias, COL_BED);
+            var joinSubCondition12 = joinSubCondition1.ChildConditionGroup(RDBConditionGroupOperator.AND);
+            joinSubCondition12.LessThanCondition(exRate1Alias, COL_BED).Column(exRate2Alias, COL_BED);
+            joinSubCondition12.ConditionIfColumnNotNull(exRate1Alias, COL_EED).GreaterThanCondition(exRate1Alias, COL_EED).Column(exRate2Alias, COL_BED);
+
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_CurrencyID);
+            var rateExp = selectColumns.Expression(COL_Rate).ArithmeticExpression(RDBArithmeticExpressionOperator.Divide);
+            rateExp.Expression1().Column(exRate1Alias, COL_Rate);
+            rateExp.Expression2().Column(exRate2Alias, COL_Rate);
+
+            var bedExp = selectColumns.Expression(COL_BED).CaseExpression();
+            var bedExpCase1 = bedExp.AddCase();
+            bedExpCase1.When().GreaterOrEqualCondition(exRate1Alias, COL_BED).Column(exRate2Alias, COL_BED);
+            bedExpCase1.Then().Column(exRate1Alias, COL_BED);
+            bedExp.Else().Column(exRate2Alias, COL_BED);
+
+            var eedExp = selectColumns.Expression(COL_EED).CaseExpression();
+            var eedExpCase1 = eedExp.AddCase();
+            eedExpCase1.When().NullCondition(exRate1Alias, COL_EED);
+            eedExpCase1.Then().Column(exRate2Alias, COL_EED);
+            var eedExpCase2 = eedExp.AddCase();
+            eedExpCase2.When().NullCondition(exRate2Alias, COL_EED);
+            eedExpCase2.Then().Column(exRate1Alias, COL_EED);
+            var eedExpCase3 = eedExp.AddCase();
+            eedExpCase3.When().GreaterThanCondition(exRate1Alias, COL_EED).Column(exRate2Alias, COL_EED);
+            eedExpCase3.Then().Column(exRate2Alias, COL_EED);
+            eedExp.Else().Column(exRate1Alias, COL_EED);
+
+            var where = selectQuery.Where();
+            where.ConditionIfColumnNotNull(exRate1Alias, COL_EED).GreaterThanCondition(exRate1Alias, COL_EED).Value(fromTime);
+            where.ConditionIfColumnNotNull(exRate2Alias, COL_EED).GreaterThanCondition(exRate2Alias, COL_EED).Value(fromTime);
+        }
+
+        public void AddJoinExchangeRates(RDBJoinContext joinContext, RDBTempTableQuery exchangeRatesConvertedToCurrency, string exchRateTableAlias, string otherTableAlias, string otherTableCurrencyColumnName, string otherTableTimeColumnName)
+        {
+            RDBJoinStatementContext joinStatement;
+            if (exchangeRatesConvertedToCurrency != null)
+                joinStatement = joinContext.Join(exchangeRatesConvertedToCurrency, exchRateTableAlias);
+            else
+                joinStatement = joinContext.Join(TABLE_NAME, exchRateTableAlias);
+            joinStatement.JoinType(RDBJoinType.Left);
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(exchRateTableAlias, COL_CurrencyID).Column(otherTableAlias, otherTableCurrencyColumnName);
+            joinCondition.GreaterOrEqualCondition(otherTableAlias, otherTableTimeColumnName).Column(exchRateTableAlias, COL_BED);
+            joinCondition.ConditionIfColumnNotNull(exchRateTableAlias, COL_EED).LessThanCondition(otherTableAlias, otherTableTimeColumnName).Column(exchRateTableAlias, COL_EED);
+        }
+
+        public void SetConvertedRateExpression(RDBExpressionContext expressionContext, Action<RDBExpressionContext> setMainExpression, string exchRateTableAlias)
+        {
+            var arithmeticExp = expressionContext.ArithmeticExpression(RDBArithmeticExpressionOperator.Divide);
+            setMainExpression(arithmeticExp.Expression1());
+            var divideByRateExp = arithmeticExp.Expression2().CaseExpression();
+            var divideByRateExpCase1 = divideByRateExp.AddCase();
+            divideByRateExpCase1.When().NotNullCondition(exchRateTableAlias, COL_Rate);
+            divideByRateExpCase1.Then().Column(exchRateTableAlias, COL_Rate);
+            divideByRateExp.Else().Value(1);
+        }
+    }
     public class AnalyticDataManager : IAnalyticDataManager
     {
         IAnalyticTableQueryContext _analyticTableQueryContext;
@@ -47,144 +146,44 @@ namespace Vanrise.Analytic.Data.RDB
             }
         }
 
+        static CurrencyExchangeRateWithEEDDataManager s_currencyExchangeRateWithEEDDataManager = new CurrencyExchangeRateWithEEDDataManager();
         public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(IAnalyticDataManagerGetAnalyticRecordsContext context)
         {
             var query = context.Query;
             var queryContext = new RDBQueryContext(GetDataProvider());
+            var allQueryDBDimensions = context.AllQueryDBDimensions;
+            var allQueryDBAggregates = context.AllQueryDBAggregates;
+            var allQueryDBFilters = context.DBFilters;
+            var queryDBFilterGroup = context.DBFilterGroup;
+
+            Dictionary<string, string> currencyFieldNamesWithAlias;
+            RDBTempTableQuery currencyExchRateTempTable;
+            PrepareCurrencyExchRatesForQuery(queryContext, query, allQueryDBDimensions, allQueryDBAggregates, out currencyFieldNamesWithAlias, out currencyExchRateTempTable);
+
+            string tableAlias = "ant";
+            string timeColumnName = GetTableWithValidate().Settings.TimeColumnName;
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(_tableName, "ant", null, true);
-            RDBGroupByContext groupBy = null;
+            selectQuery.From(_tableName, tableAlias, null, true);
+            AddJoinCurrencyExchRate(currencyFieldNamesWithAlias, selectQuery, currencyExchRateTempTable, tableAlias, timeColumnName);
+
             List<QueryDimensionInfo> dimensionInfos = new List<QueryDimensionInfo>();
             List<QueryAggregateInfo> aggregateInfos = new List<QueryAggregateInfo>();
 
-            if (context.AllQueryDBDimensions != null && context.AllQueryDBDimensions.Count > 0)
-            {
-                groupBy = selectQuery.GroupBy();
-                var groupByColumns = groupBy.Select();
-                foreach (var dimName in context.AllQueryDBDimensions)
-                {
-                    var dimConfig = GetDimensionConfigWithValidate(dimName);
-                    dimConfig.DimensionConfig.Config.SQLExpression.ThrowIfNull("dimensionConfig.Config.SQLExpression", dimName);
-                    string dimAlias = $"{dimName}_{dimConfig.DimensionConfig.AnalyticDimensionConfigId.ToString().Replace("-", "")}";
-                    var dimInfo = new QueryDimensionInfo
-                    {
-                        DimensionName = dimName,
-                        Alias = dimAlias,
-                        DimensionConfig = dimConfig
-                    };
-                    dimensionInfos.Add(dimInfo);
-                    if (dimConfig.RDBExpressionSetter != null)
-                        dimConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(groupByColumns.Expression(dimAlias)));
-                    else
-                        groupByColumns.Column(dimConfig.DimensionConfig.Config.SQLExpression, dimAlias);
-                }
-            }
+            RDBGroupByContext groupBy = AddDimensions(allQueryDBDimensions, selectQuery, dimensionInfos, currencyFieldNamesWithAlias);
+            AddAggregates(allQueryDBAggregates, selectQuery, groupBy, aggregateInfos, currencyFieldNamesWithAlias);
 
-            if (context.AllQueryDBAggregates != null && context.AllQueryDBAggregates.Count > 0)
-            {
-                var selectAggregates = groupBy != null ? groupBy.SelectAggregates() : selectQuery.SelectAggregates();                
-                foreach (var aggName in context.AllQueryDBAggregates)
-                {
-                    var aggConfig = GetAggregateConfigWithValidate(aggName);
-                    aggConfig.AggregateConfig.Config.SQLColumn.ThrowIfNull("aggregateConfig.Config.SQLColumn", aggName);
-                    string aggAlias = $"{aggName}_{aggConfig.AggregateConfig.AnalyticAggregateConfigId.ToString().Replace("-", "")}";
-                    var aggInfo = new QueryAggregateInfo
-                    {
-                        AggregateName = aggName,
-                        Alias = aggAlias,
-                        AggregateConfig = aggConfig
-                    };
-                    aggregateInfos.Add(aggInfo);
-                    if (aggConfig.AggregateConfig.Config.AggregateType == AnalyticAggregateType.Count)
-                    {
-                        selectAggregates.Count(aggAlias);
-                    }
-                    else
-                    {
-                        RDBNonCountAggregateType aggregateType;
-                        switch(aggConfig.AggregateConfig.Config.AggregateType)
-                        {
-                            case AnalyticAggregateType.Sum: aggregateType = RDBNonCountAggregateType.SUM;break;
-                            case AnalyticAggregateType.Max: aggregateType = RDBNonCountAggregateType.MAX; break;
-                            case AnalyticAggregateType.Min: aggregateType = RDBNonCountAggregateType.MIN; break;
-                            default:throw new NotSupportedException($"aggConfig.Config.AggregateType '{aggConfig.AggregateConfig.Config.AggregateType.ToString()}'");
-                        }
-                        if (aggConfig.RDBExpressionSetter != null)
-                            aggConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(selectAggregates.ExpressionAggregate(aggregateType, aggAlias)));
-                        else
-                            selectAggregates.Aggregate(aggregateType, aggConfig.AggregateConfig.Config.SQLColumn, aggAlias);
-                    }
-                }
-            }
 
             var where = selectQuery.Where();
-            string timeColumnName = GetTableWithValidate().Settings.TimeColumnName;
             where.GreaterOrEqualCondition(timeColumnName).Value(query.FromTime);
             if (query.ToTime.HasValue)
                 where.LessOrEqualCondition(timeColumnName).Value(query.ToTime.Value);
 
-            if(context.DBFilters != null)
-            {
-                foreach(var dbFilter in context.DBFilters)
-                {
-                    if (dbFilter.FilterValues != null && dbFilter.FilterValues.Count() > 0)
-                    {
-                        bool hasNullValue = false;
-                        List<string> parameterNames = new List<string>();
-                        List<BaseRDBExpression> filterValueExpressions = new List<BaseRDBExpression>();
-                        var expressionContext = where.CreateExpressionContext((exp) => filterValueExpressions.Add(exp));
-                        foreach (var filterValue in dbFilter.FilterValues)
-                        {
-                            if (filterValue == null)
-                                hasNullValue = true;
-                            else
-                                expressionContext.ObjectValue(filterValue);
-                        }
-                        
-                        var conditionContext = where;
-                        if (filterValueExpressions.Count > 0 && hasNullValue)
-                            conditionContext = where.ChildConditionGroup(RDBConditionGroupOperator.OR);
-
-                        var dimConfig = GetDimensionConfigWithValidate(dbFilter.Dimension);
-
-                        if (filterValueExpressions.Count > 0)
-                        {
-                            if (dimConfig.RDBExpressionSetter != null)
-                                dimConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(conditionContext.ListCondition(RDBListConditionOperator.IN, filterValueExpressions)));
-                            else
-                                conditionContext.ListCondition(dimConfig.DimensionConfig.Config.SQLExpression, RDBListConditionOperator.IN, filterValueExpressions);
-                        }
-
-                        if(hasNullValue)
-                        {
-                            if (dimConfig.RDBExpressionSetter != null)
-                                dimConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(conditionContext.NullCondition()));
-                            else
-                                conditionContext.NullCondition(dimConfig.DimensionConfig.Config.SQLExpression);
-                        }
-                    }
-                }
-            }
-
-            if (context.DBFilterGroup != null)
-            {
-                var recordFilterRDBBuilder = new RecordFilterRDBBuilder(
-                    (fieldName, expressionContext) =>
-                    {
-                        var dimConfig = GetDimensionConfigWithValidate(fieldName);
-                        if (dimConfig.RDBExpressionSetter != null)
-                            dimConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(expressionContext));
-                        else
-                            expressionContext.Column(dimConfig.DimensionConfig.Config.SQLExpression);
-                    });
-                recordFilterRDBBuilder.RecordFilterGroupCondition(where, context.DBFilterGroup);
-            }
+            AddFilters(where, allQueryDBFilters);
+            AddFilterGroup(where, queryDBFilterGroup);
 
             return queryContext.GetItems(reader => DBAnalyticRecordMapper(reader, dimensionInfos, aggregateInfos));
         }
-
-
-
+        
         #region Private Methods
 
         BaseRDBDataProvider GetDataProvider()
@@ -228,6 +227,198 @@ namespace Vanrise.Analytic.Data.RDB
         {
             _resolvedConfigs.ThrowIfNull("_resolvedConfigs");
             return _resolvedConfigs;
+        }
+
+        private void PrepareCurrencyExchRatesForQuery(RDBQueryContext queryContext, AnalyticQuery query, HashSet<string> allQueryDBDimensions, HashSet<string> allQueryDBAggregates, out Dictionary<string, string> currencyFieldNamesWithAlias, out RDBTempTableQuery currencyExchRateTempTable)
+        {
+            currencyFieldNamesWithAlias = new Dictionary<string, string>();
+            if (allQueryDBDimensions != null)
+            {
+                foreach (var dimName in allQueryDBDimensions)
+                {
+                    var dimConfig = GetDimensionConfigWithValidate(dimName);
+                    var currencyColumnName = dimConfig.DimensionConfig.Config.CurrencySQLColumnName;
+                    if (!String.IsNullOrWhiteSpace(currencyColumnName) && !currencyFieldNamesWithAlias.ContainsKey(currencyColumnName))
+                        currencyFieldNamesWithAlias.Add(currencyColumnName, $"{currencyColumnName}_ExRates");
+                }
+            }
+            if (allQueryDBAggregates != null)
+            {
+                foreach (var aggName in allQueryDBAggregates)
+                {
+                    var aggConfig = GetAggregateConfigWithValidate(aggName);
+                    var currencyColumnName = aggConfig.AggregateConfig.Config.CurrencySQLColumnName;
+                    if (!String.IsNullOrWhiteSpace(currencyColumnName) && !currencyFieldNamesWithAlias.ContainsKey(currencyColumnName))
+                        currencyFieldNamesWithAlias.Add(currencyColumnName, $"{currencyColumnName}_ExRates");
+                }
+            }
+
+            currencyExchRateTempTable = null;
+            if (currencyFieldNamesWithAlias.Count > 0)
+            {
+                if (query.CurrencyId.HasValue)
+                {
+                    currencyExchRateTempTable = queryContext.CreateTempTable();
+                    currencyExchRateTempTable.AddColumnsFromTable(CurrencyExchangeRateWithEEDDataManager.TABLE_NAME);
+
+                    var insertExchRateQuery = queryContext.AddInsertQuery();
+                    insertExchRateQuery.IntoTable(currencyExchRateTempTable);
+                    var selectConvertedExchangeRateQuery = insertExchRateQuery.FromSelect();
+                    s_currencyExchangeRateWithEEDDataManager.SetSelectQueryForExchangeRatesConvertedToCurrency(selectConvertedExchangeRateQuery, query.CurrencyId.Value, query.FromTime, query.ToTime);
+                }
+            }
+        }
+
+        private void AddJoinCurrencyExchRate(Dictionary<string, string> currencyFieldNamesWithAlias, RDBSelectQuery selectQuery, RDBTempTableQuery currencyExchRateTempTable, string tableAlias, string timeColumnName)
+        {
+            if (currencyFieldNamesWithAlias.Count > 0)
+            {
+                var join = selectQuery.Join();
+                foreach (var currencyFieldNameEntry in currencyFieldNamesWithAlias)
+                {
+                    s_currencyExchangeRateWithEEDDataManager.AddJoinExchangeRates(join, currencyExchRateTempTable,
+                        currencyFieldNameEntry.Value, tableAlias, currencyFieldNameEntry.Key, timeColumnName);
+                }
+            }
+        }
+
+        private RDBGroupByContext AddDimensions(HashSet<string> allQueryDBDimensions, RDBSelectQuery selectQuery, List<QueryDimensionInfo> dimensionInfos, Dictionary<string, string> currencyFieldNamesWithAlias)
+        {
+            if (allQueryDBDimensions != null && allQueryDBDimensions.Count > 0)
+            {
+                RDBGroupByContext groupBy = selectQuery.GroupBy();
+                var groupByColumns = groupBy.Select();
+                foreach (var dimName in allQueryDBDimensions)
+                {
+                    var dimConfig = GetDimensionConfigWithValidate(dimName);
+                    dimConfig.DimensionConfig.Config.SQLExpression.ThrowIfNull("dimensionConfig.Config.SQLExpression", dimName);
+                    string dimAlias = $"{dimName}_{dimConfig.DimensionConfig.AnalyticDimensionConfigId.ToString().Replace("-", "")}";
+                    var dimInfo = new QueryDimensionInfo
+                    {
+                        DimensionName = dimName,
+                        Alias = dimAlias,
+                        DimensionConfig = dimConfig
+                    };
+                    dimensionInfos.Add(dimInfo);
+                    dimConfig.RDBExpressionSetter.ThrowIfNull("dimConfig.RDBExpressionSetter", dimConfig.DimensionConfig.AnalyticDimensionConfigId);
+                    var expToSet = groupByColumns.Expression(dimAlias);
+                    if (!String.IsNullOrWhiteSpace(dimConfig.DimensionConfig.Config.CurrencySQLColumnName))
+                    {
+                        string exchRateTableAlias = currencyFieldNamesWithAlias[dimConfig.DimensionConfig.Config.CurrencySQLColumnName];
+                        s_currencyExchangeRateWithEEDDataManager.SetConvertedRateExpression(expToSet, (expContext) => expToSet = expContext, exchRateTableAlias);
+                    }
+                    dimConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(expToSet));
+                }
+
+                return groupBy;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private void AddAggregates(HashSet<string> allQueryDBAggregates, RDBSelectQuery selectQuery, RDBGroupByContext groupBy, List<QueryAggregateInfo> aggregateInfos, Dictionary<string, string> currencyFieldNamesWithAlias)
+        {
+            if (allQueryDBAggregates != null && allQueryDBAggregates.Count > 0)
+            {
+                var selectAggregates = groupBy != null ? groupBy.SelectAggregates() : selectQuery.SelectAggregates();
+                foreach (var aggName in allQueryDBAggregates)
+                {
+                    var aggConfig = GetAggregateConfigWithValidate(aggName);
+                    aggConfig.AggregateConfig.Config.SQLColumn.ThrowIfNull("aggregateConfig.Config.SQLColumn", aggName);
+                    string aggAlias = $"{aggName}_{aggConfig.AggregateConfig.AnalyticAggregateConfigId.ToString().Replace("-", "")}";
+                    var aggInfo = new QueryAggregateInfo
+                    {
+                        AggregateName = aggName,
+                        Alias = aggAlias,
+                        AggregateConfig = aggConfig
+                    };
+                    aggregateInfos.Add(aggInfo);
+                    if (aggConfig.AggregateConfig.Config.AggregateType == AnalyticAggregateType.Count)
+                    {
+                        selectAggregates.Count(aggAlias);
+                    }
+                    else
+                    {
+                        RDBNonCountAggregateType aggregateType;
+                        switch (aggConfig.AggregateConfig.Config.AggregateType)
+                        {
+                            case AnalyticAggregateType.Sum: aggregateType = RDBNonCountAggregateType.SUM; break;
+                            case AnalyticAggregateType.Max: aggregateType = RDBNonCountAggregateType.MAX; break;
+                            case AnalyticAggregateType.Min: aggregateType = RDBNonCountAggregateType.MIN; break;
+                            default: throw new NotSupportedException($"aggConfig.Config.AggregateType '{aggConfig.AggregateConfig.Config.AggregateType.ToString()}'");
+                        }
+                        aggConfig.RDBExpressionSetter.ThrowIfNull("aggConfig.RDBExpressionSetter", aggConfig.AggregateConfig.AnalyticAggregateConfigId);
+                        var expToSet = selectAggregates.ExpressionAggregate(aggregateType, aggAlias);
+                        if (!String.IsNullOrWhiteSpace(aggConfig.AggregateConfig.Config.CurrencySQLColumnName))
+                        {
+                            string exchRateTableAlias = currencyFieldNamesWithAlias[aggConfig.AggregateConfig.Config.CurrencySQLColumnName];
+                            s_currencyExchangeRateWithEEDDataManager.SetConvertedRateExpression(expToSet, (expContext) => expToSet = expContext, exchRateTableAlias);
+                        }
+                        aggConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(expToSet));
+                    }
+                }
+            }
+        }
+
+        private void AddFilters(RDBConditionContext where, List<DimensionFilter> allQueryDBFilters)
+        {
+            if (allQueryDBFilters != null)
+            {
+                foreach (var dbFilter in allQueryDBFilters)
+                {
+                    if (dbFilter.FilterValues != null && dbFilter.FilterValues.Count() > 0)
+                    {
+                        bool hasNullValue = false;
+                        List<string> parameterNames = new List<string>();
+                        List<BaseRDBExpression> filterValueExpressions = new List<BaseRDBExpression>();
+                        var expressionContext = where.CreateExpressionContext((exp) => filterValueExpressions.Add(exp));
+                        foreach (var filterValue in dbFilter.FilterValues)
+                        {
+                            if (filterValue == null)
+                                hasNullValue = true;
+                            else
+                                expressionContext.ObjectValue(filterValue);
+                        }
+
+                        var conditionContext = where;
+                        if (filterValueExpressions.Count > 0 && hasNullValue)
+                            conditionContext = where.ChildConditionGroup(RDBConditionGroupOperator.OR);
+
+                        var dimConfig = GetDimensionConfigWithValidate(dbFilter.Dimension);
+
+                        if (filterValueExpressions.Count > 0)
+                        {
+                            if (dimConfig.RDBExpressionSetter != null)
+                                dimConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(conditionContext.ListCondition(RDBListConditionOperator.IN, filterValueExpressions)));
+                            else
+                                conditionContext.ListCondition(dimConfig.DimensionConfig.Config.SQLExpression, RDBListConditionOperator.IN, filterValueExpressions);
+                        }
+
+                        if (hasNullValue)
+                        {
+                            dimConfig.RDBExpressionSetter.ThrowIfNull("dimConfig.RDBExpressionSetter", dimConfig.DimensionConfig.AnalyticDimensionConfigId);
+                            dimConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(conditionContext.NullCondition()));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void AddFilterGroup(RDBConditionContext where, GenericData.Entities.RecordFilterGroup queryDBFilterGroup)
+        {
+            if (queryDBFilterGroup != null)
+            {
+                var recordFilterRDBBuilder = new RecordFilterRDBBuilder(
+                                    (fieldName, expressionContext) =>
+                                    {
+                                        var dimConfig = GetDimensionConfigWithValidate(fieldName);
+                                        dimConfig.RDBExpressionSetter.ThrowIfNull("dimConfig.RDBExpressionSetter", dimConfig.DimensionConfig.AnalyticDimensionConfigId);
+                                        dimConfig.RDBExpressionSetter.SetExpression(new AnalyticItemRDBExpressionSetterContext(expressionContext));
+                                    });
+                recordFilterRDBBuilder.RecordFilterGroupCondition(where, queryDBFilterGroup);
+            }
         }
 
         private DBAnalyticRecord DBAnalyticRecordMapper(IRDBDataReader reader, List<QueryDimensionInfo> dimensionInfos, List<QueryAggregateInfo> aggregateInfos)
