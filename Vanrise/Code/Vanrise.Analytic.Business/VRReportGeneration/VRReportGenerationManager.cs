@@ -152,12 +152,13 @@ namespace Vanrise.Analytic.Business
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
 
-            protected override bool UseCentralizedCacheRefresher { get { return true; } }
+            IVRReportGenerationDataManager vRReportGenerationDataManager = AnalyticDataManagerFactory.GetDataManager<IVRReportGenerationDataManager>();
+            object _updateHandle;
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired(parameter);
+                return vRReportGenerationDataManager.AreVRReportGenerationUpdated(ref _updateHandle);
             }
-           
+
         }
 
         private class VRReportGenerationLoggableEntity : VRLoggableEntityBase
