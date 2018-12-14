@@ -46,6 +46,10 @@
     <Reference Include="Vanrise.Data.RDB">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.RDB.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExecutionControlDataManager.cs" />
@@ -56,6 +60,10 @@
     <ProjectReference Include="..\Vanrise.Queueing.Data\Vanrise.Queueing.Data.csproj">
       <Project>{7a7be8a2-3c37-42d6-a2e0-b2422661427f}</Project>
       <Name>Vanrise.Queueing.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Queueing.Entities\Vanrise.Queueing.Entities.csproj">
+      <Project>{a511dce7-1fa4-46dc-b04e-01c4ccdd7f1c}</Project>
+      <Name>Vanrise.Queueing.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
