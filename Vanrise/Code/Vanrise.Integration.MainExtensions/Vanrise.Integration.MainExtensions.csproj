@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,8 +50,7 @@
     <Compile Include="FailedBatchInfoPropertyEvaluator.cs" />
     <Compile Include="FileDelayChecker\SizeBasedFileDelayChecker.cs" />
     <Compile Include="FileDelayChecker\TimeBasedFileDelayChecker.cs" />
-    <Compile Include="FileMissingChecker\DateTimeFileMissingChecker.cs" />
-    <Compile Include="FileMissingChecker\SequenceFileMissingChecker.cs" />
+    <Compile Include="FileMissingChecker\SequencialFileMissingChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
