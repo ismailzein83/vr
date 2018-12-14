@@ -387,6 +387,8 @@
     <None Include="BatchScripts\FZero\Service_WeeklyReport.bat" />
     <None Include="BatchScripts\FZero\WebSiteAdmin.bat" />
     <None Include="BatchScripts\FZero\WebSiteClient.bat" />
+    <None Include="BatchScripts\Helpdesk\All.bat" />
+    <None Include="BatchScripts\Helpdesk\CheckFileLength.bat" />
     <None Include="BatchScripts\INSOFT\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\INSOFT\02-Runtime.bat" />
     <None Include="BatchScripts\INSOFT\30-WebSite_FullVersion.bat" />
