@@ -1,9 +1,9 @@
-﻿using Aspose.Cells;
-using System;
-using System.Drawing;
+﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using Aspose.Cells;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -211,7 +211,15 @@ namespace Vanrise.NumberingPlan.Business
                     colIndex = 0;
                     rowIndex++;
                 }
-
+                else
+                {
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                    colIndex++;
+                    RateWorkSheet.Cells[rowIndex, colIndex].PutValue("CodeGroup already exists");
+                    uploadCodeGroupLog.CountOfCodeGroupsFailed++;
+                    colIndex = 0;
+                    rowIndex++;
+                }
             }
 
             ICodeGroupDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
@@ -274,17 +282,12 @@ namespace Vanrise.NumberingPlan.Business
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            ICodeGroupDataManager _dataManager = CodePrepDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
+            object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired();
+                return _dataManager.AreCodeGroupUpdated(ref _updateHandle);
             }
         }
         private CodeIterator<CodeGroup> GetCodeIterator()
