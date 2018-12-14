@@ -4,7 +4,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.CompositeRecordCondition.Definition
 {
-    public class DataRecordTypeCompositeRecord : CompositeRecordConditionDefinitionSettings
+    public class DataRecordTypeCompositeRecordConditionDefinition : CompositeRecordConditionDefinitionSettings
     {
         public override Guid ConfigId { get { return new Guid("25127A16-D2EB-47A1-97C0-FFA45C2C31A0"); } }
 
