@@ -46,6 +46,16 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSaveinvoicetofileRuntime", ["U
                     }
                     return null;
                 };
+                $scope.scopeModel.isPathRequired = function () {
+                    if (!isAutomatic) return true;
+                    else {
+                        if (ctrl.datasource)
+                            for (var i = 0; i < ctrl.datasource.length; i++) {
+                                if (ctrl.datasource[i].Entity.IsEnabled) return true;
+                            }
+                    }
+                    return false;
+                };
                 defineAPI();
             }
 
@@ -62,7 +72,6 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSaveinvoicetofileRuntime", ["U
                         actionValueSettings = payload.actionValueSettings;
                         context = payload.context;
                         isAutomatic = payload.isAutomatic;
-                        $scope.scopeModel.isPathRequired = !payload.isAutomatic;
                         if (emailActionSettings != undefined)
                         {
                             if (emailActionSettings.InvoiceToFileActionSets != undefined) {
