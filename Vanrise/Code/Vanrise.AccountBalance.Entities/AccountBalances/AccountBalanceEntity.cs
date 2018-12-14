@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.AccountBalance.Entities
 {
@@ -19,4 +21,13 @@ namespace Vanrise.AccountBalance.Entities
         public string Description { get; set; }
     }
 
+
+    public class AccountBalanceTypeSetExcelCellTypeContext : IDataRecordFieldTypeSetExcelCellTypeContext
+    {
+        public ExportExcelHeaderCell HeaderCell
+        {
+            get;
+            set;
+        }
+    }
 }

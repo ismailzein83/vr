@@ -8,6 +8,7 @@ using Vanrise.AccountBalance.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.AccountBalance.Business
 {
@@ -23,7 +24,7 @@ namespace Vanrise.AccountBalance.Business
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
             return dataManager.GetLiveBalance(accountTypeId, accountId);
         }
-        public static string  GetBalanceFlagDescription(decimal balanceValue)
+        public static string GetBalanceFlagDescription(decimal balanceValue)
         {
             return balanceValue > 0 ? "Credit" : "Debit";
         }
@@ -34,7 +35,7 @@ namespace Vanrise.AccountBalance.Business
         }
         public CurrentAccountBalance GetCurrentAccountBalance(Guid accountTypeId, String accountId)
         {
-            var liveBalance = GetLiveBalance(accountTypeId,accountId);
+            var liveBalance = GetLiveBalance(accountTypeId, accountId);
             CurrencyManager currencyManager = new CurrencyManager();
             if (liveBalance == null)
                 return null;
@@ -43,7 +44,7 @@ namespace Vanrise.AccountBalance.Business
             return new CurrentAccountBalance
             {
                 CurrencyDescription = currencyManager.GetCurrencySymbol(liveBalance.CurrencyId),
-                CurrentBalance = Math.Round(Math.Abs(liveBalance.CurrentBalance),normalPression),
+                CurrentBalance = Math.Round(Math.Abs(liveBalance.CurrentBalance), normalPression),
                 BalanceFlagDescription = LiveBalanceManager.GetBalanceFlagDescription(liveBalance.CurrentBalance)
             };
         }
@@ -60,13 +61,14 @@ namespace Vanrise.AccountBalance.Business
 
         private AccountBalanceDetail AccountBalanceDetailMapper(AccountBalanceEntity accountBalance)
         {
-            return new AccountBalanceDetail {
+            return new AccountBalanceDetail
+            {
                 Entity = accountBalance,
             };
-         
+
         }
 
-        public bool TryUpdateLiveBalanceStatus(String accountId, Guid accountTypeId,VRAccountStatus status, bool isDeleted)
+        public bool TryUpdateLiveBalanceStatus(String accountId, Guid accountTypeId, VRAccountStatus status, bool isDeleted)
         {
             ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
             dataManager.TryUpdateLiveBalanceStatus(accountId, accountTypeId, status, isDeleted);
@@ -116,7 +118,7 @@ namespace Vanrise.AccountBalance.Business
                             if (source != null)
                             {
 
-                                var fields = source.Settings.GetFieldDefinitions(new Business.AccountBalanceFieldSourceGetFieldDefinitionsContext { AccountTypeSettings = accountTypeSettings});
+                                var fields = source.Settings.GetFieldDefinitions(new Business.AccountBalanceFieldSourceGetFieldDefinitionsContext { AccountTypeSettings = accountTypeSettings });
                                 var field = fields.FirstOrDefault(x => x.Name == gridColumn.FieldName);
                                 if (field != null)
                                 {
@@ -124,7 +126,7 @@ namespace Vanrise.AccountBalance.Business
                                     {
                                         return source.Settings.PrepareSourceData(new AccountBalanceFieldSourcePrepareSourceDataContext { AccountTypeSettings = accountTypeSettings, AccountBalances = accountBalances, AccountTypeId = input.Query.AccountTypeId });
                                     });
-                                    
+
                                     var fieldValue = source.Settings.GetFieldValue(new AccountBalanceFieldSourceGetFieldValueContext
                                     {
                                         FieldName = gridColumn.FieldName,
@@ -168,8 +170,7 @@ namespace Vanrise.AccountBalance.Business
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountBalanceDetail> context)
             {
                 AccountTypeSettings accountTypeSettings = new AccountTypeManager().GetAccountTypeSettings(_query.AccountTypeId);
-
-
+                Dictionary<string, DataRecordFieldType> dataRecordFieldTypeStruct = new Dictionary<string, DataRecordFieldType>();
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
                     SheetName = "Account Balances",
@@ -182,10 +183,30 @@ namespace Vanrise.AccountBalance.Business
 
                     foreach (var gridColumn in accountTypeSettings.AccountBalanceGridSettings.GridColumns)
                     {
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = gridColumn.Title, Width = 40 });
+                        ExportExcelHeaderCell exportExcelHeaderCell = new ExportExcelHeaderCell();
+                        exportExcelHeaderCell.Title = gridColumn.Title;
+                        exportExcelHeaderCell.Width = 40;
+
+                        var source = accountTypeSettings.Sources.FirstOrDefault(x => x.AccountBalanceFieldSourceId == gridColumn.SourceId);
+                        if (source != null)
+                        {
+                            var sourceFields = source.Settings.GetFieldDefinitions(new AccountBalanceFieldSourceGetFieldDefinitionsContext { AccountTypeSettings = accountTypeSettings });
+
+                            if (sourceFields != null)
+                            {
+                                var matchField = sourceFields.FirstOrDefault(x => x.Name == gridColumn.FieldName);
+                                if (matchField.FieldType == null)
+                                    throw new NullReferenceException(string.Format("{0} is not mapped to field type.", matchField.Name));
+                                var setTypeContext = new AccountBalanceTypeSetExcelCellTypeContext { HeaderCell = exportExcelHeaderCell };
+                                matchField.FieldType.SetExcelCellType(setTypeContext);
+                                if (!dataRecordFieldTypeStruct.ContainsKey(gridColumn.FieldName))
+                                {
+                                    dataRecordFieldTypeStruct.Add(gridColumn.FieldName, matchField.FieldType);
+                                }
+                            }
+                        }
+                        sheet.Header.Cells.Add(exportExcelHeaderCell);
                     }
-
-
                 }
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -201,8 +222,18 @@ namespace Vanrise.AccountBalance.Business
                             foreach (var gridColumn in accountTypeSettings.AccountBalanceGridSettings.GridColumns)
                             {
                                 var item = record.Entity.Items.GetRecord(gridColumn.FieldName);
-                                if (item != null)
-                                    row.Cells.Add(new ExportExcelCell { Value = item.Description });
+                                var fieldType = dataRecordFieldTypeStruct.GetRecord(gridColumn.FieldName);
+                                if (item != null && fieldType != null)
+                                {
+                                    if (fieldType.RenderDescriptionByDefault())
+                                    {
+                                        row.Cells.Add(new ExportExcelCell { Value = item.Description });
+                                    }
+                                    else
+                                    {
+                                        row.Cells.Add(new ExportExcelCell { Value = item.Value });
+                                    }
+                                }
                             }
                         }
                         sheet.Rows.Add(row);
