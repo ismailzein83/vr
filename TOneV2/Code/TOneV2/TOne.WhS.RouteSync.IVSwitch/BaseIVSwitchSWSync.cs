@@ -264,10 +264,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
 
                 if (routes.Any() && (option.Backups == null || option.Backups.Count == 0))
                 {
-                    foreach (var ivSwitchRoute in routes)
-                    {
-                        ivSwitchRoute.HuntStop = 1;
-                    }
+                    routes.Last().HuntStop = 1;
                 }
 
             }
