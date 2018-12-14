@@ -172,29 +172,31 @@ namespace Vanrise.HelperTools
             {
                 filesOutputPath = string.Format("{0}\\{1}", Common.CheckPathLengthOutputPath, currentDateShort);
             }
-
-            var allDirectories = Directory.GetDirectories(filesOutputPath, "*", SearchOption.TopDirectoryOnly);
-
-            foreach (var directory in allDirectories)
+            if (Directory.Exists(filesOutputPath))
             {
-                var directoryName = Path.GetFileName(directory);
+                var allDirectories = Directory.GetDirectories(filesOutputPath, "*", SearchOption.TopDirectoryOnly);
 
-                StringBuilder fileContent = new StringBuilder();
-
-                string[] allFiles = Directory.GetFiles(directory, "*.txt", SearchOption.AllDirectories);
-
-                //add folder content to created file
-                foreach (var file in allFiles)
+                Parallel.ForEach(allDirectories, directory =>
                 {
-                    if (File.Exists(file))
-                    {
-                        fileContent.AppendLine(File.ReadAllText(file));
-                        //rename or remove file
-                        File.Delete(file);
-                    }
-                }
+                    var directoryName = Path.GetFileName(directory);
 
-                File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".txt"), fileContent.ToString());
+                    StringBuilder fileContent = new StringBuilder();
+
+                    string[] allFiles = Directory.GetFiles(directory, "*.txt", SearchOption.AllDirectories);
+
+                    //add folder content to created file
+                    foreach (var file in allFiles)
+                    {
+                        if (File.Exists(file))
+                        {
+                            fileContent.AppendLine(File.ReadAllText(file));
+                            //rename or remove file
+                            File.Delete(file);
+                        }
+                    }
+
+                    File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".txt"), fileContent.ToString());
+                });
             }
         }
 
