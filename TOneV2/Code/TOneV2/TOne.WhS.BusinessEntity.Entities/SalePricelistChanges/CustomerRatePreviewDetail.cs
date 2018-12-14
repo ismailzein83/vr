@@ -6,7 +6,7 @@ namespace TOne.WhS.BusinessEntity.Entities.SalePricelistChanges
 	public class CustomerRatePreviewDetail
 	{
 		public string ZoneName { get; set; }
-		public decimal Rate { get; set; }
+		public decimal? Rate { get; set; }
 		public int? RecentCurrencyId { get; set; }
 		public string RecentCurrencySymbol { get; set; }
 		public decimal? RecentRate { get; set; }

@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities.SalePricelistChanges
 		public long? ZoneId { get; set; }
 		public int RoutingProductId { get; set; }
 		public int CountryId { get; set; }
-		public Decimal Rate { get; set; }
+		public Decimal? Rate { get; set; }
 		public int? RecentCurrencyId { get; set; }
 		public Decimal? RecentRate { get; set; }
 		public Decimal? RecentRateConverted { get; set; }
@@ -20,9 +20,9 @@ namespace TOne.WhS.BusinessEntity.Entities.SalePricelistChanges
 		public int CustomerId { get; set; }
 	}
 
-	public class ZoneCustomerPair
-	{
-		public long? ZoneId { get; set; }
-		public int CustomerId { get; set; }
-	}
+    public class ZoneCustomerPair
+    {
+        public long? ZoneId { get; set; }
+        public int CustomerId { get; set; }
+    }
 }
