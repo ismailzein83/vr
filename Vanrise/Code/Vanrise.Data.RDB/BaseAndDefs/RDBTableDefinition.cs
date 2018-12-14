@@ -19,6 +19,8 @@ namespace Vanrise.Data.RDB
 
         public string ModifiedTimeColumnName { get; set; }
 
+        public string CachePartitionColumnName { get; set; }
+
         public Dictionary<string, RDBTableColumnDefinition> Columns { get; set; }
     }
 

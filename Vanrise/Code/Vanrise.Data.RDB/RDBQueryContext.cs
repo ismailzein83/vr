@@ -145,11 +145,12 @@ namespace Vanrise.Data.RDB
             return this.DataProvider.IsDataUpdated(tableName, tableDefinition, ref lastReceivedDataInfo);
         }
 
-        protected bool IsDataUpdated<T>(string tableName, string columnName, T columnValue, ref object lastReceivedDataInfo)
+        protected bool IsDataUpdated<T>(string tableName, T cachePartitionColumnValue, ref object lastReceivedDataInfo)
         {
             var tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(this.DataProvider, tableName);
             tableDefinition.ModifiedTimeColumnName.ThrowIfNull("tableDefinition.ModifiedTimeColumnName", tableName);
-            return this.DataProvider.IsDataUpdated(tableName, tableDefinition, columnName, columnValue, ref lastReceivedDataInfo);
+            tableDefinition.CachePartitionColumnName.ThrowIfNull("tableDefinition.CachePartitionColumnName", tableName);
+            return this.DataProvider.IsDataUpdated(tableName, tableDefinition, tableDefinition.CachePartitionColumnName, cachePartitionColumnValue, ref lastReceivedDataInfo);
         }
 
         //public RDBSetParameterValuesQuery SetParameterValues()
