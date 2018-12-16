@@ -403,6 +403,11 @@ namespace Vanrise.Fzero.Services.Report
                     report.RecommendedAction = "It is highly recommended to immediately block these fraudulent MSISDNs as they are terminating international calls without passing legally through ST IGW.";
                     report.ApplicationUserID = 8;
                 }
+                else if (ClientID == 9) //Etisalat 
+                {
+                    report.RecommendedAction = "It is highly recommended to immediately block and take actions against these fraudulent MSISDNs as they are terminating international calls without passing legally through Etisalat IGW.";
+                    report.ApplicationUserID = 3;
+                }
                 else
                 {
                     report.RecommendedAction = "It is highly recommended to immediately investigate and trace these international calls and provide us with the respective CDR's of these Fradulent Calls as they were termnated to your Network and did not pass legally through ITPC's IGW.";
