@@ -916,7 +916,9 @@
               <TextRun>
                 <Value>=Parameters!Notes.Value</Value>
                 <Style>
-                  <FontWeight>Bold</FontWeight>
+                  <FontStyle>Italic</FontStyle>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontSize>8pt</FontSize>
                 </Style>
               </TextRun>
             </TextRuns>
@@ -924,9 +926,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox15</rd:DefaultName>
-        <Top>20.51016cm</Top>
-        <Left>0.37361cm</Left>
-        <Height>1.26146cm</Height>
+        <Top>14.7044cm</Top>
+        <Left>0.36195cm</Left>
+        <Height>0.65292cm</Height>
         <Width>20.16658cm</Width>
         <ZIndex>8</ZIndex>
         <Style>
@@ -1723,7 +1725,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>6.12025in</Top>
+        <Top>6.6594in</Top>
         <Left>0.1425in</Left>
         <Height>1.5833in</Height>
         <Width>4.88965in</Width>
@@ -1753,7 +1755,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox72</rd:DefaultName>
-        <Top>5.76051in</Top>
+        <Top>6.29966in</Top>
         <Left>0.36195cm</Left>
         <Height>0.25in</Height>
         <Width>2.35429in</Width>
@@ -1770,7 +1772,7 @@
       </Textbox>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>6.00703in</Top>
+        <Top>6.54618in</Top>
         <Left>0.36195cm</Left>
         <Height>0.01042in</Height>
         <Width>4.88965in</Width>
@@ -2430,7 +2432,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
