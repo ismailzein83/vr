@@ -264,6 +264,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public string GetFinancialInvoiceSettingName(Guid financialAccountDefinitionId, string financialAccountId, Guid invoiceTypeId)
         {
+            var invoiceSettingId = GetFinancialInvoiceSettingId(financialAccountDefinitionId, financialAccountId, invoiceTypeId);
+            if(invoiceSettingId.HasValue)
+            {
+                return new InvoiceSettingManager().GetInvoiceSettingName(invoiceSettingId.Value);
+            }
+            return null;
+        }
+        public Guid? GetFinancialInvoiceSettingId(Guid financialAccountDefinitionId, string financialAccountId, Guid invoiceTypeId)
+        {
             WHSFinancialAccountDefinitionManager financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
             var financialAccountDefinitionSetting = financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
             if (financialAccountDefinitionSetting.FinancialAccountInvoiceTypes != null && financialAccountDefinitionSetting.FinancialAccountInvoiceTypes.Count > 0)
@@ -274,13 +283,12 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         var partnerInvoiceSetting = new PartnerManager().GetInvoicePartnerSetting(financialAccountInvoiceType.InvoiceTypeId, financialAccountId);
                         if (partnerInvoiceSetting != null)
-                            return new InvoiceSettingManager().GetInvoiceSettingName(partnerInvoiceSetting.InvoiceSetting.InvoiceSettingId);
+                            return partnerInvoiceSetting.InvoiceSetting.InvoiceSettingId;
                     }
                 }
             }
-            return null;
+            return default(Guid?);
         }
-
         public bool DoesUserHaveViewAccess(int financialAccountId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
