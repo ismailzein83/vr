@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+   <!-- <Compile Include="BigDataServiceDataManager.cs" />-->
     <Compile Include="CityDataManager.cs" />
     <Compile Include="CountryDataManager.cs" />
     <Compile Include="CurrencyDataManager.cs" />
@@ -56,11 +57,14 @@
     <Compile Include="RateTypeDataManager.cs" />
     <Compile Include="RegionDataManager.cs" />
     <Compile Include="SMSMessageTypeDataManager.cs" />
+    <Compile Include="StatusDefinitionDataManager.cs" />
     <Compile Include="VRActionAuditDataManager.cs" />
+    <Compile Include="VRApplicationVisibilityDataManager.cs" />
     <Compile Include="VRConnectionDataManager.cs" />
     <Compile Include="VRExclusiveSessionDataManager.cs" />
     <Compile Include="VRMailMessageTemplateDataManager.cs" />
     <Compile Include="VRMailMessageTypeDataManager.cs" />
+    <Compile Include="VRNamespaceDataManager.cs" />
     <Compile Include="VRTimeZoneDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

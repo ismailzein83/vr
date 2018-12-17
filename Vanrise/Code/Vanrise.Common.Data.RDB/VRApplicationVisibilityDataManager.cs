@@ -8,7 +8,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.Common.Data.RDB
 {
-	class VRApplicationVisibilityDataManager : IVRApplicationVisibilityDataManager
+	public class VRApplicationVisibilityDataManager : IVRApplicationVisibilityDataManager
 	{
 		#region Local Variables
 		static string TABLE_NAME = "common_VRAppVisibility";
