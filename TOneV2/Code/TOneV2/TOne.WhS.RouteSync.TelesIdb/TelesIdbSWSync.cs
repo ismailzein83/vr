@@ -224,13 +224,10 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
 			if (invalidMappingSupplierIds.Count > 0)
 			{
-				CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 				List<string> invalidMappingSuppliers = new List<string>();
 
 				foreach (var supplierId in invalidMappingSupplierIds)
-				{
 					invalidMappingSuppliers.Add(string.Format("'{0}'", context.GetCarrierAccountNameById(supplierId)));
-				}
 
 				validationMessages.Add(string.Format("Invalid Mappings for Suppliers: {0}", string.Join(", ", invalidMappingSuppliers)));
 			}
