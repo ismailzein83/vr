@@ -295,7 +295,7 @@ as (select * from (values
 ('2CF7E0BE-1396-4305-AA27-11070ACFC18F','Application Visibilities','Application Visibilities','#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',26),
 ('2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF','Locked Sessions','Locked Sessions','#/view/Common/Views/VRExclusiveSession/VRExclusiveSessionManagement'							,'525B77DC-F097-4BF1-930A-034B9BBE1AC4','VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
 ('32495D59-E401-4AF0-81A3-829F9C442036','Custom Namespaces','Custom Namespaces','#/view/Common/Views/VRNamespace/VRNamespaceManagement'										,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRNamespace/GetFilteredVRNamespaces',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',19),
-('AF4FF1BA-C026-4CC7-ADE2-B684453DBB8C','Dynamic API Module','Dynamic API Module','#/view/Common/Views/VRDynamicAPIModule/VRDynamicAPIModuleManagement','89254E36-5D91-4DB1-970F-9BFEF404679A','VRCommon/VRDynamicAPIModule/GetFilteredVRDynamicAPIModules',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10)
+('AF4FF1BA-C026-4CC7-ADE2-B684453DBB8C','Dynamic API Module','Dynamic API Module','#/view/Common/Views/VRDynamicAPIModule/VRDynamicAPIModuleManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRDynamicAPIModule/GetFilteredVRDynamicAPIModules',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -421,7 +421,9 @@ as (select * from (values
 ('D72E97C0-73BA-4BB9-AA37-4889A4C3386F','Yesterday','Yesterday','VRCommon_VRTimePeriod','{"Editor":"vr-common-timeperiod-yesterday"}'),
 ('FB9B7430-6FE8-418C-98EB-49730B562DE8','SpecificDaysTimePeriod','Specific Days','VRCommon_VRTimePeriod','{"Editor":"vr-common-timeperiod-specificdays"}'),
 ('4EB2746B-5368-4D05-B6D3-EFD075BE2DCF','Custom Code ',' Custom Code ','VRCommon_DynamicAPIMethod','{"Editor":"vr-common-dynamicapi-customcode-method"}'),
-('BDD289DF-573C-44A1-9A95-D0DE2ED9DD71','Custom Code','Custom Code','VRCommon_DynamicCode','{"Editor":"vr-common-dynamiccode-customcode"}')
+('BDD289DF-573C-44A1-9A95-D0DE2ED9DD71','Custom Code','Custom Code','VRCommon_DynamicCode','{"Editor":"vr-common-dynamiccode-customcode"}'),
+('AAC62543-CF85-4F0D-BB42-121C7B699816','VRCommon_CallMethodDynamicAPI','Call Method','VRCommon_DynamicAPIMethod','{"Editor":"vr-common-dynamicapi-callmethod"}'),
+('5F14D26D-7B43-41BE-9A3A-6BA0A7EB8316','VRCommon_HttpProxyDynamicCodeSettings','Http Proxy','VRCommon_DynamicCode','{"Editor":"vr-common-dynamiccode-httpproxy"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
