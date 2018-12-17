@@ -200,7 +200,7 @@ app.directive("vrGenericdataGenericruleManagement", ['VRNotificationService', 'U
                     gridQuery.accessibility = accessibility;
                     gridQuery.EffectiveDate = $scope.scopeModel.effectiveDate;
                     gridQuery.Description = $scope.scopeModel.description;
-                    gridQuery.ReportName = $scope.scopeModel.ruleDefinition.Name
+                    gridQuery.ReportName = $scope.scopeModel.ruleDefinition.Name;
 
                     return gridQuery;
                 }
