@@ -28,8 +28,8 @@ app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_Compr
         function DirectiveConstructor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            var fileDataSourceDefinitionsSelectorAPI;
-            var fileDataSourceDefinitionsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            //var fileDataSourceDefinitionsSelectorAPI;
+            //var fileDataSourceDefinitionsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
