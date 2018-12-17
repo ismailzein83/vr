@@ -139,6 +139,13 @@
     <Compile Include="Retail_Demo\Elements\NetworkRental\Reports\Reporting.aspx.designer.cs">
       <DependentUpon>Reporting.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Retail_Demo\Elements\SMS\Reports\Reporting.aspx.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Retail_Demo\Elements\SMS\Reports\Reporting.aspx.designer.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
@@ -148,9 +155,15 @@
     <Content Include="Retail_Demo\Elements\NetworkRental\Directives\retail-demo-invoicetype-networkrentalinvoicesettings.js" />
     <Content Include="Retail_Demo\Elements\NetworkRental\Directives\Templates\NetworkRentalInvoiceSettingsTemplate.html" />
     <Content Include="Retail_Demo\Elements\NetworkRental\Reports\Reporting.aspx" />
+    <Content Include="Retail_Demo\Elements\SMS\Directives\retail-demo-invoicetype-smsinvoicesettings.js" />
+    <Content Include="Retail_Demo\Elements\SMS\Directives\Templates\SMSInvoiceSettingsTemplate.html" />
+    <Content Include="Retail_Demo\Elements\SMS\Reports\Reporting.aspx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Retail_Demo\Elements\NetworkRental\Reports\NetworkRentalInvoice.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Retail_Demo\Elements\SMS\Reports\CustomerSMSInvoice.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
