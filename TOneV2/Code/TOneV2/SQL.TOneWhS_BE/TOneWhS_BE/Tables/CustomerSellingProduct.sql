@@ -7,9 +7,12 @@
     [EED]              DATETIME   NULL,
     [timestamp]        ROWVERSION NULL,
     [CreatedTime]      DATETIME   CONSTRAINT [DF_CustomerSellingProduct_CreatedTime] DEFAULT (getdate()) NULL,
+    [LastModifiedTime] DATETIME   NULL,
     CONSTRAINT [PK_CustomerSellingProduct] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_CustomerSellingProduct_SellingProduct] FOREIGN KEY ([SellingProductID]) REFERENCES [TOneWhS_BE].[SellingProduct] ([ID])
 );
+
+
 
 
 

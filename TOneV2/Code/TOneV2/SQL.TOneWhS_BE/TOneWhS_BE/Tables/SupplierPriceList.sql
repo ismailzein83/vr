@@ -11,8 +11,11 @@
     [ProcessInstanceID] BIGINT       NULL,
     [SPLStateBackupID]  BIGINT       NULL,
     [UserID]            INT          NULL,
+    [LastModifiedTime]  DATETIME     NULL,
     CONSTRAINT [PK_SupplierPriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

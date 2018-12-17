@@ -15,8 +15,11 @@
     [Description]            NVARCHAR (MAX) NULL,
     [PricelistStateBackupID] BIGINT         NULL,
     [PricelistSource]        TINYINT        NULL,
+    [LastModifiedTime]       DATETIME       NULL,
     CONSTRAINT [PK_SalePriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
