@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrCommonTimeperiodYesterday", [function () {
+app.directive("vrCommonTimeperiodYesterday", ['UtilsService', function (UtilsService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
