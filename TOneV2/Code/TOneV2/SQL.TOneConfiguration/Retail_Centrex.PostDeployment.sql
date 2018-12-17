@@ -735,10 +735,10 @@ as (select * from (values
 )c([ID],[UniqueName],[Settings]))
 merge	[logging].[LoggableEntity] as t
 using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
+on		1=1 and t.[UniqueName] = s.[UniqueName]
 when matched then
 	update set
-	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]
+	[ID] = s.[ID],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[UniqueName],[Settings])
 	values(s.[ID],s.[UniqueName],s.[Settings]);
