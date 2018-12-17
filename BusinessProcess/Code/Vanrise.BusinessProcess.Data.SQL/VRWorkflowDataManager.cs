@@ -32,6 +32,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
             string serializedSettings = vrWorkflow.Settings != null ? Vanrise.Common.Serializer.Serialize(vrWorkflow.Settings) : null;
             return ExecuteNonQuerySP("[bp].[sp_VRWorkflow_Update]", vrWorkflow.VRWorkflowId, vrWorkflow.Name, vrWorkflow.Title, serializedSettings, lastModifiedBy) > 0;
         }
+
+        public bool AreVRWorkflowsUpdated(ref object lastReceivedDataInfo)
+        {
+            return base.IsDataUpdated("[bp].[VRWorkflow]", ref lastReceivedDataInfo);
+        }
         #endregion
 
         #region Mappers

@@ -7,22 +7,28 @@ namespace Vanrise.BusinessProcess.Data.RDB
 {
     public class BPDefinitionArgumentStateDataManager : IBPDefinitionArgumentStateDataManager
     {
-        static string TABLE_NAME = "bp_BPDefintionArgumentState";
+        static string TABLE_NAME = "bp_BPDefinitionArgumentState";
         static string TABLE_ALIAS = "bpArgState";
         const string COL_BPDefinitionID = "BPDefinitionID";
         const string COL_InputArgument = "InputArgument";
+        const string COL_CreatedTime = "CreatedTime";
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static BPDefinitionArgumentStateDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_BPDefinitionID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_InputArgument, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "bp",
-                DBTableName = "BPDefintionArgumentState",
+                DBTableName = "BPDefinitionArgumentState",
                 Columns = columns,
                 IdColumnName = COL_BPDefinitionID,
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
 

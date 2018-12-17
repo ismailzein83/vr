@@ -11,5 +11,6 @@ namespace Vanrise.BusinessProcess.Data
         bool InsertVRWorkflow(VRWorkflowToAdd vrWorkflow, Guid vrWorkflowId, int createdBy);
 
         bool UpdateVRWorkflow(VRWorkflowToUpdate vrWorkflow, int lastModifiedBy);
+        bool AreVRWorkflowsUpdated(ref object lastReceivedDataInfo);
     }
 }

@@ -12,6 +12,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
         const string COL_ID = "ID";
         const string COL_Settings = "Settings";
         const string COL_BusinessRuleDefinitionId = "BusinessRuleDefinitionId";
+        const string COL_CreatedTime = "CreatedTime";
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static BPBusinessRuleActionDataManager()
         {
@@ -19,12 +21,16 @@ namespace Vanrise.BusinessProcess.Data.RDB
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_BusinessRuleDefinitionId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "bp",
                 DBTableName = "BPBusinessRuleAction",
                 Columns = columns,
                 IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
 
@@ -41,6 +47,12 @@ namespace Vanrise.BusinessProcess.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             return queryContext.GetItems(BPBusinessRuleActionMapper);
+        }
+
+        public bool AreBPBusinessRuleActionsUpdated(ref object lastReceivedDataInfo)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref lastReceivedDataInfo);
         }
 
         BPBusinessRuleAction BPBusinessRuleActionMapper(IRDBDataReader reader)

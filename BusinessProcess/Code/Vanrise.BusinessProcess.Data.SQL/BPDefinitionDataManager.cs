@@ -35,6 +35,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool AreBPDefinitionsUpdated(ref object lastReceivedDataInfo)
+        {
+            return base.IsDataUpdated("[bp].[BPDefinition]", ref lastReceivedDataInfo);
+        }
+
         #endregion
 
         #region Mappers

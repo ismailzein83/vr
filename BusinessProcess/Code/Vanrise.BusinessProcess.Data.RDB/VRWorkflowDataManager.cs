@@ -19,7 +19,6 @@ namespace Vanrise.BusinessProcess.Data.RDB
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_LastModifiedBy = "LastModifiedBy";
 
-
         static VRWorkflowDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -105,6 +104,12 @@ namespace Vanrise.BusinessProcess.Data.RDB
             where.EqualsCondition(COL_ID).Value(vrWorkflow.VRWorkflowId);
 
             return queryContext.ExecuteNonQuery() > 0;
+        }
+
+        public bool AreVRWorkflowsUpdated(ref object lastReceivedDataInfo)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref lastReceivedDataInfo);
         }
 
         VRWorkflow VRWorkflowMapper(IRDBDataReader reader)

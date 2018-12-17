@@ -17,6 +17,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
         const string COL_VRWorkflowId = "VRWorkflowId";
         const string COL_Config = "Config";
         const string COL_CreatedTime = "CreatedTime";
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static BPDefinitionDataManager()
         {
@@ -28,13 +29,15 @@ namespace Vanrise.BusinessProcess.Data.RDB
             columns.Add(COL_VRWorkflowId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Config, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "bp",
                 DBTableName = "BPDefinition",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
 
@@ -104,6 +107,12 @@ namespace Vanrise.BusinessProcess.Data.RDB
             where.EqualsCondition(COL_ID).Value(bpDefinition.BPDefinitionID);
 
             return queryContext.ExecuteNonQuery() > 0;
+        }
+
+        public bool AreBPDefinitionsUpdated(ref object lastReceivedDataInfo)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref lastReceivedDataInfo);
         }
 
         BPDefinition BPDefinitionMapper(IRDBDataReader reader)

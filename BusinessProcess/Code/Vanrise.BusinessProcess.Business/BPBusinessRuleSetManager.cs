@@ -134,11 +134,12 @@ namespace Vanrise.BusinessProcess.Business
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher { get { return true; } }
+            IBPBusinessRuleSetDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPBusinessRuleSetDataManager>();
+            object _lastReceivedDataInfo;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired(parameter);
+                return dataManager.AreBPBusinessRuleSetsUpdated(ref _lastReceivedDataInfo);
             }
         }
 

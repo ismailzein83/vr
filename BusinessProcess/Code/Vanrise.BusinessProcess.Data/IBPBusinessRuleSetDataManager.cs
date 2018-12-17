@@ -10,5 +10,6 @@ namespace Vanrise.BusinessProcess.Data
         bool AddBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj, out int bpBusinessRuleSetId);
 
         bool UpdateBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj);
+        bool AreBPBusinessRuleSetsUpdated(ref object lastReceivedDataInfo);
     }
 }

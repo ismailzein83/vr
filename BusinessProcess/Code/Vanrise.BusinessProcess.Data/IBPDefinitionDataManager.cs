@@ -11,5 +11,6 @@ namespace Vanrise.BusinessProcess.Data
         bool InsertBPDefinition(BPDefinition bpDefinition);
 
         bool UpdateBPDefinition(BPDefinition bpDefinition);
+        bool AreBPDefinitionsUpdated(ref object lastReceivedDataInfo);
     }
 }

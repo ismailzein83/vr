@@ -14,6 +14,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
         const string COL_ParentID = "ParentID";
         const string COL_Details = "Details";
         const string COL_BPDefinitionId = "BPDefinitionId";
+        const string COL_CreatedTime = "CreatedTime";
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static BPBusinessRuleSetDataManager()
         {
@@ -23,12 +25,16 @@ namespace Vanrise.BusinessProcess.Data.RDB
             columns.Add(COL_ParentID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_Details, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_BPDefinitionId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "bp",
                 DBTableName = "BPBusinessRuleSet",
                 Columns = columns,
-                IdColumnName = COL_ID
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
 
@@ -102,6 +108,12 @@ namespace Vanrise.BusinessProcess.Data.RDB
             where.EqualsCondition(COL_ID).Value(businessRuleSetObj.BPBusinessRuleSetId);
 
             return queryContext.ExecuteNonQuery() > 0;
+        }
+
+        public bool AreBPBusinessRuleSetsUpdated(ref object lastReceivedDataInfo)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref lastReceivedDataInfo);
         }
 
         BPBusinessRuleSet BPBusinessRuleSetMapper(IRDBDataReader reader)

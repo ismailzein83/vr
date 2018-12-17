@@ -14,10 +14,16 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
 
         }
+
         #region public methods
         public List<BPBusinessRuleAction> GetBPBusinessRuleActions()
         {
             return GetItemsSP("bp.sp_BPBusinessRuleAction_GetAll", BPBusinessRuleActionMapper);
+        }
+
+        public bool AreBPBusinessRuleActionsUpdated(ref object lastReceivedDataInfo)
+        {
+            return base.IsDataUpdated("[bp].[BPBusinessRuleAction]", ref lastReceivedDataInfo);
         }
 
         #endregion
