@@ -122,6 +122,8 @@
     <Content Include="Common\Constant\VRCustomCodeDynamicAPIMethodTypeEnum.js" />
     <Content Include="Common\Constant\VRHttpMessageFormatEnum.js" />
     <Content Include="Common\Constant\VRHttpMethodEnum.js" />
+    <Content Include="Common\Directives\AdditionalErrors\AdditionalErrorsTemplate.html" />
+    <Content Include="Common\Directives\AdditionalErrors\vr-common-additionalerrors.js" />
     <Content Include="Common\Directives\Country\vr-common-country-remoteselector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\FTPConnectionEditorTemplate.html" />
