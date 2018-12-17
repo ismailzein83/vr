@@ -3,14 +3,14 @@
 @InputArgument nvarchar(MAX)
 AS
 BEGIN
-	IF NOT EXISTS(SELECT 1 FROM [bp].[BPDefintionArgumentState] WITH(NOLOCK) WHERE BPDefinitionID = @BPDefnitionId)
+	IF NOT EXISTS(SELECT 1 FROM [bp].[BPDefinitionArgumentState] WITH(NOLOCK) WHERE BPDefinitionID = @BPDefnitionId)
 	BEGIN
-		INSERT INTO [bp].[BPDefintionArgumentState] (BPDefinitionID, InputArgument)
+		INSERT INTO [bp].[BPDefinitionArgumentState] (BPDefinitionID, InputArgument)
 		VALUES (@BPDefnitionId, @InputArgument)
 	END
 	ELSE
 	BEGIN
-		UPDATE [bp].[BPDefintionArgumentState]  set InputArgument = @InputArgument
+		UPDATE [bp].[BPDefinitionArgumentState]  set InputArgument = @InputArgument, LastModifiedTime = getdate()
 		WHERE BPDefinitionID = @BPDefnitionId
 	END
 END

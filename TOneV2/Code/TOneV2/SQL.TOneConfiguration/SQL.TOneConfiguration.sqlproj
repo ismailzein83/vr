@@ -779,7 +779,6 @@
     <Build Include="common\Tables\DataEncryptionKey.sql" />
     <Build Include="common\Stored Procedures\sp_DataEncryptionKey_InsertIfNotExistsAndGetDataEncryptionKey.sql" />
     <Build Include="sec\Stored Procedures\sp_User_ChangeSecurityProvider.sql" />
-    <Build Include="bp\Tables\BPDefintionArgumentState.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinitionArgumentState_InsertOrUpdate.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinitionArgumentState_GetAll.sql" />
     <Build Include="bp\Tables\VRWorkflow.sql" />
@@ -826,6 +825,7 @@
     <Build Include="common\Stored Procedures\sp_VRDynamicAPI_GetAll.sql" />
     <Build Include="common\User Defined Types\VRDynamicAPIModuleType.sql" />
     <Build Include="common\Stored Procedures\sp_VRRule_Delete.sql" />
+    <Build Include="bp\Tables\BPDefinitionArgumentState_1.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

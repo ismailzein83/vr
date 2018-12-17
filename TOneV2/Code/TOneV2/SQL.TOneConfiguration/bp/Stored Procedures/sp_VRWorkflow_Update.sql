@@ -14,7 +14,8 @@ BEGIN
 		Name = @Name,
 		Title = @Title,
 		Settings = @Settings,
-		LastModifiedBy = @LastModifiedBy
+		LastModifiedBy = @LastModifiedBy,
+		LastModifiedTime = getdate()
 		where ID = @VRWorkflowId
 	END
 END

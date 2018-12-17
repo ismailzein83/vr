@@ -2,5 +2,5 @@
 AS
 BEGIN
 	SELECT	BPDefinitionID,InputArgument
-	FROM	[bp].[BPDefintionArgumentState] WITH(NOLOCK)
+	FROM	[bp].[BPDefinitionArgumentState] WITH(NOLOCK)
 END

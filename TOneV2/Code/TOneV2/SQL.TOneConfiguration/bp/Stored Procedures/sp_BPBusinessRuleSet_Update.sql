@@ -12,7 +12,8 @@ BEGIN
 		Update [bp].[BPBusinessRuleSet] set ParentID = @ParentId,
 		Details = @Details,
 		BPDefinitionId= @BPDefinitionId,
-		Name = @Name
+		Name = @Name,
+		LastModifiedTime = getdate()
 		where ID = @BusinessRuleSetId
 	END
 
