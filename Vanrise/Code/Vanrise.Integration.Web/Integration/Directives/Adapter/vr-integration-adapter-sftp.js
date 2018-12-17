@@ -56,18 +56,18 @@ app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_Compr
                     }
                 };
 
-                $scope.scopeModel.onFileDataSourceDefinitionsSelectorReady = function (api) {
-                    fileDataSourceDefinitionsSelectorAPI = api;
-                    fileDataSourceDefinitionsSelectorReadyPromiseDeferred.resolve();
-                };
+                //$scope.scopeModel.onFileDataSourceDefinitionsSelectorReady = function (api) {
+                //    fileDataSourceDefinitionsSelectorAPI = api;
+                //    fileDataSourceDefinitionsSelectorReadyPromiseDeferred.resolve();
+                //};
 
-                $scope.scopeModel.onFileDataSourceDefinitionSelectionChanged = function () {
-                    var beforeSelection = $scope.scopeModel.selectedFileDataSourceDefinition == undefined ? false : $scope.scopeModel.selectedFileDataSourceDefinition;
-                    $scope.scopeModel.selectedFileDataSourceDefinition = fileDataSourceDefinitionsSelectorAPI != undefined && fileDataSourceDefinitionsSelectorAPI.getSelectedIds() != undefined ?
-                        true : false;
-                    if (beforeSelection && !$scope.scopeModel.selectedFileDataSourceDefinition)
-                        $scope.scopeModel.duplicatedFilesDirectory = undefined;
-                };
+                //$scope.scopeModel.onFileDataSourceDefinitionSelectionChanged = function () {
+                //    var beforeSelection = $scope.scopeModel.selectedFileDataSourceDefinition == undefined ? false : $scope.scopeModel.selectedFileDataSourceDefinition;
+                //    $scope.scopeModel.selectedFileDataSourceDefinition = fileDataSourceDefinitionsSelectorAPI != undefined && fileDataSourceDefinitionsSelectorAPI.getSelectedIds() != undefined ?
+                //        true : false;
+                //    if (beforeSelection && !$scope.scopeModel.selectedFileDataSourceDefinition)
+                //        $scope.scopeModel.duplicatedFilesDirectory = undefined;
+                //};
 
                 defineAPI();
             }
@@ -78,7 +78,9 @@ app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_Compr
 
                 api.load = function (payload) {
                     var promises = [];
+
                     var port;
+
                     if (payload != undefined) {
 
                         var argumentData = payload.adapterArgument;
@@ -101,6 +103,7 @@ app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_Compr
                             $scope.maxNumberOfFiles = argumentData.NumberOfFiles;
                             $scope.invalidDirectory = argumentData.InvalidFilesDirectory;
                             $scope.scopeModel.duplicatedFilesDirectory = argumentData.DuplicatedFilesDirectory;
+
                             if (argumentData.SshParameters != undefined) {
                                 $scope.scopeModel.hasSshParameters = true;
                                 if (argumentData.SshParameters.Compression != undefined)
@@ -116,40 +119,36 @@ app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_Compr
                                 if (argumentData.SshParameters.SshOptions != undefined)
                                     $scope.scopeModel.selectedSshOptions = UtilsService.getItemByVal($scope.scopeModel.sshOptions, argumentData.SshParameters.SshOptions, "value");
                             }
-
                         }
                     }
-                    if (port == undefined)
-                        port = 22;
-                    $scope.port = port;
 
-                    var loadFileDataSourceDefinitionsSelectorPromise = loadFileDataSourceDefinitionsSelector();
-                    promises.push(loadFileDataSourceDefinitionsSelectorPromise);
+                    $scope.port = (port != undefined) ? port : 22;
 
-                    return UtilsService.waitMultiplePromises(promises)
-                        .catch(function (error) {
-                            VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        }).finally(function () {
-                            $scope.isLoading = false;
-                        });
+                    //var loadFileDataSourceDefinitionsSelectorPromise = loadFileDataSourceDefinitionsSelector();
+                    //promises.push(loadFileDataSourceDefinitionsSelectorPromise);
 
+                    return UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    }).finally(function () {
+                        $scope.isLoading = false;
+                    });
 
-                    function loadFileDataSourceDefinitionsSelector() {
+                    //function loadFileDataSourceDefinitionsSelector() {
 
-                        var fileDataSourceDefinitionsSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //    var fileDataSourceDefinitionsSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        fileDataSourceDefinitionsSelectorReadyPromiseDeferred.promise.then(function () {
+                    //    fileDataSourceDefinitionsSelectorReadyPromiseDeferred.promise.then(function () {
 
-                            var payload;
+                    //        var payload;
 
-                            if (argumentData != undefined && argumentData != null)
-                                payload = { selectedIds: argumentData.FileDataSourceDefinitionId };
+                    //        if (argumentData != undefined && argumentData != null)
+                    //            payload = { selectedIds: argumentData.FileDataSourceDefinitionId };
 
-                            VRUIUtilsService.callDirectiveLoad(fileDataSourceDefinitionsSelectorAPI, payload, fileDataSourceDefinitionsSelectorLoadPromiseDeferred);
-                        });
+                    //        VRUIUtilsService.callDirectiveLoad(fileDataSourceDefinitionsSelectorAPI, payload, fileDataSourceDefinitionsSelectorLoadPromiseDeferred);
+                    //    });
 
-                        return fileDataSourceDefinitionsSelectorLoadPromiseDeferred.promise;
-                    }
+                    //    return fileDataSourceDefinitionsSelectorLoadPromiseDeferred.promise;
+                    //}
                 };
 
                 api.getData = function () {
@@ -188,8 +187,6 @@ app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_Compr
                             sshParameters = {};
                     }
 
-
-
                     if ($scope.extension.indexOf(".") == 0)
                         extension = $scope.extension;
                     else
@@ -214,10 +211,11 @@ app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_Compr
                         NumberOfFiles: $scope.maxNumberOfFiles,
                         InvalidFilesDirectory: $scope.invalidDirectory,
                         SshParameters: sshParameters,
-                        FileDataSourceDefinitionId: fileDataSourceDefinitionsSelectorAPI != undefined ? fileDataSourceDefinitionsSelectorAPI.getSelectedIds() : undefined,
-                        DuplicatedFilesDirectory: fileDataSourceDefinitionsSelectorAPI != undefined ? $scope.scopeModel.duplicatedFilesDirectory : undefined
+                        //FileDataSourceDefinitionId: fileDataSourceDefinitionsSelectorAPI != undefined ? fileDataSourceDefinitionsSelectorAPI.getSelectedIds() : undefined,
+                        //DuplicatedFilesDirectory: fileDataSourceDefinitionsSelectorAPI != undefined ? $scope.scopeModel.duplicatedFilesDirectory : undefined
                     };
                 };
+
                 api.getStateData = function () {
                     return null;
                 };

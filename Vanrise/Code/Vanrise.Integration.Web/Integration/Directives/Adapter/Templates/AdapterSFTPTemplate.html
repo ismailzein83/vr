@@ -75,7 +75,7 @@
             <vr-select datasource="compressionTypes" datatextfield="description" datavaluefield="value" label="Compression Type" selectedvalues="selectedCompressionType" isrequired="compressed"></vr-select>
         </vr-columns>
     </vr-row>
-    <vr-row removeline>
+    <!--<vr-row removeline>
         <vr-integration-filedatasourcedefinition-selector on-ready="scopeModel.onFileDataSourceDefinitionsSelectorReady" 
                                                           onselectionchanged="scopeModel.onFileDataSourceDefinitionSelectionChanged"
                                                           customlabel="Import Exception Setting" normal-col-num="4" includeviewhandler showaddbutton>
@@ -83,7 +83,7 @@
         <vr-columns ng-show="scopeModel.selectedFileDataSourceDefinition" width="1/3row">
             <vr-textbox value="scopeModel.duplicatedFilesDirectory" label="Duplicated Files Directory Path" />
         </vr-columns>
-    </vr-row>
+    </vr-row>-->
 </vr-section>
 <vr-section header="After Import">
     <vr-row removeline>

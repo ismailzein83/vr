@@ -21,18 +21,18 @@ app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', '
         function DirectiveConstructor($scope, ctrl) {
             this.initializeController = initializeController;
 
-            var fileDataSourceDefinitionsSelectorAPI;
-            var fileDataSourceDefinitionsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            //var fileDataSourceDefinitionsSelectorAPI;
+            //var fileDataSourceDefinitionsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.actionsAfterImport = [{ value: -1, name: 'No Action' }, { value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
 
-                $scope.scopeModel.onFileDataSourceDefinitionsSelectorReady = function (api) {
-                    fileDataSourceDefinitionsSelectorAPI = api;
-                    fileDataSourceDefinitionsSelectorReadyPromiseDeferred.resolve();
-                };
+                //$scope.scopeModel.onFileDataSourceDefinitionsSelectorReady = function (api) {
+                //    fileDataSourceDefinitionsSelectorAPI = api;
+                //    fileDataSourceDefinitionsSelectorReadyPromiseDeferred.resolve();
+                //};
 
                 defineAPI();
             }
@@ -57,33 +57,32 @@ app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', '
                         }
                     }
 
-                    var loadFileDataSourceDefinitionsSelectorPromise = loadFileDataSourceDefinitionsSelector();
-                    promises.push(loadFileDataSourceDefinitionsSelectorPromise);
+                    //var loadFileDataSourceDefinitionsSelectorPromise = loadFileDataSourceDefinitionsSelector();
+                    //promises.push(loadFileDataSourceDefinitionsSelectorPromise);
 
-                    return UtilsService.waitMultiplePromises(promises)
-                        .catch(function (error) {
-                            VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        }).finally(function () {
-                            $scope.isLoading = false;
-                        });
+                    return UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    }).finally(function () {
+                        $scope.isLoading = false;
+                    });
 
 
-                    function loadFileDataSourceDefinitionsSelector() {
+                    //function loadFileDataSourceDefinitionsSelector() {
 
-                        var fileDataSourceDefinitionsSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //    var fileDataSourceDefinitionsSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                        fileDataSourceDefinitionsSelectorReadyPromiseDeferred.promise.then(function () {
+                    //    fileDataSourceDefinitionsSelectorReadyPromiseDeferred.promise.then(function () {
 
-                            var payload;
+                    //        var payload;
 
-                            if (argumentData != undefined && argumentData != null)
-                                payload = { selectedIds: argumentData.FileDataSourceDefinitionId };
+                    //        if (argumentData != undefined && argumentData != null)
+                    //            payload = { selectedIds: argumentData.FileDataSourceDefinitionId };
 
-                            VRUIUtilsService.callDirectiveLoad(fileDataSourceDefinitionsSelectorAPI, payload, fileDataSourceDefinitionsSelectorLoadPromiseDeferred);
-                        });
+                    //        VRUIUtilsService.callDirectiveLoad(fileDataSourceDefinitionsSelectorAPI, payload, fileDataSourceDefinitionsSelectorLoadPromiseDeferred);
+                    //    });
 
-                        return fileDataSourceDefinitionsSelectorLoadPromiseDeferred.promise;
-                    }
+                    //    return fileDataSourceDefinitionsSelectorLoadPromiseDeferred.promise;
+                    //}
                 };
 
                 api.getData = function () {
@@ -101,7 +100,7 @@ app.directive("vrIntegrationAdapterFile", ['UtilsService', 'VRUIUtilsService', '
                         Directory: $scope.scopeModel.directory,
                         DirectorytoMoveFile: $scope.scopeModel.directorytoMoveFile,
                         ActionAfterImport: $scope.scopeModel.selectedAction.value,
-                        FileDataSourceDefinitionId: fileDataSourceDefinitionsSelectorAPI != undefined ? fileDataSourceDefinitionsSelectorAPI.getSelectedIds() : undefined
+                        //FileDataSourceDefinitionId: fileDataSourceDefinitionsSelectorAPI != undefined ? fileDataSourceDefinitionsSelectorAPI.getSelectedIds() : undefined
                     };
                 };
 
