@@ -23,4 +23,5 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q			
 xcopy "C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Client\Modules\VR_GenericData\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Client\Modules\VR_Rules\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Client\Modules\Analytic\"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Client\Modules\ExcelConversion\"
 xcopy "C:\TFS\Retail\Code\Retail.BusinessEntity.Web\Retail_BusinessEntity" /S /E /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\ISP\%YYYYMMDD%\Client\Modules\Retail_BusinessEntity\"
