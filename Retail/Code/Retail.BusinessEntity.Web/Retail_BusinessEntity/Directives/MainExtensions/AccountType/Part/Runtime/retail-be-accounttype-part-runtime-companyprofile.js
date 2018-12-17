@@ -26,6 +26,9 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
 
         var countrySelectedPromiseDeferred;
 
+        var companySettingsDirectiveAPI;
+        var companySettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var mainPayload;
 
         function initializeController() {
@@ -46,10 +49,14 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                 cityDirectiveAPI = api;
                 cityReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModel.onCompanySettingsSelectorReady = function (api) {
+                companySettingsDirectiveAPI = api;
+                companySettingsReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.onCountrySelectionChanged = function () {
                 var selectedCountryId = countryDirectiveApi.getSelectedIds();
                 if (selectedCountryId != undefined) {
-                    var setLoader = function (value) { $scope.scopeModel.isLoadingCities = value };
+                    var setLoader = function (value) { $scope.scopeModel.isLoadingCities = value;};
                     var payload = {
                         countryId: selectedCountryId
                     };
@@ -158,6 +165,7 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                     }
                 }
                 promises.push(loadCountryCitySection());
+                promises.push(loadCompanySettingsDirective());
                 return UtilsService.waitMultiplePromises(promises);
 
             };
@@ -179,7 +187,6 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                             contacts[contact.contactType] = obj;
                     }
                 }
-
                 return {
                     $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartCompanyProfile,Retail.BusinessEntity.MainExtensions',
                     CountryId: countryDirectiveApi.getSelectedIds(),
@@ -193,7 +200,8 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                     MobileNumbers: $scope.scopeModel.mobileNumbers,
                     Contacts: contacts,
                     ArabicName: $scope.scopeModel.arabicName,
-                    Address: $scope.scopeModel.address
+                    Address: $scope.scopeModel.address,
+                    CompanySettingsId:companySettingsDirectiveAPI.getSelectedIds()
                 };
             };
 
@@ -219,8 +227,6 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                 VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, payload, loadCountryPromiseDeferred);
             });
 
-
-
             if (mainPayload != undefined && mainPayload.partSettings != undefined && mainPayload.partSettings.CountryId != undefined) {
                 var loadCitiesPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -239,6 +245,24 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
 
             return UtilsService.waitMultiplePromises(promises);
         }
+
+        function loadCompanySettingsDirective() {
+
+            var promises = [];
+            var companySettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            promises.push(companySettingsReadyPromiseDeferred.promise);
+            UtilsService.waitMultiplePromises(promises).then(function (response) {
+                var payload;
+                if (mainPayload != undefined && mainPayload.partSettings != undefined)
+                    payload = { selectedIds: mainPayload.partSettings.CompanySettingsId };
+
+                VRUIUtilsService.callDirectiveLoad(companySettingsDirectiveAPI, payload, companySettingsLoadPromiseDeferred);
+            });
+            return companySettingsLoadPromiseDeferred.promise;
+
+        }
+
 
     }
 }]);

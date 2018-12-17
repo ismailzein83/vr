@@ -32,6 +32,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         public string ArabicName { get; set; }
 
+        public Guid? CompanySettingsId { get; set; }
+
         public Dictionary<string, AccountCompanyContact> Contacts { get; set; }
 
         #region IAccountProfile Memebers
