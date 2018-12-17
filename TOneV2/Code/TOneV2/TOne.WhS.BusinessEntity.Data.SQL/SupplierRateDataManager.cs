@@ -156,7 +156,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySupplierId(long stateBackupId, string backupDatabase, int supplierId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierRate] WITH (TABLOCK)
-                                            SELECT  sr.[ID], sr.[PriceListID], sr.[ZoneID], sr.[CurrencyID], sr.[Rate], sr.[RateTypeID], sr.[Change], sr.[BED], sr.[EED], sr.[SourceID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierRate] sr
+                                            SELECT  sr.[ID], sr.[PriceListID], sr.[ZoneID], sr.[CurrencyID], sr.[Rate], sr.[RateTypeID], sr.[Change], sr.[BED], sr.[EED], sr.[SourceID],  {1} AS StateBackupID ,sr.[LastModifiedTime] FROM [TOneWhS_BE].[SupplierRate] sr
                                             WITH (NOLOCK)  Inner Join [TOneWhS_BE].[SupplierZone] sz WITH (NOLOCK)  on sz.ID = sr.ZoneID
                                             Where sz.SupplierID = {2}", backupDatabase, stateBackupId, supplierId);
         }
@@ -164,8 +164,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierRate] ([ID], [PriceListID], [ZoneID], [CurrencyID], [Rate], [BED], [EED], [SourceID], [Change], [RateTypeID])
-                                            SELECT [ID], [PriceListID], [ZoneID], [CurrencyID], [Rate], [BED], [EED], [SourceID], [Change], [RateTypeID] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierRate]
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierRate] ([ID], [PriceListID], [ZoneID], [CurrencyID], [Rate], [BED], [EED], [SourceID], [Change], [RateTypeID],[LastModifiedTime])
+                                            SELECT [ID], [PriceListID], [ZoneID], [CurrencyID], [Rate], [BED], [EED], [SourceID], [Change], [RateTypeID] ,[LastModifiedTime] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierRate]
                                             WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }
 

@@ -72,15 +72,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySupplierId(long stateBackupId, string backupDatabase, int supplierId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierZone] WITH (TABLOCK)
-                                            SELECT [ID] ,[CountryID], [Name], [SupplierID], [BED], [EED], [SourceID],  {1} AS StateBackupID FROM [TOneWhS_BE].[SupplierZone]
+                                            SELECT [ID] ,[CountryID], [Name], [SupplierID], [BED], [EED], [SourceID],  {1} AS StateBackupID,[LastModifiedTime] FROM [TOneWhS_BE].[SupplierZone]
                                             WITH (NOLOCK) Where SupplierID = {2}", backupDatabase, stateBackupId, supplierId);
         }
 
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierZone] ([ID], [CountryID], [Name], [SupplierID], [BED], [EED],[SourceID])
-                                            SELECT [ID], [CountryID], [Name], [SupplierID], [BED], [EED],[SourceID] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierZone]
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierZone] ([ID], [CountryID], [Name], [SupplierID], [BED], [EED],[SourceID],[LastModifiedTime])
+                                            SELECT [ID], [CountryID], [Name], [SupplierID], [BED], [EED],[SourceID],[LastModifiedTime] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierZone]
                                             WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }
 

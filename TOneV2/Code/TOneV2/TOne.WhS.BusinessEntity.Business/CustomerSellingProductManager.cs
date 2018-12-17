@@ -346,17 +346,14 @@ namespace TOne.WhS.BusinessEntity.Business
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             DateTime? _carrierAccountLastCheck;
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+
+            ICustomerSellingProductDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICustomerSellingProductDataManager>();
+            object _updateHandle;
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired()
-                  | Vanrise.Caching.CacheManagerFactory.GetCacheManager<CarrierAccountManager.CacheManager>().IsCacheExpired(ref _carrierAccountLastCheck);
+                return _dataManager.AreCustomerSellingProductsUpdated(ref _updateHandle)
+                       | Vanrise.Caching.CacheManagerFactory.GetCacheManager<CarrierAccountManager.CacheManager>().IsCacheExpired(ref _carrierAccountLastCheck);
             }
         }
 

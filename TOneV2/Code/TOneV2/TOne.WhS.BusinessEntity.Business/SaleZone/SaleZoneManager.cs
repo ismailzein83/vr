@@ -558,25 +558,20 @@ namespace TOne.WhS.BusinessEntity.Business
             IDManager.Instance.ReserveIDRange(GetSaleZoneType(), numberOfIDs, out startingId);
             return startingId;
         }
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return base.ShouldSetCacheExpired();
-            }
-        }
 
         #endregion
 
         #region Private Members
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISaleZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+            object _updateHandle;
 
+            protected override bool ShouldSetCacheExpired()
+            {
+                return _dataManager.AreZonesUpdated(ref _updateHandle);
+            }
+        }
         private ClientSaleZoneInfo ClientSaleZoneInfoMapper(SaleZoneInfo saleZoneInfo)
         {
             return new ClientSaleZoneInfo()

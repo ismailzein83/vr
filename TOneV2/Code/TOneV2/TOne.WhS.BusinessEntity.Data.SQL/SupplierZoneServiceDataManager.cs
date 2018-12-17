@@ -193,14 +193,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySupplierId(long stateBackupId, string backupDatabase, int supplierId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierZoneService] WITH (TABLOCK)
-                                            SELECT [ID], [ZoneID], [PriceListID], [SupplierID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED], [SourceID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierZoneService]
+                                            SELECT [ID], [ZoneID], [PriceListID], [SupplierID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED], [SourceID],  {1} AS StateBackupID,[LastModifiedTime]  FROM [TOneWhS_BE].[SupplierZoneService]
                                             WITH (NOLOCK) Where SupplierID = {2} and ZoneID is not null", backupDatabase, stateBackupId, supplierId);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierZoneService] ([ID], [ZoneID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED], [SourceID], [PriceListID], [SupplierID])
-                                            SELECT [ID], [ZoneID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED], [SourceID], [PriceListID],  [SupplierID] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierZoneService]
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierZoneService] ([ID], [ZoneID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED], [SourceID], [PriceListID], [SupplierID],[LastModifiedTime])
+                                            SELECT [ID], [ZoneID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED], [SourceID], [PriceListID],  [SupplierID] ,[LastModifiedTime] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierZoneService]
                                             WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }
 

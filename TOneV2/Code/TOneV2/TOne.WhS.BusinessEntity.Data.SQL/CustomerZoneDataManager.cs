@@ -97,7 +97,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                    ,[BED]
                                                    ,[EED]
                                                    ,[StateBackupID]
-                                                   ,[ProcessInstanceID])
+                                                   ,[ProcessInstanceID]
+                                                   ,LastModifiedTime)
                                            SELECT  CC.[ID]
                                                   ,CC.[CustomerID]
                                                   ,CC.[CountryID]
@@ -105,6 +106,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                   ,CC.[EED]
 	                                              ,{1} AS StateBackupID 
                                                   ,CC.[ProcessInstanceID]
+                                                  ,cc.[LastModifiedTime]
                                               FROM [TOneWhS_BE].[CustomerCountry] CC WITH (NOLOCK)
                                               JOIN [TOneWhS_BE].[CarrierAccount] CA ON CA.ID = CC.[CustomerID]  
                                               WHERE CA.SellingNumberPlanID ={2}", backupDatabase, stateBackupId,
@@ -124,7 +126,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                ,BED
                                                ,EED
                                                ,ProcessInstanceID
-                                               ,StateBackupID)
+                                               ,StateBackupID
+                                               ,LastModifiedTime)
                                             SELECT cc.ID
                                               ,cc.CustomerID
                                               ,cc.CountryID
@@ -132,6 +135,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                               ,cc.EED
                                               ,cc.ProcessInstanceID
                                               ,{1}
+                                              ,cc.LastModifiedTime
                                           FROM [TOneWhS_BE].[CustomerCountry] cc  WITH(NOLOCK) where CustomerID IN ( {2} )",
                 backupDatabase,
                 stateBackupId, customerIdsString);
@@ -163,13 +167,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                ,[CountryID]
                                                ,[BED]
                                                ,[EED]
-                                               ,[ProcessInstanceID])
+                                               ,[ProcessInstanceID]
+                                               ,[LastModifiedTime])
                                     SELECT [ID]
                                           ,[CustomerID]
                                           ,[CountryID]
                                           ,[BED]
                                           ,[EED]
                                           ,[ProcessInstanceID]
+                                          ,[LastModifiedTime]
                                       FROM {0}.[TOneWhS_BE_Bkup].[CustomerCountry] WITH (NOLOCK) Where StateBackupID = {1} ",
                 backupDatabase, stateBackupId);
         }

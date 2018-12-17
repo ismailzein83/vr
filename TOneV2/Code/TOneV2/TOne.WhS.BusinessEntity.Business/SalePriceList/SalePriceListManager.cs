@@ -1656,15 +1656,11 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            ISalePriceListDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListDataManager>();
+            object _updateHandle;
+
             public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
             {
                 get
@@ -1672,9 +1668,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     return Vanrise.Caching.CacheObjectSize.Large;
                 }
             }
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired();
+                return _dataManager.ArGetSalePriceListsUpdated(ref _updateHandle);
             }
         }
 

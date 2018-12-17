@@ -217,7 +217,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySellingNumberingPlanId(long stateBackupId, string backupDatabase, int sellingNumberPlanId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SaleRate] WITH (TABLOCK)
-                                            SELECT sr.[ID], sr.[PriceListID], sr.[ZoneID], sr.[CurrencyID], sr.[RateTypeID], sr.[Rate], sr.[BED], sr.[EED], sr.[SourceID], sr.[Change], {1} AS StateBackupID  FROM [TOneWhS_BE].[SaleRate]
+                                            SELECT sr.[ID], sr.[PriceListID], sr.[ZoneID], sr.[CurrencyID], sr.[RateTypeID], sr.[Rate], sr.[BED], sr.[EED], sr.[SourceID], sr.[Change], {1} AS StateBackupID,sr.[LastModifiedTime]  FROM [TOneWhS_BE].[SaleRate]
                                             sr WITH (NOLOCK) Inner Join [TOneWhS_BE].SaleZone sz WITH (NOLOCK) on sr.ZoneID = sz.ID
                                             Where sz.SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
         }
@@ -229,15 +229,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ownerIdsString = string.Join<int>(",", ownerIds);
 
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SaleRate] WITH (TABLOCK)
-                                           SELECT sr.[ID], sr.[PriceListID], sr.[ZoneID], sr.[CurrencyID], sr.[RateTypeID], sr.[Rate], sr.[BED], sr.[EED], sr.[SourceID], sr.[Change], {1} AS StateBackupID FROM [TOneWhS_BE].[SaleRate]
+                                           SELECT sr.[ID], sr.[PriceListID], sr.[ZoneID], sr.[CurrencyID], sr.[RateTypeID], sr.[Rate], sr.[BED], sr.[EED], sr.[SourceID], sr.[Change], {1} AS StateBackupID ,sr.[LastModifiedTime] FROM [TOneWhS_BE].[SaleRate]
                                            sr WITH (NOLOCK) Inner Join [TOneWhS_BE].[SalePriceList] pl WITH (NOLOCK) on sr.PriceListID = pl.ID
                                            Where pl.OwnerId IN ({2}) and pl.OwnerType = {3}", backupDatabase, stateBackupId, ownerIdsString, ownerType);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SaleRate] ([ID], [PriceListID], [ZoneID], [CurrencyID], [RateTypeID], [Rate], [BED], [EED], [SourceID], [Change])
-                                            SELECT [ID], [PriceListID], [ZoneID], [CurrencyID], [RateTypeID], [Rate], [BED], [EED], [SourceID], [Change] FROM [{0}].[TOneWhS_BE_Bkup].[SaleRate]
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SaleRate] ([ID], [PriceListID], [ZoneID], [CurrencyID], [RateTypeID], [Rate], [BED], [EED], [SourceID], [Change],[LastModifiedTime])
+                                            SELECT [ID], [PriceListID], [ZoneID], [CurrencyID], [RateTypeID], [Rate], [BED], [EED], [SourceID], [Change],[LastModifiedTime] FROM [{0}].[TOneWhS_BE_Bkup].[SaleRate]
                                             WITH (NOLOCK) Where StateBackupID = {1}  AND zoneid in ( select id from TOneWhS_BE.SaleZone)", backupDatabase, stateBackupId);
         }
 

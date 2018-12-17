@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Vanrise.Entities;
 using System.Activities;
 using Vanrise.BusinessProcess;
 using Vanrise.Common.Business;
-using Vanrise.Entities;
-using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
-
     public sealed class SyncImportedDataWithDB : CodeActivity
     {
         [RequiredArgument]
@@ -39,7 +34,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             int priceListId = this.PriceListId.Get(context);
             int supplierId = this.SupplierId.Get(context);
             int currencyId = this.CurrencyId.Get(context);
-            TOne.WhS.BusinessEntity.Entities.SupplierPricelistType  supplierPricelistType= this.SupplierPricelistType.Get(context);
+            TOne.WhS.BusinessEntity.Entities.SupplierPricelistType supplierPricelistType = this.SupplierPricelistType.Get(context);
             long fileId = this.FileId.Get(context);
             long stateBackupId = this.StateBackupId.Get(context);
             DateTime effectiveOn = this.EffectiveOn.Get(context);
@@ -48,20 +43,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             VRFileManager fileManager = new VRFileManager();
             var fileSettings = new VRFileSettings { ExtendedSettings = new TOne.WhS.BusinessEntity.Business.PriceListFileSettings { PriceListId = priceListId } };
-            
+
             if (!fileManager.SetFileUsedAndUpdateSettings(fileId, fileSettings))
                 throw new VRBusinessException("Pricelist files have been removed, Process must be restarted.");
 
             TOne.WhS.SupplierPriceList.Business.SupplierPriceListManager manager = new Business.SupplierPriceListManager();
             manager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, stateBackupId, supplierId, currencyId, fileId, effectiveOn, userId, supplierPricelistType);
-
-
-            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierRateCacheManager>().SetCacheExpired();
-            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierZoneServiceCacheManager>().SetCacheExpired();
-            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>().SetCacheExpired();
-            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierPriceListManager.CacheManager>().SetCacheExpired();
-            Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierZoneManager.CacheManager>().SetCacheExpired();
-
         }
     }
 }

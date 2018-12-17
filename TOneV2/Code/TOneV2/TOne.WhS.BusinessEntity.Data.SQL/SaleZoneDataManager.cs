@@ -105,7 +105,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                        , [EED]
                                                        , [SourceID]
                                                        , [StateBackupID]
-                                                       , [ProcessInstanceID])
+                                                       , [ProcessInstanceID]
+                                                       , [LastModifiedTime])
                                                  SELECT [ID]
                                                         , [SellingNumberPlanID]
                                                         , [CountryID]
@@ -114,7 +115,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                         , [EED]
                                                         , [SourceID]
                                                         , {1} AS StateBackupID
-                                                        ,[ProcessInstanceID]
+                                                        , [ProcessInstanceID]
+                                                        , [LastModifiedTime]
                                                 FROM [TOneWhS_BE].[SaleZone]
                                                 Where SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
         }
@@ -138,6 +140,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                 , [EED]
                                                 , [SourceID] 
                                                 , [ProcessInstanceID]
+                                                , [LastModifiedTime]
                                         FROM [{0}].[TOneWhS_BE_Bkup].[SaleZone]
                                         WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }

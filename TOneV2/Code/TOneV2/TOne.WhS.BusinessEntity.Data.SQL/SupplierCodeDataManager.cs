@@ -37,18 +37,18 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.[sp_SupplierCode_GetParentsBySupplier]", SupplierCodeMapper, supplierId, codeNumber);
         }
 
-        
+
         public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetDistinctCodePrefixes", CodePrefixMapper, prefixLength, effectiveOn, isFuture);
         }
-        public IEnumerable<CodePrefixInfo> GetSpecificCodeByPrefixes(int prefixLength, IEnumerable<string> codePrefixes, DateTime? effectiveOn, bool isFuture) 
+        public IEnumerable<CodePrefixInfo> GetSpecificCodeByPrefixes(int prefixLength, IEnumerable<string> codePrefixes, DateTime? effectiveOn, bool isFuture)
         {
             string _codePrefixes = null;
             if (codePrefixes != null && codePrefixes.Count() > 0)
                 _codePrefixes = string.Join<string>(",", codePrefixes);
 
-            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetSpecificCodePrefixes", CodePrefixMapper, prefixLength, _codePrefixes, effectiveOn, isFuture);    
+            return GetItemsSP("TOneWhS_BE.sp_SupplierCode_GetSpecificCodePrefixes", CodePrefixMapper, prefixLength, _codePrefixes, effectiveOn, isFuture);
         }
 
 
@@ -105,7 +105,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             ExecuteReaderSPCmd("[TOneWhS_BE].[sp_SupplierCode_GetActiveCodesBySuppliers]",
                 (reader) =>
                 {
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         if (shouldStop != null && shouldStop())
                             break;
@@ -130,15 +130,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySupplierId(long stateBackupId, string backupDatabase, int supplierId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierCode] WITH (TABLOCK)
-                                            SELECT sc.[ID], sc.[Code], sc.[ZoneID], sc.[CodeGroupID], sc.[BED], sc.[EED], sc.[SourceID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierCode] sc
+                                            SELECT sc.[ID], sc.[Code], sc.[ZoneID], sc.[CodeGroupID], sc.[BED], sc.[EED], sc.[SourceID],  {1} AS StateBackupID,sc.[LastModifiedTime]  FROM [TOneWhS_BE].[SupplierCode] sc
                                             WITH (NOLOCK)  Inner Join [TOneWhS_BE].[SupplierZone] sz  WITH (NOLOCK)  on sz.ID = sc.ZoneID
                                             Where sz.SupplierID = {2}", backupDatabase, stateBackupId, supplierId);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierCode] ([ID], [Code], [ZoneID], [CodeGroupID], [BED], [EED], [SourceID])
-                                            SELECT [ID], [Code], [ZoneID], [CodeGroupID], [BED], [EED], [SourceID] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierCode]
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierCode] ([ID], [Code], [ZoneID], [CodeGroupID], [BED], [EED], [SourceID],[LastModifiedTime])
+                                            SELECT [ID], [Code], [ZoneID], [CodeGroupID], [BED], [EED], [SourceID],[LastModifiedTime] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierCode]
                                             WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }
 
@@ -149,6 +149,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
-    
+
     }
 }

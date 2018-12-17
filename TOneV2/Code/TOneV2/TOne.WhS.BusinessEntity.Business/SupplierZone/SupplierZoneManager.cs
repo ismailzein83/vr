@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.APIEntities;
-using TOne.WhS.BusinessEntity.Data;
-using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Caching;
-using Vanrise.Caching.Runtime;
 using Vanrise.Common;
-using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Common.Business;
+using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Data;
 using Vanrise.GenericData.Entities;
+using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.APIEntities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -145,8 +141,8 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public string GetSupplierZoneNameBySupplierId(int supplierId, string codeNumber)
         {
-           var supplierZone = GetSupplierZoneByCode(supplierId, codeNumber);
-            supplierZone.ThrowIfNull("supplierZone",supplierZone);
+            var supplierZone = GetSupplierZoneByCode(supplierId, codeNumber);
+            supplierZone.ThrowIfNull("supplierZone", supplierZone);
             return supplierZone.Name;
         }
 
@@ -201,7 +197,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<long> GetSupplierZoneIdsEffectiveByZoneName(String ZoneName, DateTime BED, int supplierId)
         {
             var allSupplierZones = GetCachedSupplierZones();
-           
+
             return allSupplierZones.Values.Where(x => ((supplierId == x.SupplierId) && ZoneName.Equals(x.Name) && (!x.EED.HasValue || x.EED > BED))).Select(it => it.SupplierZoneId);
         }
 
@@ -242,7 +238,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public SupplierZone GetEffectiveSupplierZoneByZoneIds(IEnumerable<long> zoneIds, DateTime effectiveDate)
         {
-            if(zoneIds != null)
+            if (zoneIds != null)
             {
                 foreach (var zoneId in zoneIds)
                 {
@@ -295,15 +291,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            ISupplierZoneDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneDataManager>();
+            object _updateHandle;
+
             public override T GetOrCreateObject<T>(object cacheName, Func<T> createObject)
             {
                 return GetOrCreateObject(cacheName, SupplierZonesCacheExpirationChecker.Instance, createObject);
@@ -319,7 +311,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired();
+                return _dataManager.AreSupplierZonesUpdated(ref _updateHandle);
             }
         }
 

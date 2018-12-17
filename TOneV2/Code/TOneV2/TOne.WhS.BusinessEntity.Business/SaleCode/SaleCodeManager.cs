@@ -33,14 +33,14 @@ namespace TOne.WhS.BusinessEntity.Business
         public List<long> GetSaleZonesIdsByCode(string code)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            var allcodes =  dataManager.GetSaleCodesByCode(code);
+            var allcodes = dataManager.GetSaleCodesByCode(code);
             return allcodes.Select(x => x.ZoneId).Distinct().ToList();
         }
 
         public IEnumerable<SaleCode> GetParentsByPlan(int sellingNumberPlanId, string codeNumber)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
-            return dataManager.GetParentsByPlan(sellingNumberPlanId,codeNumber);
+            return dataManager.GetParentsByPlan(sellingNumberPlanId, codeNumber);
         }
 
         public string GetCode(SaleCode saleCode)
@@ -125,17 +125,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            ISaleCodeDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
+            object _updateHandle;
 
-            protected override bool ShouldSetCacheExpired(object parameter)
+            protected override bool ShouldSetCacheExpired()
             {
-                return base.ShouldSetCacheExpired();
+                return _dataManager.AreZonesUpdated(ref _updateHandle);
             }
         }
 

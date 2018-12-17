@@ -180,7 +180,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                        ,[EED]
                                                        ,[SourceID]
                                                        ,[StateBackupID]
-                                                       ,[ProcessInstanceID])
+                                                       ,[ProcessInstanceID]
+                                                       ,[LastModifiedTime])
                                                 SELECT
                                                           sc.[ID]
                                                         , sc.[Code]
@@ -191,6 +192,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                         , sc.[SourceID]
                                                         , {1} AS StateBackupID 
                                                         , sc.[ProcessInstanceID] 
+                                                        , sc.[LastModifiedTime]
                                             FROM [TOneWhS_BE].[SaleCode]
                                             sc WITH (NOLOCK) Inner Join [TOneWhS_BE].SaleZone sz WITH (NOLOCK) on sc.ZoneID = sz.ID
                                             Where sz.SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
@@ -206,7 +208,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                             , [BED]
                                             , [EED]
                                             , [SourceID]
-                                            , [ProcessInstanceID] )
+                                            , [ProcessInstanceID]
+                                            , [LastModifiedTime])
                                                                                            
                                         SELECT 
                                               [ID]
@@ -217,6 +220,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                             , [EED]
                                             , [SourceID]  
                                             , [ProcessInstanceID]
+                                            , [LastModifiedTime]
                                         FROM [{0}].[TOneWhS_BE_Bkup].[SaleCode]
                                         WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }

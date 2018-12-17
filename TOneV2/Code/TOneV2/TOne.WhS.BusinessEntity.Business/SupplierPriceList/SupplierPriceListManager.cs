@@ -1,14 +1,12 @@
 ﻿using System;
+using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.Common.Business;
+using Vanrise.Security.Business;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Common;
-using Vanrise.Common.Business;
-using Vanrise.Entities;
-using Vanrise.Security.Business;
+
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierPriceListManager
@@ -29,7 +27,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 (input.Query.SupplierIds == null || input.Query.SupplierIds.Contains(item.SupplierId))
                 && (input.Query.FromDate == null || item.EffectiveOn >= input.Query.FromDate)
                 && (!input.Query.ToDate.HasValue || item.EffectiveOn <= input.Query.ToDate)
-                && (input.Query.UserIds==null || input.Query.UserIds.Contains(item.UserId));
+                && (input.Query.UserIds == null || input.Query.UserIds.Contains(item.UserId));
 
             ResultProcessingHandler<SupplierPriceListDetail> handler = new ResultProcessingHandler<SupplierPriceListDetail>()
             {
@@ -75,7 +73,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Currency" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
-                
+
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
                 {
@@ -96,15 +94,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            ISupplierPriceListDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
+            object _updateHandle;
+
             public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
             {
                 get
@@ -115,7 +109,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired();
+                return _dataManager.ArGetPriceListsUpdated(ref _updateHandle);
             }
         }
         public Dictionary<int, SupplierPriceList> GetCachedPriceLists()

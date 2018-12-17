@@ -354,17 +354,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private class CacheManager : BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            IZoneServiceConfigDataManager dataManager = BEDataManagerFactory.GetDataManager<IZoneServiceConfigDataManager>();
+
+            object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired();
+                return dataManager.AreZoneServiceConfigsUpdated(ref _updateHandle);
             }
         }
 

@@ -6,13 +6,9 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierRateCacheManager : Vanrise.Caching.BaseCacheManager
     {
-        protected override bool UseCentralizedCacheRefresher
-        {
-            get
-            {
-                return true;
-            }
-        }
+        ISupplierRateDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+        object _updateHandle;
+
         public override Vanrise.Caching.CacheObjectSize ApproximateObjectSize
         {
             get
@@ -29,19 +25,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
         protected override bool ShouldSetCacheExpired(object parameter)
         {
-            return base.ShouldSetCacheExpired();
+            return _dataManager.AreSupplierRatesUpdated(ref _updateHandle);
         }
-        
+
         public SupplierRate CacheAndGetRate(SupplierRate rate)
         {
             return rate;
-            //Dictionary<long, SupplierRate> cachedRatesById = this.GetOrCreateObject("cachedRatesById", () => new Dictionary<long, SupplierRate>());
-            //SupplierRate matchRate;
-            //lock (cachedRatesById)
-            //{
-            //    matchRate = cachedRatesById.GetOrCreateItem(rate.SupplierRateId, () => rate);
-            //}
-            //return matchRate;
         }
     }
 }
