@@ -62,6 +62,8 @@
     <Compile Include="VRActionAuditDataManager.cs" />
     <Compile Include="VRApplicationVisibilityDataManager.cs" />
     <Compile Include="VRConnectionDataManager.cs" />
+    <Compile Include="VRDynamicAPIDataManager.cs" />
+    <Compile Include="VRDynamicAPIModuleDataManager.cs" />
     <Compile Include="VRExclusiveSessionDataManager.cs" />
     <Compile Include="VRMailMessageTemplateDataManager.cs" />
     <Compile Include="VRMailMessageTypeDataManager.cs" />
