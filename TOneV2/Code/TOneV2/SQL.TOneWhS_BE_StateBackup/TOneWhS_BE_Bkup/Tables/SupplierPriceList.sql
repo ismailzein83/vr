@@ -10,8 +10,11 @@
     [ProcessInstanceID] BIGINT       NULL,
     [SPLStateBackupID]  BIGINT       NULL,
     [UserID]            INT          NULL,
-    [StateBackupID]     BIGINT       NULL
+    [StateBackupID]     BIGINT       NULL,
+    [LastModifiedTime]  DATETIME     NULL
 );
+
+
 
 
 

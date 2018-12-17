@@ -6,8 +6,11 @@
     [RoutingProductID] INT      NOT NULL,
     [BED]              DATETIME NOT NULL,
     [EED]              DATETIME NULL,
-    [StateBackupID]    BIGINT   NOT NULL
+    [StateBackupID]    BIGINT   NOT NULL,
+    [LastModifiedTime] DATETIME NULL
 );
+
+
 
 
 

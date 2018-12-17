@@ -7,8 +7,11 @@
     [EED]               DATETIME     NULL,
     [SourceID]          VARCHAR (50) NULL,
     [StateBackupID]     BIGINT       NOT NULL,
-    [ProcessInstanceID] BIGINT       NULL
+    [ProcessInstanceID] BIGINT       NULL,
+    [LastModifiedTime]  DATETIME     NULL
 );
+
+
 
 
 

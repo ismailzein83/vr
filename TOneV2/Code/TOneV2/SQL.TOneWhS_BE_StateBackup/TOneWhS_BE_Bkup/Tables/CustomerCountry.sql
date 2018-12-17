@@ -5,8 +5,11 @@
     [BED]               DATETIME NOT NULL,
     [EED]               DATETIME NULL,
     [StateBackupID]     BIGINT   NOT NULL,
-    [ProcessInstanceID] BIGINT   NULL
+    [ProcessInstanceID] BIGINT   NULL,
+    [LastModifiedTime]  DATETIME NULL
 );
+
+
 
 
 

@@ -14,8 +14,11 @@
     [UserID]                 INT            NULL,
     [Description]            NVARCHAR (MAX) NULL,
     [PricelistStateBackupID] BIGINT         NULL,
-    [PricelistSource]        TINYINT        NULL
+    [PricelistSource]        TINYINT        NULL,
+    [LastModifiedTime]       DATETIME       NULL
 );
+
+
 
 
 
