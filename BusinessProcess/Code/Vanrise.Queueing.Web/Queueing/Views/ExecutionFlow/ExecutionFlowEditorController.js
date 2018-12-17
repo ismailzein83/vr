@@ -74,7 +74,7 @@
                
                 loadAllControls().finally(function () {
                     executionFlowDefinitionSelectorAPI.setDisabled(false);
-                })
+                });
                 
             }
         }
@@ -147,7 +147,7 @@
 
             return VR_Queueing_ExecutionFlowAPIService.AddExecutionFlow(executionFlowObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('Execution Flow', response, 'Email')) {
+                if (VRNotificationService.notifyOnItemAdded('Execution Flow', response, 'Name')) {
                     if ($scope.onExecutionFlowAdded != undefined)
                         $scope.onExecutionFlowAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
@@ -166,7 +166,7 @@
             var executionFlowObject = buildExecutionFlowObjFromScope();
 
             return VR_Queueing_ExecutionFlowAPIService.UpdateExecutionFlow(executionFlowObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated('Execution Flow', response, 'Email')) {
+                if (VRNotificationService.notifyOnItemUpdated('Execution Flow', response, 'Name')) {
                     if ($scope.onExecutionFlowUpdated != undefined)
                         $scope.onExecutionFlowUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
