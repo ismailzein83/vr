@@ -100,3 +100,22 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 end
 
+--[logging].[LoggableEntity]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[UniqueName],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('FB8DB7CB-A3A3-45F8-BD1A-229B69B8B2C0','VR_Queueing_QueueExecutionFlow','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Queueing_QueueExecutionFlow_ViewHistoryItem"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[UniqueName],[Settings]))
+merge	[logging].[LoggableEntity] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[UniqueName],[Settings])
+	values(s.[ID],s.[UniqueName],s.[Settings]);
+
