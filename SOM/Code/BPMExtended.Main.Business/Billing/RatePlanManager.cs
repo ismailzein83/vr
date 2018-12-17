@@ -124,6 +124,15 @@ namespace BPMExtended.Main.Business
             return services;
         }
 
+        public List<ServiceDetail> GetAdditionServices(string ratePlanId)
+        {
+            //TODO :  Get the addition services
+
+            List<ServiceDetail> allOptionalServices = this.GetOptionalServices(ratePlanId);
+
+            return allOptionalServices;
+
+        }
 
         public bool CheckServicesConsistency(List<ServiceParameter> services)
         {
@@ -131,8 +140,6 @@ namespace BPMExtended.Main.Business
 
             return true;
         }
-
- 
 
         public List<ServiceDetail> checkIfSwitchSupportedServices(string services, string switchId)
         {

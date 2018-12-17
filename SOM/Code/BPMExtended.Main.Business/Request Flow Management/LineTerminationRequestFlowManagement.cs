@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terrasoft.Core;
-using Terrasoft.Core.Configuration;
-using Terrasoft.Core.DB;
-using Terrasoft.Core.Entities;
 using System.Web;
+using Terrasoft.Core;
+using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
 {
-    public class ADSLLineTerminationFlowManagement
+    public class LineTerminationRequestFlowManagement
     {
         public UserConnection BPM_UserConnection
         {
@@ -20,31 +18,34 @@ namespace BPMExtended.Main.Business
                 return (UserConnection)HttpContext.Current.Session["UserConnection"];
             }
         }
-        string welcomeStep = "B8721EA5-0A7E-43BC-8E8D-8C186537FD73";
-        string printStep = "0705ADD3-50F2-42B4-8247-4B67E85E166C";
-        string ReasonStep = "DA251EA7-47C1-42AD-B4EC-A131EDD9587A";
-        string PDNStep = "DFD53946-609E-4A86-AD49-3C41BF076D20";
-        string mDFStep = "0EB0E1DB-FBC1-40D1-9B90-11C52DECE61A";
-        string completedStep = "639E4A4C-1752-42E3-83CD-85674B6E9903";
 
+        const string welcomeStep = "0BAC1212-9D90-4CAF-95C4-BE6CAFF6C0B1";
+        const string printStep = "E98EA057-8D8F-4BD1-B14F-9DAECBAE9FB4";
+        const string reasonStep = "309A5A35-395E-43FB-983D-22BAE925DAFC";
+        const string generateInvoiceStep = "7341F829-E511-4838-9324-7658122FD302";
+        const string validatePaymentStep = "A56EE0A5-A9D0-404A-B264-2517D0F3E5F7";
+        const string mdfTeamStep = "205FE9FF-FD14-4DB6-95A8-DA7BBE8D5D81";
+        const string cabinetTeamStep = "17A7EEF5-A226-4E08-8165-6986C755DEE1";
+        const string dpTeamStep = "8E6A058E-C805-4B77-AA95-D2F503E61BC7";
+        const string completedStep = "CEBCB883-84AA-4183-9938-817E711EB2BF";
         public string GetNextStep(string id, string currentStepId)
         {
+
             string nextStepId = "";
-            switch (currentStepId.ToLower())
+            switch (currentStepId)
             {
-                ///welcome step
-                case "b8721ea5-0a7e-43bc-8e8d-8c186537fd73": nextStepId = printStep; break;
-                ///print step
-                case "0705add3-50f2-42b4-8247-4b67e85e166c": nextStepId = ReasonStep; break;
-                ///reason step
-                case "da251ea7-47c1-42ad-b4ec-a131edd9587a": nextStepId = ManualSwitch(id) ? PDNStep : mDFStep; break;
-                /// PDN Step
-                case "dfd53946-609e-4a86-ad49-3c41bf076d20": nextStepId = mDFStep; break;
-                /// MDF Step
-                case "0eb0e1db-fbc1-40d1-9b90-11c52dece61a": nextStepId = completedStep; break;
+                case welcomeStep: nextStepId = printStep; break;
+                case printStep: nextStepId = reasonStep; break;
+                case reasonStep: nextStepId = generateInvoiceStep; break;
+                case generateInvoiceStep: nextStepId = validatePaymentStep; break;
+                case validatePaymentStep: nextStepId = mdfTeamStep; break;
+                case mdfTeamStep: nextStepId = cabinetTeamStep; break;
+                case cabinetTeamStep: nextStepId = dpTeamStep; break;
+                case dpTeamStep: nextStepId = completedStep; break;
             }
             return nextStepId;
         }
+
         public bool ManualSwitch(string id)
         {
             bool ismanualswitch = false;
@@ -53,7 +54,7 @@ namespace BPMExtended.Main.Business
                 //get request from bpm
                 Guid idd = new Guid(id.ToUpper());
                 // Creation of query instance with "City" root schema. 
-                var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLLineTermination");
+                var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StManagePabx");
                 esq.AddColumn("Id");
                 esq.AddColumn("StContractId");
                 // Creation of the first filter instance.

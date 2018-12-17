@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BPMExtended.Main.Entities
 {
-    public class FriendAndFamily
+    public class FriendAndFamilyDetail
     {
 
         public string Id { get; set; }

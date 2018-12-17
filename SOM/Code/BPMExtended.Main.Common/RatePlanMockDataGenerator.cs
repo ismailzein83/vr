@@ -1062,82 +1062,82 @@ namespace BPMExtended.Main.Common
 
         #region Friend And Family
 
-        public static List<FriendAndFamily> GetFriendAndFamilyNumbers(string contractId)
+        public static List<FriendAndFamilyDetail> GetFriendAndFamilyNumbers(string contractId)
         {
             return GetAllFriendAndFamilyNumbers().FindAll(x => x.ContractId.ToLower() == contractId.ToLower());
         }
 
-        private static List<FriendAndFamily> GetAllFriendAndFamilyNumbers()
+        private static List<FriendAndFamilyDetail> GetAllFriendAndFamilyNumbers()
         {
-            return new List<FriendAndFamily>
+            return new List<FriendAndFamilyDetail>
             {
-                 new FriendAndFamily
+                 new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_1,
                      ContractId = CONTRACT_CUST1_TL1,
                      PhoneNumber = "9990"                    
                  },
-                  new FriendAndFamily
+                  new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_2,
                      ContractId = CONTRACT_CUST1_TL1,
                      PhoneNumber = "9990"
                  },
-                   new FriendAndFamily
+                   new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_3,
                      ContractId = CONTRACT_CUST1_TL2,
                      PhoneNumber = "9990"
                  },
-                    new FriendAndFamily
+                    new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_4,
                      ContractId = CONTRACT_CUST1_TL2,
                      PhoneNumber = "9990"
                  },
-                     new FriendAndFamily
+                     new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_5,
                      ContractId = CONTRACT_CUST1_TL3,
                      PhoneNumber = "9990"
                  },
-                    new FriendAndFamily
+                    new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_6,
                      ContractId = CONTRACT_CUST1_TL3,
                      PhoneNumber = "9990"
                  },
-                     new FriendAndFamily
+                     new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_7,
                      ContractId = CONTRACT_CUST2_TL1,
                      PhoneNumber = "9990"
                  },
-                  new FriendAndFamily
+                  new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_8,
                      ContractId = CONTRACT_CUST2_TL1,
                      PhoneNumber = "9990"
                  },
-                   new FriendAndFamily
+                   new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_9,
                      ContractId = CONTRACT_CUST2_TL2,
                      PhoneNumber = "9990"
                  },
-                    new FriendAndFamily
+                    new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_10,
                      ContractId = CONTRACT_CUST2_TL2,
                      PhoneNumber = "9990"
                  },
-                     new FriendAndFamily
+                     new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_11,
                      ContractId = CONTRACT_CUST3_TL1,
                      PhoneNumber = "9990"
                  },
-                    new FriendAndFamily
+                    new FriendAndFamilyDetail
                  {
                      Id = FAF_Id_12,
                      ContractId = CONTRACT_CUST3_TL1,

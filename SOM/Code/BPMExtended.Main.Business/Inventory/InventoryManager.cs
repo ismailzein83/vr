@@ -210,7 +210,50 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        public TechnicalReservationDetail GetTechnicalReservationByLinePathId(string linePathId)
+        {
 
+            return new TechnicalReservationDetail
+            {
+                Switch = "s1",
+                SwitchId = "591.0",
+
+                MDFPort = "mdf p1",
+                MDF = "mdf1",
+                MDFPortId = "mdf port id1",
+                MDFId = "mdf id1",
+
+                Cabinet = "c4469",
+                CabinetId = "ci65",
+                PrimaryPort = "pp65",
+                PrimaryPortId = "we",
+                SecondaryPort = "89",
+                SecondaryPortId = "6891",
+
+                DP = "65",
+                DPPortId = "68767",
+                DPPort = "43",
+                DPId = "dp id1",
+
+                DSLAMPortId = "900",
+
+                CanReserve = "true",
+
+            };
+        }
+
+
+        public bool changeCabinetPort(string portId)
+        {
+            //TODO: change cabinet port
+            return true;
+        }
+
+        public bool changeDPPort(string portId)
+        {
+            //TODO: change DP port
+            return true;
+        }
 
         public DeportedNumberReservation GetDeportedNumberReservation(string phoneNumber)
         {

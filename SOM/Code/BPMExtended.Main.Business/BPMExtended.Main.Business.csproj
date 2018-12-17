@@ -98,9 +98,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Billing\RatePlanManager.cs" />
     <Compile Include="Provisioning\ProvisioningManager.cs" />
+    <Compile Include="Request Flow Management\AdditionServicesFlowManagement.cs" />
+    <Compile Include="Request Flow Management\ADSLAlterSpeedFlowManagement.cs" />
+    <Compile Include="Request Flow Management\ADSLChangePasswordFlowManagement.cs" />
     <Compile Include="Request Flow Management\ADSLForISPFlowManagement.cs" />
     <Compile Include="Request Flow Management\ADSLLineMovingFlowManagement.cs" />
     <Compile Include="Request Flow Management\ADSLLineTerminationFlowManagement.cs" />
+    <Compile Include="Request Flow Management\ADSLPrintConfigurationFlowManagement.cs" />
+    <Compile Include="Request Flow Management\CreatePabxFlowManagement.cs" />
+    <Compile Include="Request Flow Management\FriendAndFamilyFlowManagement.cs" />
+    <Compile Include="Request Flow Management\GSHDSLTerminationFlowManagement.cs" />
+    <Compile Include="Request Flow Management\LineTerminationRequestFlowManagement.cs" />
+    <Compile Include="Request Flow Management\ManagePabxFlowManagement.cs" />
+    <Compile Include="Request Flow Management\TelephonyContractTakeOverFlowManagement.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BPMExtended.Main.Common\BPMExtended.Main.Common.csproj">

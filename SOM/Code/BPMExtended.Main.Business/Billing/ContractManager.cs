@@ -230,7 +230,7 @@ namespace BPMExtended.Main.Business
             return true;
         }
 
-        public List<FriendAndFamily> GetFriendAndFamilyNumbers(string contractId)
+        public List<FriendAndFamilyDetail> GetFriendAndFamilyNumbers(string contractId)
         {
             return RatePlanMockDataGenerator.GetFriendAndFamilyNumbers(contractId);
         }
@@ -354,6 +354,12 @@ namespace BPMExtended.Main.Business
         }
 
         public bool ActivateGSHDSLTermination(string contractId)
+        {
+            //TODO: Terminate GSHDSL contract
+            return true;
+        }
+
+        public bool ActivateFAF(string contractId , string Percentage , string data)
         {
             //TODO: Terminate GSHDSL contract
             return true;
@@ -512,7 +518,14 @@ namespace BPMExtended.Main.Business
         }
 
 
-     
+        public bool ActivateAdditionServices(string contractId, string services)
+        {
+            //TODO: Activate Addition Services
+            return true;
+        }
+
+
+
 
         #region mappers
 

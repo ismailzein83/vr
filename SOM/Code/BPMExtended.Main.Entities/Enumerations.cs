@@ -65,5 +65,11 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         DeportedNumber = 17,
 
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        FriendAndFamily = 18,
+
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        ServiceAddition = 19,
+
     }
 }
