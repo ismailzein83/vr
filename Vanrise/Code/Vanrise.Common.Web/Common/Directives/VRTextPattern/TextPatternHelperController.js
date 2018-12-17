@@ -2,9 +2,9 @@
 
 //    'use strict';
 
-//    patternHelperController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService'];
+//    textPatternHelperController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService'];
 
-//    function patternHelperController($scope, VRNavigationService, UtilsService, VRNotificationService) {
+//    function textPatternHelperController($scope, VRNavigationService, UtilsService, VRNotificationService) {
 
 //        var context;
 
@@ -60,5 +60,5 @@
 //        }
 //    }
 
-//    appControllers.controller('VR_Common_PatternHelperController', patternHelperController);
+//    appControllers.controller('VR_Common_TextPatternHelperController', textPatternHelperController);
 //})(appControllers);
