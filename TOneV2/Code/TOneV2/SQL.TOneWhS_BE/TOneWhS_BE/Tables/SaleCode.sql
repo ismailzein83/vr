@@ -8,10 +8,13 @@
     [timestamp]         ROWVERSION   NULL,
     [SourceID]          VARCHAR (50) NULL,
     [ProcessInstanceID] BIGINT       NULL,
+    [LastModifiedTime]  DATETIME     NULL,
     CONSTRAINT [FK_SaleCode_CodeGroup] FOREIGN KEY ([CodeGroupID]) REFERENCES [TOneWhS_BE].[CodeGroup] ([ID]),
     CONSTRAINT [FK_SaleCode_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SaleZone] ([ID]),
     CONSTRAINT [IX_SaleCode_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 
