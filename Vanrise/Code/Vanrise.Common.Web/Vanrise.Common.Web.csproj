@@ -154,8 +154,8 @@
     <Content Include="Common\Directives\VRNamespace\vr-common-namespace-settings-grid.js" />
     <Content Include="Common\Directives\VRNamespace\vr-common-namespaceclass-selector.js" />
     <Content Include="Common\Directives\VRNamespace\vr-common-namespaceclassmethod-selector.js" />
-    <Content Include="Common\Directives\VRTextPattern\PatternHelperController.js" />
-    <Content Include="Common\Directives\VRTextPattern\Templates\PatternHelperTemplate.html" />
+    <Content Include="Common\Directives\VRTextPattern\TextPatternHelperController.js" />
+    <Content Include="Common\Directives\VRTextPattern\Templates\TextPatternHelperTemplate.html" />
     <Content Include="Common\Directives\VRTextPattern\vr-common-textpatternbuilder.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\SpecificDaysDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
