@@ -9,7 +9,7 @@ BEGIN
   	IF NOT EXISTS(Select Title from [bp].[BPDefinition] WITH(NOLOCK) where Title = @Title And ID != @BPDefinitionId)
 	BEGIN
 		Update [bp].[BPDefinition] 
-		set	Title = @Title,	VRWorkflowId = @VRWorkflowId, Config = @Config		
+		set	Title = @Title,	VRWorkflowId = @VRWorkflowId, Config = @Config, LastModifiedTime = getDate()
 		where ID = @BPDefinitionId
 	END
 END
