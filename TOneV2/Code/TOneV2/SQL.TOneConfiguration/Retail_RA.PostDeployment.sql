@@ -151,7 +151,7 @@ as (select * from (values
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[DataRecordTypeID],[DataStoreID],[Settings],[State]))
 merge	[genericdata].[DataRecordStorage] as t
-using	cte_data as sAnalyticReport
+using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
@@ -181,7 +181,7 @@ when matched then
 	[Name] = s.[Name],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[AnalyticReportName],s.[Settings]);
+	values(s.[ID],s.[Name],s.[Settings]);
 
 
 
