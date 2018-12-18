@@ -107,6 +107,7 @@
             UtilsService.waitMultiplePromises(promises).then(function (response) {
                 var remoteGroupPayload = {
                     connectionId: connectionId,
+                    filter: {OnlyStatic:true},
                     selectedIds: groupIds
                 };
                 VRUIUtilsService.callDirectiveLoad(remoteGroupSelectorAPI, remoteGroupPayload, remoteGroupSelectorLoadPromiseDeferred);
