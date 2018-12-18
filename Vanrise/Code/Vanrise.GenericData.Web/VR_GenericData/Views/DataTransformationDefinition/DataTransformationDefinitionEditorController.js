@@ -416,7 +416,7 @@
                     $scope.scopeModal.selectedStep.isSelected = false;
                     stepItem.isSelected = true;
                     $scope.scopeModal.selectedStep = undefined;
-                    setTimeout(function () { $scope.scopeModal.selectedStep = stepItem; UtilsService.safeApply($scope); };)
+                    setTimeout(function () { $scope.scopeModal.selectedStep = stepItem; UtilsService.safeApply($scope); });
                 }
 
             }
