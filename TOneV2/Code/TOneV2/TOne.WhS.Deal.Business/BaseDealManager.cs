@@ -78,7 +78,7 @@ namespace TOne.WhS.Deal.Business
 
         public bool DeleteDeal(int dealId)
         {
-            
+
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
             if (dataManager.Delete(dealId))
             {
@@ -226,17 +226,12 @@ namespace TOne.WhS.Deal.Business
         #region Private Classes
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            IDealDataManager _dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
+            object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired();
+                return _dataManager.AreDealsUpdated(ref _updateHandle);
             }
         }
 
