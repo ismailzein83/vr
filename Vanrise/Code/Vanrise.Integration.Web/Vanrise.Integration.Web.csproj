@@ -110,11 +110,9 @@
     <Content Include="Integration\Constants\BatchStateEnum.js" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\Templates\SizeBasedFileDelayCheckerTemplate.html" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\Templates\TimeBasedFileDelayCheckerTemplate.html" />
-    <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileMissingChecker\Templates\DateTimeFileMissingCheckerTemplate.html" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileMissingChecker\Templates\SequenceFileMissingCheckerTemplate.html" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\vr-integration-filedatasourcedefinition-delaychecker-sizebased.js" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\vr-integration-filedatasourcedefinition-delaychecker-timebased.js" />
-    <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileMissingChecker\vr-integration-filedatasourcedefinition-missingchecker-datetime.js" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileMissingChecker\vr-integration-filedatasourcedefinition-missingchecker-sequence.js" />
     <Content Include="Integration\Directives\Settings\FileDataSourceSettings\vr-integration-filedatasourcedefinition-selector.js" />
     <Content Include="Integration\Directives\Settings\Templates\DataSourceSettingTemplate.html" />

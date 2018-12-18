@@ -3,7 +3,7 @@
         <vr-form name="formFileDataSourceDefinitionEditor">
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-textbox value="scopeModel.name" type="text" label="Name" isrequired="true"></vr-textbox>
+                    <vr-textbox value="scopeModel.name" type="text" label="Name" customvalidate="scopeModel.validateNameExist(scopeModel.name)" isrequired="true"></vr-textbox>
                 </vr-columns>
             </vr-row>
             <vr-section title="Duplicate Settings">

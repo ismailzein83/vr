@@ -26,7 +26,7 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
                 $scope.scopeModel.fileDataSourceDefinitions = [];
 
                 $scope.scopeModel.addPeakTimeRange = function () {
-                    var peakTimeRange = { Entity: { PeakTimeRangeId : UtilsService.guid(), From: undefined, To: undefined } };
+                    var peakTimeRange = { Entity: { PeakTimeRangeId: UtilsService.guid(), From: undefined, To: undefined } };
                     $scope.scopeModel.peakTimeRanges.push(peakTimeRange);
                 };
 
@@ -34,30 +34,30 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
                     var onFileDataSourceDefinitionAdded = function (fileDataSourceDefinition) {
                         $scope.scopeModel.fileDataSourceDefinitions.push({ Entity: fileDataSourceDefinition });
                     };
-                    VR_Integration_DataSourceSettingService.addFileDataSourceDefinition(onFileDataSourceDefinitionAdded, false);
+
+                    var fileImportExceptionNames = getFileImportExceptionNames();
+                    VR_Integration_DataSourceSettingService.addFileDataSourceDefinition(onFileDataSourceDefinitionAdded, false, fileImportExceptionNames);
                 };
 
                 $scope.scopeModel.removePeakTimeRange = function (item) {
-                    //VRNotificationService.showConfirmation().then(function (confirmed) {
-                    //    if (confirmed) {
                     var index = $scope.scopeModel.peakTimeRanges.indexOf(item);
                     $scope.scopeModel.peakTimeRanges.splice(index, 1);
-                    //    }
-                    //});
                 };
 
                 $scope.scopeModel.removeFileDataSourceDefinition = function (item) {
-                    //VRNotificationService.showConfirmation().then(function (confirmed) {
-                    //    if (confirmed) {
                     var index = $scope.scopeModel.fileDataSourceDefinitions.indexOf(item);
                     $scope.scopeModel.fileDataSourceDefinitions.splice(index, 1);
-                    //    }
-                    //});
                 };
 
                 $scope.scopeModel.validatePeakTimeRanges = function () {
-                    return validateDateTime();
-
+                    var peakTimeRanges = $scope.scopeModel.peakTimeRanges;
+                    for (var i = 0; i < peakTimeRanges.length; i++) {
+                        var currentPeakTimeRanges = peakTimeRanges[i];
+                        var errorMessage = VRValidationService.validateTimeRange(currentPeakTimeRanges.Entity.From, currentPeakTimeRanges.Entity.To);
+                        if (errorMessage != null)
+                            return errorMessage;
+                    }
+                    return null;
                 };
 
                 $scope.scopeModel.validateFileDataSourceDefinitions = function () {
@@ -124,7 +124,7 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
                     };
                 };
 
-                if (ctrl.onReady != null && typeof(ctrl.onReady) == "function")
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
             }
 
@@ -141,18 +141,17 @@ app.directive("vrIntegrationFiledatasourcesettings", ["UtilsService", "VRValidat
                     $scope.scopeModel.fileDataSourceDefinitions[index] = { Entity: fileDataSourceDefinitionUpdated };
                 };
 
-                VR_Integration_DataSourceSettingService.editFileDataSourceDefinition(onFileDataSourceDefinitionUpdated, fileDataSourceDefinition.Entity);
+                var fileImportExceptionNames = getFileImportExceptionNames();
+                VR_Integration_DataSourceSettingService.editFileDataSourceDefinition(onFileDataSourceDefinitionUpdated, fileDataSourceDefinition.Entity, fileImportExceptionNames);
             }
 
-            function validateDateTime() {
-                var peakTimeRanges = $scope.scopeModel.peakTimeRanges;
-                for (var i = 0; i < peakTimeRanges.length; i++) {
-                    var currentPeakTimeRanges = peakTimeRanges[i];
-                    var errorMessage = VRValidationService.validateTimeRange(currentPeakTimeRanges.Entity.From, currentPeakTimeRanges.Entity.To);
-                    if (errorMessage != null)
-                        return errorMessage;
+            function getFileImportExceptionNames() {
+                var fileImportExceptionNames = [];
+                var fileDataSourceDefinitions = $scope.scopeModel.fileDataSourceDefinitions;
+                for (var j = 0; j < fileDataSourceDefinitions.length; j++) {
+                    fileImportExceptionNames.push(fileDataSourceDefinitions[j].Entity.Name);
                 }
-                return null;
+                return fileImportExceptionNames.length > 0 ? fileImportExceptionNames : undefined;
             }
         }
 

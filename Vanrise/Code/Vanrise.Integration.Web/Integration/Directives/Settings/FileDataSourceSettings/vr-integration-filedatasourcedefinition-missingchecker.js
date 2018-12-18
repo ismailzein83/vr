@@ -68,8 +68,9 @@
                     var promises = [];
                     var fileMissingChecker;
 
-                    if (payload != undefined)
+                    if (payload != undefined) {
                         fileMissingChecker = payload.fileMissingChecker;
+                    }
 
                     var getFileMissingCheckerSettingsConfigsPromise = getFileMissingCheckerSettingsConfigs();
                     promises.push(getFileMissingCheckerSettingsConfigsPromise);
@@ -85,9 +86,12 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
+
                                 if (fileMissingChecker != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
                                         UtilsService.getItemByVal($scope.scopeModel.templateConfigs, fileMissingChecker.ConfigId, 'ExtensionConfigurationId');
+                                } else {
+                                    selectorAPI.selectIfSingleItem();
                                 }
                             }
                         });

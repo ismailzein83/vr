@@ -156,9 +156,9 @@
     <Content Include="Common\Directives\VRNamespace\vr-common-namespace-settings-grid.js" />
     <Content Include="Common\Directives\VRNamespace\vr-common-namespaceclass-selector.js" />
     <Content Include="Common\Directives\VRNamespace\vr-common-namespaceclassmethod-selector.js" />
-    <Content Include="Common\Directives\VRTextPattern\TextPatternHelperController.js" />
-    <Content Include="Common\Directives\VRTextPattern\Templates\TextPatternHelperTemplate.html" />
-    <Content Include="Common\Directives\VRTextPattern\vr-common-textpatternbuilder.js" />
+    <Content Include="Common\Directives\TextPattern\TextPatternHelperController.js" />
+    <Content Include="Common\Directives\TextPattern\Templates\TextPatternHelperTemplate.html" />
+    <Content Include="Common\Directives\TextPattern\vr-common-textpatternbuilder.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\SpecificDaysDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-specificdays.js" />
@@ -171,6 +171,7 @@
     <Content Include="Common\Services\HttpProxyMethodService.js" />
     <Content Include="Common\Services\VRDynamicAPIModuleService.js" />
     <Content Include="Common\Services\VRDynamicAPIService.js" />
+    <Content Include="Common\Services\TextPatternBuilderService.js" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleEditor.html" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleEditorController.js" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleManagement.html" />

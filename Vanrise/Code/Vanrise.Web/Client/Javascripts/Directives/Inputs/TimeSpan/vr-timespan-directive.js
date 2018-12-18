@@ -12,15 +12,29 @@
                 value: '=',
                 label: '@',
                 isrequired: '=',
-                hidelabel: '@'
+                hidelabel: '@',
+                dontacceptzero: '@',
+                dontacceptnegative: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                $scope.scopeModel = {};
+                ctrl.validateTimeOffset = function (value) {
+                    var validateTimeOffset = UtilsService.validateTimeOffset(value);
+                    if (validateTimeOffset != null)
+                        return validateTimeOffset;
 
-                $scope.scopeModel.validateTimeOffset = function (value) {
-                    return UtilsService.validateTimeOffset(value);
+                    if ($attrs.dontacceptzero != undefined) {
+                        if (value == "00.00:00:00" || value == "0.00:00:00" || value == "00:00:00")
+                            return "Time Offset should different than zero";
+                    }
+
+                    if ($attrs.dontacceptnegative != undefined) {
+                        if (value != undefined && value[0] == "-")
+                            return "Time Offset should be positive";
+                    }
+
+                    return null;
                 };
             },
             compile: function (element, attrs) {
@@ -30,7 +44,6 @@
                     }
                 };
             },
-
             controllerAs: 'ctrl',
             bindToController: true,
             template: function (element, attrs) {
@@ -47,7 +60,7 @@
                 if (attrs.hidelabel != undefined)
                     label = '';
 
-                return '<vr-textbox ' + label + ' value="ctrl.value" ' + isrequired + '  customvalidate="scopeModel.validateTimeOffset(ctrl.value)"></vr-textbox>';
+                return '<vr-textbox ' + label + ' value="ctrl.value" ' + isrequired + '  customvalidate="ctrl.validateTimeOffset(ctrl.value)"></vr-textbox>';
             }
         };
     }

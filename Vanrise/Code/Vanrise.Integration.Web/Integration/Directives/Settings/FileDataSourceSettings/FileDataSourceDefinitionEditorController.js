@@ -9,6 +9,7 @@
         var editMode;
         var isSingleInsert;
         var fileDataSourceDefinitionEntity;
+        var fileImportExceptionNames;
 
         var fileDelayCheckerDirectiveAPI;
         var fileDelayCheckerDirectiveReadyPromiseDeferred;
@@ -26,6 +27,7 @@
             if (parameters != undefined && parameters != null) {
                 fileDataSourceDefinitionEntity = parameters.fileDataSourceDefinitionEntity;
                 isSingleInsert = parameters.isSingleInsert;
+                fileImportExceptionNames = parameters.fileImportExceptionNames;
             }
 
             editMode = (fileDataSourceDefinitionEntity != undefined);
@@ -56,6 +58,20 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, fileMissingCheckerDirectiveAPI, undefined, setLoader, fileMissingCheckerDirectiveReadyPromiseDeferred);
             };
 
+            $scope.scopeModel.validateNameExist = function (selectedName) {
+
+                if (fileImportExceptionNames != undefined && selectedName != undefined) {
+                    if (editMode && selectedName == fileDataSourceDefinitionEntity.Name)
+                        return null;
+
+                    for (var i = 0; i < fileImportExceptionNames.length; i++) {
+                        if (selectedName == fileImportExceptionNames[i])
+                            return "This name exist";
+                    }
+                }
+                return null;
+            };
+
             $scope.scopeModel.saveDataSourceSettings = function () {
                 if (editMode)
                     return updateFileDataSourceDefinition();
@@ -74,8 +90,6 @@
             loadAllControls().catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isLoading = false;
-            }).finally(function () {
-                fileDataSourceDefinitionEntity = undefined;
             });
         }
 
