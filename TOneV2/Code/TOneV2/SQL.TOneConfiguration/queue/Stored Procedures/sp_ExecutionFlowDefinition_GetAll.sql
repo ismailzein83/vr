@@ -9,7 +9,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT [ID]
+	SELECT [Id]
       ,[Name]
       ,[Title]
       ,[Stages]

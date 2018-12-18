@@ -17,7 +17,7 @@ BEGIN
 	    Begin Transaction
 			Update [rules].[Rule]
 			set [IsDeleted] = 1, [LastModifiedBy] = @LastModifiedBy, [LastModifiedTime] = GETDATE()
-			Where Id = @RuleID and TypeID = @RuleTypeID
+			Where ID = @RuleID and TypeID = @RuleTypeID
 	    
 	    	IF NOT EXISTS(SELECT 1 FROM  [rules].[RuleChanged]  WHERE RuleID = @RuleID and RuleTypeId = @RuleTypeID)
 				Begin

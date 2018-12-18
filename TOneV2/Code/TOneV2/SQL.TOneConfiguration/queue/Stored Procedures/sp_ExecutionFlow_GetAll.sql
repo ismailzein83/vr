@@ -10,8 +10,8 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT ef.ID, ef.ExecutionFlowDefinitionID, ef.Name, efd.ExecutionTree
-	FROM queue.ExecutionFlow ef WITH(NOLOCK) 
-	INNER JOIN queue.ExecutionFlowDefinition efd  WITH(NOLOCK) ON ef.ExecutionFlowDefinitionID = efd.ID
+	SELECT	ef.ID, ef.ExecutionFlowDefinitionID, ef.Name, efd.ExecutionTree
+	FROM	[queue].[ExecutionFlow] ef WITH(NOLOCK) 
+			INNER JOIN [queue].[ExecutionFlowDefinition] efd  WITH(NOLOCK) ON ef.ExecutionFlowDefinitionID = efd.Id
 	ORDER BY ef.[Name]
 END

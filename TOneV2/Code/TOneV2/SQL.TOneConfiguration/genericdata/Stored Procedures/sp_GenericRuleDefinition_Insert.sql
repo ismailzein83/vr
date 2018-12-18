@@ -12,7 +12,7 @@ AS
 BEGIN
 	IF NOT EXISTS(SELECT NULL FROM genericdata.GenericRuleDefinition WHERE Name = @Name)
 	BEGIN
-		INSERT INTO genericdata.GenericRuleDefinition (Id,Name, Details, CreatedTime)
+		INSERT INTO genericdata.GenericRuleDefinition (ID,Name, Details, CreatedTime)
 		VALUES (@Id,@Name, @Details, GETDATE())
 	
 	END

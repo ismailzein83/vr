@@ -12,7 +12,7 @@ AS
 BEGIN
 	IF NOT EXISTS(select 1 from [queue].[ExecutionFlow] where Name = @Name)
 	BEGIN
-		Insert into [queue].[ExecutionFlow] (ID,[Name], [ExecutionFlowDefinitionID])
+		Insert into [queue].[ExecutionFlow] (Id,[Name], [ExecutionFlowDefinitionID])
 		values(@ID,@Name, @DefinitionId)
 
 	END

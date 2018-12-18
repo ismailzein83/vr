@@ -10,8 +10,8 @@ IF NOT EXISTS(select 1 from [queue].[ExecutionFlowDefinition] where ID!=@ID and 
 BEGIN
 	
 	        Update  [queue].[ExecutionFlowDefinition]
-			Set [Name]=@Name, [Title]=@Title, [Stages]=@Stages
-			Where [ID]=@ID    
+			Set		[Name]=@Name, [Title]=@Title, [Stages]=@Stages
+			Where	[Id]=@ID    
        
            
 END

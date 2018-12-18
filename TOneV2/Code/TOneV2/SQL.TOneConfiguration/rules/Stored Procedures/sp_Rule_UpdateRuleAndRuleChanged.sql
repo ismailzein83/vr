@@ -29,7 +29,7 @@ BEGIN
 				  LastModifiedTime = GETDATE()
 			WHERE ID = @RuleID
 
-			IF NOT EXISTS(SELECT 1 FROM  [rules].[RuleChanged]  WHERE RuleID = @RuleID and RuleTypeId = @RuleTypeID)
+			IF NOT EXISTS(SELECT 1 FROM  [rules].[RuleChanged]  WHERE RuleID = @RuleID and RuleTypeID = @RuleTypeID)
 				Begin
 					Insert into [rules].[RuleChanged] ([RuleID], [RuleTypeID], [ActionType], [InitialRule], [AdditionalInformation])
 					values(@RuleID, @RuleTypeID, @ActionType, @InitialRule, @AdditionalInformation)
@@ -38,7 +38,7 @@ BEGIN
 				BEGIN
 					Update [rules].[RuleChanged] 
 					Set  AdditionalInformation = @AdditionalInformation
-					WHERE RuleID = @RuleID and RuleTypeId = @RuleTypeID
+					WHERE RuleID = @RuleID and RuleTypeID = @RuleTypeID
 				END
 	    Commit Transaction
 	End Try
