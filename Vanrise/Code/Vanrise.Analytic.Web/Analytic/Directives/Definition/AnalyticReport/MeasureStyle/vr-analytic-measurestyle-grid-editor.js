@@ -40,13 +40,13 @@
                     }
                 };
 
-              
+
 
                 $scope.onResetClicked = function (dataItem) {
                     ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
                         MeasureName: dataItem.MeasureName
                     };
-                }
+                };
                 ctrl.saveMeasureStyle = function (dataItem) {
                     if (dataItem.Entity != undefined) {
                         var isEditMode = true;
