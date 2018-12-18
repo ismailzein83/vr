@@ -21,11 +21,47 @@ namespace Retail.RA.Business
             if (!context.ToTime.HasValue)
                 throw new NullReferenceException("context.ToTime");
 
+            var dataRecordData = new DataRecordData();
+            IEnumerable<DataRecordObject> records = dataRecordData.GetDataRecords(context.FromTime.Value, context.ToTime.Value, TrafficDirection.IN);
+            foreach (var dataRecord in records)
+            {
+                context.OnRecordLoaded(dataRecord, DateTime.Now);
+            }
+        }
+    }
+
+    public class INTLOutVoiceDataProviderSettings : BusinessObjectDataProviderExtendedSettings
+    {
+        public override void LoadRecords(IBusinessObjectDataProviderLoadRecordsContext context)
+        {
+            if (!context.FromTime.HasValue)
+                throw new NullReferenceException("context.FromTime");
+
+            if (!context.ToTime.HasValue)
+                throw new NullReferenceException("context.ToTime");
+
+            DataRecordData dataRecordData = new DataRecordData();
+            IEnumerable<DataRecordObject> records = dataRecordData.GetDataRecords(context.FromTime.Value, context.ToTime.Value, TrafficDirection.OUT);
+
+            foreach (var dataRecord in records)
+            {
+                context.OnRecordLoaded(dataRecord, DateTime.Now);
+            }
+        }
+
+        public override Guid ConfigId { get; }
+        public override bool DoesSupportFilterOnAllFields { get; }
+    }
+
+    public class DataRecordData
+    {
+        public List<DataRecordObject> GetDataRecords(DateTime fromTime, DateTime toTime, TrafficDirection trafficDirection)
+        {
             var operatorDeclarationManager = new OperatorDeclarationManager();
             var periodDefinitionManager = new PeriodDefinitionManager();
 
-            var periodDefinitions = periodDefinitionManager.GetPeriodDefinitionsBetweenDate(context.FromTime.Value, context.ToTime.Value, out var minDate, out var maxDate);
-            var operatorDeclarations = operatorDeclarationManager.GetVoiceDeclarationServices(periodDefinitions);
+            var periodDefinitions = periodDefinitionManager.GetPeriodDefinitionsBetweenDate(fromTime, toTime, out var minDate, out var maxDate);
+            var operatorDeclarations = operatorDeclarationManager.GetVoiceDeclarationServices(periodDefinitions, TrafficDirection.IN);
 
             var analyticManager = new AnalyticManager();
             AnalyticQuery analyticQuery = new AnalyticQuery
@@ -33,8 +69,8 @@ namespace Retail.RA.Business
                 TableId = Guid.Parse("efe9d65f-0b0e-4466-918f-4d8982a368f6"),
                 MeasureFields = new List<string> { "CalculatedDurationInMin", "CalculatedRevenue", "CountCDRs" },
                 DimensionFields = new List<string> { "Operator", "Period" },
-                FromTime = Utilities.Min(minDate, context.FromTime.Value),
-                ToTime = Utilities.Max(maxDate, context.ToTime.Value)
+                FromTime = Utilities.Min(minDate, fromTime),
+                ToTime = Utilities.Max(maxDate, toTime)
             };
             List<AnalyticRecord> analyticRecords = analyticManager.GetAllFilteredRecords(analyticQuery, out _);
             Dictionary<long, List<BillingRecord>> billingRecordsByOperator = GetBillingRecordsByOperator(analyticRecords);
@@ -43,7 +79,6 @@ namespace Retail.RA.Business
             int startingIndex = 0;
             long lastOperatorId = 0;
 
-            Dictionary<string, ReconcilationObj> recordObjectByOperatorPeriod = new Dictionary<string, ReconcilationObj>();
             foreach (var operatorDeclaration in operatorDeclarations)
             {
                 var operatorId = operatorDeclaration.OperatorId;
@@ -56,9 +91,9 @@ namespace Retail.RA.Business
                 {
                     PeriodId = operatorDeclaration.PeriodDefinition.PeriodDefinitionId,
                     OperatorId = operatorId,
-                    DeclaredDurationInMin = operatorDeclaration.VoiceSettings.Duration,
-                    DeclaredRevenue = operatorDeclaration.VoiceSettings.Amount,
-                    DeclaredNbrOfCDR = operatorDeclaration.VoiceSettings.NumberOfCalls
+                    DeclaredDurationInMin = operatorDeclaration.VoiceSettings.DeclaredDuration,
+                    DeclaredRevenue = operatorDeclaration.VoiceSettings.DeclaredRevenue,
+                    DeclaredNbrOfCDR = operatorDeclaration.VoiceSettings.DeclaredNumberOfCalls
                 };
 
                 if (billingRecordsByOperator.TryGetValue(operatorId, out var operatorBillingRecords))
@@ -104,30 +139,17 @@ namespace Retail.RA.Business
                     }
                 }
             }
-            foreach (var reconcilationDataRecord in records)
-            {
-                var dataRecord = GetDataRecordObject(reconcilationDataRecord);
-                context.OnRecordLoaded(dataRecord, DateTime.Now);
-            }
-        }
+            if (billingRecordWithoutOperatorDeclaration.Count > 0)
+                records.AddRange(billingRecordWithoutOperatorDeclaration.Values);
 
-        public DataRecordObject GetDataRecordObject(ReconcilationObj reconcilationObj)
-        {
-            var reconcilationDataRecordObject = new Dictionary<string, object>
+            List<DataRecordObject> recordObjects = new List<DataRecordObject>();
+            foreach (var reconcilationObj in records)
             {
-                {"Operator", reconcilationObj.OperatorId},
-                {"PeriodDefinition", reconcilationObj.PeriodId},
-                {"CalculatedDurationInMin", reconcilationObj.CalculatedDurationInMin},
-                {"CalculatedRevenue", reconcilationObj.CalculatedRevenue},
-                {"CalculatedNbrOfCDR", reconcilationObj.CalculatedNbrOfCDR},
-                {"DeclaredNbrOfCDR", reconcilationObj.DeclaredNbrOfCDR},
-                {"DeclaredRevenue", reconcilationObj.DeclaredRevenue},
-                {"DeclaredDurationInMin", reconcilationObj.DeclaredDurationInMin},
-                {"Difference", reconcilationObj.DifferencePerc}
-            };
-            return new DataRecordObject(new Guid("9f9639f2-6934-4b74-a52a-46cd9d663a9a"), reconcilationDataRecordObject);
+                recordObjects.Add(GetDataRecordObject(reconcilationObj));
+            }
+            return recordObjects;
         }
-        public Dictionary<long, List<BillingRecord>> GetBillingRecordsByOperator(List<AnalyticRecord> analyticRecords)
+        private Dictionary<long, List<BillingRecord>> GetBillingRecordsByOperator(List<AnalyticRecord> analyticRecords)
         {
             Dictionary<long, List<BillingRecord>> reconcilationRecordsByOperator = new Dictionary<long, List<BillingRecord>>();
             foreach (var analyticRecord in analyticRecords)
@@ -167,28 +189,45 @@ namespace Retail.RA.Business
             }
             return reconcilationRecordsByOperator;
         }
-    }
+        public DataRecordObject GetDataRecordObject(ReconcilationObj reconcilationObj)
+        {
+            var reconcilationDataRecordObject = new Dictionary<string, object>
+            {
+                {"Operator", reconcilationObj.OperatorId},
+                {"PeriodDefinition", reconcilationObj.PeriodId},
+                {"CalculatedDurationInMin", reconcilationObj.CalculatedDurationInMin},
+                {"CalculatedRevenue", reconcilationObj.CalculatedRevenue},
+                {"CalculatedNbrOfCDR", reconcilationObj.CalculatedNbrOfCDR},
+                {"DeclaredNbrOfCDR", reconcilationObj.DeclaredNbrOfCDR},
+                {"DeclaredRevenue", reconcilationObj.DeclaredRevenue},
+                {"DeclaredDurationInMin", reconcilationObj.DeclaredDurationInMin},
+                {"Difference", reconcilationObj.DifferencePerc}
+            };
+            return new DataRecordObject(new Guid("9f9639f2-6934-4b74-a52a-46cd9d663a9a"), reconcilationDataRecordObject);
+        }
+   
+        #region Private Classes
+        public class BillingRecord
+        {
+            public long OperatorId { get; set; }
+            public int PeriodDefinitionId { get; set; }
+            public decimal DurationInMin { get; set; }
+            public decimal Revenue { get; set; }
+            public decimal NbrOfCDR { get; set; }
+        }
+        public class ReconcilationObj
+        {
+            public long OperatorId { get; set; }
+            public int PeriodId { get; set; }
+            public decimal CalculatedDurationInMin { get; set; }
+            public decimal CalculatedRevenue { get; set; }
+            public decimal CalculatedNbrOfCDR { get; set; }
 
-    public class BillingRecord
-    {
-        public long OperatorId { get; set; }
-        public int PeriodDefinitionId { get; set; }
-        public decimal DurationInMin { get; set; }
-        public decimal Revenue { get; set; }
-        public decimal NbrOfCDR { get; set; }
-    }
-
-    public class ReconcilationObj
-    {
-        public long OperatorId { get; set; }
-        public int PeriodId { get; set; }
-        public decimal CalculatedDurationInMin { get; set; }
-        public decimal CalculatedRevenue { get; set; }
-        public decimal CalculatedNbrOfCDR { get; set; }
-
-        public decimal DeclaredDurationInMin { get; set; }
-        public int DifferencePerc { get; set; }
-        public decimal DeclaredRevenue { get; set; }
-        public decimal DeclaredNbrOfCDR { get; set; }
+            public decimal DeclaredDurationInMin { get; set; }
+            public int DifferencePerc { get; set; }
+            public decimal DeclaredRevenue { get; set; }
+            public decimal DeclaredNbrOfCDR { get; set; }
+        }
+        #endregion
     }
 }
