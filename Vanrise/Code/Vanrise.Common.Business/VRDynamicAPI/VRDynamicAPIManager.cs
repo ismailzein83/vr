@@ -205,7 +205,6 @@ namespace Vanrise.Common.Business
               namespace #NAMESPACE#
               {
                  [RoutePrefix(""#RoutePrefix#"" + ""#ControllerName#"")]
-                 [JSONWithTypeAttribute]
                  public class #CLASSNAME# : BaseAPIController
                  { 
                     #Methods#
