@@ -110,6 +110,10 @@
     <Content Include="DLLs\System.Reflection.Metadata.dll" />
     <Content Include="Files\RoslynCompiler.txt" />
     <Content Include="Resources\dotnetCore\ProjectConversion.txt" />
+    <Content Include="Resources\RDB\CreateTablesSamples\Create Tables in MySQL %28AccountBalance and Invoice%29.sql" />
+    <Content Include="Resources\RDB\CreateTablesSamples\Oracle Create AccountBalance And Invoice Tables.sql" />
+    <Content Include="Resources\RDB\CreateTablesSamples\ORACLE CREATE Sequence and Trigger.sql" />
+    <Content Include="Resources\RDB\CreateTablesSamples\Postgres Create AccountBalance And Invoice Tables.sql" />
     <Content Include="Resources\RDB\MySQL.txt" />
     <Content Include="Resources\RDB\RDBRecordStorageReplacements.txt" />
     <Content Include="StandardNetFramework_DLLs\System.Data.SqlClient.dll" />
