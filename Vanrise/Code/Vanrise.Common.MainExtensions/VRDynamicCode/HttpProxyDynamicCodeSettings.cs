@@ -14,38 +14,51 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
         public Guid ConnectionId { get; set; }
         public string ClassName { get; set; }
         public List<HttpProxyMethod> Methods { get; set; }
-        public string FreeCode { get; set; }
+        public string NamespaceMembers { get; set; }
         public override string Generate(IVRDynamicCodeSettingsContext context)
         {
             StringBuilder methodsBuilder = new StringBuilder();
+            StringBuilder namespaceMembersBuilder = new StringBuilder();
+            StringBuilder classMembersBuilder = new StringBuilder();
+            if (NamespaceMembers != null)
+            {
+                namespaceMembersBuilder.Append(NamespaceMembers);
+            }
             if (Methods!=null && Methods.Count > 0)
             {
                 foreach(var method in Methods)
                 {
+                    string classMembers;
+                    string namespaceMembers;
                     if (methodsBuilder.Length > 0)
                         methodsBuilder.AppendLine();
-                    methodsBuilder.Append(method.Generate(new HttpProxyMethodContext { ConnectionId = ConnectionId}));
+                    methodsBuilder.Append(method.Generate(new HttpProxyMethodContext { ConnectionId = ConnectionId}, out classMembers, out namespaceMembers));
+                    if(namespaceMembers!=null)
+                    {
+                        if (namespaceMembersBuilder.Length > 0)
+                            namespaceMembersBuilder.AppendLine();
+                        namespaceMembersBuilder.Append(namespaceMembers);
+                    }
+                    if (classMembers != null)
+                    {
+                        if (classMembersBuilder.Length > 0)
+                            classMembersBuilder.AppendLine();
+                        classMembersBuilder.Append(classMembers);
+                    }
                 }
             }
-
+            context.NamespaceMembers = namespaceMembersBuilder.ToString();
             StringBuilder classBuilder = new StringBuilder(@"
                 public class #CLASSNAME#
                 {
+                    #CLASSMEMBERS#
+
                     #METHODS#
                 }
-
-                #FREECODE#
             ");
             classBuilder.Replace("#CLASSNAME#", ClassName);
             classBuilder.Replace("#METHODS#", methodsBuilder.ToString());
-            if (FreeCode != null)
-            {
-                classBuilder.Replace("#FREECODE#", FreeCode);
-            }
-            else
-            {
-                classBuilder.Replace("#FREECODE#", "");
-            }
+            classBuilder.Replace("#CLASSMEMBERS#", classMembersBuilder.ToString());
             return classBuilder.ToString();
         }
     }
@@ -61,7 +74,9 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
         public List<HttpProxyParameter> Parameters { get; set; }
         public Dictionary<string, string> URLParameters { get; set; }
         public string ResponseLogic { get; set; }
-        public string Generate(IHttpProxyMethodContext context)
+        public string ClassMembers { get; set; }
+        public string NamespaceMembers { get; set; }
+        public string Generate(IHttpProxyMethodContext context, out string classMembers, out string namespaceMembers)
         {
             StringBuilder methodParametersBuilder = new StringBuilder();
             StringBuilder bodyParametersBuilder = new StringBuilder();
@@ -72,6 +87,8 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
             bool doesBodyParameterExist = false;
             string bodyParameter = null;
 
+            classMembers = ClassMembers;
+            namespaceMembers = NamespaceMembers;
             if (Parameters != null && Parameters.Count > 0)
             {
                 foreach (var parameter in Parameters)
@@ -189,14 +206,14 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
             {
                 foreach (var prm in this.URLParameters)
                 {
-                    urlParametersBuilder.AppendLine(String.Concat("urlParameters.Add(\"", prm.Key, "\", \"", prm.Value, "\");"));
+                    urlParametersBuilder.AppendLine(String.Concat("urlParameters.Add(\"", prm.Key, "\",", prm.Value, ".ToString());"));
                 }
             }
             if(urlParameters!=null && urlParameters.Count > 0)
             {
                 foreach(var prm in urlParameters)
                 {
-                    urlParametersBuilder.AppendLine(String.Concat("urlParameters.Add(\"", prm, "\", ", prm, ");"));
+                    urlParametersBuilder.AppendLine(String.Concat("urlParameters.Add(\"", prm, "\", ", prm, ".ToString());"));
                 }
             }
 
@@ -207,7 +224,7 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
             {
                 foreach (var header in this.Headers)
                 {
-                    headersBuilder.AppendLine(String.Concat("headers.Add(\"", header.Key, "\", \"", header.Value, "\");"));
+                    headersBuilder.AppendLine(String.Concat("headers.Add(\"", header.Key, "\",", header.Value, ".ToString());"));
                 }
             }
               
@@ -215,7 +232,7 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
             {
                 foreach(var header in headerParameters)
                 {
-                    headersBuilder.AppendLine(String.Concat("headers.Add(\"", header, "\",", header, ");"));
+                    headersBuilder.AppendLine(String.Concat("headers.Add(\"", header, "\",", header, ".ToString());"));
                 }
             }
             functionBuilder.Replace("#BUILDHEADERS#", headersBuilder.ToString());

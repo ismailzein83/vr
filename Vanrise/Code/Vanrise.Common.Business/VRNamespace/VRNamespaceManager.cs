@@ -190,24 +190,35 @@ namespace Vanrise.Common.Business
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 namespace #NAMESPACE#
                 {
+                    #NAMESPACEMEMBERS#
+
                     #CLASSCODE#
                 }");
 
             StringBuilder classCodes = new StringBuilder();
+            StringBuilder namespaceMembers = new StringBuilder();
             if (vrNamespace.Settings != null && vrNamespace.Settings.Codes != null)
             {
                 foreach (var code in vrNamespace.Settings.Codes)
                 {
                     if (code.Settings != null)
                     {
-                        classCodes.Append(code.Settings.Generate(new VRDynamicCodeSettingsContext()));
+                        var context = new VRDynamicCodeSettingsContext();
+                        classCodes.Append(code.Settings.Generate(context));
                         classCodes.AppendLine();
+                        if (context.NamespaceMembers != null)
+                        {
+                            if (namespaceMembers.Length > 0)
+                                namespaceMembers.AppendLine();
+                            namespaceMembers.Append(context.NamespaceMembers);
+                        }
                     }
                 }
             }
 
             classDefinitionBuilder.Replace("#NAMESPACE#", vrNamespace.Name);
             classDefinitionBuilder.Replace("#CLASSCODE#", classCodes.ToString());
+            classDefinitionBuilder.Replace("#NAMESPACEMEMBERS#", namespaceMembers.ToString());
 
             return classDefinitionBuilder.ToString();
         }

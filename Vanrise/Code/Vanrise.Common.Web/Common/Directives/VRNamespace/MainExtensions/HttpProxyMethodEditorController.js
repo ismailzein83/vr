@@ -197,6 +197,8 @@
                     $scope.scopeModel.returnType = httpProxyMethodEntity.ReturnType;
                     $scope.scopeModel.body = httpProxyMethodEntity.Body;
                     $scope.scopeModel.responseLogic = httpProxyMethodEntity.ResponseLogic;
+                    $scope.scopeModel.classMembers = httpProxyMethodEntity.ClassMembers;
+                    $scope.scopeModel.namespaceMembers = httpProxyMethodEntity.NamespaceMembers;
 
                     if (httpProxyMethodEntity.Headers != undefined) {
                         for (var headerName in httpProxyMethodEntity.Headers) {
@@ -225,7 +227,7 @@
                             if (urlParameterName != "$type") {
                                 $scope.scopeModel.urlParameters.push({
                                     name: urlParameterName,
-                                    type: httpProxyMethodEntity.URLParameters[urlParameterName]
+                                    value: httpProxyMethodEntity.URLParameters[urlParameterName]
                                 });
                             }
                         }
@@ -274,7 +276,7 @@
                 if ($scope.scopeModel.urlParameters.length > 0) {
                     for (var i = 0; i < $scope.scopeModel.urlParameters.length; i++) {
                         var urlParameter = $scope.scopeModel.urlParameters[i];
-                        urlParameters[urlParameter.name] = urlParameter.type;
+                        urlParameters[urlParameter.name] = urlParameter.value;
                     }
                 }
                 return urlParameters;
@@ -289,7 +291,9 @@
                 Headers: getHeaders(),
                 Parameters: getParameters(),
                 URLParameters: getURLParameters(),
-                ResponseLogic: $scope.scopeModel.responseLogic
+                ResponseLogic: $scope.scopeModel.responseLogic,
+                ClassMembers: $scope.scopeModel.classMembers,
+                NamespaceMembers: $scope.scopeModel.namespaceMembers
             };
         }
         function insertHttpProxyMethod() {

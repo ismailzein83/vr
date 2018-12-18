@@ -27,10 +27,10 @@ namespace Vanrise.Entities
      }
     public interface IVRDynamicCodeSettingsContext
     {
-
+        string NamespaceMembers {set; }
     }
     public class VRDynamicCodeSettingsContext: IVRDynamicCodeSettingsContext
     {
-
+        public string NamespaceMembers { get; set; }
     }
 }

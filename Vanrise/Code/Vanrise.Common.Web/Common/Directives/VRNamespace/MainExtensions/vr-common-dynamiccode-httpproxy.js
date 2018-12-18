@@ -88,7 +88,7 @@ app.directive('vrCommonDynamiccodeHttpproxy', ['UtilsService', 'VRUIUtilsService
                     var promises = [];
                     if (payload != undefined && payload.vrCustomCodeSettingsEntity != undefined) {
                         $scope.scopeModel.className = payload.vrCustomCodeSettingsEntity.ClassName;
-                        $scope.scopeModel.freeCode = payload.vrCustomCodeSettingsEntity.FreeCode;
+                        $scope.scopeModel.namespaceMembers = payload.vrCustomCodeSettingsEntity.NamespaceMembers;
                         if (payload.vrCustomCodeSettingsEntity.Methods != undefined && payload.vrCustomCodeSettingsEntity.Methods.length > 0) {
                             for (var i = 0; i < payload.vrCustomCodeSettingsEntity.Methods.length; i++) {
                                 var method = payload.vrCustomCodeSettingsEntity.Methods[i];
@@ -135,7 +135,9 @@ app.directive('vrCommonDynamiccodeHttpproxy', ['UtilsService', 'VRUIUtilsService
                                         Headers: httpProxyMethod.Entity.Headers,
                                         Parameters: httpProxyMethod.Entity.Parameters,
                                         URLParameters: httpProxyMethod.Entity.URLParameters,
-                                        ResponseLogic: httpProxyMethod.Entity.ResponseLogic
+                                        ResponseLogic: httpProxyMethod.Entity.ResponseLogic,
+                                        ClassMembers: httpProxyMethod.Entity.ClassMembers,
+                                        NamespaceMembers: httpProxyMethod.Entity.NamespaceMembers
                                     });
                                 }
                             }
@@ -147,7 +149,7 @@ app.directive('vrCommonDynamiccodeHttpproxy', ['UtilsService', 'VRUIUtilsService
                         ConnectionId: connectionSelectorAPI.getSelectedIds(),
                         ClassName: $scope.scopeModel.className,
                         Methods: getMethods(),
-                        FreeCode: $scope.scopeModel.freeCode
+                        NamespaceMembers: $scope.scopeModel.namespaceMembers
                     };
                 };
 
