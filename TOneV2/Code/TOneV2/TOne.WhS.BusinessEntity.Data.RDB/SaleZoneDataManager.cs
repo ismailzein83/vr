@@ -18,6 +18,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_EED = "EED";
         const string COL_SourceID = "SourceID";
         const string COL_ProcessInstanceID = "ProcessInstanceID";
+        const string COL_LastModifiedTime = "LastModifiedTime";
         static SaleZoneDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>
@@ -29,7 +30,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 {COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
                 {COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
                 {COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50}},
-                {COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}}
+                {COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
+                {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
             };
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
@@ -43,7 +45,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("TOneWhS_BE_SaleZone", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
+            return RDBDataProviderFactory.CreateProvider("TOneWhS_BE", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
 
         public List<SaleZone> GetSaleZones(int sellingNumberPlanId)
@@ -141,7 +143,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 if (isEffectiveInFuture.Value)
                 {
-                    conditionContext.ConditionIfColumnNotNull(TABLE_ALIAS, COL_EED).GreaterOrEqualCondition(TABLE_ALIAS, COL_EED).DateNow();
+                    conditionContext.ConditionIfColumnNotNull(TABLE_ALIAS, COL_EED).GreaterOrEqualCondition(TABLE_ALIAS, COL_BED).DateNow();
                 }
                 else if (effectiveDate.HasValue)
                 {
