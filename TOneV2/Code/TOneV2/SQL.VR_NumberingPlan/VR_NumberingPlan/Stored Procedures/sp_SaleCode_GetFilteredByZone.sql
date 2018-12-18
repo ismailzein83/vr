@@ -8,7 +8,7 @@ CREATE PROCEDURE [VR_NumberingPlan].[sp_SaleCode_GetFilteredByZone]
 	@EffectiveOn datetime
 AS
 BEGIN
-	select Id, Code, ZoneId, CodeGroupId, BED, EED, SourceId
-	from TOneWhS_BE.SaleCode
-	where ZoneId = @ZoneId and (EED is null or (BED != EED and EED > @EffectiveOn))
+	select	Id, Code, ZoneId, CodeGroupId, BED, EED, SourceId
+	from	[VR_NumberingPlan].[SaleCode] WITH (NOLOCK) 
+	where	ZoneId = @ZoneId and (EED is null or (BED != EED and EED > @EffectiveOn))
 END

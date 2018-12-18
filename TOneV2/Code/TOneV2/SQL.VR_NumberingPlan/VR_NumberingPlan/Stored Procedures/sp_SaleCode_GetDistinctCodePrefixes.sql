@@ -12,7 +12,7 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;		
-		SELECT LEFT(Code, @PrefixLength) as CodePrefix, SUM(1) as codeCount FROM TOneWhS_BE.SaleCode WITH (NOLOCK) 
+		SELECT LEFT(Code, @PrefixLength) as CodePrefix, SUM(1) as codeCount FROM [VR_NumberingPlan].[SaleCode] WITH (NOLOCK) 
 		WHERE
 		(
 			(@IsFuture = 0 AND BED <= @EffectiveOn AND (EED > @EffectiveOn OR EED IS NULL))

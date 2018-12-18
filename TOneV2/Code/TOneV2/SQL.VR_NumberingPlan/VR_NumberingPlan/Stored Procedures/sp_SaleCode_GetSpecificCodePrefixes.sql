@@ -20,14 +20,14 @@ BEGIN
 	WITH AllPrefixes_CTE (CodePrefix, CodeCount)
 	AS
 	(
-		SELECT LEFT(Code, @PrefixLength) as CodePrefix, Count(1) as CodeCount 
-		FROM TOneWhS_BE.SaleCode sc WITH (NOLOCK) 
-		WHERE((@IsFuture = 0 AND BED <= @EffectiveOn AND (EED > @EffectiveOn OR EED IS NULL))OR(@IsFuture = 1 AND (BED > GETDATE() OR EED IS NULL)))
-		group by LEFT(Code, @PrefixLength)
+		SELECT	LEFT(sc.Code, @PrefixLength) as CodePrefix, Count(1) as CodeCount 
+		FROM	[VR_NumberingPlan].[SaleCode] sc WITH (NOLOCK) 
+		WHERE	((@IsFuture = 0 AND sc.BED <= @EffectiveOn AND (sc.EED > @EffectiveOn OR sc.EED IS NULL))OR(@IsFuture = 1 AND (sc.BED > GETDATE() OR sc.EED IS NULL)))
+		group by LEFT(sc.Code, @PrefixLength)
 	)
 
-	SELECT allPrefixes.CodePrefix, CodeCount
-    FROM AllPrefixes_CTE allPrefixes
-    join @CodePrefixesTable cp on cp.CodePrefix = LEFT(allPrefixes.CodePrefix, @PrefixLength-1)
+	SELECT	allPrefixes.CodePrefix, CodeCount
+    FROM	AllPrefixes_CTE allPrefixes
+			join @CodePrefixesTable cp on cp.CodePrefix = LEFT(allPrefixes.CodePrefix, @PrefixLength-1)
 
 END
