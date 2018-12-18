@@ -53,7 +53,7 @@
                 }
             };
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
         function load() {
@@ -190,7 +190,7 @@
                             FieldName: field.Name,
                             FieldTitle: field.Title,
                             Type: field.Type
-                        })
+                        });
                     }
                     return fields;
                 },

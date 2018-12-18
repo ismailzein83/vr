@@ -79,7 +79,7 @@ app.directive('vrGenericdataLoadbebyidstep', ['UtilsService', 'VRUIUtilsService'
                         beIdExpressionBuilderPayload = {};
                         beIdExpressionBuilderPayload.context = payload.context;
                         if (payload.stepDetails != undefined)
-                            beIdExpressionBuilderPayload.selectedRecords = payload.stepDetails.BusinessEntityId
+                            beIdExpressionBuilderPayload.selectedRecords = payload.stepDetails.BusinessEntityId;
                     }
                     
                     VRUIUtilsService.callDirectiveLoad(beIdExpressionBuilderAPI, beIdExpressionBuilderPayload, beIdExpressionBuilderLoadDeferred);
@@ -95,7 +95,7 @@ app.directive('vrGenericdataLoadbebyidstep', ['UtilsService', 'VRUIUtilsService'
                         beExpressionBuilderPayload = {};
                         beExpressionBuilderPayload.context = payload.context;
                         if (payload.stepDetails != undefined)
-                            beExpressionBuilderPayload.selectedRecords = payload.stepDetails.BusinessEntity
+                            beExpressionBuilderPayload.selectedRecords = payload.stepDetails.BusinessEntity;
                     }
                     
                     VRUIUtilsService.callDirectiveLoad(beExpressionBuilderAPI, beExpressionBuilderPayload, beExpressionBuilderLoadDeferred);

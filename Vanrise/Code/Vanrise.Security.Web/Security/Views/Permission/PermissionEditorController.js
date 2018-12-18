@@ -47,7 +47,7 @@
             $scope.save = savePermissions;
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
 

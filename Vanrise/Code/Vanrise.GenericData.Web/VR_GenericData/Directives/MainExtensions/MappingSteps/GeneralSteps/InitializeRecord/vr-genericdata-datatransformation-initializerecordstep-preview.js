@@ -23,7 +23,7 @@ app.directive('vrGenericdataDatatransformationInitializerecordstepPreview', ['Ut
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/GeneralSteps/InitializeRecord/Templates/InitializeRecordStepPreviewTemplate.html';

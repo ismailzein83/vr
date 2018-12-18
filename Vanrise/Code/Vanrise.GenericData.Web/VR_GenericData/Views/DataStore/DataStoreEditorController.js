@@ -34,7 +34,7 @@
             $scope.onReadyDataStoreConfigDirective = function (api) {
                 dataStoreDirectiveAPI = api;
 
-                var setLoader = function (value) { $scope.isLoadingConfigDirective = value };
+                var setLoader = function (value) { $scope.isLoadingConfigDirective = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataStoreDirectiveAPI, undefined, setLoader, dataStoreConfigReadyPromiseDeferred);
             };
             $scope.saveDataStore = function () {
@@ -53,7 +53,7 @@
                 }
             };
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
 

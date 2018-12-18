@@ -37,7 +37,7 @@ app.directive('vrSecViewtypeSelector', ['VR_Sec_ViewTypeAPIService', 'UtilsServi
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getViewTypeTemplate(attrs);

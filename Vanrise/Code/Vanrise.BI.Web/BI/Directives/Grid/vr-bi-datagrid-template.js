@@ -37,7 +37,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
 
             $scope.onFilterDimensionReady = function (api) {
                 filterDimensionAPI = api;
-                var setLoader = function (value) { $scope.isLoadingFilterDirective = value };
+                var setLoader = function (value) { $scope.isLoadingFilterDirective = value; };
                 var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDimensionAPI, payload, setLoader, filterReadyPromiseDeferred);
             };
@@ -45,7 +45,7 @@ function (UtilsService, $compile, VRNotificationService, VRUIUtilsService, TimeD
             ctrl.onEntitySelectionChanged = function () {
                 if (filterDimensionAPI != undefined) {
 
-                    var setLoader = function (value) { $scope.isLoadingFilterDirective = value };
+                    var setLoader = function (value) { $scope.isLoadingFilterDirective = value; };
                     var payload = { entityNames: UtilsService.getPropValuesFromArray(ctrl.selectedEntitiesType, "Name") };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDimensionAPI, payload, setLoader, filterReadyPromiseDeferred);
                 }

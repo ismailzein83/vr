@@ -26,7 +26,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
         };
         $scope.scopeModal.periods = UtilsService.getArrayEnum(PeriodEnum);
         $scope.scopeModal.close = function () {
-            $scope.modalContext.closeModal()
+            $scope.modalContext.closeModal();
         };
         var customize = {
             value: -1,
@@ -69,7 +69,7 @@ function WidgetPreviewController($scope, TimeDimensionTypeEnum, PeriodEnum, Util
                 $scope.scopeModal.toDate = date.to;
             }
 
-        }
+        };
 
     }
 

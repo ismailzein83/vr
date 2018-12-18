@@ -140,7 +140,7 @@
 
                 var selectedDataTransformationDefinitionInsertId = dataTransformationDefinitionInsertSelectorAPI.getSelectedIds();
                 if (selectedDataTransformationDefinitionInsertId != undefined) {
-                    var setLoaderDataTransformationDefinitionInsertRaw = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionInsertRaw = value };
+                    var setLoaderDataTransformationDefinitionInsertRaw = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionInsertRaw = value; };
                     var payloadfornDataTransformationDefinitionInsertRaw = {
                         dataTransformationDefinitionId: selectedDataTransformationDefinitionInsertId,
                         filter: { DataRecordTypeIds: [selectedRawDataRecordTypeId], IsArray: false }
@@ -148,7 +148,7 @@
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordRawInsertSelectorAPI, payloadfornDataTransformationDefinitionInsertRaw, setLoaderDataTransformationDefinitionInsertRaw, dataTransformationDefinitionInsertSelectedPromiseDeferred);
 
-                    var setLoaderDataTransformationDefinitionInsertSummary = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionInsertSummary = value };
+                    var setLoaderDataTransformationDefinitionInsertSummary = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionInsertSummary = value; };
                     var payloadfornDataTransformationDefinitionInsertSummary = {
                         dataTransformationDefinitionId: selectedDataTransformationDefinitionInsertId,
                         filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId], IsArray: false }
@@ -182,7 +182,7 @@
 
                 var selectedDataTransformationDefinitionUpdateId = dataTransformationDefinitionUpdateSelectorAPI.getSelectedIds();
                 if (selectedDataTransformationDefinitionUpdateId != undefined) {
-                    var setLoaderDataTransformationDefinitionUpdateExisting = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionUpdateExisting = value };
+                    var setLoaderDataTransformationDefinitionUpdateExisting = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionUpdateExisting = value; };
                     var payloadforDataTransformationDefinitionUpdateExisting = {
                         dataTransformationDefinitionId: selectedDataTransformationDefinitionUpdateId,
                         filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId], IsArray: false }
@@ -190,7 +190,7 @@
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataTransformationDefinitionRecordExistingSummaryUpdateSelectorAPI, payloadforDataTransformationDefinitionUpdateExisting, setLoaderDataTransformationDefinitionUpdateExisting, dataTransformationDefinitionUpdateSelectedPromiseDeferred);
 
-                    var setLoaderDataTransformationDefinitionUpdateNew = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionUpdateNew = value };
+                    var setLoaderDataTransformationDefinitionUpdateNew = function (value) { $scope.scopeModal.isLoadingDataTransformationDefinitionUpdateNew = value; };
                     var payloadfornDataTransformationDefinitionUpdateNew = {
                         dataTransformationDefinitionId: selectedDataTransformationDefinitionUpdateId,
                         filter: { DataRecordTypeIds: [selectedSummaryDataRecordTypeId], IsArray: false }
@@ -234,7 +234,7 @@
             $scope.scopeModal.onRawRecordTypeSelectionChanged = function () {
                 var selectedRawDataRecordTypeId = dataRawRecordTypeSelectorAPI.getSelectedIds();
                 if (selectedRawDataRecordTypeId != undefined) {
-                    var setLoader = function (value) { $scope.scopeModal.isLoadingisRawRecordTypeFields = value };
+                    var setLoader = function (value) { $scope.scopeModal.isLoadingisRawRecordTypeFields = value; };
                     var payload = {
                         dataRecordTypeId: selectedRawDataRecordTypeId
                     };
@@ -275,27 +275,27 @@
 
                 var selectedSummaryDataRecordTypeId = dataSummaryRecordTypeSelectorAPI.getSelectedIds();
                 if (selectedSummaryDataRecordTypeId != undefined) {
-                    var setLoaderFieldsID = function (value) { $scope.scopeModal.isLoadingSummaryRecordTypeFieldsID = value };
+                    var setLoaderFieldsID = function (value) { $scope.scopeModal.isLoadingSummaryRecordTypeFieldsID = value; };
                     var payloadforRecordFieldsID = {
                         dataRecordTypeId: selectedSummaryDataRecordTypeId
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataSummaryRecordTypeFieldsIDSelectorAPI, payloadforRecordFieldsID, setLoaderFieldsID, dataSummaryRecordTypeSelectedPromiseDeferred);
 
-                    var setLoaderFieldsBatch = function (value) { $scope.scopeModal.isLoadingSummaryRecordTypeFieldsBatch = value };
+                    var setLoaderFieldsBatch = function (value) { $scope.scopeModal.isLoadingSummaryRecordTypeFieldsBatch = value; };
                     var payloadforRecordFieldsBatch = {
                         dataRecordTypeId: selectedSummaryDataRecordTypeId
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataSummaryRecordTypeFieldsBatchSelectorAPI, payloadforRecordFieldsBatch, setLoaderFieldsBatch, dataSummaryRecordTypeSelectedPromiseDeferred);
 
 
-                    var setLoaderRecordStorage = function (value) { $scope.scopeModal.isLoadingRecordStorage = value };
+                    var setLoaderRecordStorage = function (value) { $scope.scopeModal.isLoadingRecordStorage = value; };
                     var payloadforRecordStorage = {
                         DataRecordTypeId: selectedSummaryDataRecordTypeId
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordStorageSelectorAPI, payloadforRecordStorage, setLoaderRecordStorage, dataSummaryRecordTypeSelectedPromiseDeferred);
 
 
-                    var setLoaderSummary = function (value) { $scope.scopeModal.isLoadingSummaryFields = value };
+                    var setLoaderSummary = function (value) { $scope.scopeModal.isLoadingSummaryFields = value; };
                     var payloadforSummaryField = {
                         dataRecordTypeId: selectedSummaryDataRecordTypeId
                     };
@@ -358,7 +358,7 @@
             };
 
             $scope.scopeModal.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
 

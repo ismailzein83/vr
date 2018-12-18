@@ -32,7 +32,7 @@
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onBusinessEntityDefinitionUpdated = onBusinessEntityDefinitionUpdated
+                modalScope.onBusinessEntityDefinitionUpdated = onBusinessEntityDefinitionUpdated;
             };
 
             VRModalService.showModal('/Client/Modules/Security/Views/BusinessEntity/BusinessEntityDefinitionEditor.html', modalParameters, modalSettings);

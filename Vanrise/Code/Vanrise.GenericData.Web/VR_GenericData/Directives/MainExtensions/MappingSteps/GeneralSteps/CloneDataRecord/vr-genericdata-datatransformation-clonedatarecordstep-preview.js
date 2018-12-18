@@ -23,7 +23,7 @@ app.directive('vrGenericdataDatatransformationClonedatarecordstepPreview', ['Uti
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/GeneralSteps/CloneDataRecord/Templates/CloneDataRecordStepPreviewTemplate.html';
@@ -63,7 +63,7 @@ app.directive('vrGenericdataDatatransformationClonedatarecordstepPreview', ['Uti
                 };
 
                 api.getData = function () {
-                    return stepObj.stepDetails
+                    return stepObj.stepDetails;
                 };
 
                 if (ctrl.onReady != null)

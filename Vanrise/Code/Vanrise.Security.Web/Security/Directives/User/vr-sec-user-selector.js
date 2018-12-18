@@ -36,7 +36,7 @@ app.directive('vrSecUserSelector', ['VR_Sec_UserAPIService', 'VR_Sec_UserService
                                 ctrl.selectedvalues = userObj.Entity;
 
                             if (ctrl.onitemadded != null && typeof (ctrl.onitemadded) == 'function')
-                                ctrl.onitemadded(userObj.Entity)
+                                ctrl.onitemadded(userObj.Entity);
                         }
 
                     };

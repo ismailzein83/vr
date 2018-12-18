@@ -24,7 +24,7 @@
                 dataRecordTypeEntity = parameters.DataRecordType;
                 existingTypes = parameters.ExistingTypes;
                 existingRecordNames = [];
-                for(var i=0; i<existingTypes.length;i++)
+                for(var i=0; i<existingTypes.length; i++)
                 {
                     existingRecordNames.push({ RecordName: existingTypes[i].RecordName.toLowerCase() });
                 }

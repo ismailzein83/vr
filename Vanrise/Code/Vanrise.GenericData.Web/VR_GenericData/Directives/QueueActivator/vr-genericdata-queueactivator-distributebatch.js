@@ -68,7 +68,7 @@
                     if (payload != undefined && payload.QueueActivator != undefined && payload.QueueActivator.OutputStages != undefined) {
                         for (var i = 0; i < payload.QueueActivator.OutputStages.length; i++) {
                             var currentOutputStage = payload.QueueActivator.OutputStages[i];
-                            $scope.scopeModel.selectedOutputStages.push({ stageName: currentOutputStage })
+                            $scope.scopeModel.selectedOutputStages.push({ stageName: currentOutputStage });
                         }
                     }
 

@@ -54,7 +54,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 selectedIds: viewEntity != undefined ? viewEntity.ViewContent.DefaultPeriod : PeriodEnum.CurrentMonth.value
             };
             var setLoader = function (value) {
-                $scope.isLoadingPeriodSection = value
+                $scope.isLoadingPeriodSection = value;
             };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, periodDirectiveAPI, payload, setLoader, periodReadyPromiseDeferred);
         };
@@ -65,7 +65,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                 selectedIds: viewEntity != undefined ? viewEntity.ViewContent.DefaultGrouping : TimeDimensionTypeEnum.Daily.value
             };
             var setLoader = function (value) {
-                $scope.isLoadingTimeDimentionSection = value
+                $scope.isLoadingTimeDimentionSection = value;
             };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timeDimentionDirectiveAPI, payload, setLoader, timeDimentionReadyPromiseDeferred);
         };
@@ -182,7 +182,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
         };
 
         $scope.scopeModal.close = function () {
-            $scope.modalContext.closeModal()
+            $scope.modalContext.closeModal();
         };
 
         $scope.scopeModal.onSectionChanged = function () {
@@ -551,7 +551,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
                     if (summaryContent.NumberOfColumns == $scope.scopeModal.columnWidth[j].value)
                         numberOfColumns = $scope.scopeModal.columnWidth[j];
                 if (summaryValue != null) {
-                    addSummaryContentAPI(summaryValue, numberOfColumns, summaryContent)
+                    addSummaryContentAPI(summaryValue, numberOfColumns, summaryContent);
                 }
             }
             //$scope.selectedMenuNode = UtilsService.getItemByVal($scope.menuList, $scope.filter.ModuleId, 'Id');
@@ -684,7 +684,7 @@ function DynamicPageEditorController($scope, VR_Sec_MenuAPIService, VR_Sec_Widge
         $scope.scopeModal.bodyColumnWidth = [];
         for (var i = 0; i < $scope.scopeModal.columnWidth.length; i++) {
             if ($scope.scopeModal.columnWidth[i].value != ColumnWidthEnum.QuarterRow.value)
-                $scope.scopeModal.bodyColumnWidth.push($scope.scopeModal.columnWidth[i])
+                $scope.scopeModal.bodyColumnWidth.push($scope.scopeModal.columnWidth[i]);
         }
         $scope.scopeModal.selectedColumnWidth = $scope.scopeModal.columnWidth[0];
     }

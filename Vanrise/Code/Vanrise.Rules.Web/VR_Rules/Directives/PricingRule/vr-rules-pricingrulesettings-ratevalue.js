@@ -53,7 +53,7 @@
 
                 $scope.onDirectiveReady = function (api) {
                     directiveAPI = api;
-                    var setLoader = function (value) { $scope.isLoadingDirective = value };
+                    var setLoader = function (value) { $scope.isLoadingDirective = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
                 };
 

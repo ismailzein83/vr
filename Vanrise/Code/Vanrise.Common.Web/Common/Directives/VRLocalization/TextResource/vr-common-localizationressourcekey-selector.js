@@ -31,7 +31,7 @@ app.directive("vrCommonLocalizationressourcekeySelector", ["VRNotificationServic
             var colnum = 12;
             if (attrs.normalColNum != undefined)
                 colnum = attrs.normalColNum;
-            return '<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onTextResourceSelectorReady" ng-if="scopeModel.isLocalizationEnabled" normal-col-num="' + colnum + '" selectedvalues="scopeModel.selectedResourceKey" isrequired="true" customlabel="' + label + '"></vr-common-vrlocalizationtextresource-selector>'
+            return '<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onTextResourceSelectorReady" ng-if="scopeModel.isLocalizationEnabled" normal-col-num="' + colnum + '" selectedvalues="scopeModel.selectedResourceKey" isrequired="true" customlabel="' + label + '"></vr-common-vrlocalizationtextresource-selector>';
 
         }
         function VrLocalizationressourcekeySelector($scope, ctrl, $attrs) {

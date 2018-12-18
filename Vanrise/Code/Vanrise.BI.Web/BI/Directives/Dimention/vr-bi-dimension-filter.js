@@ -53,7 +53,7 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
                         onDimensionSelectorReady : function (api)
                         {
                             filter.dimensionAPI = api;
-                            var setLoader = function (value) { filter.isLoadingDimentionDirective = value };
+                            var setLoader = function (value) { filter.isLoadingDimentionDirective = value; };
                             var payload = { entityName: filter.selectedEntityName.Name };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filter.dimensionAPI, payload, setLoader);
                         },
@@ -61,7 +61,7 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
                         {
                             if (filter.dimensionAPI != undefined)
                             {
-                                var setLoader = function (value) { filter.isLoadingDimentionDirective = value };
+                                var setLoader = function (value) { filter.isLoadingDimentionDirective = value; };
                                 var payload = { entityName: selectItem.Name };
                                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filter.dimensionAPI, payload, setLoader);
                             }
@@ -128,7 +128,7 @@ app.directive("vrBiDimensionFilter", ["UtilsService", "VRNotificationService", "
                     },
                     onSelectItem: function (selectItem) {
                         if (dataItem.dimensionAPI != undefined) {
-                            var setLoader = function (value) { dataItem.isLoadingDimentionDirective = value };
+                            var setLoader = function (value) { dataItem.isLoadingDimentionDirective = value; };
                             var payload = { entityName: selectItem.Name };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dimensionAPI, payload, setLoader);
                         }

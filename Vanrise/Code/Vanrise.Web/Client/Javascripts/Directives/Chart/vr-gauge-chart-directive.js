@@ -142,7 +142,7 @@ app.directive('vrGaugeChart', ['ChartDirService', 'VRModalService', 'UtilsServic
                         minorTickPosition: 'inside',
                         minorTickColor: '#666',
 
-                   //     tickAmount: 2,
+                        //     tickAmount: 2,
 
                         tickPixelInterval: 30,
                         tickWidth: 2,
@@ -157,7 +157,7 @@ app.directive('vrGaugeChart', ['ChartDirService', 'VRModalService', 'UtilsServic
                             //    if (this.value == 100) return yAxisDefinition.max;
                             //    return "";
                             //},
-                            
+
                         },
                         //showFirstLabel: true,
                         //showLastLabel: true,
@@ -173,11 +173,11 @@ app.directive('vrGaugeChart', ['ChartDirService', 'VRModalService', 'UtilsServic
                             to: yAxisDefinition.max,
                             color: '#DDDF0D' // yellow
                         },
-                        //{
-                        //    from: 40,
-                        //    to: 100,
-                        //    color: '#DF5353' // red
-                        //}
+                            //{
+                            //    from: 40,
+                            //    to: 100,
+                            //    color: '#DF5353' // red
+                            //}
                         ]
                     },
                     series: series,
@@ -193,7 +193,7 @@ app.directive('vrGaugeChart', ['ChartDirService', 'VRModalService', 'UtilsServic
                     }
                 });
                 isChartAvailable = true;
-            }, 1)
+            }, 1);
 
         }
 

@@ -91,7 +91,7 @@
             filter.RuleDefinitionId = genericRuleDefinitionAPI.getSelectedIds();
             filter.EffectiveDate = $scope.scopeModel.effectiveDate;
             filter.Description = $scope.scopeModel.description;
-            filter.ReportName = ruleDefinition.Name
+            filter.ReportName = ruleDefinition.Name;
         }
 
         function load() {

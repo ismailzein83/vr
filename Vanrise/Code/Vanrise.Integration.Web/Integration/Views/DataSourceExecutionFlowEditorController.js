@@ -37,7 +37,7 @@ function DataSourceExecutionFlowEditorController($scope, VR_Integration_DataSour
                 angular.forEach(response, function (item) {
                     $scope.executionFlowDefinitions.push(item);
                 });
-            })
+            });
     }
 
     function buildExecFlowObjFromScope() {

@@ -22,7 +22,7 @@ app.directive( 'vrLegend', ['$compile', 'UtilsService', function ( $compile, Uti
             {
                 if ( showContent == false )
                 {
-                    showLegendContent()
+                    showLegendContent();
                 }
                 else
                 {

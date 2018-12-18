@@ -22,7 +22,7 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService', 'VRUIUtilsServic
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Choices/Templates/ChoicesFieldTypeTemplate.html';
@@ -85,7 +85,7 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService', 'VRUIUtilsServic
 
                             var choicesGridPayLoad;
                             if (payload != undefined && payload.Choices != undefined) {
-                                choicesGridPayLoad = { choices: payload.Choices }
+                                choicesGridPayLoad = { choices: payload.Choices };
                             }
                             VRUIUtilsService.callDirectiveLoad(choicesGridAPI, choicesGridPayLoad, loadChoicesGridPromiseDeferred);
                         });
@@ -99,7 +99,7 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService', 'VRUIUtilsServic
 
                             var dataRecordFieldChoicePayLoad;
                             if (payload != undefined && payload.ChoiceDefinitionId != undefined) {
-                                dataRecordFieldChoicePayLoad = { selectedIds: payload.ChoiceDefinitionId }
+                                dataRecordFieldChoicePayLoad = { selectedIds: payload.ChoiceDefinitionId };
                             }
                             VRUIUtilsService.callDirectiveLoad(dataRecordFieldChoiceSelectorGridAPI, dataRecordFieldChoicePayLoad, loadDataRecordFieldChoiceSelectorPromiseDeferred);
                         });

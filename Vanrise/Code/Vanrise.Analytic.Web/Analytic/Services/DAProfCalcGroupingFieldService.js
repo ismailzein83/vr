@@ -15,7 +15,7 @@
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onDAProfCalcGroupingFieldAdded = onDAProfCalcGroupingFieldAdded
+                modalScope.onDAProfCalcGroupingFieldAdded = onDAProfCalcGroupingFieldAdded;
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/DataAnalysis/ProfilingAndCalculation/DAProfCalcGroupingFieldEditor.html', parameters, settings);
         };

@@ -44,7 +44,7 @@
 
             var modalSettings = {};
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onPermissionsUpdated = onPermissionsUpdated
+                modalScope.onPermissionsUpdated = onPermissionsUpdated;
             };
 
             VRModalService.showModal('/Client/Modules/Security/Views/Permission/BusinessEntityEditor.html', modalParameters, modalSettings);

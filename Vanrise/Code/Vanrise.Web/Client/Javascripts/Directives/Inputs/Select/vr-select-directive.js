@@ -860,7 +860,7 @@
                     var ulDropdown = angular.element(element[0].querySelector('.dropdown-menu'));
                     var tabindex = '';
                     if ($(divDropdown).parents().hasClass('divDisabled') == true) {
-                        tabindex = 'tabindex=-1'
+                        tabindex = 'tabindex=-1';
                     }
                     //attrs.id = baseDirService.prepareDirectiveHTMLForValidation({}, divDropdown, undefined, divDropdown);
 
@@ -1055,12 +1055,12 @@
                                     if (index >= 0)
                                         continue;
                                 }
-                                if (!ctrl.getObjectDisabled(item)){
+                                if (!ctrl.getObjectDisabled(item)) {
                                     ctrl.selectedvalues.push(item);
                                     if (ctrl.onselectitem && typeof (ctrl.onselectitem) == 'function') {
                                         ctrl.onselectitem(item);
                                     }
-                                }                                  
+                                }
                             }
                         };
 
@@ -1136,7 +1136,7 @@
 
                         };
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 var temp = selectService.dTemplate;

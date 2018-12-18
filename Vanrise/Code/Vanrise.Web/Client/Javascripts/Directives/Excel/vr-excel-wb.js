@@ -88,7 +88,7 @@ app.directive('vrExcelWb', ['VR_ExcelConversion_ExcelAPIService', function (exce
             $scope.onReadyTabs = function (api) {
                 ctrl.tabsApi = api;
                 defineAPI();
-            }
+            };
                 
         }
         function defineAPI() {

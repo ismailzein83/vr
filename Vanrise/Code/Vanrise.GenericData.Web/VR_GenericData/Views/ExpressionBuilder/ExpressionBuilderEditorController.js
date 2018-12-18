@@ -53,7 +53,7 @@
             };
              
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.validateExpression = function () {

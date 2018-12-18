@@ -15,7 +15,7 @@
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onDAProfCalcCalculationFieldAdded = onDAProfCalcCalculationFieldAdded
+                modalScope.onDAProfCalcCalculationFieldAdded = onDAProfCalcCalculationFieldAdded;
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/DataAnalysis/ProfilingAndCalculation/DAProfCalcCalculationFieldEditor.html', parameters, settings);
         };

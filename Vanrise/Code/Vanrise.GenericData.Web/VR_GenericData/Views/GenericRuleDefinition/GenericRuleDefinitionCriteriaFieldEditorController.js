@@ -76,7 +76,7 @@
 
             if (isEditMode) {
                 setCriteriaFieldEntityFromParameters().then(function () {
-                    loadAllControls()
+                    loadAllControls();
                 });
             }
             else {
@@ -147,7 +147,7 @@
                     var payload = {};
 
                     if (objectVariables != undefined) {
-                        payload.objects = objectVariables
+                        payload.objects = objectVariables;
                     }
                     if (criteriaFieldEntity != undefined) {
                         var property = { objectName: criteriaFieldEntity.ValueObjectName, propertyName: criteriaFieldEntity.ValuePropertyName };

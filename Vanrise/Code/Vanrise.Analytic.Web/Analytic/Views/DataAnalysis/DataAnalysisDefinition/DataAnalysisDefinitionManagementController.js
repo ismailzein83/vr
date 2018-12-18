@@ -28,7 +28,7 @@
             };
 
             $scope.hasAddDataAnalysisDefinitionPermission = function () {
-                return VR_Analytic_DataAnalysisDefinitionAPIService.HasAddDataAnalysisDefinitionPermission()
+                return VR_Analytic_DataAnalysisDefinitionAPIService.HasAddDataAnalysisDefinitionPermission();
             };
 
             $scope.scopeModel.onGridReady = function (api) {

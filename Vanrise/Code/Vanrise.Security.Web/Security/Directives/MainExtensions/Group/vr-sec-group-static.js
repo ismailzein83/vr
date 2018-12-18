@@ -80,6 +80,6 @@
         return directiveDefinitionObject;
     }
 
-    app.directive('vrSecGroupStatic', GroupStaticDirective)
+    app.directive('vrSecGroupStatic', GroupStaticDirective);
 
 })(app);

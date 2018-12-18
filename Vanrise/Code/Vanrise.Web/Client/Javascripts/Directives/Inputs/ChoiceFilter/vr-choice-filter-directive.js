@@ -16,7 +16,7 @@ app.directive('vrChoiceFilter', [function () {
             $element.bind("$destroy", function () {
                 setTimeout(function () {
                     ctrl.removeTab(ctrl);
-                }, 1)
+                }, 1);
                 
             });           
         },
@@ -24,7 +24,7 @@ app.directive('vrChoiceFilter', [function () {
         bindToController: true,
         compile: function (element, attrs) {
             return {
-                    pre: function ($scope, iElem, iAttrs, choicesCtrl) {
+                pre: function ($scope, iElem, iAttrs, choicesCtrl) {
                     $scope.$on("$destroy", function () {
                         iElem.off();
                         selectedWatch();
@@ -77,11 +77,11 @@ app.directive('vrChoiceFilter', [function () {
                     var span = $(element.children().first().find("span"));
                     setTimeout(function () {
                         ctrl.hint = $(span).html();
-                    },1)
+                    }, 1);
                 }
 
-           
-            }
+
+            };
         },
         template: '<label class="hand-cursor" style="margin-right:-2px" ng-style="ctrl.getTabStyle()"  ng-class="ctrl.isSelected?\'clicked-btn\':\'\'"  ng-click="ctrl.choiceClicked()" ng-transclude title="{{ctrl.hint}}"></label>'
     };

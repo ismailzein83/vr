@@ -97,7 +97,7 @@
             };
 
             $scope.scopeModal.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModal.onEditorDirectiveReady = function (api) {
@@ -352,7 +352,7 @@
         {
             var obj = dataRecordTypeAPI.getData();
             var recordTypeNames = [];
-            for (var i = 0; i < obj.RecordTypes.length;i++)
+            for (var i = 0; i < obj.RecordTypes.length; i++)
             {
                 var recordType = obj.RecordTypes[i];
                 if (!recordType.IsArray)
@@ -416,7 +416,7 @@
                     $scope.scopeModal.selectedStep.isSelected = false;
                     stepItem.isSelected = true;
                     $scope.scopeModal.selectedStep = undefined;
-                    setTimeout(function () { $scope.scopeModal.selectedStep = stepItem; UtilsService.safeApply($scope) })
+                    setTimeout(function () { $scope.scopeModal.selectedStep = stepItem; UtilsService.safeApply($scope); };)
                 }
 
             }

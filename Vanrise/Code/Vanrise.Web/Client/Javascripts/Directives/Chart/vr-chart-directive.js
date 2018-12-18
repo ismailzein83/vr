@@ -222,7 +222,7 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                                 //});
                                 return;
                             }
-                            onDataItemClicked( selectedDataItem )
+                            onDataItemClicked(selectedDataItem);
                         }
                     }
                 };
@@ -248,8 +248,7 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
             } );
 
             api.hideChart();
-            setTimeout( function ()
-            {
+            setTimeout(function () {
 
                 //chartSettings
                 var chartSettings = {
@@ -260,8 +259,7 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                         beta: 0
                     },
                     events: {
-                        load: function ()
-                        {
+                        load: function () {
                             chartAPI = this;
                         }
                     }
@@ -290,13 +288,11 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                     y: 15,
                     borderWidth: 0,
                     useHTML: true,
-                    labelFormatter: function ()
-                    {
-                        if ( currentChartSettings.showValuesWithLegends )
-                        {
-                            var htmlText = '<div style="width:200px"><span style="float:left" title="' + this.name + '">' + ( this.name != null && this.name.length > 15 ? this.name.substring( 0, 15 ) + '..' : this.name ) + '</span><span style="float:right">';
-                            if ( this.y != undefined )
-                                htmlText += this.y.toFixed( 2 );
+                    labelFormatter: function () {
+                        if (currentChartSettings.showValuesWithLegends) {
+                            var htmlText = '<div style="width:200px"><span style="float:left" title="' + this.name + '">' + (this.name != null && this.name.length > 15 ? this.name.substring(0, 15) + '..' : this.name) + '</span><span style="float:right">';
+                            if (this.y != undefined)
+                                htmlText += this.y.toFixed(2);
                             else
                                 htmlText += this.y;
 
@@ -305,17 +301,16 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                         }
 
                         else
-                            return '<div style="width:10px" title="' + this.name + '">' + ( this.name != null && this.name.length > 2 ? this.name.substring( 0, 2 ) : this.name ) + '</div>';
+                            return '<div style="width:10px" title="' + this.name + '">' + (this.name != null && this.name.length > 2 ? this.name.substring(0, 2) : this.name) + '</div>';
                     }
                 };
 
                 //tooltip
                 var tooltip = {
 
-                    formatter: function ()
-                    {
+                    formatter: function () {
                         var s = this.key;
-                        s += '<br/><span style="color:' + this.point.color + '">\u25CF</span> ' + this.series.name + ': <b>' + formatValue( this.point.y ) + '</b>';
+                        s += '<br/><span style="color:' + this.point.color + '">\u25CF</span> ' + this.series.name + ': <b>' + formatValue(this.point.y) + '</b>';
 
                         return s;
                     }
@@ -333,7 +328,7 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                     enabled: ctrl.hideexporticon == undefined
                 };
 
-                chartElement.highcharts( {
+                chartElement.highcharts({
                     chart: chartSettings,
                     title: {
                         text: chartDefinition.title
@@ -344,11 +339,11 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                     yAxis: yAxis,
                     series: series,
                     tooltip: tooltip,
-                } );
-                resizeChart( 1 );
+                });
+                resizeChart(1);
                 isChartAvailable = true;
                 $scope.$apply();
-            }, 1 )
+            }, 1);
 
 
         }

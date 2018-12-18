@@ -142,7 +142,7 @@
                         if (ctrl.onReady != null)
                             ctrl.onReady(api);
                     }
-                }
+                };
             },
 
             controllerAs: 'ctrl',

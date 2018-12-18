@@ -102,21 +102,21 @@ function MenuRankingEditorController($scope, VR_Sec_ViewAPIService, VRNotificati
     {
         if (childs == null || childs.length == 0)
             return;
-        for(var i=0 ; i<childs.length;i++)
+        for(var i=0; i<childs.length; i++)
         {
             var child = childs[i];
             if (child.MenuType == VR_Sec_MenuTypeEnum.View.value)
             {
                 childs[i].isLeaf = true;
                 childs[i].ItemId = menuItemId++;
-                setLeafNodes(child.Childs)
+                setLeafNodes(child.Childs);
             }
                 
             else
             {
                 childs[i].isLeaf = false;
                 childs[i].ItemId = menuItemId++;
-                setLeafNodes(child.Childs)
+                setLeafNodes(child.Childs);
             }
                 
         }

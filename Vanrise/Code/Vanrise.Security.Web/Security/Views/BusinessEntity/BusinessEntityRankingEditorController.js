@@ -88,13 +88,13 @@ function BusinessEntityRankingEditorController($scope, VRNotificationService, Ut
             if (child.EntType == VR_Sec_EntityTypeEnum.ENTITY.value) {
                 children[i].isLeaf = true;
                 children[i].ItemId = businessEntitiesItemId++;
-                setLeafNodes(child.Children)
+                setLeafNodes(child.Children);
             }
 
             else {
                 children[i].isLeaf = false;
                 children[i].ItemId = businessEntitiesItemId++;
-                setLeafNodes(child.Children)
+                setLeafNodes(child.Children);
             }
 
         }

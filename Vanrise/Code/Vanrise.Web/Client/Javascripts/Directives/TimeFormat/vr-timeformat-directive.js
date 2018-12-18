@@ -80,15 +80,14 @@ app.directive('vrTimeformat', ['UtilsService', '$compile', 'VRModalService', fun
                     };
                 };
                 var parameter;
-                if (ctrl.value != undefined)
-                {
-                     parameter = {
+                if (ctrl.value != undefined) {
+                    parameter = {
                         timeFormatValue: ctrl.value
                     };
                 }
-                   
+
                 VRModalService.showModal('/Client/Javascripts/Directives/TimeFormat/Templates/TimeFormatEditor.html', parameter, modalSettings);
-            }
+            };
             
         }
 

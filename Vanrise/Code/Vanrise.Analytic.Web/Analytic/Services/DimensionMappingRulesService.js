@@ -32,5 +32,5 @@ app.service("VR_Analytic_DimensionMappingRulesService", ["VRModalService",
         return {
             addRule: addRule,
             editRule: editRule
-        }
+        };
     }]);

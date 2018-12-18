@@ -151,7 +151,7 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
                     },
                     pane: {
                         center: ['50%', '85%'],
-                        size: '140%', 
+                        size: '140%',
                         startAngle: -90,
                         endAngle: 90,
                         background: {
@@ -163,7 +163,7 @@ app.directive('vrSolidgaugeChart', ['ChartDirService', 'VRModalService', 'UtilsS
                     }
                 });
                 isChartAvailable = true;
-            }, 1)
+            }, 1);
 
         }
 

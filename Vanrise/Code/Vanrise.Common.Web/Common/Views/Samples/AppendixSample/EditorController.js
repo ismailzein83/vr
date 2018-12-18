@@ -37,7 +37,7 @@
             $scope.testModel = 'test value 1';
             $scope.title = 'Appendix Sample Editor: ' + (isEditMode ? 'Edit' : 'New');
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.select1Source = [];
@@ -54,7 +54,7 @@
 
             $scope.dynamicAppendixReady = function (api) {
                 dynamicAppendixAPI = api;
-                var setLoader = function (value) { $scope.isLoadingDynamicAppendix = value };
+                var setLoader = function (value) { $scope.isLoadingDynamicAppendix = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dynamicAppendixAPI, undefined, setLoader, dynamicAppendixReadyPromiseDeferred);
             };
 
@@ -71,7 +71,7 @@
 
                 dynamicAppendixItem.dynamicAppendixReady = function (api) {
                     dynamicAppendixItem.dynamicAppendixAPI = api;
-                    var setLoader = function (value) { dynamicAppendixItem.isLoading = value };
+                    var setLoader = function (value) { dynamicAppendixItem.isLoading = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dynamicAppendixItem.dynamicAppendixAPI, undefined, setLoader);
                 };
 

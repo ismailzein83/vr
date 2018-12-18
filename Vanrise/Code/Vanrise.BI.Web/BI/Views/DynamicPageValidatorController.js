@@ -12,7 +12,7 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
                 Audience: parameters.Audience,
                 BodyContents: parameters.ViewContent.BodyContents,
                 SummaryContents: parameters.ViewContent.SummaryContents,
-            }
+            };
         }
     }
 
@@ -23,7 +23,7 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
         $scope.groups = [];
         $scope.dataSrouce = [];
         $scope.close = function () {
-            $scope.modalContext.closeModal()
+            $scope.modalContext.closeModal();
         };
 
         $scope.onMainGridReady = function (api) {
@@ -100,10 +100,10 @@ function ValidateEditorController($scope, UsersAPIService, VRNavigationService, 
 
     function loadUsers() {
       return  UsersAPIService.GetUsers().then(function (response) {
-            angular.forEach(response, function (user) {
+          angular.forEach(response, function (user) {
 
-                $scope.users.push(user);
-            })
+              $scope.users.push(user);
+          });
         });
 
     }

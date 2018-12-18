@@ -91,7 +91,7 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
 			var itemCssClass = '';
 			if (attrs.onitemclicked != undefined) {
 				onItemClickedAttr = 'ng-click="ondataitemclicked(dataItem)"';
-				itemCssClass = 'class ="vr-list-item-clickable"'
+                itemCssClass = 'class ="vr-list-item-clickable"';
 			}
 			var title='';
 			if (attrs.enabletitle != undefined)

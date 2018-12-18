@@ -47,13 +47,13 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                     };
                     dataItem.onDirectiveReady = function (api) {
                         dataItem.directiveAPI = api;
-                        var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                        var setLoader = function (value) { ctrl.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
                     };
 
                     dataItem.onRateTypeSelectorReady = function (api) {
                         dataItem.rateTypeSelectorAPI = api;
-                        var setLoader = function (value) { ctrl.isLoadingRateTypeDirective = value };
+                        var setLoader = function (value) { ctrl.isLoadingRateTypeDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.rateTypeSelectorAPI, undefined, setLoader);
                     };
 

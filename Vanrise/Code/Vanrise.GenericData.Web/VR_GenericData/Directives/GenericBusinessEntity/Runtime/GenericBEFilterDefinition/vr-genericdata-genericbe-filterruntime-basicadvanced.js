@@ -84,7 +84,7 @@
                     var recordFilters = [];
                     var filters = [];
 
-                    for(var i=0;i<$scope.scopeModel.filters.length;i++)
+                    for(var i=0; i<$scope.scopeModel.filters.length; i++)
                     {
                         var filter = $scope.scopeModel.filters[i];
                         var data = filter.filterAPI.getData();

@@ -12,14 +12,14 @@ function DataTransformationCompilationResult($scope, VRNavigationService, UtilsS
             $scope.dataSrouce = [];
             for (var i = 0; i < parameters.errorMessages.length; i++)
             {
-                $scope.dataSrouce.push({ Error: parameters.errorMessages[i] })
+                $scope.dataSrouce.push({ Error: parameters.errorMessages[i] });
             }
         }
     }
 
     function defineScope() {
         $scope.close = function () {
-            $scope.modalContext.closeModal()
+            $scope.modalContext.closeModal();
         };
         $scope.export = function () {
 

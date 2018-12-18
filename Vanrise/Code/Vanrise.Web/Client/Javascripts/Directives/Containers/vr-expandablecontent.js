@@ -13,7 +13,7 @@
             template: function(){
                 return '<div class="expandable-content"><div ng-transclude class="content" ng-style="style"></div><section class="trigger" ng-if="showSection"> \
                           <span ng-click="toggleMore()">{{more ? "See More":"Less"}}</span> \
-                        </section></div>'
+                        </section></div>';
             },
             link: function (scope, elm, attrs) {
                 var origHeight, options = angular.extend({}, angular.copy(defOption), scope.$eval(attrs.options));

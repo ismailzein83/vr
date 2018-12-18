@@ -123,7 +123,7 @@ app.directive('vrBiSummary', ['UtilsService', 'VR_BI_BIConfigurationAPIService',
                             value: response[i].toFixed(2),
                             description: ctrl.measureTypes[i],
 
-                        }
+                        };
                     }
                 })
                 .finally(function () {

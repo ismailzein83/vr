@@ -16,7 +16,7 @@
             };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onDataAnalysisItemDefinitionAdded = onDataAnalysisItemDefinitionAdded
+                modalScope.onDataAnalysisItemDefinitionAdded = onDataAnalysisItemDefinitionAdded;
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/DataAnalysis/DataAnalysisItemDefinition/DataAnalysisItemDefinitionEditor.html', parameters, settings);
         };

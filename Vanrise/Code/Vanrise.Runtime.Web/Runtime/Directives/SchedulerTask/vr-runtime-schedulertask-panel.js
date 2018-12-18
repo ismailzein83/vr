@@ -52,7 +52,7 @@ app.directive("vrRuntimeSchedulertaskPanel", ["VRUIUtilsService", "UtilsService"
                 api.loadPanel = function (payload) {
                     if (payload != undefined) { 
                         bpDefinitionId = payload.bpDefinitionId,
-                        $scope.scopeModel.showAddSchedulerTask = payload.showAddSchedulerTask
+                            $scope.scopeModel.showAddSchedulerTask = payload.showAddSchedulerTask;
                     }
                     return gridAPI.loadGrid(getGridQuery());
                 };

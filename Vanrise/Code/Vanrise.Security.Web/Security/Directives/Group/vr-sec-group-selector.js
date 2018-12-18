@@ -110,6 +110,6 @@
         return directiveDefinitionObject;
     }
 
-    app.directive('vrSecGroupSelector', GroupSelectorDirective)
+    app.directive('vrSecGroupSelector', GroupSelectorDirective);
 
 })(app);

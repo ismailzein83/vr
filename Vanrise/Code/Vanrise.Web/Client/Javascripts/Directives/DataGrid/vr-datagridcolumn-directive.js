@@ -102,7 +102,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
 
                     var show = (iAttrs.initiallyhidden != undefined) != undefined ? !$scope.$eval(iAttrs.initiallyhidden): true;
                     if (isMobile && (iAttrs.ishiddeninlistview != undefined)) {
-                        show = !$scope.$eval(iAttrs.ishiddeninlistview)
+                        show = !$scope.$eval(iAttrs.ishiddeninlistview);
                     }
 
                     if (iAttrs.ngShow != undefined)
@@ -152,7 +152,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                                 else
                                     dataGridCtrl.hideColumn(colDef);
                             }
-                        })
+                        });
                     });
                 }
             };

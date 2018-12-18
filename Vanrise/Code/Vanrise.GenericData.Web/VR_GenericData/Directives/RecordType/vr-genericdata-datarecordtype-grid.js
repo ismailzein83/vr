@@ -86,7 +86,7 @@ app.directive("vrGenericdataDatarecordtypeGrid", ["UtilsService", "VRNotificatio
             }
 
             function hasEditDataRecordTypePermission() {
-                return VR_GenericData_DataRecordTypeAPIService.HasUpdateDataRecordType()
+                return VR_GenericData_DataRecordTypeAPIService.HasUpdateDataRecordType();
             }
             function editDataRecordField(dataItem) {
                 var onDataRecordFieldUpdated = function (dataRecordFieldObj) {

@@ -23,7 +23,7 @@ app.directive('vrGenericdataDatatransformationStopiterationstepPreview', ['Utils
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/GeneralSteps/StopIteration/Templates/StopIterationStepPreviewTemplate.html';
@@ -59,7 +59,7 @@ app.directive('vrGenericdataDatatransformationStopiterationstepPreview', ['Utils
                 };
 
                 api.getData = function () {
-                    return stepObj.stepDetails
+                    return stepObj.stepDetails;
                 };
 
                 if (ctrl.onReady != null)

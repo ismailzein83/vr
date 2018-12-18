@@ -73,7 +73,7 @@
                 };
                 setTimeout(function () {
                     if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
-                        ctrl.tabindex = "-1"
+                        ctrl.tabindex = "-1";
                     }
                 }, 10);
 
@@ -82,7 +82,7 @@
                 $quan.on('keyup', function (e) {
                     if (e.which === 40) {
                         var ind = $quan.index(this);
-                        $quan.eq(ind + 1).focus()
+                        $quan.eq(ind + 1).focus();
                     }
                     if (e.which === 38) {
                         var ind = $quan.index(this);
@@ -310,7 +310,7 @@
 
                     },
 
-                }
+                };
             },
 
             controllerAs: 'ctrl',

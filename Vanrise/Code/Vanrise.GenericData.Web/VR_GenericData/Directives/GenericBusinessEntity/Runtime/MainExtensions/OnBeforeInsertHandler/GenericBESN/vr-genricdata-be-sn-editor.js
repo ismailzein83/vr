@@ -33,7 +33,7 @@
                         $scope.scopeModel.serialNumberPattern += serialNumberPatternValue;
                     };
                     var context = getContext();
-                    VR_GenericData_GenericBESerialNumberService.openSerialNumberPatternHelper(onSetSerialNumberPattern, context)
+                    VR_GenericData_GenericBESerialNumberService.openSerialNumberPatternHelper(onSetSerialNumberPattern, context);
                 };
                 getDirectiveAPI();
             }
@@ -72,7 +72,7 @@
                         var serialNumberPartsInfo = new Array();
                         if (serialNumberParts != undefined)
                         {
-                            for (var i = 0; i < serialNumberParts.length;i++)
+                            for (var i = 0; i < serialNumberParts.length; i++)
                             {
                                 serialNumberPartsInfo.push(serialNumberParts[i]);
                             }

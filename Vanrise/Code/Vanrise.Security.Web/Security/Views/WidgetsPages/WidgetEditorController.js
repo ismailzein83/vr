@@ -51,7 +51,7 @@ function widgetEditorController($scope, VR_Sec_WidgetAPIService, UtilsService, V
         $scope.scopeModal.widgetName;
         $scope.scopeModal.widget;
         $scope.scopeModal.close = function () {
-            $scope.modalContext.closeModal()
+            $scope.modalContext.closeModal();
         };
 
         $scope.scopeModal.save = function () {
@@ -76,7 +76,7 @@ function widgetEditorController($scope, VR_Sec_WidgetAPIService, UtilsService, V
                 return VR_Sec_WidgetAPIService.HasAddWidgetPermission();
             }
 
-        }
+        };
 
     }
 

@@ -23,7 +23,7 @@ app.directive('vrGenericdataDatatransformationAssignfieldstepPreview', ['UtilsSe
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/GeneralSteps/AssignField/Templates/AssignFieldStepPreviewTemplate.html';
@@ -64,7 +64,7 @@ app.directive('vrGenericdataDatatransformationAssignfieldstepPreview', ['UtilsSe
                 };
 
                 api.getData = function () {
-                    return stepObj.stepDetails
+                    return stepObj.stepDetails;
                 };
                 
                 if (ctrl.onReady != null)

@@ -55,7 +55,7 @@ function ($compile, DaysOfWeekEnum, UtilsService, VRValidationService) {
 
             ctrl.validateAddedTime = function () {
                 if (ctrl.selectedDaysOfWeek != undefined && ctrl.selectedDaysOfWeek.length > 0 && (ctrl.times == undefined || ctrl.times.length == 0)) {
-                    return 'At least one time interval should be added.'
+                    return 'At least one time interval should be added.';
                 }
                 return null;
             };

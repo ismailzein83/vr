@@ -42,7 +42,7 @@
 
             $scope.scopeModel.onSearchSettingsDirectiveReady = function (api) {
                 searchSettingDirectiveAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value; };
                 var payload = {
                     tableIds: tableSelectorAPI.getSelectedIds()
                 };
@@ -56,7 +56,7 @@
 
             $scope.scopeModel.onTableSelectionChanged = function () {
                 if (searchSettingDirectiveAPI != undefined && tableSelectorAPI != undefined) {
-                    var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value };
+                    var setLoader = function (value) { $scope.scopeModel.isLoadingSearchSettingsDirective = value; };
                     var payload = {
                         tableIds: tableSelectorAPI.getSelectedIds()
                     };
@@ -95,7 +95,7 @@
             };
            
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.onTreeReady = function (api) {
@@ -213,7 +213,7 @@
                     if (viewEntity != undefined && viewEntity.Settings != undefined) {
                         payLoad = {
                             selectedIds: viewEntity.Settings.AnalyticTableIds
-                        }
+                        };
                     }
 
                     VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoad, loadTableSelectorPromiseDeferred);
@@ -232,7 +232,7 @@
                             payLoad = {
                                 tableIds: viewEntity.Settings.AnalyticTableIds,
                                 searchSettings: viewEntity.Settings.SearchSettings
-                            }
+                            };
                         }
 
                         VRUIUtilsService.callDirectiveLoad(searchSettingDirectiveAPI, payLoad, loadSearchSettingsPromiseDeferred);
@@ -256,7 +256,7 @@
             var widgets = [];
             if ($scope.scopeModel.widgets != undefined && $scope.scopeModel.widgets.length > 0)
             {
-                for(var i=0;i<$scope.scopeModel.widgets.length;i++)
+                for(var i=0; i<$scope.scopeModel.widgets.length; i++)
                 {
                     widgets.push($scope.scopeModel.widgets[i].widgetSettings);
                 }

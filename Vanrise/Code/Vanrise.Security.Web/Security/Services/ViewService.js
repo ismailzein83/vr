@@ -34,7 +34,7 @@
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onPageUpdated = onDynamicPageUpdated
+                modalScope.onPageUpdated = onDynamicPageUpdated;
             };
 
             VRModalService.showModal('/Client/Modules/Security/Views/DynamicPages/DynamicPageEditor.html', modalParameters, modalSettings);
@@ -51,7 +51,7 @@
                         }
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, scope);
-                    })
+                    });
                 }
             });
         }
@@ -65,7 +65,7 @@
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onViewUpdated = onViewUpdated
+                modalScope.onViewUpdated = onViewUpdated;
             };
 
             VRModalService.showModal('/Client/Modules/Security/Views/Menu/ViewEditor.html', modalParameters, modalSettings);

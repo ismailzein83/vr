@@ -42,9 +42,9 @@
 
                 api.getData = function () {
                     return {
-                        FromTime : $scope.scopeModel.fromDate,
-                        ToTime : $scope.scopeModel.toDate
-                    }
+                        FromTime: $scope.scopeModel.fromDate,
+                        ToTime: $scope.scopeModel.toDate
+                    };
                 };
 
                 if (ctrl.onReady != null) {

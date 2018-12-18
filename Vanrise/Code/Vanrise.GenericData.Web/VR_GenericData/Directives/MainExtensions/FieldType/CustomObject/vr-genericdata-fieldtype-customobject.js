@@ -24,7 +24,7 @@ app.directive('vrGenericdataFieldtypeCustomobject', ['UtilsService','VRUIUtilsSe
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/CustomObject/Templates/CustomObjectFieldTypeTemplate.html';
@@ -73,7 +73,7 @@ app.directive('vrGenericdataFieldtypeCustomobject', ['UtilsService','VRUIUtilsSe
                     }
 
 
-                    return UtilsService.waitMultiplePromises(promises)
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {

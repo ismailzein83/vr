@@ -23,7 +23,7 @@ app.directive('vrGenericdataDatatransformationForloopstep', ['UtilsService','VR_
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/GeneralSteps/ForLoop/Templates/ForLoopStepTemplate.html';

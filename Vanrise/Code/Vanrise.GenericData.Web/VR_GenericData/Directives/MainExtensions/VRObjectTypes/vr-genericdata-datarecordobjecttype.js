@@ -60,7 +60,7 @@
 
                     VRUIUtilsService.callDirectiveLoad(selectorAPI, selectorPayload, dataRecordObjectTypeSelectorLoadDeferred);
 
-                    return dataRecordObjectTypeSelectorLoadDeferred.promise
+                    return dataRecordObjectTypeSelectorLoadDeferred.promise;
                 };
 
                 api.getData = function () {

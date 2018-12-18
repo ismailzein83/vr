@@ -16,7 +16,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onDataRecordAlertRuleAdded = onDataRecordAlertRuleAdded
+                modalScope.onDataRecordAlertRuleAdded = onDataRecordAlertRuleAdded;
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Elements/Notification/DataRecord/AlertRule/Views/AlertRuleRecordEditor.html', parameters, settings);

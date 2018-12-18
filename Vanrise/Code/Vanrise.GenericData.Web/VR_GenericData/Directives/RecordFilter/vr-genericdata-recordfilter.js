@@ -97,7 +97,7 @@
 
             function buildRecordFilterGroupExpression(recordFilterFieldInfosByFieldName, filterObj) {
                 return VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression({ RecordFilterFieldInfosByFieldName: recordFilterFieldInfosByFieldName, FilterGroup: filterObj }).then(function (response) {
-                    ctrl.expression = response
+                    ctrl.expression = response;
                 });
             }
         }

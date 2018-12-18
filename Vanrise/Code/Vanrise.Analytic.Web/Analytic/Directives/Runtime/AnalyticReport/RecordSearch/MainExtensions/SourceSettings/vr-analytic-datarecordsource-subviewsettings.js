@@ -54,7 +54,7 @@
                         subviewDefinition = payload.subviewDefinition;
                         parentDataRecordTypeId = payload.parentDataRecordTypeId;
                         limitResult = payload.limitResult;
-                        reportName = payload.ReportName
+                        reportName = payload.ReportName;
                     }
 
                     var loadPromiseDeferred = UtilsService.createPromiseDeferred();

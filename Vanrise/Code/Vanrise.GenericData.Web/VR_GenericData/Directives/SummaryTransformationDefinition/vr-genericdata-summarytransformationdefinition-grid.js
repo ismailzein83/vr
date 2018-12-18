@@ -87,7 +87,7 @@ app.directive("vrGenericdataSummarytransformationdefinitionGrid", ["UtilsService
             }
 
             function hasEditSummaryTransformationDefinitionPermission() {
-                return VR_GenericData_SummaryTransformationDefinitionAPIService.HasUpdateSummaryTransformationDefinition()
+                return VR_GenericData_SummaryTransformationDefinitionAPIService.HasUpdateSummaryTransformationDefinition();
             }
             function editSummaryTransformationDefinition(dataItem) {
                 var onSummaryTransformationDefinitionUpdated = function (summaryTransformationDefinitionObj) {

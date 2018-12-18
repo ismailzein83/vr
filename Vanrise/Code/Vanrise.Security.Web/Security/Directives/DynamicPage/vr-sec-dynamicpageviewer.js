@@ -19,7 +19,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
             compile: function (element, attrs) {
                 return {
                     pre: function ($scope, iElem, iAttrs, ctrl) { }
-                }
+                };
             },
             templateUrl: "/Client/Modules/Security/Directives/DynamicPage/Templates/DynamicPageViewer.html"
 
@@ -139,7 +139,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                 return VR_Sec_WidgetAPIService.GetAllWidgets()
                     .then(function (response) {
                         for (var i = 0; i < response.length; i++)
-                            $scope.allWidgets.push(response[i].Entity)
+                            $scope.allWidgets.push(response[i].Entity);
                     });
 
             }

@@ -64,7 +64,7 @@
             };
 
             $scope.scopeModal.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModal.onExtensibleBEItemDirectiveReady = function (api) {
@@ -84,7 +84,7 @@
                     }).catch(function () {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                         $scope.scopeModal.isLoading = false;
-                    });;
+                    });
 
                     
                 }).catch(function () {

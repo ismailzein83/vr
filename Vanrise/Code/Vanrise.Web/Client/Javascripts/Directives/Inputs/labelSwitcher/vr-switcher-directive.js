@@ -21,7 +21,7 @@ app.directive('vrSwitcher', ['VRValidationService', 'BaseDirService', 'VRNotific
             ctrl.tabindex = "";
             setTimeout(function () {
                 if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
-                    ctrl.tabindex = "-1"
+                    ctrl.tabindex = "-1";
                 }
             }, 10);
 

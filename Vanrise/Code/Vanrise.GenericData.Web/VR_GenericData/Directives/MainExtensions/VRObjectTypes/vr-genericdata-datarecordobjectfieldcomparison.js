@@ -115,7 +115,7 @@
                         return targetDataRecordObjectTypeSelectorLoadDeferred.promise;
                     }
 
-                    return UtilsService.waitMultiplePromises(promises)
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {

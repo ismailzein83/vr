@@ -20,7 +20,7 @@ app.directive('vrGenericdataDatatransformationdefinitionStepsequencedesign', ['U
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/VR_GenericData/Directives/DataTransformationDefinition/Templates/StepSequenceDesignTemplate.html"
 

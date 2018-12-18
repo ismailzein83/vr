@@ -23,7 +23,7 @@
         }
 
         function AddDataRecordFieldChoice(dataRecordFieldChoice) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddDataRecordFieldChoice'), dataRecordFieldChoice)
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddDataRecordFieldChoice'), dataRecordFieldChoice);
         }
         function HasAddDataRecordFieldChoice() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, controllerName, ['AddDataRecordFieldChoice']));

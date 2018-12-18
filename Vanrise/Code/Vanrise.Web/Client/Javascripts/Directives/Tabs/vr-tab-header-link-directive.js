@@ -96,7 +96,7 @@ app.directive('vrTabHeaderLink', [function () {
                     }, 1);
                 }
 
-            }
+            };
         },
         template: '<span style="position: relative;" ng-style="ctrl.getOuterStyle()"><label class="hand-cursor" ng-style="ctrl.getTabStyle()"   ng-class="ctrl.isSelected?\'clicked-btn\':\'\'"  ng-click="ctrl.choiceClicked()" ng-transclude  title="{{ctrl.hint}}"></label>'
     };

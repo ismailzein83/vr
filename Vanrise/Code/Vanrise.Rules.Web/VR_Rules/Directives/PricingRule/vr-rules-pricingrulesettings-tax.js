@@ -75,7 +75,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                 };
                 dataItem.onDirectiveReady = function (api) {
                     dataItem.directiveAPI = api;
-                    var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                    var setLoader = function (value) { ctrl.isLoadingDirective = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
                 };
                 ctrl.datasource.push({ Entity: dataItem });
@@ -203,7 +203,7 @@ function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsServi
                 }
 
                 currencyDirectiveReadyPromiseDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred)
+                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred);
 
                 });
                 promises.push(loadCurrencySelectorPromiseDeferred.promise);

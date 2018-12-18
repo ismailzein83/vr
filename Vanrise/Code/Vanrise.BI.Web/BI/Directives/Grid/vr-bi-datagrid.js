@@ -27,7 +27,7 @@ app.directive('vrBiDatagrid', ['UtilsService', 'VR_BI_BIAPIService', 'BIUtilitie
         compile: function (element, attrs) {
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) { }
-            }
+            };
         },
         template: function (element, attrs) {
             return getDataGridTemplate(attrs.previewmode);

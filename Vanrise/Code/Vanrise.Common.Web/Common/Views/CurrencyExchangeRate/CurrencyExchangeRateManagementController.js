@@ -25,7 +25,7 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 getFilterObject();
-                gridAPI.loadGrid(filter)
+                gridAPI.loadGrid(filter);
             };
 
             $scope.onCurrencySelectReady = function (api) {

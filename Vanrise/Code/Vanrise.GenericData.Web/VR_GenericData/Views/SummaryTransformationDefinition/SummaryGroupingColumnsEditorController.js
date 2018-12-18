@@ -50,7 +50,7 @@
             };
 
             $scope.scopeModal.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModal.onRawDataRecordTypeFieldsSelectorReady = function (api) {

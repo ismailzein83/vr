@@ -128,7 +128,7 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
             var plotBands = [];
             if (chartDefinition.ranges != undefined)
             {
-                for(var i=0;i<chartDefinition.ranges.length ; i++)
+                for(var i=0; i<chartDefinition.ranges.length; i++)
                 {
                     var range = chartDefinition.ranges[i];
                     plotBands.push({

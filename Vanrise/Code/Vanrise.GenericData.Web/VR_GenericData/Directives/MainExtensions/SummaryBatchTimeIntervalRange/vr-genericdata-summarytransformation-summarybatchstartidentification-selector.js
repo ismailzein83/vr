@@ -54,7 +54,7 @@ app.directive("vrGenericdataSummarytransformationSummarybatchstartidentification
                     if ($scope.selectedSummaryBatchIntervalSourceTypeTemplate != undefined) {
                         if (summaryBatchIntervalSourceDirectiveAPI != undefined) {
                             sourceSummaryBatchInterval = summaryBatchIntervalSourceDirectiveAPI.getData();
-                            sourceSummaryBatchInterval.ConfigId = $scope.selectedSummaryBatchIntervalSourceTypeTemplate.ExtensionConfigurationId
+                            sourceSummaryBatchInterval.ConfigId = $scope.selectedSummaryBatchIntervalSourceTypeTemplate.ExtensionConfigurationId;
 
                         }
                     }

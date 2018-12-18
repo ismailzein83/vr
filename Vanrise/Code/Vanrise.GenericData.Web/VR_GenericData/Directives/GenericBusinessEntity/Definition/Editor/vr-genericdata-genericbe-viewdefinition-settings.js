@@ -102,7 +102,7 @@
                             var directivePayload = { };
                             if (parameterEntity != undefined) {
                                 directivePayload.parameterEntity = parameterEntity;
-                                directivePayload.context=payload.context
+                                directivePayload.context = payload.context;
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });

@@ -228,11 +228,11 @@
 
                 if (data != undefined) {
                     gridItem.columnName = data.ColumnName,
-                    gridItem.sqlDataType = data.SQLDataType,
-                    gridItem.selectedDataRecordTypeFieldName = data.ValueExpression,
-                    gridItem.isUnique = data.IsUnique,
-                    gridItem.isIdentity = data.IsIdentity,
-                    gridItem.isDisabled = true
+                        gridItem.sqlDataType = data.SQLDataType,
+                        gridItem.selectedDataRecordTypeFieldName = data.ValueExpression,
+                        gridItem.isUnique = data.IsUnique,
+                        gridItem.isIdentity = data.IsIdentity,
+                        gridItem.isDisabled = true;
                 }
 
                 gridItem.onSelectorReady = function (api) {

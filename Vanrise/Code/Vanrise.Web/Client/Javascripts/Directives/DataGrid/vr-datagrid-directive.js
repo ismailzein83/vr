@@ -518,23 +518,23 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                        if (col.type == "Number") {
 	                            var numberPrecision = UISettingsService.getNormalPrecision() || 2;
 	                            if (col.numberPrecision == "NoDecimal")
-	                            { colFixWidth = 65 }
+                                { colFixWidth = 65; }
 	                            else if (col.numberPrecision == "LongPrecision")
-	                            { colFixWidth = 65 }
+                                { colFixWidth = 65; }
 	                            else {
-	                                colFixWidth = 65
+                                    colFixWidth = 65;
 	                            }
 	                        }
 	                        else {
 	                            if (col.type == "LongDatetime")
-	                            { colFixWidth = 120 }
+                                { colFixWidth = 120; }
 	                            else if (col.type == "Datetime")
-	                            { colFixWidth = 100 }
+                                { colFixWidth = 100; }
 	                            else if (col.type == "Date") {
-	                                colFixWidth = 80
+                                    colFixWidth = 80;
 	                            }
 	                            else if (col.type == "Yearmonth") {
-	                                colFixWidth = 50
+                                    colFixWidth = 50;
 	                            }
 	                        }
 	                        valueWidth = colFixWidth;
@@ -1070,16 +1070,16 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            }
 	            else {
 	                if (colDef.type == "LongDatetime") {
-	                    tooltipFilter = "date:'yyyy-MM-dd HH:mm:ss'"
+                        tooltipFilter = "date:'yyyy-MM-dd HH:mm:ss'";
 	                }
 	                else if (colDef.type == "Datetime") {
-	                    tooltipFilter = "date:'yyyy-MM-dd HH:mm'"
+                        tooltipFilter = "date:'yyyy-MM-dd HH:mm'";
 	                }
 	                else if (colDef.type == "Date") {
-	                    tooltipFilter = "date:'yyyy-MM-dd'"
+                        tooltipFilter = "date:'yyyy-MM-dd'";
 	                }
 	                else if (colDef.type == "Yearmonth") {
-	                    tooltipFilter = "date:'yyyy-MM'"
+                        tooltipFilter = "date:'yyyy-MM'";
 	                }
 	            }
 	            if (tooltipFilter != "")
@@ -1658,9 +1658,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	                };
 
-	                ctrl.getRowDeleteIconTitle = function () {
-	                    return attrs.rowdeleteicontitle != undefined ? attrs.rowdeleteicontitle : "";
-	                }
+                    ctrl.getRowDeleteIconTitle = function () {
+                        return attrs.rowdeleteicontitle != undefined ? attrs.rowdeleteicontitle : "";
+                    };
 	            }
 	        }
 

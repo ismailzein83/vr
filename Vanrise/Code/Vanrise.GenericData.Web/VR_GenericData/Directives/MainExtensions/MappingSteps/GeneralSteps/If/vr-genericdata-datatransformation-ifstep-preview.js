@@ -23,7 +23,7 @@ app.directive('vrGenericdataDatatransformationIfstepPreview', ['UtilsService', '
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/GeneralSteps/If/Templates/IfStepPreviewTemplate.html';

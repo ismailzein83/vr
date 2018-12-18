@@ -69,7 +69,7 @@
             addDataStore: addDataStore,
             registerObjectTrackingDrillDownToDataStore: registerObjectTrackingDrillDownToDataStore,
             getDrillDownDefinition: getDrillDownDefinition
-        })
+        });
     }
 
     appControllers.service('VR_GenericData_DataStoreService', DataStoreService);

@@ -9,10 +9,10 @@ app.directive('vrForm', [function () {
             $scope.onKeyUp = function ($event) {
                 if ($attrs.submitname != undefined) {
                     if ($event.which == 13) {
-                        $scope.$broadcast('submit' + $attrs.submitname);                        
+                        $scope.$broadcast('submit' + $attrs.submitname);
                     }
                 }
-            }
+            };
         },
         controllerAs: 'ctrl',
         bindToController: true,

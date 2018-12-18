@@ -77,7 +77,7 @@
                             loadDataTransformationRecordSelector().then(function () {
                                 loadNextRecordsSection();
                                 $scope.scopeModal.isLoadingTransformActivatorSection = false;
-                            })
+                            });
                         }
                     }
                     else
@@ -109,7 +109,7 @@
                             }
                         }
                         transformationRecords = arrayTransformationRecords;
-                    })
+                    });
                 }
             }
 

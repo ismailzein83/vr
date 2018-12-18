@@ -38,7 +38,7 @@ app.directive('vrSecTenantSelector', ['VR_Sec_TenantAPIService', 'VR_Sec_TenantS
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTenantTemplate(attrs);

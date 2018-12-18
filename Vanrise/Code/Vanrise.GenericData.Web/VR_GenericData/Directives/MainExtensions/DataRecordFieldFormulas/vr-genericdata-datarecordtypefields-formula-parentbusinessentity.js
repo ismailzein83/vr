@@ -48,7 +48,7 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaParentbusinessentity', ['
                         if (context != undefined && context.getFields != undefined)
                             $scope.fields = context.getFields();
                         if (payload.formula != undefined) {
-                            $scope.selectedFieldName = UtilsService.getItemByVal($scope.fields, payload.formula.ChildFieldName, "fieldName")
+                            $scope.selectedFieldName = UtilsService.getItemByVal($scope.fields, payload.formula.ChildFieldName, "fieldName");
                         }
                     }
                 };

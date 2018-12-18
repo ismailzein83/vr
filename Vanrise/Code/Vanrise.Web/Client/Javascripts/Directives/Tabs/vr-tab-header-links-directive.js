@@ -27,7 +27,7 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
                 choiceCtrls.splice(choiceCtrls.indexOf(tabCtrl), 1);
                 setTimeout(function () {
                     UtilsService.safeApply($scope);
-                }, 1)
+                }, 1);
             };
 
             ctrl.getTabStyle = function (ctrl) {

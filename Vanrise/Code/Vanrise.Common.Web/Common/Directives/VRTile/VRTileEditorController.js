@@ -41,7 +41,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
 
@@ -49,7 +49,7 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-            loadAllControls()
+            loadAllControls();
         }
 
         function loadAllControls() {

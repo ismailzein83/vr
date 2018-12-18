@@ -170,7 +170,7 @@ app.directive('vrGenericdataGenericbusinessentityDefinitionEditor', ['UtilsServi
                 for (var i = 0; i < recordTypeFields.length; i++) {
                     filteredFields.push({ FieldPath: recordTypeFields[i].Name });
                 }
-                for(var i=0;i<recordTypeFields.length;i++)
+                for(var i=0; i<recordTypeFields.length; i++)
                 {
                     filterSections(ctrl.sections, filteredFields, exceptedFields);
                    

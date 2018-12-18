@@ -23,7 +23,7 @@ app.directive('vrGenericdataDatatransformationRulestepCommon', ['UtilsService', 
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/VR_GenericData/Directives/MainExtensions/MappingSteps/RuleSteps/Common/Templates/RuleStepCommonTemplate.html';

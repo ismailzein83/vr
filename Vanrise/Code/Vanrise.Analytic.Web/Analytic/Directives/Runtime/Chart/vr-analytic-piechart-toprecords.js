@@ -63,7 +63,7 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                                     if (response && response.Data)
                                     {
                                         var data = [];
-                                        for (var i = 0; i < response.Data.length ;i++)
+                                        for (var i = 0; i < response.Data.length; i++)
                                         {
                                             data.push(response.Data[i]);
 

@@ -22,7 +22,7 @@
         }
 
         function AddDataStore(dataStore) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataStore', 'AddDataStore'), dataStore)
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataStore', 'AddDataStore'), dataStore);
         }
         function HasAddDataStore() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, "DataStore", ['AddDataStore']));

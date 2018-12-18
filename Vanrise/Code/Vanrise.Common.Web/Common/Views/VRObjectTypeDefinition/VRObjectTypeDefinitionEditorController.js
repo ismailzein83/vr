@@ -45,7 +45,7 @@
                 if (propertyDirectiveAPI != undefined) {
 
                     var setLoader = function (value) {
-                        $scope.scopeModel.isLoading = value
+                        $scope.scopeModel.isLoading = value;
                     };
                     var payload = {};
                     payload.context = buildPropertyContext();
@@ -67,7 +67,7 @@
                 }
             };
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
         function load() {

@@ -47,7 +47,7 @@
                 }
             };
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             function updateDataRecordFieldChoice() {
@@ -145,7 +145,7 @@
                     if (dataRecordFieldChoiceEntity != undefined && dataRecordFieldChoiceEntity.Settings != undefined) {
                         choicesGridPayLoad = {
                             choices: dataRecordFieldChoiceEntity.Settings.Choices
-                        }
+                        };
                     }
                     VRUIUtilsService.callDirectiveLoad(choicesGridAPI, choicesGridPayLoad, loadChoicesGridPromiseDeferred);
                 });

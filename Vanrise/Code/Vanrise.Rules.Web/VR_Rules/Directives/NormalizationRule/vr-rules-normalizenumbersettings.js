@@ -59,7 +59,7 @@ app.directive("vrRulesNormalizenumbersettings", ["VR_Rules_NormalizationRuleAPIS
 
                     dataItem.onDirectiveReady = function (api) {
                         dataItem.directiveAPI = api;
-                        var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                        var setLoader = function (value) { ctrl.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, undefined, setLoader);
                     };
                     

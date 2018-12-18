@@ -67,10 +67,9 @@ function (UtilsService, VRUIUtilsService, TimeDimensionTypeEnum) {
     function periodCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
-            ctrl.onSelectorReady= function(api)
-            {
+            ctrl.onSelectorReady = function (api) {
                 defineAPI();
-            }
+            };
            
         }
 

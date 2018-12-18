@@ -149,7 +149,7 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, User
                 itm.Entity.Audience = {
                     UsersName: '',
                     GroupsName: '',
-                }
+                };
             }
         }
 
@@ -171,7 +171,7 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, User
                     angular.forEach(response, function (users) {
 
                         ctrl.users.push(users);
-                    })
+                    });
                 });
 
         }
@@ -181,7 +181,7 @@ function (VRNotificationService, VR_Sec_ViewAPIService, VR_Sec_ViewService, User
                 .then(function (response) {
                     angular.forEach(response, function (role) {
                         ctrl.groups.push(role);
-                    })
+                    });
                 });
         }
 

@@ -35,7 +35,7 @@ app.directive('vrBiTimeentitySelector', ['VR_BI_BIConfigurationAPIService', 'Uti
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTimeEntityTemplate(attrs);

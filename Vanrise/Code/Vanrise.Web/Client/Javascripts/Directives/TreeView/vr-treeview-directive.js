@@ -150,35 +150,35 @@ app.directive('vrTreeview', ['UtilsService', function (UtilsService) {
 
 				if (ctrl.draggabletree != undefined) {
 					plugins.push("dnd");
-					treeData.core.check_callback = function (operation, node, parent, position, more) {
-						if (ctrl.movesettings != undefined) {
+                    treeData.core.check_callback = function (operation, node, parent, position, more) {
+                        if (ctrl.movesettings != undefined) {
 
-							if (ctrl.movesettings == 'samelevel') {
+                            if (ctrl.movesettings == 'samelevel') {
 
-								if (operation === "copy_node" || operation === "move_node") {
-									if (parent.id != node.parent) {
-										return false;
-									} else
-										return true;
-								}
-							}
-							else if (ctrl.movesettings == 'alllevels')
-								return true;
-
-
-						}
-						if (parent.id == "#") {
-							return false;
-						}
-						if (ctrl.onmoveitem != undefined && typeof (ctrl.onmoveitem) == 'function') {
-							if (parent.original != undefined) {
-								return ctrl.onmoveitem(node.original.sourceItem, parent.original.sourceItem);
-							}
+                                if (operation === "copy_node" || operation === "move_node") {
+                                    if (parent.id != node.parent) {
+                                        return false;
+                                    } else
+                                        return true;
+                                }
+                            }
+                            else if (ctrl.movesettings == 'alllevels')
+                                return true;
 
 
-						}
+                        }
+                        if (parent.id == "#") {
+                            return false;
+                        }
+                        if (ctrl.onmoveitem != undefined && typeof (ctrl.onmoveitem) == 'function') {
+                            if (parent.original != undefined) {
+                                return ctrl.onmoveitem(node.original.sourceItem, parent.original.sourceItem);
+                            }
 
-					}
+
+                        }
+
+                    };
 
 
 

@@ -15,12 +15,12 @@
             {
                 if(filterGroup.Filters != undefined)
                 {
-                    for(var i=0;i<filterGroup.Filters.length;i++)
+                    for(var i=0; i<filterGroup.Filters.length; i++)
                     {
                         var filter = filterGroup.Filters[i];
                         fieldNames.push(filter.FieldName);
                         if (filter.Filters != undefined)
-                            getFilterFieldNames(filter, fieldNames)
+                            getFilterFieldNames(filter, fieldNames);
                     }
                 }
                 return fieldNames;

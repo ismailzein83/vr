@@ -58,7 +58,7 @@ function (VRNotificationService, VR_Sec_WidgetAPIService, VR_Sec_WidgetService) 
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
-                    });;
+                    });
             };
 
         }

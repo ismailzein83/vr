@@ -119,7 +119,7 @@
         function hasSelectedItems() {
             if (isAllSelected || targetItems.length > 0)
                 return true;
-            return false
+            return false;
         }
         function reEvaluateButtonsStatus() {
             var hasInvoices = hasItems();

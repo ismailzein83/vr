@@ -10,7 +10,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onDataAnalysisDefinitionAdded = onDataAnalysisDefinitionAdded
+                modalScope.onDataAnalysisDefinitionAdded = onDataAnalysisDefinitionAdded;
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/DataAnalysis/DataAnalysisDefinition/DataAnalysisDefinitionEditor.html', null, settings);
         };

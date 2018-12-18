@@ -82,7 +82,7 @@
            $scope.data.length = 0;
            angular.forEach(response, function (item) {
                item.selected = true;
-               $scope.data.push(item)
+               $scope.data.push(item);
            });
        });
         };
@@ -106,7 +106,7 @@
       .success(function (response) {
           $scope.data2.length = 0;
           angular.forEach(response, function (item) {
-              $scope.data2.push(item)
+              $scope.data2.push(item);
           });
 
           var series = [];

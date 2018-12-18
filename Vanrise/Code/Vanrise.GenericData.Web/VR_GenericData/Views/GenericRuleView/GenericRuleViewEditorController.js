@@ -58,7 +58,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.onTreeReady = function (api) {
@@ -160,7 +160,7 @@
                     if (viewEntity != undefined && viewEntity.Settings != undefined) {
                         payLoad = {
                             selectedIds: viewEntity.Settings.RuleDefinitionIds
-                        }
+                        };
                     }
                     VRUIUtilsService.callDirectiveLoad(genericRuleDefinitionAPI, payLoad, loadGenericRuleDefinitionSelectorPromiseDeferred);
                 });
