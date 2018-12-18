@@ -220,7 +220,7 @@
 
 			selectorTranslationRuleReadyDeferred.promise.then(function () {
 				var selectorTranslationRulePayload = {};
-				if (routeEntity != undefined && routeEntity.TransRuleId != 0)
+				if (routeEntity != undefined && routeEntity.TransRuleId != 0 && !isCloneMode )
 					selectorTranslationRulePayload.selectedIds = routeEntity.TransRuleId;
 
 				VRUIUtilsService.callDirectiveLoad(selectorTranslationRuleAPI, selectorTranslationRulePayload, selectorTranslationRuleLoadDeferred);
