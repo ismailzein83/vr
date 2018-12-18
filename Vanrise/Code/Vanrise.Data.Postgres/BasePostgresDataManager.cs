@@ -115,14 +115,39 @@ namespace Vanrise.Data.Postgres
 
         #region ExecuteNonQuery
 
-        public void ExecuteNonQuery(string[] sqlStrings, int? commandTimeout = null)
+        public void ExecuteNonQueryWithTransaction(string[] queries, int? commandTimeout = null, IsolationLevel isolationLevel = IsolationLevel.ReadUncommitted)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(GetConnectionString()))
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                NpgsqlTransaction transaction = connection.BeginTransaction(isolationLevel);
+                foreach (string query in queries)
+                {
+                    using (NpgsqlCommand command = CreateCommand(connection, query, commandTimeout))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+                try
+                {
+                    transaction.Commit();
+                }
+                catch (Exception exc)
+                {
+                    transaction.Rollback();
+                }
+            }
+        }
+        public void ExecuteNonQuery(string[] queries, int? commandTimeout = null)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(GetConnectionString()))
             {
                 if (connection.State == ConnectionState.Closed) connection.Open();
-                foreach (string sql in sqlStrings)
+                foreach (string query in queries)
                 {
-                    using (NpgsqlCommand command = CreateCommand(connection, sql, commandTimeout))
+                    using (NpgsqlCommand command = CreateCommand(connection, query, commandTimeout))
                     {
                         command.ExecuteNonQuery();
                     }
