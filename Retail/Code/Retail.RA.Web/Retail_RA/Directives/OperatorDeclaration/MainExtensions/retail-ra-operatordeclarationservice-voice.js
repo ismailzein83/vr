@@ -49,9 +49,9 @@
                     if (payload != undefined) {
 
                         voiceEntity = payload.settings;
-                        $scope.scopeModel.numberOfCalls = voiceEntity.NumberOfCalls;
-                        $scope.scopeModel.duration = voiceEntity.Duration;
-                        $scope.scopeModel.amount = voiceEntity.Amount;
+                        $scope.scopeModel.numberOfCalls = voiceEntity.DeclaredNumberOfCalls;
+                        $scope.scopeModel.duration = voiceEntity.DeclaredDuration;
+                        $scope.scopeModel.revenue = voiceEntity.DeclaredRevenue;
                     }
 
                     function loadTrafficDirectionSelector() {
@@ -68,24 +68,19 @@
                         });
                         return trafficDirectionSelectorLoadDeferred.promise;
                     }
-
-                    //var trafficTypeSelectorLoadPromise = loadTrafficTypeSelector();
+                    
                     var trafficDirectionSelectorLoadPromise = loadTrafficDirectionSelector();
-
-                    //promises.push(trafficTypeSelectorLoadPromise);
                     promises.push(trafficDirectionSelectorLoadPromise);
-
                     return UtilsService.waitMultiplePromises(promises);
-
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Retail.RA.Business.Voice,Retail.RA.Business",
                         TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
-                        NumberOfCalls: $scope.scopeModel.numberOfCalls,
-                        Duration: $scope.scopeModel.duration,
-                        Amount: $scope.scopeModel.amount
+                        DeclaredNumberOfCalls: $scope.scopeModel.numberOfCalls,
+                        DeclaredDuration: $scope.scopeModel.duration,
+                        DeclaredRevenue: $scope.scopeModel.revenue
                     };
                 };
 

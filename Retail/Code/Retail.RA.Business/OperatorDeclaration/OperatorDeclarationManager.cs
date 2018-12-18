@@ -18,10 +18,14 @@ namespace Retail.RA.Business
             return cachedOperatorDeclarations;
         }
 
-        public IEnumerable<VoiceDeclarationService> GetVoiceDeclarationServices(List<PeriodDefinition> periodDefinitions)
+        public IEnumerable<VoiceDeclarationService> GetVoiceDeclarationServices(List<PeriodDefinition> periodDefinitions, TrafficDirection trafficDirection)
         {
             List<VoiceDeclarationService> operatorDeclarations = new List<VoiceDeclarationService>();
-            Dictionary<int, List<VoiceDeclarationService>> operatorDeclarationByPeriodId = GetCachedInVoiceDeclaration();
+            Dictionary<int, List<VoiceDeclarationService>> operatorDeclarationByPeriodId =
+                trafficDirection == TrafficDirection.IN
+                    ? GetCachedInVoiceDeclaration()
+                    : GetCachedOutVoiceDeclaration();
+
             foreach (var periodDefinition in periodDefinitions)
             {
                 if (operatorDeclarationByPeriodId.TryGetValue(periodDefinition.PeriodDefinitionId, out var operatorDeclaration))
@@ -29,21 +33,38 @@ namespace Retail.RA.Business
             }
             return operatorDeclarations.OrderBy(item => item.OperatorId).ThenBy(item => item.PeriodDefinition.FromDate);
         }
-        public VoiceDeclarationService GetOperatorDeclaration(long operatorId, int periodDefinitionId)
+
+        #region Private Methhods
+        private Dictionary<int, List<VoiceDeclarationService>> GetCachedOutVoiceDeclaration()
         {
-            Dictionary<int, List<VoiceDeclarationService>> operatorDeclarationByPeriodId = GetCachedInVoiceDeclaration();
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedOutVoiceDeclaration", BeDefinitionId,
+                () =>
+                {
+                    List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+                    Dictionary<int, List<VoiceDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<VoiceDeclarationService>>();
+                    foreach (var operatorDeclaration in cachedOperatorDeclarations)
+                    {
+                        foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
+                        {
+                            if (operatorDeclarationService.Settings is Voice voiceDeclarationServiceSettings && voiceDeclarationServiceSettings.TrafficDirection == TrafficDirection.OUT)
+                            {
+                                List<VoiceDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
+                                operatorDeclarations.Add(new VoiceDeclarationService
+                                {
+                                    ID = operatorDeclaration.ID,
+                                    OperatorId = operatorDeclaration.OperatorId,
+                                    PeriodDefinition = new PeriodDefinitionManager().GetPeriodDefinition(operatorDeclaration.PeriodId),
+                                    VoiceSettings = voiceDeclarationServiceSettings
+                                });
+                            }
+                        }
 
-            if (operatorDeclarationByPeriodId == null || operatorDeclarationByPeriodId.Count == 0)
-                return null;
-
-            List<VoiceDeclarationService> operatorDeclarations = operatorDeclarationByPeriodId.GetRecord(periodDefinitionId);
-
-            if (operatorDeclarations == null || operatorDeclarations.Count == 0)
-                return null;
-
-            return operatorDeclarations.FirstOrDefault(item => item.OperatorId == operatorId);
+                    }
+                    return operatorDeclarationByPeriod;
+                });
         }
-        public Dictionary<int, List<VoiceDeclarationService>> GetCachedInVoiceDeclaration()
+        private Dictionary<int, List<VoiceDeclarationService>> GetCachedInVoiceDeclaration()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedInVoiceDeclaration", BeDefinitionId,
@@ -101,6 +122,7 @@ namespace Retail.RA.Business
                 return operatorDeclarations;
             });
         }
+        #endregion
     }
 
     public class VoiceDeclarationService

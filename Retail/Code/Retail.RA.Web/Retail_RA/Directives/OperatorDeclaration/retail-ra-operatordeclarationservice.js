@@ -40,7 +40,6 @@
                 };
 
                 $scope.scopeModel.isValid = function () {
-                    console.log($scope.scopeModel.operatorDeclarationServices);
                     if ($scope.scopeModel.operatorDeclarationServices != undefined && $scope.scopeModel.operatorDeclarationServices.length > 0)
                         return null;
                     return "You Should add at least one item.";
@@ -155,7 +154,6 @@
             }
             function getServices() {
                 var services = [];
-
                 for (var i = 0; i < $scope.scopeModel.operatorDeclarationServices.length; i++) {
                     var operatorDeclarationService = $scope.scopeModel.operatorDeclarationServices[i];
                     services.push({
@@ -164,7 +162,6 @@
                         Settings: operatorDeclarationService.directiveAPI.getData()
                     });
                 }
-                console.log(services);
                 return services;
             }
         }
