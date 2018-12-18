@@ -388,8 +388,8 @@ set nocount on;
 ;with cte_data([PSIdentifier],[Name],[Description],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('Financial','Financial',null,'{"$type":"Vanrise.Security.Business.StaticGroup, Vanrise.Security.Business","ConfigId":"be6619ae-687f-45e3-bd7b-90d1db4626b6"}'),
-('Traffic','Traffic',null,'{"$type":"Vanrise.Security.Business.StaticGroup, Vanrise.Security.Business","ConfigId":"be6619ae-687f-45e3-bd7b-90d1db4626b6"}')
+('CP_Billing','Billing',null,'{"$type":"Vanrise.Security.Business.StaticGroup, Vanrise.Security.Business","ConfigId":"be6619ae-687f-45e3-bd7b-90d1db4626b6"}'),
+('CP_NOC','NOC',null,'{"$type":"Vanrise.Security.Business.StaticGroup, Vanrise.Security.Business","ConfigId":"be6619ae-687f-45e3-bd7b-90d1db4626b6"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([PSIdentifier],[Name],[Description],[Settings]))
 merge	[sec].[Group] as t
@@ -427,3 +427,29 @@ when matched then
 when not matched by target then
 	insert([Name],[RequiredPermissions])
 	values(s.[Name],s.[RequiredPermissions]);
+
+
+
+
+DECLARE @CP_NOCDataGroupId int = (SELECT ID FROM sec.[Group] where [PSIdentifier] = 'CP_NOC')
+DECLARE @CP_BillingDataGroupId int = (SELECT ID FROM sec.[Group] where [PSIdentifier] = 'CP_Billing')
+
+--[sec].[Permission]--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(1,@CP_NOCDataGroupId,1,'ab794846-853c-4402-a8e4-6f5c3a75f5f2','[{"Name":"View","Value":1}]'),
+(1,@CP_BillingDataGroupId,1,'a611a651-b60b-483d-bc83-1c2b667a120a','[{"Name":"View","Value":1}]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
+merge	[sec].[Permission] as t
+using	cte_data as s
+on		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]
+--when matched then
+--	update set
+--	[PermissionFlags] = s.[PermissionFlags]
+when not matched by target then
+	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
+	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);
