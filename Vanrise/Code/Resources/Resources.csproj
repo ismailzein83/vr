@@ -781,6 +781,7 @@
     <None Include="BatchScripts\Zebra\ZebraService.bat" />
     <None Include="DLLs\Aspose.Cells.lic" />
     <None Include="Documents\Internship Program.docx" />
+    <None Include="Documents\RDB.docx" />
     <None Include="Packages\SharedManagementObjects .msi" />
   </ItemGroup>
   <ItemGroup>
