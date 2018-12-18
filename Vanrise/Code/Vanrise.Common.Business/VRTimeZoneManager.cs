@@ -38,20 +38,20 @@ namespace Vanrise.Common.Business
 
         public string GetVRTimeZoneName(int timeZoneId)
         {
-            var timeZone =  GetVRTimeZone(timeZoneId);
-            return (timeZone != null) ? timeZone.Name : null ;
+            var timeZone = GetVRTimeZone(timeZoneId);
+            return (timeZone != null) ? timeZone.Name : null;
         }
         public VRTimeZone GetVRTimeZone(int timeZoneId, bool isViewedFromUI)
         {
             var timeZones = GetCachedVRTimeZones();
-           var timeZone = timeZones.GetRecord(timeZoneId);
-           if (timeZone != null && isViewedFromUI)
-               VRActionLogger.Current.LogObjectViewed(VRTimeZoneLoggableEntity.Instance, timeZone);
-           return timeZone;
+            var timeZone = timeZones.GetRecord(timeZoneId);
+            if (timeZone != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(VRTimeZoneLoggableEntity.Instance, timeZone);
+            return timeZone;
         }
         public VRTimeZone GetVRTimeZone(int timeZoneId)
         {
-           return GetVRTimeZone(timeZoneId,false);
+            return GetVRTimeZone(timeZoneId, false);
         }
         public Vanrise.Entities.InsertOperationOutput<VRTimeZoneDetail> AddVRTimeZone(VRTimeZone timeZone)
         {
@@ -63,7 +63,7 @@ namespace Vanrise.Common.Business
             int timeZoneId = -1;
 
             IVRTimeZoneDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRTimeZoneDataManager>();
-            
+
             int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
             timeZone.CreatedBy = loggedInUserId;
             timeZone.LastModifiedBy = loggedInUserId;
@@ -159,16 +159,12 @@ namespace Vanrise.Common.Business
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            IVRTimeZoneDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRTimeZoneDataManager>();
+            object _updateHandle;
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired();
+                return _dataManager.AreVRTimeZonesUpdated(ref _updateHandle);
             }
         }
         private class VRTimeZoneLoggableEntity : VRLoggableEntityBase

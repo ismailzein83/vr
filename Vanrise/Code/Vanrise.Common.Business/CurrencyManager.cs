@@ -95,7 +95,7 @@ namespace Vanrise.Common.Business
 
             return GetCurrency(currencyId, false);
         }
-        
+
         public Currency GetCurrencyBySymbol(string currencySymbol)
         {
             if (currencySymbol != null)
@@ -107,7 +107,7 @@ namespace Vanrise.Common.Business
             {
                 return null;
             }
-          
+
         }
 
         public Currency GetCurrencyBySourceId(string sourceId)
@@ -181,11 +181,11 @@ namespace Vanrise.Common.Business
             int currencyId = -1;
 
             ICurrencyDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyDataManager>();
-            
+
             int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
             currency.CreatedBy = loggedInUserId;
             currency.LastModifiedBy = loggedInUserId;
-            
+
             bool insertActionSucc = dataManager.Insert(currency, out currencyId);
             if (insertActionSucc)
             {
@@ -198,7 +198,7 @@ namespace Vanrise.Common.Business
                 {
                     UpdateSystemCurrency(currencyId);
                 }
-                insertOperationOutput.InsertedObject = CurrencyDetailMapper(currency);                    
+                insertOperationOutput.InsertedObject = CurrencyDetailMapper(currency);
             }
             else
             {
@@ -232,7 +232,7 @@ namespace Vanrise.Common.Business
             }
             return updateOperationOutput;
         }
-       
+
         #endregion
         public class CurrencyLoggableEntity : VRLoggableEntityBase
         {
@@ -315,16 +315,12 @@ namespace Vanrise.Common.Business
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            ICurrencyDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyDataManager>();
+            object _updateHandle;
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired();
+                return _dataManager.AreCurrenciesUpdated(ref _updateHandle);
             }
         }
         private CurrencyDetail CurrencyDetailMapper(Currency currency)
@@ -344,9 +340,9 @@ namespace Vanrise.Common.Business
         {
             SettingManager settingManager = new SettingManager();
             var currencySettingsData = settingManager.GetSetting<CurrencySettingData>(Constants.BaseCurrencySettingType);
-            SettingToEdit systemCurrency =  new SettingToEdit()
+            SettingToEdit systemCurrency = new SettingToEdit()
             {
-                Name = "System Currency",                
+                Name = "System Currency",
                 SettingId = new Guid("1c833b2d-8c97-4cdd-a1c1-c1b4d9d299de")
             };
             if (currencySettingsData == null)
@@ -357,7 +353,7 @@ namespace Vanrise.Common.Business
             {
                 currencySettingsData.CurrencyId = currencyId;
                 systemCurrency.Data = currencySettingsData;
-            }               
+            }
             settingManager.UpdateSetting(systemCurrency);
         }
         #endregion

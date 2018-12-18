@@ -53,7 +53,7 @@ namespace Vanrise.Common.Business
         public Vanrise.Entities.RateType GetRateType(int rateTypeId)
         {
 
-            return GetRateType(rateTypeId,false);
+            return GetRateType(rateTypeId, false);
         }
         public string GetRateTypeName(int rateTypeId)
         {
@@ -72,7 +72,7 @@ namespace Vanrise.Common.Business
             IRateTypeDataManager dataManager = CommonDataManagerFactory.GetDataManager<IRateTypeDataManager>();
             bool insertActionSucc = dataManager.Insert(rateType, out rateTypeId);
             if (insertActionSucc)
-            {   
+            {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 rateType.RateTypeId = rateTypeId;
                 VRActionLogger.Current.TrackAndLogObjectAdded(RateTypeLoggableEntity.Instance, rateType);
@@ -148,16 +148,13 @@ namespace Vanrise.Common.Business
 
         private class CacheManager : BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            IRateTypeDataManager dataManager = CommonDataManagerFactory.GetDataManager<IRateTypeDataManager>();
+
+            object _updateHandle;
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired();
+                return dataManager.AreRateTypesUpdated(ref _updateHandle);
             }
         }
         private Dictionary<int, Vanrise.Entities.RateType> GetCachedRateTypes()

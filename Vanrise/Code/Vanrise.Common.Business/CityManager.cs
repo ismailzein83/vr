@@ -182,7 +182,7 @@ namespace Vanrise.Common.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "City Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Region" });
-                
+
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -205,16 +205,12 @@ namespace Vanrise.Common.Business
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            ICityDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ICityDataManager>();
+            object _updateHandle;
+
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired();
+                return _dataManager.AreCitiesUpdated(ref _updateHandle);
             }
 
         }
@@ -293,9 +289,9 @@ namespace Vanrise.Common.Business
               {
                   Dictionary<int, List<City>> citiesByCountryId = new Dictionary<int, List<City>>();
                   var cities = GetCachedCities();
-                  if(cities != null)
+                  if (cities != null)
                   {
-                      foreach(var c in cities.Values)
+                      foreach (var c in cities.Values)
                       {
                           citiesByCountryId.GetOrCreateItem(c.CountryId).Add(c);
                       }

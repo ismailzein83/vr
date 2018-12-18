@@ -362,17 +362,12 @@ namespace Vanrise.Common.Business
         }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            protected override bool UseCentralizedCacheRefresher
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            ICurrencyExchangeRateDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyExchangeRateDataManager>();
+            object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return base.ShouldSetCacheExpired();
+                return _dataManager.AreCurrenciesExchangeRateUpdated(ref _updateHandle);
             }
         }
 
@@ -405,7 +400,7 @@ namespace Vanrise.Common.Business
             string mainCurrencySymbol = _currencyManager.GetSystemCurrency().Symbol;
 
             int longPrecision = GenericParameterManager.Current.GetLongPrecision(); ;
-            string rateAsString =  string.Format("{0:#,###0." + "".PadLeft(longPrecision, '0') + "}", Math.Round(Rate, longPrecision, MidpointRounding.AwayFromZero));
+            string rateAsString = string.Format("{0:#,###0." + "".PadLeft(longPrecision, '0') + "}", Math.Round(Rate, longPrecision, MidpointRounding.AwayFromZero));
             string description = string.Format("1 {0} equals {1} {2}.", mainCurrencySymbol, rateAsString, currencySymbol);
             return description;
         }
