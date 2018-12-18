@@ -56,7 +56,7 @@ app.directive("vrCommonTextpatternbuilder", ["UtilsService", "VRNotificationServ
                             ctrl.textPattern = "";
                         ctrl.textPattern += patternSeparator + patternName + patternSeparator;
                     };
-                    TextPatternBuilderService.openPatternHelper(onSetPattern, getContext());
+                    TextPatternBuilderService.openPatternHelper(onSetPattern, parts);
                 };
 
                 defineAPI();
@@ -85,15 +85,6 @@ app.directive("vrCommonTextpatternbuilder", ["UtilsService", "VRNotificationServ
 
                 if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
-            }
-
-            function getContext() {
-                var context = {
-                    getParts: function () {
-                        return parts;
-                    }
-                };
-                return context;
             }
         }
 

@@ -16,13 +16,13 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                context = parameters.context;
-                parts = context.getParts();
+                parts = parameters.parts;
             }
         }
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.dataSource = [];
 
             $scope.scopeModel.save = function (dataItem) {
                 var patternValue = dataItem.Name;
@@ -50,7 +50,10 @@
 
             function loadStaticData() {
                 if (parts != undefined) {
-                    $scope.scopeModel.dataSource = parts;
+                    for (var index = 0; index < parts.length; index++) {
+                        var currentPart = parts[index];
+                        $scope.scopeModel.dataSource.push(currentPart);
+                    }
                 }
             }
 

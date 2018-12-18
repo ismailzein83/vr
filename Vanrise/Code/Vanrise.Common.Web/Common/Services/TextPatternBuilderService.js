@@ -7,10 +7,10 @@
     function TextPatternBuilderService(VRModalService) {
 
 
-        function openPatternHelper(onSetPattern, context) {
+        function openPatternHelper(onSetPattern, parts) {
 
             var parameter = {
-                context: context
+                parts: parts
             };
 
             var modalSettings = {};
