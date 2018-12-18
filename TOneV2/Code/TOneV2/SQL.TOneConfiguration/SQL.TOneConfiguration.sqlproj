@@ -312,7 +312,6 @@
     <Build Include="bp\Tables\BPBusinessRuleSet.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTaskType_GetAll.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinition_GetAll.sql" />
-    <Build Include="Analytic\Stored Procedures\SP_SchemaConfiguration_GetByType.sql" />
     <Build Include="genericdata\Tables\SummaryTransformationDefinition.sql" />
     <Build Include="genericdata\Stored Procedures\sp_SummaryTransformationDefinition_Update.sql" />
     <Build Include="genericdata\Stored Procedures\sp_SummaryTransformationDefinition_Insert.sql" />
