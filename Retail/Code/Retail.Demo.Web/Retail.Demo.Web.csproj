@@ -151,6 +151,7 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_Demo\Constants\SmsInvoiceType.js" />
     <Content Include="Retail_Demo\Constants\ModuleConfig.js" />
     <Content Include="Retail_Demo\Elements\NetworkRental\Directives\retail-demo-invoicetype-networkrentalinvoicesettings.js" />
     <Content Include="Retail_Demo\Elements\NetworkRental\Directives\Templates\NetworkRentalInvoiceSettingsTemplate.html" />

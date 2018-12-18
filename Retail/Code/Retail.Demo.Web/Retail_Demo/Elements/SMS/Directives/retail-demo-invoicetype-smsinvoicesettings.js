@@ -1,7 +1,7 @@
 ﻿//"use strict";
 
-//app.directive("retailDemoInvoicetypeNetworkrentalinvoicesettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-//    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+//app.directive("retailDemoInvoicetypeSmsinvoicesettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "retail_SMS_InvoiceType",
+//    function (UtilsService, VRNotificationService, VRUIUtilsService, retail_SMS_InvoiceType) {
 
 //        var directiveDefinitionObject = {
 
@@ -21,7 +21,7 @@
 //            compile: function (element, attrs) {
 
 //            },
-//            templateUrl: "/Client/Modules/Retail_Demo/Elements/NetworkRental/Directives/Templates/NetworkRentalInvoiceSettingsTemplate.html"
+//            templateUrl: "/Client/Modules/Retail_Demo/Elements/SMS/Directives/Templates/SMSInvoiceSettingsTemplate.html"
 
 //        };
 
@@ -33,6 +33,7 @@
 
 //            function initializeController() {
 //                $scope.scopeModel = {};
+//                $scope.scopeModel.invoiceType = UtilsService.getArrayEnum(retail_SMS_InvoiceType);
 //                $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
 //                    beDefinitionSelectorAPI = api;
 //                    beDefinitionSelectorPromiseDeferred.resolve();
@@ -47,6 +48,7 @@
 //                api.load = function (payload) {
 //                    var promises = [];
 //                    promises.push(getBusinessEntityDefinitionSelectorLoadPromise());
+//                    if (payload != undefined && payload.extendedSettingsEntity != undefined) { $scope.scopeModel.selectedInvoiceType = UtilsService.getItemByVal($scope.scopeModel.invoiceType, payload.extendedSettingsEntity.Type, "value"); }
 
 //                    function getBusinessEntityDefinitionSelectorLoadPromise() {
 //                        var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -73,8 +75,9 @@
 
 //                api.getData = function () {
 //                    return {
-//                        $type: "Retail.Demo.Business.NetworkRentalnvoiceSettings, Retail.Demo.Business",
-//                        AccountBEDefinitionId: beDefinitionSelectorAPI.getSelectedIds()
+//                        $type: "Retail.Demo.Business.SMSInvoiceSettings, Retail.Demo.Business",
+//                        AccountBEDefinitionId: beDefinitionSelectorAPI.getSelectedIds(),
+//                        Type: $scope.scopeModel.selectedInvoiceType != undefined ? $scope.scopeModel.selectedInvoiceType.value : undefined
 //                    };
 //                };
 

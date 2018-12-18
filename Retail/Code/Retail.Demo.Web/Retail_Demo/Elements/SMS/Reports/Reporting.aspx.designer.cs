@@ -7,8 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Retail.Demo.Web.Retail_Demo.Elements.NetworkRental.Reports
-{
+namespace Retail.Demo.Web.Retail_Demo.Elements.SMS.Reports {
+    
+    
     public partial class Reporting {
     }
 }

@@ -67,6 +67,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssignedFinancialAccountToInvoiceSettingFilter.cs" />
+    <Compile Include="SMS\SMSInvoiceGenerator.cs" />
+    <Compile Include="SMS\SMSInvoicePartnerSettings.cs" />
+    <Compile Include="SMS\SMSlnvoiceSettings.cs" />
     <Compile Include="NetworkRental\NetworkRentalInvoiceGenerator.cs" />
     <Compile Include="NetworkRental\NetworkRentalInvoicePartnerSettings.cs" />
     <Compile Include="NetworkRental\NetworkRentalnvoiceSettings.cs" />
