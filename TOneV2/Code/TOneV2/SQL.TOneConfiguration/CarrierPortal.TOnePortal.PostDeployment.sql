@@ -440,8 +440,8 @@ set nocount on;
 ;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,@CP_NOCDataGroupId,1,'ab794846-853c-4402-a8e4-6f5c3a75f5f2','[{"Name":"View","Value":1}]'),
-(1,@CP_BillingDataGroupId,1,'a611a651-b60b-483d-bc83-1c2b667a120a','[{"Name":"View","Value":1}]')
+(1,@CP_BillingDataGroupId,1,'ab794846-853c-4402-a8e4-6f5c3a75f5f2','[{"Name":"View","Value":1}]'),
+(1,@CP_NOCDataGroupId,1,'a611a651-b60b-483d-bc83-1c2b667a120a','[{"Name":"View","Value":1}]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
 merge	[sec].[Permission] as t
