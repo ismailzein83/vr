@@ -47,7 +47,9 @@ namespace Vanrise.Security.Business
             {
                 if (filter != null)
                 {
-                    if ((excludedGroupIds != null && excludedGroupIds.Contains(itemObject.GroupId)) || (filter.onlyStatic && !(itemObject.Settings is StaticGroup)))
+                    if (excludedGroupIds != null && excludedGroupIds.Contains(itemObject.GroupId))
+                        return false;
+                    if (filter.OnlyStatic && !(itemObject.Settings is StaticGroup))
                         return false;
                 }
                 return true;
