@@ -9,9 +9,9 @@ namespace Retail.Demo.Web.Retail_Demo.Elements.NetworkRental.Reports
 {
     public partial class Reporting : System.Web.UI.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
+        //protected void Page_Load(object sender, EventArgs e)
+        //{
+            
+        //}
     }
 }
