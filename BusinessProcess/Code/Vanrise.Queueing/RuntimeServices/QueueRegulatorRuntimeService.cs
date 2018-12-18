@@ -8,6 +8,7 @@ using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
 using Vanrise.Common;
 using Vanrise.Runtime.Entities;
+using System.Configuration;
 
 namespace Vanrise.Queueing
 {
@@ -17,6 +18,13 @@ namespace Vanrise.Queueing
         public override Guid ConfigId { get { return new Guid("B08F3D51-CC02-4292-9AAB-FB9A8720EE16"); } }
 
         static int s_maxNumberOfItemsPerService = 5;
+        static int s_additionalItemsToLoad;
+
+        static QueueRegulatorRuntimeService()
+        {
+            if (!int.TryParse(ConfigurationManager.AppSettings["Queue_AdditionalItemsToLoad"], out s_additionalItemsToLoad))
+                s_additionalItemsToLoad = 5000;
+        }
 
         IQueueItemDataManager _queueItemDataManager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
         QueueItemManager _queueItemManager = new QueueItemManager();
@@ -108,6 +116,7 @@ namespace Vanrise.Queueing
             IOrderedEnumerable<HoldRequest> holdRequests = holdRequestManager.GetCachedOrderedHoldRequests();
 
             int maxNbOfPendingItems = s_maxNumberOfItemsPerService * activeServiceInstances.Count;
+            maxNbOfPendingItems += s_additionalItemsToLoad;
             List<PendingQueueItemInfo> pendingQueueItems = _queueItemManager.GetPendingQueueItems(maxNbOfPendingItems, holdRequests);
 
             if (pendingQueueItems != null && pendingQueueItems.Count > 0)

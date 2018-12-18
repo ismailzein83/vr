@@ -15,15 +15,15 @@ namespace Vanrise.Queueing
             IQueueItemDataManager queueItemDataManager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
 
             int maxNbOfPendingItemsToLoad = holdRequests == null || holdRequests.Count() == 0 ? maxNbOfPendingItems : Int32.MaxValue;
-
+            bool allItemsAreLoadedFromDB = holdRequests != null && holdRequests.Count() > 0;
             queueItemDataManager.GetPendingQueueItems(maxNbOfPendingItemsToLoad, (pendingQueueItemInfo) =>
             {
                 if (holdRequests == null || holdRequests.Count() == 0)
-                    return AddQueueItemWithCountValidation(pendingQueueItemInfos, pendingQueueItemInfo, maxNbOfPendingItems);
+                    return AddQueueItemWithCountValidation(pendingQueueItemInfos, pendingQueueItemInfo, maxNbOfPendingItems, allItemsAreLoadedFromDB);
 
                 IEnumerable<HoldRequest> filteredHoldRequests = holdRequests.FindAllRecords(itm => itm.QueuesToHold.Contains(pendingQueueItemInfo.QueueId));
                 if (filteredHoldRequests == null || filteredHoldRequests.Count() == 0)
-                    return AddQueueItemWithCountValidation(pendingQueueItemInfos, pendingQueueItemInfo, maxNbOfPendingItems);
+                    return AddQueueItemWithCountValidation(pendingQueueItemInfos, pendingQueueItemInfo, maxNbOfPendingItems, allItemsAreLoadedFromDB);
 
                 bool isOverlapped = false;
                 foreach (HoldRequest holdRequest in filteredHoldRequests)
@@ -36,21 +36,28 @@ namespace Vanrise.Queueing
                 }
 
                 if (!isOverlapped)
-                    return AddQueueItemWithCountValidation(pendingQueueItemInfos, pendingQueueItemInfo, maxNbOfPendingItems);
+                    return AddQueueItemWithCountValidation(pendingQueueItemInfos, pendingQueueItemInfo, maxNbOfPendingItems, allItemsAreLoadedFromDB);
 
                 return false;
             });
 
-            return pendingQueueItemInfos.Count > 0 ? pendingQueueItemInfos : null;
+            return pendingQueueItemInfos.Count > 0 ? pendingQueueItemInfos.OrderBy(itm => itm.ExecutionFlowTriggerItemID).ThenBy(itm => itm.QueueItemId).ToList() : null;
         }
 
-        private bool AddQueueItemWithCountValidation(List<PendingQueueItemInfo> pendingQueueItemInfos, PendingQueueItemInfo pendingQueueItemInfo, int maxNbOfPendingItems)
+        private bool AddQueueItemWithCountValidation(List<PendingQueueItemInfo> pendingQueueItemInfos, PendingQueueItemInfo pendingQueueItemInfo, int maxNbOfPendingItems, bool allItemsAreLoaded)
         {
             pendingQueueItemInfos.Add(pendingQueueItemInfo);
-            if (pendingQueueItemInfos.Count == maxNbOfPendingItems)
-                return true;
+            if (allItemsAreLoaded)
+            {
+                if (pendingQueueItemInfos.Count == maxNbOfPendingItems)
+                    return true;
+                else
+                    return false;
+            }
             else
+            {
                 return false;
+            }
         }
 
         public List<SummaryBatch> GetSummaryBatches(IOrderedEnumerable<HoldRequest> holdRequests)
