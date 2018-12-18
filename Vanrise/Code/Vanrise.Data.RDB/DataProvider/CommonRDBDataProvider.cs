@@ -436,8 +436,11 @@ namespace Vanrise.Data.RDB.DataProvider
             var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);
 
-            StringBuilder queryBuilder = new StringBuilder(" DELETE FROM ");
-            if (context.Joins != null && context.Joins.Count > 0)
+            bool hasJoins = context.Joins != null && context.Joins.Count > 0;
+            string tableAlias = hasJoins ? context.TableAlias : string.Empty;
+
+            StringBuilder queryBuilder = new StringBuilder($" DELETE {tableAlias} FROM ");
+            if (hasJoins)
             {
                 AddTableToDBQueryBuilder(queryBuilder, context.Table, context.TableAlias, context);
                 AddJoinsToQuery(context, queryBuilder, context.Joins, rdbConditionToDBQueryContext);
