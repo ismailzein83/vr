@@ -52,6 +52,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BELookupRuleManager.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEExtendedSettingsContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEOnBeforeInsertHandlerContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEOnBeforeInsertHandlerInfoByTypeContext.cs" />
+    <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEBulkActionProcessInput.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBusinessEntityDefinitionFilter.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEDefinitionViewFilter.cs" />

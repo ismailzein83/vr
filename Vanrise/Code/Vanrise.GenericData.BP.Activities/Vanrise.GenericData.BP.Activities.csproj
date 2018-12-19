@@ -17,7 +17,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
     <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -64,6 +65,8 @@
     <Compile Include="CDRCorrelation\InsertCorrelatedCDRs.cs" />
     <Compile Include="CDRCorrelation\LoadCDRsToCorrelate.cs" />
     <Compile Include="DeleteRecordsFromStorage.cs" />
+    <Compile Include="ExecuteGenericBEActions.cs" />
+    <Compile Include="LoadGenericBEBulkActionDrafts.cs" />
     <Compile Include="LoadRecordsFromStorages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

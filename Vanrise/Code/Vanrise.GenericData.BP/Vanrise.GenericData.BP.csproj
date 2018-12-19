@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
     <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -91,6 +92,12 @@
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="GenericBEBulkActionProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

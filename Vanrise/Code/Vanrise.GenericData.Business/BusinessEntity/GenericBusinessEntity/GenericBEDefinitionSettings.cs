@@ -137,7 +137,19 @@ namespace Vanrise.GenericData.Business
         public abstract void onBeforeUpdate(IGenericBEOnBeforeUpdateHandlerContext context);
 
     }
+    public interface IGenericBEBulkActionRuntimeSettingsContext
+    {
+        GenericBusinessEntity GenericBusinessEntity { get; set; }
+        Guid BEDefinitionId { get; set; }
+        string ErrorMessage { get; set; }
+        bool IsErrorOccured { get; set; }
+        GenericBEBulkActionSettings DefinitionSettings { get; set; }
+    }
 
+    public abstract class GenericBEBulkActionRuntimeSettings
+    {
+        public abstract void Execute(IGenericBEBulkActionRuntimeSettingsContext context);
+    }
     public interface IGenericBEOnBeforeAddHandlerContext
     {
         GenericBusinessEntityToAdd GenericBusinessEntityToAdd { get; }
