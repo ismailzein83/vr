@@ -195,6 +195,7 @@ namespace Vanrise.GenericData.Business
         GenericBEDefinitionSettings DefinitionSettings { get; }
         GenericBusinessEntity OldGenericBusinessEntity { get; }
         Guid BusinessEntityDefinitionId { get; }
+        OutputResult OutputResult { get; }
     }
 
 
