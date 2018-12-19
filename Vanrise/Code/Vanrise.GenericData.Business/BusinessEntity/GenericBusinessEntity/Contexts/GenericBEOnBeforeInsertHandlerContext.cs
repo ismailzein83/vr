@@ -14,5 +14,12 @@ namespace Vanrise.GenericData.Business
         public GenericBEDefinitionSettings DefinitionSettings { get; set; }
         public Guid BusinessEntityDefinitionId { get; set; }
         public HandlerOperationType OperationType { get; set; }
+        public OutputResult OutputResult { get; set; }
+
+    }
+    public class OutputResult
+    {
+        public bool Result { get; set; }
+        public List<string> Messages { get; set; }
     }
 }
