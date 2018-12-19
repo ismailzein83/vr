@@ -568,7 +568,11 @@ namespace Retail.BusinessEntity.Business
             var account = GetAccount(accountBEDefinitionId, accountId);
             if (account == null)
                 throw new NullReferenceException(String.Format("account '{0}'", accountId));
+            return HasAccountProfile(account, getInherited, out accountProfile);
+        }
 
+        public bool HasAccountProfile(Account account, bool getInherited, out IAccountProfile accountProfile)
+        {
             if (account.Settings == null)
             {
                 accountProfile = null;
@@ -585,22 +589,40 @@ namespace Retail.BusinessEntity.Business
                 }
             }
             if (getInherited && account.ParentAccountId.HasValue)
-                return HasAccountProfile(accountBEDefinitionId, account.ParentAccountId.Value, true, out accountProfile);
+                return HasAccountProfile(GetParentAccount(account), true, out accountProfile);
             else
             {
                 accountProfile = null;
                 return false;
             }
         }
-        public CompanySetting GetCompanySetting(long accountId)
+
+        public CompanySetting GetCompanySetting(Guid accountBEDefinitionId, long accountId)
         {
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            var companySettingsId = GetCompanySettingId(accountBEDefinitionId, accountId);
+            if(companySettingsId.HasValue)
+                return configManager.GetCompanySettingById(companySettingsId.Value);
             return configManager.GetDefaultCompanySetting();
         }
-        public IEnumerable<Guid> GetBankDetailsIds(long accountId)
+
+        private Guid? GetCompanySettingId(Guid accountBEDefinitionId, long accountId)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            IAccountProfile accountProfile;
+            if (HasAccountProfile(account, true, out accountProfile)) 
+            {
+                if (accountProfile.CompanySettingsId.HasValue)
+                    return accountProfile.CompanySettingsId.Value;
+                if (account.ParentAccountId.HasValue)
+                    return GetCompanySettingId(accountBEDefinitionId, account.ParentAccountId.Value);
+            }
+            return null;
+        }
+        public IEnumerable<Guid> GetBankDetailsIds(Guid accountBEDefinitionId, long accountId)
         {
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
-            var companySettings = GetCompanySetting(accountId);
+            var companySettings = GetCompanySetting(accountBEDefinitionId,accountId);
             return companySettings.BankDetails;
         }
 

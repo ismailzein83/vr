@@ -86,7 +86,7 @@ namespace Retail.MultiNet.Business
                     Dictionary<string, VRRdlcReportParameter> rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
                     CurrencyManager currencyManager = new CurrencyManager();
                     AccountBEManager accountBEManager = new AccountBEManager();
-                    CompanySetting companySetting = accountBEManager.GetCompanySetting(financialAccountData.Account.AccountId);
+                    CompanySetting companySetting = accountBEManager.GetCompanySetting(this._acountBEDefinitionId,financialAccountData.Account.AccountId);
                     string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
                     int currencyId = accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
                     string currencySymbol = currencyManager.GetCurrencySymbol(currencyId);

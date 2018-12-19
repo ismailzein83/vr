@@ -85,7 +85,7 @@ namespace Retail.BusinessEntity.Entities
     public interface IAccountProfile
     {
         string Address { get; }
-
+        Guid? CompanySettingsId { get; }
         List<string> Faxes { get; }
 
         List<string> PhoneNumbers { get; }

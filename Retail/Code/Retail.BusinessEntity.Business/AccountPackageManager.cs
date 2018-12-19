@@ -159,7 +159,7 @@ namespace Retail.BusinessEntity.Business
 		{
 			List<VRExcelSheet> rateSheets = new List<VRExcelSheet>();
 			AccountBEManager accountManager = new AccountBEManager();
-			var companySettings = accountManager.GetCompanySetting(accountId);
+			var companySettings = accountManager.GetCompanySetting(accountBEDefinitionId,accountId);
 			companySettings.ThrowIfNull("companySettings");
 			VRFileManager fileManager = new VRFileManager();
 			Dictionary<Guid, VRExcelSheet> sheetsPerServiceType = new Dictionary<Guid, VRExcelSheet>();

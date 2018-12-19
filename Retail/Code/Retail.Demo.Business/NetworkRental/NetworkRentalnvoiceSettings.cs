@@ -33,7 +33,7 @@ namespace Retail.Demo.Business
                 case "BankDetails":
                     {
                         #region BankDetails
-                        return accountBEManager.GetBankDetailsIds(financialAccountData.Account.AccountId);
+                        return accountBEManager.GetBankDetailsIds(this.AccountBEDefinitionId,financialAccountData.Account.AccountId);
                         #endregion
                     }
             }

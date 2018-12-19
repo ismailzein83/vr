@@ -52,7 +52,7 @@ namespace Retail.MultiNet.Business
                     {
                         #region BankDetails
                         AccountBEManager accountBEManager = new AccountBEManager();
-                        return accountBEManager.GetBankDetailsIds(financialAccountData.Account.AccountId);
+                        return accountBEManager.GetBankDetailsIds(this.AccountBEDefinitionId,financialAccountData.Account.AccountId);
                         #endregion
                     }
 

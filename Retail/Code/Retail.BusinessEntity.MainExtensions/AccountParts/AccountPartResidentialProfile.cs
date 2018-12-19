@@ -18,6 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         // public const int ExtensionConfigId = 22;
         public int? CountryId { get; set; }
+        public Guid? CompanySettingsId { get; set; }
 
         public int? CityId { get; set; }
 

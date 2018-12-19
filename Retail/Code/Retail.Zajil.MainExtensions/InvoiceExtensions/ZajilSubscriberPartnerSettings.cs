@@ -83,7 +83,7 @@ namespace Retail.Zajil.MainExtensions
                     CurrencyManager currencyManager = new CurrencyManager();
 
                     AccountBEManager accountBEManager = new AccountBEManager();
-                    CompanySetting companySetting = accountBEManager.GetCompanySetting(partnerId);
+                    CompanySetting companySetting = accountBEManager.GetCompanySetting(this._acountBEDefinitionId,partnerId);
                     var account = accountBEManager.GetAccount(this._acountBEDefinitionId, partnerId);
                     string accountName = accountBEManager.GetAccountName(this._acountBEDefinitionId, account.AccountId);
 
