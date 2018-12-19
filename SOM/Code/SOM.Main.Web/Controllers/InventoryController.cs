@@ -169,7 +169,13 @@ namespace SOM.Main.Web.Controllers
         #endregion
 
 
-
+        [HttpGet]
+        [Route("GetInventoryPhoneItem")]
+        public InventoryPhoneItem GetInventoryPhoneItem(string phoneNumber)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetInventoryPhoneItem(phoneNumber);
+        }
         [HttpGet]
         [Route("ReserveTelephonyNumber")]
         public string ReserveTelephonyNumber(string pathtype, string Pathname, string ObjectList, string connectors)
