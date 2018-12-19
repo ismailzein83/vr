@@ -7,6 +7,8 @@ namespace Vanrise.GenericData.MainExtensions.CompositeRecordCondition.Runtime
 {
     public class CompositeRecordConditionGroup : Vanrise.GenericData.Entities.CompositeRecordCondition
     {
+        public override Guid ConfigId { get { return new Guid("9ADCEA46-87C2-4747-8B88-20796AA99CA0"); } }
+
         public List<Vanrise.GenericData.Entities.CompositeRecordCondition> RecordConditions { get; set; }
 
         public CompositeRecordConditionLogicalOperator LogicalOperator { get; set; }

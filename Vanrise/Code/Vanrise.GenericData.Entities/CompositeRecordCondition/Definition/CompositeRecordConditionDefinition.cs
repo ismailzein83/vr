@@ -6,7 +6,7 @@ namespace Vanrise.GenericData.Entities
     public class CompositeRecordConditionDefinition
     {
         public string Name { get; set; }
-
+        public string Title { get; set; }  
         public CompositeRecordConditionDefinitionSettings Settings { get; set; }
     }
 

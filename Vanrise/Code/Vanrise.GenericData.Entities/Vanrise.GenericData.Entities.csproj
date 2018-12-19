@@ -109,6 +109,7 @@
     <Compile Include="CompositeRecordCondition\Runtime\CompositeRecordConditionConfig.cs" />
     <Compile Include="CompositeRecordCondition\Definition\CompositeRecordConditionDefinition.cs" />
     <Compile Include="CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionSettingConfig.cs" />
+    <Compile Include="CompositeRecordCondition\Runtime\CompositeRecordConditionResolvedData.cs" />
     <Compile Include="DataStorage\DataRecordStorage\BusinessObjectDataRecordStorageConfig.cs" />
     <Compile Include="DataRecordCondition.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoice.cs" />

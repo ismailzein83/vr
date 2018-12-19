@@ -232,10 +232,10 @@
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionGroupTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\Templates\DataRecordTypeCompositeRecordTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\Templates\DataRecordTypeCompositeRecordConditionDefinitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinitiongroup.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinition-settings.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\vr-genericdata-datarecordtype-compositerecord.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\vr-genericdata-datarecordtype-compositerecordconditiondefinition.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\Templates\CompositeRecordConditionGroupTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Runtime\Templates\CompositeRecordConditionTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\Templates\RecordFilterCompositeConditionTemplate.html" />

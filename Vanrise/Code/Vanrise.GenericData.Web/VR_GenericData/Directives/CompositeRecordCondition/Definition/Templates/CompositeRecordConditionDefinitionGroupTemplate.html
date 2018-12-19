@@ -1,17 +1,15 @@
-﻿<vr-row>
-    <vr-columns width="fullrow">
-        <vr-button type="Add" data-onclick="scopeModel.addCompositeRecordConditionDefinition" standalone></vr-button>
-        <vr-validator validate="scopeModel.isGridValid()">
-            <vr-datagrid on-ready="scopeModel.onGridReady"
-                         datasource="scopeModel.datasource"
-                         menuactions="scopeModel.gridMenuActions"
-                         ondeleterow="scopeModel.removeCompositeRecordConditionDefinition"
-                         idfield="Entity.CompositeRecordConditionDefinitionId"
-                         norowhighlightonclick="true" maxheight="300px">
+﻿<vr-columns width="fullrow">
+    <vr-button type="Add" data-onclick="scopeModel.addCompositeRecordConditionDefinition" standalone></vr-button>
+    <vr-validator validate="scopeModel.isGridValid()">
+        <vr-datagrid on-ready="scopeModel.onGridReady"
+                     datasource="scopeModel.datasource"
+                     menuactions="scopeModel.gridMenuActions"
+                     ondeleterow="scopeModel.removeCompositeRecordConditionDefinition"
+                     idfield="Entity.CompositeRecordConditionDefinitionId"
+                     norowhighlightonclick="true" maxheight="300px" hidegridmenu>
 
-                <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" fixedwidth="200" disablesorting></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Settings'" field="'Entity.Settings'" fixedwidth="200" disablesorting></vr-datagridcolumn>
-            </vr-datagrid>
-        </vr-validator>
-    </vr-columns>
-</vr-row>
+            <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" fixedwidth="200" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'" fixedwidth="200" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
+</vr-columns>

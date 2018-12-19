@@ -2,41 +2,43 @@
 
     'use strict';
 
-    CompositeRecordConditionDefinitionService.$inject = ['VRModalService', 'VRNotificationService'];
+    CompositeRecordConditionDefinitionService.$inject = ['VRModalService'];
 
-    function CompositeRecordConditionDefinitionService(VRModalService, VRNotificationService) {
+    function CompositeRecordConditionDefinitionService(VRModalService) {
 
-        function addCompositeRecordConditionDefinition(onCompositeRecordConditionDefinitionAdded) {
-            var settings = {
+        function addCompositeRecordConditionDefinition(onCompositeRecordConditionDefinitionAdded, conditionRecordNames, conditionRecordTitles) {
+
+            var parameters = {
+                conditionRecordNames: conditionRecordNames,
+                conditionRecordTitles: conditionRecordTitles
             };
+
+            var settings = {};
             settings.onScopeReady = function (modalScope) {
                 modalScope.onCompositeRecordConditionDefinitionAdded = onCompositeRecordConditionDefinitionAdded;
             };
-            var parameters = {};
-           
             VRModalService.showModal("/Client/Modules/VR_GenericData/Directives/CompositeRecordCondition/Definition/Templates/CompositeRecordConditionDefinitionEditorTemplate.html", parameters, settings);
         }
 
-        function editCompositeRecordConditionDefinition(onCompositeRecordConditionDefinitionUpdated, compositeRecordConditionDefinition) {
-            var settings = {
+        function editCompositeRecordConditionDefinition(onCompositeRecordConditionDefinitionUpdated, compositeRecordConditionDefinition, conditionRecordNames, conditionRecordTitles) {
+            var parameters = {
+                CompositeRecordConditionDefinition: compositeRecordConditionDefinition,
+                conditionRecordNames: conditionRecordNames,
+                conditionRecordTitles: conditionRecordTitles
             };
 
+            var settings = {};
             settings.onScopeReady = function (modalScope) {
                 modalScope.onCompositeRecordConditionDefinitionUpdated = onCompositeRecordConditionDefinitionUpdated;
             };
-            var parameters = {
-                CompositeRecordConditionDefinition: compositeRecordConditionDefinition
-            };
-
             VRModalService.showModal("/Client/Modules/VR_GenericData/Directives/CompositeRecordCondition/Definition/Templates/CompositeRecordConditionDefinitionEditorTemplate.html", parameters, settings);
         }
 
         return ({
             addCompositeRecordConditionDefinition: addCompositeRecordConditionDefinition,
-            editCompositeRecordConditionDefinition: editCompositeRecordConditionDefinition,
+            editCompositeRecordConditionDefinition: editCompositeRecordConditionDefinition
         });
     }
 
     appControllers.service('VR_GenericData_CompositeRecordConditionDefinitionService', CompositeRecordConditionDefinitionService);
-
 })(appControllers);

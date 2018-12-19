@@ -12,10 +12,11 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetCompositeRecordConditionDefinitionSettingConfigs"));
         }
 
-        return ({
-            GetCompositeRecordConditionDefinitionSettingConfigs: GetCompositeRecordConditionDefinitionSettingConfigs
-        });
+        return {
+            GetCompositeRecordConditionDefinitionSettingConfigs: GetCompositeRecordConditionDefinitionSettingConfigs,
+        };
     }
 
     appControllers.service('VR_GenericData_CompositeRecordConditionDefinitionAPIService', CompositeRecordConditionDefinitionAPIService);
 })(appControllers);
+

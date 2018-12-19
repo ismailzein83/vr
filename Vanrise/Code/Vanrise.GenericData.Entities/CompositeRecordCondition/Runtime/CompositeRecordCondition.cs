@@ -12,8 +12,11 @@ namespace Vanrise.GenericData.Entities
         [Description("OR")]
         Or = 1
     }
+
     public abstract class CompositeRecordCondition
     {
+        public abstract Guid ConfigId { get; }
+
         public abstract bool Evaluate(ICompositeRecordConditionEvaluateContext context);
     }
 

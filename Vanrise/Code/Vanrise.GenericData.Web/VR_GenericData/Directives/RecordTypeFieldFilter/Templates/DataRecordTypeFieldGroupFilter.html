@@ -3,18 +3,18 @@
         <vr-row removeline>
             <vr-columns width="1/2row">
                 <vr-choices isradio selectedindex="ctrl.condition">
-                    <vr-choice ng-repeat="condition in conditions">{{condition.description}}</vr-choice>
+                    <vr-choice ng-repeat="condition in ctrl.conditions">{{condition.description}}</vr-choice>
                 </vr-choices>
-            </vr-columns>
-            <vr-columns width="1/4row" class="vr-groupfilter-button">
-                <button type="button" class="btn btn-xs" data-add="group" ng-click="ctrl.addGroup()" style="background-color:#6DA279;color:white;">
-                    <i class="glyphicon glyphicon-plus-sign"></i> Add Group
-                </button>
             </vr-columns>
 
             <vr-columns width="1/4row" class="vr-groupfilter-button">
+                <button type="button" class="btn btn-xs" data-add="group" ng-click="ctrl.addGroup()" style="background-color:#6DA279;color:white;">
+                    <i class="glyphicon glyphicon-plus"></i> Group
+                </button>
+            </vr-columns>
+            <vr-columns width="1/4row" class="vr-groupfilter-button">
                 <button type="button" class="btn btn-xs" data-add="rule" ng-click="ctrl.addRule()" style="background-color:#6DA279;color:white;">
-                    <i class="glyphicon glyphicon-plus"></i> Add Condition
+                    <i class="glyphicon glyphicon-plus"></i> Condition
                 </button>
             </vr-columns>
         </vr-row>
@@ -24,9 +24,7 @@
                 <div style="display:inline-block;width:calc(100% - 18px);">
                     <vr-directivewrapper directive="'vr-genericdata-datarecordtypefield-rulefilter'" on-ready="rule.onRuleFilterReady"></vr-directivewrapper>
                 </div>
-
                 <i class="glyphicon glyphicon-remove hand-cursor" style="position:absolute;top: 5px;" ng-click="removeRule(rule)"></i>
-
             </vr-columns>
         </vr-row>
 

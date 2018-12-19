@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Business
 {
     public class CompositeRecordConditionManager
     {
+        public IEnumerable<CompositeRecordConditionConfig> GetCompositeRecordConditionConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<CompositeRecordConditionConfig>(CompositeRecordConditionConfig.EXTENSION_TYPE);
+        }
     }
 }

@@ -1,1 +1,18 @@
-﻿
+﻿<vr-columns width="fullrow">
+    <vr-section>
+        <vr-columns colnum="2">
+            <vr-select on-ready="scopeModel.onRecordNamesSelectorReady"
+                       datasource="scopeModel.recordNames"
+                       selectedvalues="scopeModel.selectedRecordName"
+                       onselectionchanged="scopeModel.onRecordNamesSelectionChanged"
+                       datavaluefield="Name" datatextfield="Title"
+                       label="Record Name" isrequired="true" hideremoveicon>
+            </vr-select>
+        </vr-columns>
+        <vr-columns colnum="10" haschildcolumns>
+            <vr-genericdata-datarecordtypefield-groupfilter ng-if="scopeModel.selectedRecordName != undefined"
+                                                            on-ready="scopeModel.onGroupFilterReady">
+            </vr-genericdata-datarecordtypefield-groupfilter>
+        </vr-columns>
+    </vr-section>
+</vr-columns>

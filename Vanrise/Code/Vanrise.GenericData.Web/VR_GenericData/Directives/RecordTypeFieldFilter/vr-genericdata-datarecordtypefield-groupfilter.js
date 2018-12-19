@@ -22,15 +22,15 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
         };
 
         function recordTypeFieldGroupFilterCtor(ctrl, $scope, $attrs) {
+            this.initializeController = initializeController;
 
             var filterObj;
             var context;
 
-           
-
             function initializeController() {
-                ctrl.groups = [];
                 ctrl.rules = [];
+                ctrl.groups = [];
+                ctrl.conditions = UtilsService.getArrayEnum(VR_GenericData_RecordQueryLogicalOperatorEnum);
 
                 ctrl.isValid = function () {
                     if (ctrl.groups.length == 0 && ctrl.rules.length == 0)
@@ -80,81 +80,22 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                 var api = {};
 
                 api.load = function (payload) {
+                    ctrl.rules = [];
+                    ctrl.groups = [];
+
                     var promises = [];
-                    $scope.conditions = UtilsService.getArrayEnum(VR_GenericData_RecordQueryLogicalOperatorEnum);
+
                     if (payload != undefined) {
                         context = payload.context;
 
                         filterObj = payload.filterObj;
                         if (filterObj) {
                             buildData(filterObj.Filters, promises);
-                            ctrl.condition = payload.filterObj.LogicalOperator;//UtilsService.getEnum(VR_GenericData_RecordQueryLogicalOperatorEnum, 'value', payload.filterObj.LogicalOperator).description;
-
+                            ctrl.condition = filterObj.LogicalOperator; //UtilsService.getEnum(VR_GenericData_RecordQueryLogicalOperatorEnum, 'value', payload.filterObj.LogicalOperator).description;
                         }
                     }
+
                     return UtilsService.waitMultiplePromises(promises);
-                };
-
-                var buildData = function (items, promises) {
-                    if (items) {
-                        for (var x = 0; x < items.length; x++) {
-                            var currentItem = items[x];
-
-                            var payload = {
-                                context: context,
-                                filterObj: currentItem
-                            };
-
-                            var filterItem = {
-                                payload: payload,
-                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
-                            };
-                            promises.push(filterItem.loadPromiseDeferred.promise);
-
-                            if (currentItem.$type == 'Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities') {
-                                buildGroup(filterItem);
-                            }
-                            else {
-                                buildRule(filterItem);
-                            }
-                        }
-                    }
-                };
-
-                var buildRule = function (filterItem) {
-                    var rule = {};
-                    var filterItemPayload = filterItem.payload;
-
-                    rule.onRuleFilterReady = function (api) {
-                        rule.api = api;
-                        filterItem.readyPromiseDeferred.resolve();
-                    };
-
-                    filterItem.readyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(rule.api, filterItemPayload, filterItem.loadPromiseDeferred);
-                        });
-
-                    ctrl.rules.push(rule);
-                };
-
-                var buildGroup = function (filterItem) {
-
-                    var group = {};
-                    var filterItemPayload = filterItem.payload;
-
-                    group.onGroupFilterReady = function (api) {
-                        group.api = api;
-                        filterItem.readyPromiseDeferred.resolve();
-                    };
-
-                    filterItem.readyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(group.api, filterItemPayload, filterItem.loadPromiseDeferred);
-                        });
-
-                    ctrl.groups.push(group);
                 };
 
                 api.getData = function () {
@@ -174,6 +115,7 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                             filters.push(currentGroup.api.getData());
                         }
                     }
+
                     //var logicalOperator = UtilsService.getEnum(VR_GenericData_RecordQueryLogicalOperatorEnum, 'description', ctrl.condition);
                     var filterGroup = {
                         $type: "Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities",
@@ -214,9 +156,67 @@ app.directive('vrGenericdataDatarecordtypefieldGroupfilter', ['VR_GenericData_Da
                     ctrl.onReady(api);
             }
 
-            this.initializeController = initializeController;
+            function buildData(items, promises) {
+                if (items) {
+                    for (var x = 0; x < items.length; x++) {
+                        var currentItem = items[x];
 
+                        var payload = {
+                            context: context,
+                            filterObj: currentItem
+                        };
+
+                        var filterItem = {
+                            payload: payload,
+                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                            loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                        };
+                        promises.push(filterItem.loadPromiseDeferred.promise);
+
+                        if (currentItem.$type == 'Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities') {
+                            buildGroup(filterItem);
+                        }
+                        else {
+                            buildRule(filterItem);
+                        }
+                    }
+                }
+            }
+
+            function buildRule(filterItem) {
+                var rule = {};
+                var filterItemPayload = filterItem.payload;
+
+                rule.onRuleFilterReady = function (api) {
+                    rule.api = api;
+                    filterItem.readyPromiseDeferred.resolve();
+                };
+
+                filterItem.readyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(rule.api, filterItemPayload, filterItem.loadPromiseDeferred);
+                });
+
+                ctrl.rules.push(rule);
+            }
+
+            function buildGroup(filterItem) {
+
+                var group = {};
+                var filterItemPayload = filterItem.payload;
+
+                group.onGroupFilterReady = function (api) {
+                    group.api = api;
+                    filterItem.readyPromiseDeferred.resolve();
+                };
+
+                filterItem.readyPromiseDeferred.promise
+                    .then(function () {
+                        VRUIUtilsService.callDirectiveLoad(group.api, filterItemPayload, filterItem.loadPromiseDeferred);
+                    });
+
+                ctrl.groups.push(group);
+            }
         }
+
         return directiveDefinitionObject;
     }]);
-

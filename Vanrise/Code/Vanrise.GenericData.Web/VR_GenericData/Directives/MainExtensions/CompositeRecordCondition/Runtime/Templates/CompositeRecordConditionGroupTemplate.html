@@ -1,1 +1,28 @@
-﻿
+﻿<vr-columns width="fullrow">
+    <vr-validator validate="scopeModel.validateCompositeRecordCondition()">
+        <vr-section>
+            <vr-columns width="1/4row">
+                <vr-choices isradio selectedindex="scopeModel.logicalOperator">
+                    <vr-choice ng-repeat="logicalOperator in scopeModel.logicalOperators">{{logicalOperator.description}}</vr-choice>
+                </vr-choices>
+            </vr-columns>
+
+            <div ng-repeat="btn in scopeModel.compositeRecordConditionConfigs">
+                <vr-columns width="1/4row" class="vr-groupfilter-button">
+                    <button type="button" class="btn btn-xs" data-add="rule" ng-click="scopeModel.addCondition(btn)" style="background-color:#6DA279;color:white;">
+                        <i class="glyphicon glyphicon-plus"></i> {{btn.Title}}
+                    </button>
+                </vr-columns>
+            </div>
+
+            <span ng-repeat="condition in scopeModel.conditions">
+                <vr-columns width="fullrow">
+                    <div style="display:inline-block;width:calc(100% - 18px);">
+                        <vr-directivewrapper directive="condition.editor" on-ready="condition.onConditionFilterReady"></vr-directivewrapper>
+                    </div>
+                    <i class="glyphicon glyphicon-remove hand-cursor" style="position:absolute;top: 5px;" ng-click="scopeModel.removeCondition(condition)"></i>
+                </vr-columns>
+            </span>
+        </vr-section>
+    </vr-validator>
+</vr-columns>

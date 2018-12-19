@@ -35,6 +35,9 @@ app.directive('vrGenericdataCompositerecordconditiondefinitiongroup', ['UtilsSer
 
             var gridAPI;
 
+            var conditionRecordNames = [];
+            var conditionRecordTitles = [];
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.datasource = [];
@@ -54,11 +57,13 @@ app.directive('vrGenericdataCompositerecordconditiondefinitiongroup', ['UtilsSer
                         $scope.scopeModel.datasource.push({ Entity: addedCompositeRecordConditionDefinition });
                     };
 
-                    VR_GenericData_CompositeRecordConditionDefinitionService.addCompositeRecordConditionDefinition(onCompositeRecordConditionDefinitionAdded);
+                    getConditionRecordNamesAndTitles();
+
+                    VR_GenericData_CompositeRecordConditionDefinitionService.addCompositeRecordConditionDefinition(onCompositeRecordConditionDefinitionAdded, conditionRecordNames, conditionRecordTitles);
                 };
 
                 $scope.scopeModel.removeCompositeRecordConditionDefinition = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.Entity.CompositeRecordConditionDefinitionId, 'Entity.CompositeRecordConditionDefinitionId');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.Entity, 'Entity');
                     $scope.scopeModel.datasource.splice(index, 1);
                 };
 
@@ -72,18 +77,41 @@ app.directive('vrGenericdataCompositerecordconditiondefinitiongroup', ['UtilsSer
                 api.load = function (payload) {
                     $scope.scopeModel.datasource.length = 0;
 
-                    console.log(payload);
-                    //if (payload != undefined) {
-                       
-                    //}
+                    var compositeRecordConditionDefinitionGroup;
+
+                    if (payload != undefined) {
+                        if (payload.compositeRecordConditionDefinitionGroup != undefined &&
+                            payload.compositeRecordConditionDefinitionGroup.CompositeRecordFilterDefinitions != undefined)
+                            compositeRecordConditionDefinitionGroup = payload.compositeRecordConditionDefinitionGroup.CompositeRecordFilterDefinitions;
+                    }
+
+                    if (compositeRecordConditionDefinitionGroup != undefined) {
+                        for (var i = 0; i < compositeRecordConditionDefinitionGroup.length; i++) {
+                            $scope.scopeModel.datasource.push({ Entity: compositeRecordConditionDefinitionGroup[i] });
+                        }
+                    }
                 };
 
                 api.getData = function () {
+
+                    function getCompositeRecordConditionDefinitionGroup() {
+                        var compositeRecordConditions = [];
+                        for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+                            var currentItem = $scope.scopeModel.datasource[i].Entity;
+                            compositeRecordConditions.push({
+                                Name: currentItem.Name,
+                                Title: currentItem.Title,
+                                Settings: currentItem.Settings
+                            });
+                        }
+                        return compositeRecordConditions;
+                    }
+
                     return {
-                        CompositeRecordConditionDefinitionGroup: getCompositeRecordConditionDefinitionGroup()
+                        CompositeRecordFilterDefinitions: getCompositeRecordConditionDefinitionGroup()
                     };
                 };
-               
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
@@ -97,23 +125,22 @@ app.directive('vrGenericdataCompositerecordconditiondefinitiongroup', ['UtilsSer
 
             function editCompositeRecordConditionDefinition(compositeRecordConditionDefinition) {
                 var onCompositeRecordConditionDefinitionUpdated = function (updatedCompositeRecordConditionDefinition) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, compositeRecordConditionDefinition.Entity.CompositeRecordConditionDefinitionId, 'Entity.CompositeRecordConditionDefinitionId');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, compositeRecordConditionDefinition.Entity, 'Entity');
                     $scope.scopeModel.datasource[index] = { Entity: updatedCompositeRecordConditionDefinition };
                 };
-                VR_GenericData_CompositeRecordConditionDefinitionService.editCompositeRecordConditionDefinition(onCompositeRecordConditionDefinitionUpdated, compositeRecordConditionDefinition.Entity);
+
+                getConditionRecordNamesAndTitles();
+
+                VR_GenericData_CompositeRecordConditionDefinitionService.editCompositeRecordConditionDefinition(onCompositeRecordConditionDefinitionUpdated,
+                    compositeRecordConditionDefinition.Entity, conditionRecordNames, conditionRecordTitles);
             }
 
-            function getCompositeRecordConditionDefinitionGroup() {
-                var compositeRecordConditions = [];
+            function getConditionRecordNamesAndTitles() {
                 for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
-                    var currentItem = $scope.scopeModel.datasource[i].Entity;
-                    compositeRecordConditions.push({
-                        CompositeRecordConditionDefinitionId: currentItem.CompositeRecordConditionDefinitionId,
-                        Name: currentItem.Name,
-                        Settings: currentItem.Settings
-                    });
+                    var currentEntity = $scope.scopeModel.datasource[i].Entity;
+                    conditionRecordNames.push(currentEntity.Name);
+                    conditionRecordTitles.push(currentEntity.Title);
                 }
-                return compositeRecordConditions;
             }
         }
     }]);

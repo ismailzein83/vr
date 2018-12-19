@@ -31,8 +31,6 @@ app.directive('vrGenericdataCompositerecordconditiondefinitionSettings', ['Utils
             var directiveAPI;
             var directiveReadyDeferred;
 
-            var compositeRecordConditionDefinitionSettingId;
-
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -45,35 +43,33 @@ app.directive('vrGenericdataCompositerecordconditiondefinitionSettings', ['Utils
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
-                    var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value; };
-
-                    var directivePayload = {
-                        compositeRecordConditionDefinitionSettingId: compositeRecordConditionDefinitionSettingId
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
                 };
             }
 
             function defineAPI() {
                 var api = {};
-                var compositeRecordConditionDefinitionSetting;
 
                 api.load = function (payload) {
                     var promises = [];
                     selectorAPI.clearDataSource();
 
+                    var compositeRecordConditionDefinitionSetting;
+
                     if (payload != undefined) {
                         compositeRecordConditionDefinitionSetting = payload.compositeRecordConditionDefinitionSetting;
-                        compositeRecordConditionDefinitionSettingId = payload.compositeRecordConditionDefinitionSettingId;
                     }
+
+                    var getCompositeRecordConditionDefinitionSettingConfigsPromise = getCompositeRecordConditionDefinitionSettingConfigs();
+                    promises.push(getCompositeRecordConditionDefinitionSettingConfigsPromise);
 
                     if (compositeRecordConditionDefinitionSetting != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
-
-                    var getCompositeRecordConditionDefinitionSettingConfigsPromise = getCompositeRecordConditionDefinitionSettingConfigs();
-                    promises.push(getCompositeRecordConditionDefinitionSettingConfigsPromise);
 
                     function getCompositeRecordConditionDefinitionSettingConfigs() {
                         return VR_GenericData_CompositeRecordConditionDefinitionAPIService.GetCompositeRecordConditionDefinitionSettingConfigs().then(function (response) {
@@ -98,10 +94,11 @@ app.directive('vrGenericdataCompositerecordconditiondefinitionSettings', ['Utils
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = {
-                                compositeRecordConditionDefinitionSetting: compositeRecordConditionDefinitionSetting,
-                                compositeRecordConditionDefinitionSettingId: compositeRecordConditionDefinitionSettingId
-                            };
+
+                            var directivePayload;
+                            if (compositeRecordConditionDefinitionSetting != undefined) {
+                                directivePayload = { DataRecordTypeId: compositeRecordConditionDefinitionSetting.DataRecordTypeId };
+                            }
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -114,7 +111,6 @@ app.directive('vrGenericdataCompositerecordconditiondefinitionSettings', ['Utils
                 api.getData = function () {
                     var data;
                     if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
-
                         data = directiveAPI.getData();
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
@@ -149,6 +145,6 @@ app.directive('vrGenericdataCompositerecordconditiondefinitionSettings', ['Utils
                 + ' </vr-columns>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
             return template;
-
         }
+
     }]);
