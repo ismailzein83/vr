@@ -239,9 +239,9 @@ as (select * from (values
 merge	[runtime].[RuntimeNodeConfiguration] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Settings] = s.[Settings],[CreatedBy] = s.[CreatedBy],[LastModifiedBy] = s.[LastModifiedBy]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Settings] = s.[Settings],[CreatedBy] = s.[CreatedBy],[LastModifiedBy] = s.[LastModifiedBy]
 when not matched by target then
 	insert([ID],[Name],[Settings],[CreatedBy],[LastModifiedBy])
 	values(s.[ID],s.[Name],s.[Settings],s.[CreatedBy],s.[LastModifiedBy]);
