@@ -53,10 +53,10 @@ namespace Vanrise.GenericData.RDBDataStorage
                             #SetRDBBulkInsertColumnsFromRecordImplementation#
                         }
 
-                        public void SetRDBInsertColumnsFromRecord(dynamic dynamicRecord, Vanrise.Data.RDB.RDBInsertQuery insertQuery)
+                        public void SetRDBInsertColumnsToTempTableFromRecord(dynamic dynamicRecord, Vanrise.Data.RDB.RDBInsertMultipleRowsQueryRowContext tempTableRowContext)
                         {
                             #DATARECORD_RUNTIMETYPE# record = Vanrise.Common.ExtensionMethods.CastWithValidate<#DATARECORD_RUNTIMETYPE#>(dynamicRecord, ""dynamicRecord"");
-                            #SetRDBInsertColumnsFromRecordImplementation#
+                            #SetRDBInsertColumnsToTempTableFromRecordImplementation#
                         }
 
                         public dynamic GetDynamicRecordFromReader(Vanrise.Data.RDB.IRDBDataReader reader)
@@ -93,7 +93,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                     classDefinitionBuilder.Replace("#FillRECORDTYPEFIELDTYPES#", fillRecordTypeFieldTypesBuilder.ToString());
                     
                     StringBuilder setRDBBulkInsertColumnsValuesBuilder = new StringBuilder();
-                    StringBuilder setRDBInsertColumnsFromRecordBuilder = new StringBuilder();
+                    StringBuilder setRDBInsertColumnsToTempTableFromRecordBuilder = new StringBuilder();
 
 
                     foreach (var columnSettings in dataRecordStorageSettings.Columns)
@@ -102,20 +102,17 @@ namespace Vanrise.GenericData.RDBDataStorage
                         matchField.ThrowIfNull("matchField", columnSettings.FieldName);
                         if (!columnSettings.IsIdentity)
                             AppendSetRDBValueFromRecordField(setRDBBulkInsertColumnsValuesBuilder, matchField, "bulkInsertRecordContext");
-                        AppendSetRDBValueFromRecordField(setRDBInsertColumnsFromRecordBuilder, matchField, $@"insertQuery.Column(""{matchField.Name}"")");
+                        AppendSetRDBValueFromRecordField(setRDBInsertColumnsToTempTableFromRecordBuilder, matchField, "tempTableRowContext.Value()");
                     }
 
                     if (dataRecordStorageSettings.IncludeQueueItemId)
-                    {                        
-                        setRDBBulkInsertColumnsValuesBuilder.AppendLine(
-                                    @"  if(record.QueueItemId != null && record.QueueItemId != default(long))
-                                            bulkInsertRecordContext.Value(record.QueueItemId);
-                                        else
-                                            bulkInsertRecordContext.Null();");
+                    {
+                        AppendSetRDBValueFromRecordQueueItemId(setRDBBulkInsertColumnsValuesBuilder, "bulkInsertRecordContext");
+                        AppendSetRDBValueFromRecordQueueItemId(setRDBInsertColumnsToTempTableFromRecordBuilder, "tempTableRowContext.Value()");                        
                     }
 
                     classDefinitionBuilder.Replace("#SetRDBBulkInsertColumnsFromRecordImplementation#", setRDBBulkInsertColumnsValuesBuilder.ToString());
-                    classDefinitionBuilder.Replace("#SetRDBInsertColumnsFromRecordImplementation#", setRDBInsertColumnsFromRecordBuilder.ToString());
+                    classDefinitionBuilder.Replace("#SetRDBInsertColumnsToTempTableFromRecordImplementation#", setRDBInsertColumnsToTempTableFromRecordBuilder.ToString());
 
                     Type dataRecordRuntimeType = recordTypeManager.GetDataRecordRuntimeType(dataRecordStorage.DataRecordTypeId);
                     dataRecordRuntimeType.ThrowIfNull("dataRecordRuntimeType", dataRecordStorage.DataRecordTypeId);
@@ -154,20 +151,20 @@ namespace Vanrise.GenericData.RDBDataStorage
                 });
         }
 
-        private static void AppendSetRDBValueFromRecordField(StringBuilder rdbBulkInsertColumnsValuesBuilder, DataRecordField matchField, string rdbContextName)
+        private static void AppendSetRDBValueFromRecordField(StringBuilder rdbColumnsValuesBuilder, DataRecordField matchField, string rdbContextName)
         {
             string fieldName = matchField.Name;
             if (matchField.Type.StoreValueSerialized)
             {
-                rdbBulkInsertColumnsValuesBuilder.AppendLine($"var {fieldName}Context = new Vanrise.GenericData.Entities.SerializeDataRecordFieldValueContext() {{ Object = record.{fieldName} }}; ");
-                rdbBulkInsertColumnsValuesBuilder.AppendLine($"{rdbContextName}.Value(s_{fieldName}FieldType.SerializeValue({fieldName}Context));");
+                rdbColumnsValuesBuilder.AppendLine($"var {fieldName}Context = new Vanrise.GenericData.Entities.SerializeDataRecordFieldValueContext() {{ Object = record.{fieldName} }}; ");
+                rdbColumnsValuesBuilder.AppendLine($"{rdbContextName}.Value(s_{fieldName}FieldType.SerializeValue({fieldName}Context));");
             }
             else
             {
                 var runtimeType = matchField.Type.GetRuntimeType();
                 if (runtimeType.IsValueType && Nullable.GetUnderlyingType(runtimeType) != null)//is nullable Type
                 {
-                    rdbBulkInsertColumnsValuesBuilder.AppendLine(
+                    rdbColumnsValuesBuilder.AppendLine(
                         $@" if(record.{fieldName}.HasValue)
                                 {rdbContextName}.Value(record.{fieldName}.Value);
                             else
@@ -175,9 +172,18 @@ namespace Vanrise.GenericData.RDBDataStorage
                 }
                 else
                 {
-                    rdbBulkInsertColumnsValuesBuilder.AppendLine($"{rdbContextName}.Value(record.{fieldName});");
+                    rdbColumnsValuesBuilder.AppendLine($"{rdbContextName}.Value(record.{fieldName});");
                 }
             }
+        }
+
+        private static void AppendSetRDBValueFromRecordQueueItemId(StringBuilder setColumnsValuesBuilder, string rdbContextName)
+        {
+            setColumnsValuesBuilder.AppendLine(
+                                                $@" if(record.QueueItemId != null && record.QueueItemId != default(long))
+                                                        {rdbContextName}.Value(record.QueueItemId);
+                                                    else
+                                                        {rdbContextName}.Null();");
         }
 
         private void BuildMapperImplementations(RDBDataRecordStorageSettings dataRecordStorageSettings, 

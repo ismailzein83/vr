@@ -45,9 +45,9 @@ namespace Vanrise.Data.RDB
             _currentRecord.Value(value);
         }
 
-        public void Value(Vanrise.Entities.Time time)
+        public void Value(Vanrise.Entities.Time value)
         {
-            _currentRecord.Value(time);
+            _currentRecord.Value(value);
         }
 
         public void Value(bool value)

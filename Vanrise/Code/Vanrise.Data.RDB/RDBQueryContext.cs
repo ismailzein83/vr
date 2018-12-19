@@ -88,6 +88,13 @@ namespace Vanrise.Data.RDB
             return query;
         }
 
+        public RDBInsertMultipleRowsQuery AddInsertMultipleRowsQuery()
+        {
+            var query = new RDBInsertMultipleRowsQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
         public RDBUpdateQuery AddUpdateQuery()
         {
             var query = new RDBUpdateQuery(QueryBuilderContext.CreateChildContext());

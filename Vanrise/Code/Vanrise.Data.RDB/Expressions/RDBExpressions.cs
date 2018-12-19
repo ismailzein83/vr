@@ -104,6 +104,16 @@ namespace Vanrise.Data.RDB
         }
     }
 
+    internal class RDBFixedTimeExpression : BaseRDBExpression
+    {
+        public Vanrise.Entities.Time Value { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return BaseDataManager.GetTimeForBCP(this.Value) as string;
+        }
+    }
+
     internal class RDBFixedGuidExpression : BaseRDBExpression
     {
         public Guid Value { get; set; }

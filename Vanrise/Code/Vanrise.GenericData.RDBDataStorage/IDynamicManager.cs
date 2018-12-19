@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.RDBDataStorage
     {
         void WriteFieldsToRecordStream(dynamic record, Vanrise.Data.RDB.RDBBulkInsertQueryWriteRecordContext bulkInsertRecordContext);
 
-        void SetRDBInsertColumnsFromRecord(dynamic record, Vanrise.Data.RDB.RDBInsertQuery insertQuery);
+        void SetRDBInsertColumnsToTempTableFromRecord(dynamic record, Vanrise.Data.RDB.RDBInsertMultipleRowsQueryRowContext tempTableRowContext);
 
         dynamic GetDynamicRecordFromReader(Vanrise.Data.RDB.IRDBDataReader reader);
 

@@ -74,6 +74,8 @@
     <Compile Include="ExecuteNonQuery\RDBDeleteQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBDropTableQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBIfQuery.cs" />
+    <Compile Include="ExecuteNonQuery\RDBInsertMultipleRowsQuery.cs" />
+    <Compile Include="ExecuteNonQuery\RDBInsertMultipleRowsQueryRowContext.cs" />
     <Compile Include="ExecuteNonQuery\RDBParameterDeclarationQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBSetParameterValuesQuery.cs" />
     <Compile Include="Expressions\BaseRDBExpression.cs" />

@@ -231,14 +231,17 @@ namespace Vanrise.GenericData.RDBDataStorage
             tempTableQuery.AddColumnsFromTable(rdbRegistrationInfo.RDBTableUniqueName);
 
             var dynamicManager = this.DynamicManager;
-            
+
+            var insertRecordsToTempTableQuery = queryContext.AddInsertMultipleRowsQuery();
+            insertRecordsToTempTableQuery.IntoTable(tempTableQuery);
+            insertRecordsToTempTableQuery.Columns(rdbRegistrationInfo.FieldNamesForBulkInsert);
+
             foreach(var record in records)
             {
-                var insertToTempQuery = queryContext.AddInsertQuery();
-                insertToTempQuery.IntoTable(tempTableQuery);
-                dynamicManager.SetRDBInsertColumnsFromRecord(record, insertToTempQuery);
+                var newRowContext = insertRecordsToTempTableQuery.AddRow();
+                dynamicManager.SetRDBInsertColumnsToTempTableFromRecord(record, newRowContext);
             }
-
+            
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(rdbRegistrationInfo.RDBTableQuerySource);
 
