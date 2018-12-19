@@ -22,7 +22,7 @@ namespace Vanrise.Data.RDB.DataProvider
         {
             _connString = connString;
         }
-        
+
         public virtual bool UseLimitForTopRecords
         {
             get
@@ -34,9 +34,25 @@ namespace Vanrise.Data.RDB.DataProvider
         public override string GetTableDBName(string schemaName, string tableName)
         {
             if (!String.IsNullOrEmpty(schemaName))
-                return String.Concat(schemaName, ".", tableName);
+                return String.Concat("\"", schemaName, "\"", ".", "\"", tableName, "\"");
             else
-                return tableName;
+                return string.Concat("\"", tableName, "\"");
+        }
+
+        public override string GetColumnDBName(string columnDBName)
+        {
+            if (!string.IsNullOrEmpty(columnDBName))
+                columnDBName = string.Concat("\"", columnDBName, "\"");
+
+            return base.GetColumnDBName(columnDBName);
+        }
+
+        public override string GetDBAlias(string alias)
+        {
+            if (!string.IsNullOrEmpty(alias))
+                alias = string.Concat("\"", alias, "\"");
+
+            return base.GetDBAlias(alias);
         }
 
         public override string GetQueryConcatenatedStrings(params string[] strings)
@@ -290,7 +306,7 @@ namespace Vanrise.Data.RDB.DataProvider
             }
 
             StringBuilder columnQueryBuilder = new StringBuilder(" SET ");
-            
+
             Dictionary<string, RDBUpdateSelectColumn> selectColumnsByColumnName = null;
             StringBuilder selectColumnsQueryBuilder = null;
 
@@ -415,7 +431,7 @@ namespace Vanrise.Data.RDB.DataProvider
         private void AddStatementSetColumnValueInUpdateQuery(StringBuilder columnQueryBuilder, string columnDBName, string parameterDBName, string value)
         {
             bool parameterAdded = false;
-            if(parameterDBName != null)
+            if (parameterDBName != null)
             {
                 columnQueryBuilder.Append(parameterDBName);
                 columnQueryBuilder.Append("=");
@@ -481,7 +497,7 @@ namespace Vanrise.Data.RDB.DataProvider
                 string columnDBName = RDBSchemaManager.GetColumnDBName(context.DataProvider, colDefEntry.Key, colDefEntry.Value.ColumnDefinition);
 
                 AppendTableColumnDefinition(columnsQueryBuilder, colDefEntry.Key, columnDBName, colDefEntry.Value.ColumnDefinition, colDefEntry.Value.NotNullable, colDefEntry.Value.IsIdentity);
-               
+
                 if (colDefEntry.Value.IsPrimaryKey)
                 {
                     if (primaryKeyDBColumnNames == null)
@@ -511,17 +527,17 @@ namespace Vanrise.Data.RDB.DataProvider
             return resolvedQuery;
         }
 
-        public abstract void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName, 
+        public abstract void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName,
             RDBTableColumnDefinition columnDefinition, bool notNullable, bool isIdentityColumn);
-        
+
         public override RDBResolvedQuery ResolveTempTableCreationQuery(IRDBDataProviderResolveTempTableCreationQueryContext context)
         {
             string tempTableName = GenerateTempTableName();
             context.TempTableName = tempTableName;
-           
+
             var columnsQueryBuilder = new StringBuilder();
             columnsQueryBuilder.Append(" ( ");
-            
+
             int colIndex = 0;
             List<string> primaryKeyDBColumnNames = null;
             foreach (var colDefEntry in context.Columns)
@@ -536,21 +552,21 @@ namespace Vanrise.Data.RDB.DataProvider
                     columnNotNullable = true;
                 AppendTableColumnDefinition(columnsQueryBuilder, colDefEntry.Key, columnDBName, colDefEntry.Value.ColumnDefinition, columnNotNullable, false);
 
-                if(colDefEntry.Value.IsPrimaryKey)
+                if (colDefEntry.Value.IsPrimaryKey)
                 {
                     if (primaryKeyDBColumnNames == null)
                         primaryKeyDBColumnNames = new List<string>();
                     primaryKeyDBColumnNames.Add(columnDBName);
                 }
             }
-            if(primaryKeyDBColumnNames != null)
+            if (primaryKeyDBColumnNames != null)
             {
                 columnsQueryBuilder.Append(", Primary Key (");
                 columnsQueryBuilder.Append(string.Join(",", primaryKeyDBColumnNames));
                 columnsQueryBuilder.Append(")");
             }
 
-            columnsQueryBuilder.Append(" ) ");            
+            columnsQueryBuilder.Append(" ) ");
 
             var resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = GenerateCreateTempTableQuery(tempTableName, columnsQueryBuilder.ToString()) });

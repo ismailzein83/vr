@@ -34,9 +34,9 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
         public override string GetTableDBName(string schemaName, string tableName)
         {
             if (!String.IsNullOrEmpty(schemaName))
-                return String.Concat(schemaName, "_", tableName);
+                return String.Concat("\"", schemaName, "\"", "_", "\"", tableName,"\"");
             else
-                return tableName;
+                return string.Concat("\"", tableName, "\"");
         }
 
         public override string ConvertToDBParameterName(string parameterName, RDBParameterDirection parameterDirection)

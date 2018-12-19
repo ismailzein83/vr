@@ -19,29 +19,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
         PostgresDataManager _dataManager;
 
-        public override string GetTableDBName(string schemaName, string tableName)
-        {
-            if (!string.IsNullOrEmpty(schemaName))
-                schemaName = string.Concat("\"", schemaName, "\"");
-            if (!string.IsNullOrEmpty(tableName))
-                tableName = string.Concat("\"", tableName, "\"");
-            return base.GetTableDBName(schemaName, tableName);
-        }
-
-        public override string GetColumnDBName(string columnDBName)
-        {
-            if (!string.IsNullOrEmpty(columnDBName))
-                columnDBName = string.Concat("\"", columnDBName, "\"");
-            return base.GetColumnDBName(columnDBName);
-        }
-
-        public override string GetDBAlias(string alias)
-        {
-            if (string.IsNullOrEmpty(alias))
-                return alias;
-            return string.Concat("\"", alias, "\"");
-        }
-
         public override string ConvertToDBParameterName(string parameterName, RDBParameterDirection parameterDirection)
         {
             return string.Concat("@", parameterName);
