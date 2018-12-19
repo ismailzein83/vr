@@ -129,6 +129,10 @@
       <Project>{69b59125-bef7-4864-a609-85db39f0f177}</Project>
       <Name>BPMExtended.Main.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BPMExtended.Main.SOM.Entities\BPMExtended.Main.SOM.csproj">
+      <Project>{25a7b453-cdc4-4c51-86cb-2483386f6bc6}</Project>
+      <Name>BPMExtended.Main.SOM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SOM.Main.BP.Arguments\SOM.Main.BP.Arguments.csproj">
       <Project>{faa3c61c-6384-40ef-bf18-e1b3f85adfc8}</Project>
       <Name>SOM.Main.BP.Arguments</Name>

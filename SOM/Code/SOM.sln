@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.136
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{DE97F650-DB52-4B6D-AEFA-209B22D7560F}"
 EndProject
@@ -51,7 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPMExtended.Main.Data.SQL",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPMExtended.Main.Common", "BPMExtended.Main.Common\BPMExtended.Main.Common.csproj", "{3E3A051A-0843-4F74-B115-D3067C305C87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPMExtended.Main.SOM.Entities", "BPMExtended.Main.SOM.Entities\BPMExtended.Main.SOM.Entities.csproj", "{25A7B453-CDC4-4C51-86CB-2483386F6BC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPMExtended.Main.SOM", "BPMExtended.Main.SOM.Entities\BPMExtended.Main.SOM.csproj", "{25A7B453-CDC4-4C51-86CB-2483386F6BC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -212,7 +212,7 @@ Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = SOM.sln
@@ -286,7 +286,7 @@ Global
 		SccProjectTopLevelParentUniqueName18 = SOM.sln
 		SccProjectName18 = BPMExtended.Main.Common
 		SccLocalPath18 = BPMExtended.Main.Common
-		SccProjectUniqueName19 = BPMExtended.Main.SOM.Entities\\BPMExtended.Main.SOM.Entities.csproj
+		SccProjectUniqueName19 = BPMExtended.Main.SOM.Entities\\BPMExtended.Main.SOM.csproj
 		SccProjectTopLevelParentUniqueName19 = SOM.sln
 		SccProjectName19 = BPMExtended.Main.SOM.Entities
 		SccLocalPath19 = BPMExtended.Main.SOM.Entities

@@ -12,6 +12,45 @@ namespace BPMExtended.Main.Business
 {
     public class InventoryManager
     {
+        public InventoryPhoneItemDetail GetTechnicalDetails(string phoneNumber)
+        {
+            InventoryPhoneItem item = null;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<InventoryPhoneItem>(String.Format("api/SOM/Inventory/GetInventoryPhoneItem?id={0}", phoneNumber));
+            }
+            return new InventoryPhoneItemDetail
+            {
+                Cabinet = item.Cabinet,
+                CabinetPrimaryPort = item.CabinetPrimaryPort,
+                CabinetSecondaryPort = item.CabinetSecondaryPort,
+                DP = item.DP,
+                DPPorts = item.DPPorts,
+                DPSecondaryPorts = item.DPSecondaryPorts,
+                DSlam = item.DSlam,
+                DSlamOMC = item.DSlamOMC,
+                DSlamPort = item.DSlamPort,
+                IsMultiplexed = item.IsMultiplexed,
+                MDFPort = item.MDFPort,
+                MSAN_EID = item.MSAN_EID,
+                MSAN_TID = item.MSAN_TID,
+                MSANType = item.MSANType,
+                PhoneStatus = (BPMExtended.Main.Entities.PhoneStatus)item.PhoneStatus,
+                PhoneType = (BPMExtended.Main.Entities.PhoneType)item.PhoneType,
+                Receiver = item.Receiver,
+                ReceiverPort = item.ReceiverPort,
+                Switch = item.Switch,
+                SwitchId = item.SwitchId,
+                SwitchOMC = item.SwitchOMC,
+                SWITCH_TYPE = item.SWITCH_TYPE,
+                Transmitter = item.Transmitter,
+                TransmitterPort = item.TransmitterPort,
+                VerticalMDF = item.VerticalMDF,
+                DPPortId = item.DPPortId,
+                DPId = item.DPId
+
+            };
+        }
         public InventoryPhoneItemDetail GetInventoryDetail(string phoneNumber)
         {
             InventoryPhoneItem item = null;

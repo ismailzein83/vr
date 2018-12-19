@@ -244,4 +244,11 @@ namespace SOM.Main.Business
         public string DSLAM_CARD_ID { get; set; }
         public string DSLAM_ID { get; set; }
     }
+    public class DeviceIDDetail
+    {
+        public string SEC { get; set; }
+        public string PHONE_NUMBER { get; set; }
+        public string DEV_ID { get; set; }
+        public string DEV_TYPE { get; set; }
+    }
 }

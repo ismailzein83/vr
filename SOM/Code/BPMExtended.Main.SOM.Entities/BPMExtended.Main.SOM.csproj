@@ -7,8 +7,8 @@
     <ProjectGuid>{25A7B453-CDC4-4C51-86CB-2483386F6BC6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BPMExtended.Main.SOM.Entities</RootNamespace>
-    <AssemblyName>BPMExtended.Main.SOM.Entities</AssemblyName>
+    <RootNamespace>BPMExtended.Main.SOMAPI</RootNamespace>
+    <AssemblyName>BPMExtended.Main.SOM</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TechnicalDetails.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
