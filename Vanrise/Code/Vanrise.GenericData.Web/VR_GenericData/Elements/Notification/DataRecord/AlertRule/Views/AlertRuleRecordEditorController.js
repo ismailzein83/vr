@@ -2,9 +2,9 @@
 
     "use strict";
 
-    DataRecordAlertRuleEditorController.$inject = ['$scope', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VR_Analytic_DAProfCalcOutputSettingsAPIService'];
+    DataRecordAlertRuleEditorController.$inject = ['$scope', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
 
-    function DataRecordAlertRuleEditorController($scope, VRNotificationService, UtilsService, VRUIUtilsService, VRNavigationService, VR_Analytic_DAProfCalcOutputSettingsAPIService) {
+    function DataRecordAlertRuleEditorController($scope, VRNotificationService, UtilsService, VRUIUtilsService, VRNavigationService) {
 
         var isEditMode;
         var dataRecordAlertRuleEntity;
