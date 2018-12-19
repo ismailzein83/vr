@@ -342,7 +342,8 @@ namespace TOne.WhS.Routing.Business
                 {
                     case Business.OrderType.Order: options = OrderOptionsByOrder<T>(options, routingDatabase); break;
                     case Business.OrderType.Sequential: options = OrderOptionsBySequential<T>(options, routingDatabase); break;
-                    case Business.OrderType.Percentage: options = OrderOptionsByPercentage<T>(options, routingDatabase); break;
+                    //case Business.OrderType.Percentage: options = OrderOptionsByPercentage<T>(options, routingDatabase); break;
+                    case Business.OrderType.Percentage: options = (OptionOrderSettings.Count > 1) ? OrderOptionsByPercentage<T>(options, routingDatabase) : OrderOptionsByOrder<T>(options, routingDatabase); break;
                     case Business.OrderType.OptionDistribution: options = OrderOptionsByOptionDistribution<T>(options, routingDatabase); break;
                 }
             }
