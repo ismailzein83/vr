@@ -62,7 +62,7 @@
     <add key="VRFile_CDRComparison_FileCDRSource_DBConnStringKey" value="CDRComparisonOutputDBConnString"/>
 
     <add key="VRFile_Max_Uncompressed_MB_Size" value="5000" /><!--VRFile_Max_Uncompressed_MB_Size used to set limitation for maximum file size-->
-    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,LogDBConnString"/>
   </appSettings>
   
   <system.web>
