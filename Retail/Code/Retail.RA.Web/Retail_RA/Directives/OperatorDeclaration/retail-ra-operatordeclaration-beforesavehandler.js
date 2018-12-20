@@ -18,7 +18,7 @@ app.directive("retailRaOperatordeclarationBeforesavehandler", ["UtilsService", "
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclarationServices/Templates/OperatorDeclarationOnBeforeSaveHandler.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/Templates/OperatorDeclarationOnBeforeSaveHandler.html"
         };
 
         function Handler($scope, ctrl, $attrs) {
@@ -35,7 +35,7 @@ app.directive("retailRaOperatordeclarationBeforesavehandler", ["UtilsService", "
                 api.getData = function () {
 
                     return {
-                        $type: "Retail.RA.Business.RAOperationDeclarationOnBeforeSaveHandler,Retail.RA.Business"
+                        $type: "Retail.RA.Business.RAInternationalOperatorDeclarationOnBeforeSaveHandler,Retail.RA.Business"
                     };
                 };
 
