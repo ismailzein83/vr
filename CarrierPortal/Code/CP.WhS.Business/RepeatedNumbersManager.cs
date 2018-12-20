@@ -77,16 +77,16 @@ namespace CP.WhS.Business
                 }
                 else
                 {
-                    clonedInput.Query.Filter.CustomerIds = accessibleCustomers.Select(x => x.AccountId).ToList();
-                    clonedInput.Query.Filter.SupplierIds = accessibleSuppliers.Select(x => x.AccountId).ToList();
+                    clonedInput.Query.Filter.CustomerIds = accessibleCustomers != null && accessibleCustomers.Count() > 0 ? accessibleCustomers.Select(x => x.AccountId).ToList() : null;
+                    clonedInput.Query.Filter.SupplierIds = accessibleSuppliers != null && accessibleSuppliers.Count() > 0 ? accessibleSuppliers.Select(x => x.AccountId).ToList() : null;
                 }
             }
             else
             {
                 clonedInput.Query.Filter = new RepeatedNumberFilter()
                 {
-                    CustomerIds = accessibleCustomers.Select(x => x.AccountId).ToList(),
-                    SupplierIds = accessibleSuppliers.Select(x => x.AccountId).ToList()
+                    CustomerIds = accessibleCustomers != null && accessibleCustomers.Count() > 0 ? accessibleCustomers.Select(x => x.AccountId).ToList() : null,
+                    SupplierIds = accessibleSuppliers != null && accessibleSuppliers.Count() > 0 ? accessibleSuppliers.Select(x => x.AccountId).ToList() : null,
                 };
             }
             if (clonedInput.DataRetrievalResultType == DataRetrievalResultType.Excel)
