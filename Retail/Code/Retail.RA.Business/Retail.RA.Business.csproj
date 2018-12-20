@@ -82,7 +82,7 @@
     <Compile Include="OperatorDeclaration\OperatorDeclarationManager.cs" />
     <Compile Include="OperatorDeclaration\OperatorDeclarationServicesCustomObjectTypeSettings.cs" />
     <Compile Include="OperatorDeclaration\OperatorDeclarationServicesManager.cs" />
-    <Compile Include="OperatorDeclaration\RAOperationDeclarationOnBeforeSaveHandler.cs" />
+    <Compile Include="OperatorDeclaration\RAInternationalOperatorDeclarationOnBeforeSaveHandler.cs" />
     <Compile Include="Period Definition\PeriodDefinitionManager.cs" />
     <Compile Include="Period Definition\RAPeriodDefinitionOnAfterSaveHandler.cs" />
     <Compile Include="Period Definition\RAPeriodDefinitionOnBeforeSaveHandler.cs" />
