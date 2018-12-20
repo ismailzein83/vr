@@ -1,0 +1,15 @@
+﻿<vr-row removeline>
+    <vr-columns width="1/4row">
+        <vr-select on-ready="onSelectorReady"
+                   datasource="voiceTaxRuleTemplates"
+                   selectedvalues="selectedVoiceTaxRuleTemplate"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Title"
+                   label="Rule Type"
+                   isrequired>
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="3/4row" ng-show="voiceTaxRuleTemplates!=undefined">
+        <vr-directivewrapper directive="selectedVoiceTaxRuleTemplate.Editor" on-ready="onDirectiveReady"></vr-directivewrapper>
+    </vr-columns>
+</vr-row>

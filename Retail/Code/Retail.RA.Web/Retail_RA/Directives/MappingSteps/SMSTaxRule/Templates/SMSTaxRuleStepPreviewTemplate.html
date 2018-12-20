@@ -1,0 +1,10 @@
+﻿<vr-genericdata-datatransformation-rulestepcommon-preview on-ready="ctrl.onCommonDirectiveReady"></vr-genericdata-datatransformation-rulestepcommon-preview>
+<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-list maxitemsperrow="1">
+            <vr-listitem ng-show="ctrl.numberofSMSs!=undefined"><vr-label>Rule.NumberofSMSs = {{ctrl.numberofSMSs}}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.totalAmount!=undefined"><vr-label>Rule.TotalAmount = {{ctrl.totalAmount}}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.totalTaxValue!=undefined"><vr-label>{{ctrl.totalTaxValue}} = Rule.TotalTaxValue</vr-label></vr-listitem>
+        </vr-list>
+    </vr-columns>
+</vr-row>

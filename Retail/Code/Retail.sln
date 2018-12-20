@@ -252,6 +252,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.RA.Web", "Retail.RA.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.RA.Entities", "Retail.RA.Entities\Retail.RA.Entities.csproj", "{35B73AE6-BBC8-408C-AB01-3BF3574B28E0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.RA.MainExtensions", "Retail.RA.MainExtensions\Retail.RA.MainExtensions.csproj", "{805F9814-7817-485E-9214-BD669813EB95}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -694,6 +696,10 @@ Global
 		{35B73AE6-BBC8-408C-AB01-3BF3574B28E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35B73AE6-BBC8-408C-AB01-3BF3574B28E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35B73AE6-BBC8-408C-AB01-3BF3574B28E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{805F9814-7817-485E-9214-BD669813EB95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{805F9814-7817-485E-9214-BD669813EB95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{805F9814-7817-485E-9214-BD669813EB95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{805F9814-7817-485E-9214-BD669813EB95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -816,14 +822,15 @@ Global
 		{87CD3228-CC6D-4DD7-8F3D-3F1F9B8567E9} = {69EA1D14-2E55-4426-A329-EA3E60995E85}
 		{93613BFD-1F1C-46E4-A5E0-C14135E3B807} = {69EA1D14-2E55-4426-A329-EA3E60995E85}
 		{35B73AE6-BBC8-408C-AB01-3BF3574B28E0} = {69EA1D14-2E55-4426-A329-EA3E60995E85}
+		{805F9814-7817-485E-9214-BD669813EB95} = {69EA1D14-2E55-4426-A329-EA3E60995E85}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 103
+		SccNumberOfProjects = 104
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = Retail.sln
@@ -1233,5 +1240,9 @@ Global
 		SccProjectTopLevelParentUniqueName102 = Retail.sln
 		SccProjectName102 = Retail.RA.Entities
 		SccLocalPath102 = Retail.RA.Entities
+		SccProjectUniqueName103 = Retail.RA.MainExtensions\\Retail.RA.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName103 = Retail.sln
+		SccProjectName103 = Retail.RA.MainExtensions
+		SccLocalPath103 = Retail.RA.MainExtensions
 	EndGlobalSection
 EndGlobal
