@@ -40,7 +40,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("BusinessProcess_BPBusinessRuleSet", "BusinessProcessConfigDBConnStringKey", "ConfigurationDBConnString");
+            return RDBDataProviderFactory.CreateProvider("BusinessProcessConfig", "BusinessProcessConfigDBConnStringKey", "ConfigurationDBConnString");
         }
 
         public List<BPBusinessRuleSet> GetBPBusinessRuleSets()
@@ -55,6 +55,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
         public bool AddBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj, out int bpBusinessRuleSetId)
         {
+            bpBusinessRuleSetId = 0;
+
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var insertQuery = queryContext.AddInsertQuery();
@@ -74,9 +76,12 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             insertQuery.Column(COL_BPDefinitionId).Value(businessRuleSetObj.BPDefinitionId);
 
-            bpBusinessRuleSetId = queryContext.ExecuteScalar().IntWithNullHandlingValue;
+            int? insertedId = queryContext.ExecuteScalar().NullableIntValue;
+            if (!insertedId.HasValue)
+                return false;
 
-            return bpBusinessRuleSetId > 0;
+            bpBusinessRuleSetId = insertedId.Value;
+            return true;
         }
 
         public bool UpdateBusinessRuleSet(BPBusinessRuleSet businessRuleSetObj)

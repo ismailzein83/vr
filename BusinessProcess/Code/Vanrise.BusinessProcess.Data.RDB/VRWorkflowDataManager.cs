@@ -43,7 +43,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("BusinessProcess_VRWorkflow", "BusinessProcessConfigDBConnStringKey", "BusinessProcessDBConnString");
+            return RDBDataProviderFactory.CreateProvider("BusinessProcessConfig", "BusinessProcessConfigDBConnStringKey", "BusinessProcessDBConnString");
         }
 
         public List<VRWorkflow> GetVRWorkflows()

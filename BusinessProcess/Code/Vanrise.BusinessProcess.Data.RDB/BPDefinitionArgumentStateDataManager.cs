@@ -34,7 +34,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("BusinessProcess_BPDefinitionArgumentState", "BusinessProcessConfigDBConnStringKey", "BusinessProcessDBConnString");
+            return RDBDataProviderFactory.CreateProvider("BusinessProcessConfig", "BusinessProcessConfigDBConnStringKey", "BusinessProcessDBConnString");
         }
 
         public List<BPDefinitionArgumentState> GetBPDefinitionArgumentStates()

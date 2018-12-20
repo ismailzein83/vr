@@ -40,7 +40,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("BusinessProcess_BPTracking", "BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString");
+            return RDBDataProviderFactory.CreateProvider("BusinessProcess", "BusinessProcessTrackingDBConnStringKey", "BusinessProcessTrackingDBConnString");
 
         }
 
