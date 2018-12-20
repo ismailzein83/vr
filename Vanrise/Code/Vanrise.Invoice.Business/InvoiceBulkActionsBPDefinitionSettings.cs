@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Invoice.BP.Arguments;
 using Vanrise.Invoice.Entities;
@@ -24,25 +25,6 @@ namespace Vanrise.Invoice.Business
         {
             context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
             InvoiceBulkActionProcessInput invoiceBulkActionProcessInput = context.IntanceToRun.InputArgument.CastWithValidate<InvoiceBulkActionProcessInput>("context.IntanceToRun.InputArgument");
-
-
-            var bulkActionTypes = new InvoiceTypeManager().GetInvoiceBulkActionsByBulkActionId(invoiceBulkActionProcessInput.InvoiceTypeId);
-
-            if (invoiceBulkActionProcessInput != null && invoiceBulkActionProcessInput.InvoiceBulkActions != null && invoiceBulkActionProcessInput.InvoiceBulkActions.Count != 0)
-            {
-                foreach (var bulkAction in invoiceBulkActionProcessInput.InvoiceBulkActions)
-                {
-                    var invoiceBulkAction = bulkActionTypes.GetRecord(bulkAction.InvoiceBulkActionId);
-                    var bulkActionCheckAccessContext = new AutomaticInvoiceActionSettingsCheckAccessContext
-                    {
-                        UserId = context.IntanceToRun.InitiatorUserId,
-                        InvoiceBulkAction = invoiceBulkAction
-                    };
-                    if (!invoiceBulkAction.Settings.DoesUserHaveAccess(bulkActionCheckAccessContext))
-                        context.Reason = String.Format("'{0}' Action. Reason : You do not have access.", invoiceBulkAction.Title);
-                    return false;
-                }
-            }
 
             DateTime invoiceMinimumFrom = invoiceBulkActionProcessInput.MinimumFrom;
             DateTime invoiceMaximumTo = invoiceBulkActionProcessInput.MaximumTo.AddDays(1);
@@ -108,6 +90,41 @@ namespace Vanrise.Invoice.Business
             }
 
             return true;
+        }
+        public override bool DoesUserHaveStartSpecificInstanceAccess(IBPDefinitionDoesUserHaveStartSpecificInstanceAccessContext context)
+        {
+            InvoiceBulkActionProcessInput invoiceBulkActionProcessInput = context.InputArg.CastWithValidate<InvoiceBulkActionProcessInput>("context.IntanceToRun.InputArgument");
+            if (invoiceBulkActionProcessInput != null)
+            {
+                return new InvoiceTypeManager().DoesUserHaveSpecificActionAccess(invoiceBulkActionProcessInput.InvoiceBulkActions, invoiceBulkActionProcessInput.InvoiceTypeId, context.DefinitionContext.UserId);
+            }
+            return false;
+        }
+
+        public override bool DoesUserHaveScheduleSpecificTaskAccess(IBPDefinitionDoesUserHaveScheduleSpecificTaskAccessContext context)
+        {
+            InvoiceBulkActionProcessInput invoiceBulkActionProcessInput = context.InputArg.CastWithValidate<InvoiceBulkActionProcessInput>("context.IntanceToRun.InputArgument");
+            if (invoiceBulkActionProcessInput != null)
+            {
+                return new InvoiceTypeManager().DoesUserHaveSpecificActionAccess(invoiceBulkActionProcessInput.InvoiceBulkActions, invoiceBulkActionProcessInput.InvoiceTypeId, context.DefinitionContext.UserId);
+            }
+            return false;
+        }
+
+
+        public override bool DoesUserHaveViewAccess(IBPDefinitionDoesUserHaveViewAccessContext context)
+        {
+            return new InvoiceTypeManager().DoesUserHaveActionsAccess(context.UserId);
+        }
+
+        public override bool DoesUserHaveStartAccess(IBPDefinitionDoesUserHaveStartAccessContext context)
+        {
+            return new InvoiceTypeManager().DoesUserHaveActionsAccess(context.UserId);
+        }
+
+        public override bool DoesUserHaveScheduleTaskAccess(IBPDefinitionDoesUserHaveScheduleTaskContext context)
+        {
+            return new InvoiceTypeManager().DoesUserHaveActionsAccess(context.UserId);
         }
     }
 }

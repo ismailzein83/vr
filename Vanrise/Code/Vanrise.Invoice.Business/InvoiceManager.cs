@@ -1413,6 +1413,10 @@ namespace Vanrise.Invoice.Business
             if (input.InvoiceBulkActions == null || input.InvoiceBulkActions.Count == 0)
                 return new ExecuteMenualInvoiceActionsOutput { Succeed = false, OutputMessage = "At least one invoice action should be selected." };
 
+            if(!new InvoiceTypeManager().DoesUserHaveSpecificActionAccess(input.InvoiceBulkActions, input.InvoiceTypeId, userId))
+                return new ExecuteMenualInvoiceActionsOutput { Succeed = false, OutputMessage = "you are not authorized to perform this request." };
+
+
             InvoiceBulkActionProcessInput invoiceBulkActionProcessInput = new InvoiceBulkActionProcessInput()
             {
                 InvoiceBulkActionIdentifier = input.InvoiceBulkActionIdentifier,

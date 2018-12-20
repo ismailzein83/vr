@@ -395,6 +395,29 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceSettingPartDefinitionInfo;
         }
+
+        public bool DoesUserHaveActionsAccess(int userId)
+        {
+
+            var invoiceTypes = GetCachedInvoiceTypes();
+            foreach(var invoiceType in invoiceTypes)
+            {
+                var bulkActionTypes = new InvoiceTypeManager().GetInvoiceBulkActionsByBulkActionId(invoiceType.Key);
+                foreach (var bulkAction in bulkActionTypes)
+                {
+                    var bulkActionCheckAccessContext = new AutomaticInvoiceActionSettingsCheckAccessContext
+                    {
+                        UserId = userId,
+                        InvoiceBulkAction = bulkAction.Value
+                    };
+                    if (bulkAction.Value.Settings.DoesUserHaveAccess(bulkActionCheckAccessContext))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+
         public bool DoesUserHaveViewAccess(Guid invoiceTypeId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
@@ -635,6 +658,26 @@ namespace Vanrise.Invoice.Business
             }
 
             return null;
+        }
+
+        public bool DoesUserHaveSpecificActionAccess(List<InvoiceBulkActionRuntime> InvoiceBulkActions , Guid invoiceTypeId, int userId)
+        {
+            var bulkActionTypes = new InvoiceTypeManager().GetInvoiceBulkActionsByBulkActionId(invoiceTypeId);
+            if (InvoiceBulkActions != null && InvoiceBulkActions.Count != 0)
+            {
+                foreach (var bulkAction in InvoiceBulkActions)
+                {
+                    var invoiceBulkAction = bulkActionTypes.GetRecord(bulkAction.InvoiceBulkActionId);
+                    var bulkActionCheckAccessContext = new AutomaticInvoiceActionSettingsCheckAccessContext
+                    {
+                        UserId = userId ,
+                        InvoiceBulkAction = invoiceBulkAction
+                    };
+                    if (!invoiceBulkAction.Settings.DoesUserHaveAccess(bulkActionCheckAccessContext))
+                        return false;
+                }
+            }
+            return true;
         }
 
         #endregion
