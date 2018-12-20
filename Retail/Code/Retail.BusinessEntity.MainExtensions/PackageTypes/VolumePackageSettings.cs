@@ -9,8 +9,6 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 {
     public class VolumePackageSettings : PackageExtendedSettings, IPackageUsageVolume
     {
-        public List<VolumePackageItem> Items { get; set; }
-
         public decimal Price { get; set; }
 
         public int CurrencyId { get; set; }
@@ -19,6 +17,7 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 
         public bool ReducePriceForIncompletePeriods { get; set; }
 
+        public List<VolumePackageItem> Items { get; set; }
 
         #region Public Methods
         public override void ValidatePackageAssignment(IPackageSettingAssignementValidateContext context)
@@ -354,8 +353,8 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
 
         public Guid VolumePackageDefinitionItemId { get; set; }
 
-        public CompositeRecordCondition Condition { get; set; }
-
         public decimal Volume { get; set; }
+
+        public CompositeRecordCondition Condition { get; set; }
     }
 }

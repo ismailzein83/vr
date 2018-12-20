@@ -1,0 +1,34 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_VolumePackageSettingsEditorController" vr-loader="scopeModel.isLoading" size="xlarge" width="Large">
+    <vr-modalbody>
+        <vr-form name="formPackageEditor">
+            <vr-row>
+                <vr-columns colnum="3">
+                    <vr-select label="Type"
+                               datasource="scopeModel.volumePackageDefinitionItems"
+                               selectedvalues="scopeModel.selectedVolumePackageDefinitionItem"
+                               onselectionchanged="scopeModel.onVolumePackageDefinitionItemSelectionChanged"
+                               datavaluefield="VolumePackageDefinitionItemId"
+                               datatextfield="Name"
+                               isrequired="true" hideremoveicon>
+                    </vr-select>
+                </vr-columns>
+                <vr-columns colnum="3">
+                    <vr-textbox label="Volume" value="scopeModel.volume" type="number" minvalue="1" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <div ng-if="scopeModel.selectedVolumePackageDefinitionItem!=undefined">
+                    <vr-genericdata-compositerecordcondition on-ready="scopeModel.onCompositeRecordConditionDirectiveReady"
+                                                             normal-col-num="3">
+                    </vr-genericdata-compositerecordcondition>
+                </div>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formPackageEditor" haspermission="hasSavePackagePermission"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

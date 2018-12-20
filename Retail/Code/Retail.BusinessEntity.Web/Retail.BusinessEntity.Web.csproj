@@ -178,6 +178,7 @@
     <Compile Include="Controllers\AccountPartTaxesRuntimeController.cs" />
     <Compile Include="Controllers\AccountServiceController.cs" />
     <Compile Include="Controllers\AccountSynchronizerHandlerController.cs" />
+    <Compile Include="Controllers\BEConfigurationController.cs" />
     <Compile Include="Controllers\FinancialAccountController.cs" />
     <Compile Include="Controllers\FinancialAccountDefinitionController.cs" />
     <Compile Include="Controllers\OperatorWithLocalController.cs" />
@@ -209,6 +210,8 @@
     <Folder Include="Retail_BusinessEntity\Directives\AccountDefinition\FinancialAccountLocator\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ActionBPRuntime\Templates\" />
+    <Folder Include="Retail_BusinessEntity\Directives\Package\PackageExtendedSettings\" />
+    <Folder Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\MainExtensions\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\" />
     <Folder Include="Retail_BusinessEntity\Views\Account\ExtendedSettings\" />
   </ItemGroup>
@@ -510,13 +513,13 @@
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\retail-be-packagedefinition-invoicerecurcharge-evaluator.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\Templates\RecurchargePackageDefinitionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\Templates\VolumePackageDefinitionSettingsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\MainExtensions\retail-be-packagesettings-recurcharge-evaluator-onetime.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\MainExtensions\retail-be-packagesettings-recurcharge-evaluator-periodic.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\MainExtensions\retail-be-packageusagevolumerecurringperiod-monthly.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\MainExtensions\retail-be-volumepackagesettings-recurringperiodusage-selector.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\MainExtensions\Templates\MonthlyPackageUsageVolumeRecurringPeriodTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\MainExtensions\Templates\OneTimeEvaluatorTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\MainExtensions\Templates\PeriodicEvaluatorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\RecurringChargeEvaluator\retail-be-packagesettings-recurcharge-evaluator-onetime.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\RecurringChargeEvaluator\retail-be-packagesettings-recurcharge-evaluator-periodic.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\UsageVolume\retail-be-packageusagevolume-recurringperiod-monthly.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\UsageVolume\retail-be-packageusagevolume-recurringperiod.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\UsageVolume\Templates\MonthlyPackageUsageVolumeRecurringPeriodTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\RecurringChargeEvaluator\Templates\OneTimeEvaluatorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\RecurringChargeEvaluator\Templates\PeriodicEvaluatorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\retail-be-packagesettings-extendedsettings-recurcharge.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\retail-be-packagesettings-extendedsettings-volume.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\Templates\RecurChargePackageSettingsTemplate.html" />
@@ -561,7 +564,7 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Convertors\retail-be-user-convertor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Convertors\Templates\CompanyConvertorEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Convertors\Templates\UserConvertorEditor.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\retail-be-pricingpackagesettings-management.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\retail-be-packagesettings-extendedsettings-pricing.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\Templates\PricingPackageSettingsManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiodsettings-monthly.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\RecurringPeriod\retail-be-recurringperiodsettings-weekly.js" />
@@ -791,6 +794,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountConditionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountManagerAssignmentAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\BEConfigurationAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ChangeStatusActionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
@@ -808,7 +812,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\RecurringChargeDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\RevenueComparisonAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountSynchronizerHandlerAPIService.js" />
-    <Content Include="Retail_BusinessEntity\Services\APIServices\VolumePackageAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\VolumePackageDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\VRAccountBalanceAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\FinancialAccountService.js" />
     <Content Include="Retail_BusinessEntity\Services\PortalAccountService.js" />
@@ -851,8 +855,8 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\Templates\AccountViewDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\AccountViewDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Services\VisibilityAccountDefinitionService.js" />
-    <Content Include="Retail_BusinessEntity\Services\VolumePackageDefinitionSettingsService.js" />
-    <Content Include="Retail_BusinessEntity\Services\VolumePackageSettingsService.js" />
+    <Content Include="Retail_BusinessEntity\Services\VolumePackageDefinitionService.js" />
+    <Content Include="Retail_BusinessEntity\Services\VolumePackageService.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountManager\AccountManagerAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountManager\AccountManagerAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\AccountPackageManagement.html" />
@@ -885,8 +889,8 @@
     <Content Include="Retail_BusinessEntity\Views\FinancialAccount\FinancialAccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\Templates\VolumePackageDefinitionSettingsEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\VolumePackageDefinitionSettingsEditorController.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageExtendedSettings\VolumePackageSettingsEditor.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageExtendedSettings\VolumePackageSettingsEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\Templates\VolumePackageSettingsEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\VolumePackageSettingsEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyManagement.html" />
@@ -925,8 +929,8 @@
     <Content Include="Retail_BusinessEntity\Views\CreditClass\CreditClassEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageEditorController.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageExtendedSettings\PricingPackageSettingsEditor.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Package\PackageExtendedSettings\PricingPackageSettingsEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\Templates\PricingPackageSettingsEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\PricingPackageSettingsEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageItemEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageItemEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Package\PackageManagement.html" />

@@ -57,7 +57,11 @@
                                     var setLoader = function (value) {
                                         $scope.scopeModel.isPackageExtendedSettingsDirectiveLoading = value;
                                     };
-                                    var payload = { context: getContext(), extendedSettingsDefinition: response.Settings.ExtendedSettings };
+                                    var payload = {
+                                        context: getContext(),
+                                        packageDefinitionId: response.VRComponentTypeId,
+                                        extendedSettingsDefinition: response.Settings.ExtendedSettings
+                                    };
                                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, packageExtendedSettingsDirectiveAPI, payload, setLoader);
                                 });
                             }
@@ -168,6 +172,7 @@
 
                 if (packageDefinition != undefined && packageDefinition.Settings != undefined)
                 {
+                    packageExtendedSettingsDirectivePayload.packageDefinitionId = packageDefinition.VRComponentTypeId;
                     packageExtendedSettingsDirectivePayload.extendedSettingsDefinition = packageDefinition.Settings.ExtendedSettings;
                 }
                 VRUIUtilsService.callDirectiveLoad(packageExtendedSettingsDirectiveAPI, packageExtendedSettingsDirectivePayload, packageExtendedSettingsDirectiveLoadDeferred);
@@ -209,8 +214,8 @@
         }
 
         function buildPackageObjFromScope() {
-            var obj = {
-                PackageId: packageId,
+            return {
+                PackageId: packageId ,
                 Name: $scope.scopeModel.name,
                 Description: $scope.scopeModel.description,
                 Settings: {
@@ -218,8 +223,6 @@
                     ExtendedSettings: packageExtendedSettingsDirectiveAPI.getData()
                 }
             };
-
-            return obj;
         }
 
         function getContext()

@@ -25,12 +25,7 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "AddPackage"), packageObject);
         }
 
-        function GetPackageExtendedSettingsTemplateConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackageExtendedSettingsTemplateConfigs"));
-        }
-
-        function GetVoiceTypesTemplateConfigs()
-        {
+        function GetVoiceTypesTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetVoiceTypesTemplateConfigs"));
 
         }
@@ -39,7 +34,9 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetServicePackageItemConfigs"));
 
         }
+
         
+
         function GetPackagesInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetPackagesInfo"), {
                 filter: filter
@@ -54,13 +51,11 @@
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "DoesUserHaveAddAccess"));
         }
 
-
         return ({
             GetFilteredPackages: GetFilteredPackages,
             GetPackageEditorRuntime: GetPackageEditorRuntime,
             AddPackage: AddPackage,
             UpdatePackage: UpdatePackage,
-            GetPackageExtendedSettingsTemplateConfigs: GetPackageExtendedSettingsTemplateConfigs,
             GetVoiceTypesTemplateConfigs: GetVoiceTypesTemplateConfigs,
             GetServicePackageItemConfigs: GetServicePackageItemConfigs,
             GetPackagesInfo: GetPackagesInfo,
@@ -70,5 +65,4 @@
     }
 
     appControllers.service('Retail_BE_PackageAPIService', packageAPIService);
-
 })(appControllers);

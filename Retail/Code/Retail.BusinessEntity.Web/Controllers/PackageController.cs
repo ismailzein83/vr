@@ -1,11 +1,7 @@
 ﻿using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
-using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace Retail.BusinessEntity.Web.Controllers
@@ -58,14 +54,6 @@ namespace Retail.BusinessEntity.Web.Controllers
                 return GetUnauthorizedResponse();
             PackageManager manager = new PackageManager();
             return manager.UpdatePackage(package);
-        }
-
-        [HttpGet]
-        [Route("GetPackageExtendedSettingsTemplateConfigs")]
-        public IEnumerable<PackageExtendedSettingsConfig> GetPackageExtendedSettingsTemplateConfigs()
-        {
-            PackageManager manager = new PackageManager();
-            return manager.GetPackageExtendedSettingsTemplateConfigs();
         }
 
         [HttpGet]

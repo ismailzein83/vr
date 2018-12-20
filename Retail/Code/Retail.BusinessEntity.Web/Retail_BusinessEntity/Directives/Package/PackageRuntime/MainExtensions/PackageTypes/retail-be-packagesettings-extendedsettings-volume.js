@@ -2,70 +2,74 @@
 
     'use strict';
 
-    VolumePackageSettingsDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_VolumePackageSettingsService', 'VRUIUtilsService'];
+    VolumePackageSettingsDirective.$inject = ['UtilsService', 'Retail_BE_VolumePackageService', 'VRUIUtilsService'];
 
-    function VolumePackageSettingsDirective(UtilsService, VRNotificationService, Retail_BE_VolumePackageSettingsService, VRUIUtilsService) {
+    function VolumePackageSettingsDirective(UtilsService, Retail_BE_VolumePackageService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
                 var ctor = new VolumePackageSettings($scope, ctrl);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageRuntime/MainExtensions/PackageTypes/Templates/VolumePackageSettingsTemplate.html'
         };
 
         function VolumePackageSettings($scope, ctrl) {
             this.initializeController = initializeController;
 
-            var gridAPI;
+            var volumePackageDefinitionId;
+            var volumePackageDefinitionItems;
 
             var currencyDirectiveAPI;
             var currencyDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var recurringPeriodUsageSelectorAPI;
-            var recurringPeriodUsageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var recurringPeriodUsageDirectiveAPI;
+            var recurringPeriodUsageDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var gridAPI;
 
             function initializeController() {
                 $scope.scopeModel = {};
-
-                $scope.scopeModel.onGridReady = function (api) {
-                    gridAPI = api;
-                };
-
-                $scope.scopeModel.AddVolumePackageItem = function () {
-                    var onVolumePackageItemAdded = function (addedVolumePackageItem) {
-                        $scope.scopeModel.volumePackageItems.push(addedVolumePackageItem);
-                    };
-                    Retail_BE_VolumePackageSettingsService.addVolumePackageItem(onVolumePackageItemAdded);
-                };
-
-                $scope.scopeModel.DeleteVolumePackageItem = function (volumePackageItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.volumePackageItems, volumePackageItem.VolumePackageItemId, 'VolumePackageItemId');
-                    $scope.scopeModel.volumePackageItems.splice(index, 1);
-                };
+                $scope.scopeModel.volumePackageItems = [];
 
                 $scope.scopeModel.onCurrencyDirectiveReady = function (api) {
                     currencyDirectiveAPI = api;
                     currencyDirectiveReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.onRecurringPeriodUsageSelectorReady = function (api) {
-                    recurringPeriodUsageSelectorAPI = api;
-                    recurringPeriodUsageSelectorReadyDeferred.resolve();
+                $scope.scopeModel.onRecurringPeriodUsageDirectiveReady = function (api) {
+                    recurringPeriodUsageDirectiveAPI = api;
+                    recurringPeriodUsageDirectiveReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onGridReady = function (api) {
+                    gridAPI = api;
+                };
+
+                $scope.scopeModel.isGridValid = function () {
+                    if ($scope.scopeModel.volumePackageItems.length < 1)
+                        return 'Grid should contains at least one item';
+                    return null;
+                };
+
+                $scope.scopeModel.addVolumePackageItem = function () {
+                    var onVolumePackageItemAdded = function (addedVolumePackageItem) {
+                        extendVolumePackageDefinitionItem(addedVolumePackageItem);
+                        $scope.scopeModel.volumePackageItems.push({ Entity: addedVolumePackageItem });
+                    };
+
+                    Retail_BE_VolumePackageService.addVolumePackageItem(onVolumePackageItemAdded, volumePackageDefinitionItems, volumePackageDefinitionId);
+                };
+
+                $scope.scopeModel.removeVolumePackageItem = function (volumePackageItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.volumePackageItems, volumePackageItem.Entity.VolumePackageItemId, 'Entity.VolumePackageItemId');
+                    $scope.scopeModel.volumePackageItems.splice(index, 1);
                 };
 
                 defineMenuActions();
@@ -77,65 +81,95 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
-                    //$scope.scopeModel.volumePackageItems.length = 0;
+                    $scope.scopeModel.volumePackageItems.length = 0;
 
-                    console.log(payload);
-                    if (payload != undefined && payload.extendedSettings != undefined) {
-                        $scope.scopeModel.volumePackageItems = payload.extendedSettings.Items;
-                        $scope.scopeModel.price = payload.extendedSettings.Price;
-                        $scope.scopeModel.reducePrice = payload.extendedSettings.ReducePriceForIncompletePeriods;
+                    if (payload != undefined) {
+                        volumePackageDefinitionId = payload.packageDefinitionId;
+
+                        var extendedSettingsDefinition = payload.extendedSettingsDefinition;
+                        if (extendedSettingsDefinition != undefined) {
+                            volumePackageDefinitionItems = extendedSettingsDefinition.Items;
+                        }
+
+                        var extendedSettings = payload.extendedSettings;
+                        if (extendedSettings != undefined) {
+                            $scope.scopeModel.price = extendedSettings.Price;
+                            $scope.scopeModel.reducePrice = extendedSettings.ReducePriceForIncompletePeriods;
+
+                            if (extendedSettings.Items != undefined) {
+                                for (var i = 0; i < extendedSettings.Items.length; i++) {
+                                    var currentItem = extendedSettings.Items[i];
+                                    extendVolumePackageDefinitionItem(currentItem);
+                                    $scope.scopeModel.volumePackageItems.push({ Entity: currentItem });
+                                }
+                            }
+                        }
                     }
+
+                    var promises = [];
 
                     var loadCurrencyDirectivePromise = loadCurrencyDirective();
                     promises.push(loadCurrencyDirectivePromise);
+
+                    var loadRecurringPeriodUsageDirectivePromise = loadRecurringPeriodUsageDirective();
+                    promises.push(loadRecurringPeriodUsageDirectivePromise);
 
                     function loadCurrencyDirective() {
                         var loadCurrencyDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
                         currencyDirectiveReadyDeferred.promise.then(function () {
-                            var currencyDirectiverPayload;
-                            if (payload != undefined && payload.extendedSettings != undefined)
-                                currencyDirectiverPayload = {
-                                    selectedIds: payload.extendedSettings.CurrencyId
-                                };
 
+                            var currencyDirectiverPayload;
+                            if (extendedSettings != undefined) {
+                                currencyDirectiverPayload = { selectedIds: extendedSettings.CurrencyId };
+                            }
                             VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyDirectiverPayload, loadCurrencyDirectivePromiseDeferred);
                         });
+
                         return loadCurrencyDirectivePromiseDeferred.promise;
                     }
+                    function loadRecurringPeriodUsageDirective() {
+                        var loadRecurringPeriodUsageDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    var loadRecurringPeriodUsageSelectorPromise = loadRecurringPeriodUsageSelector();
-                    promises.push(loadRecurringPeriodUsageSelectorPromise);
+                        recurringPeriodUsageDirectiveReadyDeferred.promise.then(function () {
 
-                    function loadRecurringPeriodUsageSelector() {
-                        var loadRecurringPeriodUsageSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        recurringPeriodUsageSelectorReadyDeferred.promise.then(function () {
-                            var recurringPeriodUsageSelectorPayload;
-                            if (payload != undefined && payload.extendedSettings != undefined) 
-                                recurringPeriodUsageSelectorPayload = {
-                                    selectedIds: payload.extendedSettings.RecurringPeriod
-                                };
-                            
-                            VRUIUtilsService.callDirectiveLoad(recurringPeriodUsageSelectorAPI, recurringPeriodUsageSelectorPayload, loadRecurringPeriodUsageSelectorPromiseDeferred);
+                            var recurringPeriodUsageDirectivePayload;
+                            if (extendedSettings != undefined) {
+                                recurringPeriodUsageDirectivePayload = { packageUsageVolumeRecurringPeriod: extendedSettings.RecurringPeriod };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(recurringPeriodUsageDirectiveAPI, recurringPeriodUsageDirectivePayload, loadRecurringPeriodUsageDirectivePromiseDeferred);
                         });
-                        return loadRecurringPeriodUsageSelectorPromiseDeferred.promise;
+
+                        return loadRecurringPeriodUsageDirectivePromiseDeferred.promise;
                     }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-                    var obj = {
+
+                    function getVolumePackageItems() {
+                        var items = [];
+                        for (var i = 0; i < $scope.scopeModel.volumePackageItems.length; i++) {
+                            var currentItem = $scope.scopeModel.volumePackageItems[i].Entity;
+                            items.push({
+                                VolumePackageItemId: currentItem.VolumePackageItemId,
+                                VolumePackageDefinitionItemId: currentItem.VolumePackageDefinitionItemId,
+                                Volume: currentItem.Volume,
+                                Condition: currentItem.Condition
+                            });
+                        }
+                        return items;
+                    }
+
+                    return {
                         $type: "Retail.BusinessEntity.MainExtensions.PackageTypes.VolumePackageSettings, Retail.BusinessEntity.MainExtensions",
-                        Items: $scope.scopeModel.volumePackageItems,
                         Price: $scope.scopeModel.price,
                         CurrencyId: currencyDirectiveAPI.getSelectedIds(),
-                        RecurringPeriod: recurringPeriodUsageSelectorAPI.getData(),
-                        ReducePriceForIncompletePeriods: $scope.scopeModel.reducePrice
+                        RecurringPeriod: recurringPeriodUsageDirectiveAPI.getData(),
+                        ReducePriceForIncompletePeriods: $scope.scopeModel.reducePrice,
+                        Items: getVolumePackageItems()
                     };
-                    console.log(obj);
-                    return obj;
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -152,15 +186,20 @@
 
             function editVolumePackageItem(volumePackageItem) {
                 var onVolumePackageItemUpdated = function (updatedVolumePackageItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.volumePackageItems, volumePackageItem.VolumePackageItemId, 'VolumePackageItemId');
-                    $scope.scopeModel.volumePackageItems[index] = updatedVolumePackageItem;
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.volumePackageItems, volumePackageItem.Entity.VolumePackageItemId, 'Entity.VolumePackageItemId');
+                    extendVolumePackageDefinitionItem(updatedVolumePackageItem);
+                    $scope.scopeModel.volumePackageItems[index] = { Entity: updatedVolumePackageItem };
                 };
 
-                Retail_BE_VolumePackageSettingsService.editVolumePackageItem(volumePackageItem, onVolumePackageItemUpdated);
+                Retail_BE_VolumePackageService.editVolumePackageItem(onVolumePackageItemUpdated, volumePackageItem.Entity, volumePackageDefinitionItems, volumePackageDefinitionId);
+            }
+
+            function extendVolumePackageDefinitionItem(volumePackageDefinitionItem) {
+                var item = UtilsService.getItemByVal(volumePackageDefinitionItems, volumePackageDefinitionItem.VolumePackageDefinitionItemId, 'VolumePackageDefinitionItemId');
+                volumePackageDefinitionItem.VolumePackageDefinitionItemName = item.Name;
             }
         }
     }
 
     app.directive('retailBePackagesettingsExtendedsettingsVolume', VolumePackageSettingsDirective);
-
 })(app);

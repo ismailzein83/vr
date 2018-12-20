@@ -1,37 +1,35 @@
 ﻿<vr-tab header="'Settings'">
-
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-textbox value="scopeModel.price" type="number" minvalue="0" label="Price" isrequired></vr-textbox>
+        </vr-columns>
+        <vr-common-currency-selector on-ready="scopeModel.onCurrencyDirectiveReady"
+                                     normal-col-num="6" isrequired="true">
+        </vr-common-currency-selector>
+        <retail-be-packageusagevolume-recurringperiod on-ready="scopeModel.onRecurringPeriodUsageDirectiveReady"
+                                                                       normal-col-num="6">
+        </retail-be-packageusagevolume-recurringperiod>
+        <vr-columns width="1/2row">
+            <vr-switch label="Reduce Price For Incomplete Periods" value="scopeModel.reducePrice"></vr-switch>
+        </vr-columns>
+    </vr-row>
     <vr-row removeline>
         <vr-columns width="fullrow" simplecol>
-            <vr-button type="Add" data-onclick="scopeModel.AddVolumePackageItem" standalone></vr-button>
+            <vr-button type="Add" data-onclick="scopeModel.addVolumePackageItem" standalone></vr-button>
         </vr-columns>
     </vr-row>
     <vr-row>
         <vr-columns width="fullrow">
-            <vr-datagrid on-ready="scopeModel.onGridReady"
-                         datasource="scopeModel.volumePackageItems"
-                         menuactions="scopeModel.menuActions"
-                         ondeleterow="scopeModel.DeleteVolumePackageItem">
+            <vr-validator validate="scopeModel.isGridValid()">
+                <vr-datagrid on-ready="scopeModel.onGridReady"
+                             datasource="scopeModel.volumePackageItems"
+                             menuactions="scopeModel.menuActions"
+                             ondeleterow="scopeModel.removeVolumePackageItem">
 
-                <vr-datagridcolumn headertext="'ID'" field="'VolumePackageItemId'" widthfactor="1" disablesorting></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Volume Package Definition Item'" field="'VolumePackageDefinitionItemId'" widthfactor="15" disablesorting></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Volume'" field="'Volume'" widthfactor="10" disablesorting></vr-datagridcolumn>
-            </vr-datagrid>
+                    <vr-datagridcolumn headertext="'Package Item'" field="'Entity.VolumePackageDefinitionItemName'" widthfactor="15" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Volume'" field="'Entity.Volume'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
         </vr-columns>
-    </vr-row>
-    <vr-row>
-        <vr-columns width="1/2row">
-            <vr-textbox label="Price" value="scopeModel.price" typeof="decimal" min="0"></vr-textbox>
-        </vr-columns>
-        <vr-common-currency-selector on-ready="scopeModel.onCurrencyDirectiveReady"
-                                     normal-col-num="6">
-        </vr-common-currency-selector>
-        <!-- <vr-row>-->
-        <retail-be-volumepackagesettings-recurringperiodusage-selector on-ready="scopeModel.onRecurringPeriodUsageSelectorReady"
-                                                                       normal-col-num="6">
-        </retail-be-volumepackagesettings-recurringperiodusage-selector>
-        <vr-columns width="1/2row">
-            <vr-switch label="Reduce Price For Incomplete Periods" value="scopeModel.reducePrice"></vr-switch>
-        </vr-columns>
-        <!--</vr-row>-->
     </vr-row>
 </vr-tab>

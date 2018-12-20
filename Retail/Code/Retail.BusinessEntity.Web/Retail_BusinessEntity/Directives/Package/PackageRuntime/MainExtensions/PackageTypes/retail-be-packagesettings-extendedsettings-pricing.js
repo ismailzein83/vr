@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PricingPackageSettingsManagementDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_PricingPackageSettingsService'];
+    PricingPackageSettingsDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_PricingPackageSettingsService'];
 
-    function PricingPackageSettingsManagementDirective(UtilsService, VRNotificationService, Retail_BE_PricingPackageSettingsService) {
+    function PricingPackageSettingsDirective(UtilsService, VRNotificationService, Retail_BE_PricingPackageSettingsService) {
         return {
             restrict: 'E',
             scope: {
@@ -154,6 +154,6 @@
         }
     }
 
-    app.directive('retailBePricingpackagesettingsManagement', PricingPackageSettingsManagementDirective);
+    app.directive('retailBePackagesettingsExtendedsettingsPricing', PricingPackageSettingsDirective);
 
 })(app);

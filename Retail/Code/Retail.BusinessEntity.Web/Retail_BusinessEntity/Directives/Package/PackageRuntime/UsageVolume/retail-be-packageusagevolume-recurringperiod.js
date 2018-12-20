@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeVolumepackagesettingsRecurringperiodusageSelector', ['UtilsService', 'VRUIUtilsService', 'Retail_BE_PackageAPIService',
-    function (UtilsService, VRUIUtilsService, Retail_BE_PackageAPIService) {
+app.directive('retailBePackageusagevolumeRecurringperiod', ['UtilsService', 'VRUIUtilsService', 'Retail_BE_BEConfigurationAPIService',
+    function (UtilsService, VRUIUtilsService, Retail_BE_BEConfigurationAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -59,25 +59,25 @@ app.directive('retailBeVolumepackagesettingsRecurringperiodusageSelector', ['Uti
                 var packageUsageVolumeRecurringPeriod;
 
                 api.load = function (payload) {
-                    var promises = [];
                     selectorAPI.clearDataSource();
 
-                    console.log(payload);
                     if (payload != undefined) {
                         packageUsageVolumeRecurringPeriod = payload.packageUsageVolumeRecurringPeriod;
                         packageUsageVolumeRecurringPeriodId = payload.packageUsageVolumeRecurringPeriodId;
                     }
+
+                    var promises = [];
+
+                    var getPackageUsageVolumeRecurringPeriodConfigsPromise = getPackageUsageVolumeRecurringPeriodConfigs();
+                    promises.push(getPackageUsageVolumeRecurringPeriodConfigsPromise);
 
                     if (packageUsageVolumeRecurringPeriod != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getPackageUsageVolumeRecurringPeriodConfigsPromise = getPackageUsageVolumeRecurringPeriodConfigs();
-                    promises.push(getPackageUsageVolumeRecurringPeriodConfigsPromise);
-
                     function getPackageUsageVolumeRecurringPeriodConfigs() {
-                        return Retail_BE_PackageAPIService.GetPackageUsageVolumeRecurringPeriodConfigs().then(function (response) {
+                        return Retail_BE_BEConfigurationAPIService.GetPackageUsageVolumeRecurringPeriodConfigs().then(function (response) {
 
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
@@ -132,13 +132,12 @@ app.directive('retailBeVolumepackagesettingsRecurringperiodusageSelector', ['Uti
 
         function getTamplate(attrs) {
 
-            var label = "label='Package Usage Volume Recurring Period'";
+            var label = "label='Recurring Period'";
             if (attrs.hidelabel != undefined) {
                 label = "";
             }
             var template =
-                '<vr-row>'
-                + '<vr-columns colnum="{{ctrl.normalColNum}}">'
+                '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                 + ' datasource="scopeModel.templateConfigs"'
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
@@ -149,109 +148,7 @@ app.directive('retailBeVolumepackagesettingsRecurringperiodusageSelector', ['Uti
                 + '>'
                 + '</vr-select>'
                 + ' </vr-columns>'
-                + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
             return template;
-
         }
-        //return {
-        //    restrict: 'E',
-        //    scope: {
-        //        onReady: '=',
-        //        ismultipleselection: '@',
-        //        selectedvalues: '=',
-        //        onselectionchanged: '=',
-        //        onselectitem: '=',
-        //        ondeselectitem: '=',
-        //        isrequired: '=',
-        //        hideremoveicon: '@',
-        //        normalColNum: '@'
-        //    },
-        //    controller: function ($scope, $element, $attrs) {
-
-        //        var ctrl = this;
-        //        ctrl.datasource = [];
-
-        //        ctrl.selectedvalues;
-        //        if ($attrs.ismultipleselection != undefined)
-        //            ctrl.selectedvalues = [];
-
-        //        var packageUsageVolumeRecurringPeriodSelector = new PackageUsageVolumeRecurringPeriodSelector(ctrl, $scope, $attrs);
-        //        packageUsageVolumeRecurringPeriodSelector.initializeController();
-
-        //    },
-        //    controllerAs: 'ctrl',
-        //    bindToController: true,
-        //    template: function (element, attrs) {
-        //        return getTemplate(attrs);
-        //    }
-        //};
-
-        //function PackageUsageVolumeRecurringPeriodSelector(ctrl, $scope, attrs) {
-        //    this.initializeController = initializeController;
-
-        //    var selectorAPI;
-
-        //    function initializeController() {
-        //        ctrl.onSelectorReady = function (api) {
-        //            selectorAPI = api;
-        //            defineAPI();
-        //        };
-        //    }
-
-        //    function defineAPI() {
-        //        var api = {};
-
-        //        api.load = function (payload) {
-        //           // selectorAPI.clearDataSource();
-        //            ctrl.templateConfigs = [];
-        //            var selectedIds;
-        //            console.log(payload);
-        //            if (payload != undefined) {
-        //                selectedIds = payload.selectedIds;
-        //            }
-
-        //            return Retail_BE_PackageAPIService.GetPackageUsageVolumeRecurringPeriodConfigs().then(function (response) {
-        //                if (response != null) {
-        //                    for (var i = 0; i < response.length; i++) {
-        //                        ctrl.templateConfigs.push(response[i]);
-        //                    }
-        //                    if (selectedIds != undefined) {
-        //                        ctrl.selectedTemplateConfig = UtilsService.getItemByVal(ctrl.templateConfigs, selectedIds.ConfigId, 'ExtensionConfigurationId');
-        //                    }
-        //                }
-        //            });
-        //        };
-
-        //        api.getSelectedIds = function () {
-        //            var data;
-        //            if (ctrl.selectedTemplateConfig != undefined && directiveAPI != undefined) {
-
-        //                data = directiveAPI.getData();
-        //                if (data != undefined) {
-        //                    data.ConfigId = ctrl.selectedTemplateConfig.ExtensionConfigurationId;
-        //                }
-        //            }
-        //            return data;
-        //        };
-
-        //        if (ctrl.onReady != null)
-        //            ctrl.onReady(api);
-        //    }
-        //}
-
-        //function getTemplate(attrs) {
-
-        //    var multipleselection = "";
-        //    var label = "Package Usage Volume Recurring Period";
-
-        //    if (attrs.ismultipleselection != undefined) {
-        //        label = "Package Usage Volume Recurring Periods";
-        //        multipleselection = "ismultipleselection";
-        //    }
-
-        //    return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="ExtensionConfigurationId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.templateConfigs" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedTemplateConfig" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon"></vr-select></vr-columns>'
-        //        + '<vr-directivewrapper ng-if="ctrl.selectedTemplateConfig != undefined" directive="ctrl.selectedTemplateConfig.Editor" on-ready="ctrl.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate"></vr-directivewrapper>';
-        //}
-
     }]);

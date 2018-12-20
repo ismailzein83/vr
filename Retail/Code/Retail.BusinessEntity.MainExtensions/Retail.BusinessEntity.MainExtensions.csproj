@@ -171,12 +171,12 @@
     <Compile Include="DataRecordFieldFormulas\ZoneEvaluatorFieldFormula.cs" />
     <Compile Include="FinancialAccount\PostpaidFinancialAccount.cs" />
     <Compile Include="FinancialAccount\PostpaidFinancialAccountDefinition.cs" />
-    <Compile Include="PackageDefinitionExtendedSettings\PricingPackageDefinitionSettings.cs" />
+    <Compile Include="PackageTypes\PricingPackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageSettings.cs" />
-    <Compile Include="PackageTypes\VolumePackageController.cs" />
+    <Compile Include="PackageTypes\VolumePackageDefinitionController.cs" />
     <Compile Include="PackageTypes\VolumePackageDefinitionSettings.cs" />
-    <Compile Include="PackageTypes\VolumePackageManager.cs" />
+    <Compile Include="PackageTypes\VolumePackageDefinitionManager.cs" />
     <Compile Include="PackageUsageVolumeRecurringPeriods\MonthlyPackageUsageVolumeRecurringPeriod.cs" />
     <Compile Include="PortalAccountExtraFieldDefinition.cs" />
     <Compile Include="PortalAccount\PortalAccount.cs" />
@@ -270,6 +270,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BEActions\" />
+    <Folder Include="PackageDefinitionExtendedSettings\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

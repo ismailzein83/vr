@@ -18,10 +18,10 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
     {
         public Guid VolumePackageDefinitionItemId { get; set; }
 
-        public CompositeRecordConditionDefinitionGroup CompositeRecordConditionDefinitionGroup { get; set; }
+        public string Name { get; set; }
 
         public List<Guid> ServiceTypeIds { get; set; }
 
-        public string Name { get; set; }
+        public CompositeRecordConditionDefinitionGroup CompositeRecordConditionDefinitionGroup { get; set; }
     }
 }

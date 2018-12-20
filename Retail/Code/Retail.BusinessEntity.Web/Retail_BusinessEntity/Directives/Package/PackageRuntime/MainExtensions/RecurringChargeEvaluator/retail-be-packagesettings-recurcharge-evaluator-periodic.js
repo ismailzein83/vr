@@ -2,13 +2,13 @@
 
     'use strict';
 
-    RecurchargeEvaluatorOnetimeDirective.$inject = ['UtilsService', 'VRNotificationService'];
+    RecurchargeEvaluatorPeriodicDirective.$inject = ['UtilsService', 'VRNotificationService','Retail_BE_PeriodicRecurringChargePeriodTypeEnum'];
 
-    function RecurchargeEvaluatorOnetimeDirective(UtilsService, VRNotificationService) {
+    function RecurchargeEvaluatorPeriodicDirective(UtilsService, VRNotificationService, Retail_BE_PeriodicRecurringChargePeriodTypeEnum) {
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -25,7 +25,7 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageRuntime/MainExtensions/PackageTypes/MainExtensions/Templates/OneTimeEvaluatorTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageRuntime/MainExtensions/RecurringChargeEvaluator/Templates/PeriodicEvaluatorTemplate.html'
         };
 
         function RecurChargePackageSettings($scope, ctrl) {
@@ -37,6 +37,17 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.periodicRecurringChargePeriodTypes = UtilsService.getArrayEnum(Retail_BE_PeriodicRecurringChargePeriodTypeEnum);
+                $scope.scopeModel.selectedPeriodicRecurringChargePeriodType = Retail_BE_PeriodicRecurringChargePeriodTypeEnum.Monthly;
+
+                $scope.scopeModel.onPeriodTypeSelectionChanged = function (value) {
+                    if (value != undefined && value.value == Retail_BE_PeriodicRecurringChargePeriodTypeEnum.Days.value) {
+                        $scope.scopeModel.showNumberOfDays = true;
+                    } else {
+                        $scope.scopeModel.showNumberOfDays = false;
+                    }
+                };
 
                 $scope.scopeModel.onCurrencyDirectiveReady = function (api) {
                     currencySelectorAPI = api;
@@ -53,12 +64,17 @@
                 var api = {};
 
                 api.load = function (payload) {
+
                     var promises = [];
                     var evaluatorSettings;
                     if (payload != undefined) {
                         evaluatorSettings = payload.evaluatorSettings;
                         if (evaluatorSettings != undefined) {
                             ctrl.price = evaluatorSettings.Price;
+                            if (evaluatorSettings.PeriodType != undefined) {
+                                $scope.scopeModel.selectedPeriodicRecurringChargePeriodType = UtilsService.getItemByVal($scope.scopeModel.periodicRecurringChargePeriodTypes, evaluatorSettings.PeriodType, "value");
+                            }
+                            $scope.scopeModel.numberOfDays = evaluatorSettings.NumberOfDays;
                         }
                     }
                     var currencySelectorPayload = evaluatorSettings != undefined ? { selectedIds: evaluatorSettings.CurrencyId } : undefined;
@@ -68,9 +84,11 @@
 
                 api.getData = function () {
                     var obj = {
-                        $type: "Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators.OneTimeRecurringChargeEvaluator, Retail.BusinessEntity.MainExtensions",
+                        $type: "Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators.PeriodicRecurringChargeEvaluator, Retail.BusinessEntity.MainExtensions",
                         Price: ctrl.price,
-                        CurrencyId: currencySelectorAPI.getSelectedIds()
+                        CurrencyId: currencySelectorAPI.getSelectedIds(),
+                        PeriodType: $scope.scopeModel.selectedPeriodicRecurringChargePeriodType.value,
+                        NumberOfDays : $scope.scopeModel.numberOfDays
                     };
                     return obj;
                 };
@@ -84,6 +102,6 @@
         }
     }
 
-    app.directive('retailBePackagesettingsRecurchargeEvaluatorOnetime', RecurchargeEvaluatorOnetimeDirective);
+    app.directive('retailBePackagesettingsRecurchargeEvaluatorPeriodic', RecurchargeEvaluatorPeriodicDirective);
 
 })(app);

@@ -12,7 +12,6 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
                 var ctor = new MonthlyPackageUsageVolumeRecurringPeriodDirective($scope, ctrl);
                 ctor.initializeController();
             },
@@ -25,7 +24,7 @@
                     }
                 };
             },
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageRuntime/MainExtensions/PackageTypes/MainExtensions/Templates/MonthlyPackageUsageVolumeRecurringPeriodTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/Package/PackageRuntime/MainExtensions/UsageVolume/Templates/MonthlyPackageUsageVolumeRecurringPeriodTemplate.html'
         };
 
         function MonthlyPackageUsageVolumeRecurringPeriodDirective($scope, ctrl) {
@@ -57,5 +56,5 @@
         }
     }
 
-    app.directive('retailBePackageusagevolumerecurringperiodMonthly', MonthlyPackageUsageVolumeRecurringPeriodDirective);
+    app.directive('retailBePackageusagevolumeRecurringperiodMonthly', MonthlyPackageUsageVolumeRecurringPeriodDirective);
 })(app);

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBePackagedefinitionExtendedsettingsVolume', ['UtilsService', 'Retail_BE_VolumePackageDefinitionSettingsService',
-    function (UtilsService, Retail_BE_VolumePackageDefinitionSettingsService) {
+app.directive('retailBePackagedefinitionExtendedsettingsVolume', ['UtilsService', 'Retail_BE_VolumePackageDefinitionService',
+    function (UtilsService, Retail_BE_VolumePackageDefinitionService) {
         return {
             restrict: 'E',
             scope: {
@@ -23,29 +23,39 @@ app.directive('retailBePackagedefinitionExtendedsettingsVolume', ['UtilsService'
 
             var gridAPI;
 
+            var volumePackageDefinitionItemsNames = [];
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.datasource = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    defineAPI();
+                };
+
+                $scope.scopeModel.isGridValid = function () {
+                    if ($scope.scopeModel.datasource.length < 1)
+                        return 'Grid should contains at least one item';
+                    return null;
                 };
 
                 $scope.scopeModel.addVolumePackageDefinitionItem = function () {
                     var onVolumePackageDefinitionItemAdded = function (addedVolumePackageDefinitionItem) {
-                        $scope.scopeModel.datasource.push(addedVolumePackageDefinitionItem);
+                        $scope.scopeModel.datasource.push({ Entity: addedVolumePackageDefinitionItem });
                     };
 
-                    Retail_BE_VolumePackageDefinitionSettingsService.addVolumePackageDefinitionItem(onVolumePackageDefinitionItemAdded);
+                    getVolumePackageDefinitionItemsNames();
+
+                    Retail_BE_VolumePackageDefinitionService.addVolumePackageDefinitionItem(onVolumePackageDefinitionItemAdded, volumePackageDefinitionItemsNames);
                 };
 
                 $scope.scopeModel.removeVolumePackageDefinitionItem = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.VolumePackageDefinitionItemId, 'VolumePackageDefinitionItemId');
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.Entity.VolumePackageDefinitionItemId, 'Entity.VolumePackageDefinitionItemId');
                     $scope.scopeModel.datasource.splice(index, 1);
                 };
 
                 defineMenuActions();
-                defineAPI();
             }
 
             function defineAPI() {
@@ -54,14 +64,32 @@ app.directive('retailBePackagedefinitionExtendedsettingsVolume', ['UtilsService'
                 api.load = function (payload) {
                     $scope.scopeModel.datasource.length = 0;
 
-                    if (payload != undefined && payload.extendedSettings != undefined)
-                        $scope.scopeModel.datasource = payload.extendedSettings.Items;
+                    if (payload != undefined && payload.extendedSettings != undefined) {
+                        for (var i = 0; i < payload.extendedSettings.Items.length; i++) {
+                            $scope.scopeModel.datasource.push({ Entity: payload.extendedSettings.Items[i] });
+                        }
+                    }
                 };
 
                 api.getData = function () {
+
+                    function getItems() {
+                        var items = [];
+                        for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+                            var currentItem = $scope.scopeModel.datasource[i].Entity;
+                            items.push({
+                                VolumePackageDefinitionItemId: currentItem.VolumePackageDefinitionItemId,
+                                Name: currentItem.Name,
+                                CompositeRecordConditionDefinitionGroup: currentItem.CompositeRecordConditionDefinitionGroup,
+                                ServiceTypeIds: currentItem.ServiceTypeIds
+                            });
+                        }
+                        return items;
+                    }
+
                     return {
                         $type: 'Retail.BusinessEntity.MainExtensions.PackageTypes.VolumePackageDefinitionSettings, Retail.BusinessEntity.MainExtensions',
-                        Items: $scope.scopeModel.datasource
+                        Items: getItems()
                     };
                 };
 
@@ -70,22 +98,28 @@ app.directive('retailBePackagedefinitionExtendedsettingsVolume', ['UtilsService'
             }
 
             function defineMenuActions() {
-                var defaultMenuActions = [{
+                $scope.scopeModel.gridMenuActions = [{
                     name: "Edit",
                     clicked: editVolumePackageDefinitionItem
                 }];
-
-                $scope.scopeModel.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
             }
 
             function editVolumePackageDefinitionItem(volumePackageDefinitionItem) {
                 var onVolumePackageDefinitionItemUpdated = function (updatedVolumePackageDefinitionItem) {
-                    var index = $scope.scopeModel.datasource.indexOf(volumePackageDefinitionItem);
-                    $scope.scopeModel.datasource[index] = updatedVolumePackageDefinitionItem;
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, volumePackageDefinitionItem.Entity.VolumePackageDefinitionItemId, 'Entity.VolumePackageDefinitionItemId');
+                    $scope.scopeModel.datasource[index] = { Entity: updatedVolumePackageDefinitionItem };
                 };
-                Retail_BE_VolumePackageDefinitionSettingsService.editVolumePackageDefinitionItem(volumePackageDefinitionItem, onVolumePackageDefinitionItemUpdated);
+
+                getVolumePackageDefinitionItemsNames();
+
+                Retail_BE_VolumePackageDefinitionService.editVolumePackageDefinitionItem(onVolumePackageDefinitionItemUpdated, volumePackageDefinitionItem.Entity, volumePackageDefinitionItemsNames);
+            }
+
+            function getVolumePackageDefinitionItemsNames() {
+                for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+                    var currentEntity = $scope.scopeModel.datasource[i].Entity;
+                    volumePackageDefinitionItemsNames.push(currentEntity.Name);
+                }
             }
         }
     }]);

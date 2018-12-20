@@ -326,7 +326,6 @@
     <Compile Include="Package\PackageInfo.cs" />
     <Compile Include="Package\PackageFilter.cs" />
     <Compile Include="Package\PackageQuery.cs" />
-    <Compile Include="Package\PackageExtendedSettingsConfig.cs" />
     <Compile Include="Package\ServiceVoiceTypeTemplateConfig.cs" />
     <Compile Include="PricingEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

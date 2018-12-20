@@ -3,25 +3,24 @@ using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
-using Vanrise.Security.Business;
 
 namespace Retail.BusinessEntity.Business
 {
     public class PackageManager : BaseBusinessEntityManager
     {
         #region ctor/Local Variables
+
         static PackageDefinitionManager _packageDefinitionManager = new PackageDefinitionManager();
         static AccountBEManager s_accountBEManager = new AccountBEManager();
 
         #endregion
 
         #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<PackageDetail> GetFilteredPackages(Vanrise.Entities.DataRetrievalInput<PackageQuery> input)
         {            
             var allPackages = GetCachedPackages();
@@ -102,7 +101,6 @@ namespace Retail.BusinessEntity.Business
             return packages;
         }
 
-
         public Guid GetPackageAccountDefinitionId(Package package)
         {
             package.Settings.ThrowIfNull("package.Settings", package.PackageId);
@@ -111,7 +109,6 @@ namespace Retail.BusinessEntity.Business
             packageDefinition.Settings.ThrowIfNull("packageDefinition.Settings", package.Settings.PackageDefinitionId);
             return packageDefinition.Settings.AccountBEDefinitionId;
         }
-
         public Guid GetPackageAccountDefinitionId(int packageId)
         {
             var package = GetPackage(packageId);
@@ -170,11 +167,6 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
        
-        public IEnumerable<PackageExtendedSettingsConfig> GetPackageExtendedSettingsTemplateConfigs()
-        {
-            var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<PackageExtendedSettingsConfig>(PackageExtendedSettingsConfig.EXTENSION_TYPE);
-        }
         public IEnumerable<ServiceVoiceTypeTemplateConfig> GetVoiceTypesTemplateConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
@@ -233,7 +225,7 @@ namespace Retail.BusinessEntity.Business
 
             return true;
         }
-
+        
         #endregion
 
         #region Private Methods
@@ -300,7 +292,6 @@ namespace Retail.BusinessEntity.Business
                 get { return "Retail_BusinessEntity_Package_ViewHistoryItem"; }
             }
 
-
             public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
             {
                 Package package = context.Object.CastWithValidate<Package>("context.Object");
@@ -349,6 +340,7 @@ namespace Retail.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
+
         #endregion
 
         #region  Mappers

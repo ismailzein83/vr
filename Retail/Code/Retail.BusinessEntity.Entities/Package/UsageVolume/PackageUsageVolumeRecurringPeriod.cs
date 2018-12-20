@@ -13,39 +13,31 @@ namespace Retail.BusinessEntity.Entities
 		public abstract void GetEventApplicablePeriod(IPackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext context);
 
 		public abstract void GetChargingDates(IPackageUsageVolumeRecurringPeriodGetChargingDatesContext context);
+
 		public abstract string GetDescription();
 	}
 
 	public interface IPackageUsageVolumeRecurringPeriodGetEventApplicablePeriodContext
 	{
 		DateTime EventTime { get; }
-
 		DateTime PackageAssignmentStartTime { get; }
-
 		DateTime? PackageAssignmentEndTime { get; }
-
 		DateTime PeriodStart { set; }
-
 		DateTime PeriodEnd { set; }
 	}
 
 	public interface IPackageUsageVolumeRecurringPeriodGetChargingDatesContext
 	{
 		DateTime FromDate { get; }
-
 		DateTime ToDate { get; }
-
 		DateTime PackageAssignmentStartTime { get; }
-
 		DateTime? PackageAssignmentEndTime { get; }
-
 		List<PackageUsageVolumeRecurringPeriodChargingDate> ChargingDates { set; }
 	}
 
 	public class PackageUsageVolumeRecurringPeriodChargingDate
 	{
 		public DateTime ChargingDate { get; set; }
-
 		public Decimal? PeriodFractionOfTheFullPeriod { get; set; }
 	}
 }

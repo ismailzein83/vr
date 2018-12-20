@@ -8,11 +8,13 @@
 
         var isEditMode;
         var volumePackageDefinitionItem;
-        var serviceTypeIds;
-        var context;
+        var volumePackageDefinitionItemsNames;
 
         var serviceTypeSelectorAPI;
         var serviceTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var compositeRecordConditionDefinitionGroupDirectiveAPI;
+        var compositeRecordConditionDefinitionGroupDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -22,20 +24,35 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                volumePackageDefinitionItem = parameters.VolumePackageDEfinitionItem;
-                serviceTypeIds = volumePackageDefinitionItem != undefined ? volumePackageDefinitionItem.ServiceTypeIds : undefined;
-                context = parameters.context;
+                volumePackageDefinitionItem = parameters.VolumePackageDefinitionItem;
+                volumePackageDefinitionItemsNames = parameters.volumePackageDefinitionItemsNames;
             }
 
             isEditMode = volumePackageDefinitionItem != undefined;
         }
-
         function defineScope() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.onServiceTypeSelectorReady = function (api) {
                 serviceTypeSelectorAPI = api;
                 serviceTypeSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onCompositeRecordConditionDefinitionGroupDirectiveReady = function (api) {
+                compositeRecordConditionDefinitionGroupDirectiveAPI = api;
+                compositeRecordConditionDefinitionGroupDirectiveReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.isNameValid = function () {
+                var volumePackageDefinitionName = $scope.scopeModel.name != undefined ? $scope.scopeModel.name.toLowerCase() : undefined;
+                if (isEditMode && volumePackageDefinitionName == volumePackageDefinitionItem.Name.toLowerCase())
+                    return null;
+
+                for (var i = 0; i < volumePackageDefinitionItemsNames.length; i++) {
+                    if (volumePackageDefinitionName == volumePackageDefinitionItemsNames[i].toLowerCase())
+                        return 'Name already exists';
+                }
+                return null;
             };
 
             $scope.scopeModel.save = function () {
@@ -46,7 +63,6 @@
                 $scope.modalContext.closeModal();
             };
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
@@ -55,7 +71,7 @@
         function loadAllControls() {
 
             function setTitle() {
-                if (isEditMode && volumePackageDefinitionItem != undefined)
+                if (isEditMode)
                     $scope.title = UtilsService.buildTitleForUpdateEditor(volumePackageDefinitionItem.Name, 'Volume Package Definition Item');
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor('Volume Package Definition Item');
@@ -70,30 +86,37 @@
                 var loadServiceTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 serviceTypeSelectorReadyDeferred.promise.then(function () {
-                    var filters;
-                    if (context != undefined && context.getServiceTypeFilter != undefined) {
-                        filters = [];
-                        filters.push(context.getServiceTypeFilter());
-                    }
-                    var serviceTypeSelectorPayload = {
-                        selectedIds: serviceTypeIds,
-                        //excludedServiceTypeIds: excludedServiceTypeIds,
-                        filter: {
-                            Filters: filters
-                        }
-                    };
 
+                    var serviceTypeSelectorPayload;
+                    if (volumePackageDefinitionItem != undefined) {
+                        serviceTypeSelectorPayload = { selectedIds: volumePackageDefinitionItem.ServiceTypeIds };
+                    }
                     VRUIUtilsService.callDirectiveLoad(serviceTypeSelectorAPI, serviceTypeSelectorPayload, loadServiceTypeSelectorPromiseDeferred);
                 });
+
                 return loadServiceTypeSelectorPromiseDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadServiceTypeSelector]).then(function () {
+            function loadCompositeRecordConditionDefinitionGroupDirective() {
+                var loadCompositeRecordConditionDefinitionGroupDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
+                compositeRecordConditionDefinitionGroupDirectiveReadyDeferred.promise.then(function () {
+
+                    var payload;
+                    if (volumePackageDefinitionItem != undefined) {
+                        payload = {
+                            compositeRecordConditionDefinitionGroup: volumePackageDefinitionItem.CompositeRecordConditionDefinitionGroup
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(compositeRecordConditionDefinitionGroupDirectiveAPI, payload, loadCompositeRecordConditionDefinitionGroupDirectivePromiseDeferred);
+                });
+                return loadCompositeRecordConditionDefinitionGroupDirectivePromiseDeferred.promise;
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadServiceTypeSelector, loadCompositeRecordConditionDefinitionGroupDirective]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
 
@@ -116,11 +139,11 @@
         function buildVolumePackageDefinitionItemFromScope() {
             return {
                 VolumePackageDefinitionItemId: volumePackageDefinitionItem != undefined ? volumePackageDefinitionItem.VolumePackageDefinitionItemId : UtilsService.guid(),
+                Name: $scope.scopeModel.name,
                 ServiceTypeIds: serviceTypeSelectorAPI.getSelectedIds(),
-                Name: $scope.scopeModel.name
+                CompositeRecordConditionDefinitionGroup: compositeRecordConditionDefinitionGroupDirectiveAPI.getData()
             };
         }
-
     }
 
     appControllers.controller('Retail_BE_VolumePackageDefinitionSettingsEditorController', VolumePackageDefinitionSettingsEditorController);

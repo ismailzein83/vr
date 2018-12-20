@@ -1,11 +1,11 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    VolumePackageAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig'];
+    VolumePackageDefinitionAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig'];
 
-    function VolumePackageAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig) {
+    function VolumePackageDefinitionAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig) {
 
-        var controllerName = "VolumePackage";
+        var controllerName = "VolumePackageDefinition";
 
         function GetCompositeRecordConditionResolvedDataList(volumePackageDefinitionId, volumePackageDefinitionItemId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetCompositeRecordConditionResolvedDataList"), {
@@ -19,5 +19,5 @@
         });
     }
 
-    appControllers.service('Retail_BE_VolumePackageAPIService', VolumePackageAPIService);
+    appControllers.service('Retail_BE_VolumePackageDefinitionAPIService', VolumePackageDefinitionAPIService);
 })(appControllers);
