@@ -15,13 +15,29 @@ namespace Mediation.Runtime.Tasks
     {
         public void Execute()
         {
+            #region MediationTestingTask
+            //MediationTestingTask.MediationTestingTask_Main();
+            #endregion
+
             #region DataParserTesterTask
-            DataParserTesterTask.DataParserTesterTask_Main();
+            //DataParserTesterTask.DataParserTesterTask_Main();
             #endregion
 
             #region RuntimeTask
             //RuntimeTask.RuntimeTask_Main();
             #endregion
+        }
+    }
+
+    public class MediationTestingTask
+    {
+        public static void MediationTestingTask_Main()
+        {
+            string hex = "00251926118228ffff040002";
+            byte[] byteArray = ParserHelper.StringToByteArray(hex);
+
+            string byteArrayAsBCD = ParserHelper.GetBCDNumber(byteArray, true, true);
+            string byteArrayAsString = ParserHelper.ByteArrayToString(byteArray, false);
         }
     }
 
