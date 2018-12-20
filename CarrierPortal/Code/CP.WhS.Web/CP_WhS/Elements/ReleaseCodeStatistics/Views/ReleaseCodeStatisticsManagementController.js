@@ -129,7 +129,8 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         var filter = {};
         filter.Dimession = releaseCodeDimensionDirectiveAPI.getSelectedIds();
         $scope.dimensionvalues = filter.Dimession;
-        if (accountViewTypeAPI.getSelectedIds() == CP_WhS_AccountViewTypeEnum.Customer.value) {
+        filter.AccountType = accountViewTypeAPI.getSelectedIds();
+        if (filter.AccountType == CP_WhS_AccountViewTypeEnum.Customer.value) {
             filter.CustomerIds = accountDirectiveAPI.getSelectedIds();
         }
         else {

@@ -1,4 +1,5 @@
 ﻿using CP.WhS.Business;
+using CP.WhS.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace CP.WhS.Web.Controllers
         ReleaseCodeStatisticsManager _releaseCodeStatisticsManager = new ReleaseCodeStatisticsManager();
         [HttpPost]
         [Route("GetFilteredReleaseCodeStatistics")]
-        public object GetFilteredReleaseCodeStatistics(DataRetrievalInput<ReleaseCodeQuery> input)
+        public object GetFilteredReleaseCodeStatistics(DataRetrievalInput<ClientReleaseCodeQuery> input)
         {
             return GetWebResponse(input, _releaseCodeStatisticsManager.GetFilteredReleaseCodeStatistics(input), "Release Code Statistics");
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CP.WhS.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,50 +13,71 @@ namespace CP.WhS.Business
 {
     public class ReleaseCodeStatisticsManager
     {
-        public IDataRetrievalResult<ReleaseCodeStatDetail> GetFilteredReleaseCodeStatistics(DataRetrievalInput<ReleaseCodeQuery> query)
+        public IDataRetrievalResult<ReleaseCodeStatDetail> GetFilteredReleaseCodeStatistics(DataRetrievalInput<ClientReleaseCodeQuery> query)
         {
             var connectionSettings = new PortalConnectionManager().GetWhSConnectionSettings();
-            var clonedInput = Utilities.CloneObject<DataRetrievalInput<ReleaseCodeQuery>>(query);
-            clonedInput.IsAPICall = true;
+            List<string> columnsToShow = new List<string>() { "ReleaseCode", "ReleaseSource", "Attempt", "FailedAttempt", "Percentage", "DurationInMinutes",
+            "FirstAttempt", "LastAttempt"};
             WhSCarrierAccountBEManager whSCarrierAccountBEManager = new WhSCarrierAccountBEManager();
             var accessibleCustomers = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new Entities.ClientAccountInfoFilter() { GetCustomers = true });
             var accessibleSuppliers = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new Entities.ClientAccountInfoFilter() { GetSuppliers = true });
-            List<string> columnsToShow = new List<string>() { "ReleaseCode", "ReleaseSource", "Attempt", "FailedAttempt", "Percentage", "DurationInMinutes",
-            "FirstAttempt", "LastAttempt"};
-            if (clonedInput.Query.Filter != null)
+            var input = new DataRetrievalInput<ReleaseCodeQuery>()
             {
-                if (clonedInput.Query.Filter.CustomerIds != null && query.Query.Filter.CustomerIds.Count > 0)
+                DataRetrievalResultType = query.DataRetrievalResultType,
+                FromRow = query.FromRow,
+                GetSummary = query.GetSummary,
+                IsAPICall = query.IsAPICall,
+                IsSortDescending = query.IsSortDescending,
+                ResultKey = query.ResultKey,
+                SortByColumnName = query.SortByColumnName,
+                ToRow = query.ToRow,
+                Query = new ReleaseCodeQuery()
+                {
+                    To = query.Query.To,
+                    From = query.Query.From,
+                    Filter = new ReleaseCodeFilter()
+                    {
+                        ColumnsToShow = columnsToShow
+                    }
+                }
+            };
+            if (query.Query.Filter != null)
+            {
+                if (query.Query.Filter.CustomerIds != null && query.Query.Filter.CustomerIds.Count > 0)
                 {
                     foreach (var customerId in query.Query.Filter.CustomerIds)
                     {
-                        if (accessibleCustomers.FindRecord(x => x.AccountId == customerId) == null)
-                            return null;
+                        if (!accessibleCustomers.Any(x => x.AccountId == customerId))
+                            throw new Exception("You are not authorized to view this report.");
                     }
+                    input.Query.Filter.CustomerIds = query.Query.Filter.CustomerIds;
                 }
-                else if (clonedInput.Query.Filter.SupplierIds != null && query.Query.Filter.SupplierIds.Count > 0)
+                else if (query.Query.Filter.SupplierIds != null && query.Query.Filter.SupplierIds.Count > 0)
                 {
                     foreach (var supplierId in query.Query.Filter.SupplierIds)
                     {
-                        if (accessibleSuppliers.FindRecord(x => x.AccountId == supplierId) == null)
-                            return null;
+                        if (!accessibleSuppliers.Any(x => x.AccountId == supplierId))
+                            throw new Exception("You are not authorized to view this report.");
                     }
+                    input.Query.Filter.SupplierIds = query.Query.Filter.SupplierIds;
                 }
                 else
                 {
-                    clonedInput.Query.Filter.CustomerIds = accessibleCustomers != null && accessibleCustomers.Count() > 0 ? accessibleCustomers.Select(x => x.AccountId).ToList() : null;
-                    clonedInput.Query.Filter.SupplierIds = accessibleSuppliers != null && accessibleSuppliers.Count() > 0 ? accessibleSuppliers.Select(x => x.AccountId).ToList() : null;
+                    if (query.Query.Filter.AccountType == AccountViewType.Customer)
+                    {
+                        input.Query.Filter.CustomerIds = accessibleCustomers != null && accessibleCustomers.Count() > 0 ? accessibleCustomers.Select(x => x.AccountId).ToList() : null;
+                    }
+                    else if (query.Query.Filter.AccountType == AccountViewType.Supplier)
+                    {
+                        input.Query.Filter.SupplierIds = accessibleSuppliers != null && accessibleSuppliers.Count() > 0 ? accessibleSuppliers.Select(x => x.AccountId).ToList() : null;
+                    }
                 }
-                clonedInput.Query.Filter.ColumnsToShow = columnsToShow;
+                input.Query.Filter.Dimession = query.Query.Filter.Dimession;
+                input.Query.Filter.CountryIds = query.Query.Filter.CountryIds;
+                input.Query.Filter.MasterSaleZoneIds = query.Query.Filter.MasterSaleZoneIds;
             }
-            else
-            {
-                clonedInput.Query.Filter = new ReleaseCodeFilter()
-                {
-                    CustomerIds = accessibleCustomers != null && accessibleCustomers.Count() > 0 ? accessibleCustomers.Select(x => x.AccountId).ToList() : null,
-                    SupplierIds = accessibleSuppliers != null && accessibleSuppliers.Count() > 0 ? accessibleSuppliers.Select(x => x.AccountId).ToList() : null,
-                    ColumnsToShow = columnsToShow
-                };
-            }
+            var clonedInput = Utilities.CloneObject<DataRetrievalInput<ReleaseCodeQuery>>(input);
+            clonedInput.IsAPICall = true;
             if (clonedInput.DataRetrievalResultType == DataRetrievalResultType.Excel)
             {
                 return connectionSettings.Post<DataRetrievalInput<ReleaseCodeQuery>, RemoteExcelResult<ReleaseCodeStatDetail>>("/api/WhS_Analytics/ReleaseCode/GetAllFilteredReleaseCodes", clonedInput);

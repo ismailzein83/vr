@@ -25,6 +25,9 @@ namespace CP.WhS.Business
                 cdrType = CDRType.PartialPriced;
             else if (query.Query.CDRType == ClientCDRType.Successful)
                 cdrType = CDRType.Successful;
+            WhSCarrierAccountBEManager whSCarrierAccountBEManager = new WhSCarrierAccountBEManager();
+            var accessibleCustomers = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new Entities.ClientAccountInfoFilter() { GetCustomers = true });
+            var accessibleSuppliers = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new Entities.ClientAccountInfoFilter() { GetSuppliers = true });
             var input = new DataRetrievalInput<RepeatedNumberQuery>()
             {
                 DataRetrievalResultType = query.DataRetrievalResultType,
@@ -42,9 +45,6 @@ namespace CP.WhS.Business
                     CDRType = cdrType,
                     Filter = new RepeatedNumberFilter()
                     {
-                        CustomerIds = query.Query.Filter.CustomerIds,
-                        SupplierIds = query.Query.Filter.SupplierIds,
-                        SwitchIds = query.Query.Filter.SwitchIds,
                         ColumnsToShow = query.Query.Filter.AccountType == AccountViewType.Customer ? new List<string>() { "CustomerName", "SaleZoneName", "Attempt", "DurationInMinutes", "PhoneNumber" } : new List<string>() { "SupplierName", "SaleZoneName", "Attempt", "DurationInMinutes", "PhoneNumber" }
                     },
                     PhoneNumber = query.Query.PhoneNumber,
@@ -52,43 +52,41 @@ namespace CP.WhS.Business
                     RepeatedMorethan = query.Query.RepeatedMorethan
                 }
             };
-            var clonedInput = Utilities.CloneObject<DataRetrievalInput<RepeatedNumberQuery>>(input);
-            clonedInput.IsAPICall = true;
-            WhSCarrierAccountBEManager whSCarrierAccountBEManager = new WhSCarrierAccountBEManager();
-            var accessibleCustomers = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new Entities.ClientAccountInfoFilter() { GetCustomers = true });
-            var accessibleSuppliers = whSCarrierAccountBEManager.GetRemoteCarrierAccountsInfo(new Entities.ClientAccountInfoFilter() { GetSuppliers = true });
-            if (clonedInput.Query.Filter != null)
+            if (query.Query.Filter != null)
             {
-                if (clonedInput.Query.Filter.CustomerIds != null && query.Query.Filter.CustomerIds.Count > 0)
+                if (query.Query.Filter.CustomerIds != null && query.Query.Filter.CustomerIds.Count > 0)
                 {
                     foreach (var customerId in query.Query.Filter.CustomerIds)
                     {
-                        if (accessibleCustomers.FindRecord(x => x.AccountId == customerId) == null)
-                            return null;
+                        if (!accessibleCustomers.Any(x => x.AccountId == customerId))
+                            throw new Exception("You are not authorized to view this report.");
                     }
+                    input.Query.Filter.CustomerIds = query.Query.Filter.CustomerIds;
                 }
-                else if (clonedInput.Query.Filter.SupplierIds != null && query.Query.Filter.SupplierIds.Count > 0)
+                else if (query.Query.Filter.SupplierIds != null && query.Query.Filter.SupplierIds.Count > 0)
                 {
                     foreach (var supplierId in query.Query.Filter.SupplierIds)
                     {
-                        if (accessibleSuppliers.FindRecord(x => x.AccountId == supplierId) == null)
-                            return null;
+                        if (!accessibleSuppliers.Any(x => x.AccountId == supplierId))
+                            throw new Exception("You are not authorized to view this report.");
                     }
+                    input.Query.Filter.SupplierIds = query.Query.Filter.SupplierIds;
                 }
                 else
                 {
-                    clonedInput.Query.Filter.CustomerIds = accessibleCustomers != null && accessibleCustomers.Count() > 0 ? accessibleCustomers.Select(x => x.AccountId).ToList() : null;
-                    clonedInput.Query.Filter.SupplierIds = accessibleSuppliers != null && accessibleSuppliers.Count() > 0 ? accessibleSuppliers.Select(x => x.AccountId).ToList() : null;
+                    if (query.Query.Filter.AccountType == AccountViewType.Customer)
+                    {
+                        input.Query.Filter.CustomerIds = accessibleCustomers != null && accessibleCustomers.Count() > 0 ? accessibleCustomers.Select(x => x.AccountId).ToList() : null;
+                    }
+                    else if (query.Query.Filter.AccountType == AccountViewType.Supplier)
+                    {
+                        input.Query.Filter.SupplierIds = accessibleSuppliers != null && accessibleSuppliers.Count() > 0 ? accessibleSuppliers.Select(x => x.AccountId).ToList() : null;
+                    }
                 }
+                input.Query.Filter.SwitchIds = query.Query.Filter.SwitchIds;
             }
-            else
-            {
-                clonedInput.Query.Filter = new RepeatedNumberFilter()
-                {
-                    CustomerIds = accessibleCustomers != null && accessibleCustomers.Count() > 0 ? accessibleCustomers.Select(x => x.AccountId).ToList() : null,
-                    SupplierIds = accessibleSuppliers != null && accessibleSuppliers.Count() > 0 ? accessibleSuppliers.Select(x => x.AccountId).ToList() : null,
-                };
-            }
+            var clonedInput = Utilities.CloneObject<DataRetrievalInput<RepeatedNumberQuery>>(input);
+            clonedInput.IsAPICall = true;
             if (clonedInput.DataRetrievalResultType == DataRetrievalResultType.Excel)
             {
                 return connectionSettings.Post<DataRetrievalInput<RepeatedNumberQuery>, RemoteExcelResult<RepeatedNumberDetail>>("/api/WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers", clonedInput);
