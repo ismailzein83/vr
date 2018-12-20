@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
-using Vanrise.Common;
-using Retail.RA.Entities;
 using System.Collections.Generic;
+using System.Linq;
+using Retail.RA.Entities;
+using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 
 namespace Retail.RA.Business
@@ -18,10 +18,10 @@ namespace Retail.RA.Business
             return cachedOperatorDeclarations;
         }
 
-        public IEnumerable<IcxVoiceDeclarationService> GetVoiceDeclarationServices(List<PeriodDefinition> periodDefinitions, TrafficDirection trafficDirection)
+        public IEnumerable<IntlVoiceDeclarationService> GetVoiceDeclarationServices(List<PeriodDefinition> periodDefinitions, TrafficDirection trafficDirection)
         {
-            List<IcxVoiceDeclarationService> operatorDeclarations = new List<IcxVoiceDeclarationService>();
-            Dictionary<int, List<IcxVoiceDeclarationService>> operatorDeclarationByPeriodId =
+            List<IntlVoiceDeclarationService> operatorDeclarations = new List<IntlVoiceDeclarationService>();
+            Dictionary<int, List<IntlVoiceDeclarationService>> operatorDeclarationByPeriodId =
                 trafficDirection == TrafficDirection.IN
                     ? GetCachedInVoiceDeclaration()
                     : GetCachedOutVoiceDeclaration();
@@ -34,23 +34,43 @@ namespace Retail.RA.Business
             return operatorDeclarations.OrderBy(item => item.OperatorId).ThenBy(item => item.PeriodDefinition.FromDate);
         }
 
+        public IEnumerable<IntlVoiceDeclarationService> GetVoiceDeclarationServices(List<PeriodDefinition> periodDefinitions, TrafficDirection trafficDirection, IEnumerable<long> filteredOperatorIds)
+        {
+            List<IntlVoiceDeclarationService> operatorDeclarations = new List<IntlVoiceDeclarationService>();
+            Dictionary<int, List<IntlVoiceDeclarationService>> operatorDeclarationByPeriodId =
+                trafficDirection == TrafficDirection.IN
+                    ? GetCachedInVoiceDeclaration()
+                    : GetCachedOutVoiceDeclaration();
+
+            foreach (var periodDefinition in periodDefinitions)
+            {
+                if (operatorDeclarationByPeriodId.TryGetValue(periodDefinition.PeriodDefinitionId, out var operatorDeclaration))
+                {
+                    var filteredOperatorDeclaration = operatorDeclaration.FindAllRecords(item => filteredOperatorIds.Contains(item.OperatorId));
+                    if (filteredOperatorDeclaration != null && filteredOperatorDeclaration.Any())
+                        operatorDeclarations.AddRange(filteredOperatorDeclaration);
+                }
+            }
+            return operatorDeclarations.OrderBy(item => item.OperatorId).ThenBy(item => item.PeriodDefinition.FromDate);
+        }
+
         #region Private Methhods
-        private Dictionary<int, List<IcxVoiceDeclarationService>> GetCachedOutVoiceDeclaration()
+        private Dictionary<int, List<IntlVoiceDeclarationService>> GetCachedOutVoiceDeclaration()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedOutVoiceDeclaration", BeDefinitionId,
                 () =>
                 {
                     List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
-                    Dictionary<int, List<IcxVoiceDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IcxVoiceDeclarationService>>();
+                    Dictionary<int, List<IntlVoiceDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlVoiceDeclarationService>>();
                     foreach (var operatorDeclaration in cachedOperatorDeclarations)
                     {
                         foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
                         {
                             if (operatorDeclarationService.Settings is Voice voiceDeclarationServiceSettings && voiceDeclarationServiceSettings.TrafficDirection == TrafficDirection.OUT)
                             {
-                                List<IcxVoiceDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
-                                operatorDeclarations.Add(new IcxVoiceDeclarationService
+                                List<IntlVoiceDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
+                                operatorDeclarations.Add(new IntlVoiceDeclarationService
                                 {
                                     ID = operatorDeclaration.ID,
                                     OperatorId = operatorDeclaration.OperatorId,
@@ -64,22 +84,22 @@ namespace Retail.RA.Business
                     return operatorDeclarationByPeriod;
                 });
         }
-        private Dictionary<int, List<IcxVoiceDeclarationService>> GetCachedInVoiceDeclaration()
+        private Dictionary<int, List<IntlVoiceDeclarationService>> GetCachedInVoiceDeclaration()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedInVoiceDeclaration", BeDefinitionId,
                 () =>
                 {
                     List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
-                    Dictionary<int, List<IcxVoiceDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IcxVoiceDeclarationService>>();
+                    Dictionary<int, List<IntlVoiceDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlVoiceDeclarationService>>();
                     foreach (var operatorDeclaration in cachedOperatorDeclarations)
                     {
                         foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
                         {
                             if (operatorDeclarationService.Settings is Voice voiceDeclarationServiceSettings && voiceDeclarationServiceSettings.TrafficDirection == TrafficDirection.IN)
                             {
-                                List<IcxVoiceDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
-                                operatorDeclarations.Add(new IcxVoiceDeclarationService
+                                List<IntlVoiceDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
+                                operatorDeclarations.Add(new IntlVoiceDeclarationService
                                 {
                                     ID = operatorDeclaration.ID,
                                     OperatorId = operatorDeclaration.OperatorId,
