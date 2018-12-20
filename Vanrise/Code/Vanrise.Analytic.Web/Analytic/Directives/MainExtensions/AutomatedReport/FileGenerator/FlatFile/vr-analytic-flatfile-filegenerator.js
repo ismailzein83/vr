@@ -32,7 +32,6 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
         var gridAPI;
 
         var queries;
-        var isEditMode;
 
         var allFields;
 
@@ -47,6 +46,8 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
 
             $scope.scopeModel.fileExtension = "csv";
             $scope.scopeModel.delimiter = ",";
+
+            $scope.scopeModel.isQuerySelected = false;
 
             $scope.scopeModel.onQueryNameSelectorReady = function (api) {
                 queryNameSelectorAPI = api;
@@ -97,6 +98,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                 else {
                     $scope.scopeModel.fields.length = 0;
                     $scope.scopeModel.listNames.length = 0;
+                    $scope.scopeModel.isQuerySelected = false;
                 }
             };
 
@@ -162,6 +164,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                                     });
                                 }
                                 queryNameSelectorAPI.selectIfSingleItem();
+                                $scope.scopeModel.isQuerySelected = true;
                                 queryArrayPromise.resolve();
                             }
                             else {
@@ -293,6 +296,7 @@ function (UtilsService, VRAnalytic_AdvancedExcelFileGeneratorService, VRNotifica
                     });
                     queryNameSelectorReadyDeferred.promise.then(function() {
                         queryNameSelectorAPI.selectIfSingleItem();
+                        $scope.scopeModel.isQuerySelected = true;
                     });
                 }
                 queries = newQueries;

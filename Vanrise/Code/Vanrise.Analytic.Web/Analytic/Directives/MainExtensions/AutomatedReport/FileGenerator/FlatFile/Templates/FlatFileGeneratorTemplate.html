@@ -74,7 +74,7 @@
             </vr-row>
             <vr-row>
                 <vr-columns colnum="5">
-                    <a href="" ng-click="scopeModel.addAllFields()" ng-show="scopeModel.fields.length==0 && scopeModel.querySelected!=undefined">Add all fields</a>
+                    <a href="" ng-click="scopeModel.addAllFields()" ng-show="scopeModel.fields.length==0 && (scopeModel.isQuerySelected || scopeModel.querySelected!=undefined)">Add all fields</a>
                 </vr-columns>
             </vr-row>
         </div>
