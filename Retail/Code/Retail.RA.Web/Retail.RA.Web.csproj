@@ -86,11 +86,13 @@
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\retail-ra-operatordeclarationservice-voice.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\Templates\OperatorDeclarationServiceSMSTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\Templates\OperatorDeclarationServiceVoiceTemplate.html" />
-    <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-operatordeclaration-beforesavehandler.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-icx-operatordeclaration-beforesavehandler.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-intl-operatordeclaration-beforesavehandler.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-operatordeclarationservices-customobjectsettings.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\retail-ra-operatordeclarationservice.js" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IcxOperatorDeclarationOnBeforeSaveHandler.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\OperationDirectionServicesTemplate.html" />
-    <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\OperatorDeclarationOnBeforeSaveHandler.html" />
+    <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\IntlOperatorDeclarationOnBeforeSaveHandler.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\Templates\OperatorDirectionServicesCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnAfterSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnBeforeSaveHandlerTemplate.html" />

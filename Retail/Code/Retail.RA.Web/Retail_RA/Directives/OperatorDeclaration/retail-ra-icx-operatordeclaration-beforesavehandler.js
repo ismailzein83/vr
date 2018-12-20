@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("retailRaOperatordeclarationBeforesavehandler", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("retailRaIcxOperatordeclarationBeforesavehandler", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -18,7 +18,7 @@ app.directive("retailRaOperatordeclarationBeforesavehandler", ["UtilsService", "
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/Templates/OperatorDeclarationOnBeforeSaveHandler.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/OperatorDeclaration/Templates/IcxOperatorDeclarationOnBeforeSaveHandler.html"
         };
 
         function Handler($scope, ctrl, $attrs) {
@@ -35,7 +35,7 @@ app.directive("retailRaOperatordeclarationBeforesavehandler", ["UtilsService", "
                 api.getData = function () {
 
                     return {
-                        $type: "Retail.RA.Business.RAInternationalOperatorDeclarationOnBeforeSaveHandler,Retail.RA.Business"
+                        $type: "Retail.RA.Business.RAInterconnectOperatorDeclarationOnBeforeSaveHandler,Retail.RA.Business"
                     };
                 };
 
