@@ -211,7 +211,6 @@
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ActionBPDefinition\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Runtime\ActionBPRuntime\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\Package\PackageExtendedSettings\" />
-    <Folder Include="Retail_BusinessEntity\Directives\Package\PackageRuntime\MainExtensions\PackageTypes\MainExtensions\Templates\" />
     <Folder Include="Retail_BusinessEntity\Directives\RecurringCharge\RecurringChargeDefinition\" />
     <Folder Include="Retail_BusinessEntity\Views\Account\ExtendedSettings\" />
   </ItemGroup>
