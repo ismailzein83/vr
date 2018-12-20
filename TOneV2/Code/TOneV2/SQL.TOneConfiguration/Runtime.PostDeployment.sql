@@ -69,8 +69,8 @@ as (select * from (values
 ('95ABA81F-01BB-40B5-8194-5F67718F6C04','Scheduler Service','Scheduler Service','#/view/Runtime/Views/SchedulerTaskManagement'								,'B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B',null,null,null,'{"$type":"Vanrise.Runtime.Business.SchedulerServiceViewSettings, Vanrise.Runtime.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
 ('C65ED28A-36D0-4047-BEC5-030D35B02308','My Scheduler Service','Scheduler Service','#/viewwithparams/Runtime/Views/SchedulerTaskManagement/{"myTasks":"1"}'	,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,null,null,'{"$type":"Vanrise.Runtime.Business.UserSchedulerServiceViewSettings, Vanrise.Runtime.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',125),
 
-('0FBE2511-A7C6-441F-BEA7-9FA5CADADF96','Runtime Node Configurations','Runtime Node Configurations','#/view/Runtime/Views/Runtime/RuntimeNodeConfigurationManagement'	,'EEA077E8-CE38-4E87-89ED-34612D47A998','VR_Runtime/RuntimeNodeConfiguration/GetFilteredRuntimeNodesConfigurations',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
-('CFEF119F-5527-4675-A3C9-0FF2C44E6C73','Runtime Nodes','Runtime Nodes','#/view/Runtime/Views/Runtime/RuntimeNodeManagement'											,'EEA077E8-CE38-4E87-89ED-34612D47A998','VR_Runtime/RuntimeNode/GetAllNodes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10)
+('0FBE2511-A7C6-441F-BEA7-9FA5CADADF96','Nodes Configuration','Runtime Nodes Configuration','#/view/Runtime/Views/Runtime/RuntimeNodeConfigurationManagement'	,'EEA077E8-CE38-4E87-89ED-34612D47A998','VR_Runtime/RuntimeNodeConfiguration/GetFilteredRuntimeNodesConfigurations',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
+('CFEF119F-5527-4675-A3C9-0FF2C44E6C73','Nodes','Runtime Nodes','#/view/Runtime/Views/Runtime/RuntimeNodeManagement'											,'EEA077E8-CE38-4E87-89ED-34612D47A998','VR_Runtime/RuntimeNode/GetAllNodes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
