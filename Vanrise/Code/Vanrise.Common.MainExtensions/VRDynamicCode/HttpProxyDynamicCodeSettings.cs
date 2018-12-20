@@ -177,15 +177,29 @@ namespace Vanrise.Common.MainExtensions.VRDynamicCode
                 functionBuilder.Replace("#RETURN#", resultBuilder.ToString());
                 if (ResponseLogic != null)
                 {
-                    StringBuilder reponseHandlerBuilder = new StringBuilder(@"#RETURNTYPE# GetResponseHandler_#METHODNAME#(Vanrise.Common.Business.VRHttpResponse response){
+                    StringBuilder reponseHandlerBuilder = new StringBuilder(@"#RETURNTYPE# GetResponseHandler_#METHODNAME#(Vanrise.Common.Business.VRHttpResponse response #PARAMETERS#){
                     #RESPONSEHANDLERLOGIC#
                     }");
+                    if (methodParametersBuilder.Length > 0)
+                    {
+                        reponseHandlerBuilder.Replace("#PARAMETERS#", string.Concat(",", methodParametersBuilder.ToString()));
+                    }
+                    else
+                    {
+                        reponseHandlerBuilder.Replace("#PARAMETERS#", "");
+                    }
                     reponseHandlerBuilder.Replace("#RETURNTYPE#", ReturnType);
                     reponseHandlerBuilder.Replace("#METHODNAME#", MethodName);
                     reponseHandlerBuilder.Replace("#RESPONSEHANDLERLOGIC#", this.ResponseLogic);
                     functionBuilder.Replace("#BUILDRESPONSEHANDLER#", reponseHandlerBuilder.ToString());
-                    functionBuilder.Replace("#RESULTVALUE#", string.Format("result = GetResponseHandler_{0}(response);", MethodName));
-
+                    if (bodyParameterNamesBuilder.Length > 0)
+                    {
+                        functionBuilder.Replace("#RESULTVALUE#", string.Format("result = GetResponseHandler_{0}(response, {1});", MethodName, bodyParameterNamesBuilder.ToString()));
+                    }
+                    else
+                    {
+                        functionBuilder.Replace("#RESULTVALUE#", string.Format("result = GetResponseHandler_{0}(response);", MethodName));
+                    }
                 }
                 else
                 {
