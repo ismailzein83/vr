@@ -237,7 +237,6 @@
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\vr-genericdata-datarecordtype-compositerecordconditiondefinition.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\Templates\CompositeRecordConditionGroupTemplate.html" />
-    <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Runtime\Templates\CompositeRecordConditionTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\Templates\RecordFilterCompositeConditionTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Runtime\vr-genericdata-compositerecordconditiongroup.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Runtime\vr-genericdata-compositerecordcondition.js" />
