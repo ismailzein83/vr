@@ -35,7 +35,7 @@ namespace Vanrise.Invoice.Business
                     var invoiceBulkAction = bulkActionTypes.GetRecord(bulkAction.InvoiceBulkActionId);
                     var bulkActionCheckAccessContext = new AutomaticInvoiceActionSettingsCheckAccessContext
                     {
-                        UserId = ContextFactory.GetContext().GetLoggedInUserId(),
+                        UserId = context.IntanceToRun.InitiatorUserId,
                         InvoiceBulkAction = invoiceBulkAction
                     };
                     if (!invoiceBulkAction.Settings.DoesUserHaveAccess(bulkActionCheckAccessContext))
