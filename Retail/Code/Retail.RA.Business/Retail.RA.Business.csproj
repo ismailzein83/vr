@@ -89,6 +89,7 @@
     <Compile Include="Period Definition\RAPeriodDefinitionOnBeforeSaveHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OperatorDeclaration\RAInterconnectOperatorDeclarationOnBeforeSaveHandler.cs" />
+    <Compile Include="Reconciliation\Reconciliation.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxMappingStep.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxRule.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxRuleContext.cs" />
