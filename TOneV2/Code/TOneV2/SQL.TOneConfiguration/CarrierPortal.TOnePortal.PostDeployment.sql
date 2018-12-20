@@ -344,7 +344,7 @@ set nocount on;
 ;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(0, CONVERT(varchar, @TOneAccountID),1,'b4158657-230e-40bf-b88c-f2b2ca8835de','[{"Name":"Add","Value":1},{"Name":"Reset Password","Value":1}]')
+(0, CONVERT(varchar, @TOneAccountID),1,'b4158657-230e-40bf-b88c-f2b2ca8835de','[{"Name":"Add","Value":1},{"Name":"Reset Password","Value":1},{"Name":"View","Value":1},{"Name":"Edit","Value":1}]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))
 merge	[sec].[Permission] as t
