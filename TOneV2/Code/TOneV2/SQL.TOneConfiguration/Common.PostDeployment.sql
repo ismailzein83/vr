@@ -423,7 +423,7 @@ as (select * from (values
 ('4EB2746B-5368-4D05-B6D3-EFD075BE2DCF','Custom Code ',' Custom Code ','VRCommon_DynamicAPIMethod','{"Editor":"vr-common-dynamicapi-customcode-method"}'),
 ('BDD289DF-573C-44A1-9A95-D0DE2ED9DD71','Custom Code','Custom Code','VRCommon_DynamicCode','{"Editor":"vr-common-dynamiccode-customcode"}'),
 ('AAC62543-CF85-4F0D-BB42-121C7B699816','VRCommon_CallMethodDynamicAPI','Call Method','VRCommon_DynamicAPIMethod','{"Editor":"vr-common-dynamicapi-callmethod"}'),
-('5F14D26D-7B43-41BE-9A3A-6BA0A7EB8316','VRCommon_HttpProxyDynamicCodeSettings','Http Proxy','VRCommon_DynamicCode','{"Editor":"vr-common-dynamiccode-httpproxy"}')
+('5F14D26D-7B43-41BE-9A3A-6BA0A7EB8316','VRCommon_HttpProxyDynamicCodeSettings','Http Service Proxy','VRCommon_DynamicCode','{"Editor":"vr-common-dynamiccode-httpproxy"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
