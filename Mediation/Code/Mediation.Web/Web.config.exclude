@@ -73,7 +73,7 @@
     <add key="BCPDonotDeleteFiles" value="false"/>
     <add key="BusinessProcess_ActivityEventsTracking" value="false"/>
 
-    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,Mediation_CDR_DBConnString"/>
+    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,Mediation_CDR_DBConnString,LogDBConnString"/>
   </appSettings>
   <system.web>
     <compilation debug="true" targetFramework="4.7.2" />
