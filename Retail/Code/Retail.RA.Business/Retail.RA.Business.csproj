@@ -67,6 +67,12 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\INTLReconcilationObjectDataProviderSettings.cs" />
@@ -81,7 +87,22 @@
     <Compile Include="Period Definition\RAPeriodDefinitionOnAfterSaveHandler.cs" />
     <Compile Include="Period Definition\RAPeriodDefinitionOnBeforeSaveHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaxRules\SMS\SMSTaxMappingStep.cs" />
+    <Compile Include="TaxRules\SMS\SMSTaxRule.cs" />
+    <Compile Include="TaxRules\SMS\SMSTaxRuleContext.cs" />
+    <Compile Include="TaxRules\SMS\SMSTaxRuleDeefinitionSettings.cs" />
+    <Compile Include="TaxRules\SMS\SMSTaxRuleManager.cs" />
+    <Compile Include="TaxRules\SMS\SMSTaxRuleSettings.cs" />
+    <Compile Include="TaxRules\SMS\SMSTaxRuleSettingsConfig.cs" />
+    <Compile Include="TaxRules\TaxRuleManager.cs" />
+    <Compile Include="TaxRules\Voice\VoiceTaxMappingStep.cs" />
+    <Compile Include="TaxRules\Voice\VoiceTaxRule.cs" />
+    <Compile Include="TaxRules\Voice\VoiceTaxRuleDefinitionSettings.cs" />
     <Compile Include="SpecialNumbers\SpecialNumbersManager.cs" />
+    <Compile Include="TaxRules\Voice\VoiceTaxRuleContext.cs" />
+    <Compile Include="TaxRules\Voice\VoiceTaxRuleManager.cs" />
+    <Compile Include="TaxRules\Voice\VoiceTaxRuleSettings.cs" />
+    <Compile Include="TaxRules\Voice\VoiceTaxRuleSettingsConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.RA.Entities\Retail.RA.Entities.csproj">

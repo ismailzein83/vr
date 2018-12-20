@@ -96,16 +96,42 @@
     <Content Include="Retail_RA\Directives\PeriodDefinition\PeriodDefinitionOnBeforeSaveHandlerTemplate.html" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\retail-ra-perioddefinition-aftersavehandler.js" />
     <Content Include="Retail_RA\Directives\PeriodDefinition\retail-ra-perioddefinition-beforesavehandler.js" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\ra-genericruledefinitionsettings-voicetax.js" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\ra-rules-voicetaxrule-overall.js" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\ra-rules-voicetaxrule-perminute.js" />
+    <Content Include="Retail_RA\Directives\TaxRules\ra-rules-taxrulesettings-voice.js" />
+    <Content Include="Retail_RA\Directives\MappingSteps\SMSTaxRule\ra-datatransformation-smstaxrulestep-preview.js" />
+    <Content Include="Retail_RA\Directives\MappingSteps\SMSTaxRule\ra-datatransformation-smstaxrulestep.js" />
+    <Content Include="Retail_RA\Directives\MappingSteps\SMSTaxRule\Templates\SMSTaxRuleStepPreviewTemplate.html" />
+    <Content Include="Retail_RA\Directives\MappingSteps\SMSTaxRule\Templates\SMSTaxRuleStepTemplate.html" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\SMS\ra-genericruledefinitionsettings-smstax.js" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\SMS\ra-rules-smstaxrule-overall.js" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\SMS\ra-rules-smstaxrule-persms.js" />
+    <Content Include="Retail_RA\Directives\TaxRules\ra-rules-taxrulesettings-sms.js" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\SMS\Templates\EmptyDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\SMS\Templates\SMSTaxRuleOverallTemplate.html" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\SMS\Templates\SMSTaxRulePerSMSTemplate.html" />
+    <Content Include="Retail_RA\Directives\TaxRules\Templates\SMSTaxRuleSettings.html" />
+    <Content Include="Retail_RA\Directives\MappingSteps\VoiceTaxRule\ra-datatransformation-voicetaxrulestep-preview.js" />
+    <Content Include="Retail_RA\Directives\MappingSteps\VoiceTaxRule\ra-datatransformation-voicetaxrulestep.js" />
+    <Content Include="Retail_RA\Directives\MappingSteps\VoiceTaxRule\Templates\VoiceTaxRuleStepPreviewTemplate.html" />
+    <Content Include="Retail_RA\Directives\MappingSteps\VoiceTaxRule\Templates\VoiceTaxRuleStepTemplate.html" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\Templates\EmptyDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\Templates\TaxRuleOverallTemplate.html" />
+    <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\Templates\TaxRulePerMinuteTemplate.html" />
+    <Content Include="Retail_RA\Directives\TaxRules\Templates\VoiceTaxRuleSettings.html" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\retail-ra-specialnumbers-customobjectsettings.js" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\retail-ra-specialnumbers.js" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\Template\SpecialNumbersCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\Template\SpecialNumbersTemplate.html" />
     <Content Include="Retail_RA\Services\APIServices\OperatorDirectionServicesAPIService.js" />
+    <Content Include="Retail_RA\Services\APIServices\TaxRuleAPIService.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controller\RAOperatorDirectionServicesController.cs" />
+    <Compile Include="Controller\RaRulesController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
