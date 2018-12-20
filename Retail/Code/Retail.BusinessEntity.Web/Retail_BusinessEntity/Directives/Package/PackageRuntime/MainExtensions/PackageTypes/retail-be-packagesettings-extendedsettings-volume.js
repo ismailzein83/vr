@@ -81,6 +81,8 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    $scope.scopeModel.price = undefined;
+                    $scope.scopeModel.reducePrice = false;
                     $scope.scopeModel.volumePackageItems.length = 0;
 
                     if (payload != undefined) {

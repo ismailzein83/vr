@@ -56,10 +56,11 @@ app.directive('retailBePackageusagevolumeRecurringperiod', ['UtilsService', 'VRU
 
             function defineAPI() {
                 var api = {};
-                var packageUsageVolumeRecurringPeriod;
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
+
+                    var packageUsageVolumeRecurringPeriod;
 
                     if (payload != undefined) {
                         packageUsageVolumeRecurringPeriod = payload.packageUsageVolumeRecurringPeriod;
