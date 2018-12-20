@@ -62,7 +62,7 @@
     <add key="InvoiceDBConnStringKey"                           value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
 
-    <add key="TestCallAnalysis_DBConnStringKey"                 value="ConfigurationDBConnString"/>
+    <add key="TestCallAnalysis_DBConnStringKey"                 value="ConfigurationDBConnString,LogDBConnString"/>
     
     <add key="ExposedConnectionStringNames" value=""/>
   </appSettings>

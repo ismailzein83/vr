@@ -66,7 +66,7 @@
     <add key="VoucherDBConnStringKey"                        	  value="VoucherDBConnString"/>
     <add key="ISPDBConnStringKey" 								              value="ConfigurationDBConnString"/>
 
-    <add key="ExposedConnectionStringNames"                     value="ConfigurationDBConnString"/>
+    <add key="ExposedConnectionStringNames"                     value="ConfigurationDBConnString,LogDBConnString"/>
   </appSettings>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">

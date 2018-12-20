@@ -72,7 +72,7 @@
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
     <add key="ISPDBConnStringKey" 								              value="ConfigurationDBConnString"/>
 
-    <add key="ExposedConnectionStringNames"                     value="ConfigurationDBConnString"/>
+    <add key="ExposedConnectionStringNames"                     value="ConfigurationDBConnString,LogDBConnString"/>
   </appSettings>
 
   <system.web>

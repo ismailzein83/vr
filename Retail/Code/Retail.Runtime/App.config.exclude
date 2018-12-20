@@ -72,7 +72,7 @@
     <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>
     <add key="VoucherDBConnStringKey"                         value="VoucherDBConnString"/>
 
-    <add key="ExposedConnectionStringNames" value="RetailCDRDBConnString,RetailAnalyticsDBConnString,ConfigurationDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="RetailCDRDBConnString,RetailAnalyticsDBConnString,ConfigurationDBConnString,LogDBConnString"/>
   </appSettings>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
