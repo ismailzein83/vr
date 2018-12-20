@@ -112,7 +112,11 @@ as (select * from (values
 ('919798ED-8B0D-40CD-A011-D90C3B691C88','CDRCorrelationDefinitionSettings','CDR Correlation','VR_Common_VRComponentType','{"Editor":"vr-genericdata-cdrcorrelationdefinition-settings"}'),
 ('6BC1FB84-F28D-476A-81FA-A11FC4E5CC06','Delete_Generic','Delete Generic','VR_GenericData_GenericBEActionDefinitionSettings','{"Editor":"vr-genericdata-genericbe-deletegenericaction-definition"}'),
 
-('6B1A593A-E5E5-4CA4-834A-9A20A1FD16BA','VR_GenericData_GenericRuleDefinitionCriteria','Rule Tree Criteria','VR_GenericData_CriteriaDefinition','{"GridEditor":"vr-genericdata-genericrule-grid-ruletreecriteria","SearchEditor":"vr-genericdata-genericrulesearch-ruletreecriteria","DefinitionEditor":"vr-genericdata-genericruledefinition-ruletreecriteria"}')
+('6B1A593A-E5E5-4CA4-834A-9A20A1FD16BA','VR_GenericData_GenericRuleDefinitionCriteria','Rule Tree Criteria','VR_GenericData_CriteriaDefinition','{"GridEditor":"vr-genericdata-genericrule-grid-ruletreecriteria","SearchEditor":"vr-genericdata-genericrulesearch-ruletreecriteria","DefinitionEditor":"vr-genericdata-genericruledefinition-ruletreecriteria"}'),
+
+('25127A16-D2EB-47A1-97C0-FFA45C2C31A0','DataRecordTypeCompositeRecordConditionDefinition','Data Record Type','VR_GenericData_CompositeRecordConditionDefinitionSettingConfig','{"Editor":"vr-genericdata-datarecordtype-compositerecordconditiondefinition"}'),
+('F16BBC6F-F471-4601-B5C9-7C95B88B3ECB','RecordFilterCompositeCondition','Record Filter','VR_GenericData_CompositeRecordConditionConfig','{"Editor":"vr-genericdata-recordfiltercompositecondition"}'),
+('9ADCEA46-87C2-4747-8B88-20796AA99CA0','CompositeRecordConditionGroup','Condition Group','VR_GenericData_CompositeRecordConditionConfig','{"Editor":"vr-genericdata-compositerecordconditiongroup"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\	
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t

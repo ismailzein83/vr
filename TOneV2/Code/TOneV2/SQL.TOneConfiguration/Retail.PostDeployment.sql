@@ -99,8 +99,11 @@ as (select * from (values
 ('44F7D357-CD66-4397-A159-7A597A8C1164','ProductDefinition','Product Definition','VR_Common_VRComponentType'												,'{"Editor":"retail-be-productdefinition-settings"}'),
 ('CE9260A7-732F-4573-BEF8-9A3F8FC7BCC6','PackageDefinition','Package Definition','VR_Common_VRComponentType'												,'{"Editor":"retail-be-packagedefinition-settings"}'),
 
-('76A889A4-9F93-4327-91C4-EE2F1EF2026E','Pricing','Pricing','Retail_BE_PackageDefinition'																				,'{"DefinitionEditor":"retail-be-packagedefinition-extendedsettings-pricing"}'),
-('E326482A-9AB5-4715-848F-11CAF4940040','InvoiceRecurCharge','Invoice RecurCharge','Retail_BE_PackageDefinition'														,'{"DefinitionEditor":"retail-be-packagedefinition-extendedsettings-recurcharge"}'),
+('76A889A4-9F93-4327-91C4-EE2F1EF2026E','Pricing','Pricing','Retail_BE_PackageDefinition'								,'{"DefinitionEditor":"retail-be-packagedefinition-extendedsettings-pricing"}'),
+('E326482A-9AB5-4715-848F-11CAF4940040','InvoiceRecurCharge','Invoice RecurCharge','Retail_BE_PackageDefinition'		,'{"DefinitionEditor":"retail-be-packagedefinition-extendedsettings-recurcharge"}'),
+('959D230D-3FEA-44FE-9231-6698642F48CB','Volume','Volume','Retail_BE_PackageDefinition'									,'{"DefinitionEditor":"retail-be-packagedefinition-extendedsettings-volume"}'),
+
+('2CE2B9F6-F41D-4CFF-A138-12FF1A5A3A2F','MonthlyPackageUsageVolumeRecurringPeriod','Monthly','Retail_BE_PackageUsageVolumeRecurringPeriodConfig'	,'{"Editor":"retail-be-packageusagevolume-recurringperiod-monthly"}'),
 
 ('82B558C6-CEF2-4318-8819-A8495097E770','VR_GenericData_BEParentChildRelationDefinition','Parent-Child Relation Definition','VR_Common_VRComponentType'		,'{"Editor":"vr-genericdata-beparentchildrelationdefinition-settings"}'),
 
@@ -123,7 +126,6 @@ as (select * from (values
 ('52525041-7A8B-4AE1-9599-A3F34A87CB38','Retail Account Balance','Retail Account Balance','VR_AccountBalance_NotificationTypeExtendedSettingsConfig'							,'{"Editor":"retail-be-accountbalancenotificationtype-settings"}'),
 ('F21A72DC-48BF-43F4-A2A7-97E72F75B391','Operator Setting','Operator Setting','Retail_BE_AccountPartDefinition'																	,'{"DefinitionEditor":"retail-be-accounttype-part-definition-operator","RuntimeEditor":"retail-be-accounttype-part-runtime-operator"}'),
 ('D879B75A-7F13-4543-8EDE-961327CB3E33','Inv To Acc Relation','Inv To Acc Relation','VR_InvToAccBalanceRelation_RelationDefinitionExtendedSettings','{"Editor":"retail-invtoaccbalancerelation-definition-accountextendedsettings"}'),
-('B78610BA-4CA2-4E60-8143-73CEF6E99D14','Retail_BE_PackageExtendedSettingsConfig_PricingPackageSettings','Pricing Package','Retail_BE_PackageExtendedSettingsConfig','{"Editor":"retail-be-pricingpackagesettings-management"}'),
 ('6A33AFF5-C8D0-41BA-906D-3F9CBB8A7D3E','Financial Account Balance','Financial Account Balance','VR_AccountBalance_AccountTypeExtendedSettingsConfig','{"Editor":"retail-be-extendedsettings-financialaccountbalance"}'),
 ('3ED8A0C3-99E7-486A-A560-5789BA1DEAEE','Financial Account Definition','Financial Account Definition','VR_Common_VRComponentType','{"Editor":"retail-be-financialaccountdefinition-settings"}'),
 ('1F7F8131-E49E-4A1D-802A-0432BA92EBAB','PeriodicRecurringCharge','Periodic Recurring Charge','Retail_BE_RecurringChargeEvaluator','{"DefinitionEditor":"retail-be-packagedefinition-recurcharge-evaluator-periodic"}'),
