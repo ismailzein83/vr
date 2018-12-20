@@ -1,7 +1,6 @@
 ﻿using System;
 using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
-using Vanrise.Entities;
 
 namespace Vanrise.DataParser.MainExtensions.BinaryParsers.AlcatelParsers.FieldParsers
 {
@@ -26,12 +25,24 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.AlcatelParsers.FieldPa
             string result;
 
             int indexOfFirstFInReserved = reserved.ToLower().IndexOf('f');
-            if (indexOfFirstFInReserved == -1)
+            if (indexOfFirstFInReserved < 0)
+            {
                 result = string.Concat(number, reserved);
+            }
+            else if (indexOfFirstFInReserved == 0)
+            {
+                int indexOfFirstFInNumber = number.ToLower().IndexOf('f');
+                if (indexOfFirstFInNumber < 0)
+                    result = number;
+                else
+                    result = number.Substring(0, indexOfFirstFInNumber);
+            }
             else
+            {
                 result = string.Concat(number, reserved.Substring(0, indexOfFirstFInReserved));
+            }
 
-            if (result[0] == '0' && result[1] != '0')
+            if (result.Length >= 2 && result[0] == '0' && result[1] != '0')
                 result = result.Substring(1);
 
             context.Record.SetFieldValue(this.FieldName, result);
