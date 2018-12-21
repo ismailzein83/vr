@@ -21,6 +21,8 @@ namespace Retail.RA.Business
             var from = context.GenericBusinessEntity.FieldValues.GetRecord("From");
             if (from == null)
                 throw new NullReferenceException("from");
+            var id = context.GenericBusinessEntity.FieldValues.GetRecord("ID");
+            int? periodDefinitionId =  (int?)id;
             var to = context.GenericBusinessEntity.FieldValues.GetRecord("To");
             if (to == null)
                 throw new NullReferenceException("to");
@@ -33,7 +35,7 @@ namespace Retail.RA.Business
                 currentName = name;
             }
 
-            if (periodDefinitionManager.IsPeriodOverlapping((DateTime)from, (DateTime)to))
+            if (periodDefinitionManager.IsPeriodOverlapping((DateTime)from, (DateTime)to, periodDefinitionId))
             {
                 context.OutputResult.Result = false;
                 context.OutputResult.Messages.Add(string.Format("Period definition '{0}' is overlapping with other periods", name));

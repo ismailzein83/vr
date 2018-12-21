@@ -91,7 +91,7 @@ namespace Retail.RA.Business
                 return periodDefinitionById;
             });
         }
-        public bool IsPeriodOverlapping(DateTime bed, DateTime eed)
+        public bool IsPeriodOverlapping(DateTime bed, DateTime eed , int? periodDefinitionId)
         {
             var cacehdPeriodDefintions = GetCachedPeriodDefinitions();
             List<PeriodDefinition> overlappingPeriodDefinitions = new List<PeriodDefinition>();
@@ -101,7 +101,7 @@ namespace Retail.RA.Business
                 periodDefinitions.ThrowIfNull("periodDefinitions");
                 foreach (var periodDefinition in periodDefinitions)
                 {
-                    if (periodDefinition.ToDate > bed && eed > periodDefinition.FromDate && periodDefinition.FromDate != periodDefinition.ToDate)
+                    if (periodDefinition.ToDate > bed && eed > periodDefinition.FromDate && periodDefinition.FromDate != periodDefinition.ToDate && (periodDefinitionId == null || periodDefinitionId.Value != periodDefinition.PeriodDefinitionId))
                         overlappingPeriodDefinitions.Add(periodDefinition);
                 }
             }
