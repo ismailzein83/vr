@@ -20,7 +20,7 @@ namespace Vanrise.GenericData.Data.RDB
         const string COL_BED = "BED";
         const string COL_EED = "EED";
         const string COL_CreatedTime = "CreatedTime";
-
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static BEParentChildRelationDataManager()
         {
@@ -32,13 +32,15 @@ namespace Vanrise.GenericData.Data.RDB
             columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "genericdata",
                 DBTableName = "BEParentChildRelation",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
 
@@ -73,14 +75,15 @@ namespace Vanrise.GenericData.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_RelationDefinitionID, COL_ParentBEID, COL_ChildBEID, COL_BED, COL_EED);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Where().EqualsCondition(COL_RelationDefinitionID).Value(beParentChildRelationDefinitionId);
             return queryContext.GetItems<BEParentChildRelation>(BEParentChildRelationMapper);
         }
 
         public bool AreBEParentChildRelationUpdated(Guid beParentChildRelationDefinitionId, ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public bool Insert(BEParentChildRelation BEParentChildRelationItem, out long insertedId)
@@ -99,8 +102,17 @@ namespace Vanrise.GenericData.Data.RDB
             else
                 insertQuery.Column(COL_EED).Null();
 
-            insertedId = queryContext.ExecuteScalar().LongWithNullHandlingValue;
-            return insertedId != 0;
+            var nullableId = queryContext.ExecuteScalar().NullableLongValue;
+            if (nullableId.HasValue)
+            {
+                insertedId = nullableId.Value;
+                return true;
+            }
+            else
+            {
+                insertedId = -1;
+                return false;
+            }
         }
 
         public bool Update(BEParentChildRelation BEParentChildRelationItem)
