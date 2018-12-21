@@ -20,7 +20,7 @@ namespace Vanrise.GenericData.Data.RDB
         const string COL_Settings = "Settings";
         const string COL_State = "State";
         const string COL_CreatedTime = "CreatedTime";
-
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static DataRecordStorageDataManager()
         {
@@ -32,13 +32,15 @@ namespace Vanrise.GenericData.Data.RDB
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_State, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "genericdata",
                 DBTableName = "DataRecordStorage",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
         #endregion
@@ -80,13 +82,13 @@ namespace Vanrise.GenericData.Data.RDB
             insertQuery.Column(COL_DataRecordTypeID).Value(dataRecordStorage.DataRecordTypeId);
             insertQuery.Column(COL_DataStoreID).Value(dataRecordStorage.DataStoreId);
             insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordStorage.Settings));
-            insertQuery.Column(COL_CreatedTime).DateNow();
             return queryContext.ExecuteNonQuery() > 0;
         }
 
         public bool AreDataRecordStoragesUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public IEnumerable<DataRecordStorage> GetDataRecordStorages()
@@ -94,7 +96,7 @@ namespace Vanrise.GenericData.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_DataRecordTypeID, COL_DataStoreID, COL_Settings, COL_State);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
             return queryContext.GetItems<DataRecordStorage>(DataRecordStorageMapper);
         }
