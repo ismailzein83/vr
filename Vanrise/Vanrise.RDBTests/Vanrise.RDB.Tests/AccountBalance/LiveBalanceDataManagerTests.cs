@@ -405,10 +405,9 @@ namespace Vanrise.RDB.Tests.AccountBalance
             List<List<string>> accountIdsList = new List<List<string>> { new List<string>(), accountIds };
             List<string> signs = new List<string> { ">", ">=", "<", "<=" };
              List<Decimal> balances = new List<decimal> { 0, 200 };
-            List<string> orderBys = new List<string> { "", "ASC", "DESC" };
             List<DateTime?> effectiveDates = new List<DateTime?> { null, DateTime.Now};
 
-            UTUtilities.CallActionIteratively((accountIdList, sign, balance, orderBy, status,effectiveDate,  isEffectiveInFuture) =>
+            UTUtilities.CallActionIteratively((accountIdList, sign, balance, status,effectiveDate,  isEffectiveInFuture) =>
             {
                 var query = new AccountBalanceQuery
                 {
@@ -417,14 +416,13 @@ namespace Vanrise.RDB.Tests.AccountBalance
                     Sign = sign,
                     Top = 1000,
                     Balance = balance,
-                    OrderBy = orderBy,
                     Status = status,
                     EffectiveDate = effectiveDate,
                     IsEffectiveInFuture = isEffectiveInFuture
                 };
                 AssertAccountBalancesAreSimilar(_sqlDataManager.GetFilteredAccountBalances(query), _rdbDataManager.GetFilteredAccountBalances(query));
 
-            }, accountIdsList, signs,balances, orderBys, UTUtilities.GetEnumListForTesting<VRAccountStatus?>(), 
+            }, accountIdsList, signs,balances, UTUtilities.GetEnumListForTesting<VRAccountStatus?>(), 
             effectiveDates, UTUtilities.GetNullableBoolListForTesting());
         }
 

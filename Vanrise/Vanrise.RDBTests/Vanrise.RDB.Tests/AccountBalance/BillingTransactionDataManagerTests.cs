@@ -62,7 +62,7 @@ namespace Vanrise.RDB.Tests.AccountBalance
             transactionTimes = new List<DateTime> { DateTime.Now, DateTime.Today.AddDays(-10) };
             transactionTypeIds = new List<Guid> { Guid.NewGuid(), new Guid("AF7A2D82-1416-4833-8B6E-033474BC2D20"), Guid.NewGuid() };
             List<Decimal> amounts = new List<decimal> { 2.3M, 3.2M };
-            List<BillingTransactionSettings> settings = new List<BillingTransactionSettings> { null, new BillingTransactionSettings { Attachments = new GenericData.Entities.AttachmentFieldTypeEntityCollection { new GenericData.Entities.AttachmentFieldTypeEntity { FileId = 3 } } } };
+            List<BillingTransactionSettings> settings = new List<BillingTransactionSettings> { null, new BillingTransactionSettings { Attachments = new Vanrise.GenericData.Entities.AttachmentFieldTypeEntityCollection { new Vanrise.GenericData.Entities.AttachmentFieldTypeEntity { FileId = 3 } } } };
             List<string> notes = new List<string> { null, "fdsfds" };
             List<string> sourceIds = new List<string> { null, "fsdfwewewewew" };
 
