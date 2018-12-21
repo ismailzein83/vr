@@ -20,7 +20,19 @@ namespace Vanrise.Data.RDB
         {
             var expressionContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             string expression1String = this.Expression1.ToDBQuery(expressionContext);
-            string expression2String = this.Expression2.ToDBQuery(expressionContext);
+            RDBFixedTextExpression expression2AsFixedText = this.Expression2 as RDBFixedTextExpression;
+            bool isExpression2AFixedText;
+            string expression2String;
+            if (expression2AsFixedText != null)
+            {
+                expression2String = expression2AsFixedText.Value;
+                isExpression2AFixedText = true;
+            }
+            else
+            {
+                expression2String = this.Expression2.ToDBQuery(expressionContext);
+                isExpression2AFixedText = false;
+            }
             string compareOperator;
             switch (this.Operator)
             {
@@ -31,32 +43,57 @@ namespace Vanrise.Data.RDB
                 case RDBCompareConditionOperator.L: compareOperator = " < "; break;
                 case RDBCompareConditionOperator.LEq: compareOperator = " <= "; break;
                 case RDBCompareConditionOperator.StartWith: 
-                    compareOperator = " like ";
-                    expression2String = context.DataProvider.GetQueryConcatenatedStrings(expression2String, "'%'");
+                    compareOperator = " LIKE ";
+                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, false);
                     break;
                 case RDBCompareConditionOperator.EndWith:
-                    compareOperator = " like ";
-                    expression2String = context.DataProvider.GetQueryConcatenatedStrings("'%'", expression2String);
+                    compareOperator = " LIKE ";
+                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, false, true);
                     break;
                 case RDBCompareConditionOperator.Contains:
-                    compareOperator = " like ";
-                    expression2String = context.DataProvider.GetQueryConcatenatedStrings("'%'", expression2String, "'%'");
+                    compareOperator = " LIKE ";
+                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, true);
                     break;
                 case RDBCompareConditionOperator.NotStartWith: 
-                    compareOperator = " not like ";
-                    expression2String = context.DataProvider.GetQueryConcatenatedStrings(expression2String, "'%'");
+                    compareOperator = " NOT LIKE ";
+                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, false);
                     break;
                 case RDBCompareConditionOperator.NotEndWith:
-                    compareOperator = " not like ";
-                    expression2String = context.DataProvider.GetQueryConcatenatedStrings("'%'", expression2String);
+                    compareOperator = " NOT LIKE ";
+                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String,isExpression2AFixedText,  false, true);
                     break;
                 case RDBCompareConditionOperator.NotContains:
-                    compareOperator = " not like ";
-                    expression2String = context.DataProvider.GetQueryConcatenatedStrings("'%'", expression2String, "'%'");
+                    compareOperator = " NOT LIKE ";
+                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, true);
                     break;
                 default: throw new NotSupportedException(String.Format("Operator '{0}'", this.Operator.ToString()));
             }
             return String.Concat(expression1String, compareOperator, expression2String);
+        }
+
+        string GetQueryLikeExpressionString(BaseRDBDataProvider dataProvider, string expression, bool isExpressionAFixedText, bool startWith, bool endWith)
+        {
+            if (isExpressionAFixedText)
+            {
+                StringBuilder builder = new StringBuilder("'");
+                if (endWith)
+                    builder.Append('%');
+                builder.Append(expression);
+                if (startWith)
+                    builder.Append('%');
+                builder.Append("'");
+                return builder.ToString();
+            }
+            else
+            {
+                List<string> parts = new List<string>();
+                if (endWith)
+                    parts.Add("'%'");
+                parts.Add(expression);
+                if (startWith)
+                    parts.Add("'%'");
+                return dataProvider.GetQueryConcatenatedStrings(parts.ToArray());
+            }
         }
     }
 

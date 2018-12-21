@@ -113,7 +113,7 @@ namespace Vanrise.GenericData.Data.SQL
                 }
             }
 
-            return String.Format("({0})", builder);
+            return filterGroup.Filters.Count == 1 ? builder.ToString () : String.Format("({0})", builder);
         }
 
         private string BuildRecordFilter(EmptyRecordFilter emptyFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)

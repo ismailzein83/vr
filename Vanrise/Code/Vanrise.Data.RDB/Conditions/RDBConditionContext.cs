@@ -267,32 +267,32 @@ namespace Vanrise.Data.RDB
 
         public RDBExpressionContext ListCondition(RDBListConditionOperator oper, IEnumerable<string> values)
         {
-            return ListCondition(oper, values.Select<string, BaseRDBExpression>(itm => new RDBFixedTextExpression { Value = itm }).ToList());
+            return ListCondition(oper, values == null ? null : values.Select<string, BaseRDBExpression>(itm => new RDBFixedTextExpression { Value = itm }).ToList());
         }
 
         public RDBExpressionContext ListCondition(RDBListConditionOperator oper, IEnumerable<int> values)
         {
-            return ListCondition(oper, values.Select<int, BaseRDBExpression>(itm => new RDBFixedIntExpression { Value = itm }).ToList());
+            return ListCondition(oper, values == null ? null : values.Select<int, BaseRDBExpression>(itm => new RDBFixedIntExpression { Value = itm }).ToList());
         }
 
         public RDBExpressionContext ListCondition(RDBListConditionOperator oper, IEnumerable<long> values)
         {
-            return ListCondition(oper, values.Select<long, BaseRDBExpression>(itm => new RDBFixedLongExpression { Value = itm }).ToList());
+            return ListCondition(oper, values == null ? null : values.Select<long, BaseRDBExpression>(itm => new RDBFixedLongExpression { Value = itm }).ToList());
         }
 
         public RDBExpressionContext ListCondition(RDBListConditionOperator oper, IEnumerable<decimal> values)
         {
-            return ListCondition(oper, values.Select<decimal, BaseRDBExpression>(itm => new RDBFixedDecimalExpression { Value = itm }).ToList());
+            return ListCondition(oper, values == null ? null : values.Select<decimal, BaseRDBExpression>(itm => new RDBFixedDecimalExpression { Value = itm }).ToList());
         }
 
         public RDBExpressionContext ListCondition(RDBListConditionOperator oper, IEnumerable<DateTime> values)
         {
-            return ListCondition(oper, values.Select<DateTime, BaseRDBExpression>(itm => new RDBFixedDateTimeExpression { Value = itm }).ToList());
+            return ListCondition(oper, values == null ? null : values.Select<DateTime, BaseRDBExpression>(itm => new RDBFixedDateTimeExpression { Value = itm }).ToList());
         }
 
         public RDBExpressionContext ListCondition(RDBListConditionOperator oper, IEnumerable<Guid> values)
         {
-            return ListCondition(oper, values.Select<Guid, BaseRDBExpression>(itm => new RDBFixedGuidExpression { Value = itm }).ToList());
+            return ListCondition(oper, values == null ? null : values.Select<Guid, BaseRDBExpression>(itm => new RDBFixedGuidExpression { Value = itm }).ToList());
         }
         
         public RDBExpressionContext ListCondition(RDBListConditionOperator oper, IEnumerable<BaseRDBExpression> values)

@@ -161,9 +161,34 @@ namespace Vanrise.GenericData.Data.RDB
             compareConditionContext.Expression2().Value(filter.Value);
         }
 
+        private void RecordFilterCondition2(RDBConditionContext conditionContext, DateTimeRecordFilter dateTimeFilter)
+        {
+            //Action<string, RDBExpressionContext> setDateFieldExpression = (fldName, expContext) =>
+            //{
+            //    var comparisonPart = dateTimeFilter.ComparisonPart;
+            //    if (comparisonPart == DateTimeRecordFilterComparisonPart.DateTime || comparisonPart == DateTimeRecordFilterComparisonPart.YearMonth)
+            //    {
+            //        _setExpressionFromField(fldName, expContext);
+            //    }
+            //    else
+            //    {
+            //        RDBDateTimePart part;
+            //        switch (comparisonPart)
+            //        {
+            //            case DateTimeRecordFilterComparisonPart.DateOnly:
+            //            case DateTimeRecordFilterComparisonPart.YearWeek: part = RDBDateTimePart.DateOnly; break;
+            //            case DateTimeRecordFilterComparisonPart.TimeOnly:
+            //            case DateTimeRecordFilterComparisonPart.Hour: part = RDBDateTimePart.TimeOnly; break;
+            //            default: throw new NotSupportedException(string.Format("comparisonPart '{0}'", comparisonPart));
+            //        }
+            //        _setExpressionFromField(fldName, expContext.DateTimePart(part));
+            //    }
+            //};
+        }
+
         private void RecordFilterCondition(RDBConditionContext conditionContext, DateTimeRecordFilter dateTimeFilter)
         {
-
+            
             BaseRDBExpression fieldDateExpression = null;
             _setExpressionFromField(dateTimeFilter.FieldName, conditionContext.CreateExpressionContext((expression) => fieldDateExpression = expression));
 
@@ -235,7 +260,7 @@ namespace Vanrise.GenericData.Data.RDB
             {
                 var orCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
                 orCondition.CompareCondition(fieldDatePartExpression, RDBCompareConditionOperator.L, startDateExpression);
-                orCondition.CompareCondition(fieldDatePartExpression, dateTimeFilter.ExcludeValue2 ? RDBCompareConditionOperator.G : RDBCompareConditionOperator.GEq, secondDateExpression);
+                orCondition.CompareCondition(fieldDatePartExpression, dateTimeFilter.ExcludeValue2 ? RDBCompareConditionOperator.GEq : RDBCompareConditionOperator.G, secondDateExpression);
                 return;
             }
 
@@ -511,64 +536,38 @@ namespace Vanrise.GenericData.Data.RDB
 
         private void RecordFilterCondition(RDBConditionContext conditionContext, BooleanRecordFilter booleanFilter)
         {
-            BaseRDBExpression fieldExpression = null;
-            _setExpressionFromField(booleanFilter.FieldName, conditionContext.CreateExpressionContext((expression) => fieldExpression = expression));
-            BaseRDBExpression valueExpression = null;
-            conditionContext.CreateExpressionContext((exp) => valueExpression = exp).Value(booleanFilter.IsTrue);
-            conditionContext.CompareCondition(fieldExpression, RDBCompareConditionOperator.Eq, valueExpression);
+            var compareConditionContext = conditionContext.CompareCondition(RDBCompareConditionOperator.Eq);
+            _setExpressionFromField(booleanFilter.FieldName, compareConditionContext.Expression1());
+            compareConditionContext.Expression2().Value(booleanFilter.IsTrue);
         }
 
         private void RecordFilterCondition(RDBConditionContext conditionContext, NumberListRecordFilter numberListFilter)
         {
-            List<BaseRDBExpression> valueExpressions = null;
-            if (numberListFilter.Values != null)
-            {
-                valueExpressions = new List<BaseRDBExpression>();
-                foreach (var value in numberListFilter.Values)
-                {
-                    conditionContext.CreateExpressionContext((expression) => valueExpressions.Add(expression)).Value(value);
-                }
-            }
-            RecordFilterCondition(conditionContext, numberListFilter.FieldName, numberListFilter.CompareOperator, valueExpressions);
-
+            var listConditionExpressionContext = conditionContext.ListCondition(numberListFilter.CompareOperator == ListRecordFilterOperator.In ? RDBListConditionOperator.IN : RDBListConditionOperator.NotIN, numberListFilter.Values);
+            _setExpressionFromField(numberListFilter.FieldName, listConditionExpressionContext);
         }
 
         private void RecordFilterCondition(RDBConditionContext conditionContext, StringListRecordFilter stringListRecordFilter)
         {
-            List<BaseRDBExpression> valueExpressions = null;
-            if (stringListRecordFilter.Values != null)
-            {
-                valueExpressions = new List<BaseRDBExpression>();
-                foreach (var value in stringListRecordFilter.Values)
-                {
-                    conditionContext.CreateExpressionContext((expression) => valueExpressions.Add(expression)).Value(value);
-                }
-            }
-            RecordFilterCondition(conditionContext, stringListRecordFilter.FieldName, stringListRecordFilter.CompareOperator, valueExpressions);
+            var listConditionExpressionContext = conditionContext.ListCondition(stringListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? RDBListConditionOperator.IN : RDBListConditionOperator.NotIN, stringListRecordFilter.Values);
+            _setExpressionFromField(stringListRecordFilter.FieldName, listConditionExpressionContext);
         }
 
-        private void RecordFilterCondition(RDBConditionContext conditionContext, ObjectListRecordFilter stringListRecordFilter)
+        private void RecordFilterCondition(RDBConditionContext conditionContext, ObjectListRecordFilter objectListRecordFilter)
         {
             List<BaseRDBExpression> valueExpressions = null;
-            if (stringListRecordFilter.Values != null)
+            if (objectListRecordFilter.Values != null)
             {
                 valueExpressions = new List<BaseRDBExpression>();
-                foreach (var value in stringListRecordFilter.Values)
+                foreach (var value in objectListRecordFilter.Values)
                 {
                     conditionContext.CreateExpressionContext((expression) => valueExpressions.Add(expression)).ObjectValue(value);
                 }
             }
-            RecordFilterCondition(conditionContext, stringListRecordFilter.FieldName, stringListRecordFilter.CompareOperator, valueExpressions);
-
+            var listConditionExpressionContext = conditionContext.ListCondition(objectListRecordFilter.CompareOperator == ListRecordFilterOperator.In ? RDBListConditionOperator.IN : RDBListConditionOperator.NotIN, valueExpressions);
+            _setExpressionFromField(objectListRecordFilter.FieldName, listConditionExpressionContext);
         }
-
-        private void RecordFilterCondition(RDBConditionContext conditionContext, string fieldName, ListRecordFilterOperator compareOperator, List<BaseRDBExpression> values)
-        {
-            BaseRDBExpression fieldExpression = null;
-            _setExpressionFromField(fieldName, conditionContext.CreateExpressionContext((expression) => fieldExpression = expression));
-            conditionContext.ListCondition(fieldExpression, compareOperator == ListRecordFilterOperator.In ? RDBListConditionOperator.IN : RDBListConditionOperator.NotIN, values);
-        }
-
+        
         private void RecordFilterCondition(RDBConditionContext conditionContext, AlwaysFalseRecordFilter alwaysFalseFilter)
         {
             conditionContext.FalseCondition();
