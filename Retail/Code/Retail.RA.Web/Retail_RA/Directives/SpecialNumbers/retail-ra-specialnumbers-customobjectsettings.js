@@ -30,7 +30,7 @@
                 defineAPI();
             }
             function defineAPI() {
-                var api = {};
+                var api = {}; 
 
                 api.load = function (payload) {
 

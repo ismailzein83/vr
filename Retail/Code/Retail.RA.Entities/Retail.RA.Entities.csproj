@@ -61,6 +61,7 @@
     <Compile Include="Period Definition\PeriodDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Special Numbers\SpecialNumberCustomObjectTypeSettings.cs" />
+    <Compile Include="Special Numbers\SpecialNumberGroup.cs" />
     <Compile Include="Special Numbers\SpecialNumbersSetting.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

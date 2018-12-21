@@ -14,6 +14,7 @@ namespace Retail.RA.Business
         public override Guid ConfigId { get { return new Guid("56EE0B5C-DA52-4B8C-B205-FE536F969659"); } }
         public override void Execute(IGenericBEOnBeforeInsertHandlerContext context)
         {
+            PeriodDefinitionManager periodDefinitionManager = new PeriodDefinitionManager();
             context.ThrowIfNull("context");
             context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
             context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
@@ -24,7 +25,7 @@ namespace Retail.RA.Business
             if (to == null)
                 throw new NullReferenceException("to");
             var currentName = context.GenericBusinessEntity.FieldValues.GetRecord("Name");
-            var name = string.Join(" To ", ((DateTime)from).ToString(Utilities.GetDateTimeFormat( Vanrise.Entities.DateTimeType.Date)), ((DateTime)from).ToString(Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)));
+            var name = string.Join(" To ", ((DateTime)from).ToString(Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)), ((DateTime)from).ToString(Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)));
             if (currentName == null)
                 context.GenericBusinessEntity.FieldValues.Add("Name", name);
             else
@@ -32,6 +33,11 @@ namespace Retail.RA.Business
                 currentName = name;
             }
 
+            if (periodDefinitionManager.IsPeriodOverlapping((DateTime)from, (DateTime)to))
+            {
+                context.OutputResult.Result = false;
+                context.OutputResult.Messages.Add(string.Format("Period definition '{0}' is overlapping with other periods", name));
+            }
         }
     }
-} 
+}

@@ -15,36 +15,90 @@ namespace Retail.RA.Business
         public override Guid ConfigId { get { return new Guid("db7ea63c-0407-4712-a95c-7fc253db8fdf"); } }
         public override void Execute(IGenericBEOnAfterSaveHandlerContext context)
         {
-            //            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-            //            context.ThrowIfNull("context");
-            //            context.NewEntity.ThrowIfNull("context.NewEntity");
-            //            context.NewEntity.FieldValues.ThrowIfNull("context.NewEntity.FieldValues");
-            //            if (context.BusinessEntityDefinitionId == null)
-            //                throw new NullReferenceException("BusinessEntityDefinitionId");
-            //            var from = (DateTime)context.NewEntity.FieldValues.GetRecord("From");
-            //            if (from == null)
-            //                throw new NullReferenceException("from");
-            //            var to = (DateTime)context.NewEntity.FieldValues.GetRecord("To");
-            //            if (to == null)
-            //                throw new NullReferenceException("to");
-            //            var repeat = context.NewEntity.FieldValues.GetRecord("Repeat");
-            //            if(repeat != null)
-            //            {
-            //                for (var i = 0; i < (int)repeat; i++)
-            //                {
-            //                    var genericBusinessEntityToAdd = new GenericBusinessEntityToAdd
-            //                    {
-            //                        BusinessEntityDefinitionId = context.BusinessEntityDefinitionId,
-            //                        FieldValues = new Dictionary<string, object>()
-            //                    };
+            PeriodDefinitionManager periodDefinitionManager = new PeriodDefinitionManager();
+            bool monthlyRepeat = false;
+            bool dailyRepeat = false;
+            List<GenericBusinessEntityToAdd> periodDefinitionsToAdd = new List<GenericBusinessEntityToAdd>();
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            context.ThrowIfNull("context");
+            context.NewEntity.ThrowIfNull("context.NewEntity");
+            context.NewEntity.FieldValues.ThrowIfNull("context.NewEntity.FieldValues");
+            if (context.BusinessEntityDefinitionId == null)
+                throw new NullReferenceException("BusinessEntityDefinitionId");
+            var from = (DateTime)context.NewEntity.FieldValues.GetRecord("From");
+            if (from == null)
+                throw new NullReferenceException("from");
+            var to = (DateTime)context.NewEntity.FieldValues.GetRecord("To");
+            if (to == null)
+                throw new NullReferenceException("to");
+            var repeat = context.NewEntity.FieldValues.GetRecord("Repeat");
+            var timeSpan = to.Subtract(from);
 
-            //                    genericBusinessEntityToAdd.FieldValues.Add("From", from.AddMonths(1));
-            //                    genericBusinessEntityToAdd.FieldValues.Add("URL", applicationURL);
-            //                    var insertOperationOutput = genericBusinessEntityManager.AddGenericBusinessEntity(genericBusinessEntityToAdd);
-            //                }
-            //}
-            //            }
+            if (from.Month == to.Month)
+            {
+                var daysInMonth = DateTime.DaysInMonth(from.Year, from.Month);
 
-        }        
+                if (daysInMonth == timeSpan.Days + 1)
+                    monthlyRepeat = true;
+                else dailyRepeat = true;
+            }
+            else
+            {
+                int daysInAllMonths = 0;
+                var currentDate = from;
+                while (currentDate.Month < to.Month || currentDate.Year < to.Year)
+                {
+                    daysInAllMonths += DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+                    currentDate = currentDate.AddMonths(1);
+                }
+                if (daysInAllMonths == timeSpan.Days + 1)
+                    monthlyRepeat = true;
+                else
+                    dailyRepeat = true;
+            }
+
+            if (repeat != null)
+            {
+                var newFrom = from;
+                var monthsDifference = (to.Year - from.Year) * 12 + (to.Month - from.Month);
+                var newTo = to;
+                for (var i = 0; i < Convert.ToInt32(repeat); i++)
+                {
+                    var genericBusinessEntityToAdd = new GenericBusinessEntityToAdd
+                    {
+                        BusinessEntityDefinitionId = context.BusinessEntityDefinitionId,
+                        FieldValues = new Dictionary<string, object>()
+                    };
+                    if (monthlyRepeat)
+                    {
+                        newFrom = newFrom.AddMonths(monthsDifference);
+                        newTo = newTo.AddMonths(monthsDifference);
+                        genericBusinessEntityToAdd.FieldValues.Add("From", newFrom);
+                        genericBusinessEntityToAdd.FieldValues.Add("To", newTo);
+                    }
+                    else if (dailyRepeat)
+                    {
+                        newFrom = newFrom.AddDays(timeSpan.Days + 1);
+                        newTo = newTo.AddDays(timeSpan.Days + 1);
+                        genericBusinessEntityToAdd.FieldValues.Add("From", newFrom);
+                        genericBusinessEntityToAdd.FieldValues.Add("To", newTo);
+                    }
+                    periodDefinitionsToAdd.Add(genericBusinessEntityToAdd);
+
+                }
+
+            }
+
+            if (periodDefinitionsToAdd.Count() > 0)
+            {
+                foreach (var periodDefinition in periodDefinitionsToAdd)
+                {
+                    genericBusinessEntityManager.AddGenericBusinessEntity(periodDefinition);
+                }
+            }
+
+        }
+
     }
 }
+

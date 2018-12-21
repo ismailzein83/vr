@@ -51,6 +51,6 @@ app.directive("retailRaPerioddefinitionBeforesavehandler", ["UtilsService", "VRN
         }
 
         return directiveDefinitionObject;
-
+         
     }
 ]);
