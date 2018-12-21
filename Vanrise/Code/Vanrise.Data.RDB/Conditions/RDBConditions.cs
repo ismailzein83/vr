@@ -20,20 +20,7 @@ namespace Vanrise.Data.RDB
         {
             var expressionContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             string expression1String = this.Expression1.ToDBQuery(expressionContext);
-            RDBFixedTextExpression expression2AsFixedText = this.Expression2 as RDBFixedTextExpression;
-            bool isExpression2AFixedText;
-            string expression2String;
-            if (expression2AsFixedText != null)
-            {
-                expression2String = expression2AsFixedText.Value;
-                isExpression2AFixedText = true;
-            }
-            else
-            {
-                expression2String = this.Expression2.ToDBQuery(expressionContext);
-                isExpression2AFixedText = false;
-            }
-            string compareOperator;
+            string compareOperator = null;
             switch (this.Operator)
             {
                 case RDBCompareConditionOperator.Eq: compareOperator = " = "; break;
@@ -42,33 +29,57 @@ namespace Vanrise.Data.RDB
                 case RDBCompareConditionOperator.GEq: compareOperator = " >= "; break;
                 case RDBCompareConditionOperator.L: compareOperator = " < "; break;
                 case RDBCompareConditionOperator.LEq: compareOperator = " <= "; break;
-                case RDBCompareConditionOperator.StartWith: 
-                    compareOperator = " LIKE ";
-                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, false);
-                    break;
-                case RDBCompareConditionOperator.EndWith:
-                    compareOperator = " LIKE ";
-                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, false, true);
-                    break;
-                case RDBCompareConditionOperator.Contains:
-                    compareOperator = " LIKE ";
-                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, true);
-                    break;
-                case RDBCompareConditionOperator.NotStartWith: 
-                    compareOperator = " NOT LIKE ";
-                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, false);
-                    break;
-                case RDBCompareConditionOperator.NotEndWith:
-                    compareOperator = " NOT LIKE ";
-                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String,isExpression2AFixedText,  false, true);
-                    break;
-                case RDBCompareConditionOperator.NotContains:
-                    compareOperator = " NOT LIKE ";
-                    expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, true);
-                    break;
-                default: throw new NotSupportedException(String.Format("Operator '{0}'", this.Operator.ToString()));
             }
-            return String.Concat(expression1String, compareOperator, expression2String);
+
+            if (compareOperator != null)
+            {
+                return String.Concat(expression1String, compareOperator, this.Expression2.ToDBQuery(expressionContext));
+            }
+            else
+            {
+                RDBFixedTextExpression expression2AsFixedText = this.Expression2 as RDBFixedTextExpression;
+                bool isExpression2AFixedText;
+                string expression2String;
+                if (expression2AsFixedText != null)
+                {
+                    expression2String = expression2AsFixedText.Value;
+                    isExpression2AFixedText = true;
+                }
+                else
+                {
+                    expression2String = this.Expression2.ToDBQuery(expressionContext);
+                    isExpression2AFixedText = false;
+                }
+                switch (this.Operator)
+                {
+                    case RDBCompareConditionOperator.StartWith:
+                        compareOperator = " LIKE ";
+                        expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, false);
+                        break;
+                    case RDBCompareConditionOperator.EndWith:
+                        compareOperator = " LIKE ";
+                        expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, false, true);
+                        break;
+                    case RDBCompareConditionOperator.Contains:
+                        compareOperator = " LIKE ";
+                        expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, true);
+                        break;
+                    case RDBCompareConditionOperator.NotStartWith:
+                        compareOperator = " NOT LIKE ";
+                        expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, false);
+                        break;
+                    case RDBCompareConditionOperator.NotEndWith:
+                        compareOperator = " NOT LIKE ";
+                        expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, false, true);
+                        break;
+                    case RDBCompareConditionOperator.NotContains:
+                        compareOperator = " NOT LIKE ";
+                        expression2String = GetQueryLikeExpressionString(context.DataProvider, expression2String, isExpression2AFixedText, true, true);
+                        break;
+                    default: throw new NotSupportedException(String.Format("Operator '{0}'", this.Operator.ToString()));
+                }
+                return String.Concat(expression1String, compareOperator, expression2String);
+            }
         }
 
         string GetQueryLikeExpressionString(BaseRDBDataProvider dataProvider, string expression, bool isExpressionAFixedText, bool startWith, bool endWith)
