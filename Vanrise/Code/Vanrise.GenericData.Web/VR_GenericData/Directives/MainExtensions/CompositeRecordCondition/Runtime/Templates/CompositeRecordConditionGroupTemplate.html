@@ -1,6 +1,6 @@
 ﻿<vr-columns width="fullrow">
     <vr-validator validate="scopeModel.validateCompositeRecordCondition()">
-        <vr-section>
+        <vr-section level="2" light >
             <vr-columns width="1/4row">
                 <vr-choices isradio selectedindex="scopeModel.logicalOperator">
                     <vr-choice ng-repeat="logicalOperator in scopeModel.logicalOperators">{{logicalOperator.description}}</vr-choice>
