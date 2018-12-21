@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Retail.RA.Business;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
@@ -33,6 +32,11 @@ namespace Retail.RA.Business
                 toTime = query.ToTime.Value;
 
             var periodDefinitions = periodDefinitionManager.GetPeriodDefinitionsBetweenDate(query.FromTime, toTime, out var minDate, out var maxDate);
+            if (periodDefinitions == null && periodDefinitions.Count == 0)
+                throw new NullReferenceException("periodDefinitions");
+            if (filteredOperatorIds == null && filteredOperatorIds.Count == 0)
+                throw new NullReferenceException("filteredOperatorIds");
+
             var operatorDeclarations = operatorDeclarationManager.GetVoiceDeclarationServices(periodDefinitions, TrafficDirection.IN, filteredOperatorIds);
 
             var analyticManager = new AnalyticManager();
@@ -177,7 +181,7 @@ namespace Retail.RA.Business
                 MeasureValue countCDR;
                 analyticRecord.MeasureValues.TryGetValue("CountCDRs", out countCDR);
                 if (countCDR?.Value != null)
-                    reconcilationObj.NbrOfCDR = Convert.ToDecimal(countCDR.Value ?? 0.0);
+                    reconcilationObj.NbrOfCDR = Convert.ToInt64(countCDR.Value ?? 0.0);
 
                 List<BillingRecord> billingRecords = reconcilationRecordsByOperator.GetOrCreateItem(operatorId);
                 billingRecords.Add(reconcilationObj);
@@ -190,7 +194,7 @@ namespace Retail.RA.Business
             public int PeriodDefinitionId { get; set; }
             public decimal DurationInMin { get; set; }
             public decimal Revenue { get; set; }
-            public decimal NbrOfCDR { get; set; }
+            public long NbrOfCDR { get; set; }
         }
         public class ReconcilationObj
         {
@@ -198,12 +202,12 @@ namespace Retail.RA.Business
             public int PeriodId { get; set; }
             public decimal CalculatedDurationInMin { get; set; }
             public decimal CalculatedRevenue { get; set; }
-            public decimal CalculatedNbrOfCDR { get; set; }
+            public long CalculatedNbrOfCDR { get; set; }
 
             public decimal DeclaredDurationInMin { get; set; }
             public int DifferencePerc { get; set; }
             public decimal DeclaredRevenue { get; set; }
-            public decimal DeclaredNbrOfCDR { get; set; }
+            public long DeclaredNbrOfCDR { get; set; }
         }
     }
 }
