@@ -126,7 +126,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         }
     }
 
-    function notifyOnItemAdded(itemType, insertOperationOutput, keyProperty) {//insertOperationOutput is of type InsertOperationOutput
+    function notifyOnItemAdded(itemType, insertOperationOutput, keyProperty, additionalErrorsDirectiveAPI) {//insertOperationOutput is of type InsertOperationOutput
         switch (insertOperationOutput.Result) {
             case InsertOperationResultEnum.Succeeded.value:
                 var msg = itemType + " added successfully";
@@ -136,6 +136,13 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             case InsertOperationResultEnum.Failed.value:
                 var msg = "Failed to add " + itemType;
                 notifyOnItemAction("error", msg, insertOperationOutput);
+                if (insertOperationOutput.AdditionalMessages != undefined && insertOperationOutput.AdditionalMessages.length > 0) {
+                    var additionalErrorsPayload = {
+                        className: "alert alert-danger",
+                        errorMessages: insertOperationOutput.AdditionalMessages,
+                    };
+                    additionalErrorsDirectiveAPI.load(additionalErrorsPayload);
+                }
                 break;
             case InsertOperationResultEnum.SameExists.value:
                 if (keyProperty == null || keyProperty == undefined || keyProperty == "")
@@ -166,7 +173,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         }
         return false;
     }
-    function notifyOnItemUpdated(itemType, updateOperationOutput, keyProperty) {//updateOperationOutput is of type UpdateOperationOutput
+    function notifyOnItemUpdated(itemType, updateOperationOutput, keyProperty,additionalErrorsDirectiveAPI) {//updateOperationOutput is of type UpdateOperationOutput
         switch (updateOperationOutput.Result) {
             case UpdateOperationResultEnum.Succeeded.value:
                 var msg = itemType + " updated successfully";
@@ -176,6 +183,13 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             case UpdateOperationResultEnum.Failed.value:
                 var msg = "Failed to update " + itemType;
                 notifyOnItemAction("error", msg, updateOperationOutput);
+                if (updateOperationOutput.AdditionalMessages != undefined && updateOperationOutput.AdditionalMessages.length > 0) {
+                    var additionalErrorsPayload = {
+                        className: "alert alert-danger",
+                        errorMessages: updateOperationOutput.AdditionalMessages,
+                    };
+                    additionalErrorsDirectiveAPI.load(additionalErrorsPayload);
+                }
                 break;
             case UpdateOperationResultEnum.SameExists.value:
                 if (keyProperty == null || keyProperty == undefined || keyProperty == "")

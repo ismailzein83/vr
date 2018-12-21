@@ -1,1 +1,9 @@
-﻿
+﻿<vr-row>
+<vr-columns width="fullrow">
+    <label ng-class="scopeModel.className" vr-alert>
+        <ul>
+            <li ng-repeat="error in scopeModel.errorMessages">{{error.Message}}</li>
+        </ul>
+    </label>
+</vr-columns>
+</vr-row>

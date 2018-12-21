@@ -15,8 +15,15 @@
         var requiredPermissionAPI;
         var requiredPermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var statusDefinitionAPI;
+        var statusDefinitionReadyDeferred = UtilsService.createPromiseDeferred();
+
         var analyticDataProviderSettingsDirectiveAPI;
         var analyticDataProviderSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var beDefinitionSelectorApi;
+        var beDefinitionSelectorPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+        var beDefinitionSelectedPromiseDeferred;
 
         var connectionStringType;
         loadParameters();
@@ -38,7 +45,26 @@
                 ConnectionString: { value: 0, description: "Connection String" },
                 ConnectionStringName: { value: 1, description: "Connection String Name" }
             };
-
+            $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
+                beDefinitionSelectorApi = api;
+                beDefinitionSelectorPromiseReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onStatusDefinitionSelectorReady = function (api) {
+                statusDefinitionAPI = api;
+                statusDefinitionReadyDeferred.resolve();
+            };
+            $scope.scopeModel.businessEntitySelectionChanged = function () {
+                var selectedBeDefinitionId = beDefinitionSelectorApi.getSelectedIds();
+                if (selectedBeDefinitionId != undefined) {
+                    var setLoader = function (value) { $scope.isLoadingStatusDefinitions = value; };
+                    var payload = {
+                        filter: { BusinessEntityDefinitionId: selectedBeDefinitionId }
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, statusDefinitionAPI, payload, setLoader, beDefinitionSelectedPromiseDeferred);
+                }
+                else if (statusDefinitionAPI != undefined)
+                    statusDefinitionAPI.clearDataSource();
+            };
             $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
@@ -76,7 +102,7 @@
                 }
             };
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
 
@@ -97,7 +123,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadRequiredPermission, loadAnalyticDataProviderSettingsDirective]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadRequiredPermission, loadAnalyticDataProviderSettingsDirective, loadBeDefinitionStatusDefinitionSection]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -178,6 +204,48 @@
                 tableEntity = response;
             });
         }
+        function loadBeDefinitionStatusDefinitionSection() {
+            var loadBeDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var promises = [];
+            promises.push(loadBeDefinitionPromiseDeferred.promise);
+
+            var payload;
+            if (tableEntity != undefined && tableEntity.Settings.StatusDefinitionBEId != undefined) {
+                payload = {
+                    filter: {
+                        Filters: [{
+                            $type: "Vanrise.Common.Business.StatusDefinitionBEFilter, Vanrise.Common.Business"
+                        }]
+                    }
+                };
+                payload.selectedIds = tableEntity.Settings.StatusDefinitionBEId;
+                beDefinitionSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+            }
+
+            beDefinitionSelectorPromiseReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(beDefinitionSelectorApi, payload, loadBeDefinitionPromiseDeferred);
+            });
+
+
+
+            if (tableEntity != undefined && tableEntity.Settings.StatusDefinitionBEId != undefined) {
+                var loadStatusDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                promises.push(loadStatusDefinitionPromiseDeferred.promise);
+                console.log(beDefinitionSelectedPromiseDeferred);
+                UtilsService.waitMultiplePromises([statusDefinitionReadyDeferred.promise, beDefinitionSelectedPromiseDeferred.promise]).then(function () {
+                    var statusDefinitionPayload = {
+                        filter: { BusinessEntityDefinitionId: tableEntity.Settings.StatusDefinitionBEId },
+                        selectedIds: tableEntity.Settings.StatusDefinitionId
+                    };
+                    VRUIUtilsService.callDirectiveLoad(statusDefinitionAPI, statusDefinitionPayload, loadStatusDefinitionPromiseDeferred);
+                    beDefinitionSelectedPromiseDeferred = undefined;
+                });
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
+        }
 
         function buildTableObjectFromScope() {
             var table = {
@@ -191,7 +259,10 @@
                     DataRecordTypeIds: dataRecordTypeSelectorAPI.getSelectedIds(),
                     RequiredPermission: requiredPermissionAPI.getData(),
                     DataProvider: analyticDataProviderSettingsDirectiveAPI.getData(),
-                    ShowInKPISettings: $scope.scopeModel.showInKPISettings
+                    ShowInKPISettings: $scope.scopeModel.showInKPISettings,
+                    StatusDefinitionBEId: beDefinitionSelectorApi.getSelectedIds(),
+                    StatusDefinitionId: statusDefinitionAPI.getSelectedIds()
+
                 }
             };
             return table;
@@ -205,17 +276,17 @@
             var tableObj = buildTableObjectFromScope();
 
             return VR_Analytic_AnalyticTableAPIService.AddAnalyticTable(tableObj)
-            .then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded('Analytic Table', response, 'Name')) {
-                    if ($scope.onAnalyticTableAdded != undefined)
-                        $scope.onAnalyticTableAdded(response.InsertedObject);
-                    $scope.modalContext.closeModal();
-                }
-            }).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
-            });
+                .then(function (response) {
+                    if (VRNotificationService.notifyOnItemAdded('Analytic Table', response, 'Name')) {
+                        if ($scope.onAnalyticTableAdded != undefined)
+                            $scope.onAnalyticTableAdded(response.InsertedObject);
+                        $scope.modalContext.closeModal();
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
         }
 
         function update() {

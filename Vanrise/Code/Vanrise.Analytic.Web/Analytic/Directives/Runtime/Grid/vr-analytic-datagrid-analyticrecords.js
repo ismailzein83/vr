@@ -38,6 +38,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             var currencyId;
             var reportName;
             var withSummary;
+            var styleDefinitions;
 
             function initializeController() {
                 $scope.gridMenuActions = [];
@@ -58,15 +59,13 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                 ctrl.mainGrid = (ctrl.parameters == undefined);
 
                 gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
-                var styleColors = UtilsService.getArrayEnum(VR_Analytic_StyleCodeEnum);
 
                 ctrl.getMeasureColor = function (dataItem, colDef) {
                     var measure = dataItem.MeasureValues[colDef.tag];
-                    if (measure != undefined) {
-                        var style = UtilsService.getItemByVal(styleColors, measure.StyleCode, 'value');
-                        if (style != undefined)
-                            return style.styleCode;
-                    }
+                    if (measure != undefined)
+                        var style = UtilsService.getItemByVal(styleDefinitions, measure.StyleDefinitionId, 'StyleDefinitionId');
+                    if (style != undefined) 
+                        return style.StyleDefinitionSettings.StyleFormatingSettings;
                 };
                 ctrl.gridReady = function (api) {
                     gridApi = api;
@@ -77,11 +76,17 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         var directiveAPI = {};
 
                         directiveAPI.load = function (payLoad) {
+                            var promises = [];
+                          
+                            
                             var promiseReadyDeferred = UtilsService.createPromiseDeferred();
                             tableId = payLoad.TableId;
-                            var promises = [];
-
                             if (payLoad.Settings != undefined && !payLoad.isInternalLoading) {
+                                var styleDefinitionsPromiseDeferred = VRCommon_StyleDefinitionAPIService.GetAllStyleDefinitions().then(function (response) {
+                                    if (response != undefined)
+                                        styleDefinitions = response;
+                                });
+                                promises.push(styleDefinitionsPromiseDeferred);
                                 var kpiSettingsPromise = VR_Analytic_KPISettingsAPIService.GetAnalytictableKPISettings(tableId).then(function (response) {
                                     measureStyleRules = response;
                                     if (measureStyleRules == undefined)
@@ -97,7 +102,9 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 });
                                 promises.push(kpiSettingsPromise);
                             }
-                           
+                            else {
+                                styleDefinitions = payLoad.StyleDefinitions;
+                            }
 
                             if (payLoad.DimensionsConfig == undefined) {
                                 promises.push(loadDimensionsConfig());
@@ -285,7 +292,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 GridMenuActions: $scope.gridMenuActions,
                                 ItemActions: itemActions,
                                 AdvancedOrderOptions: queryFinalized.AdvancedOrderOptions,
-                                CurrencyId: currencyId
+                                CurrencyId: currencyId,
+                                StyleDefinitions:styleDefinitions
                             };
                             return dataItem.gridAPI.load(drillDownPayLoad);
                         };
@@ -359,7 +367,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                         if (payload.Settings != undefined) {
                             gridPayload = payload;
-                           
+
                             initialQueryOrderType = payload.Settings.OrderType;
                             if (payload.Settings.RootDimensionsFromSearchSection) {
                                 var groupingSearchDimension = UtilsService.getItemByVal(payload.SelectedGroupingDimensions, dimension.DimensionName, 'DimensionName');
@@ -663,7 +671,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 FilterGroup: gridPayload.FilterGroup,
                                 ToTime: toTime,
                                 AdvancedOrderOptions: gridPayload.AdvancedOrderOptions,
-                                isInternalLoading :true
+                                isInternalLoading: true
                             };
                             loadGrid(payload);
                         }

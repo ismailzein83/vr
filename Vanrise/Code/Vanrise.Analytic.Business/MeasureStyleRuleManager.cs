@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
@@ -43,6 +44,7 @@ namespace Vanrise.Analytic.Business
         }
         public MeasureStyleRuleRuntime GetMeasureStyleRuleDetail(MeasureStyleRule measureStyleRule, Dictionary<string, AnalyticMeasure> analyticMeasuresByMeasureName)
         {
+            StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
          
             var recordFilterFieldInfosByFieldName = analyticMeasuresByMeasureName.ToDictionary(key => key.Key, value => new RecordFilterFieldInfo
             {
@@ -54,6 +56,8 @@ namespace Vanrise.Analytic.Business
 
             foreach (var rule in measureStyleRule.Rules)
             {
+                var statusDefinition = statusDefinitionManager.GetStatusDefinition(rule.StatusDefinitionId);
+                statusDefinition.ThrowIfNull("statusDefinition");
                 rules.Add(new StyleRuleDetail()
                 {
                     RecordFilterDescription = _recordFilterManager.BuildRecordFilterGroupExpression(new RecordFilterGroup
@@ -64,19 +68,28 @@ namespace Vanrise.Analytic.Business
                         LogicalOperator = RecordQueryLogicalOperator.And
                     }, recordFilterFieldInfosByFieldName),
                     RecordFilter = rule.RecordFilter,
-                    StyleCode = rule.StyleCode,
-                    StyleValue = rule.StyleValue,
-                    StyleValueDescription = Utilities.GetEnumDescription(rule.StyleValue)
+                    StatusDefinitionId = rule.StatusDefinitionId,
+                    StyleValueDescription = statusDefinition.Name
                 });
             }
             AnalyticMeasure analyticMeasure = analyticMeasuresByMeasureName.GetRecord(measureStyleRule.MeasureName);
             analyticMeasure.ThrowIfNull("AnalyticMeasure");
+
+            var recommendedStyleRuleDescription = _recordFilterManager.BuildRecordFilterGroupExpression(new RecordFilterGroup
+            {
+                Filters = measureStyleRule.RecommendedStyleRule,
+                LogicalOperator = RecordQueryLogicalOperator.Or
+            }, recordFilterFieldInfosByFieldName);
+            recommendedStyleRuleDescription.ThrowIfNull("recommendedStyleRuleDescription");
+
             var measureStyleRuleDetail = new MeasureStyleRuleDetail()
             {
                 MeasureName = measureStyleRule.MeasureName,
                 MeasureTitle = analyticMeasure.Title,
-                Rules = rules
+                Rules = rules,
+                RecommendedRecordFilterDescription = recommendedStyleRuleDescription
             };
+
             return new MeasureStyleRuleRuntime
             {
                 MeasureStyleRule = measureStyleRule,

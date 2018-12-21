@@ -14,6 +14,6 @@ namespace Vanrise.Analytic.Entities
     public class MeasureValue
     {
         public object Value { get; set; }
-        public string StyleCode { get; set; }
+        public Guid? StyleDefinitionId { get; set; }
     }
 }

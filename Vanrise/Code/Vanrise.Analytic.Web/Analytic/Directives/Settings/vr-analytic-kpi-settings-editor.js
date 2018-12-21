@@ -54,7 +54,6 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                     };
                     return VR_Analytic_AnalyticTableAPIService.GetAnalyticTablesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         if (response != undefined) {
-                            console.log(response);
                             for (var i = 0; i < response.length; i++) {
                                 var analytictable = response[i];
                                 var itemTab = {

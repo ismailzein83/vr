@@ -2,6 +2,7 @@
     <vr-datagrid datasource="ctrl.measureStyles" norowhighlightonclick="true"
                  on-ready="ctrl.onGridReady" menuactions="ctrl.measureStylesGridMenuActions" hidegridmenu>
         <vr-datagridcolumn headertext="'Measure Name'" field="'MeasureName'" disablesorting="true" isclickable="true" onclicked="ctrl.saveMeasureStyle"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Recommended'" field="'Entity.MeasureStyleRuleDetail.RecommendedRecordFilterDescription'" disablesorting="true" ></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Description'" disablesorting="true">
             <span style="display:block " ng-repeat="rule in dataItem.Entity.MeasureStyleRuleDetail.Rules">
                 {{rule.StyleValueDescription}} if {{rule.RecordFilterDescription}}

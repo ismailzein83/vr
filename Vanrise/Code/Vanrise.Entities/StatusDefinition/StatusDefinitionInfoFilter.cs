@@ -10,5 +10,6 @@ namespace Vanrise.Entities
     {
         public Guid? BusinessEntityDefinitionId { get; set; }
         public List<IStatusDefinitionFilter> Filters { get; set; }
+        public List<Guid> ExcludedIds { get; set; }
     }
 }

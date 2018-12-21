@@ -99,7 +99,7 @@ namespace Vanrise.Analytic.Business
             IEnumerable<DBAnalyticRecord> dbRecords = dataManager.GetAnalyticRecords(getAnalyticRecordsContext);
 
             var allDBDimensions = getAnalyticRecordsContext.AllQueryDBDimensions;
-            List <string> allDimensionNamesList = new List<string>();
+            List<string> allDimensionNamesList = new List<string>();
 
             if (query.DimensionFields != null)
                 allDimensionNamesList.AddRange(query.DimensionFields);
@@ -112,7 +112,7 @@ namespace Vanrise.Analytic.Business
                 FillCalculatedDimensions(queryContext, queryForDataManager.DimensionFields, dbRecords, allDBDimensions, query.Filters, query.FilterGroup);
                 var records = ApplyFinalGroupingAndFiltering(queryContext, dbRecords, query.DimensionFields, allDimensionNames,
                     query.MeasureFields, measureStyleRulesDictionary, query.Filters, query.SubTables, query.FilterGroup, query.WithSummary, out summaryRecord, out resultSubTables);
-                if(dontApplyOrdering || !query.OrderType.HasValue)
+                if (dontApplyOrdering || !query.OrderType.HasValue)
                 {
                     return records;
                 }
@@ -787,6 +787,8 @@ namespace Vanrise.Analytic.Business
 
         private MeasureValues CreateMeasuresFilledWithDefaultValues(IAnalyticTableQueryContext analyticTableQueryContext, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary)
         {
+            AnalyticTableManager analyticTableManager = new AnalyticTableManager();
+            StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
             var measureValues = new MeasureValues();
             foreach (var measureName in measureNames)
             {
@@ -794,25 +796,43 @@ namespace Vanrise.Analytic.Business
                 var measureRuntimeType = measureConfig.Config.FieldType.GetRuntimeType();
                 var measureValue = Utilities.GetTypeDefault(measureRuntimeType);
                 RecordFilterManager filterManager = new RecordFilterManager();
-                string styleCode = null;
+                Guid? styleDefinitionId = null;
                 if (measureStyleRulesDictionary != null)
                 {
                     MeasureStyleRule measureStyleRule = null;
                     if (measureStyleRulesDictionary.TryGetValue(measureName, out measureStyleRule))
                     {
-                        foreach (var rule in measureStyleRule.Rules)
+                        foreach (var recordfilter in measureStyleRule.RecommendedStyleRule)
                         {
-                            StyleRuleConditionContext context = new StyleRuleConditionContext { Value = measureValue };
-                            if (rule.RecordFilter != null && filterManager.IsSingleFieldFilterMatch(rule.RecordFilter, measureValue, measureConfig.Config.FieldType))
+                            if (recordfilter != null && filterManager.IsSingleFieldFilterMatch(recordfilter, measureValue, measureConfig.Config.FieldType))
                             {
-                                styleCode = rule.StyleCode;
+                                var analyticTable = analyticTableManager.GetAnalyticTableById(analyticTableQueryContext.Query.TableId);
+                                analyticTable.ThrowIfNull("analyticTable");
+                                analyticTable.Settings.ThrowIfNull("analyticTable.Settings");
+                                var statusDefinition = statusDefinitionManager.GetStatusDefinition(analyticTable.Settings.StatusDefinitionId);
+                                styleDefinitionId = GetStyleDefinitionIdFromStatusDefinition(statusDefinition);
                                 break;
+                            }
+                        }
+                        if (styleDefinitionId == null)
+                        {
+                            foreach (var rule in measureStyleRule.Rules)
+                            {
+                                StyleRuleConditionContext context = new StyleRuleConditionContext { Value = measureValue };
+                                if (rule.RecordFilter != null && filterManager.IsSingleFieldFilterMatch(rule.RecordFilter, measureValue, measureConfig.Config.FieldType))
+                                {
+                                    if (rule.StatusDefinitionId == null)
+                                        throw new NullReferenceException("StatusDefinitionId");
+                                    var statusDefinition = statusDefinitionManager.GetStatusDefinition(rule.StatusDefinitionId);
+                                    styleDefinitionId = GetStyleDefinitionIdFromStatusDefinition(statusDefinition);
+                                    break;
+                                }
                             }
                         }
                     }
 
                 }
-                measureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleCode = styleCode });
+                measureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleDefinitionId = styleDefinitionId.Value });
             }
             return measureValues;
         }
@@ -928,6 +948,8 @@ namespace Vanrise.Analytic.Business
             HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
             bool isSummaryRecord, int? subTableIndex, string recordGroupingKey, string subTableRecordGroupingKey, out bool allMeasuresAreNull)
         {
+            StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
+            AnalyticTableManager analyticTableManager = new AnalyticTableManager();
             AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dbRecord.Time, MeasureValues = new MeasureValues() };
 
             if (dimensionNames != null)
@@ -951,6 +973,7 @@ namespace Vanrise.Analytic.Business
 
             foreach (var measureName in measureNames)
             {
+
                 var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
                 var measureValue = measureConfig.Evaluator.GetMeasureValue(getMeasureValueContext);
 
@@ -961,18 +984,39 @@ namespace Vanrise.Analytic.Business
                 else
                     modifiedMeasureValue = measureValue;
 
-                string styleCode = null;
+                Guid? styleDefinitionId = null;
                 if (measureStyleRulesDictionary != null)
                 {
                     MeasureStyleRule measureStyleRule = null;
                     if (measureStyleRulesDictionary.TryGetValue(measureName, out measureStyleRule))
                     {
-                        foreach (var rule in measureStyleRule.Rules)
+                        if (measureStyleRule.RecommendedStyleRule != null)
                         {
-                            if (rule.RecordFilter != null && filterManager.IsSingleFieldFilterMatch(rule.RecordFilter, modifiedMeasureValue, measureConfig.Config.FieldType))
+                            foreach (var recordfilter in measureStyleRule.RecommendedStyleRule)
                             {
-                                styleCode = rule.StyleCode;
-                                break;
+                                if (recordfilter != null && filterManager.IsSingleFieldFilterMatch(recordfilter, modifiedMeasureValue, measureConfig.Config.FieldType))
+                                {
+                                    var analyticTable = analyticTableManager.GetAnalyticTableById(analyticTableQueryContext.Query.TableId);
+                                    analyticTable.ThrowIfNull("analyticTable");
+                                    analyticTable.Settings.ThrowIfNull("analyticTable.Settings");
+                                    var statusDefinition = statusDefinitionManager.GetStatusDefinition(analyticTable.Settings.StatusDefinitionId);
+                                    styleDefinitionId = GetStyleDefinitionIdFromStatusDefinition(statusDefinition);
+                                    break;
+                                }
+                            }
+                        }
+                        if (styleDefinitionId == null)
+                        {
+                            foreach (var rule in measureStyleRule.Rules)
+                            {
+                                if (rule.RecordFilter != null && filterManager.IsSingleFieldFilterMatch(rule.RecordFilter, modifiedMeasureValue, measureConfig.Config.FieldType))
+                                {
+                                    if (rule.StatusDefinitionId == null)
+                                        throw new NullReferenceException("StatusDefinitionId");
+                                    var statusDefinition = statusDefinitionManager.GetStatusDefinition(rule.StatusDefinitionId);
+                                    styleDefinitionId = GetStyleDefinitionIdFromStatusDefinition(statusDefinition);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -981,7 +1025,7 @@ namespace Vanrise.Analytic.Business
                 if (measureValue != null)
                     allMeasuresAreNull = false;
 
-                analyticRecord.MeasureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleCode = styleCode });
+                analyticRecord.MeasureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleDefinitionId = styleDefinitionId });
             }
 
             return analyticRecord;
@@ -1044,7 +1088,16 @@ namespace Vanrise.Analytic.Business
             }
             return orderedRecords;
         }
+        private Guid GetStyleDefinitionIdFromStatusDefinition(StatusDefinition statusDefinition)
+        {
+            StyleDefinitionManager styleDefinitionManager = new StyleDefinitionManager();
+            statusDefinition.ThrowIfNull("statusDefinition");
+            statusDefinition.Settings.ThrowIfNull("statusDefinition.Settings");
+            if (statusDefinition.Settings.StyleDefinitionId == null)
+                throw new NullReferenceException("StyleDefinitionId");
 
+            return statusDefinition.Settings.StyleDefinitionId;
+        }
         private static IEnumerable<T> GetOrderedByAllAdvancedMeasureOrder<T>(List<string> measures, AnalyticQueryAdvancedOrderOptionsBase advancedOrderOptions, IEnumerable<T> allRecords, Func<T, AnalyticRecord> getAnalyticRecord)
         {
             if (measures == null)
@@ -1181,7 +1234,7 @@ namespace Vanrise.Analytic.Business
                 List<DimensionFilter> dbFilters = null;
                 if (filters != null)
                 {
-                    foreach(var filter in filters)
+                    foreach (var filter in filters)
                     {
                         var dimensionConfig = _queryContext.GetDimensionConfig(filter.Dimension);
                         if (!String.IsNullOrEmpty(dimensionConfig.Config.SQLExpression))
@@ -1199,10 +1252,10 @@ namespace Vanrise.Analytic.Business
             private RecordFilterGroup GetDBFilterGroup(RecordFilterGroup filterGroup)
             {
                 RecordFilterGroup dbFilterGroup = null;
-                if(filterGroup != null)
+                if (filterGroup != null)
                 {
                     List<string> nonDBDimensionNames = _queryContext.Dimensions.Values.Where(dimConfig => string.IsNullOrEmpty(dimConfig.Config.SQLExpression)).Select(dimConfig => dimConfig.Name).ToList();
-                    if(nonDBDimensionNames.Count == 0)
+                    if (nonDBDimensionNames.Count == 0)
                     {
                         dbFilterGroup = filterGroup;
                     }
@@ -1343,7 +1396,7 @@ namespace Vanrise.Analytic.Business
                         {
                             totalrow.Cells.Add(new ExportExcelCell()
                             {
-                                Value  = k == 0 ? "Total" : string.Empty,
+                                Value = k == 0 ? "Total" : string.Empty,
                                 Style = new ExcelCellStyle()
                                 {
                                     IsBold = true,

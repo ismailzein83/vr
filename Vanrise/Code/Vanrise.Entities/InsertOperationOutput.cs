@@ -16,5 +16,11 @@ namespace Vanrise.Entities
         public string Message { get; set; }
 
         public bool ShowExactMessage { get; set; }
+        public List<InsertAdditionalMessage> AdditionalMessages { get; set; }
+    }
+    public class InsertAdditionalMessage
+    {
+        public InsertOperationResult Result { get; set; }
+        public string Message { get; set; }
     }
 }

@@ -33,7 +33,13 @@ namespace Vanrise.Analytic.Entities
         public RequiredPermissionSettings RequiredPermission { get; set; }
 
         public AnalyticDataProvider DataProvider { get; set; }
+
         public bool ShowInKPISettings { get; set; }
+
+        public Guid StatusDefinitionBEId { get; set; }
+
+        public Guid StatusDefinitionId { get; set; }
+
     }
 
 

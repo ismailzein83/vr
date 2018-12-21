@@ -2,9 +2,9 @@
 
     'use strict';
 
-    MeasureStyleGridEditorDirective.$inject = ['Analytic_AnalyticService', 'UtilsService', 'VR_Analytic_MeasureStyleRuleAPIService'];
+    MeasureStyleGridEditorDirective.$inject = ['Analytic_AnalyticService', 'UtilsService', 'VR_Analytic_MeasureStyleRuleAPIService', 'VR_Analytic_AnalyticTableAPIService'];
 
-    function MeasureStyleGridEditorDirective(Analytic_AnalyticService, UtilsService, VR_Analytic_MeasureStyleRuleAPIService) {
+    function MeasureStyleGridEditorDirective(Analytic_AnalyticService, UtilsService, VR_Analytic_MeasureStyleRuleAPIService, VR_Analytic_AnalyticTableAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -48,29 +48,42 @@
                     };
                 };
                 ctrl.saveMeasureStyle = function (dataItem) {
-                    if (dataItem.Entity != undefined) {
-                        var isEditMode = true;
-                        var onMeasureStyleUpdated = function (measureStyleObj) {
-                            ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
-                                MeasureName: dataItem.MeasureName,
-                                Entity: measureStyleObj
+                    var statusDefinitionBeId;
+                    var recommendedId;
+
+                    var analyticTablePromiseDeferred = UtilsService.createPromiseDeferred();
+                    VR_Analytic_AnalyticTableAPIService.GetTableById(analyticTableId).then(function (response) {
+                        if (response != undefined) {
+                            statusDefinitionBeId = response.Settings.StatusDefinitionBEId;
+                            recommendedId = response.Settings.StatusDefinitionId;
+                        }
+                        analyticTablePromiseDeferred.resolve();
+                    });
+                    analyticTablePromiseDeferred.promise.then(function () {
+                        if (dataItem.Entity != undefined) {
+                            var isEditMode = true;
+                            var onMeasureStyleUpdated = function (measureStyleObj) {
+                                ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
+                                    MeasureName: dataItem.MeasureName,
+                                    Entity: measureStyleObj
+                                };
                             };
-                        };
-                        var measureNames = getMeasureNames(dataItem);
-                        var measureName = dataItem.Entity.MeasureStyleRuleDetail.MeasureName;
-                        var selectedMeasure = UtilsService.getItemByVal(measureNames, dataItem.Entity.MeasureStyleRuleDetail.MeasureName, "Name");
-                        Analytic_AnalyticService.editMeasureStyle(dataItem, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId, isEditMode, measureName);
-                    }
-                    else {
-                        var onMeasureStyleAdded = function (measureStyleObj) {
-                            ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
-                                MeasureName: dataItem.MeasureName,
-                                Entity: measureStyleObj
+                            var measureNames = getMeasureNames(dataItem);
+                            var measureName = dataItem.Entity.MeasureStyleRuleDetail.MeasureName;
+                            var selectedMeasure = UtilsService.getItemByVal(measureNames, dataItem.Entity.MeasureStyleRuleDetail.MeasureName, "Name");
+                            Analytic_AnalyticService.editMeasureStyle(dataItem, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId, isEditMode, measureName, statusDefinitionBeId, recommendedId);
+                        }
+                        else {
+                            var onMeasureStyleAdded = function (measureStyleObj) {
+                                ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
+                                    MeasureName: dataItem.MeasureName,
+                                    Entity: measureStyleObj
+                                };
                             };
-                        };
-                        var measureName = dataItem.MeasureName;
-                        Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, context, analyticTableId, measureName);
-                    }
+                            var measureName = dataItem.MeasureName;
+                            Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, context, analyticTableId, measureName, statusDefinitionBeId, recommendedId);
+                        }
+                    });
                 };
             }
 
@@ -78,7 +91,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var measureStyleRuleEditorRuntime;
                     var measureStyleRuleEditorRuntimePromiseDeferred = UtilsService.createPromiseDeferred();
                     if (payload != undefined) {
@@ -101,7 +113,6 @@
                             VR_Analytic_MeasureStyleRuleAPIService.GetMeasureStyleRuleEditorRuntime(filter).then(function (response) {
                                 if (response != undefined && response.MeasureStyleRulesRuntime != undefined) {
                                     measureStyleRuleEditorRuntime = response;
-                                    console.log(response);
                                     measureStyleRuleEditorRuntimePromiseDeferred.resolve();
 
                                 }

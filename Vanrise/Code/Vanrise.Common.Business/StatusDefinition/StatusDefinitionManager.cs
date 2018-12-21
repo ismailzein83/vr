@@ -103,6 +103,8 @@ namespace Vanrise.Common.Business
                 {
                     if (filter.BusinessEntityDefinitionId.HasValue && filter.BusinessEntityDefinitionId.Value != x.BusinessEntityDefinitionId)
                         return false;
+                    if (filter.ExcludedIds != null && filter.ExcludedIds.Count() > 0 && filter.ExcludedIds.Contains(x.StatusDefinitionId))
+                        return false;
                     if (filter.Filters != null)
                     {
                         var context = new StatusDefinitionFilterContext() { BusinessEntityDefinitionId = x.BusinessEntityDefinitionId,StatusDefinition = x };

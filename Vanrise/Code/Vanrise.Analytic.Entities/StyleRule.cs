@@ -10,14 +10,13 @@ namespace Vanrise.Analytic.Entities
     public class MeasureStyleRule
     {
         public string MeasureName { get; set; }
-
+        public List<RecordFilter> RecommendedStyleRule { get; set; }
         public List<StyleRule> Rules { get; set; }
     }
     public class StyleRule
     {
         public RecordFilter RecordFilter { get; set; }
-        public StyleCodeEnum StyleValue { get; set; }
-        public string StyleCode { get; set; }
+        public Guid StatusDefinitionId { get; set; }
     }
 
     public abstract class StyleRuleCondition
@@ -28,7 +27,7 @@ namespace Vanrise.Analytic.Entities
 
     public interface IStyleRuleConditionContext
     {
-        dynamic Value { get;}
+        dynamic Value { get; }
     }
 
     public class MeasureStyleRuleRuntime
@@ -41,7 +40,7 @@ namespace Vanrise.Analytic.Entities
         public string MeasureTitle { get; set; }
 
         public string MeasureName { get; set; }
-
+        public string RecommendedRecordFilterDescription { get; set; }
         public List<StyleRuleDetail> Rules { get; set; }
     }
     public class StyleRuleDetail
@@ -49,8 +48,7 @@ namespace Vanrise.Analytic.Entities
         public string RecordFilterDescription { get; set; }
         public RecordFilter RecordFilter { get; set; }
         public string StyleValueDescription { get; set; }
-        public string StyleCode { get; set; }
-        public StyleCodeEnum StyleValue { get; set; }
+        public Guid StatusDefinitionId { get; set; }
 
     }
 }

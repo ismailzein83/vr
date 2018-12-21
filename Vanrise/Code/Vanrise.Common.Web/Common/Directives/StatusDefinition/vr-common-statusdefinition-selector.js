@@ -97,6 +97,9 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('StatusDefinitionId', attrs, ctrl);
                 };
+                api.clearDataSource = function () {
+                    ctrl.datasource.length = 0;
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

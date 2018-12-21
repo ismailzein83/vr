@@ -55,6 +55,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Output\Vanrise.Common.Excel.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.MainExtensions">
+      <HintPath>..\Output\Vanrise.Common.MainExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticConfigurationManager.cs" />
