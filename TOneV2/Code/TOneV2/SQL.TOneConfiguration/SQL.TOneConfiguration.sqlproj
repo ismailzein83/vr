@@ -919,6 +919,7 @@
     <None Include="TOne_Portal.PostDeployment.sql" />
     <None Include="TOne_Namibia.PostDeployment.sql" />
     <None Include="DataParser.PostDeployment.sql" />
+    <None Include="Retail.WhS_SMS.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
