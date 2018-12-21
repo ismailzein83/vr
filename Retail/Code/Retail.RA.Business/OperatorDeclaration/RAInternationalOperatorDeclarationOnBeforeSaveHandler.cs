@@ -18,12 +18,14 @@ namespace Retail.RA.Business
             context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
             IntlOperatorDeclarationManager operatorDeclarationManager = new IntlOperatorDeclarationManager();
             var operatorDeclarations = operatorDeclarationManager.GetAllOperatorDecalarations();
+            var id = context.GenericBusinessEntity.FieldValues.GetRecord("ID");
+            id.ThrowIfNull("ID");
             var operatorId = context.GenericBusinessEntity.FieldValues.GetRecord("Operator");
             operatorId.ThrowIfNull("operatorId");
             var periodId = context.GenericBusinessEntity.FieldValues.GetRecord("Period");
             periodId.ThrowIfNull("periodId");
           
-            var operatorDeclaration = operatorDeclarations.FindRecord(x => x.PeriodId == Convert.ToInt32(periodId) && x.OperatorId == Convert.ToInt64(operatorId));
+            var operatorDeclaration = operatorDeclarations.FindRecord(x => x.PeriodId == Convert.ToInt32(periodId) && x.OperatorId == Convert.ToInt64(operatorId) && x.ID != Convert.ToInt64(id));
             if(operatorDeclaration != null)
             {
                 context.OutputResult.Result = false;
