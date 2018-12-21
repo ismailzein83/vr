@@ -47,8 +47,8 @@
   <ItemGroup>
     <Compile Include="ActiveServices.cs" />
     <Compile Include="InvoiceDetails.cs" />
-    <Compile Include="InvoiceSMSItemDetail.cs" />
-    <Compile Include="InvoiceSMSDetail.cs" />
+    <Compile Include="CustomerSMSInvoiceItemDetails.cs" />
+    <Compile Include="CustomerSMSInvoiceDetails.cs" />
     <Compile Include="NewOrders.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

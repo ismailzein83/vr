@@ -164,6 +164,9 @@
     <EmbeddedResource Include="Retail_Demo\Elements\NetworkRental\Reports\NetworkRentalInvoice.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Retail_Demo\Elements\SMS\Reports\CustomerSMSInvoiceItemsReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Retail_Demo\Elements\SMS\Reports\CustomerSMSInvoice.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

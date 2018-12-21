@@ -13,91 +13,64 @@ namespace Retail.Demo.Business
 
     public class SMSInvoiceSettings : BaseRetailInvoiceTypeSettings
     {
-        //    public SMSInvoiceType Type { get; set; }
-        //    public override Guid ConfigId
-        //    {
-        //        get { return new Guid("bb80cf36-b7f3-4933-876b-e9d982fe27df"); }
-        //    }
-        //    public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
-        //    {
-        //        AccountBEManager accountBEManager = new AccountBEManager();
-        //        FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-        //        var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.Invoice.PartnerId);
-
-        //        switch (context.InfoType)
-        //        {
-        //            case "MailTemplate":
-        //                long accountId = Convert.ToInt32(financialAccountData.Account.AccountId);
-        //                var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
-        //                Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-        //                objects.Add("Operator", account);
-        //                objects.Add("Invoice", context.Invoice);
-        //                return objects;
-        //            case "BankDetails":
-        //                {
-        //                    #region BankDetails
-        //                    return accountBEManager.GetBankDetailsIds(financialAccountData.Account.AccountId);
-        //                    #endregion
-        //                }
-        //        }
-        //        return null;
-        //    }
-
-        //    public override void GetInitialPeriodInfo(IInitialPeriodInfoContext context)
-        //    {
-        //        FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-        //        var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.PartnerId);
-        //        context.PartnerCreationDate = financialAccountData.Account.CreatedTime;
-        //    }
-
-        //    public override InvoiceGenerator GetInvoiceGenerator()
-        //    {
-        //        return new SMSInvoiceGenerator(this.AccountBEDefinitionId, this.Type);
-        //    }
-
-        //    public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
-        //    {
-        //        switch (context.PartnerRetrievalType)
-        //        {
-        //            case PartnerRetrievalType.GetActive:
-        //            case PartnerRetrievalType.GetAll:
-        //                FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-        //                return financialAccountManager.GetAllFinancialAccountsIds(this.AccountBEDefinitionId);
-        //            default:
-        //                return null;
-        //        }
-        //    }
-
-        //    public override InvoicePartnerManager GetPartnerManager()
-        //    {
-        //        return new SMSInvoicePartnerSettings(this.AccountBEDefinitionId);
-        //    }
-        //}
-        public override Guid ConfigId => throw new NotImplementedException();
-
+        public SMSInvoiceType Type { get; set; }
+        public override Guid ConfigId
+        {
+            get { return new Guid("bb80cf36-b7f3-4933-876b-e9d982fe27df"); }
+        }
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
         {
-            throw new NotImplementedException();
+            AccountBEManager accountBEManager = new AccountBEManager();
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.Invoice.PartnerId);
+
+            switch (context.InfoType)
+            {
+                case "MailTemplate":
+                    long accountId = Convert.ToInt32(financialAccountData.Account.AccountId);
+                    var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
+                    Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
+                    objects.Add("Operator", account);
+                    objects.Add("Invoice", context.Invoice);
+                    return objects;
+                case "BankDetails":
+                    {
+                        #region BankDetails
+                        return accountBEManager.GetBankDetailsIds(this.AccountBEDefinitionId,financialAccountData.Account.AccountId);
+                        #endregion
+                    }
+            }
+            return null;
         }
 
         public override void GetInitialPeriodInfo(IInitialPeriodInfoContext context)
         {
-            throw new NotImplementedException();
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.PartnerId);
+            context.PartnerCreationDate = financialAccountData.Account.CreatedTime;
         }
 
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            throw new NotImplementedException();
+            return new SMSInvoiceGenerator(this.AccountBEDefinitionId, this.Type);
         }
 
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
         {
-            throw new NotImplementedException();
+            switch (context.PartnerRetrievalType)
+            {
+                case PartnerRetrievalType.GetActive:
+                case PartnerRetrievalType.GetAll:
+                    FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+                    return financialAccountManager.GetAllFinancialAccountsIds(this.AccountBEDefinitionId);
+                default:
+                    return null;
+            }
         }
 
         public override InvoicePartnerManager GetPartnerManager()
         {
-            throw new NotImplementedException();
+            return new SMSInvoicePartnerSettings(this.AccountBEDefinitionId);
         }
     }
 }
