@@ -1825,18 +1825,44 @@ loader .outer-loader {
     border-top: 0px !important;
     padding: 5px;
     margin: 0px;
+    padding-top: 10px;
 }
 
+.panel-vr.panel-vr-child.light.hidden-title > .panel-body {
+    padding-top: 5px;
+    border-top: unset !important;
+    border: 1px solid #ddd !important;
+}
+
+vr-section[collapsible] .panel-vr.panel-vr-child.light.hidden-title > .panel-body {
+    border-top: 0px solid #ddd !important;
+}
+
+.panel-vr .collapsible-container {
+    border-top: 1px solid #ddd !important;
+}
+.panel-vr.panel-vr-child.light .collapsible-container .collapsible-icon {
+    font-size: 12px;
+    padding-right: unset;
+    top: 5px;
+    left: 14px;
+    background-color: #fff;
+    width: 17px;
+    height: 11px;
+    position: absolute;
+    padding-left: 3px;
+}
 .panel-vr.panel-vr-child.light > .panel-heading {
     border-color: #ddd;
     padding: 0px 6px 0px 0px;
     margin-top: -27px;
 }
 
-    .panel-vr.panel-vr-child.light > .panel-heading label {
-        padding: 0px 5px 0px 10px;
-        left: 5px;
-    }
+.panel-vr.panel-vr-child.light > .panel-heading label {
+    padding: 0px 5px 0px 10px;
+    left: 5px;
+    top: 15px;
+}
 /* panel-vr-child */
 .section-menu vr-button span {
     font-size: 11px !important;
