@@ -23,7 +23,7 @@ namespace Vanrise.GenericData.Data.RDB
         const string COL_ExtraFieldsEvaluator = "ExtraFieldsEvaluator";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
-
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static DataRecordTypeDataManager()
         {
@@ -35,13 +35,15 @@ namespace Vanrise.GenericData.Data.RDB
             columns.Add(COL_ExtraFieldsEvaluator, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "genericdata",
                 DBTableName = "DataRecordType",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
         #endregion
@@ -101,7 +103,8 @@ namespace Vanrise.GenericData.Data.RDB
 
         public bool AreDataRecordTypeUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public List<DataRecordType> GetDataRecordTypes()
@@ -109,14 +112,27 @@ namespace Vanrise.GenericData.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_ParentID, COL_Fields, COL_ExtraFieldsEvaluator, COL_Settings);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
             return queryContext.GetItems<DataRecordType>(DataRecordTypeMapper);
         }
 
         public void SetDataRecordTypeCacheExpired()
         {
-            throw new NotImplementedException();
+            var selectQueryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = selectQueryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, 1, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+            var item = selectQueryContext.GetItem(DataRecordTypeMapper);
+            if (item != null)
+            {
+                var updateQueryContext = new RDBQueryContext(GetDataProvider());
+                var updateQuery = updateQueryContext.AddUpdateQuery();
+                updateQuery.FromTable(TABLE_NAME);
+                updateQuery.Column(COL_Name).Column(COL_Name);
+                updateQuery.Where().EqualsCondition(COL_ID).Value(item.DataRecordTypeId);
+                updateQueryContext.ExecuteNonQuery();
+            }
         }
 
         public bool UpdateDataRecordType(DataRecordType dataRecordType)
