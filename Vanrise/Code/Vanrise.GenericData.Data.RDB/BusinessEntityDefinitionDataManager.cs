@@ -20,7 +20,7 @@ namespace Vanrise.GenericData.Data.RDB
         const string COL_Title = "Title";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
-
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static BusinessEntityDefinitionDataManager()
         {
@@ -30,13 +30,15 @@ namespace Vanrise.GenericData.Data.RDB
             columns.Add(COL_Title, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 1000 });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "genericdata",
                 DBTableName = "BusinessEntityDefinition",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
 
@@ -83,7 +85,8 @@ namespace Vanrise.GenericData.Data.RDB
 
         public bool AreGenericRuleDefinitionsUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public void GenerateScript(List<BusinessEntityDefinition> beDefinitions, Action<string, string> addEntityScript)
@@ -96,7 +99,7 @@ namespace Vanrise.GenericData.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_Title, COL_Settings);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
             return queryContext.GetItems<BusinessEntityDefinition>(BusinessEntityDefinitionMapper);
         }
