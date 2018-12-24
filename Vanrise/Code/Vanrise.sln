@@ -437,6 +437,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Analytic.Data.RDB",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DatabaseStructure", "Vanrise.DatabaseStructure\Vanrise.DatabaseStructure.csproj", "{7584FE24-2426-40CF-829B-FBC9FE87F5A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Security.Data.RDB", "Vanrise.Security.Data.RDB\Vanrise.Security.Data.RDB.csproj", "{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.Transformation.Data.RDB", "Vanrise.GenericData.Transformation.Data.RDB\Vanrise.GenericData.Transformation.Data.RDB.csproj", "{5DD70E32-B69A-4100-AF77-A979F055A748}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1981,6 +1985,30 @@ Global
 		{7584FE24-2426-40CF-829B-FBC9FE87F5A2}.Release|x64.Build.0 = Release|Any CPU
 		{7584FE24-2426-40CF-829B-FBC9FE87F5A2}.Release|x86.ActiveCfg = Release|Any CPU
 		{7584FE24-2426-40CF-829B-FBC9FE87F5A2}.Release|x86.Build.0 = Release|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Debug|x64.Build.0 = Debug|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Debug|x86.Build.0 = Debug|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Release|x64.ActiveCfg = Release|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Release|x64.Build.0 = Release|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Release|x86.ActiveCfg = Release|Any CPU
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427}.Release|x86.Build.0 = Release|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Debug|x64.Build.0 = Debug|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Debug|x86.Build.0 = Debug|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Release|x64.ActiveCfg = Release|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Release|x64.Build.0 = Release|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Release|x86.ActiveCfg = Release|Any CPU
+		{5DD70E32-B69A-4100-AF77-A979F055A748}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2178,12 +2206,14 @@ Global
 		{5C0E46FD-E38F-4062-9A05-DD716424A15F} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
 		{CBD3D9C6-7FB8-40C2-B895-389A1B97CA78} = {8DFB44A5-B08F-439A-856A-174E03432484}
 		{7584FE24-2426-40CF-829B-FBC9FE87F5A2} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
+		{ADFF1331-0AD7-4C84-90DE-EC17AF5B1427} = {375D020B-2FA0-4D68-B841-E74E1FD15B16}
+		{5DD70E32-B69A-4100-AF77-A979F055A748} = {768DBB47-FFE4-4BAE-A289-963CFB561B64}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A6C2049-65DE-477B-B7A1-CD4DBAC577AF}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 187
+		SccNumberOfProjects = 189
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -2931,5 +2961,13 @@ Global
 		SccProjectTopLevelParentUniqueName186 = Vanrise.sln
 		SccProjectName186 = Vanrise.DatabaseStructure
 		SccLocalPath186 = Vanrise.DatabaseStructure
+		SccProjectUniqueName187 = Vanrise.Security.Data.RDB\\Vanrise.Security.Data.RDB.csproj
+		SccProjectTopLevelParentUniqueName187 = Vanrise.sln
+		SccProjectName187 = Vanrise.Security.Data.RDB
+		SccLocalPath187 = Vanrise.Security.Data.RDB
+		SccProjectUniqueName188 = Vanrise.GenericData.Transformation.Data.RDB\\Vanrise.GenericData.Transformation.Data.RDB.csproj
+		SccProjectTopLevelParentUniqueName188 = Vanrise.sln
+		SccProjectName188 = Vanrise.GenericData.Transformation.Data.RDB
+		SccLocalPath188 = Vanrise.GenericData.Transformation.Data.RDB
 	EndGlobalSection
 EndGlobal
