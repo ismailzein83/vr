@@ -14,6 +14,7 @@ namespace Vanrise.Notification.Data.RDB
     public class VRAlertLevelDataManager : IVRAlertLevelDataManager
     {
         static string TABLE_NAME = "VR_Notification_VRAlertLevel";
+        static string TABLE_ALIAS = "vrAlertLevel";
 
         const string COL_ID = "ID";
         const string COL_Name = "Name";
@@ -70,8 +71,8 @@ namespace Vanrise.Notification.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "vrAlertLevel", null, true);
-            selectQuery.SelectColumns().AllTableColumns("vrAlertLevel");
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
             return queryContext.GetItems(VRAlertLevelMapper);
         }
@@ -82,7 +83,7 @@ namespace Vanrise.Notification.Data.RDB
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
 
-            var ifNotExists = insertQuery.IfNotExists("vrAlertLevel");
+            var ifNotExists = insertQuery.IfNotExists(TABLE_ALIAS);
             ifNotExists.EqualsCondition(COL_Name).Value(alertLevelItem.Name);
             ifNotExists.EqualsCondition(COL_BusinessEntityDefinitionID).Value(alertLevelItem.BusinessEntityDefinitionId);
 
@@ -102,7 +103,7 @@ namespace Vanrise.Notification.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            var notExistsCondition = updateQuery.IfNotExists("vrAlertLevel");
+            var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.NotEqualsCondition(COL_ID).Value(alertLevelItem.VRAlertLevelId);
             notExistsCondition.EqualsCondition(COL_Name).Value(alertLevelItem.Name);
             notExistsCondition.EqualsCondition(COL_BusinessEntityDefinitionID).Value(alertLevelItem.BusinessEntityDefinitionId);

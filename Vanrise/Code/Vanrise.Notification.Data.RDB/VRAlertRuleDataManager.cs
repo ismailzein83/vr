@@ -116,12 +116,15 @@ namespace Vanrise.Notification.Data.RDB
                 insertQuery.Column(COL_LastModifiedBy).Value(VRAlertRuleItem.LastModifiedBy.Value);
             else
                 insertQuery.Column(COL_LastModifiedBy).Null();
-            insertQuery.Column(COL_LastModifiedTime).DateNow();
             insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(VRAlertRuleItem.Settings));
-            insertedId = queryContext.ExecuteScalar().LongWithNullHandlingValue;
-            if (insertedId == 0)
-                insertedId = -1;
-            return insertedId != -1;
+            var insertedID = queryContext.ExecuteScalar().NullableLongValue;
+            if (insertedID.HasValue)
+            {
+                insertedId = (long)insertedID;
+                return true;
+            }
+            insertedId = -1;
+            return false;
         }
 
         public bool Update(VRAlertRule VRAlertRuleItem)
@@ -140,7 +143,6 @@ namespace Vanrise.Notification.Data.RDB
             else
                 updateQuery.Column(COL_LastModifiedBy).Null();
             updateQuery.Column(COL_IsDisabled).Value(VRAlertRuleItem.IsDisabled);
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
             updateQuery.Where().EqualsCondition(COL_ID).Value(VRAlertRuleItem.VRAlertRuleId);
             return queryContext.ExecuteNonQuery() > 0;
 
