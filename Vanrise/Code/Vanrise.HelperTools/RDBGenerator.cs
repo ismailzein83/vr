@@ -165,9 +165,9 @@ namespace Vanrise.HelperTools
            
             columnDefinition.Append(string.Format("DataType = RDBDataType.{0}", dataTypes.GetRecord(column.DataType.SqlDataType)));
             if (column.DataType.MaximumLength > 0 && (recordType.Equals("NVarchar") || recordType.Equals("Varchar")))
-                columnDefinition.Append(string.Format(", Size= {0} ", column.DataType.MaximumLength));
+                columnDefinition.Append(string.Format(", Size = {0} ", column.DataType.MaximumLength));
             if (column.DataType.NumericPrecision > 0 && recordType.Equals("Decimal"))
-                columnDefinition.Append(string.Format(", Precision= {0} ", column.DataType.NumericPrecision));
+                columnDefinition.Append(string.Format(", Size = {0}, Precision = {1} ", column.DataType.NumericPrecision, column.DataType.NumericScale));
             return columnDefinition.ToString();
         }
         void AppendLines(StringBuilder stringBuilder, int numberOflines)
