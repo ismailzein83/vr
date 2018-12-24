@@ -562,6 +562,9 @@
     <Reference Include="Vanrise.GenericData.Transformation.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Data.RDB">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Transformation.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Data.SQL.dll</HintPath>
     </Reference>
@@ -810,6 +813,9 @@
     <Reference Include="Vanrise.Security.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data.RDB">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.RDB.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Security.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Data.SQL.dll</HintPath>
