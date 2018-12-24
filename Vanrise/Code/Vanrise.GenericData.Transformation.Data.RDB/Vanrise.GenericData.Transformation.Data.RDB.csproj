@@ -43,6 +43,18 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.RDB">
+      <HintPath>..\Output\Vanrise.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Data">
+      <HintPath>..\Output\Vanrise.GenericData.Transformation.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Entities">
+      <HintPath>..\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataTransformationDefinitionDataManager.cs" />
