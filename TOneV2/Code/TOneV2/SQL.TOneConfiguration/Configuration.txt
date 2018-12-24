@@ -127,3 +127,6 @@ Retail_NetworkRental.PostDeployment.sql
 
 Voucher
 Voucher.PostDeployment.sql
+
+TOne.SMS
+Retail.WhS_SMS.sql
