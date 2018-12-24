@@ -58,17 +58,17 @@ namespace Vanrise.Common.Data.RDB
 		#region Public Methods
 		public bool AreRegionsUpdated(ref object updateHandle)
 		{
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
 
 		public List<Region> GetRegions()
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var selectQuery = queryContext.AddSelectQuery();
 			selectQuery.From(TABLE_NAME, TABLE_ALIAS,null,true);
-			selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_CountryID, COL_Settings, COL_CreatedTime, COL_CreatedBy, COL_LastModifiedBy, COL_LastModifiedTime);
+			selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			return queryContext.GetItems(RegionMapper);
-
 		}
 
 		public bool Insert(Region region, out int insertedId)
@@ -76,13 +76,14 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var insertQuery = queryContext.AddInsertQuery();
 			insertQuery.IntoTable(TABLE_NAME);
-			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.EqualsCondition(COL_Name).Value(region.Name);
 			ifNotExist.EqualsCondition(COL_CountryID).Value(region.CountryId);
 			insertQuery.AddSelectGeneratedId();
 			insertQuery.Column(COL_Name).Value(region.Name);
 			insertQuery.Column(COL_CountryID).Value(region.CountryId);
-			insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(region.Settings));
+            if(region.Settings != null)
+			  insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(region.Settings));
 			if (region.CreatedBy.HasValue)
 				insertQuery.Column(COL_CreatedBy).Value(region.CreatedBy.Value);
 			else
@@ -91,14 +92,14 @@ namespace Vanrise.Common.Data.RDB
 				insertQuery.Column(COL_LastModifiedBy).Value(region.LastModifiedBy.Value);
 			else
 				insertQuery.Column(COL_LastModifiedBy).Null();
-			if (region.LastModifiedTime.HasValue)
-				insertQuery.Column(COL_LastModifiedTime).Value(region.LastModifiedTime.Value);
-			else
-				insertQuery.Column(COL_LastModifiedTime).Null();
-			insertedId = queryContext.ExecuteScalar().IntWithNullHandlingValue;
-			if (insertedId == 0)
-				insertedId = -1;
-			return (insertedId != -1);
+			var insertedID = queryContext.ExecuteScalar().NullableIntValue;
+            if(insertedID.HasValue)
+            {
+                insertedId = insertedID.Value;
+                return true;
+            }
+            insertedId = -1;
+            return false;
 		}
 
 		public bool Update(Region region)
@@ -106,14 +107,18 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var updateQuery = queryContext.AddUpdateQuery();
 			updateQuery.FromTable(TABLE_NAME);
-			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.NotEqualsCondition(COL_ID).Value(region.RegionId);
 			ifNotExist.EqualsCondition(COL_Name).Value(region.Name);
 			ifNotExist.EqualsCondition(COL_CountryID).Value(region.CountryId);
 			updateQuery.Column(COL_Name).Value(region.Name);
 			updateQuery.Column(COL_CountryID).Value(region.CountryId);
-			updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(region.Settings));
-			if (region.LastModifiedBy.HasValue)
+            if (region.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(region.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
+
+            if (region.LastModifiedBy.HasValue)
 				updateQuery.Column(COL_LastModifiedBy).Value(region.LastModifiedBy.Value);
 			else
 				updateQuery.Column(COL_LastModifiedBy).Null();

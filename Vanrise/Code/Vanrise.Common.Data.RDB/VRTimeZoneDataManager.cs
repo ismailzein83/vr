@@ -54,7 +54,7 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var selectQuery = queryContext.AddSelectQuery();
 			selectQuery.From(TABLE_NAME, TABLE_ALIAS,null,true);
-			selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_Settings, COL_CreatedTime, COL_CreatedBy, COL_LastModifiedBy, COL_LastModifiedTime);
+			selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			selectQuery.Sort().ByColumn(COL_Name,RDBSortDirection.ASC);
 			return queryContext.GetItems(VRTimeZoneMapper);
 		}
@@ -68,7 +68,8 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.EqualsCondition(COL_Name).Value(timeZone.Name);
 			insertQuery.AddSelectGeneratedId();
 			insertQuery.Column(COL_Name).Value(timeZone.Name);
-			insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(timeZone.Settings));
+            if(timeZone.Settings != null)
+		    	insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(timeZone.Settings));
 			if (timeZone.CreatedBy.HasValue)
 				insertQuery.Column(COL_CreatedBy).Value(timeZone.CreatedBy.Value);
 			else
@@ -78,10 +79,14 @@ namespace Vanrise.Common.Data.RDB
 			else
 				insertQuery.Column(COL_LastModifiedBy).Null();
 
-				insertedId= queryCotext.ExecuteScalar().IntWithNullHandlingValue;
-			if (insertedId == 0)
-				insertedId = -1;
-			return (insertedId != -1);
+			var	insertedID= queryCotext.ExecuteScalar().NullableIntValue;
+			if (insertedID.HasValue)
+            {
+                insertedId = insertedID.Value;
+                return true;
+            }
+            insertedId = -1;
+            return false;
 		}
 
 		public bool Update(VRTimeZone timeZone)
@@ -89,12 +94,16 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var updateQuery = queryContext.AddUpdateQuery();
 			updateQuery.FromTable(TABLE_NAME);
-			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.NotEqualsCondition(COL_ID).Value(timeZone.TimeZoneId);
 			ifNotExist.EqualsCondition(COL_Name).Value(timeZone.Name);
 			updateQuery.Column(COL_Name).Value(timeZone.Name);
-			updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(timeZone.Settings));
-			if (timeZone.LastModifiedBy.HasValue)
+            if (timeZone.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(timeZone.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
+
+            if (timeZone.LastModifiedBy.HasValue)
 				updateQuery.Column(COL_LastModifiedBy).Value(timeZone.LastModifiedBy.Value);
 			else
 				updateQuery.Column(COL_LastModifiedBy).Null();
@@ -105,8 +114,9 @@ namespace Vanrise.Common.Data.RDB
 
 		public bool AreVRTimeZonesUpdated(ref object updateHandle)
 		{
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
 
 		#endregion
 
@@ -123,13 +133,13 @@ namespace Vanrise.Common.Data.RDB
 
 			return new VRTimeZone
 			{
-				TimeZoneId = reader.GetInt("ID"),
-				Name = reader.GetString("Name"),
-				Settings = Vanrise.Common.Serializer.Deserialize<VRTimeZoneSettings>(reader.GetString("Settings")),
-				CreatedTime = reader.GetDateTime("CreatedTime"),
-				CreatedBy = reader.GetNullableInt("CreatedBy"),
-				LastModifiedBy = reader.GetNullableInt("LastModifiedBy"),
-				LastModifiedTime = reader.GetNullableDateTime("LastModifiedTime")
+				TimeZoneId = reader.GetInt(COL_ID),
+				Name = reader.GetString(COL_Name),
+				Settings = Vanrise.Common.Serializer.Deserialize<VRTimeZoneSettings>(reader.GetString(COL_Settings)),
+				CreatedTime = reader.GetDateTime(COL_CreatedTime),
+				CreatedBy = reader.GetNullableInt(COL_CreatedBy),
+				LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
+				LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime)
 			};
 		}
 

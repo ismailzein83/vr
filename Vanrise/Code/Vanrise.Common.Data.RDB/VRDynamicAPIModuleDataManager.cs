@@ -50,7 +50,7 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var selectQuery = queryContext.AddSelectQuery();
 			selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-			selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_CreatedTime, COL_CreatedBy, COL_LastModifiedBy, COL_LastModifiedTime);
+			selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
 			return queryContext.GetItems(VRDynamicAPIModuleMapper);
 		}
@@ -82,7 +82,7 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var updateQuery = queryContext.AddUpdateQuery();
 			updateQuery.FromTable(TABLE_NAME);
-			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.NotEqualsCondition(COL_ID).Value(vrDynamicAPIModule.VRDynamicAPIModuleId);
 			ifNotExist.EqualsCondition(COL_Name).Value(vrDynamicAPIModule.Name);
 			updateQuery.Column(COL_Name).Value(vrDynamicAPIModule.Name);
@@ -92,8 +92,9 @@ namespace Vanrise.Common.Data.RDB
 		}
 		public bool AreVRDynamicAPIModulesUpdated(ref object updateHandle)
 		{
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
 		#endregion
 
 		#region Private Methods

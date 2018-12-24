@@ -17,39 +17,45 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_Name = "Name";
 		const string COL_Settings = "Settings";
 		const string COL_CreatedTime = "CreatedTime";
-		#endregion
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
-		#region Constructors
-		static StyleDefinitionDataManager()
+        #endregion
+
+        #region Constructors
+        static StyleDefinitionDataManager()
 		{
-			var columns = new Dictionary<string, RDBTableColumnDefinition>();
-			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-			columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
-			columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-			RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
-			{
-				DBSchemaName = "common",
-				DBTableName = "StyleDefinition",
-				Columns = columns,
-				IdColumnName = COL_ID,
-				CreatedTimeColumnName = COL_CreatedTime
-			});
-		}
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+            {
+                DBSchemaName = "common",
+                DBTableName = "StyleDefinition",
+                Columns = columns,
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
+
+            });
+        }
 		#endregion
 
 		#region Public Methods
 		public bool AreStyleDefinitionUpdated(ref object updateHandle)
 		{
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
 
 		public List<StyleDefinition> GetStyleDefinitions()
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var selectQuery = queryContext.AddSelectQuery();
 			selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-			selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_Settings);
+			selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
 			return queryContext.GetItems(StyleDefinitionMapper);
 		}
@@ -63,7 +69,8 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.EqualsCondition(COL_Name).Value(styleDefinitionItem.Name);
 			insertQuery.Column(COL_ID).Value(styleDefinitionItem.StyleDefinitionId);
 			insertQuery.Column(COL_Name).Value(styleDefinitionItem.Name);
-			insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(styleDefinitionItem.StyleDefinitionSettings));
+            if(styleDefinitionItem.StyleDefinitionSettings != null)
+			    insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(styleDefinitionItem.StyleDefinitionSettings));
 			return queryContext.ExecuteNonQuery() > 0;
 		}
 
@@ -72,12 +79,15 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var updateQuery = queryContext.AddUpdateQuery();
 			updateQuery.FromTable(TABLE_NAME);
-			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.NotEqualsCondition(COL_ID).Value(styleDefinitionItem.StyleDefinitionId);
 			ifNotExist.EqualsCondition(COL_Name).Value(styleDefinitionItem.Name);
 			updateQuery.Column(COL_Name).Value(styleDefinitionItem.Name);
-			updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(styleDefinitionItem.StyleDefinitionSettings));
-			updateQuery.Where().EqualsCondition(COL_ID).Value(styleDefinitionItem.StyleDefinitionId);
+            if (styleDefinitionItem.StyleDefinitionSettings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(styleDefinitionItem.StyleDefinitionSettings));
+            else
+                updateQuery.Column(COL_Settings).Null();
+            updateQuery.Where().EqualsCondition(COL_ID).Value(styleDefinitionItem.StyleDefinitionId);
 			return queryContext.ExecuteNonQuery() > 0;
 		}
 		#endregion

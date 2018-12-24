@@ -51,15 +51,16 @@ namespace Vanrise.Common.Data.RDB
 		#region Public Methods
 		public bool AreVRDynamicAPIsUpdated(ref object updateHandle)
 		{
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
 
 		public List<VRDynamicAPI> GetVRDynamicAPIs()
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var selectQuery = queryContext.AddSelectQuery();
 			selectQuery.From(TABLE_NAME, TABLE_ALIAS,null,true);
-			selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_ModuleId, COL_Settings, COL_CreatedTime, COL_CreatedBy, COL_LastModifiedBy, COL_LastModifiedTime);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			selectQuery.Sort().ByColumn(COL_Name,RDBSortDirection.ASC);
 			return queryContext.GetItems(VRDynamicAPIMapper);
 		}
@@ -69,13 +70,14 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var insertQuery = queryContext.AddInsertQuery();
 			insertQuery.IntoTable(TABLE_NAME);
-			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.EqualsCondition(COL_Name).Value(vrDynamicAPI.Name);
 			ifNotExist.EqualsCondition(COL_ModuleId).Value(vrDynamicAPI.ModuleId);
 			insertQuery.AddSelectGeneratedId();
 			insertQuery.Column(COL_Name).Value(vrDynamicAPI.Name);
 			insertQuery.Column(COL_ModuleId).Value(vrDynamicAPI.ModuleId);
-			insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrDynamicAPI.Settings));
+            if(vrDynamicAPI.Settings != null)
+			    insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrDynamicAPI.Settings));
 			insertQuery.Column(COL_CreatedBy).Value(vrDynamicAPI.CreatedBy);
 			insertQuery.Column(COL_LastModifiedBy).Value(vrDynamicAPI.LastModifiedBy);
 
@@ -94,14 +96,18 @@ namespace Vanrise.Common.Data.RDB
 			var queryConext = new RDBQueryContext(GetDataProvider());
 			var updateQuery = queryConext.AddUpdateQuery();
 			updateQuery.FromTable(TABLE_NAME);
-			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.NotEqualsCondition(COL_ID).Value(vrDynamicAPI.VRDynamicAPIId);
 			ifNotExist.EqualsCondition(COL_Name).Value(vrDynamicAPI.Name);
 			ifNotExist.EqualsCondition(COL_ModuleId).Value(vrDynamicAPI.ModuleId);
 			updateQuery.Column(COL_Name).Value(vrDynamicAPI.Name);
 			updateQuery.Column(COL_ModuleId).Value(vrDynamicAPI.ModuleId);
-			updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrDynamicAPI.Settings));
-			updateQuery.Column(COL_LastModifiedBy).Value(vrDynamicAPI.LastModifiedBy);
+            if (vrDynamicAPI.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrDynamicAPI.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
+
+            updateQuery.Column(COL_LastModifiedBy).Value(vrDynamicAPI.LastModifiedBy);
 			updateQuery.Where().EqualsCondition(COL_ID).Value(vrDynamicAPI.VRDynamicAPIId);
 			return queryConext.ExecuteNonQuery() > 0;
 		}

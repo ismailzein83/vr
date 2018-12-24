@@ -18,41 +18,46 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_Settings = "Settings";
 		const string COL_IsCurrent = "IsCurrent";
 		const string COL_CreatedTime = "CreatedTime";
-		#endregion
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
-		#region Constructors
-		static VRApplicationVisibilityDataManager()
+        #endregion
+
+        #region Constructors
+        static VRApplicationVisibilityDataManager()
 		{
-			var columns = new Dictionary<string, RDBTableColumnDefinition>();
-			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-			columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
-			columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-			columns.Add(COL_IsCurrent, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
-			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-			RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
-			{
-				DBSchemaName = "common",
-				DBTableName = "VRAppVisibility",
-				Columns = columns,
-				IdColumnName = COL_ID,
-				CreatedTimeColumnName = COL_CreatedTime
-			});
-		}
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_IsCurrent, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+            {
+                DBSchemaName = "common",
+                DBTableName = "VRAppVisibility",
+                Columns = columns,
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
+            });
+        }
 		#endregion
 
 		#region Public Methods
 		public bool AreVRApplicationVisibilityUpdated(ref object updateHandle)
 		{
 
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
 
 		public List<VRApplicationVisibility> GetVRApplicationVisibilities()
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var selectQuery = queryContext.AddSelectQuery();
 			selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-			selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_IsCurrent, COL_Settings);
+			selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
 			return queryContext.GetItems(VRApplicationVisibilityMapper);
 		}
@@ -62,27 +67,32 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var insertQuery = queryContext.AddInsertQuery();
 			insertQuery.IntoTable(TABLE_NAME);
-			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.EqualsCondition(COL_Name).Value(vrApplicationVisibilityItem.Name);
 			insertQuery.Column(COL_ID).Value(vrApplicationVisibilityItem.VRApplicationVisibilityId);
 			insertQuery.Column(COL_Name).Value(vrApplicationVisibilityItem.Name);
-			insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrApplicationVisibilityItem.Settings));
+            if(vrApplicationVisibilityItem.Settings != null)
+			    insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrApplicationVisibilityItem.Settings));
 			return queryContext.ExecuteNonQuery() > 0;
 		}
 
-		public bool Update(VRApplicationVisibility vrApplicationVisibilityItem)
-		{
-			var queryContext = new RDBQueryContext(GetDataProvider());
-			var updateQuery = queryContext.AddUpdateQuery();
-			updateQuery.FromTable(TABLE_NAME);
-			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
-			ifNotExist.NotEqualsCondition(COL_ID).Value(vrApplicationVisibilityItem.VRApplicationVisibilityId);
-			ifNotExist.EqualsCondition(COL_Name).Value(vrApplicationVisibilityItem.Name);
-			updateQuery.Column(COL_Name).Value(vrApplicationVisibilityItem.Name);
-			updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrApplicationVisibilityItem.Settings));
-			updateQuery.Where().EqualsCondition(COL_ID).Value(vrApplicationVisibilityItem.VRApplicationVisibilityId);
-			return queryContext.ExecuteNonQuery() > 0;
-		}
+        public bool Update(VRApplicationVisibility vrApplicationVisibilityItem)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
+            ifNotExist.NotEqualsCondition(COL_ID).Value(vrApplicationVisibilityItem.VRApplicationVisibilityId);
+            ifNotExist.EqualsCondition(COL_Name).Value(vrApplicationVisibilityItem.Name);
+            updateQuery.Column(COL_Name).Value(vrApplicationVisibilityItem.Name);
+            if (vrApplicationVisibilityItem.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrApplicationVisibilityItem.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
+
+            updateQuery.Where().EqualsCondition(COL_ID).Value(vrApplicationVisibilityItem.VRApplicationVisibilityId);
+            return queryContext.ExecuteNonQuery() > 0;
+        }
 		#endregion
 
 		#region Private Methods

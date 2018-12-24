@@ -15,20 +15,23 @@ namespace Vanrise.Common.Data.RDB
 		static string TABLE_ALIAS = "rateType";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
-		static RateTypeDataManager()
+        static RateTypeDataManager()
 		{
-			var columns = new Dictionary<string, RDBTableColumnDefinition>();
-			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-			columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 50 });
-			RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
-			{
-				DBSchemaName = "common",
-				DBTableName = "RateType",
-				Columns = columns,
-				IdColumnName = COL_ID
-			});
-		}
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 50 });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+            {
+                DBSchemaName = "common",
+                DBTableName = "RateType",
+                Columns = columns,
+                IdColumnName = COL_ID,
+                ModifiedTimeColumnName = COL_LastModifiedTime
+            });
+        }
 
 		#region Private Methods
 		BaseRDBDataProvider GetDataProvider()
@@ -40,15 +43,16 @@ namespace Vanrise.Common.Data.RDB
 		#region Public Methods
 		public bool AreRateTypesUpdated(ref object updateHandle)
 		{
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
 
 		public List<RateType> GetRateTypes()
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var selectQuery = queryContext.AddSelectQuery();
 			selectQuery.From(TABLE_NAME, TABLE_ALIAS,null,true);
-			selectQuery.SelectColumns().Columns(COL_ID, COL_Name);
+			selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
 			return queryContext.GetItems(RateTypeMapper);
 		}
@@ -62,18 +66,22 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.EqualsCondition(COL_Name).Value(rateType.Name);
 			insertQuery.AddSelectGeneratedId();
 			insertQuery.Column(COL_Name).Value(rateType.Name);
-			insertedId = queryContext.ExecuteScalar().IntWithNullHandlingValue;
-			if (insertedId == 0)
-				insertedId = -1;
-			return (insertedId != -1);
-		}
+            var insertedID = queryContext.ExecuteScalar().NullableIntValue;
+            if (insertedID.HasValue)
+            {
+                insertedId = insertedID.Value;
+                return true;
+            }
+            insertedId = -1;
+            return false;
+        }
 
 		public bool Update(RateType rateType)
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var updateQuery = queryContext.AddUpdateQuery();
 			updateQuery.FromTable(TABLE_NAME);
-			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.NotEqualsCondition(COL_ID).Value(rateType.RateTypeId);
 			ifNotExist.EqualsCondition(COL_Name).Value(rateType.Name);
 			updateQuery.Column(COL_Name).Value(rateType.Name);

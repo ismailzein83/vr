@@ -17,25 +17,30 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_Name = "Name";
 		const string COL_Settings = "Settings";
 		const string COL_CreatedTime = "CreatedTime";
-		#endregion
-		
-		#region Contructors
-		static VRConnectionDataManager()
+        const string COL_LastModifiedTime = "LastModifiedTime";
+
+        #endregion
+
+        #region Contructors
+        static VRConnectionDataManager()
 		{
-			var columns = new Dictionary<string, RDBTableColumnDefinition>();
-			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-			columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
-			columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-			RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
-			{
-				DBSchemaName = "common",
-				DBTableName = "Connection",
-				Columns = columns,
-				IdColumnName = COL_ID,
-				CreatedTimeColumnName = COL_CreatedTime
-			});
-		}
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+            {
+                DBSchemaName = "common",
+                DBTableName = "Connection",
+                Columns = columns,
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
+
+            });
+        }
 		#endregion
 
 		#region Public Methods
@@ -45,7 +50,7 @@ namespace Vanrise.Common.Data.RDB
 			var queryConext = new RDBQueryContext(GetDataProvider());
 			var selectQuery = queryConext.AddSelectQuery();
 			selectQuery.From(TABLE_NAME, TABLE_ALIAS,null,true);
-			selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_Settings);
+			selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			return queryConext.GetItems(VRConnectionMapper);
 		}
 		public bool Update(VRConnection connection)
@@ -57,8 +62,11 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.EqualsCondition(COL_Name).Value(connection.Name);
 			ifNotExist.NotEqualsCondition(COL_ID).Value(connection.VRConnectionId);
 			updateQuery.Column(COL_Name).Value(connection.Name);
-			updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(connection.Settings));
-			updateQuery.Where().EqualsCondition(COL_ID).Value(connection.VRConnectionId);
+            if (connection.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(connection.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
+            updateQuery.Where().EqualsCondition(COL_ID).Value(connection.VRConnectionId);
 			return queryContext.ExecuteNonQuery() > 0;
 		}
 
@@ -71,7 +79,8 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.EqualsCondition(COL_Name).Value(connection.Name);
 			insertQuery.Column(COL_ID).Value(connection.VRConnectionId);
 			insertQuery.Column(COL_Name).Value(connection.Name);
-			insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(connection.Settings));
+            if(connection.Settings != null)
+		    	insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(connection.Settings));
 			return queryContext.ExecuteNonQuery() > 0;
 		}
 
@@ -79,8 +88,9 @@ namespace Vanrise.Common.Data.RDB
 
 		public bool AreVRConnectionsUpdated(ref object updateHandle)
 		{
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
 		#endregion
 
 		#region Private Methods

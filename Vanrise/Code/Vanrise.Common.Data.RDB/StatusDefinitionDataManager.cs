@@ -55,15 +55,16 @@ namespace Vanrise.Common.Data.RDB
 		#region Public Methods
 		public bool AreStatusDefinitionUpdated(ref object updateHandle)
 		{
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
 
 		public List<StatusDefinition> GetStatusDefinition()
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var selectQuery = queryContext.AddSelectQuery();
 			selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-			selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_Settings, COL_BusinessEntityDefinitionID, COL_CreatedTime, COL_CreatedBy, COL_LastModifiedBy, COL_LastModifiedTime);
+			selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			return queryContext.GetItems(StatusDefinitionMapper);
 		}
 
@@ -72,14 +73,16 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var insertQuery = queryContext.AddInsertQuery();
 			insertQuery.IntoTable(TABLE_NAME);
-			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.EqualsCondition(TABLE_ALIAS, COL_Name).Value(statusDefinitionItem.Name);
 			ifNotExist.EqualsCondition(TABLE_ALIAS, COL_BusinessEntityDefinitionID).Value(statusDefinitionItem.BusinessEntityDefinitionId);
 			insertQuery.Column(COL_ID).Value(statusDefinitionItem.StatusDefinitionId);
 			insertQuery.Column(COL_Name).Value(statusDefinitionItem.Name);
 			insertQuery.Column(COL_BusinessEntityDefinitionID).Value(statusDefinitionItem.BusinessEntityDefinitionId);
-			insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(statusDefinitionItem.Settings));
-			if (statusDefinitionItem.CreatedBy.HasValue)
+            if(statusDefinitionItem.Settings != null)
+			   insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(statusDefinitionItem.Settings));
+
+            if (statusDefinitionItem.CreatedBy.HasValue)
 				insertQuery.Column(COL_CreatedBy).Value(statusDefinitionItem.CreatedBy.Value);
 			else
 				insertQuery.Column(COL_CreatedBy).Null();
@@ -95,18 +98,24 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var updateQuery = queryContext.AddUpdateQuery();
 			updateQuery.FromTable(TABLE_NAME);
-			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.NotEqualsCondition(COL_ID).Value(statusDefinitionItem.StatusDefinitionId);
 			ifNotExist.EqualsCondition(COL_Name).Value(statusDefinitionItem.Name);
 			ifNotExist.EqualsCondition(COL_BusinessEntityDefinitionID).Value(statusDefinitionItem.BusinessEntityDefinitionId);
 			updateQuery.Column(COL_Name).Value(statusDefinitionItem.Name);
-			updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(statusDefinitionItem.Settings));
-			updateQuery.Column(COL_BusinessEntityDefinitionID).Value(statusDefinitionItem.BusinessEntityDefinitionId);
-			if(statusDefinitionItem.LastModifiedBy.HasValue)
-			updateQuery.Column(COL_LastModifiedBy).Value(statusDefinitionItem.LastModifiedBy.Value);
+
+            if (statusDefinitionItem.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(statusDefinitionItem.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
+
+            updateQuery.Column(COL_BusinessEntityDefinitionID).Value(statusDefinitionItem.BusinessEntityDefinitionId);
+
+            if (statusDefinitionItem.LastModifiedBy.HasValue)
+			    updateQuery.Column(COL_LastModifiedBy).Value(statusDefinitionItem.LastModifiedBy.Value);
 			else
-			updateQuery.Column(COL_LastModifiedBy).Null();
-			updateQuery.Where(RDBConditionGroupOperator.AND).EqualsCondition(COL_ID).Value(statusDefinitionItem.StatusDefinitionId);
+			    updateQuery.Column(COL_LastModifiedBy).Null();
+            updateQuery.Where().EqualsCondition(COL_ID).Value(statusDefinitionItem.StatusDefinitionId);
 			return queryContext.ExecuteNonQuery() > 0;
 		}
 		#endregion
@@ -127,7 +136,7 @@ namespace Vanrise.Common.Data.RDB
 				StatusDefinitionId = reader.GetGuid(COL_ID),
 				Name = reader.GetString(COL_Name),
 				BusinessEntityDefinitionId =reader.GetGuid(COL_BusinessEntityDefinitionID),
-				Settings = reader.GetString(COL_Settings) != null ? Vanrise.Common.Serializer.Deserialize<StatusDefinitionSettings>(reader.GetString(COL_Settings)) : null,
+				Settings = Vanrise.Common.Serializer.Deserialize<StatusDefinitionSettings>(reader.GetString(COL_Settings)),
 				CreatedTime = reader.GetDateTime(COL_CreatedTime),
 				CreatedBy = reader.GetNullableInt(COL_CreatedBy),
 				LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
