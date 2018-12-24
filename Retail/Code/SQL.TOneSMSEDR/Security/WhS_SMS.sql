@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [WhS_SMS]
+    AUTHORIZATION [dbo];
+

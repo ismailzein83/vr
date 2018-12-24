@@ -254,6 +254,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.RA.Entities", "Retai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.RA.MainExtensions", "Retail.RA.MainExtensions\Retail.RA.MainExtensions.csproj", "{805F9814-7817-485E-9214-BD669813EB95}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.TOneSMSEDR", "SQL.TOneSMSEDR\SQL.TOneSMSEDR.sqlproj", "{4838A917-C913-49BB-9D7C-DB4A81F0377D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -700,6 +702,12 @@ Global
 		{805F9814-7817-485E-9214-BD669813EB95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{805F9814-7817-485E-9214-BD669813EB95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{805F9814-7817-485E-9214-BD669813EB95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4838A917-C913-49BB-9D7C-DB4A81F0377D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4838A917-C913-49BB-9D7C-DB4A81F0377D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4838A917-C913-49BB-9D7C-DB4A81F0377D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{4838A917-C913-49BB-9D7C-DB4A81F0377D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4838A917-C913-49BB-9D7C-DB4A81F0377D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4838A917-C913-49BB-9D7C-DB4A81F0377D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -823,12 +831,13 @@ Global
 		{93613BFD-1F1C-46E4-A5E0-C14135E3B807} = {69EA1D14-2E55-4426-A329-EA3E60995E85}
 		{35B73AE6-BBC8-408C-AB01-3BF3574B28E0} = {69EA1D14-2E55-4426-A329-EA3E60995E85}
 		{805F9814-7817-485E-9214-BD669813EB95} = {69EA1D14-2E55-4426-A329-EA3E60995E85}
+		{4838A917-C913-49BB-9D7C-DB4A81F0377D} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 104
+		SccNumberOfProjects = 105
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1244,5 +1253,9 @@ Global
 		SccProjectTopLevelParentUniqueName103 = Retail.sln
 		SccProjectName103 = Retail.RA.MainExtensions
 		SccLocalPath103 = Retail.RA.MainExtensions
+		SccProjectUniqueName104 = SQL.TOneSMSEDR\\SQL.TOneSMSEDR.sqlproj
+		SccProjectTopLevelParentUniqueName104 = Retail.sln
+		SccProjectName104 = SQL.TOneSMSEDR
+		SccLocalPath104 = SQL.TOneSMSEDR
 	EndGlobalSection
 EndGlobal

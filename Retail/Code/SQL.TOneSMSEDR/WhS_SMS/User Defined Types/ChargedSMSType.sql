@@ -1,0 +1,21 @@
+﻿CREATE TYPE [WhS_SMS].[ChargedSMSType] AS TABLE (
+    [ID]                         BIGINT          NULL,
+    [Message]                    NVARCHAR (MAX)  NULL,
+    [ProxiedMessage]             NVARCHAR (MAX)  NULL,
+    [Attempt]                    INT             NULL,
+    [ClientRequestDate]          DATETIME        NULL,
+    [CustomerId]                 BIGINT          NULL,
+    [CustomerAmount]             DECIMAL (20, 8) NULL,
+    [DeliveryDate]               DATETIME        NULL,
+    [ReplyDate]                  DATETIME        NULL,
+    [VendorId]                   BIGINT          NULL,
+    [VendorAmount]               DECIMAL (20, 8) NULL,
+    [CustomerFinancialAccountId] BIGINT          NULL,
+    [SupplierFinancialAccountId] BIGINT          NULL,
+    [SupplierCurrencyId]         INT             NULL,
+    [CustomerCurrencyId]         INT             NULL,
+    [CustomerBillingAccountId]   VARCHAR (50)    NULL,
+    [SupplierBillingAccountId]   VARCHAR (50)    NULL,
+    [DSTAddressOUT]              VARCHAR (255)   NULL,
+    [DestinationZoneId]          BIGINT          NULL);
+
