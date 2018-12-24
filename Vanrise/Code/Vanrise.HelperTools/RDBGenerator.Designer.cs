@@ -33,15 +33,18 @@
             this.generatedCode = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.GenerateRDBCode = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tableName = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // connectionString
             // 
             this.connectionString.Location = new System.Drawing.Point(29, 40);
             this.connectionString.Name = "connectionString";
-            this.connectionString.Text = "Server=192.168.110.185;Database=TOneConfiguration;User ID=Development;Password=dev!123";
             this.connectionString.Size = new System.Drawing.Size(1022, 20);
             this.connectionString.TabIndex = 0;
+            this.connectionString.Text = "Server=192.168.110.185;Database=TOneConfiguration;User ID=Development;Password=de" +
+    "v!123";
             // 
             // label1
             // 
@@ -54,11 +57,11 @@
             // 
             // generatedCode
             // 
-            this.generatedCode.Location = new System.Drawing.Point(26, 113);
+            this.generatedCode.Location = new System.Drawing.Point(26, 163);
             this.generatedCode.Multiline = true;
             this.generatedCode.Name = "generatedCode";
             this.generatedCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.generatedCode.Size = new System.Drawing.Size(1022, 698);
+            this.generatedCode.Size = new System.Drawing.Size(1022, 648);
             this.generatedCode.TabIndex = 2;
             // 
             // label2
@@ -72,7 +75,7 @@
             // 
             // GenerateRDBCode
             // 
-            this.GenerateRDBCode.Location = new System.Drawing.Point(416, 67);
+            this.GenerateRDBCode.Location = new System.Drawing.Point(426, 134);
             this.GenerateRDBCode.Name = "GenerateRDBCode";
             this.GenerateRDBCode.Size = new System.Drawing.Size(75, 23);
             this.GenerateRDBCode.TabIndex = 4;
@@ -80,11 +83,29 @@
             this.GenerateRDBCode.UseVisualStyleBackColor = true;
             this.GenerateRDBCode.Click += new System.EventHandler(this.GenerateRDBCode_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(26, 68);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(65, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Table Name";
+            // 
+            // tableName
+            // 
+            this.tableName.Location = new System.Drawing.Point(26, 87);
+            this.tableName.Name = "tableName";
+            this.tableName.Size = new System.Drawing.Size(1022, 20);
+            this.tableName.TabIndex = 5;
+            // 
             // RDBGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1093, 820);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.tableName);
             this.Controls.Add(this.GenerateRDBCode);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.generatedCode);
@@ -104,5 +125,7 @@
         private System.Windows.Forms.TextBox generatedCode;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button GenerateRDBCode;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tableName;
     }
 }

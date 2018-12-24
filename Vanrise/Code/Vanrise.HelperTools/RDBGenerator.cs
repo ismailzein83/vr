@@ -52,25 +52,27 @@ namespace Vanrise.HelperTools
                 int tablesCount = connectedDataBase.Tables.Count;
                 for (int i = 0; i < tablesCount; i++)
                 {
-                   
                     Table t = connectedDataBase.Tables[i];
-                    if (t.IsSystemObject) continue;
-                    string tablefullname = string.Format("'{0}.{1}'", t.Schema, t.Name);
-                    generatedCode.Append(string.Format("_ _ _ _ _ _ _ _ START{0} _ _ _ _ _ _", tablefullname));
-                    generatedCode.Append(string.Format("_ _ _ _ _ _ _ _ begin{0} _ _ _ _ _ _", DateTime.Now.ToString()));
-                    AppendLines(generatedCode, 2);
+                    if (String.IsNullOrEmpty(tableName.Text)|| tableName.Text == t.Name)
+                    {
+                        if (t.IsSystemObject) continue;
+                        string tablefullname = string.Format("'{0}.{1}'", t.Schema, t.Name);
+                        generatedCode.Append(string.Format("_ _ _ _ _ _ _ _ START{0} _ _ _ _ _ _", tablefullname));
+                        generatedCode.Append(string.Format("_ _ _ _ _ _ _ _ begin{0} _ _ _ _ _ _", DateTime.Now.ToString()));
+                        AppendLines(generatedCode, 2);
 
-                    generatedCode.Append(BuildTableStaticFields(t));
+                        generatedCode.Append(BuildTableStaticFields(t));
 
-                    AppendLines(generatedCode, 2);
+                        AppendLines(generatedCode, 2);
 
-                    generatedCode.Append(BuildTableDataManagerConstructor(t));
+                        generatedCode.Append(BuildTableDataManagerConstructor(t));
 
-                    AppendLines(generatedCode, 2);
-                    generatedCode.Append(string.Format("_ _ _ _ _ _ _ _ ends{0} _ _ _ _ _ _", DateTime.Now.ToString()));
-                    generatedCode.Append(string.Format("_ _ _ _ _ _ _ _ END _ _ _ _ _ _"));
+                        AppendLines(generatedCode, 2);
+                        generatedCode.Append(string.Format("_ _ _ _ _ _ _ _ ends{0} _ _ _ _ _ _", DateTime.Now.ToString()));
+                        generatedCode.Append(string.Format("_ _ _ _ _ _ _ _ END _ _ _ _ _ _"));
 
-                    AppendLines(generatedCode, 2);
+                        AppendLines(generatedCode, 2);
+                    }
                 }
 
                 this.generatedCode.Text = generatedCode.ToString();
