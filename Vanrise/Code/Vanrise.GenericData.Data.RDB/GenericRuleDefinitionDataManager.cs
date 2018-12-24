@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.Data.RDB
         const string COL_Name = "Name";
         const string COL_Details = "Details";
         const string COL_CreatedTime = "CreatedTime";
-
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static GenericRuleDefinitionDataManager()
         {
@@ -26,13 +26,15 @@ namespace Vanrise.GenericData.Data.RDB
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 900 });
             columns.Add(COL_Details, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "genericdata",
                 DBTableName = "GenericRuleDefinition",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
         #endregion
@@ -69,14 +71,15 @@ namespace Vanrise.GenericData.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_Details, COL_CreatedTime);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
             return queryContext.GetItems(GenericRuleDefinitionMapper);
         }
 
         public bool AreGenericRuleDefinitionsUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public bool AddGenericRuleDefinition(GenericRuleDefinition genericRuleDefinition)
@@ -88,7 +91,6 @@ namespace Vanrise.GenericData.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
             insertQuery.Column(COL_ID).Value(genericRuleDefinition.GenericRuleDefinitionId);
             insertQuery.Column(COL_Name).Value(genericRuleDefinition.Name);
-            insertQuery.Column(COL_CreatedTime).DateNow();
             insertQuery.Column(COL_Details).Value(Common.Serializer.Serialize(genericRuleDefinition));
             return queryContext.ExecuteNonQuery() > 0;
         }
