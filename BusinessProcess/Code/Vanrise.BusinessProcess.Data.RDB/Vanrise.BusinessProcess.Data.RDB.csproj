@@ -62,6 +62,7 @@
     <Compile Include="BPBusinessRuleActionTypeDataManager.cs" />
     <Compile Include="BPBusinessRuleDefinitionDataManager.cs" />
     <Compile Include="BPBusinessRuleSetDataManager.cs" />
+    <Compile Include="BPDataManager.cs" />
     <Compile Include="BPDefinitionArgumentStateDataManager.cs" />
     <Compile Include="BPDefinitionDataManager.cs" />
     <Compile Include="BPInstanceDataManager.cs" />
