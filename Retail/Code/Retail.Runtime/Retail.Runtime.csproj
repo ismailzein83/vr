@@ -672,6 +672,9 @@
     <None Include="App.config.Interconnect.exclude">
       <SubType>Designer</SubType>
     </None>
+    <None Include="App.config.SMS-WHS.exclude">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="App.config.RA.exclude">
       <SubType>Designer</SubType>
     </None>

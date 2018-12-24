@@ -1062,6 +1062,9 @@
     <Content Include="Web.config.NR.exclude">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Web.config.SMS-WHS.exclude">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Web.config.RA.exclude">
       <SubType>Designer</SubType>
     </None>
