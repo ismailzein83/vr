@@ -12,7 +12,10 @@ CREATE PROCEDURE [common].[sp_CurrencyExchangeRate_update]
 	
 AS
 BEGIN
+IF NOT EXISTS(SELECT 1 FROM common.CurrencyExchangeRate WHERE ID != @ID AND ExchangeDate = @ExchangeDate and CurrencyID= @CurrencyID)
+	BEGIN
 	UPDATE common.CurrencyExchangeRate
-	SET Rate = @Rate , CurrencyID = @CurrencyID , ExchangeDate = @ExchangeDate
+	SET Rate = @Rate , CurrencyID = @CurrencyID , ExchangeDate = @ExchangeDate,LastModifiedTime=getdate()
 	WHERE ID = @ID
+	END
 END

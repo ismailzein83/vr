@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Common].[sp_GenericLKUP_Update]
+CREATE PROCEDURE [common].[sp_GenericLKUP_Update]
 	@ID uniqueidentifier,
 	@Name NVARCHAR(255),
 	@BusinessEntityDefinitionId uniqueidentifier,
@@ -13,7 +13,7 @@ BEGIN
 IF NOT EXISTS(SELECT 1 FROM [Common].GenericLKUP WHERE ID != @ID and Name = @Name and BusinessEntityDefinitionID = @BusinessEntityDefinitionId)
 	BEGIN
 		update [Common].GenericLKUP
-		set  Name = @Name ,Settings= @Settings, BusinessEntityDefinitionID = @BusinessEntityDefinitionId
+		set  Name = @Name ,Settings= @Settings, BusinessEntityDefinitionID = @BusinessEntityDefinitionId,LastModifiedTime = getdate()
 		where  ID = @ID
 	END
 END

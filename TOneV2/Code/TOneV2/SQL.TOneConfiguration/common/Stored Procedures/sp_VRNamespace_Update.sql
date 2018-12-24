@@ -7,7 +7,7 @@ BEGIN
 IF NOT EXISTS(SELECT 1 FROM common.VRNamespace WHERE ID != @ID and Name = @Name)
 	BEGIN
 		update common.VRNamespace
-		set  Name = @Name, Settings = @Settings
+		set  Name = @Name, Settings = @Settings, LastModifiedTime = getdate()
 		where  ID = @ID
 	END
 END
