@@ -7,8 +7,11 @@
     [State]            NVARCHAR (MAX)   NULL,
     [CreatedTime]      DATETIME         CONSTRAINT [DF_DataRecordStorage_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]        ROWVERSION       NULL,
+    [LastModifiedTime] DATETIME         CONSTRAINT [DF_DataRecordStorage_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_DataRecordStorage] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

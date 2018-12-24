@@ -14,7 +14,7 @@ BEGIN
 	IF NOT EXISTS (SELECT NULL FROM genericdata.DataRecordStorage WHERE ID != @Id AND Name = @Name)
 	BEGIN
 		UPDATE genericdata.DataRecordStorage
-		SET Name = @Name, DataRecordTypeID = @DataRecordTypeId, DataStoreID = @DataStoreId, Settings = @Settings
+		SET Name = @Name, DataRecordTypeID = @DataRecordTypeId, DataStoreID = @DataStoreId, Settings = @Settings, LastModifiedTime = GETDATE()
 		WHERE ID = @Id
 	END
 END

@@ -15,7 +15,7 @@ BEGIN
 IF NOT EXISTS(SELECT 1 FROM genericdata.[DataRecordType] WHERE ID != @ID AND Name = @Name)
 	BEGIN
 		Update genericdata.[DataRecordType]
-		Set Name = @Name, ParentID = @ParentId , Fields = @Fields, ExtraFieldsEvaluator = @ExtraFieldsEvaluator, Settings = @Settings
+		Set Name = @Name, ParentID = @ParentId , Fields = @Fields, ExtraFieldsEvaluator = @ExtraFieldsEvaluator, Settings = @Settings, LastModifiedTime = GETDATE()
 		Where ID = @ID
 	END
 END

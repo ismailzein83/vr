@@ -8,7 +8,7 @@ BEGIN
 IF NOT EXISTS(SELECT 1 FROM genericdata.DataRecordFieldChoice WHERE ID != @ID AND Name = @Name)
 	BEGIN
 		Update genericdata.DataRecordFieldChoice
-	Set Name = @Name, Settings = @Settings
+	Set Name = @Name, Settings = @Settings, LastModifiedTime = GETDATE()
 	Where ID = @ID
 	END
 END

@@ -12,7 +12,7 @@ BEGIN
 	IF NOT EXISTS(SELECT NULL FROM genericdata.DataStore WHERE ID != @Id AND Name = @Name)
 	BEGIN
 		UPDATE genericdata.DataStore
-		SET Name = @Name, Settings = @Setting
+		SET Name = @Name, Settings = @Setting, LastModifiedTime = GETDATE()
 		WHERE ID = @Id
 	END
 END

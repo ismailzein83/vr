@@ -4,8 +4,11 @@
     [Title]                VARCHAR (255)  NOT NULL,
     [DefaultQueueSettings] NVARCHAR (MAX) NOT NULL,
     [CreatedTime]          DATETIME       CONSTRAINT [DF_QueueItemType_CreatedTime] DEFAULT (getdate()) NULL,
+    [LastModifiedTime]     DATETIME       CONSTRAINT [DF_QueueItemType_LastModifiedTime] DEFAULT (getdate()) NULL,
     [timestamp]            ROWVERSION     NULL,
     CONSTRAINT [PK_QueueItemType] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_QueueItemType_ItemFQTN] UNIQUE NONCLUSTERED ([ItemFQTN] ASC)
 );
+
+
 

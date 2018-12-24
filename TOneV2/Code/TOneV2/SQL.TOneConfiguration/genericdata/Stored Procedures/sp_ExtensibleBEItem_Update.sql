@@ -12,7 +12,7 @@ BEGIN
 IF EXISTS(SELECT 1 FROM genericdata.ExtensibleBEItem WHERE ID = @ID)
 	BEGIN
 		Update genericdata.ExtensibleBEItem
-		Set  Details = @Details
+		Set  Details = @Details, LastModifiedTime = GETDATE()
 		Where ID = @ID
 	END
 END

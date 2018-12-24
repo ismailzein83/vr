@@ -7,6 +7,9 @@
     [EED]                  DATETIME         NULL,
     [timestamp]            ROWVERSION       NULL,
     [CreatedTime]          DATETIME         CONSTRAINT [DF_BEParentChildRelation_CreatedTime] DEFAULT (getdate()) NULL,
+    [LastModifiedTime]     DATETIME         CONSTRAINT [DF_BEParentChildRelation_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_BEParentChildRelation] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

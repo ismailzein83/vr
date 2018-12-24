@@ -18,7 +18,8 @@ IF NOT EXISTS(select 1 from genericdata.BusinessEntityDefinition where Name = @N
 	UPDATE	genericdata.BusinessEntityDefinition
 	SET	    Name = @Name,
 			Title =@Title,
-			Settings = @Settings
+			Settings = @Settings,
+			LastModifiedTime = GETDATE()
 	WHERE	ID = @ID
 	END
 END

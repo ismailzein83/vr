@@ -13,7 +13,7 @@ BEGIN
 IF NOT EXISTS(SELECT 1 FROM genericdata.[SummaryTransformationDefinition] WHERE ID != @ID AND Name = @Name)
 	BEGIN
 		Update genericdata.[SummaryTransformationDefinition]
-		Set Name = @Name, Details = @Details 
+		Set Name = @Name, Details = @Details, LastModifiedTime = GETDATE()
 		Where ID = @ID
 	END
 END

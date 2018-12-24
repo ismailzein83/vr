@@ -8,7 +8,8 @@ BEGIN
 	BEGIN
 		UPDATE [reprocess].ReprocessDefinition
 		SET Name = @Name,
-			[Settings] = @Settings
+		LastModifiedTime = GETDATE(),
+		[Settings] = @Settings
 		WHERE ID = @ID
 	END
 END

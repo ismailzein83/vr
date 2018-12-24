@@ -11,7 +11,7 @@ BEGIN
 	--			  where ID != @ID and ParentBEID = @ParentBEID and ChildBEID = @ChildBEID)
 	BEGIN
 		update [genericdata].[BEParentChildRelation]
-		set RelationDefinitionID = @RelationDefinitionID, ParentBEID = @ParentBEID, ChildBEID = @ChildBEID, BED = @BED, EED =@EED
+		set RelationDefinitionID = @RelationDefinitionID, ParentBEID = @ParentBEID, ChildBEID = @ChildBEID, BED = @BED, EED =@EED, LastModifiedTime = GETDATE()
 		where ID = @ID
 	END
 END

@@ -14,7 +14,7 @@ BEGIN
 IF NOT EXISTS(SELECT 1 FROM genericdata.DataTransformationDefinition WHERE ID != @ID AND Name = @Name)
 	BEGIN
 		Update genericdata.DataTransformationDefinition
-		Set Name = @Name, Title = @Title , Details = @Details
+		Set Name = @Name, Title = @Title , Details = @Details, LastModifiedTime = GETDATE()
 		Where ID = @ID
 	END
 END
