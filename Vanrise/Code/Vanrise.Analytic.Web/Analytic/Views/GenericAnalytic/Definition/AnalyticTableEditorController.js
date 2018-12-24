@@ -145,8 +145,6 @@
                         $scope.scopeModel.connectionString = tableEntity.Settings.ConnectionString;
                         $scope.scopeModel.tableName = tableEntity.Settings.TableName;
                         $scope.scopeModel.timeColumnName = tableEntity.Settings.TimeColumnName;
-
-
                         $scope.scopeModel.connectionStringName = tableEntity.Settings.ConnectionStringName;
                         $scope.scopeModel.connectionString = tableEntity.Settings.ConnectionString;
                         $scope.scopeModel.showInKPISettings = tableEntity.Settings.ShowInKPISettings;
@@ -155,8 +153,6 @@
                         } else if ($scope.scopeModel.connectionString != undefined) {
                             $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionString;
                         }
-
-
                     }
                 }
 
@@ -233,7 +229,6 @@
                 var loadStatusDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 promises.push(loadStatusDefinitionPromiseDeferred.promise);
-                console.log(beDefinitionSelectedPromiseDeferred);
                 UtilsService.waitMultiplePromises([statusDefinitionReadyDeferred.promise, beDefinitionSelectedPromiseDeferred.promise]).then(function () {
                     var statusDefinitionPayload = {
                         filter: { BusinessEntityDefinitionId: tableEntity.Settings.StatusDefinitionBEId },
@@ -267,7 +262,6 @@
             };
             return table;
         }
-
 
         function insert() {
 

@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Entities;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
     public class AnalyticTableSettings
     {
-        public string ConnectionString { get; set; }
-
         /// <summary>
         /// either ConnectionString or ConnectionStringName should have value. ConnectionString has more priority than ConnectionStringName
         /// </summary>
+        public string ConnectionString { get; set; }
+
         public string ConnectionStringName { get; set; }
 
         public string TableName { get; set; }
@@ -28,6 +24,7 @@ namespace Vanrise.Analytic.Entities
         public string MonthlyTableName { get; set; }
 
         public string TimeColumnName { get; set; }
+
         public List<Guid> DataRecordTypeIds { get; set; }
 
         public RequiredPermissionSettings RequiredPermission { get; set; }
@@ -36,11 +33,9 @@ namespace Vanrise.Analytic.Entities
 
         public bool ShowInKPISettings { get; set; }
 
-        public Guid StatusDefinitionBEId { get; set; }
+        public Guid? StatusDefinitionBEId { get; set; }
 
         public Guid StatusDefinitionId { get; set; }
 
     }
-
-
 }
