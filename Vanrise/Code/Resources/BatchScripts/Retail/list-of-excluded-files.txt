@@ -27,6 +27,10 @@
 \images\ISP-login.png
 \images\ISP-logoonheader.png
 
+\images\SMS-WHS-iconheader.ico
+\images\SMS-WHS-login.png
+\images\SMS-WHS-logoonheader.png
+
 \bin\Retail.Ringo.Business.dll
 \bin\Retail.Ringo.Data.dll
 \bin\Retail.Ringo.Data.SQL.dll
