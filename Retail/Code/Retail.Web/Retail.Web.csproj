@@ -765,6 +765,9 @@
     <Content Include="Images\RA-iconheader.ico" />
     <Content Include="Images\RA-login.png" />
     <Content Include="Images\RA-logoonheader.png" />
+    <Content Include="Images\SMS-WHS-iconheader.ico" />
+    <Content Include="Images\SMS-WHS-login.png" />
+    <Content Include="Images\SMS-WHS-logoonheader.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
