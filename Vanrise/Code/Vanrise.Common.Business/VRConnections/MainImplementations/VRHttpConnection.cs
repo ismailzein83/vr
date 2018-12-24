@@ -239,20 +239,42 @@ namespace Vanrise.Common.Business
             switch (_messageFormat)
             {
                 case VRHttpMessageFormat.ApplicationJSON:
-                    var jsonFault = Serializer.Deserialize<JSONFault>(this.StringResponse);
-                    if (jsonFault.Message != null && jsonFault.ExceptionMessage != null)
+                    try
                     {
-                        _errorMessage = jsonFault.Message;
-                        _exception = new Exception(string.Format("{0}: {1}. Stack Trace: {2}", jsonFault.Message, jsonFault.ExceptionMessage, jsonFault.StackTrace));
+                        var jsonFault = Serializer.Deserialize<JSONFault>(this.StringResponse);
+                        if (jsonFault.Message != null && jsonFault.ExceptionMessage != null)
+                        {
+                            _errorMessage = jsonFault.Message;
+                            _exception = new Exception(string.Format("{0}: {1}. Stack Trace: {2}", jsonFault.Message, jsonFault.ExceptionMessage, jsonFault.StackTrace));
+                        }
+                    }
+                    catch
+                    {
+                        if (_exception == null)
+                            _exception = new Exception(this.StringResponse);
+
+                        if (_errorMessage == null)
+                            _errorMessage = _exception.Message;
                     }
                     break;
                 case VRHttpMessageFormat.ApplicationXML:
                 case VRHttpMessageFormat.TextXML:
-                    var soapFault = new VRXmlSerializer().Deserialize<Fault>(this.StringResponse);
-                    if (soapFault.faultcode != null && soapFault.faultstring != null)
+                    try
                     {
-                        _errorMessage = soapFault.faultstring;
-                        _exception = new Exception(string.Format("{0}: {1}", soapFault.faultcode, soapFault.faultstring));
+                        var soapFault = new VRXmlSerializer().Deserialize<Fault>(this.StringResponse);
+                        if (soapFault.faultcode != null && soapFault.faultstring != null)
+                        {
+                            _errorMessage = soapFault.faultstring;
+                            _exception = new Exception(string.Format("{0}: {1}", soapFault.faultcode, soapFault.faultstring));
+                        }
+                    }
+                    catch
+                    {
+                        if (_exception == null)
+                            _exception = new Exception(this.StringResponse);
+
+                        if (_errorMessage == null)
+                            _errorMessage = _exception.Message;
                     }
                     break;
                 default: throw new NotSupportedException(String.Format("_messageFormat: '{0}'", _messageFormat.ToString()));
