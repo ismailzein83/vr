@@ -501,6 +501,11 @@ when not matched by target then
                 sb = sb.Replace(mainItem, "StandardNetworkRentalStructure");
             }
 
+            if (projectName == "TOne.SMS")
+            {
+                sb = sb.Replace(mainItem, "StandardTOneSMSStructure");
+            }            
+
             if (!Directory.Exists(sqlFilesOutputPath))
             {
                 Directory.CreateDirectory(sqlFilesOutputPath);
