@@ -76,7 +76,10 @@ namespace Vanrise.Common.Data.RDB
 			insertQuery.Column(COL_ID).Value(smsMessageTemplateItem.SMSMessageTemplateId);
 			insertQuery.Column(COL_Name).Value(smsMessageTemplateItem.Name);
 			insertQuery.Column(COL_SMSMessageTypeId).Value(smsMessageTemplateItem.SMSMessageTypeId);
-			insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(smsMessageTemplateItem.Settings));
+			if (smsMessageTemplateItem.Settings != null)
+				insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(smsMessageTemplateItem.Settings));
+			else
+				insertQuery.Column(COL_Settings).Null();
 			insertQuery.Column(COL_CreatedBy).Value(smsMessageTemplateItem.CreatedBy);
 			insertQuery.Column(COL_LastModifiedBy).Value(smsMessageTemplateItem.LastModifiedBy);
 
