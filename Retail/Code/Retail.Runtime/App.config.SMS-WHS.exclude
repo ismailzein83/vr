@@ -30,7 +30,7 @@
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=TOne.SMS_Transaction;User ID=sa; Password=" />
     <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=TOne.SMS_Logging;User ID=sa; Password=" />
 
-    <add name="SMSCDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=TOne.SMS_CDR;User ID=sa;Password=" />
+    <add name="SMSDBConnString" connectionString="Data Source=localhost;Initial Catalog=TOne.SMS_EDR;User ID=sa;Password=" />
     
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
@@ -67,7 +67,7 @@
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString" />    
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
     
-    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,SMSCDRDBConnString,RAAnalyticsDBConnString,LogDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,SMSDBConnString,RAAnalyticsDBConnString,LogDBConnString"/>
   </appSettings>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
