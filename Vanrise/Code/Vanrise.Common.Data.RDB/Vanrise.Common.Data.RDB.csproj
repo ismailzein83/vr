@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <!-- <Compile Include="BigDataServiceDataManager.cs" />-->
+    <!--<Compile Include="CacheRefreshDataManager.cs" />-->
     <Compile Include="CityDataManager.cs" />
     <Compile Include="CountryDataManager.cs" />
     <Compile Include="CurrencyDataManager.cs" />
@@ -53,12 +54,15 @@
     <Compile Include="EmailTemplateDataManager.cs" />
     <Compile Include="ExtensionConfigurationDataManager.cs" />
     <Compile Include="GenericLKUPItemDataManager.cs" />
+    <!--<Compile Include="OverriddenConfigurationDataManager.cs" />-->
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateTypeDataManager.cs" />
     <Compile Include="RegionDataManager.cs" />
+    <Compile Include="SMSMessageTemplateDataManager.cs" />
     <Compile Include="SMSMessageTypeDataManager.cs" />
     <Compile Include="StatusDefinitionDataManager.cs" />
     <Compile Include="StyleDefinitionDataManager.cs" />
+    <!--<Compile Include="TypeDataManager.cs" />-->
     <Compile Include="VRActionAuditDataManager.cs" />
     <Compile Include="VRApplicationVisibilityDataManager.cs" />
     <Compile Include="VRConnectionDataManager.cs" />
@@ -68,6 +72,7 @@
     <Compile Include="VRMailMessageTemplateDataManager.cs" />
     <Compile Include="VRMailMessageTypeDataManager.cs" />
     <Compile Include="VRNamespaceDataManager.cs" />
+   <!-- <Compile Include="VRTempPayloadDataManager.cs" />-->
     <Compile Include="VRTimeZoneDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
