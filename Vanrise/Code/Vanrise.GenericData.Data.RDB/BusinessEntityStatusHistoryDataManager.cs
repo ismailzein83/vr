@@ -77,8 +77,7 @@ namespace Vanrise.GenericData.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, 1 , false);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_BusinessEntityDefinitionID, COL_BusinessEntityID, COL_FieldName,
-                COL_StatusID, COL_PreviousStatusID, COL_StatusChangedDate, COL_IsDeleted);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             var subCondition = selectQuery.Where().ChildConditionGroup(RDBConditionGroupOperator.OR);
             subCondition.NullCondition(COL_IsDeleted);
             subCondition.EqualsCondition(COL_IsDeleted).Value(false);
