@@ -82,7 +82,7 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var updateQuery = queryContext.AddUpdateQuery();
 			updateQuery.FromTable(TABLE_NAME);
-			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.NotEqualsCondition(COL_ID).Value(country.CountryId);
 			ifNotExist.EqualsCondition(COL_Name).Value(country.Name);
 			updateQuery.Column(COL_Name).Value(country.Name);
@@ -95,8 +95,9 @@ namespace Vanrise.Common.Data.RDB
 		}
 		public bool AreCountriesUpdated(ref object updateHandle)
 		{
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
 		public void InsertFromSource(Country country)
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());

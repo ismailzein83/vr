@@ -83,18 +83,22 @@ namespace Vanrise.Common.Data.RDB
 				insertQuery.Column(COL_LastModifiedBy).Value(currency.LastModifiedBy.Value);
 			else
 				insertQuery.Column(COL_LastModifiedBy).Null();
-			insertedId = queryContext.ExecuteScalar().IntWithNullHandlingValue;
-			if (insertedId == 0)
-				insertedId = -1;
-			return (insertedId != -1);
-		}
+			var insertedID = queryContext.ExecuteScalar().NullableIntValue;
+            if (insertedID.HasValue)
+            {
+                insertedId = insertedID.Value;
+                return true;
+            }
+            insertedId = -1;
+            return false;
+        }
 
 		public bool Update(Currency currency)
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var updateQuery = queryContext.AddUpdateQuery();
 			updateQuery.FromTable(TABLE_NAME);
-			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.NotEqualsCondition(COL_ID).Value(currency.CurrencyId);
 			ifNotExist.EqualsCondition(COL_Symbol).Value(currency.Symbol);
 			updateQuery.Column(COL_Name).Value(currency.Name);
@@ -110,8 +114,9 @@ namespace Vanrise.Common.Data.RDB
 
 		public bool AreCurrenciesUpdated(ref object updateHandle)
 		{
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        } 
 		#region Mappers
 		public Currency CurrencyMapper(IRDBDataReader reader)
 		{

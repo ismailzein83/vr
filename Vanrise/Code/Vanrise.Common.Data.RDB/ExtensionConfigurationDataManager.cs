@@ -19,10 +19,11 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_ConfigType = "ConfigType";
 		const string COL_Settings = "Settings";
 		const string COL_CreatedTime = "CreatedTime";
-		#endregion
+        const string COL_LastModifiedTime = "LastModifiedTime";
+        #endregion
 
-		#region Contructors
-		static ExtensionConfigurationDataManager()
+        #region Contructors
+        static ExtensionConfigurationDataManager()
 		{
 			var columns = new Dictionary<string, RDBTableColumnDefinition>();
 			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
@@ -37,8 +38,9 @@ namespace Vanrise.Common.Data.RDB
 				DBTableName = "ExtensionConfiguration",
 				Columns = columns,
 				IdColumnName = COL_ID,
-				CreatedTimeColumnName = COL_CreatedTime
-			});
+				CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName= COL_LastModifiedTime
+            });
 		}
 		#endregion
 
@@ -54,15 +56,16 @@ namespace Vanrise.Common.Data.RDB
 		#region Public Methods
 		public bool AreExtensionConfigurationUpdated(string parameter, ref object updateHandle)
 		{
-			throw new NotImplementedException();
-		}
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
 
 		public List<T> GetExtensionConfigurationsByType<T>(string type) where T : ExtensionConfiguration
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var selectQuery = queryContext.AddSelectQuery();
 			selectQuery.From(TABLE_NAME, TABLE_ALIAS,null,true);
-			selectQuery.SelectColumns().Columns(COL_ID, COL_Title,COL_Settings,COL_Name);
+			selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			selectQuery.Where().EqualsCondition(COL_ConfigType).Value(type);
 			return queryContext.GetItems(ExtensionConfigurationMapper<T>);
 
