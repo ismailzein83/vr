@@ -484,7 +484,7 @@
 			return {
 				Entity:
 				{
-					EndPointId: endPointEntity != undefined ? endPointEntity.EndPointId : undefined,
+					EndPointId: endPointId,
 					Description: $scope.scopeModel.description,
 					LogAlias: $scope.scopeModel.logalias,
 					CodecProfileId: $scope.scopeModel.codecprofileid,
