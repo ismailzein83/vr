@@ -206,7 +206,7 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder("(");            
             bool isFirstItem = true;
             var conditionContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);
             foreach (var when in this.Whens)
@@ -224,7 +224,7 @@ namespace Vanrise.Data.RDB
                 builder.Append(" ELSE ");
                 builder.Append(this.DefaultValueExpression.ToDBQuery(context));
             }
-            builder.Append(" END ");
+            builder.Append(" END )");
             return builder.ToString();
         }
     }
@@ -325,6 +325,28 @@ namespace Vanrise.Data.RDB
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
             return String.Concat("MIN(", this.Expression.ToDBQuery(context), ")");
+        }
+    }
+
+    public enum RDBDateTimeAddInterval { Seconds = 0}
+    internal class RDBDateTimeAddExpression : BaseRDBExpression
+    {
+        public RDBDateTimeAddInterval Interval { get; set; }
+
+        public BaseRDBExpression DateTimeExpression { get; set; }
+
+        public BaseRDBExpression ValueToAddExpression { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            string sqlInteval;
+            switch (this.Interval)
+            {
+                case RDBDateTimeAddInterval.Seconds: sqlInteval = "second";break;
+                default: throw new NotSupportedException($"this.Interval '{this.Interval.ToString()}'");
+            }
+
+            return $"DATEADD({sqlInteval}, {this.ValueToAddExpression.ToDBQuery(context)}, {this.DateTimeExpression.ToDBQuery(context)})";
         }
     }
 

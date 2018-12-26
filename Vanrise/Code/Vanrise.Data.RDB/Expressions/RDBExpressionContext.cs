@@ -172,6 +172,11 @@ namespace Vanrise.Data.RDB
         {
             return new RDBCaseExpressionContext(_queryBuilderContext, _tableAlias, (exp) => Expression(exp));
         }
+
+        public RDBDateTimeAddExpressionContext DateTimeAdd(RDBDateTimeAddInterval addInterval)
+        {
+            return new RDBDateTimeAddExpressionContext(_queryBuilderContext, _tableAlias, addInterval, (exp) => Expression(exp));
+        }
     }
 
     public class RDBArithmeticExpressionContext : RDBTwoExpressionsContext
@@ -240,6 +245,31 @@ namespace Vanrise.Data.RDB
         public RDBExpressionContext Then()
         {
             return new RDBExpressionContext(_queryBuilderContext, (exp) => _when.ValueExpression = exp, _tableAlias);
+        }
+    }
+
+    public class RDBDateTimeAddExpressionContext
+    {
+        RDBQueryBuilderContext _queryBuilderContext;
+        string _tableAlias;
+        RDBDateTimeAddExpression _dateTimeAddExpression;
+
+        internal RDBDateTimeAddExpressionContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, RDBDateTimeAddInterval addInterval, Action<BaseRDBExpression> setExpression)
+        {
+            _queryBuilderContext = queryBuilderContext;
+            _tableAlias = tableAlias;
+            _dateTimeAddExpression = new RDBDateTimeAddExpression { Interval = addInterval };
+            setExpression(_dateTimeAddExpression);
+        }
+
+        public RDBExpressionContext DateTime()
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (exp) => _dateTimeAddExpression.DateTimeExpression = exp, _tableAlias);
+        }
+
+        public RDBExpressionContext ValueToAdd()
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (exp) => _dateTimeAddExpression.ValueToAddExpression = exp, _tableAlias);
         }
     }
 }
