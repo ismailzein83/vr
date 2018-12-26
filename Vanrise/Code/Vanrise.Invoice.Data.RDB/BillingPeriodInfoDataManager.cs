@@ -10,11 +10,11 @@ namespace Vanrise.Invoice.Data.RDB
     public class BillingPeriodInfoDataManager : IBillingPeriodInfoDataManager
     {
         static string TABLE_NAME = "VR_Invoice_BillingPeriodInfo";
-
         const string COL_InvoiceTypeId = "InvoiceTypeId";
         const string COL_PartnerId = "PartnerId";
         const string COL_NextPeriodStart = "NextPeriodStart";
         const string COL_CreatedTime = "CreatedTime";
+
 
         static BillingPeriodInfoDataManager()
         {
@@ -56,7 +56,7 @@ namespace Vanrise.Invoice.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "billPer");
+            selectQuery.From(TABLE_NAME, "billPer", null, true);
             selectQuery.SelectColumns().AllTableColumns("billPer");
 
             var where = selectQuery.Where();
@@ -68,14 +68,25 @@ namespace Vanrise.Invoice.Data.RDB
 
         public bool InsertOrUpdateBillingPeriodInfo(Entities.BillingPeriodInfo billingPeriodInfo)
         {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            AddInsertOrUpdateBillingPeriodInfo(queryContext, billingPeriodInfo);
-
-            queryContext.ExecuteNonQuery();
+            var dataProvider = GetDataProvider();
+            var queryContext = new RDBQueryContext(dataProvider);
+            AddUpdateBillingPeriodInfoQuery(queryContext, billingPeriodInfo);
+            if(queryContext.ExecuteNonQuery() <= 0)
+            {
+                var queryContext2 = new RDBQueryContext(dataProvider);
+                AddInsertBillingPeriodInfoQuery(queryContext2, billingPeriodInfo, false);
+                queryContext2.ExecuteNonQuery();
+            }
             return true;
         }
 
         public void AddInsertOrUpdateBillingPeriodInfo(RDBQueryContext queryContext, Entities.BillingPeriodInfo billingPeriodInfo)
+        {
+            AddInsertBillingPeriodInfoQuery(queryContext, billingPeriodInfo, true);
+            AddUpdateBillingPeriodInfoQuery(queryContext, billingPeriodInfo);
+        }
+
+        private void AddInsertBillingPeriodInfoQuery(RDBQueryContext queryContext, Entities.BillingPeriodInfo billingPeriodInfo, bool checkIfNotExists)
         {
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
@@ -83,10 +94,16 @@ namespace Vanrise.Invoice.Data.RDB
             insertQuery.Column(COL_PartnerId).Value(billingPeriodInfo.PartnerId);
             insertQuery.Column(COL_NextPeriodStart).Value(billingPeriodInfo.NextPeriodStart);
 
-            var notExistsCondition = insertQuery.IfNotExists("billPer");
-            notExistsCondition.EqualsCondition(COL_InvoiceTypeId).Value(billingPeriodInfo.InvoiceTypeId);
-            notExistsCondition.EqualsCondition(COL_PartnerId).Value(billingPeriodInfo.PartnerId);
+            if (checkIfNotExists)
+            {
+                var notExistsCondition = insertQuery.IfNotExists("billPer");
+                notExistsCondition.EqualsCondition(COL_InvoiceTypeId).Value(billingPeriodInfo.InvoiceTypeId);
+                notExistsCondition.EqualsCondition(COL_PartnerId).Value(billingPeriodInfo.PartnerId);
+            }
+        }
 
+        private void AddUpdateBillingPeriodInfoQuery(RDBQueryContext queryContext, Entities.BillingPeriodInfo billingPeriodInfo)
+        {
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
             updateQuery.Column(COL_NextPeriodStart).Value(billingPeriodInfo.NextPeriodStart);

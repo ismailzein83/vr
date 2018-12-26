@@ -11,31 +11,31 @@ namespace Vanrise.AccountBalance.Data.RDB
     public class AccountUsageDataManager : IAccountUsageDataManager
     {
         static string TABLE_NAME = "VR_AccountBalance_AccountUsage";
-
         const string COL_ID = "ID";
         const string COL_AccountTypeID = "AccountTypeID";
-        const string COL_AccountID = "AccountID";
         const string COL_TransactionTypeID = "TransactionTypeID";
+        const string COL_AccountID = "AccountID";
         const string COL_CurrencyId = "CurrencyId";
-        const string COL_UsageBalance = "UsageBalance";
         const string COL_PeriodStart = "PeriodStart";
         const string COL_PeriodEnd = "PeriodEnd";
+        const string COL_UsageBalance = "UsageBalance";
         const string COL_IsOverridden = "IsOverridden";
         const string COL_OverriddenAmount = "OverriddenAmount";
         const string COL_CorrectionProcessID = "CorrectionProcessID";
         const string COL_CreatedTime = "CreatedTime";
+
 
         static AccountUsageDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
             columns.Add(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
             columns.Add(COL_TransactionTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
             columns.Add(COL_CurrencyId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add(COL_UsageBalance, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
             columns.Add(COL_PeriodStart, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_PeriodEnd, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_UsageBalance, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
             columns.Add(COL_IsOverridden, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
             columns.Add(COL_OverriddenAmount, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
             columns.Add(COL_CorrectionProcessID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
@@ -93,7 +93,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.From(TABLE_NAME, "au", null, true);
             selectQuery.SelectColumns().Columns(COL_ID, COL_AccountID, COL_TransactionTypeID, COL_IsOverridden);
 
             var where = selectQuery.Where();
@@ -168,7 +168,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.From(TABLE_NAME, "au", null, true);
             selectQuery.SelectColumns().AllTableColumns("au");
 
             var where = selectQuery.Where();
@@ -201,7 +201,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             LiveBalanceDataManager liveBalanceDataManager = new LiveBalanceDataManager();
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.From(TABLE_NAME, "au", null, true);
             selectQuery.SelectColumns().AllTableColumns("au");
 
             var joinContext = selectQuery.Join();
@@ -227,7 +227,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             LiveBalanceDataManager liveBalanceDataManager = new LiveBalanceDataManager();
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.From(TABLE_NAME, "au", null, true);
             selectQuery.SelectColumns().AllTableColumns("au");
 
             var joinContext = selectQuery.Join();
@@ -251,19 +251,22 @@ namespace Vanrise.AccountBalance.Data.RDB
             tempTableQuery.AddColumn(COL_AccountID, RDBDataType.Varchar, 50, null, true);
             tempTableQuery.AddColumn(COL_TransactionTypeID, RDBDataType.UniqueIdentifier, true);
             tempTableQuery.AddColumn(COL_PeriodStart, RDBDataType.DateTime, true);
-            tempTableQuery.AddColumn(COL_PeriodEnd, RDBDataType.DateTime, true); 
-            tempTableQuery.AddColumn("TransactionID", RDBDataType.BigInt);
+            tempTableQuery.AddColumn(COL_PeriodEnd, RDBDataType.DateTime, true);
+            string transactionIdColumn = "TransactionID";
+            tempTableQuery.AddColumn(transactionIdColumn, RDBDataType.BigInt);
+
+            var insertMultipeRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+            insertMultipeRowsQuery.IntoTable(tempTableQuery);
             
             foreach (var queryItem in transactionAccountUsageQueries)
             {
-                var insertQuery = queryContext.AddInsertQuery();
-                insertQuery.IntoTable(tempTableQuery);
-                insertQuery.Column("TransactionID").Value(queryItem.TransactionId);
-                insertQuery.Column(COL_TransactionTypeID).Value(queryItem.TransactionTypeId);
-                insertQuery.Column(COL_AccountTypeID).Value(queryItem.AccountTypeId);
-                insertQuery.Column(COL_AccountID).Value(queryItem.AccountId);
-                insertQuery.Column(COL_PeriodStart).Value(queryItem.PeriodStart);
-                insertQuery.Column(COL_PeriodEnd).Value(queryItem.PeriodEnd);
+                var rowContext = insertMultipeRowsQuery.AddRow();
+                rowContext.Column(transactionIdColumn).Value(queryItem.TransactionId);
+                rowContext.Column(COL_TransactionTypeID).Value(queryItem.TransactionTypeId);
+                rowContext.Column(COL_AccountTypeID).Value(queryItem.AccountTypeId);
+                rowContext.Column(COL_AccountID).Value(queryItem.AccountId);
+                rowContext.Column(COL_PeriodStart).Value(queryItem.PeriodStart);
+                rowContext.Column(COL_PeriodEnd).Value(queryItem.PeriodEnd);
             }
 
             var selectQuery = queryContext.AddSelectQuery();
@@ -275,8 +278,8 @@ namespace Vanrise.AccountBalance.Data.RDB
             joinCondition.EqualsCondition("au", COL_AccountTypeID, "queryTable", COL_AccountTypeID);
             joinCondition.EqualsCondition("au", COL_AccountID, "queryTable", COL_AccountID);
             joinCondition.EqualsCondition("au", COL_TransactionTypeID, "queryTable", COL_TransactionTypeID);
-            joinCondition.GreaterOrEqualCondition(COL_PeriodStart).Column("queryTable", COL_PeriodStart);
-            joinCondition.LessOrEqualCondition(COL_PeriodEnd).Column("queryTable", COL_PeriodEnd);
+            joinCondition.GreaterOrEqualCondition("au", COL_PeriodStart).Column("queryTable", COL_PeriodStart);
+            joinCondition.LessOrEqualCondition("au", COL_PeriodEnd).Column("queryTable", COL_PeriodEnd);
 
             return queryContext.GetItems(AccountUsageMapper);
         }
@@ -296,8 +299,8 @@ namespace Vanrise.AccountBalance.Data.RDB
             joinSelectCondition.EqualsCondition("au", COL_AccountTypeID, "usageOverride", AccountUsageOverrideDataManager.COL_AccountTypeID);
             joinSelectCondition.EqualsCondition("au", COL_AccountID, "usageOverride", AccountUsageOverrideDataManager.COL_AccountID);
             joinSelectCondition.EqualsCondition("au", COL_TransactionTypeID, "usageOverride", AccountUsageOverrideDataManager.COL_TransactionTypeID);
-            joinSelectCondition.GreaterOrEqualCondition(COL_PeriodStart).Column("usageOverride", AccountUsageOverrideDataManager.COL_PeriodStart);
-            joinSelectCondition.LessOrEqualCondition(COL_PeriodEnd).Column("usageOverride", AccountUsageOverrideDataManager.COL_PeriodEnd);
+            joinSelectCondition.GreaterOrEqualCondition("au", COL_PeriodStart).Column("usageOverride", AccountUsageOverrideDataManager.COL_PeriodStart);
+            joinSelectCondition.LessOrEqualCondition("au", COL_PeriodEnd).Column("usageOverride", AccountUsageOverrideDataManager.COL_PeriodEnd);
             
             return queryContext.GetItems(AccountUsageMapper);                 
         }
@@ -306,7 +309,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "au", 1);
+            selectQuery.From(TABLE_NAME, "au", 1, true);
             selectQuery.SelectColumns().AllTableColumns("au");
 
             var where = selectQuery.Where();
@@ -323,7 +326,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.From(TABLE_NAME, "au", null, true);
             selectQuery.SelectColumns().AllTableColumns("au");
 
             var where = selectQuery.Where();
@@ -348,22 +351,24 @@ namespace Vanrise.AccountBalance.Data.RDB
             tempTableQuery.AddColumn(COL_AccountID, RDBDataType.Varchar, 50, null, true);
             tempTableQuery.AddColumn(COL_PeriodEnd, RDBDataType.DateTime, true);
 
+            var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+            insertMultipleRowsQuery.IntoTable(tempTableQuery);
+
             foreach (var usageByTime in accountUsagesByTime)
             {
-                var insertQuery = queryContext.AddInsertQuery();
-                insertQuery.IntoTable(tempTableQuery);
-                insertQuery.Column(COL_AccountID).Value(usageByTime.AccountId);
-                insertQuery.Column(COL_PeriodEnd).Value(usageByTime.EndPeriod);
+                var rowContext = insertMultipleRowsQuery.AddRow();
+                rowContext.Column(COL_AccountID).Value(usageByTime.AccountId);
+                rowContext.Column(COL_PeriodEnd).Value(usageByTime.EndPeriod);
             }
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "au");
+            selectQuery.From(TABLE_NAME, "au", null, true);
             selectQuery.SelectColumns().AllTableColumns("au");
 
             var joinContext = selectQuery.Join();
             var joinCondition = joinContext.Join(tempTableQuery, "queryTable").On();
             joinCondition.EqualsCondition("au", COL_AccountID, "queryTable", COL_AccountID);
-            joinCondition.GreaterThanCondition(COL_PeriodEnd).Column("queryTable", COL_PeriodEnd);
+            joinCondition.GreaterThanCondition("au", COL_PeriodEnd).Column("queryTable", COL_PeriodEnd);
 
             var where = selectQuery.Where();
             where.EqualsCondition(COL_AccountTypeID).Value(accountTypeId);
@@ -400,12 +405,14 @@ namespace Vanrise.AccountBalance.Data.RDB
             tempTableQuery.AddColumn(COL_ID, RDBDataType.BigInt, true);
             tempTableQuery.AddColumn("UpdateValue", RDBDataType.Decimal, 20, 6);
 
+            var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+            insertMultipleRowsQuery.IntoTable(tempTableQuery);
+            
             foreach (var auToUpdate in accountsUsageToUpdate)
             {
-                var insertQuery = queryContext.AddInsertQuery();
-                insertQuery.IntoTable(tempTableQuery);
-                insertQuery.Column(COL_ID).Value(auToUpdate.AccountUsageId);
-                insertQuery.Column("UpdateValue").Value(auToUpdate.Value);
+                var rowContext = insertMultipleRowsQuery.AddRow();
+                rowContext.Column(COL_ID).Value(auToUpdate.AccountUsageId);
+                rowContext.Column("UpdateValue").Value(auToUpdate.Value);
             }
 
             var updateQuery = queryContext.AddUpdateQuery();

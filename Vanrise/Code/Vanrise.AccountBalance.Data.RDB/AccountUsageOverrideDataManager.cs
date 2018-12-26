@@ -11,23 +11,23 @@ namespace Vanrise.AccountBalance.Data.RDB
     public class AccountUsageOverrideDataManager : IAccountUsageOverrideDataManager
     {
         static string TABLE_NAME = "VR_AccountBalance_AccountUsageOverride";
-
         const string COL_ID = "ID";
         internal const string COL_AccountTypeID = "AccountTypeID";
-        internal const string COL_AccountID = "AccountID";
         internal const string COL_TransactionTypeID = "TransactionTypeID";
+        internal const string COL_AccountID = "AccountID";
         internal const string COL_PeriodStart = "PeriodStart";
         internal const string COL_PeriodEnd = "PeriodEnd";
         const string COL_OverriddenByTransactionID = "OverriddenByTransactionID";
         const string COL_CreatedTime = "CreatedTime";
+
 
         static AccountUsageOverrideDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
             columns.Add(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
             columns.Add(COL_TransactionTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
             columns.Add(COL_PeriodStart, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_PeriodEnd, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_OverriddenByTransactionID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
@@ -53,16 +53,17 @@ namespace Vanrise.AccountBalance.Data.RDB
 
         public void AddQueryInsertAccountUsageOverrides(RDBQueryContext queryContext, IEnumerable<AccountUsageOverride> accountUsageOverrides)
         {
+            var insertMultipeRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+            insertMultipeRowsQuery.IntoTable(TABLE_NAME);
             foreach (var accountUsageOverride in accountUsageOverrides)
             {
-                var insertQuery = queryContext.AddInsertQuery();
-                insertQuery.IntoTable(TABLE_NAME);
-                insertQuery.Column(COL_AccountTypeID).Value(accountUsageOverride.AccountTypeId);
-                insertQuery.Column(COL_AccountID).Value(accountUsageOverride.AccountId);
-                insertQuery.Column(COL_TransactionTypeID).Value(accountUsageOverride.TransactionTypeId);
-                insertQuery.Column(COL_PeriodStart).Value(accountUsageOverride.PeriodStart);
-                insertQuery.Column(COL_PeriodEnd).Value(accountUsageOverride.PeriodEnd);
-                insertQuery.Column(COL_OverriddenByTransactionID).Value(accountUsageOverride.OverriddenByTransactionId);
+                var rowContext = insertMultipeRowsQuery.AddRow();
+                rowContext.Column(COL_AccountTypeID).Value(accountUsageOverride.AccountTypeId);
+                rowContext.Column(COL_AccountID).Value(accountUsageOverride.AccountId);
+                rowContext.Column(COL_TransactionTypeID).Value(accountUsageOverride.TransactionTypeId);
+                rowContext.Column(COL_PeriodStart).Value(accountUsageOverride.PeriodStart);
+                rowContext.Column(COL_PeriodEnd).Value(accountUsageOverride.PeriodEnd);
+                rowContext.Column(COL_OverriddenByTransactionID).Value(accountUsageOverride.OverriddenByTransactionId);
             }
         }
 

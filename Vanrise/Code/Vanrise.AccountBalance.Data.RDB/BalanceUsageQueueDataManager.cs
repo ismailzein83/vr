@@ -11,12 +11,12 @@ namespace Vanrise.AccountBalance.Data.RDB
     public class BalanceUsageQueueDataManager : IBalanceUsageQueueDataManager
     {
         static string TABLE_NAME = "VR_AccountBalance_BalanceUsageQueue";
-
         const string COL_ID = "ID";
         const string COL_AccountTypeID = "AccountTypeID";
         const string COL_QueueType = "QueueType";
         const string COL_UsageDetails = "UsageDetails";
         const string COL_CreatedTime = "CreatedTime";
+
 
         static BalanceUsageQueueDataManager()
         {
@@ -61,7 +61,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "usageQueue");
+            selectQuery.From(TABLE_NAME, "usageQueue", null, true);
             selectQuery.SelectColumns().AllTableColumns("usageQueue");
 
             var whereCondition = selectQuery.Where();
@@ -99,7 +99,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "usageQueue", 1);
+            selectQuery.From(TABLE_NAME, "usageQueue", 1, true);
             selectQuery.SelectColumns().Column(COL_ID);
 
             selectQuery.Where().EqualsCondition(COL_AccountTypeID).Value(accountTypeId);

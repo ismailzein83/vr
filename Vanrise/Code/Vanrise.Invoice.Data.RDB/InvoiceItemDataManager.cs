@@ -12,13 +12,13 @@ namespace Vanrise.Invoice.Data.RDB
     public class InvoiceItemDataManager : IInvoiceItemDataManager
     {
         static string TABLE_NAME = "VR_Invoice_InvoiceItem";
-
         const string COL_ID = "ID";
         const string COL_InvoiceID = "InvoiceID";
         const string COL_ItemSetName = "ItemSetName";
         const string COL_Name = "Name";
         const string COL_Details = "Details";
         const string COL_CreatedTime = "CreatedTime";
+
 
         static InvoiceItemDataManager()
         {
@@ -58,7 +58,7 @@ namespace Vanrise.Invoice.Data.RDB
                     var connectionString = ConfigurationManager.ConnectionStrings[connectionStringKey];
                     if (connectionString == null)
                         throw new NullReferenceException(String.Format("connectionString '{0}'", connectionStringKey));
-                    return RDBDataProviderFactory.CreateProvider("VR_Invoice", connectionString.ConnectionString);
+                    return RDBDataProviderFactory.CreateProviderFromConnString("VR_Invoice", connectionString.ConnectionString);
                 }
             }
             return RDBDataProviderFactory.CreateProvider("VR_Invoice", "InvoiceDBConnStringKey", "InvoiceDBConnString");
@@ -99,7 +99,7 @@ namespace Vanrise.Invoice.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "invItm");
+            selectQuery.From(TABLE_NAME, "invItm", null, true);
             selectQuery.SelectColumns().AllTableColumns("invItm");
 
             var where = selectQuery.Where();
@@ -118,16 +118,17 @@ namespace Vanrise.Invoice.Data.RDB
 
             if(itemSetNames != null)
             {
+                var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+                insertMultipleRowsQuery.IntoTable(tempTableQuery);
                 foreach(var itemSetName in itemSetNames)
                 {
-                    var insertQuery = queryContext.AddInsertQuery();
-                    insertQuery.IntoTable(tempTableQuery);
-                    insertQuery.Column(COL_ItemSetName).Value(itemSetName);
+                    var rowContext = insertMultipleRowsQuery.AddRow();
+                    rowContext.Column(COL_ItemSetName).Value(itemSetName);
                 }
             }
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "invItm");
+            selectQuery.From(TABLE_NAME, "invItm", null, true);
             selectQuery.SelectColumns().AllTableColumns("invItm");
 
             var joinCondition = selectQuery.Join().Join(tempTableQuery, "setNames").On();
@@ -146,19 +147,21 @@ namespace Vanrise.Invoice.Data.RDB
             {
                 var queryContext = new RDBQueryContext(GetDataProvider());
 
+                var insertMultipeRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+                insertMultipeRowsQuery.IntoTable(TABLE_NAME);
+                
                 foreach (var itemSet in invoiceItemSets)
                 {
                     if (itemSet.Items != null && itemSet.Items.Count > 0)
                     {
                         foreach (var item in itemSet.Items)
                         {
-                            var insertQuery = queryContext.AddInsertQuery();
-                            insertQuery.IntoTable(TABLE_NAME);
-                            insertQuery.Column(COL_InvoiceID).Value(invoiceId);
-                            insertQuery.Column(COL_ItemSetName).Value(itemSet.SetName);
-                            insertQuery.Column(COL_Name).Value(item.Name);
-                            string serializedDetails = Vanrise.Common.Serializer.Serialize(item.Details);
-                            insertQuery.Column(COL_Details).Value(serializedDetails);
+                            var rowContext = insertMultipeRowsQuery.AddRow();
+                            rowContext.Column(COL_InvoiceID).Value(invoiceId);
+                            rowContext.Column(COL_ItemSetName).Value(itemSet.SetName);
+                            rowContext.Column(COL_Name).Value(item.Name);
+                            if (item.Details != null)
+                                rowContext.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(item.Details));
                         }
                     }
                 }

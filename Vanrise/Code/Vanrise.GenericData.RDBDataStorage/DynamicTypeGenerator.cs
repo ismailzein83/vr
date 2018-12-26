@@ -102,13 +102,13 @@ namespace Vanrise.GenericData.RDBDataStorage
                         matchField.ThrowIfNull("matchField", columnSettings.FieldName);
                         if (!columnSettings.IsIdentity)
                             AppendSetRDBValueFromRecordField(setRDBBulkInsertColumnsValuesBuilder, matchField, "bulkInsertRecordContext");
-                        AppendSetRDBValueFromRecordField(setRDBInsertColumnsToTempTableFromRecordBuilder, matchField, "tempTableRowContext.Value()");
+                        AppendSetRDBValueFromRecordField(setRDBInsertColumnsToTempTableFromRecordBuilder, matchField, $@"tempTableRowContext.Column(""{matchField.Name}"")");
                     }
 
                     if (dataRecordStorageSettings.IncludeQueueItemId)
                     {
                         AppendSetRDBValueFromRecordQueueItemId(setRDBBulkInsertColumnsValuesBuilder, "bulkInsertRecordContext");
-                        AppendSetRDBValueFromRecordQueueItemId(setRDBInsertColumnsToTempTableFromRecordBuilder, "tempTableRowContext.Value()");                        
+                        AppendSetRDBValueFromRecordQueueItemId(setRDBInsertColumnsToTempTableFromRecordBuilder, @"tempTableRowContext.Column(""QueueItemId"")");                        
                     }
 
                     classDefinitionBuilder.Replace("#SetRDBBulkInsertColumnsFromRecordImplementation#", setRDBBulkInsertColumnsValuesBuilder.ToString());

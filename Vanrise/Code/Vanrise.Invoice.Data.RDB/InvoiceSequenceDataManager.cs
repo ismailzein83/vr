@@ -10,13 +10,13 @@ namespace Vanrise.Invoice.Data.RDB
     public class InvoiceSequenceDataManager : IInvoiceSequenceDataManager
     {
         static string TABLE_NAME = "VR_Invoice_InvoiceSequence";
-
         const string COL_SequenceGroup = "SequenceGroup";
         const string COL_InvoiceTypeID = "InvoiceTypeID";
         const string COL_SequenceKey = "SequenceKey";
         const string COL_InitialValue = "InitialValue";
         const string COL_LastValue = "LastValue";
         const string COL_CreatedTime = "CreatedTime";
+
 
         static InvoiceSequenceDataManager()
         {

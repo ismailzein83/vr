@@ -11,30 +11,33 @@ namespace Vanrise.AccountBalance.Data.RDB
     public class BillingTransactionTypeDataManager : IBillingTransactionTypeDataManager
     {
         static string TABLE_NAME = "VR_AccountBalance_BillingTransactionType";
-
         const string COL_ID = "ID";
         const string COL_Name = "Name";
         const string COL_IsCredit = "IsCredit";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
+        const string COL_LastModifiedTime = "LastModifiedTime";
+
 
         static BillingTransactionTypeDataManager()
         {
-            var columns = new Dictionary<string,RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition{ DataType = RDBDataType.UniqueIdentifier});
-            columns.Add(COL_Name, new RDBTableColumnDefinition{ DataType = RDBDataType.NVarchar, Size= 255});
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_IsCredit, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
-            columns.Add(COL_Settings, new RDBTableColumnDefinition {  DataType = RDBDataType.NVarchar });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_AccountBalance",
                 DBTableName = "BillingTransactionType",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
-            
         }
 
         #region Private Methods
@@ -62,20 +65,15 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "transType");
+            selectQuery.From(TABLE_NAME, "transType", null, true);
             selectQuery.SelectColumns().AllTableColumns("transType");            
             return queryContext.GetItems(BillingTransactionTypeMapper);
-            //return new RDBQueryContext(GetDataProvider())
-            //    .Select()
-            //    .From(TABLE_NAME, "transType")
-            //    .SelectColumns().AllTableColumns("transType").EndColumns()
-            //    .EndSelect()
-            //    .GetItems(BillingTransactionTypeMapper);
         }
 
         public bool AreBillingTransactionTypeUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         #endregion

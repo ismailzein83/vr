@@ -11,12 +11,12 @@ namespace Vanrise.Invoice.Data.RDB
     public class InvoiceBulkActionsDraftDataManager : IInvoiceBulkActionsDraftDataManager
     {
         static string TABLE_NAME = "VR_Invoice_InvoiceBulkActionDraft";
-
         const string COL_ID = "ID";
-        const string COL_InvoiceBulkActionIdentifier = "InvoiceBulkActionIdentifier";
+        internal const string COL_InvoiceBulkActionIdentifier = "InvoiceBulkActionIdentifier";
         internal const string COL_InvoiceTypeId = "InvoiceTypeId";
         internal const string COL_InvoiceId = "InvoiceId";
         const string COL_CreatedTime = "CreatedTime";
+
 
         static InvoiceBulkActionsDraftDataManager()
         {
@@ -47,7 +47,7 @@ namespace Vanrise.Invoice.Data.RDB
         {
             return new InvoiceBulkActionsDraftSummary()
             {
-                TotalCount = reader.GetInt("TotalCount"),
+                TotalCount = reader.GetIntWithNullHandling("TotalCount"),
                 MinimumFrom = reader.GetNullableDateTime("MinimumFrom"),
                 MaximumTo = reader.GetNullableDateTime("MaximumTo")
             };
@@ -63,7 +63,7 @@ namespace Vanrise.Invoice.Data.RDB
 
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bulkActionDrft");
+            selectQuery.From(TABLE_NAME, "bulkActionDrft", null, true);
 
             invoiceDataManager.AddJoinInvoiceToBulkActionDraft(selectQuery.Join(), "bulkActionDrft", "inv");
 
@@ -100,19 +100,21 @@ namespace Vanrise.Invoice.Data.RDB
             {
                 if(targetInvoicesIds != null)
                 {
+                    var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+                    insertMultipleRowsQuery.IntoTable(TABLE_NAME);
+
                     foreach (var invoiceId in targetInvoicesIds)
                     {
-                        var insertQuery = queryContext.AddInsertQuery();
-                        insertQuery.IntoTable(TABLE_NAME);
-                        insertQuery.Column(COL_InvoiceBulkActionIdentifier).Value(invoiceBulkActionIdentifier);
-                        insertQuery.Column(COL_InvoiceTypeId).Value(invoiceTypeId);
-                        insertQuery.Column(COL_InvoiceId).Value(invoiceId);
+                        var rowContext = insertMultipleRowsQuery.AddRow();
+                        rowContext.Column(COL_InvoiceBulkActionIdentifier).Value(invoiceBulkActionIdentifier);
+                        rowContext.Column(COL_InvoiceTypeId).Value(invoiceTypeId);
+                        rowContext.Column(COL_InvoiceId).Value(invoiceId);
                     }
                 }
             }
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bulkActionDrft");
+            selectQuery.From(TABLE_NAME, "bulkActionDrft", null, true);
 
             invoiceDataManager.AddJoinInvoiceToBulkActionDraft(selectQuery.Join(), "bulkActionDrft", "inv");
 
@@ -138,14 +140,11 @@ namespace Vanrise.Invoice.Data.RDB
 
         #endregion
 
-        internal void DeleteBulkActionDrafts(Guid bulkActionDraftIdentifier)
+        internal void AddDeleteBulkActionDraftsQuery(RDBQueryContext queryContext, Guid bulkActionDraftIdentifier)
         {
-            var queryContext = new RDBQueryContext(GetDataProvider());
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(TABLE_NAME);
             deleteQuery.Where().EqualsCondition(COL_InvoiceBulkActionIdentifier).Value(bulkActionDraftIdentifier);
-
-            queryContext.ExecuteNonQuery();
         }
 
         internal RDBInsertQuery CreateInsertQuery(RDBQueryContext queryContext)

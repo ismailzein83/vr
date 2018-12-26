@@ -12,7 +12,6 @@ namespace Vanrise.Invoice.Data.RDB
     public class InvoiceAccountDataManager : IInvoiceAccountDataManager
     {
         static string TABLE_NAME = "VR_Invoice_InvoiceAccount";
-
         const string COL_ID = "ID";
         const string COL_InvoiceTypeID = "InvoiceTypeID";
         const string COL_PartnerID = "PartnerID";
@@ -21,6 +20,7 @@ namespace Vanrise.Invoice.Data.RDB
         const string COL_Status = "Status";
         const string COL_IsDeleted = "IsDeleted";
         const string COL_CreatedTime = "CreatedTime";
+
 
         static InvoiceAccountDataManager()
         {
@@ -54,7 +54,7 @@ namespace Vanrise.Invoice.Data.RDB
         {
             return new VRInvoiceAccount
             {
-                Status = (VRAccountStatus)reader.GetInt(COL_Status),
+                Status = (VRAccountStatus)reader.GetIntWithNullHandling(COL_Status),
                 BED = reader.GetNullableDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
                 InvoiceAccountId = reader.GetLong(COL_ID),
@@ -147,7 +147,7 @@ namespace Vanrise.Invoice.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "invAcc");
+            selectQuery.From(TABLE_NAME, "invAcc", null, true);
             selectQuery.SelectColumns().AllTableColumns("invAcc");
 
             var where = selectQuery.Where();

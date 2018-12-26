@@ -12,7 +12,6 @@ namespace Vanrise.AccountBalance.Data.RDB
     public class BillingTransactionDataManager : IBillingTransactionDataManager
     {
         static string TABLE_NAME = "VR_AccountBalance_BillingTransaction";
-
         const string COL_ID = "ID";
         const string COL_AccountTypeID = "AccountTypeID";
         const string COL_AccountID = "AccountID";
@@ -24,31 +23,34 @@ namespace Vanrise.AccountBalance.Data.RDB
         const string COL_Notes = "Notes";
         const string COL_CreatedByInvoiceID = "CreatedByInvoiceID";
         const string COL_IsBalanceUpdated = "IsBalanceUpdated";
+        const string COL_ClosingPeriodId = "ClosingPeriodId";
         const string COL_Settings = "Settings";
+        const string COL_CreatedTime = "CreatedTime";
         const string COL_IsDeleted = "IsDeleted";
         const string COL_IsSubtractedFromBalance = "IsSubtractedFromBalance";
         const string COL_SourceID = "SourceID";
-        const string COL_CreatedTime = "CreatedTime";
+
 
         static BillingTransactionDataManager()
         {
-            var columns = new Dictionary<string,RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition{ DataType = RDBDataType.BigInt});
-            columns.Add(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier});
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_AccountTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_AccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
             columns.Add(COL_TransactionTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Amount, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 6 });
-            columns.Add(COL_CurrencyId, new RDBTableColumnDefinition {  DataType = RDBDataType.Int });
+            columns.Add(COL_CurrencyId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_TransactionTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_Reference, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_Notes, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 1000 });
             columns.Add(COL_CreatedByInvoiceID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
             columns.Add(COL_IsBalanceUpdated, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+            columns.Add(COL_ClosingPeriodId, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_IsDeleted, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
             columns.Add(COL_IsSubtractedFromBalance, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
             columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_AccountBalance",
@@ -112,7 +114,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.From(TABLE_NAME, "bt", null, true);
             selectQuery.SelectColumns().AllTableColumns("bt");
 
             var joinContext = selectQuery.Join();
@@ -145,7 +147,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.From(TABLE_NAME, "bt", null, true);
             selectQuery.SelectColumns().AllTableColumns("bt");
 
             var where = selectQuery.Where();
@@ -166,7 +168,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.From(TABLE_NAME, "bt", null, true);
             selectQuery.SelectColumns().AllTableColumns("bt");
 
             var where = selectQuery.Where();
@@ -183,7 +185,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.From(TABLE_NAME, "bt", null, true);
             selectQuery.SelectColumns().Columns(COL_AccountID, COL_Amount, COL_CurrencyId, COL_TransactionTime, COL_TransactionTypeID);
 
             var where = selectQuery.Where();
@@ -206,22 +208,24 @@ namespace Vanrise.AccountBalance.Data.RDB
             var btAccountTimesTempTableQuery = queryContext.CreateTempTable();
             btAccountTimesTempTableQuery.AddColumn(COL_AccountID, RDBDataType.Varchar, 50, null, true);
             btAccountTimesTempTableQuery.AddColumn(COL_TransactionTime, RDBDataType.DateTime, true);
+
+            var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+            insertMultipleRowsQuery.IntoTable(btAccountTimesTempTableQuery);
             
             foreach (var item in billingTransactionsByTime)
             {
-                var insertQuery = queryContext.AddInsertQuery();
-                insertQuery.IntoTable(btAccountTimesTempTableQuery);
-                insertQuery.Column(COL_AccountID).Value(item.AccountId);
-                insertQuery.Column(COL_TransactionTime).Value(item.TransactionTime);
+                var rowContext = insertMultipleRowsQuery.AddRow();
+                rowContext.Column(COL_AccountID).Value(item.AccountId);
+                rowContext.Column(COL_TransactionTime).Value(item.TransactionTime);
             }
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.From(TABLE_NAME, "bt", null, true);
             selectQuery.SelectColumns().Columns(COL_AccountID, COL_Amount, COL_CurrencyId, COL_TransactionTime, COL_TransactionTypeID);
 
             var joinContext = selectQuery.Join();
             var joinCondition = joinContext.Join(btAccountTimesTempTableQuery, "btAccountTimes").On();
-            joinCondition.EqualsCondition(COL_AccountID).Column("btAccountTimes", COL_AccountID);
+            joinCondition.EqualsCondition("bt", COL_AccountID).Column("btAccountTimes", COL_AccountID);
             joinCondition.GreaterThanCondition("bt", COL_TransactionTime).Column("btAccountTimes", COL_TransactionTime);
 
             var where = selectQuery.Where();
@@ -238,7 +242,7 @@ namespace Vanrise.AccountBalance.Data.RDB
             var liveBalanceDataManager = new LiveBalanceDataManager();
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.From(TABLE_NAME, "bt", null, true);
             selectQuery.SelectColumns().AllTableColumns("bt");
 
             var joinContext = selectQuery.Join();
@@ -258,7 +262,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bt");
+            selectQuery.From(TABLE_NAME, "bt", null, true);
             selectQuery.SelectColumns().AllTableColumns("bt");
 
             var where = selectQuery.Where();
@@ -280,7 +284,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bt", 1);
+            selectQuery.From(TABLE_NAME, "bt", 1, true);
             selectQuery.SelectColumns().AllTableColumns("bt");
 
             var where = selectQuery.Where();
@@ -298,7 +302,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, "bt", 1);
+            selectQuery.From(TABLE_NAME, "bt", 1, true);
             selectQuery.SelectColumns().Column(COL_ID);
 
             var where = selectQuery.Where();
@@ -365,7 +369,7 @@ namespace Vanrise.AccountBalance.Data.RDB
         public void AddQuerySetBillingTransactionsAsBalanceUpdated(RDBQueryContext queryContext, IEnumerable<long> billingTransactionIds)
         {
             var updateQuery = queryContext.AddUpdateQuery();
-            updateQuery.FromTable(BillingTransactionDataManager.TABLE_NAME);
+            updateQuery.FromTable(TABLE_NAME);
             updateQuery.Column(COL_IsBalanceUpdated).Value(true);
             updateQuery.Where().ListCondition(COL_ID, RDBListConditionOperator.IN, billingTransactionIds);
         }

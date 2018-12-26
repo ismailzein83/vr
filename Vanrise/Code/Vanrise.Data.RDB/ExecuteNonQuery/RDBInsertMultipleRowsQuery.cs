@@ -15,8 +15,9 @@ namespace Vanrise.Data.RDB
         }
 
         IRDBTableQuerySource _table;
-        string[] _columns;
         List<RDBInsertMultipleRowsQueryRow> _rows = new List<RDBInsertMultipleRowsQueryRow>();
+        HashSet<string> _columns = new HashSet<string>();
+
 
         public void IntoTable(IRDBTableQuerySource table)
         {
@@ -28,37 +29,20 @@ namespace Vanrise.Data.RDB
         {
             IntoTable(new RDBTableDefinitionQuerySource(tableName));
         }
-
-        public void Columns(params string[] columnNames)
-        {
-            this._columns = columnNames;
-        }
-
+        
         public RDBInsertMultipleRowsQueryRowContext AddRow()
         {
             var row = new RDBInsertMultipleRowsQueryRow();
             this._rows.Add(row);
-            return new RDBInsertMultipleRowsQueryRowContext(this._queryBuilderContext, row);
+            return new RDBInsertMultipleRowsQueryRowContext(this._queryBuilderContext, _columns, row);
         }
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
-            _columns.ThrowIfNull("_columns");
             var resolvedQuery = new RDBResolvedQuery();
             foreach (var row in _rows)
             {
-                List<RDBInsertColumn> insertRowQueryColumnValues = new List<RDBInsertColumn>();
-                for (int i = 0; i < _columns.Length; i++)
-                {
-                    if (row.Values.Count <= i)
-                        throw new Exception($"Number of Row Values '{row.Values.Count}' is less than number of columns '{_columns.Length}'. Row Index '{_rows.IndexOf(row)}'");
-                    insertRowQueryColumnValues.Add(new RDBInsertColumn
-                    {
-                        ColumnName = _columns[i],
-                        Value = row.Values[i]
-                    });
-                }
-                var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this._table, insertRowQueryColumnValues, null, false, context, _queryBuilderContext);
+                var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this._table, row.ColumnValues, null, false, context, _queryBuilderContext);
                 var insertRowResolvedQuery = context.DataProvider.ResolveInsertQuery(resolveInsertQueryContext);
                 resolvedQuery.Statements.AddRange(insertRowResolvedQuery.Statements);
             }
@@ -70,9 +54,10 @@ namespace Vanrise.Data.RDB
     {
         public RDBInsertMultipleRowsQueryRow()
         {
-            this.Values = new List<BaseRDBExpression>();
+            this.ColumnValues = new List<RDBInsertColumn>();
         }
+        
+        public List<RDBInsertColumn> ColumnValues { get; private set; }
 
-        public List<BaseRDBExpression> Values { get; private set; }
     }
 }

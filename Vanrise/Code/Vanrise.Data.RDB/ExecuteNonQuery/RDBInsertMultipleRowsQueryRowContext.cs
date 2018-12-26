@@ -9,22 +9,30 @@ namespace Vanrise.Data.RDB
     public class RDBInsertMultipleRowsQueryRowContext
     {
         RDBQueryBuilderContext _queryBuilderContext;
+        HashSet<string> _columns;
         RDBInsertMultipleRowsQueryRow _row;
 
-        internal RDBInsertMultipleRowsQueryRowContext(RDBQueryBuilderContext queryBuilderContext, RDBInsertMultipleRowsQueryRow row)
+        internal RDBInsertMultipleRowsQueryRowContext(RDBQueryBuilderContext queryBuilderContext, HashSet<string> columns, RDBInsertMultipleRowsQueryRow row)
         {
+            this._columns = columns;
             this._queryBuilderContext = queryBuilderContext;
             this._row = row;
         }
 
-        public RDBExpressionContext Value()
+
+        public RDBExpressionContext Column(string columnName)
         {
-            return new RDBExpressionContext(_queryBuilderContext, (expression) => this.Value(expression), null);
+            return new RDBExpressionContext(_queryBuilderContext, (expression) => ColumnValue(columnName, expression), null);
         }
 
-        void Value(BaseRDBExpression value)
+        public void ColumnValue(string columnName, BaseRDBExpression value)
         {
-            this._row.Values.Add(value);
+            _columns.Add(columnName);
+            this._row.ColumnValues.Add(new RDBInsertColumn
+            {
+                ColumnName = columnName,
+                Value = value
+            });
         }
     }
 }

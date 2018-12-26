@@ -11,7 +11,6 @@ namespace Vanrise.Invoice.Data.RDB
     public class InvoiceSettingDataManager : IInvoiceSettingDataManager
     {
         static string TABLE_NAME = "VR_Invoice_InvoiceSetting";
-
         const string COL_ID = "ID";
         const string COL_InvoiceTypeId = "InvoiceTypeId";
         const string COL_Name = "Name";
@@ -19,6 +18,8 @@ namespace Vanrise.Invoice.Data.RDB
         const string COL_Details = "Details";
         const string COL_IsDeleted = "IsDeleted";
         const string COL_CreatedTime = "CreatedTime";
+        const string COL_LastModifiedTime = "LastModifiedTime";
+
 
         static InvoiceSettingDataManager()
         {
@@ -30,13 +31,16 @@ namespace Vanrise.Invoice.Data.RDB
             columns.Add(COL_Details, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_IsDeleted, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_Invoice",
                 DBTableName = "InvoiceSetting",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
 
@@ -80,7 +84,8 @@ namespace Vanrise.Invoice.Data.RDB
 
         public bool AreInvoiceSettingsUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public bool InsertInvoiceSetting(Entities.InvoiceSetting invoiceSetting)

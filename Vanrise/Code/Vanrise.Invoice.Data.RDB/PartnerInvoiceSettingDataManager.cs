@@ -11,12 +11,13 @@ namespace Vanrise.Invoice.Data.RDB
     public class PartnerInvoiceSettingDataManager : IPartnerInvoiceSettingDataManager
     {
         static string TABLE_NAME = "VR_Invoice_PartnerInvoiceSetting";
-
         const string COL_ID = "ID";
         const string COL_PartnerID = "PartnerID";
         const string COL_InvoiceSettingID = "InvoiceSettingID";
         const string COL_Details = "Details";
         const string COL_CreatedTime = "CreatedTime";
+        const string COL_LastModifiedTime = "LastModifiedTime";
+
 
         static PartnerInvoiceSettingDataManager()
         {
@@ -26,13 +27,16 @@ namespace Vanrise.Invoice.Data.RDB
             columns.Add(COL_InvoiceSettingID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Details, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VR_Invoice",
                 DBTableName = "PartnerInvoiceSetting",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
 
@@ -71,7 +75,8 @@ namespace Vanrise.Invoice.Data.RDB
 
         public bool ArePartnerInvoiceSettingsUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public bool InsertPartnerInvoiceSetting(Guid invoicePartnerSettingId, Guid invoiceSettingId, string partnerId, Entities.PartnerInvoiceSettingDetails partnerInvoiceSettingDetails)
@@ -99,7 +104,10 @@ namespace Vanrise.Invoice.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            updateQuery.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(partnerInvoiceSettingDetails));
+            if (partnerInvoiceSettingDetails != null)
+                updateQuery.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(partnerInvoiceSettingDetails));
+            else
+                updateQuery.Column(COL_Details).Null();
             updateQuery.Where().EqualsCondition(COL_ID).Value(partnerInvoiceSettingId);
 
             return queryContext.ExecuteNonQuery() > 0;
@@ -142,7 +150,12 @@ namespace Vanrise.Invoice.Data.RDB
 
         public PartnerInvoiceSetting GetPartnerInvoiceSetting(Guid partnerInvoiceSettingId)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, "partnerSett");
+            selectQuery.SelectColumns().AllTableColumns("partnerSett");
+            selectQuery.Where().EqualsCondition(COL_ID).Value(partnerInvoiceSettingId);
+            return queryContext.GetItem(PartnerInvoiceSettingMapper);
         }
 
         #endregion

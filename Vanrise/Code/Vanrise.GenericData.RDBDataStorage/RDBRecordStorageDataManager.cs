@@ -234,7 +234,6 @@ namespace Vanrise.GenericData.RDBDataStorage
 
             var insertRecordsToTempTableQuery = queryContext.AddInsertMultipleRowsQuery();
             insertRecordsToTempTableQuery.IntoTable(tempTableQuery);
-            insertRecordsToTempTableQuery.Columns(rdbRegistrationInfo.FieldNamesForBulkInsert);
 
             foreach(var record in records)
             {

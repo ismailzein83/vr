@@ -11,7 +11,6 @@ namespace Vanrise.Invoice.Data.RDB
     public class InvoiceGenerationDraftDataManager : IInvoiceGenerationDraftDataManager
     {
         static string TABLE_NAME = "VR_Invoice_InvoiceGenerationDraft";
-
         const string COL_ID = "ID";
         const string COL_InvoiceGenerationIdentifier = "InvoiceGenerationIdentifier";
         const string COL_InvoiceTypeId = "InvoiceTypeId";
@@ -22,7 +21,8 @@ namespace Vanrise.Invoice.Data.RDB
         const string COL_CustomPayload = "CustomPayload";
         const string COL_CreatedTime = "CreatedTime";
 
-         static InvoiceGenerationDraftDataManager()
+
+        static InvoiceGenerationDraftDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
@@ -123,7 +123,10 @@ namespace Vanrise.Invoice.Data.RDB
 
             updateQuery.Column(COL_FromDate).Value(invoiceGenerationDraft.From);
             updateQuery.Column(COL_ToDate).Value(invoiceGenerationDraft.To);
-            updateQuery.Column(COL_CustomPayload).Value(Vanrise.Common.Serializer.Serialize(invoiceGenerationDraft.CustomPayload));
+            if (invoiceGenerationDraft.CustomPayload != null)
+                updateQuery.Column(COL_CustomPayload).Value(Vanrise.Common.Serializer.Serialize(invoiceGenerationDraft.CustomPayload));
+            else
+                updateQuery.Column(COL_CustomPayload).Null();
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(invoiceGenerationDraft.InvoiceGenerationDraftId);
 
