@@ -15,36 +15,10 @@ namespace Vanrise.Invoice.MainExtensions
         {
             List<BillingInterval> billingIntervalList = new List<BillingInterval>();
 
-            BillingInterval perviousBillingInterval = new Entities.BillingInterval();
-            int numberOfDays = this.NumberOfDays - 1;
-            if (context.PreviousPeriodEndDate.HasValue)
-            {
-                BillingInterval nextBillingInterval = new Entities.BillingInterval();
-                nextBillingInterval.FromDate = context.PreviousPeriodEndDate.Value;
-
-                nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddDays(numberOfDays);
-             
-                if (nextBillingInterval.ToDate > context.IssueDate)
-                {
-                    perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate, numberOfDays);
-                }
-                else
-                {
-                    perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
-                    perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
-                    while (nextBillingInterval.ToDate < context.IssueDate && nextBillingInterval.ToDate < DateTime.Today)
-                    {
-                        perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
-                        perviousBillingInterval.ToDate = nextBillingInterval.ToDate;
-                        nextBillingInterval.FromDate = nextBillingInterval.ToDate.AddDays(1);
-                        nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddDays(numberOfDays);
-                    }
-                }
-            }else
-            {
-                perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate, numberOfDays);
-            }
-            billingIntervalList.Add(perviousBillingInterval);
+            BillingInterval billingInterval = new Entities.BillingInterval();
+            billingInterval.ToDate = context.IssueDate.Date.AddMilliseconds(-2);
+            billingInterval.FromDate = billingInterval.ToDate.AddDays(-NumberOfDays + 1).Date;
+            billingIntervalList.Add(billingInterval);
             return billingIntervalList;
         }
         private BillingInterval GetIntervalIfPreviousPeriodNotValid(DateTime issueDate, int numberOfDays)
