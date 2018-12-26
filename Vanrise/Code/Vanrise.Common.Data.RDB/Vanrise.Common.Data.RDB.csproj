@@ -69,9 +69,10 @@
     <Compile Include="VRConnectionDataManager.cs" />
     <Compile Include="VRDynamicAPIDataManager.cs" />
     <Compile Include="VRDynamicAPIModuleDataManager.cs" />
-   <!-- <Compile Include="VREventHandlerDataManager.cs" />-->
+    <!-- <Compile Include="VREventHandlerDataManager.cs" />-->
     <Compile Include="VRExclusiveSessionDataManager.cs" />
     <Compile Include="VRLocalizationLanguageDataManager.cs" />
+    <Compile Include="VRLocalizationModuleDataManager.cs" />
     <Compile Include="VRMailMessageTemplateDataManager.cs" />
     <Compile Include="VRMailMessageTypeDataManager.cs" />
     <Compile Include="VRNamespaceDataManager.cs" />
