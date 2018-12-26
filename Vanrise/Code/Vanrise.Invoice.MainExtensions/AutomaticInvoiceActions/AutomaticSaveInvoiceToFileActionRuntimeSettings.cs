@@ -83,8 +83,14 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                                         {
                                             string fileName = string.Format("{0}.{1}", invoicefile.Name, invoicefile.ExtensionType);
                                             string fullpath = Path.Combine(this.LocationPath, fileName);
-                                            File.WriteAllBytes(fullpath, invoicefile.Content);
-                                           
+                                            if(Directory.Exists(this.LocationPath))
+                                            {
+                                                File.WriteAllBytes(fullpath, invoicefile.Content);
+                                            }else
+                                            {
+                                                context.ErrorMessage = "Cannot save invoice to file. Reason: 'Location Path' not valid.";
+                                                context.IsErrorOccured = false;
+                                            }
                                         }
                                         else
                                         {
