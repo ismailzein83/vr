@@ -56,7 +56,7 @@ namespace Vanrise.Notification.Data.RDB
         #region Private Methods
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("VR_Notification_VRAlertRule", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+            return RDBDataProviderFactory.CreateProvider("VR_Notification", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
         }
         #endregion
 
@@ -93,7 +93,8 @@ namespace Vanrise.Notification.Data.RDB
         }
         public bool AreVRAlertRuleUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public bool Insert(VRAlertRule VRAlertRuleItem, out long insertedId)
@@ -116,7 +117,10 @@ namespace Vanrise.Notification.Data.RDB
                 insertQuery.Column(COL_LastModifiedBy).Value(VRAlertRuleItem.LastModifiedBy.Value);
             else
                 insertQuery.Column(COL_LastModifiedBy).Null();
-            insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(VRAlertRuleItem.Settings));
+            if (VRAlertRuleItem.Settings != null)
+                insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(VRAlertRuleItem.Settings));
+            else
+                insertQuery.Column(COL_Settings).Null();
             var insertedID = queryContext.ExecuteScalar().NullableLongValue;
             if (insertedID.HasValue)
             {
@@ -137,7 +141,10 @@ namespace Vanrise.Notification.Data.RDB
             ifNotExists.EqualsCondition(COL_Name).Value(VRAlertRuleItem.Name);
             updateQuery.Column(COL_Name).Value(VRAlertRuleItem.Name);
             updateQuery.Column(COL_RuleTypeId).Value(VRAlertRuleItem.RuleTypeId);
-            updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(VRAlertRuleItem.Settings));
+            if (VRAlertRuleItem.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(VRAlertRuleItem.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
             if (VRAlertRuleItem.LastModifiedBy.HasValue)
                 updateQuery.Column(COL_LastModifiedBy).Value(VRAlertRuleItem.LastModifiedBy.Value);
             else
