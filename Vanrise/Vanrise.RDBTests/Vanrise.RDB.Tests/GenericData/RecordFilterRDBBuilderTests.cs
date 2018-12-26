@@ -35,11 +35,37 @@ namespace Vanrise.RDB.Tests.GenericData
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime
             });
+
+            foreach(var col in columns)
+            {
+                s_fieldInfos.Add(col.Key, new FieldInfo
+                {
+                    SQLExpression = $@"""tbl"".""{col.Key}""",
+                    SetRDBExpression = (expContext) => expContext.Column(col.Key)
+                });
+            }
+
+            Action<RDBExpressionContext> setAmountIfNotDeletedExpression = (expContext) =>
+            {
+                var caseContext = expContext.CaseExpression();
+                var case1 = caseContext.AddCase();
+                case1.When().EqualsCondition(COL_IsDeleted).Value(false);
+                case1.Then().Column(COL_Amount);
+                caseContext.Else().Value(0);
+            };
+            s_fieldInfos.Add("AmountIfNotDeleted", new FieldInfo
+            {
+                SetRDBExpression = setAmountIfNotDeletedExpression,
+                SQLExpression = $@"( CASE WHEN ""tbl"".""{COL_IsDeleted}"" = 0 THEN ""tbl"".""{COL_Amount}"" ELSE 0 END )"
+            });
         }
+
+        static Dictionary<string, FieldInfo> s_fieldInfos = new Dictionary<string, FieldInfo>();
 
         [TestMethod]
         public void TestRecordFilterGroup()
         {
+            TestRecordFilter(new NumberRecordFilter { FieldName = "AmountIfNotDeleted", CompareOperator = NumberRecordFilterOperator.Greater, Value = 34 });
             TestRecordFilter(new EmptyRecordFilter { FieldName = COL_Name });
             TestRecordFilter(new NonEmptyRecordFilter { FieldName = COL_Name });
             TestRecordFilter(new AlwaysTrueRecordFilter { FieldName = COL_Name });
@@ -204,7 +230,7 @@ namespace Vanrise.RDB.Tests.GenericData
             selectQuery.From(TABLE_NAME, "tbl");
             selectQuery.SelectColumns().Column("ID");
             var where = selectQuery.Where();
-            new Vanrise.GenericData.Data.RDB.RecordFilterRDBBuilder((fldName, expContext) => expContext.Column(fldName)).RecordFilterGroupCondition(where, filterGroup);
+            new Vanrise.GenericData.Data.RDB.RecordFilterRDBBuilder((fldName, expContext) => s_fieldInfos[fldName].SetRDBExpression(expContext)).RecordFilterGroupCondition(where, filterGroup);
 
             var resolveQueryContext = new Vanrise.Data.RDB.RDBQueryGetResolvedQueryContext(dataProvider);
             StringBuilder rdbQueryBuilder = new StringBuilder(queryContext.GetResolvedQuery(resolveQueryContext).Statements[0].TextStatement);
@@ -216,7 +242,7 @@ namespace Vanrise.RDB.Tests.GenericData
 
             int parameterIndex = 0;
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-            string filterGroupSQLString = new Vanrise.GenericData.Data.SQL.RecordFilterSQLBuilder((fldName) => $@"""tbl"".""{fldName}""").BuildRecordFilter(filterGroup, ref parameterIndex, parameterValues);
+            string filterGroupSQLString = new Vanrise.GenericData.Data.SQL.RecordFilterSQLBuilder((fldName) => s_fieldInfos[fldName].SQLExpression).BuildRecordFilter(filterGroup, ref parameterIndex, parameterValues);
             StringBuilder sqlQueryBuilder = new StringBuilder(filterGroupSQLString);
             foreach (var prm in parameterValues)
             {
@@ -241,6 +267,13 @@ namespace Vanrise.RDB.Tests.GenericData
                 queryBuilder.Replace(prmName, (bool)prmValue ? "1" : "0");
             else
                 queryBuilder.Replace(prmName, prmValue.ToString());
+        }
+
+        private class FieldInfo
+        {
+            public string SQLExpression { get; set; }
+
+            public Action<RDBExpressionContext> SetRDBExpression { get; set; }
         }
     }
 }

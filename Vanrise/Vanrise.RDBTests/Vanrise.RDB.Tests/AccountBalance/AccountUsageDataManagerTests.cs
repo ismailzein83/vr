@@ -328,8 +328,8 @@ periodStart.ToString("yyyy-MM-dd HH:mm:ss"), periodEnd.ToString("yyyy-MM-dd HH:m
             currencyIds = new List<int> { 1, 2 };
             transactionTypeIds = new List<Guid> { Guid.NewGuid(), new Guid("AF7A2D82-1416-4833-8B6E-033474BC2D20"), Guid.NewGuid() };
             List<Decimal> amounts = new List<decimal> { 0, 3.2M };
-            fromTimes = new List<DateTime> { DateTime.Now, DateTime.Today.AddDays(-10) };
-            toTimes = new List<DateTime> { DateTime.Now, DateTime.Today.AddDays(10) };
+            fromTimes = new List<DateTime> { DateTime.Today.AddSeconds(9490), DateTime.Today.AddDays(-10) };
+            toTimes = new List<DateTime> { DateTime.Today.AddSeconds(6345), DateTime.Today.AddDays(10) };
 
 
             UTUtilities.CallActionIteratively(
