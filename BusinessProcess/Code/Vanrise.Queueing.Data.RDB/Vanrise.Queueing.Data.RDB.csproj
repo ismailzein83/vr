@@ -62,6 +62,7 @@
     <Compile Include="QueueActivatorConfigDataManager.cs" />
     <Compile Include="QueueDataManager.cs" />
     <Compile Include="QueueExecutionFlowDataManager.cs" />
+    <Compile Include="QueueExecutionFlowDefinitionDataManager.cs" />
     <Compile Include="QueueItemTypeDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
