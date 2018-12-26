@@ -135,6 +135,9 @@
     <Compile Include="DataStorage\IGetRemoteRecordStorageDataManagerContext.cs" />
     <Compile Include="DataStorage\TempStorageInformation.cs" />
     <Compile Include="DataStorage\IGetStorageRowCountContext.cs" />
+    <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEDefinitionBulkActionSettings.cs" />
+    <Compile Include="GenericBusinessEntity\UpdateGenericBEField.cs" />
+    <Compile Include="GenericBusinessEntity\UpdateGenericBEFieldRuntime.cs" />
     <Compile Include="GenericBusinessEntity\DeleteGenericBusinessEntityInput.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEDefinitionGridColumnAttribute.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEInvalidRow.cs" />
