@@ -81,8 +81,23 @@ namespace Vanrise.Analytic.Business
             return GetAllFilteredRecords(query, false, out summaryRecord, out resultSubTables);
         }
 
-        public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query, bool dontApplyOrdering, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
+        public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery inputQuery, bool dontApplyOrdering, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
         {
+            var query = inputQuery.VRDeepCopy();
+            if (query.AdvancedOrderOptions != null)
+            {
+                var additionalMeasures = query.AdvancedOrderOptions.GetAdditionalMeasureNames();
+                if (additionalMeasures != null && additionalMeasures.Count > 0)
+                {
+                    if (query.MeasureFields == null)
+                        query.MeasureFields = new List<string>();
+                    foreach (var additionalMeasure in additionalMeasures)
+                    {
+                        if (!query.MeasureFields.Contains(additionalMeasure))
+                            query.MeasureFields.Add(additionalMeasure);
+                    }
+                }
+            }
             SetQueryToTimeIfNull(query);
             if (query.LastHours.HasValue)
             {

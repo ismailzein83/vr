@@ -38,10 +38,23 @@ namespace Vanrise.GenericData.Business
             };
             return storageDataManager.GetFilteredDataRecords(context);
         }
-        public Vanrise.Entities.IDataRetrievalResult<DataRecordDetail> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<DataRecordDetail> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> dataRetrievalInput)
         {
+            var input = dataRetrievalInput.VRDeepCopy();
+            if (input.Query.SortColumns != null && input.Query.SortColumns.Count > 0)
+            {
+                if (input.Query.Columns == null)
+                    input.Query.Columns = new List<string>();
+                foreach (var sortColumn in input.Query.SortColumns)
+                {
+                    if (!input.Query.Columns.Contains(sortColumn.FieldName))
+                    {
+                        input.Query.Columns.Add(sortColumn.FieldName);
+                    }
+                }
+            }
             input.Query.DataRecordStorageIds.ThrowIfNull("input.Query.DataRecordStorageIds");
-
+            
             foreach (var id in input.Query.DataRecordStorageIds)
             {
                 if (DoesDataRecordStorageDenyAPICall(id))
