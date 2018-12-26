@@ -13,7 +13,7 @@ BEGIN
 IF NOT EXISTS(SELECT 1 FROM [VRNotification].VRAlertLevel WHERE ID != @ID and Name = @Name and BusinessEntityDefinitionID = @BusinessEntityDefinitionId)
 	BEGIN
 		update [VRNotification].VRAlertLevel
-		set  Name = @Name ,Settings= @Settings, BusinessEntityDefinitionID = @BusinessEntityDefinitionId
+		set  Name = @Name ,Settings= @Settings, BusinessEntityDefinitionID = @BusinessEntityDefinitionId, LastModifiedTime = GETDATE()
 		where  ID = @ID
 	END
 END

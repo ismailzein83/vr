@@ -11,6 +11,7 @@ BEGIN
 	DECLARE @InvoiceTypeID UniqueIdentifier = (SELECT [InvoiceTypeId] FROM [VR_Invoice].[InvoiceSetting] WHERE [ID] = @InvoiceSettingId)
 	
 	UPDATE VR_Invoice.InvoiceSetting
-	SET IsDefault = CASE WHEN ID = @InvoiceSettingId THEN 1 ELSE 0 END
+	SET IsDefault = CASE WHEN ID = @InvoiceSettingId THEN 1 ELSE 0 END,
+		LastModifiedTime = GETDATE()
 	WHERE [InvoiceTypeId] = @InvoiceTypeID AND (IsDefault = 1 OR ID = @InvoiceSettingId)
 END

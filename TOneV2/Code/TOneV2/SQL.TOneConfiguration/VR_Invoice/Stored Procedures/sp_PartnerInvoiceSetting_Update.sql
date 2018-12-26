@@ -9,6 +9,7 @@ CREATE PROCEDURE [VR_Invoice].[sp_PartnerInvoiceSetting_Update]
 AS
 BEGIN
 	Update VR_Invoice.PartnerInvoiceSetting
-	Set Details = @Details
+	Set Details = @Details,
+		LastModifiedTime = GETDATE()
 	Where ID = @PartnerInvoiceSettingId
 END

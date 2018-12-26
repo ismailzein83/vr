@@ -18,7 +18,8 @@ ELSE
 	BEGIN
 	  Update VR_Invoice.PartnerInvoiceSetting
 		Set PartnerId = @PartnerId,
-		    InvoiceSettingId = @InvoiceSettingId
+		    InvoiceSettingId = @InvoiceSettingId,
+			LastModifiedTime = GETDATE()
 	    Where   ID = @PartnerInvoiceSettingId
 	END
 END

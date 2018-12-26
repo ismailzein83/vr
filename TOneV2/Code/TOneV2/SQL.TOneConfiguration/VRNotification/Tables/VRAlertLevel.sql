@@ -5,6 +5,9 @@
     [Settings]                   NVARCHAR (MAX)   NULL,
     [CreatedTime]                DATETIME         CONSTRAINT [DF_AlertLevel_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]                  ROWVERSION       NULL,
+    [LastModifiedTime]           DATETIME         CONSTRAINT [DF_VRAlertLevel_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_AlertLevel] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

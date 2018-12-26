@@ -17,7 +17,8 @@ BEGIN
 	Set  Name = @Name,
 	    InvoiceTypeId =@InvoiceTypeId,
 		IsDefault = @IsDefault,
-		Details = @Details
+		Details = @Details,
+		LastModifiedTime = GETDATE()
 	Where ID = @InvoiceSettingId
 	END
 END

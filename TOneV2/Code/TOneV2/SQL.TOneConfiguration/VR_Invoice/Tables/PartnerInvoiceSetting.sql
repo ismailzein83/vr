@@ -4,9 +4,12 @@
     [InvoiceSettingID] UNIQUEIDENTIFIER NOT NULL,
     [Details]          NVARCHAR (MAX)   NULL,
     [CreatedTime]      DATETIME         CONSTRAINT [DF_PartnerInvoiceSetting_CreatedTime] DEFAULT (getdate()) NULL,
+    [LastModifiedTime] DATETIME         CONSTRAINT [DF_PartnerInvoiceSetting_LastModifiedTime] DEFAULT (getdate()) NULL,
     [timestamp]        ROWVERSION       NULL,
     CONSTRAINT [PK_PartnerInvoiceSetting] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 GO
