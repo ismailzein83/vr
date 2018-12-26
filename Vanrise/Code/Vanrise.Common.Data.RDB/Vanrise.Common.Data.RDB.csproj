@@ -73,6 +73,7 @@
     <Compile Include="VRExclusiveSessionDataManager.cs" />
     <Compile Include="VRLocalizationLanguageDataManager.cs" />
     <Compile Include="VRLocalizationModuleDataManager.cs" />
+    <Compile Include="VRLocalizationTextResourceDataManager.cs" />
     <Compile Include="VRMailMessageTemplateDataManager.cs" />
     <Compile Include="VRMailMessageTypeDataManager.cs" />
     <Compile Include="VRNamespaceDataManager.cs" />
