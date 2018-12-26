@@ -42,7 +42,7 @@ namespace Vanrise.GenericData.Data.RDB
         #region Private Methods
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("VR_GenericData_DataStore", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+            return RDBDataProviderFactory.CreateProvider("VR_GenericData", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
         }
         #endregion
 

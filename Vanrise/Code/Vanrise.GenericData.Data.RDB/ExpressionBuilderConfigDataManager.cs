@@ -56,7 +56,7 @@ namespace Vanrise.GenericData.Data.RDB
         #region Private Methods
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("VR_GenericData_ExpressionBuilderConfig", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+            return RDBDataProviderFactory.CreateProvider("VR_GenericData", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
         }
         #endregion
         public bool AreExpressionBuilderConfigUpdated(ref object updateHandle)

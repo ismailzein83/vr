@@ -45,7 +45,7 @@ namespace Vanrise.GenericData.Data.RDB
         #endregion
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("VR_GenericData_BusinessEntityDefinition", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+            return RDBDataProviderFactory.CreateProvider("VR_GenericData", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
         }
         #region PrivateMethods
         BusinessEntityDefinition BusinessEntityDefinitionMapper(IRDBDataReader reader)
