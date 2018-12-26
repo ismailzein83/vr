@@ -21,6 +21,7 @@ namespace Vanrise.Notification.Data.RDB
         const string COL_BusinessEntityDefinitionID = "BusinessEntityDefinitionID";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static VRAlertLevelDataManager()
         {
@@ -30,13 +31,15 @@ namespace Vanrise.Notification.Data.RDB
             columns.Add(COL_BusinessEntityDefinitionID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VRNotification",
                 DBTableName = "VRAlertLevel",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
 
@@ -64,7 +67,8 @@ namespace Vanrise.Notification.Data.RDB
         #region IVRAlertLevelDataManager
         public bool AreAlertLevelUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public List<VRAlertLevel> GetAlertLevel()
@@ -92,7 +96,8 @@ namespace Vanrise.Notification.Data.RDB
             insertQuery.Column(COL_BusinessEntityDefinitionID).Value(alertLevelItem.BusinessEntityDefinitionId);
             if (alertLevelItem.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(alertLevelItem.Settings));
-
+            else
+                insertQuery.Column(COL_Settings).Null();
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -110,8 +115,10 @@ namespace Vanrise.Notification.Data.RDB
 
             updateQuery.Column(COL_Name).Value(alertLevelItem.Name);
             updateQuery.Column(COL_BusinessEntityDefinitionID).Value(alertLevelItem.BusinessEntityDefinitionId);
-            updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(alertLevelItem.Settings));
-
+            if (alertLevelItem.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(alertLevelItem.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
             updateQuery.Where().EqualsCondition(COL_ID).Value(alertLevelItem.VRAlertLevelId);
 
             return queryContext.ExecuteNonQuery() > 0;
