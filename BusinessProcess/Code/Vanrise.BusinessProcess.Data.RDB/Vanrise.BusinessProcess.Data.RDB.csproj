@@ -68,6 +68,7 @@
     <Compile Include="BPInstanceDataManager.cs" />
     <Compile Include="BPInstancePersistenceDataManager.cs" />
     <Compile Include="BPTaskDataManager.cs" />
+    <Compile Include="BPTaskTypeDataManager.cs" />
     <Compile Include="BPTrackingDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRWorkflowDataManager.cs" />
