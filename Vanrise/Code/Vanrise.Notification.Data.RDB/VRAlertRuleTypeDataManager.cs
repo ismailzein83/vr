@@ -17,6 +17,7 @@ namespace Vanrise.Notification.Data.RDB
         const string COL_Name = "Name";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
 
         static VRAlertRuleTypeDataManager()
@@ -26,13 +27,15 @@ namespace Vanrise.Notification.Data.RDB
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "VRNotification",
                 DBTableName = "VRAlertRuleType",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
 
@@ -40,7 +43,7 @@ namespace Vanrise.Notification.Data.RDB
         #region Private Methods
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("VR_Notification_VRAlertRuleType", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+            return RDBDataProviderFactory.CreateProvider("VR_Notification", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
         }
         #endregion
 
@@ -70,7 +73,8 @@ namespace Vanrise.Notification.Data.RDB
 
         public bool AreVRAlertRuleTypeUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public bool Insert(VRAlertRuleType vrAlertRuleTypeItem)
@@ -82,7 +86,10 @@ namespace Vanrise.Notification.Data.RDB
             ifNotExists.EqualsCondition(COL_Name).Value(vrAlertRuleTypeItem.Name);
             insertQuery.Column(COL_ID).Value(vrAlertRuleTypeItem.VRAlertRuleTypeId);
             insertQuery.Column(COL_Name).Value(vrAlertRuleTypeItem.Name);
-            insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrAlertRuleTypeItem.Settings));
+            if (vrAlertRuleTypeItem.Settings != null)
+                insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrAlertRuleTypeItem.Settings));
+            else
+                insertQuery.Column(COL_Settings).Null();
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -95,7 +102,10 @@ namespace Vanrise.Notification.Data.RDB
             ifNotExists.NotEqualsCondition(COL_ID).Value(vrAlertRuleTypeItem.VRAlertRuleTypeId);
             ifNotExists.EqualsCondition(COL_Name).Value(vrAlertRuleTypeItem.Name);
             updateQuery.Column(COL_Name).Value(vrAlertRuleTypeItem.Name);
-            updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrAlertRuleTypeItem.Settings));
+            if (vrAlertRuleTypeItem.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrAlertRuleTypeItem.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
             updateQuery.Where().EqualsCondition(COL_ID).Value(vrAlertRuleTypeItem.VRAlertRuleTypeId);
             return queryContext.ExecuteNonQuery() > 0;
         }
