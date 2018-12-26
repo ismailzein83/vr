@@ -44,7 +44,7 @@ namespace Vanrise.GenericData.Transformation.Data.RDB
         #region Private Methods
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("VR_GenericData_DataTransformationDefinition", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+            return RDBDataProviderFactory.CreateProvider("VR_GenericData_Transformation", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
         }
         #endregion
 
