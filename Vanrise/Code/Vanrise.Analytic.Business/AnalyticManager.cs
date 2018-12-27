@@ -21,7 +21,6 @@ namespace Vanrise.Analytic.Business
             //CheckAnalyticRequiredPermission(input);
             if (input.Query.FromTime == input.Query.ToTime)
                 return null;
-
             AnalyticTable analyticTable = new AnalyticTableManager().GetAnalyticTableById(input.Query.TableId);
             analyticTable.ThrowIfNull("analyticTable", input.Query.TableId);
             analyticTable.Settings.ThrowIfNull("analyticTable.Settings", input.Query.TableId);
@@ -83,6 +82,7 @@ namespace Vanrise.Analytic.Business
 
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery inputQuery, bool dontApplyOrdering, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
         {
+
             var query = inputQuery.VRDeepCopy();
             if (query.AdvancedOrderOptions != null)
             {
@@ -97,6 +97,39 @@ namespace Vanrise.Analytic.Business
                             query.MeasureFields.Add(additionalMeasure);
                     }
                 }
+            }
+            ConfigManager configManager = new ConfigManager();
+            var analyticTableKPISettings = configManager.GetAnalytictableKPISettings(query.TableId);
+            if (analyticTableKPISettings != null && analyticTableKPISettings.GlobalFilter != null)
+            {
+                if (query.FilterGroup != null)
+                {
+                    
+                    if (query.FilterGroup.LogicalOperator == RecordQueryLogicalOperator.And)
+                    {
+                        if (query.FilterGroup.Filters == null)
+                            query.FilterGroup.Filters = new List<RecordFilter>();
+                        query.FilterGroup.Filters.Add(analyticTableKPISettings.GlobalFilter);
+                    }
+
+                    else if (query.FilterGroup.LogicalOperator == RecordQueryLogicalOperator.Or)
+                    {
+                        var recordFilterGroup = new RecordFilterGroup()
+                        {
+                            LogicalOperator = RecordQueryLogicalOperator.And,
+                            Filters = new List<RecordFilter>()
+                        };
+                        recordFilterGroup.Filters.Add(analyticTableKPISettings.GlobalFilter);
+                        recordFilterGroup.Filters.Add(inputQuery.FilterGroup);
+                        query.FilterGroup = recordFilterGroup;
+
+                    }
+                }
+                else
+                {
+                    query.FilterGroup = analyticTableKPISettings.GlobalFilter;
+                }
+
             }
             SetQueryToTimeIfNull(query);
             if (query.LastHours.HasValue)
@@ -817,27 +850,28 @@ namespace Vanrise.Analytic.Business
                     MeasureStyleRule measureStyleRule = null;
                     if (measureStyleRulesDictionary.TryGetValue(measureName, out measureStyleRule))
                     {
-                        foreach (var recordfilter in measureStyleRule.RecommendedStyleRule)
+                        if (measureStyleRule.RecommendedStyleRule != null && measureStyleRule.RecommendedStyleRule.RecordFilters != null)
                         {
-                            if (recordfilter != null && filterManager.IsSingleFieldFilterMatch(recordfilter, measureValue, measureConfig.Config.FieldType))
+                            foreach (var recordfilter in measureStyleRule.RecommendedStyleRule.RecordFilters)
                             {
-                                var analyticTable = analyticTableManager.GetAnalyticTableById(analyticTableQueryContext.Query.TableId);
-                                analyticTable.ThrowIfNull("analyticTable");
-                                analyticTable.Settings.ThrowIfNull("analyticTable.Settings");
-                                var statusDefinition = statusDefinitionManager.GetStatusDefinition(analyticTable.Settings.StatusDefinitionId);
-                                styleDefinitionId = GetStyleDefinitionIdFromStatusDefinition(statusDefinition);
-                                break;
+                                if (recordfilter != null && filterManager.IsSingleFieldFilterMatch(recordfilter, measureValue, measureConfig.Config.FieldType))
+                                {
+                                    var analyticTable = analyticTableManager.GetAnalyticTableById(analyticTableQueryContext.Query.TableId);
+                                    analyticTable.ThrowIfNull("analyticTable");
+                                    analyticTable.Settings.ThrowIfNull("analyticTable.Settings");
+                                    var statusDefinition = statusDefinitionManager.GetStatusDefinition(analyticTable.Settings.StatusDefinitionId);
+                                    styleDefinitionId = GetStyleDefinitionIdFromStatusDefinition(statusDefinition);
+                                    break;
+                                }
                             }
                         }
-                        if (styleDefinitionId == null)
+                        if (!styleDefinitionId.HasValue)
                         {
                             foreach (var rule in measureStyleRule.Rules)
                             {
                                 StyleRuleConditionContext context = new StyleRuleConditionContext { Value = measureValue };
                                 if (rule.RecordFilter != null && filterManager.IsSingleFieldFilterMatch(rule.RecordFilter, measureValue, measureConfig.Config.FieldType))
                                 {
-                                    if (rule.StatusDefinitionId == null)
-                                        throw new NullReferenceException("StatusDefinitionId");
                                     var statusDefinition = statusDefinitionManager.GetStatusDefinition(rule.StatusDefinitionId);
                                     styleDefinitionId = GetStyleDefinitionIdFromStatusDefinition(statusDefinition);
                                     break;
@@ -1005,9 +1039,9 @@ namespace Vanrise.Analytic.Business
                     MeasureStyleRule measureStyleRule = null;
                     if (measureStyleRulesDictionary.TryGetValue(measureName, out measureStyleRule))
                     {
-                        if (measureStyleRule.RecommendedStyleRule != null)
+                        if (measureStyleRule.RecommendedStyleRule != null && measureStyleRule.RecommendedStyleRule.RecordFilters != null)
                         {
-                            foreach (var recordfilter in measureStyleRule.RecommendedStyleRule)
+                            foreach (var recordfilter in measureStyleRule.RecommendedStyleRule.RecordFilters)
                             {
                                 if (recordfilter != null && filterManager.IsSingleFieldFilterMatch(recordfilter, modifiedMeasureValue, measureConfig.Config.FieldType))
                                 {

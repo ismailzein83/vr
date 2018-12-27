@@ -49,10 +49,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                     if (payload != undefined) {
                         measureStyleRules = payload.data.AnalyticTablesKPISettings;
                     }
-                    var filter = {
-                        ShowInKPISettings  : true
-                    };
-                    return VR_Analytic_AnalyticTableAPIService.GetAnalyticTablesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return VR_Analytic_AnalyticTableAPIService.GetAnalyticTablesInfo().then(function (response) {
                         if (response != undefined) {
                             for (var i = 0; i < response.length; i++) {
                                 var analytictable = response[i];
@@ -71,7 +68,8 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                         var analyticTable = $scope.analyticTables[i];
                         analyticTablesKPISettings.push({
                             AnalyticTableId: analyticTable.analyticTableId,
-                            MeasureStyleRules: analyticTable.measureStyleGridAPI != undefined ? analyticTable.measureStyleGridAPI.getData() : undefined
+                            MeasureStyleRules: analyticTable.measureStyleGridAPI != undefined ? analyticTable.measureStyleGridAPI.getData() : undefined,
+                            GlobalFilter: analyticTable.recordFilterAPI != undefined ? analyticTable.recordFilterAPI.getData().filterObj : undefined
                         });
                     };
                     var KPISettings = {
@@ -86,11 +84,14 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
             }
 
             function extendDataItem(itemTab) {
+                console.log(itemTab);
                 var measures = [];
                 var dataItem = {
                     title: itemTab.analytictable.Name,
                     analyticTableId: itemTab.analytictable.AnalyticTableId,
-                    isLoading: true
+                    isMeasureStyleGridLoading: true,
+                    isRecordFilterLoading:true,
+                    showKPISection: itemTab.analytictable.StatusDefinitionId != undefined? true : false
                 };
                 var input = {
                     TableIds: [itemTab.analytictable.AnalyticTableId],
@@ -122,7 +123,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                 var measuresByAnalyticTable = UtilsService.getItemByVal(measureStyleRules, itemTab.analytictable.AnalyticTableId, "AnalyticTableId");
                 dataItem.measureStyleLoadDeferred = UtilsService.createPromiseDeferred();
                 dataItem.measureStyleLoadDeferred.promise.then(function () {
-                    dataItem.isLoading = false;
+                    dataItem.isMeasureStyleGridLoading = false;
                 });
                 dataItem.onMeasureStyleGridReady = function (api) {
                     dataItem.measureStyleGridAPI = api;
@@ -133,6 +134,42 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                             analyticTableId: itemTab.analytictable.AnalyticTableId
                         };
                         VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.measureStyleLoadDeferred);
+                    });
+                };
+                var fields = []
+                var analyticTableDimensionsPromise = VR_Analytic_AnalyticItemConfigAPIService.GetDimensions(itemTab.analytictable.AnalyticTableId).then(function (response) {
+                    if (response != undefined) {
+                        var dimensions = response;
+                        for (var i = 0; i < dimensions.length; i++) {
+                            var dimension = response[i];
+                            var field = {
+                                FieldName: dimension.Name,
+                                FieldTitle: dimension.Title,
+                                Type: dimension.Config.FieldType,
+                            };
+                            fields.push(field);
+                        };
+                    }
+                });
+                var recordFilterContext = {
+                    getFields: function () {
+                        return fields;
+                    },
+                   
+                };
+                dataItem.recordFilterLoadDeferred = UtilsService.createPromiseDeferred();
+                dataItem.recordFilterLoadDeferred.promise.then(function () {
+                    dataItem.isRecordFilterLoading = false;
+                });
+                dataItem.onRecordFilterReady = function (api) {
+                    dataItem.recordFilterAPI = api;
+                    analyticTableDimensionsPromise.then(function () {
+                        var payload = {
+                            context: recordFilterContext,
+                            FilterGroup: measuresByAnalyticTable != undefined ? measuresByAnalyticTable.GlobalFilter : undefined
+                        };
+
+                        VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.recordFilterLoadDeferred);
                     });
                 };
                 $scope.analyticTables.push(dataItem);

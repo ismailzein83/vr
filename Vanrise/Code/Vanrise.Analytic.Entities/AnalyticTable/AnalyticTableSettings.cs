@@ -31,7 +31,6 @@ namespace Vanrise.Analytic.Entities
 
         public AnalyticDataProvider DataProvider { get; set; }
 
-        public bool ShowInKPISettings { get; set; }
 
         public Guid? StatusDefinitionBEId { get; set; }
 

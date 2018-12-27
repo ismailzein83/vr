@@ -181,8 +181,8 @@
                     var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, measure.FieldType.ConfigId, "ExtensionConfigurationId");
                     var editorObject= fieldType != undefined ? fieldType.RuleFilterEditor : undefined;
 
-                    for (var i = 0; i < measureStyleRule.RecommendedStyleRule.length; i++) {
-                        var recordFilter = measureStyleRule.RecommendedStyleRule[i];
+                    for (var i = 0; i < measureStyleRule.RecommendedStyleRule.RecordFilters.length; i++) {
+                        var recordFilter = measureStyleRule.RecommendedStyleRule.RecordFilters[i];
                         var dataItem = {
                             editor: editorObject
                         };
@@ -311,7 +311,7 @@
             };
             var measureStyleRule = {
                 MeasureName: measure.Name,
-                RecommendedStyleRule: recordFilters,
+                RecommendedStyleRule: { RecordFilters:recordFilters},
                 Rules: rules
             };
             return measureStyleRule;
@@ -324,6 +324,7 @@
                 MeasureStyleRule: measureStyleObj
             };
             return VR_Analytic_MeasureStyleRuleAPIService.GetMeasureStyleRuleDetail(measureStyleRuleInput).then(function (response) {
+                console.log(response);
                 var measureStyleDetail = response;
                 if ($scope.onMeasureStyleAdded != undefined) {
                     $scope.onMeasureStyleAdded(measureStyleDetail);

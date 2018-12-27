@@ -22,6 +22,13 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticDimensionConfigInfoFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AnalyticDimensionConfigInfoFilter>(filter) : null;
             return manager.GetDimensionsInfo(serializedFilter);
         }
+        [HttpGet]
+        [Route("GetDimensions")]
+        public IEnumerable<AnalyticDimension> GetDimensions(Guid analyticTableId)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            return manager.GetDimensionValues(analyticTableId);
+        }
 
         [HttpGet]
         [Route("GetMeasuresInfo")]

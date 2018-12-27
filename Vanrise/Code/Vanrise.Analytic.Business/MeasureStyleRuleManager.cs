@@ -74,13 +74,16 @@ namespace Vanrise.Analytic.Business
             }
             AnalyticMeasure analyticMeasure = analyticMeasuresByMeasureName.GetRecord(measureStyleRule.MeasureName);
             analyticMeasure.ThrowIfNull("AnalyticMeasure");
-
-            var recommendedStyleRuleDescription = _recordFilterManager.BuildRecordFilterGroupExpression(new RecordFilterGroup
+            string recommendedStyleRuleDescription = null;
+            if (measureStyleRule.RecommendedStyleRule != null)
             {
-                Filters = measureStyleRule.RecommendedStyleRule,
-                LogicalOperator = RecordQueryLogicalOperator.Or
-            }, recordFilterFieldInfosByFieldName);
-            recommendedStyleRuleDescription.ThrowIfNull("recommendedStyleRuleDescription");
+                 recommendedStyleRuleDescription = _recordFilterManager.BuildRecordFilterGroupExpression(new RecordFilterGroup
+                {
+                    Filters = measureStyleRule.RecommendedStyleRule.RecordFilters,
+                    LogicalOperator = RecordQueryLogicalOperator.Or
+                }, recordFilterFieldInfosByFieldName);
+                recommendedStyleRuleDescription.ThrowIfNull("recommendedStyleRuleDescription");
+            }
 
             var measureStyleRuleDetail = new MeasureStyleRuleDetail()
             {

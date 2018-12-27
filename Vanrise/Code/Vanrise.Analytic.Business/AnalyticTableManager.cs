@@ -10,6 +10,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Security.Business;
+
 namespace Vanrise.Analytic.Business
 {
     public class AnalyticTableManager : IAnalyticTableManager
@@ -49,8 +50,7 @@ namespace Vanrise.Analytic.Business
             if (filter != null)
             {
                 Func<AnalyticTable, bool> filterExpression = (item) =>
-                 (filter.OnlySelectedIds == null || filter.OnlySelectedIds.Contains(item.AnalyticTableId)) &&
-                 (filter.ShowInKPISettings == null || item.Settings.ShowInKPISettings == filter.ShowInKPISettings.Value);
+                 (filter.OnlySelectedIds == null || filter.OnlySelectedIds.Contains(item.AnalyticTableId));
 
                 return analyticTables.MapRecords(AnalyticTableInfoMapper, filterExpression);
             }
@@ -247,6 +247,7 @@ namespace Vanrise.Analytic.Business
             {
                 AnalyticTableId = analyticTable.AnalyticTableId,
                 Name = analyticTable.Name,
+                StatusBEDefinitionId = analyticTable.Settings.StatusDefinitionBEId
 
             };
         }

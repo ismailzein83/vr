@@ -25,7 +25,7 @@ namespace Vanrise.Analytic.Business
             automatedReportSettings.ThrowIfNull("automatedReportSettings");
             return automatedReportSettings;
         }
-        public List<MeasureStyleRule> GetAnalytictableKPISettings (Guid analyticTableId)
+        public List<MeasureStyleRule> GetAnalytictableKPIMeasureStyleRuleSettings (Guid analyticTableId)
         {
             SettingManager settingManager = new SettingManager();
             KPISettings kpiSettings = settingManager.GetSetting<KPISettings>(KPISettings.SETTING_TYPE);
@@ -34,6 +34,18 @@ namespace Vanrise.Analytic.Business
                 var analyticTableKPISettings = kpiSettings.AnalyticTablesKPISettings.FindRecord(x => x.AnalyticTableId == analyticTableId);
                 if(analyticTableKPISettings != null)
                     return analyticTableKPISettings.MeasureStyleRules;
+            }
+            return null;
+        }
+        public AnalyticTableKPISettings GetAnalytictableKPISettings(Guid analyticTableId)
+        {
+            SettingManager settingManager = new SettingManager();
+            KPISettings kpiSettings = settingManager.GetSetting<KPISettings>(KPISettings.SETTING_TYPE);
+            if (kpiSettings != null && kpiSettings.AnalyticTablesKPISettings != null)
+            {
+                var analyticTableKPISettings = kpiSettings.AnalyticTablesKPISettings.FindRecord(x => x.AnalyticTableId == analyticTableId);
+                if (analyticTableKPISettings != null)
+                    return analyticTableKPISettings;
             }
             return null;
         }

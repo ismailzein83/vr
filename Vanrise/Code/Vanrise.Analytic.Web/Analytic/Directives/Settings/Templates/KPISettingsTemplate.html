@@ -1,15 +1,23 @@
 ﻿
+
 <vr-tabs>
     <vr-tab ng-repeat="analyticTable in analyticTables" header="analyticTable.title" dontload="true">
-        <vr-row>
-            
-                <span ng-show="true" vr-loader="analyticTable.isLoading">
+        <vr-section header="Global Filter">
+            <vr-row>
+                <span vr-loader="analyticTable.isRecordFilterLoading">
+                    <vr-genericdata-recordfilter on-ready="analyticTable.onRecordFilterReady"></vr-genericdata-recordfilter>
+                    </span>
+            </vr-row>
+        </vr-section>
+        <vr-section header="KPI Rules"  ng-show="analyticTable.showKPISection">
+            <vr-row>
+                <span vr-loader="analyticTable.isMeasureStyleGridLoading">
                     <vr-analytic-measurestyle-grid-editor on-ready="analyticTable.onMeasureStyleGridReady"></vr-analytic-measurestyle-grid-editor>
                 </span>
-           
-        </vr-row>
+            </vr-row>
+        </vr-section>
     </vr-tab>
 </vr-tabs>
 
 
- 
+

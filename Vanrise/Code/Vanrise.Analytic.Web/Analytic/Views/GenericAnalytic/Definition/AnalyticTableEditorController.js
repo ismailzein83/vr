@@ -62,8 +62,10 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, statusDefinitionAPI, payload, setLoader, beDefinitionSelectedPromiseDeferred);
                 }
-                else if (statusDefinitionAPI != undefined)
+                else if (statusDefinitionAPI != undefined) {
                     statusDefinitionAPI.clearDataSource();
+                    $scope.scopeModel.selectedStatusDefinition = undefined;
+                }
             };
             $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
@@ -147,7 +149,6 @@
                         $scope.scopeModel.timeColumnName = tableEntity.Settings.TimeColumnName;
                         $scope.scopeModel.connectionStringName = tableEntity.Settings.ConnectionStringName;
                         $scope.scopeModel.connectionString = tableEntity.Settings.ConnectionString;
-                        $scope.scopeModel.showInKPISettings = tableEntity.Settings.ShowInKPISettings;
                         if ($scope.scopeModel.connectionStringName != undefined) {
                             $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionStringName;
                         } else if ($scope.scopeModel.connectionString != undefined) {
@@ -206,15 +207,14 @@
             var promises = [];
             promises.push(loadBeDefinitionPromiseDeferred.promise);
 
-            var payload;
+            var payload = {
+                filter: {
+                    Filters: [{
+                        $type: "Vanrise.Common.Business.StatusDefinitionBEFilter, Vanrise.Common.Business"
+                    }]
+                }
+            };
             if (tableEntity != undefined && tableEntity.Settings.StatusDefinitionBEId != undefined) {
-                payload = {
-                    filter: {
-                        Filters: [{
-                            $type: "Vanrise.Common.Business.StatusDefinitionBEFilter, Vanrise.Common.Business"
-                        }]
-                    }
-                };
                 payload.selectedIds = tableEntity.Settings.StatusDefinitionBEId;
                 beDefinitionSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
             }
@@ -254,7 +254,6 @@
                     DataRecordTypeIds: dataRecordTypeSelectorAPI.getSelectedIds(),
                     RequiredPermission: requiredPermissionAPI.getData(),
                     DataProvider: analyticDataProviderSettingsDirectiveAPI.getData(),
-                    ShowInKPISettings: $scope.scopeModel.showInKPISettings,
                     StatusDefinitionBEId: beDefinitionSelectorApi.getSelectedIds(),
                     StatusDefinitionId: statusDefinitionAPI.getSelectedIds()
 

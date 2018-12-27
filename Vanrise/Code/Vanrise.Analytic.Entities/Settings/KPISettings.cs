@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -15,6 +16,7 @@ namespace Vanrise.Analytic.Entities
     public class AnalyticTableKPISettings
     {
         public Guid AnalyticTableId { get; set; }
+        public RecordFilterGroup GlobalFilter { get; set; }
         public List<MeasureStyleRule> MeasureStyleRules { get; set; }
     }
 }

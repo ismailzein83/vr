@@ -18,7 +18,7 @@ namespace Vanrise.Analytic.Web.Controllers
         public List<MeasureStyleRule> GetAnalytictableKPISettings(Guid analyticTableId)
         {
             ConfigManager configManager = new ConfigManager();
-            return configManager.GetAnalytictableKPISettings(analyticTableId);
+            return configManager.GetAnalytictableKPIMeasureStyleRuleSettings(analyticTableId);
         } 
     }
 }

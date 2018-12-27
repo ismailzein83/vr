@@ -34,10 +34,13 @@
             var filterDimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
             var advancedFilterDimensionSelectorAPI;
-            var advancedFilterDimensionReadyDeferred = UtilsService.createPromiseDeferred();
+            var advancedFilterDimensionReadyDeferred = UtilsService.createPromiseDeferred(); 
+
+            
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.analyticTables = [];
                 $scope.scopeModel.groupingDimensions = [];
                 $scope.scopeModel.filterDimensions = [];
                 $scope.scopeModel.showAdvancedFilterFields = false;
@@ -161,6 +164,7 @@
 
                     if (payload != undefined && payload.tableIds != undefined) {
                         var tableIds = payload.tableIds;
+                        $scope.scopeModel.analyticTables = tableIds;
 
                         var selectedGroupingIds;
                         var selectedFilterIds;

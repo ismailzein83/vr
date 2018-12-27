@@ -10,9 +10,14 @@ namespace Vanrise.Analytic.Entities
     public class MeasureStyleRule
     {
         public string MeasureName { get; set; }
-        public List<RecordFilter> RecommendedStyleRule { get; set; }
+        public RecommendedStyleRule RecommendedStyleRule { get; set; }
         public List<StyleRule> Rules { get; set; }
     }
+    public class RecommendedStyleRule
+    {
+        public List<RecordFilter> RecordFilters { get; set; }
+    }
+        
     public class StyleRule
     {
         public RecordFilter RecordFilter { get; set; }

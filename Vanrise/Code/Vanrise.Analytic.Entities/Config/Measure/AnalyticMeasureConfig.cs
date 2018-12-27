@@ -22,5 +22,10 @@ namespace Vanrise.Analytic.Entities
         public GenericData.Entities.DataRecordFieldType FieldType { get; set; }
 
         public RequiredPermissionSettings RequiredPermission { get; set; }
+
+        public string Description { get; set; }
+
+        public bool HideDescriptionInLegend { get; set; }
+
     }
 }

@@ -21,7 +21,7 @@ namespace Vanrise.Analytic.Business
         public AnalyticDimensionEditorRuntime GetAnalyticDimensionEditorRuntime(AnalyticDimensionEditorInput input)
         {
             AnalyticTableManager analyticTableManager = new AnalyticTableManager();
-          
+
             var analyticTable = analyticTableManager.GetAnalyticTableById(input.TableId);
             AnalyticDimensionEditorRuntime analyticDimensionEditorRuntime = new AnalyticDimensionEditorRuntime();
 
@@ -32,6 +32,12 @@ namespace Vanrise.Analytic.Business
                 analyticDimensionEditorRuntime.DataRecordTypeInfo = dataRecordTypeManager.GetDataRecordTypeInfo(filter);
             }
             return analyticDimensionEditorRuntime;
+        }
+        public IEnumerable<AnalyticDimension> GetDimensionValues(Guid analyticTableId)
+        {
+            var dimensionsByDimensionName = GetDimensions(analyticTableId);
+            dimensionsByDimensionName.ThrowIfNull("dimensionsByDimensionName");
+            return dimensionsByDimensionName.Values;
         }
         public Dictionary<string, AnalyticDimension> GetDimensions(Guid tableId)
         {
@@ -163,7 +169,7 @@ namespace Vanrise.Analytic.Business
             if (analyticItemConfig != null)
                 return analyticItemConfig.Name;
             return null;
-        
+
         }
         public IEnumerable<AnalyticDimensionConfigInfo> GetDimensionsInfo(AnalyticDimensionConfigInfoFilter filter)
         {
@@ -248,7 +254,7 @@ namespace Vanrise.Analytic.Business
 
             Func<Object, bool> filterExpression = (prod) =>
                  (true);
-            
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, itemConfigs.ToBigResult(input, filterExpression));
         }
         public Object GetAnalyticItemConfigsById(Guid tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
@@ -343,7 +349,7 @@ namespace Vanrise.Analytic.Business
                 case AnalyticItemType.Join: data = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
                 case AnalyticItemType.Measure: data = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
                 case AnalyticItemType.Aggregate: data = GetCachedAnalyticItemConfigs<AnalyticAggregateConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
-                case  AnalyticItemType.MeasureExternalSource: data = GetCachedAnalyticItemConfigs<AnalyticMeasureExternalSourceConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
+                case AnalyticItemType.MeasureExternalSource: data = GetCachedAnalyticItemConfigs<AnalyticMeasureExternalSourceConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
             }
             return data;
         }
@@ -505,18 +511,18 @@ namespace Vanrise.Analytic.Business
 
             public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
             {
-              
-           AnalyticItemConfig analyticItemConfig = context.Object.CastWithValidate<AnalyticItemConfig>("context.Object");
+
+                AnalyticItemConfig analyticItemConfig = context.Object.CastWithValidate<AnalyticItemConfig>("context.Object");
                 return analyticItemConfig.AnalyticItemConfigId;
-                  
+
             }
 
             public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
             {
-              
-                        AnalyticItemConfig analyticItemConfig = context.Object.CastWithValidate<AnalyticItemConfig>("context.Object");
-                        return s_analyticItemConfigManager.GetAnalyticItemConfigName(analyticItemConfig);
-                   
+
+                AnalyticItemConfig analyticItemConfig = context.Object.CastWithValidate<AnalyticItemConfig>("context.Object");
+                return s_analyticItemConfigManager.GetAnalyticItemConfigName(analyticItemConfig);
+
             }
         }
 

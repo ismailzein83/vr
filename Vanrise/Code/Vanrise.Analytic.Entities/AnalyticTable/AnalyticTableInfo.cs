@@ -11,5 +11,6 @@ namespace Vanrise.Analytic.Entities
         public Guid AnalyticTableId { get; set; }
 
         public string Name { get; set; }
+        public Guid? StatusBEDefinitionId { get; set; }
     }
 }

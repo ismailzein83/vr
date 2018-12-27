@@ -46,7 +46,6 @@
                         <vr-row>
                             <vr-columns width="1/3row">
                                 <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
-                                                                                  isrequired="true"
                                                                                   onselectionchanged="scopeModel.businessEntitySelectionChanged"
                                                                                   customlabel="Status Group">
                                 </vr-genericdata-businessentitydefinition-selector>
@@ -55,9 +54,6 @@
                                 <span vr-loader="isLoadingStatusDefinitions">
                                     <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady" selectedvalues="scopeModel.selectedStatusDefinition" customlabel="Recommended" onselectionchanged="scopeModel.onStatusDefinitionSelectionChanged"></vr-common-statusdefinition-selector>
                                 </span>
-                            </vr-columns>
-                            <vr-columns width="1/3row">
-                                <vr-switch value="scopeModel.showInKPISettings" label="Show In KPI Settings"></vr-switch>
                             </vr-columns>
                         </vr-row>
                     </vr-section>

@@ -11,6 +11,11 @@
                 filter: filter
             });
         }
+        function GetDimensions(analyticTableId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDimensions"), {
+                analyticTableId: analyticTableId
+            });
+        }
         function GetMeasuresInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasuresInfo"), {
                 filter: filter
@@ -67,7 +72,8 @@
             UpdateAnalyticItemConfig: UpdateAnalyticItemConfig,
             GetAnalyticItemConfigs: GetAnalyticItemConfigs,
             GetAnalyticDimensionEditorRuntime: GetAnalyticDimensionEditorRuntime,
-            GetRemoteMeasuresInfo: GetRemoteMeasuresInfo
+            GetRemoteMeasuresInfo: GetRemoteMeasuresInfo,
+            GetDimensions: GetDimensions
         });
     }
 
