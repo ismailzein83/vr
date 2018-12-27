@@ -10,7 +10,7 @@ BEGIN
 IF NOT EXISTS(SELECT 1 FROM Analytic.AnalyticReport WHERE ID != @ID AND Name = @Name and UserID = @UserID)
 	BEGIN
 		Update Analytic.AnalyticReport
-	Set Name = @Name, Settings = @Settings,AccessType = @AccessType
+	Set Name = @Name, Settings = @Settings,AccessType = @AccessType,LastModifiedTime = getdate()
 	Where ID = @ID
 	END
 END

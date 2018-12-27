@@ -22,7 +22,8 @@ IF NOT EXISTS(select 1 from sec.[BusinessEntity] where Name = @Name and Id!=@Id)
 				Title = @Title,
 				ModuleId=@ModuleId,
 				BreakInheritance = @BreakInheritance,
-				PermissionOptions=@PermissionOptions
+				PermissionOptions=@PermissionOptions,
+				LastModifiedTime = GETDATE()
 		WHERE	Id = @Id
 	END
 END

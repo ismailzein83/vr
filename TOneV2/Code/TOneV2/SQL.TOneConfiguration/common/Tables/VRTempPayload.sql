@@ -1,10 +1,13 @@
 ﻿CREATE TABLE [common].[VRTempPayload] (
-    [ID]          UNIQUEIDENTIFIER NOT NULL,
-    [Settings]    NVARCHAR (MAX)   NULL,
-    [CreatedBy]   INT              NULL,
-    [CreatedTime] DATETIME         CONSTRAINT [DF_VRTempPayload_CreatedTime] DEFAULT (getdate()) NULL,
+    [ID]               UNIQUEIDENTIFIER NOT NULL,
+    [Settings]         NVARCHAR (MAX)   NULL,
+    [CreatedBy]        INT              NULL,
+    [CreatedTime]      DATETIME         CONSTRAINT [DF_VRTempPayload_CreatedTime] DEFAULT (getdate()) NULL,
+    [LastModifiedTime] DATETIME         CONSTRAINT [DF_VRTempPayload_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_VRTempPayload] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

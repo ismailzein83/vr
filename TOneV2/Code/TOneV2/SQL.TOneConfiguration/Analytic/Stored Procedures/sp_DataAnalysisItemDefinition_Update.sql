@@ -10,7 +10,7 @@ BEGIN
 				  WHERE ID != @ID and Name = @Name and DataAnalysisDefinitionID = @DataAnalysisDefinitionID)
 	BEGIN
 		update Analytic.DataAnalysisItemDefinition
-		set  DataAnalysisDefinitionID = @DataAnalysisDefinitionID, Name = @Name, Settings = @Settings
+		set  DataAnalysisDefinitionID = @DataAnalysisDefinitionID, Name = @Name, Settings = @Settings, LastModifiedTime = getdate()
 		where  ID = @ID
 	END
 END

@@ -8,7 +8,7 @@ BEGIN
 IF NOT EXISTS(SELECT 1 FROM Analytic.AnalyticTable WHERE ID != @ID AND Name = @Name)
 	BEGIN
 		Update Analytic.AnalyticTable
-	Set Name = @Name, Settings = @Settings
+	Set Name = @Name, Settings = @Settings, LastModifiedTime = GETDATE()
 	Where ID = @ID
 	END
 END
