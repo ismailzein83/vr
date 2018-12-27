@@ -70,8 +70,6 @@ namespace Vanrise.Common.Data.RDB
 			insertQuery.Column(COL_ModuleID).Value(localizationTextResource.ModuleId);
 			if (localizationTextResource.Settings != null)
 				insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(localizationTextResource.Settings));
-			else
-				insertQuery.Column(COL_Settings).Null();
 			return queryContext.ExecuteNonQuery() > 0;
 		}
 
