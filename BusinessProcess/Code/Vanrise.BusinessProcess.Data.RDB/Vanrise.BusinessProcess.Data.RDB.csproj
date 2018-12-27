@@ -65,6 +65,7 @@
     <Compile Include="BPDataManager.cs" />
     <Compile Include="BPDefinitionArgumentStateDataManager.cs" />
     <Compile Include="BPDefinitionDataManager.cs" />
+    <Compile Include="BPEventDataManager.cs" />
     <Compile Include="BPInstanceDataManager.cs" />
     <Compile Include="BPInstancePersistenceDataManager.cs" />
     <Compile Include="BPTaskDataManager.cs" />
