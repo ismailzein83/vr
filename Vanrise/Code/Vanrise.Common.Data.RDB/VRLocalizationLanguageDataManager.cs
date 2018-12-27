@@ -73,8 +73,6 @@ namespace Vanrise.Common.Data.RDB
 				insertQuery.Column(COL_ParentLanguageID).Null();
 			if (localizationLanguage.Settings != null)
 				insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(localizationLanguage.Settings));
-			else
-				insertQuery.Column(COL_Settings).Null();
 			return queryContext.ExecuteNonQuery() > 0;
 
 
