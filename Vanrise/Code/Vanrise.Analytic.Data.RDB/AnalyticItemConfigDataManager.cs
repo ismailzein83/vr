@@ -20,6 +20,7 @@ namespace Vanrise.Analytic.Data.RDB
         const string COL_Title = "Title";
         const string COL_Config = "Config";
         const string COL_CreatedTime = "CreatedTime";
+        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static AnalyticItemConfigDataManager()
         {
@@ -31,13 +32,16 @@ namespace Vanrise.Analytic.Data.RDB
             columns.Add(COL_Title, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
             columns.Add(COL_Config, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "Analytic",
                 DBTableName = "AnalyticItemConfig",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
 
@@ -88,7 +92,8 @@ namespace Vanrise.Analytic.Data.RDB
 
         public bool AreAnalyticItemConfigUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME,ref updateHandle);
         }
 
         public List<AnalyticItemConfig<T>> GetItemConfigs<T>(Guid tableId, AnalyticItemType itemType) where T : class
@@ -121,7 +126,11 @@ namespace Vanrise.Analytic.Data.RDB
 
             updateQuery.Column(COL_Name).Value(analyticItemConfig.Name);
             updateQuery.Column(COL_Title).Value(analyticItemConfig.Title);
-            updateQuery.Column(COL_Config).Value(Vanrise.Common.Serializer.Serialize(analyticItemConfig.Config));
+            if (analyticItemConfig.Config != null)
+                updateQuery.Column(COL_Config).Value(Vanrise.Common.Serializer.Serialize(analyticItemConfig.Config));
+            else
+                updateQuery.Column(COL_Config).Null();
+
             updateQuery.Column(COL_TableId).Value(analyticItemConfig.TableId);
             updateQuery.Column(COL_ItemType).Value((int)analyticItemConfig.ItemType);
 

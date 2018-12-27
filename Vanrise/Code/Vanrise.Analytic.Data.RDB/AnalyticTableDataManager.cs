@@ -18,7 +18,7 @@ namespace Vanrise.Analytic.Data.RDB
         const string COL_Name = "Name";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
-
+        const string COL_LastModifiedTime = "LastModifiedTime";
         static AnalyticTableDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -26,13 +26,16 @@ namespace Vanrise.Analytic.Data.RDB
             columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "Analytic",
                 DBTableName = "AnalyticTable",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
         #region Private Methods
@@ -73,7 +76,8 @@ namespace Vanrise.Analytic.Data.RDB
 
         public bool AreAnalyticTableUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public List<Analytic.Entities.AnalyticTable> GetAnalyticTables()
@@ -97,7 +101,10 @@ namespace Vanrise.Analytic.Data.RDB
             notExistsCondition.EqualsCondition(COL_Name).Value(analyticTable.Name);
 
             updateQuery.Column(COL_Name).Value(analyticTable.Name);
-            updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
+            if (analyticTable.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(analyticTable.AnalyticTableId);
 

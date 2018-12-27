@@ -19,6 +19,7 @@ namespace Vanrise.Analytic.Data.RDB
         const string COL_AccessType = "AccessType";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
+        const string COL_LastModifiedTime = "LastModifiedTime";
         static AnalyticReportDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -28,13 +29,16 @@ namespace Vanrise.Analytic.Data.RDB
             columns.Add(COL_AccessType, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "Analytic",
                 DBTableName = "AnalyticReport",
                 Columns = columns,
                 IdColumnName = COL_ID,
-                CreatedTimeColumnName = COL_CreatedTime
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
+
             });
         }
 
@@ -80,7 +84,8 @@ namespace Vanrise.Analytic.Data.RDB
 
         public bool AreAnalyticReportUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public List<AnalyticReport> GetAnalyticReports()
@@ -104,7 +109,10 @@ namespace Vanrise.Analytic.Data.RDB
             notExistsCondition.EqualsCondition(COL_Name).Value(analyticReport.Name);
 
             updateQuery.Column(COL_Name).Value(analyticReport.Name);
-            updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
+            if (analyticReport.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(analyticReport.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
             updateQuery.Column(COL_UserID).Value(analyticReport.UserID);
             updateQuery.Column(COL_AccessType).Value((int)analyticReport.AccessType);
 
