@@ -838,6 +838,7 @@
     <Compile Include="Tasks\ABaghdadiTask.cs" />
     <Compile Include="Tasks\AliAtouiTask.cs" />
     <Compile Include="Tasks\AliBalloukTask.cs" />
+    <Compile Include="Tasks\AliSlaymanTask.cs" />
     <Compile Include="Tasks\HassanMakhourTask.cs" />
     <Compile Include="Tasks\Naim Task.cs" />
     <Compile Include="Tasks\AnthonyTask.cs" />
