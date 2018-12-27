@@ -97,8 +97,12 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.EqualsCondition(COL_Name).Value(smsMessageTemplateItem.Name);
 
 			updateQuery.Column(COL_Name).Value(smsMessageTemplateItem.Name);
-			updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(smsMessageTemplateItem.Settings));
-			updateQuery.Column(COL_SMSMessageTypeId).Value(smsMessageTemplateItem.SMSMessageTypeId);
+            if (smsMessageTemplateItem.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(smsMessageTemplateItem.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
+
+            updateQuery.Column(COL_SMSMessageTypeId).Value(smsMessageTemplateItem.SMSMessageTypeId);
 			updateQuery.Column(COL_LastModifiedBy).Value(smsMessageTemplateItem.LastModifiedBy);
 
 			updateQuery.Where().EqualsCondition(COL_ID).Value(smsMessageTemplateItem.SMSMessageTemplateId);
