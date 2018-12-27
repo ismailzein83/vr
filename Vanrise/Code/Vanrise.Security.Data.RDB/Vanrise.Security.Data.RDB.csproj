@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="BusinessEntityDataManager.cs" />
     <Compile Include="BusinessEntityModuleDataManager.cs" />
+    <Compile Include="GroupDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
