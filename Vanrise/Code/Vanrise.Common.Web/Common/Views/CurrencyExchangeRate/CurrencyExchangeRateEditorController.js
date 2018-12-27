@@ -121,7 +121,7 @@
         {
             if ( currencyExchangeRateEntity == undefined )
             {
-                $scope.exchangeDate = VRDateTimeService.getNowDateTime();
+                $scope.exchangeDate = VRDateTimeService.getTodayDate();
                 return;
             }
             $scope.rate = currencyExchangeRateEntity.Rate;
