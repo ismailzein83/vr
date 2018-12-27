@@ -573,7 +573,7 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
                 var financialAccounts = financialAccountsData.GetRecord(classification);
                 if (financialAccounts != null)
                 {
-                    CheckFinancialAccountOverlaping(mainFinancialAccount, financialAccounts, out message, out result);
+                    CheckFinancialAccountOverlaping(mainFinancialAccount, financialAccounts, accountId, out message, out result);
                     if (!result)
                     {
                         return result;
@@ -584,15 +584,15 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
         }
 
 
-        private void CheckFinancialAccountOverlaping(FinancialAccount mainFinancialAccount, IOrderedEnumerable<FinancialAccountData> financialAccounts, out string message, out bool result)
+        private void CheckFinancialAccountOverlaping(FinancialAccount mainFinancialAccount, IOrderedEnumerable<FinancialAccountData> financialAccounts, long accountId, out string message, out bool result)
         {
             foreach (var financialAccount in financialAccounts)
             {
-                if (financialAccount.FinancialAccount.SequenceNumber != mainFinancialAccount.SequenceNumber)
+                if (financialAccount.FinancialAccount.SequenceNumber != mainFinancialAccount.SequenceNumber || financialAccount.Account.AccountId != accountId)
                 {
                     if (mainFinancialAccount.IsOverlappedWith(financialAccount.FinancialAccount))
                     {
-                        message = string.Format("Financial account must not overlap.");
+                        message = string.Format("Financial accounts must not overlap.");
                         result = false;
                         return;
                     }
