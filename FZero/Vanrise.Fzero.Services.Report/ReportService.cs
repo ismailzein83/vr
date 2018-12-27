@@ -13,6 +13,8 @@ using System.Text;
 using System.Linq;
 using Rebex.Net;
 using System.Threading;
+using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
+using System.Data;
 
 namespace Vanrise.Fzero.Services.Report
 {
@@ -116,7 +118,7 @@ namespace Vanrise.Fzero.Services.Report
                                 SendReport(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT), out reportCounter);
                                 if (i.EnableFTP.HasValue && i.EnableFTP.Value)
                                 {
-                                    SaveToFTPFile(i.FTPAddress, i.FTPUserName, i.FTPPassword, i.FTPPort, i.FTPType, i.User.FullName, DistinctCLIsWitoutCountryCode, reportCounter, i.Compression, i.SshEncryptionAlgorithm, i.SshHostKeyAlgorithm, i.SshKeyExchangeAlgorithm, i.SshMacAlgorithm, i.SshOptions);
+                                    SaveToFTPFile(i.ID,i.User.ClientID.Value,i.FTPAddress, i.FTPUserName, i.FTPPassword, i.FTPPort, i.FTPType, i.User.FullName, DistinctCLIsWitoutCountryCode, reportCounter, i.Compression, i.SshEncryptionAlgorithm, i.SshHostKeyAlgorithm, i.SshKeyExchangeAlgorithm, i.SshMacAlgorithm, i.SshOptions);
                                 }
                             }
                         }
@@ -181,35 +183,78 @@ namespace Vanrise.Fzero.Services.Report
 
         }
 
-
-        private void SaveToFTPFile(string ftpAddress, string ftpUserName, string ftpPassword, string ftpPort, int? ftpType, string mobileOperatorName, HashSet<string> distinctCLIs, string reportCounter, int? compression, int? sshEncryptionAlgorithm, int? sshHostKeyAlgorithm, int? sshKeyExchangeAlgorithm, int? sshMacAlgorithm, int? sshOptions)
+        private void SaveToFTPFile(int mobileOperatorId, int clientId, string ftpAddress, string ftpUserName, string ftpPassword, string ftpPort, int? ftpType, string mobileOperatorName, HashSet<string> distinctCLIs, string reportCounter, int? compression, int? sshEncryptionAlgorithm, int? sshHostKeyAlgorithm, int? sshKeyExchangeAlgorithm, int? sshMacAlgorithm, int? sshOptions)
         {
 
             try
             {
+                var db1 = GetConnectionDB();
+                var cmd1 = db1.GetStoredProcCommand("dbo.[sp_FTPReports_GetNotSentReportToRetry]");
+                cmd1.CommandTimeout = 600;
+                using (cmd1)
+                {
+                    int maxNumberOfRetry;
+                    if (!int.TryParse(ConfigurationManager.AppSettings["FTPMaxNumberOfRetry"], out maxNumberOfRetry))
+                        maxNumberOfRetry = 5;
+
+                    db1.AssignParameters(cmd1, new Object[] { mobileOperatorId, clientId, maxNumberOfRetry });
+                    var reader = db1.ExecuteReader(cmd1);
+                    while (reader.Read())
+                    {
+
+                        var reportName = reader["ReportName"] as string;
+                        byte[] content = reader["Content"] != DBNull.Value ? (byte[])reader["Content"] : default(byte[]);
+                        TrySaveToFTPFile((long)reader["ID"], mobileOperatorId, clientId, reportName, content, ftpAddress, ftpUserName, ftpPassword, ftpPort, ftpType, mobileOperatorName, compression, sshEncryptionAlgorithm, sshHostKeyAlgorithm, sshKeyExchangeAlgorithm, sshMacAlgorithm, sshOptions);
+                    }
+                    cmd1.Dispose();
+                }
+
                 if (reportCounter == null)
                     return;
 
+                string fileName = string.Format("AutoSuspend_{0:yyyyMMdd}_{1}_Vanrise.tmp", DateTime.Now, reportCounter);
+                StringBuilder stringBuilder = new StringBuilder();
+                foreach (var item in distinctCLIs)
+                {
+                    stringBuilder.AppendLine(item.ToString());
+                }
+                long ftpreportId;
+                byte[] buffer = new ASCIIEncoding().GetBytes(stringBuilder.ToString());
+                var db = GetConnectionDB();
+                var cmd = db.GetStoredProcCommand("dbo.[sp_FTPReports_InsertReport]");
+                cmd.CommandTimeout = 600;
+                using (cmd)
+                {
+                    db.AssignParameters(cmd, new Object[] { fileName, buffer, false, clientId, mobileOperatorId, 0 });
+                    ftpreportId =Convert.ToInt64(db.ExecuteScalar(cmd));
+                    cmd.Dispose();
+                }
+                TrySaveToFTPFile( ftpreportId,mobileOperatorId, clientId, fileName, buffer, ftpAddress, ftpUserName, ftpPassword, ftpPort, ftpType, mobileOperatorName, compression, sshEncryptionAlgorithm, sshHostKeyAlgorithm, sshKeyExchangeAlgorithm, sshMacAlgorithm, sshOptions);
+            }
+            catch (Exception ex)
+            {
+                ErrorLog("SaveToFTPFile: " + ex.Message);
+                ErrorLog("SaveToFTPFile: " + ex.InnerException);
+                ErrorLog("SaveToFTPFile: " + ex.ToString());
+            }
+
+        }
+
+        private void TrySaveToFTPFile(long ftpreportId, int mobileOperatorId, int clientId, string fileName, byte[] buffer, string ftpAddress, string ftpUserName, string ftpPassword, string ftpPort, int? ftpType, string mobileOperatorName, int? compression, int? sshEncryptionAlgorithm, int? sshHostKeyAlgorithm, int? sshKeyExchangeAlgorithm, int? sshMacAlgorithm, int? sshOptions)
+        {
+            try
+            {
                 if (ftpAddress != null && ftpUserName != null & ftpPassword != null)
                 {
-                    string fileName = string.Format("AutoSuspend_{0:yyyyMMdd}_{1}_Vanrise.tmp", DateTime.Now, reportCounter);
-                    StringBuilder stringBuilder = new StringBuilder();
-                    foreach (var item in distinctCLIs)
-                    {
-                        stringBuilder.AppendLine(item.ToString());
-                    }
-
-                    byte[] buffer = new ASCIIEncoding().GetBytes(stringBuilder.ToString());
 
                     if (!ftpType.HasValue || ftpType.Value == (int)FTPTypeEnum.FTP)
                     {
-
                         Rebex.Net.FtpWebRequest ftpWebRequest = (Rebex.Net.FtpWebRequest)Rebex.Net.FtpWebRequest.Create(String.Format("ftp://{0}/{1}", ftpAddress, fileName.Replace(".tmp", ".txt")));
                         ftpWebRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
-                    //   ftpWebRequest..KeepAlive = false;
+                        //   ftpWebRequest..KeepAlive = false;
                         ftpWebRequest.Timeout = 20000;
                         ftpWebRequest.Method = WebRequestMethods.Ftp.UploadFile;
-                      //  ftpWebRequest.UseBinary = true;
+                        //  ftpWebRequest.UseBinary = true;
                         Stream stream = ftpWebRequest.GetRequestStream();
                         ftpWebRequest.ContentLength = buffer.Length;
                         stream.Write(buffer, 0, buffer.Length);
@@ -263,7 +308,7 @@ namespace Vanrise.Fzero.Services.Report
                             {
                                 filePath += string.Format("/{0}", ftpAddressArray[i]);
                             }
-                            if(!string.IsNullOrEmpty(filePath))
+                            if (!string.IsNullOrEmpty(filePath))
                             {
                                 fileName = string.Format("{0}/{1}", filePath, fileName);
                             }
@@ -284,18 +329,39 @@ namespace Vanrise.Fzero.Services.Report
                             System.Threading.Thread.Sleep(200);
                         }
                         client.Rename(remotePath, remotePath.Replace(".tmp", ".txt"));
+
+                        var db = GetConnectionDB();
+                        var cmd = db.GetStoredProcCommand("dbo.[sp_FTPReports_SetReportSent]");
+                        cmd.CommandTimeout = 600;
+                        using (cmd)
+                        {
+                            db.AssignParameters(cmd, new Object[] { ftpreportId, fileName.Replace(".tmp", ".txt") });
+                            db.ExecuteNonQuery(cmd);
+                            cmd.Dispose();
+                        }
+
                         client.Dispose();
                     }
                 }
             }
             catch (Exception ex)
             {
+                var db = GetConnectionDB();
+                var cmd = db.GetStoredProcCommand("dbo.[sp_FTPReports_UpdateRetryCount]");
+                cmd.CommandTimeout = 600;
+                using (cmd)
+                {
+                    db.AssignParameters(cmd, new Object[] { ftpreportId, ex.ToString() });
+                    db.ExecuteNonQuery(cmd);
+                    cmd.Dispose();
+                }
+                ErrorLog(string.Format("SaveToFTPFile: Unable To Send {0}.", fileName));
                 ErrorLog("SaveToFTPFile: " + ex.Message);
                 ErrorLog("SaveToFTPFile: " + ex.InnerException);
                 ErrorLog("SaveToFTPFile: " + ex.ToString());
             }
-
         }
+    
      
       
         private void TrySetCompression(SshParameters sshParameters, VRCompressionEnum? compression)
@@ -309,6 +375,11 @@ namespace Vanrise.Fzero.Services.Report
                     default: throw new NotSupportedException(string.Format("VRCompressionEnum {0} not supported.", compression.Value));
                 }
             }
+        }
+
+        private SqlDatabase GetConnectionDB()
+        {
+            return new SqlDatabase(ConfigurationManager.ConnectionStrings["FMSConnectionString"].ConnectionString);
         }
 
         private void TrySetSshEncryptionAlgorithm(SshParameters sshParameters, VRSshEncryptionAlgorithmEnum? sshEncryptionAlgorithm)
@@ -461,6 +532,11 @@ namespace Vanrise.Fzero.Services.Report
                 if (ClientID == 3)
                 {
                     parameters[1] = new ReportParameter("RecommendedAction", "It is highly recommended to immediately block these fraudulent MSISDNs as they are terminating international calls without passing legally through ST IGW.");
+                }
+                else if (ClientID == 9) //Etisalat 
+                {
+                    parameters[1] = new ReportParameter("RecommendedAction", "It is highly recommended to immediately block and take actions against these fraudulent MSISDNs as they are terminating international calls without passing legally through Etisalat IGW.");
+
                 }
                 else
                 {
