@@ -75,7 +75,8 @@ namespace Vanrise.Analytic.Data.RDB
         #region IVRReportGenerationDataManager
         public bool AreVRReportGenerationUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public List<VRReportGeneration> GetVRReportGenerations()
@@ -128,7 +129,10 @@ namespace Vanrise.Analytic.Data.RDB
 
             updateQuery.Column(COL_Name).Value(vrReportGeneration.Name);
             updateQuery.Column(COL_Description).Value(vrReportGeneration.Description);
-            updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrReportGeneration.Settings));
+            if (vrReportGeneration.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrReportGeneration.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
             updateQuery.Column(COL_AccessLevel).Value((int)vrReportGeneration.AccessLevel);
             updateQuery.Column(COL_LastModifiedBy).Value(vrReportGeneration.LastModifiedBy);
 
