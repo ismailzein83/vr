@@ -20,6 +20,7 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_Settings = "Settings";
 		const string COL_CreatedTime = "CreatedTime";
         const string COL_LastModifiedTime = "LastModifiedTime";
+
         #endregion
 
         #region Contructors
@@ -32,7 +33,8 @@ namespace Vanrise.Common.Data.RDB
 			columns.Add(COL_ConfigType, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
 			columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
 			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-			RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
 			{
 				DBSchemaName = "common",
 				DBTableName = "ExtensionConfiguration",
