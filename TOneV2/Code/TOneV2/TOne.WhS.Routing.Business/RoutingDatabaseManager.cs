@@ -47,7 +47,7 @@ namespace TOne.WhS.Routing.Business
         {
             var notDeletedDBs = GetNotDeletedDatabases();
             RoutingDatabase db = notDeletedDBs.GetRecord(routingDatabaseId);
-            if (db == null && notDeletedDBs != null && !notDeletedDBs.Values.Any(itm => itm.ID > routingDatabaseId))
+            if (db == null || db.Settings == null)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 db = GetNotDeletedDatabases().GetRecord(routingDatabaseId);
