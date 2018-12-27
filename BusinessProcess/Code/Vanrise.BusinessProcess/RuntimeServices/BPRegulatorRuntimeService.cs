@@ -91,7 +91,16 @@ namespace Vanrise.BusinessProcess
         {
             Dictionary<Guid, StructuredProcessSynchronisation> structuredProcessSynchronisations = _processSynchronisationManager.GetStructuredProcessSynchronisations();
 
-            var pendingInstances = _bpInstanceManager.GetPendingInstancesInfo(s_pendingStatuses);
+            List<BPInstance> pendingInstances;
+            try
+            {
+                pendingInstances = _bpInstanceManager.GetPendingInstancesInfo(s_pendingStatuses);//some time, this call fails due to locking on the database table
+            }
+            catch
+            {
+                System.Threading.Thread.Sleep(500);
+                pendingInstances = _bpInstanceManager.GetPendingInstancesInfo(s_pendingStatuses);
+            }
             if (pendingInstances != null && pendingInstances.Count > 0)
             {
                 Dictionary<long, BPInstance> pendingInstancesDict = pendingInstances.ToDictionary(itm => itm.ProcessInstanceID, itm => itm);
