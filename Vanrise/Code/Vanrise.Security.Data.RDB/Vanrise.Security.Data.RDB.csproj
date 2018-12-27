@@ -43,6 +43,15 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Data.RDB">
+      <HintPath>..\Output\Vanrise.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data">
+      <HintPath>..\Output\Vanrise.Security.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities">
+      <HintPath>..\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessEntityDataManager.cs" />
