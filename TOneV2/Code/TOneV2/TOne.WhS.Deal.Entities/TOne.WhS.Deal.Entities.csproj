@@ -108,7 +108,6 @@
     <Compile Include="SwapDeal\DealSettingsDetail.cs" />
     <Compile Include="DealRateEvaluator\BaseDealRateEvaluator.cs" />
     <Compile Include="UpdateDealOperationOutput.cs" />
-    <Compile Include="VolumeCommitment\VolCommitmentDealFilter.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealInfo.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealQuery.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItem.cs" />

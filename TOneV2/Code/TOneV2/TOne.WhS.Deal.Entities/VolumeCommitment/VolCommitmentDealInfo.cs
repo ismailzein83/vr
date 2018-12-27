@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Deal.Entities.VolumeCommitment
 {
-    class VolCommitmentDealInfo
+    class VolCommitmentDealInfo : DealDefinitionInfo
     {
     }
 }
