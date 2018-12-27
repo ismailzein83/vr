@@ -79,7 +79,7 @@ namespace Vanrise.Common.Data.RDB
 		#endregion
 
 		#region Private Methods
-		BaseRDBDataProvider GetDataProvider()
+		private BaseRDBDataProvider GetDataProvider()
 		{
 			return RDBDataProviderFactory.CreateProvider("VR_Common", "VRLocalizationDBConnStringKey", "VRLocalizationDBConnString");
 		}

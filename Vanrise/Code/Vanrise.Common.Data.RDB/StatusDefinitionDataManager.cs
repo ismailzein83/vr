@@ -11,9 +11,8 @@ namespace Vanrise.Common.Data.RDB
 	public class StatusDefinitionDataManager : IStatusDefinitionDataManager
 	{
 		#region Local Variables
-
 		static string TABLE_NAME = "common_StatusDefinition";
-		static string TABLE_ALIAS = "statusDefinition";
+		static string TABLE_ALIAS = "vrStatusDefinition";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
 		const string COL_BusinessEntityDefinitionID = "BusinessEntityDefinitionID";
@@ -22,11 +21,9 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_CreatedBy = "CreatedBy";
 		const string COL_LastModifiedBy = "LastModifiedBy";
 		const string COL_LastModifiedTime = "LastModifiedTime";
-
 		#endregion
 
 		#region Constructors
-
 		static StatusDefinitionDataManager()
 		{
 			var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -49,7 +46,6 @@ namespace Vanrise.Common.Data.RDB
 
 			});
 		}
-
 		#endregion
 
 		#region Public Methods
@@ -121,9 +117,9 @@ namespace Vanrise.Common.Data.RDB
 		#endregion
 
 		#region Private Methods
-		BaseRDBDataProvider GetDataProvider()
+		private BaseRDBDataProvider GetDataProvider()
 		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_StatusDefinition", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 
 		#endregion

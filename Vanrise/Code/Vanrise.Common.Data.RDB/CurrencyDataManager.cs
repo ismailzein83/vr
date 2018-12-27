@@ -10,9 +10,9 @@ namespace Vanrise.Common.Data.RDB
 {
 	class CurrencyDataManager : ICurrencyDataManager
 	{
-
+		#region Local Variables
 		static string TABLE_NAME = "common_Currency";
-		static string TABLE_ALIAS = "currency";
+		static string TABLE_ALIAS = "vrCurrency";
 		const string COL_ID = "ID";
 		const string COL_Symbol = "Symbol";
 		const string COL_Name = "Name";
@@ -21,8 +21,9 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_LastModifiedBy = "LastModifiedBy";
 		const string COL_LastModifiedTime = "LastModifiedTime";
 		const string COL_CreatedTime = "CreatedTime";
+		#endregion
 
-
+		#region Constructors
 		static CurrencyDataManager()
 		{
 			var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -42,18 +43,11 @@ namespace Vanrise.Common.Data.RDB
 				IdColumnName = COL_ID,
 				CreatedTimeColumnName = COL_CreatedTime,
 				ModifiedTimeColumnName = COL_LastModifiedTime
-
 			});
-		}
-
-		#region Private Methods
-		BaseRDBDataProvider GetDataProvider()
-		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_Currency", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 		#endregion
 
-
+		#region Public Methods
 		public List<Currency> GetCurrencies()
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
@@ -116,7 +110,16 @@ namespace Vanrise.Common.Data.RDB
 		{
             var queryContext = new RDBQueryContext(GetDataProvider());
             return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
-        } 
+        }
+		#endregion
+
+		#region Private Methods
+		private BaseRDBDataProvider GetDataProvider()
+		{
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+		}
+		#endregion
+
 		#region Mappers
 		public Currency CurrencyMapper(IRDBDataReader reader)
 		{

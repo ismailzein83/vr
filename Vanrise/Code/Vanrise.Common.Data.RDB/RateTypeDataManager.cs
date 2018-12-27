@@ -11,13 +11,16 @@ namespace Vanrise.Common.Data.RDB
 {
 	public class RateTypeDataManager : IRateTypeDataManager
 	{
+		#region Local Variables
 		static string TABLE_NAME = "common_RateType";
-		static string TABLE_ALIAS = "rateType";
+		static string TABLE_ALIAS = "vrRateType";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
         const string COL_LastModifiedTime = "LastModifiedTime";
+		#endregion
 
-        static RateTypeDataManager()
+		#region Constructors
+		static RateTypeDataManager()
 		{
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
@@ -32,12 +35,6 @@ namespace Vanrise.Common.Data.RDB
                 ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
-
-		#region Private Methods
-		BaseRDBDataProvider GetDataProvider()
-		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_RateType", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
-		}
 		#endregion
 
 		#region Public Methods
@@ -87,6 +84,13 @@ namespace Vanrise.Common.Data.RDB
 			updateQuery.Column(COL_Name).Value(rateType.Name);
 			updateQuery.Where().EqualsCondition(COL_ID).Value(rateType.RateTypeId);
 			return queryContext.ExecuteNonQuery() > 0;
+		}
+		#endregion
+
+		#region Private Methods
+		private BaseRDBDataProvider GetDataProvider()
+		{
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 		#endregion
 

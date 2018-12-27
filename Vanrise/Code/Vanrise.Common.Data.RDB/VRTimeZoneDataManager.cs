@@ -121,9 +121,9 @@ namespace Vanrise.Common.Data.RDB
 		#endregion
 
 		#region Private Methods
-		BaseRDBDataProvider GetDataProvider()
+		private BaseRDBDataProvider GetDataProvider()
 		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_VRTimeZone", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 		#endregion
 

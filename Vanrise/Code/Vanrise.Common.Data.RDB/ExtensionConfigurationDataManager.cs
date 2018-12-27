@@ -12,7 +12,7 @@ namespace Vanrise.Common.Data.RDB
 	{
 		#region Local Variables
 		static string TABLE_NAME = "common_ExtensionConfiguration";
-		static string TABLE_ALIAS = "extensionConfiguration";
+		static string TABLE_ALIAS = "vrExtensionConfiguration";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
 		const string COL_Title = "Title";
@@ -20,7 +20,6 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_Settings = "Settings";
 		const string COL_CreatedTime = "CreatedTime";
         const string COL_LastModifiedTime = "LastModifiedTime";
-
         #endregion
 
         #region Contructors
@@ -46,15 +45,6 @@ namespace Vanrise.Common.Data.RDB
 		}
 		#endregion
 
-		#region Private Methods
-
-		BaseRDBDataProvider GetDataProvider()
-		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_ExtensionConfiguration", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
-		}
-
-		#endregion
-
 		#region Public Methods
 		public bool AreExtensionConfigurationUpdated(string parameter, ref object updateHandle)
 		{
@@ -70,8 +60,13 @@ namespace Vanrise.Common.Data.RDB
 			selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			selectQuery.Where().EqualsCondition(COL_ConfigType).Value(type);
 			return queryContext.GetItems(ExtensionConfigurationMapper<T>);
+		}
+		#endregion
 
-
+		#region Private Methods
+		private BaseRDBDataProvider GetDataProvider()
+		{
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 		#endregion
 

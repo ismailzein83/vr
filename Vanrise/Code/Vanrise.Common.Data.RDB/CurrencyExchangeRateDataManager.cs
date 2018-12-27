@@ -11,9 +11,8 @@ namespace Vanrise.Common.Data.RDB
 	public class CurrencyExchangeRateDataManager : ICurrencyExchangeRateDataManager
 	{
         #region Local Variables
-
         static string TABLE_NAME = "common_CurrencyExchangeRate";
-        static string TABLE_ALIAS = "currencyExchangeRate";
+        static string TABLE_ALIAS = "vrCurrencyExchangeRate";
         const string COL_ID = "ID";
         const string COL_CurrencyID = "CurrencyID";
         const string COL_Rate = "Rate";
@@ -39,16 +38,8 @@ namespace Vanrise.Common.Data.RDB
                 Columns = columns,
                 IdColumnName = COL_ID,
                 ModifiedTimeColumnName = COL_LastModifiedTime
-
             });
         }
-        #endregion
-
-        #region Private Methods
-        BaseRDBDataProvider GetDataProvider()
-		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_CurrencyExchangeRate", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
-		}
 		#endregion
 
 		#region Public Methods
@@ -70,15 +61,19 @@ namespace Vanrise.Common.Data.RDB
 		public bool Insert(CurrencyExchangeRate currencyExchangeRate, out int insertedId)
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
+
 			var insertQuery = queryContext.AddInsertQuery();
 			insertQuery.IntoTable(TABLE_NAME);
-			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS);
-			ifNotExist.EqualsCondition(COL_ExchangeDate).Value(currencyExchangeRate.ExchangeDate);
-			ifNotExist.EqualsCondition(COL_CurrencyID).Value(currencyExchangeRate.CurrencyId);
-			insertQuery.AddSelectGeneratedId();
 			insertQuery.Column(COL_Rate).Value(currencyExchangeRate.Rate);
 			insertQuery.Column(COL_CurrencyID).Value(currencyExchangeRate.CurrencyId);
 			insertQuery.Column(COL_ExchangeDate).Value(currencyExchangeRate.ExchangeDate);
+
+			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS);
+			ifNotExist.EqualsCondition(COL_ExchangeDate).Value(currencyExchangeRate.ExchangeDate);
+			ifNotExist.EqualsCondition(COL_CurrencyID).Value(currencyExchangeRate.CurrencyId);
+
+			insertQuery.AddSelectGeneratedId();
+			
 			var insertedID = queryContext.ExecuteScalar().NullableIntValue;
             if (insertedID.HasValue)
             {
@@ -94,11 +89,22 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var updateQuery = queryContext.AddUpdateQuery();
 			updateQuery.FromTable(TABLE_NAME);
+			var ifNotExist = updateQuery.IfNotExists(TABLE_ALIAS);
+			ifNotExist.NotEqualsCondition(COL_ID).Value(currencyExchangeRate.CurrencyExchangeRateId);
+			ifNotExist.EqualsCondition(COL_ExchangeDate).Value(currencyExchangeRate.ExchangeDate);
+			ifNotExist.EqualsCondition(COL_CurrencyID).Value(currencyExchangeRate.CurrencyId);
 			updateQuery.Column(COL_Rate).Value(currencyExchangeRate.Rate);
 			updateQuery.Column(COL_CurrencyID).Value(currencyExchangeRate.CurrencyId);
 			updateQuery.Column(COL_ExchangeDate).Value(currencyExchangeRate.ExchangeDate);
 			updateQuery.Where().EqualsCondition(COL_ID).Value(currencyExchangeRate.CurrencyExchangeRateId);
 			return queryContext.ExecuteNonQuery() > 0;
+		}
+		#endregion
+
+		#region Private Methods
+		private BaseRDBDataProvider GetDataProvider()
+		{
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 		#endregion
 

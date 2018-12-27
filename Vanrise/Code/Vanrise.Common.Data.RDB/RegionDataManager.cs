@@ -10,9 +10,9 @@ namespace Vanrise.Common.Data.RDB
 {
 	public class RegionDataManager: IRegionDataManager
 	{
-
+		#region Local Variables
 		static string TABLE_NAME = "common_Region";
-		static string TABLE_ALIAS = "region";
+		static string TABLE_ALIAS = "vrRegion";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
 		const string COL_CountryID = "CountryID";
@@ -22,8 +22,9 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_CreatedBy = "CreatedBy";
 		const string COL_LastModifiedBy = "LastModifiedBy";
 		const string COL_LastModifiedTime = "LastModifiedTime";
+		#endregion
 
-
+		#region Constructors
 		static RegionDataManager()
 		{
 			var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -46,12 +47,6 @@ namespace Vanrise.Common.Data.RDB
 				ModifiedTimeColumnName = COL_LastModifiedTime
 
 			});
-		}
-
-		#region Private Methods
-		BaseRDBDataProvider GetDataProvider()
-		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_Region", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 		#endregion
 
@@ -124,6 +119,13 @@ namespace Vanrise.Common.Data.RDB
 				updateQuery.Column(COL_LastModifiedBy).Null();
 			updateQuery.Where().EqualsCondition(COL_ID).Value(region.RegionId);
 			return queryContext.ExecuteNonQuery() > 0;
+		}
+		#endregion
+
+		#region Private Methods
+		private BaseRDBDataProvider GetDataProvider()
+		{
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 		#endregion
 

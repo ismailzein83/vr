@@ -12,13 +12,12 @@ namespace Vanrise.Common.Data.RDB
 	{
 		#region Local Variables
 		static string TABLE_NAME = "common_Connection";
-		static string TABLE_ALIAS = "connection";
+		static string TABLE_ALIAS = "vrConnection";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
 		const string COL_Settings = "Settings";
 		const string COL_CreatedTime = "CreatedTime";
         const string COL_LastModifiedTime = "LastModifiedTime";
-
         #endregion
 
         #region Contructors
@@ -44,7 +43,6 @@ namespace Vanrise.Common.Data.RDB
 		#endregion
 
 		#region Public Methods
-
 		public List<VRConnection> GetVRConnections()
 		{
 			var queryConext = new RDBQueryContext(GetDataProvider());
@@ -94,9 +92,9 @@ namespace Vanrise.Common.Data.RDB
 		#endregion
 
 		#region Private Methods
-		BaseRDBDataProvider GetDataProvider()
+		private BaseRDBDataProvider GetDataProvider()
 		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_Connection", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 		#endregion
 

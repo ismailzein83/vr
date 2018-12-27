@@ -18,7 +18,6 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_Settings = "Settings";
 		const string COL_CreatedTime = "CreatedTime";
         const string COL_LastModifiedTime = "LastModifiedTime";
-
         #endregion
 
         #region Constructors
@@ -92,12 +91,11 @@ namespace Vanrise.Common.Data.RDB
 		}
 		#endregion
 
-		BaseRDBDataProvider GetDataProvider()
-		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_VRNamespace", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
-		}
-
 		#region Private Methods
+		private BaseRDBDataProvider GetDataProvider()
+		{
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+		}
 		#endregion
 
 		#region Mappers

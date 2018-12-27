@@ -12,7 +12,7 @@ namespace Vanrise.Common.Data.RDB
 	{
 		#region Local Variables
 		static string TABLE_NAME = "common_GenericLKUP";
-		static string TABLE_ALIAS = "genericLKUP";
+		static string TABLE_ALIAS = "vrGenericLKUP";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
 		const string COL_BusinessEntityDefinitionID = "BusinessEntityDefinitionID";
@@ -20,6 +20,7 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_CreatedTime = "CreatedTime";
         const string COL_LastModifiedTime = "LastModifiedTime";
         #endregion
+
         #region Contructors
         static GenericLKUPItemDataManager()
 		{
@@ -42,8 +43,8 @@ namespace Vanrise.Common.Data.RDB
             });
         }
 		#endregion
-		#region Public Methods
 
+		#region Public Methods
 		public bool AreGenericLKUPItemUpdated(ref object updateHandle)
 		{
             var queryContext = new RDBQueryContext(GetDataProvider());
@@ -98,12 +99,12 @@ namespace Vanrise.Common.Data.RDB
 			updateQuery.Where().EqualsCondition(COL_ID).Value(genericLKUPItem.GenericLKUPItemId);
 			return queryContext.ExecuteNonQuery() > 0;
 		}
-
 		#endregion
+
 		#region Private Methods
-		BaseRDBDataProvider GetDataProvider()
+		private BaseRDBDataProvider GetDataProvider()
 		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_GenericLKUP", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 		#endregion
 

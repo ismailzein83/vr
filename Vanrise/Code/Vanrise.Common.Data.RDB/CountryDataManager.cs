@@ -11,9 +11,9 @@ namespace Vanrise.Common.Data.RDB
 {
 	public class CountryDataManager : ICountrytDataManager
 	{
-
+		#region Local Variables
 		static string TABLE_NAME = "common_Country";
-		static string TABLE_ALIAS = "country";
+		static string TABLE_ALIAS = "vrCountry";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
 		const string COL_SourceID = "SourceID";
@@ -21,8 +21,9 @@ namespace Vanrise.Common.Data.RDB
 		const string COL_CreatedBy = "CreatedBy";
 		const string COL_LastModifiedBy = "LastModifiedBy";
 		const string COL_LastModifiedTime = "LastModifiedTime";
+		#endregion
 
-
+		#region Constructors
 		static CountryDataManager()
 		{
 			var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -44,12 +45,9 @@ namespace Vanrise.Common.Data.RDB
 
 			});
 		}
-		#region Private Methods
-		BaseRDBDataProvider GetDataProvider()
-		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_Country", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
-		}
 		#endregion
+
+		#region Public Methods
 		public List<Country> GetCountries()
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
@@ -131,6 +129,15 @@ namespace Vanrise.Common.Data.RDB
 			queryContext.ExecuteNonQuery();
 
 		}
+		#endregion
+
+		#region Private Methods
+		private BaseRDBDataProvider GetDataProvider()
+		{
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+		}
+		#endregion
+
 		#region Mappers
 		private Country CountryMapper(IRDBDataReader reader)
 		{

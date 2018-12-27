@@ -12,13 +12,12 @@ namespace Vanrise.Common.Data.RDB
 	{
 		#region Local Variables
 		static string TABLE_NAME = "common_StyleDefinition";
-		static string TABLE_ALIAS = "styleDefinition";
+		static string TABLE_ALIAS = "vrStyleDefinition";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
 		const string COL_Settings = "Settings";
 		const string COL_CreatedTime = "CreatedTime";
         const string COL_LastModifiedTime = "LastModifiedTime";
-
         #endregion
 
         #region Constructors
@@ -93,9 +92,9 @@ namespace Vanrise.Common.Data.RDB
 		#endregion
 
 		#region Private Methods
-		BaseRDBDataProvider GetDataProvider()
+		private BaseRDBDataProvider GetDataProvider()
 		{
-			return RDBDataProviderFactory.CreateProvider("VR_Common_StyleDefinition", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
+			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 
 		#endregion
