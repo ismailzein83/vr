@@ -72,6 +72,7 @@
     <Compile Include="BPTaskTypeDataManager.cs" />
     <Compile Include="BPTimeSubscriptionDataManager.cs" />
     <Compile Include="BPTrackingDataManager.cs" />
+    <Compile Include="BPValidationMessageDataManager.cs" />
     <Compile Include="ProcessSynchronisationDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VRWorkflowDataManager.cs" />
