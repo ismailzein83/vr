@@ -85,7 +85,6 @@ namespace Vanrise.Analytic.Data.RDB
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-            selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
             return queryContext.GetItems(VRReportGenerationMapper);
         }
 
