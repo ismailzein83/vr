@@ -271,7 +271,11 @@ namespace Vanrise.Invoice.Data.RDB
         {            
             insertedInvoiceIds = null;
             if (generateInvoicesInputToSave == null || generateInvoicesInputToSave.Count == 0)
+            {
+                if (generateInvoicesInputToSave != null)
+                    insertedInvoiceIds = new List<long>();
                 return true;
+            }
             var dataProvider = GetDataProvider();
             insertedInvoiceIds = new List<long>();
 
