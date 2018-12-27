@@ -34,7 +34,7 @@ namespace Vanrise.Analytic.Entities
 
         public Guid? StatusDefinitionBEId { get; set; }
 
-        public Guid StatusDefinitionId { get; set; }
+        public Guid? RecommendedStatusDefinitionId { get; set; }
 
     }
 }

@@ -34,13 +34,10 @@
             var filterDimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
             var advancedFilterDimensionSelectorAPI;
-            var advancedFilterDimensionReadyDeferred = UtilsService.createPromiseDeferred(); 
-
-            
+            var advancedFilterDimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.analyticTables = [];
                 $scope.scopeModel.groupingDimensions = [];
                 $scope.scopeModel.filterDimensions = [];
                 $scope.scopeModel.showAdvancedFilterFields = false;
@@ -164,7 +161,6 @@
 
                     if (payload != undefined && payload.tableIds != undefined) {
                         var tableIds = payload.tableIds;
-                        $scope.scopeModel.analyticTables = tableIds;
 
                         var selectedGroupingIds;
                         var selectedFilterIds;
@@ -176,7 +172,7 @@
 
                             if (payload.searchSettings.GroupingDimensions != undefined && payload.searchSettings.GroupingDimensions.length > 0) {
                                 selectedGroupingIds = [];
-                                for (var i = 0 ; i < payload.searchSettings.GroupingDimensions.length; i++) {
+                                for (var i = 0; i < payload.searchSettings.GroupingDimensions.length; i++) {
                                     var groupingDimension = payload.searchSettings.GroupingDimensions[i];
                                     selectedGroupingIds.push(groupingDimension.DimensionName);
                                     $scope.scopeModel.groupingDimensions.push({
@@ -189,7 +185,7 @@
 
                             if (payload.searchSettings.Filters != undefined && payload.searchSettings.Filters.length > 0) {
                                 selectedFilterIds = [];
-                                for (var i = 0 ; i < payload.searchSettings.Filters.length; i++) {
+                                for (var i = 0; i < payload.searchSettings.Filters.length; i++) {
                                     var filterDimension = payload.searchSettings.Filters[i];
                                     selectedFilterIds.push(filterDimension.DimensionName);
                                     var dataItem = {
@@ -207,7 +203,7 @@
 
                                 if ($scope.scopeModel.advancedFilterFieldsRelationTypeSelectedValues.value == VR_Analytic_AdvancedFilterFieldsRelationType.SpecificFields.value) {
                                     selectedAdvancedFilterFieldIds = [];
-                                    for (var i = 0 ; i < payload.searchSettings.AdvancedFilters.AvailableFields.length; i++) {
+                                    for (var i = 0; i < payload.searchSettings.AdvancedFilters.AvailableFields.length; i++) {
                                         var advancedFilterDimension = payload.searchSettings.AdvancedFilters.AvailableFields[i];
                                         selectedAdvancedFilterFieldIds.push(advancedFilterDimension.FieldName);
                                         //var dataItem = {

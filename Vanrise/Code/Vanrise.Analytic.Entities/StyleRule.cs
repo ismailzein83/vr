@@ -52,7 +52,7 @@ namespace Vanrise.Analytic.Entities
     {
         public string RecordFilterDescription { get; set; }
         public RecordFilter RecordFilter { get; set; }
-        public string StyleValueDescription { get; set; }
+        public string StatusValueDescription { get; set; }
         public Guid StatusDefinitionId { get; set; }
 
     }

@@ -21,7 +21,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
             templateUrl: "/Client/Modules/Analytic/Directives/Settings/Templates/KPISettingsTemplate.html"
         };
 
-        function KPISettingsEditor(ctrl, $scope, $attrs) {
+        function KPISettingsEditor(ctrl, $scope, $attrs) {  
             this.initializeController = initializeController;
 
             var measureStyleRules;
@@ -84,14 +84,26 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
             }
 
             function extendDataItem(itemTab) {
-                console.log(itemTab);
+                var promises = [];
+
+                var statusDefinitionBeId;
+                var recommendedId;
+
+                var analyticTablePromiseDeferred = VR_Analytic_AnalyticTableAPIService.GetTableById(itemTab.analytictable.AnalyticTableId).then(function (response) {
+                    if (response != undefined) {
+                        statusDefinitionBeId = response.Settings.StatusDefinitionBEId;
+                        recommendedId = response.Settings.RecommendedStatusDefinitionId;
+                    }
+                });
+                promises.push(analyticTablePromiseDeferred);
+
                 var measures = [];
                 var dataItem = {
                     title: itemTab.analytictable.Name,
                     analyticTableId: itemTab.analytictable.AnalyticTableId,
                     isMeasureStyleGridLoading: true,
                     isRecordFilterLoading:true,
-                    showKPISection: itemTab.analytictable.StatusDefinitionId != undefined? true : false
+                    showKPISection: itemTab.analytictable.StatusBEDefinitionId != undefined? true : false
                 };
                 var input = {
                     TableIds: [itemTab.analytictable.AnalyticTableId],
@@ -120,6 +132,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                         };
                     }
                 });
+                promises.push(analyticItemConfigPromise);
                 var measuresByAnalyticTable = UtilsService.getItemByVal(measureStyleRules, itemTab.analytictable.AnalyticTableId, "AnalyticTableId");
                 dataItem.measureStyleLoadDeferred = UtilsService.createPromiseDeferred();
                 dataItem.measureStyleLoadDeferred.promise.then(function () {
@@ -127,11 +140,13 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                 });
                 dataItem.onMeasureStyleGridReady = function (api) {
                     dataItem.measureStyleGridAPI = api;
-                    analyticItemConfigPromise.then(function () {
+                    UtilsService.waitMultiplePromises(promises).then(function () {
                         var payload = {
                             context: context,
                             measureStyles: measuresByAnalyticTable != undefined ? measuresByAnalyticTable.MeasureStyleRules : undefined,
-                            analyticTableId: itemTab.analytictable.AnalyticTableId
+                            analyticTableId: itemTab.analytictable.AnalyticTableId,
+                            statusDefinitionBeId: statusDefinitionBeId,
+                            recommendedId: recommendedId
                         };
                         VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.measureStyleLoadDeferred);
                     });

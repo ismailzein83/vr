@@ -24,14 +24,22 @@
         };
 
         function MeasureStyleGridEditor($scope, ctrl, $attrs) {
+
             this.initializeController = initializeController;
+
             var context;
             var gridAPI;
             var counter = 0;
             var analyticTableId;
+            var statusDefinitionBeId;
+            var recommendedId;
+
             function initializeController() {
                 ctrl.measureStyles = [];
                 ctrl.measureFields = [];
+                ctrl.showRecommendedColumn = function () {
+                    return recommendedId != undefined;
+                };
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
 
@@ -48,18 +56,7 @@
                     };
                 };
                 ctrl.saveMeasureStyle = function (dataItem) {
-                    var statusDefinitionBeId;
-                    var recommendedId;
-
-                    var analyticTablePromiseDeferred = UtilsService.createPromiseDeferred();
-                    VR_Analytic_AnalyticTableAPIService.GetTableById(analyticTableId).then(function (response) {
-                        if (response != undefined) {
-                            statusDefinitionBeId = response.Settings.StatusDefinitionBEId;
-                            recommendedId = response.Settings.StatusDefinitionId;
-                        }
-                        analyticTablePromiseDeferred.resolve();
-                    });
-                    analyticTablePromiseDeferred.promise.then(function () {
+                   
                         if (dataItem.Entity != undefined) {
                             var isEditMode = true;
                             var onMeasureStyleUpdated = function (measureStyleObj) {
@@ -83,7 +80,6 @@
                             var measureName = dataItem.MeasureName;
                             Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, context, analyticTableId, measureName, statusDefinitionBeId, recommendedId);
                         }
-                    });
                 };
             }
 
@@ -94,6 +90,8 @@
                     var measureStyleRuleEditorRuntime;
                     var measureStyleRuleEditorRuntimePromiseDeferred = UtilsService.createPromiseDeferred();
                     if (payload != undefined) {
+                        statusDefinitionBeId = payload.statusDefinitionBeId;
+                        recommendedId = payload.recommendedId;
                         analyticTableId = payload.analyticTableId;
                         context = payload.context;
                         var measureNames = context.getMeasures();

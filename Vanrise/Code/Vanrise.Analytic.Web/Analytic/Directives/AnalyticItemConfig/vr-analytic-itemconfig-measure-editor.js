@@ -90,8 +90,6 @@
                         configEntity = payload.ConfigEntity;
                         if (configEntity != undefined) {
                             $scope.scopeModel.sqlExpressionMethod = configEntity.GetValueMethod;
-                            $scope.scopeModel.measureDescription = configEntity.Description;
-                            $scope.scopeModel.hideInLegend = configEntity.HideDescriptionInLegend;
                         }
                         var loadJoinDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         joinReadyDeferred.promise.then(function () {
@@ -167,9 +165,7 @@
                         DependentAggregateNames: dependentAggregateNames,
                         DependentDimensions: dependentDimensions,
                         FieldType: fieldType,
-                        RequiredPermission: requiredPermissionAPI.getData(),
-                        Description: $scope.scopeModel.measureDescription,
-                        HideDescriptionInLegend: $scope.scopeModel.hideInLegend
+                        RequiredPermission: requiredPermissionAPI.getData()
                     };
                     return dimension;
                 };

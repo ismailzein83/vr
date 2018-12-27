@@ -859,8 +859,7 @@ namespace Vanrise.Analytic.Business
                                     var analyticTable = analyticTableManager.GetAnalyticTableById(analyticTableQueryContext.Query.TableId);
                                     analyticTable.ThrowIfNull("analyticTable");
                                     analyticTable.Settings.ThrowIfNull("analyticTable.Settings");
-                                    var statusDefinition = statusDefinitionManager.GetStatusDefinition(analyticTable.Settings.StatusDefinitionId);
-                                    styleDefinitionId = GetStyleDefinitionIdFromStatusDefinition(statusDefinition);
+                                    styleDefinitionId = statusDefinitionManager.GetStyleDefinitionId(analyticTable.Settings.RecommendedStatusDefinitionId.Value);
                                     break;
                                 }
                             }
@@ -872,8 +871,7 @@ namespace Vanrise.Analytic.Business
                                 StyleRuleConditionContext context = new StyleRuleConditionContext { Value = measureValue };
                                 if (rule.RecordFilter != null && filterManager.IsSingleFieldFilterMatch(rule.RecordFilter, measureValue, measureConfig.Config.FieldType))
                                 {
-                                    var statusDefinition = statusDefinitionManager.GetStatusDefinition(rule.StatusDefinitionId);
-                                    styleDefinitionId = GetStyleDefinitionIdFromStatusDefinition(statusDefinition);
+                                    styleDefinitionId = statusDefinitionManager.GetStyleDefinitionId(rule.StatusDefinitionId);
                                     break;
                                 }
                             }
@@ -1048,8 +1046,7 @@ namespace Vanrise.Analytic.Business
                                     var analyticTable = analyticTableManager.GetAnalyticTableById(analyticTableQueryContext.Query.TableId);
                                     analyticTable.ThrowIfNull("analyticTable");
                                     analyticTable.Settings.ThrowIfNull("analyticTable.Settings");
-                                    var statusDefinition = statusDefinitionManager.GetStatusDefinition(analyticTable.Settings.StatusDefinitionId);
-                                    styleDefinitionId = GetStyleDefinitionIdFromStatusDefinition(statusDefinition);
+                                    styleDefinitionId = statusDefinitionManager.GetStyleDefinitionId(analyticTable.Settings.RecommendedStatusDefinitionId.Value);
                                     break;
                                 }
                             }
@@ -1062,8 +1059,7 @@ namespace Vanrise.Analytic.Business
                                 {
                                     if (rule.StatusDefinitionId == null)
                                         throw new NullReferenceException("StatusDefinitionId");
-                                    var statusDefinition = statusDefinitionManager.GetStatusDefinition(rule.StatusDefinitionId);
-                                    styleDefinitionId = GetStyleDefinitionIdFromStatusDefinition(statusDefinition);
+                                    styleDefinitionId = statusDefinitionManager.GetStyleDefinitionId(rule.StatusDefinitionId);
                                     break;
                                 }
                             }
@@ -1136,16 +1132,6 @@ namespace Vanrise.Analytic.Business
                 }
             }
             return orderedRecords;
-        }
-        private Guid GetStyleDefinitionIdFromStatusDefinition(StatusDefinition statusDefinition)
-        {
-            StyleDefinitionManager styleDefinitionManager = new StyleDefinitionManager();
-            statusDefinition.ThrowIfNull("statusDefinition");
-            statusDefinition.Settings.ThrowIfNull("statusDefinition.Settings");
-            if (statusDefinition.Settings.StyleDefinitionId == null)
-                throw new NullReferenceException("StyleDefinitionId");
-
-            return statusDefinition.Settings.StyleDefinitionId;
         }
         private static IEnumerable<T> GetOrderedByAllAdvancedMeasureOrder<T>(List<string> measures, AnalyticQueryAdvancedOrderOptionsBase advancedOrderOptions, IEnumerable<T> allRecords, Func<T, AnalyticRecord> getAnalyticRecord)
         {

@@ -19,7 +19,14 @@ namespace Vanrise.Common.Business
 
             return cachedStatusDefinitions.GetRecord(statusDefinitionId);
         }
-      
+        public Guid GetStyleDefinitionId(Guid statusDefinitionId)
+        {
+            Dictionary<Guid, StatusDefinition> cachedStatusDefinitions = this.GetCachedStatusDefinitions();
+            var statusDefinition = cachedStatusDefinitions.GetRecord(statusDefinitionId);
+            statusDefinition.ThrowIfNull("statusDefinition");
+            statusDefinition.Settings.ThrowIfNull("statusDefinition.Settings");
+            return statusDefinition.Settings.StyleDefinitionId;
+      }
         public string GetStatusDefinitionName(Guid statusDefinitionId)
         {
             StatusDefinition statusDefinition = this.GetStatusDefinition(statusDefinitionId);
@@ -107,7 +114,7 @@ namespace Vanrise.Common.Business
                         return false;
                     if (filter.Filters != null)
                     {
-                        var context = new StatusDefinitionFilterContext() { BusinessEntityDefinitionId = x.BusinessEntityDefinitionId,StatusDefinition = x };
+                        var context = new StatusDefinitionFilterContext() { BusinessEntityDefinitionId = x.BusinessEntityDefinitionId, StatusDefinition = x };
                         if (!filter.Filters.Any(y => y.IsMatched(context)))
                             return false;
                     }
@@ -144,7 +151,7 @@ namespace Vanrise.Common.Business
                     return true;
                 };
             }
-              
+
             return GetCachedStatusDefinitions().FindAllRecords(filterExpression);
         }
 

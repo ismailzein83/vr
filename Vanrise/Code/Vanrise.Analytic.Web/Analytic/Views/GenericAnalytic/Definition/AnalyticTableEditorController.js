@@ -232,7 +232,7 @@
                 UtilsService.waitMultiplePromises([statusDefinitionReadyDeferred.promise, beDefinitionSelectedPromiseDeferred.promise]).then(function () {
                     var statusDefinitionPayload = {
                         filter: { BusinessEntityDefinitionId: tableEntity.Settings.StatusDefinitionBEId },
-                        selectedIds: tableEntity.Settings.StatusDefinitionId
+                        selectedIds: tableEntity.Settings.RecommendedStatusDefinitionId
                     };
                     VRUIUtilsService.callDirectiveLoad(statusDefinitionAPI, statusDefinitionPayload, loadStatusDefinitionPromiseDeferred);
                     beDefinitionSelectedPromiseDeferred = undefined;
@@ -255,7 +255,7 @@
                     RequiredPermission: requiredPermissionAPI.getData(),
                     DataProvider: analyticDataProviderSettingsDirectiveAPI.getData(),
                     StatusDefinitionBEId: beDefinitionSelectorApi.getSelectedIds(),
-                    StatusDefinitionId: statusDefinitionAPI.getSelectedIds()
+                    RecommendedStatusDefinitionId: statusDefinitionAPI.getSelectedIds()
 
                 }
             };

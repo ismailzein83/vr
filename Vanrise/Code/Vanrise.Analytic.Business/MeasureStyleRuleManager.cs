@@ -56,8 +56,7 @@ namespace Vanrise.Analytic.Business
 
             foreach (var rule in measureStyleRule.Rules)
             {
-                var statusDefinition = statusDefinitionManager.GetStatusDefinition(rule.StatusDefinitionId);
-                statusDefinition.ThrowIfNull("statusDefinition");
+                
                 rules.Add(new StyleRuleDetail()
                 {
                     RecordFilterDescription = _recordFilterManager.BuildRecordFilterGroupExpression(new RecordFilterGroup
@@ -69,13 +68,13 @@ namespace Vanrise.Analytic.Business
                     }, recordFilterFieldInfosByFieldName),
                     RecordFilter = rule.RecordFilter,
                     StatusDefinitionId = rule.StatusDefinitionId,
-                    StyleValueDescription = statusDefinition.Name
+                    StatusValueDescription = statusDefinitionManager.GetStatusDefinitionName(rule.StatusDefinitionId)
                 });
             }
             AnalyticMeasure analyticMeasure = analyticMeasuresByMeasureName.GetRecord(measureStyleRule.MeasureName);
             analyticMeasure.ThrowIfNull("AnalyticMeasure");
             string recommendedStyleRuleDescription = null;
-            if (measureStyleRule.RecommendedStyleRule != null)
+            if (measureStyleRule.RecommendedStyleRule != null && measureStyleRule.RecommendedStyleRule.RecordFilters != null && measureStyleRule.RecommendedStyleRule.RecordFilters.Count()>0)
             {
                  recommendedStyleRuleDescription = _recordFilterManager.BuildRecordFilterGroupExpression(new RecordFilterGroup
                 {

@@ -41,7 +41,9 @@
         }
 
         function defineScope() {
-
+            $scope.scopeModel.showRecommendedGrid = function () {
+                return recommendedId != undefined;
+            };
             $scope.scopeModel.removeMeasureStyle = function (measureStyle) {
                 $scope.scopeModel.measureStyles.splice($scope.scopeModel.measureStyles.indexOf(measureStyle), 1);
             };
@@ -55,11 +57,6 @@
 
             $scope.scopeModel.isValidMeasureStyles = function () {
                 if ($scope.scopeModel.measureStyles.length == 0)
-                    return "At least one style should be added.";
-                return null;
-            };
-            $scope.scopeModel.isValidRecommendedMeasureStyles = function () {
-                if ($scope.scopeModel.recommendedMeasureStyles.length == 0)
                     return "At least one style should be added.";
                 return null;
             };
@@ -113,7 +110,7 @@
                     var payload = {
                         filter: {
                             BusinessEntityDefinitionId: statusDefinitionBeId,
-                            ExcludedIds: [recommendedId]
+                            ExcludedIds: recommendedId!= undefined? [recommendedId] :undefined
                         },
                     };
                     VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.statusDefinitionLoadDeferred);
@@ -231,7 +228,7 @@
                         var payload = {
                             filter: {
                                 BusinessEntityDefinitionId: statusDefinitionBeId,
-                                ExcludedIds: [recommendedId]
+                                ExcludedIds: recommendedId != undefined ? [recommendedId] : undefined
                             },
                             selectedIds: styleConditionItem.payload.StatusDefinitionId
                         };
@@ -324,7 +321,6 @@
                 MeasureStyleRule: measureStyleObj
             };
             return VR_Analytic_MeasureStyleRuleAPIService.GetMeasureStyleRuleDetail(measureStyleRuleInput).then(function (response) {
-                console.log(response);
                 var measureStyleDetail = response;
                 if ($scope.onMeasureStyleAdded != undefined) {
                     $scope.onMeasureStyleAdded(measureStyleDetail);
