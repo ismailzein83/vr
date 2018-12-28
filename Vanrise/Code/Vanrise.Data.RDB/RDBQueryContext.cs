@@ -152,7 +152,7 @@ namespace Vanrise.Data.RDB
             return this.DataProvider.IsDataUpdated(tableName, tableDefinition, ref lastReceivedDataInfo);
         }
 
-        protected bool IsDataUpdated<T>(string tableName, T cachePartitionColumnValue, ref object lastReceivedDataInfo)
+        public bool IsDataUpdated<T>(string tableName, T cachePartitionColumnValue, ref object lastReceivedDataInfo)
         {
             var tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(this.DataProvider, tableName);
             tableDefinition.ModifiedTimeColumnName.ThrowIfNull("tableDefinition.ModifiedTimeColumnName", tableName);
