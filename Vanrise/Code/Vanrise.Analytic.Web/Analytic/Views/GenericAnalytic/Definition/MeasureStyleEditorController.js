@@ -2,7 +2,7 @@
 
     "use strict";
 
-    MeasureStyleEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService','VR_Analytic_MeasureStyleRuleAPIService'];
+    MeasureStyleEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_MeasureStyleRuleAPIService'];
 
     function MeasureStyleEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_MeasureStyleRuleAPIService) {
 
@@ -110,7 +110,7 @@
                     var payload = {
                         filter: {
                             BusinessEntityDefinitionId: statusDefinitionBeId,
-                            ExcludedIds: recommendedId!= undefined? [recommendedId] :undefined
+                            ExcludedIds: recommendedId != undefined ? [recommendedId] : undefined
                         },
                     };
                     VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.statusDefinitionLoadDeferred);
@@ -176,15 +176,16 @@
                     var promises = [];
                     measure = context.getMeasure(measureName);
                     var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, measure.FieldType.ConfigId, "ExtensionConfigurationId");
-                    var editorObject= fieldType != undefined ? fieldType.RuleFilterEditor : undefined;
-
-                    for (var i = 0; i < measureStyleRule.RecommendedStyleRule.RecordFilters.length; i++) {
-                        var recordFilter = measureStyleRule.RecommendedStyleRule.RecordFilters[i];
-                        var dataItem = {
-                            editor: editorObject
-                        };
-                        promises.push(extendRecommendedGridDataItem(dataItem,recordFilter));
-                        $scope.scopeModel.recommendedMeasureStyles.push(dataItem);
+                    var editorObject = fieldType != undefined ? fieldType.RuleFilterEditor : undefined;
+                    if (measureStyleRule.RecommendedStyleRule != undefined && measureStyleRule.RecommendedStyleRule.RecordFilters != undefined) {
+                        for (var i = 0; i < measureStyleRule.RecommendedStyleRule.RecordFilters.length; i++) {
+                            var recordFilter = measureStyleRule.RecommendedStyleRule.RecordFilters[i];
+                            var dataItem = {
+                                editor: editorObject
+                            };
+                            promises.push(extendRecommendedGridDataItem(dataItem, recordFilter));
+                            $scope.scopeModel.recommendedMeasureStyles.push(dataItem);
+                        }
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 }
@@ -287,7 +288,7 @@
                 if (data != undefined)
                     data.FieldName = measurestyle.name;
 
-               
+
 
                 rules.push({
                     $type: "Vanrise.Analytic.Entities.StyleRule,Vanrise.Analytic.Entities",
@@ -304,11 +305,12 @@
                     recommendedData = recommendedMeasurestyle.recommendedDirectiveAPI.getData();
                 if (recommendedData != undefined)
                     recommendedData.FieldName = measurestyle.name;
-                recordFilters.push(recommendedData);
+                if (recommendedData != undefined)
+                    recordFilters.push(recommendedData);
             };
             var measureStyleRule = {
                 MeasureName: measure.Name,
-                RecommendedStyleRule: { RecordFilters:recordFilters},
+                RecommendedStyleRule: recordFilters.length > 0 ? { RecordFilters: recordFilters } : { RecordFilters: undefined },
                 Rules: rules
             };
             return measureStyleRule;

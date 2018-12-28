@@ -56,30 +56,30 @@
                     };
                 };
                 ctrl.saveMeasureStyle = function (dataItem) {
-                   
-                        if (dataItem.Entity != undefined) {
-                            var isEditMode = true;
-                            var onMeasureStyleUpdated = function (measureStyleObj) {
-                                ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
-                                    MeasureName: dataItem.MeasureName,
-                                    Entity: measureStyleObj
-                                };
+
+                    if (dataItem.Entity != undefined) {
+                        var isEditMode = true;
+                        var onMeasureStyleUpdated = function (measureStyleObj) {
+                            ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
+                                MeasureName: dataItem.MeasureName,
+                                Entity: measureStyleObj
                             };
-                            var measureNames = getMeasureNames(dataItem);
-                            var measureName = dataItem.Entity.MeasureStyleRuleDetail.MeasureName;
-                            var selectedMeasure = UtilsService.getItemByVal(measureNames, dataItem.Entity.MeasureStyleRuleDetail.MeasureName, "Name");
-                            Analytic_AnalyticService.editMeasureStyle(dataItem, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId, isEditMode, measureName, statusDefinitionBeId, recommendedId);
-                        }
-                        else {
-                            var onMeasureStyleAdded = function (measureStyleObj) {
-                                ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
-                                    MeasureName: dataItem.MeasureName,
-                                    Entity: measureStyleObj
-                                };
+                        };
+                        var measureNames = getMeasureNames(dataItem);
+                        var measureName = dataItem.Entity.MeasureStyleRuleDetail.MeasureName;
+                        var selectedMeasure = UtilsService.getItemByVal(measureNames, dataItem.Entity.MeasureStyleRuleDetail.MeasureName, "Name");
+                        Analytic_AnalyticService.editMeasureStyle(dataItem, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId, isEditMode, measureName, statusDefinitionBeId, recommendedId);
+                    }
+                    else {
+                        var onMeasureStyleAdded = function (measureStyleObj) {
+                            ctrl.measureStyles[ctrl.measureStyles.indexOf(dataItem)] = {
+                                MeasureName: dataItem.MeasureName,
+                                Entity: measureStyleObj
                             };
-                            var measureName = dataItem.MeasureName;
-                            Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, context, analyticTableId, measureName, statusDefinitionBeId, recommendedId);
-                        }
+                        };
+                        var measureName = dataItem.MeasureName;
+                        Analytic_AnalyticService.addMeasureStyle(onMeasureStyleAdded, context, analyticTableId, measureName, statusDefinitionBeId, recommendedId);
+                    }
                 };
             }
 
@@ -87,12 +87,20 @@
                 var api = {};
 
                 api.load = function (payload) {
+
                     var measureStyleRuleEditorRuntime;
                     var measureStyleRuleEditorRuntimePromiseDeferred = UtilsService.createPromiseDeferred();
+
                     if (payload != undefined) {
-                        statusDefinitionBeId = payload.statusDefinitionBeId;
-                        recommendedId = payload.recommendedId;
+
                         analyticTableId = payload.analyticTableId;
+                        VR_Analytic_AnalyticTableAPIService.GetTableById(analyticTableId).then(function (response) {
+                            if (response != undefined) {
+                                statusDefinitionBeId = response.Settings.StatusDefinitionBEId;
+                                recommendedId = response.Settings.RecommendedStatusDefinitionId;
+                            }
+                        });
+
                         context = payload.context;
                         var measureNames = context.getMeasures();
                         context.getMeasure = function (name) {
@@ -102,6 +110,7 @@
                         };
                         ctrl.measureFields = getMeasureNames();
                         ctrl.descriptons = [];
+
                         if (payload.measureStyles != undefined && payload.measureStyles.length > 0) {
                             var filter = {
                                 AnalyticTableId: analyticTableId,
@@ -119,6 +128,7 @@
                         }
                         else
                             measureStyleRuleEditorRuntimePromiseDeferred.resolve();
+                        
                         measureStyleRuleEditorRuntimePromiseDeferred.promise.then(function () {
                             for (var i = 0; i < measureNames.length; i++) {
                                 var measure = measureNames[i];
@@ -139,6 +149,8 @@
                             }
                         });
                     }
+
+
                 };
                 api.reloadMeasures = function () {
 

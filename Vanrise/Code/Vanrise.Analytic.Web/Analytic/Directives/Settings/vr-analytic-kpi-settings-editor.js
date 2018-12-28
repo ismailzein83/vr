@@ -85,18 +85,6 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
 
             function extendDataItem(itemTab) {
                 var promises = [];
-
-                var statusDefinitionBeId;
-                var recommendedId;
-
-                var analyticTablePromiseDeferred = VR_Analytic_AnalyticTableAPIService.GetTableById(itemTab.analytictable.AnalyticTableId).then(function (response) {
-                    if (response != undefined) {
-                        statusDefinitionBeId = response.Settings.StatusDefinitionBEId;
-                        recommendedId = response.Settings.RecommendedStatusDefinitionId;
-                    }
-                });
-                promises.push(analyticTablePromiseDeferred);
-
                 var measures = [];
                 var dataItem = {
                     title: itemTab.analytictable.Name,
@@ -145,8 +133,6 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                             context: context,
                             measureStyles: measuresByAnalyticTable != undefined ? measuresByAnalyticTable.MeasureStyleRules : undefined,
                             analyticTableId: itemTab.analytictable.AnalyticTableId,
-                            statusDefinitionBeId: statusDefinitionBeId,
-                            recommendedId: recommendedId
                         };
                         VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.measureStyleLoadDeferred);
                     });

@@ -3,7 +3,7 @@
         <vr-form validationcontext="analyticMeasureStyleEditorGroup">
             <vr-tabs>
                 <vr-tab header="'Definition'" >
-                    <vr-section title="Recommended" ng-show="scopeModel.showRecommendedGrid()">
+                    <vr-section title="Recommended" ng-if="scopeModel.showRecommendedGrid()">
                         <vr-row>
                             <vr-columns width="1/3row">
                                 <vr-button type="Add" data-onclick="scopeModel.addRecommendedMeasureStyleRule" standalone></vr-button>
