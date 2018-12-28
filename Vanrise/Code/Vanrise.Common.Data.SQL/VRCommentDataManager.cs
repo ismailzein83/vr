@@ -31,7 +31,7 @@ namespace Vanrise.Common.Data.SQL
         public bool Insert(VRComment vRCommentItem, out long vRCommentId)
         {
             object id;
-            int nbOfRecordsAffected = ExecuteNonQuerySP("Common.sp_VRComment_Insert", out id, vRCommentItem.DefinitionId, vRCommentItem.ObjectId, vRCommentItem.Content, vRCommentItem.CreatedBy);
+            int nbOfRecordsAffected = ExecuteNonQuerySP("Common.sp_VRComment_Insert", out id, vRCommentItem.DefinitionId, vRCommentItem.ObjectId, vRCommentItem.Content, vRCommentItem.CreatedBy,vRCommentItem.LastModifiedBy);
 
             bool result = (nbOfRecordsAffected > 0);
             if (result)

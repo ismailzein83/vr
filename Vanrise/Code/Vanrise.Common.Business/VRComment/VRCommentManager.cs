@@ -32,7 +32,8 @@ namespace Vanrise.Common.Business
             long commentId = -1;
 
             vRComment.CreatedBy = _securityManager.GetLoggedInUserId();
-            bool insertActionSuccess = vRCommentDataManager.Insert(vRComment, out commentId);
+			vRComment.LastModifiedBy = _securityManager.GetLoggedInUserId();
+			bool insertActionSuccess = vRCommentDataManager.Insert(vRComment, out commentId);
             if (insertActionSuccess)
             {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
