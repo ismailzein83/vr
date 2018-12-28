@@ -61,6 +61,7 @@
     <Compile Include="BusinessEntityDataManager.cs" />
     <Compile Include="BusinessEntityModuleDataManager.cs" />
     <Compile Include="GroupDataManager.cs" />
+    <Compile Include="ModuleDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserGroupDataManager.cs" />
   </ItemGroup>
