@@ -10,16 +10,16 @@
     [DurationInSeconds]    DECIMAL (20, 4)  NULL,
     [CGPN]                 VARCHAR (40)     NULL,
     [CDPN]                 VARCHAR (40)     NULL,
-    [ReleaseCode]          VARCHAR (50)     NULL,
-    [InTrunk]              VARCHAR (50)     NULL,
-    [InIP]                 VARCHAR (50)     NULL,
-    [OutTrunk]             VARCHAR (50)     NULL,
-    [OutIP]                VARCHAR (50)     NULL,
     [ExtraFields]          NVARCHAR (MAX)   NULL,
-    [QueueItemId]          BIGINT           NULL,
     [Trunk]                NVARCHAR (MAX)   NULL,
     [IP]                   NVARCHAR (MAX)   NULL,
     [CauseToReleaseCode]   NVARCHAR (MAX)   NULL,
-    [CauseFromReleaseCode] NVARCHAR (MAX)   NULL
+    [CauseFromReleaseCode] NVARCHAR (MAX)   NULL,
+    [DisconnectReason]     VARCHAR (255)    NULL,
+    [AlertDateTime]        DATETIME         NULL,
+    [TrafficDirection]     INT              NULL,
+    [QueueItemId]          BIGINT           NULL
 );
+
+
 
