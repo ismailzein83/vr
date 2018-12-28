@@ -73,7 +73,9 @@ namespace Vanrise.Notification.Data.RDB
         #region Mappers
         public VRNotification VRNotificationMapper(IRDBDataReader reader)
         {
-            var notification = new VRNotification
+            var eventPayload = reader.GetString(COL_EventPayload);
+            var rollbackEventPayload = reader.GetString(COL_RollbackEventPayload);
+            return new VRNotification
             {
                 VRNotificationId = reader.GetLong(COL_ID),
                 UserId = reader.GetInt(COL_UserID),
@@ -87,21 +89,14 @@ namespace Vanrise.Notification.Data.RDB
                 TypeId = reader.GetGuid(COL_TypeID),
                 AlertLevelId = reader.GetGuid(COL_AlertLevelID),
                 Description = reader.GetString(COL_Description),
-                ExecuteBPInstanceID = reader.GetNullableLong("ExecuteBPInstanceID"),
-                ClearBPInstanceID = reader.GetNullableLong("ClearBPInstanceID"),
+                ExecuteBPInstanceID = reader.GetNullableLong(COL_ExecuteBPInstanceID),
+                ClearBPInstanceID = reader.GetNullableLong(COL_ClearBPInstanceID),
                 ErrorMessage = reader.GetString(COL_ErrorMessage),
                 CreationTime = reader.GetDateTime(COL_CreationTime),
+                Data = Serializer.Deserialize<VRNotificationData>(reader.GetString(COL_Data)),
+                EventPayload = !string.IsNullOrEmpty(eventPayload) ? Serializer.Deserialize(eventPayload) as IVRActionEventPayload : null,
+                RollbackEventPayload = !string.IsNullOrEmpty(rollbackEventPayload) ? Serializer.Deserialize(rollbackEventPayload) as IVRActionRollbackEventPayload : null
             };
-            string serializedData = reader.GetStringWithEmptyHandling(COL_Data);
-            if (!string.IsNullOrEmpty(serializedData))
-                notification.Data = Serializer.Deserialize<VRNotificationData>(serializedData);
-            string serializedEventPayload = reader.GetStringWithEmptyHandling("EventPayload");
-            if (!string.IsNullOrEmpty(serializedEventPayload))
-                notification.EventPayload = Serializer.Deserialize(serializedEventPayload) as IVRActionEventPayload;
-            string serializedRollbackEventPayload = reader.GetStringWithEmptyHandling("RollbackEventPayload");
-            if (!string.IsNullOrEmpty(serializedRollbackEventPayload))
-                notification.RollbackEventPayload = Serializer.Deserialize(serializedRollbackEventPayload) as IVRActionRollbackEventPayload;
-            return notification;
         }
         #endregion
         #region IVRNotificationDataManager
