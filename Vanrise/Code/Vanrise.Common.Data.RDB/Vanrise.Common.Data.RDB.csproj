@@ -59,7 +59,6 @@
     <Compile Include="RateTypeDataManager.cs" />
     <Compile Include="RegionDataManager.cs" />
     <Compile Include="SMSMessageTemplateDataManager.cs" />
-    <Compile Include="SMSMessageTypeDataManager.cs" />
     <Compile Include="StatusDefinitionDataManager.cs" />
     <Compile Include="StyleDefinitionDataManager.cs" />
     <!--<Compile Include="TypeDataManager.cs" />-->
