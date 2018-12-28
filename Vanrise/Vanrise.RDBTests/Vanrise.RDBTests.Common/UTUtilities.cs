@@ -72,6 +72,8 @@ namespace Vanrise.RDBTests.Common
                 dt.Columns.Remove("timestamp");
             if (dt.Columns.Contains("CreatedTime"))
                 dt.Columns.Remove("CreatedTime");
+            if (dt.Columns.Contains("LastModifiedTime"))
+                dt.Columns.Remove("LastModifiedTime");
             return dt;
         }
 

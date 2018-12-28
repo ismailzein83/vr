@@ -42,7 +42,7 @@ namespace Vanrise.RDB.Tests.Invoice
                 InvoiceSetting entity = context.Entity;
                 entity.Name = entity.Name + " Updated ";
                 entity.IsDefault = true;
-                entity.Details.InvoiceSettingParts.Add(new Guid("B96140F0-9F30-4E44-BF80-41AC693996AF"), new MyInvoiceSettingPart { Prop = "fsdgfdsg gfds fdsg'fdg" });
+                entity.Details.InvoiceSettingParts.Add(Guid.NewGuid(), new MyInvoiceSettingPart { Prop = "fsdgfdsg gfds fdsg'fdg" });
             }
 
             private class MyInvoiceSettingPart : InvoiceSettingPart

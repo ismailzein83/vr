@@ -40,7 +40,7 @@ namespace Vanrise.RDB.Tests.Invoice
             public override void ChangeEntityPropsForUpdate(IEntityMainOperationTesterChangeEntityPropsForUpdateContext<PartnerInvoiceSetting> context)
             {
                 PartnerInvoiceSetting entity = context.Entity;
-                entity.Details.InvoiceSettingParts.Add(new Guid("1FAA5207-E6F4-4DDF-9C0D-D7B5DABB9EE8"), new MyInvoicePart { Prop = "fdsf sgd fdsgt" });
+                entity.Details.InvoiceSettingParts.Add(Guid.NewGuid(), new MyInvoicePart { Prop = "fdsf sgd fdsgt" });
             }
 
             private class MyInvoicePart : InvoiceSettingPart

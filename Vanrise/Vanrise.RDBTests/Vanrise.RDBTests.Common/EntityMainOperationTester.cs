@@ -22,6 +22,7 @@ namespace Vanrise.RDBTests.Common
 
         public void ExecuteTest(bool testUniquenessOnAdd = true, bool testUniquenessOnUpdate = true, bool testDelete = false)
         {
+            UTUtilities.TruncateTable(this.DBConnStringName, this.DBSchemaName, this.DBTableName);
             var entity = _entity;
 
             InsertEntity(entity);
