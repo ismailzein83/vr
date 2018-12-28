@@ -18,6 +18,7 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime" /S /E /R /y /v /i /z /Q	
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\ClearVoice\%YYYYMMDD%\Client\Modules\VR_Notification\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\ClearVoice\%YYYYMMDD%\Client\Modules\VR_GenericData\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\ClearVoice\%YYYYMMDD%\Client\Modules\Analytic\"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\ClearVoice\%YYYYMMDD%\Client\Modules\ExcelConversion\"
 xcopy "C:\TFS\QualityMeasurement\Code\QM.BusinessEntity.Web\QM_BusinessEntity" /S /E /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\ClearVoice\%YYYYMMDD%\Client\Modules\QM_BusinessEntity\"
 xcopy "C:\TFS\QualityMeasurement\Code\QM.CLITester.Web\QM_CLITester" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\ClearVoice\%YYYYMMDD%\Client\Modules\QM_CLITester\"
 

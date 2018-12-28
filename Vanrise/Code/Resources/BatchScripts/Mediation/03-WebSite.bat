@@ -22,6 +22,7 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration" /S /E /R /y /v /
 xcopy "C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\Modules\VR_GenericData\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.DataParser.Web\VR_DataParser" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\Modules\VR_DataParser\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\Modules\VR_Notification\"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\Modules\ExcelConversion\"
 
 xcopy "C:\TFS\Mediation\Code\Mediation.Generic.Web\Mediation_Generic" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\Modules\Mediation_Generic\"
 xcopy "C:\TFS\Mediation\Code\Mediation.Huawei.Web\Mediation_Huawei" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\Modules\Mediation_Huawei\"
