@@ -65,12 +65,26 @@
     <Folder Include="RA\Tables\" />
     <Folder Include="RA\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="RA_INTL\" />
+    <Folder Include="RA_INTL\Tables\" />
+    <Folder Include="RA_ICX\" />
+    <Folder Include="RA_ICX\Tables\" />
+    <Folder Include="RA_INTL\User Defined Types\" />
+    <Folder Include="RA_ICX\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="RA\Tables\OperatorDeclaration.sql" />
     <Build Include="RA\Tables\Probe.sql" />
-    <Build Include="RA\User Defined Types\OperatorDeclarationType.sql" />
     <Build Include="RA\User Defined Types\ProbeType.sql" />
     <Build Include="Security\RA.sql" />
+    <Build Include="RA\Tables\SpecialNumbers.sql" />
+    <Build Include="RA\Tables\Period.sql" />
+    <Build Include="RA_INTL\Tables\OperatorDeclaration.sql" />
+    <Build Include="RA_ICX\Tables\OperatorDeclaration.sql" />
+    <Build Include="RA\User Defined Types\SpecialNumbersType.sql" />
+    <Build Include="RA\User Defined Types\PeriodType.sql" />
+    <Build Include="RA_INTL\User Defined Types\OperatorDeclarationType.sql" />
+    <Build Include="RA_ICX\User Defined Types\OperatorDeclarationType.sql" />
+    <Build Include="Security\RA_INTL.sql" />
+    <Build Include="Security\RA_ICX.sql" />
   </ItemGroup>
 </Project>

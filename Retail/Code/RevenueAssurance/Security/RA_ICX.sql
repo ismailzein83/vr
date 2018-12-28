@@ -1,0 +1,5 @@
+﻿CREATE SCHEMA [RA_ICX]
+    AUTHORIZATION [dbo];
+
+
+
