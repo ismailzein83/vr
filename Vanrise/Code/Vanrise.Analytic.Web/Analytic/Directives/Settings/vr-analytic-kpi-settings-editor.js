@@ -137,7 +137,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                         VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.measureStyleLoadDeferred);
                     });
                 };
-                var fields = []
+                var fields = [];
                 var analyticTableDimensionsPromise = VR_Analytic_AnalyticItemConfigAPIService.GetDimensions(itemTab.analytictable.AnalyticTableId).then(function (response) {
                     if (response != undefined) {
                         var dimensions = response;
