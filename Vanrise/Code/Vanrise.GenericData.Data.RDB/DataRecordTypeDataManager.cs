@@ -57,16 +57,14 @@ namespace Vanrise.GenericData.Data.RDB
         #region Mappers
         DataRecordType DataRecordTypeMapper(IRDBDataReader reader)
         {
-            var extraFieldsEvaluator = reader.GetStringWithEmptyHandling(COL_ExtraFieldsEvaluator);
-            var settings = reader.GetStringWithEmptyHandling(COL_Settings);
             return new DataRecordType
             {
                 DataRecordTypeId = reader.GetGuid(COL_ID),
                 Name = reader.GetString(COL_Name),
                 ParentId = reader.GetNullableGuid(COL_ParentID),
                 Fields = Vanrise.Common.Serializer.Deserialize<List<DataRecordField>>(reader.GetString(COL_Fields)),
-                ExtraFieldsEvaluator = extraFieldsEvaluator != null ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeExtraField>(extraFieldsEvaluator) : null,
-                Settings = settings != null ? Vanrise.Common.Serializer.Deserialize<DataRecordTypeSettings>(settings) : null
+                ExtraFieldsEvaluator = Vanrise.Common.Serializer.Deserialize<DataRecordTypeExtraField>(reader.GetString(COL_ExtraFieldsEvaluator)),
+                Settings = Vanrise.Common.Serializer.Deserialize<DataRecordTypeSettings>(reader.GetString(COL_Settings))
             };
         }
         #endregion
