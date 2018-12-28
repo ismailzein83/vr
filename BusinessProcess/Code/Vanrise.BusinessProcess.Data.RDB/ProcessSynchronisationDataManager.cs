@@ -117,7 +117,6 @@ namespace Vanrise.BusinessProcess.Data.RDB
         }
         public bool UpdateProcessSynchronisation(ProcessSynchronisationToUpdate processSynchronisationToUpdate, int lastModifiedBy)
         {
-            string serializedSettings = processSynchronisationToUpdate.Settings != null ? Vanrise.Common.Serializer.Serialize(processSynchronisationToUpdate.Settings) : null;
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var updateQuery = queryContext.AddUpdateQuery();
@@ -127,6 +126,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
             updateQuery.Column(COL_IsEnabled).Value(processSynchronisationToUpdate.IsEnabled);
             if (processSynchronisationToUpdate.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(processSynchronisationToUpdate.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
             updateQuery.Column(COL_LastModifiedBy).Value(lastModifiedBy);
 
             var ifNotExistContext = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);

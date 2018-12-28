@@ -246,7 +246,10 @@ namespace Vanrise.BusinessProcess.Data.RDB
             updateQuery.FromTable(TABLE_NAME);
             updateQuery.Column(COL_ExecutedBy).Value(input.ExecutedBy);
             updateQuery.Column(COL_Status).Value((int)bpTaskStatus);
-            updateQuery.Column(COL_TaskExecutionInformation).Value(input.ExecutionInformation != null ? Serializer.Serialize(input.ExecutionInformation) : null);
+            if (input.ExecutionInformation != null)
+                updateQuery.Column(COL_TaskExecutionInformation).Value(Serializer.Serialize(input.ExecutionInformation));
+            else
+                updateQuery.Column(COL_TaskExecutionInformation).Null();
             updateQuery.Column(COL_Notes).Value(input.Notes);
             updateQuery.Column(COL_Decision).Value(input.Decision);
             updateQuery.Column(COL_LastUpdatedTime).DateNow();
