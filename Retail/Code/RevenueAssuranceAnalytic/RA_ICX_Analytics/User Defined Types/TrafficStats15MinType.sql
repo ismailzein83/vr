@@ -1,12 +1,21 @@
 ﻿CREATE TYPE [RA_ICX_Analytics].[TrafficStats15MinType] AS TABLE (
-    [ID]                 BIGINT          NULL,
-    [BatchStart]         DATETIME        NULL,
-    [OperatorID]         BIGINT          NULL,
-    [NumberOfCDRs]       INT             NULL,
-    [OriginationZoneID]  BIGINT          NULL,
-    [DestinationZoneID]  BIGINT          NULL,
-    [TrafficDirection]   INT             NULL,
-    [SuccessfulAttempts] INT             NULL,
-    [SumOfPDDInSeconds]  DECIMAL (20, 4) NULL,
-    [DurationInSeconds]  DECIMAL (20, 4) NULL);
+    [ID]                       BIGINT           NULL,
+    [BatchStart]               DATETIME         NULL,
+    [OperatorID]               BIGINT           NULL,
+    [InterconnectOperator]     BIGINT           NULL,
+    [DataSource]               UNIQUEIDENTIFIER NULL,
+    [TrafficDirection]         INT              NULL,
+    [Probe]                    BIGINT           NULL,
+    [OriginationZoneID]        BIGINT           NULL,
+    [DestinationZoneID]        BIGINT           NULL,
+    [OriginationCountryID]     INT              NULL,
+    [DestinationCountryID]     INT              NULL,
+    [NumberOfCDRs]             INT              NULL,
+    [SuccessfulAttempts]       BIGINT           NULL,
+    [TotalDurationInSeconds]   DECIMAL (20, 4)  NULL,
+    [SumOfPDDInSeconds]        DECIMAL (20, 4)  NULL,
+    [MaximumDurationInSeconds] DECIMAL (20, 4)  NULL,
+    [MinimumDurationInSeconds] DECIMAL (20, 4)  NULL);
+
+
 

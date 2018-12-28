@@ -73,22 +73,27 @@
     <Folder Include="RA_ICX_Analytics\User Defined Types\" />
     <Folder Include="RA_Analytics\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="RA_INTL_Analytics\" />
+    <Folder Include="RA_INTL_Analytics\Tables\" />
+    <Folder Include="RA_INTL_Analytics\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
     <Build Include="RA_ICX_Analytics\Tables\TrafficStats15Min.sql" />
     <Build Include="RA_ICX_Analytics\Tables\BillingStatsDaily.sql" />
-    <Build Include="RA_Analytics\Tables\TrafficStats15Min.sql" />
-    <Build Include="RA_Analytics\Tables\BillingStatsDaily.sql" />
     <Build Include="dbo\Functions\ZeroToMax.sql" />
     <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
     <Build Include="COMMON\Functions\getExchangeRates.sql" />
     <Build Include="RA_ICX_Analytics\User Defined Types\TrafficStats15MinType.sql" />
     <Build Include="RA_ICX_Analytics\User Defined Types\BillingStatsDailyType.sql" />
-    <Build Include="RA_Analytics\User Defined Types\BillingStatsDailyType.sql" />
     <Build Include="RA_Analytics\User Defined Types\TrafficStats15MinType.sql" />
     <Build Include="Security\RA_ICX_Analytics.sql" />
     <Build Include="Security\RA_Analytics.sql" />
     <Build Include="Security\COMMON.sql" />
+    <Build Include="RA_INTL_Analytics\Tables\TrafficStats15Min.sql" />
+    <Build Include="RA_INTL_Analytics\Tables\BillingStatsDaily.sql" />
+    <Build Include="RA_INTL_Analytics\User Defined Types\TrafficStats15MinType.sql" />
+    <Build Include="RA_INTL_Analytics\User Defined Types\BillingStatsDailyType.sql" />
+    <Build Include="Security\RA_INTL_Analytics.sql" />
   </ItemGroup>
 </Project>
