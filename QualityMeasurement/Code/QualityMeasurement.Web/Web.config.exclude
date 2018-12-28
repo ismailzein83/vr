@@ -45,7 +45,8 @@
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
 
     <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
-
+    <add key="BigDataServiceDBConnStringKey"                    value="TransactionDBConnString"/>
+    
     <add key="LoggingDBConnStringKey"                           value="LogDBConnString"/>
 
     <add key="SecurityDBConnStringKey"                          value="ConfigurationDBConnString"/>
