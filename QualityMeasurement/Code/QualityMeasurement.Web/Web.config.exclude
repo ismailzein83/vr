@@ -70,6 +70,8 @@
     <add key="ConnectorPassword" value="XBJnXe8lZBfUxP9BpalLAg==" />
     <add key="ConnectorUrl" value="dCw8OSmS14MSHGcMFrmxOG+9zd0qm3XhUBY0lfvvRhM=" />
     <add key="ConnectorUrlBeta" value="CLGo9vEUBAsD1kNHD/qrtA8bJdRl0NWvy8UeHVvKRjg=" />    
+  
+    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,LogDBConnString"/>
   </appSettings>
   <system.web>
     <compilation debug="false" targetFramework="4.7.2" />
