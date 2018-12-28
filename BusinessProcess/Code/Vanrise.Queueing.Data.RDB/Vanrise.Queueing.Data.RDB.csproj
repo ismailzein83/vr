@@ -66,6 +66,7 @@
     <Compile Include="QueueItemDataManager.cs" />
     <Compile Include="QueueItemHeaderDataManager.cs" />
     <Compile Include="QueueItemTypeDataManager.cs" />
+    <Compile Include="QueueSubscriptionDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Queueing.Data\Vanrise.Queueing.Data.csproj">
