@@ -18,6 +18,23 @@ namespace Retail.RA.Business
             return cachedOperatorDeclarations;
         }
 
+        public IEnumerable<IntlVoiceDeclarationService> GetVoiceDeclarationServices(List<PeriodDefinition> periodDefinitions, IEnumerable<long> filteredOperatorIds)
+        {
+            List<IntlVoiceDeclarationService> operatorDeclarations = new List<IntlVoiceDeclarationService>();
+            Dictionary<int, List<IntlVoiceDeclarationService>> operatorDeclarationByPeriodId = GetCachedVoiceDeclaration();
+
+            foreach (var periodDefinition in periodDefinitions)
+            {
+                if (operatorDeclarationByPeriodId.TryGetValue(periodDefinition.PeriodDefinitionId, out var operatorDeclaration))
+                {
+                    var filteredOperatorDeclaration = operatorDeclaration.FindAllRecords(item => filteredOperatorIds.Contains(item.OperatorId));
+                    if (filteredOperatorDeclaration != null && filteredOperatorDeclaration.Any())
+                        operatorDeclarations.AddRange(filteredOperatorDeclaration);
+                }
+            }
+            return operatorDeclarations.OrderBy(item => item.OperatorId).ThenBy(item => item.PeriodDefinition.FromDate);
+        }
+
         public IEnumerable<IntlVoiceDeclarationService> GetVoiceDeclarationServices(List<PeriodDefinition> periodDefinitions, TrafficDirection trafficDirection)
         {
             List<IntlVoiceDeclarationService> operatorDeclarations = new List<IntlVoiceDeclarationService>();
@@ -97,6 +114,36 @@ namespace Retail.RA.Business
                         foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
                         {
                             if (operatorDeclarationService.Settings is Voice voiceDeclarationServiceSettings && voiceDeclarationServiceSettings.TrafficDirection == TrafficDirection.IN)
+                            {
+                                List<IntlVoiceDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
+                                operatorDeclarations.Add(new IntlVoiceDeclarationService
+                                {
+                                    ID = operatorDeclaration.ID,
+                                    OperatorId = operatorDeclaration.OperatorId,
+                                    PeriodDefinition = new PeriodDefinitionManager().GetPeriodDefinition(operatorDeclaration.PeriodId),
+                                    VoiceSettings = voiceDeclarationServiceSettings
+                                });
+                            }
+                        }
+
+                    }
+                    return operatorDeclarationByPeriod;
+                });
+        }
+
+        private Dictionary<int, List<IntlVoiceDeclarationService>> GetCachedVoiceDeclaration()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedInVoiceDeclaration", BeDefinitionId,
+                () =>
+                {
+                    List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+                    Dictionary<int, List<IntlVoiceDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlVoiceDeclarationService>>();
+                    foreach (var operatorDeclaration in cachedOperatorDeclarations)
+                    {
+                        foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
+                        {
+                            if (operatorDeclarationService.Settings is Voice voiceDeclarationServiceSettings)
                             {
                                 List<IntlVoiceDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
                                 operatorDeclarations.Add(new IntlVoiceDeclarationService
