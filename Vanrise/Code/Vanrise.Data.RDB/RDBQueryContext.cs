@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.Data.RDB
 {
@@ -284,6 +285,34 @@ namespace Vanrise.Data.RDB
             return resolvedQuery;
         }
 
+        public DateTimeRange GetDBDateTimeRange()
+        {
+            return new DateTimeRange()
+            {
+                From = new DateTime(1753, 1, 1, 0, 0, 0),
+                To = new DateTime(9999, 12, 31, 23, 59, 59)
+            };
+        }
+        
+        public bool CheckIfDefaultOrInvalidDBTime(DateTime? dateTime)
+        {
+            if (!dateTime.HasValue || dateTime.Value == default(DateTime))
+                return true;
+
+            if (!IsWithinDBDateTimeRange(dateTime.Value))
+                return true;
+
+            return false;
+        }
+
+        public bool IsWithinDBDateTimeRange(DateTime dateTime)
+        {
+            DateTimeRange dateTimeRange = GetDBDateTimeRange();
+            if (dateTime < dateTimeRange.From || dateTime > dateTimeRange.To)
+                return false;
+
+            return true;
+        }
         #region Private Classes
 
         private class RDBDataProviderExecuteNonQueryContext : BaseRDBDataProviderExecuteQueryContext, IRDBDataProviderExecuteNonQueryContext
