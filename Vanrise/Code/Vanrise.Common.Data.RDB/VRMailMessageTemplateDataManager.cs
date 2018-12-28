@@ -100,14 +100,14 @@ namespace Vanrise.Common.Data.RDB
 		#endregion
 
 		#region Private Methods
-		BaseRDBDataProvider GetDataProvider()
+		private BaseRDBDataProvider GetDataProvider()
 		{
 			return RDBDataProviderFactory.CreateProvider("VR_Common", "ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey");
 		}
 		#endregion
 
 		#region Mappers
-		VRMailMessageTemplate VRMailMessageTemplateMapper(IRDBDataReader reader)
+		private VRMailMessageTemplate VRMailMessageTemplateMapper(IRDBDataReader reader)
 		{
 			return new VRMailMessageTemplate
 			{
