@@ -55,7 +55,6 @@ namespace Vanrise.GenericData.Data.RDB
         #region Mappers
         DataRecordStorage DataRecordStorageMapper(IRDBDataReader reader)
         {
-            var state = reader.GetStringWithEmptyHandling(COL_State);
             return new DataRecordStorage()
             {
                 DataRecordStorageId = reader.GetGuid(COL_ID),
@@ -63,7 +62,7 @@ namespace Vanrise.GenericData.Data.RDB
                 DataRecordTypeId = reader.GetGuid(COL_DataRecordTypeID),
                 DataStoreId = reader.GetGuid(COL_DataStoreID),
                 Settings = Vanrise.Common.Serializer.Deserialize<DataRecordStorageSettings>(reader.GetString(COL_Settings)),
-                State = state != null ? Vanrise.Common.Serializer.Deserialize<DataRecordStorageState>(state) : null
+                State = Vanrise.Common.Serializer.Deserialize<DataRecordStorageState>(reader.GetString(COL_State))
             };
         }
         #endregion
