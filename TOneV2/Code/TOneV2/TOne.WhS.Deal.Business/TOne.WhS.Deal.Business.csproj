@@ -112,7 +112,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Context\SwapDealAnalysisInboundRateCalcMethodContext.cs" />
     <Compile Include="Context\SwapDealAnalysisOutboundRateCalcMethodContext.cs" />
-    <Compile Include="DealVolBuyAndSwapFilter.cs" />
     <Compile Include="DealZoneInfoByZoneId.cs" />
     <Compile Include="DealZoneRateManager.cs" />
     <Compile Include="Extensions\DealBusinessObjectDataProviderSettings.cs" />
@@ -132,7 +131,6 @@
     <Compile Include="SwapDeals\SwapDealAnalysisManager.cs" />
     <Compile Include="VolumeCommitment\DealSaleRateEvaluatorContext.cs" />
     <Compile Include="VolumeCommitment\DealSupplierRateEvaluatorContext.cs" />
-    <Compile Include="VolumeCommitment\VolCommitmentDealFilter.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealSettings.cs" />
   </ItemGroup>
   <ItemGroup>

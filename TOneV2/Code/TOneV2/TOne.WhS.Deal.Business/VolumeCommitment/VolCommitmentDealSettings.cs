@@ -21,6 +21,28 @@ namespace TOne.WhS.Deal.Business
         public static Guid VolCommitmentDealSettingsConfigId = new Guid("B606E88C-4AE5-4BF0-BCE5-10D456A092F5");
         public override Guid ConfigId { get { return VolCommitmentDealSettingsConfigId; } }
 
+        public override bool IsBuyDeal
+        {
+            get
+            {
+                if (DealType == VolCommitmentDealType.Buy)
+                    return true;
+
+                return false;
+            }
+        }
+
+        public override bool IsSellDeal
+        {
+            get
+            {
+                if (DealType == VolCommitmentDealType.Sell)
+                    return true;
+
+                return false;
+            }
+        }
+
         public VolCommitmentDealType DealType { get; set; }
 
         public int CarrierAccountId { get; set; }
