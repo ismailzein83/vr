@@ -66,6 +66,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityProviderDataManager.cs" />
     <Compile Include="TenantDataManager.cs" />
+    <Compile Include="UserDataManager.cs" />
     <Compile Include="UserFailedLoginDataManager.cs" />
     <Compile Include="UserGroupDataManager.cs" />
   </ItemGroup>
