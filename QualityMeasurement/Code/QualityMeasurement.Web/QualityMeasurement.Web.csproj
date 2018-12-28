@@ -164,6 +164,33 @@
     <Reference Include="TOne.CDRProcess.Arguments">
       <HintPath>..\..\..\TOneV2\Code\TOneV2\TOne.CDRProcess\bin\Debug\TOne.CDRProcess.Arguments.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Analytic.BP.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.Postgres">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.Postgres.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BI.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BI.Business.dll</HintPath>
     </Reference>
@@ -243,6 +270,30 @@
     </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.BP.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Runtime.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Business.dll</HintPath>
@@ -377,7 +428,9 @@
     <Content Include="appSettings.config" />
     <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\QualityMeasurement.pubxml" />
-    <None Include="Web.config.exclude" />
+    <None Include="Web.config.exclude">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.config.Debug.exclude">
       <DependentUpon>Web.config.exclude</DependentUpon>
     </None>

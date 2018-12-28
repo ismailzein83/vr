@@ -131,6 +131,36 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Analytic.BP">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.BP.Activities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.BP.Arguments">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.Postgres">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.Postgres.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
@@ -180,6 +210,37 @@
     </Reference>
     <Reference Include="Vanrise.Logging.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Logging.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.BP">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.BP.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.BP.Activities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.BP.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.BP.Arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.MainExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
