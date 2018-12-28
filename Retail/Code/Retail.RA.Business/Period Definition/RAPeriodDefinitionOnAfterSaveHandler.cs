@@ -33,13 +33,14 @@ namespace Retail.RA.Business
                 throw new NullReferenceException("to");
             var repeat = context.NewEntity.FieldValues.GetRecord("Repeat");
             var timeSpan = to.Subtract(from);
-
             if (from.Month == to.Month)
             {
                 var daysInMonth = DateTime.DaysInMonth(from.Year, from.Month);
 
                 if (daysInMonth == timeSpan.Days + 1)
+                {
                     monthlyRepeat = true;
+                }
                 else dailyRepeat = true;
             }
             else
@@ -51,6 +52,10 @@ namespace Retail.RA.Business
                     daysInAllMonths += DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
                     currentDate = currentDate.AddMonths(1);
                 }
+                if (to.Day == DateTime.DaysInMonth(to.Year, to.Month))
+                {
+                    daysInAllMonths += DateTime.DaysInMonth(to.Year, to.Month);
+                }
                 if (daysInAllMonths == timeSpan.Days + 1)
                     monthlyRepeat = true;
                 else
@@ -60,7 +65,7 @@ namespace Retail.RA.Business
             if (repeat != null)
             {
                 var newFrom = from;
-                var monthsDifference = (to.Year - from.Year) * 12 + (to.Month - from.Month);
+                var monthsDifference = (to.Year - from.Year) * 12 + (to.Month - from.Month) + 1;
                 var newTo = to;
                 for (var i = 0; i < Convert.ToInt32(repeat); i++)
                 {
@@ -71,8 +76,8 @@ namespace Retail.RA.Business
                     };
                     if (monthlyRepeat)
                     {
-                        newFrom = newFrom.AddMonths(monthsDifference);
-                        newTo = newTo.AddMonths(monthsDifference);
+                        newFrom = newTo.AddDays(1);
+                        newTo = AddMonths(newTo, monthsDifference);
                         genericBusinessEntityToAdd.FieldValues.Add("From", newFrom);
                         genericBusinessEntityToAdd.FieldValues.Add("To", newTo);
                     }
@@ -97,6 +102,13 @@ namespace Retail.RA.Business
                 }
             }
 
+        }
+        private DateTime AddMonths(DateTime date, int numberOfMonths)
+        {
+            if (date.Day != DateTime.DaysInMonth(date.Year, date.Month))
+                return date.AddMonths(numberOfMonths);
+            else
+                return date.AddDays(1).AddMonths(numberOfMonths).AddDays(-1);
         }
 
     }
