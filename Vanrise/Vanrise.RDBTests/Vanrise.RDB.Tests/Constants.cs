@@ -12,5 +12,7 @@ namespace Vanrise.RDB.Tests
         public const string DBSCHEMA_NAME_INVOICE = "VR_Invoice";
         public const string DBSCHEMA_NAME_ACCOUNTBALANCE = "VR_AccountBalance";
         public const string DBSCHEMA_NAME_Rule = "Rules";
+        public const string DBSCHEMA_NAME_Common = "Common";
+
     }
 }

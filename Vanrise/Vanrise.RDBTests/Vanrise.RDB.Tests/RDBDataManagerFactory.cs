@@ -17,7 +17,8 @@ namespace Vanrise.RDB.Tests
                 (
                     Assembly.Load("Vanrise.Invoice.Data.RDB"), 
                     Assembly.Load("Vanrise.AccountBalance.Data.RDB"),
-                    Assembly.Load("Vanrise.Rules.Data.RDB")
+                    Assembly.Load("Vanrise.Rules.Data.RDB"),
+                     Assembly.Load("Vanrise.Common.Data.RDB")
                 );
         }
 
