@@ -54,7 +54,7 @@
     <!--<Compile Include="EntityPersonalizationDataManager.cs" />-->
     <Compile Include="ExtensionConfigurationDataManager.cs" />
     <Compile Include="GenericLKUPItemDataManager.cs" />
-    <!--<Compile Include="OverriddenConfigurationDataManager.cs" />-->
+    <Compile Include="OverriddenConfigurationDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateTypeDataManager.cs" />
     <Compile Include="RegionDataManager.cs" />
