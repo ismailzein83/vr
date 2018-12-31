@@ -178,13 +178,23 @@ namespace Vanrise.Invoice.Data.RDB
             InvoiceAccountDataManager invoiceAccountDataManager = new InvoiceAccountDataManager();
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumnsFromTable(TABLE_NAME);
+            RDBSelectQuery selectInvoicesQuery;
+            RDBTempTableQuery tempTableQuery = null;
+            if (query.InvoiceBulkActionIdentifier.HasValue && query.IsSelectAll.HasValue && query.IsSelectAll.Value)
+            {
+                tempTableQuery = queryContext.CreateTempTable();
+                tempTableQuery.AddColumnsFromTable(TABLE_NAME);
 
-            var insertIntoTempTableQuery = queryContext.AddInsertQuery();
-            insertIntoTempTableQuery.IntoTable(tempTableQuery);
+                var insertIntoTempTableQuery = queryContext.AddInsertQuery();
+                insertIntoTempTableQuery.IntoTable(tempTableQuery);
 
-            var selectInvoicesQuery = insertIntoTempTableQuery.FromSelect();
+                selectInvoicesQuery = insertIntoTempTableQuery.FromSelect();
+            }
+            else
+            {
+                selectInvoicesQuery = queryContext.AddSelectQuery();
+            }
+            
             selectInvoicesQuery.From(TABLE_NAME, "inv", null, true);
             selectInvoicesQuery.SelectColumns().AllTableColumns("inv");
 
@@ -223,7 +233,7 @@ namespace Vanrise.Invoice.Data.RDB
 
             InvoiceBulkActionsDraftDataManager invoiceBulkActionsDraftDataManager = new InvoiceBulkActionsDraftDataManager();
 
-            if(query.IsSelectAll.HasValue && query.InvoiceBulkActionIdentifier.HasValue)
+            if(query.InvoiceBulkActionIdentifier.HasValue && query.IsSelectAll.HasValue)
             {
                 invoiceBulkActionsDraftDataManager.AddDeleteBulkActionDraftsQuery(queryContext, query.InvoiceBulkActionIdentifier.Value);
                 if (query.IsSelectAll.Value)
@@ -237,10 +247,13 @@ namespace Vanrise.Invoice.Data.RDB
                     selectColumns.Column(COL_ID, InvoiceBulkActionsDraftDataManager.COL_InvoiceId);
                 }
             }
-            
-            var selectFromTempQuery = queryContext.AddSelectQuery();
-            selectFromTempQuery.From(tempTableQuery, "tmp");
-            selectFromTempQuery.SelectColumns().AllTableColumns("tmp");
+
+            if (tempTableQuery != null)
+            {
+                var selectFromTempQuery = queryContext.AddSelectQuery();
+                selectFromTempQuery.From(tempTableQuery, "tmp");
+                selectFromTempQuery.SelectColumns().AllTableColumns("tmp");
+            }
 
             var invoices = queryContext.GetItems(InvoiceMapper);
 

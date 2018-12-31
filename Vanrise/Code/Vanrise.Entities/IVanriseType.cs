@@ -10,4 +10,14 @@ namespace Vanrise.Entities
     {
         string UniqueTypeName { get; }
     }
+
+    public class VanriseType : IVanriseType
+    {
+        public VanriseType(string uniqueTypeName)
+        {
+            this.UniqueTypeName = uniqueTypeName;
+        }
+
+        public string UniqueTypeName { get; private set; }
+    }
 }
