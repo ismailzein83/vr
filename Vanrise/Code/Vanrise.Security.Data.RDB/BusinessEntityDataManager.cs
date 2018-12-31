@@ -57,10 +57,8 @@ namespace Vanrise.Security.Data.RDB
                 Title = reader.GetString(COL_Title),
                 ModuleId = reader.GetGuid(COL_ModuleId),
                 BreakInheritance = reader.GetBoolean(COL_BreakInheritance),
+                PermissionOptions = Common.Serializer.Deserialize<List<string>>(reader.GetString(COL_PermissionOptions))
             };
-            var serializedPermissionOptions = reader.GetStringWithEmptyHandling(COL_PermissionOptions);
-            if (!string.IsNullOrEmpty(serializedPermissionOptions))
-                entity.PermissionOptions = Common.Serializer.Deserialize<List<string>>(serializedPermissionOptions);
 
             return entity;
         }
