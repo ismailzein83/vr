@@ -16,6 +16,8 @@ namespace Retail.BusinessEntity.Entities
 
     public class BaseAccount
     {
+        public long? ParentAccountId { get; set; }
+
         public long AccountId { get; set; }
 
         public string Name { get; set; }
@@ -47,7 +49,6 @@ namespace Retail.BusinessEntity.Entities
     {
         public const string BUSINESSENTITY_DEFINITION_NAME = "Retail_BE_SubscriberAccount";
         public Guid StatusId { get; set; }
-        public long? ParentAccountId { get; set; }
         public string SourceId { get; set; }
         public Dictionary<string, BaseAccountExtendedSettings> ExtendedSettings { get; set; }
     }
@@ -55,18 +56,16 @@ namespace Retail.BusinessEntity.Entities
     public class AccountToInsert : BaseAccount
     {
         public string SourceId { get; set; }
-
+        public long? ParentAccountId { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
 
         public Guid StatusId { get; set; }
-
-        public long? ParentAccountId { get; set; }
-
         public Dictionary<string, BaseAccountExtendedSettings> ExtendedSettings { get; set; }
     }
 
     public class AccountToEdit : BaseAccount
     {
+
         public string SourceId { get; set; }
 
         public Guid AccountBEDefinitionId { get; set; }

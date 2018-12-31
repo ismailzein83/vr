@@ -191,7 +191,8 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
                             AccountId: accountId,
                             SourceId: sourceId,
                             Name: $scope.scopeModel.name,
-                            TypeId: accountTypeSelectorAPI.getSelectedIds()
+                            TypeId: accountTypeSelectorAPI.getSelectedIds(),
+                            ParentAccountId : parentAccountId
                         };
 
                         obj.Settings = {};
@@ -199,7 +200,6 @@ app.directive('retailBeAccountEditor', ['UtilsService', 'VRUIUtilsService', 'Ret
 
                         if (!isEditMode) {
                             obj.StatusId = accountEntity != undefined ? accountEntity.StatusId : undefined;
-                            obj.ParentAccountId = parentAccountId;
                         }
 
                         return obj;
