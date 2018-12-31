@@ -163,6 +163,8 @@
     <Compile Include="Common\RateTypeDataManagerTests.cs" />
     <Compile Include="Common\RegionDataManagerTests.cs" />
     <Compile Include="Common\StatusDefinitionDataManagerTests.cs" />
+    <Compile Include="Common\StyleDefinitionDataManagerTests.cs" />
+    <Compile Include="Common\VRApplicationVisibilityDataManagerTests.cs" />
     <Compile Include="Common\VRConnectionDataManagerTests.cs" />
     <Compile Include="Common\VRTimeZoneDataManagerTests.cs" />
     <Compile Include="Constants.cs" />
