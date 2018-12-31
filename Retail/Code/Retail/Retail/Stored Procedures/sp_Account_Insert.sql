@@ -17,10 +17,14 @@ CREATE PROCEDURE [Retail].[sp_Account_Insert]
 	@ID INT OUT
 AS
 BEGIN
-		IF @CreatedTime IS NULL
+
+If NOT EXISTS(SELECT TOP 1 NULL FROM Retail.Account WHERE Name = @Name AND TypeID =@TypeID AND (@ParentID is null or ParentID = @ParentID))
+BEGIN
+	IF @CreatedTime IS NULL
 			SET @CreatedTime = GETDATE()
 		INSERT INTO Retail.Account (Name, [TypeID], Settings, ExtendedSettings, ParentID,StatusID, SourceID,CreatedTime, CreatedBy, LastModifiedBy, LastModifiedTime)
 		VALUES (@Name, @TypeID, @Settings, @ExtendedSettings, @ParentID,@StatusID,@SourceID, @CreatedTime, @CreatedBy, @LastModifiedBy, GETDATE())
 		SET @ID = SCOPE_IDENTITY()
+END
 
 END
