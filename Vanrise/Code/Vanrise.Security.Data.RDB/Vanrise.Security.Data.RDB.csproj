@@ -70,6 +70,7 @@
     <Compile Include="UserDataManager.cs" />
     <Compile Include="UserFailedLoginDataManager.cs" />
     <Compile Include="UserGroupDataManager.cs" />
+    <Compile Include="UserPasswordHistoryDataManager.cs" />
     <Compile Include="ViewDataManager.cs" />
     <Compile Include="WidgetDataManager.cs" />
     <Compile Include="WidgetDefinitionDataManager.cs" />
