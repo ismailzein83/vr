@@ -162,6 +162,7 @@
     <Compile Include="Common\GenericLKUPItemDataManagerTests.cs" />
     <Compile Include="Common\RateTypeDataManagerTests.cs" />
     <Compile Include="Common\RegionDataManagerTests.cs" />
+    <Compile Include="Common\SMSMessageTemplateDataManagerTests.cs" />
     <Compile Include="Common\StatusDefinitionDataManagerTests.cs" />
     <Compile Include="Common\StyleDefinitionDataManagerTests.cs" />
     <Compile Include="Common\VRApplicationVisibilityDataManagerTests.cs" />
