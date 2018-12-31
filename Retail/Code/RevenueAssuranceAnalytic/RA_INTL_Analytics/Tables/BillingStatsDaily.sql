@@ -15,6 +15,9 @@
     [MinimumDurationInSeconds]   DECIMAL (20, 4) NULL,
     [MaximumDurationInSeconds]   DECIMAL (20, 4) NULL,
     [TotalRevenue]               DECIMAL (22, 8) NULL,
-    [TotalIncome]                DECIMAL (22, 8) NULL
+    [TotalIncome]                DECIMAL (22, 8) NULL,
+    [CurrencyID]                 INT             NULL
 );
+
+
 
