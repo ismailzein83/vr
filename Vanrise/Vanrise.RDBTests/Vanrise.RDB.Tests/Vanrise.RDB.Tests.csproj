@@ -43,6 +43,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=4.1.0.0, Culture=neutral, PublicKeyToken=e44a2bc38ed2c13c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
@@ -79,6 +80,16 @@
     </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Code\Output\Vanrise.Common.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Data.RDB">
+      <HintPath>..\..\Code\Output\Vanrise.Common.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Data.SQL">
+      <HintPath>..\..\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\Code\Output\Vanrise.Data.dll</HintPath>
@@ -122,6 +133,20 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Code\Output\Vanrise.Rules.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data.RDB">
+      <HintPath>..\..\Code\Output\Vanrise.Rules.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Data.SQL">
+      <HintPath>..\..\Code\Output\Vanrise.Rules.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBalance\BillingTransactionTypeDataManagerTests.cs" />
@@ -143,6 +168,7 @@
     <Compile Include="Invoice\PartnerInvoiceSettingDataManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDBDataManagerFactory.cs" />
+    <Compile Include="Rule\RuleDataManagerTests.cs" />
     <Compile Include="SQLDataManagerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -155,7 +181,9 @@
       <Name>Vanrise.RDBTests.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

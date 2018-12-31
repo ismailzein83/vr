@@ -16,7 +16,8 @@ namespace Vanrise.RDB.Tests
             s_objectFactory = new ObjectFactory
                 (
                     Assembly.Load("Vanrise.Invoice.Data.SQL"), 
-                    Assembly.Load("Vanrise.AccountBalance.Data.SQL")
+                    Assembly.Load("Vanrise.AccountBalance.Data.SQL"),
+                    Assembly.Load("Vanrise.Rules.Data.SQL")
                 );
         }
 
