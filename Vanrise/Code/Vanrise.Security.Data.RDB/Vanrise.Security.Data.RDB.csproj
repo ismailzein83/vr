@@ -71,6 +71,7 @@
     <Compile Include="UserGroupDataManager.cs" />
     <Compile Include="ViewDataManager.cs" />
     <Compile Include="WidgetDataManager.cs" />
+    <Compile Include="WidgetDefinitionDataManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
