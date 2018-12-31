@@ -21,10 +21,10 @@ namespace Retail.RA.Business
             {
                 var operatorDimensionFilter = query.Filters.FirstOrDefault(itm => itm.Dimension == "Operator");
                 if (operatorDimensionFilter != null)
-                {
                     filteredOperatorIdsObject = operatorDimensionFilter.FilterValues;
+
+                if (filteredOperatorIdsObject != null && filteredOperatorIdsObject.Count > 0)
                     filteredOperatorIds = operatorDimensionFilter.FilterValues.Select(itm => Convert.ToInt64(itm)).ToList();
-                }
             }
 
             var toTime = DateTime.Now;
@@ -32,9 +32,7 @@ namespace Retail.RA.Business
                 toTime = query.ToTime.Value;
 
             var periodDefinitions = periodDefinitionManager.GetPeriodDefinitionsBetweenDate(query.FromTime, toTime, out var minDate, out var maxDate);
-            if (periodDefinitions == null && periodDefinitions.Count == 0)
-                return rawMemoryRecords;
-            if (filteredOperatorIds == null && filteredOperatorIds.Count == 0)
+            if (periodDefinitions == null || periodDefinitions.Count == 0)
                 return rawMemoryRecords;
 
             var allOperatorDeclarations = operatorDeclarationManager.GetVoiceDeclarationServices(periodDefinitions, filteredOperatorIds);
@@ -43,20 +41,22 @@ namespace Retail.RA.Business
             AnalyticQuery analyticQuery = new AnalyticQuery
             {
                 TableId = Guid.Parse("efe9d65f-0b0e-4466-918f-4d8982a368f6"),
-                MeasureFields = new List<string> { "CalculatedDurationInMin", "CalculatedRevenue", "CountCDRs" },
+                MeasureFields = new List<string> { "TotalDurationInMin", "Revenue", "NumberOfCDRs" },
                 DimensionFields = new List<string> { "Operator", "Period", "TrafficDirection" },
                 FromTime = Utilities.Min(minDate, query.FromTime),
                 ToTime = Utilities.Max(maxDate, toTime),
                 Filters = new List<DimensionFilter>()
             };
 
-            DimensionFilter dimensionFilter = new DimensionFilter()
+            if (filteredOperatorIdsObject != null && filteredOperatorIdsObject.Count > 0)
             {
-                Dimension = "Operator",
-                FilterValues = filteredOperatorIdsObject
-            };
-
-            analyticQuery.Filters.Add(dimensionFilter);
+                DimensionFilter dimensionFilter = new DimensionFilter()
+                {
+                    Dimension = "Operator",
+                    FilterValues = filteredOperatorIdsObject
+                };
+                analyticQuery.Filters.Add(dimensionFilter);
+            }
 
             List<AnalyticRecord> analyticRecords = analyticManager.GetAllFilteredRecords(analyticQuery, out _);
             Dictionary<long, List<BillingRecord>> billingRecordsByOperator = GetBillingRecordsByOperator(analyticRecords);
@@ -65,65 +65,70 @@ namespace Retail.RA.Business
             int startingIndex = 0;
             long lastOperatorId = 0;
 
-            foreach (var operatorDeclaration in allOperatorDeclarations)
+            if (allOperatorDeclarations != null && allOperatorDeclarations.Any())
             {
-                var operatorId = operatorDeclaration.OperatorId;
-                if (lastOperatorId != operatorId)
+                foreach (var operatorDeclaration in allOperatorDeclarations)
                 {
-                    startingIndex = 0;
-                    lastOperatorId = operatorId;
-                }
-                var reconcilationObj = new ReconcilationObj
-                {
-                    PeriodId = operatorDeclaration.PeriodDefinition.PeriodDefinitionId,
-                    OperatorId = operatorId,
-                    TrafficDirection = operatorDeclaration.VoiceSettings.TrafficDirection,
-                    DeclaredDurationInMin = operatorDeclaration.VoiceSettings.DeclaredDuration,
-                    DeclaredRevenue = operatorDeclaration.VoiceSettings.DeclaredRevenue,
-                    DeclaredNbrOfCDR = operatorDeclaration.VoiceSettings.DeclaredNumberOfCalls
-                };
-
-                if (billingRecordsByOperator.TryGetValue(operatorId, out var operatorBillingRecords))
-                {
-                    List<BillingRecord> orderedBillingRecords = operatorBillingRecords.OrderBy(item => item.PeriodDefinitionId).ToList();
-                    for (int i = startingIndex; i < orderedBillingRecords.Count; i++)
+                    var operatorId = operatorDeclaration.OperatorId;
+                    if (lastOperatorId != operatorId)
                     {
-                        var billingRecord = orderedBillingRecords[i];
-                        if (billingRecord.PeriodDefinitionId == operatorDeclaration.PeriodDefinition.PeriodDefinitionId && billingRecord.TrafficDirection == operatorDeclaration.VoiceSettings.TrafficDirection)
+                        startingIndex = 0;
+                        lastOperatorId = operatorId;
+                    }
+                    var reconcilationObj = new ReconcilationObj
+                    {
+                        PeriodId = operatorDeclaration.PeriodDefinition.PeriodDefinitionId,
+                        OperatorId = operatorId,
+                        TrafficDirection = operatorDeclaration.VoiceSettings.TrafficDirection,
+                        DeclaredDurationInMin = operatorDeclaration.VoiceSettings.DeclaredDuration,
+                        DeclaredRevenue = operatorDeclaration.VoiceSettings.DeclaredRevenue,
+                        DeclaredNbrOfCDR = operatorDeclaration.VoiceSettings.DeclaredNumberOfCalls
+                    };
+
+                    if (billingRecordsByOperator.TryGetValue(operatorId, out var operatorBillingRecords))
+                    {
+                        List<BillingRecord> orderedBillingRecords = operatorBillingRecords.OrderBy(item => item.PeriodDefinitionId).ToList();
+                        for (int i = startingIndex; i < orderedBillingRecords.Count; i++)
                         {
-                            reconcilationObj.CalculatedDurationInMin += billingRecord.DurationInMin;
-                            reconcilationObj.CalculatedRevenue += billingRecord.Revenue;
-                            reconcilationObj.CalculatedNbrOfCDR += billingRecord.NbrOfCDR;
-                            reconcilationObj.DifferencePerc = reconcilationObj.CalculatedDurationInMin > 0
-                                ? (int)((reconcilationObj.CalculatedDurationInMin - reconcilationObj.DeclaredDurationInMin) / reconcilationObj.CalculatedDurationInMin)
-                                : 0;
-                            operatorBillingRecords.Remove(billingRecord);
-                        }
-                        else
-                        {
-                            startingIndex = i;
-                            break;
+                            var billingRecord = orderedBillingRecords[i];
+                            if (billingRecord.PeriodDefinitionId == operatorDeclaration.PeriodDefinition.PeriodDefinitionId && billingRecord.TrafficDirection == operatorDeclaration.VoiceSettings.TrafficDirection)
+                            {
+                                reconcilationObj.CalculatedDurationInMin += billingRecord.DurationInMin;
+                                reconcilationObj.CalculatedRevenue += billingRecord.Revenue;
+                                reconcilationObj.CalculatedNbrOfCDR += billingRecord.NbrOfCDR;
+                                reconcilationObj.DifferencePerc = reconcilationObj.CalculatedDurationInMin > 0
+                                    ? (int)((reconcilationObj.CalculatedDurationInMin - reconcilationObj.DeclaredDurationInMin) / reconcilationObj.CalculatedDurationInMin)
+                                    : 0;
+                                operatorBillingRecords.Remove(billingRecord);
+                            }
+                            else
+                            {
+                                startingIndex = i;
+                            }
                         }
                     }
+                    records.Add(reconcilationObj);
                 }
-                records.Add(reconcilationObj);
             }
 
             Dictionary<string, ReconcilationObj> billingRecordWithoutOperatorDeclaration = new Dictionary<string, ReconcilationObj>();
-            foreach (var billingRecords in billingRecordsByOperator.Values)
+            if (billingRecordsByOperator != null)
             {
-                if (billingRecords != null && billingRecords.Count > 0)
+                foreach (var billingRecords in billingRecordsByOperator.Values)
                 {
-                    foreach (var billingRecord in billingRecords)
+                    if (billingRecords != null && billingRecords.Count > 0)
                     {
-                        string key = $"{billingRecord.OperatorId}_{billingRecord.PeriodDefinitionId}_{(int)billingRecord.TrafficDirection}";
-                        var recordObj = billingRecordWithoutOperatorDeclaration.GetOrCreateItem(key);
-                        recordObj.OperatorId = billingRecord.OperatorId;
-                        recordObj.PeriodId = billingRecord.PeriodDefinitionId;
-                        recordObj.CalculatedDurationInMin += billingRecord.DurationInMin;
-                        recordObj.CalculatedNbrOfCDR += billingRecord.NbrOfCDR;
-                        recordObj.CalculatedRevenue += billingRecord.Revenue;
-                        recordObj.TrafficDirection = billingRecord.TrafficDirection;
+                        foreach (var billingRecord in billingRecords)
+                        {
+                            string key = $"{billingRecord.OperatorId}_{billingRecord.PeriodDefinitionId}_{(int)billingRecord.TrafficDirection}";
+                            var recordObj = billingRecordWithoutOperatorDeclaration.GetOrCreateItem(key);
+                            recordObj.OperatorId = billingRecord.OperatorId;
+                            recordObj.PeriodId = billingRecord.PeriodDefinitionId;
+                            recordObj.CalculatedDurationInMin += billingRecord.DurationInMin;
+                            recordObj.CalculatedNbrOfCDR += billingRecord.NbrOfCDR;
+                            recordObj.CalculatedRevenue += billingRecord.Revenue;
+                            recordObj.TrafficDirection = billingRecord.TrafficDirection;
+                        }
                     }
                 }
             }
@@ -140,13 +145,13 @@ namespace Retail.RA.Business
         public RawMemoryRecord GetRawMemoryRecord(ReconcilationObj reconcilationObj)
         {
             RawMemoryRecord rawMemoryRecord = new RawMemoryRecord { FieldValues = new Dictionary<string, dynamic>() };
-            rawMemoryRecord.FieldValues.Add("Operator", reconcilationObj.OperatorId);
-            rawMemoryRecord.FieldValues.Add("PeriodDefinition", reconcilationObj.PeriodId);
+            rawMemoryRecord.FieldValues.Add("OperatorID", reconcilationObj.OperatorId);
+            rawMemoryRecord.FieldValues.Add("PeriodID", reconcilationObj.PeriodId);
             rawMemoryRecord.FieldValues.Add("TrafficDirection", reconcilationObj.TrafficDirection);
             rawMemoryRecord.FieldValues.Add("CalculatedDurationInMin", reconcilationObj.CalculatedDurationInMin);
             rawMemoryRecord.FieldValues.Add("CalculatedRevenue", reconcilationObj.CalculatedRevenue);
-            rawMemoryRecord.FieldValues.Add("CalculatedNbrOfCDR", reconcilationObj.CalculatedNbrOfCDR);
-            rawMemoryRecord.FieldValues.Add("DeclaredNbrOfCDR", reconcilationObj.DeclaredNbrOfCDR);
+            rawMemoryRecord.FieldValues.Add("CalculatedNumberOfCDR", reconcilationObj.CalculatedNbrOfCDR);
+            rawMemoryRecord.FieldValues.Add("DeclaredNumberOfCDR", reconcilationObj.DeclaredNbrOfCDR);
             rawMemoryRecord.FieldValues.Add("DeclaredRevenue", reconcilationObj.DeclaredRevenue);
             rawMemoryRecord.FieldValues.Add("DeclaredDurationInMin", reconcilationObj.DeclaredDurationInMin);
             rawMemoryRecord.FieldValues.Add("Difference", reconcilationObj.DifferencePerc);
@@ -163,6 +168,8 @@ namespace Retail.RA.Business
                 var periodDimension = analyticRecord.DimensionValues[1];
                 var trafficDirectionDimension = analyticRecord.DimensionValues[2];
 
+                if (periodDimension == null || periodDimension.Value == null)
+                    continue;
                 long operatorId = (long)operatorIdDimension.Value;
                 int periodId = (int)periodDimension.Value;
                 TrafficDirection trafficDirection = (TrafficDirection)((int)trafficDirectionDimension.Value);
@@ -175,17 +182,17 @@ namespace Retail.RA.Business
                 };
 
                 MeasureValue calculatedDurationInMin;
-                analyticRecord.MeasureValues.TryGetValue("CalculatedDurationInMin", out calculatedDurationInMin);
+                analyticRecord.MeasureValues.TryGetValue("TotalDurationInMin", out calculatedDurationInMin);
                 if (calculatedDurationInMin?.Value != null)
                     reconcilationObj.DurationInMin = Convert.ToDecimal(calculatedDurationInMin.Value ?? 0.0);
 
                 MeasureValue calculatedRevenue;
-                analyticRecord.MeasureValues.TryGetValue("CalculatedRevenue", out calculatedRevenue);
+                analyticRecord.MeasureValues.TryGetValue("Revenue", out calculatedRevenue);
                 if (calculatedRevenue?.Value != null)
                     reconcilationObj.Revenue = Convert.ToDecimal(calculatedRevenue.Value ?? 0.0);
 
                 MeasureValue countCDR;
-                analyticRecord.MeasureValues.TryGetValue("CountCDRs", out countCDR);
+                analyticRecord.MeasureValues.TryGetValue("NumberOfCDRs", out countCDR);
                 if (countCDR?.Value != null)
                     reconcilationObj.NbrOfCDR = Convert.ToInt64(countCDR.Value ?? 0.0);
 
@@ -210,10 +217,10 @@ namespace Retail.RA.Business
             {
                 var operatorDimensionFilter = query.Filters.FirstOrDefault(itm => itm.Dimension == "Operator");
                 if (operatorDimensionFilter != null)
-                {
                     filteredOperatorIdsObject = operatorDimensionFilter.FilterValues;
+
+                if (filteredOperatorIdsObject != null)
                     filteredOperatorIds = operatorDimensionFilter.FilterValues.Select(itm => Convert.ToInt64(itm)).ToList();
-                }
             }
 
             var toTime = DateTime.Now;
@@ -221,9 +228,7 @@ namespace Retail.RA.Business
                 toTime = query.ToTime.Value;
 
             var periodDefinitions = periodDefinitionManager.GetPeriodDefinitionsBetweenDate(query.FromTime, toTime, out var minDate, out var maxDate);
-            if (periodDefinitions == null && periodDefinitions.Count == 0)
-                return rawMemoryRecords;
-            if (filteredOperatorIds == null && filteredOperatorIds.Count == 0)
+            if (periodDefinitions == null || periodDefinitions.Count == 0)
                 return rawMemoryRecords;
 
             var allOperatorDeclarations = operatorDeclarationManager.GetVoiceDeclarationServices(periodDefinitions, filteredOperatorIds);
@@ -232,20 +237,22 @@ namespace Retail.RA.Business
             AnalyticQuery analyticQuery = new AnalyticQuery
             {
                 TableId = Guid.Parse("8e3baf48-a2d3-4b09-8198-cbb4ad6f76f5"),
-                MeasureFields = new List<string> { "CalculatedDurationInMin", "CalculatedRevenue", "CountCDRs" },
+                MeasureFields = new List<string> { "TotalDurationInMin", "Revenue", "NumberOfCDRs" },
                 DimensionFields = new List<string> { "Operator", "Period", "TrafficDirection" },
                 FromTime = Utilities.Min(minDate, query.FromTime),
                 ToTime = Utilities.Max(maxDate, toTime),
                 Filters = new List<DimensionFilter>()
             };
 
-            DimensionFilter dimensionFilter = new DimensionFilter()
+            if (filteredOperatorIdsObject != null && filteredOperatorIdsObject.Count > 0)
             {
-                Dimension = "Operator",
-                FilterValues = filteredOperatorIdsObject
-            };
-
-            analyticQuery.Filters.Add(dimensionFilter);
+                DimensionFilter dimensionFilter = new DimensionFilter()
+                {
+                    Dimension = "Operator",
+                    FilterValues = filteredOperatorIdsObject
+                };
+                analyticQuery.Filters.Add(dimensionFilter);
+            }
 
             List<AnalyticRecord> analyticRecords = analyticManager.GetAllFilteredRecords(analyticQuery, out _);
             Dictionary<long, List<BillingRecord>> billingRecordsByOperator = GetBillingRecordsByOperator(analyticRecords);
@@ -254,68 +261,75 @@ namespace Retail.RA.Business
             int startingIndex = 0;
             long lastOperatorId = 0;
 
-            foreach (var operatorDeclaration in allOperatorDeclarations)
+            if (allOperatorDeclarations != null)
             {
-                var operatorId = operatorDeclaration.OperatorId;
-                if (lastOperatorId != operatorId)
+                foreach (var operatorDeclaration in allOperatorDeclarations)
                 {
-                    startingIndex = 0;
-                    lastOperatorId = operatorId;
-                }
-                var reconcilationObj = new ReconcilationObj
-                {
-                    PeriodId = operatorDeclaration.PeriodDefinition.PeriodDefinitionId,
-                    OperatorId = operatorId,
-                    TrafficDirection = operatorDeclaration.VoiceSettings.TrafficDirection,
-                    DeclaredDurationInMin = operatorDeclaration.VoiceSettings.DeclaredDuration,
-                    DeclaredRevenue = operatorDeclaration.VoiceSettings.DeclaredRevenue,
-                    DeclaredNbrOfCDR = operatorDeclaration.VoiceSettings.DeclaredNumberOfCalls
-                };
-
-                if (billingRecordsByOperator.TryGetValue(operatorId, out var operatorBillingRecords))
-                {
-                    List<BillingRecord> orderedBillingRecords = operatorBillingRecords.OrderBy(item => item.PeriodDefinitionId).ToList();
-                    for (int i = startingIndex; i < orderedBillingRecords.Count; i++)
+                    var operatorId = operatorDeclaration.OperatorId;
+                    if (lastOperatorId != operatorId)
                     {
-                        var billingRecord = orderedBillingRecords[i];
-                        if (billingRecord.PeriodDefinitionId == operatorDeclaration.PeriodDefinition.PeriodDefinitionId && billingRecord.TrafficDirection == operatorDeclaration.VoiceSettings.TrafficDirection)
+                        startingIndex = 0;
+                        lastOperatorId = operatorId;
+                    }
+                    var reconcilationObj = new ReconcilationObj
+                    {
+                        PeriodId = operatorDeclaration.PeriodDefinition.PeriodDefinitionId,
+                        OperatorId = operatorId,
+                        TrafficDirection = operatorDeclaration.VoiceSettings.TrafficDirection,
+                        DeclaredDurationInMin = operatorDeclaration.VoiceSettings.DeclaredDuration,
+                        DeclaredRevenue = operatorDeclaration.VoiceSettings.DeclaredRevenue,
+                        DeclaredNbrOfCDR = operatorDeclaration.VoiceSettings.DeclaredNumberOfCalls
+                    };
+
+                    if (billingRecordsByOperator.TryGetValue(operatorId, out var operatorBillingRecords))
+                    {
+                        List<BillingRecord> orderedBillingRecords = operatorBillingRecords.OrderBy(item => item.PeriodDefinitionId).ToList();
+                        for (int i = startingIndex; i < orderedBillingRecords.Count; i++)
                         {
-                            reconcilationObj.CalculatedDurationInMin += billingRecord.DurationInMin;
-                            reconcilationObj.CalculatedRevenue += billingRecord.Revenue;
-                            reconcilationObj.CalculatedNbrOfCDR += billingRecord.NbrOfCDR;
-                            reconcilationObj.DifferencePerc = reconcilationObj.CalculatedDurationInMin > 0
-                                ? (int)((reconcilationObj.CalculatedDurationInMin - reconcilationObj.DeclaredDurationInMin) / reconcilationObj.CalculatedDurationInMin)
-                                : 0;
-                            operatorBillingRecords.Remove(billingRecord);
-                        }
-                        else
-                        {
-                            startingIndex = i;
-                            break;
+                            var billingRecord = orderedBillingRecords[i];
+                            if (billingRecord.PeriodDefinitionId == operatorDeclaration.PeriodDefinition.PeriodDefinitionId && billingRecord.TrafficDirection == operatorDeclaration.VoiceSettings.TrafficDirection)
+                            {
+                                reconcilationObj.CalculatedDurationInMin += billingRecord.DurationInMin;
+                                reconcilationObj.CalculatedRevenue += billingRecord.Revenue;
+                                reconcilationObj.CalculatedNbrOfCDR += billingRecord.NbrOfCDR;
+                                reconcilationObj.DifferencePerc = reconcilationObj.CalculatedDurationInMin > 0
+                                    ? (int)((reconcilationObj.CalculatedDurationInMin - reconcilationObj.DeclaredDurationInMin) / reconcilationObj.CalculatedDurationInMin)
+                                    : 0;
+                                operatorBillingRecords.Remove(billingRecord);
+                            }
+                            else
+                            {
+                                startingIndex = i;
+                                break;
+                            }
                         }
                     }
+                    records.Add(reconcilationObj);
                 }
-                records.Add(reconcilationObj);
             }
 
             Dictionary<string, ReconcilationObj> billingRecordWithoutOperatorDeclaration = new Dictionary<string, ReconcilationObj>();
-            foreach (var billingRecords in billingRecordsByOperator.Values)
+            if (billingRecordsByOperator != null)
             {
-                if (billingRecords != null && billingRecords.Count > 0)
+                foreach (var billingRecords in billingRecordsByOperator.Values)
                 {
-                    foreach (var billingRecord in billingRecords)
+                    if (billingRecords != null && billingRecords.Count > 0)
                     {
-                        string key = $"{billingRecord.OperatorId}_{billingRecord.PeriodDefinitionId}_{(int)billingRecord.TrafficDirection}";
-                        var recordObj = billingRecordWithoutOperatorDeclaration.GetOrCreateItem(key);
-                        recordObj.OperatorId = billingRecord.OperatorId;
-                        recordObj.PeriodId = billingRecord.PeriodDefinitionId;
-                        recordObj.CalculatedDurationInMin += billingRecord.DurationInMin;
-                        recordObj.CalculatedNbrOfCDR += billingRecord.NbrOfCDR;
-                        recordObj.CalculatedRevenue += billingRecord.Revenue;
-                        recordObj.TrafficDirection = billingRecord.TrafficDirection;
+                        foreach (var billingRecord in billingRecords)
+                        {
+                            string key = $"{billingRecord.OperatorId}_{billingRecord.PeriodDefinitionId}_{(int)billingRecord.TrafficDirection}";
+                            var recordObj = billingRecordWithoutOperatorDeclaration.GetOrCreateItem(key);
+                            recordObj.OperatorId = billingRecord.OperatorId;
+                            recordObj.PeriodId = billingRecord.PeriodDefinitionId;
+                            recordObj.CalculatedDurationInMin += billingRecord.DurationInMin;
+                            recordObj.CalculatedNbrOfCDR += billingRecord.NbrOfCDR;
+                            recordObj.CalculatedRevenue += billingRecord.Revenue;
+                            recordObj.TrafficDirection = billingRecord.TrafficDirection;
+                        }
                     }
                 }
             }
+
             if (billingRecordWithoutOperatorDeclaration.Count > 0)
                 records.AddRange(billingRecordWithoutOperatorDeclaration.Values);
 
@@ -329,13 +343,13 @@ namespace Retail.RA.Business
         public RawMemoryRecord GetRawMemoryRecord(ReconcilationObj reconcilationObj)
         {
             RawMemoryRecord rawMemoryRecord = new RawMemoryRecord { FieldValues = new Dictionary<string, dynamic>() };
-            rawMemoryRecord.FieldValues.Add("Operator", reconcilationObj.OperatorId);
-            rawMemoryRecord.FieldValues.Add("PeriodDefinition", reconcilationObj.PeriodId);
+            rawMemoryRecord.FieldValues.Add("OperatorID", reconcilationObj.OperatorId);
+            rawMemoryRecord.FieldValues.Add("PeriodID", reconcilationObj.PeriodId);
             rawMemoryRecord.FieldValues.Add("TrafficDirection", reconcilationObj.TrafficDirection);
             rawMemoryRecord.FieldValues.Add("CalculatedDurationInMin", reconcilationObj.CalculatedDurationInMin);
             rawMemoryRecord.FieldValues.Add("CalculatedRevenue", reconcilationObj.CalculatedRevenue);
-            rawMemoryRecord.FieldValues.Add("CalculatedNbrOfCDR", reconcilationObj.CalculatedNbrOfCDR);
-            rawMemoryRecord.FieldValues.Add("DeclaredNbrOfCDR", reconcilationObj.DeclaredNbrOfCDR);
+            rawMemoryRecord.FieldValues.Add("CalculatedNumberOfCDR", reconcilationObj.CalculatedNbrOfCDR);
+            rawMemoryRecord.FieldValues.Add("DeclaredNumberOfCDR", reconcilationObj.DeclaredNbrOfCDR);
             rawMemoryRecord.FieldValues.Add("DeclaredRevenue", reconcilationObj.DeclaredRevenue);
             rawMemoryRecord.FieldValues.Add("DeclaredDurationInMin", reconcilationObj.DeclaredDurationInMin);
             rawMemoryRecord.FieldValues.Add("Difference", reconcilationObj.DifferencePerc);
@@ -352,6 +366,9 @@ namespace Retail.RA.Business
                 var periodDimension = analyticRecord.DimensionValues[1];
                 var trafficDirectionDimension = analyticRecord.DimensionValues[2];
 
+                if (periodDimension == null || periodDimension.Value == null)
+                    continue;
+
                 long operatorId = (long)operatorIdDimension.Value;
                 int periodId = (int)periodDimension.Value;
                 TrafficDirection trafficDirection = (TrafficDirection)((int)trafficDirectionDimension.Value);
@@ -364,17 +381,17 @@ namespace Retail.RA.Business
                 };
 
                 MeasureValue calculatedDurationInMin;
-                analyticRecord.MeasureValues.TryGetValue("CalculatedDurationInMin", out calculatedDurationInMin);
+                analyticRecord.MeasureValues.TryGetValue("TotalDurationInMin", out calculatedDurationInMin);
                 if (calculatedDurationInMin?.Value != null)
                     reconcilationObj.DurationInMin = Convert.ToDecimal(calculatedDurationInMin.Value ?? 0.0);
 
                 MeasureValue calculatedRevenue;
-                analyticRecord.MeasureValues.TryGetValue("CalculatedRevenue", out calculatedRevenue);
+                analyticRecord.MeasureValues.TryGetValue("Revenue", out calculatedRevenue);
                 if (calculatedRevenue?.Value != null)
                     reconcilationObj.Revenue = Convert.ToDecimal(calculatedRevenue.Value ?? 0.0);
 
                 MeasureValue countCDR;
-                analyticRecord.MeasureValues.TryGetValue("CountCDRs", out countCDR);
+                analyticRecord.MeasureValues.TryGetValue("NumberOfCDRs", out countCDR);
                 if (countCDR?.Value != null)
                     reconcilationObj.NbrOfCDR = Convert.ToInt64(countCDR.Value ?? 0.0);
 

@@ -27,7 +27,7 @@ namespace Retail.RA.Business
             {
                 if (operatorDeclarationByPeriodId.TryGetValue(periodDefinition.PeriodDefinitionId, out var operatorDeclaration))
                 {
-                    var filteredOperatorDeclaration = operatorDeclaration.FindAllRecords(item => filteredOperatorIds.Contains(item.OperatorId));
+                    var filteredOperatorDeclaration = operatorDeclaration.FindAllRecords(item => filteredOperatorIds == null || filteredOperatorIds.Contains(item.OperatorId));
                     if (filteredOperatorDeclaration != null && filteredOperatorDeclaration.Any())
                         operatorDeclarations.AddRange(filteredOperatorDeclaration);
                 }
