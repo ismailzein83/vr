@@ -321,6 +321,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.ExcelConversion.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.BP.dll</HintPath>
     </Reference>
