@@ -70,6 +70,7 @@
     <Compile Include="UserFailedLoginDataManager.cs" />
     <Compile Include="UserGroupDataManager.cs" />
     <Compile Include="ViewDataManager.cs" />
+    <Compile Include="WidgetDataManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
