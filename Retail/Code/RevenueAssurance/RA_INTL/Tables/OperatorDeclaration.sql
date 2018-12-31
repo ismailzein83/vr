@@ -3,7 +3,7 @@
     [OperatorID]       BIGINT          NULL,
     [TotalVolumeInMin] DECIMAL (20, 4) NULL,
     [TotalRevenue]     DECIMAL (20, 4) NULL,
-    [CreatedTime]      DATETIME        NULL,
+    [CreatedTime]      DATETIME        CONSTRAINT [DF_OperatorDeclaration_CreatedTime] DEFAULT (getdate()) NULL,
     [CreatedBy]        INT             NULL,
     [LastModifiedTime] DATETIME        NULL,
     [LastModifiedBy]   INT             NULL,
@@ -13,4 +13,6 @@
     [CurrencyID]       INT             NULL,
     CONSTRAINT [PK_OperatorDeclaration] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
