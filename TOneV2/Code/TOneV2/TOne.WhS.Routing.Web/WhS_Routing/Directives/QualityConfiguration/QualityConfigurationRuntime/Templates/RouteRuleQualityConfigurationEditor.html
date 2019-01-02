@@ -9,7 +9,6 @@
                         </vr-columns>
                         <vr-columns width="1/2row">
                             <vr-whs-routing-qualityconfigurationdefinition-selector on-ready="scopeModel.onQualityConfigurationDefinitionSelectorReady"
-                                                                                    onselectionchanged="scopeModel.onQualityConfigurationDefinitionSelectionChanged"
                                                                                     selectedvalues="scopeModel.selectedQualityConfigurationDefinition"
                                                                                     customlabel="Type" isrequired="true" hideremoveicon>
                             </vr-whs-routing-qualityconfigurationdefinition-selector>
@@ -19,11 +18,12 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-directivewrapper ng-if="scopeModel.selectedQualityConfigurationDefinition != undefined"
-                                     directive="scopeModel.selectedQualityConfigurationDefinition.RuntimeEditor"
-                                     on-ready="scopeModel.onQualityConfigurationSettingsDirectiveReady"
-                                     vr-loader="scopeModel.isQualityConfigurationSettingsDirectiveLoading">
-                </vr-directivewrapper>
+                <span vr-loader="scopeModel.isQualityConfigurationSettingsDirectiveLoading">
+                    <vr-directivewrapper ng-if="scopeModel.selectedQualityConfigurationDefinition != undefined"
+                                         directive="scopeModel.selectedQualityConfigurationDefinition.RuntimeEditor"
+                                         on-ready="scopeModel.onQualityConfigurationSettingsDirectiveReady">
+                    </vr-directivewrapper>
+                </span>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

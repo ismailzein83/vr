@@ -2,22 +2,19 @@
 
     "use strict";
 
-    qualityConfigurationEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_QualityConfigurationAPIService', 'WhS_Routing_QualityConfigurationDefinitionAPIService'];
+    qualityConfigurationEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_QualityConfigurationAPIService'];
 
-    function qualityConfigurationEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_Routing_QualityConfigurationAPIService, WhS_Routing_QualityConfigurationDefinitionAPIService) {
+    function qualityConfigurationEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_Routing_QualityConfigurationAPIService) {
 
         var isEditMode;
         var qualityConfigurationEntity;
         var qualityConfigurationNames; //for validation
-        var qualityConfigurationDefinitionId;
 
         var qualityConfigurationDefinitionSelectorAPI;
         var qualityConfigurationDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-        var qualityConfigurationDefinitionSelectionChangedDeferred;
 
         var qualityConfigurationSettingsDirectiveAPI;
-        var qualityConfigurationSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var qualityConfigurationSettingsDirectiveReadyDeferred;
 
         loadParameters();
         defineScope();
@@ -43,33 +40,18 @@
 
             $scope.scopeModel.onQualityConfigurationSettingsDirectiveReady = function (api) {
                 qualityConfigurationSettingsDirectiveAPI = api;
-                qualityConfigurationSettingsDirectiveReadyDeferred.resolve();
-            };
 
-            $scope.scopeModel.onQualityConfigurationDefinitionSelectionChanged = function (selectedItem) {
-                if (selectedItem != undefined) {
-                    qualityConfigurationDefinitionId = selectedItem.QualityConfigurationDefinitionId;
-
-                    if (qualityConfigurationDefinitionSelectionChangedDeferred != undefined) {
-                        qualityConfigurationDefinitionSelectionChangedDeferred.resolve();
-                    }
-                    else {
-                        //getQualityConfigurationDefinition(qualityConfigurationDefinitionId).then(function (response) {
-                        //    if (response != undefined && response.Settings != undefined) {
-                        qualityConfigurationSettingsDirectiveReadyDeferred.promise.then(function () {
-
-                            var setLoader = function (value) {
-                                $scope.scopeModel.isQualityConfigurationSettingsDirectiveLoading = value;
-                            };
-                            var qualityConfigurationSettingsDirectivePayload = {
-                                qualityConfigurationDefinitionId: qualityConfigurationDefinitionId
-                            };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, qualityConfigurationSettingsDirectiveAPI, qualityConfigurationSettingsDirectivePayload, setLoader);
-                        });
-                        //    }
-                        //});
-                    }
+                var qualityConfigurationSettingsDirectivePayload;
+                if ($scope.scopeModel.selectedQualityConfigurationDefinition != undefined) {
+                    qualityConfigurationSettingsDirectivePayload = {
+                        qualityConfigurationDefinitionId: $scope.scopeModel.selectedQualityConfigurationDefinition.QualityConfigurationDefinitionId
+                    };
                 }
+
+                var setLoader = function (value) {
+                    $scope.scopeModel.isQualityConfigurationSettingsDirectiveLoading = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, qualityConfigurationSettingsDirectiveAPI, qualityConfigurationSettingsDirectivePayload, setLoader, qualityConfigurationSettingsDirectiveReadyDeferred);
             };
 
             $scope.scopeModel.validateQualityConfigurationName = function () {
@@ -102,26 +84,7 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-
-            if (isEditMode) {
-                qualityConfigurationDefinitionId = qualityConfigurationEntity.QualityConfigurationDefinitionId;
-
-                //getQualityConfigurationDefinition(qualityConfigurationDefinitionId).then(function () {
-                loadAllControls().finally(function () {
-                    //packageEntity = undefined;
-                });
-                //}).catch(function (error) {
-                //    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                //    $scope.isLoading = false;
-                //});
-            }
-            else {
-                loadAllControls();
-            }
-        }
-
-        function getQualityConfigurationDefinition(qualityConfigurationDefinitionId) {
-            return WhS_Routing_QualityConfigurationDefinitionAPIService.GetQualityConfigurationDefinition(qualityConfigurationDefinitionId);
+            loadAllControls();
         }
 
         function loadAllControls() {
@@ -142,16 +105,13 @@
             }
 
             function loadQualityConfigurationDefinitionSelector() {
-                if (isEditMode)
-                    qualityConfigurationDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-
                 var qualityConfigurationDefinitionSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 qualityConfigurationDefinitionSelectorReadyDeferred.promise.then(function () {
 
                     var qualityConfigurationDefinitionSelectorPayload;
-                    if (qualityConfigurationDefinitionId != undefined) {
-                        qualityConfigurationDefinitionSelectorPayload = { selectedIds: qualityConfigurationDefinitionId };
+                    if (qualityConfigurationEntity != undefined) {
+                        qualityConfigurationDefinitionSelectorPayload = { selectedIds: qualityConfigurationEntity.QualityConfigurationDefinitionId };
                     }
                     VRUIUtilsService.callDirectiveLoad(qualityConfigurationDefinitionSelectorAPI, qualityConfigurationDefinitionSelectorPayload, qualityConfigurationDefinitionSelectorLoadPromiseDeferred);
                 });
@@ -163,12 +123,14 @@
                 if (!isEditMode)
                     return;
 
+                qualityConfigurationSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
                 var qualityConfigurationSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                UtilsService.waitMultiplePromises([qualityConfigurationSettingsDirectiveReadyDeferred.promise, qualityConfigurationDefinitionSelectionChangedDeferred.promise]).then(function () {
-                    qualityConfigurationDefinitionSelectionChangedDeferred = undefined;
+                qualityConfigurationSettingsDirectiveReadyDeferred.promise.then(function () {
+                    qualityConfigurationSettingsDirectiveReadyDeferred = undefined;
 
-                    var qualityConfigurationSettingsDirectivePayload = { qualityConfigurationDefinitionId: qualityConfigurationDefinitionId };
+                    var qualityConfigurationSettingsDirectivePayload = { qualityConfigurationDefinitionId: qualityConfigurationEntity.QualityConfigurationDefinitionId };
                     if (qualityConfigurationEntity != undefined && qualityConfigurationEntity.Settings != undefined) {
                         qualityConfigurationSettingsDirectivePayload.qualityConfigurationSettings = qualityConfigurationEntity.Settings;
                     }
@@ -179,12 +141,12 @@
             }
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadQualityConfigurationDefinitionSelector, loadQualityConfigurationSettingsDirectiveWrapper])
-                        .catch(function (error) {
-                            VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        })
-                        .finally(function () {
-                            $scope.scopeModel.isLoading = false;
-                        });
+                .catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                })
+                .finally(function () {
+                    $scope.scopeModel.isLoading = false;
+                });
         }
 
         function insertQualityConfiguration() {
@@ -215,6 +177,11 @@
         }
 
         function buildQualityConfigurationObjectFromScope(qualityConfigurationId) {
+
+            var qualityConfigurationDefinitionId;
+            if ($scope.scopeModel.selectedQualityConfigurationDefinition != undefined)
+                qualityConfigurationDefinitionId = $scope.scopeModel.selectedQualityConfigurationDefinition.QualityConfigurationDefinitionId;
+
             var obj = {
                 QualityConfigurationId: qualityConfigurationId,
                 QualityConfigurationDefinitionId: qualityConfigurationDefinitionId,
@@ -222,7 +189,7 @@
                 RoutingTriggerThreshold: $scope.scopeModel.routingTriggerThreshold,
                 Settings: qualityConfigurationSettingsDirectiveAPI.getData()
             };
-            
+
             return obj;
         }
     }
