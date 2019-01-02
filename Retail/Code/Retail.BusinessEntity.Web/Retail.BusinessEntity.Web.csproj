@@ -237,6 +237,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountPartAvailabilityOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountPartRequiredOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\CreditClassFieldEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\FaultTicketSourceEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\RootSelectorTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\DIDNumberTypeEnum.js" />
