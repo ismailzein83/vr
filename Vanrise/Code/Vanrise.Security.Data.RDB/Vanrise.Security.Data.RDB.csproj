@@ -60,6 +60,8 @@
   <ItemGroup>
     <Compile Include="BusinessEntityDataManager.cs" />
     <Compile Include="BusinessEntityModuleDataManager.cs" />
+    <Compile Include="CookieNameDataManager.cs" />
+    <Compile Include="EncryptionKeyDataManager.cs" />
     <Compile Include="GroupDataManager.cs" />
     <Compile Include="ModuleDataManager.cs" />
     <Compile Include="OrgChartDataManager.cs" />
