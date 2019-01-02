@@ -4,6 +4,8 @@
 //using System.Text;
 //using System.Threading.Tasks;
 //using Vanrise.Data.RDB;
+//using Vanrise.Runtime.Entities;
+//using Vanrise.Common;
 
 //namespace Vanrise.Runtime.Data.RDB
 //{
@@ -48,27 +50,112 @@
 
 //        public void DeleteRunningProcess(int runningProcessId)
 //        {
-//            throw new NotImplementedException();
+//            var queryContext = new RDBQueryContext(GetDataProvider());
+
+//            var deleteQuery = queryContext.AddDeleteQuery();
+//            deleteQuery.FromTable(TABLE_NAME);
+//            deleteQuery.Where().EqualsCondition(COL_ID).Value(runningProcessId);
+
+//            queryContext.ExecuteNonQuery();
 //        }
 
 //        public List<Runtime.Entities.RunningProcessDetails> GetFilteredRunningProcesses(Vanrise.Entities.DataRetrievalInput<Runtime.Entities.RunningProcessQuery> input)
 //        {
-//            throw new NotImplementedException();
+//            var queryContext = new RDBQueryContext(GetDataProvider());
+
+//            var selectQuery = queryContext.AddSelectQuery();
+//            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+//            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+//            selectQuery.Where().EqualsCondition(COL_RuntimeNodeInstanceID).Value(input.Query.RuntimeNodeInstanceId);
+
+//            return queryContext.GetItems(RunningProcessDetailsMapper);
 //        }
 
 //        public List<Runtime.Entities.RunningProcessInfo> GetRunningProcesses()
 //        {
-//            throw new NotImplementedException();
+//            var queryContext = new RDBQueryContext(GetDataProvider());
+
+//            var selectQuery = queryContext.AddSelectQuery();
+//            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+//            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+//            return queryContext.GetItems(RunningProcessInfoMapper);
 //        }
 
 //        public Runtime.Entities.RunningProcessInfo InsertProcessInfo(Guid runtimeNodeId, Guid runtimeNodeInstanceId, int osProcessId, Runtime.Entities.RunningProcessAdditionalInfo additionalInfo)
 //        {
-//            throw new NotImplementedException();
+//            //Insert Query
+//            var firstQueryContext = new RDBQueryContext(GetDataProvider());
+
+//            var insertQuery = firstQueryContext.AddInsertQuery();
+//            insertQuery.IntoTable(TABLE_NAME);
+//            insertQuery.Column(COL_RuntimeNodeID).Value(runtimeNodeId);
+//            insertQuery.Column(COL_RuntimeNodeInstanceID).Value(runtimeNodeInstanceId);
+//            insertQuery.Column(COL_OSProcessID).Value(osProcessId);
+//            insertQuery.Column(COL_StartedTime).DateNow();
+//            if (additionalInfo != null)
+//                insertQuery.Column(COL_AdditionalInfo).Value(Common.Serializer.Serialize(additionalInfo));
+
+//            insertQuery.AddSelectGeneratedId();
+
+//            int generatedID = firstQueryContext.ExecuteScalar().IntValue;
+
+//            //SelectQuery
+//            var secondQueryContext = new RDBQueryContext(GetDataProvider());
+
+
+//            var selectQuery = secondQueryContext.AddSelectQuery();
+//            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+//            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+//            selectQuery.Where().EqualsCondition(COL_ID).Value(generatedID);
+
+//            return secondQueryContext.GetItem(RunningProcessInfoMapper);
 //        }
 
 //        public bool IsExists(int runningProcessId)
 //        {
-//            throw new NotImplementedException();
+//            var queryContext = new RDBQueryContext(GetDataProvider());
+
+//            var selectQuery = queryContext.AddSelectQuery();
+//            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+//            selectQuery.SelectColumns().Column(COL_ID);
+//            selectQuery.Where().EqualsCondition(COL_ID).Value(runningProcessId);
+
+//            return queryContext.ExecuteScalar() != null;
 //        }
+
+//        #region Private Methods
+//        private RunningProcessInfo RunningProcessInfoMapper(IRDBDataReader reader)
+//        {
+//            var runningProcessInfo = new RunningProcessInfo
+//            {
+//                ProcessId = reader.GetInt("ID"),
+//                OSProcessId = reader.GetInt("OSProcessID"),
+//                RuntimeNodeId = reader.GetGuid("RuntimeNodeID"),
+//                RuntimeNodeInstanceId = reader.GetGuid("RuntimeNodeInstanceID"),
+//                StartedTime = reader.GetDateTime("StartedTime")
+//            };
+//            string serializedAdditionInfo = reader.GetString("AdditionalInfo");
+//            if (serializedAdditionInfo != null)
+//                runningProcessInfo.AdditionalInfo = Common.Serializer.Deserialize(serializedAdditionInfo) as RunningProcessAdditionalInfo;
+//            return runningProcessInfo;
+//        }
+
+//        private RunningProcessDetails RunningProcessDetailsMapper(IRDBDataReader reader)
+//        {
+//            var runningProcessDetails = new RunningProcessDetails
+//            {
+//                ProcessId = reader.GetInt("ID"),
+//                OSProcessId = reader.GetInt("OSProcessID"),
+//                RuntimeNodeId = reader.GetGuid("RuntimeNodeID"),
+//                RuntimeNodeInstanceId = reader.GetGuid("RuntimeNodeInstanceID"),
+//                StartedTime = reader.GetDateTime("StartedTime")
+//            };
+//            string serializedAdditionInfo = reader.GetString("AdditionalInfo");
+//            if (serializedAdditionInfo != null)
+//                runningProcessDetails.AdditionalInfo = Common.Serializer.Deserialize(serializedAdditionInfo) as RunningProcessAdditionalInfo;
+//            return runningProcessDetails;
+//        }
+//        #endregion
 //    }
 //}
