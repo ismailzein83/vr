@@ -95,7 +95,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             StringBuilder queryBuilder = new StringBuilder();
 
-            queryBuilder.Append(" SELECT TOP 1 StatusUpdatedTime as MaxGlobalStatusUpdatedTime, ID as GlobalId FROM [BP].[BPInstance] WITH(NOLOCK) order by StatusUpdatedTime, ID desc ");
+            queryBuilder.Append(" SELECT TOP 1 StatusUpdatedTime as MaxGlobalStatusUpdatedTime, ID as GlobalId FROM [BP].[BPInstance] WITH(NOLOCK) order by StatusUpdatedTime desc, ID desc ");
             queryBuilder.AppendLine();
 
             queryBuilder.AppendFormat("SELECT TOP({0}) {1} INTO #TEMP FROM bp.[BPInstance] bp WITH(NOLOCK)", nbOfRows, BPInstanceSELECTCOLUMNS);
