@@ -12,7 +12,7 @@ namespace Vanrise.Integration.Entities
 
         public BatchState BatchState { get; set; }
 
-        public bool IsDuplicateSameSize { get; set; }
+        public bool? IsDuplicateSameSize { get; set; }
 
         public int RecordsCount { get; set; }
 

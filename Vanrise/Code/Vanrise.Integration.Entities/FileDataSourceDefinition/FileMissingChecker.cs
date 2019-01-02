@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Entities
 {
@@ -17,6 +18,8 @@ namespace Vanrise.Integration.Entities
         string CurrentFileName { get; }
 
         List<string> MissingFileNames { set; }
+
+        List<string> ErrorMessages { set; }
     }
 
     public class CheckMissingFilesContext : ICheckMissingFilesContext
@@ -26,5 +29,7 @@ namespace Vanrise.Integration.Entities
         public string CurrentFileName { get; set; }
 
         public List<string> MissingFileNames { get; set; }
+
+        public List<string> ErrorMessages { get; set; }
     }
 }

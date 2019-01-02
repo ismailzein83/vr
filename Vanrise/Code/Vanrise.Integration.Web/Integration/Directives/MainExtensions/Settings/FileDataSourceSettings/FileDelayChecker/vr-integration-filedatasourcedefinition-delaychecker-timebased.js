@@ -32,10 +32,10 @@ app.directive("vrIntegrationFiledatasourcedefinitionDelaycheckerTimebased", ["Ut
 
                 api.load = function (payload) {
 
-                    $scope.scopeModel.fileInterval = "00:15:00";
+                    $scope.scopeModel.delayInterval = "00:15:00";
 
                     if (payload != undefined && payload.fileDelayChecker != undefined) {
-                        $scope.scopeModel.fileInterval = payload.fileDelayChecker.FileInterval;
+                        $scope.scopeModel.delayInterval = payload.fileDelayChecker.DelayInterval;
                     }
 
                     var promises = [];
@@ -45,7 +45,7 @@ app.directive("vrIntegrationFiledatasourcedefinitionDelaycheckerTimebased", ["Ut
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Integration.MainExtensions.FileDelayChecker.TimeBasedFileDelayChecker, Vanrise.Integration.MainExtensions",
-                        FileInterval: $scope.scopeModel.fileInterval
+                        DelayInterval: $scope.scopeModel.delayInterval
                     };
                 };
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Entities;
+using Vanrise.Integration.Business;
 using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.MainExtensions.FileDelayChecker
@@ -10,9 +11,9 @@ namespace Vanrise.Integration.MainExtensions.FileDelayChecker
     {
         public override Guid ConfigId { get { return new Guid("07C4303E-2D53-4062-BEF6-9B033CABB692"); } }
 
-        public TimeSpan PeakDelayInterval { get; set; } 
+        public TimeSpan PeakDelayInterval { get; set; }
 
-        public TimeSpan OffPeakDelayInterval { get; set; } 
+        public TimeSpan OffPeakDelayInterval { get; set; }
 
         public override bool IsDelayed(IFileDelayCheckerIsDelayedContext context)
         {
@@ -21,7 +22,7 @@ namespace Vanrise.Integration.MainExtensions.FileDelayChecker
 
             DateTime nowDateTime = DateTime.Now;
             Time currentTime = new Time(nowDateTime);
-            List<PeakTimeRange> peakTimeRanges = new List<PeakTimeRange>(); //GetDataFromConfigManager
+            List<PeakTimeRange> peakTimeRanges = new ConfigManager().GetPeakTimeRanges();
 
             if (IsPeak(currentTime, peakTimeRanges))
                 return nowDateTime - context.LastRetrievedFileTime.Value > this.PeakDelayInterval;
@@ -31,7 +32,10 @@ namespace Vanrise.Integration.MainExtensions.FileDelayChecker
 
         private bool IsPeak(Time currentTime, List<PeakTimeRange> peakTimeRanges)
         {
-            PeakTimeRange peakDateTimeRange = peakTimeRanges.First(itm => itm.From.GreaterThanOrEqual(currentTime) && itm.To.LessThanOrEqual(currentTime));
+            if (peakTimeRanges == null || peakTimeRanges.Count == 0)
+                return false;
+
+            PeakTimeRange peakDateTimeRange = peakTimeRanges.FirstOrDefault(itm => itm.From.LessThanOrEqual(currentTime) && itm.To.GreaterThanOrEqual(currentTime));
             return peakDateTimeRange != null;
         }
     }

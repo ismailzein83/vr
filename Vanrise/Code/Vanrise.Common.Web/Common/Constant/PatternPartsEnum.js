@@ -5,6 +5,7 @@
     ShortMonthPatternPart: { Name: "MM", Description: "Short Month Pattern (ex: 11)" },
     DayPatternPart: { Name: "DD", Description: "Day Pattern (ex: 27)" },
     HourPatternPart: { Name: "hh", Description: "Hour Pattern (ex: 16)" },
+    MinutePatternPart: { Name: "mm", Description: "Minute Pattern (ex: 49)" },
     SecondPatternPart: { Name: "ss", Description: "Second Pattern (ex: 43)" },
     S4PatternPart: { Name: "S4", Description: "Sequence Pattern of length 4 (ex: 1234)" },
     S5PatternPart: { Name: "S5", Description: "Sequence Pattern of length 5 (ex: 12345)" }, 

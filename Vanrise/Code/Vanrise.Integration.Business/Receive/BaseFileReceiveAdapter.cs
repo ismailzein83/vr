@@ -49,16 +49,23 @@ namespace Vanrise.Integration.Business
 
             var checkMissingFilesContext = new CheckMissingFilesContext() { CurrentFileName = fileName, LastRetrievedFileName = lastRetrievedFileName };
             fileMissingChecker.CheckMissingFiles(checkMissingFilesContext);
+
             if (checkMissingFilesContext.MissingFileNames != null)
             {
                 foreach (string missingFileName in checkMissingFilesContext.MissingFileNames)
                     onDataReceived(new StreamReaderImportedData() { Name = missingFileName, Size = 0, BatchState = BatchState.Missing });
             }
+
+            if (checkMissingFilesContext.ErrorMessages != null)
+            {
+                foreach (string errorMessage in checkMissingFilesContext.ErrorMessages)
+                    base.LogError(errorMessage);
+            }
         }
 
-        protected bool IsDuplicate(string fileName, long fileSize, Dictionary<string, List<DataSourceImportedBatch>> dataSourceImportedBatchByFileNames, out bool isDuplicateSameSize)
+        protected bool IsDuplicate(string fileName, long fileSize, Dictionary<string, List<DataSourceImportedBatch>> dataSourceImportedBatchByFileNames, out bool? isDuplicateSameSize)
         {
-            isDuplicateSameSize = false;
+            isDuplicateSameSize = null;
 
             if (dataSourceImportedBatchByFileNames == null)
                 return false;
@@ -66,6 +73,8 @@ namespace Vanrise.Integration.Business
             List<DataSourceImportedBatch> dataSourceImportedBatches;
             if (!dataSourceImportedBatchByFileNames.TryGetValue(fileName, out dataSourceImportedBatches))
                 return false;
+
+            isDuplicateSameSize = false;
 
             foreach (var dataSourceImportedBatch in dataSourceImportedBatches)
             {

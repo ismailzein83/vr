@@ -36,6 +36,12 @@ namespace Vanrise.Integration.Business
             return insertOperationOutput;
         }
 
+        public List<PeakTimeRange> GetPeakTimeRanges()
+        {
+            FileDataSourceSettings fileDataSourceSettings = GetFileDataSourceSettings();
+            return fileDataSourceSettings.PeakTimeRanges;
+        }
+
         public FileDataSourceDefinition GetFileDataSourceDefinition(Guid fileDataSourceDefinitionId)
         {
             FileDataSourceDefinition fileDataSourceDefinition = GetFileDataSourceDefinitions().FindRecord(itm => itm.FileDataSourceDefinitionId == fileDataSourceDefinitionId);

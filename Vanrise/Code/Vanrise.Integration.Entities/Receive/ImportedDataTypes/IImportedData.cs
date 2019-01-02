@@ -10,7 +10,7 @@ namespace Vanrise.Integration.Entities
 
         BatchState BatchState { get; }
 
-        bool IsDuplicateSameSize { get; }
+        bool? IsDuplicateSameSize { get; }
 
         bool IsEmpty { get; }
 

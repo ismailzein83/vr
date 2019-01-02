@@ -110,18 +110,23 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                             if (!string.IsNullOrEmpty(ftpAdapterArgument.LastImportedFile) && ftpAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
                                 continue;
 
-                            bool isDuplicateSameSize = false;
+                            bool? isDuplicateSameSize = null;
                             BatchState fileState = BatchState.Normal;
                             string filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
 
                             if (fileDataSourceDefinition != null)
                             {
-                                base.CheckMissingFiles(fileDataSourceDefinition.FileMissingChecker, fileObj.Name, ftpAdapterState.LastRetrievedFileName, context.OnDataReceived);
-
                                 if (base.IsDuplicate(fileObj.Name, fileObj.Size, dataSourceImportedBatchByFileNames, out isDuplicateSameSize))
+                                {
                                     fileState = BatchState.Duplicated;
-                                else if (base.IsDelayed(fileDataSourceDefinition.FileDelayChecker, ftpAdapterState.LastRetrievedFileTime))
-                                    fileState = BatchState.Delayed;
+                                }
+                                else
+                                {
+                                    if (base.IsDelayed(fileDataSourceDefinition.FileDelayChecker, ftpAdapterState.LastRetrievedFileTime))
+                                        fileState = BatchState.Delayed;
+
+                                    base.CheckMissingFiles(fileDataSourceDefinition.FileMissingChecker, fileObj.Name, ftpAdapterState.LastRetrievedFileName, context.OnDataReceived);
+                                }
                             }
 
                             ImportedBatchProcessingOutput output = null;
@@ -252,25 +257,34 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             if (fileState == BatchState.Duplicated && !string.IsNullOrEmpty(ftpAdapterArgument.DuplicatedFilesDirectory))
             {
                 MoveFile(ftp, fileObj, filePath, ftpAdapterArgument.DuplicatedFilesDirectory, ftpAdapterArgument.Extension, "duplicate");
+                return;
             }
-            else if (output != null && output.MappingOutput.Result == MappingResult.Invalid && !string.IsNullOrEmpty(ftpAdapterArgument.InvalidFilesDirectory))
+
+            if (output != null && output.MappingOutput.Result == MappingResult.Invalid && !string.IsNullOrEmpty(ftpAdapterArgument.InvalidFilesDirectory))
             {
                 MoveFile(ftp, fileObj, filePath, ftpAdapterArgument.InvalidFilesDirectory, ftpAdapterArgument.Extension, "invalid");
+                return;
             }
-            else if (ftpAdapterArgument.ActionAfterImport.HasValue)
+
+            if (ftpAdapterArgument.ActionAfterImport.HasValue)
             {
-                if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Rename)
+                if (ftpAdapterArgument.ActionAfterImport.Value == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Rename)
                 {
                     base.LogVerbose("Renaming file {0} after import", fileObj.Name);
 
-                    ftp.Rename(filePath, string.Format(@"{0}.processed", filePath.Replace(ftpAdapterArgument.Extension, "")));
+                    string filePathWithoutExtension = filePath.Replace(ftpAdapterArgument.Extension, "");
+                    string newFilePath = string.Format(@"{0}.processed", filePathWithoutExtension);
+                    if (ftp.FileExists(newFilePath))
+                        newFilePath = newFilePath.Replace(filePathWithoutExtension, string.Format(@"{0}_{1}", filePathWithoutExtension, Guid.NewGuid()));
+
+                    ftp.Rename(filePath, newFilePath);
                 }
-                else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Delete)
+                else if (ftpAdapterArgument.ActionAfterImport.Value == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Delete)
                 {
                     base.LogVerbose("Deleting file {0} after import", fileObj.Name);
                     ftp.DeleteFile(filePath);
                 }
-                else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Move)
+                else if (ftpAdapterArgument.ActionAfterImport.Value == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Move)
                 {
                     MoveFile(ftp, fileObj, filePath, ftpAdapterArgument.DirectorytoMoveFile, ftpAdapterArgument.Extension, "processed");
                 }
@@ -280,9 +294,16 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
         private void MoveFile(Ftp ftp, FtpItem fileObj, String filePath, string directorytoMoveFile, string extension, string newExtension)
         {
             base.LogVerbose("Moving file {0} after import to Directory {1}", fileObj.Name, directorytoMoveFile);
+
             if (!ftp.DirectoryExists(directorytoMoveFile))
                 ftp.CreateDirectory(directorytoMoveFile);
-            ftp.Rename(filePath, directorytoMoveFile + "/" + string.Format(@"{0}.{1}", fileObj.Name.Replace(extension, ""), newExtension));
+
+            string fileObjWithoutExtension = fileObj.Name.Replace(extension, "");
+            string newFilePath = Path.Combine(directorytoMoveFile, string.Format(@"{0}.{1}", fileObjWithoutExtension, newExtension);
+            if (ftp.FileExists(newFilePath))
+                newFilePath = newFilePath.Replace(fileObjWithoutExtension, string.Format(@"{0}_{1}", fileObjWithoutExtension, Guid.NewGuid()));
+
+            ftp.Rename(filePath, newFilePath);
         }
 
         private FtpList CheckAndGetFinalFtpCollection(FTPAdapterArgument ftpAdapterArgument, Ftp ftp, FtpList ftpList)

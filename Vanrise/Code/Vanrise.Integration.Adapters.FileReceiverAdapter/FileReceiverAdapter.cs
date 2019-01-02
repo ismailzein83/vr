@@ -62,18 +62,23 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                                 newFilesStarted = true;
                             }
 
-                            bool isDuplicateSameSize = false;
+                            bool? isDuplicateSameSize = null;
                             BatchState fileState = BatchState.Normal;
                             String filePath = fileAdapterArgument.Directory + "/" + file.Name;
 
                             if (fileDataSourceDefinition != null)
                             {
-                                base.CheckMissingFiles(fileDataSourceDefinition.FileMissingChecker, file.Name, fileAdapterState.LastRetrievedFileName, context.OnDataReceived);
-
                                 if (base.IsDuplicate(file.Name, file.Length, dataSourceImportedBatchByFileNames, out isDuplicateSameSize))
+                                {
                                     fileState = BatchState.Duplicated;
-                                else if (base.IsDelayed(fileDataSourceDefinition.FileDelayChecker, fileAdapterState.LastRetrievedFileTime))
-                                    fileState = BatchState.Delayed;
+                                }
+                                else
+                                {
+                                    if (base.IsDelayed(fileDataSourceDefinition.FileDelayChecker, fileAdapterState.LastRetrievedFileTime))
+                                        fileState = BatchState.Delayed;
+
+                                    base.CheckMissingFiles(fileDataSourceDefinition.FileMissingChecker, file.Name, fileAdapterState.LastRetrievedFileName, context.OnDataReceived);
+                                }
                             }
 
                             ImportedBatchProcessingOutput output = null;
@@ -164,7 +169,9 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             if (fileAdapterArgument.ActionAfterImport == (int)Actions.Rename)
             {
                 base.LogVerbose("Renaming file {0} after import", file.Name);
-                file.MoveTo(Path.Combine(file.DirectoryName, string.Format(@"{0}_{1}.processed", file.Name.ToLower().Replace(fileAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid())));
+
+                string fileNameWithoutExtension = file.Name.ToLower().Replace(fileAdapterArgument.Extension.ToLower(), "");
+                file.MoveTo(Path.Combine(file.DirectoryName, string.Format(@"{0}_{1}.processed", fileNameWithoutExtension, Guid.NewGuid())));
             }
             else if (fileAdapterArgument.ActionAfterImport == (int)Actions.Delete)
             {
@@ -174,11 +181,15 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
             else if (fileAdapterArgument.ActionAfterImport == (int)Actions.Move)
             {
                 base.LogVerbose("Moving file {0} after import to Directory {1}", file.Name, fileAdapterArgument.DirectorytoMoveFile);
-                if (System.IO.Directory.Exists(fileAdapterArgument.Directory))
-                {
+                if (!System.IO.Directory.Exists(fileAdapterArgument.DirectorytoMoveFile))
+                    System.IO.Directory.CreateDirectory(fileAdapterArgument.DirectorytoMoveFile);
 
-                    file.MoveTo(Path.Combine(fileAdapterArgument.DirectorytoMoveFile, string.Format(@"{0}.processed", file.Name)));
-                }
+                string fileNameWithoutExtension = file.Name.ToLower().Replace(fileAdapterArgument.Extension.ToLower(), "");
+                string newFileName = Path.Combine(fileAdapterArgument.DirectorytoMoveFile, string.Format(@"{0}.processed", fileNameWithoutExtension));
+                if (File.Exists(newFileName))
+                    newFileName = newFileName.Replace(fileNameWithoutExtension, string.Format(@"{0}_{1}", fileNameWithoutExtension, Guid.NewGuid()));
+
+                file.MoveTo(newFileName);
             }
         }
 

@@ -76,7 +76,7 @@
         </vr-columns>
     </vr-row>
     <!--<vr-row removeline>
-        <vr-integration-filedatasourcedefinition-selector on-ready="scopeModel.onFileDataSourceDefinitionsSelectorReady" 
+        <vr-integration-filedatasourcedefinition-selector on-ready="scopeModel.onFileDataSourceDefinitionsSelectorReady"
                                                           onselectionchanged="scopeModel.onFileDataSourceDefinitionSelectionChanged"
                                                           customlabel="Import Exception Setting" normal-col-num="4" includeviewhandler showaddbutton>
         </vr-integration-filedatasourcedefinition-selector>
@@ -90,17 +90,24 @@
         <vr-columns width="1/3row">
             <vr-select datasource="actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action" selectedvalues="selectedAction" onselectionchanged="onSelectedActionChanged" isrequired hideremoveicon></vr-select>
         </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-select ng-show="selectedAction.value != undefined && selectedAction.value != -1" datasource="fileCheckCriterias" datatextfield="description" datavaluefield="value"
+        <vr-columns ng-show="selectedAction.value == 2" width="1/3row">
+            <vr-textbox value="directorytoMoveFile" label="Processed File Directory Path" />
+        </vr-columns>
+        <vr-columns ng-show="selectedAction.value != undefined && selectedAction.value != -1" width="1/3row">
+            <vr-select datasource="fileCheckCriterias" datatextfield="description" datavaluefield="value"
                        label="Import File Check Criteria" selectedvalues="selectedFileCheckCriteria" isrequired="selectedAction.value != undefined && selectedAction.value != -1" hideremoveicon></vr-select>
         </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-textbox ng-show="selectedAction.value == 2" value="directorytoMoveFile" label="Processed File Directory Path" />
+    </vr-row>
+    <vr-row ng-if="selectedFileCheckCriteria.value == 1">
+        <vr-columns width="fullrow">
+            <label class="alert alert-danger" vr-alert>
+                Only Files with name greater than last imported file name will be imported {Don't use this option if file name contains sequence number that might reset}
+            </label>
         </vr-columns>
     </vr-row>
-    <vr-row removeline>
+    <vr-row ng-if="selectedFileCheckCriteria.value == 2">
         <vr-columns width="fullrow">
-            <label class="alert alert-danger" vr-alert ng-show="selectedFileCheckCriteria.value == 2">This option might cause duplicate data in case of post action failure</label>
+            <label class="alert alert-danger" vr-alert>This option might cause duplicate data in case of post action failure</label>
         </vr-columns>
     </vr-row>
 </vr-section>

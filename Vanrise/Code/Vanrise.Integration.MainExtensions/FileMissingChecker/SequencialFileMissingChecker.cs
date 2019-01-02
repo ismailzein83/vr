@@ -32,8 +32,8 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
         public override Guid ConfigId { get { return new Guid("FA37168F-25B8-44B2-8D27-CA0DD3E3265E"); } }
 
         public string FileNamePattern { get; set; }
-
-        private TimeSpan _fileImportTimeInterval = new TimeSpan(0, 15, 0);
+         
+        private TimeSpan _fileImportTimeInterval = new TimeSpan(0, 15, 0); 
         public TimeSpan FileImportTimeInterval
         {
             get
@@ -46,26 +46,41 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
             }
         }
 
-        public long SequenceSeed { get; set; } //ask fidaa about name 
+        public long ResetSequenceNumber { get; set; }
 
         public override void CheckMissingFiles(ICheckMissingFilesContext context)
-        {
-            List<string> missingFileNames = new List<string>();
+        { 
+            List<string> errorMessages = new List<string>();
 
-            List<SequencialFileNamePatternPart> fileNamePatternParts = BuildFileNamePatternParts();
-            if (fileNamePatternParts == null)
+            if (string.IsNullOrEmpty(FileNamePattern))
+                errorMessages.Add("Empty File Name Pattern");
+
+            if (string.IsNullOrEmpty(context.CurrentFileName))
+                errorMessages.Add("Current File Name is Empty");
+
+            if (errorMessages.Count > 0)
+            {
+                context.ErrorMessages = errorMessages.Count > 0 ? errorMessages : null;
+                return;
+            }
+
+            if (string.IsNullOrEmpty(context.LastRetrievedFileName) || string.Compare(context.CurrentFileName, context.LastRetrievedFileName) == 0)
                 return;
 
+            List<SequencialFileNamePatternPart> fileNamePatternParts = BuildFileNamePatternParts();
+
+            SequencialFileNameParts lastSequencialFileNameParts;
+            SequencialFileNameParts newSequencialFileNameParts;
+            if (!TryBuildFileNameParts(context.LastRetrievedFileName, fileNamePatternParts, out lastSequencialFileNameParts) ||
+                !TryBuildFileNameParts(context.CurrentFileName, fileNamePatternParts, out newSequencialFileNameParts))
+            {
+                errorMessages.Add("Invalid Pattern");
+                context.ErrorMessages = errorMessages;
+                return;
+            }
+
             HashSet<string> distinctFileNameParts = Vanrise.Common.ExtensionMethods.ToHashSet(fileNamePatternParts.Select(itm => itm.FileNamePart));
-
             FileNamePatternType patternType = GetFileNamePatternType(distinctFileNameParts);
-
-            SequencialFileNameParts lastSequencialFileNameParts = BuildFileNameParts(context.LastRetrievedFileName, fileNamePatternParts);
-            SequencialFileNameParts newSequencialFileNameParts = BuildFileNameParts(context.CurrentFileName, fileNamePatternParts);
-
-            lastSequencialFileNameParts.ThrowIfNull("lastSequencialFileNameParts");
-            newSequencialFileNameParts.ThrowIfNull("newSequencialFileNameParts");
-
             switch (patternType)
             {
                 case FileNamePatternType.DateTimeSequence: context.MissingFileNames = GetDateTimeSequenceMissingFiles(fileNamePatternParts, lastSequencialFileNameParts, newSequencialFileNameParts); return;
@@ -85,70 +100,119 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
             List<SequencialFileNamePatternPart> fileNamePatternParts = new List<SequencialFileNamePatternPart>();
 
             int fileNameIndex = 0;
+            StringBuilder sb_previousConstant = new StringBuilder();
 
             while (!string.IsNullOrEmpty(fileNamePattern))
             {
                 int startSeparatorIndex = fileNamePattern.IndexOf(PatternSeparatorAsString);
                 if (startSeparatorIndex == -1)
+                {
+                    sb_previousConstant.Append(fileNamePattern);
+                    AddPatternPartToList(fileNamePatternParts, sb_previousConstant.ToString(), fileNameIndex, sb_previousConstant.Length, true);
                     break;
+                }
 
-                fileNameIndex += startSeparatorIndex;
-                fileNamePattern = fileNamePattern.Substring(startSeparatorIndex + 1);
+                string constantPart = fileNamePattern.Substring(0, startSeparatorIndex);
+                sb_previousConstant.Append(constantPart);
 
+                fileNamePattern = fileNamePattern.Substring(startSeparatorIndex + PatternSeparatorAsString.Length);
                 int endSeparatorIndex = fileNamePattern.IndexOf(PatternSeparatorAsString);
                 if (endSeparatorIndex == -1)
+                {
+                    sb_previousConstant.Append(string.Concat(PatternSeparatorAsString, fileNamePattern));
+                    AddPatternPartToList(fileNamePatternParts, sb_previousConstant.ToString(), fileNameIndex, sb_previousConstant.Length, true);
                     break;
+                }
 
-                int fileNamePatternPartLength;
-                string fileNamePatternPart = fileNamePattern.Substring(0, endSeparatorIndex);
-                fileNamePattern = fileNamePattern.Substring(endSeparatorIndex + 1);
+                int patternPartLength;
 
-                if (fileNamePatternPart.StartsWith("S"))
+                string patternPart = fileNamePattern.Substring(0, endSeparatorIndex);
+                if (IsSequencePart(patternPart, out patternPartLength))
+                    patternPart = SequencePatternPart;
+                else
+                    patternPartLength = patternPart.Length;
+
+                if (allPatternParts.Contains(patternPart))
                 {
-                    string lengthAsString = fileNamePatternPart.Substring(1);
-                    if ((lengthAsString.Length != 1 && lengthAsString.Length != 2) || !Int32.TryParse(lengthAsString, out fileNamePatternPartLength))
-                        fileNamePatternPartLength = fileNamePatternPart.Length;
-                    else
-                        fileNamePatternPart = SequencePatternPart;
+                    if (sb_previousConstant.Length > 0)
+                    {
+                        AddPatternPartToList(fileNamePatternParts, sb_previousConstant.ToString(), fileNameIndex, sb_previousConstant.Length, true);
+                        fileNameIndex += sb_previousConstant.Length;
+                        sb_previousConstant = new StringBuilder();
+                    }
+                    AddPatternPartToList(fileNamePatternParts, patternPart, fileNameIndex, patternPartLength, false);
+                    fileNameIndex += patternPartLength;
+
+                    fileNamePattern = fileNamePattern.Substring(endSeparatorIndex + PatternSeparatorAsString.Length);
                 }
                 else
                 {
-                    fileNamePatternPartLength = fileNamePatternPart.Length;
-                }
-
-                if (allPatternParts.Contains(fileNamePatternPart))
-                {
-                    var sequencialFileNamePatternPart = new SequencialFileNamePatternPart() { FileNamePart = fileNamePatternPart, StartIndex = fileNameIndex, Length = fileNamePatternPartLength };
-                    fileNamePatternParts.Add(sequencialFileNamePatternPart);
-                    fileNameIndex += fileNamePatternPartLength;
-                }
-                else
-                {
-                    fileNamePattern = string.Concat(PatternSeparatorAsString, fileNamePattern);
-                    fileNameIndex += fileNamePatternPartLength + 1;
+                    sb_previousConstant.Append(string.Concat(PatternSeparatorAsString, patternPart));
+                    fileNamePattern = fileNamePattern.Substring(patternPart.Length);
                 }
             }
 
             return fileNamePatternParts.Count > 0 ? fileNamePatternParts : null;
         }
 
-        private SequencialFileNameParts BuildFileNameParts(string fileName, List<SequencialFileNamePatternPart> fileNamePatternParts)
+        private void AddPatternPartToList(List<SequencialFileNamePatternPart> fileNamePatternParts, string fileNamePart, int startIndex, int length, bool isConstant)
         {
-            SequencialFileNameParts sequencialFileNameParts = new SequencialFileNameParts();
+            var sequencialFileNamePatternPart = new SequencialFileNamePatternPart() { FileNamePart = fileNamePart, StartIndex = startIndex, Length = length, IsConstant = isConstant };
+            fileNamePatternParts.Add(sequencialFileNamePatternPart);
+        }
+
+        private bool IsSequencePart(string fileNamePatternPart, out int fileNamePatternPartLength)
+        {
+            fileNamePatternPartLength = -1;
+
+            if (!fileNamePatternPart.StartsWith("S"))
+                return false;
+
+            string lengthAsString = fileNamePatternPart.Substring(1);
+            if ((lengthAsString.Length != 1 && lengthAsString.Length != 2) || !Int32.TryParse(lengthAsString, out fileNamePatternPartLength))
+                return false;
+
+            return true;
+        }
+
+        private bool TryBuildFileNameParts(string fileName, List<SequencialFileNamePatternPart> fileNamePatternParts, out SequencialFileNameParts sequencialFileNameParts)
+        {
+            sequencialFileNameParts = new SequencialFileNameParts();
 
             foreach (var fileNamePatternPart in fileNamePatternParts)
             {
-                string fileNamePart = fileNamePatternPart.FileNamePart;
-                string fileNamePartValue = fileName.Substring(fileNamePatternPart.StartIndex, fileNamePatternPart.Length);
+                if (fileNamePatternPart.IsConstant)
+                {
+                    string fileNameConstantPart = fileName.Substring(fileNamePatternPart.StartIndex, fileNamePatternPart.Length);
+                    if (fileNamePatternPart.FileNamePart.CompareTo(fileNameConstantPart) != 0)
+                        return false;
+                }
+                else
+                {
+                    string fileNamePart = fileNamePatternPart.FileNamePart;
+                    int startIndex = fileNamePatternPart.StartIndex;
+                    int length = fileNamePatternPart.Length;
 
-                BuildFileNamePart(sequencialFileNameParts, fileNamePart, fileNamePartValue);
+                    if ((startIndex + length) > fileName.Length)
+                        return false;
+
+                    string fileNamePartValue = fileName.Substring(startIndex, length);
+                    if (!TryBuildFileNamePart(sequencialFileNameParts, fileNamePart, fileNamePartValue))
+                        return false;
+                }
             }
 
-            return sequencialFileNameParts;
+            return true;
         }
 
-        private void BuildFileNamePart(SequencialFileNameParts fileNameParts, string fileNamePart, string fileNamePartValue)
+        private bool TryBuildFileNamePart(SequencialFileNameParts fileNameParts, string fileNamePart, string fileNamePartValue)
         {
+            long? value = ParseLongWithValidate(fileNamePartValue);
+            long? monthValue = ParseMonthWithValidate(fileNamePartValue);
+
+            if (!value.HasValue && !monthValue.HasValue)
+                return false;
+
             switch (fileNamePart)
             {
                 case LongYearPatternPart:
@@ -156,7 +220,7 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
                     {
                         FileNamePart = fileNamePart,
                         ValueAsString = fileNamePartValue,
-                        Value = ParseLongWithValidate(fileNamePartValue)
+                        Value = value.Value
                     };
                     break;
 
@@ -165,7 +229,19 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
                     {
                         FileNamePart = fileNamePart,
                         ValueAsString = fileNamePartValue,
-                        Value = ParseLongWithValidate(fileNamePartValue)
+                        Value = value.Value
+                    };
+                    break;
+
+                case LongMonthPatternPart:
+                    if (monthValue == -1)
+                        return false;
+
+                    fileNameParts.MonthPart = new SequencialFileNamePart()
+                    {
+                        FileNamePart = fileNamePart,
+                        ValueAsString = fileNamePartValue,
+                        Value = monthValue.Value
                     };
                     break;
 
@@ -174,16 +250,7 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
                     {
                         FileNamePart = fileNamePart,
                         ValueAsString = fileNamePartValue,
-                        Value = ParseLongWithValidate(fileNamePartValue)
-                    };
-                    break;
-
-                case LongMonthPatternPart:
-                    fileNameParts.MonthPart = new SequencialFileNamePart()
-                    {
-                        FileNamePart = fileNamePart,
-                        ValueAsString = fileNamePartValue,
-                        Value = ParseMonthWithValidate(fileNamePartValue)
+                        Value = value.Value
                     };
                     break;
 
@@ -192,7 +259,7 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
                     {
                         FileNamePart = fileNamePart,
                         ValueAsString = fileNamePartValue,
-                        Value = ParseLongWithValidate(fileNamePartValue)
+                        Value = value.Value
                     };
                     break;
 
@@ -201,7 +268,7 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
                     {
                         FileNamePart = fileNamePart,
                         ValueAsString = fileNamePartValue,
-                        Value = ParseLongWithValidate(fileNamePartValue)
+                        Value = value.Value
                     };
                     break;
 
@@ -210,7 +277,7 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
                     {
                         FileNamePart = fileNamePart,
                         ValueAsString = fileNamePartValue,
-                        Value = ParseLongWithValidate(fileNamePartValue)
+                        Value = value.Value
                     };
                     break;
 
@@ -219,7 +286,7 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
                     {
                         FileNamePart = fileNamePart,
                         ValueAsString = fileNamePartValue,
-                        Value = ParseLongWithValidate(fileNamePartValue)
+                        Value = value.Value
                     };
                     break;
 
@@ -228,60 +295,15 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
                     {
                         FileNamePart = fileNamePart,
                         ValueAsString = fileNamePartValue,
-                        Value = ParseLongWithValidate(fileNamePartValue)
+                        Value = value.Value
                     };
                     break;
 
                 default:
-                    fileNameParts = null;
-                    break;
-
-            }
-        }
-
-        private string BuildMissingFileName(List<SequencialFileNamePatternPart> fileNamePatternParts, DateTime? missingFileDateTime, long? missingFileSequence)
-        {
-            string missingFileName = this.FileNamePattern;
-
-            foreach (SequencialFileNamePatternPart fileNamePatternPart in fileNamePatternParts)
-            {
-                switch (fileNamePatternPart.FileNamePart)
-                {
-                    case LongYearPatternPart:
-                        missingFileName = missingFileName.Replace(GetFullPaternPart(LongYearPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Year.ToString(), fileNamePatternPart.Length));
-                        break;
-
-                    case ShortYearPatternPart:
-                        missingFileName = missingFileName.Replace(GetFullPaternPart(ShortYearPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Year.ToString(), fileNamePatternPart.Length));
-                        break;
-
-                    case ShortMonthPatternPart:
-                        missingFileName = missingFileName.Replace(GetFullPaternPart(ShortMonthPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Month.ToString(), fileNamePatternPart.Length));
-                        break;
-
-                    case DayPatternPart:
-                        missingFileName = missingFileName.Replace(GetFullPaternPart(DayPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Day.ToString(), fileNamePatternPart.Length));
-                        break;
-
-                    case HourPatternPart:
-                        missingFileName = missingFileName.Replace(GetFullPaternPart(HourPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Hour.ToString(), fileNamePatternPart.Length));
-                        break;
-
-                    case MinutePatternPart:
-                        missingFileName = missingFileName.Replace(GetFullPaternPart(MinutePatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Minute.ToString(), fileNamePatternPart.Length));
-                        break;
-
-                    case SecondPatternPart:
-                        missingFileName = missingFileName.Replace(GetFullPaternPart(SecondPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Second.ToString(), fileNamePatternPart.Length));
-                        break;
-
-                    case SequencePatternPart:
-                        missingFileName = missingFileName.Replace("#S" + fileNamePatternPart.Length + "#", PadLeftZerosIfNecessary(missingFileSequence.Value.ToString(), fileNamePatternPart.Length));
-                        break;
-                }
+                    return false;
             }
 
-            return missingFileName;
+            return true;
         }
 
         private FileNamePatternType GetFileNamePatternType(HashSet<string> distinctFileNameParts)
@@ -295,32 +317,32 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
 
         private List<string> GetDateTimeSequenceMissingFiles(List<SequencialFileNamePatternPart> fileNamePatternParts, SequencialFileNameParts lastFileNameParts, SequencialFileNameParts newFileNameParts)
         {
-            List<string> missingFileNames = new List<string>();
-
-            long maxNumber = GetMaxNumber(lastFileNameParts.SequencePart.ValueAsString.Length);
-
             long sequenceDifference = newFileNameParts.SequencePart.Value - lastFileNameParts.SequencePart.Value;
-            if (sequenceDifference == 1)
+            if (sequenceDifference == 1 || sequenceDifference == 0)
                 return null;
 
             DateTime lastFileDateTime = BuildDateTimePart(lastFileNameParts);
             DateTime newFileDateTime = BuildDateTimePart(newFileNameParts);
 
-            DateTime missingFileDateTime = lastFileDateTime.CompareTo(newFileDateTime) <= 0 ? lastFileDateTime : newFileDateTime;
+            long maxNumber = GetMaxNumber(lastFileNameParts.SequencePart.ValueAsString.Length);
 
             long nbOfMissingFiles;
             if (sequenceDifference > 1)
                 nbOfMissingFiles = sequenceDifference - 1;
             else
-                nbOfMissingFiles = maxNumber - SequenceSeed + sequenceDifference;
+                nbOfMissingFiles = maxNumber - ResetSequenceNumber + sequenceDifference;
+
+            DateTime missingFileDateTime = lastFileDateTime.CompareTo(newFileDateTime) <= 0 ? lastFileDateTime : newFileDateTime;
+            IEnumerable<SequencialFileNamePatternPart> variablePatternParts = fileNamePatternParts.Where(itm => !itm.IsConstant);
+            List<string> missingFileNames = new List<string>();
 
             for (long i = 1; i <= nbOfMissingFiles; i++)
             {
                 long missingFileSequence = lastFileNameParts.SequencePart.Value + i;
                 if (missingFileSequence > maxNumber)
-                    missingFileSequence = SequenceSeed + (missingFileSequence - maxNumber - 1);
+                    missingFileSequence = ResetSequenceNumber + (missingFileSequence - maxNumber - 1);
 
-                string missingFileName = BuildMissingFileName(fileNamePatternParts, missingFileDateTime, missingFileSequence);
+                string missingFileName = BuildMissingFileName(variablePatternParts, missingFileDateTime, missingFileSequence);
                 missingFileNames.Add(missingFileName);
             }
 
@@ -329,25 +351,25 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
 
         private List<string> GetSequenceMissingFiles(List<SequencialFileNamePatternPart> fileNamePatternParts, SequencialFileNameParts lastSequencialFileNameParts, SequencialFileNameParts newSequencialFileNameParts)
         {
-            List<string> missingFileNames = new List<string>();
+            long sequenceDifference = newSequencialFileNameParts.SequencePart.Value - lastSequencialFileNameParts.SequencePart.Value;
+            if (sequenceDifference == 1 || sequenceDifference == 0)
+                return null;
 
             long maxNumber = GetMaxNumber(lastSequencialFileNameParts.SequencePart.ValueAsString.Length);
-
-            long sequenceDifference = newSequencialFileNameParts.SequencePart.Value - lastSequencialFileNameParts.SequencePart.Value;
-            if (sequenceDifference == 1)
-                return null;
 
             long nbOfMissingFiles;
             if (sequenceDifference > 1)
                 nbOfMissingFiles = sequenceDifference - 1;
             else
-                nbOfMissingFiles = maxNumber - SequenceSeed + sequenceDifference;
+                nbOfMissingFiles = maxNumber - ResetSequenceNumber + sequenceDifference;
+
+            List<string> missingFileNames = new List<string>();
 
             for (long i = 1; i <= nbOfMissingFiles; i++)
             {
                 long missingFileSequence = lastSequencialFileNameParts.SequencePart.Value + i;
                 if (missingFileSequence > maxNumber)
-                    missingFileSequence = SequenceSeed + (missingFileSequence - maxNumber - 1);
+                    missingFileSequence = ResetSequenceNumber + (missingFileSequence - maxNumber - 1);
 
                 string missingFileName = BuildMissingFileName(fileNamePatternParts, null, missingFileSequence);
                 missingFileNames.Add(missingFileName);
@@ -376,16 +398,61 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
             return missingFileNames;
         }
 
-        private long ParseLongWithValidate(string valueAsString)
+        private string BuildMissingFileName(IEnumerable<SequencialFileNamePatternPart> variablePatternParts, DateTime? missingFileDateTime, long? missingFileSequence)
         {
-            long result;
-            if (!long.TryParse(valueAsString, out result))
-                throw new Exception(string.Format("invalid integer format {0}", valueAsString));
+            string missingFileName = this.FileNamePattern;
 
-            return result;
+            foreach (SequencialFileNamePatternPart variablePatternPart in variablePatternParts)
+            {
+                switch (variablePatternPart.FileNamePart)
+                {
+                    case LongYearPatternPart:
+                        missingFileName = missingFileName.Replace(GetFullPaternPart(LongYearPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Year.ToString(), variablePatternPart.Length));
+                        break;
+
+                    case ShortYearPatternPart:
+                        missingFileName = missingFileName.Replace(GetFullPaternPart(ShortYearPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Year.ToString(), variablePatternPart.Length));
+                        break;
+
+                    case ShortMonthPatternPart:
+                        missingFileName = missingFileName.Replace(GetFullPaternPart(ShortMonthPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Month.ToString(), variablePatternPart.Length));
+                        break;
+
+                    case DayPatternPart:
+                        missingFileName = missingFileName.Replace(GetFullPaternPart(DayPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Day.ToString(), variablePatternPart.Length));
+                        break;
+
+                    case HourPatternPart:
+                        missingFileName = missingFileName.Replace(GetFullPaternPart(HourPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Hour.ToString(), variablePatternPart.Length));
+                        break;
+
+                    case MinutePatternPart:
+                        missingFileName = missingFileName.Replace(GetFullPaternPart(MinutePatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Minute.ToString(), variablePatternPart.Length));
+                        break;
+
+                    case SecondPatternPart:
+                        missingFileName = missingFileName.Replace(GetFullPaternPart(SecondPatternPart), PadLeftZerosIfNecessary(missingFileDateTime.Value.Second.ToString(), variablePatternPart.Length));
+                        break;
+
+                    case SequencePatternPart:
+                        missingFileName = missingFileName.Replace("#S" + variablePatternPart.Length + "#", PadLeftZerosIfNecessary(missingFileSequence.Value.ToString(), variablePatternPart.Length));
+                        break;
+                }
+            }
+
+            return missingFileName;
         }
 
-        private long ParseMonthWithValidate(string monthAsString)
+        private long? ParseLongWithValidate(string valueAsString)
+        {
+            long value;
+            if (!long.TryParse(valueAsString, out value))
+                return null;
+
+            return value;
+        }
+
+        private long? ParseMonthWithValidate(string monthAsString)
         {
             switch (monthAsString.ToLower())
             {
@@ -413,15 +480,14 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
 
                 case "dec": return 12;
 
-                default:
-                    throw new NotSupportedException(string.Format("month: {0} not supported.", monthAsString));
+                default: return null;
             }
         }
 
         private string PadLeftZerosIfNecessary(string numberAsString, int patternPartLength)
         {
             if (numberAsString.Length < patternPartLength)
-                numberAsString = numberAsString.PadLeft(patternPartLength - numberAsString.Length + 1, '0');
+                numberAsString = numberAsString.PadLeft(patternPartLength, '0');
 
             return numberAsString;
         }
@@ -459,11 +525,13 @@ namespace Vanrise.Integration.MainExtensions.FileMissingChecker
         #endregion
 
         #region Private Classes
+
         private class SequencialFileNamePatternPart
         {
             public string FileNamePart { get; set; }
             public int StartIndex { get; set; }
             public int Length { get; set; }
+            public bool IsConstant { get; set; }
         }
 
         private class SequencialFileNameParts
