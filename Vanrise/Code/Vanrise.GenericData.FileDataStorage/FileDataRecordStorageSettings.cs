@@ -7,9 +7,12 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.FileDataStorage
 {
+    public enum FileDataRecordStorageFolderStructureType { MonthDateHour = 1 }
     public class FileDataRecordStorageSettings : DataRecordStorageSettings
     {
         public string RootFolderPath { get; set; }
+
+        public FileDataRecordStorageFolderStructureType? FolderStructureType { get; set; }
 
         public TimeSpan StoragePartitionInterval { get; set; }
 

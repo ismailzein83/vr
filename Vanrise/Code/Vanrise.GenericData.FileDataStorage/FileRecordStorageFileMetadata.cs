@@ -10,14 +10,20 @@ namespace Vanrise.GenericData.FileDataStorage
     {
         public long FileRecordStorageFileMetadataId { get; set; }
 
+        public string ParentFolderRelativePath { get; set; }
+
         public string FileName { get; set; }
 
         public DateTime FromTime { get; set; }
 
         public DateTime ToTime { get; set; }
 
-        public long FromId { get; set; }
+        public DateTime MinTime { get; set; }
 
-        public long ToId { get; set; }
+        public DateTime MaxTime { get; set; }
+
+        public long MinId { get; set; }
+
+        public long MaxId { get; set; }
     }
 }

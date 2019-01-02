@@ -8,8 +8,8 @@ namespace Vanrise.GenericData.FileDataStorage
 {
     public interface IDynamicManager
     {
-        void AddRecordToCorrespondingBatch(dynamic dynamicRecord, Vanrise.GenericData.FileDataStorage.FileRecordStorageBatches batches);
-
         void FillRecordInfoFromDynamicRecord(Vanrise.GenericData.FileDataStorage.FileRecordStorageRecordInfo recordInfo, dynamic dynamicRecord);
+
+        dynamic GetDynamicRecordFromRecordInfo(Vanrise.GenericData.FileDataStorage.FileRecordStorageRecordInfo recordInfo);
     }
 }

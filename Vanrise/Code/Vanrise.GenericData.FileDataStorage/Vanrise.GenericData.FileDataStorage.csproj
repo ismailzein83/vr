@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -86,6 +87,17 @@
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Runtime.Entities\Vanrise.Runtime.Entities.csproj">
+      <Project>{07b66e74-bd84-4023-b839-5bb522b7a98c}</Project>
+      <Name>Vanrise.Runtime.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Runtime\Vanrise.Runtime.csproj">
+      <Project>{2cdddf60-45b6-4ce6-ac2b-4470bb9bfe96}</Project>
+      <Name>Vanrise.Runtime</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
+  </PropertyGroup>
 </Project>
