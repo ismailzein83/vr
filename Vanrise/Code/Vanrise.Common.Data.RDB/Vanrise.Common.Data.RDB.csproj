@@ -78,7 +78,7 @@
     <Compile Include="VRMailMessageTemplateDataManager.cs" />
     <Compile Include="VRMailMessageTypeDataManager.cs" />
     <Compile Include="VRNamespaceDataManager.cs" />
-    <!--<Compile Include="VRObjectTypeDefinitionDataManager.cs" />-->
+    <Compile Include="VRObjectTypeDefinitionDataManager.cs" />
     <!--<Compile Include="VRRuleDataManager.cs" />-->
     <Compile Include="VRTempPayloadDataManager.cs" />
     <Compile Include="VRTimeZoneDataManager.cs" />
