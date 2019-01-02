@@ -2,12 +2,13 @@
 	@DefinitionId uniqueidentifier,
 	@ObjectId nvarchar(255),
 	@Content nvarchar(max),
-	@CreatedBy bigint,	
+	@CreatedBy bigint,
+	@LastModifiedBy bigint,	
 	@ID bigint out
 AS
 
 	BEGIN
 		INSERT INTO [common].[VRComment] (DefinitionId,ObjectId,Content,CreatedBy,LastModifiedBy)
-		VALUES(@DefinitionId,@ObjectId,@Content,@CreatedBy,@CreatedBy)
+		VALUES(@DefinitionId,@ObjectId,@Content,@CreatedBy,@LastModifiedBy)
 		SET @ID = SCOPE_IDENTITY();
 	END

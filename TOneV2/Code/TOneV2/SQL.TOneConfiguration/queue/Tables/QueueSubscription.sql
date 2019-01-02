@@ -3,9 +3,12 @@
     [SubscribedQueueID] INT        NOT NULL,
     [IsActive]          BIT        NULL,
     [CreatedTime]       DATETIME   CONSTRAINT [DF_QueueSubscription_CreatedTime] DEFAULT (getdate()) NULL,
+    [LastModifiedTime]  DATETIME   CONSTRAINT [DF_QueueSubscription_LastModifiedTime] DEFAULT (getdate()) NULL,
     [timestamp]         ROWVERSION NULL,
     CONSTRAINT [PK_QueueSubscription] PRIMARY KEY CLUSTERED ([QueueID] ASC, [SubscribedQueueID] ASC)
 );
+
+
 
 
 
