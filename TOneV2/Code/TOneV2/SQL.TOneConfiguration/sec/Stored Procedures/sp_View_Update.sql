@@ -28,7 +28,8 @@ IF NOT EXISTS(select 1 from sec.[View] where Name = @PageName and Module=@Module
 				Title = @Title,
 				Audience=@Audience,
 				[Content]=@Content,
-				Settings = @Settings
+				Settings = @Settings,
+				LastModifiedTime = GETDATE()
 		WHERE	Id = @pageID
 	END
 END

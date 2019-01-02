@@ -10,7 +10,8 @@ BEGIN
 		UPDATE sec.[Tenant]
 		SET Name = @Name,
 			Settings = @Settings,
-			ParentTenantID = @ParentTenantID
+			ParentTenantID = @ParentTenantID,
+			LastModifiedTime = GETDATE()
 		WHERE ID = @ID
 	end
 END

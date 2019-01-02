@@ -13,6 +13,6 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 		UPDATE	sec.[Module]
-		SET		[Rank] = @rank,ParentID =@parentId
+		SET		[Rank] = @rank,ParentID =@parentId, LastModifiedTime = GETDATE()
 		WHERE	Id = @moduleId
 END

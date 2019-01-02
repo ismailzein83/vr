@@ -14,7 +14,8 @@ BEGIN
 			ParentId = @ParentId,
 			[DefaultViewId] = @DefaultViewId,
 			[AllowDynamic] = @AllowDynamic,
-			[Settings] = @Settings
+			[Settings] = @Settings,
+			LastModifiedTime = GETDATE()
 		WHERE ID = @ID
 	end
 END
