@@ -299,7 +299,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 ftp.CreateDirectory(directorytoMoveFile);
 
             string fileObjWithoutExtension = fileObj.Name.Replace(extension, "");
-            string newFilePath = Path.Combine(directorytoMoveFile, string.Format(@"{0}.{1}", fileObjWithoutExtension, newExtension);
+            string newFilePath = Path.Combine(directorytoMoveFile, string.Format(@"{0}.{1}", fileObjWithoutExtension, newExtension));
             if (ftp.FileExists(newFilePath))
                 newFilePath = newFilePath.Replace(fileObjWithoutExtension, string.Format(@"{0}_{1}", fileObjWithoutExtension, Guid.NewGuid()));
 
