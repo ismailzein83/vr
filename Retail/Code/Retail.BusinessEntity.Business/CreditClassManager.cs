@@ -8,6 +8,7 @@ using Vanrise.Common;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.Data;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -91,6 +92,12 @@ namespace Retail.BusinessEntity.Business
         {
             CreditClass creditClass = this.GetCreditClass(creditClassId);
             return (creditClass != null) ? creditClass.Name : null;
+        }
+
+        public decimal GetConvertedCreditClassBalanceLimit(decimal balanceLimit, int currencyId)
+        {
+            CurrencyExchangeRateManager exchangeRateManager = new CurrencyExchangeRateManager();
+            return exchangeRateManager.ConvertValueToCurrency(balanceLimit, currencyId, DateTime.Now);
         }
 
         #endregion
