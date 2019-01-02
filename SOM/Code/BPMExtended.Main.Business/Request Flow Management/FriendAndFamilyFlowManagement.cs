@@ -15,7 +15,6 @@ namespace BPMExtended.Main.Business
         const string completedStep = "498A1C06-03A9-4EB7-A3BF-B0CC6554C40A";
         public string GetNextStep(string id, string currentStepId)
         {
-
             string nextStepId = "";
             switch (currentStepId)
             {

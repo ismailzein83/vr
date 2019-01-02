@@ -214,9 +214,17 @@ namespace SOM.Main.Business
         {
             return new ReserveLineRequestOutput
             {
-                Message = string.Format("Phone Number {0} is Reserved", input.PhoneNumber)
+                Message = string.Format("Phone Number {0} is Reserved", input.PhoneNumber, input.PrimaryPort, input.SecondaryPort)
             };
         }
+        public ReserveLineRequestOutput ReservePhoneNumber(string phoneNumber, string primaryPort, string secondaryPort)
+        {
+            return new ReserveLineRequestOutput
+            {
+                Message = string.Format("Phone Number {0} is Reserved", phoneNumber)
+            };
+        }
+
         //public TelephonyLineSubscriptionOutput InitiateTelephonyLineSubscriptionRequest(TelephonyLineSubscriptionInput input)
         //{
 
@@ -449,7 +457,7 @@ namespace SOM.Main.Business
         {
             InventoryPhoneItem result = null;
 
-            List<TechnicalReservationDetail> data = connector.Get<List<TechnicalReservationDetail>>("/Technicallinedetailsbypathid/Get?pathid=5" + pathID);
+            List<TechnicalReservationDetail> data = connector.Get<List<TechnicalReservationDetail>>("/Technicallinedetailsbypathid/Get?pathid=" + pathID);
 
             if (data != null && data.Count > 0)
             {

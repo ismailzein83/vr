@@ -55,7 +55,7 @@ namespace BPMExtended.Main.Business
                 // Creation of query instance with "City" root schema. 
                 var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StADSLLineTermination");
                 esq.AddColumn("Id");
-                esq.AddColumn("StContractId");
+                esq.AddColumn("StTelephonyContractId");
                 // Creation of the first filter instance.
                 var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
                 // Adding created filters to query collection. 
@@ -64,7 +64,7 @@ namespace BPMExtended.Main.Business
                 var entities = esq.GetEntityCollection(BPM_UserConnection);
                 if (entities.Count > 0)
                 {
-                    var contractId = entities[0].GetColumnValue("StContractId");
+                    var contractId = entities[0].GetColumnValue("StTelephonyContractId");
                     InventoryManager manager = new InventoryManager();
                     ismanualswitch = manager.IsManualSwitch(contractId.ToString());
                 }

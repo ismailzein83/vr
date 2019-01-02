@@ -18,6 +18,7 @@ namespace SOM.Main.Web.Controllers
         [Route("GetTechnicalDetails")]
         public InventoryPhoneItem GetTechnicalDetails(string phoneNumber)
         {
+            // change  object type from 'InventoryPhoneItem' class to 'TechnicalDetails'
             InventoryManager manager = new InventoryManager();
             return manager.GetInventoryPhoneItem(phoneNumber);
         }
@@ -25,6 +26,7 @@ namespace SOM.Main.Web.Controllers
         [Route("GetTemporaryTechnicalReservation")]
         public TechnicalReservationPhoneItem GetTemporaryTechnicalReservation(string phoneNumber)
         {
+            // change  object type from 'TechnicalReservationPhoneItem' class to 'TechnicalReservation'
             InventoryManager manager = new InventoryManager();
             return manager.GetTechnicalReservation(phoneNumber);
         }
@@ -32,15 +34,16 @@ namespace SOM.Main.Web.Controllers
         [Route("GetAvailableNumbers")]
         public List<PhoneNumberItem> GetAvailableNumbers(string switchId, string category, string type, int top)
         {
+
             InventoryManager manager = new InventoryManager();
             return manager.GetAvailableNumbers(switchId, category, type, top);
         }
         [HttpPost]
         [Route("ReservePhoneNumber")]
-        public ReserveLineRequestOutput ReservePhoneNumber(ReserveLineRequestInput input)
+        public ReserveLineRequestOutput ReservePhoneNumber(string phoneNumber , string primaryPort , string secondaryPort)
         {
             InventoryManager manager = new InventoryManager();
-            return manager.ReservePhoneNumber(input);
+            return manager.ReservePhoneNumber(phoneNumber, primaryPort, secondaryPort);
         }
         [HttpGet]
         [Route("GetFreeDevices")]
@@ -96,13 +99,7 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.GetFreePorts(dpId);
         }
-        [HttpGet]
-        [Route("GetDPPorts")]
-        public List<DPPortItem> GetDPPorts(string dpId)
-        {
-            InventoryManager manager = new InventoryManager();
-            return manager.GetDPPorts(dpId);
-        }
+
         [HttpGet]
         [Route("ReserveNumber")]
         public string ReserveNumber(string phoneNumber, string pathType, string phoneNumberID, string deviceID, string mDFPortID, string dPPortID, string primaryPort, string secondaryPort)
@@ -121,6 +118,7 @@ namespace SOM.Main.Web.Controllers
         [Route("CheckADSL")]
         public LinePath CheckADSL(string phoneNumber)
         {
+            // change  object type from 'LinePath' class to 'ADSLLinePath'
             InventoryManager manager = new InventoryManager();
             return manager.CheckADSL(phoneNumber);
         }
@@ -128,6 +126,7 @@ namespace SOM.Main.Web.Controllers
         [Route("GetISPs")]
         public List<ISPItem> GetISPs()
         {
+            // change  object type from 'ISPItem' class to 'ISP'
             InventoryManager manager = new InventoryManager();
             return manager.GetISPs();
         }
@@ -142,6 +141,7 @@ namespace SOM.Main.Web.Controllers
         [Route("GetDeviceID")]
         public string GetDeviceID(string phoneNumberID)
         {
+            // change  object type from 'ISPItem' class to 'ISP'
             InventoryManager manager = new InventoryManager();
             return manager.GetDeviceID(phoneNumberID);
         }
@@ -156,6 +156,7 @@ namespace SOM.Main.Web.Controllers
         [Route("GetDeviceIDs")]
         public List<DeviceDetailItem> GetDeviceIDs(string phoneNumbers)
         {
+            // change  object type from 'DeviceDetailItem' class to 'Device'
             InventoryManager manager = new InventoryManager();
             return manager.GetDeviceIDs(phoneNumbers);
         }
@@ -166,9 +167,18 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.CreateFullPath(phoneNumber,pathID);
         }
+
+
         #endregion
 
 
+        [HttpGet]
+        [Route("GetDPPorts")]
+        public List<DPPortItem> GetDPPorts(string dpId)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetDPPorts(dpId);
+        }
         [HttpGet]
         [Route("GetInventoryPhoneItem")]
         public InventoryPhoneItem GetInventoryPhoneItem(string phoneNumber)
