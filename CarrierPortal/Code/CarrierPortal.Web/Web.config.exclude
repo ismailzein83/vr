@@ -50,7 +50,7 @@
     <add key="ConfigurationDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="RuntimeConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
-    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,LogDBConnString"/>
+    <add key="ExposedConnectionStringNames"                     value="ConfigurationDBConnString,LogDBConnString"/>
   </appSettings>
   <system.web>
     <compilation debug="true" targetFramework="4.7.2" />
