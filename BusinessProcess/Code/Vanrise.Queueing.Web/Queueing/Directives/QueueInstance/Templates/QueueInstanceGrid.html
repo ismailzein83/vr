@@ -1,7 +1,7 @@
-﻿<vr-datagrid dataretrievalfunction="dataRetrievalFunction"
+﻿<vr-datagrid on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
              datasource="queueInstances"
              pagingtype="'PagingOnScroll'"
-             on-ready="ongridReady"
              menuactions="gridMenuActions"
              idfield="Entity.QueueInstanceId">
 
@@ -15,5 +15,4 @@
     <vr-datagridcolumn headertext="'New Items'" field="'newItemsCount'" isfielddynamic="true" getcolor="getNewItemsColor" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Under Processing'" field="'underProcessingCount'" isfielddynamic="true" getcolor="getUnderProcessingColor" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Suspended'" field="'suspendedCount'" isfielddynamic="true" getcolor="getSuspendedColor" disablesorting></vr-datagridcolumn>
-
 </vr-datagrid>
