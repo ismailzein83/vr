@@ -242,7 +242,7 @@ namespace Vanrise.Integration.Business
             }
         }
 
-        private void SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput mappingOutput, bool isDuplicateSameSize)
+        private void SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput mappingOutput, bool? isDuplicateSameSize)   
         {
             if (dataSource.Entity.Settings.ErrorMailTemplateId.HasValue)
             {
@@ -257,7 +257,7 @@ namespace Vanrise.Integration.Business
 
                 if (data.IsFile)
                 {
-                    if (data.BatchState == BatchState.Duplicated && !isDuplicateSameSize)
+                    if (data.BatchState == BatchState.Duplicated && isDuplicateSameSize.HasValue && !isDuplicateSameSize.Value)
                     {
                         errorMessage = "Duplicate File with different size";
                     }
