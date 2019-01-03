@@ -83,7 +83,6 @@
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEOnBeforeInsertHandlerInfoByTypeContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\ExecuteGenericBEBulkActionProcessInput.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\ExecuteGenericBEBulkActionProcessOutput.cs" />
-    <Compile Include="BusinessEntity\GenericBusinessEntity\GetGenericBEFieldRuntimeEditors.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEBulkActionProcessInput.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBusinessEntityDefinitionFilter.cs" />
