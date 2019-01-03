@@ -206,6 +206,7 @@
     <Content Include="VR_GenericData\Constants\CompareToConstantOperatorEnum.js" />
     <Content Include="VR_GenericData\Constants\DateCounterTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\FieldNumberDataPrecisionEnum.js" />
+    <Content Include="VR_GenericData\Constants\GenericBEDefinitionBulkActionUpdateFieldStateEnum.js" />
     <Content Include="VR_GenericData\Constants\GenericBEDefinitionTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\MappingDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\RecordFilterOperatorEnum.js" />
@@ -232,6 +233,18 @@
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\Templates\CompositeRecordConditionDefinitionGroupTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\GenericBEBulkActionDefinitionEditorController.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\MainExtensions\Templates\GenericBEBulkActionSettingsUpdateTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\MainExtensions\vr-genericdata-genericbe-bulkactiondefinition-update-fieldstate.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\MainExtensions\vr-genericdata-genericbe-bulkactiondefinition-update.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\MainExtensions\Templates\GenericBEBulkActionUpdateTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\MainExtensions\vr-genericdata-genericbe-bulkactionsettings-update.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\Templates\GenericBEBulkActionDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\vr-genericdata-genericbe-bulkactionsettings-selective.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\vr-genericdata-genericbe-bulkactions-management.js" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\GenericBEBulkActionDefinition\Templates\GenericBEBulkActionsManagementTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\GenericBERuntimeManagementTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-runtime-management.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\CompositeRecordCondition\Definition\Templates\DataRecordTypeCompositeRecordConditionDefinitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinitiongroup.js" />
     <Content Include="VR_GenericData\Directives\CompositeRecordCondition\Definition\vr-genericdata-compositerecordconditiondefinition-settings.js" />
@@ -858,6 +871,8 @@
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\GenericRowEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\SectionEditor.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Definition\SectionEditorController.js" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityBulkActionsEditor.html" />
+    <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityBulkActionEditorController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityEditorUploaderController.js" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityManagement.html" />
     <Content Include="VR_GenericData\Views\GenericBusinessEntity\Runtime\GenericBusinessEntityManagementController.js" />

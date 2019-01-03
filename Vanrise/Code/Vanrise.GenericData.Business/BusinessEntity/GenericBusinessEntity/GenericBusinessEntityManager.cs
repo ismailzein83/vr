@@ -19,6 +19,7 @@ using Aspose.Cells;
 using Vanrise.GenericData.Entities.GenericRules;
 using System.Drawing;
 using System.IO;
+using Vanrise.BusinessProcess.Business;
 
 namespace Vanrise.GenericData.Business
 {
@@ -334,11 +335,14 @@ namespace Vanrise.GenericData.Business
                         DataRecordStorageIds = new List<Guid> { genericBEDefinitionSetting.DataRecordStorageId.Value },
                         Direction = OrderDirection.Descending,
                         LimitResult = input.Query.LimitResult,
+                        BusinessEntityDefinitionId=input.Query.BusinessEntityDefinitionId,
+                        BulkActionState=input.Query.BulkActionState
                         //SortColumns=,
                         //ToTime
                     },
                 });
 
+               
 
                 if (input.DataRetrievalResultType == DataRetrievalResultType.Excel)
                 {
@@ -702,6 +706,31 @@ namespace Vanrise.GenericData.Business
             return uploadOutput;
         }
 
+        public ExecuteGenericBEBulkActionProcessOutput ExecuteGenericBEBulkActions(ExecuteGenericBEBulkActionProcessInput input)
+        {
+            input.BulkActionFinalState.ThrowIfNull("input.BulkActionFinalState");
+            input.BulkActionFinalState.TargetItems.ThrowIfNull("input.BulkActionFinalState.TargetItems");
+            if (input.BulkActionFinalState.TargetItems.Count == 0 && !input.BulkActionFinalState.IsAllSelected)
+            {
+                return new ExecuteGenericBEBulkActionProcessOutput { Succeed = false, OutputMessage = "At least one business entity must be selected." };
+            }
+            int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+
+            GenericBEBulkActionProcessInput genericBEBulkActionProcessInput = new GenericBEBulkActionProcessInput()
+            {
+                BEDefinitionId = input.GenericBEDefinitionId,
+                BulkActions = input.GenericBEBulkActions,
+                BulkActionFinalState = input.BulkActionFinalState,
+                HandlingErrorOption = input.HandlingErrorOption,
+                UserId = userId
+            };
+            var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
+            {
+                InputArguments = genericBEBulkActionProcessInput
+            };
+            var result = new BPInstanceManager().CreateNewProcess(createProcessInput);
+            return new ExecuteGenericBEBulkActionProcessOutput { Succeed = true, ProcessInstanceId = result.ProcessInstanceId };
+        }
         private bool ParseExcel(long fileId, out string errorMessage, out List<ParsedGenericBERow> parsedExcel)
         {
             VRFileManager fileManager = new VRFileManager();

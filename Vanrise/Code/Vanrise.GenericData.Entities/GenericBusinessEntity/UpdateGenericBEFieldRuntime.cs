@@ -12,5 +12,8 @@ namespace Vanrise.GenericData.Entities
         public string Title { get; set; }
         public DataRecordFieldType Type { get; set; }
         public string RuntimeEditor { get; set; }
+        public Boolean IsRequired { get; set; }
+        public object DefaultValue { get; set; }
+        public UpdateGenericBEFieldState FieldState { get; set; }
     }
 }

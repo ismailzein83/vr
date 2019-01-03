@@ -145,6 +145,15 @@ namespace Vanrise.GenericData.Business
         bool IsErrorOccured { get; set; }
         GenericBEBulkActionSettings DefinitionSettings { get; set; }
     }
+    public class GenericBEBulkActionRuntimeSettingsContext : IGenericBEBulkActionRuntimeSettingsContext
+    {
+        public GenericBusinessEntity GenericBusinessEntity { get; set; }
+        public Guid BEDefinitionId { get; set; }
+        public string ErrorMessage { get; set; }
+        public bool IsErrorOccured { get; set; }
+        public GenericBEBulkActionSettings DefinitionSettings { get; set; }
+
+    }
 
     public abstract class GenericBEBulkActionRuntimeSettings
     {

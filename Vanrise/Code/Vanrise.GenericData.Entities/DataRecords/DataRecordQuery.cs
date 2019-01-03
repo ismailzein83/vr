@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
@@ -26,6 +27,9 @@ namespace Vanrise.GenericData.Entities
         public List<SortColumn> SortColumns { get; set; }
 
         public List<DataRecordFilter> Filters { get; set; }
+        public BulkActionState BulkActionState { get; set; }
+
+
     }
 
     public class DataRecordFilter

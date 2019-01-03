@@ -135,8 +135,13 @@ namespace Vanrise.GenericData.Web.Controllers
 			byte[] bytes = manager.DownloadBusinessEntityLog(fileID);
 			return GetExcelResponse(bytes, "ImportedResults.xls");
 		}
-		
 
+        [HttpPost]
+        [Route("ExecuteGenericBEBulkActions")]
+        public object ExecuteGenericBEBulkActions(ExecuteGenericBEBulkActionProcessInput input)
+        {
+            return _manager.ExecuteGenericBEBulkActions(input);
+        }
 
-	}
+    }
 }

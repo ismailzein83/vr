@@ -20,7 +20,7 @@ namespace Vanrise.GenericData.Business
     }
     public class GenericBEBulkActionRuntime
     {
-        public Guid AccountBulkActionId { get; set; }
+        public Guid GenericBEBulkActionId { get; set; }
         public GenericBEBulkActionRuntimeSettings Settings { get; set; }
     }
 }

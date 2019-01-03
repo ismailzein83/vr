@@ -146,5 +146,19 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetRemoteGenericBEDefinitionInfo(input);
         }
+
+        [HttpPost]
+        [Route("GetUpdateBulkActionGenericBEFieldsRuntime")]
+        public IEnumerable<UpdateGenericBEFieldRuntime> GetUpdateBulkActionGenericBEFieldsRuntime(GetUpdateBulkActionsRuntimeInput input)
+        {
+            return _manager.GetUpdateBulkActionGenericBEFieldsRuntime(input);
+        }
+        [HttpGet]
+        [Route("GetGenericBEBulkActionSettingsConfigs")]
+        public IEnumerable<GenericBEBulkActionSettingsConfig> GetGenericBEBulkActionSettingsConfigs()
+        {
+            return _manager.GetGenericBEBulkActionSettingsConfigs();
+        }
+
     }
 }

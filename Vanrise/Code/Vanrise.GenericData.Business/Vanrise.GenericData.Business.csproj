@@ -52,6 +52,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Business">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
@@ -78,6 +81,9 @@
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEExtendedSettingsContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEOnBeforeInsertHandlerContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEOnBeforeInsertHandlerInfoByTypeContext.cs" />
+    <Compile Include="BusinessEntity\GenericBusinessEntity\ExecuteGenericBEBulkActionProcessInput.cs" />
+    <Compile Include="BusinessEntity\GenericBusinessEntity\ExecuteGenericBEBulkActionProcessOutput.cs" />
+    <Compile Include="BusinessEntity\GenericBusinessEntity\GetGenericBEFieldRuntimeEditors.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEBulkActionProcessInput.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBusinessEntityDefinitionFilter.cs" />

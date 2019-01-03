@@ -130,7 +130,15 @@ namespace Vanrise.GenericData.Business
             }
             return dataRecordField;
         }
-
+        public DataRecordField GetDataRecordTypeIdField(Guid dataRecordTypeId)
+        {
+            var dataRecordType = GetDataRecordType(dataRecordTypeId);
+            var dataRecordTypeFields = GetDataRecordTypeFields(dataRecordTypeId);
+            dataRecordType.Settings.IdField.ThrowIfNull("dataRecordType.Settings.IdField");
+            var idDataRecordField = dataRecordTypeFields.FindRecord(x => x.Name == dataRecordType.Settings.IdField);
+            idDataRecordField.ThrowIfNull("idDataRecordField");
+            return idDataRecordField;
+        }
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypeInfo(DataRecordTypeInfoFilter filter)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();

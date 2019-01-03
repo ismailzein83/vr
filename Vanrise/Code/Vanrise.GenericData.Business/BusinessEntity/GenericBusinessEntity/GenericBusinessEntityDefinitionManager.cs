@@ -136,6 +136,41 @@ namespace Vanrise.GenericData.Business
             return dataRecordTypeFields;
         }
 
+  
+        public IEnumerable<UpdateGenericBEFieldRuntime> GetUpdateBulkActionGenericBEFieldsRuntime(GetUpdateBulkActionsRuntimeInput input)
+        {
+            List<UpdateGenericBEFieldRuntime> updateBulkActionRuntime = null;
+            if (input.Fields != null && input.Fields.Count > 0)
+            {
+                var dataRecordTypeFields = _dataRecordTypeManager.GetDataRecordTypeFields(input.DataRecordTypeId);
+                dataRecordTypeFields.ThrowIfNull("dataRecordTypeFields", input.DataRecordTypeId);
+                DataRecordFieldManager dataRecordFieldManager = new DataRecordFieldManager();
+                IEnumerable<DataRecordFieldTypeConfig> dataRecordTypeConfigs = dataRecordFieldManager.GetDataRecordFieldTypeConfigs();
+                updateBulkActionRuntime = new List<UpdateGenericBEFieldRuntime>();
+                foreach (var field in input.Fields)
+                {
+                    DataRecordFieldTypeConfig dataRecordTypeConfig = new DataRecordFieldTypeConfig();
+                    dataRecordTypeConfig = dataRecordTypeConfigs.FindRecord(x => x.ExtensionConfigurationId == dataRecordTypeFields.GetRecord(field.FieldName).Type.ConfigId);
+                    dataRecordTypeConfig.ThrowIfNull("dataRecordTypeConfig");
+                    var updateGenericBEFieldRuntime = new UpdateGenericBEFieldRuntime
+                    {
+                        Name = field.FieldName,
+                        RuntimeEditor = dataRecordTypeConfig.RuntimeEditor,
+                        IsRequired = field.IsRequired,
+                        DefaultValue = field.DefaultValue,
+                        FieldState = field.FieldState
+                    };
+                    var recordTypeFields = dataRecordTypeFields.GetRecord(field.FieldName);
+                    recordTypeFields.ThrowIfNull("dataRecordTypeFields of field name {0}", field.FieldName);
+                    updateGenericBEFieldRuntime.Title = recordTypeFields.Title;
+                    updateGenericBEFieldRuntime.Type = recordTypeFields.Type;
+
+                    updateBulkActionRuntime.Add(updateGenericBEFieldRuntime);
+                }
+            }
+            return updateBulkActionRuntime;
+        }
+
         public Dictionary<Guid, GenericBEAction> GetCachedGenericBEActionsByActionId(Guid businessEntityDefinitionId)
         {
             return new BusinessEntityDefinitionManager().GetCachedOrCreate(string.Format("GenericBusinessEntityDefinitionManager_GetGenericBEActionsById_{0}", businessEntityDefinitionId), () =>
@@ -256,6 +291,12 @@ namespace Vanrise.GenericData.Business
         {
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<GenericBESerialNumberPartSettingsConfig>(GenericBESerialNumberPartSettingsConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<GenericBEBulkActionSettingsConfig> GetGenericBEBulkActionSettingsConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<GenericBEBulkActionSettingsConfig>(GenericBEBulkActionSettingsConfig.EXTENSION_TYPE);
         }
 
         #endregion

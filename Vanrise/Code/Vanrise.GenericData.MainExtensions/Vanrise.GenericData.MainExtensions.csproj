@@ -97,6 +97,7 @@
     <Compile Include="GenericBusinessEntity\ActionFilterCondition\GenericFilterGroupCondition.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEActions\DeleteGenericBEAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEActions\EditGenericBEAction.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEBulkActions\UpdateGenericBEBulkActionRuntimeSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEBulkActions\UpdateGenericBEBulkAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEConditions\GenericFilterGroupCondition.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\LimitResultFilterDefinitionSettings.cs" />
