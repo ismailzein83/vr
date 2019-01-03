@@ -34,6 +34,8 @@ xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\TOne.DefaultData.PostDepl
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\TOne.AutoImportSPL.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\TOne_Ogero.PostDeployment.sql" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\TOne_Portal.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\TOne_Jazz.PostDeployment.sql" /y /v /z /i /Q /R				"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\TOne_Namibia.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 
 start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "Enumerations" "TOneV2"
 
