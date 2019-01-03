@@ -65,6 +65,7 @@
     <Compile Include="QueueExecutionFlowDefinitionDataManager.cs" />
     <Compile Include="QueueItemDataManager.cs" />
     <Compile Include="QueueItemHeaderDataManager.cs" />
+    <Compile Include="QueueItemIDGenDataManager.cs" />
     <Compile Include="QueueItemTypeDataManager.cs" />
     <Compile Include="QueueSubscriptionDataManager.cs" />
     <Compile Include="SummaryBatchActivatorDataManager.cs" />
