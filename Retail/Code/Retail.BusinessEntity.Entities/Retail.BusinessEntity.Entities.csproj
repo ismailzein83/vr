@@ -112,6 +112,7 @@
     <Compile Include="AccountStatusHistory\AccountStatusHistory.cs" />
     <Compile Include="AccountType\AccountTypeBESelectorFilter.cs" />
     <Compile Include="AccountDefinition\ExecuteAccountBulkActionProcessInput.cs" />
+    <Compile Include="Account\AccountCreditLimit.cs" />
     <Compile Include="Account\AccountFilter.cs" />
     <Compile Include="AccountSynchronizerHandler\AccountSynchronizerInsertHandler.cs" />
     <Compile Include="AccountSynchronizerHandler\AccountSynchronizerInsertHandlerConfig.cs" />
