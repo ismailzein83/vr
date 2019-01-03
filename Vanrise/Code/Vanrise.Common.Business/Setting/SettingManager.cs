@@ -15,6 +15,9 @@ namespace Vanrise.Common.Business
         {
             _securityContext = ContextFactory.GetContext();
         }
+
+        #region Public Methods
+
         public T GetSetting<T>(string type) where T : SettingData
         {
             var setting = GetCachedSettingsByType().GetRecord(type);
@@ -70,6 +73,7 @@ namespace Vanrise.Common.Business
 
             return cachedSettings.MapRecords(SettingInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
+
         public string GetSettingName(Setting setting)
         {
 
@@ -143,6 +147,8 @@ namespace Vanrise.Common.Business
             var setting = allSettings.GetRecord(settingId);
             if (setting != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(SettingLoggableEntity.Instance, setting);
+
+            setting.Data.PrepareSettingBeforeLoad(new SettingPrepareSettingBeforeLoadContext());
             return setting;
         }
 
@@ -151,6 +157,7 @@ namespace Vanrise.Common.Business
 
             return GetSetting(settingId, false);
         }
+
         public Setting GetSettingByType(string type)
         {
             var allSettings = GetCachedSettings();
@@ -173,6 +180,10 @@ namespace Vanrise.Common.Business
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, createObject);
         }
+
+        #endregion
+
+        #region Private Methods
 
         private Dictionary<Guid, Setting> GetCachedSettings()
         {
@@ -206,7 +217,20 @@ namespace Vanrise.Common.Business
             };
         }
 
+        private bool CheckIfFilterIsMatch(Setting setting, List<ISettingFilter> filters)
+        {
+            SettingFilterContext context = new SettingFilterContext { setting = setting };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
+        }
 
+        #endregion
+
+        #region Classes
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
@@ -217,17 +241,6 @@ namespace Vanrise.Common.Business
             {
                 return _dataManager.AreSettingsUpdated(ref _updateHandle);
             }
-        }
-
-        private bool CheckIfFilterIsMatch(Setting setting, List<ISettingFilter> filters)
-        {
-            SettingFilterContext context = new SettingFilterContext { setting = setting };
-            foreach (var filter in filters)
-            {
-                if (!filter.IsMatched(context))
-                    return false;
-            }
-            return true;
         }
 
         private class SettingLoggableEntity : VRLoggableEntityBase
@@ -275,7 +288,7 @@ namespace Vanrise.Common.Business
 
         }
 
-        SettingInfo SettingInfoMapper(Setting setting)
+        private SettingInfo SettingInfoMapper(Setting setting)
         {
             return new SettingInfo()
             {
@@ -284,7 +297,10 @@ namespace Vanrise.Common.Business
             };
         }
 
+        #endregion
+
         #region Security
+
         public bool DoesUserHaveUpdatePermission(Guid settingId)
         {
             var setting = GetSetting(settingId);
@@ -307,14 +323,17 @@ namespace Vanrise.Common.Business
         {
             return _securityContext.HasPermissionToActions("VRCommon/Settings/GetFilteredTechnicalSettings");
         }
+
         private bool HasUpdateTechnicalSettings()
         {
             return _securityContext.HasPermissionToActions("VRCommon/Settings/UpdateTechnicalSetting");
         }
+
         private bool HasGetTechnicalSettings()
         {
             return _securityContext.HasPermissionToActions("VRCommon/Settings/GetTechnicalSetting");
         }
+
         #endregion
     }
 
@@ -331,4 +350,7 @@ namespace Vanrise.Common.Business
 
     }
 
+    public class SettingPrepareSettingBeforeLoadContext: ISettingPrepareSettingBeforeLoadContext
+    {
+    }
 }

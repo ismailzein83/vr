@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Vanrise.Entities
 {
     public class Setting
@@ -29,21 +30,30 @@ namespace Vanrise.Entities
         {
             return true;
         }
+
         public virtual void OnBeforeSave(ISettingOnBeforeSaveContext context)
         {
         }
+
         public virtual void OnAfterSave(ISettingOnAfterSaveContext context)
         {
         }
+
+        public virtual void PrepareSettingBeforeLoad(ISettingPrepareSettingBeforeLoadContext context)
+        {
+        }
     }
+
     public interface ISettingDataValidationContext
     {
         string ErrorMessage { get; set; }
     }
+
     public class SettingDataValidationContext : ISettingDataValidationContext
     {
         public string ErrorMessage { get; set; }
     }
+
     public class SettingToEdit
     {
         public Guid SettingId { get; set; }
@@ -66,4 +76,8 @@ namespace Vanrise.Entities
 
     }
 
+    public interface ISettingPrepareSettingBeforeLoadContext
+    {
+
+    }
 }
