@@ -1841,6 +1841,7 @@ vr-section[collapsible] .panel-vr.panel-vr-child.light.hidden-title > .panel-bod
 .panel-vr .collapsible-container {
     border-top: 1px solid #ddd !important;
 }
+
 .panel-vr.panel-vr-child.light .collapsible-container .collapsible-icon {
     font-size: 12px;
     padding-right: unset;
@@ -1852,17 +1853,18 @@ vr-section[collapsible] .panel-vr.panel-vr-child.light.hidden-title > .panel-bod
     position: absolute;
     padding-left: 3px;
 }
+
 .panel-vr.panel-vr-child.light > .panel-heading {
     border-color: #ddd;
     padding: 0px 6px 0px 0px;
     margin-top: -27px;
 }
 
-.panel-vr.panel-vr-child.light > .panel-heading label {
-    padding: 0px 5px 0px 10px;
-    left: 5px;
-    top: 15px;
-}
+    .panel-vr.panel-vr-child.light > .panel-heading label {
+        padding: 0px 5px 0px 10px;
+        left: 5px;
+        top: 15px;
+    }
 /* panel-vr-child */
 .section-menu vr-button span {
     font-size: 11px !important;
@@ -2344,13 +2346,15 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     pointer-events: auto !important;
 }
 
-.divDisabled vr-select vr-validator > div button.dropdown-toggle {
-    pointer-events: none !important;
-}
+    .divDisabled vr-select vr-validator > div button.dropdown-toggle {
+        pointer-events: none !important;
+    }
+
 .divDisabled vr-select div.dropdown .vr-select-remove {
     pointer-events: none !important;
-    display:none !important;
+    display: none !important;
 }
+
 .divDisabled vr-validator > div .vr-dropdown-select {
     opacity: 0.8 !important;
 }
@@ -4077,7 +4081,7 @@ vr-overall-widget .list-group-item {
 /* end vr-tile*/
 
 /* start vr-drag-drop zone*/
-.vr-toolbox {
+.vr-toolbox, .vr-helpbox {
     border: solid;
     border: 1px solid #ccc;
     padding: 0px 5px;
@@ -4088,7 +4092,12 @@ vr-overall-widget .list-group-item {
     font-size: 12px;
 }
 
-    .vr-toolbox .item {
+.vr-toolbox, .vr-helpbox {
+    flex-wrap: wrap;
+    border: none;
+}
+
+    .vr-toolbox .item, .vr-helpbox .item {
         width: 100px;
         display: inline-block;
         margin: 2px;
@@ -4103,6 +4112,24 @@ vr-overall-widget .list-group-item {
         background-color: #20407d;
         color: #fff;
         text-align: center;
+    }
+
+    .vr-helpbox .item {
+        width: 120px;
+        color: #635F5F;
+        background-color: transparent;
+        text-align: left;
+        margin-top: 5px;
+        border: 0px solid #666;
+        cursor: default !important;
+        display:inline-flex;
+    }
+
+    .vr-helpbox .item .badge-color {
+        display: inline-block;
+        width: 20px;
+        height: 10px;
+        margin: 4px 3px;
     }
 
 vr-toolbox[medium] .item {
@@ -4308,9 +4335,9 @@ vr-datalist[scrollable] .datalist-container {
     background-color: #e9e9e9;
 }
 
-.vr-datagrid[alternative-color="true"] .vr-datagrid-body-odd .vr-datagrid-cell-container {
-    background-color: inherit !important;
-}
+    .vr-datagrid[alternative-color="true"] .vr-datagrid-body-odd .vr-datagrid-cell-container {
+        background-color: inherit !important;
+    }
 
 .vr-datagrid[alternative-color] .vr-datagrid-body > div:first-of-type:hover {
     background-color: #d7ebee !important;
