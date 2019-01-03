@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.DataParser.Data;
-using Vanrise.Caching;
-using Vanrise.Entities;
-using Vanrise.DataParser.Entities;
 using Vanrise.Common;
+using Vanrise.DataParser.Data;
+using Vanrise.DataParser.Entities;
+using Vanrise.Entities;
+
 namespace Vanrise.DataParser.Business
 {
     public class ParserTypeManager
@@ -80,8 +78,22 @@ namespace Vanrise.DataParser.Business
             return updateOperationOutput;
         }
 
-#endregion
+        #endregion
 
+        #region Private Methods
+
+        private Dictionary<Guid,ParserType> GetCachedParserTypes()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetParserTypes",
+              () =>
+              {
+                  IParserTypeDataManager dataManager = DataParserDataManagerFactory.GetDataManager<IParserTypeDataManager>();
+                  IEnumerable<ParserType> parserTypes = dataManager.GetParserTypes();
+                  return parserTypes.ToDictionary(p =>p.ParserTypeId, p => p);
+              });
+        }
+
+        #endregion
 
         #region Private Classes
 
@@ -95,19 +107,7 @@ namespace Vanrise.DataParser.Business
                 return _dataManager.AreParserTypesUpdated(ref _updateHandle);
             }
         }
-        #endregion
 
-        #region Private Methods
-        private Dictionary<Guid,ParserType> GetCachedParserTypes()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetParserTypes",
-              () =>
-              {
-                  IParserTypeDataManager dataManager = DataParserDataManagerFactory.GetDataManager<IParserTypeDataManager>();
-                  IEnumerable<ParserType> parserTypes = dataManager.GetParserTypes();
-                  return parserTypes.ToDictionary(p =>p.ParserTypeId, p => p);
-              });
-        }
         #endregion
 
         #region Mappers
@@ -118,7 +118,6 @@ namespace Vanrise.DataParser.Business
             parserTypeDetail.Entity = parserType;
             return parserTypeDetail;
         }
-
 
         #endregion
     }

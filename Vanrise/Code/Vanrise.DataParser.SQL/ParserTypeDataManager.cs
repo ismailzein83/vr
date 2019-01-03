@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 using Vanrise.DataParser.Entities;
-using Vanrise.Common;
+
 namespace Vanrise.DataParser.Data.SQL
 {
     public class ParserTypeDataManager : BaseSQLDataManager, IParserTypeDataManager
     { 
-        #region ctor
+        #region Properties/Ctor
+
         public ParserTypeDataManager()
             : base(GetConnectionStringName("DataParserDBConnStringKey", "DataParserDBConnString"))
         {
 
         }
+
         #endregion
+
+        #region Public Methods
 
         public List<Entities.ParserType> GetParserTypes()
         {
@@ -43,6 +44,8 @@ namespace Vanrise.DataParser.Data.SQL
             return (recordsEffected > 0);
         }
 
+        #endregion
+
         #region Mappers
 
         ParserType ParserTypeMapper(IDataReader reader)
@@ -55,6 +58,6 @@ namespace Vanrise.DataParser.Data.SQL
             };
         }
 
-        # endregion
+        #endregion
     }
 }
