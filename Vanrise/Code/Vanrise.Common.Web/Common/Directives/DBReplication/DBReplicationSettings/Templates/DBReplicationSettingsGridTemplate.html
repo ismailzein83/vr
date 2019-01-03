@@ -4,16 +4,17 @@
                  datasource="scopeModel.datasource"
                  menuactions="scopeModel.gridMenuActions"
                  ondeleterow="scopeModel.removeDBReplicationSetting"
-                 idfield="id"
-                 norowhighlightonclick="true" maxheight="300px">
+                 idfield="id" norowhighlightonclick="true" maxheight="300px">
 
-        <vr-datagridcolumn headertext="'Source Connection'" field="'SourceConnectionStringName'" disablesorting widthfactor="1"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Target Connection'" field="'TargetConnectionString'" disablesorting widthfactor="3"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Source Connection'" field="'SourceConnectionStringName'" disablesorting widthfactor="2"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Target Connection'" field="'TargetConnectionStringName'" disablesorting widthfactor="2"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Settings'" field="'DbDefinitions'" disablesorting widthfactor="3">
-            <span ng-repeat="dbDefinitions in dataItem.DbDefinitions">
-                '{{dbDefinitions.name}}'
-                <span ng-if="!$last">, </span>
-            </span>
+            <div style="white-space:normal">
+                <span ng-repeat="dbDefinitions in dataItem.DbDefinitions">
+                    '{{dbDefinitions.name}}'
+                    <span ng-if="!$last">, </span>
+                </span>
+            </div>            
         </vr-datagridcolumn>
     </vr-datagrid>
 </vr-validator>

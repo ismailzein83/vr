@@ -2,6 +2,7 @@
 using System.Activities;
 using System.Collections.Generic;
 using Vanrise.BusinessProcess;
+using Vanrise.Common.Business;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 
@@ -24,6 +25,7 @@ namespace Vanrise.Common.BP.Activities
             DBReplicationDefinition dbReplicatioDefinition = this.DBReplicatioDefinition.Get(context.ActivityContext);
 
             IDBReplicationDataManager dbReplicationDataManager = CommonDataManagerFactory.GetDataManager<IDBReplicationDataManager>();
+            VRConnectionManager vrConnectionManager = new VRConnectionManager();
 
             Dictionary<string, List<DBReplicationTableDetails>> dbReplicationTableDetailsListByTargetLinkedServer = new Dictionary<string, List<DBReplicationTableDetails>>();
             Dictionary<Guid, DBConnectionEntity> dbConnectionEntities = GetDBConnectionEntities(dbReplicationSettings);
@@ -31,7 +33,10 @@ namespace Vanrise.Common.BP.Activities
             foreach (var databaseDefinitionKvp in dbReplicatioDefinition.Settings.DatabaseDefinitions)
             {
                 Guid databaseDefinitionId = databaseDefinitionKvp.Key;
+
                 DBConnectionEntity dbConnectionEntity = dbConnectionEntities.GetRecord(databaseDefinitionId);
+                VRConnection vrConnection = vrConnectionManager.GetVRConnection(dbConnectionEntity.TargetConnectionId);
+                SQLConnection sqlConnection = vrConnection.Settings.CastWithValidate<SQLConnection>("SQLConnection", SQLConnection.s_ConfigId);
 
                 foreach (DBReplicationTableDefinition table in databaseDefinitionKvp.Value.Tables)
                 {
@@ -44,7 +49,7 @@ namespace Vanrise.Common.BP.Activities
                         TableSchema = table.TableSchema,
                         SourceConnectionStringName = dbConnectionEntity.SourceConnectionStringName,
                         TableName = table.TableName,
-                        TargetConnectionString = dbConnectionEntity.TargetConnectionString
+                        TargetConnectionString = sqlConnection.ConnectionString
                     };
 
                     List<DBReplicationTableDetails> dbReplicationTableDetailsList = dbReplicationTableDetailsListByTargetLinkedServer.GetOrCreateItem(dbReplicationTableDetails.TargetConnectionString);
@@ -75,7 +80,7 @@ namespace Vanrise.Common.BP.Activities
                 DBConnectionEntity dbConnectionEntity = new DBConnectionEntity()
                 {
                     SourceConnectionStringName = dbConnection.SourceConnectionStringName,
-                    TargetConnectionString = dbConnection.TargetConnectionString
+                    TargetConnectionId = dbConnection.TargetConnectionId
                 };
 
                 foreach (var setting in dbConnection.Settings)
@@ -88,7 +93,7 @@ namespace Vanrise.Common.BP.Activities
         {
             public string SourceConnectionStringName { get; set; }
 
-            public string TargetConnectionString { get; set; }
+            public Guid TargetConnectionId { get; set; }
         }
     }
 }

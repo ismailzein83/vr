@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
@@ -15,7 +12,7 @@ namespace Vanrise.Entities
     {
         public string SourceConnectionStringName { get; set; }
 
-        public string TargetConnectionString { get; set; }
+        public Guid TargetConnectionId { get; set; }
 
         public List<DBConnectionSettings> Settings { get; set; }
     }

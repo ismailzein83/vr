@@ -14,7 +14,8 @@ app.directive('vrCommonConnectionSelector', ['VRCommon_VRConnectionAPIService', 
                 ondeselectitem: "=",
                 isdisabled: "=",
                 hideremoveicon: '@',
-                normalColNum: '@'
+                normalColNum: '@',
+                customlabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -31,13 +32,6 @@ app.directive('vrCommonConnectionSelector', ['VRCommon_VRConnectionAPIService', 
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             template: function (element, attrs) {
                 return getConnectionTemplate(attrs);
             }
@@ -52,6 +46,10 @@ app.directive('vrCommonConnectionSelector', ['VRCommon_VRConnectionAPIService', 
                 label = "Connections";
                 multipleselection = "ismultipleselection";
             }
+
+            if (attrs.customlabel != undefined)
+                label = attrs.customlabel;
+
             var hideremoveicon="";
             if (attrs.hideremoveicon !=undefined) {
                 hideremoveicon="hideremoveicon";

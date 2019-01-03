@@ -2,17 +2,20 @@
 
     'use strict';
 
-    DbReplicationSettingsEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VRCommon_DBReplicationDefinitionAPIService'];
-    function DbReplicationSettingsEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VRCommon_DBReplicationDefinitionAPIService) {
+    DbReplicationSettingsEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+
+    function DbReplicationSettingsEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
         var dbReplicationSettingEntity;
         var dbReplicationDefinitionId;
         var selectedDBDefinitions;
-        var filter;
 
         var dbDefinitionSelectorAPI;
         var dbDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var connectionSelectorAPI;
+        var connectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -36,6 +39,11 @@
             $scope.scopeModel.onDBDefinitionSelectorReady = function (api) {
                 dbDefinitionSelectorAPI = api;
                 dbDefinitionSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onVRConnectionSelectorReady = function (api) {
+                connectionSelectorAPI = api;
+                connectionSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.save = function () {
@@ -62,10 +70,29 @@
             }
 
             function loadStaticData() {
-                if (dbReplicationSettingEntity != undefined) {
+                if (dbReplicationSettingEntity != undefined)
                     $scope.scopeModel.sourceConnectionStringName = dbReplicationSettingEntity.SourceConnectionStringName;
-                    $scope.scopeModel.targetConnectionString = dbReplicationSettingEntity.TargetConnectionString;
-                }
+            }
+
+            function loadVRConnectionSelector() {
+                var connectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                connectionSelectorReadyDeferred.promise.then(function () {
+                    var selectorPayload = {
+                        filter: {
+                            Filters: [{
+                                $type: "Vanrise.Common.Business.SQLConnectionFilter ,Vanrise.Common.Business"
+                            }]
+                        }
+                    };
+
+                    if (dbReplicationSettingEntity != undefined)
+                        selectorPayload.selectedIds = dbReplicationSettingEntity.TargetConnectionId;
+
+                    VRUIUtilsService.callDirectiveLoad(connectionSelectorAPI, selectorPayload, connectionSelectorLoadDeferred);
+                });
+
+                return connectionSelectorLoadDeferred.promise;
             }
 
             function loadDBDefinitionSelector() {
@@ -96,12 +123,10 @@
                 return dbDefinitionSelectorLoadDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDBDefinitionSelector]).then(function () {
-
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRConnectionSelector, loadDBDefinitionSelector]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
-            }).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
 
         }
@@ -125,10 +150,12 @@
         function buildDBReplicationSettingObjFromScope() {
             return {
                 SourceConnectionStringName: $scope.scopeModel.sourceConnectionStringName,
-                TargetConnectionString: $scope.scopeModel.targetConnectionString,
+                TargetConnectionStringName: $scope.scopeModel.selectedConnection.Name,
+                TargetConnectionId: connectionSelectorAPI.getSelectedIds(),
                 Settings: dbDefinitionSelectorAPI.getSelectedIds()
             };
         }
+
     }
 
     appControllers.controller('VR_Common_DbReplicationSettingsEditorController', DbReplicationSettingsEditorController);
