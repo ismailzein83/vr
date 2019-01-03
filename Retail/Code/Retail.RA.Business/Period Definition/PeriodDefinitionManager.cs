@@ -80,7 +80,7 @@ namespace Retail.RA.Business
                         PeriodDefinition periodDefinition = new PeriodDefinition
                         {
                             PeriodDefinitionId = (int)genericBusinessEntity.FieldValues.GetRecord("ID"),
-                            Name = genericBusinessEntity.FieldValues.GetRecord("Name") as string,
+                            Period = genericBusinessEntity.FieldValues.GetRecord("Period") as string,
                             FromDate = (DateTime)genericBusinessEntity.FieldValues.GetRecord("From"),
                             ToDate = (DateTime)genericBusinessEntity.FieldValues.GetRecord("To")
                         };

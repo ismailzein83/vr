@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Retail.RA.Business;
+using System;
 using System.Collections.Generic;
+
 
 namespace Retail.RA.Entities
 {
@@ -13,6 +15,9 @@ namespace Retail.RA.Entities
     public abstract class OperatorDeclarationServiceSettings
     {
         public abstract Guid ConfigId { get; }
+        public abstract TrafficDirection GetTrafficDirection();
+        public abstract ServiceType GetServiceType();
+
     }
 
     public class OperatorDeclarationServices
@@ -21,5 +26,10 @@ namespace Retail.RA.Entities
     }
     public class OperatorDeclarationServicesCollection : List<OperatorDeclarationService>
     {
+    }
+    public struct OperationDeclarationTrafficItem
+    {
+        public ServiceType ServiceType { get; set; }
+        public TrafficDirection TrafficDirection { get; set; }
     }
 }

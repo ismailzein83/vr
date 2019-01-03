@@ -19,4 +19,10 @@ namespace Retail.RA.Business
         OUT = 1
     }
 
+   public enum ServiceType
+    {
+        Voice = 0,
+        SMS = 1
+    }
+
 }

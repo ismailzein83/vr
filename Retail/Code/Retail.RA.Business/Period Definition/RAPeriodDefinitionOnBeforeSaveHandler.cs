@@ -26,10 +26,10 @@ namespace Retail.RA.Business
             var to = context.GenericBusinessEntity.FieldValues.GetRecord("To");
             if (to == null)
                 throw new NullReferenceException("to");
-            var currentName = context.GenericBusinessEntity.FieldValues.GetRecord("Name");
+            var currentName = context.GenericBusinessEntity.FieldValues.GetRecord("Period");
             var name = string.Join(" To ", ((DateTime)from).ToString(Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)), ((DateTime)to).ToString(Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date)));
             if (currentName == null)
-                context.GenericBusinessEntity.FieldValues.Add("Name", name);
+                context.GenericBusinessEntity.FieldValues.Add("Period", name);
             else
             {
                 currentName = name;
