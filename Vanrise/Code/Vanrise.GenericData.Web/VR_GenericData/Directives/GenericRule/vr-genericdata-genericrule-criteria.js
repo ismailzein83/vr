@@ -39,17 +39,17 @@
             function initializeController() {
 
                 $scope.criteriaDefinitionFields;
-                $scope.criteriaGroups = [];
-                $scope.remainingCriteriaFields = [];
+                $scope.criteria = [];
+                $scope.doGroupsExist = false;
                 $scope.onGroupCriteriaFieldSelectionChanged = function (selectedField) {
                     if (selectedField != undefined) {
                         if (groupCriteriaFieldSelectedPromise != undefined) {
                             groupCriteriaFieldSelectedPromise.resolve();
                         }
                         else {
-                            if ($scope.criteriaGroups != undefined && $scope.criteriaGroups.length > 0) {
-                                for (var i = 0; i < $scope.criteriaGroups.length; i++) {
-                                    var criteriaGroup = $scope.criteriaGroups[i];
+                            if ($scope.criteria != undefined && $scope.criteria.length > 0) {
+                                for (var i = 0; i < $scope.criteria.length; i++) {
+                                    var criteriaGroup = $scope.criteria[i];
                                     if (criteriaGroup.fields != undefined && criteriaGroup.fields.length > 0) {
                                         var field = UtilsService.getItemByVal(criteriaGroup.fields, selectedField.FieldName, 'FieldName');
                                         if (field != null) {
@@ -88,41 +88,37 @@
 
                 api.getData = function () {
                     var genericRuleCriteria;
-                    if ($scope.criteriaGroups != undefined && $scope.criteriaGroups.length > 0) {
-                        for (var i = 0; i < $scope.criteriaGroups.length; i++) {
-                            var criteriaGroup = $scope.criteriaGroups[i];
-                            if (criteriaGroup.fields != undefined) {
-                                for (var j = 0; j < criteriaGroup.fields.length; j++) {
-                                    var fieldGroup = criteriaGroup.fields[j];
-                                    var fieldGroupData = fieldGroup.runtimeEditor.directiveAPI.getData();
-                                    if (fieldGroupData != undefined) {
-                                        if (genericRuleCriteria == undefined) {
-                                            genericRuleCriteria = {};
-                                            genericRuleCriteria.FieldsValues = {};
-                                        }
-                                        genericRuleCriteria.FieldsValues[fieldGroup.FieldName] = fieldGroupData;
+                    if ($scope.criteria != undefined && $scope.criteria.length > 0) {
+                        for (var i = 0; i < $scope.criteria.length; i++) {
+                            var item = $scope.criteria[i];
+                            if (item.groupId != undefined) {
+                                if (item.fields != undefined && item.fields.length>0) {
+                                    for (var j = 0; j < item.fields.length; j++) {
+                                        var fieldGroup = item.fields[j];
+                                        var fieldGroupData = fieldGroup.runtimeEditor.directiveAPI.getData();
+                                        if (fieldGroupData != undefined) {
+                                            if (genericRuleCriteria == undefined) {
+                                                genericRuleCriteria = {};
+                                                genericRuleCriteria.FieldsValues = {};
+                                            }
+                                            genericRuleCriteria.FieldsValues[fieldGroup.FieldName] = fieldGroupData;
 
+                                        }
                                     }
                                 }
                             }
-                        }
-                    }
-                    if ($scope.remainingCriteriaFields != undefined && $scope.remainingCriteriaFields.length > 0) {
-                        for (var i = 0; i < $scope.remainingCriteriaFields.length; i++) {
-                            var remainingCriteriaField = $scope.remainingCriteriaFields[i];
-                            var remainingCriteriaFieldValue = remainingCriteriaField.runtimeEditor.directiveAPI.getData();
-                            if (remainingCriteriaFieldValue != undefined) {
-                                if (genericRuleCriteria == undefined) {
-                                    genericRuleCriteria = {};
-                                    genericRuleCriteria.FieldsValues = {};
+                            else {
+                                var fieldValue = item.runtimeEditor.directiveAPI.getData();
+                                if (fieldValue != undefined) {
+                                    if (genericRuleCriteria == undefined) {
+                                        genericRuleCriteria = {};
+                                        genericRuleCriteria.FieldsValues = {};
+                                    }
+                                    genericRuleCriteria.FieldsValues[item.FieldName] = fieldValue;
                                 }
-
-                                genericRuleCriteria.FieldsValues[remainingCriteriaField.FieldName] = remainingCriteriaFieldValue;
-
                             }
                         }
                     }
-
                     return genericRuleCriteria;
                 };
 
@@ -137,6 +133,8 @@
                     if (criteriaFieldsValues != undefined) {
                         groupCriteriaFieldSelectedPromise = UtilsService.createPromiseDeferred();
                     }
+                    if (payload.criteriaDefinitionGroups != undefined && payload.criteriaDefinitionGroups.length > 0)
+                        $scope.doGroupsExist = true;
 
                     loadAllFieldsPromiseDeferred.promise.then(function () {
                         for (var i = 0; i < $scope.criteriaFields.length; i++) {
@@ -147,7 +145,7 @@
                                     var criteriaDefinitionGroup = payload.criteriaDefinitionGroups[j];
                                     var criteriaDefField = UtilsService.getItemByVal(criteriaDefinitionGroup.Fields, criteriaField.FieldName, 'FieldName');
                                     if (criteriaDefField != undefined) {
-                                        var criteriaGroup = UtilsService.getItemByVal($scope.criteriaGroups, criteriaDefinitionGroup.GroupId, 'groupId');
+                                        var criteriaGroup = UtilsService.getItemByVal($scope.criteria, criteriaDefinitionGroup.GroupId, 'groupId');
                                         if (criteriaGroup != undefined) {
                                             var selectedFieldValue = criteriaFieldsValues != undefined ? criteriaFieldsValues[criteriaField.FieldName] : undefined;
                                             if (selectedFieldValue != undefined) {
@@ -155,7 +153,7 @@
                                             }
                                             criteriaGroup.fields.push(criteriaField);
                                         } else {
-                                            $scope.criteriaGroups.push({
+                                            $scope.criteria.push({
                                                 groupId: criteriaDefinitionGroup.GroupId,
                                                 groupTitle: criteriaDefinitionGroup.GroupTitle,
                                                 fields: [criteriaField],
@@ -166,9 +164,9 @@
                                     }
                                 }
                                 if (!belongToGroup)
-                                    $scope.remainingCriteriaFields.push(criteriaField);
+                                    $scope.criteria.push(criteriaField);
                             } else {
-                                $scope.remainingCriteriaFields.push(criteriaField);
+                                $scope.criteria.push(criteriaField);
                             }
                         }
                     });
