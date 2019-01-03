@@ -27,8 +27,15 @@ namespace Retail.BusinessEntity.MainExtensions.VRObjectTypes
                 case AccountCreditLimitField.ConvertedCreditLimit:
                     if(accountCreditLimit.CreditLimit.HasValue && accountCreditLimit.CreditLimitCurrencyId.HasValue && accountCreditLimit.AccountCurrencyId.HasValue)
                     {
-                        var creditClassManager = new CreditClassManager();
-                        return creditClassManager.GetConvertedCreditClassBalanceLimit(accountCreditLimit.CreditLimit.Value, accountCreditLimit.CreditLimitCurrencyId.Value, accountCreditLimit.AccountCurrencyId.Value);
+                        if (accountCreditLimit.CreditLimitCurrencyId.Value != accountCreditLimit.AccountCurrencyId.Value)
+                        {
+                            var creditClassManager = new CreditClassManager();
+                            return creditClassManager.GetConvertedCreditClassBalanceLimit(accountCreditLimit.CreditLimit.Value, accountCreditLimit.CreditLimitCurrencyId.Value, accountCreditLimit.AccountCurrencyId.Value);
+                        }
+                        else
+                        {
+                            return accountCreditLimit.CreditLimit.Value;
+                        }
                     }
                     break;
                 case AccountCreditLimitField.CreditLimit:
