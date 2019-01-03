@@ -94,10 +94,10 @@ namespace Retail.BusinessEntity.Business
             return (creditClass != null) ? creditClass.Name : null;
         }
 
-        public decimal GetConvertedCreditClassBalanceLimit(decimal balanceLimit, int currencyId)
+        public decimal GetConvertedCreditClassBalanceLimit(decimal balanceLimit, int fromCurrencyId, int toCurrencyId)
         {
             CurrencyExchangeRateManager exchangeRateManager = new CurrencyExchangeRateManager();
-            return exchangeRateManager.ConvertValueToCurrency(balanceLimit, currencyId, DateTime.Now);
+            return exchangeRateManager.ConvertValueToCurrency(balanceLimit, fromCurrencyId, toCurrencyId, DateTime.Now);
         }
 
         #endregion
