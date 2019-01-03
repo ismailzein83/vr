@@ -335,7 +335,6 @@ namespace Vanrise.GenericData.Business
                         DataRecordStorageIds = new List<Guid> { genericBEDefinitionSetting.DataRecordStorageId.Value },
                         Direction = OrderDirection.Descending,
                         LimitResult = input.Query.LimitResult,
-                        BusinessEntityDefinitionId=input.Query.BusinessEntityDefinitionId,
                         BulkActionState=input.Query.BulkActionState
                         //SortColumns=,
                         //ToTime
