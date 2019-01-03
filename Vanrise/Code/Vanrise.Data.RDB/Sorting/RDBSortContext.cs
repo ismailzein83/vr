@@ -8,15 +8,22 @@ namespace Vanrise.Data.RDB
 {
     public class RDBSortContext
     {
+        RDBQueryBuilderContext _queryBuilderContext;
         List<RDBSelectSortColumn> _columns;
         IRDBTableQuerySource _table;
         string _tableAlias;
 
-        internal RDBSortContext(List<RDBSelectSortColumn> columns, IRDBTableQuerySource table, string tableAlias)
+        internal RDBSortContext(RDBQueryBuilderContext queryBuilderContext, List<RDBSelectSortColumn> columns, IRDBTableQuerySource table, string tableAlias)
         {
+            _queryBuilderContext = queryBuilderContext;
             _columns = columns;
             _table = table;
             _tableAlias = tableAlias;
+        }
+
+        public RDBExpressionContext ByExpression(RDBSortDirection direction)
+        {
+            return new RDBExpressionContext(this._queryBuilderContext, (exp) => ByExpression(exp, direction), this._tableAlias);
         }
 
         public void ByExpression(BaseRDBExpression expression, RDBSortDirection direction)

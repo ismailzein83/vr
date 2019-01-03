@@ -156,7 +156,7 @@ namespace Vanrise.Data.RDB
             if (_sortContext == null)
             {
                 this._sortColumns = new List<RDBSelectSortColumn>();
-                _sortContext = new RDBSortContext(this._sortColumns, this._table, this._tableAlias);
+                _sortContext = new RDBSortContext(this._queryBuilderContext, this._sortColumns, this._table, this._tableAlias);
             }
             return _sortContext;
         }
