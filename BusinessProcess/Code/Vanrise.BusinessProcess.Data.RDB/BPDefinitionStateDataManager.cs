@@ -8,7 +8,7 @@ using Vanrise.Data.RDB;
 
 namespace Vanrise.BusinessProcess.Data.RDB
 {
-    public class BPDataManager : IBPDataManager
+    public class BPDefinitionStateDataManager : IBPDefinitionStateDataManager
     {
         static string TABLE_NAME = "bp_BPDefinitionState";
         static string TABLE_ALIAS = "DefState";
@@ -17,7 +17,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
         const string COL_ObjectKey = "ObjectKey";
         const string COL_ObjectValue = "ObjectValue";
 
-        static BPDataManager()
+        static BPDefinitionStateDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_DefinitionID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });

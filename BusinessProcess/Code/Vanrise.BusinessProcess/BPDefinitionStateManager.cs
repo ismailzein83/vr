@@ -1,34 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Vanrise.BusinessProcess.Data;
-using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.BusinessProcess
 {
-    public class ProcessManager
+    public class BPDefinitionStateManager
     {
         #region BP Transaction Methods
 
         public T GetDefinitionObjectState<T>(Guid definitionId, string objectKey)
         {
-            IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
+            IBPDefinitionStateDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionStateDataManager>();
             return dataManager.GetDefinitionObjectState<T>(definitionId, objectKey);
         }
 
         public void SaveDefinitionObjectState(Guid definitionId, string objectKey, object objectValue)
         {
-            IBPDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDataManager>();
+            IBPDefinitionStateDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPDefinitionStateDataManager>();
             if (dataManager.UpdateDefinitionObjectState(definitionId, objectKey, objectValue) <= 0)
                 dataManager.InsertDefinitionObjectState(definitionId, objectKey, objectValue);
         }
 
         #endregion
-
-        #region Private Methods
-
-        #endregion
-
     }
 }

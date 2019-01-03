@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Activities;
+﻿using System.Activities;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
-
     public sealed class SaveDefinitionObjectState : CodeActivity
     {
         public InArgument<string> ObjectKey { get; set; }
@@ -17,8 +12,8 @@ namespace Vanrise.BusinessProcess.WFActivities
         protected override void Execute(CodeActivityContext context)
         {
             var sharedData = context.GetSharedInstanceData();
-            ProcessManager processManager = new ProcessManager();
-            processManager.SaveDefinitionObjectState(sharedData.InstanceInfo.DefinitionID, this.ObjectKey.Get(context), this.ObjectValue.Get(context));
+            BPDefinitionStateManager bpDefinitionStateManager = new BPDefinitionStateManager();
+            bpDefinitionStateManager.SaveDefinitionObjectState(sharedData.InstanceInfo.DefinitionID, this.ObjectKey.Get(context), this.ObjectValue.Get(context));
         }
     }
 }

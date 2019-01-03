@@ -1,7 +1,8 @@
 ﻿using System;
+
 namespace Vanrise.BusinessProcess.Data
 {
-    public interface IBPDataManager : IDataManager
+    public interface IBPDefinitionStateDataManager : IDataManager
     {
         T GetDefinitionObjectState<T>(Guid definitionId, string objectKey);
 

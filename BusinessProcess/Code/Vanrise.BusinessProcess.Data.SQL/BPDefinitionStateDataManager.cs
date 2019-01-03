@@ -4,9 +4,9 @@ using Vanrise.Common;
 
 namespace Vanrise.BusinessProcess.Data.SQL
 {
-    internal class BPDataManager : BaseSQLDataManager, IBPDataManager
+    internal class BPDefinitionStateDataManager : BaseSQLDataManager, IBPDefinitionStateDataManager
     {
-        public BPDataManager()
+        public BPDefinitionStateDataManager()
             : base(GetConnectionStringName("BusinessProcessDBConnStringKey", "BusinessProcessDBConnString"))
         {
         }

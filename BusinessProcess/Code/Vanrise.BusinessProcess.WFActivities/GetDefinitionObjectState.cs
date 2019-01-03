@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Activities;
+﻿using System.Activities;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
-
     public sealed class GetDefinitionObjectState<T> : CodeActivity<T>
     {
         public InArgument<string> ObjectKey { get; set; }
@@ -14,8 +9,8 @@ namespace Vanrise.BusinessProcess.WFActivities
         protected override T Execute(CodeActivityContext context)
         {
             var sharedData = context.GetSharedInstanceData();
-            ProcessManager processManager = new ProcessManager();
-            return processManager.GetDefinitionObjectState<T>(sharedData.InstanceInfo.DefinitionID, this.ObjectKey.Get(context));
+            BPDefinitionStateManager bpDefinitionStateManager = new BPDefinitionStateManager();
+            return bpDefinitionStateManager.GetDefinitionObjectState<T>(sharedData.InstanceInfo.DefinitionID, this.ObjectKey.Get(context));
         }
     }
 }
