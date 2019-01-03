@@ -12,6 +12,6 @@ AS
 BEGIN
 	SELECT top(@LastInvoices)	ID,InvoiceTypeID,PartnerID,SplitInvoiceGroupId,SettlementInvoiceId,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,PaidDate,IsAutomatic,UserId,Settings,CreatedTime,LockDate,Notes, SourceId,InvoiceSettingId,SentDate,NeedApproval,ApprovedBy,ApprovedTime
 	FROM	VR_Invoice.Invoice with(nolock)
-	where	InvoiceTypeID = @InvoiceTypeId  AND  PartnerID = @PartnerId  AND ISNULL( IsDraft,0) = 0 AND (@BeforeDate IS NULL OR CreatedTime <@BeforeDate) AND ISNULL( IsDeleted,0) = 0
-	Order by ID desc
+	where	InvoiceTypeID = @InvoiceTypeId  AND  PartnerID = @PartnerId  AND ISNULL( IsDraft,0) = 0 AND (@BeforeDate IS NULL OR FromDate <@BeforeDate) AND ISNULL( IsDeleted,0) = 0
+	Order by FromDate desc
 END
