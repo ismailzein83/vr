@@ -1,15 +1,13 @@
 ﻿using System;
+using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Activities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
 
 namespace Vanrise.BEBridge.BP.Activities
 {
-
     public class ReadSourceBEsInput
     {
         public SourceBEReader SourceReader { get; set; }
@@ -22,27 +20,33 @@ namespace Vanrise.BEBridge.BP.Activities
     {
         public object ReaderState { get; set; }
     }
+
     public sealed class ReadSourceBEs : DependentAsyncActivity<ReadSourceBEsInput, ReadSourceBEsOutput>
     {
         [RequiredArgument]
         public InArgument<SourceBEReader> SourceReader { get; set; }
+
         [RequiredArgument]
         public InOutArgument<BaseQueue<SourceBatches>> SourceBatches { get; set; }
+
         [RequiredArgument]
         public InArgument<List<BaseQueue<BatchProcessingContext>>> OutputQueues { get; set; }
+
         [RequiredArgument]
         public InArgument<Guid> BeDefinitionId { get; set; }
+
         [RequiredArgument]
         public OutArgument<object> ReaderState { get; set; }
+
         protected override ReadSourceBEsOutput DoWorkWithResult(ReadSourceBEsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            ProcessManager processManager = new ProcessManager();
+            BPDefinitionStateManager bpDefinitionStateManager = new BPDefinitionStateManager();
 
             List<BatchProcessingContext> pendingBatchProcessings = new List<BatchProcessingContext>();
             Action<SourceBEBatch, SourceBEBatchRetrievedContext> onSourceBEBatchRetrieved = (sourceBEBatch, sourceRetrievedContext) =>
             {
                 handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Source BE file {0} read.", sourceBEBatch.BatchName);
-                var batchProcessContext = new BatchProcessingContext(sourceBEBatch, inputArgument.SourceReader, inputArgument.OutputQueues,inputArgument.BeDefinitionId);
+                var batchProcessContext = new BatchProcessingContext(sourceBEBatch, inputArgument.SourceReader, inputArgument.OutputQueues, inputArgument.BeDefinitionId);
                 lock (pendingBatchProcessings)
                 {
                     pendingBatchProcessings.Add(batchProcessContext);
@@ -54,7 +58,7 @@ namespace Vanrise.BEBridge.BP.Activities
             SourceBEReaderRetrieveUpdatedBEsContext sourceBEReaderContext =
                new SourceBEReaderRetrieveUpdatedBEsContext(onSourceBEBatchRetrieved)
                {
-                   ReaderState = processManager.GetDefinitionObjectState<object>(handle.SharedInstanceData.InstanceInfo.DefinitionID, inputArgument.BeDefinitionId.ToString())
+                   ReaderState = bpDefinitionStateManager.GetDefinitionObjectState<object>(handle.SharedInstanceData.InstanceInfo.DefinitionID, inputArgument.BeDefinitionId.ToString())
                };
             sourceBEReaderContext.BEReceiveDefinitionId = inputArgument.BeDefinitionId;
             inputArgument.SourceReader.RetrieveUpdatedBEs(sourceBEReaderContext);
@@ -94,6 +98,7 @@ namespace Vanrise.BEBridge.BP.Activities
                 ReaderState = sourceBEReaderContext.ReaderState
             };
         }
+
         protected override ReadSourceBEsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new ReadSourceBEsInput
@@ -104,12 +109,14 @@ namespace Vanrise.BEBridge.BP.Activities
                 BeDefinitionId = this.BeDefinitionId.Get(context)
             };
         }
+
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.SourceBatches.Get(context) == null)
                 this.SourceBatches.Set(context, new MemoryQueue<SourceBatches>());
             base.OnBeforeExecute(context, handle);
         }
+
         protected override void OnWorkComplete(AsyncCodeActivityContext context, ReadSourceBEsOutput result)
         {
             this.ReaderState.Set(context, result.ReaderState);
@@ -119,8 +126,11 @@ namespace Vanrise.BEBridge.BP.Activities
 
         private class SourceBEReaderRetrieveUpdatedBEsContext : ISourceBEReaderRetrieveUpdatedBEsContext
         {
-
             Action<SourceBEBatch, SourceBEBatchRetrievedContext> _onSourceBEBatchRetrieved;
+
+            public object ReaderState { get; set; }
+
+            public Guid BEReceiveDefinitionId { get; set; }
 
             public SourceBEReaderRetrieveUpdatedBEsContext(Action<SourceBEBatch, SourceBEBatchRetrievedContext> onSourceBeBatchRetrieved)
             {
@@ -131,21 +141,8 @@ namespace Vanrise.BEBridge.BP.Activities
             {
                 _onSourceBEBatchRetrieved(sourceBEs, context);
             }
-
-            public object ReaderState
-            {
-                get;
-                set;
-            }
-
-            public Guid BEReceiveDefinitionId
-            {
-                get;
-                set;
-            }
         }
 
         #endregion
     }
-
 }

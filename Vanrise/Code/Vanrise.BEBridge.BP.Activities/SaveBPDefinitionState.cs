@@ -17,13 +17,15 @@ namespace Vanrise.BEBridge.BP.Activities
     {
         [RequiredArgument]
         public InArgument<Guid> BeDefinitionId { get; set; }
+
         [RequiredArgument]
         public InArgument<object> ReaderState { get; set; }
+
         protected override void DoWork(SaveBPDefinitionStateInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            ProcessManager processManager = new ProcessManager();
+            BPDefinitionStateManager bpDefinitionStateManager = new BPDefinitionStateManager();
             if (inputArgument.ReaderState != null)
-                processManager.SaveDefinitionObjectState(handle.SharedInstanceData.InstanceInfo.DefinitionID, inputArgument.BeDefinitionId.ToString(), inputArgument.ReaderState);
+                bpDefinitionStateManager.SaveDefinitionObjectState(handle.SharedInstanceData.InstanceInfo.DefinitionID, inputArgument.BeDefinitionId.ToString(), inputArgument.ReaderState);
         }
 
         protected override SaveBPDefinitionStateInput GetInputArgument2(AsyncCodeActivityContext context)
