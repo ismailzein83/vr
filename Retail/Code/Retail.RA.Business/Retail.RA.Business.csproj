@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\INTLReconcilationObjectDataProviderSettings.cs" />
+    <Compile Include="MNC\MNCSettingsCustomObjectTypeSettings.cs" />
     <Compile Include="OperatorDeclarationServices\SMS.cs" />
     <Compile Include="OperatorDeclarationServices\Voice.cs" />
     <Compile Include="OperatorDeclaration\IcxOperatorDeclarationManager.cs" />
