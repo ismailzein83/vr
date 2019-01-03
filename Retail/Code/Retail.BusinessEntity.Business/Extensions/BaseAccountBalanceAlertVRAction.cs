@@ -86,8 +86,8 @@ namespace Retail.BusinessEntity.Business
                                 AccountCurrencyId = accountPayment.CurrencyId,
                             };
                             var systemCurrency = new CurrencyManager().GetSystemCurrency();
-                            if (systemCurrency != null)
-                                accountCreditLimit.CreditLimitCurrencyId = systemCurrency.CurrencyId;
+                            systemCurrency.ThrowIfNull("systemCurrency");
+                            accountCreditLimit.CreditLimitCurrencyId = systemCurrency.CurrencyId;
                             return accountCreditLimit;
                         }
                     }

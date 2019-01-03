@@ -766,7 +766,7 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
                         foreach (var accountNode in allAccountNodes.Values)
                         {
                             if (!accountNode.Account.ParentAccountId.HasValue)//start from only root nodes
-                                AddAccountNodeFinancialAccounts(accountNode, allFinancialAccountsData);
+                                AddAccountNodeFinancialAccounts(accountNode, allFinancialAccountsData, accountDefinitionId);
                         }
                     }
 
@@ -803,13 +803,13 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
                 });
         }
 
-        private void AddAccountNodeFinancialAccounts(AccountTreeNode accountNode, Dictionary<long, List<FinancialAccountData>> allFinancialAccountsData)
+        private void AddAccountNodeFinancialAccounts(AccountTreeNode accountNode, Dictionary<long, List<FinancialAccountData>> allFinancialAccountsData, Guid accountBEDefinitionId)
         {
             List<FinancialAccountData> financialAccounts = allFinancialAccountsData.GetOrCreateItem(accountNode.Account.AccountId);
             AccountBEFinancialAccountsSettings accountFinancialAccountsSettings = s_accountManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(accountNode.Account);
             if (accountFinancialAccountsSettings != null && accountFinancialAccountsSettings.FinancialAccounts != null && accountFinancialAccountsSettings.FinancialAccounts.Count > 0)
             {
-                financialAccounts.AddRange(accountFinancialAccountsSettings.FinancialAccounts.Select(itm => CreateFinancialAccountData(itm, accountNode.Account)));
+                financialAccounts.AddRange(accountFinancialAccountsSettings.FinancialAccounts.Select(itm => CreateFinancialAccountData(itm, accountNode.Account, accountBEDefinitionId)));
             }
 
             if (accountNode.ChildNodes != null && accountNode.ChildNodes.Count > 0)
@@ -832,23 +832,14 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
                                 IsInherited = true
                             }).ToList());
                     }
-                    AddAccountNodeFinancialAccounts(childNode, allFinancialAccountsData);
+                    AddAccountNodeFinancialAccounts(childNode, allFinancialAccountsData, accountBEDefinitionId);
                 }
             }
         }
 
-        private FinancialAccountData CreateFinancialAccountData(FinancialAccount financialAccount, Account account, Guid? accountBEDefinitionId = null)
+        private FinancialAccountData CreateFinancialAccountData(FinancialAccount financialAccount, Account account, Guid accountBEDefinitionId)
         {
             var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
-            int? accountCurrencyId = null;
-            if (accountBEDefinitionId.HasValue)
-            {
-                IAccountPayment accountPayment;
-                var accountBEManager = new AccountBEManager();
-                accountBEManager.HasAccountPayment(accountBEDefinitionId.Value, true, account, out accountPayment);
-                if (accountPayment != null)
-                    accountCurrencyId = accountPayment.CurrencyId;
-            }
             var financialAccountData = new FinancialAccountData
             {
                 FinancialAccountId = GetFinancialAccountId(account.AccountId, financialAccount.SequenceNumber),
@@ -856,8 +847,10 @@ VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
                 Account = account,
                 BalanceAccountTypeId = financialAccountDefinitionSettings.BalanceAccountTypeId,
                 InvoiceTypeIds = financialAccountDefinitionSettings.InvoiceTypes != null ? financialAccountDefinitionSettings.InvoiceTypes.MapRecords(x => x.InvoiceTypeId).ToList() : null,
-                AccountCurrencyId = accountCurrencyId
             };
+            IAccountPayment accountPayment;
+            if (s_accountManager.HasAccountPayment(accountBEDefinitionId, true, account, out accountPayment))
+                financialAccountData.AccountCurrencyId = accountPayment.CurrencyId;
             financialAccount.ExtendedSettings.ThrowIfNull("financialAccount.ExtendedSettings", financialAccountData.FinancialAccountId);
             var fillExtraDataContext = new FinancialAccountFillExtraDataContext
             {
