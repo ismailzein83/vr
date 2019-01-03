@@ -45,7 +45,17 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBalanceFieldSource
 
                         var financialAccountData = financialAccountManager.GetFinancialAccountData(accountBEDefinitionId, context.AccountBalance.AccountId);
                         financialAccountData.ThrowIfNull("financialAccountData");
-                        return financialAccountData.CreditLimit;
+                        if (financialAccountData.CreditLimitCurrencyId.HasValue && financialAccountData.CreditLimit.HasValue && financialAccountData.AccountCurrencyId.HasValue)
+                        {
+                            if (financialAccountData.CreditLimitCurrencyId.Value != financialAccountData.AccountCurrencyId.Value)
+                                return new CreditClassManager().GetConvertedCreditClassBalanceLimit(financialAccountData.CreditLimit.Value, financialAccountData.CreditLimitCurrencyId.Value, financialAccountData.AccountCurrencyId.Value);
+                            else
+                                return financialAccountData.CreditLimit.Value;
+                        }
+                        else
+                        {
+                            return financialAccountData.CreditLimit;
+                        }
                 }
             }
             return null;
