@@ -21,8 +21,8 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
                 ondeselectitem: "=",
 				customvalidate: '=',
 				onbeforeselectionchanged: '=',
-				ondeselectallitems: '='
-
+                ondeselectallitems: '=',
+                hideSelectAll: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -64,12 +64,15 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
             var hideselectedvaluessection = "";
             if (attrs.hideselectedvaluessection != undefined)
                 hideselectedvaluessection = "hideselectedvaluessection";
+            var hideSelectAll = "";
+            if (attrs.hideSelectAll != undefined)
+                hideSelectAll = "hideSelectAll";
             var multipleselection = "";
             if (attrs.ismultipleselection != undefined)
                 multipleselection = "ismultipleselection";
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-			return ' <vr-select  datasource="ctrl.datasource" customvalidate="ctrl.customvalidate" on-ready="ctrl.onSelectorReady" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' ' +hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' +disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Title" datavaluefield="Name" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ondeselectallitems="ctrl.ondeselectallitems"'
+            return ' <vr-select  datasource="ctrl.datasource" customvalidate="ctrl.customvalidate" on-ready="ctrl.onSelectorReady" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' ' + hideSelectAll +' onselectionchanged="ctrl.onselectionchanged" datatextfield="Title" datavaluefield="Name" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ondeselectallitems="ctrl.ondeselectallitems"' + 
 				+ 'entityname="Field" ' + label + ' ' + multipleselection + ' onbeforeselectionchanged="ctrl.onbeforeselectionchanged"></vr-select>';
 
         }
@@ -117,7 +120,6 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
                         if (selectedIds != undefined)
                             VRUIUtilsService.setSelectedValues(selectedIds, 'Name', $attrs, ctrl);
                     });
-                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getSelectedIds = function () {

@@ -65,11 +65,20 @@
         function GetRemoteGenericBEDefinitionInfo(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetRemoteGenericBEDefinitionInfo'), input);
         }
+
+        function GetUpdateBulkActionGenericBEFieldsRuntime(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetUpdateBulkActionGenericBEFieldsRuntime'), input);
+        }
+
         function GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs"));
         }
-
+        
+        function GetGenericBEBulkActionSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEBulkActionSettingsConfigs"));
+        }
         return ({
+            
             GetGenericBEDefinitionSettings: GetGenericBEDefinitionSettings,
             GetGenericBEGridDefinition: GetGenericBEGridDefinition,
             GetGenericBEGridColumnAttributes: GetGenericBEGridColumnAttributes,
@@ -88,7 +97,9 @@
             GetGenericBusinessEntityRuntimeInfo: GetGenericBusinessEntityRuntimeInfo,
             GenericBEActionFilterConditionConfigs: GenericBEActionFilterConditionConfigs,
             GetRemoteGenericBEDefinitionInfo: GetRemoteGenericBEDefinitionInfo,
-            GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs: GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs
+            GetUpdateBulkActionGenericBEFieldsRuntime: GetUpdateBulkActionGenericBEFieldsRuntime,
+            GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs: GetGenericBEOnBeforeGetFilteredHandlerSettingsConfigs,
+            GetGenericBEBulkActionSettingsConfigs: GetGenericBEBulkActionSettingsConfigs
         });
     }
     appControllers.service("VR_GenericData_GenericBEDefinitionAPIService", genericBusinessEntityDefinitionAPIService);

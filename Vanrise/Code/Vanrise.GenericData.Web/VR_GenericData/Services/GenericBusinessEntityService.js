@@ -11,7 +11,8 @@
             editGenericBusinessEntity: editGenericBusinessEntity,
             defineGenericBEViewTabs: defineGenericBEViewTabs,
 			uploadGenericBusinessEntity:uploadGenericBusinessEntity,
-            getEntityUniqueName: getEntityUniqueName
+            getEntityUniqueName: getEntityUniqueName,
+            openBulkActionsEditor: openBulkActionsEditor
          //   getDrillDownDefinition: getDrillDownDefinition
 
         });
@@ -116,6 +117,22 @@
   
         function getEntityUniqueName(businessEntityDefinitionId) {
             return "VR_GenericData_GenericBusinessEntity_"+ businessEntityDefinitionId;
+        }
+
+        function openBulkActionsEditor(viewId, bulkAction, businessEntityDefinitionId,dataRecordTypeId) {
+            var parameters = {
+                viewId: viewId,
+                bulkAction: bulkAction,
+                businessEntityDefinitionId: businessEntityDefinitionId,
+                dataRecordTypeId: dataRecordTypeId
+            };
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityBulkActionsEditor.html', parameters, settings);
         }
 
         //function registerObjectTrackingDrillDownToGenericBusinessEntity() {

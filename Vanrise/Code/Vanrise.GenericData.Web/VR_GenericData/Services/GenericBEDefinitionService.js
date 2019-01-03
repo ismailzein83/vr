@@ -10,6 +10,7 @@
         var tabModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBETabContainerEditorController.html";
         var basicAdvancefilterModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBEFilterDefinition/Templates/BasicAdvancedFilterEditor.html";
         var actionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionEditor.html";
+        var bulkActionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBEBulkActionDefinition/Templates/GenericBEBulkActionDefinitionEditor.html";
         var gridActionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/GridActionDefinitionEditor.html";
         var conditionalHandlerPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/OnAfterSaveHandler/Templates/AfterSaveHandlerConditionalEditor.html";
         var conditionGroupPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBESaveCondition/MainExtensions/Templates/GenericBEConditionGroupEditor.html";
@@ -33,8 +34,9 @@
             addGenericBEConditionGroup: addGenericBEConditionGroup,
             editGenericBEConditionGroup: editGenericBEConditionGroup,
             addGenericBESerialNumberPart: addGenericBESerialNumberPart,
-            editGenericBESerialNumberPart:editGenericBESerialNumberPart
-
+            editGenericBESerialNumberPart: editGenericBESerialNumberPart,
+            addGenericBEBulkActionDefinition: addGenericBEBulkActionDefinition,
+            editGenericBEBulkActionDefinition: editGenericBEBulkActionDefinition
         });
 
         function addGenericBEColumnDefinition(onGenericBEColumnDefinitionAdded, context) {
@@ -292,6 +294,37 @@
                 modalScope.onGenericBESerialNumberPartUpdated = onGenericBESerialNumberPartUpdated;
             };
             VRModalService.showModal(partDefinitionPath, parameters, settings);
+        }
+
+        function addGenericBEBulkActionDefinition(genericBEDefinitionId, onGenericBEBulkActionAdded, context) {
+            var parameters = {
+                genericBEDefinitionId: genericBEDefinitionId,
+                context: context
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEBulkActionAdded = onGenericBEBulkActionAdded;
+            };
+
+            VRModalService.showModal(bulkActionModalPath, parameters, settings);
+        }
+
+        function editGenericBEBulkActionDefinition(genericBEBulkActionEntity, genericBEDefinitionId, onGenericBEBulkActionUpdated, context) {
+            var parameters = {
+                genericBEDefinitionId: genericBEDefinitionId,
+                genericBEBulkActionEntity: genericBEBulkActionEntity,
+                context: context
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEBulkActionUpdated = onGenericBEBulkActionUpdated;
+            };
+
+            VRModalService.showModal(bulkActionModalPath, parameters, settings);
         }
 
     };

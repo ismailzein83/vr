@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRUIUtilsService', 'UtilsService', 'VR_GenericData_GenericBEActionService', 'VR_GenericData_GenericBusinessEntityService'];
+    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRUIUtilsService', 'UtilsService', 'VR_GenericData_GenericBEActionService', 'VR_GenericData_GenericBusinessEntityService','VRCommon_VRBulkActionDraftService'];
 
-    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBEDefinitionAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityAPIService, VRUIUtilsService, UtilsService, VR_GenericData_GenericBEActionService, VR_GenericData_GenericBusinessEntityService) {
+    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBEDefinitionAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityAPIService, VRUIUtilsService, UtilsService, VR_GenericData_GenericBEActionService, VR_GenericData_GenericBusinessEntityService, VRCommon_VRBulkActionDraftService) {
         return {
             restrict: 'E',
             scope: {
@@ -30,6 +30,10 @@
             var genericBEGridViews = [];
             var fieldValues;
             var idFieldType;
+            var bulkActionId;
+            var bulkActionDraftInstance;
+            var context;
+            var gridQuery;
 
             var gridAPI;
             var gridAPIPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -63,21 +67,43 @@
                     gridAPIPromiseDeferred.resolve();
                 };
 
+                $scope.scopeModel.showDirectiveTabs = function () {
+                    if (bulkActionId != undefined) return false;
+                    return true;
+                };
+
+
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_GenericData_GenericBusinessEntityAPIService.GetFilteredGenericBusinessEntities(dataRetrievalInput).then(function (response) {
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                var genericBusinessEntity = response.Data[i];
-                                VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEGridViews, idFieldType);
-                                VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType, fieldValues);
+                                var businessEntity = response.Data[i]; 
+                                if (bulkActionId != undefined && idFieldType != undefined && idFieldType.Name != undefined) {
+                                    businessEntity.isSelected = bulkActionDraftInstance.isItemSelected(businessEntity.FieldValues[idFieldType.Name].Value);
+                                } else {
+
+                                    VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, businessEntity, gridAPI, genericBEGridViews, idFieldType);
+                                    VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, businessEntity, gridAPI, genericBEActions, genericBEGridActions, genericBEGridViews, idFieldType, fieldValues);
+                                }
                             }
                         }
                         onResponseReady(response);
 
+                        if (bulkActionId != undefined) {
+                            bulkActionDraftInstance.reEvaluateButtonsStatus();
+                        }
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
+
+
+                $scope.scopeModel.onBusinessEntitySelect = function (businessEntity) {
+                    if (bulkActionDraftInstance != undefined && idFieldType != undefined && idFieldType.Name !=undefined) {
+                        bulkActionDraftInstance.onSelectItem({ ItemId: businessEntity.FieldValues[idFieldType.Name].Value }, businessEntity.isSelected);
+                    }
+                };
+
                 defineAPI();
             }
 
@@ -90,12 +116,13 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    var gridQuery;
                     
                     if (payload != undefined) {
                         if (businessEntityDefinitionId != undefined && businessEntityDefinitionId != payload.businessEntityDefinitionId)
                         { $scope.scopeModel.columns.length = 0; gridAPI.clearUpdatedItems(); }
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
+                        bulkActionId = payload.bulkActionId;
+                        context = payload.context;
                         gridQuery = payload.query;
                         if (gridQuery != undefined)
                             fieldValues = gridQuery.fieldValues;
@@ -125,7 +152,12 @@
 
                     //Retrieving Data
                     UtilsService.waitMultiplePromises(promises).finally(function () {
-                        var promise =  gridAPI.retrieveData(buildGridQuery());
+                        if (bulkActionId != undefined) {
+                            $scope.scopeModel.showMultipleSelection = true;
+                            bulkActionDraftInstance = VRCommon_VRBulkActionDraftService.createBulkActionDraft(getContext());
+                        }
+
+                        var promise = gridAPI.retrieveData(buildGridQuery(gridQuery));
                         if (promise != undefined)
                         {
                             promise.then(function () {
@@ -178,14 +210,6 @@
                         });
                     }
 
-                    function buildGridQuery() {
-                        if (gridQuery == undefined)
-                            gridQuery = {};
-                        gridQuery.BusinessEntityDefinitionId = businessEntityDefinitionId;
-                        return gridQuery;
-                    }
-
-                    return gridLoadDeferred.promise;
                 };
 
                 api.onGenericBEAdded = function (addedBusinessEntity) {
@@ -194,9 +218,48 @@
                     gridAPI.itemAdded(addedBusinessEntity);
                 };
 
+                api.deselectAllBusinessEntities = function () {
+                    bulkActionDraftInstance.deselectAllItems();
+                };
+
+                api.selectAllBusinessEntities = function () {
+                    bulkActionDraftInstance.selectAllItems();
+                };
+
+                api.finalizeBulkActionDraft = function () {
+                    return bulkActionDraftInstance.finalizeBulkActionDraft();
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
+            function getContext() {
+
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                currentContext.triggerRetrieveData = function () {
+                    if (gridQuery == undefined)
+                        gridQuery = {};
+                    gridQuery.BulkActionState = bulkActionDraftInstance.getBulkActionState();
+                    gridAPI.retrieveData(buildGridQuery(gridQuery));
+                };
+
+                currentContext.hasItems = function () {
+                    return $scope.scopeModel.businessEntities.length > 0;
+                };
+                return currentContext;
+            }
+
+
+
+            function buildGridQuery(gridQuery) {
+                if (gridQuery == undefined)
+                    gridQuery = {};
+                gridQuery.BusinessEntityDefinitionId = businessEntityDefinitionId;
+                return gridQuery;
+            }
+
 
         }
     }

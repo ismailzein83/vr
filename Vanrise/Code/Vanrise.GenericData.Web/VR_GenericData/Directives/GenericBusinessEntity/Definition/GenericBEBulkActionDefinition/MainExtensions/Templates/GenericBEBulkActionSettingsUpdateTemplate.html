@@ -1,0 +1,4 @@
+﻿<vr-span  ng-repeat="field in scopeModel.fields" ng-hide={{scopeModel.hideField(field.FieldState)}} vr-disabled={{scopeModel.disableField(field.FieldState)}}>
+    <vr-directivewrapper  directive="field.RuntimeEditor" selectionmode = "single" isrequired="field.IsRequired"  normal-col-num="2"  on-ready="field.onRunTimeEditorDirectiveReady">
+        </vr-directivewrapper>
+</vr-span>

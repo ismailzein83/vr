@@ -1,0 +1,29 @@
+﻿<vr-form name="formFilter">
+    <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
+        <vr-row removeline>
+            <vr-genericdata-genericbedefinition-selector ng-hide="scopeModel.hideBusinessEntityDefinitionSelector" normal-col-num="2" hideremoveicon on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady" selectedvalues="scopeModel.caseDefinition"
+                                                         onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChange"
+                                                         isrequired="true" customlabel="Type"></vr-genericdata-genericbedefinition-selector>
+        </vr-row>
+        <vr-row>
+            <vr-directivewrapper ng-if="scopeModel.filterDirective != undefined" directive="scopeModel.filterDirective" on-ready="scopeModel.onFilterDirectiveReady"></vr-directivewrapper>
+        </vr-row>
+    </div>
+    <vr-row removeline>
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+            <div transclude-to="buttons">
+                <vr-button type="DeselectAll" formname="formFilter" data-onclick="scopeModel.deselectAllClicked" vr-disabled="!scopeModel.enableDeselectAll" ng-show="scopeModel.showActionButtons"></vr-button>
+                <vr-button type="SelectAll" formname="formFilter" data-onclick="scopeModel.selectAllClicked" vr-disabled="!scopeModel.enableSelectAll" ng-show="scopeModel.showActionButtons"></vr-button>
+                <vr-button type="BulkActions" formname="formFilter" ng-show="scopeModel.showMenuActions" menuactions="scopeModel.addBulkActions"></vr-button>
+                <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton"></vr-button>
+                <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
+                <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton"></vr-button>
+            </div>
+        </vr-actionbar>
+    </vr-row>
+</vr-form>
+<vr-row>
+    <vr-columns width="fullrow" simplecol>
+        <vr-genericdata-genericbusinessentity-grid on-ready="scopeModel.onGridDirectiveReady"></vr-genericdata-genericbusinessentity-grid>
+    </vr-columns>
+</vr-row>

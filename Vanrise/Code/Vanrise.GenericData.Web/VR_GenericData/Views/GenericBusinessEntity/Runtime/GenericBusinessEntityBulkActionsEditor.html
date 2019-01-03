@@ -1,0 +1,26 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_BulkActionsEditorController" size="xlarge" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formGenericBEBulkActionsEditor">
+            <vr-tabs>
+                <vr-tab header="'Main View'" > 
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <vr-genericdata-genericbe-runtime-management on-ready="scopeModel.onGenericBERuntimeManagementDirectiveReady"></vr-genericdata-genericbe-runtime-management>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Bulk Action Runtime'">
+                    <vr-genericdata-genericbe-bulkactionsettings-update on-ready="scopeModel.onBulkActionRuntimeDirectiveReady"></vr-genericdata-genericbe-bulkactionsettings-update>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Execute" formname="formGenericBEBulkActionsEditor" data-onclick="scopeModel.execute"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

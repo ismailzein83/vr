@@ -19,7 +19,8 @@
 			DeleteGenericBusinessEntity: DeleteGenericBusinessEntity,
 			UploadGenericBusinessEntities: UploadGenericBusinessEntities,
 			DownloadGenericBusinessEntityTemplate: DownloadGenericBusinessEntityTemplate,
-			DownloadBusinessEntityLog: DownloadBusinessEntityLog
+            DownloadBusinessEntityLog: DownloadBusinessEntityLog,
+            ExecuteGenericBEBulkActions: ExecuteGenericBEBulkActions
         };
 
         function GetFilteredGenericBusinessEntities(input) {
@@ -96,7 +97,10 @@
 					returnAllResponseParameters: true,
 					responseTypeAsBufferArray: true
 				});
-		}
+        }
+        function ExecuteGenericBEBulkActions(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "ExecuteGenericBEBulkActions"), input);
+        }
     }
 
     appControllers.service('VR_GenericData_GenericBusinessEntityAPIService', GenericBusinessEntityAPIService);

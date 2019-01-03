@@ -1,0 +1,35 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-genericdata-datarecordtypefields-selector selectedvalues="scopeModel.selectedFields" label="Fields"
+                                                      onselectitem="scopeModel.onFieldSelected" ondeselectitem="scopeModel.onFieldDeselected" ondeselectallitems="scopeModel.deselectAllFields"
+                                                      hideselectedvaluessection="true" on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady" ismultipleselection isrequired="true"
+                                                      hide-select-all="true" onselectionchanged="scopeModel.onFieldSelectionChange"></vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Fields">
+            <vr-datagrid datasource="ctrl.datasource"
+                         enabledraggablerow="true"
+                         hidegridmenu
+                         ondeleterow="scopeModel.onDeleteField">
+                <vr-datagridcolumn headertext="'Field Name'" type="'Text'">
+                    <vr-label>{{dataItem.data.FieldName}}</vr-label>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Default Value'" type="'Text'">
+                    <vr-span vr-loader="scopeModel.isRuntimeEditorDirectiveloading">
+                        <vr-directivewrapper ng-if="dataItem.runtimeEditor != undefined" directive="dataItem.runtimeEditor" selectionmode="single" isrequired on-ready="dataItem.onRunTimeEditorDirectiveReady"></vr-directivewrapper>
+                    </vr-span>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Required'" type="'Text'">
+                    <vr-switch value="dataItem.data.IsRequired"></vr-switch>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'State'" type="'Text'">
+                    <vr-span vr-loader="scopeModel.isFieldStateDirectiveloading">
+                        <vr-genericdata-genericbe-bulkactiondefinition-update-fieldstate on-ready="dataItem.onFieldStateDirectiveReady" isrequired="true"></vr-genericdata-genericbe-bulkactiondefinition-update-fieldstate>
+                    </vr-span>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-section>
+    </vr-columns>
+</vr-row>

@@ -1,14 +1,20 @@
-﻿<vr-datagrid on-ready="scopeModel.onGridReady"  ng-if="scopeModel.showGrid"
+﻿<vr-datagrid on-ready="scopeModel.onGridReady" ng-if="scopeModel.showGrid"
              datasource="scopeModel.businessEntities"
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              menuactions="scopeModel.menuActions"
              pagingtype="'Pager'"
              idfield="{{scopeModel.idFieldName}}"
              showexpand="scopeModel.showDrillDown"
-             enableautoexport>
+             enableautoexport
+             >
+    <vr-datagridcolumn widthfactor="3" disablesorting isfielddynamic="true" ng-show="scopeModel.showMultipleSelection">
+        <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.scopeModel.onBusinessEntitySelect(dataItem)"></vr-check>
+    </vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column"></vr-datagridcolumn>
-    <vr-datagridexpandablerow>
-        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-    </vr-datagridexpandablerow>
+    <vr-span ng-if="scopeModel.showDirectiveTabs()">
+        <vr-datagridexpandablerow>
+            <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+        </vr-datagridexpandablerow>
+    </vr-span>
 </vr-datagrid>
 

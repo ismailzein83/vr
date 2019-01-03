@@ -123,13 +123,40 @@ namespace Vanrise.GenericData.Business
                         return true;
                     };
 
-                    var dataRecordBigResult = AllRecordsToBigResult(input, dataRecords.FindAllRecords(filterExpression), recordType);
-
+                    var dataRecordBigResult = dataRecords.FindAllRecords(filterExpression);
                     var handler = new ResultProcessingHandler<DataRecordDetail>()
                     {
                         ExportExcelHandler = new DataRecordStorageExcelExportHandler(input.Query)
                     };
-                    return DataRetrievalManager.Instance.ProcessResult(input, dataRecordBigResult, handler);
+
+                    var cachedAccountsWithSelectionHandling = dataRecordBigResult;
+                    if (input.Query.BulkActionState != null)
+                    {
+                        string resultKey = input.ResultKey;
+                        VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
+                        cachedAccountsWithSelectionHandling = bulkActionDraftManager.GetOrCreateCachedWithSelectionHandling<DataRecord, DataRecordStorageManager.RecordCacheManager, Guid>(ref resultKey, input.Query.BulkActionState, () =>
+                        {
+                            return dataRecordBigResult;
+                        }, (records) =>
+                        {
+
+                            List<BulkActionItem> bulkActionItems = new List<BulkActionItem>();
+                            var idField = _recordTypeManager.GetDataRecordTypeIdField(dataRecordStorage.DataRecordTypeId);
+                            foreach (var record in records)
+                            {
+                                bulkActionItems.Add(new BulkActionItem
+                                {
+                                    ItemId = record.FieldValues.GetRecord(idField.Name).ToString()
+                                });
+                            }
+                            return bulkActionItems;
+
+                        }, dataRecordStorageId);
+                        input.ResultKey = resultKey;
+                    }
+
+                    return DataRetrievalManager.Instance.ProcessResult(input, AllRecordsToBigResult(input, cachedAccountsWithSelectionHandling, recordType), handler);
+
                 }
                 else
                 {
@@ -1192,10 +1219,36 @@ namespace Vanrise.GenericData.Business
             public override IEnumerable<DataRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
             {
                 DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
-                return dataRecordStorageManager.GetDataRecordsFinalResult(DataRecordType, input, (dataRecordStorageId, cloneInput) =>
+                var dataRecordsFinalResult= dataRecordStorageManager.GetDataRecordsFinalResult(DataRecordType, input, (dataRecordStorageId, cloneInput) =>
                 {
                     return dataRecordStorageManager.GetDataRecords(cloneInput.Query.FromTime, cloneInput.Query.ToTime,cloneInput.Query.FilterGroup,cloneInput.Query.Columns,cloneInput.Query.LimitResult,cloneInput.Query.Direction, dataRecordStorageId);
                 });
+                if (input.Query.BulkActionState != null)
+                {
+                    VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
+                    GenericBusinessEntityDefinitionManager _genericBEDefinitionManager = new GenericBusinessEntityDefinitionManager();
+                    bulkActionDraftManager.CreateWithClearVRBulkActionDraft(input.Query.BulkActionState, dataRecordsFinalResult, (records) =>
+                    {
+                        DataRecordStorageManager manager = new DataRecordStorageManager();
+                        DataRecordTypeManager _recordTypeManager = new DataRecordTypeManager();
+                        List<BulkActionItem> bulkActionItems = new List<BulkActionItem>();
+                        var dataRecordStorageId = input.Query.DataRecordStorageIds.First();
+                        var dataRecordStorage = manager.GetDataRecordStorage(dataRecordStorageId);
+                        dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
+                        var idField = _recordTypeManager.GetDataRecordTypeIdField(dataRecordStorage.DataRecordTypeId);
+                        foreach (var record in records)
+                        {
+                            bulkActionItems.Add(new BulkActionItem
+                            {
+                                ItemId = record.FieldValues.GetRecord(idField.Name).ToString()
+                            });
+                        }
+                        return bulkActionItems;
+
+                    });
+                }
+                return dataRecordsFinalResult;
+
             }
 
             protected override Vanrise.Entities.BigResult<DataRecordDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, IEnumerable<DataRecord> allRecords)

@@ -55,7 +55,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 			var actionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 			var gridActionDefinitionGridAPI;
-			var gridActionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var gridActionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 			var extendedSettingsAPI;
 			var extendedSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -91,7 +91,10 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 			var genericBEDefinitionTypeSelectedDeferred;
 
 			var dataRecordStorageId;
-			var vrConnectionId;
+            var vrConnectionId;
+
+            var bulkActionsDirectiveAPI;
+            var bulkActionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 			var typefieldsSelectorDefered = UtilsService.createPromiseDeferred();
 			function initializeController() {
@@ -196,7 +199,12 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 				$scope.scopeModel.onGenericBEEditorExtendedSettingsReady = function (api) {
 					extendedSettingsAPI = api;
 					extendedSettingsReadyPromiseDeferred.resolve();
-				};
+                };
+
+                $scope.scopeModel.onGenericBEBulkActionsDirectiveReady = function (api) {
+                    bulkActionsDirectiveAPI = api;
+                    bulkActionDefinitionGridReadyPromiseDeferred.resolve();
+                };
 
 				$scope.scopeModel.onGenericBEBeforeInsertHandlerSettingsReady = function (api) {
 					beforeInsertHandlerAPI = api;
@@ -211,7 +219,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 				$scope.scopeModel.onGenericBEBeforeGetFilteredHandlerSettingsReady = function (api) {
 					beforeGetFilteredHandlerAPI = api;
 					beforeGetFilteredReadyPromiseDeferred.resolve();
-				};
+                };
 
 				$scope.scopeModel.onGenericBESecurityReady = function (api) {
 					securityAPI = api;
@@ -266,7 +274,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 			function defineAPI() {
 				var api = {};
 
-				api.getData = function () {
+                api.getData = function () {
 					return {
 						$type: "Vanrise.GenericData.Business.GenericBEDefinitionSettings, Vanrise.GenericData.Business",
 						DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
@@ -285,7 +293,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 						FilterDefinition: {
 							Settings: filterDefinitionAPI.getData()
 						},
-						GenericBEActions: actionDefinitionGridAPI.getData(),
+                        GenericBEActions: actionDefinitionGridAPI.getData(),
+                        GenericBEBulkActions: bulkActionsDirectiveAPI.getData(),
 						ExtendedSettings: extendedSettingsAPI.getData(),
 						OnBeforeInsertHandler: beforeInsertHandlerAPI.getData(),
 						OnAfterSaveHandler: afterSaveHandlerAPI.getData(),
@@ -329,7 +338,9 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 					if (dataRecordStorageId != undefined) {
 						promises.push(loadDataRecordStorageSelector());
 					}
-					promises.push(loadActionDefinitionGrid());
+                    promises.push(loadActionDefinitionGrid());
+                    promises.push(loadBulkActionDefinitionGrid());
+
 					promises.push(loadExtendedSettingsEditor());
 
 					promises.push(loadColumnDefinitionGrid());
@@ -412,15 +423,15 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 					function loadGridActionDefinitionGrid() {
 						var loadGridActionDefinitionGridPromiseDeferred = UtilsService.createPromiseDeferred();
 						gridActionDefinitionGridReadyPromiseDeferred.promise.then(function () {
-							var gActionpayload = {
-								context: getContext()
-							};
-							if (businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.GridDefinition != undefined && businessEntityDefinitionSettings.GridDefinition.GenericBEGridActions != undefined)
-								gActionpayload.genericBEGridActions = businessEntityDefinitionSettings.GridDefinition.GenericBEGridActions;
+                            var gActionpayload = {
+                                context: getContext()
+                            };
+                            if (businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.GridDefinition != undefined && businessEntityDefinitionSettings.GridDefinition.GenericBEGridActions != undefined)
+                                gActionpayload.genericBEGridActions = businessEntityDefinitionSettings.GridDefinition.GenericBEGridActions;
 
-							VRUIUtilsService.callDirectiveLoad(gridActionDefinitionGridAPI, gActionpayload, loadGridActionDefinitionGridPromiseDeferred);
-						});
-						return loadGridActionDefinitionGridPromiseDeferred.promise;
+                            VRUIUtilsService.callDirectiveLoad(gridActionDefinitionGridAPI, gActionpayload, loadGridActionDefinitionGridPromiseDeferred);
+                        });
+                        return loadGridActionDefinitionGridPromiseDeferred.promise;
 					}
 
 					function loadViewDefinitionGrid() {
@@ -487,7 +498,20 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 							VRUIUtilsService.callDirectiveLoad(actionDefinitionGridAPI, payload, loadActionDefinitionGridPromiseDeferred);
 						});
 						return loadActionDefinitionGridPromiseDeferred.promise;
-					}
+                    }
+
+
+                    function loadBulkActionDefinitionGrid() {
+                        var loadBulkActionDefinitionGridPromiseDeferred = UtilsService.createPromiseDeferred();
+                        bulkActionDefinitionGridReadyPromiseDeferred.promise.then(function () {
+                            var payload = {
+                                context: getContext(),
+                                genericBEBulkActions: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.GenericBEBulkActions || undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(bulkActionsDirectiveAPI, payload, loadBulkActionDefinitionGridPromiseDeferred);
+                        });
+                        return loadBulkActionDefinitionGridPromiseDeferred.promise;
+                    }
 
 					function loadExtendedSettingsEditor() {
 						var loadExtendedSettingsEditorPromiseDeferred = UtilsService.createPromiseDeferred();
