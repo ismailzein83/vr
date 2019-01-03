@@ -128,7 +128,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public bool AreCodeGroupUpdated(ref object updateHandle)
         {
-            return true;
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public bool CheckIfCodeGroupHasRelatedCodes(int codeGroupId)
