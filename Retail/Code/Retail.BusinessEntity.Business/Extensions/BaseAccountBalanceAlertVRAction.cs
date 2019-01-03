@@ -7,6 +7,7 @@ using Vanrise.AccountBalance.Business.Extensions;
 using Vanrise.Notification.Entities;
 using Vanrise.Common;
 using Retail.BusinessEntity.Entities;
+using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -53,13 +54,18 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        protected Decimal? GetAccountCreditLimit(VRBalanceAlertEventPayload balanceAlertEventPayload, out Guid accountBEDefinitionId)
+        protected AccountCreditLimit GetAccountCreditLimit(VRBalanceAlertEventPayload balanceAlertEventPayload, out Guid accountBEDefinitionId)
         {
             accountBEDefinitionId = GetAccountBEDefinitionId(balanceAlertEventPayload);
             var financialAccountData = s_financialAccountManager.GetFinancialAccountData(accountBEDefinitionId, balanceAlertEventPayload.EntityId);
             if (financialAccountData != null)
             {
-                return financialAccountData.CreditLimit;
+                return new AccountCreditLimit
+                {
+                    AccountCurrencyId = financialAccountData.AccountCurrencyId,
+                    CreditLimit = financialAccountData.CreditLimit,
+                    CreditLimitCurrencyId = financialAccountData.CreditLimitCurrencyId
+                };
             }
             else
             {
@@ -73,7 +79,17 @@ namespace Retail.BusinessEntity.Business
                     {
                         IPostpaidProductSettings productSettingsAsPostpaid = product.Settings.ExtendedSettings as IPostpaidProductSettings;
                         if (productSettingsAsPostpaid != null)
-                            return productSettingsAsPostpaid.CreditLimit;
+                        {
+                            var accountCreditLimit = new AccountCreditLimit
+                            {
+                                CreditLimit = productSettingsAsPostpaid.CreditLimit,
+                                AccountCurrencyId = accountPayment.CurrencyId,
+                            };
+                            var systemCurrency = new CurrencyManager().GetSystemCurrency();
+                            if (systemCurrency != null)
+                                accountCreditLimit.CreditLimitCurrencyId = systemCurrency.CurrencyId;
+                            return accountCreditLimit;
+                        }
                     }
                 }
                 return null;

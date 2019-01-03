@@ -237,7 +237,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountPartAvailabilityOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountPartRequiredOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
-    <Content Include="Retail_BusinessEntity\Constant\CreditClassFieldEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\AccountCreditLimitFieldEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\FaultTicketSourceEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\RootSelectorTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\DIDNumberTypeEnum.js" />
@@ -503,10 +503,10 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\retail-be-retrievefinancialinfostep.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\Templates\RetrieveFinancialInfoStepPreviewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\TransformationSteps\Templates\RetrieveFinancialInfoStepTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\retail-be-creditclass-objecttype.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\retail-be-creditclass-propertyevaluator.js" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\CreditClassObjectTypeTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\CreditClassPropertyEvaluatorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\retail-be-accountcreditlimit-objecttype.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\retail-be-accountcreditlimit-propertyevaluator.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\AccountCreditLimitObjectTypeTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\AccountCreditLimitPropertyEvaluatorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\OperatorDeclaredInfo\retail-be-traffictype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\MainExtensions\retail-be-packagedefinition-recurcharge-evaluator-onetime.js" />
     <Content Include="Retail_BusinessEntity\Directives\Package\PackageDefinition\MainExtensions\ExtendedSettings\MainExtensions\retail-be-packagedefinition-recurcharge-evaluator-periodic.js" />

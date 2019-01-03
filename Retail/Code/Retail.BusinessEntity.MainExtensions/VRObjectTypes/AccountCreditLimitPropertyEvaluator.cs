@@ -20,20 +20,30 @@ namespace Retail.BusinessEntity.MainExtensions.VRObjectTypes
         public bool UseDescription { get; set; }
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
-            CreditClass creditClass = context.Object as CreditClass;
-            creditClass.ThrowIfNull("creditClass");
-            creditClass.Settings.ThrowIfNull("creditClass.Settings");
+            AccountCreditLimit accountCreditLimit = context.Object as AccountCreditLimit;
+            accountCreditLimit.ThrowIfNull("accountCreditLimit");
             switch (AccountCreditLimitField)
             {
                 case AccountCreditLimitField.ConvertedCreditLimit:
-                    return new CreditClassManager().GetConvertedCreditClassBalanceLimit(creditClass.Settings.BalanceLimit, creditClass.Settings.CurrencyId);
+                    if(accountCreditLimit.CreditLimit.HasValue && accountCreditLimit.CreditLimitCurrencyId.HasValue && accountCreditLimit.AccountCurrencyId.HasValue)
+                    {
+                        var creditClassManager = new CreditClassManager();
+                        return creditClassManager.GetConvertedCreditClassBalanceLimit(accountCreditLimit.CreditLimit.Value, accountCreditLimit.CreditLimitCurrencyId.Value, accountCreditLimit.AccountCurrencyId.Value);
+                    }
+                    break;
                 case AccountCreditLimitField.CreditLimit:
-                    return creditClass.Settings.BalanceLimit;
+                    if(accountCreditLimit.CreditLimit.HasValue)
+                        return accountCreditLimit.CreditLimit.Value;
+                    break;
                 case AccountCreditLimitField.CreditLimitCurrency:
-                    if (UseDescription)
-                        return new CurrencyManager().GetCurrencyName(creditClass.Settings.CurrencyId);
-                    else
-                        return creditClass.Settings.CurrencyId;
+                    if (accountCreditLimit.CreditLimitCurrencyId.HasValue)
+                    {
+                        if (UseDescription)
+                            return new CurrencyManager().GetCurrencyName(accountCreditLimit.CreditLimitCurrencyId.Value);
+                        else
+                            return accountCreditLimit.CreditLimitCurrencyId.Value;
+                    }
+                    break;
             }
             return null;
         }

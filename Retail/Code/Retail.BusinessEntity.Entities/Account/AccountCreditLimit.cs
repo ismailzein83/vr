@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
-    class AccountCreditLimit
+    public class AccountCreditLimit
     {
+        public decimal? CreditLimit { get; set; }
+        public int? CreditLimitCurrencyId { get; set; }
+        public int? AccountCurrencyId { get; set; }
     }
 }

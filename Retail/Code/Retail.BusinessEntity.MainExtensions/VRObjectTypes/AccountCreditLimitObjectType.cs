@@ -15,13 +15,7 @@ namespace Retail.BusinessEntity.MainExtensions.VRObjectTypes
         public Guid AccountBEDefinitionId { get; set; }
         public override object CreateObject(IVRObjectTypeCreateObjectContext context)
         {
-            AccountBEManager accountBEManager = new AccountBEManager();
-            Account account = accountBEManager.GetAccount(AccountBEDefinitionId, (long)context.ObjectId);
-
-            if (account == null)
-                throw new DataIntegrityValidationException(string.Format("Account not found for AccountBEDefinitionId : '{0}' and Account ID: '{1}'", AccountBEDefinitionId, context.ObjectId));
-
-            return account;
+            return null;
         }
     }
 }
