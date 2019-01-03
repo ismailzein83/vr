@@ -247,8 +247,8 @@
     <Compile Include="AccountActions\SendEmailAction.cs" />
     <Compile Include="AccountBalanceAlertRule\FixedBalanceAlertThreshold.cs" />
     <Compile Include="TransformationSteps\RetrieveFinancialInfoStep.cs" />
-    <Compile Include="VRObjectTypes\CreditClassObjectType.cs" />
-    <Compile Include="VRObjectTypes\CreditClassPropertyEvaluator.cs" />
+    <Compile Include="VRObjectTypes\AccountCreditLimitObjectType.cs" />
+    <Compile Include="VRObjectTypes\AccountCreditLimitPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\RetailAccountPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\RetailAccountObjectType.cs" />
   </ItemGroup>

@@ -12,24 +12,24 @@ using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.MainExtensions.VRObjectTypes
 {
-    public enum CreditClassField { CreditLimit = 0, CreditLimitCurrency = 1, ConvertedCreditLimit = 2 }
-    public class CreditClassPropertyEvaluator : VRObjectPropertyEvaluator
+    public enum AccountCreditLimitField { CreditLimit = 0, CreditLimitCurrency = 1, ConvertedCreditLimit = 2 }
+    public class AccountCreditLimitPropertyEvaluator : VRObjectPropertyEvaluator
     {
         public override Guid ConfigId { get { return new Guid("73E1C37B-BB45-442E-B7DA-19BA1597E0D8"); } }
-        public CreditClassField CreditClassField { get; set; }
+        public AccountCreditLimitField AccountCreditLimitField { get; set; }
         public bool UseDescription { get; set; }
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
             CreditClass creditClass = context.Object as CreditClass;
             creditClass.ThrowIfNull("creditClass");
             creditClass.Settings.ThrowIfNull("creditClass.Settings");
-            switch (CreditClassField)
+            switch (AccountCreditLimitField)
             {
-                case CreditClassField.ConvertedCreditLimit:
+                case AccountCreditLimitField.ConvertedCreditLimit:
                     return new CreditClassManager().GetConvertedCreditClassBalanceLimit(creditClass.Settings.BalanceLimit, creditClass.Settings.CurrencyId);
-                case CreditClassField.CreditLimit:
+                case AccountCreditLimitField.CreditLimit:
                     return creditClass.Settings.BalanceLimit;
-                case CreditClassField.CreditLimitCurrency:
+                case AccountCreditLimitField.CreditLimitCurrency:
                     if (UseDescription)
                         return new CurrencyManager().GetCurrencyName(creditClass.Settings.CurrencyId);
                     else
