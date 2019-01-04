@@ -14,3 +14,6 @@
 \Images\nTegra-02.png
 \Images\Zebra-01.png
 \Images\Zebra-02.png
+
+\CSViews\Home\Index-flat.cshtml
+\CSViews\Security\Login-flat.cshtml
