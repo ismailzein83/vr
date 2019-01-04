@@ -11,7 +11,7 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            
+
             ctrl.getObjectProperty = function (item, property) {
                 return BaseDirService.getObjectProperty(item, property);
             };
@@ -20,8 +20,8 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
                 return item;
             };
 
-            ctrl.getObjectClass = function (item) {               
-                if (typeof item[ctrl.dataclassfield] ) {
+            ctrl.getObjectClass = function (item) {
+                if (typeof item[ctrl.dataclassfield]) {
                     var color = item[ctrl.dataclassfield];
                     if (typeof color === 'string' || typeof color instanceof String) {
                         return color;
@@ -41,7 +41,7 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
                 if (ctrl.datavaluefield) return ctrl.getObjectProperty(item, ctrl.datavaluefield);
                 return item;
             };
-        
+
 
         },
         controllerAs: 'ctrl',
@@ -59,11 +59,13 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
                 layoutClass = " vertical-alignment";
             if (attrs.leftalignment != undefined)
                 layoutClass += " left-alignment";
-
+            var addedClasses = "";
+            if (attrs.isclickable)
+                addedClasses += " clickable";
             var mainTemplate = '<div  class="vr-helpbox' + layoutClass + '" >'
-				+ '<span style="margin-left: -5px;border: 1px solid #ccc;border-radius: 4px;"><div class="item" ng-repeat="item in ctrl.datasource">'
+				+ '<span style="margin-left: -5px;border: 1px solid #ccc;border-radius: 4px;"><div class="item ' + addedClasses + '" ng-repeat="item in ctrl.datasource">'
 				+ '<div class="badge-color" ng-class="ctrl.getObjectClass(item)"></div>'
-				+ '<span title="{{ctrl.getObjectText(item)}}" ng-class="ctrl.getLabelClass(item)">{{ctrl.getObjectText(item)}}</span>'
+				+ '<span title="{{ctrl.getObjectText(item)}}" ng-class="ctrl.getLabelClass(item)" >{{ctrl.getObjectText(item)}}</span>'
 				+ '</div>'
 				+ '</div></span>';
             return labelTemplate + mainTemplate;

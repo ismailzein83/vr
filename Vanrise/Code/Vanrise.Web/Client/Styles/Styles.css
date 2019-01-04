@@ -4124,6 +4124,9 @@ vr-overall-widget .list-group-item {
         cursor: default !important;
         display:inline-flex;
     }
+    .vr-helpbox .item. {        
+        cursor: pointer !important;
+    }
 
     .vr-helpbox .item .badge-color {
         display: inline-block;
