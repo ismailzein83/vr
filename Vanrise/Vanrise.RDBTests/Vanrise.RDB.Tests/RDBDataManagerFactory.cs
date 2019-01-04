@@ -15,10 +15,12 @@ namespace Vanrise.RDB.Tests
         {
             s_objectFactory = new ObjectFactory
                 (
-                    Assembly.Load("Vanrise.Invoice.Data.RDB"), 
+                    Assembly.Load("Vanrise.Invoice.Data.RDB"),
                     Assembly.Load("Vanrise.AccountBalance.Data.RDB"),
                     Assembly.Load("Vanrise.Rules.Data.RDB"),
-                     Assembly.Load("Vanrise.Common.Data.RDB")
+                    Assembly.Load("Vanrise.Common.Data.RDB"),
+                    Assembly.Load("Vanrise.GenericData.Data.RDB")
+
                 );
         }
 
