@@ -40,7 +40,8 @@ namespace Vanrise.GenericData.Data.RDB
                 Columns = columns,
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
-                ModifiedTimeColumnName = COL_LastModifiedTime
+                ModifiedTimeColumnName = COL_LastModifiedTime,
+                CachePartitionColumnName = COL_RelationDefinitionID
             });
         }
 
@@ -77,13 +78,13 @@ namespace Vanrise.GenericData.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Where().EqualsCondition(COL_RelationDefinitionID).Value(beParentChildRelationDefinitionId);
-            return queryContext.GetItems<BEParentChildRelation>(BEParentChildRelationMapper);
+            return queryContext.GetItems(BEParentChildRelationMapper);
         }
 
         public bool AreBEParentChildRelationUpdated(Guid beParentChildRelationDefinitionId, ref object updateHandle)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
-            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+            return queryContext.IsDataUpdated(TABLE_NAME, beParentChildRelationDefinitionId, ref updateHandle);
         }
 
         public bool Insert(BEParentChildRelation BEParentChildRelationItem, out long insertedId)
@@ -99,13 +100,11 @@ namespace Vanrise.GenericData.Data.RDB
             insertQuery.Column(COL_BED).Value(BEParentChildRelationItem.BED);
             if (BEParentChildRelationItem.EED.HasValue)
                 insertQuery.Column(COL_EED).Value(BEParentChildRelationItem.EED.Value);
-            else
-                insertQuery.Column(COL_EED).Null();
 
-            var nullableId = queryContext.ExecuteScalar().NullableLongValue;
-            if (nullableId.HasValue)
+            var id = queryContext.ExecuteScalar().NullableLongValue;
+            if (id.HasValue)
             {
-                insertedId = nullableId.Value;
+                insertedId = id.Value;
                 return true;
             }
             else
