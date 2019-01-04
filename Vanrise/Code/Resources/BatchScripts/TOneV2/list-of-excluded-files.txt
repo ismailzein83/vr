@@ -26,5 +26,21 @@
 \images\Zebra-login.png
 \images\Zebra-iconheader.ico
 
+\images\cloudXPoint-flat-logoonheader.png
+\images\cloudXPoint-flat-login.png
+\images\cloudXPoint-flat-iconheader.ico
+
+\images\cabill-logoonheader.png
+\images\cabill-login.png
+\images\cabill-iconheader.ico
+
+\images\Ogero-logoonheader.png
+\images\Ogero-login.png
+\images\Ogero-iconheader.ico
+
+\images\TOne-flat-logoonheader.png
+\images\TOne-flat-login.png
+\images\TOne-flat-iconheader.ico
+
 Version 13-07-2018\
 Old\
