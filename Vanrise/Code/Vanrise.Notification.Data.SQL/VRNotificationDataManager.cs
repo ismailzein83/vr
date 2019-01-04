@@ -158,9 +158,9 @@ namespace Vanrise.Notification.Data.SQL
             DateTime from = context.Query != null && context.Query.From.HasValue ? context.Query.From.Value : default(DateTime);
             DateTime to = context.Query != null && context.Query.To.HasValue ? context.Query.To.Value : default(DateTime);
 
-            DateTime? origStatusUpdateTime;
+            DateTime? origLastModifiedTime;
             long? origId;
-            SplitLastUpdateHandle(context.LastUpdateHandle, out origStatusUpdateTime, out origId);
+            SplitLastUpdateHandle(context.LastUpdateHandle, out origLastModifiedTime, out origId);
 
             List<VRNotification> notifications = new List<VRNotification>();
             ExecuteReaderSP("[VRNotification].[sp_VRNotifications_GetUpdated]", (reader) =>
@@ -177,7 +177,7 @@ namespace Vanrise.Notification.Data.SQL
                         context.LastUpdateHandle = BuildLastUpdateHandle(maxLastModifiedTime, id);
                     }
 
-            }, context.NotificationTypeId, context.NbOfRows, origStatusUpdateTime, origId, description, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
+            }, context.NotificationTypeId, context.NbOfRows, origLastModifiedTime, origId, description, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
 
             return notifications;
         }
@@ -211,23 +211,23 @@ namespace Vanrise.Notification.Data.SQL
         #endregion
 
         #region private methods
-        private object BuildLastUpdateHandle(DateTime? statusUpdateTime, long? id)
+        private object BuildLastUpdateHandle(DateTime? lastModifiedTime, long? id)
         {
-            if (statusUpdateTime.HasValue && id.HasValue)
-                return string.Concat(statusUpdateTime.Value.ToString("yyyyMMddHHmmssfff"), "@", id.Value);
+            if (lastModifiedTime.HasValue && id.HasValue)
+                return string.Concat(lastModifiedTime.Value.ToString("yyyyMMddHHmmssfff"), "@", id.Value);
 
             return null;
         }
 
-        private void SplitLastUpdateHandle(object lastUpdateHandle, out DateTime? statusUpdateTime, out long? id)
+        private void SplitLastUpdateHandle(object lastUpdateHandle, out DateTime? lastModifiedTime, out long? id)
         {
-            statusUpdateTime = null;
+            lastModifiedTime = null;
             id = null;
 
             if (lastUpdateHandle != null)
             {
                 string[] data = lastUpdateHandle.ToString().Split('@');
-                statusUpdateTime = DateTime.ParseExact(data[0], "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
+                lastModifiedTime = DateTime.ParseExact(data[0], "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
                 id = long.Parse(data[1]);
             }
         }
