@@ -19,6 +19,6 @@ namespace Vanrise.Entities
     }
     public class VRNamespaceItemSettings
     {
-        public List<VRDynamicCode> Codes { get; set; }
+        public VRDynamicCodeSettings Code { get; set; }
     }
 }

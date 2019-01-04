@@ -141,6 +141,8 @@
     <Compile Include="VRNamespace\VRNamespaceDetail.cs" />
     <Compile Include="VRNamespace\VRNamespaceInfo.cs" />
     <Compile Include="VRNamespace\VRNamespaceItem.cs" />
+    <Compile Include="VRNamespace\VRNamespaceItemDetail.cs" />
+    <Compile Include="VRNamespace\VRNamespaceItemQuery.cs" />
     <Compile Include="VRNamespace\VRNamespaceQuery.cs" />
     <Compile Include="VRPushNotification\VRPushNotificationClientMessage.cs" />
     <Compile Include="VRPushNotification\VRPushNotificationClientSubscription.cs" />
