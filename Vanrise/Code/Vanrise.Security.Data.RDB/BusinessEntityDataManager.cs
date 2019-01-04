@@ -78,8 +78,6 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.Column(COL_BreakInheritance).Value(businessEntity.BreakInheritance);
             if (businessEntity.PermissionOptions != null)
                 insertQuery.Column(COL_PermissionOptions).Value(Common.Serializer.Serialize(businessEntity.PermissionOptions));
-            else
-                insertQuery.Column(COL_PermissionOptions).Null();
             return queryContext.ExecuteNonQuery() > 0;
         }
 

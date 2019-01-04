@@ -64,8 +64,6 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.Column(COL_Name).Value(orgChart.Name);
             if (orgChart.Hierarchy != null)
                 insertQuery.Column(COL_Hierarchy).Value(Common.Serializer.Serialize(orgChart.Hierarchy));
-            else
-                insertQuery.Column(COL_Hierarchy).Null();
             insertQuery.AddSelectGeneratedId();
             var id = queryContext.ExecuteScalar().NullableIntValue;
             if (id.HasValue)

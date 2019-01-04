@@ -109,34 +109,16 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.Column(COL_Url).Value(view.Url);
             if (view.ModuleId.HasValue)
                 insertQuery.Column(COL_Module).Value(view.ModuleId.Value);
-            else
-                insertQuery.Column(COL_Module).Null();
-            if (view.Audience != null)
+            if (view.Audience != null && ((view.Audience.Groups != null && view.Audience.Groups.Count > 0) || (view.Audience.Users != null && view.Audience.Users.Count > 0)))
             {
-                if ((view.Audience.Groups != null && view.Audience.Groups.Count > 0) || (view.Audience.Users != null && view.Audience.Users.Count > 0))
-                    insertQuery.Column(COL_Audience).Value(Common.Serializer.Serialize(view.Audience, true));
-                else
-                    insertQuery.Column(COL_Audience).Null();
+                insertQuery.Column(COL_Audience).Value(Common.Serializer.Serialize(view.Audience, true));
             }
-            else
+            if (view.ViewContent != null && ((view.ViewContent.BodyContents != null && view.ViewContent.BodyContents.Count > 0) || (view.ViewContent.SummaryContents != null && view.ViewContent.SummaryContents.Count > 0)))
             {
-                insertQuery.Column(COL_Audience).Null();
-            }
-            if (view.ViewContent != null)
-            {
-                if ((view.ViewContent.BodyContents != null && view.ViewContent.BodyContents.Count > 0) || (view.ViewContent.SummaryContents != null && view.ViewContent.SummaryContents.Count > 0))
-                    insertQuery.Column(COL_Content).Value(Common.Serializer.Serialize(view.ViewContent, true));
-                else
-                    insertQuery.Column(COL_Content).Null();
-            }
-            else
-            {
-                insertQuery.Column(COL_Content).Null();
+                insertQuery.Column(COL_Content).Value(Common.Serializer.Serialize(view.ViewContent, true));
             }
             if (view.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Common.Serializer.Serialize(view.Settings));
-            else
-                insertQuery.Column(COL_Settings).Null();
             insertQuery.Column(COL_Type).Value(view.Type);
             return queryContext.ExecuteNonQuery() > 0;
         }

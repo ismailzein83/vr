@@ -77,8 +77,6 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.Column(COL_Name).Value(moduleObject.Name);
             if (moduleObject.ParentId.HasValue)
                 insertQuery.Column(COL_ParentId).Value(moduleObject.ParentId.Value);
-            else
-                insertQuery.Column(COL_ParentId).Null();
             insertQuery.Column(COL_BreakInheritance).Value(moduleObject.BreakInheritance);
             return queryContext.ExecuteNonQuery() > 0;
         }

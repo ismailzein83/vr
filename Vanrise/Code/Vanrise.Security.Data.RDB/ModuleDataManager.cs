@@ -91,17 +91,11 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.Column(COL_Name).Value(moduleObject.Name);
             if (moduleObject.ParentId.HasValue)
                 insertQuery.Column(COL_ParentId).Value(moduleObject.ParentId.Value);
-            else
-                insertQuery.Column(COL_ParentId).Null();
             if (moduleObject.DefaultViewId.HasValue)
                 insertQuery.Column(COL_DefaultViewId).Value(moduleObject.DefaultViewId.Value);
-            else
-                insertQuery.Column(COL_DefaultViewId).Null();
             insertQuery.Column(COL_AllowDynamic).Value(moduleObject.AllowDynamic);
             if (moduleObject.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Common.Serializer.Serialize(moduleObject.Settings));
-            else
-                insertQuery.Column(COL_Settings).Null();
             return queryContext.ExecuteNonQuery() > 0;
 
         }

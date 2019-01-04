@@ -70,12 +70,8 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.Column(COL_Name).Value(tenant.Name);
             if (tenant.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Common.Serializer.Serialize(tenant.Settings));
-            else
-                insertQuery.Column(COL_Settings).Null();
             if (tenant.ParentTenantId.HasValue)
                 insertQuery.Column(COL_ParentTenantID).Value(tenant.ParentTenantId.Value);
-            else
-                insertQuery.Column(COL_ParentTenantID).Null();
             var id = queryContext.ExecuteScalar().NullableIntValue;
             if (id.HasValue)
                 insertedId = id.Value;
