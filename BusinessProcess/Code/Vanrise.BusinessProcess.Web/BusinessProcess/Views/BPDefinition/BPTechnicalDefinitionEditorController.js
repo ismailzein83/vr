@@ -109,10 +109,24 @@
             };
 
             $scope.scopeModel.onCompileClick = function () {
+                if ($scope.scopeModel.title == undefined || $scope.scopeModel.title == '') {
+                    VRNotificationService.showWarning("Title is required");
+                    return;
+                }
+
+                var vrWorkflowId = $scope.scopeModel.loadVRWorklowSelector ? vrWorkflowSelectorAPI.getSelectedIds() : null;
+                if (vrWorkflowId == null) {
+                    VRNotificationService.showWarning("Workflow is required");
+                    return;
+                }
+
                 $scope.scopeModel.isLoadingArguments = true;
-                return tryCompile().then(function (response) {
+
+                BusinessProcess_BPDefinitionAPIService.TryCompileProcessTitle(buildBPEntityObjFromScope()).then(function (response) {
                     $scope.scopeModel.isLoadingArguments = false;
-                    if (response)
+
+                    validationMessages = response.ErrorMessages;
+                    if (validationMessages == undefined || validationMessages.length == 0)
                         VRNotificationService.showSuccess("Custom Code compiled successfully.");
                 });
             };
@@ -294,11 +308,6 @@
                 });
         }
 
-        function tryCompile() {
-            return BusinessProcess_BPDefinitionAPIService.TryCompileProcessTitle(buildBPEntityObjFromScope()).then(function (response) {
-                validationMessages = response.ErrorMessages;
-            });
-        }
 
         function insert() {
             $scope.scopeModel.isLoading = true;
