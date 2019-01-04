@@ -41,6 +41,7 @@ BEGIN
 		   AND (@To is null or CreationTime < @To)
 	ORDER BY ID DESC
 				
-	SELECT MAX([timestamp]) AS MaxTimestamp 
+	SELECT TOP 1 StatusUpdatedTime, ID
 	FROM [VRNotification].[VRNotification] WITH(NOLOCK)
+	ORDER BY StatusUpdatedTime desc, ID desc
 END
