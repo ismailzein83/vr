@@ -131,7 +131,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                 , [BED]
                                                 , [EED]
                                                 , [SourceID]
-                                                , [ProcessInstanceID])
+                                                , [ProcessInstanceID]
+                                                , [LastModifiedTime])
                                          SELECT   [ID]
                                                 , [SellingNumberPlanID]
                                                 , [CountryID]
