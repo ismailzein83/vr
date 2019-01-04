@@ -136,10 +136,10 @@ namespace Vanrise.Notification.Data.SQL
                 if (reader.NextResult())
                     while (reader.Read())
                     {
-                        DateTime maxStatusUpdatedTime = GetReaderValue<DateTime>(reader, "StatusUpdatedTime");
+                        DateTime maxLastModifiedTime = GetReaderValue<DateTime>(reader, "LastModifiedTime");
                         long id = GetReaderValue<long>(reader, "ID");
 
-                        context.LastUpdateHandle = BuildLastUpdateHandle(maxStatusUpdatedTime, id);
+                        context.LastUpdateHandle = BuildLastUpdateHandle(maxLastModifiedTime, id);
                     }
 
             }, context.NotificationTypeId, context.NbOfRows, description, statusIds, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
@@ -171,10 +171,10 @@ namespace Vanrise.Notification.Data.SQL
                 if (reader.NextResult())
                     while (reader.Read())
                     {
-                        DateTime maxStatusUpdatedTime = GetReaderValue<DateTime>(reader, "StatusUpdatedTime");
+                        DateTime maxLastModifiedTime = GetReaderValue<DateTime>(reader, "LastModifiedTime");
                         long id = GetReaderValue<long>(reader, "ID");
 
-                        context.LastUpdateHandle = BuildLastUpdateHandle(maxStatusUpdatedTime, id);
+                        context.LastUpdateHandle = BuildLastUpdateHandle(maxLastModifiedTime, id);
                     }
 
             }, context.NotificationTypeId, context.NbOfRows, origStatusUpdateTime, origId, description, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
