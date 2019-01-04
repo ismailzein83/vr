@@ -101,6 +101,12 @@
     <Compile Include="Request Flow Management\AdditionServicesFlowManagement.cs" />
     <Compile Include="Request Flow Management\ADSLAlterSpeedFlowManagement.cs" />
     <Compile Include="Request Flow Management\ADSLChangePasswordFlowManagement.cs" />
+    <Compile Include="Request Flow Management\ADSLRequestFlowManagement.cs" />
+    <Compile Include="Request Flow Management\CallDetailsRequestFlowMnagement.cs" />
+    <Compile Include="Request Flow Management\ChangePhoneNumberFlowManagement.cs" />
+    <Compile Include="Request Flow Management\DeportedNumberFlowManagement.cs" />
+    <Compile Include="Request Flow Management\GSHDSLFlowManagement.cs" />
+    <Compile Include="Request Flow Management\LeasedLineTerminationFlowManagement.cs" />
     <Compile Include="Request Flow Management\LineMovingNewSwitchFlowManagement.cs" />
     <Compile Include="Request Flow Management\LineMovingSameSwitchFlowManagement.cs" />
     <Compile Include="Request Flow Management\LeasedLineRequestFlowManagement.cs" />
