@@ -7,7 +7,7 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
             datavaluefield: '@',
             datatextfield: '@',
             dataclassfield: '@',
-            labelclassfield:'@'
+            labelclassfield: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -20,10 +20,20 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
                 return item;
             };
 
-            ctrl.getObjectClass = function (item) {
-                if (ctrl.dataclassfield) return ctrl.getObjectProperty(item, ctrl.dataclassfield);
-                return item;
+            ctrl.getObjectClass = function (item) {               
+                if (typeof item[ctrl.dataclassfield] ) {
+                    var color = item[ctrl.dataclassfield];
+                    if (typeof color === 'string' || typeof color instanceof String) {
+                        return color;
+                    }
+                    else if (typeof color === 'object' || color instanceof Object) {
+                        switch (color.UniqueName) {
+                            case "VR_AccountBalance_StyleFormating_CSSClass": return color.ClassName;
+                        }
+                    }
+                }
             };
+
             ctrl.getLabelClass = function (item) {
                 if (ctrl.labelclassfield) return ctrl.getObjectProperty(item, ctrl.labelclassfield);
             };
