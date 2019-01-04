@@ -17,3 +17,5 @@
 
 \CSViews\Home\Index-flat.cshtml
 \CSViews\Security\Login-flat.cshtml
+
+NImages\
