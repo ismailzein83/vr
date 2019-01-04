@@ -66,7 +66,8 @@ namespace Vanrise.GenericData.Data.RDB
             ifNotExists.EqualsCondition(COL_Name).Value(dataRecordFieldChoice.Name);
             insertQuery.Column(COL_ID).Value(dataRecordFieldChoice.DataRecordFieldChoiceId);
             insertQuery.Column(COL_Name).Value(dataRecordFieldChoice.Name);
-            insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
+            if(dataRecordFieldChoice.Settings!=null)
+                insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -83,7 +84,7 @@ namespace Vanrise.GenericData.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
-            return queryContext.GetItems<DataRecordFieldChoice>(DataRecordFieldChoiceMapper);
+            return queryContext.GetItems(DataRecordFieldChoiceMapper);
         }
 
         public bool UpdateDataRecordFieldChoice(DataRecordFieldChoice dataRecordFieldChoice)
@@ -95,7 +96,10 @@ namespace Vanrise.GenericData.Data.RDB
             ifNotExists.NotEqualsCondition(COL_ID).Value(dataRecordFieldChoice.DataRecordFieldChoiceId);
             ifNotExists.EqualsCondition(COL_Name).Value(dataRecordFieldChoice.Name);
             updateQuery.Column(COL_Name).Value(dataRecordFieldChoice.Name);
-            updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
+            if (dataRecordFieldChoice.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordFieldChoice.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
             updateQuery.Where().EqualsCondition(COL_ID).Value(dataRecordFieldChoice.DataRecordFieldChoiceId);
             return queryContext.ExecuteNonQuery() > 0;
         }

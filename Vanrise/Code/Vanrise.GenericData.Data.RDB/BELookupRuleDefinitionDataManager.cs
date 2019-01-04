@@ -51,7 +51,8 @@ namespace Vanrise.GenericData.Data.RDB
         BELookupRuleDefinition BELookupRuleDefinitionMapper(IRDBDataReader reader)
         {
             var beLookupRuleDefinition = Vanrise.Common.Serializer.Deserialize<BELookupRuleDefinition>(reader.GetString(COL_Details));
-            beLookupRuleDefinition.BELookupRuleDefinitionId = reader.GetGuid(COL_ID);
+            if(beLookupRuleDefinition!=null)
+                beLookupRuleDefinition.BELookupRuleDefinitionId = reader.GetGuid(COL_ID);
             return beLookupRuleDefinition;
         }
         #endregion
@@ -63,7 +64,7 @@ namespace Vanrise.GenericData.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
-            return queryContext.GetItems<BELookupRuleDefinition>(BELookupRuleDefinitionMapper);
+            return queryContext.GetItems(BELookupRuleDefinitionMapper);
         }
 
         public bool AreBELookupRuleDefinitionsUpdated(ref object updateHandle)
@@ -77,7 +78,7 @@ namespace Vanrise.GenericData.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
-            var ifNotExists = insertQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+            var ifNotExists = insertQuery.IfNotExists(TABLE_ALIAS);
             ifNotExists.EqualsCondition(COL_Name).Value(beLookupRuleDefinition.Name);
 
             insertQuery.Column(COL_ID).Value(beLookupRuleDefinition.BELookupRuleDefinitionId);
@@ -92,7 +93,7 @@ namespace Vanrise.GenericData.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            var ifNotExists = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.AND);
+            var ifNotExists = updateQuery.IfNotExists(TABLE_ALIAS);
             ifNotExists.EqualsCondition(COL_Name).Value(beLookupRuleDefinition.Name);
             ifNotExists.NotEqualsCondition(COL_ID).Value(beLookupRuleDefinition.BELookupRuleDefinitionId);
 

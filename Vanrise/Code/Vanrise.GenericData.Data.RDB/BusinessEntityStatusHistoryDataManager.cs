@@ -85,7 +85,7 @@ namespace Vanrise.GenericData.Data.RDB
             selectQuery.Where().EqualsCondition(COL_BusinessEntityID).Value(businessEntityId);
             selectQuery.Where().EqualsCondition(COL_FieldName).Value(fieldName);
             selectQuery.Sort().ByColumn(COL_StatusChangedDate, RDBSortDirection.DESC);
-            return queryContext.GetItem<BusinessEntityStatusHistory>(BusinessEntityStatusHistoryMapper);
+            return queryContext.GetItem(BusinessEntityStatusHistoryMapper);
         }
 
         public bool Insert(Guid businessEntityDefinitionId, string businessEntityId, string fieldName, Guid statusId, Guid? previousStatusId)
@@ -99,8 +99,6 @@ namespace Vanrise.GenericData.Data.RDB
             insertQuery.Column(COL_StatusID).Value(statusId);
             if (previousStatusId.HasValue)
                 insertQuery.Column(COL_PreviousStatusID).Value(previousStatusId.Value);
-            else
-                insertQuery.Column(COL_PreviousStatusID).Null();
             insertQuery.Column(COL_StatusChangedDate).DateNow();
             insertQuery.Column(COL_IsDeleted).Value(false);
             return queryContext.ExecuteNonQuery() > 0;

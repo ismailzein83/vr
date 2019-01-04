@@ -81,20 +81,12 @@ namespace Vanrise.GenericData.Data.RDB
             insertQuery.Column(COL_Name).Value(dataRecordType.Name);
             if (dataRecordType.ParentId.HasValue)
                 insertQuery.Column(COL_ParentID).Value(dataRecordType.ParentId.Value);
-            else
-                insertQuery.Column(COL_ParentID).Null();
             if (dataRecordType.Fields != null)
                 insertQuery.Column(COL_Fields).Value(Vanrise.Common.Serializer.Serialize(dataRecordType.Fields));
-            else
-                insertQuery.Column(COL_Fields).Null();
             if (dataRecordType.ExtraFieldsEvaluator != null)
                 insertQuery.Column(COL_ExtraFieldsEvaluator).Value(Vanrise.Common.Serializer.Serialize(dataRecordType.ExtraFieldsEvaluator));
-            else
-                insertQuery.Column(COL_ExtraFieldsEvaluator).Null();
             if (dataRecordType.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordType.Settings));
-            else
-                insertQuery.Column(COL_Settings).Null();
             return queryContext.ExecuteNonQuery() > 0;
 
         }
@@ -112,7 +104,7 @@ namespace Vanrise.GenericData.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
-            return queryContext.GetItems<DataRecordType>(DataRecordTypeMapper);
+            return queryContext.GetItems(DataRecordTypeMapper);
         }
 
         public void SetDataRecordTypeCacheExpired()

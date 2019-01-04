@@ -50,16 +50,20 @@ namespace Vanrise.GenericData.Data.RDB
         GenericRuleDefinition GenericRuleDefinitionMapper(IRDBDataReader reader)
         {
             GenericRuleDefinition details = Vanrise.Common.Serializer.Deserialize<GenericRuleDefinition>(reader.GetString(COL_Details));
-            return new GenericRuleDefinition()
+            var genericRuleDefinition = new GenericRuleDefinition()
             {
                 GenericRuleDefinitionId = reader.GetGuid(COL_ID),
                 Name = reader.GetString(COL_Name),
-                Title = details.Title,
-                Objects = details.Objects,
-                CriteriaDefinition = details.CriteriaDefinition,
-                SettingsDefinition = details.SettingsDefinition,
-                Security = details.Security
             };
+            if (details != null)
+            {
+                genericRuleDefinition.Title = details.Title;
+                genericRuleDefinition.Objects = details.Objects;
+                genericRuleDefinition.CriteriaDefinition = details.CriteriaDefinition;
+                genericRuleDefinition.SettingsDefinition = details.SettingsDefinition;
+                genericRuleDefinition.Security = details.Security;
+            }
+            return genericRuleDefinition;
         }
 
         #endregion

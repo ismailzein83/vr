@@ -56,8 +56,8 @@ namespace Vanrise.GenericData.Data.RDB
             string details = reader.GetString(COL_Details);
             if (details != null && details != string.Empty)
                 summaryTransformationDefinition = Vanrise.Common.Serializer.Deserialize<SummaryTransformationDefinition>(details);
-
-            summaryTransformationDefinition.SummaryTransformationDefinitionId = reader.GetGuid(COL_ID);
+            if(summaryTransformationDefinition!=null)
+                summaryTransformationDefinition.SummaryTransformationDefinitionId = reader.GetGuid(COL_ID);
 
             return summaryTransformationDefinition;
         }

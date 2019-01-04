@@ -67,7 +67,8 @@ namespace Vanrise.GenericData.Data.RDB
             ifNotExists.EqualsCondition(COL_Name).Value(dataStore.Name);
             insertQuery.Column(COL_ID).Value(dataStore.DataStoreId);
             insertQuery.Column(COL_Name).Value(dataStore.Name);
-            insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataStore.Settings));
+            if(dataStore.Settings!=null)
+                insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataStore.Settings));
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -84,7 +85,7 @@ namespace Vanrise.GenericData.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
-            return queryContext.GetItems<DataStore>(DataStoreMapper);
+            return queryContext.GetItems(DataStoreMapper);
         }
 
         public bool UpdateDataStore(DataStore dataStore)
@@ -96,7 +97,10 @@ namespace Vanrise.GenericData.Data.RDB
             ifNotExists.NotEqualsCondition(COL_ID).Value(dataStore.DataStoreId);
             ifNotExists.EqualsCondition(COL_Name).Value(dataStore.Name);
             updateQuery.Column(COL_Name).Value(dataStore.Name);
-            updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataStore.Settings));
+            if (dataStore.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataStore.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
             updateQuery.Where().EqualsCondition(COL_ID).Value(dataStore.DataStoreId);
             return queryContext.ExecuteNonQuery() > 0;
         }

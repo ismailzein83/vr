@@ -80,7 +80,8 @@ namespace Vanrise.GenericData.Data.RDB
             insertQuery.Column(COL_Name).Value(dataRecordStorage.Name);
             insertQuery.Column(COL_DataRecordTypeID).Value(dataRecordStorage.DataRecordTypeId);
             insertQuery.Column(COL_DataStoreID).Value(dataRecordStorage.DataStoreId);
-            insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordStorage.Settings));
+            if(dataRecordStorage.Settings!=null)
+                insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordStorage.Settings));
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -97,7 +98,7 @@ namespace Vanrise.GenericData.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
-            return queryContext.GetItems<DataRecordStorage>(DataRecordStorageMapper);
+            return queryContext.GetItems(DataRecordStorageMapper);
         }
 
         public bool UpdateDataRecordStorage(DataRecordStorage dataRecordStorage)
@@ -111,7 +112,10 @@ namespace Vanrise.GenericData.Data.RDB
             updateQuery.Column(COL_Name).Value(dataRecordStorage.Name);
             updateQuery.Column(COL_DataRecordTypeID).Value(dataRecordStorage.DataRecordTypeId);
             updateQuery.Column(COL_DataStoreID).Value(dataRecordStorage.DataStoreId);
-            updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordStorage.Settings));
+            if (dataRecordStorage.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(dataRecordStorage.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
             updateQuery.Where().EqualsCondition(COL_ID).Value(dataRecordStorage.DataRecordStorageId);
             return queryContext.ExecuteNonQuery() > 0;
         }
