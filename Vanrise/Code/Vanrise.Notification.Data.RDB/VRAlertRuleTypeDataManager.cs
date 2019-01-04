@@ -88,8 +88,6 @@ namespace Vanrise.Notification.Data.RDB
             insertQuery.Column(COL_Name).Value(vrAlertRuleTypeItem.Name);
             if (vrAlertRuleTypeItem.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrAlertRuleTypeItem.Settings));
-            else
-                insertQuery.Column(COL_Settings).Null();
             return queryContext.ExecuteNonQuery() > 0;
         }
 

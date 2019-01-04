@@ -96,8 +96,6 @@ namespace Vanrise.Notification.Data.RDB
             insertQuery.Column(COL_BusinessEntityDefinitionID).Value(alertLevelItem.BusinessEntityDefinitionId);
             if (alertLevelItem.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(alertLevelItem.Settings));
-            else
-                insertQuery.Column(COL_Settings).Null();
             return queryContext.ExecuteNonQuery() > 0;
         }
 

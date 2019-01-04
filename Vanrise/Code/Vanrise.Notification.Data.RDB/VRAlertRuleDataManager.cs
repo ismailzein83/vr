@@ -111,16 +111,10 @@ namespace Vanrise.Notification.Data.RDB
             insertQuery.Column(COL_UserId).Value(VRAlertRuleItem.UserId);
             if (VRAlertRuleItem.CreatedBy.HasValue)
                 insertQuery.Column(COL_CreatedBy).Value(VRAlertRuleItem.CreatedBy.Value);
-            else
-                insertQuery.Column(COL_CreatedBy).Null();
             if (VRAlertRuleItem.LastModifiedBy.HasValue)
                 insertQuery.Column(COL_LastModifiedBy).Value(VRAlertRuleItem.LastModifiedBy.Value);
-            else
-                insertQuery.Column(COL_LastModifiedBy).Null();
             if (VRAlertRuleItem.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(VRAlertRuleItem.Settings));
-            else
-                insertQuery.Column(COL_Settings).Null();
             var insertedID = queryContext.ExecuteScalar().NullableLongValue;
             if (insertedID.HasValue)
             {
