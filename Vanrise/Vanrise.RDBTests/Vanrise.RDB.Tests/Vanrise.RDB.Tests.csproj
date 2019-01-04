@@ -159,7 +159,10 @@
     <Compile Include="Common\CountryDataManagerTests.cs" />
     <Compile Include="Common\CurrencyDataManagerTests.cs" />
     <Compile Include="Common\CurrencyExchangeRateDataManagerTests.cs" />
+    <Compile Include="Common\ExtensionConfigurationDataManagerTests.cs" />
     <Compile Include="Common\GenericLKUPItemDataManagerTests.cs" />
+    <Compile Include="Common\OverriddenConfigurationDataManagerTests.cs" />
+    <Compile Include="Common\OverriddenConfigurationGroupDataManagerTests.cs" />
     <Compile Include="Common\RateTypeDataManagerTests.cs" />
     <Compile Include="Common\RegionDataManagerTests.cs" />
     <Compile Include="Common\SMSMessageTemplateDataManagerTests.cs" />
