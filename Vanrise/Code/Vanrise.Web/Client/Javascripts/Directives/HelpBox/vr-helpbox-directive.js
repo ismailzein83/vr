@@ -6,7 +6,8 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
             datasource: '=',
             datavaluefield: '@',
             datatextfield: '@',
-            dataclassfield: '@'
+            dataclassfield: '@',
+            labelclassfield:'@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -22,6 +23,9 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
             ctrl.getObjectClass = function (item) {
                 if (ctrl.dataclassfield) return ctrl.getObjectProperty(item, ctrl.dataclassfield);
                 return item;
+            };
+            ctrl.getLabelClass = function (item) {
+                if (ctrl.labelclassfield) return ctrl.getObjectProperty(item, ctrl.labelclassfield);
             };
             ctrl.getObjectValue = function (item) {
                 if (ctrl.datavaluefield) return ctrl.getObjectProperty(item, ctrl.datavaluefield);
@@ -49,7 +53,7 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
             var mainTemplate = '<div  class="vr-helpbox' + layoutClass + '" >'
 				+ '<span style="margin-left: -5px;border: 1px solid #ccc;border-radius: 4px;"><div class="item" ng-repeat="item in ctrl.datasource">'
 				+ '<div class="badge-color" ng-class="ctrl.getObjectClass(item)"></div>'
-				+ '<span title="{{ctrl.getObjectText(item)}}">{{ctrl.getObjectText(item)}}</span>'
+				+ '<span title="{{ctrl.getObjectText(item)}}" ng-class="ctrl.getLabelClass(item)">{{ctrl.getObjectText(item)}}</span>'
 				+ '</div>'
 				+ '</div></span>';
             return labelTemplate + mainTemplate;
