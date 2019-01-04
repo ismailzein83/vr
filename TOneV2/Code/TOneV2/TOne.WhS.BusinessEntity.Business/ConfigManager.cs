@@ -143,7 +143,11 @@ namespace TOne.WhS.BusinessEntity.Business
         public bool GetSaleAreaAllowRateZero()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
-            return saleAreaSettings.PricingSettings.AllowRateZero.Value;
+
+            if (saleAreaSettings.PricingSettings.AllowRateZero.HasValue)
+                return saleAreaSettings.PricingSettings.AllowRateZero.Value;
+
+            return false;
         }
 
         public bool GetPurchaseAreaAllowRateZero()

@@ -55,7 +55,6 @@
                 longPrecision = parameters.longPrecision;
                 pricingSettings = parameters.pricingSettings;
                 allowRateZero = (parameters.pricingSettings != undefined) ? parameters.pricingSettings.AllowRateZero : false;
-                console.log(allowRateZero);
             }
         }
         function defineScope() {

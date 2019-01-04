@@ -55,7 +55,6 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
                 }
 
                 if (bulkActionContext != undefined) {
-                    console.log(bulkActionContext);
                     ctrl.longPrecision = bulkActionContext.longPrecision;
                     ctrl.allowRateZero = bulkActionContext.allowRateZero;
                 }
