@@ -459,6 +459,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.NumberingPlan.Data.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.FileDataStorage", "Vanrise.GenericData.FileDataStorage\Vanrise.GenericData.FileDataStorage.csproj", "{DDDCB6B4-414D-4815-833F-75601061FC7F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevTools", "DevTools", "{A035B772-46E1-4B98-BD9D-DB17225833EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DevTools.Business", "Vanrise.DevTools.Business\Vanrise.DevTools.Business.csproj", "{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DevTools.Data", "Vanrise.DevTools.Data\Vanrise.DevTools.Data.csproj", "{3867914C-8972-4BAD-A1E8-46CA59F75B08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DevTools.Data.SQL", "Vanrise.DevTools.Data.SQL\Vanrise.DevTools.Data.SQL.csproj", "{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DevTools.Entities", "Vanrise.DevTools.Entities\Vanrise.DevTools.Entities.csproj", "{30DF9A71-05B6-4199-AE6B-68DB57864909}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DevTools.MainExtensions", "Vanrise.DevTools.MainExtensions\Vanrise.DevTools.MainExtensions.csproj", "{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2135,6 +2147,66 @@ Global
 		{DDDCB6B4-414D-4815-833F-75601061FC7F}.Release|x64.Build.0 = Release|Any CPU
 		{DDDCB6B4-414D-4815-833F-75601061FC7F}.Release|x86.ActiveCfg = Release|Any CPU
 		{DDDCB6B4-414D-4815-833F-75601061FC7F}.Release|x86.Build.0 = Release|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Debug|x64.Build.0 = Debug|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Debug|x86.Build.0 = Debug|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Release|x64.ActiveCfg = Release|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Release|x64.Build.0 = Release|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Release|x86.ActiveCfg = Release|Any CPU
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7}.Release|x86.Build.0 = Release|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Debug|x64.Build.0 = Debug|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Debug|x86.Build.0 = Debug|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Release|x64.ActiveCfg = Release|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Release|x64.Build.0 = Release|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Release|x86.ActiveCfg = Release|Any CPU
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08}.Release|x86.Build.0 = Release|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Debug|x64.Build.0 = Debug|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Debug|x86.Build.0 = Debug|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Release|x64.ActiveCfg = Release|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Release|x64.Build.0 = Release|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Release|x86.ActiveCfg = Release|Any CPU
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96}.Release|x86.Build.0 = Release|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Debug|x64.Build.0 = Debug|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Debug|x86.Build.0 = Debug|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Release|x64.ActiveCfg = Release|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Release|x64.Build.0 = Release|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Release|x86.ActiveCfg = Release|Any CPU
+		{30DF9A71-05B6-4199-AE6B-68DB57864909}.Release|x86.Build.0 = Release|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Debug|x64.Build.0 = Debug|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Debug|x86.Build.0 = Debug|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Release|x64.ActiveCfg = Release|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Release|x64.Build.0 = Release|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Release|x86.ActiveCfg = Release|Any CPU
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2343,12 +2415,17 @@ Global
 		{C0874549-9531-4550-B724-1EC4055295A4} = {C314EDE4-0CF4-4E30-BF4D-D08798AB0543}
 		{6B9542D6-2F56-4DAC-8054-3E62344AF96E} = {A3A92219-95E9-48DC-9808-B64E2A09C226}
 		{DDDCB6B4-414D-4815-833F-75601061FC7F} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
+		{B92A7351-49EF-4DA9-AB76-0FFDDE313EC7} = {A035B772-46E1-4B98-BD9D-DB17225833EE}
+		{3867914C-8972-4BAD-A1E8-46CA59F75B08} = {A035B772-46E1-4B98-BD9D-DB17225833EE}
+		{0CDF0624-FF25-42DF-8E86-AF2F7FEEBF96} = {A035B772-46E1-4B98-BD9D-DB17225833EE}
+		{30DF9A71-05B6-4199-AE6B-68DB57864909} = {A035B772-46E1-4B98-BD9D-DB17225833EE}
+		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F} = {A035B772-46E1-4B98-BD9D-DB17225833EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A6C2049-65DE-477B-B7A1-CD4DBAC577AF}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 198
+		SccNumberOfProjects = 203
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -3140,5 +3217,25 @@ Global
 		SccProjectTopLevelParentUniqueName197 = Vanrise.sln
 		SccProjectName197 = Vanrise.GenericData.FileDataStorage
 		SccLocalPath197 = Vanrise.GenericData.FileDataStorage
+		SccProjectUniqueName198 = Vanrise.DevTools.Business\\Vanrise.DevTools.Business.csproj
+		SccProjectTopLevelParentUniqueName198 = Vanrise.sln
+		SccProjectName198 = Vanrise.DevTools.Business
+		SccLocalPath198 = Vanrise.DevTools.Business
+		SccProjectUniqueName199 = Vanrise.DevTools.Data\\Vanrise.DevTools.Data.csproj
+		SccProjectTopLevelParentUniqueName199 = Vanrise.sln
+		SccProjectName199 = Vanrise.DevTools.Data
+		SccLocalPath199 = Vanrise.DevTools.Data
+		SccProjectUniqueName200 = Vanrise.DevTools.Data.SQL\\Vanrise.DevTools.Data.SQL.csproj
+		SccProjectTopLevelParentUniqueName200 = Vanrise.sln
+		SccProjectName200 = Vanrise.DevTools.Data.SQL
+		SccLocalPath200 = Vanrise.DevTools.Data.SQL
+		SccProjectUniqueName201 = Vanrise.DevTools.Entities\\Vanrise.DevTools.Entities.csproj
+		SccProjectTopLevelParentUniqueName201 = Vanrise.sln
+		SccProjectName201 = Vanrise.DevTools.Entities
+		SccLocalPath201 = Vanrise.DevTools.Entities
+		SccProjectUniqueName202 = Vanrise.DevTools.MainExtensions\\Vanrise.DevTools.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName202 = Vanrise.sln
+		SccProjectName202 = Vanrise.DevTools.MainExtensions
+		SccLocalPath202 = Vanrise.DevTools.MainExtensions
 	EndGlobalSection
 EndGlobal
