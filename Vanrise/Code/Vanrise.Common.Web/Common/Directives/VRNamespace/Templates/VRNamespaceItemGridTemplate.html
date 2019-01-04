@@ -1,0 +1,13 @@
+﻿<vr-datagrid datasource="scopeModel.vrNamespaceItems"
+             on-ready="scopeModel.onGridReady"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             idfield="VRNamespaceItemId"
+             hidegridmenu>
+
+    <vr-datagridcolumn headertext="'ID'" field="'VRNamespaceItemId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Title'" field="'Name'" type="'Text'"></vr-datagridcolumn> 
+    <vr-datagridcolumn headertext="'Created By'" field="'CreatedByDescription'" type="'Text'"></vr-datagridcolumn>
+
+</vr-datagrid>
