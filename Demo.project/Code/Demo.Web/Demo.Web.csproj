@@ -207,6 +207,24 @@
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.DevTools.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DevTools.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.DevTools.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DevTools.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.DevTools.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DevTools.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.DevTools.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DevTools.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.DevTools.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DevTools.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.DevTools.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DevTools.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>

@@ -15,3 +15,4 @@ Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
 Integration				C:\TFS\Vanrise\Code\Vanrise.Integration.Web\Integration
 Demo_BestPractices		C:\TFS\Demo.project\Code\Demo.BestPractices.Web\Demo_BestPractices
 VR_Tools				C:\TFS\Demo.project\Code\Vanrise.Tools.Web\VR_Tools
+VR_DevTools				C:\TFS\Vanrise\Code\Vanrise.DevTools.Web\VR_DevTools
