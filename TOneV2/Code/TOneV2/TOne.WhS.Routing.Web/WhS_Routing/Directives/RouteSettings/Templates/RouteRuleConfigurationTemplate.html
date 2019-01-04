@@ -14,3 +14,12 @@
         <vr-switch value="scopeModel.fixedOptionLossDefaultValue" label="Fixed Option Loss Default Value"></vr-switch>
     </vr-columns>
 </vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="scopeModel.ruleCriteriasPriority"
+                     enabledraggablerow="true"
+                     hidegridmenu>
+            <vr-datagridcolumn headertext="'Rule Criteria'" type="'Text'" field="'Name'" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>

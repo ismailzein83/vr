@@ -4,3 +4,13 @@
 <vr-section header="Product Routes">
     <vr-whs-routing-route-routeoptionruleconfiguration-grid on-ready="scopeModel.onProductRouteGridReady"></vr-whs-routing-route-routeoptionruleconfiguration-grid>
 </vr-section>
+<vr-section header="Rule Criterias">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-datagrid datasource="scopeModel.ruleCriteriasPriority"
+                         enabledraggablerow="true" hidegridmenu>
+                <vr-datagridcolumn headertext="'Rule Criteria'" type="'Text'" field="'Name'" disablesorting></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+</vr-section>

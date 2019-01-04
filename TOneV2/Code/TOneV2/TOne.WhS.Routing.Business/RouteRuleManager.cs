@@ -17,6 +17,20 @@ namespace TOne.WhS.Routing.Business
 {
     public class RouteRuleManager : Vanrise.Rules.RuleManager<RouteRule, RouteRuleDetail>
     {
+        #region Properties/Ctor
+
+        static readonly Dictionary<Guid, Vanrise.Rules.BaseRuleStructureBehavior> s_baseRuleStructureBehaviorDict = new Dictionary<Guid, Vanrise.Rules.BaseRuleStructureBehavior>()
+        {
+            { BaseRuleCriteriaPriority.s_CodeRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCode()},
+            //{ BaseRuleCriteriaPriority.s_DealRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByDeal()},
+            { BaseRuleCriteriaPriority.s_ZoneRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone()},
+            { BaseRuleCriteriaPriority.s_CountryRuleBehavior, new Vanrise.Common.MainExtensions.Country.Rules.StructureRulesBehaviors.RuleBehaviorByCountry()},
+            { BaseRuleCriteriaPriority.s_CustomerRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCustomer()},
+            { BaseRuleCriteriaPriority.s_RoutingProductRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct()}
+        };
+
+        #endregion
+
         #region Public Methods
 
         public IEnumerable<RouteRuleCriteriaConfig> GetRouteRuleCriteriaTemplates()
@@ -336,6 +350,7 @@ namespace TOne.WhS.Routing.Business
 
             return selectiveCountryCriteriaGroup.CountryIds != null && selectiveCountryCriteriaGroup.CountryIds.Count > 0;
         }
+
         public RouteRuleSettings ExtendSuppliersList(RouteRuleSettings routeRuleSettings, List<RouteOption> routeOptions)
         {
             return routeRuleSettings.ExtendSuppliersList(routeRuleSettings, routeOptions);
@@ -347,12 +362,13 @@ namespace TOne.WhS.Routing.Business
 
         private IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
         {
-            List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
-            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCode());
-            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
-            ruleStructureBehaviors.Add(new Vanrise.Common.MainExtensions.Country.Rules.StructureRulesBehaviors.RuleBehaviorByCountry());
-            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCustomer());
-            ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct());
+            List<RouteRuleCriteriaPriority> routeRuleCriteriasPriority = new ConfigManager().GetRouteRuleCriteriasPriority();
+            var ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
+
+            foreach (var ruleCriteria in routeRuleCriteriasPriority)
+            {
+                ruleStructureBehaviors.Add(s_baseRuleStructureBehaviorDict.GetRecord(ruleCriteria.Id));
+            }
             return ruleStructureBehaviors;
         }
 

@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,6 +49,10 @@
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -117,6 +121,7 @@
     <Compile Include="RouteRuleQualityContext.cs" />
     <Compile Include="RoutingExcludedDestinations\RoutingExcludedDestinationsConfig.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationRuntime\QualityConfiguration.cs" />
+    <Compile Include="Settings\BaseRuleCriteriaPriority.cs" />
     <Compile Include="Settings\RouteRuleConfiguration.cs" />
     <Compile Include="Settings\TechnicalQualityConfiguration.cs" />
     <Compile Include="RouteRuleSettings\SpecialRequestRouteOptionSettings.cs" />

@@ -16,9 +16,24 @@ namespace TOne.WhS.Routing.Business
 {
 	public class RouteOptionRuleManager : Vanrise.Rules.RuleManager<RouteOptionRule, RouteOptionRuleDetail>
 	{
-		#region Variables/Ctor
+        #region Properties/Ctor
 
-		static RouteOptionRuleManager()
+        static readonly Dictionary<Guid, Vanrise.Rules.BaseRuleStructureBehavior> s_baseRuleStructureBehaviorDict = new Dictionary<Guid, Vanrise.Rules.BaseRuleStructureBehavior>()
+        {
+            { BaseRuleCriteriaPriority.s_SupplierZoneRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySupplierZone()} ,
+            { BaseRuleCriteriaPriority.s_SupplierRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySupplier() },
+            { BaseRuleCriteriaPriority.s_CodeRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCode() },
+            { BaseRuleCriteriaPriority.s_ZoneRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone() },
+            { BaseRuleCriteriaPriority.s_CountryRuleBehavior, new Vanrise.Common.MainExtensions.Country.Rules.StructureRulesBehaviors.RuleBehaviorByCountry() },
+            { BaseRuleCriteriaPriority.s_CustomerRuleBehavior , new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCustomer() },
+            { BaseRuleCriteriaPriority.s_RoutingProductRuleBehavior, new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct() },
+        };
+
+        #endregion
+
+        #region Variables/Ctor
+
+        static RouteOptionRuleManager()
 		{
 			RouteOptionRuleManager instance = new RouteOptionRuleManager();
 			instance.AddRuleCachingExpirationChecker(new RouteOptionRuleCachingExpirationChecker());
@@ -322,22 +337,21 @@ namespace TOne.WhS.Routing.Business
 			return RouteOptionRuleLoggableEntity.Instance;
 		}
 
-		#endregion
+        #endregion
 
-		#region Private Methods
+        #region Private Methods
 
-		private IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
+        private IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
 		{
-			List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
-			ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySupplierZone());
-			ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySupplier());
-			ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCode());
-			ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
-			ruleStructureBehaviors.Add(new Vanrise.Common.MainExtensions.Country.Rules.StructureRulesBehaviors.RuleBehaviorByCountry());
-			ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCustomer());
-			//ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct());
-			return ruleStructureBehaviors;
-		}
+            List<RouteOptionRuleCriteriaPriority> routeOptionRuleCriteriasPriority = new ConfigManager().GetRouteOptionRuleCriteriasPriority();
+            List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
+
+            foreach (var ruleCriteria in routeOptionRuleCriteriasPriority)
+            {
+                ruleStructureBehaviors.Add(s_baseRuleStructureBehaviorDict.GetRecord(ruleCriteria.Id));
+            }
+            return ruleStructureBehaviors;
+        }
 
 		private int GetRuleTypePriority(RouteOptionRuleConfig ruleTypeConfig)
 		{

@@ -33,8 +33,8 @@ function (UtilsService, VRUIUtilsService, WhS_Routing_RoutingProcessTypeEnum) {
         var productRouteGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
-
             $scope.scopeModel = {};
+            $scope.scopeModel.ruleCriteriasPriority = [];
 
             $scope.scopeModel.onCustomerRouteGridReady = function (api) {
                 customerRouteGridAPI = api;
@@ -62,6 +62,7 @@ function (UtilsService, VRUIUtilsService, WhS_Routing_RoutingProcessTypeEnum) {
                 if (payload) {
                     customerRouteOptionRuleTypeConfiguration = payload.CustomerRouteOptionRuleTypeConfiguration;
                     productRouteOptionRuleTypeConfiguration = payload.ProductRouteOptionRuleTypeConfiguration;
+                    $scope.scopeModel.ruleCriteriasPriority = payload.RuleCriteriasPriority != undefined && payload.RuleCriteriasPriority != null ? payload.RuleCriteriasPriority : [];
                 }
 
                 //Loading Customer Route Grid
@@ -88,6 +89,12 @@ function (UtilsService, VRUIUtilsService, WhS_Routing_RoutingProcessTypeEnum) {
 
             api.getData = function () {
 
+                var ruleCriteriasPriority = [];
+                for (var i = 0; i < $scope.scopeModel.ruleCriteriasPriority.length; i++) {
+                    var currentRule = $scope.scopeModel.ruleCriteriasPriority[i];
+                    ruleCriteriasPriority.push(getRulePriority(currentRule));
+                }
+
                 var obj = {
                     $type: "TOne.WhS.Routing.Entities.RouteOptionRuleConfiguration, TOne.WhS.Routing.Entities",
                     CustomerRouteOptionRuleTypeConfiguration: {
@@ -97,8 +104,16 @@ function (UtilsService, VRUIUtilsService, WhS_Routing_RoutingProcessTypeEnum) {
                     ProductRouteOptionRuleTypeConfiguration: {
                         $type: "TOne.WhS.Routing.Entities.ProductRouteOptionRuleTypeConfiguration, TOne.WhS.Routing.Entities",
                         RouteOptionRuleTypeConfiguration: productRouteGridAPI.getData()
-                    }
+                    },
+                    RuleCriteriasPriority: ruleCriteriasPriority
                 };
+
+                function getRulePriority(dataItem) {
+                    return {
+                        Id: dataItem.Id,
+                        Name: dataItem.Name
+                    };
+                }
 
                 return obj;
             };

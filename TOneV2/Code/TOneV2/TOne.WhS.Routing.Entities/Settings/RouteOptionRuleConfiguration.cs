@@ -11,6 +11,8 @@ namespace TOne.WhS.Routing.Entities
         public CustomerRouteOptionRuleTypeConfiguration CustomerRouteOptionRuleTypeConfiguration { get; set; }
 
         public ProductRouteOptionRuleTypeConfiguration ProductRouteOptionRuleTypeConfiguration { get; set; }
+
+        public List<RouteOptionRuleCriteriaPriority> RuleCriteriasPriority { get; set; } 
     }
 
     public class CustomerRouteOptionRuleTypeConfiguration

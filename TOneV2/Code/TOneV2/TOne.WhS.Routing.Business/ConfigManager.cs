@@ -148,20 +148,29 @@ namespace TOne.WhS.Routing.Business
         public QualityConfiguration GetQualityConfiguration()
         {
             RouteSettingsData routeSettingsData = GetRouteSettingData();
-
-            if (routeSettingsData.QualityConfiguration == null)
-                throw new NullReferenceException("routeSettingsData.QualityConfiguration");
-
+            routeSettingsData.QualityConfiguration.ThrowIfNull("routeSettingsData.QualityConfiguration");
             return routeSettingsData.QualityConfiguration;
         }
 
         public RouteRuleConfiguration GetRouteRuleConfiguration()
         {
             RouteSettingsData routeSettingsData = GetRouteSettingData();
-            if (routeSettingsData.RouteRuleConfiguration == null)
-                throw new NullReferenceException("routeSettingsData.RouteRuleConfiguration");
-
+            routeSettingsData.RouteRuleConfiguration.ThrowIfNull("routeSettingsData.RouteRuleConfiguration");
             return routeSettingsData.RouteRuleConfiguration;
+        }
+
+        public List<RouteRuleCriteriaPriority> GetRouteRuleCriteriasPriority()
+        {
+            List<RouteRuleCriteriaPriority> routeRuleCriteriaPriority = GetRouteRuleConfiguration().RuleCriteriasPriority;
+            routeRuleCriteriaPriority.ThrowIfNull("routeRuleCriteriasPriority");
+            return routeRuleCriteriaPriority;
+        }
+
+        public List<RouteOptionRuleCriteriaPriority> GetRouteOptionRuleCriteriasPriority()
+        {
+            List<RouteOptionRuleCriteriaPriority> routeOptionRuleCriteriaPriority = GetRouteOptionRuleConfiguration().RuleCriteriasPriority;
+            routeOptionRuleCriteriaPriority.ThrowIfNull("routeOptionRuleCriteriaPriority");
+            return routeOptionRuleCriteriaPriority;
         }
 
         public Dictionary<Guid, Decimal> GetTriggerThresholdByRouteRuleQualityConfiguration()
@@ -177,6 +186,7 @@ namespace TOne.WhS.Routing.Business
 
             return triggerThresholdByRouteRuleQualityConfiguration;
         }
+
         public bool GetProductRouteBuildGenerateCostAnalysisByCustomer()
         {
             return GetProductRouteBuildConfiguration().GenerateCostAnalysisByCustomer;
@@ -214,6 +224,7 @@ namespace TOne.WhS.Routing.Business
             if (routeTechnicalSettingData == null)
                 throw new NullReferenceException("routeTechnicalSettingData");
 
+            routeTechnicalSettingData.PrepareSettingBeforeLoad(new SettingPrepareSettingBeforeLoadContext());
             return routeTechnicalSettingData;
         }
 
@@ -221,7 +232,6 @@ namespace TOne.WhS.Routing.Business
         {
             SettingManager settingManager = new SettingManager();
             RouteSettingsData routeSettingsData = settingManager.GetSetting<RouteSettingsData>(Constants.RouteSettings);
-
             if (routeSettingsData == null)
                 throw new NullReferenceException("routeSettingsData");
 
