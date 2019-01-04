@@ -77,6 +77,7 @@
     <Compile Include="IVRLocalizationTextResourceDataManager.cs" />
     <Compile Include="IVRLocalizationTextResourceTranslationDataManager.cs" />
     <Compile Include="IVRLoggableEntityDataManager.cs" />
+    <Compile Include="IVRNamespaceItemDataManager.cs" />
     <Compile Include="IVRObjectTrackingDataManager.cs" />
     <Compile Include="IVRReceivedMailMessageDataManager.cs" />
     <Compile Include="IVRRuleDataManager.cs" />
