@@ -12,7 +12,7 @@ set [Status] = @Status,
     RollbackEventPayload = ISNULL(@RollbackEventPayload, RollbackEventPayload),
 	ExecuteBPInstanceID = ISNULL(@ExecuteBPInstanceID, ExecuteBPInstanceID), 
 	ClearBPInstanceID = ISNULL(@ClearBPInstanceID, ClearBPInstanceID),
-	StatusUpdatedTime = GETDATE()
+	LastModifiedTime = GETDATE()
 where 	ID = @VRNotificationId
 
 END

@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [VRNotification].[sp_VRNotifications_GetUpdated]
 	@NotificationTypeID UniqueIdentifier,
 	@NbOfRows BIGINT,
-    @StatusUpdatedTime datetime,
+    @LastModifiedTime datetime,
 	@NotificationId BIGINT,
     @Description varchar(max),
     @AlertLevelIds varchar(max),
@@ -27,7 +27,7 @@ BEGIN
 	  ,[ErrorMessage]
 	  ,[Data]	
 	  ,[CreationTime]
-	  ,[StatusUpdatedTime]
+	  ,[LastModifiedTime]
 	  ,[EventPayload]
 	  ,RollbackEventPayload
 	INTO #temptable2_VRNotifications_GetUpdated
@@ -37,16 +37,16 @@ BEGIN
 		   AND (@AlertLevelIds is null or [AlertLevelId] in (SELECT AlertLevelId FROM @NotificationAlertLevelIDsTable)) 
 		   AND (@From is null or CreationTime >= @From)
 		   AND (@To is null or CreationTime < @To)
-		   AND (StatusUpdatedTime > @StatusUpdatedTime OR (StatusUpdatedTime = @StatusUpdatedTime AND ID > @NotificationId))
-	ORDER BY StatusUpdatedTime, ID
+		   AND (LastModifiedTime > @LastModifiedTime OR (LastModifiedTime = @LastModifiedTime AND ID > @NotificationId))
+	ORDER BY LastModifiedTime, ID
 	
 	SELECT [ID],[UserID],[TypeID],[ParentType1],[ParentType2],[EventKey],[ExecuteBPInstanceID]
 			,[ClearBPInstanceID],[Status],[AlertLevelID],[Description],[ErrorMessage],[Data],[CreationTime] ,[EventPayload],RollbackEventPayload
 	FROM #temptable2_VRNotifications_GetUpdated
 	  
 	IF((SELECT COUNT(*) FROM #temptable2_VRNotifications_GetUpdated) = 0)
-		SELECT @StatusUpdatedTime as StatusUpdatedTime, @NotificationId as ID
+		SELECT @LastModifiedTime as LastModifiedTime, @NotificationId as ID
 	ELSE
-		SELECT TOP 1 StatusUpdatedTime, ID FROM #temptable2_VRNotifications_GetUpdated
-		ORDER BY StatusUpdatedTime desc, ID desc
+		SELECT TOP 1 LastModifiedTime, ID FROM #temptable2_VRNotifications_GetUpdated
+		ORDER BY LastModifiedTime desc, ID desc
 END

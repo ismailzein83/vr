@@ -41,7 +41,7 @@ BEGIN
 		   AND (@To is null or CreationTime < @To)
 	ORDER BY ID DESC
 				
-	SELECT TOP 1 StatusUpdatedTime, ID
+	SELECT TOP 1 LastModifiedTime, ID
 	FROM [VRNotification].[VRNotification] WITH(NOLOCK)
-	ORDER BY StatusUpdatedTime desc, ID desc
+	ORDER BY LastModifiedTime desc, ID desc
 END

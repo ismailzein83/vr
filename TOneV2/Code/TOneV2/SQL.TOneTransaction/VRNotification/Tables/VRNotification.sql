@@ -15,10 +15,12 @@
     [RollbackEventPayload] NVARCHAR (MAX)   NULL,
     [Data]                 NVARCHAR (MAX)   NULL,
     [CreationTime]         DATETIME         CONSTRAINT [DF_VRNotification_CreationTime] DEFAULT (getdate()) NULL,
-    [StatusUpdatedTime]    DATETIME         CONSTRAINT [DF_VRNotification_StatusUpdatedTime] DEFAULT (getdate()) NULL,
+    [LastModifiedTime]     DATETIME         CONSTRAINT [DF_VRNotification_StatusUpdatedTime] DEFAULT (getdate()) NULL,
     [timestamp]            ROWVERSION       NULL,
     CONSTRAINT [PK_VRActiveNotification_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
