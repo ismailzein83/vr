@@ -169,7 +169,7 @@ namespace Vanrise.Notification.Business
 
             VRNotificationUpdateOutput vrNotificationUpdateOutput = new VRNotificationUpdateOutput();
             vrNotificationUpdateOutput.VRNotificationDetails = vrNotifications.Select(VRNotificationDetailMapper).ToList(); ;
-            vrNotificationUpdateOutput.MaxTimeStamp = vrNotificationFirstPageContext.MaxTimeStamp;
+            vrNotificationUpdateOutput.LastUpdateHandle = vrNotificationFirstPageContext.LastUpdateHandle;
 
             return vrNotificationUpdateOutput;
         }
@@ -189,7 +189,7 @@ namespace Vanrise.Notification.Business
                 NotificationTypeId = input.NotificationTypeId,
                 NbOfRows = input.ExtendedQuery == null ? input.NbOfRows : long.MaxValue,
                 Query = input.Query,
-                MaxTimeStamp = input.LastUpdateHandle
+                LastUpdateHandle = input.LastUpdateHandle
             };
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
             List<VRNotification> getUpdatedNotifications = dataManager.GetUpdateVRNotifications(vrNotificationUpdateContext);
@@ -198,7 +198,7 @@ namespace Vanrise.Notification.Business
 
             VRNotificationUpdateOutput vrNotificationUpdateOutput = new VRNotificationUpdateOutput();
             vrNotificationUpdateOutput.VRNotificationDetails = matchedVRNotification != null ? matchedVRNotification.Select(VRNotificationDetailMapper).ToList() : null;
-            vrNotificationUpdateOutput.MaxTimeStamp = vrNotificationUpdateContext.MaxTimeStamp;
+            vrNotificationUpdateOutput.LastUpdateHandle = vrNotificationUpdateContext.LastUpdateHandle;
 
             return vrNotificationUpdateOutput;
         }

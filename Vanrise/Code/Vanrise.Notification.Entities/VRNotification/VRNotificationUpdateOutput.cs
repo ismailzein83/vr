@@ -6,6 +6,6 @@ namespace Vanrise.Notification.Entities
     {
         public List<VRNotificationDetail> VRNotificationDetails { get; set; }
 
-        public byte[] MaxTimeStamp { get; set; }
+        public object LastUpdateHandle { get; set; }
     }
 }

@@ -6,7 +6,7 @@ namespace Vanrise.Notification.Entities
     {
         Func<VRNotification, bool> onItemReady { get; }
 
-        byte[] MaxTimeStamp { set; }
+        object LastUpdateHandle { set; }
     }
 
     public class VRNotificationFirstPageContext : IVRNotificationFirstPageContext
@@ -19,6 +19,6 @@ namespace Vanrise.Notification.Entities
 
         public Func<VRNotification, bool> onItemReady { get; set; }
 
-        public byte[] MaxTimeStamp { get; set; }
+        public object LastUpdateHandle { get; set; }
     }
 }

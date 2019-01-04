@@ -4,7 +4,7 @@ namespace Vanrise.Notification.Entities
 {
     public interface IVRNotificationUpdateContext : IGetVRNotificationContext
     {
-        byte[] MaxTimeStamp { get; set; }
+        object LastUpdateHandle { get; set; }
     }
 
     public class VRNotificationUpdateContext : IVRNotificationUpdateContext
@@ -15,6 +15,6 @@ namespace Vanrise.Notification.Entities
 
         public VRNotificationQuery Query { get; set; }
 
-        public byte[] MaxTimeStamp { get; set; }
+        public object LastUpdateHandle { get; set; }
     }
 }

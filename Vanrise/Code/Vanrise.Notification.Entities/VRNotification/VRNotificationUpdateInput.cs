@@ -4,6 +4,6 @@ namespace Vanrise.Notification.Entities
 {
     public class VRNotificationUpdateInput : VRNotificationInput
     {
-        public byte[] LastUpdateHandle { get; set; }
+        public object LastUpdateHandle { get; set; }
     }
 }

@@ -36,19 +36,30 @@
                     VRTimerService.unregisterJob(scope.job);
                 }
 
-                return VR_Notification_VRNotificationsAPIService.GetFirstPageVRNotifications(buildVRNotificationFirstPageInput()).then(function (response) {
-                    manipulateDataUpdated(response);
-                    isGettingDataFirstTime = false;
+                return getFirstPage().then(function () {
                     VRTimerService.registerJob(onTimerElapsed, scope);
                 });
             };
 
             function onTimerElapsed(jobId) {
-                return VR_Notification_VRNotificationsAPIService.GetUpdatedVRNotifications(buildVRNotificationUpdateInput()).then(function (response) {
-                    if (scope.job.id == jobId)
-                        manipulateDataUpdated(response);
-                });
+                if (lastUpdateHandle != undefined)
+                    return VR_Notification_VRNotificationsAPIService.GetUpdatedVRNotifications(buildVRNotificationUpdateInput()).then(function (response) {
+                        if (scope.job.id == jobId)
+                            manipulateDataUpdated(response);
+                    });
+                else {
+                    return getFirstPage();
+                }
             };
+
+            function getFirstPage() {
+                return VR_Notification_VRNotificationsAPIService.GetFirstPageVRNotifications(buildVRNotificationFirstPageInput()).then(function (response) {
+                    manipulateDataUpdated(response);
+
+                    if (lastUpdateHandle != undefined)
+                        isGettingDataFirstTime = false;
+                });
+            }
 
             function manipulateDataUpdated(response) {
                 var itemAddedOrUpdatedInThisCall = false;
@@ -97,7 +108,7 @@
                         }
                     }
                 }
-                lastUpdateHandle = response.MaxTimeStamp;
+                lastUpdateHandle = response.LastUpdateHandle;
             };
 
             function isStatusMatched(statusId) {
