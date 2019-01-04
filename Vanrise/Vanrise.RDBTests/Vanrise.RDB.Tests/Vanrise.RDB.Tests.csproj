@@ -172,6 +172,8 @@
     <Compile Include="Common\VRConnectionDataManagerTests.cs" />
     <Compile Include="Common\VRDynamicAPIDataManagerTests.cs" />
     <Compile Include="Common\VRDynamicAPIModuleDataManagerTests.cs" />
+    <Compile Include="Common\VRMailMessageTemplateDataManagerTests.cs" />
+    <Compile Include="Common\VRMailMessageTypeDataManagerTests.cs" />
     <Compile Include="Common\VRTimeZoneDataManagerTests.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="GenericData\RecordFilterRDBBuilderTests.cs" />
