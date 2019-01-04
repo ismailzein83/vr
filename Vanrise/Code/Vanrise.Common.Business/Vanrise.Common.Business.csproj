@@ -178,6 +178,7 @@
     <Compile Include="SummaryTransformation\SummaryTransformationManager.cs" />
     <Compile Include="TypeManager.cs" />
     <Compile Include="VRMail\VRMailMessageTypeOverriddenConfiguration.cs" />
+    <Compile Include="VRNamespace\VRNamespaceItemManager.cs" />
     <Compile Include="VRNamespace\VRNamespaceManager.cs" />
     <Compile Include="VRObject\VRObjectEvaluator.cs" />
     <Compile Include="VRObject\VRObjectExpressionEvaluator.cs" />
