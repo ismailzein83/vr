@@ -248,12 +248,6 @@ app.directive( 'vrTreeview', ['UtilsService', function ( UtilsService )
                         $scope.$apply();
 
                     }
-                    else
-                    {
-                        ctrl.selecteditem = undefined;
-                        $scope.$apply();
-                    }
-
                 } );
                 treeElement.on( 'set_state.jstree', function ( e, data )
                 {
