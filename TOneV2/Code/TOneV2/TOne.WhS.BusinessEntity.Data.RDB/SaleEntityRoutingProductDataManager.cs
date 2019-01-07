@@ -20,8 +20,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_BED = "BED";
         const string COL_EED = "EED";
         const string COL_LastModifiedTime = "LastModifiedTime";
-
-
         static SaleEntityRoutingProductDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>
@@ -49,9 +47,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return RDBDataProviderFactory.CreateProvider("TOneWhS_BE", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
-        #endregion ISaleEntityRoutingProductDataManager
 
-        #region Members
+        #endregion 
+
+        #region ISaleEntityRoutingProductDataManager Members
 
         public List<SaleZoneRoutingProduct> GetAllZoneRoutingProducts()
         {
@@ -105,7 +104,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(COL_OwnerType).Value((int)ownerType);
             whereContext.EqualsCondition(COL_OwnerID).Value(ownerId);
-            whereContext.ConditionIfColumnNotNull(COL_ZoneID);
+            whereContext.NotNullCondition(COL_ZoneID);
 
             whereContext.LessOrEqualCondition(COL_BED).Value(effectiveOn);
             var orCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
@@ -126,7 +125,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_OwnerType, COL_OwnerID, COL_RoutingProductID, COL_BED, COL_EED);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(COL_OwnerType).Value((int)ownerType);
@@ -145,12 +144,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_OwnerType, COL_OwnerID, COL_RoutingProductID, COL_BED, COL_EED);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(COL_OwnerType).Value((int)ownerType);
             whereContext.EqualsCondition(COL_OwnerID).Value(ownerId);
-            whereContext.ConditionIfColumnNotNull(COL_ZoneID);
+            whereContext.NotNullCondition(COL_ZoneID);
 
             var orCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
             orCondition.NullCondition(COL_EED);
@@ -161,7 +160,65 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.GetItems(SaleZoneRoutingProductMapper);
         }
 
-        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwner(SalePriceListOwnerType ownerType, int ownerId)
+        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwners(IEnumerable<int> sellingProductIds, IEnumerable<int> customerIds)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereCondition = selectQuery.Where();
+            whereCondition.NullCondition(COL_ZoneID);
+
+            var dateOrCondition = whereCondition.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            dateOrCondition.NullCondition(COL_EED);
+            dateOrCondition.GreaterThanCondition(COL_EED).Column(COL_BED);
+
+            var ownerOrCondition = whereCondition.ChildConditionGroup(RDBConditionGroupOperator.OR);
+
+            var sellingProductAndCondition = ownerOrCondition.ChildConditionGroup();
+            sellingProductAndCondition.EqualsCondition(COL_OwnerType).Value((int)SalePriceListOwnerType.SellingProduct);
+            sellingProductAndCondition.ListCondition(COL_OwnerID, RDBListConditionOperator.IN, sellingProductIds);
+
+            var customerAndCondition = ownerOrCondition.ChildConditionGroup();
+            customerAndCondition.EqualsCondition(COL_OwnerType).Value((int)SalePriceListOwnerType.Customer);
+            customerAndCondition.ListCondition(COL_OwnerID, RDBListConditionOperator.IN, customerIds);
+
+            return queryContext.GetItems(DefaultRoutingProductMapper);
+
+        }
+
+        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwners(IEnumerable<int> sellingProductIds, IEnumerable<int> customerIds, IEnumerable<long> zoneIds)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereCondition = selectQuery.Where();
+
+            var dateOrCondition = whereCondition.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            dateOrCondition.NullCondition(COL_EED);
+            dateOrCondition.GreaterThanCondition(COL_EED).Column(COL_BED);
+
+            var zoneCondition = whereCondition.ChildConditionGroup();
+            zoneCondition.NotNullCondition(COL_ZoneID);
+            zoneCondition.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, zoneIds);
+
+            var ownerOrCondition = whereCondition.ChildConditionGroup(RDBConditionGroupOperator.OR);
+
+            var sellingProductAndCondition = ownerOrCondition.ChildConditionGroup();
+            sellingProductAndCondition.EqualsCondition(COL_OwnerType).Value((int)SalePriceListOwnerType.SellingProduct);
+            sellingProductAndCondition.ListCondition(COL_OwnerID, RDBListConditionOperator.IN, sellingProductIds);
+
+            var customerAndCondition = ownerOrCondition.ChildConditionGroup();
+            customerAndCondition.EqualsCondition(COL_OwnerType).Value((int)SalePriceListOwnerType.Customer);
+            customerAndCondition.ListCondition(COL_OwnerID, RDBListConditionOperator.IN, customerIds);
+
+            return queryContext.GetItems(SaleZoneRoutingProductMapper);
+        }
+
+        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwners(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
@@ -170,99 +227,97 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereContext = selectQuery.Where();
             whereContext.NullCondition(COL_ZoneID);
-            whereContext.EqualsCondition(COL_OwnerID).Value(ownerId);
             whereContext.EqualsCondition(COL_OwnerType).Value((int)ownerType);
+            whereContext.ListCondition(COL_OwnerID, RDBListConditionOperator.IN, ownerIds);
 
             return queryContext.GetItems(DefaultRoutingProductMapper);
         }
 
-        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds)
+        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwners(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds)
         {
-            if (saleZoneIds == null || !saleZoneIds.Any())
-                throw new Vanrise.Entities.MissingArgumentValidationException("saleZoneIds were not passed");
-
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_OwnerType, COL_OwnerID, COL_ZoneID, COL_RoutingProductID, COL_BED, COL_EED);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
-            whereContext.ConditionIfColumnNotNull(COL_ZoneID);
-            whereContext.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, saleZoneIds);
             whereContext.EqualsCondition(COL_OwnerType).Value((int)ownerType);
-            whereContext.EqualsCondition(COL_OwnerID).Value(ownerId);
+            whereContext.ListCondition(COL_OwnerID, RDBListConditionOperator.IN, ownerIds);
+            whereContext.NotNullCondition(COL_ZoneID);
+            whereContext.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, zoneIds);
 
             return queryContext.GetItems(SaleZoneRoutingProductMapper);
         }
 
-        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsBySellingProductsAndCustomer(IEnumerable<int> sellingProductIds, int customerId)
+        public bool Update(ZoneRoutingProductToEdit zoneRoutingProductToEdit, long reservedId, List<ZoneRoutingProductToChange> routingProductToChange)
         {
-            return null;
-            //if (sellingProductIds == null || !sellingProductIds.Any())
-            //    throw new Vanrise.Entities.MissingArgumentValidationException("sellingProductIds were not passed");
+            var queryContext = new RDBQueryContext(GetDataProvider());
 
-            //var queryContext = new RDBQueryContext(GetDataProvider());
-            //var selectQuery = queryContext.AddSelectQuery();
-            //selectQuery.From(TABLE_NAME, TABLE_ALIAS);
-            //selectQuery.SelectColumns().Columns(COL_ID, COL_OwnerType, COL_OwnerID, COL_RoutingProductID, COL_BED, COL_EED);
+            var tempTableQuery = queryContext.CreateTempTable();
+            tempTableQuery.AddColumn(COL_RoutingProductID, RDBDataType.BigInt, true);
+            tempTableQuery.AddColumn(COL_EED, RDBDataType.DateTime, false);
 
-            //var whereContext = selectQuery.Where();
-            //whereContext.NullCondition(COL_ZoneID);
+            var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+            insertMultipleRowsQuery.IntoTable(tempTableQuery);
 
-            //var orCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            foreach (var queryItem in routingProductToChange)
+            {
+                var rowContext = insertMultipleRowsQuery.AddRow();
+                rowContext.Column(COL_EED).Value(queryItem.EED);
+                rowContext.Column(COL_RoutingProductID).Value(queryItem.ZoneRoutingProductId);
+            }
 
-            //var firstAndCondition = 
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            var joinContext = updateQuery.Join(TABLE_ALIAS);
+            joinContext.JoinOnEqualOtherTableColumn(tempTableQuery, "zrpToUpdate", COL_RoutingProductID, TABLE_ALIAS, COL_ID);
 
+            updateQuery.Column(COL_EED).Column("zrpToUpdate", COL_EED);
+
+            var insertQuery = queryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+            insertQuery.Column(COL_ID).Value(reservedId);
+            insertQuery.Column(COL_OwnerType).Value((int)zoneRoutingProductToEdit.OwnerType);
+            insertQuery.Column(COL_OwnerID).Value(zoneRoutingProductToEdit.OwnerId);
+            insertQuery.Column(COL_ZoneID).Value(zoneRoutingProductToEdit.ZoneId);
+            insertQuery.Column(COL_RoutingProductID).Value(zoneRoutingProductToEdit.ChangedRoutingProductId);
+            insertQuery.Column(COL_BED).Value(zoneRoutingProductToEdit.BED);
+
+            return queryContext.ExecuteNonQuery(true) > 0;
         }
 
-        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsBySellingProductsAndCustomer(IEnumerable<int> sellingProductIds, int customerId,
-            IEnumerable<long> saleZoneIds)
+        #endregion
+
+        #region Not Used Fucntions
+        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwner(SalePriceListOwnerType ownerType, int ownerId)
         {
             throw new NotImplementedException();
         }
 
+        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds)
+        {
+            throw new NotImplementedException();
+        }
+        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsBySellingProductsAndCustomer(IEnumerable<int> sellingProductIds, int customerId)
+        {
+            throw new NotImplementedException();
+        }
+        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsBySellingProductsAndCustomer(IEnumerable<int> sellingProductIds, int customerId, IEnumerable<long> saleZoneIds)
+        {
+            throw new NotImplementedException();
+        }
         public IEnumerable<SaleZoneRoutingProduct> GetExistingZoneRoutingProductsByZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime minEED)
         {
-            return null;
+            throw new NotImplementedException();
         }
-
         public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProducts(int sellingProductId, int customerId, IEnumerable<long> zoneIds)
         {
             throw new NotImplementedException();
         }
-
         public IEnumerable<SaleZoneRoutingProduct> GetAllSaleZoneRoutingProducts(int sellingProductId, int customerId, IEnumerable<long> zoneIds)
         {
             throw new NotImplementedException();
         }
-
-        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwners(IEnumerable<int> sellingProductIds, IEnumerable<int> customerIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwners(IEnumerable<int> sellingProductIds, IEnumerable<int> customerIds,
-            IEnumerable<long> zoneIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwners(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwners(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds,
-            IEnumerable<long> zoneIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(ZoneRoutingProductToEdit zoneRoutingProductToEdit, long reservedId, List<ZoneRoutingProductToChange> routingProductToChange)
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
 
         #region Mappers
@@ -296,7 +351,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #endregion
 
-        #region private Methods
+        #region Private Methods
 
         private RDBQueryContext GetRoutingProducts(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture, bool isDefault)
         {
@@ -325,23 +380,24 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         private void SetRoutingProductWhereContext(RDBConditionContext conditionContext, DateTime? effectiveOn, bool isEffectiveInFuture, bool isDefault, int ownerType)
         {
-            var orCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
             if (isEffectiveInFuture)
             {
-                orCondition.ConditionIfColumnNotNull(COL_EED).GreaterThanCondition(COL_BED).DateNow();
+                conditionContext.NullCondition(COL_EED);
+                conditionContext.GreaterThanCondition(COL_BED).DateNow();
             }
             else if (effectiveOn.HasValue)
             {
-                var andCondition = orCondition.ChildConditionGroup();
-                andCondition.ConditionIfColumnNotNull(COL_BED).LessOrEqualCondition(COL_BED).Value(effectiveOn.Value);
-                andCondition.ConditionIfColumnNotNull(COL_EED).GreaterThanCondition(COL_EED).Value(effectiveOn.Value);
+                conditionContext.LessOrEqualCondition(COL_BED).Value(effectiveOn.Value);
+                var orCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
+                orCondition.GreaterThanCondition(COL_EED).Value(effectiveOn.Value);
+                orCondition.NullCondition(COL_EED);
             }
 
             conditionContext.EqualsCondition(COL_OwnerType).Value(ownerType);
             if (isDefault)
                 conditionContext.NullCondition(COL_ZoneID);
             else
-                conditionContext.ConditionIfColumnNotNull(COL_ZoneID);
+                conditionContext.NotNullCondition(COL_ZoneID);
         }
 
         private RDBQueryContext GetAllRoutingProducts(bool isDefault)
@@ -356,7 +412,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (isDefault)
                 whereContext.NullCondition(COL_ZoneID);
             else
-                whereContext.ConditionIfColumnNotNull(COL_ZoneID);
+                whereContext.NotNullCondition(COL_ZoneID);
 
             var orCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
             orCondition.NullCondition(COL_EED);
