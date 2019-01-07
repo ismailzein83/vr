@@ -118,6 +118,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Normalization">
+      <HintPath>..\..\Code\Output\Vanrise.GenericData.Normalization.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Data">
       <HintPath>..\..\Code\Output\Vanrise.Invoice.Data.dll</HintPath>
     </Reference>
@@ -183,6 +186,9 @@
     <Compile Include="Common\VRTimeZoneDataManagerTests.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="GenericData\BELookupRuleDefinitionDataManagerTests.cs" />
+    <Compile Include="GenericData\BusinessEntityDefinitionDataManagerTests.cs" />
+    <Compile Include="GenericData\DataRecordFieldChoiceDataManagerTests.cs" />
+    <Compile Include="GenericData\GenericRuleDefinitionDataManagerTests.cs" />
     <Compile Include="GenericData\RecordFilterRDBBuilderTests.cs" />
     <Compile Include="Invoice\InvoiceBulkActionsDraftDataManagerTests.cs" />
     <Compile Include="Invoice\InvoiceDataManagerTests.cs" />
