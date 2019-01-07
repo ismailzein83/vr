@@ -19,11 +19,13 @@ namespace Retail.Demo.Business
     {
         Guid _acountBEDefinitionId { get; set; }
         SMSInvoiceType _type;
+        Guid _invoiceTransactionTypeId;
 
-        public SMSInvoiceGenerator(Guid acountBEDefinitionId, SMSInvoiceType type)
+        public SMSInvoiceGenerator(Guid acountBEDefinitionId, SMSInvoiceType type, Guid invoiceTransactionTypeId)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
             this._type = type;
+            this._invoiceTransactionTypeId = invoiceTransactionTypeId;
         }
 
         #region Fields
@@ -92,8 +94,22 @@ namespace Retail.Demo.Business
                     NumberOfSMS = numberOfSMS
                 }
             };
-        }
+            SetInvoiceBillingTransactions(context, amount, currencyId, financialAccountData.BalanceAccountTypeId);
 
+        }
+        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, decimal amount, int currencyId, Guid? balanceAccountTypeId)
+        {
+            var billingTransaction = new GeneratedInvoiceBillingTransaction()
+            {
+                AccountId = context.PartnerId,
+                Amount = amount,
+                CurrencyId = currencyId,
+                TransactionTypeId = this._invoiceTransactionTypeId,
+            };
+            if (balanceAccountTypeId.HasValue)
+                billingTransaction.AccountTypeId = balanceAccountTypeId.Value;
+            context.BillingTransactions = new List<GeneratedInvoiceBillingTransaction>() { billingTransaction };
+        }
         private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceMeasures>> itemSetNamesDic)
         {
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();

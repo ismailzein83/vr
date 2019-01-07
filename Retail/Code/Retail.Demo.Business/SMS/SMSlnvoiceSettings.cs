@@ -13,6 +13,7 @@ namespace Retail.Demo.Business
 
     public class SMSInvoiceSettings : BaseRetailInvoiceTypeSettings
     {
+        public static Guid s_invoiceTransactionTypeId { get { return new Guid("3a9a321f-754f-40ae-a8f8-e06f299607f4"); } }
         public SMSInvoiceType Type { get; set; }
         public override Guid ConfigId
         {
@@ -52,7 +53,7 @@ namespace Retail.Demo.Business
 
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            return new SMSInvoiceGenerator(this.AccountBEDefinitionId, this.Type);
+            return new SMSInvoiceGenerator(this.AccountBEDefinitionId, this.Type, s_invoiceTransactionTypeId);
         }
 
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
