@@ -23,8 +23,7 @@ namespace BPMExtended.Main.Business
         string welcomeStep = "B8721EA5-0A7E-43BC-8E8D-8C186537FD73";
         string printStep = "0705ADD3-50F2-42B4-8247-4B67E85E166C";
         string ReasonStep = "DA251EA7-47C1-42AD-B4EC-A131EDD9587A";
-        string PDNStep = "DFD53946-609E-4A86-AD49-3C41BF076D20";
-        string mDFStep = "0EB0E1DB-FBC1-40D1-9B90-11C52DECE61A";
+        string TechnicalStep = "56D55B17-8962-4D80-9564-361AD127E6B5";
         string completedStep = "639E4A4C-1752-42E3-83CD-85674B6E9903";
 
         public string GetNextStep(string id, string currentStepId)
@@ -37,15 +36,13 @@ namespace BPMExtended.Main.Business
                 ///print step
                 case "0705add3-50f2-42b4-8247-4b67e85e166c": nextStepId = ReasonStep; break;
                 ///reason step
-                case "da251ea7-47c1-42ad-b4ec-a131edd9587a": nextStepId = ManualSwitch(id) ? PDNStep : mDFStep; break;
-                /// PDN Step
-                case "dfd53946-609e-4a86-ad49-3c41bf076d20": nextStepId = mDFStep; break;
-                /// MDF Step
-                case "0eb0e1db-fbc1-40d1-9b90-11c52dece61a": nextStepId = completedStep; break;
+                case "da251ea7-47c1-42ad-b4ec-a131edd9587a": nextStepId = TechnicalStep; break;
+                /// Technical Step
+                case "56d55b17-8962-4d80-9564-361ad127e6b5": nextStepId = completedStep; break;
             }
             return nextStepId;
         }
-        public bool ManualSwitch(string id)
+      /*  public bool ManualSwitch(string id)
         {
             bool ismanualswitch = false;
             if (id != "")
@@ -70,6 +67,6 @@ namespace BPMExtended.Main.Business
                 }
             }
             return ismanualswitch;
-        }
+        }*/
     }
 }
