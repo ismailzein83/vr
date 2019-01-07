@@ -15,8 +15,10 @@
                 <vr-datagridcolumn headertext="'Supplier'">
                     {{dataItem.Name}}
                 </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Deals'">
-                    <vr-whs-deal-dealdefinition-selector on-ready="dataItem.onSupplierDealSelectorReady"
+
+                <!--headertext="'Deals'" ng-show="false" to remove-->
+                <vr-datagridcolumn>
+                    <vr-whs-deal-dealdefinition-selector ng-show="false" on-ready="dataItem.onSupplierDealSelectorReady"
                                                          normal-col-num="12" ismultipleselection hidelabel usefullcolumn>
                     </vr-whs-deal-dealdefinition-selector>
                 </vr-datagridcolumn>

@@ -341,10 +341,11 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                             var supplierDealIds = supplier.supplierDealSelectorAPI.getSelectedIds();
 
                             var supplierDeals = [];
-                            if (supplierDealIds != undefined && supplierDealIds.length > 0)
+                            if (supplierDealIds != undefined && supplierDealIds.length > 0) {
                                 for (var j = 0; j < supplierDealIds.length; j++) {
                                     supplierDeals.push({ SupplierDealId: supplierDealIds[j] });
                                 }
+                            }
 
                             var option = {
                                 SupplierId: supplier.SupplierId,
@@ -352,6 +353,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                                 Percentage: supplier.Percentage,
                                 SupplierDeals: supplierDeals
                             };
+
                             if ((routeRuleConfiguration.FixedOptionLossType == WhS_Routing_FixedOptionLossTypeEnum.RemoveLoss.value && supplier.IsRemoveLoss) ||
                                 (routeRuleConfiguration.FixedOptionLossType == WhS_Routing_FixedOptionLossTypeEnum.AcceptLoss.value && !supplier.IsRemoveLoss)) {
                                 option.Filters = [{
@@ -361,9 +363,11 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                                     RateOptionValue: 0
                                 }];
                             }
+
                             if ($scope.scopeModel.showBackupTabs && supplier.backupOptionGridAPI) {
                                 option.Backups = supplier.backupOptionGridAPI.getData();
                             }
+
                             options.push(option);
                         }
                         return options;

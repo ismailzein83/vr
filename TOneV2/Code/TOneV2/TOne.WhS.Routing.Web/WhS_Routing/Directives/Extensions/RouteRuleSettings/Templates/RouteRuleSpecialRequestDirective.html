@@ -17,45 +17,47 @@
         <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCarrierAccountDirectiveReady" selectedvalues="scopeModel.selectedSuppliers" normal-col-num="3"
                                            onselectitem="scopeModel.onSelectSupplier" getsuppliers ismultipleselection hideselectedvaluessection>
         </vr-whs-be-carrieraccount-selector>
-   
+
         <vr-columns width="fullrow" simplecol>
             <vr-validator validate="scopeModel.isValid()">
-                    <vr-datagrid on-ready="scopeModel.onGridReady" gridmenuactions="scopeModel.gridLeftMenuActions"
-                                 datasource="scopeModel.suppliers"
-                                 ondeleterow="scopeModel.onDeleteRow"
-                                 showexpand="scopeModel.showExpand"
-                                 disablesorting="true" enabledraggablerow="true" rowdeleteicontitle="Reset to LCR position"
-                                 vr-loader="scopeModel.isLoadingSelectedSupplier" disabledraggablecolumns>
+                <vr-datagrid on-ready="scopeModel.onGridReady" gridmenuactions="scopeModel.gridLeftMenuActions"
+                             datasource="scopeModel.suppliers"
+                             ondeleterow="scopeModel.onDeleteRow"
+                             showexpand="scopeModel.showExpand"
+                             disablesorting="true" enabledraggablerow="true" rowdeleteicontitle="Reset to LCR position"
+                             vr-loader="scopeModel.isLoadingSelectedSupplier" disabledraggablecolumns>
 
-                        <vr-datagridcolumn headertext="'Supplier'" field="'Name'"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Deals'">
-                            <vr-whs-deal-dealdefinition-selector on-ready="dataItem.onSupplierDealSelectorReady"
-                                                                 normal-col-num="12" ismultipleselection hidelabel usefullcolumn>
-                            </vr-whs-deal-dealdefinition-selector>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Rate'" field="'Rate'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'" ng-if="scopeModel.showRateServices" columnindex="1"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Services'" widthfactor="1" fixedwidth="60" ng-if="scopeModel.showRateServices" columnindex="2">
-                            <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'# Of Tries'" fixedwidth="70">
-                            <vr-textbox value="dataItem.NumberOfTries" type="number" decimalprecision="0" minvalue="1" isrequired tonextinput></vr-textbox>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Percentage'" fixedwidth="70">
-                            <vr-textbox value="dataItem.Percentage" type="number" decimalprecision="0" minvalue="1" maxvalue="100" tonextinput
-                                        isrequired="{{viewScope.scopeModel.showBackupTabs}}" onvaluechanged="viewScope.scopeModel.onPercentageValueChanged">
-                            </vr-textbox>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Force'" fixedwidth="50">
-                            <vr-switch value="dataItem.ForceOption"></vr-switch>
-                        </vr-datagridcolumn>
-                        <vr-datagridcolumn fixedwidth="30" invisibleheader>
-                            <vr-button type="Exclude" ng-click="viewScope.scopeModel.excludeOption(dataItem)" buttontitle="Exclude From Route" standalone small></vr-button>
-                        </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Supplier'" field="'Name'"></vr-datagridcolumn>
 
-                        <vr-datagridexpandablerow>
-                            <vr-whs-routing-specialrequest-backupoption on-ready="dataItem.onBackupOptionDirectiveReady"></vr-whs-routing-specialrequest-backupoption>
-                        </vr-datagridexpandablerow>
-                    </vr-datagrid>
+                    <!--headertext="'Deals'" ng-show="false" to remove-->
+                    <vr-datagridcolumn>
+                        <vr-whs-deal-dealdefinition-selector ng-show="false" on-ready="dataItem.onSupplierDealSelectorReady"
+                                                             normal-col-num="12" ismultipleselection hidelabel usefullcolumn>
+                        </vr-whs-deal-dealdefinition-selector>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Rate'" field="'Rate'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'" ng-if="scopeModel.showRateServices" columnindex="1"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Services'" widthfactor="1" fixedwidth="60" ng-if="scopeModel.showRateServices" columnindex="2">
+                        <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'# Of Tries'" fixedwidth="70">
+                        <vr-textbox value="dataItem.NumberOfTries" type="number" decimalprecision="0" minvalue="1" isrequired tonextinput></vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Percentage'" fixedwidth="70">
+                        <vr-textbox value="dataItem.Percentage" type="number" decimalprecision="0" minvalue="1" maxvalue="100" tonextinput
+                                    isrequired="{{viewScope.scopeModel.showBackupTabs}}" onvaluechanged="viewScope.scopeModel.onPercentageValueChanged">
+                        </vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Force'" fixedwidth="50">
+                        <vr-switch value="dataItem.ForceOption"></vr-switch>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn fixedwidth="30" invisibleheader>
+                        <vr-button type="Exclude" ng-click="viewScope.scopeModel.excludeOption(dataItem)" buttontitle="Exclude From Route" standalone small></vr-button>
+                    </vr-datagridcolumn>
+
+                    <vr-datagridexpandablerow>
+                        <vr-whs-routing-specialrequest-backupoption on-ready="dataItem.onBackupOptionDirectiveReady"></vr-whs-routing-specialrequest-backupoption>
+                    </vr-datagridexpandablerow>
+                </vr-datagrid>
             </vr-validator>
         </vr-columns>
     </vr-row>
@@ -65,12 +67,12 @@
 </vr-section>
 <vr-section title="Excluded Options">
     <vr-row>
-            <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onExcludedSuppliersSelectorReady"
-                                               onselectitem="scopeModel.onSelectExcludedSupplier"
-                                               ondeselectitem="scopeModel.onDeselectExcludedSupplier"
-                                               ondeselectallitems="scopeModel.onDeselectAllExcludedSuppliers"
-                                               selectedvalues="scopeModel.selectedExcludedSuppliers"
-                                               customlabel="Excluded Suppliers" ismultipleselection getsuppliers normal-col-num="3">
-            </vr-whs-be-carrieraccount-selector>
+        <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onExcludedSuppliersSelectorReady"
+                                           onselectitem="scopeModel.onSelectExcludedSupplier"
+                                           ondeselectitem="scopeModel.onDeselectExcludedSupplier"
+                                           ondeselectallitems="scopeModel.onDeselectAllExcludedSuppliers"
+                                           selectedvalues="scopeModel.selectedExcludedSuppliers"
+                                           customlabel="Excluded Suppliers" ismultipleselection getsuppliers normal-col-num="3">
+        </vr-whs-be-carrieraccount-selector>
     </vr-row>
 </vr-section>

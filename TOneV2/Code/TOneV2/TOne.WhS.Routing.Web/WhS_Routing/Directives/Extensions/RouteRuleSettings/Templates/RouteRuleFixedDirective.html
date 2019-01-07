@@ -17,7 +17,7 @@
         <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCarrierAccountDirectiveReady" selectedvalues="scopeModel.selectedSuppliers" normal-col-num="3"
                                            onselectitem="scopeModel.onSelectSupplier" getsuppliers ismultipleselection hideselectedvaluessection>
         </vr-whs-be-carrieraccount-selector>
-    
+
         <vr-columns width="fullrow" simplecol>
             <vr-validator validate="scopeModel.isValid()" ng-if="scopeModel.showGrid">
                 <vr-datagrid on-ready="scopeModel.onGridReady"
@@ -28,8 +28,10 @@
                              disabledraggablecolumns vr-loader="scopeModel.isLoadingSelectedSupplier">
 
                     <vr-datagridcolumn headertext="'Supplier'" field="'Name'" getcolor="getColor"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Deals'">
-                        <vr-whs-deal-dealdefinition-selector on-ready="dataItem.onSupplierDealSelectorReady"
+
+                    <!--headertext="'Deals'" ng-show="false" to remove-->
+                    <vr-datagridcolumn>
+                        <vr-whs-deal-dealdefinition-selector ng-show="false" on-ready="dataItem.onSupplierDealSelectorReady"
                                                              normal-col-num="12" ismultipleselection hidelabel usefullcolumn>
                         </vr-whs-deal-dealdefinition-selector>
                     </vr-datagridcolumn>
