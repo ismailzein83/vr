@@ -241,6 +241,9 @@
     <Reference Include="Vanrise.DataParser.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DataParser.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.DataParser.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DataParser.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.DataParser.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.DataParser.Data.SQL.dll</HintPath>
     </Reference>
