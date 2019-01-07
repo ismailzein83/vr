@@ -54,6 +54,7 @@
     <Compile Include="RuntimeServiceInstanceDataManager.cs" />
     <Compile Include="SchedulerTaskActionTypeDataManager.cs" />
     <Compile Include="SchedulerTaskDataManager.cs" />
+    <Compile Include="SchedulerTaskStateDataManager.cs" />
     <Compile Include="SchedulerTaskTriggerTypeDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
