@@ -51,6 +51,7 @@
     <Compile Include="RuntimeNodeConfigurationDataManager.cs" />
     <Compile Include="RuntimeNodeStateDataManager.cs" />
     <Compile Include="RuntimeServiceInstanceDataManager.cs" />
+    <Compile Include="SchedulerTaskActionTypeDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
