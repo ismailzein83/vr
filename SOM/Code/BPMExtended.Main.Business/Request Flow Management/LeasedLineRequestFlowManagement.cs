@@ -1,47 +1,120 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
+using Terrasoft.Core;
+using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
 {
-    public class LeasedLineRequestFlowManagement //To be completed
+    public class LeasedLineRequestFlowManagement
     {
-        const string welcome = "34C4F53D-BB22-44DA-A938-ECEA5D528C0A";
-        const string requestID = "6A46936E-70EB-4B0C-B3E1-12EA79EDDA77";
-        const string address = "8C41CB22-2529-4716-9269-C579A9BAE25B";
-        const string technicalTeam = "42A6FF3C-592A-4155-877B-D59B7628968B";
-        const string services = "BE2B4318-F9AB-4A32-B793-76C64F929DBA";
-        const string discount = "18800FBE-701C-46BC-B9A9-8BAF9441C873";
-        const string paymentMethod = "4DBF157D-FC72-4B5E-A53F-07F8186EF6EF";
-        const string print = "CE1AA066-2A3F-480E-856D-52AFED5493D3";
-        const string site1MDFCabling = "A956FDBA-5577-4832-9470-CA3D6444357F";
-        const string site1CabinetTeam = "E2C09497-68E4-4B4B-A86C-521303416385";
-        const string site1DPTeam = "68F0805B-633D-4674-863F-EA36AE78A367";
-        const string mic = "4DA0301B-A9DA-4521-B2A2-C5DF85E6F6C6";
-        const string site2MDFCabling = "AEEE45D0-400D-4963-B1D0-488521D8B46E";
-        const string site2CabinetTeam = "E264678C-D4BD-499E-9EC4-17CB7BAE65ED";
-        const string site2DPTeam = "25933A59-4756-4CD6-B751-11E7DC9DDCF7";
-        const string fiberTeam = "C91897C4-0452-4D03-893F-0DAF222F81D9";
-        const string microwaveTeam = "54CFE6FD-32B0-4C94-B1CD-0D773ADB55AD";
+        public UserConnection BPM_UserConnection
+        {
+            get
+            {
+                return (UserConnection)HttpContext.Current.Session["UserConnection"];
+            }
+        }
 
-        const string Completed = "1DFC2AE4-3E5D-4EFF-B37E-3BB8B423C49F";
-        const string Completed2 = "12CD5791-FF95-4E92-9B64-E28F0D24684F";
-       // const string NearbyNumbers = "01D567D3-44C5-432E-B487-B3E2957C12DC";
+        const string startingProcess = "59C93AF1-7B3E-4DBC-AB1A-770098F8204B";
+        const string requestID = "3B9222AF-73F8-4F4F-BC3C-0BB0697DC795";
+        const string address = "5237ECDF-8455-4720-A2CF-8CE3AC415921";
+        const string technicalTeam = "53BD9DCE-7695-4007-97F0-0466CEAE356F";
+        const string services = "AD7EB0E2-2B8D-4F3B-86E8-26FFEAF89409";
+
+        const string discount = "BF730CB5-396F-4720-A663-E16A8A09C7FB";
+        const string paymentMethod = "16A296DF-6695-4FD7-AA11-4381BC4A9874";
+        const string print = "E7C4431A-615D-44A6-8811-8DD731A378DB"; // to technical
+
+        //Technical Teams
+        const string site1MDFCabling = "48CE764E-C1DD-4B8B-A5FF-A111B43E6028";
+        const string site1CabinetTeam = "D8EFC5C5-5480-4A76-A6BC-2E306D42B70C";
+        const string site1DPTeam = "AA515839-89AC-47CC-BF9E-C95A346679A3";
+        const string mic = "A0302F8A-91A5-43ED-8F22-FB37A1B044D2";
+        const string site2MDFCabling = "25556706-7E48-4251-A9C0-3D809C3B104C";
+        const string site2CabinetTeam = "A7EF2BCA-81F2-469D-9CEA-D382443D90D9";
+        const string site2DPTeam = "48E70652-F3EE-46A4-9277-6FCB48768262";
+        const string fiberTeam = "0ACA0696-5FC1-4DF8-9AE9-3FFA604C5A41";
+        const string microwaveTeam = "A71308A3-8C7B-416A-8315-8A679142EB78";
+        const string Completed = "DBEF5609-03E6-47D9-A901-6F48914A57F3";
 
 
-        public string GetNextStep(string id, string currentStepId)
+        public string GetNextStep(string id, string currentStepId, bool isFiber = false, bool isMicrowave = false)
         {
 
             string nextStepId = "";
             switch (currentStepId)
             {
-                case welcome: nextStepId = requestID; break;
+                case startingProcess: nextStepId = requestID; break;
                 case requestID: nextStepId = address; break;
                 case address: nextStepId = technicalTeam; break;
+                case technicalTeam: nextStepId = services; break;
+                case services: nextStepId = isFiber ? discount : isMicrowave ? paymentMethod : print; break;
+                case discount: nextStepId = paymentMethod; break;
+                case paymentMethod: nextStepId = isMicrowave ? paymentMethod : print; break;
+                case print: nextStepId = site1MDFCabling; break;
+                case site1MDFCabling: nextStepId = site1CabinetTeam; break;
+                case site1CabinetTeam: nextStepId = site1DPTeam; break;
+                case site1DPTeam: nextStepId = mic; break;
+                case mic: nextStepId = site2MDFCabling; break;
+                case site2MDFCabling: nextStepId = site2CabinetTeam; break;
+                case site2CabinetTeam: nextStepId = site2DPTeam; break;
+                case site2DPTeam: nextStepId = fiberTeam; break;
+                case fiberTeam: nextStepId = microwaveTeam; break;
+                case microwaveTeam: nextStepId = Completed; break;
             }
             return nextStepId;
         }
+
+        public bool IsFiberFounded(string id)
+        {
+            bool isFiberFounded = false;
+            if (id != "")
+            {
+                Guid idd = new Guid(id.ToUpper());
+                var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLine");
+
+                esq.AddColumn("Id");
+                esq.AddColumn("StIsFiberServiceSelected");
+
+                var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
+
+                esq.Filters.Add(esqFirstFilter);
+
+                var entities = esq.GetEntityCollection(BPM_UserConnection);
+                if (entities.Count > 0)
+                {
+                    var fiber = entities[0].GetColumnValue("StIsFiberServiceSelected");
+                    isFiberFounded = (bool)fiber==true ? true : false;
+                }
+            }
+            return isFiberFounded;
+        }
+
+        public bool IsMicrowaveService(string id)
+        {
+            bool isMicrowaveService = false;
+            if (id != "")
+            {
+                Guid idd = new Guid(id.ToUpper());
+                var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StLeasedLine");
+
+                esq.AddColumn("Id");
+                esq.AddColumn("StIsMicrowaveServiceSelected");
+
+                var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
+
+                esq.Filters.Add(esqFirstFilter);
+
+                var entities = esq.GetEntityCollection(BPM_UserConnection);
+                if (entities.Count > 0)
+                {
+                    var microwaveService = entities[0].GetColumnValue("StIsMicrowaveServiceSelected");
+                    isMicrowaveService = (bool)microwaveService== true ? true : false;
+                }
+            }
+            return isMicrowaveService;
+        }
+
+
     }
 }
