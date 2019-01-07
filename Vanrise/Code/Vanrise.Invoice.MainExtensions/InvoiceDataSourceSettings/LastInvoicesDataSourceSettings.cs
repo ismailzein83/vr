@@ -21,16 +21,16 @@ namespace Vanrise.Invoice.MainExtensions
             var currentInvoice = context.InvoiceActionContext.GetInvoice();
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(currentInvoice.InvoiceTypeId);
             var invoiceManager = new InvoiceManager();
-            DateTime? datetime = currentInvoice.CreatedTime == DateTime.MinValue ? default(DateTime?) : currentInvoice.CreatedTime;
+            DateTime? datetime = currentInvoice.FromDate == DateTime.MinValue ? default(DateTime?) : currentInvoice.FromDate;
             var invoices = invoiceManager.GetLasInvoices(currentInvoice.InvoiceTypeId, currentInvoice.PartnerId, datetime, this.LastInvoices);
             List<InvoiceDataSourceItem> invoiceDataSourceItems = new List<InvoiceDataSourceItem>();
-            if(invoices != null)
+            if (invoices != null)
             {
                 invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
                 invoiceType.Settings.CurrencyFieldName.ThrowIfNull("invoiceType.Settings.CurrencyFieldName");
                 invoiceType.Settings.AmountFieldName.ThrowIfNull("invoiceType.Settings.AmountFieldName");
                 var currencyManager = new CurrencyManager();
-                foreach(var invoice in invoices)
+                foreach (var invoice in invoices)
                 {
                     InvoiceRecordObject invoiceRecordObject = new InvoiceRecordObject(invoice);
                     invoiceRecordObject.ThrowIfNull("invoiceRecordObject");
