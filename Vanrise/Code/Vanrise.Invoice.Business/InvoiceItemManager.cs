@@ -9,6 +9,8 @@ using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
+
 namespace Vanrise.Invoice.Business
 {
     public class InvoiceItemManager
@@ -26,10 +28,10 @@ namespace Vanrise.Invoice.Business
             {
                 StringBuilder itemSetName = new StringBuilder();
                 InvoiceItemConcatenatedPartContext context = new InvoiceItemConcatenatedPartContext
-                    {
-                        InvoiceItemDetails = invoiceItemDetails,
-                        CurrentItemSetName = currentItemSetName
-                    };
+                {
+                    InvoiceItemDetails = invoiceItemDetails,
+                    CurrentItemSetName = currentItemSetName
+                };
                 foreach (var part in itemSetNameParts)
                 {
                     itemSetName.Append(part.Settings.GetPartText(context));
@@ -47,6 +49,18 @@ namespace Vanrise.Invoice.Business
                 invoiceItems = GetInvoiceItemsByItemSetNames(invoiceTypeId, new List<long> { invoiceId }, itemSetNames, compareOperator);
             }
             return invoiceItems;
+        }
+
+        public string GetSubsectionTitle(Guid invoiceTypeId, Guid subsectionId)
+        {
+            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
+            invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceTypeId);
+            invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", invoiceTypeId);
+            var subsection = invoiceType.Settings.SubSections.FindRecord(x => x.InvoiceSubSectionId == subsectionId);
+            subsection.ThrowIfNull("subsection", subsectionId);
+            return subsection.SectionTitle;
         }
 
         public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(Guid invoiceTypeId, List<long> invoiceIds, List<string> itemSetNames, CompareOperator compareOperator)
@@ -165,6 +179,13 @@ namespace Vanrise.Invoice.Business
 
                 return detailedResults;
             }
+            protected override ResultProcessingHandler<InvoiceItemDetail> GetResultProcessingHandler(DataRetrievalInput<InvoiceItemQuery> input, BigResult<InvoiceItemDetail> bigResult)
+            {
+                return new ResultProcessingHandler<InvoiceItemDetail>()
+                {
+                    ExportExcelHandler = new InvoiceItemExcelExportHandler(input.Query)
+                };
+            }
             public List<InvoiceSubSectionGridColumn> GetInvoiceSubSectionGridColumn(InvoiceType invoiceType, Guid uniqueSectionID)
             {
                 List<InvoiceSubSectionGridColumn> gridColumns = null;
@@ -227,10 +248,172 @@ namespace Vanrise.Invoice.Business
             {
                 return new InvoiceItemGroupingManager().GetFilteredGroupingInvoiceItems(input.Query);
             }
+            protected override ResultProcessingHandler<GroupingInvoiceItemDetail> GetResultProcessingHandler(DataRetrievalInput<GroupingInvoiceItemQuery> input, BigResult<GroupingInvoiceItemDetail> bigResult)
+            {
+                return new ResultProcessingHandler<GroupingInvoiceItemDetail>
+                {
+                    ExportExcelHandler = new GroupingInvoiceItemExcelExportHandler(input.Query)
+                };
+            }
+
+        }
+        private class InvoiceItemExcelExportHandler : ExcelExportHandler<InvoiceItemDetail>
+        {
+            InvoiceItemQuery _query;
+            public InvoiceItemExcelExportHandler(InvoiceItemQuery query)
+            {
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<InvoiceItemDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet() { Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() } };
+                InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+                InvoiceItemRequestHandler invoiceItemRequestHandler = new InvoiceItemRequestHandler();
+                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
+                invoiceType.ThrowIfNull("invoiceType", _query.InvoiceTypeId);
+                var gridColumns = invoiceItemRequestHandler.GetInvoiceSubSectionGridColumn(invoiceType, _query.UniqueSectionID);
+                if (gridColumns != null && gridColumns.Count > 0)
+                {
+                    foreach (var column in gridColumns)
+                    {
+                        var headerCell = new ExportExcelHeaderCell { Title = column.Header };
+                        if (column.FieldType != null)
+                        {
+                            column.FieldType.SetExcelCellType(new DataRecordFieldTypeSetExcelCellTypeContext { HeaderCell = headerCell });
+                        }
+                        sheet.Header.Cells.Add(headerCell);
+                    }
+                }
+                if (context.BigResult != null && context.BigResult.Data != null && context.BigResult.Data.Count() > 0)
+                {
+                    sheet.Rows = new List<ExportExcelRow>();
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        var row = new ExportExcelRow();
+                        if (record.Items != null && record.Items.Count > 0)
+                        {
+                            int index = 0;
+                            row.Cells = new List<ExportExcelCell>();
+                            foreach (var item in record.Items)
+                            {
+                                var gridColumn = gridColumns.ElementAtOrDefault(index);
+                                row.Cells.Add(new ExportExcelCell()
+                                {
+                                    Value = gridColumn != null && gridColumn.FieldType != null && gridColumn.FieldType.RenderDescriptionByDefault() ? item.Description : item.Value
+                                });
+                                index++;
+                            }
+                        }
+                        sheet.Rows.Add(row);
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+        private class GroupingInvoiceItemExcelExportHandler : ExcelExportHandler<GroupingInvoiceItemDetail>
+        {
+            GroupingInvoiceItemQuery _query;
+            public GroupingInvoiceItemExcelExportHandler(GroupingInvoiceItemQuery query)
+            {
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<GroupingInvoiceItemDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet() { Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() } };
+                InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+                var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
+                invoiceType.ThrowIfNull("invoiceType", _query.InvoiceTypeId);
+                invoiceType.Settings.ThrowIfNull("invoiceType.Settings", _query.InvoiceTypeId);
+                invoiceType.Settings.SubSections.ThrowIfNull("invoiceType.Settings.SubSections", _query.InvoiceTypeId);
+                invoiceType.Settings.ItemGroupings.ThrowIfNull("invoiceType.Settings.ItemGroupings", _query.InvoiceTypeId);
+                var groupingItem = invoiceType.Settings.ItemGroupings.FindRecord(x => x.ItemGroupingId == _query.ItemGroupingId);
+                groupingItem.ThrowIfNull("groupingItem", _query.ItemGroupingId);
+                groupingItem.DimensionItemFields.ThrowIfNull("groupingItem.DimensionItemFields", _query.ItemGroupingId);
+                groupingItem.AggregateItemFields.ThrowIfNull("groupingItem.AggregateItemFields", _query.ItemGroupingId);
+                var subsection = invoiceType.Settings.SubSections.FindRecord(x => x.InvoiceSubSectionId == _query.UniqueSectionID);
+                subsection.ThrowIfNull("subsection", _query.UniqueSectionID);
+                subsection.Settings.ThrowIfNull("subsection.Settings", _query.UniqueSectionID);
+                var headers = subsection.Settings.GetSubsectionHeaders();
+                if (headers != null && headers.Count > 0)
+                {
+                    if (_query.DimensionIds != null && _query.DimensionIds.Count > 0)
+                    {
+                        foreach (var dimensionId in _query.DimensionIds)
+                        {
+                            var header = headers.GetRecord(dimensionId);
+                            var headerCell = new ExportExcelHeaderCell() { Title = header };
+                            var dimensionItem = groupingItem.DimensionItemFields.FindRecord(x => x.DimensionItemFieldId == dimensionId);
+                            dimensionItem.ThrowIfNull("dimenionItem", dimensionId);
+                            dimensionItem.FieldType.ThrowIfNull("dimenionItem.FieldType", dimensionId);
+                            dimensionItem.FieldType.SetExcelCellType(new DataRecordFieldTypeSetExcelCellTypeContext
+                            {
+                                HeaderCell = headerCell
+                            });
+                            sheet.Header.Cells.Add(headerCell);
+                        }
+                    }
+                    if (_query.MeasureIds != null && _query.MeasureIds.Count > 0)
+                    {
+                        foreach (var measureId in _query.MeasureIds)
+                        {
+                            var header = headers.GetRecord(measureId);
+                            var headerCell = new ExportExcelHeaderCell() { Title = header };
+                            var measureItem = groupingItem.AggregateItemFields.FindRecord(x => x.AggregateItemFieldId == measureId);
+                            measureItem.ThrowIfNull("measureItem", measureId);
+                            measureItem.FieldType.ThrowIfNull("measureItem.FieldType", measureId);
+                            measureItem.FieldType.SetExcelCellType(new DataRecordFieldTypeSetExcelCellTypeContext
+                            {
+                                HeaderCell = headerCell
+                            });
+                            sheet.Header.Cells.Add(headerCell);
+                        }
+                    }
+                }
+                if (context.BigResult != null && context.BigResult.Data != null && context.BigResult.Data.Count() > 0)
+                {
+                    sheet.Rows = new List<ExportExcelRow>();
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        if (record.DimensionValues != null && record.DimensionValues.Length > 0)
+                        {
+                            for (int i = 0; i < record.DimensionValues.Length; i++)
+                            {
+                                var dimValue = record.DimensionValues[i];
+                                var dimId = _query.DimensionIds.ElementAtOrDefault(i);
+                                var dimensionItem = groupingItem.DimensionItemFields.FindRecord(x => x.DimensionItemFieldId == dimId);
+                                dimensionItem.ThrowIfNull("dimenionItem", dimId);
+                                dimensionItem.FieldType.ThrowIfNull("dimenionItem.FieldType", dimId);
+                                row.Cells.Add(new ExportExcelCell { Value = dimensionItem.FieldType.RenderDescriptionByDefault() ? dimValue.Name : dimValue.Value });
+                            }
+                        }
+                        if (record.MeasureValues != null && record.MeasureValues.Count > 0)
+                        {
+                            int index = 0;
+                            foreach (var measureValue in record.MeasureValues)
+                            {
+                                if (measureValue.Value != null)
+                                {
+                                    var measureId = _query.MeasureIds.ElementAtOrDefault(index);
+                                    var measureItem = groupingItem.AggregateItemFields.FindRecord(x => x.AggregateItemFieldId == measureId);
+                                    measureItem.ThrowIfNull("measureItem", measureId);
+                                    measureItem.FieldType.ThrowIfNull("measureItem.FieldType", measureId);
+                                    row.Cells.Add(new ExportExcelCell { Value = measureItem.FieldType.RenderDescriptionByDefault() ? measureItem.FieldType.GetDescription(measureValue.Value.Value) : measureValue.Value.Value });
+                                }
+                                index++;
+                            }
+                        }
+                        sheet.Rows.Add(row);
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
 
-
-
+        private class DataRecordFieldTypeSetExcelCellTypeContext : IDataRecordFieldTypeSetExcelCellTypeContext
+        {
+            public ExportExcelHeaderCell HeaderCell { get; set; }
+        }
 
         #endregion
 

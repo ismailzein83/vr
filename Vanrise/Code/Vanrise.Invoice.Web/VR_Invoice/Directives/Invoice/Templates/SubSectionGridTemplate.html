@@ -4,7 +4,8 @@
              pagingtype="'Pager'"
              menuactions="gridMenuActions"
              showexpand="showExpandIcon"
-             defaultsortbyfieldname="gridFields[0].Field">
+             defaultsortbyfieldname="gridFields[0].Field"
+             enableautoexport="true">
     <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field"></vr-datagridcolumn>
     <vr-datagridexpandablerow >
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>

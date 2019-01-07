@@ -10,6 +10,7 @@ namespace Vanrise.Invoice.Entities
     {
         public GroupingInvoiceItemDetail ParentGroupingInvoiceItemDetail { get; set; }
         public Guid? SectionId { get; set; }
+        public Guid UniqueSectionID { get; set; }
         public long InvoiceId { get; set; }
         public Guid InvoiceTypeId { get; set; }
         public Guid ItemGroupingId { get; set; }

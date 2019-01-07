@@ -14,6 +14,7 @@ namespace Vanrise.Invoice.Entities
         public Guid ItemGroupingId { get; set; }
         public List<Guid> DimensionIds { get; set; }
         public List<Guid> MeasureIds { get; set; }
+        public Guid UniqueSectionID { get; set; }
         public List<InvoiceGroupingDimensionFilter> Filters { get; set; }
 
 

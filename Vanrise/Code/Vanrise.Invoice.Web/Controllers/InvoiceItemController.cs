@@ -20,7 +20,7 @@ namespace Vanrise.Invoice.Web.Controllers
          public object GetFilteredInvoiceItems(Vanrise.Entities.DataRetrievalInput<InvoiceItemQuery> input)
          {
              InvoiceItemManager manager = new InvoiceItemManager();
-             return GetWebResponse(input, manager.GetFilteredInvoiceItems(input));
+            return GetWebResponse(input, manager.GetFilteredInvoiceItems(input), manager.GetSubsectionTitle(input.Query.InvoiceTypeId, input.Query.UniqueSectionID));
          }
          
     }

@@ -38,18 +38,20 @@ namespace Vanrise.Invoice.MainExtensions
                     InvoiceTypeId=input.Query.InvoiceTypeId,
                     ItemGroupingId=input.Query.ItemGroupingId,
                     MeasureIds = input.Query.MeasureIds,
+                    UniqueSectionID = input.Query.UniqueSectionID
                 },
                 ResultKey = input.ResultKey,
                 ToRow = input.ToRow
             };
            
-            var result = manager.GetFilteredGroupingInvoiceItems(itemGroupingInput) as Vanrise.Entities.BigResult<GroupingInvoiceItemDetail>;
-
-             Vanrise.Entities.BigResult<ItemGroupingSectionResult> bigDataResult = new BigResult<ItemGroupingSectionResult>();
-             bigDataResult.ResultKey = result.ResultKey;
             if (input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
-                 if(result.Data != null)
+                var result = manager.GetFilteredGroupingInvoiceItems(itemGroupingInput) as Vanrise.Entities.BigResult<GroupingInvoiceItemDetail>;
+
+                Vanrise.Entities.BigResult<ItemGroupingSectionResult> bigDataResult = new BigResult<ItemGroupingSectionResult>();
+                bigDataResult.ResultKey = result.ResultKey;
+
+                if (result.Data != null)
                  {
                      List<ItemGroupingSectionResult> itemGroupingSectionResults = new List<ItemGroupingSectionResult>();
                      RecordFilterManager filterManager = new RecordFilterManager();
@@ -120,8 +122,13 @@ namespace Vanrise.Invoice.MainExtensions
                      bigDataResult.Data = itemGroupingSectionResults;
                  }
                  bigDataResult.TotalCount = result.TotalCount;
+                return GetWebResponse(input, bigDataResult);
             }
-            return GetWebResponse(input, bigDataResult);
+            else
+            {
+                var excelResult = manager.GetFilteredGroupingInvoiceItems(itemGroupingInput) as Vanrise.Entities.ExcelResult<GroupingInvoiceItemDetail>;
+                return GetWebResponse(input, excelResult, manager.GetSubsectionTitle(input.Query.InvoiceTypeId, input.Query.UniqueSectionID));
+            }
         }
 
         private ItemGroupingSectionSettings GetSection(InvoiceType invoiceType, Guid sectionId)
