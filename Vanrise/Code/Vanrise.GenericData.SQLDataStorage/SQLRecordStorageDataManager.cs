@@ -11,6 +11,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using System.Data.Common;
 using Vanrise.Entities;
+using Vanrise.Common.Business;
 
 namespace Vanrise.GenericData.SQLDataStorage
 {
@@ -97,18 +98,39 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         public object InitialiazeStreamForDBApply()
         {
-            return base.InitializeStreamForBulkInsert();
+            return new List<dynamic>();
         }
 
         public void WriteRecordToStream(object record, object dbApplyStream)
         {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            this.DynamicManager.WriteRecordToStream(record, streamForBulkInsert);
+            List<dynamic> records = dbApplyStream as List<dynamic>;
+            records.Add(record);
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            StreamForBulkInsert streamForBulkInsert = base.InitializeStreamForBulkInsert();
+            List<dynamic> records = dbApplyStream as List<dynamic>;
+
+            long? startingId = null;
+            int recordsCount = records.Count;
+            if (_dataRecordStorageSettings.GenerateRecordIds)
+            {
+                long firstId;
+                IDManager.Instance.ReserveIDRange(new VanriseType($"SQLDataRecordStorage_{this._dataRecordStorage.DataRecordStorageId}"), recordsCount, out firstId);
+                startingId = firstId;
+            }
+
+            foreach (dynamic record in records)
+            {
+                if (startingId.HasValue)
+                {
+                    record.SetFieldValue(DataRecordType.Settings.IdField, startingId);
+                    startingId++;
+                }
+                this.DynamicManager.WriteRecordToStream(record, streamForBulkInsert);
+            }
+
             streamForBulkInsert.Close();
             string tableName = GetTableNameWithSchema();
             return new StreamBulkInsertInfo
@@ -312,7 +334,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
             StringBuilder parameterDeclarationBuilder = new StringBuilder();
             StringBuilder parameterAssignementBuilder = new StringBuilder();
-            
+
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
             if(context.FromTime != default(DateTime))
             {
@@ -332,7 +354,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                 parameterAssignementBuilder.Append(" @ToTime = @ToTime_FromOut ");
                 filters.Add(string.Format(" {0} <= @ToTime ", dateTimeColumn));
             }
-           
+
             Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
             String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(context.FilterGroup, ref parameterIndex, parameterValues);
             if (!string.IsNullOrWhiteSpace(recordFilter))
@@ -1091,12 +1113,12 @@ namespace Vanrise.GenericData.SQLDataStorage
         private string BuildQuery(List<string> fieldNames, int? limitResult, OrderDirection orderDirection, List<string> filters)
         {
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
-            string tableName = GetTableNameWithSchema();            
+            string tableName = GetTableNameWithSchema();
             string whereCondition = filters != null && filters.Count > 0 ? string.Concat(" WHERE ", string.Join(" AND ", filters)) : "";
             string orderResult = string.Format(" Order By {0} {1} ", dateTimeColumn, orderDirection == OrderDirection.Ascending ? "ASC" : "DESC");
             StringBuilder str = new StringBuilder(string.Format(@"  select {0} {1} from {2} WITH (NOLOCK)
                                                                     {3} {4} ",
-                                                                    limitResult.HasValue ? string.Format(" Top {0} ", limitResult.Value) : "", 
+                                                                    limitResult.HasValue ? string.Format(" Top {0} ", limitResult.Value) : "",
                                                                     string.Join<string>(",", GetColumnNamesFromFieldNames(fieldNames)),
                                                                     tableName, whereCondition, orderResult));
             //input.SortByColumnName = dateTimeColumn;

@@ -123,6 +123,7 @@
                         ctrl.tableName = payload.TableName;
                         ctrl.tableSchema = payload.TableSchema;
                         ctrl.includeQueueItemId = payload.IncludeQueueItemId;
+                        ctrl.generateRecordIds = payload.GenerateRecordIds;
                     }
 
                     if (payload.DataRecordTypeId != undefined) {
@@ -187,7 +188,8 @@
                         TableSchema: ctrl.tableSchema,
                         Columns: ctrl.columns.length > 0 ? getColumns() : null,
                         NullableFields: getNullableFields(),
-                        IncludeQueueItemId: ctrl.includeQueueItemId
+                        IncludeQueueItemId: ctrl.includeQueueItemId,
+                        GenerateRecordIds: ctrl.generateRecordIds
                     };
 
                     function getColumns() {
