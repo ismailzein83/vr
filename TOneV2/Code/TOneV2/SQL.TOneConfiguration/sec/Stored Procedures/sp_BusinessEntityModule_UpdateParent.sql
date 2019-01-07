@@ -12,6 +12,6 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	UPDATE	sec.BusinessEntityModule
-		SET		 ParentId = @ParentId
+		SET		 ParentId = @ParentId, LastModifiedTime = GETDATE()
 		WHERE	Id = @ModuleId
 END

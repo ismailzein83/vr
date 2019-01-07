@@ -8,7 +8,8 @@ IF NOT EXISTS(SELECT 1 FROM sec.[OrgChart] WHERE Id != @Id AND Name = @Name)
 	BEGIN
 		UPDATE [sec].[OrgChart]
 		SET Name = @Name,
-			Hierarchy = @Hierarchy
+			Hierarchy = @Hierarchy,
+			LastModifiedTime = GETDATE()
 		WHERE Id = @Id
 	END
 END

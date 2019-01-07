@@ -9,6 +9,6 @@ AS
 BEGIN
 
 	UPDATE sec.BusinessEntityModule 
-	SET BreakInheritance = 1 - BreakInheritance
+	SET BreakInheritance = 1 - BreakInheritance, LastModifiedTime = GETDATE()
 	Where Id = @EntityId
 END

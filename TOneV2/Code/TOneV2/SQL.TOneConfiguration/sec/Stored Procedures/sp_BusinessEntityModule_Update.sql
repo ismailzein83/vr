@@ -18,7 +18,8 @@ IF NOT EXISTS(select 1 from sec.[BusinessEntityModule] where Name = @Name and Id
 	UPDATE	sec.[BusinessEntityModule]
 		SET		Name = @Name,
 				ParentId=@ParentId,
-				BreakInheritance = @BreakInheritance
+				BreakInheritance = @BreakInheritance,
+				LastModifiedTime = GETDATE()
 		WHERE	Id = @Id
 	END
 END
