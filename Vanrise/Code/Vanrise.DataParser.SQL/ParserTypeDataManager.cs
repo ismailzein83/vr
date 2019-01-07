@@ -7,7 +7,7 @@ using Vanrise.DataParser.Entities;
 namespace Vanrise.DataParser.Data.SQL
 {
     public class ParserTypeDataManager : BaseSQLDataManager, IParserTypeDataManager
-    { 
+    {
         #region Properties/Ctor
 
         public ParserTypeDataManager()
@@ -25,22 +25,22 @@ namespace Vanrise.DataParser.Data.SQL
             return GetItemsSP("[dataparser].[sp_ParserType_GetAll]", ParserTypeMapper);
         }
 
-        public bool AreParserTypesUpdated(ref object updateHandle)
+        public bool AreParserTypesUpdated(ref object lastReceivedDataInfo)
         {
-            return base.IsDataUpdated("[dataparser].[ParserType]", ref updateHandle);
+            return base.IsDataUpdated("[dataparser].[ParserType]", ref lastReceivedDataInfo);
+        }
+
+        public bool Insert(ParserType parserType)
+        {
+            string serializedSettings = parserType.Settings != null ? Vanrise.Common.Serializer.Serialize(parserType.Settings) : null;
+            int recordsEffected = ExecuteNonQuerySP("[dataparser].[sp_ParserType_Insert]", parserType.ParserTypeId, parserType.Name, serializedSettings);
+            return (recordsEffected > 0);
         }
 
         public bool Update(Entities.ParserType parserType)
         {
             string serializedSettings = parserType.Settings != null ? Vanrise.Common.Serializer.Serialize(parserType.Settings) : null;
             int recordsEffected = ExecuteNonQuerySP("[dataparser].[sp_ParserType_Update]", parserType.ParserTypeId, parserType.Name, serializedSettings);
-            return (recordsEffected > 0);
-        }
-
-        public bool Insert(ParserType parserType)
-        {
-            string serializedSettings = parserType.Settings != null ? Vanrise.Common.Serializer.Serialize(parserType.Settings) : null;
-            int recordsEffected = ExecuteNonQuerySP("[dataparser].[sp_ParserType_Insert]", parserType.ParserTypeId, parserType.Name,serializedSettings);
             return (recordsEffected > 0);
         }
 
@@ -52,9 +52,9 @@ namespace Vanrise.DataParser.Data.SQL
         {
             return new ParserType
             {
-               ParserTypeId = (Guid)reader["ID"],
-               Name = reader["Name"] as string,
-               Settings = Vanrise.Common.Serializer.Deserialize<ParserTypeSettings>(reader["Settings"] as string)
+                ParserTypeId = (Guid)reader["ID"],
+                Name = reader["Name"] as string,
+                Settings = Vanrise.Common.Serializer.Deserialize<ParserTypeSettings>(reader["Settings"] as string)
             };
         }
 

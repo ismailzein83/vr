@@ -100,11 +100,11 @@ namespace Vanrise.DataParser.Business
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IParserTypeDataManager _dataManager = DataParserDataManagerFactory.GetDataManager<IParserTypeDataManager>();
-            object _updateHandle;
+            object _lastReceivedDataInfo;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreParserTypesUpdated(ref _updateHandle);
+                return _dataManager.AreParserTypesUpdated(ref _lastReceivedDataInfo);
             }
         }
 

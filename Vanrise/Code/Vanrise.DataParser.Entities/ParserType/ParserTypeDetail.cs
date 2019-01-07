@@ -8,7 +8,6 @@ namespace Vanrise.DataParser.Entities
 {
    public class ParserTypeDetail
     {
-
        public ParserType Entity { get; set; }
     }
 }
