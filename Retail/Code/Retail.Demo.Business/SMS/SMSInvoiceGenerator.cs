@@ -94,10 +94,11 @@ namespace Retail.Demo.Business
                     NumberOfSMS = numberOfSMS
                 }
             };
-            SetInvoiceBillingTransactions(context, amount, currencyId, financialAccountData.BalanceAccountTypeId);
+            if(financialAccountData.BalanceAccountTypeId.HasValue)
+              SetInvoiceBillingTransactions(context, amount, currencyId, financialAccountData.BalanceAccountTypeId.Value, fromDate, toDate);
 
         }
-        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, decimal amount, int currencyId, Guid? balanceAccountTypeId)
+        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, decimal amount, int currencyId, Guid balanceAccountTypeId,DateTime fromDate, DateTime toDate)
         {
             var billingTransaction = new GeneratedInvoiceBillingTransaction()
             {
@@ -105,9 +106,10 @@ namespace Retail.Demo.Business
                 Amount = amount,
                 CurrencyId = currencyId,
                 TransactionTypeId = this._invoiceTransactionTypeId,
+                AccountTypeId = balanceAccountTypeId,
+                FromDate = fromDate,
+                ToDate = toDate
             };
-            if (balanceAccountTypeId.HasValue)
-                billingTransaction.AccountTypeId = balanceAccountTypeId.Value;
             context.BillingTransactions = new List<GeneratedInvoiceBillingTransaction>() { billingTransaction };
         }
         private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceMeasures>> itemSetNamesDic)
