@@ -268,19 +268,22 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     }
                     function getOptionsSectionLoadPromise() {
                         //Loading CarrierAccount Selector
-                        var carrierAccountSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                        carrierAccountSelectorReadyPromiseDeferred.promise.then(function () {
+                        function loadCarrierAccountSelector() {
+                            var carrierAccountSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                            carrierAccountSelectorReadyPromiseDeferred.promise.then(function () {
 
-                            var carrierAccountPayload = { filter: { SupplierFilterSettings: supplierFilterSettings } };
-                            if (options != undefined) {
-                                carrierAccountPayload.selectedIds = UtilsService.getPropValuesFromArray(options, "SupplierId");
-                            }
-                            VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, carrierAccountPayload, carrierAccountSelectorLoadPromiseDeferred);
-                        });
+                                var carrierAccountPayload = { filter: { SupplierFilterSettings: supplierFilterSettings } };
+                                if (options != undefined) {
+                                    carrierAccountPayload.selectedIds = UtilsService.getPropValuesFromArray(options, "SupplierId");
+                                }
+                                VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, carrierAccountPayload, carrierAccountSelectorLoadPromiseDeferred);
+                            });
+                            return carrierAccountSelectorLoadPromiseDeferred.promise;
+                        }
 
                         //Loading Options Grid 
                         var loadOptionGridPromiseDeferred = UtilsService.createPromiseDeferred();
-                        UtilsService.waitMultiplePromises([gridPromiseDeferred.promise, carrierAccountSelectorLoadPromiseDeferred.promise]).then(function () {
+                        UtilsService.waitMultiplePromises([gridPromiseDeferred.promise, loadCarrierAccountSelector()]).then(function () {
                             var _promises = [];
                             for (var i = 0; i < $scope.scopeModel.selectedSuppliers.length; i++) {
                                 var selectedSupplier = $scope.scopeModel.selectedSuppliers[i];
@@ -304,6 +307,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                             $scope.scopeModel.selectedSuppliers = [];
                         });
                     }
+
                     function getOverallBackupOptionsDirectiveLoadPromise() {
                         var overallBackupOptionsDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -334,10 +338,19 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                         var options = [];
                         for (var i = 0; i < $scope.scopeModel.suppliers.length; i++) {
                             var supplier = $scope.scopeModel.suppliers[i];
+                            var supplierDealIds = supplier.supplierDealSelectorAPI.getSelectedIds();
+
+                            var supplierDeals = [];
+                            if (supplierDealIds != undefined && supplierDealIds.length > 0)
+                                for (var j = 0; j < supplierDealIds.length; j++) {
+                                    supplierDeals.push({ SupplierDealId: supplierDealIds[j] });
+                                }
+
                             var option = {
                                 SupplierId: supplier.SupplierId,
                                 NumberOfTries: supplier.NumberOfTries,
-                                Percentage: supplier.Percentage
+                                Percentage: supplier.Percentage,
+                                SupplierDeals: supplierDeals
                             };
                             if ((routeRuleConfiguration.FixedOptionLossType == WhS_Routing_FixedOptionLossTypeEnum.RemoveLoss.value && supplier.IsRemoveLoss) ||
                                 (routeRuleConfiguration.FixedOptionLossType == WhS_Routing_FixedOptionLossTypeEnum.AcceptLoss.value && !supplier.IsRemoveLoss)) {
@@ -421,6 +434,23 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     };
                     extendOptionPromises.push(option.serviceViewerLoadDeferred.promise);
                 }
+
+                option.supplierDealLoadDeferred = UtilsService.createPromiseDeferred();
+                option.onSupplierDealSelectorReady = function (api) {
+                    option.supplierDealSelectorAPI = api;
+
+                    var supplierDealSelectorPayload = { filter: { Filters: [{ $type: "TOne.WhS.Deal.MainExtensions.DealDefinitionFilter.CostDealFilter, TOne.WhS.Deal.MainExtensions" }] } };
+
+                    var selectedCarrierId = selectedSupplier.CarrierAccountId;
+                    if (selectedCarrierId != undefined) {
+                        supplierDealSelectorPayload.filter.CarrierAccountIds = [selectedCarrierId];
+                    }
+                    if (currentOption != undefined && currentOption.SupplierDeals != undefined) {
+                        supplierDealSelectorPayload.selectedIds = UtilsService.getPropValuesFromArray(currentOption.SupplierDeals, "SupplierDealId");
+                    }
+                    VRUIUtilsService.callDirectiveLoad(option.supplierDealSelectorAPI, supplierDealSelectorPayload, option.supplierDealLoadDeferred);
+                };
+                extendOptionPromises.push(option.supplierDealLoadDeferred.promise);
 
                 option.onBackupOptionDirectiveReady = function (api) {
                     option.backupOptionGridAPI = api;

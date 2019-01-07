@@ -66,11 +66,15 @@ app.directive('vrWhsDealDealdefinitionSelector', ['UtilsService', '$compile', 'V
             if (attrs.ismultipleselection != undefined)
                 multipleselection = "ismultipleselection";
 
+            var haschildcolumns = "";
+            if (attrs.usefullcolumn != undefined)
+                haschildcolumns = "haschildcolumns";
+
             var onviewclicked = "";
             if (attrs.includeviewhandler != undefined)
                 onviewclicked = "onviewclicked='onViewIconClicked'";
 
-            return '<vr-columns  colnum="{{ctrl.normalColNum}}" ' + disabled + '  > <vr-select on-ready="scopeModel.onSelectorReady" hasviewpermission="ctrl.hasviewpremission" ' + onviewclicked + ' ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DealId"'
+            return '<vr-columns  colnum="{{ctrl.normalColNum}}" ' + disabled + ' ' + haschildcolumns + '  > <vr-select on-ready="scopeModel.onSelectorReady" hasviewpermission="ctrl.hasviewpremission" ' + onviewclicked + ' ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DealId"'
                 + 'entityname="Deal" ' + label + ' ' + hideremoveicon + '></vr-select> </vr-columns>';
 
         }

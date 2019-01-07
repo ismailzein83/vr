@@ -1,15 +1,25 @@
 ﻿<vr-row removeline>
     <vr-columns width="1/3row">
-        <vr-whs-be-carrieraccount-selector ismultipleselection hideselectedvaluessection isrequired="true" selectedvalues="ctrl.selectedSuppliers" getsuppliers on-ready="ctrl.onCarrierAccountDirectiveReady"></vr-whs-be-carrieraccount-selector>
+        <vr-whs-be-carrieraccount-selector on-ready="ctrl.onCarrierAccountDirectiveReady" selectedvalues="ctrl.selectedSuppliers"
+                                           onselectitem="ctrl.onSelectSupplier" ondeselectitem="ctrl.onDeselectSupplier" ondeselectallitems="ctrl.removeAllFilters"
+                                           hideselectedvaluessection ismultipleselection isrequired="true" getsuppliers>
+        </vr-whs-be-carrieraccount-selector>
     </vr-columns>
     <vr-columns width="2/3row">
         <!--<span ng-if="ctrl.showExtendSuppliersButton">
             <vr-button type="Reload" data-onclick="ctrl.extendSuppliersList" standalone></vr-button>
         </span>-->
         <div>
-            <vr-datagrid datasource="ctrl.selectedSuppliers" gridmenuactions="gridLeftMenuActions"
-                         on-ready="ctrl.onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter">
-                <vr-datagridcolumn headertext="'Suppliers'">{{dataItem.Name}}</vr-datagridcolumn>
+            <vr-datagrid datasource="ctrl.suppliers" gridmenuactions="gridLeftMenuActions"
+                         on-ready="ctrl.onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" vr-loader="ctrl.isLoadingSelectedSupplier">
+                <vr-datagridcolumn headertext="'Supplier'">
+                    {{dataItem.Name}}
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Deals'">
+                    <vr-whs-deal-dealdefinition-selector on-ready="dataItem.onSupplierDealSelectorReady"
+                                                         normal-col-num="12" ismultipleselection hidelabel usefullcolumn>
+                    </vr-whs-deal-dealdefinition-selector>
+                </vr-datagridcolumn>
             </vr-datagrid>
         </div>
     </vr-columns>

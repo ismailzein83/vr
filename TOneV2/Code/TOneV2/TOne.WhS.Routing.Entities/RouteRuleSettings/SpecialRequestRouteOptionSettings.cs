@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -14,7 +10,7 @@ namespace TOne.WhS.Routing.Entities
 
         public int? Percentage { get; set; }
 
-        public List<SpecialRequestRouteDealSupplier> DealSuppliers { get; set; }
+        public List<SpecialRequestRouteSupplierDeal> SupplierDeals { get; set; }
 
         public bool ForceOption { get; set; }
 
@@ -30,7 +26,7 @@ namespace TOne.WhS.Routing.Entities
         public bool ForceOption { get; set; }
     }
     
-    public class SpecialRequestRouteDealSupplier : BaseRouteDealSupplier
+    public class SpecialRequestRouteSupplierDeal : BaseRouteSupplierDeal
     {
     }
 }

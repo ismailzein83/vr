@@ -40,8 +40,6 @@ namespace TOne.WhS.Deal.Business
     {
         public static Guid SwapDealSettingsConfigId = new Guid("63C1310D-FDEA-4AC7-BDE1-58FD11E4EC65");
         public override Guid ConfigId { get { return SwapDealSettingsConfigId; } }
-        public override bool IsBuyDeal { get { return true; } }
-        public override bool IsSellDeal { get { return true; } }
         public int CarrierAccountId { get; set; }
         public DealContract DealContract { get; set; }
         public DealType DealType { get; set; }

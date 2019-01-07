@@ -42,9 +42,6 @@ namespace TOne.WhS.Deal.Entities
                 return EEDToStore;
             }
         }
-
-        public abstract bool IsBuyDeal { get; }
-        public abstract bool IsSellDeal { get;}
         public abstract DateTime? RealEED { get; }
         public abstract DateTime RealBED { get; }
         public abstract int GetCarrierAccountId();

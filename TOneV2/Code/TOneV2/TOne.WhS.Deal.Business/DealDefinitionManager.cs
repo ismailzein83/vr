@@ -29,12 +29,7 @@ namespace TOne.WhS.Deal.Business
                 if (filter.ExcludedDealDefinitionIds != null && filter.ExcludedDealDefinitionIds.Contains(dealDefinition.DealId))
                     return false;
 
-                if (filter.BuyDealSupptierIds != null)
-                    if (dealDefinition.Settings.IsBuyDeal && !filter.BuyDealSupptierIds.Contains(dealDefinition.Settings.GetCarrierAccountId()))
-                        return false;
-
-                if (filter.SellDealCustomerIds != null)
-                    if (dealDefinition.Settings.IsSellDeal && !filter.SellDealCustomerIds.Contains(dealDefinition.Settings.GetCarrierAccountId()))
+                if (filter.CarrierAccountIds != null && !filter.CarrierAccountIds.Contains(dealDefinition.Settings.GetCarrierAccountId()))
                         return false;
 
                 if (filter.Filters != null)

@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="DataAnalysis\ProfilingAndCalculation\DealDAProfCalcAlertRuleFilter.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\DealDAProfCalcAlertRuleFilterDefinition.cs" />
+    <Compile Include="DealDefinitionFilter\CostDealFilter.cs" />
     <Compile Include="DealDefinitionFilter\SaleDealFilter.cs" />
     <Compile Include="DealRateEvaluator\SaleRateEvaluator\DiscountSaleRateEvaluator.cs" />
     <Compile Include="DealRateEvaluator\SaleRateEvaluator\FixedSaleRateEvaluator.cs" />

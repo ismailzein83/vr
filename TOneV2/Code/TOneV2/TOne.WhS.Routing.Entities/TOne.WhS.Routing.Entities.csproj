@@ -93,7 +93,7 @@
     <Compile Include="QualityConfiguration\QualityConfigurationDefinition\QualityConfigurationDefinitionSettings.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationRuntime\RouteRuleQualityConfiguration.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationRuntime\RouteRuleQualityConfigurationData.cs" />
-    <Compile Include="RouteRuleSettings\BaseRouteDealSupplier.cs" />
+    <Compile Include="RouteRuleSettings\BaseRouteSupplierDeal.cs" />
     <Compile Include="RouteRuleSettings\FixedRouteOptionSettings.cs" />
     <Compile Include="RouteRuleSettings\IRouteOptionSettings.cs" />
     <Compile Include="Routes\CustomerRouteOptionDetail.cs" />

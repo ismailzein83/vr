@@ -6,9 +6,7 @@ namespace TOne.WhS.Deal.Entities
     {
         public List<IDealDefinitionFilter> Filters { get; set; }
 
-        public List<int> BuyDealSupptierIds { get; set; }
-
-        public List<int> SellDealCustomerIds { get; set; }
+        public List<int> CarrierAccountIds { get; set; }
 
         public List<int> IncludedDealDefinitionIds { get; set; }
 

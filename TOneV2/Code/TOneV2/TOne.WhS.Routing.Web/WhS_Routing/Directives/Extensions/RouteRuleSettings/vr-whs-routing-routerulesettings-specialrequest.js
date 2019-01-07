@@ -367,11 +367,20 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
                         var options = [];
                         for (var i = 0; i < $scope.scopeModel.suppliers.length; i++) {
                             var supplier = $scope.scopeModel.suppliers[i];
+
+                            var supplierDealIds = supplier.supplierDealSelectorAPI.getSelectedIds();
+                            var supplierDeals = [];
+                            if (supplierDealIds != undefined && supplierDealIds.length > 0)
+                                for (var j = 0; j < supplierDealIds.length; j++) {
+                                    supplierDeals.push({ SupplierDealId: supplierDealIds[j] });
+                                }
+
                             var option = {
                                 SupplierId: supplier.SupplierId,
                                 ForceOption: supplier.ForceOption,
                                 NumberOfTries: supplier.NumberOfTries,
-                                Percentage: supplier.Percentage
+                                Percentage: supplier.Percentage,
+                                SupplierDeals: supplierDeals
                             };
                             if ($scope.scopeModel.showBackupTabs && supplier.backupOptionGridAPI) {
                                 option.Backups = supplier.backupOptionGridAPI.getData();
@@ -415,6 +424,10 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
             function extendAndAddOptionToGrid(selectedSupplier, currentOption, backupOptionDirectiveLoadPromiseDeferred) {
                 var extendOptionPromises = [];
 
+                var selectedSupplierDealIds;
+                if (currentOption != undefined && currentOption.SupplierDeals != undefined && currentOption.SupplierDeals != null)
+                    selectedSupplierDealIds = UtilsService.getPropValuesFromArray(currentOption.SupplierDeals, "SupplierDealId");
+
                 var option = {
                     tempId: UtilsService.guid(),
                     SupplierId: selectedSupplier.CarrierAccountId,
@@ -447,6 +460,23 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
                     extendOptionPromises.push(option.serviceViewerLoadDeferred.promise);
                 }
 
+                option.supplierDealLoadDeferred = UtilsService.createPromiseDeferred();
+                option.onSupplierDealSelectorReady = function (api) {
+                    option.supplierDealSelectorAPI = api;
+
+                    var supplierDealSelectorPayload = { filter: { Filters: [{ $type: "TOne.WhS.Deal.MainExtensions.DealDefinitionFilter.CostDealFilter, TOne.WhS.Deal.MainExtensions" }] } };
+
+                    var selectedCarrierId = selectedSupplier.CarrierAccountId;
+                    if (selectedCarrierId != undefined) {
+                        supplierDealSelectorPayload.filter.CarrierAccountIds = [selectedCarrierId];
+                    }
+                    if (selectedSupplierDealIds != undefined && selectedSupplierDealIds.length > 0) {
+                        supplierDealSelectorPayload.selectedIds = selectedSupplierDealIds;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(option.supplierDealSelectorAPI, supplierDealSelectorPayload, option.supplierDealLoadDeferred);
+                };
+                extendOptionPromises.push(option.supplierDealLoadDeferred.promise);
+
                 option.onBackupOptionDirectiveReady = function (api) {
                     option.backupOptionGridAPI = api;
 
@@ -462,16 +492,19 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
 
                 return UtilsService.waitMultiplePromises(extendOptionPromises);
             }
+
             function expandRow(option) {
                 if ($scope.scopeModel.showBackupTabs) {
                     gridAPI.expandRow(option);
                 }
             }
+
             function expandRows() {
                 for (var i = 0; i < $scope.scopeModel.suppliers.length; i++) {
                     gridAPI.expandRow($scope.scopeModel.suppliers[i]);
                 }
             }
+
             function collapseRows() {
                 for (var i = 0; i < $scope.scopeModel.suppliers.length; i++) {
                     gridAPI.collapseRow($scope.scopeModel.suppliers[i]);
