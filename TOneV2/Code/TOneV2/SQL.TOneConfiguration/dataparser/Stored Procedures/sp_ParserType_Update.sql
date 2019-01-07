@@ -9,10 +9,10 @@ CREATE PROCEDURE [dataparser].[sp_ParserType_Update]
 	@Settings NVARCHAR(MAX)
 AS
 BEGIN
-	IF NOT EXISTS(SELECT 1 FROM common.VRComponentType WHERE ID != @ID and Name = @Name)
+	IF NOT EXISTS(SELECT 1 FROM [dataparser].[ParserType] WHERE ID != @ID and Name = @Name)
 	BEGIN
-		update dataparser.ParserType
-		set  Name = @Name, Settings = @Settings
+		update [dataparser].[ParserType]
+		set  Name = @Name, Settings = @Settings, LastModifiedTime = GETDATE()
 		where  ID = @ID
 	END
 END
