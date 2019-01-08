@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;

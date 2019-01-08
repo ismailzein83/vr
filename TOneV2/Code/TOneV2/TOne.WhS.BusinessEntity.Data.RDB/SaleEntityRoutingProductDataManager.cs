@@ -95,10 +95,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var whereContext = selectQuery.Where();
             whereContext.NullCondition(COL_ZoneID);
 
-            whereContext.LessOrEqualCondition(COL_BED).Value(effectiveOn);
-            var orCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            orCondition.NullCondition(COL_EED);
-            orCondition.GreaterThanCondition(COL_EED).Value(effectiveOn);
+            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, COL_BED, COL_EED, effectiveOn);
 
             return queryContext.GetItems(DefaultRoutingProductMapper);
         }
@@ -121,10 +118,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereContext.EqualsCondition(COL_OwnerID).Value(ownerId);
             whereContext.NotNullCondition(COL_ZoneID);
 
-            whereContext.LessOrEqualCondition(COL_BED).Value(effectiveOn);
-            var orCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            orCondition.NullCondition(COL_EED);
-            orCondition.GreaterThanCondition(COL_EED).Value(effectiveOn);
+            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, COL_BED, COL_EED, effectiveOn);
 
             return queryContext.GetItems(SaleZoneRoutingProductMapper);
         }

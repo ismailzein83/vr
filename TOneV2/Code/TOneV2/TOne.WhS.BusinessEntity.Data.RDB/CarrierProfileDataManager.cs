@@ -72,7 +72,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.EqualsCondition(COL_Name).Value(carrierProfile.Name);
-            notExistsCondition.EqualsCondition(COL_IsDeleted).Value(0);
+            notExistsCondition.EqualsCondition(COL_IsDeleted).Value(false);
 
             insertQuery.Column(COL_Name).Value(carrierProfile.Name);
 
@@ -115,7 +115,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 updateQuery.Column(COL_LastModifiedBy).Value(carrierProfile.LastModifiedBy.Value);
 
             updateQuery.Column(COL_LastModifiedTime).DateNow();
-            
+
             updateQuery.Where().EqualsCondition(COL_ID).Value(carrierProfile.CarrierProfileId);
 
             return queryContext.ExecuteNonQuery() > 0;

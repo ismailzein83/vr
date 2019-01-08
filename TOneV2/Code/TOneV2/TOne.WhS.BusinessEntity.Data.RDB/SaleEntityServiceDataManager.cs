@@ -53,16 +53,50 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region Members
         public IEnumerable<SaleEntityDefaultService> GetEffectiveSaleEntityDefaultServices(DateTime? effectiveOn)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereContext = selectQuery.Where();
+            whereContext.NullCondition(COL_ZoneID);
+
+            if (effectiveOn.HasValue)
+                BEDataUtility.SetEffectiveAfterDateCondition(whereContext, COL_BED, COL_EED, effectiveOn.Value);
+            else
+                whereContext.FalseCondition();//effectiveOn should be required
+
+            return queryContext.GetItems(SaleEntityDefaultServiceMapper);
         }
 
         public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServices(SalePriceListOwnerType ownerType, int ownerId, DateTime? effectiveOn)
         {
-            throw new NotImplementedException();
+
+            SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinQuery = selectQuery.Join();
+            salePriceListDataManager.JoinSalePriceList(joinQuery, "p", "ID", TABLE_ALIAS, COL_PriceListID);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.NotNullCondition(COL_ZoneID);
+            whereQuery.EqualsCondition("p", "OwnerType").Value((int)ownerType);
+            whereQuery.EqualsCondition("p", "OwnerType").Value(ownerId);
+
+            if (effectiveOn.HasValue)
+                BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, COL_BED, COL_EED, effectiveOn.Value);
+            else
+                whereQuery.FalseCondition();//effectiveOn should be required
+            
+            return queryContext.GetItems(SaleEntityZoneServiceMapper);
         }
 
-        public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServicesByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn,
-            bool isEffectiveInFuture)
+        public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServicesByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             throw new NotImplementedException();
         }
@@ -105,17 +139,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             throw new NotImplementedException();
         }
 
+        public bool AreSaleEntityServicesUpdated(ref object updateHandle)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
+        #endregion
+
+        #region Not Used Functions
         public IEnumerable<SaleEntityZoneService> GetFilteredSaleEntityZoneService(SaleEntityZoneServiceQuery query)
         {
             throw new NotImplementedException();
         }
-
-        public bool AreSaleEntityServicesUpdated(ref object updateHandle)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
-
 
         #region Mappers
 

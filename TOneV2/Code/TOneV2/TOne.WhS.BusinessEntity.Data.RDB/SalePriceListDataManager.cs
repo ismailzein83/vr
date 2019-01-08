@@ -119,7 +119,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
 
         #endregion
-    
+
         #region Not Used Function
         public bool Update(SalePriceList salePriceList)
         {
@@ -186,7 +186,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 recordContext.Value((int)record.PriceListType);
             else
                 recordContext.Value(string.Empty);
-            
+
             recordContext.Value(record.ProcessInstanceId);
             recordContext.Value(record.FileId);
             recordContext.Value(record.UserId);
@@ -211,5 +211,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #endregion
 
+        #region Public Methods
+        public void JoinSalePriceList(RDBJoinContext joinContext, string priceListTableAlias, string priceListIdTableCol, string originalTableAlias, string originalTableCol)
+        {
+            var joinStatement = joinContext.Join(TABLE_NAME, priceListTableAlias);
+            joinStatement.JoinType(RDBJoinType.Inner);
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(originalTableAlias, originalTableCol, priceListTableAlias, priceListIdTableCol);
+        }
+        #endregion
     }
 }
