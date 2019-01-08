@@ -128,6 +128,8 @@
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\FTPConnectionEditorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-ftpconnection-editor.js" />
+    <Content Include="Common\Directives\StatusDefinition\Templates\StatusDefinitionViewerTemplate.html" />
+    <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-viewer.js" />
     <Content Include="Common\Directives\VRDynamicAPIModule\Templates\DynamicAPIModuleGridTemplate.html" />
     <Content Include="Common\Directives\VRDynamicAPIModule\vr-common-dynamicapi-module-grid.js" />
     <Content Include="Common\Directives\VRDynamicAPI\MainExtensions\Templates\CallMethodDynamicAPITemplate.html" />
