@@ -9,8 +9,8 @@
 
         function addVRNamespaceItem(onVRNameSpaceItemAdded, vrNamespaceId) {
             var parameters = {
-            vrNamespaceId: vrNamespaceId,
-            }
+                vrNamespaceId: vrNamespaceId,
+            };
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {

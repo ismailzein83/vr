@@ -9,7 +9,7 @@
 
         var isEditMode;
         var vrNamespaceItemId;
-        var vrNamespaceItem
+        var vrNamespaceItem;
         var vrNamespaceId;
         var vrDynamicCodeSettingsDirectiveApi;
 
