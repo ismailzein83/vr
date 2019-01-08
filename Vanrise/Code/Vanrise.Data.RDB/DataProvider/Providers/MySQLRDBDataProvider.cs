@@ -13,22 +13,19 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 {
     public class MySQLRDBDataProvider : CommonRDBDataProvider
     {
+        MySQLDataManager _dataManager;
+
+        public const string UNIQUE_NAME = "MYSQL";
+        public override string UniqueName { get { return UNIQUE_NAME; } }
+
+        public override bool UseLimitForTopRecords { get { return true; } }
+
         public MySQLRDBDataProvider(string connString)
              : base(connString)
         {
             connString.ThrowIfNull("connString");
             var validConnString = string.Concat(connString, "Allow User Variables=True");
             _dataManager = new MySQLDataManager(validConnString);
-        }
-
-        MySQLDataManager _dataManager;
-
-        public override bool UseLimitForTopRecords
-        {
-            get
-            {
-                return true;
-            }
         }
 
         public override string GetTableDBName(string schemaName, string tableName)
@@ -42,12 +39,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
         public override string ConvertToDBParameterName(string parameterName, RDBParameterDirection parameterDirection)
         {
             return string.Concat("@", parameterName);
-        }
-
-        public const string UNIQUE_NAME = "MYSQL";
-        public override string UniqueName
-        {
-            get { return UNIQUE_NAME; }
         }
 
         //public override RDBResolvedQueryStatement GetStatementSetParameterValue(string parameterDBName, string parameterValue)
@@ -102,7 +93,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     selectColumnsByColumnName.Add(selectColumn.ColumnName, selectColumn);
                 }
             }
-
 
             int colIndex = 0;
 
@@ -213,7 +203,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 columnQueryBuilder.Append(")");
         }
 
-
         public override string GetQueryConcatenatedStrings(params string[] strings)
         {
             if (strings != null && strings.Length > 0)
@@ -308,6 +297,16 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             return new MySQLRDBStreamForBulkInsert(this.ConnectionString, context.DBTableName, context.Columns.Select(col => col.DBColumnName).ToList(), context.FieldSeparator);
         }
 
+        public override string GetConnectionString(IRDBDataProviderGetConnectionStringContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetDataBaseName(IRDBDataProviderGetDataBaseNameContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void CreateDatabase(IRDBDataProviderCreateDatabaseContext context)
         {
             throw new NotImplementedException();
@@ -337,9 +336,9 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                         using (var reader = cmd.ExecuteReader())
                         {
                             onReaderReady(reader);
-                             //cmd.Cancel();
-                             //reader.Close();
-                         }
+                            //cmd.Cancel();
+                            //reader.Close();
+                        }
                     });
             }
 

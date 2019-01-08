@@ -11,31 +11,24 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 {
     public class PostgresRDBDataProvider : CommonRDBDataProvider
     {
+        PostgresDataManager _dataManager;
+
+        public const string UNIQUE_NAME = "POSTGRES";
+        public override string UniqueName { get { return UNIQUE_NAME; } }
+
+        public override bool UseLimitForTopRecords { get { return true; } }
+
+        public override string NowDateTimeFunction { get { return " current_timestamp "; } }
+
         public PostgresRDBDataProvider(string connString)
             : base(connString)
         {
             _dataManager = new PostgresDataManager(connString, this);
         }
 
-        PostgresDataManager _dataManager;
-
         public override string ConvertToDBParameterName(string parameterName, RDBParameterDirection parameterDirection)
         {
             return string.Concat("@", parameterName);
-        }
-
-        public const string UNIQUE_NAME = "POSTGRES";
-        public override string UniqueName
-        {
-            get { return UNIQUE_NAME; }
-        }
-
-        public override bool UseLimitForTopRecords
-        {
-            get
-            {
-                return true;
-            }
         }
 
         public override string GetQueryConcatenatedStrings(params string[] strings)
@@ -253,7 +246,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 if (!string.IsNullOrEmpty(conditionDBQuery))
                 {
                     queryBuilder.Append(" WHERE ");
-                    if(mainJoinCondition != null)
+                    if (mainJoinCondition != null)
                     {
                         queryBuilder.Append(mainJoinCondition);
                         queryBuilder.Append(" AND ");
@@ -263,13 +256,13 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 }
             }
 
-            if(mainJoinCondition != null && !joinConditionAdded)
+            if (mainJoinCondition != null && !joinConditionAdded)
             {
                 queryBuilder.Append(" WHERE ");
                 queryBuilder.Append(mainJoinCondition);
             }
 
-            if(selectColumnsQueryBuilder != null )
+            if (selectColumnsQueryBuilder != null)
             {
                 queryBuilder.Append(" RETURNING ");
                 queryBuilder.Append(selectColumnsQueryBuilder.ToString());
@@ -278,7 +271,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
             return resolvedQuery;
         }
-        
+
         public override void ExecuteReader(IRDBDataProviderExecuteReaderContext context)
         {
             _dataManager.ExecuteReader(context.Query, context.Parameters, context.ExecuteTransactional, (originalReader) => context.OnReaderReady(new PostgresRDBDataReader(originalReader)));
@@ -300,7 +293,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             columnsQueryBuilder.Append(" ");
             if (isIdentityColumn)
             {
-                switch(columnDefinition.DataType)
+                switch (columnDefinition.DataType)
                 {
                     case RDBDataType.Int: columnsQueryBuilder.Append(" serial "); break;
                     case RDBDataType.BigInt: columnsQueryBuilder.Append(" bigserial "); break;
@@ -312,11 +305,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 columnsQueryBuilder.Append(GetColumnDBType(columnName, columnDefinition));
             }
             columnsQueryBuilder.Append(notNullable ? " NOT NULL " : " NULL ");
-        }
-
-        public override string NowDateTimeFunction
-        {
-            get { return " current_timestamp "; }
         }
 
         protected override string GetNVarcharDBType(int? size)
@@ -383,6 +371,16 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
         {
             throw new NotImplementedException();
             //return "LASTVAL()";
+        }
+
+        public override string GetConnectionString(IRDBDataProviderGetConnectionStringContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetDataBaseName(IRDBDataProviderGetDataBaseNameContext context)
+        {
+            throw new NotImplementedException();
         }
 
         public override void CreateDatabase(IRDBDataProviderCreateDatabaseContext context)
@@ -481,7 +479,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 }
             }
 
-
             public string GetQueryAsText(RDBResolvedQuery resolvedQuery)
             {
                 var queryBuilder = new StringBuilder();
@@ -494,7 +491,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 }
                 return queryBuilder.ToString();
             }
-
 
             private static void AddParameters(NpgsqlCommand cmd, Dictionary<string, RDBParameter> parameters)
             {

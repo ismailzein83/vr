@@ -10,25 +10,13 @@ namespace Vanrise.Data.RDB.DataProvider
     public abstract class CommonRDBDataProvider : BaseRDBDataProvider
     {
         string _connString;
-        protected string ConnectionString
-        {
-            get
-            {
-                return _connString;
-            }
-        }
+        protected string ConnectionString { get { return _connString; } }
+
+        public virtual bool UseLimitForTopRecords { get { return false; } }
 
         public CommonRDBDataProvider(string connString)
         {
             _connString = connString;
-        }
-
-        public virtual bool UseLimitForTopRecords
-        {
-            get
-            {
-                return false;
-            }
         }
 
         public override string GetTableDBName(string schemaName, string tableName)
@@ -699,6 +687,5 @@ namespace Vanrise.Data.RDB.DataProvider
         {
             throw new NotImplementedException();
         }
-
     }
 }

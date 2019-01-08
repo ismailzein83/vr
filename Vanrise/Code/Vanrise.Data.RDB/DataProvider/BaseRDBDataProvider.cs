@@ -66,6 +66,10 @@ namespace Vanrise.Data.RDB
 
         public abstract RDBResolvedQuery ResolveTempTableDropQuery(IRDBDataProviderResolveTempTableDropQueryContext context);
 
+        public abstract string GetConnectionString(IRDBDataProviderGetConnectionStringContext context);
+
+        public abstract string GetDataBaseName(IRDBDataProviderGetDataBaseNameContext context);
+
         public abstract void CreateDatabase(IRDBDataProviderCreateDatabaseContext context);
 
         public abstract void DropDatabase(IRDBDataProviderDropDatabaseContext context);
@@ -86,7 +90,6 @@ namespace Vanrise.Data.RDB
                 To = new DateTime(9999, 12, 31, 23, 59, 59)
             };
         }
-
 
         public virtual bool IsDataUpdated(string tableName, RDBTableDefinition tableDefinition, ref object lastReceivedDataInfo)
         {
@@ -330,6 +333,7 @@ namespace Vanrise.Data.RDB
 
         bool AddSelectGeneratedId { get; }
     }
+
     public class RDBDataProviderResolveInsertQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveInsertQueryContext
     {
         public RDBDataProviderResolveInsertQueryContext(IRDBTableQuerySource table, List<RDBInsertColumn> columnValues, RDBSelectQuery selectQuery, bool addSelectGeneratedId,
@@ -343,11 +347,7 @@ namespace Vanrise.Data.RDB
             this.AddSelectGeneratedId = addSelectGeneratedId;
         }
 
-        public RDBQueryBuilderContext QueryBuilderContext
-        {
-            get;
-            private set;
-        }
+        public RDBQueryBuilderContext QueryBuilderContext { get; private set; }
 
         public IRDBTableQuerySource Table { get; set; }
 
@@ -357,6 +357,7 @@ namespace Vanrise.Data.RDB
 
         public bool AddSelectGeneratedId { get; private set; }
     }
+
     public interface IRDBDataProviderResolveUpdateQueryContext : IBaseRDBResolveQueryContext
     {
         RDBQueryBuilderContext QueryBuilderContext { get; }
@@ -419,7 +420,6 @@ namespace Vanrise.Data.RDB
 
         public List<RDBJoin> Joins { get; private set; }
 
-
         public List<RDBUpdateSelectColumn> SelectColumns { get; private set; }
     }
 
@@ -460,6 +460,29 @@ namespace Vanrise.Data.RDB
         public List<RDBJoin> Joins { get; private set; }
     }
 
+    public interface IRDBDataProviderGetConnectionStringContext
+    {
+        string OverridingDatabaseName { get; }
+    }
+
+    public class RDBDataProviderGetConnectionStringContext : IRDBDataProviderGetConnectionStringContext
+    {
+        public RDBDataProviderGetConnectionStringContext(string overridingDatabaseName)
+        {
+            this.OverridingDatabaseName = overridingDatabaseName;
+        }
+
+        public string OverridingDatabaseName { get; private set; }
+    }
+
+    public interface IRDBDataProviderGetDataBaseNameContext
+    {
+    }
+
+    public class RDBDataProviderGetDataBaseNameContext : IRDBDataProviderGetDataBaseNameContext
+    {
+    }
+
     public interface IRDBDataProviderCreateDatabaseContext
     {
         string DatabaseName { get; }
@@ -478,23 +501,11 @@ namespace Vanrise.Data.RDB
             this.LogFileDirectory = logFileDirectory;
         }
 
-        public string DatabaseName
-        {
-            get;
-            private set;
-        }
+        public string DatabaseName { get; private set; }
 
-        public string DataFileDirectory
-        {
-            get;
-            private set;
-        }
+        public string DataFileDirectory { get; private set; }
 
-        public string LogFileDirectory
-        {
-            get;
-            private set;
-        }
+        public string LogFileDirectory { get; private set; }
     }
 
     public interface IRDBDataProviderDropDatabaseContext
@@ -509,11 +520,7 @@ namespace Vanrise.Data.RDB
             this.DatabaseName = databaseName;
         }
 
-        public string DatabaseName
-        {
-            get;
-            private set;
-        }
+        public string DatabaseName { get; private set; }
     }
 
     public interface IRDBDataProviderResolveTableCreationQueryContext : IBaseRDBResolveQueryContext
@@ -748,7 +755,6 @@ namespace Vanrise.Data.RDB
         }
     }
 
-
     public interface IRDBDataProviderExecuteReaderContext : IBaseRDBDataProviderExecuteQueryContext
     {
         void OnReaderReady(IRDBDataReader reader);
@@ -807,6 +813,16 @@ namespace Vanrise.Data.RDB
         public char FieldSeparator { get; private set; }
 
         public string[] ColumnNames { get; private set; }
+    }
+
+    public class GetOverridenConnectionStringInput
+    {
+        public string OverridingDatabaseName { get; set; } 
+    }
+
+    public class GetDataBaseNameInput
+    {
+
     }
 
     public class CreateDatabaseInput

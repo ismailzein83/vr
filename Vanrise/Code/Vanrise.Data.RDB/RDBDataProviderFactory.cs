@@ -8,6 +8,7 @@ namespace Vanrise.Data.RDB
     public static class RDBDataProviderFactory
     {
         static bool s_appendRDBToConnStringName = ConfigurationManager.AppSettings["RDB_AppendRDBToConnStringName"] == "true";
+
         public static BaseRDBDataProvider CreateProvider(string moduleName, string appSettingWithConnectionStringName, string defaultConnectionStringName)
         {
             var connString = GetConnectionString(appSettingWithConnectionStringName, defaultConnectionStringName);

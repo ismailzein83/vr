@@ -12,13 +12,7 @@ namespace Vanrise.Data.RDB
     {
         BaseRDBDataProvider _dataProvider;
 
-        public BaseRDBDataProvider DataProvider
-        {
-            get
-            {
-                return _dataProvider;
-            }
-        }
+        public BaseRDBDataProvider DataProvider { get { return _dataProvider; } }
 
         public BaseRDBQueryContext(BaseRDBDataProvider dataProvider)
         {
@@ -27,7 +21,7 @@ namespace Vanrise.Data.RDB
     }
 
     public class RDBQueryContext : BaseRDBQueryContext
-    {        
+    {
         BaseRDBQuery _query;
 
         public RDBQueryBuilderContext QueryBuilderContext { get; private set; }
@@ -44,14 +38,10 @@ namespace Vanrise.Data.RDB
             }
         }
 
-        internal List<BaseRDBQuery> Queries
-        {
-            get;
-            private set;
-        }
+        internal List<BaseRDBQuery> Queries { get; private set; }
 
         public RDBQueryContext(BaseRDBDataProvider dataProvider)
-            :this(new RDBQueryBuilderContext(dataProvider))
+            : this(new RDBQueryBuilderContext(dataProvider))
         {
         }
 
@@ -74,7 +64,7 @@ namespace Vanrise.Data.RDB
             Queries.Add(query);
             return query;
         }
-        
+
         public RDBSelectTableRowsCountQuery AddSelectTableRowsCountQuery()
         {
             var query = new RDBSelectTableRowsCountQuery(QueryBuilderContext.CreateChildContext());
@@ -144,6 +134,23 @@ namespace Vanrise.Data.RDB
             var query = new RDBCreateIndexQuery(QueryBuilderContext.CreateChildContext());
             Queries.Add(query);
             return query;
+        }
+
+        public string GetConnectionString()
+        {
+            return GetOverridenConnectionString(null);
+        }
+
+        public string GetOverridenConnectionString(GetOverridenConnectionStringInput input)
+        {
+            RDBDataProviderGetConnectionStringContext context = new RDBDataProviderGetConnectionStringContext(input.OverridingDatabaseName);
+            return this.DataProvider.GetConnectionString(context);
+        }
+
+        public string GetDataBaseName(GetDataBaseNameInput input)
+        {
+            RDBDataProviderGetDataBaseNameContext context = new RDBDataProviderGetDataBaseNameContext();
+            return this.DataProvider.GetDataBaseName(context);
         }
 
         public void CreateDatabase(CreateDatabaseInput input)
@@ -229,7 +236,6 @@ namespace Vanrise.Data.RDB
             return items;
         }
 
-
         public Q GetItem<Q>(Func<IRDBDataReader, Q> objectBuilder)
         {
             Q item = default(Q);
@@ -284,9 +290,9 @@ namespace Vanrise.Data.RDB
                 //    }
                 //}
 
-                if(resolveQueryContext.TempTableNames.Count > 0)
+                if (resolveQueryContext.TempTableNames.Count > 0)
                 {
-                    foreach(var tempTableName in resolveQueryContext.TempTableNames)
+                    foreach (var tempTableName in resolveQueryContext.TempTableNames)
                     {
                         var dropTableResolvedQuery = resolveQueryContext.DataProvider.ResolveTempTableDropQuery(new RDBDataProviderResolveTempTableDropQueryContext(tempTableName, resolveQueryContext));
                         if (dropTableResolvedQuery != null && dropTableResolvedQuery.Statements.Count > 0)
@@ -305,7 +311,7 @@ namespace Vanrise.Data.RDB
                 To = new DateTime(9999, 12, 31, 23, 59, 59)
             };
         }
-        
+
         public bool CheckIfDefaultOrInvalidDBTime(DateTime? dateTime)
         {
             if (!dateTime.HasValue || dateTime.Value == default(DateTime))
@@ -325,6 +331,7 @@ namespace Vanrise.Data.RDB
 
             return true;
         }
+
         #region Private Classes
 
         private class RDBDataProviderExecuteNonQueryContext : BaseRDBDataProviderExecuteQueryContext, IRDBDataProviderExecuteNonQueryContext

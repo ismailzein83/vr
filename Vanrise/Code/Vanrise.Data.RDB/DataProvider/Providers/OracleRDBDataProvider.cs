@@ -11,12 +11,20 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 {
     public class OracleRDBDataProvider : BaseRDBDataProvider
     {
-        public OracleRDBDataProvider(string connString)
-         {
-             _dataManager = new OracleDataManager(connString);
-         }
-
         OracleDataManager _dataManager;
+
+        public const string UNIQUE_NAME = "ORACLE";
+        public override string UniqueName { get { return UNIQUE_NAME; } }
+
+        const string ORACLE_EMPTY_STRING_VALUE = "ORCLEMTYNTNUL";
+        public override string EmptyStringValue { get { return ORACLE_EMPTY_STRING_VALUE; } }
+
+        public override string NowDateTimeFunction { get { return "SYSDATE"; } }
+
+        public OracleRDBDataProvider(string connString)
+        {
+            _dataManager = new OracleDataManager(connString);
+        }
 
         public override string GetTableDBName(string schemaName, string tableName)
         {
@@ -81,7 +89,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 AddJoinsToQuery(context, queryBuilder, context.Joins, rdbConditionToDBQueryContext);
 
             StringBuilder columnQueryBuilder = new StringBuilder(" SELECT ");
-            
+
             List<RDBSelectColumn> selectColumns = context.Columns;
             if (selectColumns == null || selectColumns.Count == 0)
             {
@@ -115,7 +123,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             if (context.IsMainStatement)
             {
                 //string cursorIndex = (context.Parameters.Values.Count(prm => prm.Type == RDBDataType.Cursor) + 1).ToString();
-                string cursorParameterName = string.Concat("cursor_", Guid.NewGuid().ToString().Replace("-", "").Substring(0,22));
+                string cursorParameterName = string.Concat("cursor_", Guid.NewGuid().ToString().Replace("-", "").Substring(0, 22));
                 string cursorDBParameterName = string.Concat(":", cursorParameterName);
                 queryBuilder.Insert(0, string.Concat(" OPEN ", cursorDBParameterName, " FOR "));
                 context.AddParameter(new RDBParameter { Name = cursorParameterName, DBParameterName = cursorDBParameterName, Direction = RDBParameterDirection.In, Type = RDBDataType.Cursor });
@@ -180,7 +188,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 }
             }
 
-            
+
             var resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new OracleRDBResolvedQueryStatement(OracleRDBResolvedQueryStatementType.Regular) { TextStatement = queryBuilder.ToString() });
             return resolvedQuery;
@@ -225,7 +233,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 queryBuilder.Append(valueBuilder.ToString());
                 queryBuilder.Append(")");
 
-                if(context.AddSelectGeneratedId)
+                if (context.AddSelectGeneratedId)
                 {
                     var getIdColumnInfoContext = new RDBTableQuerySourceGetIdColumnInfoContext(context.DataProvider);
                     context.Table.GetIdColumnInfo(getIdColumnInfoContext);
@@ -237,14 +245,14 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     string idParameterName = string.Concat("GenId_", Guid.NewGuid().ToString().Replace("-", "").Substring(0, 23));
                     string idDBParameterName = this.ConvertToDBParameterName(idParameterName, RDBParameterDirection.Declared);
                     context.AddParameter(new RDBParameter
-                        {
-                            Name = idParameterName,
-                            DBParameterName = idDBParameterName,
-                            Direction = RDBParameterDirection.Declared,
-                            Type = getIdColumnInfoContext.IdColumnDefinition.DataType,
-                            Size = getIdColumnInfoContext.IdColumnDefinition.Size,
-                            Precision = getIdColumnInfoContext.IdColumnDefinition.Precision
-                        });
+                    {
+                        Name = idParameterName,
+                        DBParameterName = idDBParameterName,
+                        Direction = RDBParameterDirection.Declared,
+                        Type = getIdColumnInfoContext.IdColumnDefinition.DataType,
+                        Size = getIdColumnInfoContext.IdColumnDefinition.Size,
+                        Precision = getIdColumnInfoContext.IdColumnDefinition.Precision
+                    });
                     queryBuilder.Append(string.Concat(" RETURNING ", idColumnDBName, " INTO ", idDBParameterName));
 
                     string cursorParameterName = string.Concat("cursor_", Guid.NewGuid().ToString().Replace("-", "").Substring(0, 22));
@@ -585,8 +593,10 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             columnsQueryBuilder.Append(" ) ");
 
             var resolvedQuery = new RDBResolvedQuery();
-            resolvedQuery.Statements.Add(new OracleRDBResolvedQueryStatement(OracleRDBResolvedQueryStatementType.CreateTempTable) { 
-                TextStatement = string.Concat("CREATE GLOBAL TEMPORARY TABLE ", tempTableName, " ", columnsQueryBuilder.ToString(), " ON COMMIT PRESERVE ROWS ") });
+            resolvedQuery.Statements.Add(new OracleRDBResolvedQueryStatement(OracleRDBResolvedQueryStatementType.CreateTempTable)
+            {
+                TextStatement = string.Concat("CREATE GLOBAL TEMPORARY TABLE ", tempTableName, " ", columnsQueryBuilder.ToString(), " ON COMMIT PRESERVE ROWS ")
+            });
             return resolvedQuery;
         }
 
@@ -659,7 +669,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             return "RAW(16)";
         }
 
-
         protected void AddTableToDBQueryBuilder(StringBuilder queryBuilder, IRDBTableQuerySource table, string tableAlias, IBaseRDBResolveQueryContext parentContext)
         {
             var tableQuerySourceContext = new RDBTableQuerySourceToDBQueryContext(parentContext);
@@ -692,27 +701,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             throw new NotImplementedException();
         }
 
-        public const string UNIQUE_NAME = "ORACLE";
-        public override string UniqueName
-        {
-            get { return UNIQUE_NAME; }
-        }
-
-        public override string NowDateTimeFunction
-        {
-            get { return "SYSDATE"; }
-        }
-
-        const string ORACLE_EMPTY_STRING_VALUE = "ORCLEMTYNTNUL";
-
-        public override string EmptyStringValue
-        {
-            get
-            {
-                return ORACLE_EMPTY_STRING_VALUE;
-            }
-        }
-
         public override string ConvertToDBParameterName(string parameterName, RDBParameterDirection parameterDirection)
         {
             return parameterDirection == RDBParameterDirection.In ? string.Concat(":", parameterName) : parameterName;
@@ -731,6 +719,16 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
         public override RDBFieldValue ExecuteScalar(IRDBDataProviderExecuteScalarContext context)
         {
             return new OracleRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters, context.ExecuteTransactional));
+        }
+
+        public override string GetConnectionString(IRDBDataProviderGetConnectionStringContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetDataBaseName(IRDBDataProviderGetDataBaseNameContext context)
+        {
+            throw new NotImplementedException();
         }
 
         public override void CreateDatabase(IRDBDataProviderCreateDatabaseContext context)
@@ -814,7 +812,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 executeTransactional = false;
                 string createTempTablesQuery;
                 string dropTempTablesQuery;
-                string queryText = GetQueryAsText(query,readNbOfRowsAffected , parameters, out createTempTablesQuery, out dropTempTablesQuery);
+                string queryText = GetQueryAsText(query, readNbOfRowsAffected, parameters, out createTempTablesQuery, out dropTempTablesQuery);
 
                 bool tempTablesCreated = false;
                 try
@@ -822,9 +820,9 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     using (var connection = new OracleConnection(_connString))
                     {
                         connection.Open();
-                        if(createTempTablesQuery != null)
+                        if (createTempTablesQuery != null)
                         {
-                            using(var createTempTablesCmd = new OracleCommand(createTempTablesQuery, connection))
+                            using (var createTempTablesCmd = new OracleCommand(createTempTablesQuery, connection))
                             {
                                 createTempTablesCmd.ExecuteNonQuery();
                                 tempTablesCreated = true;
@@ -902,12 +900,12 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 StringBuilder createTempTablesQueryBuilder = null;
                 StringBuilder dropTempTablesQueryBuilder = null;
 
-                if(parameters != null)
+                if (parameters != null)
                 {
                     bool anyParameterAdded = false;
-                    foreach(var prm in parameters.Values)
+                    foreach (var prm in parameters.Values)
                     {
-                        if(prm.Direction == RDBParameterDirection.Declared)
+                        if (prm.Direction == RDBParameterDirection.Declared)
                         {
                             if (!anyParameterAdded)
                                 regularQueryBuilder.Append("DECLARE ");
@@ -921,7 +919,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 regularQueryBuilder.Append("BEGIN");
                 regularQueryBuilder.AppendLine();
 
-                foreach(var statement in resolvedQuery.Statements)
+                foreach (var statement in resolvedQuery.Statements)
                 {
                     OracleRDBResolvedQueryStatement oracleStatement = statement.CastWithValidate<OracleRDBResolvedQueryStatement>("statement");
                     switch (oracleStatement.StatementType)
@@ -946,7 +944,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                             break;
                         default: throw new NotSupportedException(string.Format("StatementType '{0}'", oracleStatement.StatementType.ToString()));
                     }
-                    
+
                 }
 
                 if (readNbOfRowsAffected)
@@ -1003,7 +1001,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     }
                 }
 
-               
+
             }
         }
 
@@ -1047,7 +1045,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 else
                     return default(Guid);
             }
-            
+
 
             public override bool GetBoolean(string fieldName)
             {

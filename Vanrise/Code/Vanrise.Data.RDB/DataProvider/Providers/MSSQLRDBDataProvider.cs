@@ -12,23 +12,20 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 {
     public class MSSQLRDBDataProvider : CommonRDBDataProvider
     {
+        SQLDataManager _dataManager;
+
+        public const string UNIQUE_NAME = "MSSQL";
+        public override string UniqueName { get { return UNIQUE_NAME; } }
+
         public MSSQLRDBDataProvider(string connString)
             : base(connString)
         {
             _dataManager = new SQLDataManager(connString, this);
         }
 
-        SQLDataManager _dataManager;
-
         public override string ConvertToDBParameterName(string parameterName, RDBParameterDirection parameterDirection)
         {
             return string.Concat("@", parameterName);
-        }
-
-        public const string UNIQUE_NAME = "MSSQL";
-        public override string UniqueName
-        {
-            get { return UNIQUE_NAME; }
         }
 
         public override void ExecuteReader(IRDBDataProviderExecuteReaderContext context)
@@ -174,6 +171,26 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             }
         }
 
+        public override string GetConnectionString(IRDBDataProviderGetConnectionStringContext context)
+        {
+            if (!string.IsNullOrEmpty(context.OverridingDatabaseName))
+            {
+                SqlConnectionStringBuilder connectionBuilder = new SqlConnectionStringBuilder(base.ConnectionString);
+                connectionBuilder.InitialCatalog = context.OverridingDatabaseName;
+                return connectionBuilder.ToString();
+            }
+            else
+            {
+                return base.ConnectionString;
+            }
+        }
+
+        public override string GetDataBaseName(IRDBDataProviderGetDataBaseNameContext context)
+        {
+            SqlConnectionStringBuilder connectionBuilder = new SqlConnectionStringBuilder(base.ConnectionString);
+            return connectionBuilder.InitialCatalog;
+        }
+
         public override void CreateDatabase(IRDBDataProviderCreateDatabaseContext context)
         {
             StringBuilder strBuilder = new StringBuilder();
@@ -191,7 +208,9 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
             }
             else
+            {
                 strBuilder.AppendLine(String.Format(@"CREATE DATABASE {0}", context.DatabaseName));
+            }
 
             strBuilder.AppendLine(String.Format("ALTER DATABASE [{0}] SET RECOVERY SIMPLE", context.DatabaseName));
 
@@ -215,6 +234,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
             _dataManager.ExecuteNonQuery(resolvedQuery, null, false);
         }
+
         #region Private Classes
 
         private class SQLDataManager : Vanrise.Data.SQL.BaseSQLDataManager
@@ -301,7 +321,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 }
             }
 
-
             public string GetQueryAsText(RDBResolvedQuery resolvedQuery, Dictionary<string, RDBParameter> parameters)
             {
                 var queryBuilder = new StringBuilder();
@@ -331,7 +350,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 }
                 return queryBuilder.ToString();
             }
-
 
             private static void AddParameters(SqlCommand cmd, Dictionary<string, RDBParameter> parameters)
             {
