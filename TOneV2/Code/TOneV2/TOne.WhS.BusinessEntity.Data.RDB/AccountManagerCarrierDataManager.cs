@@ -58,6 +58,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public bool AssignCarriers(UpdatedAccountManagerCarrier[] updatedCarriers)
         {
+            return false;
             //TODO check it 
             //var queryContext = new RDBQueryContext(GetDataProvider());
             //var tempTableQueryToInsert = CreateTempTable(queryContext, updatedCarriers, true);
