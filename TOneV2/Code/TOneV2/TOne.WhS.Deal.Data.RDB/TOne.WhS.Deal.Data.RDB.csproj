@@ -55,6 +55,7 @@
     <Compile Include="DaysToReprocessDataManager.cs" />
     <Compile Include="DealDataManager.cs" />
     <Compile Include="DealDetailedProgressDataManager.cs" />
+    <Compile Include="DealProgressDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
