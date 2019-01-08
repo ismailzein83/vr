@@ -54,17 +54,13 @@ namespace Vanrise.Security.Data.RDB
         #region Mappers
         Group GroupMapper(IRDBDataReader reader)
         {
-            Group group = new Group
+            return new Group
             {
                 GroupId = reader.GetInt(COL_ID),
                 Name = reader.GetString(COL_Name),
                 Description = reader.GetString(COL_Description),
+                Settings = Common.Serializer.Deserialize<GroupSettings>(reader.GetString(COL_Settings))
             };
-            var serializedSettings = reader.GetString(COL_Settings);
-            if (serializedSettings != null)
-                group.Settings = Common.Serializer.Deserialize<GroupSettings>(serializedSettings);
-
-            return group;
         }
         #endregion
         #region IGroupDataManager

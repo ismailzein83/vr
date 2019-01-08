@@ -89,6 +89,8 @@ namespace Vanrise.Security.Data.RDB
                 CreatedBy = reader.GetNullableInt(COL_CreatedBy),
                 LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
                 LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime),
+                Settings = Common.Serializer.Deserialize<UserSetting>(reader.GetString(COL_Settings)),
+                ExtendedSettings = Common.Serializer.Deserialize<Dictionary<string, object>>(reader.GetString(COL_ExtendedSettings))
             };
             var isSystemUser = reader.GetNullableBoolean(COL_IsSystemUser);
             if (isSystemUser.HasValue)
@@ -96,12 +98,6 @@ namespace Vanrise.Security.Data.RDB
             var passwordChangeTime = reader.GetNullableDateTime(COL_PasswordChangeTime);
             if (passwordChangeTime.HasValue)
                 user.PasswordChangeTime = passwordChangeTime.Value;
-            var settings = reader.GetStringWithEmptyHandling(COL_Settings);
-            if (!string.IsNullOrEmpty(settings))
-                user.Settings = Common.Serializer.Deserialize<UserSetting>(settings);
-            var extendedSettings = reader.GetStringWithEmptyHandling(COL_ExtendedSettings);
-            if (!string.IsNullOrEmpty(extendedSettings))
-                user.ExtendedSettings = Common.Serializer.Deserialize<Dictionary<string, object>>(extendedSettings);
             return user;
 
         }
