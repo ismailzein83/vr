@@ -62,7 +62,7 @@
     <Compile Include="SMSMessageTemplateDataManager.cs" />
     <Compile Include="StatusDefinitionDataManager.cs" />
     <Compile Include="StyleDefinitionDataManager.cs" />
-    <!--<Compile Include="TypeDataManager.cs" />-->
+    <Compile Include="TypeDataManager.cs" />
     <Compile Include="VRActionAuditDataManager.cs" />
     <Compile Include="VRApplicationVisibilityDataManager.cs" />
     <Compile Include="VRCommentDataManager.cs" />
