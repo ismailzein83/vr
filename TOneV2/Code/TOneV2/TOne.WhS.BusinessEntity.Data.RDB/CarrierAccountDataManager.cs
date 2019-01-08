@@ -86,7 +86,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.EqualsCondition(COL_NameSuffix).Value(carrierAccount.NameSuffix);
             notExistsCondition.EqualsCondition(COL_CarrierProfileID).Value(carrierAccount.CarrierProfileId);
-            notExistsCondition.EqualsCondition(COL_IsDeleted).Value(0);
+            notExistsCondition.EqualsCondition(COL_IsDeleted).Value(false);
 
             insertQuery.Column(COL_NameSuffix).Value(carrierAccount.NameSuffix);
             insertQuery.Column(COL_CarrierProfileID).Value(carrierAccount.CarrierProfileId);

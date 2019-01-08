@@ -79,47 +79,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.GetItems(SalePriceListMapper);
         }
 
-        public bool Update(SalePriceList salePriceList)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var updateQuery = queryContext.AddUpdateQuery();
-            updateQuery.FromTable(TABLE_NAME);
-
-            updateQuery.Column(COL_FileID).Value(salePriceList.FileId);
-
-            if (salePriceList.PriceListType.HasValue)
-                updateQuery.Column(COL_PriceListType).Value((int)salePriceList.PriceListType);
-
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
-
-            updateQuery.Where().EqualsCondition(COL_ID).Value(salePriceList.PriceListId);
-
-            return queryContext.ExecuteNonQuery() > 0;
-        }
-
-        public bool Insert(SalePriceList salePriceList)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(TABLE_NAME);
-
-            insertQuery.Column(COL_ID).Value(salePriceList.PriceListId);
-            insertQuery.Column(COL_OwnerType).Value((int)salePriceList.OwnerType);
-            insertQuery.Column(COL_OwnerID).Value(salePriceList.OwnerId);
-            insertQuery.Column(COL_CurrencyID).Value(salePriceList.CurrencyId);
-            insertQuery.Column(COL_EffectiveOn).Value(salePriceList.EffectiveOn);
-
-            if (salePriceList.PriceListType.HasValue)
-                insertQuery.Column(COL_PriceListType).Value((int)salePriceList.PriceListType);
-
-            insertQuery.Column(COL_ProcessInstanceID).Value(salePriceList.ProcessInstanceId);
-            insertQuery.Column(COL_FileID).Value(salePriceList.FileId);
-            insertQuery.Column(COL_UserID).Value(salePriceList.UserId);
-
-            var returnedValue = queryContext.ExecuteScalar().NullableIntValue;
-            return returnedValue.HasValue;
-        }
-
         public bool ArGetSalePriceListsUpdated(ref object updateHandle)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
@@ -146,7 +105,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.ExecuteNonQuery() > 0;
         }
 
-        public void SavePriceListsToDb(List<SalePriceList> salePriceLists)
+        public void SavePriceListsToDb(IEnumerable<NewPriceList> salePriceLists)
         {
             object dbApplyStream = InitialiazeStreamForDBApply();
 
@@ -159,7 +118,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             ApplyForDB(prepareToApplyInfo);
         }
 
-        public void SavePriceListsToDb(IEnumerable<NewPriceList> salePriceLists)
+        #endregion
+    
+        #region Not Used Function
+        public bool Update(SalePriceList salePriceList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Insert(SalePriceList salePriceList)
+        {
+            throw new NotImplementedException();
+        }
+        public void SavePriceListsToDb(List<SalePriceList> salePriceLists)
         {
             throw new NotImplementedException();
         }
@@ -198,10 +169,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var streamForBulkInsert = queryContext.StartBulkInsert();
-            streamForBulkInsert.IntoTable(TABLE_NAME, '^', COL_ID, COL_OwnerType, COL_OwnerID, COL_CurrencyID, COL_EffectiveOn, COL_PriceListType, COL_SourceID, COL_ProcessInstanceID, COL_FileID, COL_UserID, COL_Description);
+            streamForBulkInsert.IntoTable(TABLE_NAME, '^', COL_ID, COL_OwnerType, COL_OwnerID, COL_CurrencyID, COL_EffectiveOn, COL_PriceListType, COL_ProcessInstanceID, COL_FileID, COL_UserID, COL_Description);
             return streamForBulkInsert;
         }
-        private void WriteRecordToStream(SalePriceList record, object dbApplyStream)
+        private void WriteRecordToStream(NewPriceList record, object dbApplyStream)
         {
             RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
             var recordContext = bulkInsertContext.WriteRecord();
@@ -215,8 +186,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 recordContext.Value((int)record.PriceListType);
             else
                 recordContext.Value(string.Empty);
-
-            recordContext.Value(record.SourceId);
+            
             recordContext.Value(record.ProcessInstanceId);
             recordContext.Value(record.FileId);
             recordContext.Value(record.UserId);

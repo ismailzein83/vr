@@ -69,12 +69,30 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<SaleEntityZoneService> GetSaleZonesServicesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
         {
-            throw new NotImplementedException();
+            var saleZoneDataManager = new SaleZoneDataManager();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinContext = selectQuery.Join();
+            saleZoneDataManager.JoinSaleZone(joinContext, "z", "ID", TABLE_ALIAS, COL_ZoneID);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition("z", "SellingNumberPlanID").Value(sellingNumberPlanId);
+
+            var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orCondition.NullCondition(COL_EED);
+            orCondition.GreaterThanCondition(COL_EED).Value(effectiveOn);
+
+            whereQuery.NotNullCondition(COL_ZoneID);
+            return queryContext.GetItems(SaleEntityZoneServiceMapper);
         }
 
         public IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProductsEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
         {
-            throw new NotImplementedException();
+            SaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
+            return saleEntityRoutingProductDataManager.GetSaleZoneRoutingProductsEffectiveAfter(sellingNumberPlanId, effectiveOn);
         }
 
         public IEnumerable<SaleEntityDefaultService> GetDefaultServicesEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate)

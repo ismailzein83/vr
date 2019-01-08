@@ -66,7 +66,22 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<DefaultRoutingProduct> GetDefaultRoutingProducts(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
+            List<DefaultRoutingProduct> res = new List<DefaultRoutingProduct>();
             RDBQueryContext queryContext = GetRoutingProducts(customerIds, effectiveOn, isEffectiveInFuture, true);
+            queryContext.ExecuteReader(reader =>
+            {
+                while (reader.Read())
+                {
+                    res.Add(DefaultRoutingProductMapper(reader));
+                }
+
+                reader.NextResult();
+                while (reader.Read())
+                {
+                    res.Add(DefaultRoutingProductMapper(reader));
+                }
+            });
+
             return queryContext.GetItems(DefaultRoutingProductMapper);
         }
 
@@ -361,7 +376,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 var selectQuery = queryContext.AddSelectQuery();
                 selectQuery.From(TABLE_NAME, TABLE_ALIAS);
-                selectQuery.SelectColumns().Columns(COL_ID, COL_OwnerType, COL_OwnerID, COL_ZoneID, COL_RoutingProductID, COL_BED, COL_EED);
+                selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
                 var whereContext = selectQuery.Where();
                 whereContext.ListCondition(COL_OwnerID, RDBListConditionOperator.IN, customerIds);
@@ -419,6 +434,31 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             orCondition.NotEqualsCondition(COL_EED).Column(COL_BED);
 
             return queryContext;
+        }
+        #endregion
+
+        #region Public Methods
+        public IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProductsEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
+        {
+            var saleZoneDataManager = new SaleZoneDataManager();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinContext = selectQuery.Join();
+            saleZoneDataManager.JoinSaleZone(joinContext, "z", "ID", TABLE_ALIAS, COL_ZoneID);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition("z", "SellingNumberPlanID").Value(sellingNumberPlanId);
+
+            var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orCondition.NullCondition(COL_EED);
+            orCondition.GreaterThanCondition(COL_EED).Value(effectiveOn);
+
+            whereQuery.NotNullCondition(COL_ZoneID);
+            return queryContext.GetItems(SaleZoneRoutingProductMapper);
+
         }
         #endregion
     }

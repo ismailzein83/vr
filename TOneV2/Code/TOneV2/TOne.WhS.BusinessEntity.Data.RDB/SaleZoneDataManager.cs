@@ -8,6 +8,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SaleZoneDataManager : ISaleZoneDataManager
     {
+        #region RDB
+
         static string TABLE_ALIAS = "TOneWhS_BE";
         static string TABLE_NAME = "TOneWhS_BE_SaleZone";
         const string COL_ID = "ID";
@@ -19,6 +21,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_SourceID = "SourceID";
         const string COL_ProcessInstanceID = "ProcessInstanceID";
         const string COL_LastModifiedTime = "LastModifiedTime";
+        const string COL_CreatedTime = "CreatedTime";
         static SaleZoneDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>
@@ -31,6 +34,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 {COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
                 {COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50}},
                 {COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
+                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
                 {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
             };
 
@@ -39,7 +43,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 DBSchemaName = "TOneWhS_BE",
                 DBTableName = "SaleZone",
                 Columns = columns,
-                IdColumnName = COL_ID
+                IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime,
+                ModifiedTimeColumnName = COL_LastModifiedTime
             });
         }
 
@@ -48,16 +54,20 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return RDBDataProviderFactory.CreateProvider("TOneWhS_BE", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
 
+        #endregion
+
+        #region ISaleZoneDataManager Members
         public List<SaleZone> GetSaleZones(int sellingNumberPlanId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-
-            var where = selectQuery.Where();
-            where.ConditionIfColumnNotNull(COL_SellingNumberPlanID).EqualsCondition(COL_SellingNumberPlanID).Value(sellingNumberPlanId);
-
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var where = selectQuery.Where();
+            where.NotNullCondition(COL_SellingNumberPlanID);
+            where.EqualsCondition(COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+
             return queryContext.GetItems(SaleZoneMapper);
         }
 
@@ -78,7 +88,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public bool AreZonesUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public IEnumerable<SaleZone> GetAllSaleZones()
@@ -109,6 +120,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             //Todo
             // [SalePricelistRateChange] , [SalePricelistCodeChange] , [SalePricelistRPChange] convert it first to RDB
         }
+        #endregion
 
         #region Mappers
         SaleZone SaleZoneMapper(IRDBDataReader reader)
@@ -120,7 +132,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 CountryId = reader.GetInt("CountryID"),
                 Name = reader.GetString("Name"),
                 BED = reader.GetDateTime("BED"),
-                EED = reader.GetDateTimeWithNullHandling("EED"),
+                EED = reader.GetNullableDateTime("EED"),
                 SourceId = reader.GetString("SourceID")
             };
         }
@@ -152,6 +164,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                     orCondition.ConditionIfColumnNotNull(TABLE_ALIAS, COL_EED).GreaterOrEqualCondition(TABLE_ALIAS, COL_EED).Value(effectiveDate.Value);
                 }
             }
+        }
+        #endregion
+
+        #region Public Methods
+
+        public void JoinSaleZone(RDBJoinContext joinContext, string zoneTableAlias, string zoneTableCol, string originalTableAlias, string originalTableCol)
+        {
+            var joinStatement = joinContext.Join(TABLE_NAME, zoneTableAlias);
+            joinStatement.JoinType(RDBJoinType.Inner);
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(originalTableAlias, originalTableCol, zoneTableAlias, zoneTableCol);
         }
         #endregion
     }
