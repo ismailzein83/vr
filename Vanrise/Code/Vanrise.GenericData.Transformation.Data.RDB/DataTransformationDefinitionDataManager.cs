@@ -91,7 +91,7 @@ namespace Vanrise.GenericData.Transformation.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Sort().ByColumn(COL_Name, RDBSortDirection.ASC);
-            return queryContext.GetItems<DataTransformationDefinition>(DataTransformationDefinitionMapper);
+            return queryContext.GetItems(DataTransformationDefinitionMapper);
         }
 
         public bool UpdateDataTransformationDefinition(DataTransformationDefinition dataTransformationDefinition)
