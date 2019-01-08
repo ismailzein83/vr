@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AffectedDealZoneGroupsDataManager.cs" />
     <Compile Include="DaysToReprocessDataManager.cs" />
     <Compile Include="DealDataManager.cs" />
     <Compile Include="DealDetailedProgressDataManager.cs" />
