@@ -350,6 +350,27 @@ namespace Vanrise.Data.RDB
         }
     }
 
+    public enum RDBDateTimeDiffInterval { Seconds = 0 }
+    internal class RDBDateTimeDiffExpression : BaseRDBExpression
+    {
+        public RDBDateTimeDiffInterval Interval { get; set; }
+
+        public BaseRDBExpression DateTimeExpression1 { get; set; }
+
+        public BaseRDBExpression DateTimeExpression2 { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            string sqlInteval;
+            switch (this.Interval)
+            {
+                case RDBDateTimeDiffInterval.Seconds: sqlInteval = "second"; break;
+                default: throw new NotSupportedException($"this.Interval '{this.Interval.ToString()}'");
+            }
+
+            return $"DATEDiff({sqlInteval}, {this.DateTimeExpression1.ToDBQuery(context)}, {this.DateTimeExpression2.ToDBQuery(context)})";
+        }
+    }
     //internal class RDBParameterExpression : BaseRDBExpression
     //{
     //    public string ParameterName { get; set; }
