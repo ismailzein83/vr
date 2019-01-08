@@ -90,6 +90,7 @@
     <Compile Include="EntityPersonalization\EntityPersonalizationManager.cs" />
     <Compile Include="EntityPersonalization\PersonalizationItems\GridPersonalizationExtendedSetting.cs" />
     <Compile Include="ExcelFileParser\ExcelFileParserManger.cs" />
+    <Compile Include="ProcessStateManager.cs" />
     <Compile Include="SMS\SMSManager.cs" />
     <Compile Include="SMS\SMSMessageTemplateManager.cs" />
     <Compile Include="SMS\SMSMessageTypeManager.cs" />
