@@ -14,7 +14,7 @@ namespace Vanrise.Security.Data.RDB
         static string TABLE_NAME = "sec_UserGroup";
         static string TABLE_ALIAS = "userGroup";
         const string COL_UserId = "UserId";
-        const string COL_GroupId = "GroupId";
+        internal const string COL_GroupId = "GroupId";
         const string COL_LastModifiedTime = "LastModifiedTime";
 
         static UserGroupDataManager()
@@ -53,6 +53,7 @@ namespace Vanrise.Security.Data.RDB
         }
         #endregion
 
+        #region IUserGroupDataManager
         public bool AreUserGroupUpdated(ref object updateHandle)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
@@ -67,5 +68,15 @@ namespace Vanrise.Security.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             return queryContext.GetItems(UserGroupMapper);
         }
+        #endregion
+
+        #region GroupDataManager
+        public void SetSelectQuery(RDBSelectQuery selectQuery, int userId)
+        {
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Column(COL_GroupId);
+            selectQuery.Where().EqualsCondition(COL_UserId).Value(userId);
+        }
+        #endregion
     }
 }

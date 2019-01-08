@@ -15,7 +15,7 @@ namespace Vanrise.Security.Data.RDB
         static string TABLE_ALIAS = "user";
         const string COL_ID = "ID";
         const string COL_SecurityProviderId = "SecurityProviderId";
-        const string COL_Name = "Name";
+        internal const string COL_Name = "Name";
         const string COL_Password = "Password";
         const string COL_Email = "Email";
         const string COL_TenantId = "TenantId";
@@ -113,6 +113,8 @@ namespace Vanrise.Security.Data.RDB
             return RDBDataProviderFactory.CreateProvider("VR_Sec", "SecurityDBConnStringKey", "SecurityDBConnString");
         }
         #endregion
+
+        #region IUserDataManager
         public bool ActivatePassword(string email, string password, int lastModifiedBy)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
@@ -400,5 +402,13 @@ namespace Vanrise.Security.Data.RDB
             updateQuery.Where().EqualsCondition(COL_ID).Value(userId);
             return queryContext.ExecuteNonQuery() > 0;
         }
+        #endregion
+
+        #region PermissionDataManager
+        public void SetJoinContext(RDBJoinContext joinContext, string table1Alias, string table2Alias, string column1Name, RDBJoinType joinType)
+        {
+            joinContext.JoinOnEqualOtherTableColumn(joinType, TABLE_NAME, table2Alias, COL_ID, table1Alias, column1Name);
+        }
+        #endregion
     }
 }
