@@ -52,11 +52,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AffectedDealZoneGroupsDataManager.cs" />
+    <Compile Include="AffectedDealZoneGroupsToDeleteDataManager.cs" />
     <Compile Include="DaysToReprocessDataManager.cs" />
     <Compile Include="DealDataManager.cs" />
     <Compile Include="DealDetailedProgressDataManager.cs" />
     <Compile Include="DealProgressDataManager.cs" />
+    <Compile Include="DealZoneRateDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
