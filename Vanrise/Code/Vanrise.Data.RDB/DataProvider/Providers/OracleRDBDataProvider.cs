@@ -733,6 +733,16 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             return new OracleRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters, context.ExecuteTransactional));
         }
 
+        public override void CreateDatabase(IRDBDataProviderCreateDatabaseContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DropDatabase(IRDBDataProviderDropDatabaseContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Private Classes
 
         public enum OracleRDBResolvedQueryStatementType { Regular, CreateTempTable, DropTempTable }

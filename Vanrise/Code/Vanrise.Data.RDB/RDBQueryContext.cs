@@ -146,6 +146,18 @@ namespace Vanrise.Data.RDB
             return query;
         }
 
+        public void CreateDatabase(CreateDatabaseInput input)
+        {
+            RDBDataProviderCreateDatabaseContext context = new RDBDataProviderCreateDatabaseContext(input.DatabaseName, input.DataFileDirectory, input.LogFileDirectory);
+            this.DataProvider.CreateDatabase(context);
+        }
+
+        public void DropDatabase(DropDatabaseInput input)
+        {
+            RDBDataProviderDropDatabaseContext context = new RDBDataProviderDropDatabaseContext(input.DatabaseName);
+            this.DataProvider.DropDatabase(context);
+        }
+
         public bool IsDataUpdated(string tableName, ref object lastReceivedDataInfo)
         {
             var tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(this.DataProvider, tableName);

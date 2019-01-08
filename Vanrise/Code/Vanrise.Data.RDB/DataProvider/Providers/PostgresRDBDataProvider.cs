@@ -384,7 +384,17 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             throw new NotImplementedException();
             //return "LASTVAL()";
         }
-        
+
+        public override void CreateDatabase(IRDBDataProviderCreateDatabaseContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DropDatabase(IRDBDataProviderDropDatabaseContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Private Classes
 
         private class PostgresDataManager : Vanrise.Data.SQL.BaseSQLDataManager

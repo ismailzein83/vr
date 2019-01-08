@@ -66,6 +66,10 @@ namespace Vanrise.Data.RDB
 
         public abstract RDBResolvedQuery ResolveTempTableDropQuery(IRDBDataProviderResolveTempTableDropQueryContext context);
 
+        public abstract void CreateDatabase(IRDBDataProviderCreateDatabaseContext context);
+
+        public abstract void DropDatabase(IRDBDataProviderDropDatabaseContext context);
+
         public abstract void ExecuteReader(IRDBDataProviderExecuteReaderContext context);
 
         public abstract RDBFieldValue ExecuteScalar(IRDBDataProviderExecuteScalarContext context);
@@ -456,6 +460,62 @@ namespace Vanrise.Data.RDB
         public List<RDBJoin> Joins { get; private set; }
     }
 
+    public interface IRDBDataProviderCreateDatabaseContext
+    {
+        string DatabaseName { get; }
+
+        string DataFileDirectory { get; }
+
+        string LogFileDirectory { get; }
+    }
+
+    public class RDBDataProviderCreateDatabaseContext : IRDBDataProviderCreateDatabaseContext
+    {
+        public RDBDataProviderCreateDatabaseContext(string databaseName, string dataFileDirectory, string logFileDirectory)
+        {
+            this.DatabaseName = databaseName;
+            this.DataFileDirectory = dataFileDirectory;
+            this.LogFileDirectory = logFileDirectory;
+        }
+
+        public string DatabaseName
+        {
+            get;
+            private set;
+        }
+
+        public string DataFileDirectory
+        {
+            get;
+            private set;
+        }
+
+        public string LogFileDirectory
+        {
+            get;
+            private set;
+        }
+    }
+
+    public interface IRDBDataProviderDropDatabaseContext
+    {
+        string DatabaseName { get; }
+    }
+
+    public class RDBDataProviderDropDatabaseContext : IRDBDataProviderDropDatabaseContext
+    {
+        public RDBDataProviderDropDatabaseContext(string databaseName)
+        {
+            this.DatabaseName = databaseName;
+        }
+
+        public string DatabaseName
+        {
+            get;
+            private set;
+        }
+    }
+
     public interface IRDBDataProviderResolveTableCreationQueryContext : IBaseRDBResolveQueryContext
     {
         string SchemaName { get; }
@@ -547,7 +607,7 @@ namespace Vanrise.Data.RDB
 
     public class RDBDataProviderResolveIndexCreationQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveIndexCreationQueryContext
     {
-        public RDBDataProviderResolveIndexCreationQueryContext(string schemaName, string tableName, RDBCreateIndexType indexType, List<string> columnNames, 
+        public RDBDataProviderResolveIndexCreationQueryContext(string schemaName, string tableName, RDBCreateIndexType indexType, List<string> columnNames,
             IBaseRDBResolveQueryContext parentContext)
             : base(parentContext)
         {
@@ -747,5 +807,19 @@ namespace Vanrise.Data.RDB
         public char FieldSeparator { get; private set; }
 
         public string[] ColumnNames { get; private set; }
+    }
+
+    public class CreateDatabaseInput
+    {
+        public string DatabaseName { get; set; }
+
+        public string DataFileDirectory { get; set; }
+
+        public string LogFileDirectory { get; set; }
+    }
+
+    public class DropDatabaseInput
+    {
+        public string DatabaseName { get; set; }
     }
 }
