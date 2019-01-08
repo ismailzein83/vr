@@ -12,6 +12,7 @@ namespace Vanrise.Common.Business
     {
         static AssemblyObject assemblyObject = new AssemblyObject();
 
+
         #region Public Methods
 
         public IDataRetrievalResult<VRNamespaceDetail> GetFilteredVRNamespaces(DataRetrievalInput<VRNamespaceQuery> input)
@@ -118,14 +119,14 @@ namespace Vanrise.Common.Business
             var vrNamespaces = GetCachedVRNamespaces();
             if (vrNamespaces != null && vrNamespaces.Count > 0)
             {
-               return vrNamespaces.MapRecords(VRNamespaceInfoMapper).OrderBy(ns => ns.Name);
+                return vrNamespaces.MapRecords(VRNamespaceInfoMapper).OrderBy(ns => ns.Name);
             }
             return null;
         }
         public IEnumerable<VRNamespaceClassInfo> GetVRNamespaceClassesInfo(Guid vrNamespaceId)
         {
             var assemblyClasses = GetAssemblyClasses(vrNamespaceId);
-            if(assemblyClasses!=null && assemblyClasses.Count > 0)
+            if (assemblyClasses != null && assemblyClasses.Count > 0)
             {
                 return assemblyClasses.Keys.MapRecords(VRNamespaceClassInfoMapper).OrderBy(x => x.Name);
             }
@@ -135,7 +136,7 @@ namespace Vanrise.Common.Business
         public IEnumerable<VRNamespaceClassMethodInfo> GetVRNamespaceClassMethodsInfo(Guid vrNamespaceId, string className)
         {
             var assemblyClassMethods = GetAssemblyClassMethods(vrNamespaceId, className);
-            if(assemblyClassMethods!=null && assemblyClassMethods.Count > 0)
+            if (assemblyClassMethods != null && assemblyClassMethods.Count > 0)
             {
                 return assemblyClassMethods.Keys.MapRecords(VRNamespaceClassMethodInfoMapper).OrderBy(x => x.Name);
             }
@@ -197,24 +198,24 @@ namespace Vanrise.Common.Business
 
             StringBuilder classCodes = new StringBuilder();
             StringBuilder namespaceMembers = new StringBuilder();
-            if (vrNamespace.Settings != null && vrNamespace.Settings.Codes != null)
+            VRNamespaceItemManager _vRNamespaceItemManager = new VRNamespaceItemManager();
+            IEnumerable<VRNamespaceItem> vrNamespaceItems = _vRNamespaceItemManager.GetVRNamespaceItemsByNamespaceId(vrNamespace.VRNamespaceId);
+            foreach (var namespaceItem in vrNamespaceItems)
             {
-                foreach (var code in vrNamespace.Settings.Codes)
+                if (namespaceItem.Settings != null && namespaceItem.Settings.Code != null)
                 {
-                    if (code.Settings != null)
+                    var context = new VRDynamicCodeSettingsContext();
+                    classCodes.Append(namespaceItem.Settings.Code.Generate(context));
+                    classCodes.AppendLine();
+                    if (context.NamespaceMembers != null)
                     {
-                        var context = new VRDynamicCodeSettingsContext();
-                        classCodes.Append(code.Settings.Generate(context));
-                        classCodes.AppendLine();
-                        if (context.NamespaceMembers != null)
-                        {
-                            if (namespaceMembers.Length > 0)
-                                namespaceMembers.AppendLine();
-                            namespaceMembers.Append(context.NamespaceMembers);
-                        }
+                        if (namespaceMembers.Length > 0)
+                            namespaceMembers.AppendLine();
+                        namespaceMembers.Append(context.NamespaceMembers);
                     }
                 }
             }
+
 
             classDefinitionBuilder.Replace("#NAMESPACE#", vrNamespace.Name);
             classDefinitionBuilder.Replace("#CLASSCODE#", classCodes.ToString());
@@ -243,7 +244,7 @@ namespace Vanrise.Common.Business
         {
             return GetAssemblyClasses(vrNamespaceId).GetRecord(className);
         }
-     
+
         private Assembly GetCachedAssembly()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("CachedVRNamespacesAssembly", () =>

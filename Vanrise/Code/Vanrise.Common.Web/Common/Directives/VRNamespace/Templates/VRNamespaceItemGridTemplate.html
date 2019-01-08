@@ -3,11 +3,12 @@
              pagingtype="'PagingOnScroll'"
              menuactions="scopeModel.menuActions"
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
-             idfield="VRNamespaceItemId"
-             hidegridmenu>
+             idfield="VRNamespaceItemId">
 
     <vr-datagridcolumn headertext="'ID'" field="'VRNamespaceItemId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Title'" field="'Name'" type="'Text'"></vr-datagridcolumn> 
+    <vr-datagridcolumn headertext="'Title'" field="'Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Created By'" field="'CreatedByDescription'" type="'Text'"></vr-datagridcolumn>
-
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

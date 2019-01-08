@@ -21,7 +21,7 @@ app.directive('vrCommonNamespaceitemGrid', ['VRUIUtilsService', 'VRNotificationS
 
             var gridAPI;
             var nameSpaceId;
-
+            var gridDrillDownTabsObj;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -30,11 +30,18 @@ app.directive('vrCommonNamespaceitemGrid', ['VRUIUtilsService', 'VRNotificationS
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VRCommon_VRNamespaceItemService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.scopeModel.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VRCommon_VRNamespaceItemAPIService.GetFilteredVRNamespaceItems(dataRetrievalInput).then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -57,6 +64,7 @@ app.directive('vrCommonNamespaceitemGrid', ['VRUIUtilsService', 'VRNotificationS
                 };
 
                 api.onVRNameSpaceItemAdded = function (addedVRDNameSpaceItem) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedVRDNameSpaceItem);
                     gridAPI.itemAdded(addedVRDNameSpaceItem);
                 };
 
@@ -67,18 +75,23 @@ app.directive('vrCommonNamespaceitemGrid', ['VRUIUtilsService', 'VRNotificationS
             function defineMenuActions() {
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
-                    clicked: editVRNamespaceItem
+                    clicked: editVRNamespaceItem,
+                    haspermission: hasEditVRNamespaceItemPermission
                 });
             }
 
             function editVRNamespaceItem(vrNameSpaceItemObj) {
-                var isGridOpenedFromGridDrillDown = true;
 
                 var onVRNameSpaceItemUpdated = function (updatedVRNameSpaceItem) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedVRNameSpaceItem);
                     gridAPI.itemUpdated(updatedVRNameSpaceItem);
                 };
 
-                VRCommon_VRNamespaceItemService.editVRNamespaceItem(onVRNameSpaceItemUpdated, vrNameSpaceItemObj.VRNamespaceItemId, nameSpaceId, isGridOpenedFromGridDrillDown);
+                VRCommon_VRNamespaceItemService.editVRNamespaceItem(onVRNameSpaceItemUpdated, vrNameSpaceItemObj.VRNamespaceItemId);
+            }
+
+            function hasEditVRNamespaceItemPermission() {
+                return VRCommon_VRNamespaceItemAPIService.HasEditVRNamespaceItemPermission();
             }
 
         }

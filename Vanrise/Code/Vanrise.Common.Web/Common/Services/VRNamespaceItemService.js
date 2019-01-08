@@ -2,14 +2,14 @@
 
     "use strict";
 
-    VRNamespaceItemService.$inject = ['VRModalService'];
+    VRNamespaceItemService.$inject = ['VRModalService', 'VRCommon_ObjectTrackingService', 'VRCommon_VRNamespaceService','VRCommon_VRNamespaceItemAPIService'];
 
-    function VRNamespaceItemService(VRModalService) {
+    function VRNamespaceItemService(VRModalService, VRCommon_ObjectTrackingService, VRCommon_VRNamespaceService, VRCommon_VRNamespaceItemAPIService) {
+        var drillDownDefinitions = [];
 
-        function addVRNamespaceItem(onVRNameSpaceItemAdded, vrNamespaceId, isGridOpenedFromGridDrillDown) {
+        function addVRNamespaceItem(onVRNameSpaceItemAdded, vrNamespaceId) {
             var parameters = {
             vrNamespaceId: vrNamespaceId,
-            isGridOpenedFromGridDrillDown: isGridOpenedFromGridDrillDown
             }
             var settings = {};
 
@@ -19,12 +19,10 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRNamespace/VRDynamicCodeEditor.html', parameters, settings);
         }
 
-        function editVRNamespaceItem(onVRNameSpaceItemUpdated, vrNameSpaceItemId, vrNamespaceId, isGridOpenedFromGridDrillDown) {
+        function editVRNamespaceItem(onVRNameSpaceItemUpdated, vrNameSpaceItemId) {
             var settings = {};
             var parameters = {
                 vrNameSpaceItemId: vrNameSpaceItemId,
-                vrNamespaceId:vrNamespaceId,
-                isGridOpenedFromGridDrillDown: isGridOpenedFromGridDrillDown
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -45,10 +43,65 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRNamespace/VRNamespaceItemCompilationResult.html', modalParameters, modalSettings);
         }
 
+        function registerObjectTrackingDrillDownToVRNamespaceItem() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.directive = "vr-common-objecttracking-grid";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, vrNamespaceItem) {
+                vrNamespaceItem.objectTrackingGridAPI = directiveAPI;
+                var query = {
+                    ObjectId: vrNamespaceItem.VRNamespaceItemId,
+                    EntityUniqueName: getEntityUniqueName(),
+
+                };
+                return vrNamespaceItem.objectTrackingGridAPI.load(query);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+        function registerNamespaceItemDrillDownDefinitionToNamespace() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = "Namespace Item";
+            drillDownDefinition.directive = "vr-common-namespaceitem-search";
+            drillDownDefinition.haspermission = function () {
+                return VRCommon_VRNamespaceItemAPIService.HasGetFilteredVRNamespaceItems();
+            };
+            drillDownDefinition.loadDirective = function (directiveAPI, namespace) {
+                namespace.nameSpaceItemGridAPI = directiveAPI;
+
+                var query = {
+                    NameSpaceId: namespace.VRNamespaceId
+                };
+
+                return namespace.nameSpaceItemGridAPI.load(query);
+            };
+            VRCommon_VRNamespaceService.addDrillDownDefinition(drillDownDefinition);
+        }
+        function addDrillDownDefinition(drillDownDefinition) {
+
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
+
+        function getEntityUniqueName() {
+            return "VR_Common_VRNamespaceItem";
+        }
+
         return {
             addVRNamespaceItem: addVRNamespaceItem,
             editVRNamespaceItem: editVRNamespaceItem,
-            tryCompilationResult: tryCompilationResult
+            tryCompilationResult: tryCompilationResult,
+            registerObjectTrackingDrillDownToVRNamespaceItem: registerObjectTrackingDrillDownToVRNamespaceItem,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerNamespaceItemDrillDownDefinitionToNamespace: registerNamespaceItemDrillDownDefinitionToNamespace
         };
     }
 

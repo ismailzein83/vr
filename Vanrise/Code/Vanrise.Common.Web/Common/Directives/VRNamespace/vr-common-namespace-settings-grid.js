@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonNamespaceSettingsGrid', ['VRUIUtilsService', 'VRNotificationService',  'VRCommon_VRNamespaceService',
-    function (VRUIUtilsService, VRNotificationService,  VRCommon_VRNamespaceService) {
+app.directive('vrCommonNamespaceSettingsGrid', ['VRUIUtilsService', 'VRNotificationService', 'VRCommon_VRNamespaceService',
+    function (VRUIUtilsService, VRNotificationService, VRCommon_VRNamespaceService) {
         return {
             restrict: 'E',
             scope: {
@@ -45,7 +45,7 @@ app.directive('vrCommonNamespaceSettingsGrid', ['VRUIUtilsService', 'VRNotificat
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.data != undefined )
+                    if (payload != undefined && payload.data != undefined)
                         for (var i = 0; i < payload.data.Codes.length; i++) {
                             $scope.scopeModel.vrNamespaceSettings.push({ Entity: payload.data.Codes[i] });
                         }
@@ -64,6 +64,7 @@ app.directive('vrCommonNamespaceSettingsGrid', ['VRUIUtilsService', 'VRNotificat
                     var onVRDynamicCodeAdded = function (addedVRDynamicCode) {
                         $scope.scopeModel.vrNamespaceSettings.push({ Entity: addedVRDynamicCode });
                     };
+
                     VRCommon_VRNamespaceService.addVRDynamicCode(onVRDynamicCodeAdded);
                 };
 
@@ -79,6 +80,7 @@ app.directive('vrCommonNamespaceSettingsGrid', ['VRUIUtilsService', 'VRNotificat
             }
 
             function editVRDynamicCode(vrDynamicCodeObj) {
+
                 var onVRDynamicCodeUpdated = function (updatedVRDynamicCode) {
                     var index = $scope.scopeModel.vrNamespaceSettings.indexOf(vrDynamicCodeObj);
                     $scope.scopeModel.vrNamespaceSettings[index] = { Entity: updatedVRDynamicCode };
@@ -86,8 +88,5 @@ app.directive('vrCommonNamespaceSettingsGrid', ['VRUIUtilsService', 'VRNotificat
 
                 VRCommon_VRNamespaceService.editVRDynamicCode(onVRDynamicCodeUpdated, vrDynamicCodeObj.Entity);
             }
-
-          
-         
         }
     }]);

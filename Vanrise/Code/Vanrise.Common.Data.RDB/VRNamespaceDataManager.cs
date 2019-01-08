@@ -67,8 +67,7 @@ namespace Vanrise.Common.Data.RDB
             ifNotExist.EqualsCondition(COL_Name).Value(vrNamespaceItem.Name);
             insertQuery.Column(COL_ID).Value(vrNamespaceItem.VRNamespaceId);
             insertQuery.Column(COL_Name).Value(vrNamespaceItem.Name);
-            if (vrNamespaceItem.Settings != null)
-                insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrNamespaceItem.Settings));
+         
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -81,10 +80,6 @@ namespace Vanrise.Common.Data.RDB
 			ifNotExist.NotEqualsCondition(COL_ID).Value(vrNamespaceItem.VRNamespaceId);
 			ifNotExist.EqualsCondition(COL_Name).Value(vrNamespaceItem.Name);
 			updateQuery.Column(COL_Name).Value(vrNamespaceItem.Name);
-            if (vrNamespaceItem.Settings != null)
-                updateQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrNamespaceItem.Settings));
-            else
-                updateQuery.Column(COL_Settings).Null();
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(vrNamespaceItem.VRNamespaceId);
 			return queryContext.ExecuteNonQuery() > 0;
@@ -105,7 +100,6 @@ namespace Vanrise.Common.Data.RDB
 			{
 				VRNamespaceId = reader.GetGuid(COL_ID),
 				Name = reader.GetString(COL_Name),
-				Settings = Vanrise.Common.Serializer.Deserialize<VRNamespaceSettings>(reader.GetString(COL_Settings))
 			};
 		}
 		#endregion

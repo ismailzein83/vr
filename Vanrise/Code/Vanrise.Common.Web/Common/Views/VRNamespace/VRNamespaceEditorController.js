@@ -10,8 +10,6 @@
 
         var vrNamespaceId;
         var vrNamespaceEntity;
-        var vrNamespaceSettingsGridApi;
-        var vrNamespaceSettingsGridDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -33,11 +31,7 @@
                 return tryCompileNamespace();
             };
 
-            $scope.scopeModel.onVRNamespaceSettingsGridReady = function (api) {
-                vrNamespaceSettingsGridApi = api;
-                vrNamespaceSettingsGridDirectiveReadyPromiseDeferred.resolve();
-            };
-
+            
             $scope.scopeModel.save = function () {
 
                 var promiseDeferred = UtilsService.createPromiseDeferred();
@@ -94,7 +88,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRNamespaceSettingsGridDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -115,23 +109,7 @@
                 $scope.scopeModel.namespace = vrNamespaceEntity.Name;
             }
 
-            function loadVRNamespaceSettingsGridDirective() {
-
-                var promises = [];
-                var vrNamespaceSettingsGridDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                promises.push(vrNamespaceSettingsGridDirectiveReadyPromiseDeferred.promise);
-                UtilsService.waitMultiplePromises(promises).then(function (response) {
-                    if (isEditMode) {
-                        if (vrNamespaceEntity.Settings != undefined) {
-                            var settingsPayload = { data: vrNamespaceEntity.Settings };
-                        }
-                    }
-                    VRUIUtilsService.callDirectiveLoad(vrNamespaceSettingsGridApi, settingsPayload, vrNamespaceSettingsGridDirectiveLoadPromiseDeferred);
-                });
-                return vrNamespaceSettingsGridDirectiveLoadPromiseDeferred.promise;
-
-            }
+            
 
         }
 
@@ -169,7 +147,6 @@
             return {
                 VRNamespaceId: vrNamespaceEntity != undefined ? vrNamespaceEntity.VRNamespaceId : undefined,
                 Name: $scope.scopeModel.namespace,
-                Settings: { Codes: vrNamespaceSettingsGridApi.getData() }
             };
         }
 

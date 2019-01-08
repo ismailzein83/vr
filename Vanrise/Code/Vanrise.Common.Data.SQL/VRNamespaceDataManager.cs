@@ -29,16 +29,14 @@ namespace Vanrise.Common.Data.SQL
             return base.IsDataUpdated("common.VRNamespace", ref updateHandle);
         }
 
-        public bool Insert(VRNamespace vrNamespaceItem)
+        public bool Insert(VRNamespace vrNamespace)
         {
-            string serializedSettings = vrNamespaceItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vrNamespaceItem.Settings) : null;
-            return ExecuteNonQuerySP("common.sp_VRNamespace_Insert", vrNamespaceItem.VRNamespaceId, vrNamespaceItem.Name, serializedSettings) > 0;
+            return ExecuteNonQuerySP("common.sp_VRNamespace_Insert", vrNamespace.VRNamespaceId, vrNamespace.Name) > 0;
         }
 
-        public bool Update(VRNamespace vrNamespaceItem)
+        public bool Update(VRNamespace vrNamespace)
         {
-            string serializedSettings = vrNamespaceItem.Settings != null ? Vanrise.Common.Serializer.Serialize(vrNamespaceItem.Settings) : null;
-            return ExecuteNonQuerySP("common.sp_VRNamespace_Update", vrNamespaceItem.VRNamespaceId, vrNamespaceItem.Name, serializedSettings) > 0;
+            return ExecuteNonQuerySP("common.sp_VRNamespace_Update", vrNamespace.VRNamespaceId, vrNamespace.Name) > 0;
         }
 
         #endregion
@@ -51,7 +49,6 @@ namespace Vanrise.Common.Data.SQL
             {
                 VRNamespaceId = (Guid)reader["ID"],
                 Name = reader["Name"] as string,
-                Settings = Vanrise.Common.Serializer.Deserialize<VRNamespaceSettings>(reader["Settings"] as string)
             };
             return vrNamespace;
         }

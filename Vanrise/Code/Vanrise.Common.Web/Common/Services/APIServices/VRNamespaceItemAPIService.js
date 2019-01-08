@@ -2,9 +2,9 @@
 
     "use strict";
 
-    VRNamespaceItemAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig'];
+    VRNamespaceItemAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
 
-    function VRNamespaceItemAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig) {
+    function VRNamespaceItemAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
 
         var controllerName = "VRNamespaceItem";
 
@@ -42,6 +42,18 @@
             });
         }
 
+        function HasGetFilteredVRNamespaceItems() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['GetFilteredVRNamespaceItems']));
+        }
+
+        function HasAddVRNamespaceItemPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddVRNamespaceItem']));
+        }
+
+        function HasEditVRNamespaceItemPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateVRNamespaceItem']));
+        }
+
         return ({
             GetFilteredVRNamespaceItems: GetFilteredVRNamespaceItems,
             GetVRNamespaceItem: GetVRNamespaceItem,
@@ -49,7 +61,10 @@
             UpdateVRNamespaceItem: UpdateVRNamespaceItem,
             GetVRDynamicCodeSettingsConfigs: GetVRDynamicCodeSettingsConfigs,
             TryCompileNamespaceItem: TryCompileNamespaceItem,
-            ExportCompilationResult: ExportCompilationResult
+            ExportCompilationResult: ExportCompilationResult,
+            HasGetFilteredVRNamespaceItems: HasGetFilteredVRNamespaceItems,
+            HasAddVRNamespaceItemPermission: HasAddVRNamespaceItemPermission,
+            HasEditVRNamespaceItemPermission: HasEditVRNamespaceItemPermission
         });
     }
 

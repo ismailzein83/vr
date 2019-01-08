@@ -21,6 +21,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Save" formname="formVRCustomCodeEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Compile" formname="formVRCustomCodeEditor" data-onclick="scopeModel.tryCompileNamespace"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

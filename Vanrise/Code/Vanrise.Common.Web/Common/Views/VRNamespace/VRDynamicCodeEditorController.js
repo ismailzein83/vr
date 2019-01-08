@@ -2,15 +2,19 @@
 
     "use strict";
 
-    VRDynamicCodeEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VRCommon_VRNamespaceService'];
+    VRDynamicCodeEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VRCommon_VRNamespaceService', 'VRCommon_VRNamespaceItemAPIService', 'VRCommon_VRNamespaceItemService'];
 
-    function VRDynamicCodeEditorController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService,  VRCommon_VRNamespaceService) {
+    function VRDynamicCodeEditorController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VRCommon_VRNamespaceService,
+        VRCommon_VRNamespaceItemAPIService, VRCommon_VRNamespaceItemService) {
 
         var isEditMode;
-
-        var vrDynamicCodeEntity;
+        var vrNamespaceItemId;
+        var vrNamespaceItem
+        var vrNamespaceId;
         var vrDynamicCodeSettingsDirectiveApi;
+
         var vrDynamicCodeSettingsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -19,10 +23,11 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                vrDynamicCodeEntity = parameters.vrDynamicCodeEntity;
+                vrNamespaceItemId = parameters.vrNameSpaceItemId; //edit mode
+                vrNamespaceId = parameters.vrNamespaceId;  // add mode
             }
 
-            isEditMode = (vrDynamicCodeEntity != undefined);
+            isEditMode = (vrNamespaceItemId != undefined);
         }
 
         function defineScope() {
@@ -33,30 +38,66 @@
                 vrDynamicCodeSettingsDirectiveReadyPromiseDeferred.resolve();
             };
 
+            $scope.scopeModel.tryCompileNamespace = function () {
+                return tryCompileNamespaceItem();
+            };
+
             $scope.scopeModel.save = function () {
 
-                if (isEditMode)
-                    return update();
-                else
-                    return insert();
+                var promiseDeferred = UtilsService.createPromiseDeferred();
+
+                tryCompileNamespaceItem().then(function (response) {
+                    if (response) { // success compile
+                        var savePromise;
+                        if (isEditMode)
+                            savePromise = update();
+                        else
+                            savePromise = insert();
+
+                        savePromise.then(function () { // success update/insert
+                            promiseDeferred.resolve();
+                        }).catch(function (error) {
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
+                            promiseDeferred.reject();
+                        });
+                    }
+                    else { // compilation wrong
+                        promiseDeferred.resolve();
+                    }
+                }).catch(function (error) { // compilation error
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    promiseDeferred.reject();
+                });
+
+                return promiseDeferred.promise;
             };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
+
             if (isEditMode) {
-                loadAllControls().finally(function () {
-                    vrDynamicCodeEntity = undefined;
+                getVRNamespaceItem().then(function () {
+                    loadAllControls();
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.scopeModel.isLoading = false;
                 });
             }
             else
                 loadAllControls();
         }
 
- 
+        function getVRNamespaceItem() {
+            return VRCommon_VRNamespaceItemAPIService.GetVRNamespaceItem(vrNamespaceItemId).then(function (response) {
+                vrNamespaceItem = response;
+                vrNamespaceId = vrNamespaceItem.VRNamespaceId;
+            });
+        }
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadVRDynamicCodeSettingsDirective]).catch(function (error) {
@@ -67,7 +108,7 @@
 
             function setTitle() {
                 if (isEditMode) {
-                    var vrDynamicCodeTitle = (vrDynamicCodeEntity != undefined) ? vrDynamicCodeEntity.Title : null;
+                    var vrDynamicCodeTitle = (vrNamespaceItem != undefined) ? vrNamespaceItem.Name : null;
                     $scope.title = UtilsService.buildTitleForUpdateEditor(vrDynamicCodeTitle, 'Dynamic Code');
                 }
                 else {
@@ -75,9 +116,9 @@
                 }
             }
             function loadStaticData() {
-                if (vrDynamicCodeEntity == undefined)
+                if (vrNamespaceItem == undefined)
                     return;
-                $scope.scopeModel.title = vrDynamicCodeEntity.Title;
+                $scope.scopeModel.title = vrNamespaceItem.Name;
             }
 
             function loadVRDynamicCodeSettingsDirective() {
@@ -88,43 +129,85 @@
                 promises.push(vrDynamicCodeSettingsDirectiveReadyPromiseDeferred.promise);
                 UtilsService.waitMultiplePromises(promises).then(function (response) {
                     if (isEditMode) {
-                        if (vrDynamicCodeEntity.Settings != undefined) {
-                            var settingsPayload = { Settings: vrDynamicCodeEntity.Settings };
+                        if (vrNamespaceItem.Settings != undefined) {
+                            if (vrNamespaceItemId != undefined)
+                                var settingsPayload = { Settings: vrNamespaceItem.Settings.Code };
+                            else
+                                var settingsPayload = { Settings: vrNamespaceItem.Settings };
                         }
                     }
                     VRUIUtilsService.callDirectiveLoad(vrDynamicCodeSettingsDirectiveApi, settingsPayload, vrDynamicCodeSettingsDirectiveLoadPromiseDeferred);
                 });
+                $scope.scopeModel.isLoading = false;
                 return vrDynamicCodeSettingsDirectiveLoadPromiseDeferred.promise;
-
             }
 
         }
 
         function insert() {
             $scope.scopeModel.isLoading = true;
-            if ($scope.onVRDynamicCodeAdded != undefined)
-                $scope.onVRDynamicCodeAdded(buildVRDynamicCodeObjFromScope());
-            $scope.scopeModel.isLoading = false;
-            $scope.modalContext.closeModal();
+            return VRCommon_VRNamespaceItemAPIService.AddVRNamespaceItem(buildVRNamespaceItemObjFromScope()).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded('Namespace Item', response, 'Name')) {
+                    if ($scope.onVRNameSpaceItemAdded != undefined) {
+                        $scope.onVRNameSpaceItemAdded(response.InsertedObject);
+                    }
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
+
         function update() {
-
             $scope.scopeModel.isLoading = true;
-            if ($scope.onVRDynamicCodeUpdated != undefined) 
-                $scope.onVRDynamicCodeUpdated(buildVRDynamicCodeObjFromScope());
-            $scope.scopeModel.isLoading = false;
-            $scope.modalContext.closeModal();
-          
+            return VRCommon_VRNamespaceItemAPIService.UpdateVRNamespaceItem(buildVRNamespaceItemObjFromScope()).then(function (response) {
+                if (VRNotificationService.notifyOnItemUpdated('Namespace Item', response, 'Name')) {
+                    if ($scope.onVRNameSpaceItemUpdated != undefined) {
+                        $scope.onVRNameSpaceItemUpdated(response.UpdatedObject);
+                    }
+                    $scope.modalContext.closeModal();
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
 
-        function buildVRDynamicCodeObjFromScope() {
+        function buildVRNamespaceItemObjFromScope() {
             return {
-                VRDynamicCodeId: UtilsService.guid(),
-                Title: $scope.scopeModel.title,
-                Settings: vrDynamicCodeSettingsDirectiveApi.getData()
+                VRNamespaceItemId: vrNamespaceItemId,
+                VRNamespaceId: vrNamespaceId,
+                Name: $scope.scopeModel.title,
+                Settings: {
+                    Code: vrDynamicCodeSettingsDirectiveApi.getData()
+                }
             };
         }
 
+        function tryCompileNamespaceItem() {
+            var promiseDeferred = UtilsService.createPromiseDeferred();
+            $scope.scopeModel.isLoading = true;
+            var namespaceItemObj = buildVRNamespaceItemObjFromScope();
+            VRCommon_VRNamespaceItemAPIService.TryCompileNamespaceItem(namespaceItemObj).then(function (response) {
+                if (response.Result) { // success compilation 
+                    VRNotificationService.showSuccess("Namespace compiled successfully.");
+                    promiseDeferred.resolve(true);
+                }
+                else { // wrong compilation 
+                    VRCommon_VRNamespaceItemService.tryCompilationResult(response.ErrorMessages, namespaceItemObj);
+                    promiseDeferred.resolve(false);
+                }
+            }).catch(function (error) { // error in compilation 
+                VRNotificationService.notifyException(error, $scope);
+                promiseDeferred.reject(error);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+            return promiseDeferred.promise;
+        }
     }
 
     appControllers.controller('VRCommon_VRDynamicCodeEditorController', VRDynamicCodeEditorController);

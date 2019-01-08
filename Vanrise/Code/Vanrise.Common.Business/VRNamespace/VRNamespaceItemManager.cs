@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
@@ -29,6 +30,7 @@ namespace Vanrise.Common.Business
 
                 return true;
             };
+            VRActionLogger.Current.LogGetFilteredAction(VRNamespaceItemLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRNamespaceItems.ToBigResult(input, filterExpression, VRNamespaceItemDetailMapper));
         }
 
@@ -38,6 +40,10 @@ namespace Vanrise.Common.Business
             return cachedVRNamespaceItems.GetRecord(vrNamespaceItemId);
         }
 
+        public string GetVRNamespaceItemName(VRNamespaceItem vrNamespaceItem)
+        {
+            return (vrNamespaceItem != null) ? vrNamespaceItem.Name : null;
+        }
 
         public Vanrise.Entities.InsertOperationOutput<VRNamespaceItemDetail> AddVRNamespaceItem(VRNamespaceItem vrNamespaceItem)
         {
@@ -61,6 +67,7 @@ namespace Vanrise.Common.Business
                 if (dataManager.Insert(vrNamespaceItem))
                 {
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    VRActionLogger.Current.TrackAndLogObjectAdded(VRNamespaceItemLoggableEntity.Instance, vrNamespaceItem);
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                     insertOperationOutput.InsertedObject = VRNamespaceItemDetailMapper(this.GetVRNamespaceItem(vrNamespaceItem.VRNamespaceItemId));
                 }
@@ -91,6 +98,7 @@ namespace Vanrise.Common.Business
                 if (dataManager.Update(vrNamespaceItem))
                 {
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(VRNamespaceItemLoggableEntity.Instance, vrNamespaceItem);
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = VRNamespaceItemDetailMapper(this.GetVRNamespaceItem(vrNamespaceItem.VRNamespaceItemId));
                 }
@@ -220,7 +228,6 @@ namespace Vanrise.Common.Business
             return classDefinitionBuilder.ToString();
         }
 
-       
         #endregion
 
         #region Classes
@@ -241,6 +248,38 @@ namespace Vanrise.Common.Business
             public Assembly OutputAssembly { get; set; }
             public bool Result { get; set; }
             public List<string> ErrorMessages { get; set; }
+        }
+
+        private class VRNamespaceItemLoggableEntity : VRLoggableEntityBase
+        {
+            public static VRNamespaceItemLoggableEntity Instance = new VRNamespaceItemLoggableEntity();
+
+            private VRNamespaceItemLoggableEntity()
+            {
+
+            }
+
+            static VRNamespaceItemManager _vrNamespaceItemManager = new VRNamespaceItemManager();
+
+            public override string EntityUniqueName { get { return "VR_Common_VRNamespaceItem"; } }
+
+            public override string ModuleName { get { return "Common"; } }
+
+            public override string EntityDisplayName { get { return "VRNamespaceItem"; } }
+
+            public override string ViewHistoryItemClientActionName { get { return "VR_Common_VRNamespaceItem_ViewHistoryItem"; } }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                VRNamespaceItem vrNamespaceItem = context.Object.CastWithValidate<VRNamespaceItem>("context.Object");
+                return vrNamespaceItem.VRNamespaceItemId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                VRNamespaceItem vrNamespaceItem = context.Object.CastWithValidate<VRNamespaceItem>("context.Object");
+                return _vrNamespaceItemManager.GetVRNamespaceItemName(vrNamespaceItem);
+            }
         }
 
         #endregion

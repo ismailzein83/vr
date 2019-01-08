@@ -102,7 +102,8 @@
             getDrillDownDefinition: getDrillDownDefinition,
             tryCompilationResult: tryCompilationResult,
             addVRDynamicCode: addVRDynamicCode,
-            editVRDynamicCode: editVRDynamicCode
+            editVRDynamicCode: editVRDynamicCode,
+            addDrillDownDefinition: addDrillDownDefinition
         };
     }
 

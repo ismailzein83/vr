@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrCommonNamespaceitemSearch', ['VRUIUtilsService', 'VRNotificationService', 'VRCommon_VRNamespaceItemService',
-    function (VRUIUtilsService, VRNotificationService, VRCommon_VRNamespaceItemService) {
+app.directive('vrCommonNamespaceitemSearch', ['VRUIUtilsService', 'VRNotificationService', 'VRCommon_VRNamespaceItemService','VRCommon_VRNamespaceItemAPIService',
+    function (VRUIUtilsService, VRNotificationService, VRCommon_VRNamespaceItemService, VRCommon_VRNamespaceItemAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -33,15 +33,18 @@ app.directive('vrCommonNamespaceitemSearch', ['VRUIUtilsService', 'VRNotificatio
 
                 $scope.scopeModel.search = function () {
                     return gridAPI.load(getGridPayload());
-                }
+                };
 
                 $scope.scopeModel.addVRNamespaceItem = function () {
-                    var isGridOpenedFromGridDrillDown = true;
 
                     var onVRNameSpaceItemAdded = function (addedVRDNameSpaceItem) {
                         gridAPI.onVRNameSpaceItemAdded(addedVRDNameSpaceItem);
                     };
-                    VRCommon_VRNamespaceItemService.addVRNamespaceItem(onVRNameSpaceItemAdded, nameSpaceId, isGridOpenedFromGridDrillDown);
+                    VRCommon_VRNamespaceItemService.addVRNamespaceItem(onVRNameSpaceItemAdded, nameSpaceId);
+                };
+
+                $scope.scopeModel.hasAddVRNamespaceItemPermission = function () {
+                    return VRCommon_VRNamespaceItemAPIService.HasAddVRNamespaceItemPermission();
                 };
                 
             }
