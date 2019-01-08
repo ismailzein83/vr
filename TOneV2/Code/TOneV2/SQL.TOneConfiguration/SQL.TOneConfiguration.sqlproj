@@ -825,6 +825,10 @@
     <Build Include="common\User Defined Types\VRDynamicAPIModuleType.sql" />
     <Build Include="common\Stored Procedures\sp_VRRule_Delete.sql" />
     <Build Include="bp\Tables\BPDefinitionArgumentState_1.sql" />
+    <Build Include="common\Tables\VRNamespaceItem.sql" />
+    <Build Include="common\Stored Procedures\sp_VRNamespaceItem_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_VRNamespaceItem_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_VRNamespaceItem_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
