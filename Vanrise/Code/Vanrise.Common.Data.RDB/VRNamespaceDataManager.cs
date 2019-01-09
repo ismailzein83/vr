@@ -15,30 +15,29 @@ namespace Vanrise.Common.Data.RDB
 		static string TABLE_ALIAS = "vrNamespace";
 		const string COL_ID = "ID";
 		const string COL_Name = "Name";
-		const string COL_Settings = "Settings";
+		const string COL_LastModifiedTime = "LastModifiedTime";
 		const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
-        #endregion
+		#endregion
 
-        #region Constructors
-        static VRNamespaceDataManager()
+		#region Constructors
+		static VRNamespaceDataManager()
 		{
-            var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
-            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
-            {
-                DBSchemaName = "common",
-                DBTableName = "VRNamespace",
-                Columns = columns,
-                CreatedTimeColumnName = COL_CreatedTime,
-                ModifiedTimeColumnName = COL_LastModifiedTime
+			var columns = new Dictionary<string, RDBTableColumnDefinition>();
+			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+			columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
+			columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+			RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
+			{
+				DBSchemaName = "common",
+				DBTableName = "VRNamespace",
+				Columns = columns,
+				IdColumnName = COL_ID,
+				CreatedTimeColumnName = COL_CreatedTime,
+				ModifiedTimeColumnName = COL_LastModifiedTime
 
-            });
-        }
+			});
+		}
 		#endregion
 
 		#region Public Methods
@@ -53,7 +52,7 @@ namespace Vanrise.Common.Data.RDB
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var selectQuery = queryContext.AddSelectQuery();
 			selectQuery.From(TABLE_NAME, TABLE_ALIAS,null,true);
-			selectQuery.SelectColumns().Columns(COL_ID, COL_Name, COL_Settings);
+			selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 			selectQuery.Sort().ByColumn(COL_Name,RDBSortDirection.ASC);
 			return queryContext.GetItems(VRNamespaceMapper);
 		}
