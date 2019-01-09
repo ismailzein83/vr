@@ -1113,6 +1113,10 @@
       <Project>{ac6889a0-853c-4ff2-b2e4-a5b358065ec3}</Project>
       <Name>TOne.WhS.CodePreparation.BP.Arguments</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.CodePreparation.Data.RDB\TOne.WhS.CodePreparation.Data.RDB.csproj">
+      <Project>{72f1a3ab-f551-4c30-94e8-e2fe9698ba2f}</Project>
+      <Name>TOne.WhS.CodePreparation.Data.RDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.CodePreparation.Data.SQL\TOne.WhS.CodePreparation.Data.SQL.csproj">
       <Project>{2d04aa1a-1a4d-4983-9841-b27a3932dff2}</Project>
       <Name>TOne.WhS.CodePreparation.Data.SQL</Name>
