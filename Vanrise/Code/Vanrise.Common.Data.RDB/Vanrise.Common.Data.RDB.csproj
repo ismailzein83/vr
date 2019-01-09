@@ -64,6 +64,7 @@
     <Compile Include="StyleDefinitionDataManager.cs" />
     <Compile Include="TypeDataManager.cs" />
     <Compile Include="VRActionAuditDataManager.cs" />
+    <!--<Compile Include="VRActionAuditLKUPDataManager.cs" />-->
     <Compile Include="VRApplicationVisibilityDataManager.cs" />
     <Compile Include="VRCommentDataManager.cs" />
     <Compile Include="VRConnectionDataManager.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="VRMailMessageTemplateDataManager.cs" />
     <Compile Include="VRMailMessageTypeDataManager.cs" />
     <Compile Include="VRNamespaceDataManager.cs" />
+    <Compile Include="VRNamespaceItemDataManager.cs" />
     <Compile Include="VRObjectTrackingDataManager.cs" />
     <Compile Include="VRObjectTypeDefinitionDataManager.cs" />
     <!--<Compile Include="VRRuleDataManager.cs" />-->
