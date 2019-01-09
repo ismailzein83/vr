@@ -101,8 +101,14 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
         public override RDBResolvedQuery ResolveIndexCreationQuery(IRDBDataProviderResolveIndexCreationQueryContext context)
         {
+            string tableDBNameForIndex;
+            if (!string.IsNullOrEmpty(context.SchemaName))
+                tableDBNameForIndex = string.Concat(context.SchemaName, "_", context.TableName);
+            else
+                tableDBNameForIndex = context.TableName;
+
             string tableDBName = GetTableDBName(context.SchemaName, context.TableName);
-            string indexName = string.Concat("IX_", tableDBName, "_", string.Join("", context.ColumnNames));
+            string indexName = string.IsNullOrEmpty(context.IndexName) ? string.Concat("IX_", tableDBNameForIndex, "_", string.Join("", context.ColumnNames.Select(itm => itm.Key))) : context.IndexName;
             var queryBuilder = new StringBuilder();
             if (context.IndexType == RDBCreateIndexType.UniqueClustered || context.IndexType == RDBCreateIndexType.UniqueNonClustered)
             {
@@ -129,11 +135,25 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 queryBuilder.Append(tableDBName);
             }
             queryBuilder.Append(" (");
-            queryBuilder.Append(string.Join(", ", context.ColumnNames.Select(colName => string.Concat(colName, " ASC"))));
+            queryBuilder.Append(string.Join(", ", context.ColumnNames.Select(colName => string.Concat(colName.Key, colName.Value == RDBCreateIndexDirection.ASC ? " ASC " : " DESC "))));
             queryBuilder.Append(")");
             var resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
             return resolvedQuery;
+        }
+
+        public override object GetMaxReceivedDataInfo(string tableName, RDBTableDefinition tableDefinition)
+        {
+            string query = String.Format("SELECT MAX(timestamp) FROM {0} WITH(NOLOCK)", GetTableDBName(tableDefinition.DBSchemaName, tableDefinition.DBTableName));
+            return _dataManager.ExecuteScalar(query, null);
+        }
+
+        public override void AddGreaterThanReceivedDataInfoCondition(string tableName, RDBTableDefinition tableDefinition, RDBConditionContext conditionContext, object lastReceivedDataInfo)
+        {
+            if (lastReceivedDataInfo == null)
+                return;
+
+            conditionContext.GreaterThanCondition("timestamp").Value(lastReceivedDataInfo as byte[]);
         }
 
         public override bool IsDataUpdated(string tableName, RDBTableDefinition tableDefinition, ref object lastReceivedDataInfo)

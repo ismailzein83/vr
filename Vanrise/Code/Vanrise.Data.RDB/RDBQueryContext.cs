@@ -180,6 +180,20 @@ namespace Vanrise.Data.RDB
             return this.DataProvider.IsDataUpdated(tableName, tableDefinition, tableDefinition.CachePartitionColumnName, cachePartitionColumnValue, ref lastReceivedDataInfo);
         }
 
+        public object GetMaxReceivedDataInfo(string tableName)
+        {
+            var tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(this.DataProvider, tableName);
+            tableDefinition.ModifiedTimeColumnName.ThrowIfNull("tableDefinition.ModifiedTimeColumnName", tableName);
+            return this.DataProvider.GetMaxReceivedDataInfo(tableName, tableDefinition);
+        }
+
+        public void AddGreaterThanReceivedDataInfoCondition(string tableName, RDBConditionContext conditionContext, object lastReceivedDataInfo)
+        {
+            var tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(this.DataProvider, tableName);
+            tableDefinition.ModifiedTimeColumnName.ThrowIfNull("tableDefinition.ModifiedTimeColumnName", tableName);
+            this.DataProvider.AddGreaterThanReceivedDataInfoCondition(tableName, tableDefinition, conditionContext, lastReceivedDataInfo);
+        }
+
         //public RDBSetParameterValuesQuery SetParameterValues()
         //{
         //    var query = new RDBSetParameterValuesQuery(this.QueryBuilderContext.CreateChildContext());

@@ -91,6 +91,24 @@ namespace Vanrise.Data.RDB
             };
         }
 
+        public virtual object GetMaxReceivedDataInfo(string tableName, RDBTableDefinition tableDefinition)
+        {
+            var queryContext = new RDBQueryContext(this);
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(tableName, "tab", null, true);
+            selectQuery.SelectAggregates().Aggregate(RDBNonCountAggregateType.MAX, tableDefinition.ModifiedTimeColumnName);
+            return queryContext.ExecuteScalar().NullableDateTimeValue;
+        }
+
+        public virtual void AddGreaterThanReceivedDataInfoCondition(string tableName, RDBTableDefinition tableDefinition, RDBConditionContext conditionContext, object lastReceivedDataInfo)
+        {
+            if (lastReceivedDataInfo == null)
+                return;
+
+            DateTime lastModifiedTime = ((DateTime?)lastReceivedDataInfo).Value;
+            conditionContext.GreaterThanCondition(tableDefinition.ModifiedTimeColumnName).Value(lastModifiedTime);
+        }
+
         public virtual bool IsDataUpdated(string tableName, RDBTableDefinition tableDefinition, ref object lastReceivedDataInfo)
         {
             var queryContext = new RDBQueryContext(this);
@@ -609,12 +627,14 @@ namespace Vanrise.Data.RDB
 
         RDBCreateIndexType IndexType { get; }
 
-        List<string> ColumnNames { get; }
+        string IndexName { get; }
+
+        Dictionary<string, RDBCreateIndexDirection> ColumnNames { get; }
     }
 
     public class RDBDataProviderResolveIndexCreationQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveIndexCreationQueryContext
     {
-        public RDBDataProviderResolveIndexCreationQueryContext(string schemaName, string tableName, RDBCreateIndexType indexType, List<string> columnNames,
+        public RDBDataProviderResolveIndexCreationQueryContext(string schemaName, string tableName, RDBCreateIndexType indexType, string indexName, Dictionary<string, RDBCreateIndexDirection> columnNames,
             IBaseRDBResolveQueryContext parentContext)
             : base(parentContext)
         {
@@ -622,6 +642,7 @@ namespace Vanrise.Data.RDB
             this.TableName = tableName;
             this.ColumnNames = columnNames;
             this.IndexType = indexType;
+            this.IndexName = indexName;
         }
 
         public string SchemaName
@@ -642,7 +663,13 @@ namespace Vanrise.Data.RDB
             private set;
         }
 
-        public List<string> ColumnNames
+        public string IndexName
+        {
+            get;
+            private set;
+        }
+
+        public Dictionary<string, RDBCreateIndexDirection> ColumnNames
         {
             get;
             private set;
@@ -817,7 +844,7 @@ namespace Vanrise.Data.RDB
 
     public class GetOverridenConnectionStringInput
     {
-        public string OverridingDatabaseName { get; set; } 
+        public string OverridingDatabaseName { get; set; }
     }
 
     public class GetDataBaseNameInput

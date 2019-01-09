@@ -40,7 +40,7 @@ namespace Vanrise.Data.RDB
                 if (_defaultTableDefinitionsByName.ContainsKey(tableName))
                     throw new Exception(String.Format("Table '{0}' already registered in default table definitions", tableName));
                 tableDefinition.Columns.ThrowIfNull("tableDefinition.Columns", tableName);
-                foreach(var columnEntry in tableDefinition.Columns)
+                foreach (var columnEntry in tableDefinition.Columns)
                 {
                     if (columnEntry.Value.DBColumnName == null)
                         columnEntry.Value.DBColumnName = columnEntry.Key;
@@ -51,7 +51,7 @@ namespace Vanrise.Data.RDB
 
         public void OverrideTableInfo(string providerUniqueName, string tableName, string dbSchemaName, string dbTableName)
         {
-            lock(this)
+            lock (this)
             {
                 RDBTableDefinition tableDefinition = GetOrAddTableDefinitionByProvider(providerUniqueName, tableName);
                 tableDefinition.DBSchemaName = dbSchemaName;
@@ -126,6 +126,9 @@ namespace Vanrise.Data.RDB
 
         internal RDBTableColumnDefinition GetColumnDefinitionWithValidate(RDBTableDefinition tableDefinition, string tableName, string columnName)
         {
+            if (string.Compare(columnName, "timestamp", true) == 0)
+                return GetTimestampColumnDefinition();
+
             RDBTableColumnDefinition columnDefinition;
             if (!tableDefinition.Columns.TryGetValue(columnName, out columnDefinition))
                 throw new Exception(String.Format(" Column '{0}' not found in table '{1}'", columnName, tableName));
@@ -179,6 +182,15 @@ namespace Vanrise.Data.RDB
             if (!tableDefinition.Columns.TryGetValue(columnName, out columnDefinition))
                 throw new Exception(String.Format("Column '{0}' not found in table '{1}'", columnName, tableName));
             return columnDefinition;
+        }
+
+        private RDBTableColumnDefinition GetTimestampColumnDefinition()
+        {
+            return new RDBTableColumnDefinition()
+            {
+                DataType = RDBDataType.VarBinary,
+                DBColumnName = "timestamp"
+            };
         }
 
         #endregion

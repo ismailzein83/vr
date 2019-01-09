@@ -7,16 +7,19 @@ using System.Threading.Tasks;
 namespace Vanrise.Data.RDB
 {
     public enum RDBCreateIndexType { Clustered, NonClustered, UniqueClustered, UniqueNonClustered }
+
+    public enum RDBCreateIndexDirection { ASC, DESC }
     public class RDBCreateIndexQuery : BaseRDBQuery
     {
         DBTableInfo _dbTableInfo;
         Dictionary<string, DBTableInfo> _dbTableInfosByProviderUniqueName = new Dictionary<string, DBTableInfo>();
 
-        List<string> _columnNames = new List<string>();
+        Dictionary<string, RDBCreateIndexDirection> _columnNames = new Dictionary<string, RDBCreateIndexDirection>();
+        string _indexName;
         RDBCreateIndexType _indexType;
 
         RDBQueryBuilderContext _queryBuilderContext;
-        
+
         internal RDBCreateIndexQuery(RDBQueryBuilderContext queryBuilderContext)
         {
             _queryBuilderContext = queryBuilderContext;
@@ -51,9 +54,14 @@ namespace Vanrise.Data.RDB
             _indexType = indexType;
         }
 
-        public void AddColumn(string columnName)
+        public void IndexName(string indexName)
         {
-            _columnNames.Add(columnName);
+            _indexName = indexName;
+        }
+
+        public void AddColumn(string columnName, RDBCreateIndexDirection direction = RDBCreateIndexDirection.ASC)
+        {
+            _columnNames.Add(columnName, direction);
         }
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
@@ -61,7 +69,7 @@ namespace Vanrise.Data.RDB
             DBTableInfo dbTableInfo;
             if (!_dbTableInfosByProviderUniqueName.TryGetValue(context.DataProvider.UniqueName, out dbTableInfo))
                 dbTableInfo = _dbTableInfo;
-            var resolveQueryContext = new RDBDataProviderResolveIndexCreationQueryContext(_dbTableInfo.DBSchemaName, _dbTableInfo.DBTableName, _indexType, _columnNames, context);
+            var resolveQueryContext = new RDBDataProviderResolveIndexCreationQueryContext(_dbTableInfo.DBSchemaName, _dbTableInfo.DBTableName, _indexType, _indexName ,_columnNames, context);
             return context.DataProvider.ResolveIndexCreationQuery(resolveQueryContext);
         }
 
