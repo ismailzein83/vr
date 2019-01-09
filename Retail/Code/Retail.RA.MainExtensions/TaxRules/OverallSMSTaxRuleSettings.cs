@@ -6,7 +6,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Retail.RA.MainExtensions
 {
-    public class OverallSMSTaxRuleSettings : SMSTaxRuleSettings
+    public class OverallSMSTaxRuleSettingsA : SMSTaxRuleSettings
     {
         public override Guid ConfigId { get { return new Guid("00E25E63-9C8A-46C0-955E-4A7382FB1918"); } }
 

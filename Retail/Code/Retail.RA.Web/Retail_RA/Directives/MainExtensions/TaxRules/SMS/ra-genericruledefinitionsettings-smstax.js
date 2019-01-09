@@ -21,7 +21,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_RA/Directives/Rules/SMS/Templates/EmptyDefinitionSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/MainExtensions/TaxRules/SMS/Templates/EmptyDefinitionSettingsTemplate.html"
         };
 
         function RuleDefinitionSettings($scope, ctrl, $attrs) {

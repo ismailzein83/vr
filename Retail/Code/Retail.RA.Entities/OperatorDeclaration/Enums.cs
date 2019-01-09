@@ -19,7 +19,19 @@ namespace Retail.RA.Business
         OUT = 1
     }
 
-   public enum ServiceType
+    public enum CustomerDeliveryStatus
+    {
+        Delivered = 0,
+        NotDelivered = 1
+    }
+
+    public enum VendorDeliveryStatus
+    {
+        Delivered = 0,
+        NotDelivered = 1
+    }
+
+    public enum ServiceType
     {
         Voice = 0,
         SMS = 1

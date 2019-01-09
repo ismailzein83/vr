@@ -76,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\INTLReconcilationObjectDataProviderSettings.cs" />
+    <Compile Include="MCC\MCCManager.cs" />
+    <Compile Include="MNC\MNCManager.cs" />
     <Compile Include="MNC\MNCSettingsCustomObjectTypeSettings.cs" />
     <Compile Include="OperatorDeclarationServices\SMS.cs" />
     <Compile Include="OperatorDeclarationServices\Voice.cs" />
@@ -90,6 +92,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="OperatorDeclaration\RAInterconnectOperatorDeclarationOnBeforeSaveHandler.cs" />
     <Compile Include="Reconciliation\Reconciliation.cs" />
+    <Compile Include="Reconciliation\SMSReconciliation.cs" />
+    <Compile Include="SMSRateValueRule\SMSRateValueMappingStep.cs" />
+    <Compile Include="SMSRateValueRule\SMSRateValueRule.cs" />
+    <Compile Include="SMSRateValueRule\SMSRateValueRuleContext.cs" />
+    <Compile Include="SMSRateValueRule\SMSRateValueRuleDefinitionSettings.cs" />
+    <Compile Include="SMSRateValueRule\SMSRateValueRuleManager.cs" />
+    <Compile Include="SMSRateValueRule\SMSRateValueRuleSettings.cs" />
+    <Compile Include="SMSRateValueRule\SMSRateValueRuleSettingsConfig.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxMappingStep.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxRule.cs" />
     <Compile Include="TaxRules\SMS\SMSTaxRuleContext.cs" />
@@ -113,5 +123,6 @@
       <Name>Retail.RA.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

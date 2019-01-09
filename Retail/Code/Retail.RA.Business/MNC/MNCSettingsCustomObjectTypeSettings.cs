@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using Retail.RA.Entities;
 using Vanrise.GenericData.Entities;
 
 namespace Retail.RA.Business
@@ -32,15 +32,5 @@ namespace Retail.RA.Business
         {
             return "MNC Settings";
         }
-    }
-
-    public class MNCSettings
-    {
-        public List<MNCCodes> Codes { get; set; }
-    }
-
-    public class MNCCodes
-    {
-        public string Code { get; set; }
     }
 }

@@ -6,23 +6,23 @@ namespace Retail.RA.Business
 {
     public class SMSTaxRuleManager : Vanrise.GenericData.Business.GenericRuleManager<SMSTaxRule>
     {
-        public void ApplyTaxRule(ISMSTaxRuleContext context, Guid ruleDefinitionId, GenericRuleTarget target)
+        public void ApplySMSTaxRule(ISMSTaxRuleContext context, Guid ruleDefinitionId, GenericRuleTarget target)
         {
-            this.ApplyTaxRule(context, () => GetMatchRule(ruleDefinitionId, target), target);
+            this.ApplySMSTaxRule(context, () => GetMatchRule(ruleDefinitionId, target), target);
         }
 
-        public void ApplyTaxRule(ISMSTaxRuleContext context, RuleTree ruleTree, GenericRuleTarget target)
+        public void ApplySMSTaxRule(ISMSTaxRuleContext context, RuleTree ruleTree, GenericRuleTarget target)
         {
-            this.ApplyTaxRule(context, () => ruleTree.GetMatchRule(target) as SMSTaxRule, target);
+            this.ApplySMSTaxRule(context, () => ruleTree.GetMatchRule(target) as SMSTaxRule, target);
         }
 
-        void ApplyTaxRule(ISMSTaxRuleContext context, Func<SMSTaxRule> getMatchRule, GenericRuleTarget target)
+        void ApplySMSTaxRule(ISMSTaxRuleContext context, Func<SMSTaxRule> getMatchRule, GenericRuleTarget target)
         {
-            var taxRule = getMatchRule();
-            if (taxRule != null)
+            var smsTaxRule = getMatchRule();
+            if (smsTaxRule != null)
             {
-                taxRule.Settings.ApplySMSTaxRule(context);
-                context.Rule = taxRule;
+                smsTaxRule.Settings.ApplySMSTaxRule(context);
+                context.Rule = smsTaxRule;
             }
         }
     }

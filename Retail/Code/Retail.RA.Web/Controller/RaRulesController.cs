@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using Retail.RA.Business;
-using Retail.RA.Business.TaxRules;
 using Vanrise.Web.Base;
 
 namespace Retail.RA.Web.Controller

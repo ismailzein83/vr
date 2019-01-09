@@ -41,7 +41,7 @@ namespace Retail.RA.Business
             AnalyticQuery analyticQuery = new AnalyticQuery
             {
                 TableId = Guid.Parse("efe9d65f-0b0e-4466-918f-4d8982a368f6"),
-                MeasureFields = new List<string> { "TotalDurationInMin", "Revenue", "NumberOfCDRs" },
+                MeasureFields = new List<string> { "TotalSaleDurationInMin", "Revenue", "NumberOfCDRs" },
                 DimensionFields = new List<string> { "Operator", "Period", "TrafficDirection" },
                 FromTime = Utilities.Min(minDate, query.FromTime),
                 ToTime = Utilities.Max(maxDate, toTime),
@@ -182,7 +182,7 @@ namespace Retail.RA.Business
                 };
 
                 MeasureValue calculatedDurationInMin;
-                analyticRecord.MeasureValues.TryGetValue("TotalDurationInMin", out calculatedDurationInMin);
+                analyticRecord.MeasureValues.TryGetValue("TotalSaleDurationInMin", out calculatedDurationInMin);
                 if (calculatedDurationInMin?.Value != null)
                     reconcilationObj.DurationInMin = Convert.ToDecimal(calculatedDurationInMin.Value ?? 0.0);
 
@@ -237,7 +237,7 @@ namespace Retail.RA.Business
             AnalyticQuery analyticQuery = new AnalyticQuery
             {
                 TableId = Guid.Parse("8e3baf48-a2d3-4b09-8198-cbb4ad6f76f5"),
-                MeasureFields = new List<string> { "TotalDurationInMin", "Revenue", "NumberOfCDRs" },
+                MeasureFields = new List<string> { "TotalSaleDurationInMin", "Revenue", "NumberOfCDRs" },
                 DimensionFields = new List<string> { "Operator", "Period", "TrafficDirection" },
                 FromTime = Utilities.Min(minDate, query.FromTime),
                 ToTime = Utilities.Max(maxDate, toTime),
@@ -381,7 +381,7 @@ namespace Retail.RA.Business
                 };
 
                 MeasureValue calculatedDurationInMin;
-                analyticRecord.MeasureValues.TryGetValue("TotalDurationInMin", out calculatedDurationInMin);
+                analyticRecord.MeasureValues.TryGetValue("TotalSaleDurationInMin", out calculatedDurationInMin);
                 if (calculatedDurationInMin?.Value != null)
                     reconcilationObj.DurationInMin = Convert.ToDecimal(calculatedDurationInMin.Value ?? 0.0);
 

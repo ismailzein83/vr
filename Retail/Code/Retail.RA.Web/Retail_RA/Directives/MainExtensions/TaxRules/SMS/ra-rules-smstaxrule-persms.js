@@ -19,7 +19,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Retail_RA/Directives/Rules/SMS/Templates/SMSTaxRulePerSMSTemplate.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/MainExtensions/TaxRules/SMS/Templates/SMSTaxRulePerSMSTemplate.html"
         };
 
         function PerSMSTaxRuleSettings(ctrl, $scope, $attrs) {
