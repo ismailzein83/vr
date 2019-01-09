@@ -15,7 +15,7 @@ namespace Vanrise.Integration.Data.SQL
 
         }
 
-        public long InsertEntry(Guid dataSourceId, string batchDescription, decimal? batchSize, BatchState batchState, bool? isDuplicateSameSize, int recordCounts, Entities.MappingResult? result, 
+        public long InsertEntry(Guid dataSourceId, string batchDescription, decimal? batchSize, BatchState batchState, bool? isDuplicateSameSize, int recordCounts, Entities.MappingResult? result,
             string mapperMessage, string queueItemsIds, string logEntryTime, DateTime? batchStart, DateTime? batchEnd)
         {
             return (long)ExecuteScalarSP("[integration].[sp_DataSourceImportedBatch_Insert]", dataSourceId, batchDescription, batchSize, batchState, isDuplicateSameSize, recordCounts, result, mapperMessage, queueItemsIds, logEntryTime, batchStart, batchEnd);
@@ -82,12 +82,11 @@ namespace Vanrise.Integration.Data.SQL
 
         private DataSourceImportedBatch DataSourceImportedBatchMapper(IDataReader reader)
         {
-            Vanrise.Integration.Entities.DataSourceImportedBatch dataSourceImportedBatch = new Vanrise.Integration.Entities.DataSourceImportedBatch
+            var dataSourceImportedBatch = new Vanrise.Integration.Entities.DataSourceImportedBatch
             {
                 ID = (long)reader["ID"],
                 BatchDescription = reader["BatchDescription"] as string,
                 BatchSize = GetReaderValue<decimal>(reader, "BatchSize"),
-                BatchState = (BatchState)reader["BatchState"],
                 RecordsCount = (int)reader["RecordsCount"],
                 MappingResult = (MappingResult)reader["MappingResult"],
                 MapperMessage = reader["MapperMessage"] as string,
@@ -96,6 +95,9 @@ namespace Vanrise.Integration.Data.SQL
                 BatchStart = GetReaderValue<DateTime?>(reader, "BatchStart"),
                 BatchEnd = GetReaderValue<DateTime?>(reader, "BatchEnd")
             };
+
+            int? batchStateAsInt = GetReaderValue<int?>(reader, "BatchState");
+            dataSourceImportedBatch.BatchState = batchStateAsInt.HasValue ? (BatchState)batchStateAsInt.Value : BatchState.Normal;
 
             return dataSourceImportedBatch;
         }
