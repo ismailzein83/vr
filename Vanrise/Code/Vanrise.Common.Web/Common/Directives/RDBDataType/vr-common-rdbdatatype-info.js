@@ -79,8 +79,8 @@ appControllers.directive('vrCommonRdbdatatypeInfo', ['VRNotificationService', 'U
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
-                        $scope.scopeModel.size = payload.Size;
-                        $scope.scopeModel.precision = payload.Precision;
+                        $scope.scopeModel.size = payload.size;
+                        $scope.scopeModel.precision = payload.precision;
                     }
 
                    return VRCommon_RDBDataTypeAPIService.GetRDBDataTypeInfo().then(function (response) {
