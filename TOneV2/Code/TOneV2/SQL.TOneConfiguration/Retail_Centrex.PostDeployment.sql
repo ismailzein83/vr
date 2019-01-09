@@ -755,9 +755,9 @@ as (select * from (values
 merge	[common].[MailMessageTemplate] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[MessageTypeID] = s.[MessageTypeID],[Settings] = s.[Settings]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[MessageTypeID] = s.[MessageTypeID],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[MessageTypeID],[Settings])
 	values(s.[ID],s.[Name],s.[MessageTypeID],s.[Settings]);

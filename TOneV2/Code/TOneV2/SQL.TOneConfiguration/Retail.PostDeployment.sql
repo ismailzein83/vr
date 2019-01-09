@@ -430,8 +430,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('509E467B-4562-4CA6-A32E-E50473B74D2C','Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Retail","VersionNumber":"version #VersionNumber# ~ #VersionDate#"}}',1),
-('554149f4-6361-4e32-8b3c-dc2a30084c77','Invoice Settings','Retail_BE_RetailInvoiceSettings','Business Entities','{"Editor":"retail-be-retailinvoicesettings"}',null,0)
+('509E467B-4562-4CA6-A32E-E50473B74D2C','Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"Retail","VersionNumber":"version #VersionNumber# ~ #VersionDate#"}}',1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
@@ -440,6 +439,26 @@ on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
 	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+when not matched by target then
+	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+----------------------------------------------------------------------------------------------------
+END
+
+BEGIN
+set nocount on;
+;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('554149f4-6361-4e32-8b3c-dc2a30084c77','Invoice Settings','Retail_BE_RetailInvoiceSettings','Business Entities','{"Editor":"retail-be-retailinvoicesettings"}',null,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
+merge	[common].[Setting] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
 when not matched by target then
 	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
