@@ -1,6 +1,6 @@
 ﻿
-appControllers.directive('vrCommonRdbdatatypeInfo', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_RDBDataTypeInfoAPIService',
-    function (VRNotificationService, UtilsService, VRUIUtilsService, VRCommon_RDBDataTypeInfoAPIService) {
+appControllers.directive('vrCommonRdbdatatypeInfo', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_RDBDataTypeAPIService',
+    function (VRNotificationService, UtilsService, VRUIUtilsService, VRCommon_RDBDataTypeAPIService) {
         'use strict';
 
         var directiveDefinitionObject = {
