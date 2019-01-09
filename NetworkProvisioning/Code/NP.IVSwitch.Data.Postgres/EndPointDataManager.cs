@@ -25,19 +25,34 @@ namespace NP.IVSwitch.Data.Postgres
         {
 
             String cmdText = @"
-                                SELECT access_list.user_id,access_list.account_id,access_list.description,access_list.group_id,access_list.tariff_id,access_list.route_table_id,
-                                access_list.log_alias,access_list.codec_profile_id,access_list.cli_routing,access_list.dst_routing,access_list.trans_rule_id,access_list.state_id,
-                                access_list.channels_limit,access_list.route_table_id,access_list.max_call_dura,access_list.rtp_mode,access_list.domain_id,
-                                access_list.host,access_list.tech_prefix,null as sip_login, null as sip_password
-                                FROM access_list INNER JOIN users on access_list.user_id = users.user_id
-                                UNION
-                                SELECT users.user_id,users.account_id, users.description ,users.group_id,users.tariff_id,users.route_table_id,users.log_alias,users.codec_profile_id,users.cli_routing,users.dst_routing,
-                                users.trans_rule_id,users.state_id,users.channels_limit,users.route_table_id,users.max_call_dura,users.rtp_mode,
-                                users.domain_id,null as host,users.tech_prefix,users.sip_login,users.sip_password
-                                FROM users LEFT JOIN access_list on users.user_id = access_list.user_id  where access_list.user_id is null";
+								SELECT                     
+								case when users.type_id = @SIPType then users.user_id else access_list.user_id end,
+								case when users.type_id = @SIPType then users.account_id else access_list.account_id end,
+								case when users.type_id = @SIPType then users.description else access_list.description end,
+								case when users.type_id = @SIPType then users.group_id else access_list.group_id end,
+								case when users.type_id = @SIPType then users.tariff_id else access_list.tariff_id end,
+								case when users.type_id = @SIPType then users.route_table_id else access_list.route_table_id end,
+								case when users.type_id = @SIPType then users.log_alias else access_list.log_alias end,
+								case when users.type_id = @SIPType then users.codec_profile_id else access_list.codec_profile_id end,
+								case when users.type_id = @SIPType then users.cli_routing else access_list.cli_routing end,
+								case when users.type_id = @SIPType then users.dst_routing else access_list.dst_routing end,
+								case when users.type_id = @SIPType then users.trans_rule_id else access_list.trans_rule_id end,
+								case when users.type_id = @SIPType then users.state_id else access_list.state_id end,
+								case when users.type_id = @SIPType then users.channels_limit else access_list.channels_limit end,
+								case when users.type_id = @SIPType then users.max_call_dura else access_list.max_call_dura end,
+								case when users.type_id = @SIPType then users.rtp_mode else access_list.rtp_mode end,
+								case when users.type_id = @SIPType then users.domain_id else access_list.domain_id end,
+								access_list.host,
+								case when access_list.tech_prefix is null then users.tech_prefix else access_list.tech_prefix end,
+								users.sip_login,
+								users.sip_password
+								FROM users left join 
+								access_list on access_list.user_id = users.user_id where users.type_id <> @RoutType";
             return GetItemsText(cmdText, EndPointMapper, (cmd) =>
             {
-            });
+				cmd.Parameters.AddWithValue("@SIPType", (int)UserType.SIP);
+				cmd.Parameters.AddWithValue("@RoutType", (int)UserType.VendroTermRoute);
+			});
         }
         public int GetTableId(int userId)
         {
@@ -462,12 +477,12 @@ namespace NP.IVSwitch.Data.Postgres
             EndPoint endPoint = new EndPoint
             {
 
-                EndPointId = (int)reader["user_id"],
-                CliRouting = (Int16)reader["cli_routing"],
-                DstRouting = (int)reader["dst_routing"],
-                RouteTableId = GetReaderValue<int?>(reader, "route_table_id"),
+				EndPointId = (int)reader["user_id"],
+				CliRouting = (Int16)reader["cli_routing"],
+				DstRouting = (int)reader["dst_routing"],
+				RouteTableId = GetReaderValue<int?>(reader, "route_table_id"),
                 AccountId = (int)reader["account_id"],
-                Description = reader["description"] as string,
+				Description = reader["description"] as string,
                 LogAlias = reader["log_alias"] as string,
                 CodecProfileId = (int)reader["codec_profile_id"],
                 TransRuleId = (int)reader["trans_rule_id"],
