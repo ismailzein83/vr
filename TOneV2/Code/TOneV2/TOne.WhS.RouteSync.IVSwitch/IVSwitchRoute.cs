@@ -25,7 +25,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
         public int Flag3 { get; set; }
         public int Flag4 { get; set; }
         public decimal Flag5 { get; set; }
-        public int TechPrefix { get; set; }
+        public string TechPrefix { get; set; }
         public IVSwitchRoute()
         {
             RoutingMode = 1;
@@ -39,7 +39,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             Flag3 = 0;
             Flag4 = 0;
             Flag5 = 0;
-            TechPrefix = 0;
+            TechPrefix = string.Empty;
         }
     }
 }
