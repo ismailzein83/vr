@@ -791,15 +791,15 @@ set nocount on;
 ;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('13437680-B64E-4FA2-9DB5-C2AC1C4633F0','Fault Tickets','Retail_BE_FaultTickets_Settings','Business Entities','{"Editor":"retail-be-faultticket-settings-editor"}','{"$type":"Retail.BusinessEntity.Business.FaultTicketsSettingsData, Retail.BusinessEntity.Business","FaultTicketSetting":{"$type":"Retail.BusinessEntity.Business.FaultTicketSetting, Retail.BusinessEntity.Business","SerialNumberPattern":"#CarrierName#","InitialSequence":50,"OpenMailTemplateId":"4ea32fab-6095-43a4-bed3-bb32e42e4553","PendingMailTemplateId":"1bf9a171-3880-4d43-915a-9fa68085970b","ClosedMailTemplateId":"46c7fa26-5f3b-416c-af77-749b3f07a02c","BackOfficeMailTemplateId":"8a41665a-6378-48fc-a921-efaa651d1a69"}}',null)
+('13437680-B64E-4FA2-9DB5-C2AC1C4633F0','Fault Tickets','Retail_BE_FaultTickets_Settings','Business Entities','{"Editor":"retail-be-faultticket-settings-editor"}','{"$type":"Retail.BusinessEntity.Business.FaultTicketsSettingsData, Retail.BusinessEntity.Business","FaultTicketSetting":{"$type":"Retail.BusinessEntity.Business.FaultTicketSetting, Retail.BusinessEntity.Business","SerialNumberPattern":"#CarrierName#","InitialSequence":50,"OpenMailTemplateId":"4ea32fab-6095-43a4-bed3-bb32e42e4553","PendingMailTemplateId":"1bf9a171-3880-4d43-915a-9fa68085970b","ClosedMailTemplateId":"46c7fa26-5f3b-416c-af77-749b3f07a02c","BackOfficeMailTemplateId":"8a41665a-6378-48fc-a921-efaa651d1a69"}}',0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
 when not matched by target then
 	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
