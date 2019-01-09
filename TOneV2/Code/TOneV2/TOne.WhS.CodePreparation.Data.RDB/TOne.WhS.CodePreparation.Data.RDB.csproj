@@ -61,6 +61,8 @@
   <ItemGroup>
     <Compile Include="ChangedCustomerCountryDataManager.cs" />
     <Compile Include="ChangedSaleCodeDataManager.cs" />
+    <Compile Include="ChangedSaleRateDataManager.cs" />
+    <Compile Include="ChangedSaleZoneDataManager.cs" />
     <Compile Include="ChangedSaleZoneRoutingProductsDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
