@@ -128,6 +128,7 @@
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\FTPConnectionEditorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-ftpconnection-editor.js" />
+    <Content Include="Common\Directives\RDBDataType\vr-common-rdbdatatype-info.js" />
     <Content Include="Common\Directives\StatusDefinition\Templates\StatusDefinitionViewerTemplate.html" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-viewer.js" />
     <Content Include="Common\Directives\VRDynamicAPIModule\Templates\DynamicAPIModuleGridTemplate.html" />
@@ -169,6 +170,7 @@
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-specificdays.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-yesterday.js" />
+    <Content Include="Common\Services\APIServices\RDBDataTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRBulkActionDraftAPIService.js" />
     <Content Include="Common\Services\APIServices\VRNamespaceItemAPIService.js" />
     <Content Include="Common\Services\APIServices\VRDynamicAPIAPIService.js" />
@@ -200,6 +202,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
     <Compile Include="Controllers\CacheRefreshController.cs" />
+    <Compile Include="Controllers\RDBDataTypeController.cs" />
     <Compile Include="Controllers\VRBulkActionDraftController.cs" />
     <Compile Include="Controllers\VRCommentController.cs" />
     <Compile Include="Controllers\DBReplicationDefinitionController.cs" />
@@ -907,7 +910,9 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
