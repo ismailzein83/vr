@@ -507,6 +507,9 @@
     <Reference Include="Vanrise.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.DatabaseStructure">
+      <HintPath>..\..\..\..\Vanrise\Code\Vanrise.DatabaseStructure\obj\Debug\Vanrise.DatabaseStructure.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.DataParser.Data.RDB">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.DataParser.Data.RDB.dll</HintPath>
     </Reference>
