@@ -60,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangedCustomerCountryDataManager.cs" />
+    <Compile Include="ChangedSaleCodeDataManager.cs" />
+    <Compile Include="ChangedSaleZoneRoutingProductsDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
