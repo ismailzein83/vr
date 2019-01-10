@@ -74,6 +74,13 @@ namespace Vanrise.Data.RDB
             Expression(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName});
         }
 
+
+        public RDBTextConcatenationExpressionContext TextConcatenation()
+        {
+            return new RDBTextConcatenationExpressionContext(_queryBuilderContext, _tableAlias, (exp1, exp2) => Expression(new RDBTextConcatenationExpression { Expression1 = exp1, Expression2 = exp2 }));
+        }
+
+
         public void DateNow()
         {
             Expression(new RDBNowDateTimeExpression());
@@ -186,6 +193,24 @@ namespace Vanrise.Data.RDB
     public class RDBArithmeticExpressionContext : RDBTwoExpressionsContext
     {
         public RDBArithmeticExpressionContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, Action<BaseRDBExpression, BaseRDBExpression> setExpressions)
+            : base(queryBuilderContext, tableAlias, setExpressions)
+        {
+        }
+
+        public RDBExpressionContext Expression1()
+        {
+            return base.Exp1();
+        }
+
+        public RDBExpressionContext Expression2()
+        {
+            return base.Exp2();
+        }
+    }
+
+    public class RDBTextConcatenationExpressionContext : RDBTwoExpressionsContext
+    {
+        public RDBTextConcatenationExpressionContext(RDBQueryBuilderContext queryBuilderContext, string tableAlias, Action<BaseRDBExpression, BaseRDBExpression> setExpressions)
             : base(queryBuilderContext, tableAlias, setExpressions)
         {
         }

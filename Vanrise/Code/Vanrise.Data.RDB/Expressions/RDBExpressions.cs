@@ -179,6 +179,18 @@ namespace Vanrise.Data.RDB
         }
     }
 
+    internal class RDBTextConcatenationExpression : BaseRDBExpression
+    {
+        public BaseRDBExpression Expression1 { get; set; }
+
+        public BaseRDBExpression Expression2 { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return string.Concat(this.Expression1.ToDBQuery(context), " + ", this.Expression2.ToDBQuery(context));
+        }
+    }
+
     public enum RDBDateTimePart { TimeOnly = 1, DateOnly = 2 }
     internal class RDBDateTimePartExpression : BaseRDBExpression
     {
