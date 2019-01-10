@@ -125,7 +125,7 @@
         {
             var deleteActionType = {
                 ActionTypeName: "DeleteGenericBEAction",
-                ExecuteAction: function (payload) {
+				ExecuteAction: function (payload) {
                     if (payload == undefined)
                         return;
                     var genericBusinessEntityId = payload.genericBusinessEntityId;
@@ -133,7 +133,8 @@
                     var genericBusinessEntityIds = [genericBusinessEntityId];
                     var input = {
                         GenericBusinessEntityIds: genericBusinessEntityIds,
-                        BusinessEntityDefinitionId: businessEntityDefinitionId
+						BusinessEntityDefinitionId: businessEntityDefinitionId,
+						BusinessEntityActionTypeId: payload.genericBEAction.GenericBEActionId
                     };
                     var onItemDeleted = payload.onItemDeleted;
                     var deletePromiseDeferred = UtilsService.createPromiseDeferred();

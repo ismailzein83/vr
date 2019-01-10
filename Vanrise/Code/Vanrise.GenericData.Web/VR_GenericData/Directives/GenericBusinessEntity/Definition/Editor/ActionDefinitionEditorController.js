@@ -12,7 +12,10 @@
 
 
         var actionSettingsDirectiveAPI;
-        var actionSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+		var actionSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+		var securityActionAPI;
+		var securityActionReadyPromiseDeffered = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -27,16 +30,21 @@
             isEditMode = (actionDefinition != undefined);
         }
         function defineScope() {
-            $scope.scopeModel = {};
+			$scope.scopeModel = {};
+			$scope.scopeModel.showSecurityGrid = true;
 
             $scope.scopeModel.onActionDefinitionSettingDirectiveReady = function (api) {
                 actionSettingsDirectiveAPI = api;
                 actionSettingsReadyPromiseDeferred.resolve();
             };
 
+			$scope.scopeModel.onSecurityActionRequiredPermissionReady = function (api) {
+				securityActionAPI = api;
+				securityActionReadyPromiseDeffered.resolve();
+			};
 
 
-            $scope.scopeModel.saveActionDefinition = function () {
+			$scope.scopeModel.saveActionDefinition = function () {
                 if (isEditMode) {
                     return update();
                 }
@@ -50,9 +58,9 @@
             };
 
         }
-        function load() {
+		function load() {
 
-            loadAllControls();
+			loadAllControls();
 
             function loadAllControls() {
                 $scope.scopeModel.isLoading = true;
@@ -72,17 +80,33 @@
 
                 function loadSettingDirectiveSection() {
                     var loadActionSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
-                    actionSettingsReadyPromiseDeferred.promise.then(function () {
-                        var payload = {
-                            settings: actionDefinition != undefined && actionDefinition.Settings != undefined ? actionDefinition.Settings : undefined
-                        };
+					actionSettingsReadyPromiseDeferred.promise.then(function () {
+						var payload = { context: getContext() };
+
+						payload.settings = actionDefinition != undefined && actionDefinition.Settings != undefined ? actionDefinition.Settings : undefined;
+
 
                         VRUIUtilsService.callDirectiveLoad(actionSettingsDirectiveAPI, payload, loadActionSettingsPromiseDeferred);
                     });
                     return loadActionSettingsPromiseDeferred.promise;
-                }
+				}
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadSettingDirectiveSection]).then(function () {
+				function loadSecurityActionSection() {
+					var loadSecurityActionPromiseDeferred = UtilsService.createPromiseDeferred();
+					securityActionReadyPromiseDeffered.promise.then(function () {
+						var payload;
+						if (actionDefinition != undefined ) {
+							payload = {
+								data: actionDefinition.RequiredPermission
+							};
+						}
+						VRUIUtilsService.callDirectiveLoad(securityActionAPI, payload, loadSecurityActionPromiseDeferred);
+
+					});
+					return loadSecurityActionPromiseDeferred.promise;
+				}
+
+				return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadSettingDirectiveSection, loadSecurityActionSection]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -97,7 +121,8 @@
             return {
                 GenericBEActionId: actionDefinition != undefined ? actionDefinition.GenericBEActionId : UtilsService.guid(),
                 Name: $scope.scopeModel.name,
-                Settings: actionSettingsDirectiveAPI.getData()
+				Settings: actionSettingsDirectiveAPI.getData(),
+				RequiredPermission: !$scope.scopeModel.showSecurityGrid ? null : securityActionAPI.getData()
             };
         }
 
@@ -110,12 +135,27 @@
         }
 
         function update() {
-            var actionDefinition = buildActionDefinitionFromScope();
+			var actionDefinition = buildActionDefinitionFromScope();
             if ($scope.onGenericBEActionDefinitionUpdated != undefined) {
                 $scope.onGenericBEActionDefinitionUpdated(actionDefinition);
             }
             $scope.modalContext.closeModal();
-        }
+		}
+
+		function getContext() {
+			var currentContext = context;
+			if (currentContext == undefined)
+				currentContext = {};
+
+			currentContext.showSecurityGridCallBack = function (showGrid) {
+				if (securityActionAPI != undefined && $scope.scopeModel.showSecurityGrid != showGrid) {
+					securityActionAPI.load({ data: null });
+				}
+				$scope.scopeModel.showSecurityGrid = showGrid;
+			};
+			return currentContext;
+		}
+
     }
 
     appControllers.controller('VR_GenericData_GenericBEActionDefintionController', GenericBEActionDefintionController);

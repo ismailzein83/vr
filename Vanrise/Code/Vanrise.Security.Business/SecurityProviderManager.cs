@@ -189,7 +189,12 @@ namespace Vanrise.Security.Business
             return extensionConfigurationManager.GetExtensionConfigurations<SecurityProviderConfigs>(SecurityProviderConfigs.EXTENSION_TYPE);
         }
 
-        private SecurityProviderInfo SecurityProviderInfoMapper(SecurityProvider securityProvider)
+		public bool DoesUserHaveActionAccess(string actionKind, Guid businessEntityDefinitionId, Guid businessEntityActionTypeId)
+		{
+			IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+			return genericBusinessEntityManager.DoesUserHaveActionAccess( actionKind, businessEntityDefinitionId, businessEntityActionTypeId);
+		}
+		private SecurityProviderInfo SecurityProviderInfoMapper(SecurityProvider securityProvider)
         {
             securityProvider.ThrowIfNull("securityProvider");
             securityProvider.Settings.ThrowIfNull("securityProvider.Settings", securityProvider.SecurityProviderId);

@@ -363,33 +363,41 @@ namespace Vanrise.GenericData.Business
     {
         public Guid GenericBEActionId { get; set; }
         public string Name { get; set; }
-        public GenericBEActionSettings Settings { get; set; }
-    }
-    public abstract class GenericBEActionSettings
+		public GenericBEActionSettings Settings { get; set; }
+		public RequiredPermissionSettings RequiredPermission { get; set; }
+
+	}
+	public abstract class GenericBEActionSettings
     {
         public virtual string ActionTypeName { get; set; }
+		public abstract string ActionKind { get; }
         public abstract Guid ConfigId { get; }
         public virtual bool DoesUserHaveAccess(IGenericBEActionDefinitionCheckAccessContext context)
         {
-            return true;
-        }
-    }
+			return ContextFactory.GetContext().IsAllowed(context.GenericBEAction.RequiredPermission, context.UserId);
+		}
+	}
 
     public interface IGenericBEActionDefinitionCheckAccessContext
     {
         Guid BusinessEntityDefinitionId { get; }
 
         int UserId { get; }
-    }
+
+		GenericBEAction GenericBEAction { get; set; }
+	}
 
     public class GenericBEActionDefinitionCheckAccessContext : IGenericBEActionDefinitionCheckAccessContext
     {
         public Guid BusinessEntityDefinitionId { get; set; }
 
         public int UserId { get; set; }
-    }
 
-    public interface IGenericBEViewDefinitionCheckAccessContext
+		public GenericBEAction GenericBEAction { get; set; }
+
+	}
+
+	public interface IGenericBEViewDefinitionCheckAccessContext
     {
         Guid BusinessEntityDefinitionId { get; }
 

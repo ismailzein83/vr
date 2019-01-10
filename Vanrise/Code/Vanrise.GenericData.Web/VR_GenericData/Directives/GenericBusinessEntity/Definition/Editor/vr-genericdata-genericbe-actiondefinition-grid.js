@@ -76,7 +76,8 @@ app.directive("vrGenericdataGenericbeActiondefinitionGrid", ["UtilsService", "VR
                             actions.push({
                                 GenericBEActionId: currentItem.GenericBEActionId,
                                 Name: currentItem.Name,
-                                Settings: currentItem.Settings
+								Settings: currentItem.Settings,
+								RequiredPermission: currentItem.RequiredPermission
                             });
                         }
                     }
@@ -119,10 +120,10 @@ app.directive("vrGenericdataGenericbeActiondefinitionGrid", ["UtilsService", "VR
                 };
             }
 
-            function editAction(actionObj) {
-                var onActionUpdated = function (action) {
+			function editAction(actionObj) {
+				var onActionUpdated = function (action) {
                     var index = ctrl.datasource.indexOf(actionObj);
-                    ctrl.datasource[index] = action;
+					ctrl.datasource[index] = action;
                 };
                 VR_GenericData_GenericBEDefinitionService.editGenericBEActionDefinition(onActionUpdated, actionObj, getContext());
             }

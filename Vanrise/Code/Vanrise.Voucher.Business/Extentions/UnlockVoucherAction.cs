@@ -15,5 +15,7 @@ namespace Vanrise.Voucher.Business
         }
         public override string ActionTypeName { get { return "UnlockVoucher"; } }
 
-    }
+		public override string ActionKind  { get { return "UnlockVoucherAction"; }
+}
+	}
 }

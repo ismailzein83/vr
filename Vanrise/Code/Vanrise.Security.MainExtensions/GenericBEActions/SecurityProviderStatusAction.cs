@@ -16,5 +16,6 @@ namespace Vanrise.Security.MainExtensions.GenericBEActions
         public bool SetEnable { get; set; }
         public override string ActionTypeName { get { return "SecurityProviderStatus"; } }
 
-    }
+		public override string ActionKind { get { return "SecurityProviderStatusAction"; } }
+	}
 }

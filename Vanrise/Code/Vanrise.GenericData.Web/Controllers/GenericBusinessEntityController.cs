@@ -76,7 +76,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("DeleteGenericBusinessEntity")]
         public object DeleteGenericBusinessEntity(DeleteGenericBusinessEntityInput input)
         {
-            if (!DoesUserHaveDeleteAccess(input.BusinessEntityDefinitionId))
+            if (!_manager.DoesUserHaveActionAccess("Delete", input.BusinessEntityDefinitionId,input.BusinessEntityActionTypeId))
                 return GetUnauthorizedResponse();
 
             return _manager.DeleteGenericBusinessEntity(input);

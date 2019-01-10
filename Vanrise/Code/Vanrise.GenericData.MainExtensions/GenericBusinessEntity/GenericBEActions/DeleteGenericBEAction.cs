@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.GenericData.MainExtensions
 {
@@ -15,9 +16,7 @@ namespace Vanrise.GenericData.MainExtensions
         }
         public override string ActionTypeName { get { return "DeleteGenericBEAction"; } }
 
-        public override bool DoesUserHaveAccess(IGenericBEActionDefinitionCheckAccessContext context)
-        {
-            return new GenericBusinessEntityManager().DoesUserHaveDeleteAccess(context.BusinessEntityDefinitionId);
-        }
-    }
+		public override string ActionKind { get { return "Delete"; } }
+
+	}
 }

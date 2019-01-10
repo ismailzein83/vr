@@ -51,18 +51,20 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "GetDefaultSecurityProviderId"));
         }
 
-        function ChangeSecurityProviderStatus(securityProviderId, isEnabled) {
+		function ChangeSecurityProviderStatus(securityProviderId, isEnabled, securitActionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "ChangeSecurityProviderStatus"),
                 {
                     securityProviderId: securityProviderId,
-                    isEnabled: isEnabled
+					isEnabled: isEnabled,
+					securitActionId: securitActionId
                 }
                 );
         }
-         function SetDefaultSecurityProvider(securityProviderId) {
+		function SetDefaultSecurityProvider(securityProviderId, securitActionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, "SetDefaultSecurityProvider"),
                 {
-                    securityProviderId: securityProviderId
+					securityProviderId: securityProviderId,
+					securitActionId: securitActionId
                 }
             );
         }

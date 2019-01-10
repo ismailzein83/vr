@@ -11,5 +11,7 @@ namespace Vanrise.GenericData.Entities
         public List<object> GenericBusinessEntityIds { get; set; }
 
         public Guid BusinessEntityDefinitionId { get; set; }
+
+		public Guid BusinessEntityActionTypeId { get; set; }
     }
 }

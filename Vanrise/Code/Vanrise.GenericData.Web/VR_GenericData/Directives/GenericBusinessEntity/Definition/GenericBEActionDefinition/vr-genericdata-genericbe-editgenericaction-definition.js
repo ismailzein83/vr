@@ -30,7 +30,10 @@
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
+				api.load = function (payload) {
+					var context = payload.context;
+					if (context != undefined && context.showSecurityGridCallBack != undefined && typeof (context.showSecurityGridCallBack) == 'function')
+						context.showSecurityGridCallBack(false);
                 };
 
 

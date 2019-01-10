@@ -15,5 +15,6 @@ namespace Vanrise.GenericData.Entities
         //void SetCacheExpired(Guid businessEntityDefinitionId);
         UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntityToUpdate genericBusinessEntityToUpdate);
         GenericBusinessEntityDetail GetGenericBusinessEntityDetail(Object genericBusinessEntityId, Guid businessEntityDefinitionId);
-    }
+		bool DoesUserHaveActionAccess(string actionKind, Guid BusinessEntityDefinitionId, Guid businessEntityActionTypeId);
+	}
 }

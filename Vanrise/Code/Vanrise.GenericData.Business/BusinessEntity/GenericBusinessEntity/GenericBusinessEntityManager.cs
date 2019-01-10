@@ -969,12 +969,22 @@ namespace Vanrise.GenericData.Business
             return file.Content;
         }
 
+		public GenericBEAction GetGenericBEAction(Guid businessEntityDefinitionId,Guid actionId)
+		{
+			var accountBEDefinitionSettings = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+			if (accountBEDefinitionSettings != null && accountBEDefinitionSettings.GenericBEActions != null)
+			{
+				return accountBEDefinitionSettings.GenericBEActions.FindRecord(x => x.GenericBEActionId == actionId);
+			}
+			return null;
+		}
 
-        #endregion
 
-        #region Private Methods
+		#endregion
 
-        private bool UpdateStatusHistoryIfAvailable(Guid businessEntityDefinitionId, GenericBusinessEntity genericBusinessEntity, object genericBusinessEntityId)
+		#region Private Methods
+
+		private bool UpdateStatusHistoryIfAvailable(Guid businessEntityDefinitionId, GenericBusinessEntity genericBusinessEntity, object genericBusinessEntityId)
         {
             var statusFieldNames = _genericBEDefinitionManager.GetStatusFieldNames(businessEntityDefinitionId);
             BusinessEntityStatusHistoryManager businessEntityStatusHistoryManager = new BusinessEntityStatusHistoryManager();
@@ -1178,7 +1188,7 @@ namespace Vanrise.GenericData.Business
             genericBusinessEntityDetail.FieldValues = new GenericBusinessEntityValues();
             var dataRecordTypeFields = _genericBEDefinitionManager.GetDataRecordTypeFieldsByBEDefinitionId(businessEntityDefinitionId);
 
-            foreach (var fieldValue in genericBusinessEntity.FieldValues)
+			foreach (var fieldValue in genericBusinessEntity.FieldValues)
             {
                 var dataRecordTypeField = dataRecordTypeFields.FindRecord(x => x.Name == fieldValue.Key);
                 if (dataRecordTypeField != null)
@@ -1191,11 +1201,6 @@ namespace Vanrise.GenericData.Business
                 }
             }
 
-            var actionContext = new GenericBEActionDefinitionCheckAccessContext
-            {
-                BusinessEntityDefinitionId = businessEntityDefinitionId,
-                UserId = SecurityContext.Current.GetLoggedInUserId()
-            };
             var viewContext = new GenericBEViewDefinitionCheckAccessContext
             {
                 BusinessEntityDefinitionId = businessEntityDefinitionId,
@@ -1212,8 +1217,15 @@ namespace Vanrise.GenericData.Business
                     var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
                     GenericBEActionFilterConditionContext genericBEActionFilterConditionContext = new GenericBEActionFilterConditionContext { Entity = genericBusinessEntity, DefinitionSettings = genericBEDefinitionSetting };
                     foreach (var genericBEGridAction in gridDefinition.GenericBEGridActions)
-                    {
-                        if (genericBEGridAction.FilterCondition == null || genericBEGridAction.FilterCondition.IsFilterMatch(genericBEActionFilterConditionContext))
+					{
+						var actionContext = new GenericBEActionDefinitionCheckAccessContext
+						{
+							BusinessEntityDefinitionId = businessEntityDefinitionId,
+							UserId = SecurityContext.Current.GetLoggedInUserId(),
+							GenericBEAction= GetGenericBEAction(businessEntityDefinitionId, genericBEGridAction.GenericBEActionId)
+						};
+
+						if (genericBEGridAction.FilterCondition == null || genericBEGridAction.FilterCondition.IsFilterMatch(genericBEActionFilterConditionContext))
                         {
 
                             var genericBeAction = genericBeActions.GetRecord(genericBEGridAction.GenericBEActionId);
@@ -1298,10 +1310,36 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
-        #endregion
+		#endregion
 
-        #region security
-        public bool DoesUserHaveViewAccess(int userId, List<Guid> genericBeDefinitionIds)
+		#region security
+		public bool DoesUserHaveActionAccess(string actionKind, Guid BusinessEntityDefinitionId, Guid businessEntityActionTypeId)
+		{
+			int userId = SecurityContext.Current.GetLoggedInUserId();
+			return DoesUserHaveActionAccess(actionKind, userId, BusinessEntityDefinitionId, businessEntityActionTypeId);
+		}
+		public bool DoesUserHaveActionAccess(string actionKind, int userId, Guid BusinessEntityDefinitionId, Guid ActionTypeId)
+		{
+
+			var genericBEaction = this.GetGenericBEAction(BusinessEntityDefinitionId, ActionTypeId);
+			genericBEaction.ThrowIfNull("BusinrAction ", ActionTypeId);
+			genericBEaction.Settings.ThrowIfNull("Business Entity Action Settings", ActionTypeId);
+
+			var context = new GenericBEActionDefinitionCheckAccessContext
+			{
+				UserId = userId,
+				BusinessEntityDefinitionId = BusinessEntityDefinitionId,
+				GenericBEAction = genericBEaction
+			};
+
+			if (actionKind != genericBEaction.Settings.ActionKind || !genericBEaction.Settings.DoesUserHaveAccess(context))
+				return false;
+			return true;
+		}
+
+
+
+		public bool DoesUserHaveViewAccess(int userId, List<Guid> genericBeDefinitionIds)
         {
             foreach (var id in genericBeDefinitionIds)
             {

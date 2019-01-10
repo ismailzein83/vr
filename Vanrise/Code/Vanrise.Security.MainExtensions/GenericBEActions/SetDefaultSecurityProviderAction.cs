@@ -13,9 +13,7 @@ namespace Vanrise.Security.MainExtensions.GenericBEActions
 
         public override string ActionTypeName { get { return "SetDefaultSecurityProviderAction"; } }
 
-        public override bool DoesUserHaveAccess(IGenericBEActionDefinitionCheckAccessContext context)
-        {
-            return new GenericBusinessEntityManager().DoesUserHaveEditAccess(context.UserId, context.BusinessEntityDefinitionId);
-        }
+		public override string ActionKind { get { return "SetDefaultSecurityProvider"; } }
+
     }
 }
