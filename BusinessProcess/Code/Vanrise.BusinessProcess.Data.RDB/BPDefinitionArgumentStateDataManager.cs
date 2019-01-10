@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
@@ -66,14 +67,17 @@ namespace Vanrise.BusinessProcess.Data.RDB
             if (effectedRows <= 0)
             {
                 var queryContext2 = new RDBQueryContext(GetDataProvider());
+                //try
+                //{
+                    var insertQuery = queryContext2.AddInsertQuery();
+                    insertQuery.IntoTable(TABLE_NAME);
+                    insertQuery.Column(COL_BPDefinitionID).Value(bpDefinitionArgumentState.BPDefinitionID);
+                    insertQuery.Column(COL_InputArgument).Value(serializedInputArguments);
 
-                var insertQuery = queryContext2.AddInsertQuery();
-                insertQuery.IntoTable(TABLE_NAME);
-                insertQuery.Column(COL_BPDefinitionID).Value(bpDefinitionArgumentState.BPDefinitionID);
-                insertQuery.Column(COL_InputArgument).Value(serializedInputArguments);
-
-                effectedRows = queryContext2.ExecuteNonQuery();
-            }
+                    effectedRows = queryContext2.ExecuteNonQuery();
+                }
+            //    catch (Exception ex) { }
+            //}
             return effectedRows > 0;
         }
 
