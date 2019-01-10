@@ -65,7 +65,7 @@
     <Compile Include="StyleDefinitionDataManager.cs" />
     <Compile Include="TypeDataManager.cs" />
     <Compile Include="VRActionAuditDataManager.cs" />
-    <!--<Compile Include="VRActionAuditLKUPDataManager.cs" />-->
+    <Compile Include="VRActionAuditLKUPDataManager.cs" />
     <Compile Include="VRApplicationVisibilityDataManager.cs" />
     <Compile Include="VRCommentDataManager.cs" />
     <Compile Include="VRConnectionDataManager.cs" />
