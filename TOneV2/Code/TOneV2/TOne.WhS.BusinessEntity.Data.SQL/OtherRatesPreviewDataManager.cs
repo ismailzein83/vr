@@ -16,11 +16,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
 
         }
-        public IEnumerable<SalePricelistRateChange> GetFilteredRatesPreviewByProcessInstanceId(int processInstanceId,string zoneName,int customerId)
+        public IEnumerable<SalePricelistRateChange> GetFilteredRatesPreviewByProcessInstanceId(int processInstanceId, string zoneName, int customerId)
         {
             return GetItemsSP("TOneWhS_BE.sp_SalePriceListNew_GetPreviewsByProcessInstanceId", OtherRatePreviewMapper, processInstanceId, zoneName, customerId);
         }
-        public IEnumerable<SalePricelistRateChange> GetFilteredRatesPreviewByPriceListId(int pricelistId,string zoneName)
+        public IEnumerable<SalePricelistRateChange> GetFilteredRatesPreviewByPriceListId(int pricelistId, string zoneName)
         {
             return GetItemsSP("TOneWhS_BE.sp_SalePriceListNew_GetPreviewsByPricelistId", OtherRatePreviewMapper, pricelistId, zoneName);
         }
@@ -32,7 +32,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 RateTypeId = GetReaderValue<int?>(reader, "RateTypeId"),
                 RecentRate = GetReaderValue<decimal?>(reader, "RecentRate"),
                 Rate = GetReaderValue<decimal>(reader, "Rate"),
-                ChangeType = (RateChangeType)GetReaderValue<byte>(reader, "Change"),
+                ChangeType = (RateChangeType)GetReaderValue<int>(reader, "Change"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyId"),
