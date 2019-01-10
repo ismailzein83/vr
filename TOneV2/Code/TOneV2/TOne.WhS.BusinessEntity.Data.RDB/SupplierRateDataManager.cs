@@ -92,7 +92,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<SupplierRate> GetFilteredSupplierRates(SupplierRateQuery input, DateTime effectiveOn)
         {
-
+            return null;
         }
 
         public IEnumerable<SupplierRate> GetFilteredSupplierPendingRates(SupplierRateQuery input, DateTime effectiveOn)
