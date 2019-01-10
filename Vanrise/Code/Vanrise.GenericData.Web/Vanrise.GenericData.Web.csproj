@@ -227,6 +227,10 @@
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationDefinition\vr-genericdata-beparentchildrelationdefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\Templates\BEParentChildRelationGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\vr-genericdata-beparentchildrelation-grid.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\ListEditorDefinitionSettingTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\ListEditorRuntimeSettingTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-listeditor-definition.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-listeditor-runtime.js" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\Templates\CDRCorrelationDefinitionSettings.html" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\CDRCorrelation\vr-genericdata-cdrcorrelationdefinition-settings.js" />
