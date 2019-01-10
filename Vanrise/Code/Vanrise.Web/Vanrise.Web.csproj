@@ -1209,14 +1209,14 @@
     <Content Include="Client\Styles\Styles.css" />
     <Content Include="Client\CSViews\Home\Index-flat.cshtml" />
     <Content Include="Client\CSViews\Security\Login-flat.cshtml" />
-    <None Include="Client\Themes\theme-extented-blue.css.exclude" />
-    <Content Include="Client\Themes\theme-extented-INSOFT.css.exclude" />
-    <Content Include="Client\Themes\theme-extented-Zebra.css.exclude" />
-    <None Include="Client\Themes\theme-extented-red.css.exclude" />
-    <None Include="Client\Themes\theme-extented-green.css.exclude" />
-    <None Include="Client\Themes\theme-extented-cloudXPoint.css.exclude" />
-    <None Include="Client\Themes\theme-extented-nTegra.css.exclude" />
-    <Content Include="Client\Themes\theme-extented.css" />
+    <None Include="Client\Themes\theme-extended-blue.css.exclude" />
+    <Content Include="Client\Themes\theme-extended-INSOFT.css.exclude" />
+    <Content Include="Client\Themes\theme-extended-Zebra.css.exclude" />
+    <None Include="Client\Themes\theme-extended-red.css.exclude" />
+    <None Include="Client\Themes\theme-extended-green.css.exclude" />
+    <None Include="Client\Themes\theme-extended-cloudXPoint.css.exclude" />
+    <None Include="Client\Themes\theme-extended-nTegra.css.exclude" />
+    <Content Include="Client\Themes\theme-extended.css" />
     <Content Include="Client\Themes\theme.css" />
     <Content Include="Client\Styles\waves.css" />
     <Content Include="Client\Templates\Grid\CellAction.html" />
@@ -1271,7 +1271,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Client\Themes\theme-extented-Ogero.css.exclude" />
+    <Content Include="Client\Themes\theme-extended-Ogero.css.exclude" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Client\FontStyle\fonts\BoldItalic\OpenSans-BoldItalic.eot" />
