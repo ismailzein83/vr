@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
-
+using Vanrise.Entities;
 namespace Vanrise.Data.RDB
 {
     internal class RDBColumnExpression : BaseRDBExpression

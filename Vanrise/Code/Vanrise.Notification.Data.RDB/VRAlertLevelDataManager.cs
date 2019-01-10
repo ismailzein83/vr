@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.Notification.Entities;
 using Vanrise.Notification.Data;
 using Vanrise.Data.RDB;
-
+using Vanrise.Entities;
 namespace Vanrise.Notification.Data.RDB
 {
 

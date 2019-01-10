@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
-
+using Vanrise.Entities;
 namespace Vanrise.Data.RDB
 {
     public class RDBTempTableQuery : BaseRDBQuery, IRDBTableQuerySource
@@ -33,7 +33,7 @@ namespace Vanrise.Data.RDB
         {
             AddColumn(columnName, type, size, precision, false);
         }
-
+         
         public void AddColumn(string columnName, RDBDataType type, int? size, int? precision, bool isPrimaryKey)
         {
             this._columns.Add(columnName, new RDBTempTableColumnDefinition

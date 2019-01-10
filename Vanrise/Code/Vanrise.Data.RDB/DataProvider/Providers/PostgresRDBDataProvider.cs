@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Npgsql;
-
+using Vanrise.Entities;
 namespace Vanrise.Data.RDB.DataProvider.Providers
 {
     public class PostgresRDBDataProvider : CommonRDBDataProvider

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Security.Entities;
 using Vanrise.Data.RDB;
-
+using Vanrise.Entities;
 namespace Vanrise.Security.Data.RDB
 {
     public class SystemActionDataManager : ISystemActionDataManager

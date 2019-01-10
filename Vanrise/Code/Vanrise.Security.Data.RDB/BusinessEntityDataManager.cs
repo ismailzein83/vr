@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Data.RDB;
 using Vanrise.Security.Entities;
-
+using Vanrise.Entities;
 namespace Vanrise.Security.Data.RDB
 {
     public class BusinessEntityDataManager : IBusinessEntityDataManager

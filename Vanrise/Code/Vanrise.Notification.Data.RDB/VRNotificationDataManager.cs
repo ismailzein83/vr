@@ -7,7 +7,7 @@
 //using Vanrise.Notification.Entities;
 //using Vanrise.Common;
 //using System.Data;
-
+//using Vanrise.Entities;
 //namespace Vanrise.Notification.Data.RDB
 //{
 //    public class VRNotificationDataManager : IVRNotificationDataManager //timestamp column had to be used in this table

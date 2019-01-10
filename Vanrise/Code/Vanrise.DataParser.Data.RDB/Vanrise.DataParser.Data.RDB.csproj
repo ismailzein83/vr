@@ -65,6 +65,10 @@
       <Project>{91d049e3-d276-4ac0-8ac1-3bf0bbe84751}</Project>
       <Name>Vanrise.DataParser.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

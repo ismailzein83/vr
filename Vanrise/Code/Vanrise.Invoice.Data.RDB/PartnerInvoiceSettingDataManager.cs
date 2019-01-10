@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.RDB;
 using Vanrise.Invoice.Entities;
-
+using Vanrise.Entities;
 namespace Vanrise.Invoice.Data.RDB
 {
     public class PartnerInvoiceSettingDataManager : IPartnerInvoiceSettingDataManager

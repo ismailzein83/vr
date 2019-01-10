@@ -4,7 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using Vanrise.Data.RDB;
+using Vanrise.Entities;
 namespace Vanrise.Common
 {
     public class RDBDataTypeManager
@@ -31,11 +31,5 @@ namespace Vanrise.Common
             return rdbDataTypeInfo;
         }
     }
-    public class RDBDataTypeInfo
-    {
-        public RDBDataType Value { get; set; }
-        public string Description { get; set; }
-        public bool RequireSize { get; set; }
-        public bool RequirePrecision { get; set; }
-    }
+   
 }

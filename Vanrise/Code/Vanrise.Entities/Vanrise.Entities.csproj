@@ -71,6 +71,8 @@
     <Compile Include="DBReplication\DBReplicationPreInsertConfig.cs" />
     <Compile Include="File\VRRemoteFileInfo.cs" />
     <Compile Include="ProcessState.cs" />
+    <Compile Include="RDBDataType\RDBDataType.cs" />
+    <Compile Include="RDBDataType\RDBDataTypeInfo.cs" />
     <Compile Include="StatusDefinition\StatusDefinitionStyle.cs" />
     <Compile Include="Tools\GeneratedScriptItem.cs" />
     <Compile Include="VRAPIDiscovery.cs" />

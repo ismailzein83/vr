@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,6 +63,10 @@
     <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
       <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
       <Name>Vanrise.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Notification.Data\Vanrise.Notification.Data.csproj">
       <Project>{c425f563-5869-495c-b4fb-e39b6ab48b82}</Project>

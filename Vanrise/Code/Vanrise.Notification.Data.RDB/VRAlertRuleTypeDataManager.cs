@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.RDB;
 using Vanrise.Notification.Entities;
-
+using Vanrise.Entities;
 namespace Vanrise.Notification.Data.RDB
 {
     public class VRAlertRuleTypeDataManager : IVRAlertRuleTypeDataManager

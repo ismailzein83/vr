@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
-
+using Vanrise.Entities;
 namespace Vanrise.Analytic.Data.RDB
 {
     public class RDBAnalyticDataProvider : AnalyticDataProvider

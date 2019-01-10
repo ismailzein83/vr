@@ -9,7 +9,7 @@ using Vanrise.Common;
 using Vanrise.AccountBalance.Data.RDB;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Data.RDB;
-
+using Vanrise.Entities;
 namespace Vanrise.Invoice.Data.RDB
 {
     public class InvoiceDataManager : IInvoiceDataManager

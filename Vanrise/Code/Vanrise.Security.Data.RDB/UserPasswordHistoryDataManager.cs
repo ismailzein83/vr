@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.RDB;
 using Vanrise.Security.Entities;
-
+using Vanrise.Entities;
 namespace Vanrise.Security.Data.RDB
 {
     public class UserPasswordHistoryDataManager : IUserPasswordHistoryDataManager

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.RDB;
 using Vanrise.GenericData.Entities.ExpressionBuilder;
-
+using Vanrise.Entities;
 namespace Vanrise.GenericData.Data.RDB
 {
     public class ExpressionBuilderConfigDataManager : IExpressionBuilderConfigDataManager

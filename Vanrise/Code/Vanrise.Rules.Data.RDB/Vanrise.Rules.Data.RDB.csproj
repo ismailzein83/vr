@@ -56,6 +56,10 @@
       <Project>{2d7a8e74-a563-4752-866b-40e8fe14c7bc}</Project>
       <Name>Vanrise.Data.RDB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Rules.Data\Vanrise.Rules.Data.csproj">
       <Project>{bd35c0bc-9d20-48ff-a5b5-64ebb656ba19}</Project>
       <Name>Vanrise.Rules.Data</Name>

@@ -7,7 +7,7 @@ using Vanrise.Data.RDB;
 using Vanrise.GenericData.Data.SQL;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Entities.ExpressionBuilder;
-
+using Vanrise.Entities;
 namespace Vanrise.GenericData.Data.RDB
 {
     public class DataRecordTypeDataManager : IDataRecordTypeDataManager

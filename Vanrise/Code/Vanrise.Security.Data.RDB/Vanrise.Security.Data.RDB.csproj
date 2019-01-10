@@ -50,6 +50,9 @@
     <Reference Include="Vanrise.Data.RDB">
       <HintPath>..\Output\Vanrise.Data.RDB.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Data">
       <HintPath>..\Output\Vanrise.Security.Data.dll</HintPath>
     </Reference>

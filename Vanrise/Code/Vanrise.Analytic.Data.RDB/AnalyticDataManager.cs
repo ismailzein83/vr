@@ -7,7 +7,7 @@ using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.GenericData.Data.RDB;
-
+using Vanrise.Entities;
 namespace Vanrise.Analytic.Data.RDB
 {
     /// <summary>

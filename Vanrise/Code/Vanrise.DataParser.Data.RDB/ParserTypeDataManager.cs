@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.DataParser.Entities;
-
+using Vanrise.Entities;
 namespace Vanrise.DataParser.Data.RDB
 {
     public class ParserTypeDataManager : IParserTypeDataManager

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Data.RDB;
 using Vanrise.GenericData.Data.SQL;
 using Vanrise.GenericData.Entities;
-
+using Vanrise.Entities;
 namespace Vanrise.GenericData.Data.RDB
 {
     public class DataStoreDataManager : IDataStoreDataManager

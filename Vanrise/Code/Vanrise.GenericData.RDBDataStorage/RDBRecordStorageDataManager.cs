@@ -8,7 +8,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Data.RDB;
-
+using Vanrise.Entities;
 namespace Vanrise.GenericData.RDBDataStorage
 {
     public class RDBRecordStorageDataManager : IDataRecordDataManager, ISummaryRecordDataManager

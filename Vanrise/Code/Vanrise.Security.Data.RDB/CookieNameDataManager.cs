@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.Data.RDB;
-
+using Vanrise.Entities;
 namespace Vanrise.Security.Data.RDB
 {
     public class CookieNameDataManager : ICookieNameDataManager

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.RDB;
 using Vanrise.GenericData.Transformation.Entities;
-
+using Vanrise.Entities;
 namespace Vanrise.GenericData.Transformation.Data.RDB
 {
     public class DataTransformationDefinitionDataManager : IDataTransformationDefinitionDataManager
