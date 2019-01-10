@@ -3,7 +3,7 @@ using Vanrise.Common;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-
+using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class WHSFinancialAccountDataManager : IWHSFinancialAccountDataManager
@@ -82,7 +82,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (financialAccountToEdit.LastModifiedBy.HasValue)
                 updateQuery.Column(COL_LastModifiedBy).Value(financialAccountToEdit.LastModifiedBy.Value);
 
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
+            //updateQuery.Column(COL_LastModifiedTime).DateNow();
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(financialAccountToEdit.FinancialAccountId);
 
@@ -102,7 +102,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (financialAccount.CarrierAccountId.HasValue)
                 insertQuery.Column(COL_CarrierAccountId).Value(financialAccount.CarrierAccountId.Value);
 
-            insertQuery.Column(COL_FinancialAccountDefinitionId).Value(financialAccount.FinancialAccountId);
+            insertQuery.Column(COL_FinancialAccountDefinitionId).Value(financialAccount.FinancialAccountDefinitionId);
 
             if (financialAccount.Settings != null)
                 insertQuery.Column(COL_FinancialAccountSettings).Value(Serializer.Serialize(financialAccount.Settings));
@@ -141,17 +141,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new WHSFinancialAccount
             {
-                FinancialAccountId = reader.GetInt("ID"),
-                CarrierAccountId = reader.GetNullableInt("CarrierAccountId"),
-                CarrierProfileId = reader.GetNullableInt("CarrierProfileId"),
-                FinancialAccountDefinitionId = reader.GetGuid("FinancialAccountDefinitionId"),
-                Settings = Serializer.Deserialize<WHSFinancialAccountSettings>(reader.GetString("FinancialAccountSettings")),
-                BED = reader.GetDateTime("BED"),
-                EED = reader.GetNullableDateTime("EED"),
-                CreatedTime = reader.GetDateTime("CreatedTime"),
-                CreatedBy = reader.GetNullableInt("CreatedBy"),
-                LastModifiedBy = reader.GetNullableInt("LastModifiedBy"),
-                LastModifiedTime = reader.GetNullableDateTime("LastModifiedTime")
+                FinancialAccountId = reader.GetInt(COL_ID),
+                CarrierAccountId = reader.GetNullableInt(COL_CarrierAccountId),
+                CarrierProfileId = reader.GetNullableInt(COL_CarrierProfileId),
+                FinancialAccountDefinitionId = reader.GetGuid(COL_FinancialAccountDefinitionId),
+                Settings = Serializer.Deserialize<WHSFinancialAccountSettings>(reader.GetString(COL_FinancialAccountSettings)),
+                BED = reader.GetDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED),
+                CreatedTime = reader.GetDateTime(COL_CreatedTime),
+                CreatedBy = reader.GetNullableInt(COL_CreatedBy),
+                LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
+                LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime)
             };
         }
 

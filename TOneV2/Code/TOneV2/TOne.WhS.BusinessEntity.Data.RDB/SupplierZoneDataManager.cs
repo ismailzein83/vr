@@ -2,7 +2,7 @@
 using Vanrise.Common;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
-
+using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SupplierZoneDataManager

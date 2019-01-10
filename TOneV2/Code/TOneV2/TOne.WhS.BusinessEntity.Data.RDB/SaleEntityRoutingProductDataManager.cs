@@ -3,7 +3,7 @@ using System.Linq;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-
+using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SaleEntityRoutingProductDataManager : ISaleEntityRoutingProductDataManager
