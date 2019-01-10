@@ -16,7 +16,6 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData" /S /E /R /y /
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\XBooster\%YYYYMMDD%\Client\Modules\Runtime\"
 xcopy "C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\XBooster\%YYYYMMDD%\Client\Modules\BusinessProcess\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\XBooster\%YYYYMMDD%\Client\Modules\VR_Rules\"
-xcopy "C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\XBooster\%YYYYMMDD%\Client\Modules\VR_GenericData\"
 xcopy "C:\TFS\Xbooster\Code\CDRComparison.Web\CDRComparison" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\XBooster\%YYYYMMDD%\Client\Modules\CDRComparison\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\XBooster\%YYYYMMDD%\Client\Modules\ExcelConversion\"
 xcopy "C:\TFS\Xbooster\Code\XBooster.PriceListConversion.Web\XBooster_PriceListConversion" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\XBooster\%YYYYMMDD%\Client\Modules\XBooster_PriceListConversion\"
