@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Data.RDB;
 using Vanrise.Common;
-
+using Vanrise.Entities;
 namespace TOne.WhS.CodePreparation.Data.RDB
 {
     public class NewSaleZoneRPDataManager : INewSaleZoneRoutingProductDataManager

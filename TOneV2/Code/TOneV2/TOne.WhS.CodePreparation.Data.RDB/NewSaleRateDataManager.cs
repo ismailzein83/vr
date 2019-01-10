@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.Entities;
 using Vanrise.Data.RDB;
 using Vanrise.Common;
-
+using Vanrise.Entities;
 namespace TOne.WhS.CodePreparation.Data.RDB
 {
     public class NewSaleRateDataManager : INewSaleRateDataManager
