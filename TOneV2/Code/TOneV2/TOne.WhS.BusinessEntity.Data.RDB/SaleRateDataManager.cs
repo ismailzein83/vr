@@ -609,7 +609,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 Rate = reader.GetDecimal(COL_Rate),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                RateChange = (RateChangeType)reader.GetInt(COL_Change),
+                RateChange = (RateChangeType)reader.GetIntWithNullHandling(COL_Change),
                 CurrencyId = reader.GetNullableInt(COL_CurrencyID)
             };
         }
