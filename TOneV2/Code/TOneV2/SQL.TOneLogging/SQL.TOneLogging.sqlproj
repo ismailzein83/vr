@@ -94,8 +94,6 @@
     <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_Insert.sql" />
     <Build Include="integration\User Defined Types\SeverityType.sql" />
     <Build Include="integration\User Defined Types\MappingResultType.sql" />
-    <Build Include="integration\Stored Procedures\sp_DataSourceLog_CreateTempByFiltered.sql" />
-    <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_CreateTempByFiltered.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTrackings_GetUpdated.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTrackings_GetBeforeID.sql" />
     <Build Include="bp\Tables\BPValidationMessage.sql" />
@@ -118,6 +116,8 @@
     <Build Include="integration\Functions\ParseStringList.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceSummary_Get.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_GetByDataSource.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_GetFiltered.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceLog_GetFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
