@@ -115,6 +115,7 @@
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\GenericBEDefinitionView.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\HistoryGenericBEDefinitionView.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorDefinitionSetting.cs" />
+    <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\ListEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\StaticEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\TabsContainerEditorDefinitionSetting.cs" />
     <Compile Include="GenericRuleCriteriaFieldValues\BusinessEntityValues.cs" />
