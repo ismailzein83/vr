@@ -311,17 +311,20 @@ namespace NP.IVSwitch.Business
 				RouteOptionsToEdit = new List<RouteTableRouteOptionRuntimeEditor>(),
 			};
 
+			var ivSwitchSync = Helper.GetIvSwitchSync();
+			ivSwitchSync.ThrowIfNull("ivSwitchSync");
+			ivSwitchSync.BlockedAccountMapping.ThrowIfNull("ivSwitchSync.BlockedAccountMapping");
+			int blockedAccount;
+			int.TryParse(Helper.GetIvSwitchSync().BlockedAccountMapping, out blockedAccount);
+
 			RouteTableRoutesToEdit RouteTableRoutesToEdit = new RouteTableRoutesToEdit();
-			RouteTableRoutesToEdit = routeTableRouteDataManager.GetRouteTableRoutesOptions(routeTableId, destination);
+			RouteTableRoutesToEdit = routeTableRouteDataManager.GetRouteTableRoutesOptions(routeTableId, destination, blockedAccount);
 			routeTableRoutesRuntimeEditor.Destination = destination;
 			routeTableRoutesRuntimeEditor.TechPrefix = RouteTableRoutesToEdit.TechPrefix;
 
 			if (routeTableRoutesRuntimeEditor != null && routeTableRoutesRuntimeEditor.RouteOptionsToEdit != null)
 				foreach (var item in RouteTableRoutesToEdit.RouteOptionsToEdit)
 				{
-					int blockedAccount;
-					int.TryParse(Helper.GetIvSwitchSync().BlockedAccountMapping, out blockedAccount);
-
 					if (item.RouteId == blockedAccount)
 					{
 						routeTableRoutesRuntimeEditor.IsBlockedAccount = true;

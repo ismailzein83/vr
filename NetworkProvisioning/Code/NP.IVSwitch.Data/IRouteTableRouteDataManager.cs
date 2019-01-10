@@ -13,7 +13,7 @@ namespace NP.IVSwitch.Data
    {
        List<RouteTableRoute> GetRouteTablesRoutes(RouteTableViewType routeTableViewType,int routeTableId, int limit, string aNumber, string bNumber,string whitelist, List<int> routeIds);
        bool Insert(List<RouteTableRoute> routeTableRoutes,int routeTableId ,bool IsBlockedAccount);
-       RouteTableRoutesToEdit GetRouteTableRoutesOptions(int routeTableId, string destination);
+       RouteTableRoutesToEdit GetRouteTableRoutesOptions(int routeTableId, string destination,int blockedAccountId);
        bool Update(RouteTableRoute routeTableRoute, int routeTableId, bool IsBlockedAccount);
        bool DropRouteTableRoute(int routeTableId);
        bool DeleteRouteTableRoutes(int routeTableId, string destination);
