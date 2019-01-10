@@ -11,7 +11,7 @@ using Vanrise.Data.SQL;
 
 namespace TOne.WhS.CodePreparation.Data.SQL
 {
-    public class NewSalePriceListDataManager : BaseTOneDataManager, INewSalePriceListDataManager
+    public class NewSalePriceListDataManager : BaseTOneDataManager, INewSalePriceListDataManager // this datamanager is not used anymore
     {
         public NewSalePriceListDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
