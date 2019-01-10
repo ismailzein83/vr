@@ -98,9 +98,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new AssignedCarrier
             {
-                CarrierAccountId = reader.GetInt("CarrierAccountId"),
-                UserId = reader.GetIntWithNullHandling("UserId"),
-                RelationType = (CarrierAccountType)reader.GetInt("RelationType")
+                CarrierAccountId = reader.GetInt(COL_CarrierAccountId),
+                UserId = reader.GetIntWithNullHandling(COL_UserId),
+                RelationType = (CarrierAccountType)reader.GetInt(COL_RelationType)
             };
         }
 

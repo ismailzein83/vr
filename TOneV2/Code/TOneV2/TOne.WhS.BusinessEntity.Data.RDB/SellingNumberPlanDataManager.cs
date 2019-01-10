@@ -115,12 +115,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             SellingNumberPlan sellingNumberPlan = new SellingNumberPlan
             {
-                SellingNumberPlanId = reader.GetInt("ID"),
-                Name = reader.GetString("Name"),
-                CreatedTime = reader.GetNullableDateTime("CreatedTime"),
-                CreatedBy = reader.GetNullableInt("CreatedBy"),
-                LastModifiedBy = reader.GetNullableInt("LastModifiedBy"),
-                LastModifiedTime = reader.GetNullableDateTime("LastModifiedTime")
+                SellingNumberPlanId = reader.GetInt(COL_ID),
+                Name = reader.GetString(COL_Name),
+                CreatedTime = reader.GetNullableDateTime(COL_CreatedTime),
+                CreatedBy = reader.GetNullableInt(COL_CreatedBy),
+                LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
+                LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime)
             };
             return sellingNumberPlan;
         }

@@ -118,9 +118,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SalePriceListTemplate
             {
-                SalePriceListTemplateId = reader.GetInt("ID"),
-                Name = reader.GetString("Name"),
-                Settings = Serializer.Deserialize<SalePriceListTemplateSettings>(reader.GetString("Settings"))
+                SalePriceListTemplateId = reader.GetInt(COL_ID),
+                Name = reader.GetString(COL_Name),
+                Settings = Serializer.Deserialize<SalePriceListTemplateSettings>(reader.GetString(COL_Settings))
             };
         }
 

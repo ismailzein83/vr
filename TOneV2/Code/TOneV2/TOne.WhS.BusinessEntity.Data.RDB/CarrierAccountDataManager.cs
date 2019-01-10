@@ -70,7 +70,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             return queryContext.GetItems(CarrierAccountMapper);
         }
@@ -186,22 +186,22 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new CarrierAccount
             {
-                CarrierAccountId = reader.GetInt("ID"),
-                CarrierProfileId = reader.GetInt("CarrierProfileId"),
-                NameSuffix = reader.GetString("NameSuffix"),
-                SourceId = reader.GetString("SourceID"),
-                AccountType = (CarrierAccountType)reader.GetInt("AccountType"),
-                SellingNumberPlanId = reader.GetNullableInt("SellingNumberPlanID"),
-                SellingProductId = reader.GetNullableInt("SellingProductId"),
-                CreatedBy = reader.GetNullableInt("CreatedBy"),
-                LastModifiedBy = reader.GetNullableInt("LastModifiedBy"),
-                LastModifiedTime = reader.GetNullableDateTime("LastModifiedTime"),
-                IsDeleted = reader.GetBooleanWithNullHandling("IsDeleted"),
-                CreatedTime = reader.GetDateTimeWithNullHandling("CreatedTime"),
-                SupplierSettings = Serializer.Deserialize<CarrierAccountSupplierSettings>(reader.GetString("SupplierSettings")),
-                CustomerSettings = Serializer.Deserialize<CarrierAccountCustomerSettings>(reader.GetString("CustomerSettings")),
-                CarrierAccountSettings = Serializer.Deserialize<CarrierAccountSettings>(reader.GetString("CarrierAccountSettings")),
-                ExtendedSettings = Serializer.Deserialize<Dictionary<string, Object>>(reader.GetString("ExtendedSettings"))
+                CarrierAccountId = reader.GetInt(COL_ID),
+                CarrierProfileId = reader.GetInt(COL_CarrierProfileID),
+                NameSuffix = reader.GetString(COL_NameSuffix),
+                SourceId = reader.GetString(COL_SourceID),
+                AccountType = (CarrierAccountType)reader.GetInt(COL_AccountType),
+                SellingNumberPlanId = reader.GetNullableInt(COL_SellingNumberPlanID),
+                SellingProductId = reader.GetNullableInt(COL_SellingProductID),
+                CreatedBy = reader.GetNullableInt(COL_CreatedBy),
+                LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
+                LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime),
+                IsDeleted = reader.GetBooleanWithNullHandling(COL_IsDeleted),
+                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                SupplierSettings = Serializer.Deserialize<CarrierAccountSupplierSettings>(reader.GetString(COL_SupplierSettings)),
+                CustomerSettings = Serializer.Deserialize<CarrierAccountCustomerSettings>(reader.GetString(COL_CustomerSettings)),
+                CarrierAccountSettings = Serializer.Deserialize<CarrierAccountSettings>(reader.GetString(COL_CarrierAccountSettings)),
+                ExtendedSettings = Serializer.Deserialize<Dictionary<string, Object>>(reader.GetString(COL_ExtendedSettings))
             };
         }
 

@@ -83,12 +83,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new CustomerCountry2
             {
-                CustomerCountryId = reader.GetInt("ID"),
-                CustomerId = reader.GetInt("CustomerID"),
-                CountryId = reader.GetInt("CountryID"),
-                BED = reader.GetDateTime("BED"),
-                EED = reader.GetNullableDateTime("EED"),
-                ProcessInstanceId = reader.GetNullableLong("processInstanceId")
+                CustomerCountryId = reader.GetInt(COL_ID),
+                CustomerId = reader.GetInt(COL_CustomerID),
+                CountryId = reader.GetInt(COL_CountryID),
+                BED = reader.GetDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED),
+                ProcessInstanceId = reader.GetNullableLong(COL_ProcessInstanceID)
             };
         }
 

@@ -149,16 +149,16 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new CarrierProfile
             {
-                CarrierProfileId = reader.GetInt("ID"),
-                Name = reader.GetString("Name"),
-                Settings = Serializer.Deserialize<CarrierProfileSettings>(reader.GetString("Settings")),
-                SourceId = reader.GetString("SourceId"),
-                CreatedTime = reader.GetDateTimeWithNullHandling("CreatedTime"),
-                ExtendedSettings = Serializer.Deserialize<Dictionary<string, Object>>(reader.GetString("ExtendedSettings")),
-                IsDeleted = reader.GetBooleanWithNullHandling("IsDeleted"),
-                CreatedBy = reader.GetNullableInt("CreatedBy"),
-                LastModifiedBy = reader.GetNullableInt("LastModifiedBy"),
-                LastModifiedTime = reader.GetNullableDateTime("LastModifiedTime")
+                CarrierProfileId = reader.GetInt(COL_ID),
+                Name = reader.GetString(COL_Name),
+                Settings = Serializer.Deserialize<CarrierProfileSettings>(reader.GetString(COL_Settings)),
+                SourceId = reader.GetString(COL_SourceID),
+                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                ExtendedSettings = Serializer.Deserialize<Dictionary<string, Object>>(reader.GetString(COL_ExtendedSettings)),
+                IsDeleted = reader.GetBooleanWithNullHandling(COL_IsDeleted),
+                CreatedBy = reader.GetNullableInt(COL_CreatedBy),
+                LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
+                LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime)
             };
         }
 

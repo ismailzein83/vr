@@ -14,8 +14,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static string TABLE_ALIAS = "sp";
         static string TABLE_NAME = "TOneWhS_BE_SalePriceList";
         const string COL_ID = "ID";
-        const string COL_OwnerType = "OwnerType";
-        const string COL_OwnerID = "OwnerID";
         const string COL_CurrencyID = "CurrencyID";
         const string COL_EffectiveOn = "EffectiveOn";
         const string COL_PriceListType = "PriceListType";
@@ -30,6 +28,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_PricelistSource = "PricelistSource";
         const string COL_LastModifiedTime = "LastModifiedTime";
 
+        internal const string COL_OwnerType = "OwnerType";
+        internal const string COL_OwnerID = "OwnerID";
 
         static SalePriceListDataManager()
         {
@@ -142,21 +142,21 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             SalePriceList salePriceList = new SalePriceList
             {
-                OwnerId = reader.GetInt("OwnerID"),
-                CurrencyId = reader.GetInt("CurrencyID"),
-                PriceListId = reader.GetInt("ID"),
-                OwnerType = (SalePriceListOwnerType)reader.GetInt("OwnerType"),
-                EffectiveOn = reader.GetDateTimeWithNullHandling("EffectiveOn"),
-                PriceListType = (SalePriceListType?)reader.GetIntWithNullHandling("PriceListType"),
-                ProcessInstanceId = reader.GetLongWithNullHandling("ProcessInstanceID"),
-                FileId = reader.GetLongWithNullHandling("FileID"),
-                CreatedTime = reader.GetDateTimeWithNullHandling("CreatedTime"),
-                IsSent = reader.GetBooleanWithNullHandling("IsSent"),
-                SourceId = reader.GetString("SourceID"),
-                UserId = reader.GetIntWithNullHandling("UserID"),
-                Description = reader.GetString("Description"),
-                PricelistStateBackupId = reader.GetNullableLong("PricelistStateBackupID"),
-                PricelistSource = (SalePricelistSource?)reader.GetIntWithNullHandling("PricelistSource")
+                OwnerId = reader.GetInt(COL_OwnerID),
+                CurrencyId = reader.GetInt(COL_CurrencyID),
+                PriceListId = reader.GetInt(COL_ID),
+                OwnerType = (SalePriceListOwnerType)reader.GetInt(COL_OwnerType),
+                EffectiveOn = reader.GetDateTimeWithNullHandling(COL_EffectiveOn),
+                PriceListType = (SalePriceListType?)reader.GetIntWithNullHandling(COL_PriceListType),
+                ProcessInstanceId = reader.GetLongWithNullHandling(COL_ProcessInstanceID),
+                FileId = reader.GetLongWithNullHandling(COL_FileID),
+                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                IsSent = reader.GetBooleanWithNullHandling(COL_IsSent),
+                SourceId = reader.GetString(COL_SourceID),
+                UserId = reader.GetIntWithNullHandling(COL_UserID),
+                Description = reader.GetString(COL_Description),
+                PricelistStateBackupId = reader.GetNullableLong(COL_PricelistStateBackupID),
+                PricelistSource = (SalePricelistSource?)reader.GetIntWithNullHandling(COL_PricelistSource)
             };
             return salePriceList;
         }
@@ -212,12 +212,22 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
 
         #region Public Methods
-        public void JoinSalePriceList(RDBJoinContext joinContext, string priceListTableAlias, string priceListIdTableCol, string originalTableAlias, string originalTableCol)
+        public void JoinSalePriceList(RDBJoinContext joinContext, string priceListTableAlias, string originalTableAlias, string originalTablePricelistIdCol)
         {
             var joinStatement = joinContext.Join(TABLE_NAME, priceListTableAlias);
             joinStatement.JoinType(RDBJoinType.Inner);
             var joinCondition = joinStatement.On();
-            joinCondition.EqualsCondition(originalTableAlias, originalTableCol, priceListTableAlias, priceListIdTableCol);
+            joinCondition.EqualsCondition(originalTableAlias, originalTablePricelistIdCol, priceListTableAlias, COL_ID);
+        }
+
+        public void SetSelectPriceListIDsQuery(RDBSelectQuery selectQuery, int ownerType, int ownerId)
+        {
+            selectQuery.From(TABLE_NAME,TABLE_ALIAS);
+            selectQuery.SelectColumns().Columns(COL_ID);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(COL_OwnerType).Value(ownerType);
+            whereQuery.EqualsCondition(COL_OwnerID).Value(ownerId);
         }
         #endregion
     }

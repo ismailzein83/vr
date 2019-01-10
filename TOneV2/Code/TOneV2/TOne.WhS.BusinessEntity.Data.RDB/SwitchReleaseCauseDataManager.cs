@@ -136,15 +136,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SwitchReleaseCause
             {
-                ReleaseCode = reader.GetString("ReleaseCode"),
-                SwitchReleaseCauseId = reader.GetInt("ID"),
-                SwitchId = reader.GetIntWithNullHandling("SwitchID"),
-                Settings = Serializer.Deserialize<SwitchReleaseCauseSetting>(reader.GetString("Settings")),
-                SourceId = reader.GetString("SourceID"),
-                CreatedTime = reader.GetDateTimeWithNullHandling("CreatedTime"),
-                CreatedBy = reader.GetNullableInt("CreatedBy"),
-                LastModifiedBy = reader.GetNullableInt("LastModifiedBy"),
-                LastModifiedTime = reader.GetDateTimeWithNullHandling("LastModifiedTime"),
+                ReleaseCode = reader.GetString(COL_ReleaseCode),
+                SwitchReleaseCauseId = reader.GetInt(COL_ID),
+                SwitchId = reader.GetIntWithNullHandling(COL_SwitchID),
+                Settings = Serializer.Deserialize<SwitchReleaseCauseSetting>(reader.GetString(COL_Settings)),
+                SourceId = reader.GetString(COL_SourceID),
+                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                CreatedBy = reader.GetNullableInt(COL_CreatedBy),
+                LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
+                LastModifiedTime = reader.GetDateTimeWithNullHandling(COL_LastModifiedTime)
             };
         }
         #endregion

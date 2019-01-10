@@ -116,10 +116,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             ZoneServiceConfig zoneServiceConfig = new ZoneServiceConfig
             {
-                ZoneServiceConfigId = reader.GetInt("ID"),
-                Symbol = reader.GetString("Symbol"),
-                Settings = Serializer.Deserialize<ServiceConfigSetting>(reader.GetString("Settings")),
-                SourceId = reader.GetString("SourceId")
+                ZoneServiceConfigId = reader.GetInt(COL_ID),
+                Symbol = reader.GetString(COL_Symbol),
+                Settings = Serializer.Deserialize<ServiceConfigSetting>(reader.GetString(COL_Settings)),
+                SourceId = reader.GetString(COL_SourceID)
             };
             return zoneServiceConfig;
         }

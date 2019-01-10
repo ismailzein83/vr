@@ -133,14 +133,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new Switch
             {
-                SwitchId = reader.GetInt("ID"),
-                Name = reader.GetString("Name"),
-                SourceId = reader.GetString("SourceID"),
-                Settings = Serializer.Deserialize<SwitchSettings>(reader.GetString("Settings")),
-                CreatedTime = reader.GetDateTimeWithNullHandling("CreatedTime"),
-                CreatedBy = reader.GetNullableInt("CreatedBy"),
-                LastModifiedBy = reader.GetNullableInt("LastModifiedBy"),
-                LastModifiedTime = reader.GetNullableDateTime("LastModifiedTime")
+                SwitchId = reader.GetInt(COL_ID),
+                Name = reader.GetString(COL_Name),
+                SourceId = reader.GetString(COL_SourceID),
+                Settings = Serializer.Deserialize<SwitchSettings>(reader.GetString(COL_Settings)),
+                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                CreatedBy = reader.GetNullableInt(COL_CreatedBy),
+                LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
+                LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime)
             };
         }
         #endregion

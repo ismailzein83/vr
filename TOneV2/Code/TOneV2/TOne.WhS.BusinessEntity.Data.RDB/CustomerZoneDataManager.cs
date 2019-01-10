@@ -47,13 +47,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #endregion
 
-        #region Members
+        #region ICustomerZoneDataManager Members
 
         public List<CustomerZones> GetAllCustomerZones()
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             return queryContext.GetItems(CustomerZonesMapper);
         }
@@ -94,10 +94,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new CustomerZones
             {
-                CustomerZonesId = reader.GetInt("ID"),
-                CustomerId = reader.GetInt("CustomerID"),
-                Countries = Serializer.Deserialize<List<CustomerCountry>>(reader.GetString("Details")),
-                StartEffectiveTime = reader.GetDateTime("BED")
+                CustomerZonesId = reader.GetInt(COL_ID),
+                CustomerId = reader.GetInt(COL_CustomerID),
+                Countries = Serializer.Deserialize<List<CustomerCountry>>(reader.GetString(COL_Details)),
+                StartEffectiveTime = reader.GetDateTime(COL_BED)
             };
         }
 

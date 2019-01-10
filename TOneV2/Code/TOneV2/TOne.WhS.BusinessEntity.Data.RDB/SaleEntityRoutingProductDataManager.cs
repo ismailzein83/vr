@@ -95,7 +95,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var whereContext = selectQuery.Where();
             whereContext.NullCondition(COL_ZoneID);
 
-            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, COL_BED, COL_EED, effectiveOn);
+            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
 
             return queryContext.GetItems(DefaultRoutingProductMapper);
         }
@@ -118,7 +118,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereContext.EqualsCondition(COL_OwnerID).Value(ownerId);
             whereContext.NotNullCondition(COL_ZoneID);
 
-            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, COL_BED, COL_EED, effectiveOn);
+            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
 
             return queryContext.GetItems(SaleZoneRoutingProductMapper);
         }
@@ -335,12 +335,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new DefaultRoutingProduct
             {
-                SaleEntityRoutingProductId = reader.GetInt("ID"),
-                RoutingProductId = reader.GetInt("RoutingProductID"),
-                OwnerType = (SalePriceListOwnerType)reader.GetInt("OwnerType"),
-                OwnerId = reader.GetInt("OwnerID"),
-                BED = reader.GetDateTime("BED"),
-                EED = reader.GetNullableDateTime("EED")
+                SaleEntityRoutingProductId = reader.GetInt(COL_ID),
+                RoutingProductId = reader.GetInt(COL_RoutingProductID),
+                OwnerType = (SalePriceListOwnerType)reader.GetInt(COL_OwnerType),
+                OwnerId = reader.GetInt(COL_OwnerID),
+                BED = reader.GetDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED)
             };
         }
 
@@ -348,13 +348,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SaleZoneRoutingProduct
             {
-                SaleEntityRoutingProductId = reader.GetInt("ID"),
-                RoutingProductId = reader.GetInt("RoutingProductID"),
-                OwnerType = (SalePriceListOwnerType)reader.GetInt("OwnerType"),
-                OwnerId = reader.GetInt("OwnerID"),
-                BED = reader.GetDateTime("BED"),
-                EED = reader.GetNullableDateTime("EED"),
-                SaleZoneId = reader.GetLongWithNullHandling("ZoneID")
+                SaleEntityRoutingProductId = reader.GetInt(COL_ID),
+                RoutingProductId = reader.GetInt(COL_RoutingProductID),
+                OwnerType = (SalePriceListOwnerType)reader.GetInt(COL_OwnerType),
+                OwnerId = reader.GetInt(COL_OwnerID),
+                BED = reader.GetDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED),
+                SaleZoneId = reader.GetLongWithNullHandling(COL_ZoneID)
             };
         }
 
@@ -434,17 +434,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region Public Methods
         public IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProductsEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
         {
-            var saleZoneDataManager = new SaleZoneDataManager();
+            SaleZoneDataManager saleZoneDataManager = new SaleZoneDataManager();
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinContext = selectQuery.Join();
-            saleZoneDataManager.JoinSaleZone(joinContext, "z", "ID", TABLE_ALIAS, COL_ZoneID);
+            saleZoneDataManager.JoinSaleZone(joinContext, "sz", TABLE_ALIAS, COL_ZoneID);
 
             var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition("z", "SellingNumberPlanID").Value(sellingNumberPlanId);
+            whereQuery.EqualsCondition("z", SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
 
             var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
             orCondition.NullCondition(COL_EED);

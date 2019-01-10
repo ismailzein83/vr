@@ -10,18 +10,20 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
     {
         #region RDB
 
-        static string TABLE_ALIAS = "TOneWhS_BE";
+        static string TABLE_ALIAS = "sz";
         static string TABLE_NAME = "TOneWhS_BE_SaleZone";
         const string COL_ID = "ID";
-        const string COL_SellingNumberPlanID = "SellingNumberPlanID";
-        const string COL_CountryID = "CountryID";
-        const string COL_Name = "Name";
         const string COL_BED = "BED";
         const string COL_EED = "EED";
         const string COL_SourceID = "SourceID";
         const string COL_ProcessInstanceID = "ProcessInstanceID";
         const string COL_LastModifiedTime = "LastModifiedTime";
         const string COL_CreatedTime = "CreatedTime";
+
+        internal const string COL_SellingNumberPlanID = "SellingNumberPlanID";
+        internal const string COL_CountryID = "CountryID";
+        internal const string COL_Name = "Name";
+
         static SaleZoneDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>
@@ -127,13 +129,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SaleZone
             {
-                SaleZoneId = reader.GetLong("ID"),
-                SellingNumberPlanId = reader.GetInt("SellingNumberPlanID"),
-                CountryId = reader.GetInt("CountryID"),
-                Name = reader.GetString("Name"),
-                BED = reader.GetDateTime("BED"),
-                EED = reader.GetNullableDateTime("EED"),
-                SourceId = reader.GetString("SourceID")
+                SaleZoneId = reader.GetLong(COL_ID),
+                SellingNumberPlanId = reader.GetInt(COL_SellingNumberPlanID),
+                CountryId = reader.GetInt(COL_CountryID),
+                Name = reader.GetString(COL_Name),
+                BED = reader.GetDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED),
+                SourceId = reader.GetString(COL_SourceID)
             };
         }
         SaleZoneInfo SaleZoneInfoMapper(IRDBDataReader reader)
@@ -169,12 +171,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #region Public Methods
 
-        public void JoinSaleZone(RDBJoinContext joinContext, string zoneTableAlias, string zoneTableCol, string originalTableAlias, string originalTableCol)
+        public void JoinSaleZone(RDBJoinContext joinContext, string zoneTableAlias, string originalTableAlias, string originalTableZoneIdCol)
         {
             var joinStatement = joinContext.Join(TABLE_NAME, zoneTableAlias);
             joinStatement.JoinType(RDBJoinType.Inner);
             var joinCondition = joinStatement.On();
-            joinCondition.EqualsCondition(originalTableAlias, originalTableCol, zoneTableAlias, zoneTableCol);
+            joinCondition.EqualsCondition(originalTableAlias, originalTableZoneIdCol, zoneTableAlias, COL_ID);
         }
         #endregion
     }

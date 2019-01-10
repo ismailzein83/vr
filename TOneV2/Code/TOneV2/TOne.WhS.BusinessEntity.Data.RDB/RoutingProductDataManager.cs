@@ -3,69 +3,76 @@ using Vanrise.Common;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
-    public class SellingProductDataManager : ISellingProductDataManager
+    public class RoutingProductDataManager : IRoutingProductDataManager
     {
         #region RDB
 
-        static string TABLE_ALIAS = "sp";
-        static string TABLE_NAME = "TOneWhS_BE_SellingProduct";
+        static string TABLE_ALIAS = "rp";
+        static string TABLE_NAME = "TOneWhS_BE_RoutingProduct";
         const string COL_ID = "ID";
         const string COL_Name = "Name";
-        const string COL_DefaultRoutingProductID = "DefaultRoutingProductID";
         const string COL_SellingNumberPlanID = "SellingNumberPlanID";
         const string COL_Settings = "Settings";
         const string COL_CreatedTime = "CreatedTime";
-        const string COL_CreatedBy = "CreatedBy";
-        const string COL_LastModifiedBy = "LastModifiedBy";
         const string COL_LastModifiedTime = "LastModifiedTime";
 
 
-        static SellingProductDataManager()
+        static RoutingProductDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>
             {
                 {COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
                 {COL_Name, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 255}},
-                {COL_DefaultRoutingProductID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
                 {COL_SellingNumberPlanID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
                 {COL_Settings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar}},
                 {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_CreatedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_LastModifiedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
                 {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
             };
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
-                DBTableName = "SellingProduct",
+                DBTableName = "RoutingProduct",
                 Columns = columns,
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
-
             });
         }
         BaseRDBDataProvider GetDataProvider()
         {
             return RDBDataProviderFactory.CreateProvider("TOneWhS_BE", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
-
         #endregion
 
-        #region ISellingProductDataManager Members
-        public List<SellingProduct> GetSellingProducts()
+        #region IRoutingProductDataManager Members
+
+        public RoutingProduct GetRoutingProduct(int routingProductId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-            return queryContext.GetItems(SellingProductMapper);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(COL_ID).Value(routingProductId);
+
+            return queryContext.GetItem(RoutingProductMapper);
         }
 
-        public bool Insert(SellingProduct sellingProduct, out int insertedId)
+        public IEnumerable<RoutingProduct> GetRoutingProducts()
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+            return queryContext.GetItems(RoutingProductMapper);
+        }
+
+        public bool Insert(RoutingProduct routingProduct, out int insertedId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
@@ -73,19 +80,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             insertQuery.AddSelectGeneratedId();
 
             var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
-            notExistsCondition.EqualsCondition(COL_Name).Value(sellingProduct.Name);
+            notExistsCondition.EqualsCondition(COL_Name).Value(routingProduct.Name);
 
-            insertQuery.Column(COL_Name).Value(sellingProduct.Name);
-            insertQuery.Column(COL_SellingNumberPlanID).Value(sellingProduct.SellingNumberPlanId);
+            insertQuery.Column(COL_Name).Value(routingProduct.Name);
+            insertQuery.Column(COL_SellingNumberPlanID).Value(routingProduct.SellingNumberPlanId);
 
-            if (sellingProduct.Settings != null)
-                insertQuery.Column(COL_Settings).Value(Serializer.Serialize(sellingProduct.Settings));
-
-            if (sellingProduct.CreatedBy.HasValue)
-                insertQuery.Column(COL_CreatedBy).Value(sellingProduct.CreatedBy.Value);
-
-            if (sellingProduct.LastModifiedBy.HasValue)
-                insertQuery.Column(COL_LastModifiedBy).Value(sellingProduct.LastModifiedBy.Value);
+            if (routingProduct.Settings != null)
+                insertQuery.Column(COL_Settings).Value(Serializer.Serialize(routingProduct.Settings));
 
             var returnedValue = queryContext.ExecuteScalar().NullableIntValue;
             if (returnedValue.HasValue)
@@ -97,53 +98,67 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return false;
         }
 
-        public bool Update(SellingProductToEdit sellingProduct)
+        public bool Update(RoutingProductToEdit routingProduct)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.OR);
-            notExistsCondition.EqualsCondition(COL_Name).Value(sellingProduct.Name);
-            notExistsCondition.NotEqualsCondition(COL_ID).Value(sellingProduct.SellingProductId);
+            var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
+            notExistsCondition.NotEqualsCondition(COL_ID).Value(routingProduct.RoutingProductId);
+            notExistsCondition.EqualsCondition(COL_Name).Value(routingProduct.Name);
 
-            updateQuery.Column(COL_Name).Value(sellingProduct.Name);
-            
-            if (sellingProduct.Settings != null)
-                updateQuery.Column(COL_Settings).Value(Serializer.Serialize(sellingProduct.Settings));
-            
-            if (sellingProduct.LastModifiedBy.HasValue)
-                updateQuery.Column(COL_LastModifiedBy).Value(sellingProduct.LastModifiedBy.Value);
-            
+            updateQuery.Column(COL_Name).Value(routingProduct.Name);
+
+            if (routingProduct.Settings != null)
+                updateQuery.Column(COL_Settings).Value(Serializer.Serialize(routingProduct.Settings));
+
             updateQuery.Column(COL_LastModifiedTime).DateNow();
 
-            updateQuery.Where().EqualsCondition(COL_ID).Value(sellingProduct.SellingProductId);
+            updateQuery.Where().EqualsCondition(COL_ID).Value(routingProduct.RoutingProductId);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
 
-        public bool AreSellingProductsUpdated(ref object updateHandle)
+        public bool Delete(int routingProductId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_ID).Value(routingProductId);
+            return queryContext.ExecuteNonQuery() > 0;
+        }
+
+        public bool AreRoutingProductsUpdated(ref object updateHandle)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
+
+        public bool CheckIfRoutingProductHasRelatedSaleEntities(int routingProductId)
+        {
+            var routingProduct = GetRoutingProduct(routingProductId);
+            return routingProduct == null;
+        }
+        #endregion
+
+        #region Not Used Functions
+        public BigResult<RoutingProduct> GetFilteredRoutingProducts(DataRetrievalInput<RoutingProductQuery> input)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         #region Mappers
-        SellingProduct SellingProductMapper(IRDBDataReader reader)
+        Entities.RoutingProduct RoutingProductMapper(IRDBDataReader reader)
         {
-            SellingProduct sellingProductDetail = new SellingProduct
+            return new RoutingProduct
             {
-                SellingProductId = reader.GetInt(COL_ID),
+                RoutingProductId = reader.GetInt(COL_ID),
                 Name = reader.GetString(COL_Name),
                 SellingNumberPlanId = reader.GetInt(COL_SellingNumberPlanID),
-                Settings = Serializer.Deserialize<SellingProductSettings>(reader.GetString(COL_Settings)),
-                CreatedTime = reader.GetNullableDateTime(COL_CreatedTime),
-                CreatedBy = reader.GetNullableInt(COL_CreatedBy),
-                LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
-                LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime)
+                Settings = Serializer.Deserialize<RoutingProductSettings>(reader.GetString(COL_Settings))
             };
-            return sellingProductDetail;
         }
         #endregion
     }

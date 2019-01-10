@@ -5,18 +5,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class BEDataUtility
     {
-        public static void SetEffectiveAfterDateCondition(RDBConditionContext conditionContext, string colBED, string ColEED, DateTime effectiveOn)
+        public static void SetEffectiveAfterDateCondition(RDBConditionContext conditionContext,string tableAlias, string colBED, string ColEED, DateTime effectiveOn)
         {
-            conditionContext.LessOrEqualCondition(colBED).Value(effectiveOn);
-            var orCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            orCondition.NullCondition(ColEED);
-            orCondition.GreaterThanCondition(ColEED).Value(effectiveOn);
+            var andConditionContext = conditionContext.ChildConditionGroup();
+            andConditionContext.LessOrEqualCondition(tableAlias,colBED).Value(effectiveOn);
+            var orCondition = andConditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orCondition.NullCondition(tableAlias, ColEED);
+            orCondition.GreaterThanCondition(tableAlias, ColEED).Value(effectiveOn);
         }
-        private void AddEffectiveAfterDateCondition(RDBConditionContext context, string colBED, string colEED, DateTime effectiveAfter)
+        public static void SetFutureDateCondition(RDBConditionContext context, string tableAlias, string colBED, string colEED, DateTime effectiveAfter)
         {
             var effectiveCondition = context.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            effectiveCondition.NullCondition(colEED);
-            effectiveCondition.GreaterThanCondition(colBED).Value(effectiveAfter);
+            effectiveCondition.NullCondition(tableAlias, colEED);
+            effectiveCondition.GreaterThanCondition(tableAlias, colBED).Value(effectiveAfter);
         }
     }
 }

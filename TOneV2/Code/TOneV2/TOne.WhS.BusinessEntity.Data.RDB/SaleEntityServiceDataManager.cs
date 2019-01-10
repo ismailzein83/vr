@@ -63,7 +63,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereContext.NullCondition(COL_ZoneID);
 
             if (effectiveOn.HasValue)
-                BEDataUtility.SetEffectiveAfterDateCondition(whereContext, COL_BED, COL_EED, effectiveOn.Value);
+                BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
             else
                 whereContext.FalseCondition();//effectiveOn should be required
 
@@ -72,8 +72,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServices(SalePriceListOwnerType ownerType, int ownerId, DateTime? effectiveOn)
         {
-
-            SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
+            var salePriceListDataManager = new SalePriceListDataManager();
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var selectQuery = queryContext.AddSelectQuery();
@@ -81,18 +80,18 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinQuery = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinQuery, "p", "ID", TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(joinQuery, "p", TABLE_ALIAS, COL_PriceListID);
 
             var whereQuery = selectQuery.Where();
             whereQuery.NotNullCondition(COL_ZoneID);
-            whereQuery.EqualsCondition("p", "OwnerType").Value((int)ownerType);
-            whereQuery.EqualsCondition("p", "OwnerType").Value(ownerId);
+            whereQuery.EqualsCondition("p", SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
+            whereQuery.EqualsCondition("p", SalePriceListDataManager.COL_OwnerID).Value(ownerId);
 
             if (effectiveOn.HasValue)
-                BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, COL_BED, COL_EED, effectiveOn.Value);
+                BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
             else
                 whereQuery.FalseCondition();//effectiveOn should be required
-            
+
             return queryContext.GetItems(SaleEntityZoneServiceMapper);
         }
 
@@ -103,17 +102,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<SaleEntityZoneService> GetSaleZonesServicesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
         {
-            var saleZoneDataManager = new SaleZoneDataManager();
+            SaleZoneDataManager saleZoneDataManager = new SaleZoneDataManager();
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinContext = selectQuery.Join();
-            saleZoneDataManager.JoinSaleZone(joinContext, "z", "ID", TABLE_ALIAS, COL_ZoneID);
+            saleZoneDataManager.JoinSaleZone(joinContext, "sz", TABLE_ALIAS, COL_ZoneID);
 
             var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition("z", "SellingNumberPlanID").Value(sellingNumberPlanId);
+            whereQuery.EqualsCondition("z", SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
 
             var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
             orCondition.NullCondition(COL_EED);
@@ -159,11 +158,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SaleEntityDefaultService
             {
-                SaleEntityServiceId = reader.GetInt("ID"),
-                PriceListId = reader.GetInt("PriceListID"),
-                Services = Serializer.Deserialize<List<ZoneService>>(reader.GetString("Services")),
-                BED = reader.GetDateTime("BED"),
-                EED = reader.GetNullableDateTime("EED")
+                SaleEntityServiceId = reader.GetInt(COL_ID),
+                PriceListId = reader.GetInt(COL_PriceListID),
+                Services = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_Services)),
+                BED = reader.GetDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED)
             };
         }
 
@@ -171,12 +170,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SaleEntityZoneService
             {
-                SaleEntityServiceId = reader.GetLong("ID"),
-                PriceListId = reader.GetInt("PriceListID"),
-                ZoneId = reader.GetLongWithNullHandling("ZoneID"),
-                Services = Serializer.Deserialize<List<ZoneService>>(reader.GetString("Services")),
-                BED = reader.GetDateTime("BED"),
-                EED = reader.GetNullableDateTime("EED")
+                SaleEntityServiceId = reader.GetLong(COL_ID),
+                PriceListId = reader.GetInt(COL_PriceListID),
+                ZoneId = reader.GetLongWithNullHandling(COL_ZoneID),
+                Services = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_Services)),
+                BED = reader.GetDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED)
             };
         }
 

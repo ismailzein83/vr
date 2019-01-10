@@ -97,13 +97,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             if (switchConnectivity.Settings != null)
                 insertQuery.Column(COL_Settings).Value(Serializer.Serialize(switchConnectivity.Settings));
-            
+
             if (switchConnectivity.CreatedBy.HasValue)
                 insertQuery.Column(COL_CreatedBy).Value(switchConnectivity.CreatedBy.Value);
 
             if (switchConnectivity.LastModifiedBy.HasValue)
                 insertQuery.Column(COL_LastModifiedBy).Value(switchConnectivity.LastModifiedBy.Value);
-            
+
             var returnedValue = queryContext.ExecuteScalar().NullableIntValue;
             if (returnedValue.HasValue)
             {
@@ -129,7 +129,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             updateQuery.Column(COL_BED).Value(switchConnectivity.BED);
             updateQuery.Column(COL_CarrierAccountID).Value(switchConnectivity.CarrierAccountId);
 
-            if(switchConnectivity.EED.HasValue)
+            if (switchConnectivity.EED.HasValue)
                 updateQuery.Column(COL_EED).Value(switchConnectivity.EED.Value);
 
             if (switchConnectivity.Settings != null)
@@ -153,17 +153,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SwitchConnectivity
             {
-                SwitchConnectivityId = reader.GetInt("ID"),
-                Name = reader.GetString("Name"),
-                SwitchId = reader.GetInt("SwitchId"),
-                Settings = Serializer.Deserialize<SwitchConnectivitySettings>(reader.GetString("Settings")),
-                CarrierAccountId = reader.GetInt("CarrierAccountID"),
-                BED = reader.GetDateTime("BED"),
-                EED = reader.GetNullableDateTime("EED"),
-                CreatedTime = reader.GetDateTimeWithNullHandling("CreatedTime"),
-                CreatedBy = reader.GetNullableInt("CreatedBy"),
-                LastModifiedBy = reader.GetNullableInt("LastModifiedBy"),
-                LastModifiedTime = reader.GetNullableDateTime("LastModifiedTime"),
+                SwitchConnectivityId = reader.GetInt(COL_ID),
+                Name = reader.GetString(COL_Name),
+                SwitchId = reader.GetInt(COL_SwitchID),
+                Settings = Serializer.Deserialize<SwitchConnectivitySettings>(reader.GetString(COL_Settings)),
+                CarrierAccountId = reader.GetInt(COL_CarrierAccountID),
+                BED = reader.GetDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED),
+                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                CreatedBy = reader.GetNullableInt(COL_CreatedBy),
+                LastModifiedBy = reader.GetNullableInt(COL_LastModifiedBy),
+                LastModifiedTime = reader.GetNullableDateTime(COL_LastModifiedTime),
             };
         }
 
