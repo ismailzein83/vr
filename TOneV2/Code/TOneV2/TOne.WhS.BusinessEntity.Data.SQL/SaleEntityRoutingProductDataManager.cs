@@ -192,7 +192,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 SaleEntityRoutingProductId = (long)reader["ID"],
                 RoutingProductId = GetReaderValue<Int32>(reader, "RoutingProductID"),
-                OwnerType = GetReaderValue<SalePriceListOwnerType>(reader, "OwnerType"),
+                OwnerType = (SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
                 OwnerId = (int)reader["OwnerID"],
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED")
@@ -205,7 +205,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 SaleEntityRoutingProductId = (long)reader["ID"],
                 RoutingProductId = GetReaderValue<Int32>(reader, "RoutingProductID"),
-                OwnerType = GetReaderValue<SalePriceListOwnerType>(reader, "OwnerType"),
+                OwnerType = (SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
                 OwnerId = (int)reader["OwnerID"],
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
