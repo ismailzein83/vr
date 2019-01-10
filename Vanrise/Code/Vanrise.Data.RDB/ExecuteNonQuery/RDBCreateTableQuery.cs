@@ -52,6 +52,16 @@ namespace Vanrise.Data.RDB
             AddColumn(columnName, columnName, dataType, null, null, false, false, false);
         }
 
+        public void AddColumn(string columnName, RDBDataType dataType, bool notNullable)
+        {
+            AddColumn(columnName, columnName, dataType, null, null, notNullable, false, false);
+        }
+
+        public void AddColumn(string columnName, RDBDataType dataType, int? size, int? precision, bool notNullable)
+        {
+            AddColumn(columnName, columnName, dataType, size, precision, notNullable, false, false);
+        }
+
         public void AddColumn(string columnName, string dbColumnName, RDBDataType dataType, int? size, int? precision, bool notNullable, bool isPrimaryKey, bool isIdentity)
         {
             if(isIdentity)
