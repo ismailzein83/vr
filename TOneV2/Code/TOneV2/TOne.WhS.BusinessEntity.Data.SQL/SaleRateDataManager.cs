@@ -205,7 +205,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             saleRate.BED = (DateTime)reader["BED"];
             saleRate.EED = GetReaderValue<DateTime?>(reader, "EED");
 
-            saleRate.RateChange = (Entities.RateChangeType)GetReaderValue<byte>(reader, "Change");
+            saleRate.RateChange = (Entities.RateChangeType)GetReaderValue<int>(reader, "Change");
             saleRate.CurrencyId = GetReaderValue<int?>(reader, "CurrencyId");
             return saleRate;
         }
