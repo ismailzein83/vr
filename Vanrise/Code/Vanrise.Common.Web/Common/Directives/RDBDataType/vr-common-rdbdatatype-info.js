@@ -15,7 +15,8 @@ appControllers.directive('vrCommonRdbdatatypeInfo', ['VRNotificationService', 'U
                 ondeselectitem: "=",
                 hideremoveicon: '@',
                 normalColNum: '@',
-                isdisabled: '='
+                isdisabled: '=',
+                label: '@',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -40,16 +41,16 @@ appControllers.directive('vrCommonRdbdatatypeInfo', ['VRNotificationService', 'U
 
 
             var multipleselection = "";
-            var label = "RDB Data Type ";
+            var label = attrs.label;
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
             }
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" datatextfield="Description" datavaluefield="Value" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Schema" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>' +
-                '<vr-columns width="normal" ng-if="ctrl.selectedvalues.RequireSize"><vr-textbox value="scopeModel.size" label="Size" isrequired></vr-textbox></vr-columns>' +
-                '<vr-columns width="normal" ng-if="ctrl.selectedvalues.RequirePrecision"><vr-textbox value="scopeModel.precision" label="Precision" isrequired></vr-textbox></vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" onselectionchanged="scopeModel.onTypeChanged" datatextfield="Description" datavaluefield="Value" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Schema" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>' +
+                '<vr-columns colnum="{{ctrl.normalColNum/2}}" ng-if="ctrl.selectedvalues.RequireSize"><vr-textbox value="scopeModel.size" label="Size" isrequired type="number"></vr-textbox></vr-columns>' +
+                '<vr-columns colnum="{{ctrl.normalColNum/2}}" ng-if="ctrl.selectedvalues.RequirePrecision"><vr-textbox value="scopeModel.precision" label="Precision" isrequired  type="number"></vr-textbox></vr-columns>';
 
         }
 
@@ -58,7 +59,7 @@ appControllers.directive('vrCommonRdbdatatypeInfo', ['VRNotificationService', 'U
 
             $scope.scopeModel = {};
             var selectorAPI;
-
+            var typeSelectedPromise;
             function initializeController() {
 
 
@@ -67,6 +68,20 @@ appControllers.directive('vrCommonRdbdatatypeInfo', ['VRNotificationService', 'U
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
+                };
+
+                $scope.scopeModel.onTypeChanged = function (value) {
+                    if (selectorAPI) {
+                        if (value) {
+                            if (typeSelectedPromise != undefined) {
+                                typeSelectedPromise.resolve();
+                            }
+                            else {
+                                $scope.scopeModel.size = undefined;
+                                $scope.scopeModel.precision = undefined;
+                            }
+                        }
+                    }
                 };
             }
 
@@ -89,6 +104,7 @@ appControllers.directive('vrCommonRdbdatatypeInfo', ['VRNotificationService', 'U
                                 ctrl.datasource.push(response[i]);
                             }
                             if (selectedIds != undefined) {
+                                typeSelectedPromise = UtilsService.createPromiseDeferred();
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'Value', attrs, ctrl);
                             }
                         }
