@@ -20,6 +20,8 @@ namespace Vanrise.GenericData.SQLDataStorage
         /// </summary>
         public string ConnectionStringName { get; set; }
 
+        public string ConnectionStringAppSettingName { get; set; }
+
         public override void UpdateRecordStorage(IUpdateRecordStorageContext context)
         {
             var sqlDataStoreSettings = context.DataStore.Settings as SQLDataStoreSettings;

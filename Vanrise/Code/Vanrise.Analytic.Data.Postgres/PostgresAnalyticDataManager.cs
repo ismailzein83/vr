@@ -712,10 +712,11 @@ namespace Vanrise.Analytic.Data.Postgres
         #endregion
 
         #region Overriden Methods
+
         protected override string GetConnectionString()
         {
             var tableSettings = GetTable().Settings;
-            return !String.IsNullOrEmpty(tableSettings.ConnectionString) ? tableSettings.ConnectionString : Common.Utilities.GetExposedConnectionString(tableSettings.ConnectionStringName);
+            return !String.IsNullOrEmpty(tableSettings.ConnectionString) ? tableSettings.ConnectionString : Common.Utilities.GetConnectionStringByName(tableSettings.ConnectionStringName);
         }
 
         #endregion
@@ -743,7 +744,5 @@ namespace Vanrise.Analytic.Data.Postgres
         }
 
         #endregion
-
-
     }
 }

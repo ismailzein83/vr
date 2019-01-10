@@ -1,7 +1,8 @@
 ﻿(function (app) {
 
     'use strict';
-    DataStoreSettingSqlDirective.$inject = [ 'UtilsService'];
+
+    DataStoreSettingSqlDirective.$inject = ['UtilsService'];
 
     function DataStoreSettingSqlDirective(UtilsService) {
         return {
@@ -17,42 +18,37 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             templateUrl: function (element, attrs) {
                 return "/Client/Modules/VR_GenericData/Directives/MainExtensions/DataStoreSetting/Templates/SqlTemplate.html";
             }
         };
+
         function DirectiveConstructor($scope, ctrl) {
             this.initializeController = initializeController;
-            var connectionStringType;
-            function initializeController() {
-                connectionStringType = {
-                    ConnectionString: { value: 0, description: "Connection String" },
-                    ConnectionStringName: { value: 1, description: "Connection String Name" },
-                };
 
-                $scope.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
-                $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
+            var connectionStringType = {
+                ConnectionString: { value: 0, description: "Connection String" },
+                ConnectionStringName: { value: 1, description: "Connection String Name" },
+                ConnectionStringAppSettingName: { value: 2, description: "Connection String App Setting Name" }
+            };
+
+            function initializeController() {
                 $scope.showConnectionString = true;
                 $scope.showConnectionStringName = false;
+                $scope.showConnectionStringAppSettingName = false;
+                $scope.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
+                $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
+
                 $scope.onConnectionStringTypeSelectionChanged = function () {
                     if ($scope.selectedConnectionStringType != undefined) {
 
                         switch ($scope.selectedConnectionStringType.value) {
-                            case connectionStringType.ConnectionString.value: $scope.showConnectionString = true; $scope.showConnectionStringName = false; break;
-                            case connectionStringType.ConnectionStringName.value: $scope.showConnectionStringName = true; $scope.showConnectionString = false; break;
+                            case connectionStringType.ConnectionString.value: $scope.showConnectionString = true; $scope.showConnectionStringName = false; $scope.showConnectionStringAppSettingName = false; break;
+                            case connectionStringType.ConnectionStringName.value: $scope.showConnectionStringName = true; $scope.showConnectionString = false; $scope.showConnectionStringAppSettingName = false; break;
+                            case connectionStringType.ConnectionStringAppSettingName.value: $scope.showConnectionStringAppSettingName = true; $scope.showConnectionString = false; $scope.showConnectionStringName = false; break;
                         }
-
                     }
                 };
-
-
 
                 defineAPI();
             }
@@ -60,38 +56,37 @@
             function defineAPI() {
                 var api = {};
 
-                api.getData = function () {
-                    return {
-                        $type: "Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage",
-                        ConnectionStringName: $scope.showConnectionStringName ? $scope.connectionStringName : undefined,
-                        ConnectionString: $scope.showConnectionString ? $scope.connectionString : undefined
-                    };
-                };
-
-
                 api.load = function (payload) {
+
                     if (payload != undefined && payload.data != undefined) {
-
-                        $scope.connectionStringName = payload.data.ConnectionStringName;
                         $scope.connectionString = payload.data.ConnectionString;
+                        $scope.connectionStringName = payload.data.ConnectionStringName;
+                        $scope.connectionStringAppSettingName = payload.data.ConnectionStringAppSettingName;
 
-                        if ($scope.connectionStringName != undefined) {
-                            $scope.selectedConnectionStringType = connectionStringType.ConnectionStringName;
-                        } else if ($scope.connectionString != undefined) {
+                        if ($scope.connectionString != undefined) {
                             $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
+                        } else if ($scope.connectionStringName != undefined) {
+                            $scope.selectedConnectionStringType = connectionStringType.ConnectionStringName;
+                        } else if ($scope.connectionStringAppSettingName != undefined) {
+                            $scope.selectedConnectionStringType = connectionStringType.ConnectionStringAppSettingName;
                         }
-
-                        //  $scope.connectionString = payload.data.ConnectionString;
                     }
                 };
 
+                api.getData = function () {
+                    return {
+                        $type: "Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage",
+                        ConnectionString: $scope.showConnectionString ? $scope.connectionString : undefined,
+                        ConnectionStringName: $scope.showConnectionStringName ? $scope.connectionStringName : undefined,
+                        ConnectionStringAppSettingName: $scope.showConnectionStringAppSettingName ? $scope.connectionStringAppSettingName : undefined
+                    };
+                };
 
-                if (ctrl.onReady != null)
+                if (ctrl.onReady != null && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
             }
         }
     }
 
     app.directive('vrGenericdataDatastoresettingSql', DataStoreSettingSqlDirective);
-
 })(app);

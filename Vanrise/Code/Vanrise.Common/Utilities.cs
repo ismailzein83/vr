@@ -301,36 +301,20 @@ namespace Vanrise.Common
                 }
             }
         }
-
-        public static string GetExposedConnectionString(string connectionStringName)
+         
+        public static string GetConnectionStringByName(string connectionStringName)
         {
-            if (!IsConnectionStringExposed(connectionStringName))
-                throw new Exception(String.Format("Connection String '{0}' is not exposed", connectionStringName));
             var connStringEntry = ConfigurationManager.ConnectionStrings[connectionStringName];
-            if (connStringEntry == null)
-                throw new NullReferenceException(String.Format("connStringEntry. connectionStringName '{0}'", connectionStringName));
+            connStringEntry.ThrowIfNull(String.Format("connStringEntry. connectionStringName '{0}'", connectionStringName));
             return connStringEntry.ConnectionString;
         }
 
-        static HashSet<string> s_exposedConnectionStringNames;
-        static Object s_lockObj = new object();
-        private static bool IsConnectionStringExposed(string connectionStringName)
+        public static string GetConnectionStringByAppSettingName(string appSettingConnectionStringName)
         {
-            if (s_exposedConnectionStringNames == null)
-            {
-                lock (s_lockObj)
-                {
-                    if (s_exposedConnectionStringNames == null)
-                    {
-                        var exposedConnectionStringNames = ConfigurationManager.AppSettings["ExposedConnectionStringNames"];
-                        if (exposedConnectionStringNames != null)
-                            s_exposedConnectionStringNames = new HashSet<string>(exposedConnectionStringNames.Split(',').Select(itm => itm.Trim()));
-                        else
-                            s_exposedConnectionStringNames = new HashSet<string>();
-                    }
-                }
-            }
-            return s_exposedConnectionStringNames.Contains(connectionStringName);
+            appSettingConnectionStringName.ThrowIfNull("appSettingConnectionStringName");
+            var connStringNameEntry = ConfigurationManager.AppSettings[appSettingConnectionStringName];
+            connStringNameEntry.ThrowIfNull(String.Format("connStringNameEntry. appSettingConnectionStringName '{0}'", appSettingConnectionStringName));
+            return GetConnectionStringByName(connStringNameEntry);
         }
 
         public static string GetDateTimeFormat(Vanrise.Entities.DateTimeType dateTimeType)

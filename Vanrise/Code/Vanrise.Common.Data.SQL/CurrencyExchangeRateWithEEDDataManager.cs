@@ -7,6 +7,13 @@ namespace Vanrise.Common.Data.SQL
     public class CurrencyExchangeRateWithEEDDataManager : Vanrise.Data.SQL.BaseSQLDataManager, ICurrencyExchangeRateWithEEDDataManager
     {
         readonly string[] columns = { "CurrencyID", "Rate", "BED", "EED" };
+
+        string _connectionString;
+        public string ConnectionString { set { _connectionString = value; } }
+
+        string _connectionStringName;
+        public string ConnectionStringName { set { _connectionStringName = value; } }
+
         public void ApplyExchangeRateWithEESInDB(List<Vanrise.Entities.ExchangeRateWithEED> exchangeRates)
         {
             ExecuteNonQueryText(@" 
@@ -70,19 +77,7 @@ namespace Vanrise.Common.Data.SQL
 
         protected override string GetConnectionString()
         {
-            return !String.IsNullOrEmpty(_connectionString) ? _connectionString : Common.Utilities.GetExposedConnectionString(_connectionStringName);
-        }
-
-        string _connectionString;
-        public string ConnectionString
-        {
-            set { _connectionString = value; }
-        }
-
-        string _connectionStringName;
-        public string ConnectionStringName
-        {
-            set { _connectionStringName = value; }
+            return !String.IsNullOrEmpty(_connectionString) ? _connectionString : Common.Utilities.GetConnectionStringByName(_connectionStringName);
         }
     }
 }

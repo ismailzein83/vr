@@ -91,9 +91,18 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         protected override string GetConnectionString()
         {
-            if (_dataStoreSettings == null)
-                throw new NullReferenceException("_dataStoreSettings");
-            return !String.IsNullOrEmpty(_dataStoreSettings.ConnectionString) ? _dataStoreSettings.ConnectionString : Common.Utilities.GetExposedConnectionString(_dataStoreSettings.ConnectionStringName);
+            _dataStoreSettings.ThrowIfNull("_dataStoreSettings");
+
+            if (!String.IsNullOrEmpty(_dataStoreSettings.ConnectionString))
+                return _dataStoreSettings.ConnectionString;
+
+            if (!String.IsNullOrEmpty(_dataStoreSettings.ConnectionStringName))
+                return Utilities.GetConnectionStringByName(_dataStoreSettings.ConnectionStringName); 
+
+            if (!String.IsNullOrEmpty(_dataStoreSettings.ConnectionStringAppSettingName))
+                return Utilities.GetConnectionStringByAppSettingName(_dataStoreSettings.ConnectionStringAppSettingName);
+
+            throw new Exception("ConnectionString or ConnectionStringName or ConnectionStringAppSettingName should be defined");
         }
 
         public object InitialiazeStreamForDBApply()
@@ -336,14 +345,14 @@ namespace Vanrise.GenericData.SQLDataStorage
             StringBuilder parameterAssignementBuilder = new StringBuilder();
 
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
-            if(context.FromTime != default(DateTime))
+            if (context.FromTime != default(DateTime))
             {
                 parameterDeclarationBuilder.Append(" @FromTime datetime ");
                 parameterAssignementBuilder.Append(" @FromTime = @FromTime_FromOut ");
                 filters.Add(string.Format(" {0} >= @FromTime ", dateTimeColumn));
             }
 
-            if(context.ToTime != default(DateTime))
+            if (context.ToTime != default(DateTime))
             {
                 if (parameterDeclarationBuilder.Length > 0)
                     parameterDeclarationBuilder.Append(", ");
@@ -887,7 +896,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             foreach (var fieldValue in fieldValues)
             {
                 var sqlDataRecordStorageColumn = GetColumnFromFieldName(fieldValue.Key);
-                if(sqlDataRecordStorageColumn != null)
+                if (sqlDataRecordStorageColumn != null)
                 {
                     var parameter = GenerateParameterName(ref parameterIndex);
                     DataRecordField matchingField = DataRecordType.Fields.FindRecord(itm => itm.Name == fieldValue.Key);
@@ -1151,7 +1160,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             foreach (var fieldValue in fieldValues)
             {
                 var sqlDataRecordStorageColumn = GetColumnFromFieldName(fieldValue.Key);
-                if(sqlDataRecordStorageColumn != null)
+                if (sqlDataRecordStorageColumn != null)
                 {
                     var parameter = GenerateParameterName(ref parameterIndex);
 

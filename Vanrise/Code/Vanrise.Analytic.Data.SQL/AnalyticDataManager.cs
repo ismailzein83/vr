@@ -5,11 +5,9 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.GenericData.Data.SQL;
-using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Data.SQL
 {
@@ -751,10 +749,11 @@ namespace Vanrise.Analytic.Data.SQL
         #endregion
 
         #region Overriden Methods
+
         protected override string GetConnectionString()
         {
             var tableSettings = GetTable().Settings;
-            return !String.IsNullOrEmpty(tableSettings.ConnectionString) ? tableSettings.ConnectionString : Common.Utilities.GetExposedConnectionString(tableSettings.ConnectionStringName);
+            return !String.IsNullOrEmpty(tableSettings.ConnectionString) ? tableSettings.ConnectionString : Common.Utilities.GetConnectionStringByName(tableSettings.ConnectionStringName);
         }
 
         #endregion
