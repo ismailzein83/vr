@@ -142,7 +142,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CurrencyId = GetReaderValue<int?>(reader, "CurrencyID"),
                 Rate = GetReaderValue<decimal>(reader, "Rate"),
                 RateTypeId = GetReaderValue<int?>(reader, "RateTypeID"),
-                RateChange = (RateChangeType)GetReaderValue<byte>(reader, "Change"),
+                RateChange = (RateChangeType)GetReaderValue<int>(reader, "Change"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED")
             };
