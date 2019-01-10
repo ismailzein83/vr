@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
 
@@ -139,7 +137,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SaleEntityRoutingProductId = (long)reader["ID"],
                 RoutingProductId = (int)reader["RoutingProductID"],
                 OwnerId = (int)reader["OwnerID"],
-                OwnerType = GetReaderValue<SalePriceListOwnerType>(reader, "OwnerType"),
+                OwnerType = (SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
                 SaleZoneId = (long)reader["ZoneID"],
                 BED = (DateTime)reader["BED"],
                 EED = GetReaderValue<DateTime?>(reader, "EED")
