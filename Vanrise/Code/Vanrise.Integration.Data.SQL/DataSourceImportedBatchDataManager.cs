@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Vanrise.Data.SQL;
+using Vanrise.Common;
 using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Data.SQL
@@ -21,34 +22,22 @@ namespace Vanrise.Integration.Data.SQL
             return (long)ExecuteScalarSP("[integration].[sp_DataSourceImportedBatch_Insert]", dataSourceId, batchDescription, batchSize, batchState, isDuplicateSameSize, recordCounts, result, mapperMessage, queueItemsIds, logEntryTime, batchStart, batchEnd);
         }
 
-        public Vanrise.Entities.BigResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
+      
+        public List<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(DataSourceImportedBatchQuery query)
         {
-            Dictionary<string, string> mapper = new Dictionary<string, string>();
-            mapper.Add("MappingResultDescription", "MappingResult");
+            string mappingResults = null;
+            if (query.MappingResults != null && query.MappingResults.Count > 0)
+                mappingResults = string.Join(",", query.MappingResults.MapRecords(x => (int)x));
 
-            DataTable dtMappingResults = BuildMappingResultsTable(input.Query.MappingResults);
-
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySPCmd("[integration].[sp_DataSourceImportedBatch_CreateTempByFiltered]", (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@TempTableName", tempTableName));
-                    cmd.Parameters.Add(new SqlParameter("@DataSourceId", input.Query.DataSourceId));
-                    cmd.Parameters.Add(new SqlParameter("@BatchName", input.Query.BatchName));
-
-                    var dtParameter = new SqlParameter("@MappingResults", SqlDbType.Structured);
-                    dtParameter.Value = dtMappingResults;
-                    cmd.Parameters.Add(dtParameter);
-
-                    cmd.Parameters.Add(new SqlParameter("@From", input.Query.From));
-                    cmd.Parameters.Add(new SqlParameter("@To", input.Query.To));
-                    cmd.Parameters.Add(new SqlParameter("@Top", input.Query.Top));
-                });
-            };
-
-            return RetrieveData(input, createTempTableAction, DataSourceImportedBatchMapper, mapper);
+            return GetItemsSP("[integration].[sp_DataSourceImportedBatch_GetFiltered]", DataSourceImportedBatchMapper,
+                   query.DataSourceId,
+                   query.BatchName,
+                   mappingResults,
+                   query.From,
+                   query.To,
+                   query.Top
+               );
         }
-
         public List<DataSourceImportedBatch> GetDataSourceImportedBatches(Guid DataSourceId, DateTime from)
         {
             return GetItemsSP("[integration].[sp_DataSourceImportedBatch_GetByDataSource]", DataSourceImportedBatchMapper, DataSourceId, from);
@@ -61,23 +50,6 @@ namespace Vanrise.Integration.Data.SQL
                 serializedDataSourceIds = string.Join<Guid>(",", dataSourcesIds);
 
             return GetItemsSP("[integration].[sp_DataSourceSummary_Get]", DataSourceSummaryMapper, serializedDataSourceIds, fromTime);
-        }
-
-        private DataTable BuildMappingResultsTable(List<MappingResult> mappingResults)
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("MappingResult", typeof(int));
-            dt.BeginLoadData();
-
-            foreach (var mappingResult in mappingResults)
-            {
-                DataRow dr = dt.NewRow();
-                dr["MappingResult"] = mappingResult;
-                dt.Rows.Add(dr);
-            }
-
-            dt.EndLoadData();
-            return dt;
         }
 
         private DataSourceImportedBatch DataSourceImportedBatchMapper(IDataReader reader)

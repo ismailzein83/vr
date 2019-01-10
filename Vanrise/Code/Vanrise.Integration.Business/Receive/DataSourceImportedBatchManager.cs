@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
@@ -18,55 +19,11 @@ namespace Vanrise.Integration.Business
             return manager.InsertEntry(dataSourceId, entry.BatchDescription, entry.BatchSize, entry.BatchState, entry.IsDuplicateSameSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds, logEntryTime, entry.BatchStart, entry.BatchEnd);
         }
 
-        public Vanrise.Entities.IDataRetrievalResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<DataSourceImportedBatchDetail> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
         {
-            var maxTop = new Vanrise.Common.Business.ConfigManager().GetMaxSearchRecordCount();
-            if (input.Query.Top > maxTop)
-                throw new VRBusinessException(string.Format("Top record count cannot be greater than {0}", maxTop));
 
-            IDataSourceImportedBatchDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
-            Vanrise.Entities.BigResult<DataSourceImportedBatch> bigResult = dataManager.GetFilteredDataSourceImportedBatches(input);
+            return BigDataManager.Instance.RetrieveData(input, new DataSourceImportedBatchRequestHandler());
 
-            //Technically no need to use Hashset because ids in seperate rows will not repeat. 
-            //Just in case it did, the use of hashset is to avoid this problem.
-            HashSet<long> queueItemIds = new HashSet<long>();
-            foreach (DataSourceImportedBatch batch in bigResult.Data)
-            {
-                if (string.IsNullOrEmpty(batch.QueueItemIds))
-                    continue;
-
-                string[] qIds = batch.QueueItemIds.Split(',');
-                queueItemIds.UnionWith(qIds.Select(itm => long.Parse(itm)));
-            }
-
-            QueueingManager queueingManager = new QueueingManager();
-            Dictionary<long, ItemExecutionFlowInfo> dicItemExecutionStatus = queueingManager.GetItemsExecutionFlowStatus(queueItemIds.ToList());
-
-            foreach (DataSourceImportedBatch batch in bigResult.Data)
-            {
-                if (batch.MappingResult == MappingResult.Invalid)
-                {
-                    batch.ExecutionStatus = ItemExecutionFlowStatus.Failed;
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(batch.QueueItemIds))
-                {
-                    batch.ExecutionStatus = ItemExecutionFlowStatus.NoBatches;
-                    continue;
-                }
-
-                string[] batchQueueItemIds = batch.QueueItemIds.Split(',');
-                List<ItemExecutionFlowInfo> list = batchQueueItemIds.Select(itm => dicItemExecutionStatus.GetRecord(long.Parse(itm))).ToList();
-                batch.ExecutionStatus = list.Count > 1 ? queueingManager.GetExecutionFlowStatus(list) : list.First().Status;
-            }
-
-            ResultProcessingHandler<DataSourceImportedBatch> handler = new ResultProcessingHandler<DataSourceImportedBatch>()
-            {
-                ExportExcelHandler = new DataSourceImportedBatchExcelExportHandler()
-            };
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bigResult, handler);
         }
 
         public List<DataSourceImportedBatch> GetDataSourceImportedBatches(Guid DataSourceId, DateTime from)
@@ -83,9 +40,93 @@ namespace Vanrise.Integration.Business
 
         #region Private Classes
 
-        private class DataSourceImportedBatchExcelExportHandler : ExcelExportHandler<DataSourceImportedBatch>
+        private class DataSourceImportedBatchRequestHandler : BigDataRequestHandler<DataSourceImportedBatchQuery, DataSourceImportedBatch, DataSourceImportedBatchDetail>
         {
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DataSourceImportedBatch> context)
+            public override DataSourceImportedBatchDetail EntityDetailMapper(DataSourceImportedBatch entity)
+            {
+                return new DataSourceImportedBatchDetail
+                {
+                    ID = entity.ID,
+                    BatchDescription = entity.BatchDescription,
+                    BatchSize = entity.BatchSize,
+                    BatchStateDescription = Utilities.GetEnumDescription<BatchState>(entity.BatchState),
+                    RecordsCount = entity.RecordsCount,
+                    MappingResult = entity.MappingResult,
+                    MappingResultDescription = Utilities.GetEnumDescription<MappingResult>(entity.MappingResult),
+                    MapperMessage = entity.MapperMessage,
+                    QueueItemIds = entity.QueueItemIds,
+                    LogEntryTime = entity.LogEntryTime,
+                    BatchStart = entity.BatchStart,
+                    BatchEnd = entity.BatchEnd,
+                    ExecutionStatus = entity.ExecutionStatus
+                };
+            }
+
+           
+
+            public override IEnumerable<DataSourceImportedBatch> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
+            {
+                var maxTop = new Vanrise.Common.Business.ConfigManager().GetMaxSearchRecordCount();
+                if (input.Query.Top > maxTop)
+                    throw new VRBusinessException(string.Format("Top record count cannot be greater than {0}", maxTop));
+                IDataSourceImportedBatchDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
+                return dataManager.GetFilteredDataSourceImportedBatches(input.Query);
+            }
+
+            protected override Vanrise.Entities.BigResult<DataSourceImportedBatchDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input, IEnumerable<DataSourceImportedBatch> allRecords)
+            {
+                var bigResult = base.AllRecordsToBigResult(input, allRecords);
+
+                if (bigResult != null && bigResult.Data != null)
+                {
+                    HashSet<long> queueItemIds = new HashSet<long>();
+                    foreach (DataSourceImportedBatchDetail batch in bigResult.Data)
+                    {
+                        if (string.IsNullOrEmpty(batch.QueueItemIds))
+                            continue;
+
+                        string[] qIds = batch.QueueItemIds.Split(',');
+                        queueItemIds.UnionWith(qIds.Select(itm => long.Parse(itm)));
+                    }
+
+                    QueueingManager queueingManager = new QueueingManager();
+                    Dictionary<long, ItemExecutionFlowInfo> dicItemExecutionStatus = queueingManager.GetItemsExecutionFlowStatus(queueItemIds.ToList());
+
+                    foreach (DataSourceImportedBatchDetail batch in bigResult.Data)
+                    {
+                        if (batch.MappingResult == MappingResult.Invalid)
+                        {
+                            batch.ExecutionStatus = ItemExecutionFlowStatus.Failed;
+                            continue;
+                        }
+
+                        if (string.IsNullOrEmpty(batch.QueueItemIds))
+                        {
+                            batch.ExecutionStatus = ItemExecutionFlowStatus.NoBatches;
+                            continue;
+                        }
+
+                        string[] batchQueueItemIds = batch.QueueItemIds.Split(',');
+                        List<ItemExecutionFlowInfo> list = batchQueueItemIds.Select(itm => dicItemExecutionStatus.GetRecord(long.Parse(itm))).ToList();
+                        batch.ExecutionStatus = list.Count > 1 ? queueingManager.GetExecutionFlowStatus(list) : list.First().Status;
+                    }
+                }
+                return bigResult;
+            }
+
+            protected override ResultProcessingHandler<DataSourceImportedBatchDetail> GetResultProcessingHandler(DataRetrievalInput<DataSourceImportedBatchQuery> input, BigResult<DataSourceImportedBatchDetail> bigResult)
+            {
+                return  new ResultProcessingHandler<DataSourceImportedBatchDetail>
+                {
+                    ExportExcelHandler = new DataSourceImportedBatchExcelExportHandler()
+                };
+            }
+        }
+
+
+        private class DataSourceImportedBatchExcelExportHandler : ExcelExportHandler<DataSourceImportedBatchDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DataSourceImportedBatchDetail> context)
             {
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
@@ -114,7 +155,7 @@ namespace Vanrise.Integration.Business
                         row.Cells.Add(new ExportExcelCell { Value = record.BatchDescription });
                         row.Cells.Add(new ExportExcelCell { Value = record.BatchSize });
                         row.Cells.Add(new ExportExcelCell { Value = record.RecordsCount });
-                        row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.MappingResult) });
+                        row.Cells.Add(new ExportExcelCell { Value = record.MappingResultDescription });
                         row.Cells.Add(new ExportExcelCell { Value = record.MapperMessage });
                         row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.ExecutionStatus) });
                     }

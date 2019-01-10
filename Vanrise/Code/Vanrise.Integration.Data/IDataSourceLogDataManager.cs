@@ -11,6 +11,6 @@ namespace Vanrise.Integration.Data
     {
         void InsertEntry(Vanrise.Entities.LogEntryType entryType, string message, Guid dataSourceId, long? queueItemId, string logTimeSpan);
 
-        Vanrise.Entities.BigResult<DataSourceLog> GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input);
+        List<DataSourceLog> GetFilteredDataSourceLogs(DataSourceLogQuery query);
     }
 }

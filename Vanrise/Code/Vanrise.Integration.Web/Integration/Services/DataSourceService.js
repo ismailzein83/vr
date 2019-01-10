@@ -2,10 +2,10 @@
 
     'use strict';
 
-    DataSourceService.$inject = ['UtilsService', 'VRModalService', 'VR_Integration_ExecutionStatusEnum', 'VR_Integration_BatchStateEnum', 'VR_Integration_MappingResultEnum', 'LabelColorsEnum','VRNotificationService','VR_Integration_DataSourceAPIService','VRCommon_ObjectTrackingService'];
+    DataSourceService.$inject = ['UtilsService', 'VRModalService', 'VR_Integration_ExecutionStatusEnum', 'LabelColorsEnum', 'VRNotificationService', 'VR_Integration_DataSourceAPIService', 'VRCommon_ObjectTrackingService'];
 
-    function DataSourceService(UtilsService, VRModalService, VR_Integration_ExecutionStatusEnum, VR_Integration_BatchStateEnum, VR_Integration_MappingResultEnum, LabelColorsEnum, VRNotificationService, VR_Integration_DataSourceAPIService,VRCommon_ObjectTrackingService) {
-        var drillDownDefinitions=[];
+    function DataSourceService(UtilsService, VRModalService, VR_Integration_ExecutionStatusEnum, LabelColorsEnum, VRNotificationService, VR_Integration_DataSourceAPIService, VRCommon_ObjectTrackingService) {
+        var drillDownDefinitions = [];
 
         function registerHistoryViewAction() {
 
@@ -39,13 +39,6 @@
             return UtilsService.getEnumDescription(VR_Integration_ExecutionStatusEnum, executionStatusValue);
         }
 
-        function getBatchStateDescription(batchStateValue) {
-            return UtilsService.getEnumDescription(VR_Integration_BatchStateEnum, batchStateValue);
-        }
-
-        function getMappingResultDescription(mappingResultValue) {
-            return UtilsService.getEnumDescription(VR_Integration_MappingResultEnum, mappingResultValue);
-        }
 
         function getExecutionStatusColor(executionStatusValue) {
             var color = undefined;
@@ -100,21 +93,20 @@
         function deleteDataSource(scope, dataSourceObj, onDataSourceDeleted) {
             VRNotificationService.showConfirmation().then(function (response) {
 
-                    if (response) {
-                        return VR_Integration_DataSourceAPIService.DeleteDataSource(dataSourceObj.DataSourceId, dataSourceObj.TaskId)
-                            .then(function (deletionResponse) {
-                                VRNotificationService.notifyOnItemDeleted("DataSource", deletionResponse);
-                                onDataSourceDeleted(dataSourceObj);
-                            })
-                            .catch(function (error) {
-                                VRNotificationService.notifyException(error, scope);
-                            });
-                    }
-                });
+                if (response) {
+                    return VR_Integration_DataSourceAPIService.DeleteDataSource(dataSourceObj.DataSourceId, dataSourceObj.TaskId)
+                        .then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("DataSource", deletionResponse);
+                            onDataSourceDeleted(dataSourceObj);
+                        })
+                        .catch(function (error) {
+                            VRNotificationService.notifyException(error, scope);
+                        });
+                }
+            });
         }
 
-        function getEntityUniqueName()
-        {
+        function getEntityUniqueName() {
             return "VR_Integration_DataSource";
         }
 
@@ -123,21 +115,21 @@
 
             drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
             drillDownDefinition.directive = "vr-common-objecttracking-grid";
-            
+
 
             drillDownDefinition.loadDirective = function (directiveAPI, dataSourceItem) {
                 dataSourceItem.objectTrackingGridAPI = directiveAPI;
-              
+
                 var query = {
                     ObjectId: dataSourceItem.Entity.DataSourceId,
                     EntityUniqueName: getEntityUniqueName(),
-                    
+
                 };
                 return dataSourceItem.objectTrackingGridAPI.load(query);
             };
-            
+
             addDrillDownDefinition(drillDownDefinition);
-           
+
         }
 
         function registerLogToDataSource() {
@@ -183,18 +175,16 @@
         }
 
         function addDrillDownDefinition(drillDownDefinition) {
-          
+
             drillDownDefinitions.push(drillDownDefinition);
         }
 
         function getDrillDownDefinition() {
             return drillDownDefinitions;
         }
-   
+
         return {
             getExecutionStatusDescription: getExecutionStatusDescription,
-            getBatchStateDescription: getBatchStateDescription,
-            getMappingResultDescription: getMappingResultDescription,
             getExecutionStatusColor: getExecutionStatusColor,
             editDataSource: editDataSource,
             addDataSource: addDataSource,
@@ -204,7 +194,7 @@
             registerHistoryViewAction: registerHistoryViewAction,
             registerLogToDataSource: registerLogToDataSource,
             registerImportedBatchToDataSource: registerImportedBatchToDataSource
-        };    
+        };
     };
 
     appControllers.service('VR_Integration_DataSourceService', DataSourceService);

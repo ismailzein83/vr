@@ -107,7 +107,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Integration\Constants\BatchStateEnum.js" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\Templates\SizeBasedFileDelayCheckerTemplate.html" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileDelayChecker\Templates\TimeBasedFileDelayCheckerTemplate.html" />
     <Content Include="Integration\Directives\MainExtensions\Settings\FileDataSourceSettings\FileMissingChecker\Templates\SequenceFileMissingCheckerTemplate.html" />

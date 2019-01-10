@@ -54,10 +54,6 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceLogAPISe
 
                 return VR_Integration_DataSourceLogAPIService.GetFilteredDataSourceLogs(dataRetrievalInput)
                     .then(function (response) {
-
-                        angular.forEach(response.Data, function (item) {
-                            item.SeverityDescription = UtilsService.getLogEntryTypeDescription(item.Severity);
-                        });
                         onResponseReady(response);
                     })
                     .catch(function (error) {

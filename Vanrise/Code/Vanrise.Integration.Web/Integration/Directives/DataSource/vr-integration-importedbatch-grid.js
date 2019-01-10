@@ -42,8 +42,6 @@ app.directive("vrIntegrationImportedbatchGrid", ["UtilsService", "VRNotification
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 var itm = response.Data[i];
-                                itm.BatchStateDescription = VR_Integration_DataSourceService.getBatchStateDescription(itm.BatchState);
-                                itm.MappingResultDescription = VR_Integration_DataSourceService.getMappingResultDescription(itm.MappingResult);
                                 itm.ExecutionStatusDescription = VR_Integration_DataSourceService.getExecutionStatusDescription(itm.ExecutionStatus);
                                 gridDrillDownTabsObj.setDrillDownExtensionObject(itm);
                             }

@@ -32,30 +32,21 @@ namespace Vanrise.Integration.Data.SQL
             ExecuteNonQuerySP("integration.sp_DataSourceLog_Insert", dataSourceId, entryType, message, importedBatchId, logTimeSpan);
         }
 
-        public Vanrise.Entities.BigResult<DataSourceLog> GetFilteredDataSourceLogs(Vanrise.Entities.DataRetrievalInput<DataSourceLogQuery> input)
+        public List<DataSourceLog> GetFilteredDataSourceLogs(DataSourceLogQuery query)
         {
-            DataTable dtSeverities = BuildSeveritiesTable(input.Query.Severities);
+            string severities = null;
+            if (query.Severities != null && query.Severities.Count > 0)
+                severities = string.Join(",", query.Severities.MapRecords(x => (int)x));
 
-            Action<string> createTempTableAction = (tempTableName) =>
-            {
-                ExecuteNonQuerySPCmd("integration.sp_DataSourceLog_CreateTempByFiltered", (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@TempTableName", tempTableName));
-                    cmd.Parameters.Add(new SqlParameter("@DataSourceId", input.Query.DataSourceId));
-
-                    var dtParameter = new SqlParameter("@Severities", SqlDbType.Structured);
-                    dtParameter.Value = dtSeverities;
-                    cmd.Parameters.Add(dtParameter);
-                    
-                    cmd.Parameters.Add(new SqlParameter("@From", input.Query.From));
-                    cmd.Parameters.Add(new SqlParameter("@To", input.Query.To));
-                    cmd.Parameters.Add(new SqlParameter("@Top", input.Query.Top));
-
-                });
-            };
-
-            return RetrieveData(input, createTempTableAction, DataSourceLogMapper, _columnMapper);
+            return GetItemsSP("[integration].[sp_DataSourceLog_GetFiltered]", DataSourceLogMapper,
+                   query.DataSourceId,
+                   severities,
+                   query.From,
+                   query.To,
+                   query.Top
+               );
         }
+
 
         Vanrise.Integration.Entities.DataSourceLog DataSourceLogMapper(IDataReader reader)
         {
@@ -70,22 +61,6 @@ namespace Vanrise.Integration.Data.SQL
 
             return dataSourceLog;
         }
-
-        private DataTable BuildSeveritiesTable(List<LogEntryType> severities)
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Severity", typeof(int));
-            dt.BeginLoadData();
-
-            foreach (var severity in severities)
-            {
-                DataRow dr = dt.NewRow();
-                dr["Severity"] = severity;
-                dt.Rows.Add(dr);
-            }
-
-            dt.EndLoadData();
-            return dt;
-        }
+                
     }
 }

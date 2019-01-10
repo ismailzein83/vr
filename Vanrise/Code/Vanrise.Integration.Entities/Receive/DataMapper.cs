@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Vanrise.Entities;
 
 namespace Vanrise.Integration.Entities
@@ -51,10 +52,15 @@ namespace Vanrise.Integration.Entities
 
     public enum MappingResult
     {
+        [Description("None")]
         None = 0,
+        [Description("Valid")]
         Valid = 1,
+        [Description("Invalid")]
         Invalid = 2,
+        [Description("Empty")]
         Empty = 3,
+        [Description("Partial Invalid")]
         PartialInvalid = 4
     }
 }

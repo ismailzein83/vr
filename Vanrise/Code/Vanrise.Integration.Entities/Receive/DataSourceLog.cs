@@ -17,4 +17,13 @@ namespace Vanrise.Integration.Entities
         public string Message { get; set; }
         public DateTime LogEntryTime { get; set; }
     }
+
+    public class DataSourceLogDetail
+    {
+        public int ID { get; set; }
+        public Guid DataSourceId { get; set; }
+        public string SeverityDescription { get; set; }
+        public string Message { get; set; }
+        public DateTime LogEntryTime { get; set; }
+    }
 }

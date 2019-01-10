@@ -363,7 +363,17 @@ namespace Vanrise.Integration.Business
                    IDataSourceDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
                    var dataSources = dataManager.GetAllDataSources();
                    if (dataSources != null)
+                   {
+                       foreach(var d in dataSources)
+                       {
+                           var scheduleTask = new SchedulerTaskManager().GetTask(d.TaskId);
+                           scheduleTask.ThrowIfNull("ScheduleTask", d.TaskId);
+                           d.IsEnabled = scheduleTask.IsEnabled;
+                       }
+
                        return dataSources.ToDictionary(kvp => kvp.DataSourceId, kvp => kvp);
+                   }
+                       
                    else
                        return null;
                });
