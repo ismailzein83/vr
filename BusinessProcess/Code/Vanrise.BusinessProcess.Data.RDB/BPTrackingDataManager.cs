@@ -4,7 +4,7 @@ using System.Linq;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
-
+using Vanrise.Entities;
 namespace Vanrise.BusinessProcess.Data.RDB
 {
     public class BPTrackingDataManager : IBPTrackingDataManager

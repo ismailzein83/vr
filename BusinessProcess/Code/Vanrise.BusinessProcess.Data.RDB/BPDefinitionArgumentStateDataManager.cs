@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
-
+using Vanrise.Entities;
 namespace Vanrise.BusinessProcess.Data.RDB
 {
     public class BPDefinitionArgumentStateDataManager : IBPDefinitionArgumentStateDataManager

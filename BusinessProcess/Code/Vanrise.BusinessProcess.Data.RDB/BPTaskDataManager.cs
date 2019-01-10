@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
-
+using Vanrise.Entities;
 namespace Vanrise.BusinessProcess.Data.RDB
 {
     public class BPTaskDataManager : IBPTaskDataManager
@@ -79,7 +79,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             queryContext.ExecuteNonQuery();
         }
-        public List<BPTask> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId)
+        public List<Entities.BPTask> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
@@ -101,7 +101,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             return queryContext.GetItems(BPTaskMapper);
         }
-        public BPTask GetTask(long taskId)
+        public Entities.BPTask GetTask(long taskId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
@@ -114,9 +114,9 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             return queryContext.GetItem(BPTaskMapper);
         }
-        public List<BPTask> GetUpdated(ref object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId)
+        public List<Entities.BPTask> GetUpdated(ref object lastUpdateHandle, int nbOfRows, int? processInstanceId, int? userId)
         {
-            List<BPTask> bpTasks = new List<BPTask>();
+            List<Entities.BPTask> bpTasks = new List<Entities.BPTask>();
 
             DateTime? afterLastUpdateTime;
             long? afterId;
@@ -177,7 +177,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             {
                 while (reader.Read())
                 {
-                    BPTask bpTask = BPTaskMapper(reader);
+                    Entities.BPTask bpTask = BPTaskMapper(reader);
 
                     if (!maxLastUpdateTime_local.HasValue || maxLastUpdateTime_local.Value < bpTask.LastUpdatedTime)
                     {
@@ -284,9 +284,9 @@ namespace Vanrise.BusinessProcess.Data.RDB
         }
         #endregion
         #region Mappers
-        BPTask BPTaskMapper(IRDBDataReader reader)
+        Entities.BPTask BPTaskMapper(IRDBDataReader reader)
         {
-            var bpTask = new BPTask
+            var bpTask = new Entities.BPTask
             {
                 BPTaskId = reader.GetLong("ID"),
                 ProcessInstanceId = reader.GetLong("ProcessInstanceID"),
@@ -317,6 +317,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             return bpTask;
         }
+
         #endregion
     }
 }

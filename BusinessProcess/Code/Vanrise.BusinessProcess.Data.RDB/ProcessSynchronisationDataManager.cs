@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Data.RDB;
-
+using Vanrise.Entities;
 namespace Vanrise.BusinessProcess.Data.RDB
 {
     public class ProcessSynchronisationDataManager : IProcessSynchronisationDataManager
