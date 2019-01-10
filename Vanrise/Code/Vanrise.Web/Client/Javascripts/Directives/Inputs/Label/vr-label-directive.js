@@ -25,7 +25,10 @@
                 var hasbackgroundcolorSection = "";
                 if (tAttrs.hasbackgroundcolor != undefined)
                     hasbackgroundcolorSection = ' color:white';
-                var newElement = '<label class="control-label vr-control-label ' + color + ' " style="' + (isStandalone === "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:normal;' : '') + hasbackgroundcolorSection + ' " >'
+                var clickclass = "";
+                if (tAttrs.isclickable != undefined)
+                    clickclass = " hand-cursor ";
+                var newElement = '<label class="control-label vr-control-label ' + color + clickclass + ' " style="' + (isStandalone === "true" ? 'padding-top:6px;' : '') + (isValue ? 'font-weight:normal;' : '') + hasbackgroundcolorSection + ' " >'
                     + tElement.html() + '</label>' + hintSection;
                 tElement.html(newElement);
             }
