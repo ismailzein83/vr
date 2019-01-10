@@ -472,13 +472,17 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionDefinition\vr-genericdata-datarecord-vractiondefinition-extendedsettings-sendemail.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionRuntime\Templates\SendEmail.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionRuntime\vr-genericdata-datarecord-vraction-sendemail.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\DataRecordStorageRDBSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\DataRecordStorageSettingsBusinessObjectTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\DataRecordStorageSettingsRestAPITemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-rdb.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-restapi.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-businessobject.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\RDBTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\RestAPITemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\BusinessObjectTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-businessobject.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-rdb.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-restapi.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\Templates\AttachmentFieldTypeEntityManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\Templates\AttachmentFieldTypeEntityRemoteManagementTemplate.html" />
