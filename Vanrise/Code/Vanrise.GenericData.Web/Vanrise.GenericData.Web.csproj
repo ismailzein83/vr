@@ -478,7 +478,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-rdb.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-restapi.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-businessobject.js" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\RDBTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\DataStoreSettingsRDBTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\RestAPITemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\BusinessObjectTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-businessobject.js" />
