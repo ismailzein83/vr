@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.FileDataStorage
 {
@@ -39,7 +40,8 @@ namespace Vanrise.GenericData.FileDataStorage
 
         public override IDataRecordDataManager GetDataRecordDataManager(IGetRecordStorageDataManagerContext context)
         {
-            throw new NotImplementedException();
+            return new FileRecordStorageDataManager(context.DataStore.Settings.CastWithValidate<FileDataStoreSettings>("context.DataStore.Settings", context.DataStore.DataStoreId), context.DataRecordStorage.Settings.CastWithValidate<FileDataRecordStorageSettings>("context.DataRecordStorage.Settings", context.DataRecordStorage.DataRecordStorageId),
+                                                    context.DataRecordStorage);
         }
 
         public override int GetStorageRowCount(IGetStorageRowCountContext context)

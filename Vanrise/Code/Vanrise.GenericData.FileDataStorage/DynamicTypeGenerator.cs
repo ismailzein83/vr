@@ -32,7 +32,7 @@ namespace Vanrise.GenericData.FileDataStorage
 
                 namespace #NAMESPACE#
                 {
-                    public class #CLASSNAME# : Vanrise.GenericData.RDBDataStorage.IDynamicManager
+                    public class #CLASSNAME# : Vanrise.GenericData.FileDataStorage.IDynamicManager
                     {   
                         static Guid s_recordTypeId = new Guid(""#RECORDTYPEID#"");
                         #RECORDTYPEFIELDTYPES#
@@ -57,25 +57,14 @@ namespace Vanrise.GenericData.FileDataStorage
                             recordInfo.RecordContent = string.Join(""#FIELDSEPARATOR#"", fieldValues);
                         }
 
-                        public void SetRDBInsertColumnsToTempTableFromRecord(dynamic dynamicRecord, Vanrise.Data.RDB.RDBInsertMultipleRowsQueryRowContext tempTableRowContext)
+                        public dynamic GetDynamicRecordFromRecordInfo(Vanrise.GenericData.FileDataStorage.FileRecordStorageRecordInfo recordInfo)
                         {
-                            #DATARECORD_RUNTIMETYPE# record = Vanrise.Common.ExtensionMethods.CastWithValidate<#DATARECORD_RUNTIMETYPE#>(dynamicRecord, ""dynamicRecord"");
-                            #SetRDBInsertColumnsToTempTableFromRecordImplementation#
-                        }
-
-                        public dynamic GetDynamicRecordFromReader(Vanrise.Data.RDB.IRDBDataReader reader)
-                        {
-                            #DATARECORD_RUNTIMETYPE# dataRecord = new #DATARECORD_RUNTIMETYPE#();
-                            #DynamicRecordMapperImplementation#
-                            return dataRecord;
-                        }
-
-                        public Vanrise.GenericData.Entities.DataRecord GetDataRecordFromReader(Vanrise.Data.RDB.IRDBDataReader reader, List<string> fieldNames)
-                        {
-                            var fieldValues = new Dictionary<string, Object>();
-                            var dataRecord = new Vanrise.GenericData.Entities.DataRecord { FieldValues = fieldValues };
-                            #DataRecordMapperImplementation#
-                            return dataRecord;
+                            #DATARECORD_RUNTIMETYPE# record = new #DATARECORD_RUNTIMETYPE#();
+                            record.#TIMEFIELDNAME# = recordInfo.RecordTime;
+                            record.#IDFIELDNAME# = recordInfo.RecordId;
+                            string[] fieldValues = recordInfo.RecordContent.Split('#FIELDSEPARATOR#');
+                            #FILLDYNAMICRECORDFROMSTRINGFIELDVALUES#
+                            return record;
                         }
                     }
                 }");
@@ -99,7 +88,7 @@ namespace Vanrise.GenericData.FileDataStorage
                     classDefinitionBuilder.Replace("#TIMEFIELDNAME#", recordType.Settings.DateTimeField);
                     classDefinitionBuilder.Replace("#IDFIELDNAME#", recordType.Settings.IdField);
                     classDefinitionBuilder.Replace("#FIELDSEPARATOR#", dataRecordStorageSettings.FieldSeparator.ToString());
-
+                    
                     StringBuilder setFillRecordConcatenatedFieldsBuilder = new StringBuilder();
                     foreach (var fieldName in preparedConfig.FieldNamesForInsert)
                     {
@@ -113,21 +102,83 @@ namespace Vanrise.GenericData.FileDataStorage
                         }
                         else
                         {
-                            setFillRecordConcatenatedFieldsBuilder.AppendLine($"fieldValues.Add(record.{fieldName});");
+                            setFillRecordConcatenatedFieldsBuilder.AppendLine($@"fieldValues.Add(record.{fieldName} != null ? record.{fieldName}.ToString() : """");");
                         }
                     }
                     classDefinitionBuilder.Replace("#FILLRECORDCONCATENATEDFIELDS#", setFillRecordConcatenatedFieldsBuilder.ToString());
+
+                    StringBuilder setFillDynamicRecordFromStringFieldValuesBuilder = new StringBuilder();
+                    int fieldIndex = 0;
+                    foreach (var fieldName in preparedConfig.FieldNamesForInsert)
+                    {
+                        var matchField = recordType.Fields.FirstOrDefault(itm => itm.Name == fieldName);
+                        matchField.ThrowIfNull("matchField", fieldName);
+
+                        string valueAsStringVariableName = $"{fieldName}ValueAsString";
+                        setFillDynamicRecordFromStringFieldValuesBuilder.AppendLine($"string {valueAsStringVariableName} = fieldValues[{fieldIndex}];");
+                        setFillDynamicRecordFromStringFieldValuesBuilder.AppendLine($"if(!string.IsNullOrEmpty({fieldName}ValueAsString))");
+                        setFillDynamicRecordFromStringFieldValuesBuilder.AppendLine("{");
+
+                        if (matchField.Type.StoreValueSerialized)
+                        {
+                            setFillDynamicRecordFromStringFieldValuesBuilder.AppendLine($"var {fieldName}Context = new Vanrise.GenericData.Entities.DeserializeDataRecordFieldValueContext() {{ Value = {valueAsStringVariableName} }}; ");
+                            setFillDynamicRecordFromStringFieldValuesBuilder.AppendLine($"record.{fieldName} = s_{fieldName}FieldType.DeserializeValue({fieldName}Context);");
+                        }
+                        else
+                        {
+                            Type runtimeType = matchField.Type.GetNonNullableRuntimeType();
+                            string valueExpression = null;
+                            if(runtimeType == typeof(string))
+                            {
+                                valueExpression = valueAsStringVariableName;
+                            }
+                            else if(runtimeType == typeof(int))
+                            {
+                                valueExpression = $"int.Parse({valueAsStringVariableName})";
+                            }
+                            else if (runtimeType == typeof(long))
+                            {
+                                valueExpression = $"long.Parse({valueAsStringVariableName})";
+                            }
+                            else if (runtimeType == typeof(decimal))
+                            {
+                                valueExpression = $"decimal.Parse({valueAsStringVariableName})";
+                            }
+                            else if (runtimeType == typeof(double))
+                            {
+                                valueExpression = $"double.Parse({valueAsStringVariableName})";
+                            }
+                            else if (runtimeType == typeof(float))
+                            {
+                                valueExpression = $"float.Parse({valueAsStringVariableName})";
+                            }
+                            else if (runtimeType == typeof(DateTime))
+                            {
+                                valueExpression = $"DateTime.Parse({valueAsStringVariableName})";
+                            }
+                            else if (runtimeType == typeof(Vanrise.Entities.Time))
+                            {
+                                valueExpression = $"new Vanrise.Entities.Time({valueAsStringVariableName})";
+                            }
+                            else if (runtimeType == typeof(bool))
+                            {
+                                valueExpression = $"bool.Parse({valueAsStringVariableName})";
+                            }
+                            else if (runtimeType == typeof(Guid))
+                            {
+                                valueExpression = $"Guid.Parse({valueAsStringVariableName})";
+                            }
+                            setFillDynamicRecordFromStringFieldValuesBuilder.AppendLine($@"record.{fieldName} = {valueExpression};");
+                        }
+                        setFillDynamicRecordFromStringFieldValuesBuilder.AppendLine("}");
+                        fieldIndex++;
+                    }
+                    classDefinitionBuilder.Replace("#FILLDYNAMICRECORDFROMSTRINGFIELDVALUES#", setFillDynamicRecordFromStringFieldValuesBuilder.ToString());
+
+                    Type dataRecordRuntimeType = recordTypeManager.GetDataRecordRuntimeType(dataRecordStorage.DataRecordTypeId);
+                    dataRecordRuntimeType.ThrowIfNull("dataRecordRuntimeType", dataRecordStorage.DataRecordTypeId);
+                    classDefinitionBuilder.Replace("#DATARECORD_RUNTIMETYPE#", CSharpCompiler.TypeToString(dataRecordRuntimeType));
                     
-                    //Type dataRecordRuntimeType = recordTypeManager.GetDataRecordRuntimeType(dataRecordStorage.DataRecordTypeId);
-                    //dataRecordRuntimeType.ThrowIfNull("dataRecordRuntimeType", dataRecordStorage.DataRecordTypeId);
-                    //classDefinitionBuilder.Replace("#DATARECORD_RUNTIMETYPE#", CSharpCompiler.TypeToString(dataRecordRuntimeType));
-
-                    //string dynamicRecordMapper;
-                    //string dataRecordMapper;
-                    //BuildMapperImplementations(dataRecordStorageSettings, recordType, out dynamicRecordMapper, out dataRecordMapper);
-                    //classDefinitionBuilder.Replace("#DynamicRecordMapperImplementation#", dynamicRecordMapper);
-                    //classDefinitionBuilder.Replace("#DataRecordMapperImplementation#", dataRecordMapper);
-
                     string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.FileDataStorage");
                     string className = "DynamicManager";
                     classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);

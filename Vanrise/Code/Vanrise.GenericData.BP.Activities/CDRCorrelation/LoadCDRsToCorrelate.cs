@@ -58,11 +58,11 @@ namespace Vanrise.GenericData.BP.Activities
         {
             int maximumOutputQueueSize;
             if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_MaxCorrelateQueueSize"], out maximumOutputQueueSize))
-                maximumOutputQueueSize = 20;
+                maximumOutputQueueSize = 200;
 
             int batchSize;
             if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_BatchSize"], out batchSize))
-                batchSize = 100000;
+                batchSize = 10000;
 
             if (inputArgument.OutputQueue == null)
                 throw new NullReferenceException("inputArgument.OutputQueue");
@@ -89,7 +89,7 @@ namespace Vanrise.GenericData.BP.Activities
                 long batchRecordsCount = 0;
                 DateTime batchStartTime = DateTime.Now;
 
-                new DataRecordStorageManager().GetDataRecords(inputArgument.RecordStorageId, null, null, cdrCorrelationFilterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
+                new DataRecordStorageManager().GetDataRecords(inputArgument.RecordStorageId, cdrCorrelationFilterGroup.From, cdrCorrelationFilterGroup.To, cdrCorrelationFilterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
                 {
                     totalRecordsCount++;
                     batchRecordsCount++;

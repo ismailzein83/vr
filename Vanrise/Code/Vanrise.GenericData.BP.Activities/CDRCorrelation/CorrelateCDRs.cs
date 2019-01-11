@@ -70,6 +70,10 @@ namespace Vanrise.GenericData.BP.Activities
             List<MobileCDR> uncorrelatedMobileCDRList = new List<MobileCDR>();
             Dictionary<string, List<MobileCDR>> uncorrelatedMobileCDRsByCDPNDict = new Dictionary<string, List<MobileCDR>>();
 
+            TimeSpan totalElapsedTimeToLog = default(TimeSpan);
+            int totalNbOfProcessedCDRsToLog = 0;
+            int totalNbOfCorrelatedCDRsToLog = 0;
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItems = false;
@@ -163,12 +167,27 @@ namespace Vanrise.GenericData.BP.Activities
                                     inputArgument.OutputQueue.Enqueue(cdrCorrelationBatch);
 
                                 double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
-                                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Process {0} CDRs. {1} CDRs correlated. ElapsedTime: {2} (s)",
-                                    recordBatch.Records.Count, cdrCorrelationBatch.OutputRecordsToInsert.Count, elapsedTime.ToString());
+                                totalElapsedTimeToLog = totalElapsedTimeToLog.Add(DateTime.Now - batchStartTime);
+                                totalNbOfProcessedCDRsToLog += recordBatch.Records.Count;
+                                totalNbOfCorrelatedCDRsToLog += cdrCorrelationBatch.OutputRecordsToInsert.Count;
+                                if (totalNbOfProcessedCDRsToLog >= 100000)
+                                {
+                                    handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Process {0} CDRs. {1} CDRs correlated. ElapsedTime: {2}",
+                                        totalNbOfProcessedCDRsToLog, totalNbOfCorrelatedCDRsToLog, totalElapsedTimeToLog);
+                                    totalElapsedTimeToLog = default(TimeSpan);
+                                    totalNbOfProcessedCDRsToLog = 0;
+                                    totalNbOfCorrelatedCDRsToLog = 0;
+                                }
                             }
                         });
                 } while (!ShouldStop(handle) && hasItems);
             });
+
+            if (totalNbOfProcessedCDRsToLog > 0)
+            {
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Process {0} CDRs. {1} CDRs correlated. ElapsedTime: {2}",
+                    totalNbOfProcessedCDRsToLog, totalNbOfCorrelatedCDRsToLog, totalElapsedTimeToLog);
+            }
 
             //Finalizing CDRCorrelation
             FinalizingCDRCorrelation(uncorrelatedMobileCDRList, callForwardMobileCDRList, callForwardMobileCDRsByCGPNDict, callForwardMobileCDRsByCDPNDict, 

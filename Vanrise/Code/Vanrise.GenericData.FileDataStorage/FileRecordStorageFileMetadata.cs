@@ -11,8 +11,8 @@ namespace Vanrise.GenericData.FileDataStorage
         public long FileRecordStorageFileMetadataId { get; set; }
 
         public string ParentFolderRelativePath { get; set; }
-
-        public string FileName { get; set; }
+        
+        public long NbOfRecords { get; set; }
 
         public DateTime FromTime { get; set; }
 

@@ -6,6 +6,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Queueing;
 using Vanrise.Common;
+using System.Configuration;
 
 namespace Vanrise.GenericData.BP.Activities
 {
@@ -45,25 +46,30 @@ namespace Vanrise.GenericData.BP.Activities
 
         protected override DeleteRecordsFromStorageOutput DoWorkWithResult(DeleteRecordsFromStorageInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            int nbOfThreads;
+            if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_NbOfDeleteThreads"], out nbOfThreads))
+                nbOfThreads = 1;
             var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(inputArgument.DataRecordStorageId);
-
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            System.Threading.Tasks.Parallel.For(0, nbOfThreads, (i) =>
             {
-                bool hasItem = false;
-                do
+                DoWhilePreviousRunning(previousActivityStatus, handle, () =>
                 {
-                    hasItem = inputArgument.InputQueue.TryDequeue((deleteRecordBatch) =>
+                    bool hasItem = false;
+                    do
                     {
-                        DateTime batchStartTime = DateTime.Now;
-                        recordStorageDataManager.DeleteRecords(deleteRecordBatch.DateTimeRange.From, deleteRecordBatch.DateTimeRange.To, deleteRecordBatch.IdsToDelete, 
-                            inputArgument.IdFieldName, inputArgument.DateTimeFieldName);
+                        hasItem = inputArgument.InputQueue.TryDequeue((deleteRecordBatch) =>
+                        {
+                            DateTime batchStartTime = DateTime.Now;
+                            recordStorageDataManager.DeleteRecords(deleteRecordBatch.DateTimeRange.From, deleteRecordBatch.DateTimeRange.To, deleteRecordBatch.IdsToDelete,
+                                inputArgument.IdFieldName, inputArgument.DateTimeFieldName);
 
-                        double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
-                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete batch CDRs is done. Events Count: {0}. ElapsedTime: {1} (s), {2} Pending Batches",
-                            deleteRecordBatch.IdsToDelete.Count, elapsedTime.ToString(), inputArgument.InputQueue.Count);
-                    });
-                } while (!ShouldStop(handle) && hasItem);
-            });
+                            double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
+                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete batch CDRs is done. Events Count: {0}. ElapsedTime: {1} (s), {2} Pending Batches",
+                                deleteRecordBatch.IdsToDelete.Count, elapsedTime.ToString(), inputArgument.InputQueue.Count);
+                        });
+                    } while (!ShouldStop(handle) && hasItem);
+                });
+            });            
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete Initial CDRs is done.");
             return new DeleteRecordsFromStorageOutput();

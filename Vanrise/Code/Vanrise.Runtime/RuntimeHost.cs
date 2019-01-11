@@ -20,7 +20,7 @@ namespace Vanrise.Runtime
         #region Singleton
 
         static RuntimeHost _current;
-        internal static RuntimeHost Current
+        public static RuntimeHost Current
         {
             get
             {
@@ -112,7 +112,16 @@ namespace Vanrise.Runtime
         #region Local Variables/Properties
 
         Logger _logger = LoggerFactory.GetLogger();
+
         Guid _runtimeNodeId;
+        public Guid RuntimeNodeId
+        {
+            get
+            {
+                return _runtimeNodeId;
+            }
+        }
+
         Guid _runtimeNodeInstanceId;
         List<RuntimeServiceExecutor> _serviceExecutors;
         List<ChildRuntimeProcessProxy> _childRuntimeProcessProxies;
