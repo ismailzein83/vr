@@ -321,16 +321,11 @@ namespace NP.IVSwitch.Business
 			RouteTableRoutesToEdit = routeTableRouteDataManager.GetRouteTableRoutesOptions(routeTableId, destination, blockedAccount);
 			routeTableRoutesRuntimeEditor.Destination = destination;
 			routeTableRoutesRuntimeEditor.TechPrefix = RouteTableRoutesToEdit.TechPrefix;
+			routeTableRoutesRuntimeEditor.IsBlockedAccount = RouteTableRoutesToEdit.IsBlockedAccount;
 
-			if (routeTableRoutesRuntimeEditor != null && routeTableRoutesRuntimeEditor.RouteOptionsToEdit != null)
+			if (!RouteTableRoutesToEdit.IsBlockedAccount && routeTableRoutesRuntimeEditor != null && routeTableRoutesRuntimeEditor.RouteOptionsToEdit != null)
 				foreach (var item in RouteTableRoutesToEdit.RouteOptionsToEdit)
 				{
-					if (item.RouteId == blockedAccount)
-					{
-						routeTableRoutesRuntimeEditor.IsBlockedAccount = true;
-					}
-					else
-
 						routeTableRoutesRuntimeEditor.RouteOptionsToEdit.Add(new RouteTableRouteOptionRuntimeEditor
 						{
 							RouteId = item.RouteId,
