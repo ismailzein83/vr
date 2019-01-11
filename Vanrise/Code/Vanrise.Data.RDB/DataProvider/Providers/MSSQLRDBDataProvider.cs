@@ -255,6 +255,16 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             _dataManager.ExecuteNonQuery(resolvedQuery, null, false);
         }
 
+        public override RDBResolvedQuery ResolveTableDropQuery(IRDBDataProviderResolveTableDropQueryContext context)
+        {
+            string tableDBName = GetTableDBName(context.SchemaName, context.TableName);
+            string query = $"IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{tableDBName}') AND s.type in (N'U')) BEGIN DROP TABLE {tableDBName} END";
+
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = query });
+            return resolvedQuery;
+        }
+
         #region Private Classes
 
         private class SQLDataManager : Vanrise.Data.SQL.BaseSQLDataManager

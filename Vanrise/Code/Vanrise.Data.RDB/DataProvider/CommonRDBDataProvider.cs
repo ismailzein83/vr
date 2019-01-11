@@ -507,14 +507,6 @@ namespace Vanrise.Data.RDB.DataProvider
             return resolvedQuery;
         }
 
-        public override RDBResolvedQuery ResolveTableDropQuery(IRDBDataProviderResolveTableDropQueryContext context)
-        {
-            string tableDBName = GetTableDBName(context.SchemaName, context.TableName);
-            var resolvedQuery = new RDBResolvedQuery();
-            resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = string.Concat("DROP TABLE ", tableDBName) });
-            return resolvedQuery;
-        }
-
         public abstract void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName,
             RDBTableColumnDefinition columnDefinition, bool notNullable, bool isIdentityColumn);
 

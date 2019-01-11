@@ -317,6 +317,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             throw new NotImplementedException();
         }
 
+        public override RDBResolvedQuery ResolveTableDropQuery(IRDBDataProviderResolveTableDropQueryContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Private Classes
 
         private class MySQLDataManager
