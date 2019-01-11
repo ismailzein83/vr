@@ -161,5 +161,6 @@
     <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiEPCBadCDRType.sql" />
     <Build Include="Mobile_EDR\Tables\CorrelatedMobileCDR.sql" />
     <Build Include="Mobile_EDR\User Defined Types\CorrelatedMobileCDRType.sql" />
+    <Build Include="Mobile_EDR\Tables\MobileCDRFileMetadata.sql" />
   </ItemGroup>
 </Project>
