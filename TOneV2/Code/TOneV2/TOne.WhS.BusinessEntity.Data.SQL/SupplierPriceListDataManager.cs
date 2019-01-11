@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
@@ -53,7 +50,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ProcessInstanceId = GetReaderValue<long?>(reader, "ProcessInstanceID"),
                 SPLStateBackupId = GetReaderValue<long?>(reader, "SPLStateBackupID"),
                 UserId = GetReaderValue<int>(reader, "UserID"),
-                PricelistType = (SupplierPricelistType?)GetReaderValue<byte?>(reader, "PricelistType"),
+                PricelistType = (SupplierPricelistType?)GetReaderValue<int>(reader, "PricelistType"),
                 EffectiveOn = GetReaderValue<DateTime>(reader, "EffectiveOn")
             };
             return supplierPriceList;
