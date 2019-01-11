@@ -108,9 +108,9 @@ namespace Vanrise.Security.Data.RDB
             var selectColumns = selectQuery.SelectColumns();
             selectColumns.Column(COL_HolderType);
             var holderNameExp = selectColumns.Expression("HolderName").CaseExpression();
-            var holderNameCase1 = holderNameExp.AddCase();
-            holderNameCase1.When().EqualsCondition(COL_HolderType).Value((int)HolderType.USER);
-            holderNameCase1.Then().Column(userAlias, UserDataManager.COL_Name);
+            var holderNameCase = holderNameExp.AddCase();
+            holderNameCase.When().EqualsCondition(COL_HolderType).Value((int)HolderType.USER);
+            holderNameCase.Then().Column(userAlias, UserDataManager.COL_Name);
             holderNameExp.Else().Column(groupAlias, GroupDataManager.COL_Name);
             selectColumns.Columns(COL_EntityId, COL_EntityType, COL_HolderId, COL_PermissionFlags);
             groupDataManager.SetJoinContext(selectQuery.Join(), TABLE_ALIAS, groupAlias, COL_HolderId, RDBJoinType.Left);

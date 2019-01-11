@@ -99,22 +99,14 @@ namespace Vanrise.Security.Data.RDB
 
         public bool ToggleBreakInheritance(Guid entityId)
         {
-            var selectQueryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = selectQueryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-            selectQuery.Where().EqualsCondition(COL_ID).Value(entityId);
-            var item = selectQueryContext.GetItem(ModuleMapper);
-            if (item != null)
-            {
-                var updateQueryContext = new RDBQueryContext(GetDataProvider());
-                var updateQuery = updateQueryContext.AddUpdateQuery();
-                updateQuery.FromTable(TABLE_NAME);
-                updateQuery.Column(COL_BreakInheritance).Value(!item.BreakInheritance);
-                updateQuery.Where().EqualsCondition(COL_ID).Value(entityId);
-                return updateQueryContext.ExecuteNonQuery() > 0;
-            }
-            return false;
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            var expressionContext = updateQuery.Column(COL_BreakInheritance).ArithmeticExpression(RDBArithmeticExpressionOperator.Substract);
+            expressionContext.Expression1().Value(1);
+            expressionContext.Expression2().Column(COL_BreakInheritance);
+            updateQuery.Where().EqualsCondition(COL_ID).Value(entityId);
+            return queryContext.ExecuteNonQuery() > 0;
         }
 
         public bool UpdateBusinessEntityModule(BusinessEntityModule moduleObject)
