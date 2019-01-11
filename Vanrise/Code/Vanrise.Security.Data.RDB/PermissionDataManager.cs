@@ -145,45 +145,35 @@ namespace Vanrise.Security.Data.RDB
 
         public bool UpdatePermission(Permission permission)
         {
-            var selectQueryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = selectQueryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-            var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition(COL_HolderType).Value((int)permission.HolderType);
-            whereQuery.EqualsCondition(COL_HolderId).Value(permission.HolderId);
-            whereQuery.EqualsCondition(COL_EntityType).Value((int)permission.EntityType);
-            whereQuery.EqualsCondition(COL_EntityId).Value(permission.EntityId);
-            var permissions = selectQueryContext.GetItems(PermissionMapper);
-            if (permissions != null && permissions.Count>0)
-            {
-                var updateQueryContext = new RDBQueryContext(GetDataProvider());
-                var updateQuery = updateQueryContext.AddUpdateQuery();
-                updateQuery.FromTable(TABLE_NAME);
-                if (permission.PermissionFlags != null)
-                    updateQuery.Column(COL_PermissionFlags).Value(Common.Serializer.Serialize(permission.PermissionFlags));
-                else
-                    updateQuery.Column(COL_PermissionFlags).Null();
-                var where = updateQuery.Where();
-                where.EqualsCondition(COL_HolderType).Value((int)permission.HolderType);
-                where.EqualsCondition(COL_HolderId).Value(permission.HolderId);
-                where.EqualsCondition(COL_EntityType).Value((int)permission.EntityType);
-                where.EqualsCondition(COL_EntityId).Value(permission.EntityId);
-                return updateQueryContext.ExecuteNonQuery() > 0;
-            }
+            var insertQueryContext = new RDBQueryContext(GetDataProvider());
+            var insertQuery = insertQueryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+            var ifNotExists = insertQuery.IfNotExists(TABLE_ALIAS);
+            ifNotExists.EqualsCondition(COL_HolderType).Value((int)permission.HolderType);
+            ifNotExists.EqualsCondition(COL_HolderId).Value(permission.HolderId);
+            ifNotExists.EqualsCondition(COL_EntityType).Value((int)permission.EntityType);
+            ifNotExists.EqualsCondition(COL_EntityId).Value(permission.EntityId);
+            insertQuery.Column(COL_HolderType).Value((int)permission.HolderType);
+            insertQuery.Column(COL_HolderId).Value(permission.HolderId);
+            insertQuery.Column(COL_EntityType).Value((int)permission.EntityType);
+            insertQuery.Column(COL_EntityId).Value(permission.EntityId);
+            if (permission.PermissionFlags != null)
+                insertQuery.Column(COL_PermissionFlags).Value(Common.Serializer.Serialize(permission.PermissionFlags));
+            if (insertQueryContext.ExecuteNonQuery() > 0)
+                return true;
+            var updateQueryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = updateQueryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            if (permission.PermissionFlags != null)
+                updateQuery.Column(COL_PermissionFlags).Value(Common.Serializer.Serialize(permission.PermissionFlags));
             else
-            {
-                var insertQueryContext = new RDBQueryContext(GetDataProvider());
-                var insertQuery = insertQueryContext.AddInsertQuery();
-                insertQuery.IntoTable(TABLE_NAME);
-                insertQuery.Column(COL_HolderType).Value((int)permission.HolderType);
-                insertQuery.Column(COL_HolderId).Value(permission.HolderId);
-                insertQuery.Column(COL_EntityType).Value((int)permission.EntityType);
-                insertQuery.Column(COL_EntityId).Value(permission.EntityId);
-                if (permission.PermissionFlags != null)
-                    insertQuery.Column(COL_PermissionFlags).Value(Common.Serializer.Serialize(permission.PermissionFlags));
-                return insertQueryContext.ExecuteNonQuery() > 0;
-            }
+                updateQuery.Column(COL_PermissionFlags).Null();
+            var where = updateQuery.Where();
+            where.EqualsCondition(COL_HolderType).Value((int)permission.HolderType);
+            where.EqualsCondition(COL_HolderId).Value(permission.HolderId);
+            where.EqualsCondition(COL_EntityType).Value((int)permission.EntityType);
+            where.EqualsCondition(COL_EntityId).Value(permission.EntityId);
+            return updateQueryContext.ExecuteNonQuery() > 0;
         }
         #endregion
     }
