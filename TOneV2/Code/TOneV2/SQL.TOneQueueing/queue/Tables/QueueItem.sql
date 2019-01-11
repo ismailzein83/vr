@@ -17,7 +17,14 @@
 
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_QueueItem_ID]
     ON [queue].[QueueItem]([ID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_QueueItem_QueueIDActivatorID]
+    ON [queue].[QueueItem]([QueueID] ASC, [ActivatorID] ASC);
 
