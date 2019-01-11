@@ -31,8 +31,8 @@ namespace Vanrise.BusinessProcess.WFActivities
             var connectionStringName = databaseJobProcessInput.ConnectionStringName;
 
             string connectionString;
-            if (!String.IsNullOrWhiteSpace(connectionStringName))
-                connectionString = Vanrise.Common.Utilities.GetExposedConnectionString(connectionStringName);
+            if (!String.IsNullOrWhiteSpace(connectionStringName)) 
+                 connectionString = Vanrise.Common.Utilities.GetConnectionStringByName(connectionStringName);
             else
                 connectionString = databaseJobProcessInput.ConnectionString;
 
