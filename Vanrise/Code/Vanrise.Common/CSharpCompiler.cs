@@ -31,7 +31,9 @@ namespace Vanrise.Common
 
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            return s_dynamicAssembliesByName[args.Name.Substring(0, args.Name.IndexOf(','))];
+            Assembly assembly;
+            s_dynamicAssembliesByName.TryGetValue(args.Name.Substring(0, args.Name.IndexOf(',')), out assembly);
+            return assembly;
         }
 
         public static bool TryCompileClass(string classDefinition, out CSharpCompilationOutput output, bool ignoreNamespacesCompilation = false)
