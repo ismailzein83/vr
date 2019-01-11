@@ -18,9 +18,6 @@ namespace TestCallAnalysis.BP.Activities
         public InArgument<TimeSpan> DateTimeMargin { get; set; }
 
         [RequiredArgument]
-        public InArgument<TimeSpan> BatchIntervalTime { get; set; }
-
-        [RequiredArgument]
         public InArgument<TestCallAnalysis.Entities.CDRCorrelationProcessState> CDRCorrelationProcessState { get; set; }
 
         [RequiredArgument]
