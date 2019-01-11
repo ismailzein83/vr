@@ -39,25 +39,19 @@ namespace Vanrise.Security.Data.RDB
         #region ICookieNameDataManager
         public string InsertIfNotExistsAndGetCookieName(string nameToInsertIfNotExists)
         {
+            var insertQueryContext = new RDBQueryContext(GetDataProvider());
+            var insertQuery = insertQueryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+            insertQuery.IfNotExists(TABLE_ALIAS);
+            insertQuery.Column(COL_CookieName).Value(nameToInsertIfNotExists);
+            if (insertQueryContext.ExecuteNonQuery() > 0)
+                return nameToInsertIfNotExists;
             var selectQueryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = selectQueryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, 1, true);
             selectQuery.SelectColumns().Column(COL_CookieName);
-            var cookieName = selectQueryContext.ExecuteScalar().StringValue;
-            if (cookieName == null)
-            {
-                var insertQueryContext = new RDBQueryContext(GetDataProvider());
-                var insertQuery = insertQueryContext.AddInsertQuery();
-                insertQuery.IntoTable(TABLE_NAME);
-                insertQuery.Column(COL_CookieName).Value(nameToInsertIfNotExists);
-                insertQueryContext.ExecuteNonQuery();
-            }
-            var selectQueryContext2 = new RDBQueryContext(GetDataProvider());
-            var selectQuery2 = selectQueryContext2.AddSelectQuery();
-            selectQuery2.From(TABLE_NAME, TABLE_ALIAS, 1, true);
-            selectQuery2.SelectColumns().Column(COL_CookieName);
-            selectQuery2.Sort().ByColumn(COL_ID, RDBSortDirection.ASC);
-            return selectQueryContext2.ExecuteScalar().StringValue;
+            selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.ASC);
+            return selectQueryContext.ExecuteScalar().StringValue;
         }
         #endregion
     }
