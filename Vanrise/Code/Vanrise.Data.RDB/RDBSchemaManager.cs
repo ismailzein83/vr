@@ -90,13 +90,23 @@ namespace Vanrise.Data.RDB
 
         internal string GetTableDBName(BaseRDBDataProvider provider, string tableName)
         {
+            return GetTableDBName(provider, null, tableName);
+        }
+
+        internal string GetTableDBName(BaseRDBDataProvider provider, string databaseName, string tableName)
+        {
             RDBTableDefinition tableDefinition = GetTableDefinitionWithValidate(provider, tableName);
-            return GetTableDBName(provider, tableDefinition);
+            return GetTableDBName(provider, databaseName, tableDefinition);
         }
 
         internal static string GetTableDBName(BaseRDBDataProvider provider, RDBTableDefinition tableDefinition)
         {
-            return provider.GetTableDBName(tableDefinition.DBSchemaName, tableDefinition.DBTableName);
+            return GetTableDBName(provider, null, tableDefinition);
+        }
+
+        internal static string GetTableDBName(BaseRDBDataProvider provider, string databaseName, RDBTableDefinition tableDefinition)
+        {
+            return provider.GetTableDBName(databaseName, tableDefinition.DBSchemaName, tableDefinition.DBTableName);
         }
 
         internal List<string> GetTableColumns(string tableName)

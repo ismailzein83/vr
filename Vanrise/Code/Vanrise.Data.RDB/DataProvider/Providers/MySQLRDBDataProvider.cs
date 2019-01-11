@@ -28,12 +28,19 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             _dataManager = new MySQLDataManager(validConnString);
         }
 
-        public override string GetTableDBName(string schemaName, string tableName)
+        public override string GetTableDBName(string databaseName, string schemaName, string tableName)
         {
-            if (!String.IsNullOrEmpty(schemaName))
-                return String.Concat("\"", schemaName, "\"", "_", "\"", tableName, "\"");
-            else
-                return string.Concat("\"", tableName, "\"");
+            StringBuilder tableDbNameBuilder = new StringBuilder();
+            if (!string.IsNullOrEmpty(databaseName))
+            {
+                tableDbNameBuilder.Append($"\"{databaseName}\".");
+            }
+            if (!string.IsNullOrEmpty(schemaName))
+            {
+                tableDbNameBuilder.Append($"\"{schemaName}\"_");
+            }
+            tableDbNameBuilder.Append($"\"{tableName}\"");
+            return tableDbNameBuilder.ToString();
         }
 
         public override string ConvertToDBParameterName(string parameterName, RDBParameterDirection parameterDirection)

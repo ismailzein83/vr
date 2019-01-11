@@ -19,12 +19,19 @@ namespace Vanrise.Data.RDB.DataProvider
             _connString = connString;
         }
 
-        public override string GetTableDBName(string schemaName, string tableName)
+        public override string GetTableDBName(string databaseName, string schemaName, string tableName)
         {
-            if (!String.IsNullOrEmpty(schemaName))
-                return String.Concat("\"", schemaName, "\"", ".", "\"", tableName, "\"");
-            else
-                return string.Concat("\"", tableName, "\"");
+            StringBuilder tableDbNameBuilder = new StringBuilder();
+            if(!string.IsNullOrEmpty(databaseName))
+            {
+                tableDbNameBuilder.Append($"\"{databaseName}\".");
+            }
+            if (!string.IsNullOrEmpty(schemaName))
+            {
+                tableDbNameBuilder.Append($"\"{schemaName}\".");
+            }
+            tableDbNameBuilder.Append($"\"{tableName}\"");            
+            return tableDbNameBuilder.ToString();
         }
 
         public override string GetColumnDBName(string columnDBName)

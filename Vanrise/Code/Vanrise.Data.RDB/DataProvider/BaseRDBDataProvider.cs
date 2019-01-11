@@ -25,7 +25,12 @@ namespace Vanrise.Data.RDB
 
         public abstract string ConvertToDBParameterName(string parameterName, RDBParameterDirection parameterDirection);
 
-        public abstract string GetTableDBName(string schemaName, string tableName);
+        public string GetTableDBName(string schemaName, string tableName)
+        {
+            return GetTableDBName(null, schemaName, tableName);
+        }
+
+        public abstract string GetTableDBName(string databaseName, string schemaName, string tableName);
 
         public virtual string GetColumnDBName(string columnDBName)
         {
