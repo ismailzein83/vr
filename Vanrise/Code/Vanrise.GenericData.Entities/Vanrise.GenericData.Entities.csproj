@@ -111,6 +111,7 @@
     <Compile Include="CompositeRecordCondition\Definition\CompositeRecordConditionDefinitionSettingConfig.cs" />
     <Compile Include="CompositeRecordCondition\Runtime\CompositeRecordConditionResolvedData.cs" />
     <Compile Include="DataRecordFieldTransaltedToRDB.cs" />
+    <Compile Include="DataRecordTypes\RDBDataRecordFieldAttribute.cs" />
     <Compile Include="DataStorage\DataRecordStorage\BusinessObjectDataRecordStorageConfig.cs" />
     <Compile Include="DataRecordCondition.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoice.cs" />
