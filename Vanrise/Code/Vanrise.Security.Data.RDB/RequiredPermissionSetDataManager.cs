@@ -59,31 +59,23 @@ namespace Vanrise.Security.Data.RDB
         #region IRequiredPermissionSetDataManager
         public int AddIfNotExists(string module, string requiredPermissionString)
         {
-            var selectQueryContext1 = new RDBQueryContext(GetDataProvider());
-            var selectQuery1 = selectQueryContext1.AddSelectQuery();
-            selectQuery1.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery1.SelectColumns().AllTableColumns(TABLE_ALIAS);
-            var where1 = selectQuery1.Where();
-            where1.EqualsCondition(COL_RequiredPermissionString).Value(requiredPermissionString);
-            where1.EqualsCondition(COL_Module).Value(module);
-            var item = selectQueryContext1.GetItem(RequiredPermissionSetMapper);
-            if (item == null)
-            {
-                var insertQueryContext = new RDBQueryContext(GetDataProvider());
-                var insertQuery = insertQueryContext.AddInsertQuery();
-                insertQuery.IntoTable(TABLE_NAME);
-                insertQuery.Column(COL_Module).Value(module);
-                insertQuery.Column(COL_RequiredPermissionString).Value(requiredPermissionString);
-                insertQueryContext.ExecuteNonQuery();
-            }
-            var selectQueryContext2 = new RDBQueryContext(GetDataProvider());
-            var selectQuery2 = selectQueryContext2.AddSelectQuery();
-            selectQuery2.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery2.SelectColumns().Column(COL_ID);
-            var where2 = selectQuery2.Where();
-            where2.EqualsCondition(COL_RequiredPermissionString).Value(requiredPermissionString);
-            where2.EqualsCondition(COL_Module).Value(module);
-            return selectQueryContext2.ExecuteScalar().IntValue;
+            var insertQueryContext = new RDBQueryContext(GetDataProvider());
+            var insertQuery = insertQueryContext.AddInsertQuery();
+            insertQuery.IntoTable(TABLE_NAME);
+            var ifNotExists = insertQuery.IfNotExists(TABLE_ALIAS);
+            ifNotExists.EqualsCondition(COL_RequiredPermissionString).Value(requiredPermissionString);
+            ifNotExists.EqualsCondition(COL_Module).Value(module);
+            insertQuery.Column(COL_Module).Value(module);
+            insertQuery.Column(COL_RequiredPermissionString).Value(requiredPermissionString);
+            insertQueryContext.ExecuteNonQuery();
+            var selectQueryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = selectQueryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Column(COL_ID);
+            var where = selectQuery.Where();
+            where.EqualsCondition(COL_RequiredPermissionString).Value(requiredPermissionString);
+            where.EqualsCondition(COL_Module).Value(module);
+            return selectQueryContext.ExecuteScalar().IntValue;
         }
 
         public bool AreRequiredPermissionSetsUpdated(ref object updateHandle)
