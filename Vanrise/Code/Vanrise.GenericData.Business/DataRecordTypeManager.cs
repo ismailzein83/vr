@@ -293,6 +293,27 @@ namespace Vanrise.GenericData.Business
             return manager.GetExtensionConfigurations<DataRecordTypeExtraFieldTemplate>(DataRecordTypeExtraFieldTemplate.EXTENSION_TYPE);
         }
 
+        public List<DataRecordFieldTransaltedToRDB> GetDataRecordFieldsTranslatedToRDB(Guid dataRecordTypeId)
+        {
+            DataRecordType dataRecordType = GetDataRecordType(dataRecordTypeId);
+
+            DataRecordFieldManager dataRecordFieldManager = new DataRecordFieldManager();
+            IEnumerable<DataRecordFieldInfo> dataRecordFields = dataRecordFieldManager.GetDataRecordFieldsInfo(dataRecordTypeId, null);
+   
+            List<DataRecordFieldTransaltedToRDB> dataRecordFieldTransaltedToRDBs = new List<DataRecordFieldTransaltedToRDB>();
+            foreach (var dataRecordField in dataRecordFields)
+            {
+
+                dataRecordFieldTransaltedToRDBs.Add(new DataRecordFieldTransaltedToRDB
+                {
+                    FieldName = dataRecordField.Entity.Name,
+                    IsUnique = dataRecordField.Entity.Name == dataRecordType.Settings.IdField
+
+                });
+            }
+            return dataRecordFieldTransaltedToRDBs;
+        }
+
         #endregion
 
         #region Private Methods

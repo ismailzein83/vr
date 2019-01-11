@@ -6,5 +6,7 @@ namespace Vanrise.GenericData.Entities
     public class DataRecordFieldInfoFilter
     {
         public List<string> IncludedFieldNames { get; set; }
+
+        public bool ExcludeFormula { get; set; }
     }
 }

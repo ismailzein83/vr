@@ -77,6 +77,9 @@ namespace Vanrise.GenericData.Business
                 if (filter.IncludedFieldNames != null && !filter.IncludedFieldNames.Contains(dataRecordField.Name))
                     return false;
 
+                if (filter.ExcludeFormula && dataRecordField.Formula != null)
+                    return false;
+
                 return true;
             };
 

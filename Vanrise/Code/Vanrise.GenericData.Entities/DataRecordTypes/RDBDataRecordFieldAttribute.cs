@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace Vanrise.GenericData.Entities.DataRecordTypes
+namespace Vanrise.GenericData.Entities
 {
     public class RDBDataRecordFieldAttribute
     {

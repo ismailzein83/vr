@@ -77,5 +77,12 @@ namespace Vanrise.GenericData.Web.Controllers
             return manager.GetDataRecordTypeExtraFieldsTemplates();
         }
 
+        [HttpGet]
+        [Route("GetDataRecordFieldsTranslatedToRDB")]
+        public List<DataRecordFieldTransaltedToRDB> GetDataRecordFieldsTranslatedToRDB(Guid dataRecordTypeId)
+        {
+            DataRecordTypeManager manager = new DataRecordTypeManager();
+            return manager.GetDataRecordFieldsTranslatedToRDB(dataRecordTypeId);
+        }
     }
 }

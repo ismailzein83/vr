@@ -49,6 +49,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataRecordType", "GetDataRecordTypeExtraFieldsTemplates"));
         }
 
+        function GetDataRecordFieldsTranslatedToRDB(dataRecordTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordType', 'GetDataRecordFieldsTranslatedToRDB'), { dataRecordTypeId: dataRecordTypeId });
+        }
+
         return ({
             GetDataRecordType: GetDataRecordType,
             GetDataRecordTypeToEdit: GetDataRecordTypeToEdit,
@@ -59,7 +63,8 @@
             HasUpdateDataRecordType: HasUpdateDataRecordType,
             GetDataRecordTypeInfo: GetDataRecordTypeInfo,
             GetRemoteDataRecordTypeInfo: GetRemoteDataRecordTypeInfo,
-            GetDataRecordTypeExtraFieldsTemplates: GetDataRecordTypeExtraFieldsTemplates
+            GetDataRecordTypeExtraFieldsTemplates: GetDataRecordTypeExtraFieldsTemplates,
+            GetDataRecordFieldsTranslatedToRDB: GetDataRecordFieldsTranslatedToRDB
         });
     }
 

@@ -97,7 +97,7 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         public override void UpdateRecordStorage(IUpdateRecordStorageContext context)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

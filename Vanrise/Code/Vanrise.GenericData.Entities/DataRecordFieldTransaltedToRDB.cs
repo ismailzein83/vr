@@ -10,7 +10,6 @@ namespace Vanrise.GenericData.Entities
     public class DataRecordFieldTransaltedToRDB
     {
         public string FieldName { get; set; }
-
         public RDBDataType RDBDataType { get; set; }
         public int? Size { get; set; }
         public int? Precision { get; set; }
