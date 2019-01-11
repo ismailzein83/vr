@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
+using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
+using Vanrise.Runtime;
 using Vanrise.Runtime.Entities;
 
 namespace Mediation.Runtime.Tasks
@@ -11,8 +15,89 @@ namespace Mediation.Runtime.Tasks
     {
         public void Execute()
         {
-            GenerateRuntimeNodeConfiguration();
+            RuntimeHost host = new RuntimeHost(new List<RuntimeService>());
+            host.Start();
+            TestFileRecordStorage();
+            //GenerateRuntimeNodeConfiguration();
             Console.WriteLine("Ismail Task");
+        }
+
+        private void TestFileRecordStorage()
+        {
+            RecordFilterGroup filterGroup = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.And, Filters = new List<RecordFilter>() };
+            filterGroup.Filters.Add(new NumberListRecordFilter { FieldName = "RecordType", CompareOperator = ListRecordFilterOperator.In, Values = new List<decimal>() { 0, 1, 100 } });
+
+            CompareCDRsFromFileAndSQLStorages("2018-07-01", "2018-12-01", null);
+            CompareCDRsFromFileAndSQLStorages("2018-07-01", "2018-12-01", filterGroup);
+            CompareCDRsFromFileAndSQLStorages("2018-07-26 20:02:18.000", "2018-07-27 23:34:41.000", null);
+            CompareCDRsFromFileAndSQLStorages("2018-07-26 20:02:18.000", "2018-07-27 23:34:41.000", filterGroup);
+            CompareCDRsFromFileAndSQLStorages("2018-07-28 08:06:48.000", "2018-07-27 23:34:41.000", null);
+            CompareCDRsFromFileAndSQLStorages("2018-07-28 08:06:48.000", "2018-07-27 23:34:41.000", filterGroup);
+            CompareCDRsFromFileAndSQLStorages("2018-07-26 20:02:18.000", "2018-10-22 08:33:15.000", null);
+            CompareCDRsFromFileAndSQLStorages("2018-07-26 20:02:18.000", "2018-10-22 08:33:15.000", filterGroup);
+            CompareCDRsFromFileAndSQLStorages("2018-07-29 08:06:48.000", "2018-07-21 08:33:15.000", null);
+            CompareCDRsFromFileAndSQLStorages("2018-07-29 08:06:48.000", "2018-10-21 08:33:15.000", filterGroup);
+            Console.WriteLine("Test Done");
+        }
+
+        private static void CompareCDRsFromFileAndSQLStorages(string fromAsString, string toAsString, RecordFilterGroup filterGroup)
+        {
+            var dataRecordStorageManager = new DataRecordStorageManager();
+            DateTime from = DateTime.Parse(fromAsString);
+            DateTime to = DateTime.Parse(toAsString);
+            Guid sqlMobileCDRStorageId = new Guid("2b740017-1a95-486b-894f-09b5d092686f");
+            Guid fileMobileCDRStorageId = new Guid("b182a12d-4875-4db1-a118-434c78df6460");
+            List<dynamic> sqlCDRs = new List<dynamic>();
+            dynamic lastSQLCDR = null;
+            dataRecordStorageManager.GetDataRecords(sqlMobileCDRStorageId, from, to, filterGroup, () => false,
+                (cdr) =>
+                {
+                    if (lastSQLCDR != null && lastSQLCDR.SetupTime > cdr.SetupTime)
+                        Console.WriteLine("received not ordered SQL CDR");
+                    sqlCDRs.Add(cdr);
+                }, "SetupTime", true);
+
+            sqlCDRs = sqlCDRs.OrderBy(cdr => cdr.SetupTime).ThenBy(cdr => cdr.UniqueIdentifier).ThenBy(cdr => cdr.CallingNumber).ThenBy(cdr => cdr.CalledNumber).ToList();
+
+            dynamic lastCDR = null;
+            List<dynamic> fileCDRs = new List<dynamic>();
+            dataRecordStorageManager.GetDataRecords(fileMobileCDRStorageId, from, to, filterGroup, () => false,
+                (cdr) =>
+                {
+                    if (lastCDR != null && lastCDR.SetupTime > cdr.SetupTime)
+                        Console.WriteLine($"received not ordered File CDR. Record Id '{cdr.Id}'. Previous Record Id '{lastCDR.Id}'");
+                    lastCDR = cdr;
+                    fileCDRs.Add(cdr);
+                }, "SetupTime", true);
+
+            fileCDRs = fileCDRs.OrderBy(cdr => cdr.SetupTime).ThenBy(cdr => cdr.UniqueIdentifier).ThenBy(cdr => cdr.CallingNumber).ThenBy(cdr => cdr.CalledNumber).ToList();
+
+            if (sqlCDRs.Count != fileCDRs.Count)
+            {
+                Console.WriteLine($"CompareCDRsFromFileAndSQLStorages failed. different count. SQL Count '{sqlCDRs.Count}', File Count '{fileCDRs.Count}'");
+                return;
+            }
+            for(int i=0;i<sqlCDRs.Count;i++)
+            {
+                var sqlCDR = sqlCDRs[i];
+                var fileCDR = fileCDRs[i];                
+                string serializedSQLCDR = Serializer.Serialize(CleanCDR(sqlCDR));
+                string serializedFileCDR = Serializer.Serialize(CleanCDR(fileCDR));
+                if (serializedFileCDR != serializedSQLCDR)
+                {
+                    Console.WriteLine($"CompareCDRsFromFileAndSQLStorages failed. different CDRs Index '{i}'. SQL Id '{sqlCDR.Id}', File Id '{fileCDR.Id}'");
+                    return;
+                }
+            }
+            Console.WriteLine($"{DateTime.Now}: CompareCDRsFromFileAndSQLStorages succeeded. CDR Count: {sqlCDRs.Count}");
+            
+        }
+
+        private static dynamic CleanCDR(dynamic cdr)
+        {
+            var cdrCopy = Vanrise.Common.ExtensionMethods.VRDeepCopy(cdr);
+            cdrCopy.Id = 0;
+            return cdrCopy;
         }
 
         private void GenerateRuntimeNodeConfiguration()
