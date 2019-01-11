@@ -4,6 +4,7 @@ using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
+
 namespace Vanrise.BusinessProcess.Data.RDB
 {
     public class BPDefinitionArgumentStateDataManager : IBPDefinitionArgumentStateDataManager
@@ -67,8 +68,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
             if (effectedRows <= 0)
             {
                 var queryContext2 = new RDBQueryContext(GetDataProvider());
-                //try
-                //{
+                try
+                {
                     var insertQuery = queryContext2.AddInsertQuery();
                     insertQuery.IntoTable(TABLE_NAME);
                     insertQuery.Column(COL_BPDefinitionID).Value(bpDefinitionArgumentState.BPDefinitionID);
@@ -76,8 +77,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
                     effectedRows = queryContext2.ExecuteNonQuery();
                 }
-            //    catch (Exception ex) { }
-            //}
+                catch (Exception ex) { }
+            }
             return effectedRows > 0;
         }
 
