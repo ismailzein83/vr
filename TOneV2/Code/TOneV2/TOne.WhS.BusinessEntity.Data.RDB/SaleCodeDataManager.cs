@@ -414,5 +414,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         //}
 
         #endregion
+
+        #region Public Methods
+        public void BuildInsertQuery(RDBInsertQuery insertQuery, long processInstanceID)
+        {
+            insertQuery.IntoTable(TABLE_NAME);
+            insertQuery.Column(COL_ProcessInstanceID).Value(processInstanceID);
+        }
+        #endregion
     }
 }
