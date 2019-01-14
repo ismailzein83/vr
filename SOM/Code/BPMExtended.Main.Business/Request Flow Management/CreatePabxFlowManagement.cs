@@ -22,7 +22,8 @@ namespace BPMExtended.Main.Business
         const string welcomeStep = "AEB4AA8D-5371-4B09-8862-4D3F5111EE48";
         const string reserveNumbersStep = "2883FC66-8A4C-4D2F-81DD-3109D47D010B";
         const string printStep = "65BB4FBB-121E-4BB8-A4ED-A01F9C2F7803";
-        const string switchTeamStep = "3AE7FEA6-3CEE-4C4D-91D6-015571946B2D";
+        //const string switchTeamStep = "3AE7FEA6-3CEE-4C4D-91D6-015571946B2D";
+        const string technicalStep = "4AD46645-AD4A-4F53-83DC-EB38831867FA";
         const string completedStep = "1386C350-017D-400B-855C-04FC427868BF";
         public string GetNextStep(string id, string currentStepId)
         {
@@ -32,8 +33,8 @@ namespace BPMExtended.Main.Business
             {
                 case welcomeStep: nextStepId = reserveNumbersStep; break;
                 case reserveNumbersStep: nextStepId = printStep; break;
-                case printStep: nextStepId = ManualSwitch(id) ? switchTeamStep : completedStep; break;
-                case switchTeamStep: nextStepId = completedStep; break;
+                case printStep: nextStepId = ManualSwitch(id) ? technicalStep : completedStep; break;
+                case technicalStep: nextStepId = completedStep; break;
             }
             return nextStepId;
         }

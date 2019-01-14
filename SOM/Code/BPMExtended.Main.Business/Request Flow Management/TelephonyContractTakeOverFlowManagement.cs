@@ -27,8 +27,9 @@ namespace BPMExtended.Main.Business
         const string billOnDemandStep = "6430317A-87B7-4703-AEAF-38E8B00A6479";
         const string paymentStep = "90ED9157-3D6E-41F8-BCA4-41845BF6BBDD";
         const string adslCredentialStep = "0ED21643-2A5C-4CB2-8320-64B67D30D516";
-        const string pdnTeamStep = "CE8774B8-154B-485F-970B-8FAE05BB1902";
-        const string mdfTeamStep = "CD2A5018-23B0-4F36-942C-E450FDBBD4F0";
+      //  const string pdnTeamStep = "CE8774B8-154B-485F-970B-8FAE05BB1902";
+       // const string mdfTeamStep = "CD2A5018-23B0-4F36-942C-E450FDBBD4F0";
+        const string technicalStep = "DF7AC0B3-F53D-4104-A260-2509A3E08769";
         const string completedStep = "A826F4E8-9352-46FB-814E-8B0B52655659";
         public string GetNextStep(string id, string currentStepId)
         {
@@ -40,10 +41,14 @@ namespace BPMExtended.Main.Business
                 case targetCustomerStep: nextStepId = printStep; break;
                 case printStep: nextStepId = NBOfActiveContracts(id) == "1" ? billOnDemandStep : paymentStep; break;
                 case billOnDemandStep: nextStepId = paymentStep; break;
-                case paymentStep: nextStepId = IsTelephonyLineHasADSLContract(id)? adslCredentialStep : mdfTeamStep; break;
-                case adslCredentialStep: nextStepId = pdnTeamStep; break;
-                case pdnTeamStep: nextStepId = mdfTeamStep; break;
-                case mdfTeamStep: nextStepId = completedStep; break;
+                //  case paymentStep: nextStepId = IsTelephonyLineHasADSLContract(id)? adslCredentialStep : mdfTeamStep; break;
+                //  case adslCredentialStep: nextStepId = pdnTeamStep; break;
+                //   case pdnTeamStep: nextStepId = mdfTeamStep; break;
+                //   case mdfTeamStep: nextStepId = completedStep; break;
+                case paymentStep: nextStepId = adslCredentialStep; break;
+                case adslCredentialStep: nextStepId = technicalStep; break;
+                case technicalStep: nextStepId = completedStep; break;
+
             }
             return nextStepId;
         }

@@ -24,9 +24,10 @@ namespace BPMExtended.Main.Business
         const string reasonStep = "309A5A35-395E-43FB-983D-22BAE925DAFC";
         const string generateInvoiceStep = "7341F829-E511-4838-9324-7658122FD302";
         const string validatePaymentStep = "A56EE0A5-A9D0-404A-B264-2517D0F3E5F7";
-        const string mdfTeamStep = "205FE9FF-FD14-4DB6-95A8-DA7BBE8D5D81";
-        const string cabinetTeamStep = "17A7EEF5-A226-4E08-8165-6986C755DEE1";
-        const string dpTeamStep = "8E6A058E-C805-4B77-AA95-D2F503E61BC7";
+       // const string mdfTeamStep = "205FE9FF-FD14-4DB6-95A8-DA7BBE8D5D81";
+       // const string cabinetTeamStep = "17A7EEF5-A226-4E08-8165-6986C755DEE1";
+       // const string dpTeamStep = "8E6A058E-C805-4B77-AA95-D2F503E61BC7";
+        const string technicalStep = "45363147-CC59-4632-B09E-EB850D2FD25F";
         const string completedStep = "CEBCB883-84AA-4183-9938-817E711EB2BF";
         public string GetNextStep(string id, string currentStepId)
         {
@@ -38,10 +39,8 @@ namespace BPMExtended.Main.Business
                 case printStep: nextStepId = reasonStep; break;
                 case reasonStep: nextStepId = generateInvoiceStep; break;
                 case generateInvoiceStep: nextStepId = validatePaymentStep; break;
-                case validatePaymentStep: nextStepId = mdfTeamStep; break;
-                case mdfTeamStep: nextStepId = cabinetTeamStep; break;
-                case cabinetTeamStep: nextStepId = dpTeamStep; break;
-                case dpTeamStep: nextStepId = completedStep; break;
+                case validatePaymentStep: nextStepId = technicalStep; break;
+                case technicalStep: nextStepId = completedStep; break;
             }
             return nextStepId;
         }
