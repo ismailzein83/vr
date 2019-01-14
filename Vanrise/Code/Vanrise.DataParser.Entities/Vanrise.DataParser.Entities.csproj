@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,12 +46,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryParser\BinaryRecordReadersConfig.cs" />
-    <Compile Include="BinaryParser\PackageFieldsConfig.cs" />
+    <Compile Include="BinaryParser\BitFieldParser.cs" />
+    <Compile Include="PackageFieldsConfig.cs" />
     <Compile Include="CompositeFieldsParser.cs" />
     <Compile Include="BinaryParser\BinaryFieldParser.cs" />
     <Compile Include="BinaryParser\BinaryFieldParserCollection.cs" />
     <Compile Include="BinaryParser\BinaryRecordParser.cs" />
-    <Compile Include="BinaryParser\ParsedRecordFieldConstantValue.cs" />
+    <Compile Include="ParsedRecordFieldConstantValue.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="HexTLV\BaseStringConfig.cs" />
     <Compile Include="HexTLV\CompositeFieldsConfig.cs" />
@@ -67,15 +69,16 @@
     <Compile Include="HexTLV\TagValueParser.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ParserRecord\FldDictParsedRecord.cs" />
-    <Compile Include="ParserRecord\ParsedBatch.cs" />
-    <Compile Include="ParserTypeSettings\IDataParserInput.cs" />
-    <Compile Include="ParserRecord\ParsedRecord.cs" />
-    <Compile Include="ParserTypeSettings\ParserTypeSettings.cs" />
+    <Compile Include="ParsedRecord\FldDictParsedRecord.cs" />
+    <Compile Include="ParsedRecord\ParsedBatch.cs" />
+    <Compile Include="ParserType\IDataParserInput.cs" />
+    <Compile Include="ParsedRecord\ParsedRecord.cs" />
+    <Compile Include="ParserType\ParserTypeSettings.cs" />
     <Compile Include="ParserType\ParserType.cs" />
     <Compile Include="ParserType\ParserTypeDetail.cs" />
     <Compile Include="ParserType\ParserTypeExtendedSettingsConfig.cs" />
     <Compile Include="ParserType\ParserTypeQuery.cs" />
+    <Compile Include="PositionedBitFieldParser.cs" />
     <Compile Include="PositionedFieldParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -89,7 +92,9 @@
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ParserTypeSettings\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

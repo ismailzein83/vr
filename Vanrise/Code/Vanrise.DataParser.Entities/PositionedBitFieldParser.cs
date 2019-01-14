@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.DataParser.Entities
 {
-    public class PositionedFieldParser
+    public class PositionedBitFieldParser
     {
         public int Position { get; set; }
         public int Length { get; set; }
-        public BinaryFieldParser FieldParser { get; set; }
+        public BitFieldParser FieldParser { get; set; }
     }
 }

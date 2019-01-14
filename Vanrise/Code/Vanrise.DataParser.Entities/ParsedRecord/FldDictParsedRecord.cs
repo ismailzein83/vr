@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common;
 
 namespace Vanrise.DataParser.Entities
 {
     public class FldDictParsedRecord : ParsedRecord
     {
-        public FldDictParsedRecord()
-        {
-            this.FieldValues = new Dictionary<string, object>();
-            this.TempFieldValues = new Dictionary<string, object>();
-        }
         public string RecordName { get; set; }
+
         public Dictionary<string, Object> FieldValues { get; set; }
 
         public HashSet<string> TempFieldNames { get; set; }
 
         public Dictionary<string, Object> TempFieldValues { get; set; }
+
+        public FldDictParsedRecord()
+        {
+            this.FieldValues = new Dictionary<string, object>();
+            this.TempFieldValues = new Dictionary<string, object>();
+        }
 
         public override void SetFieldValue(string fieldName, object value)
         {
