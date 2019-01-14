@@ -181,7 +181,9 @@ namespace BPMExtended.Main.Common
 
         const string CUSTOMER_CAT_RES_ENG = "0F6CC8CB-4F69-42CB-B16B-563F2A8C2EB7";
 
-        const string CUSTOMER_CAT_RES_MARTYR = "7B015DC2-D30F-4227-ADD1-979DCE67F35C";
+        const string CUSTOMER_CAT_RES_MARTYR = "7B015DC2-D30F-4227-ADD1-979DCE67F35C"; 
+        
+        const string CUSTOMER_CAT_RES_ST_EMPLOYEE = "2A4F9ABE-9C9C-4849-B834-D50C892BC2BD";
 
         #endregion
 
@@ -1270,7 +1272,7 @@ namespace BPMExtended.Main.Common
             return GetAllCustomerCategories().FindAllRecords(x => (int)x.CustomerType == (int)customerType).MapRecords(CustomerCategoryMapper).ToList();
         }
 
-        private static SOM.Main.Entities.CustomerCategory GetCustomerCategory(string customerCategoryId)
+        public static SOM.Main.Entities.CustomerCategory GetCustomerCategory(string customerCategoryId)
         {
             return GetAllCustomerCategories().FindRecord(x => x.CategoryId == customerCategoryId);
         }
@@ -1299,6 +1301,13 @@ namespace BPMExtended.Main.Common
                     Name = "Martyr Family",
                     CustomerType = SOM.Main.Entities.CustomerType.Residential,
                     IsNormal = false
+                },
+                 new SOM.Main.Entities.CustomerCategory
+                {
+                    CategoryId = CUSTOMER_CAT_RES_ST_EMPLOYEE,
+                    Name = "ST Employee",
+                    CustomerType = SOM.Main.Entities.CustomerType.Residential,
+                    IsNormal = true
                 }
             };
         }

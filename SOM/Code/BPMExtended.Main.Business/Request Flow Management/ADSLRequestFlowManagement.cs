@@ -32,9 +32,7 @@ namespace BPMExtended.Main.Business
         const string adslCredentialsStep = "B1110D25-96F3-4FED-BC62-8C30623D929E";
 
         const string printConfigurationStep = "AA09C2F9-C844-4B13-BEFA-D9D4E00571FC";
-
-        const string pdnTeamStep = "6D8E463C-F0E2-4CDA-A45B-6E20E5ED6CB1";
-        const string mdfTeamStep = "52A1E444-ED49-4C57-9D6B-C24BCB8586C0";
+        const string TechnicalStep = "6AB2B0E3-5201-4189-9838-CF4B4E4E17D9";
 
         const string completedStep = "8CD5BDC5-2551-4767-8166-5D334D5E0FD7";
 
@@ -52,9 +50,8 @@ namespace BPMExtended.Main.Business
                 case servicesStep: nextStepId = paymentStep; break;
                 case paymentStep: nextStepId = adslCredentialsStep; break;
                 case adslCredentialsStep: nextStepId = printConfigurationStep; break;
-                case printConfigurationStep: nextStepId = pdnTeamStep; break;
-                case pdnTeamStep: nextStepId = mdfTeamStep; break;
-                case mdfTeamStep: nextStepId = completedStep; break;
+                case printConfigurationStep: nextStepId = TechnicalStep; break;
+                case TechnicalStep: nextStepId = completedStep; break;
               
             }
             return nextStepId;

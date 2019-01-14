@@ -74,6 +74,7 @@
     <Compile Include="ContractDetail.cs" />
     <Compile Include="CPTNumberDetail.cs" />
     <Compile Include="CreateCustomerRequestOutput.cs" />
+    <Compile Include="CRMCustomerInfo.cs" />
     <Compile Include="CustomerBalance.cs" />
     <Compile Include="CustomerCategoryDetail.cs" />
     <Compile Include="CustomerCategoryInfo.cs" />
@@ -95,8 +96,10 @@
     <Compile Include="LeasedLineContractDetail.cs" />
     <Compile Include="LineType.cs" />
     <Compile Include="MIC.cs" />
+    <Compile Include="OutputResult.cs" />
     <Compile Include="PabxContractDetail.cs" />
     <Compile Include="PaymentDetail.cs" />
+    <Compile Include="PaymentMethod.cs" />
     <Compile Include="PhoneNumberDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatePlanInfo.cs" />

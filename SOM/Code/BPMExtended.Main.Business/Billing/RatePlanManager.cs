@@ -28,6 +28,11 @@ namespace BPMExtended.Main.Business
             return RatePlanMockDataGenerator.GetCustomerCategories(customerType);
         }
 
+        public CustomerCategory GetCustomerCategoryById(string customerCategoryId)
+        {
+            return RatePlanMockDataGenerator.GetCustomerCategory(customerCategoryId);
+        }
+
         public List<RatePlanInfo> GetRatePlanInfo(BPMCustomerType customerType, string customerCategoryId, OperationType operationType, string subType , string filter = null)
         {
             List<string> ratePlanIds = null;
