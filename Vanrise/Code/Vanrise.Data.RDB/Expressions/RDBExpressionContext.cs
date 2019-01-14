@@ -73,13 +73,16 @@ namespace Vanrise.Data.RDB
         {
             Expression(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName});
         }
-
-
+        
         public RDBTextConcatenationExpressionContext TextConcatenation()
         {
             return new RDBTextConcatenationExpressionContext(_queryBuilderContext, _tableAlias, (exp1, exp2) => Expression(new RDBTextConcatenationExpression { Expression1 = exp1, Expression2 = exp2 }));
         }
 
+        public RDBExpressionContext TextLeftPart(int numberOfCharacters)
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (exp) => Expression(new RDBTextLeftPartExpression { Expression = exp, NbOfCharacters = numberOfCharacters }), _tableAlias);
+        }
 
         public void DateNow()
         {

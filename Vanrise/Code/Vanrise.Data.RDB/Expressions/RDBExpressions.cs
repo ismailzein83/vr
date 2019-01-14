@@ -191,6 +191,18 @@ namespace Vanrise.Data.RDB
         }
     }
 
+    internal class RDBTextLeftPartExpression : BaseRDBExpression
+    {
+        public BaseRDBExpression Expression { get; set; }
+
+        public int NbOfCharacters { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return string.Concat("LEFT(", this.Expression.ToDBQuery(context), ", ", this.NbOfCharacters, ")");
+        }
+    }
+
     public enum RDBDateTimePart { TimeOnly = 1, DateOnly = 2 }
     internal class RDBDateTimePartExpression : BaseRDBExpression
     {
