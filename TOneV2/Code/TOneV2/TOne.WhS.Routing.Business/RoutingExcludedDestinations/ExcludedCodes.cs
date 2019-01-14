@@ -16,7 +16,7 @@ namespace TOne.WhS.Routing.Business
             context.ThrowIfNull("context");
 
             if (string.IsNullOrEmpty(context.Code))
-                throw new NullReferenceException("context.Code");
+                return false;
 
             if (this.Codes == null)
                 throw new NullReferenceException(string.Format("Excluded Codes not found for Rule {0}", context.RuleId));
