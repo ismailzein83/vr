@@ -40,7 +40,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 if (file.Settings.ExtendedSettings != null)
                     configId = file.Settings.ExtendedSettings.ConfigId;
             }
-            int id = ExecuteNonQuerySP("[common].[sp_File_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime));
+            int id = ExecuteNonQuerySP("[common].[sp_File_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime), file.FileUniqueId);
             return (id > 0) ? (long)fileId : badresult;
         }
         public bool SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings)
@@ -81,7 +81,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 if (file.Settings.ExtendedSettings != null)
                     configId = file.Settings.ExtendedSettings.ConfigId;
             }
-            int id = ExecuteNonQuerySP("[common].[sp_File_Insert_Temp]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime));
+            int id = ExecuteNonQuerySP("[common].[sp_File_Insert_Temp]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime), file.FileUniqueId);
             return (id > 0) ? (long)fileId : badresult;
         }
 
@@ -108,6 +108,11 @@ namespace TOne.WhS.DBSync.Data.SQL
                     else
                         cmd.Parameters.Add(new SqlParameter("@UserID", DBNull.Value));
 
+                    if (file.FileUniqueId.HasValue)
+                        cmd.Parameters.Add(new SqlParameter("@FileUniqueId", file.FileUniqueId));
+                    else
+                        cmd.Parameters.Add(new SqlParameter("@FileUniqueId", DBNull.Value));
+
                     cmd.Parameters.Add(new SqlParameter("@IsTemp", file.IsTemp));
                     Guid? configId = null;
                     string settingAsString = null;
@@ -125,8 +130,8 @@ namespace TOne.WhS.DBSync.Data.SQL
         }
 
         const string query_InsertFileWithIdentityOff = @"set identity_insert {0} on;
-	Insert into common.[File_Temp] (ID, [Name], [Extension], [Content], [ModuleName],[UserID], IsTemp, ConfigID, Settings, [CreatedTime])
-	values(@ID, @Name, @Extension, @Content, @ModuleName,@UserID, @IsTemp, @ConfigID, @Settings, @CreatedTime)
+	Insert into common.[File_Temp] (ID, [Name], [Extension], [Content], [ModuleName],[UserID], IsTemp, ConfigID, Settings, [CreatedTime],[FileUniqueId])
+	values(@ID, @Name, @Extension, @Content, @ModuleName,@UserID, @IsTemp, @ConfigID, @Settings, @CreatedTime,@FileUniqueId)
 
 
 set identity_insert [common].[file_Temp] off;";

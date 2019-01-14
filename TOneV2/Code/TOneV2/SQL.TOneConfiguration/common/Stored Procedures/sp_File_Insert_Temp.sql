@@ -9,13 +9,14 @@ CREATE PROCEDURE [common].[sp_File_Insert_Temp]
 	@ConfigId uniqueidentifier,
 	@Settings nvarchar(max),
 	@CreatedTime datetime,
+	@FileUniqueId uniqueidentifier,
 	@Id bigint out
 AS
 BEGIN
 	IF @CreatedTime IS NULL
 		SET @CreatedTime = GETDATE()
 
-	Insert into common.[File_Temp] ([Name], [Extension], [Content], [ModuleName], [UserID], [IsTemp], [ConfigID], [Settings], [CreatedTime])
-	values(@Name, @Extension, @Content, @ModuleName, @UserID, @IsTemp, @ConfigId, @Settings, @CreatedTime)
+	Insert into common.[File_Temp] ([Name], [Extension], [Content], [ModuleName], [UserID], [IsTemp], [ConfigID], [Settings], [CreatedTime], [FileUniqueId])
+	values(@Name, @Extension, @Content, @ModuleName, @UserID, @IsTemp, @ConfigId, @Settings, @CreatedTime, @FileUniqueId)
 	SET @Id = SCOPE_IDENTITY()
 END

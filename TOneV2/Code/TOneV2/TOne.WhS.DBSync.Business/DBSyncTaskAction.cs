@@ -5,6 +5,9 @@ using TOne.WhS.BusinessEntity.Data.SQL;
 using TOne.WhS.BusinessEntity.MainExtensions;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
+using Vanrise.Analytic.Business;
+using Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators;
+using Vanrise.Analytic.MainExtensions.VRReportGeneration;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -96,12 +99,50 @@ namespace TOne.WhS.DBSync.Business
                     fileIds.Add(companySetting.CompanyLogo);
                 }
             }
+            List<Guid> fileUniqueIds = new List<Guid>();
+
+            VRReportGenerationManager vrReportGenerationManager = new VRReportGenerationManager();
+            var reportGenerations = vrReportGenerationManager.GetAllReportGenerations();
+            if (reportGenerations != null)
+            {
+                foreach (var reportGeneration in reportGenerations)
+                {
+                    if (reportGeneration.Settings != null && reportGeneration.Settings.ReportAction != null)
+                    {
+                        var downloadFileAction = reportGeneration.Settings.ReportAction as DownloadFileAction;
+                        if (downloadFileAction != null && downloadFileAction.FileGenerator != null && downloadFileAction.FileGenerator.Settings != null)
+                        {
+                            var automatedReportFileGeneratorSettings = downloadFileAction.FileGenerator.Settings as AdvancedExcelFileGenerator;
+                            if (automatedReportFileGeneratorSettings != null)
+                            {
+                                fileUniqueIds.Add(automatedReportFileGeneratorSettings.FileUniqueId);
+                            }
+                        }
+                    }
+                }
+            }
 
             PreDataDBSyncDataManager dataManager = new PreDataDBSyncDataManager();
-            List<VRFile> vrFiles = dataManager.GetExistingFiles(fileIds);
 
-            FileDBSyncDataManager fileManager = new FileDBSyncDataManager(_context.UseTempTables);
-            fileManager.InsertFiles(vrFiles);
+            List<VRFile> vrFiles = dataManager.GetExistingFiles(fileIds);
+            List<VRFile> vrFilesByFileUniqueIds = dataManager.GetExistingFiles(fileUniqueIds);
+            List<VRFile> filesToSync = null;
+            if(vrFiles != null)
+            {
+                filesToSync = new List<VRFile>();
+                filesToSync.AddRange(vrFiles);
+            }
+            if(vrFilesByFileUniqueIds != null)
+            {
+                if (filesToSync == null)
+                    filesToSync = new List<VRFile>();
+                filesToSync.AddRange(vrFilesByFileUniqueIds);
+            }
+            if(filesToSync != null)
+            {
+                FileDBSyncDataManager fileManager = new FileDBSyncDataManager(_context.UseTempTables);
+                fileManager.InsertFiles(filesToSync);
+            }
 
             if (_context.MigrationRequestedTables != null && _context.MigrationRequestedTables.Contains(DBTableName.Rule))
             {

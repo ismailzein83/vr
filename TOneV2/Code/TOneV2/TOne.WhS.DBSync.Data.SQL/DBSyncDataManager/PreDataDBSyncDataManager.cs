@@ -24,7 +24,10 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             return GetItemsText(string.Format(query_GetFiles, string.Join(",", fileIds)), VRFileMapper, null);
         }
-
+        public List<VRFile> GetExistingFiles(List<Guid> fileIds)
+        {
+            return GetItemsText(string.Format(query_GetFilesByFileUniqueId, string.Join("','", fileIds)), VRFileMapper, null);
+        }
         VRFile VRFileMapper(IDataReader reader)
         {
             var file = new VRFile
@@ -32,6 +35,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 Content = GetReaderValue<byte[]>(reader, "Content")
             };
             file.FileId = GetReaderValue<long>(reader, "ID");
+            file.FileUniqueId = GetReaderValue<Guid?>(reader, "FileUniqueId");
             file.Name = reader["Name"] as string;
             file.Extension = reader["Extension"] as string;
             file.ModuleName = reader["ModuleName"] as string;
@@ -55,5 +59,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         }
 
         const string query_GetFiles = @"Select * from [common].[File] where ID in ({0})";
+        const string query_GetFilesByFileUniqueId = @"Select * from [common].[File] where FileUniqueId in ('{0}')";
+
     }
 }
