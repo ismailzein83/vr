@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
-using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
@@ -48,7 +43,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 CurrencyId = GetReaderValue<int?>(reader, "CurrencyId"),
-                RateChange = (RateChangeType)GetReaderValue<byte>(reader, "Change")
+                RateChange = (RateChangeType)GetReaderValue<int>(reader, "Change")
             };
             return supplierOtherRate;
         }

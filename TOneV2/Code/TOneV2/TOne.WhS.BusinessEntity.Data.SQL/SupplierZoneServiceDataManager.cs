@@ -30,9 +30,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SupplierDefaultServices_GetByDate", SupplierDefaultServiceMapper, supplierId, minimumDate);
         }
-        public IEnumerable<SupplierZoneService> GetSupplierZonesServicesEffectiveAfterByZoneIds(int supplierId, DateTime effectiveDate, string strZoneIds)
+        public IEnumerable<SupplierZoneService> GetSupplierZonesServicesEffectiveAfterByZoneIds(int supplierId, DateTime effectiveDate, long zoneId)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SupplierZonesServicesEffectiveAfter_GetByZone", SupplierZoneServiceMapper, supplierId, effectiveDate, strZoneIds);
+            return GetItemsSP("TOneWhS_BE.sp_SupplierZonesServicesEffectiveAfter_GetByZone", SupplierZoneServiceMapper, supplierId, effectiveDate, zoneId);
         }
         public SupplierDefaultService GetSupplierDefaultServiceBySupplier(int supplierId, DateTime effectiveOn)
         {

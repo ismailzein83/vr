@@ -29,7 +29,7 @@ namespace TOne.WhS.BusinessEntity.Data
 
         IEnumerable<SupplierZoneService> GetEffectiveSupplierZoneServices(int supplierId, DateTime from, DateTime to);
         
-        IEnumerable<SupplierZoneService> GetSupplierZonesServicesEffectiveAfterByZoneIds(int supplierId, DateTime effectiveDate, string strZoneIds);
+        IEnumerable<SupplierZoneService> GetSupplierZonesServicesEffectiveAfterByZoneIds(int supplierId, DateTime effectiveDate, long zoneId);
 
         List<SupplierDefaultService> GetSupplierDefaultServicesEffectiveAfter(int supplierId, DateTime minimumDate);
 

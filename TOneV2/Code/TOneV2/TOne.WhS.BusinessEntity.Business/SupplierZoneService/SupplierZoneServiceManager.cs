@@ -30,16 +30,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private IEnumerable<SupplierZoneService> GetSupplierZonesServicesEffectiveAfterByZoneId(long zoneId, int supplierId, DateTime effectiveDate)
         {
-            List<long> zoneIds = new List<long>();
-            zoneIds.Add(zoneId);
-            string strZoneIds = null;
-            if (zoneIds != null && zoneIds.Count() > 0)
-            {
-                strZoneIds = string.Join(",", zoneIds);
-            }
-
             ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
-            return dataManager.GetSupplierZonesServicesEffectiveAfterByZoneIds(supplierId, effectiveDate, strZoneIds);
+            return dataManager.GetSupplierZonesServicesEffectiveAfterByZoneIds(supplierId, effectiveDate, zoneId);
         }
         public Vanrise.Entities.UpdateOperationOutput<SupplierEntityServiceDetail> UpdateSupplierZoneService(SupplierZoneServiceToEdit serviceObject)
         {
