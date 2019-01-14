@@ -136,10 +136,7 @@ namespace Vanrise.Notification.Data.SQL
                 if (reader.NextResult())
                     while (reader.Read())
                     {
-                        DateTime maxLastModifiedTime = GetReaderValue<DateTime>(reader, "LastModifiedTime");
-                        long id = GetReaderValue<long>(reader, "ID");
-
-                        context.LastUpdateHandle = BuildLastUpdateHandle(maxLastModifiedTime, id);
+                        context.LastUpdateHandle = GetReaderValue<byte[]>(reader, "MaxTimestamp");
                     }
 
             }, context.NotificationTypeId, context.NbOfRows, description, statusIds, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
@@ -158,10 +155,6 @@ namespace Vanrise.Notification.Data.SQL
             DateTime from = context.Query != null && context.Query.From.HasValue ? context.Query.From.Value : default(DateTime);
             DateTime to = context.Query != null && context.Query.To.HasValue ? context.Query.To.Value : default(DateTime);
 
-            DateTime? origLastModifiedTime;
-            long? origId;
-            SplitLastUpdateHandle(context.LastUpdateHandle, out origLastModifiedTime, out origId);
-
             List<VRNotification> notifications = new List<VRNotification>();
             ExecuteReaderSP("[VRNotification].[sp_VRNotifications_GetUpdated]", (reader) =>
             {
@@ -171,13 +164,10 @@ namespace Vanrise.Notification.Data.SQL
                 if (reader.NextResult())
                     while (reader.Read())
                     {
-                        DateTime maxLastModifiedTime = GetReaderValue<DateTime>(reader, "LastModifiedTime");
-                        long id = GetReaderValue<long>(reader, "ID");
-
-                        context.LastUpdateHandle = BuildLastUpdateHandle(maxLastModifiedTime, id);
+                        context.LastUpdateHandle = GetReaderValue<byte[]>(reader, "MaxTimestamp");
                     }
 
-            }, context.NotificationTypeId, context.NbOfRows, origLastModifiedTime, origId, description, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
+            }, context.NotificationTypeId, context.NbOfRows, context.LastUpdateHandle, description, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
 
             return notifications;
         }
@@ -207,29 +197,6 @@ namespace Vanrise.Notification.Data.SQL
                     isFinalRow = context.onItemReady(VRNotificationMapper(reader));
 
             }, context.NotificationTypeId, context.NbOfRows, context.LessThanID, description, statusIds, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
-        }
-        #endregion
-
-        #region private methods
-        private object BuildLastUpdateHandle(DateTime? lastModifiedTime, long? id)
-        {
-            if (lastModifiedTime.HasValue && id.HasValue)
-                return string.Concat(lastModifiedTime.Value.ToString("yyyyMMddHHmmssfff"), "@", id.Value);
-
-            return null;
-        }
-
-        private void SplitLastUpdateHandle(object lastUpdateHandle, out DateTime? lastModifiedTime, out long? id)
-        {
-            lastModifiedTime = null;
-            id = null;
-
-            if (lastUpdateHandle != null)
-            {
-                string[] data = lastUpdateHandle.ToString().Split('@');
-                lastModifiedTime = DateTime.ParseExact(data[0], "yyyyMMddHHmmssfff", CultureInfo.InvariantCulture);
-                id = long.Parse(data[1]);
-            }
         }
         #endregion
 
