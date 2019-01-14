@@ -351,9 +351,17 @@ namespace TOne.WhS.RouteSync.IVSwitch
         }
         private decimal? BuildPercentage(decimal gatewayPercentage, decimal? optionPercentage, decimal? optionsPercenatgeSum, int gatewayCount)
         {
-            return gatewayPercentage > 0
+            decimal? percentage = gatewayPercentage > 0
                 ? BuildPercentagePerGateway(gatewayPercentage, optionPercentage, optionsPercenatgeSum)
                 : BuildOptionPercentage(optionPercentage, optionsPercenatgeSum, gatewayCount);
+
+            if (percentage.HasValue)
+            {
+                int roundedPercentage = (int)Math.Round(percentage.Value);
+                return roundedPercentage <= 0 ? 1 : roundedPercentage;
+            }
+
+            return percentage;
         }
         #endregion
 
