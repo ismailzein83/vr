@@ -121,6 +121,9 @@
     <Reference Include="Vanrise.GenericData.Normalization">
       <HintPath>..\..\Code\Output\Vanrise.GenericData.Normalization.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.SQLDataStorage">
+      <HintPath>..\..\Code\Output\Vanrise.GenericData.SQLDataStorage.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Data">
       <HintPath>..\..\Code\Output\Vanrise.Invoice.Data.dll</HintPath>
     </Reference>
@@ -187,9 +190,16 @@
     <Compile Include="Constants.cs" />
     <Compile Include="GenericData\BELookupRuleDefinitionDataManagerTests.cs" />
     <Compile Include="GenericData\BusinessEntityDefinitionDataManagerTests.cs" />
+    <Compile Include="GenericData\BusinessEntityStatusHistoryDataManagerTests.cs" />
     <Compile Include="GenericData\DataRecordFieldChoiceDataManagerTests.cs" />
+    <Compile Include="GenericData\DataRecordStorageDataManagerTests.cs" />
+    <Compile Include="GenericData\DataRecordTypeDataManagerTests.cs" />
+    <Compile Include="GenericData\DataStoreDataManagerTests.cs" />
+    <Compile Include="GenericData\ExpressionBuilderConfigDataManagerTests.cs" />
+    <Compile Include="GenericData\ExtensibleBEItemDataManagerTests.cs" />
     <Compile Include="GenericData\GenericRuleDefinitionDataManagerTests.cs" />
     <Compile Include="GenericData\RecordFilterRDBBuilderTests.cs" />
+    <Compile Include="GenericData\SummaryTransformationDefinitionDataManagerTests.cs" />
     <Compile Include="Invoice\InvoiceBulkActionsDraftDataManagerTests.cs" />
     <Compile Include="Invoice\InvoiceDataManagerTests.cs" />
     <Compile Include="Invoice\InvoiceTypeDataManagerTests.cs" />
