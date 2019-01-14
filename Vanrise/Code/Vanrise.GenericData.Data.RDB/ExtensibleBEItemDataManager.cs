@@ -63,6 +63,7 @@ namespace Vanrise.GenericData.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
+            insertQuery.Column(COL_ID).Value(extensibleBEItem.ExtensibleBEItemId);
             if (extensibleBEItem != null)
                 insertQuery.Column(COL_Details).Value(Vanrise.Common.Serializer.Serialize(extensibleBEItem));
             return queryContext.ExecuteNonQuery() > 0;
