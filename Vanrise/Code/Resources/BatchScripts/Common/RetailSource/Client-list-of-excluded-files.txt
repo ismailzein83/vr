@@ -1,0 +1,12 @@
+\Themes\theme-extended-
+
+\Images\cloudXPoint-
+\Images\INSOFT-
+\Images\nTegra-
+\Images\Zebra-
+\Images\Ogero-
+
+\CSViews\Home\Index-flat.cshtml
+\CSViews\Security\Login-flat.cshtml
+
+NImages\

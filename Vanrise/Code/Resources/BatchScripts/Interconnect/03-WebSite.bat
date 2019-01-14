@@ -7,20 +7,17 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO Interconnect WebSite
 
-xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q																	"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Interconnect\list-of-excluded-files.txt
+xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q																	"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\RetailSource\list-of-excluded-files.txt
 xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.Interconnect.exclude" /y /v /z /i /Q /R								"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\"
-rename																												"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Web.config.Interconnect.exclude" "Web.config"												 
-del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\iconheader.ico"
-del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\login.png"
-del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\logoonheader.png"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\ICX-logoonheader.png" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\ICX-login.png" /S /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\ICX-iconheader.ico" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\"
 rename																												"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\ICX-logoonheader.png" "logoonheader.png"
 rename																												"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\ICX-login.png" "login.png"
 rename																												"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Images\ICX-iconheader.ico" "iconheader.ico"
+rename																												"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Web.config.Interconnect.exclude" "Web.config"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Bin\"
-xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Interconnect\Client-list-of-excluded-files.txt
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\RetailSource\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Common\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\VR_AccountBalance\"
@@ -44,3 +41,5 @@ xcopy "C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS" /S /E /R /y /v /i /z /Q				
 xcopy "C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Retail_Data\"
 xcopy "C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Retail_Invoice\"
 xcopy "C:\TFS\Retail\Code\Retail.Interconnect.Web\Retail_Interconnect" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Retail_Interconnect\"
+xcopy "C:\Publish\Retail\bin\Retail.Interconnect*" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Bin\"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Bin\*.pdb"

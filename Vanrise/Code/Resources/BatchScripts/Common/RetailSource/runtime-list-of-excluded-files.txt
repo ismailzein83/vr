@@ -1,0 +1,13 @@
+\Retail.Runtime.exe.config
+
+\Retail.Ringo.
+\Retail.Zajil.
+\Retail.MultiNet.
+\Retail.Teles.
+\Retail.Interconnect.
+\Retail.RA.
+\Retail.Demo.
+\Vanrise.Voucher.
+
+.aspx\
+.cs\

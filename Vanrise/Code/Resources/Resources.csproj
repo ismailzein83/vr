@@ -97,6 +97,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="BatchScripts\Common\CarrierPortalSource\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Common\CarrierPortalSource\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Common\CarrierPortalSource\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Common\TOneSource\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Common\TOneSource\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Common\TOneSource\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ISP\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ISP\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\ISP\runtime-list-of-excluded-files.txt" />
@@ -154,9 +160,9 @@
     <Content Include="BatchScripts\RA\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Retail.MultiNet\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Retail.Zajil\runtime-list-of-excluded-files.txt" />
-    <Content Include="BatchScripts\Retail\Client-list-of-excluded-files.txt" />
-    <Content Include="BatchScripts\Retail\list-of-excluded-files.txt" />
-    <Content Include="BatchScripts\Retail\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Common\RetailSource\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Common\RetailSource\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Common\RetailSource\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\SOM\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\SOM\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\SOM\runtime-list-of-excluded-files.txt" />
