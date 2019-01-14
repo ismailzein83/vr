@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="Billing\BillingManager.cs" />
     <Compile Include="Billing\ContractManager.cs" />
+    <Compile Include="Billing\CRMCustomerManager.cs" />
     <Compile Include="Billing\CustomerRequestManager.cs" />
     <Compile Include="Billing\PabxManager.cs" />
     <Compile Include="CustomerRequestTypeManager.cs" />
