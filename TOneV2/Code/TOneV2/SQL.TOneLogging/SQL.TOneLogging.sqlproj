@@ -99,7 +99,6 @@
     <Build Include="bp\Tables\BPValidationMessage.sql" />
     <Build Include="bp\Stored Procedures\sp_BPValidationMessage_GetUpdated.sql" />
     <Build Include="bp\Stored Procedures\sp_BPValidationMessage_GetBeforeID.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPValidationMessage_CreateTempForFiltered.sql" />
     <Build Include="logging\Stored Procedures\SP_LogEntry_CreateTempByFiltered.sql" />
     <Build Include="logging\Tables\UserActionAudit.sql" />
     <Build Include="logging\Tables\ActionAuditLKUP.sql" />
@@ -118,6 +117,7 @@
     <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_GetByDataSource.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_GetFiltered.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceLog_GetFiltered.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPValidationMessage_GetFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
