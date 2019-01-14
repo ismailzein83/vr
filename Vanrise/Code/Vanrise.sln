@@ -473,6 +473,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DevTools.MainExtens
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.DevTools.Web", "Vanrise.DevTools.Web\Vanrise.DevTools.Web.csproj", "{56467C2D-2B16-49CC-BC4B-2214A3106278}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.MobileNetwork.Entities", "Vanrise.MobileNetwork\Vanrise.MobileNetwork.Entities.csproj", "{06ADBD08-530D-4387-A107-CDC33C96E715}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.MobileNetwork.Business", "Vanrise.MobileNetwork.Business\Vanrise.MobileNetwork.Business.csproj", "{945B0865-4588-489C-AF05-7F09C88872DF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MobileNetwork", "MobileNetwork", "{0A9E0DE2-DA6F-417D-BEFD-B31E866F8865}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2221,6 +2227,30 @@ Global
 		{56467C2D-2B16-49CC-BC4B-2214A3106278}.Release|x64.Build.0 = Release|Any CPU
 		{56467C2D-2B16-49CC-BC4B-2214A3106278}.Release|x86.ActiveCfg = Release|Any CPU
 		{56467C2D-2B16-49CC-BC4B-2214A3106278}.Release|x86.Build.0 = Release|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Debug|x64.Build.0 = Debug|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Debug|x86.Build.0 = Debug|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Release|x64.ActiveCfg = Release|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Release|x64.Build.0 = Release|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Release|x86.ActiveCfg = Release|Any CPU
+		{06ADBD08-530D-4387-A107-CDC33C96E715}.Release|x86.Build.0 = Release|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Debug|x64.Build.0 = Debug|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Debug|x86.Build.0 = Debug|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Release|x64.ActiveCfg = Release|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Release|x64.Build.0 = Release|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Release|x86.ActiveCfg = Release|Any CPU
+		{945B0865-4588-489C-AF05-7F09C88872DF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2435,12 +2465,14 @@ Global
 		{30DF9A71-05B6-4199-AE6B-68DB57864909} = {A035B772-46E1-4B98-BD9D-DB17225833EE}
 		{A6361BD6-BDB9-4A21-BEAF-F429D41C723F} = {A035B772-46E1-4B98-BD9D-DB17225833EE}
 		{56467C2D-2B16-49CC-BC4B-2214A3106278} = {A035B772-46E1-4B98-BD9D-DB17225833EE}
+		{06ADBD08-530D-4387-A107-CDC33C96E715} = {0A9E0DE2-DA6F-417D-BEFD-B31E866F8865}
+		{945B0865-4588-489C-AF05-7F09C88872DF} = {0A9E0DE2-DA6F-417D-BEFD-B31E866F8865}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A6C2049-65DE-477B-B7A1-CD4DBAC577AF}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 204
+		SccNumberOfProjects = 206
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -3256,5 +3288,13 @@ Global
 		SccProjectTopLevelParentUniqueName203 = Vanrise.sln
 		SccProjectName203 = Vanrise.DevTools.Web
 		SccLocalPath203 = Vanrise.DevTools.Web
+		SccProjectUniqueName204 = Vanrise.MobileNetwork\\Vanrise.MobileNetwork.Entities.csproj
+		SccProjectTopLevelParentUniqueName204 = Vanrise.sln
+		SccProjectName204 = Vanrise.MobileNetwork
+		SccLocalPath204 = Vanrise.MobileNetwork
+		SccProjectUniqueName205 = Vanrise.MobileNetwork.Business\\Vanrise.MobileNetwork.Business.csproj
+		SccProjectTopLevelParentUniqueName205 = Vanrise.sln
+		SccProjectName205 = Vanrise.MobileNetwork.Business
+		SccLocalPath205 = Vanrise.MobileNetwork.Business
 	EndGlobalSection
 EndGlobal
