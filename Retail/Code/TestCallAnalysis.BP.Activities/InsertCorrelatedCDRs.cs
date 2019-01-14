@@ -16,7 +16,7 @@ namespace TestCallAnalysis.BP.Activities
 
     public class InsertCorrelatedCDRsInput
     {
-        public BaseQueue<CDRCorrelationBatch> InputQueueToInsert { get; set; }
+        public MemoryQueue<CDRCorrelationBatch> InputQueueToInsert { get; set; }
     }
     public class InsertCorrelatedCDRsOutput
     {
@@ -26,9 +26,8 @@ namespace TestCallAnalysis.BP.Activities
 
     public class InsertCorrelatedCDRs : DependentAsyncActivity<InsertCorrelatedCDRsInput, InsertCorrelatedCDRsOutput>
     {
-
         [RequiredArgument]
-        public InOutArgument<BaseQueue<CDRCorrelationBatch>> InputQueueToInsert { get; set; }
+        public InOutArgument<MemoryQueue<CDRCorrelationBatch>> InputQueueToInsert { get; set; }
 
         protected override InsertCorrelatedCDRsOutput DoWorkWithResult(InsertCorrelatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {

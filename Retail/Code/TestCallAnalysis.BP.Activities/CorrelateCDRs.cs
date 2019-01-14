@@ -14,20 +14,23 @@ namespace TestCallAnalysis.BP.Activities
 {
     public class CorrelateCDRsInput
     {
-        public BaseQueue<RecordBatch> InputQueue { get; set; }
+        public MemoryQueue<RecordBatch> InputQueue { get; set; }
         public TimeSpan DateTimeMargin { get; set; }
-        public BaseQueue<Entities.CDRCorrelationBatch> OutputQueue { get; set; }
+        public MemoryQueue<Entities.CDRCorrelationBatch> OutputQueue { get; set; }
+        public MemoryQueue<Entities.CDRCorrelationBatch> OutputCaseQueue { get; set; }
+
     }
     public sealed class CorrelateCDRs : DependentAsyncActivity<CorrelateCDRsInput>
     {
         [RequiredArgument]
-        public InArgument<BaseQueue<RecordBatch>> InputQueue { get; set; }
+        public InArgument<MemoryQueue<RecordBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InArgument<TimeSpan> DateTimeMargin { get; set; }
-
         [RequiredArgument]
-        public InOutArgument<BaseQueue<Entities.CDRCorrelationBatch>> OutputQueue { get; set; }
+        public InOutArgument<MemoryQueue<Entities.CDRCorrelationBatch>> OutputQueue { get; set; }
+        [RequiredArgument]
+        public InOutArgument<MemoryQueue<Entities.CDRCorrelationBatch>> OutputCaseQueue { get; set; }
 
         protected override CorrelateCDRsInput GetInputArgument2(AsyncCodeActivityContext context)
         {
@@ -35,7 +38,8 @@ namespace TestCallAnalysis.BP.Activities
             {
                 InputQueue = this.InputQueue.Get(context),
                 DateTimeMargin = this.DateTimeMargin.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                OutputCaseQueue = this.OutputCaseQueue.Get(context)
             };
         }
 

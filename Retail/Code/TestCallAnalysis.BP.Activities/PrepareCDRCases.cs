@@ -15,7 +15,7 @@ namespace TestCallAnalysis.BP.Activities
 
     public class PrepareCDRCasesInput
     {
-        public BaseQueue<CDRCorrelationBatch> InputQueue { get; set; }
+        public MemoryQueue<CDRCorrelationBatch> InputQueue { get; set; }
     }
     public class PrepareCDRCasesOutput
     {
@@ -25,7 +25,7 @@ namespace TestCallAnalysis.BP.Activities
     public class PrepareCDRCases : DependentAsyncActivity<PrepareCDRCasesInput, PrepareCDRCasesOutput>
     {
         [RequiredArgument]
-        public InOutArgument<BaseQueue<CDRCorrelationBatch>> InputQueue { get; set; }
+        public InOutArgument<MemoryQueue<CDRCorrelationBatch>> InputQueue { get; set; }
         protected override PrepareCDRCasesOutput DoWorkWithResult(PrepareCDRCasesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
           
