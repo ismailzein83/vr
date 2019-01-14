@@ -11,16 +11,15 @@ namespace Vanrise.DataParser.Business
     {
         public static void ReadRecordFromStream(Stream stream, int lengthNbOfBytes, bool reverseLengthBytes, Action<RecordValue> onRecordValueRead)
         {
-
             int position = 0;
             byte[] bytes = null;
             int recordLength = 0;
             byte[] recordData = null;
+
             while (position < stream.Length)
             {
                 try
                 {
-
                     bytes = new byte[lengthNbOfBytes];
                     stream.Read(bytes, 0, lengthNbOfBytes);
                     bytes = reverseLengthBytes ? bytes.Reverse().ToArray() : bytes;
@@ -40,26 +39,22 @@ namespace Vanrise.DataParser.Business
                 }
                 catch (Exception ex)
                 {
-
                     // throw ex;
                 }
-
             }
-
         }
 
         public static void ReadRecordFieldFromStream(byte[] data, int position, int length, Action<RecordValue> onRecordFieldValue)
         {
             byte[] bytes = new byte[length];
-
             Array.Copy(data, position, bytes, 0, length);
+
             RecordValue recordType = new RecordValue
             {
                 Length = length,
                 Value = bytes
             };
             onRecordFieldValue(recordType);
-
         }
 
         public static void ReadBlockFromStream(Stream stream, int blockSize, Action<RecordValue> onBlockRead, bool readOnce = false)
@@ -103,12 +98,11 @@ namespace Vanrise.DataParser.Business
             byte[] data = ((MemoryStream)recordStream).ToArray();
             foreach (var positionedFieldParser in positionedFieldParsers)
             {
-                ReadRecordFieldFromStream(data, positionedFieldParser.Position, positionedFieldParser.Length,
-                      (recordType) =>
-                      {
-                          var fieldParserContext = new BinaryFieldParserContext { Record = parsedRecord, FieldValue = recordType.Value };
-                          positionedFieldParser.FieldParser.Settings.Execute(fieldParserContext);
-                      });
+                ReadRecordFieldFromStream(data, positionedFieldParser.Position, positionedFieldParser.Length, (recordType) =>
+                {
+                    var fieldParserContext = new BinaryFieldParserContext { Record = parsedRecord, FieldValue = recordType.Value };
+                    positionedFieldParser.FieldParser.Settings.Execute(fieldParserContext);
+                });
             }
         }
 
