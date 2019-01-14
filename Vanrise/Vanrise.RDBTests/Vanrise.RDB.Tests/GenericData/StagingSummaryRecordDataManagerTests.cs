@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Data;
 using Vanrise.RDBTests.Common;
-
+using Vanrise.GenericData.Entities;
 namespace Vanrise.RDB.Tests.GenericData
 {
     [TestClass]
@@ -53,6 +53,13 @@ namespace Vanrise.RDB.Tests.GenericData
                 sqlResponse = summaryRecord;
             });
             UTUtilities.AssertObjectsAreSimilar(rdbResponse, sqlResponse);
+
+
+            List<StagingSummaryInfo> rdbInfoResponse =  _rdbDataManager.GetStagingSummaryInfo(stagingSummaryRecord.ProcessInstanceId, stagingSummaryRecord.StageName);
+            List<StagingSummaryInfo> sqlInfoResponse = _sqlDataManager.GetStagingSummaryInfo(stagingSummaryRecord.ProcessInstanceId, stagingSummaryRecord.StageName);
+            UTUtilities.AssertObjectsAreSimilar(rdbInfoResponse, sqlInfoResponse);
+            _rdbDataManager.DeleteStagingSummaryRecords(stagingSummaryRecord.ProcessInstanceId, stagingSummaryRecord.StageName, stagingSummaryRecord.BatchStart, stagingSummaryRecord.BatchEnd);
+            _sqlDataManager.DeleteStagingSummaryRecords(stagingSummaryRecord.ProcessInstanceId, stagingSummaryRecord.StageName, stagingSummaryRecord.BatchStart, stagingSummaryRecord.BatchEnd);
         }
 
 
