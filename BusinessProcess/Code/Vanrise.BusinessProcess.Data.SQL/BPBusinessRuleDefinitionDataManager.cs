@@ -26,9 +26,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("bp.sp_BPBusinessRuleDefinition_GetAll", BPBusinessRuleDefintionMapper);
         }
 
-        public bool AreBPBusinessRuleDefinitionsUpdated(ref object updateHandle)
+        public bool AreBPBusinessRuleDefinitionsUpdated(ref object lastReceivedDataInfo)
         {
-            return base.IsDataUpdated("[bp].[BPBusinessRuleDefinition]", ref updateHandle);
+            return base.IsDataUpdated("[bp].[BPBusinessRuleDefinition]", ref lastReceivedDataInfo);
         }
 
         #endregion

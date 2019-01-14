@@ -7,6 +7,6 @@ namespace Vanrise.BusinessProcess.Data
     {
         List<BPBusinessRuleDefinition> GetBPBusinessRuleDefinitions();
 
-        bool AreBPBusinessRuleDefinitionsUpdated(ref object updateHandle);
+        bool AreBPBusinessRuleDefinitionsUpdated(ref object lastReceivedDataInfo);
     }
 }

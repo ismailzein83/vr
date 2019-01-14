@@ -57,11 +57,11 @@ namespace Vanrise.BusinessProcess.Business
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IBPTaskTypeDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTaskTypeDataManager>();
-            object _updateHandle;
+            object _lastReceivedDataInfo;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return dataManager.AreBPTaskTypesUpdated(ref _updateHandle);
+                return dataManager.AreBPTaskTypesUpdated(ref _lastReceivedDataInfo);
             }
         }
         #endregion

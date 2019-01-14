@@ -11,10 +11,9 @@ namespace Vanrise.Reprocess.Data
     {
         List<ReprocessDefinition> GetReprocessDefinition();
 
-        bool AreReprocessDefinitionUpdated(ref object updateHandle);
-
         bool Insert(ReprocessDefinition ReprocessDefinitionItem);
 
         bool Update(ReprocessDefinition ReprocessDefinitionItem);
+        bool AreReprocessDefinitionUpdated(ref object lastReceivedDataInfo);
     }
 }

@@ -44,17 +44,13 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return bpValidationMessages;
         }
 
-        public Vanrise.Entities.BigResult<BPValidationMessageDetail> GetFilteredBPValidationMessage(Vanrise.Entities.DataRetrievalInput<BPValidationMessageQuery> input)
+        public IEnumerable<BPValidationMessage> GetFilteredBPValidationMessage(BPValidationMessageQuery query)
         {
-            if (input.SortByColumnName != null)
-                input.SortByColumnName = input.SortByColumnName.Replace("Entity.", "");
+            string severities = null;
+            if (query.Severities != null && query.Severities.Count > 0)
+                severities = string.Join(",", query.Severities.Select(n => (int)n));
 
-            return RetrieveData(input, (tempTableName) =>
-            {
-                ExecuteNonQuerySP("bp.sp_BPValidationMessage_CreateTempForFiltered", tempTableName, input.Query.ProcessInstanceId,
-                    input.Query.Severities == null ? null : string.Join(",", input.Query.Severities.Select(n => (int)n).ToArray()));
-
-            }, BPValidationMessageDetailMapper, _mapper);
+            return GetItemsSP("bp.sp_BPValidationMessage_GetFiltered", BPValidationMessageMapper, query.ProcessInstanceId, severities);
         }
 
         public void Insert(IEnumerable<Entities.BPValidationMessage> messages)
@@ -121,16 +117,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
             };
 
             return bpValidationMessage;
-        }
-
-        private BPValidationMessageDetail BPValidationMessageDetailMapper(IDataReader reader)
-        {
-            BPValidationMessageDetail bpValidationMessageDetail = new BPValidationMessageDetail()
-            {
-                Entity = BPValidationMessageMapper(reader)
-            };
-
-            return bpValidationMessageDetail;
         }
     }
 }

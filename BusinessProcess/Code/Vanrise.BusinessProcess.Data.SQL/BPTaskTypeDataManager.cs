@@ -20,9 +20,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("bp.sp_BPTaskType_GetAll", BPTaskTypeMapper);
         }
 
-        public bool AreBPTaskTypesUpdated(ref object updateHandle)
+        public bool AreBPTaskTypesUpdated(ref object lastReceivedDataInfo)
         {
-            return base.IsDataUpdated("[bp].[BPTaskType]", ref updateHandle);
+            return base.IsDataUpdated("[bp].[BPTaskType]", ref lastReceivedDataInfo);
         }
         #endregion
 

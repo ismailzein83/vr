@@ -33,9 +33,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return ExecuteNonQuerySP("[bp].[sp_ProcessSynchronisation_Update]", processSynchronisationToUpdate.ProcessSynchronisationId, processSynchronisationToUpdate.Name, processSynchronisationToUpdate.IsEnabled, serializedSettings, lastModifiedBy) > 0;
         }
 
-        public bool AreProcessSynchronisationsUpdated(ref object updateHandle)
+        public bool AreProcessSynchronisationsUpdated(ref object lastReceivedDataInfo)
         {
-            return base.IsDataUpdated("[bp].[ProcessSynchronisation]", ref updateHandle);
+            return base.IsDataUpdated("[bp].[ProcessSynchronisation]", ref lastReceivedDataInfo);
         }
         public bool EnableProcessSynchronisation(Guid processSynchronisationId, int lastModifiedBy)
         {

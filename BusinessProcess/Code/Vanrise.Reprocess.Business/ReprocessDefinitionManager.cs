@@ -124,11 +124,11 @@ namespace Vanrise.Reprocess.Business
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IReprocessDefinitionDataManager _dataManager = ReprocessDataManagerFactory.GetDataManager<IReprocessDefinitionDataManager>();
-            object _updateHandle;
+            object _lastReceivedDataInfo;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreReprocessDefinitionUpdated(ref _updateHandle);
+                return _dataManager.AreReprocessDefinitionUpdated(ref _lastReceivedDataInfo);
             }
         }
 

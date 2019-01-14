@@ -89,11 +89,11 @@ namespace Vanrise.BusinessProcess.Business
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IBPBusinessRuleDefinitionDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPBusinessRuleDefinitionDataManager>();
-            object _updateHandle;
+            object _lastReceivedDataInfo;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return dataManager.AreBPBusinessRuleDefinitionsUpdated(ref _updateHandle);
+                return dataManager.AreBPBusinessRuleDefinitionsUpdated(ref _lastReceivedDataInfo);
             }
         }
         #endregion

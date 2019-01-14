@@ -266,11 +266,11 @@ namespace Vanrise.BusinessProcess.Business
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IProcessSynchronisationDataManager dataManager = BPDataManagerFactory.GetDataManager<IProcessSynchronisationDataManager>();
-            object _updateHandle;
+            object _lastReceivedDataInfo;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return dataManager.AreProcessSynchronisationsUpdated(ref _updateHandle);
+                return dataManager.AreProcessSynchronisationsUpdated(ref _lastReceivedDataInfo);
             }
         }
 

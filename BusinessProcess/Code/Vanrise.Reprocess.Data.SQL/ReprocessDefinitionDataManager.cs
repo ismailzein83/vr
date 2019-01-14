@@ -30,9 +30,9 @@ namespace Vanrise.Reprocess.Data.SQL
             return GetItemsSP("reprocess.sp_ReprocessDefinition_GetAll", ReprocessDefinitionMapper);
         }
 
-        public bool AreReprocessDefinitionUpdated(ref object updateHandle)
+        public bool AreReprocessDefinitionUpdated(ref object lastReceivedDataInfo)
         {
-            return base.IsDataUpdated("reprocess.ReprocessDefinition", ref updateHandle);
+            return base.IsDataUpdated("reprocess.ReprocessDefinition", ref lastReceivedDataInfo);
         }
 
         public bool Insert(ReprocessDefinition reprocessDefinitionItem)

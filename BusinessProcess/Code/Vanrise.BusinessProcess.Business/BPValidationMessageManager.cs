@@ -50,38 +50,56 @@ namespace Vanrise.BusinessProcess
 
         public Vanrise.Entities.IDataRetrievalResult<BPValidationMessageDetail> GetFilteredBPValidationMessage(Vanrise.Entities.DataRetrievalInput<BPValidationMessageQuery> input)
         {
-            IBPValidationMessageDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPValidationMessageDataManager>();
-            Vanrise.Entities.BigResult<BPValidationMessageDetail> bigResult = dataManager.GetFilteredBPValidationMessage(input);
-
-            BPValidationMessageBigResult bpValidationMessageBigResult = new BPValidationMessageBigResult()
-            {
-                ResultKey = bigResult.ResultKey,
-                Data = bigResult.Data,
-                TotalCount = bigResult.TotalCount
-            };
-            ResultProcessingHandler<BPValidationMessageDetail> handler = new ResultProcessingHandler<BPValidationMessageDetail>()
-            {
-                ExportExcelHandler = new BPValidationMessageDetailExportExcelHandler()
-            };
-
-            if (bigResult.Data != null && bigResult.Data.Count() > 0)
-                bpValidationMessageBigResult.HasWarningMessages = bigResult.Data.Any(x => x.Entity.Severity == ActionSeverity.Warning);
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bpValidationMessageBigResult, handler);
+            return BigDataManager.Instance.RetrieveData(input, new BPValidationMessageRequestHandler());
         }
 
-        private BPValidationMessageDetail BPValidationMessageDetailMapper(BPValidationMessage bpValidationMessage)
+        #region private Class
+        private class BPValidationMessageRequestHandler : BigDataRequestHandler<BPValidationMessageQuery, BPValidationMessage, BPValidationMessageDetail>
         {
-            if (bpValidationMessage == null)
-                return null;
-            return new BPValidationMessageDetail()
+            public override BPValidationMessageDetail EntityDetailMapper(BPValidationMessage entity)
             {
-                Entity = bpValidationMessage
-            };
+                BPValidationMessageManager manager = new BPValidationMessageManager();
+                return manager.BPValidationMessageDetailMapper(entity);
+            }
+
+            public override IEnumerable<BPValidationMessage> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BPValidationMessageQuery> input)
+            {
+                IBPValidationMessageDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPValidationMessageDataManager>();
+                return dataManager.GetFilteredBPValidationMessage(input.Query);
+            }
+
+            protected override BigResult<BPValidationMessageDetail> AllRecordsToBigResult(DataRetrievalInput<BPValidationMessageQuery> input, IEnumerable<BPValidationMessage> allRecords)
+            {
+                var defaultBigResult = base.AllRecordsToBigResult(input, allRecords);
+                BPValidationMessageBigResult bpValidationMessageBigResult = new BPValidationMessageBigResult()
+                {
+                    ResultKey = defaultBigResult.ResultKey,
+                    Data = defaultBigResult.Data,
+                    TotalCount = defaultBigResult.TotalCount
+                };
+                if (allRecords.Count() > 0)
+                    bpValidationMessageBigResult.HasWarningMessages = allRecords.Any(x => x.Severity == ActionSeverity.Warning);
+                return bpValidationMessageBigResult;
+            }
+
+            protected override ResultProcessingHandler<BPValidationMessageDetail> GetResultProcessingHandler(DataRetrievalInput<BPValidationMessageQuery> input, BigResult<BPValidationMessageDetail> bigResult)
+            {
+                return new ResultProcessingHandler<BPValidationMessageDetail>
+                {
+                    ExportExcelHandler = new VRBPValidationMessageExcelExportHandler(input.Query)
+                };
+            }
         }
 
-        private class BPValidationMessageDetailExportExcelHandler : ExcelExportHandler<BPValidationMessageDetail>
+        private class VRBPValidationMessageExcelExportHandler : ExcelExportHandler<BPValidationMessageDetail>
         {
+            BPValidationMessageQuery _query;
+            public VRBPValidationMessageExcelExportHandler(BPValidationMessageQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<BPValidationMessageDetail> context)
             {
                 ExportExcelSheet sheet = new ExportExcelSheet()
@@ -90,8 +108,8 @@ namespace Vanrise.BusinessProcess
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Message",Width=200 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Severity"});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Message", Width = 200 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Severity" });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -110,5 +128,18 @@ namespace Vanrise.BusinessProcess
                 context.MainSheet = sheet;
             }
         }
+        #endregion
+
+        #region private Method
+        private BPValidationMessageDetail BPValidationMessageDetailMapper(BPValidationMessage bpValidationMessage)
+        {
+            if (bpValidationMessage == null)
+                return null;
+            return new BPValidationMessageDetail()
+            {
+                Entity = bpValidationMessage
+            };
+        }
+        #endregion
     }
 }

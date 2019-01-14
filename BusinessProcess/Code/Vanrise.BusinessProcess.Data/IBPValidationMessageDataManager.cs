@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.Data
 {
@@ -11,6 +12,6 @@ namespace Vanrise.BusinessProcess.Data
 
         List<BPValidationMessage> GetUpdated(BPValidationMessageUpdateInput input);
 
-        Vanrise.Entities.BigResult<BPValidationMessageDetail> GetFilteredBPValidationMessage(Vanrise.Entities.DataRetrievalInput<BPValidationMessageQuery> input);
+        IEnumerable<BPValidationMessage> GetFilteredBPValidationMessage(BPValidationMessageQuery query);
     }
 }
