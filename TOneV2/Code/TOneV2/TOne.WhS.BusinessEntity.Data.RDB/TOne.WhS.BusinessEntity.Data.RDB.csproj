@@ -73,9 +73,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingProductDataManager.cs" />
     <Compile Include="SaleCodeDataManager.cs" />
+    <Compile Include="SaleCodePreviewDataManager.cs" />
     <Compile Include="SaleEntityRoutingProductDataManager.cs" />
     <Compile Include="SaleEntityServiceDataManager.cs" />
-    <Compile Include="SalePriceLisNewDataManager.cs" />
+    <Compile Include="SalePriceListNewDataManager.cs" />
     <Compile Include="SalePriceListDataManager.cs" />
     <Compile Include="SalePricelistRateChangeDataManager.cs" />
     <Compile Include="SalePricelistRateChangeNewDataManager.cs" />
@@ -84,10 +85,12 @@
     <Compile Include="SaleZoneDataManager.cs" />
     <Compile Include="SellingNumberPlanDataManager.cs" />
     <Compile Include="SellingProductDataManager.cs" />
+    <Compile Include="SupplierCodeDataManager.cs" />
     <Compile Include="SupplierOtherRateDataManager.cs" />
     <Compile Include="SupplierPriceListDataManager.cs" />
     <Compile Include="SupplierRateDataManager.cs" />
     <Compile Include="SupplierZoneDataManager.cs" />
+    <Compile Include="SupplierZoneServiceDataManager.cs" />
     <Compile Include="SwitchConnectivityDataManager.cs" />
     <Compile Include="SwitchDataManager.cs" />
     <Compile Include="SwitchReleaseCauseDataManager.cs" />

@@ -1,10 +1,10 @@
 ﻿using System;
-using Vanrise.Common;
+using System.Linq;
+using Vanrise.Entities;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
-using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SupplierRateDataManager : ISupplierRateDataManager
@@ -92,7 +92,33 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<SupplierRate> GetFilteredSupplierRates(SupplierRateQuery input, DateTime effectiveOn)
         {
-            return null;
+            string supplierZoneTableAlias = "spz";
+            var supplierZoneDataManager = new SupplierZoneDataManager();
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinSupplierZone = selectQuery.Join();//TODO Join needs NoLock
+            supplierZoneDataManager.JoinSupplierZone(joinSupplierZone, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
+
+            var whereQuery = selectQuery.Where();
+
+            whereQuery.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_ID).Value(input.SupplierId);
+
+            if (input.CountriesIds != null && input.CountriesIds.Any())
+                whereQuery.ListCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_CountryID, RDBListConditionOperator.IN, input.CountriesIds);
+
+            if (!string.IsNullOrEmpty(input.SupplierZoneName))
+            {
+                string zoneNameToLower = input.SupplierZoneName.ToLower();
+                whereQuery.ContainsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_Name, zoneNameToLower);
+            }
+
+            whereQuery.NullCondition(COL_RateTypeID);
+            BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
+            return queryContext.GetItems(SupplierRateMapper);
         }
 
         public IEnumerable<SupplierRate> GetFilteredSupplierPendingRates(SupplierRateQuery input, DateTime effectiveOn)
@@ -121,58 +147,169 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 whereQuery.ContainsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_Name, zoneNameToLower);
             }
 
-            BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
+            whereQuery.NullCondition(COL_RateTypeID);
+            whereQuery.GreaterThanCondition(COL_BED).Value(effectiveOn);
             return queryContext.GetItems(SupplierRateMapper);
         }
 
         public IEnumerable<SupplierRate> GetSupplierRatesForZone(SupplierRateForZoneQuery input, DateTime effectiveOn)
         {
-            throw new NotImplementedException();
+            return GetSupplierRatesByZoneIds(new List<long> { input.SupplierZoneId }, effectiveOn);
         }
 
         public IEnumerable<SupplierRate> GetSupplierRatesByZoneIds(List<long> supplierZoneIds, DateTime effectiveOn)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.NullCondition(COL_RateTypeID);
+            BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
+
+            if (supplierZoneIds != null && supplierZoneIds.Any())
+                whereQuery.ListCondition(RDBListConditionOperator.IN, supplierZoneIds);
+            else
+                whereQuery.FalseCondition();
+
+            return queryContext.GetItems(SupplierRateMapper);
         }
 
         public IEnumerable<SupplierRate> GetSupplierRates(List<long> supplierZoneIds, DateTime BED, DateTime? EED)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereQuery = selectQuery.Where();
+
+            if (supplierZoneIds != null && supplierZoneIds.Any())
+
+                whereQuery.ListCondition(RDBListConditionOperator.IN, supplierZoneIds);
+            else
+                whereQuery.FalseCondition();
+
+            //whereQuery.NullCondition(COL_RateTypeID);
+            //if()
+            //BEDataUtility.SetEffectiveAfterDateCondition();
+            return queryContext.GetItems(SupplierRateMapper);
         }
 
         public List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate)
         {
-            throw new NotImplementedException();
+            SupplierPriceListDataManager supplierPriceListDataManager = new SupplierPriceListDataManager();
+            string supplierPriceListTableAlias = "spl";
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var join = selectQuery.Join();
+            supplierPriceListDataManager.JoinSupplierPriceList(join, supplierPriceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+
+            var whereQuery = selectQuery.Where();
+
+            var orDateCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orDateCondition.NullCondition(COL_EED);
+            var andDateCondition = orDateCondition.ChildConditionGroup();
+            andDateCondition.GreaterThanCondition(COL_EED).Value(minimumDate);
+            andDateCondition.NotEqualsCondition(COL_EED).Column(COL_BED);
+            whereQuery.EqualsCondition(supplierPriceListTableAlias, SupplierPriceListDataManager.COL_SupplierID).Value(supplierId);
+
+            return queryContext.GetItems(SupplierRateMapper);
         }
 
         public List<SupplierRate> GetEffectiveSupplierRatesBySuppliers(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos)
         {
-            throw new NotImplementedException();
+            SupplierPriceListDataManager supplierPriceListDataManager = new SupplierPriceListDataManager();
+            string supplierPriceListTableAlias = "spl";
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var join = selectQuery.Join();
+            supplierPriceListDataManager.JoinSupplierPriceList(join, supplierPriceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+
+            var whereQuery = selectQuery.Where();
+
+            if (supplierInfos != null && supplierInfos.Any())
+                whereQuery.ListCondition(supplierPriceListTableAlias, SupplierPriceListDataManager.COL_SupplierID, RDBListConditionOperator.IN, supplierInfos.Select(item => item.SupplierId));
+            else
+                whereQuery.FalseCondition();
+
+            if (effectiveOn.HasValue)
+            {
+                if (isEffectiveInFuture)
+                    BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                else
+                    BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+            }
+            else
+                whereQuery.FalseCondition();
+
+            return queryContext.GetItems(SupplierRateMapper);
         }
 
         public List<SupplierRate> GetSupplierRatesInBetweenPeriod(DateTime fromDateTime, DateTime tillDateTime)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereQuery = selectQuery.Where();
+
+            var andConditionContext = whereQuery.ChildConditionGroup();
+            andConditionContext.LessOrEqualCondition(COL_BED).Value(fromDateTime);
+            var orCondition = andConditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orCondition.NullCondition(COL_EED);
+            orCondition.GreaterThanCondition(COL_EED).Value(tillDateTime);
+
+            return queryContext.GetItems(SupplierRateMapper);
         }
 
         public List<SupplierRate> GetEffectiveSupplierRates(DateTime fromDate, DateTime toDate)
         {
-            throw new NotImplementedException();
+            return GetSupplierRatesInBetweenPeriod(fromDate, toDate);
         }
 
         public bool AreSupplierRatesUpdated(ref object updateHandle)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         public SupplierRate GetSupplierRateById(long rateId)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(COL_ID).Value(rateId);
+
+            return queryContext.GetItem(SupplierRateMapper);
         }
 
         public List<SupplierRate> GetSupplierRates(HashSet<long> supplierRateIds)
         {
-            throw new NotImplementedException();
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereQuery = selectQuery.Where();
+
+            if (supplierRateIds != null && supplierRateIds.Any())
+                whereQuery.ListCondition(RDBListConditionOperator.IN, supplierRateIds);
+            else
+                whereQuery.FalseCondition();
+
+            return queryContext.GetItems(SupplierRateMapper);
         }
 
         public DateTime? GetNextOpenOrCloseTime(DateTime effectiveDate)
@@ -210,7 +347,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #endregion
 
-
         #region Mappers
         SupplierRate SupplierRateMapper(IRDBDataReader reader)
         {
@@ -222,7 +358,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 CurrencyId = reader.GetNullableInt(COL_CurrencyID),
                 Rate = reader.GetDecimal(COL_Rate),
                 RateTypeId = reader.GetNullableInt(COL_RateTypeID),
-                RateChange = (RateChangeType)reader.GetInt(COL_Change),
+                RateChange = (RateChangeType)reader.GetIntWithNullHandling(COL_Change),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED)
             };
@@ -237,7 +373,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 CurrencyId = reader.GetNullableInt(COL_CurrencyID),
                 Rate = reader.GetDecimal(COL_Rate),
                 RateTypeId = reader.GetNullableInt(COL_RateTypeID),
-                RateChange = (RateChangeType)reader.GetInt(COL_Change),
+                RateChange = (RateChangeType)reader.GetIntWithNullHandling(COL_Change),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED)
             };

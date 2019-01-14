@@ -73,7 +73,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<SalePricelistRateChange> GetFilteredRatesPreviewByProcessInstanceId(int processInstanceId, string zoneName, int customerId)
         {
-            var salePriceLisNewDataManager = new SalePriceLisNewDataManager();
+            var salePriceLisNewDataManager = new SalePriceListNewDataManager();
 
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();

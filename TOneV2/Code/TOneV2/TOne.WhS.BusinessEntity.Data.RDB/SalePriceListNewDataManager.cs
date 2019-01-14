@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
-    public class SalePriceLisNewDataManager
+    public class SalePriceListNewDataManager
     {
         #region RDB
         static string TABLE_NAME = "TOneWhS_BE_SalePriceList_New";
@@ -26,7 +26,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_LastModifiedTime = "LastModifiedTime";
 
 
-        static SalePriceLisNewDataManager()
+        static SalePriceListNewDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>
             {

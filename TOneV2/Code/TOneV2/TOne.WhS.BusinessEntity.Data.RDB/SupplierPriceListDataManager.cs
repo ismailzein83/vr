@@ -1,8 +1,8 @@
-﻿using System;
-using Vanrise.Data.RDB;
+﻿using Vanrise.Data.RDB;
+using Vanrise.Entities;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SupplierPriceListDataManager : ISupplierPriceListDataManager
@@ -12,7 +12,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static string TABLE_ALIAS = "spr";
         static string TABLE_NAME = "TOneWhS_BE_SupplierPriceList";
         const string COL_ID = "ID";
-        const string COL_SupplierID = "SupplierID";
         const string COL_CurrencyID = "CurrencyID";
         const string COL_FileID = "FileID";
         const string COL_EffectiveOn = "EffectiveOn";
@@ -24,6 +23,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_UserID = "UserID";
         const string COL_LastModifiedTime = "LastModifiedTime";
 
+        internal const string COL_SupplierID = "SupplierID";
 
         static SupplierPriceListDataManager()
         {
