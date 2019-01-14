@@ -1,8 +1,7 @@
 ﻿CREATE PROCEDURE [VRNotification].[sp_VRNotifications_GetUpdated]
 	@NotificationTypeID UniqueIdentifier,
 	@NbOfRows BIGINT,
-    @LastModifiedTime datetime,
-	@NotificationId BIGINT,
+    @TimestampAfter timestamp,
     @Description varchar(max),
     @AlertLevelIds varchar(max),
 	@From datetime,
@@ -27,7 +26,7 @@ BEGIN
 	  ,[ErrorMessage]
 	  ,[Data]	
 	  ,[CreationTime]
-	  ,[LastModifiedTime]
+	  ,[timestamp]
 	  ,[EventPayload]
 	  ,RollbackEventPayload
 	INTO #temptable2_VRNotifications_GetUpdated
@@ -37,16 +36,15 @@ BEGIN
 		   AND (@AlertLevelIds is null or [AlertLevelId] in (SELECT AlertLevelId FROM @NotificationAlertLevelIDsTable)) 
 		   AND (@From is null or CreationTime >= @From)
 		   AND (@To is null or CreationTime < @To)
-		   AND (LastModifiedTime > @LastModifiedTime OR (LastModifiedTime = @LastModifiedTime AND ID > @NotificationId))
-	ORDER BY LastModifiedTime, ID
+		   AND ([timestamp] > @TimestampAfter) 
+	ORDER BY [timestamp]
 	
 	SELECT [ID],[UserID],[TypeID],[ParentType1],[ParentType2],[EventKey],[ExecuteBPInstanceID]
 			,[ClearBPInstanceID],[Status],[AlertLevelID],[Description],[ErrorMessage],[Data],[CreationTime] ,[EventPayload],RollbackEventPayload
 	FROM #temptable2_VRNotifications_GetUpdated
 	  
 	IF((SELECT COUNT(*) FROM #temptable2_VRNotifications_GetUpdated) = 0)
-		SELECT @LastModifiedTime as LastModifiedTime, @NotificationId as ID
+		SELECT @TimestampAfter AS MaxTimestamp
 	ELSE
-		SELECT TOP 1 LastModifiedTime, ID FROM #temptable2_VRNotifications_GetUpdated
-		ORDER BY LastModifiedTime desc, ID desc
+		SELECT MAX([timestamp]) AS MaxTimestamp FROM #temptable2_VRNotifications_GetUpdated
 END
