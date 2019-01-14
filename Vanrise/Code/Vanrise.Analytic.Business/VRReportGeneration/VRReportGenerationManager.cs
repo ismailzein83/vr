@@ -47,6 +47,10 @@ namespace Vanrise.Analytic.Business
             return DataRetrievalManager.Instance.ProcessResult(input, allVRReportGenerations.ToBigResult(input, filterExpression, (vRReportGeneration) => { return VRReportGenerationDetailMapper(vRReportGeneration, doesUserHaveEditPermission); }), handler);
 
         }
+        public IEnumerable<VRReportGeneration> GetAllReportGenerations()
+        {
+            return GetCachedVRReportGenerations().Values;
+        }
         public bool DoesUserHaveManageAccess()
         {
             Vanrise.Security.Business.SecurityManager s_securityManager = new Vanrise.Security.Business.SecurityManager();
