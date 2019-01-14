@@ -78,6 +78,10 @@
     <Compile Include="SaleZoneRPPreviewDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data.RDB\TOne.WhS.BusinessEntity.Data.RDB.csproj">
+      <Project>{8ecc9e2d-69b6-4996-82aa-7c93628b46c1}</Project>
+      <Name>TOne.WhS.BusinessEntity.Data.RDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
