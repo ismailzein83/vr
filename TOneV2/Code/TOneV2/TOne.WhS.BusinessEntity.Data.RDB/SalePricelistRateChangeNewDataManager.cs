@@ -91,6 +91,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             return queryContext.GetItems(SalePricelistRateChangeMapper);
         }
+
+        public void BuildSelectQuery(RDBSelectQuery selectQuery, long processInstanceID)
+        {
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_PricelistId, COL_Rate, COL_RateTypeId, COL_RecentRate, COL_CountryID, COL_ZoneName,
+                COL_Change, COL_BED, COL_EED, COL_RoutingProductID, COL_CurrencyID, COL_ZoneID);
+            selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceID);
+        }
         #endregion
 
         #region Mappper

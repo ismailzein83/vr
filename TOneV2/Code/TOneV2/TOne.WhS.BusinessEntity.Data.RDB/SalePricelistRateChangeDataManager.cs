@@ -82,6 +82,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.GetItems(SalePricelistRateChangeMapper);
         }
 
+        public void BuildInsertQuery(RDBInsertQuery insertQuery, long processInstanceID)
+        {
+            insertQuery.IntoTable(TABLE_NAME);
+            var salePriceListRateChangeNewDataManager = new SalePricelistRateChangeNewDataManager();
+            salePriceListRateChangeNewDataManager.BuildSelectQuery(insertQuery.FromSelect(), processInstanceID);
+        }
+
         #endregion
         
         #region Mappper
@@ -102,5 +109,5 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
 
         #endregion
-    }
+    } 
 }
