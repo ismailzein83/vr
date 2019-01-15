@@ -39,6 +39,7 @@
 	VR_CaseManagement		C:\TFS\Vanrise\Code\Vanrise.CaseManagement.Web\VR_CaseManagement
 	WhS_CDRComparison	    C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CDRComparison.Web\WhS_CDRComparison
 	CDRComparison			C:\TFS\Xbooster\Code\CDRComparison.Web\CDRComparison
+	WhS_SMSBusinessEntity	C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.SMSBusinessEntity.Web\WhS_SMSBusinessEntity
 	
 	--do not create below directories
 	-removed-Main					C:\TFS\TOneV2\Code\TOneV2\TOne.Main.Web\Main
