@@ -41,8 +41,15 @@ namespace TOne.WhS.DBSync.Data.SQL
             }
             catch (Exception ex)
             {
-                _ServerConnection.RollBackTransaction();
-                throw ex;
+                try
+                {
+                    _ServerConnection.RollBackTransaction();
+                }
+                catch(Exception rollBackEx)
+                {
+                    Vanrise.Common.LoggerFactory.GetExceptionLogger().WriteException(rollBackEx);
+                }
+                throw;
             }
             return Executed;
         }
