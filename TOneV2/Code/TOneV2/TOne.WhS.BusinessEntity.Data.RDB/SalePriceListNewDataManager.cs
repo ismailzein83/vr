@@ -9,6 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
     {
         #region RDB
         static string TABLE_NAME = "TOneWhS_BE_SalePriceList_New";
+        static string TABLE_ALIAS = "splnew";
         const string COL_ID = "ID";
         const string COL_OwnerType = "OwnerType";
         const string COL_OwnerID = "OwnerID";
@@ -74,7 +75,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var joinCondition = joinStatement.On();
             joinCondition.EqualsCondition(originalTableAlias, originalTableCol, salePriceListTableAlias, salePriceListTableCol);
         }
-
+        public void BuildSelectQuery(RDBSelectQuery selectQuery, long processInstanceId)
+        {
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.SelectColumns().Columns(COL_ID, COL_OwnerType, COL_OwnerID, COL_CurrencyID, COL_EffectiveOn,
+                COL_FileID, COL_PriceListType, COL_Description);
+            selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+        }
         #endregion
     }
 }
