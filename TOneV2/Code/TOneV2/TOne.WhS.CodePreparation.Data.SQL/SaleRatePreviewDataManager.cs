@@ -81,7 +81,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
         {
             RatePreview ratePreview = new RatePreview
             {
-                OnwerType = (SalePriceListOwnerType)GetReaderValue<byte>(reader, "OwnerType"),
+                OnwerType = (SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
                 OwnerId = (int)reader["OwnerID"],
                 Rate = (decimal)reader["Rate"],
                 BED = (DateTime)reader["BED"],
