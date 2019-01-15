@@ -126,6 +126,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 COL_Change, COL_BED, COL_EED, COL_RoutingProductID, COL_CurrencyID, COL_ZoneID);
             selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceID);
         }
+        public void DeleteRecords(RDBDeleteQuery deleteQuery, long processInstanceId)
+        {
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+        }
         #endregion
 
         #region Mappper
