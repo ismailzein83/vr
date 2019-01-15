@@ -96,6 +96,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 COL_FileID, COL_PriceListType, COL_Description);
             selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
         }
+        public void DeleteRecords(RDBDeleteQuery deleteQuery, long processInstanceId)
+        {
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+        }
         #endregion
         #region Mappers
         SalePriceListNew SalePriceListNewMapper(IRDBDataReader reader)
