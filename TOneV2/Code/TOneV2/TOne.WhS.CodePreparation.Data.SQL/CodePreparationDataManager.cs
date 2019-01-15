@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.Data.SQL;
 using TOne.WhS.CodePreparation.Entities;
-using TOne.WhS.CodePreparation.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.CodePreparation.Data.SQL
