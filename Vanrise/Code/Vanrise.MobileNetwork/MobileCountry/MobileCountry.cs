@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vanrise.MobileNetwork
+namespace Vanrise.MobileNetwork.Entities
 {
     public class MobileCountry
     {

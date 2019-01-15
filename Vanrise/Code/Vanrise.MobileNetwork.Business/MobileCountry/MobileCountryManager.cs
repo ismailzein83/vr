@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
+using Vanrise.MobileNetwork.Entities;
 
 namespace Vanrise.MobileNetwork.Business
 {
@@ -67,10 +68,10 @@ namespace Vanrise.MobileNetwork.Business
         private List<MobileCountry> GetCachedMobileCountries()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedMCCs", BeDefinitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedMobileCountries", BeDefinitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(BeDefinitionId);
-                List<MobileCountry> MCCList = new List<MobileCountry>();
+                List<MobileCountry> MobileCountryList = new List<MobileCountry>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -79,16 +80,16 @@ namespace Vanrise.MobileNetwork.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        MobileCountry mcc = new MobileCountry
+                        MobileCountry mobileCountry = new MobileCountry
                         {
                             Id = (int)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
                             CountryId = (int)genericBusinessEntity.FieldValues.GetRecord("CountryID"),
                         };
-                        MCCList.Add(mcc);
+                        MobileCountryList.Add(mobileCountry);
                     }
                 }
-                return MCCList;
+                return MobileCountryList;
             });
         }
 

@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MobileCountry\MobileCountryManager.cs" />
+    <Compile Include="MobileNetwork\MobileNetworkManager.cs" />
+    <Compile Include="MobileNetwork\MobileNetworkSettingsCustomObjectTypeSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
