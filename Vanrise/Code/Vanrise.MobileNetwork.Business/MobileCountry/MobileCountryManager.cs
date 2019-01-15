@@ -19,6 +19,10 @@ namespace Vanrise.MobileNetwork.Business
 
             return null;
         }
+      public Dictionary<string,MobileCountry> GetMobileCoutriesByCodes ()
+        {
+            return GetCachedMobileCountriesByCode();
+        }
 
         public int? GetMobileCountryEntityCountryID(int mobileCountryId)
         {
@@ -84,7 +88,7 @@ namespace Vanrise.MobileNetwork.Business
                         {
                             Id = (int)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
-                            CountryId = (int)genericBusinessEntity.FieldValues.GetRecord("CountryID"),
+                            CountryId = (int)genericBusinessEntity.FieldValues.GetRecord("Country"),
                         };
                         MobileCountryList.Add(mobileCountry);
                     }
