@@ -115,6 +115,7 @@
     <Content Include="DLLs\Microsoft.CodeAnalysis.CSharp.dll" />
     <Content Include="DLLs\Microsoft.CodeAnalysis.dll" />
     <Content Include="DLLs\Microsoft.reportviewer.common.dll" />
+    <Content Include="DLLs\microsoft.sqlserver.batchparser.dll" />
     <Content Include="DLLs\System.Collections.Immutable.dll" />
     <Content Include="DLLs\System.Reflection.Metadata.dll" />
     <Content Include="Files\RoslynCompiler.txt" />
