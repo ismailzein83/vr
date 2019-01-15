@@ -83,7 +83,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             ZoneRoutingProductPreview zoneRoutingProductPreview = new ZoneRoutingProductPreview
             {
                 ZoneName = GetReaderValue<string>(reader, "ZoneName"),
-                OwnerType = (SalePriceListOwnerType)GetReaderValue<byte>(reader, "OwnerType"),
+                OwnerType = (SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
                 OwnerId = (int)reader["OwnerID"],
                 RoutingProductId = (int)reader["RoutingProductID"],
                 BED = (DateTime)reader["BED"],
