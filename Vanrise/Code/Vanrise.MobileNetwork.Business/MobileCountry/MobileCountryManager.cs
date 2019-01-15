@@ -19,7 +19,19 @@ namespace Vanrise.MobileNetwork.Business
 
             return null;
         }
-      public Dictionary<string,MobileCountry> GetMobileCoutriesByCodes ()
+
+        public MobileCountry GetMobileCountryByCountryId(int countryId)
+        {
+            var cachedMobileCountriesByCountryID = GetCachedMobileCountriesByCountryID();
+            if (cachedMobileCountriesByCountryID == null || cachedMobileCountriesByCountryID.Count == 0)
+                return null;
+
+            var mobileCountry = cachedMobileCountriesByCountryID.GetRecord(countryId);
+
+            return mobileCountry;
+        }
+
+        public Dictionary<string,MobileCountry> GetMobileCoutriesByCodes ()
         {
             return GetCachedMobileCountriesByCode();
         }
@@ -135,6 +147,30 @@ namespace Vanrise.MobileNetwork.Business
                     foreach (MobileCountry mobileCountry in mobileCountries)
                     {
                         mobileCountriesById.Add(mobileCountry.Id, new MobileCountry
+                        {
+                            Id = mobileCountry.Id,
+                            Code = mobileCountry.Code,
+                            CountryId = mobileCountry.CountryId
+                        });
+                    }
+                }
+                return mobileCountriesById;
+            });
+        }
+
+        private Dictionary<int, MobileCountry> GetCachedMobileCountriesByCountryID()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedMobileCountriesByCountryID", BeDefinitionId, () =>
+            {
+                List<MobileCountry> mobileCountries = GetCachedMobileCountries();
+                Dictionary<int, MobileCountry> mobileCountriesById = new Dictionary<int, MobileCountry>();
+
+                if (mobileCountries != null)
+                {
+                    foreach (MobileCountry mobileCountry in mobileCountries)
+                    {
+                        mobileCountriesById.Add(mobileCountry.CountryId, new MobileCountry
                         {
                             Id = mobileCountry.Id,
                             Code = mobileCountry.Code,

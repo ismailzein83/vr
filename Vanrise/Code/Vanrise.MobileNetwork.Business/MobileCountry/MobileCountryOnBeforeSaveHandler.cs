@@ -30,7 +30,7 @@ namespace Vanrise.MobileNetwork.Business
                 context.OutputResult.Result = false;
                 context.OutputResult.Messages.Add(string.Format("The code '{0}' is already used by another Mobile Country",code));
             }
-            var mobileCountryByCountryId = mobileCountryManager.GetMobileCountryById((int)countryId);
+            var mobileCountryByCountryId = mobileCountryManager.GetMobileCountryByCountryId(Convert.ToInt32(countryId));
             if (mobileCountryByCountryId != null && mobileCountryId != mobileCountryByCountryId.Id)
             {
                 context.OutputResult.Result = false;
