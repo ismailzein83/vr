@@ -23,7 +23,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>0.53698in</Top>
-        <Left>4.9805in</Left>
+        <Left>5.58644in</Left>
         <Height>0.25in</Height>
         <Width>2.10833in</Width>
         <Style>
@@ -62,7 +62,7 @@
         <Top>1.75019in</Top>
         <Left>1.10967in</Left>
         <Height>0.48333in</Height>
-        <Width>5.39633in</Width>
+        <Width>6.01382in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -164,7 +164,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>2.32796in</Top>
-        <Left>5.41174in</Left>
+        <Left>5.8047in</Left>
         <Height>0.25in</Height>
         <Width>1.125in</Width>
         <ZIndex>4</ZIndex>
@@ -198,7 +198,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
         <Top>2.32796in</Top>
-        <Left>6.57841in</Left>
+        <Left>6.97137in</Left>
         <Height>0.25in</Height>
         <Width>0.94375in</Width>
         <ZIndex>5</ZIndex>
@@ -233,7 +233,7 @@
         <Top>3.29844in</Top>
         <Left>2.14637in</Left>
         <Height>0.02083in</Height>
-        <Width>5.36875in</Width>
+        <Width>5.76875in</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -258,16 +258,16 @@
               <Width>0.76724in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.84304in</Width>
+              <Width>0.99304in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83507in</Width>
+              <Width>0.88507in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.53341in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.23705in</Width>
+              <Width>1.43705in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.79163in</Width>
@@ -777,7 +777,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!NumberOfCalls.Value</Value>
+                              <Value>=FormatNumber(Fields!NumberOfCalls.Value,0)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -939,7 +939,7 @@
         <Top>2.72899in</Top>
         <Left>0.07216in</Left>
         <Height>0.5in</Height>
-        <Width>7.44296in</Width>
+        <Width>7.84296in</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
@@ -957,16 +957,16 @@
               <Width>0.12984in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.81861in</Width>
+              <Width>0.99304in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.83742in</Width>
+              <Width>0.88742in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.53106in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.23705in</Width>
+              <Width>1.43705in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.79163in</Width>
@@ -1084,7 +1084,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!NumberOfCalls.Value</Value>
+                              <Value>=FormatNumber(Parameters!NumberOfCalls.Value,0)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1237,9 +1237,9 @@
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
         <Top>3.37483in</Top>
-        <Left>2.14637in</Left>
+        <Left>2.12194in</Left>
         <Height>0.25in</Height>
-        <Width>5.36875in</Width>
+        <Width>5.79318in</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
@@ -1251,65 +1251,8 @@
     <Height>9.94746cm</Height>
     <Style />
   </Body>
-  <Width>19.31069cm</Width>
+  <Width>20.1044cm</Width>
   <Page>
-    <PageFooter>
-      <Height>1.524cm</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <ReportItems>
-        <Textbox Name="Textbox27">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=string.Format("{0} of {1}",Globals!PageNumber ,Globals!TotalPages)</Value>
-                  <Style>
-                    <FontFamily>Verdana</FontFamily>
-                    <FontSize>9pt</FontSize>
-                    <FontWeight>Bold</FontWeight>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>Textbox27</rd:DefaultName>
-          <Top>0.20972in</Top>
-          <Left>6.28152in</Left>
-          <Height>0.25in</Height>
-          <Width>1in</Width>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Line Name="Line2">
-          <Top>0.14028in</Top>
-          <Left>0.32111in</Left>
-          <Height>0in</Height>
-          <Width>6.96041in</Width>
-          <ZIndex>1</ZIndex>
-          <Style>
-            <Border>
-              <Style>Solid</Style>
-            </Border>
-          </Style>
-        </Line>
-      </ReportItems>
-      <Style>
-        <Border>
-          <Style>None</Style>
-        </Border>
-      </Style>
-    </PageFooter>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
     <LeftMargin>0cm</LeftMargin>
