@@ -11,10 +11,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static string TABLE_NAME = "TOneWhS_BE_CodeGroup";
         static string TABLE_ALIAS = "cg";
+
         const string COL_ID = "ID";
         const string COL_CountryID = "CountryID";
         const string COL_Name = "Name";
-        const string COL_Code = "Code";
+        internal const string COL_Code = "Code";
         const string COL_CreatedTime = "CreatedTime";
         const string COL_SourceID = "SourceID";
         const string COL_LastModifiedTime = "LastModifiedTime";
@@ -116,7 +117,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public void SaveCodeGroupToDB(List<CodeGroup> codeGroups)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
-            
+
             foreach (CodeGroup codeGroup in codeGroups)
             {
                 codeGroup.Code = codeGroup.Code.Trim();
@@ -139,9 +140,16 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public bool CheckIfCodeGroupHasRelatedCodes(int codeGroupId)
         {
-            return false;           
+            return false;
         }
 
+        public void JoinCodeGroup(RDBJoinContext joinContext, string codeTableAlias, string originalTableAlias, string originalTableCodeIdCol)
+        {
+            var joinStatement = joinContext.Join(TABLE_NAME, codeTableAlias);
+            joinStatement.JoinType(RDBJoinType.Inner);
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(originalTableAlias, originalTableCodeIdCol, codeTableAlias, COL_ID);
+        }
         #endregion
 
         #region Mappers
@@ -160,4 +168,3 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
     }
 }
- 
