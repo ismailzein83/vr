@@ -70,12 +70,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<ZoneCustomerPair> GetCustomerRatePreviewZonePairs(CustomerRatePreviewQuery query)
         {
-            throw new NotImplementedException();
+            SalePricelistRateChangeNewDataManager salePricelistRateChangeNewDataManager = new SalePricelistRateChangeNewDataManager();
+            return salePricelistRateChangeNewDataManager.GetCustomerRatePreviewZonePairs(query.ProcessInstanceId, query.CustomerIds);
         }
 
         public IEnumerable<RoutingProductPreview> GetRoutingProductPreviews(RoutingProductPreviewQuery query)
         {
-            throw new NotImplementedException();
+            SalePricelistRPChangeNewDataManager salePricelistRpChangeNewDataManager = new SalePricelistRPChangeNewDataManager();
+            return salePricelistRpChangeNewDataManager.GetSalePriceListRPChangeNewByCustomerId(query.ProcessInstanceId, query.CustomerIds);
         }
 
         public IEnumerable<int> GetAffectedCustomerIdsRPChangesByProcessInstanceId(long processInstanceId)

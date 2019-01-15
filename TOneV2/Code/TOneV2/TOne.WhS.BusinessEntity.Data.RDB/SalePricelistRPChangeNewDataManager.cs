@@ -62,7 +62,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #region Public Methods
 
-        public IEnumerable<RoutingProductPreview> GetSalePriceListRPChangeNewByCustomerId(long processInstanceId, IEnumerable<long> customerIds)
+        public IEnumerable<RoutingProductPreview> GetSalePriceListRPChangeNewByCustomerId(long processInstanceId, List<int> customerIds)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();

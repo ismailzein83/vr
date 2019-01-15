@@ -1,7 +1,9 @@
-﻿using Vanrise.Data.RDB;
+﻿using System.Linq;
+using Vanrise.Data.RDB;
 using Vanrise.Entities;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Entities.SalePricelistChanges;
 
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
@@ -81,7 +83,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinContext = selectQuery.Join();
-            salePriceListNewDataManager.JoinSalePriceListNew(joinContext, salePriceListTableAlias, SalePriceListNewDataManager.COL_ID, TABLE_ALIAS, COL_PricelistId);
+            salePriceListNewDataManager.JoinSalePriceListNew(joinContext, salePriceListTableAlias, TABLE_ALIAS, COL_PricelistId);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
@@ -108,7 +110,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var join = selectQuery.Join();
-            salePriceLisNewDataManager.JoinSalePriceListNew(join, "spn", "ID", TABLE_ALIAS, COL_PricelistId);
+            salePriceLisNewDataManager.JoinSalePriceListNew(join, "ID", TABLE_ALIAS, COL_PricelistId);
 
             var whereQueryContext = selectQuery.Where();
             whereQueryContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
@@ -118,7 +120,60 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             return queryContext.GetItems(SalePricelistRateChangeMapper);
         }
+        public List<ZoneCustomerPair> GetCustomerRatePreviews(long processInstanceId, List<int> customerIds)
+        {
+            SalePriceListNewDataManager salePriceListNewDataManager = new SalePriceListNewDataManager();
+            string salePriceListNewTableAlias = "spn";
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
+            var join = selectQuery.Join();
+            salePriceListNewDataManager.JoinSalePriceListNew(join, salePriceListNewTableAlias, TABLE_ALIAS, COL_PricelistId);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+
+            if (customerIds != null && customerIds.Any())
+                whereContext.ListCondition(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID, RDBListConditionOperator.IN, customerIds);
+
+            whereContext.NotNullCondition(COL_RateTypeId);
+
+            var groupByContext = selectQuery.GroupBy();
+            var groupByColumnsContext = groupByContext.Select();
+            groupByColumnsContext.Column(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID);
+            groupByColumnsContext.Column(TABLE_ALIAS, COL_ZoneID);
+
+            return queryContext.GetItems(CustomerRatePreviewZonePairsMapper);
+        }
+        public List<ZoneCustomerPair> GetCustomerRatePreviewZonePairs(long processInstanceId, List<int> customerIds)
+        {
+            SalePriceListNewDataManager salePriceListNewDataManager = new SalePriceListNewDataManager();
+            string salePriceListNewTableAlias = "spn";
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var join = selectQuery.Join();
+            salePriceListNewDataManager.JoinSalePriceListNew(join, salePriceListNewTableAlias, TABLE_ALIAS, COL_PricelistId);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+
+            if (customerIds != null && customerIds.Any())
+                whereContext.ListCondition(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID, RDBListConditionOperator.IN, customerIds);
+
+            whereContext.NotNullCondition(COL_RateTypeId);
+
+            var groupByContext = selectQuery.GroupBy();
+            var groupByColumnsContext = groupByContext.Select();
+            groupByColumnsContext.Column(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID);
+            groupByColumnsContext.Column(TABLE_ALIAS, COL_ZoneID);
+
+            return queryContext.GetItems(CustomerRatePreviewZonePairsMapper);
+        }
         public void BuildSelectQuery(RDBSelectQuery selectQuery, long processInstanceID)
         {
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
@@ -134,7 +189,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
 
         #region Mappper
-
+        private ZoneCustomerPair CustomerRatePreviewZonePairsMapper(IRDBDataReader reader)
+        {
+            return new ZoneCustomerPair
+            {
+                ZoneId = reader.GetNullableLong(COL_ZoneID),
+                CustomerId = reader.GetInt(SalePriceListNewDataManager.COL_OwnerID)
+            };
+        }
         private SalePricelistRateChange SalePricelistRateChangeMapper(IRDBDataReader reader)
         {
             return new SalePricelistRateChange
