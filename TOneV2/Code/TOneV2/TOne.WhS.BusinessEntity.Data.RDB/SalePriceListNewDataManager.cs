@@ -1,7 +1,6 @@
-﻿using System;
-using Vanrise.Common;
-using Vanrise.Data.RDB;
+﻿using Vanrise.Data.RDB;
 using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
@@ -10,9 +9,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region RDB
         static string TABLE_NAME = "TOneWhS_BE_SalePriceList_New";
         static string TABLE_ALIAS = "splnew";
-        const string COL_ID = "ID";
+
         const string COL_OwnerType = "OwnerType";
-        const string COL_OwnerID = "OwnerID";
         const string COL_CurrencyID = "CurrencyID";
         const string COL_EffectiveOn = "EffectiveOn";
         const string COL_PriceListType = "PriceListType";
@@ -26,6 +24,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_PricelistStateBackupID = "PricelistStateBackupID";
         const string COL_LastModifiedTime = "LastModifiedTime";
 
+        internal const string COL_ID = "ID";
+        internal const string COL_OwnerID = "OwnerID";
 
         static SalePriceListNewDataManager()
         {
@@ -67,6 +67,20 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #region Public Methods
 
+        public SalePriceListNew GetSalePriceListNew(long processInstanceId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, 1, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+
+            return queryContext.GetItem(SalePriceListNewMapper);
+        }
+
+
         public void JoinSalePriceListNew(RDBJoinContext joinContext, string salePriceListTableAlias, string salePriceListTableCol, string originalTableAlias, string originalTableCol)
         {
             //TODO need to Add NoLock on Join Statement
@@ -83,5 +97,28 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
         }
         #endregion
+        #region Mappers
+        SalePriceListNew SalePriceListNewMapper(IRDBDataReader reader)
+        {
+            return new SalePriceListNew
+            {
+                PriceListId = reader.GetInt(COL_ID),
+                OwnerId = reader.GetInt(COL_OwnerID),
+                OwnerType = (SalePriceListOwnerType)reader.GetInt(COL_OwnerType),
+                CurrencyId = reader.GetInt(COL_CurrencyID),
+                EffectiveOn = reader.GetDateTimeWithNullHandling(COL_EffectiveOn),
+                PriceListType = (SalePriceListType?)reader.GetIntWithNullHandling(COL_PriceListType),
+                SourceId = reader.GetString(COL_SourceID),
+                ProcessInstanceId = reader.GetLongWithNullHandling(COL_ProcessInstanceID),
+                FileId = reader.GetLongWithNullHandling(COL_FileID),
+                CreatedTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
+                UserId = reader.GetIntWithNullHandling(COL_UserID),
+                Description = reader.GetString(COL_Description),
+                PricelistStateBackupId = reader.GetNullableLong(COL_PricelistStateBackupID)
+            };
+        }
+
+        #endregion
+
     }
 }
