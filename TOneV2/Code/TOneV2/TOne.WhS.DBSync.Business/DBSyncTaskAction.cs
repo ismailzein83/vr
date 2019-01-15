@@ -125,7 +125,11 @@ namespace TOne.WhS.DBSync.Business
             PreDataDBSyncDataManager dataManager = new PreDataDBSyncDataManager();
 
             List<VRFile> vrFiles = dataManager.GetExistingFiles(fileIds);
-            List<VRFile> vrFilesByFileUniqueIds = dataManager.GetExistingFiles(fileUniqueIds);
+            List<VRFile> vrFilesByFileUniqueIds = null;
+            if (fileUniqueIds != null && fileUniqueIds.Count > 0)
+            {
+                vrFilesByFileUniqueIds = dataManager.GetExistingFiles(fileUniqueIds);
+            }
             List<VRFile> filesToSync = null;
             if(vrFiles != null)
             {
