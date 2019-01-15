@@ -78,7 +78,9 @@
     <Compile Include="SaleEntityServiceDataManager.cs" />
     <Compile Include="SalePriceListChangeDataManager.cs" />
     <Compile Include="SalePricelistCodeChangeDataManager.cs" />
+    <Compile Include="SalePricelistCodeChangeNewDataManager.cs" />
     <Compile Include="SalePricelistCustomerChangeDataManager.cs" />
+    <Compile Include="SalePricelistCustomerChangeNewDataManager.cs" />
     <Compile Include="SalePriceListNewDataManager.cs" />
     <Compile Include="SalePriceListDataManager.cs" />
     <Compile Include="SalePricelistRateChangeDataManager.cs" />
