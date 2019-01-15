@@ -71,12 +71,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MobileNetwork\Directives\MobileCountry\Templates\MobileCountryOnBeforeSaveHandler.html" />
-    <Content Include="MobileNetwork\Directives\MobileCountry\vr-mobilenetwork-mobilecountry-onbeforesavehandler.js" />
-    <Content Include="MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkSettingsCustomObjectSettingsTemplate.html" />
-    <Content Include="MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkSettingsTemplate.html" />
-    <Content Include="MobileNetwork\Directives\MobileNetwork\vanrise-mobilenetwork-customobjectsettings.js" />
-    <Content Include="MobileNetwork\Directives\MobileNetwork\vanrise-mobilenetwork-settings.js" />
+    <Content Include="VR_MobileNetwork\Directives\MobileCountry\Templates\MobileCountryOnBeforeSaveHandler.html" />
+    <Content Include="VR_MobileNetwork\Directives\MobileCountry\vr-mobilenetwork-mobilecountry-onbeforesavehandler.js" />
+    <Content Include="VR_MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkSettingsCustomObjectSettingsTemplate.html" />
+    <Content Include="VR_MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkSettingsTemplate.html" />
+    <Content Include="VR_MobileNetwork\Directives\MobileNetwork\vr-mobilenetwork-customobjectsettings.js" />
+    <Content Include="VR_MobileNetwork\Directives\MobileNetwork\vr-mobilenetwork-settings.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -93,7 +93,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controller\" />
-    <Folder Include="MobileNetwork\Services\APIServices\" />
+    <Folder Include="VR_MobileNetwork\Services\APIServices\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.MobileNetwork.Business\Vanrise.MobileNetwork.Business.csproj">
+      <Project>{945b0865-4588-489c-af05-7f09c88872df}</Project>
+      <Name>Vanrise.MobileNetwork.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.MobileNetwork\Vanrise.MobileNetwork.Entities.csproj">
+      <Project>{06adbd08-530d-4387-a107-cdc33c96e715}</Project>
+      <Name>Vanrise.MobileNetwork.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
