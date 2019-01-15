@@ -20,7 +20,8 @@ namespace Vanrise.RDB.Tests
                     Assembly.Load("Vanrise.Rules.Data.SQL"),
                      Assembly.Load("Vanrise.Common.Data.SQL"),
                      Assembly.Load("Vanrise.GenericData.Data.SQL"),
-                     Assembly.Load("Vanrise.GenericData.Transformation.Data.SQL")
+                     Assembly.Load("Vanrise.GenericData.Transformation.Data.SQL"),
+                       Assembly.Load("Vanrise.Security.Data.SQL")
 
                 );
         }

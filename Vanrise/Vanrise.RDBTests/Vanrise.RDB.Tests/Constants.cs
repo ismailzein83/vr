@@ -16,8 +16,8 @@ namespace Vanrise.RDB.Tests
         public const string DBSCHEMA_NAME_Common = "Common";
         public const string DBSCHEMA_NAME_GenericData = "genericdata";
         public const string DBSCHEMA_NAME_Reporocess = "reprocess";
+        public const string DBSCHEMA_NAME_Security = "sec";
 
-        
 
     }
 }

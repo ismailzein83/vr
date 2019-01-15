@@ -171,6 +171,20 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Code\Output\Vanrise.Security.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data.RDB">
+      <HintPath>..\..\Code\Output\Vanrise.Security.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Data.SQL">
+      <HintPath>..\..\Code\Output\Vanrise.Security.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBalance\BillingTransactionTypeDataManagerTests.cs" />
@@ -228,6 +242,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDBDataManagerFactory.cs" />
     <Compile Include="Rule\RuleDataManagerTests.cs" />
+    <Compile Include="Security\BusinessEntityDataManagerTests.cs" />
+    <Compile Include="Security\BusinessEntityModuleDataManagerTests.cs" />
+    <Compile Include="Security\CookieNameDataManagerTests.cs" />
+    <Compile Include="Security\EncryptionKeyDataManagerTests.cs" />
+    <Compile Include="Security\GroupDataManagerTests.cs" />
     <Compile Include="SQLDataManagerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
