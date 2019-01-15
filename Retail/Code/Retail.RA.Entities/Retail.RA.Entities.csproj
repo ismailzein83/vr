@@ -55,9 +55,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MCC\MCC.cs" />
-    <Compile Include="MNC\MNC.cs" />
-    <Compile Include="MNC\MNCSettings.cs" />
     <Compile Include="OperatorDeclaration\Enums.cs" />
     <Compile Include="OperatorDeclaration\OperatorDeclaration.cs" />
     <Compile Include="OperatorDeclaration\OperatorDeclarationService.cs" />

@@ -82,10 +82,6 @@
     <Content Include="Retail_RA\Constant\TrafficDirectionEnum.js" />
     <Content Include="Retail_RA\Directives\Extensions\INTL\retail-ra-intl-businessobject-dataprovidersettings.js" />
     <Content Include="Retail_RA\Directives\Extensions\INTL\Templates\INTLBusinessObjectDataProviderSettingsTemplate.html" />
-    <Content Include="Retail_RA\Directives\MNC\retail-ra-mncsettings-customobjectsettings.js" />
-    <Content Include="Retail_RA\Directives\MNC\retail-ra-mncsettings.js" />
-    <Content Include="Retail_RA\Directives\MNC\Templates\MNCSettingsCustomObjectSettingsTemplate.html" />
-    <Content Include="Retail_RA\Directives\MNC\Templates\MNCSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\retail-ra-operatordeclarationservice-sms.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\retail-ra-operatordeclarationservice-voice.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\Templates\OperatorDeclarationServiceSMSTemplate.html" />
