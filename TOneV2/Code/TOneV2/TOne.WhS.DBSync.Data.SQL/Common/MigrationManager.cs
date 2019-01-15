@@ -29,9 +29,9 @@ namespace TOne.WhS.DBSync.Data.SQL
         public bool PrepareBeforeApplyingRecords()
         {
             bool Executed = false;
+            _ServerConnection.BeginTransaction();
             try
-            {
-                _ServerConnection.BeginTransaction();
+            {                
                 GetAllDatabasesofTables();
                 DefineTables();
                 ScriptAllFKs();
@@ -50,9 +50,9 @@ namespace TOne.WhS.DBSync.Data.SQL
         public bool TruncateTables()
         {
             bool Executed = false;
+            _ServerConnection.BeginTransaction();
             try
-            {
-                _ServerConnection.BeginTransaction();
+            {                
                 GetAllDatabasesofTables();
                 ScriptAllFKs();
                 DropFKs();
@@ -71,9 +71,9 @@ namespace TOne.WhS.DBSync.Data.SQL
         public bool CreateForeignKeys()
         {
             bool Executed = false;
+            _ServerConnection.BeginTransaction();
             try
-            {
-                _ServerConnection.BeginTransaction();
+            {                
                 CreateFKs();
                 _ServerConnection.CommitTransaction();
                 Executed = true;
@@ -89,9 +89,9 @@ namespace TOne.WhS.DBSync.Data.SQL
         public bool FinalizeMigration(bool useTempTables, List<IDManagerEntity> idManagerEntities)
         {
             bool Executed = false;
+            _ServerConnection.BeginTransaction();
             try
-            {
-                _ServerConnection.BeginTransaction();
+            {                
                 UpdateIdManager(idManagerEntities);
                 if (useTempTables)
                 {
