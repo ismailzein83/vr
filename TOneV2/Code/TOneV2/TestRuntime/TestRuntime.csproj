@@ -1311,6 +1311,26 @@
       <Project>{fa418fbb-e474-44ce-a35b-4290213c55cf}</Project>
       <Name>TOne.WhS.Sales.MainExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Business\TOne.WhS.SMSBusinessEntity.Business.csproj">
+      <Project>{6f1a165b-f322-41f7-82b5-170b83616fe9}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Data.RDB\TOne.WhS.SMSBusinessEntity.Data.RDB.csproj">
+      <Project>{7742e981-964d-40f9-bca7-49e1fd424ab7}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.Data.RDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Data\TOne.WhS.SMSBusinessEntity.Data.csproj">
+      <Project>{ed5a6c59-dcdc-4197-bd67-95441c7bd6b7}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Entities\TOne.WhS.SMSBusinessEntity.Entities.csproj">
+      <Project>{0cb909be-06ad-43c1-8632-d58e334a324a}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.MainExtensions\TOne.WhS.SMSBusinessEntity.MainExtensions.csproj">
+      <Project>{cba925e3-0ba2-4ba2-b4bf-2083506bce7a}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SupplierPriceList.BP.Activities\TOne.WhS.SupplierPriceList.BP.Activities.csproj">
       <Project>{f7438737-d6bb-4dbc-beff-813a524e6eca}</Project>
       <Name>TOne.WhS.SupplierPriceList.BP.Activities</Name>
