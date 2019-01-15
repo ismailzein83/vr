@@ -71,6 +71,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MobileNetwork\Directives\MobileCountry\Templates\MobileCountryOnBeforeSaveHandler.html" />
+    <Content Include="MobileNetwork\Directives\MobileCountry\vr-mobilenetwork-mobilecountry-onbeforesavehandler.js" />
     <Content Include="MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkSettingsCustomObjectSettingsTemplate.html" />
     <Content Include="MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkSettingsTemplate.html" />
     <Content Include="MobileNetwork\Directives\MobileNetwork\vanrise-mobilenetwork-customobjectsettings.js" />
