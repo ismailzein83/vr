@@ -1179,6 +1179,10 @@
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
       <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Ericsson.RDB\TOne.WhS.RouteSync.Ericsson.RDB.csproj">
+      <Project>{041f88ef-095b-4482-9796-8778e23708c5}</Project>
+      <Name>TOne.WhS.RouteSync.Ericsson.RDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Ericsson.SQL\TOne.WhS.RouteSync.Ericsson.SQL.csproj">
       <Project>{b356e203-a6a3-4fa1-a273-305d66b69e8d}</Project>
       <Name>TOne.WhS.RouteSync.Ericsson.SQL</Name>
@@ -1190,6 +1194,10 @@
     <ProjectReference Include="..\TOne.WhS.RouteSync.FreeRadius\TOne.WhS.RouteSync.FreeRadius.csproj">
       <Project>{87790317-4035-4fb8-be4f-88d44fd02abe}</Project>
       <Name>TOne.WhS.RouteSync.FreeRadius</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Huawei.RDB\TOne.WhS.RouteSync.Huawei.RDB.csproj">
+      <Project>{61500f8a-051f-4e14-a2d3-ede098a3da79}</Project>
+      <Name>TOne.WhS.RouteSync.Huawei.RDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Huawei.SQL\TOne.WhS.RouteSync.Huawei.SQL.csproj">
       <Project>{44fdc92d-6615-467b-aa20-e9fc9236bcec}</Project>
