@@ -74,7 +74,6 @@
     <Compile Include="RDBDataType\RDBDataType.cs" />
     <Compile Include="RDBDataType\RDBDataTypeInfo.cs" />
     <Compile Include="StatusDefinition\StatusDefinitionStyle.cs" />
-    <Compile Include="Tools\GeneratedScriptItem.cs" />
     <Compile Include="MasterLayoutSettingData.cs" />
     <Compile Include="VRAPIDiscovery.cs" />
     <Compile Include="CompanyDefinitionConfig.cs" />
