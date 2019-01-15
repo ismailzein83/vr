@@ -82,6 +82,9 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             int result = updateQueryContext.ExecuteNonQuery();
 
+            if (result > 0)
+                return;
+
             //Insert Query 
 
             var insertQueryContext = new RDBQueryContext(GetDataProvider());
