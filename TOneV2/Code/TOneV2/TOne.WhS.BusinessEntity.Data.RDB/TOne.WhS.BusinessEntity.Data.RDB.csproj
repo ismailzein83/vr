@@ -76,10 +76,16 @@
     <Compile Include="SaleCodePreviewDataManager.cs" />
     <Compile Include="SaleEntityRoutingProductDataManager.cs" />
     <Compile Include="SaleEntityServiceDataManager.cs" />
+    <Compile Include="SalePriceListChangeDataManager.cs" />
+    <Compile Include="SalePricelistCodeChangeDataManager.cs" />
+    <Compile Include="SalePricelistCustomerChangeDataManager.cs" />
     <Compile Include="SalePriceListNewDataManager.cs" />
     <Compile Include="SalePriceListDataManager.cs" />
     <Compile Include="SalePricelistRateChangeDataManager.cs" />
     <Compile Include="SalePricelistRateChangeNewDataManager.cs" />
+    <Compile Include="SalePricelistRPChangeDataManager.cs" />
+    <Compile Include="SalePricelistRPChangeNewDataManager.cs" />
+    <Compile Include="SalePriceListSnapShotDataManager.cs" />
     <Compile Include="SalePriceListTemplateDataManager.cs" />
     <Compile Include="SaleRateDataManager.cs" />
     <Compile Include="SaleZoneDataManager.cs" />

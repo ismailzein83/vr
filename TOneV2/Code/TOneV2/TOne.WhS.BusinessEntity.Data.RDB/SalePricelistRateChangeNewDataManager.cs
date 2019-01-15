@@ -1,9 +1,8 @@
-﻿using System;
-using Vanrise.Common;
-using Vanrise.Data.RDB;
+﻿using Vanrise.Data.RDB;
+using Vanrise.Entities;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SalePricelistRateChangeNewDataManager
@@ -71,6 +70,34 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #region Public Methods
 
+        public IEnumerable<int> GetDistinctAffectedCustomerIds(long processInstanceId)
+        {
+            var lstAffectedCustomerIds = new List<int>();
+            SalePriceListNewDataManager salePriceListNewDataManager = new SalePriceListNewDataManager();
+            string salePriceListTableAlias = "sp";
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinContext = selectQuery.Join();
+            salePriceListNewDataManager.JoinSalePriceListNew(joinContext, salePriceListTableAlias, SalePriceListNewDataManager.COL_ID, TABLE_ALIAS, COL_PricelistId);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+
+            var groupByContext = selectQuery.GroupBy();
+            groupByContext.Select().Column(salePriceListTableAlias, SalePriceListNewDataManager.COL_OwnerID);
+
+            queryContext.ExecuteReader(reader =>
+            {
+                while (reader.Read())
+                {
+                    lstAffectedCustomerIds.Add(reader.GetInt("OwnerID"));
+                }
+            });
+            return lstAffectedCustomerIds;
+        }
         public IEnumerable<SalePricelistRateChange> GetFilteredRatesPreviewByProcessInstanceId(int processInstanceId, string zoneName, int customerId)
         {
             var salePriceLisNewDataManager = new SalePriceListNewDataManager();
@@ -83,11 +110,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var join = selectQuery.Join();
             salePriceLisNewDataManager.JoinSalePriceListNew(join, "spn", "ID", TABLE_ALIAS, COL_PricelistId);
 
-            var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
-            whereQuery.EqualsCondition(COL_ZoneName).Value(zoneName);
-            whereQuery.NotNullCondition(COL_RateTypeId);
-            whereQuery.EqualsCondition("spn", "OwnerID").Value(customerId);
+            var whereQueryContext = selectQuery.Where();
+            whereQueryContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+            whereQueryContext.EqualsCondition(COL_ZoneName).Value(zoneName);
+            whereQueryContext.NotNullCondition(COL_RateTypeId);
+            whereQueryContext.EqualsCondition("spn", "OwnerID").Value(customerId);
 
             return queryContext.GetItems(SalePricelistRateChangeMapper);
         }

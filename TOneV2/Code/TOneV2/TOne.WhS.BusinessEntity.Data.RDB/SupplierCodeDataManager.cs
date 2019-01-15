@@ -53,7 +53,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #endregion
 
-        #region Members
+        #region ISupplierCodeDataManager Members
 
         public IEnumerable<SupplierCode> GetParentsBySupplier(int supplierId, string codeNumber)
         {
@@ -178,6 +178,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             string codePrefixAlias = "CodePrefix";
             string codeCountAlias = "CodeCount";
+            string allPrefixesTableAlias = "allPrefixes";
 
             var tempTableQuery = queryContext.CreateTempTable();
             tempTableQuery.AddColumnsFromTable(codePrefixAlias);
@@ -223,8 +224,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(tempCodePrefixesTableQuery, "allPrefixes", null, false);
-            selectQuery.SelectColumns().AllTableColumns("allPrefixes");
+            selectQuery.From(tempCodePrefixesTableQuery, allPrefixesTableAlias);
+            selectQuery.SelectColumns().AllTableColumns(allPrefixesTableAlias);
+
+            var joinContext = selectQuery.Join();
+            var joinStatement = joinContext.Join(tempCodePrefixesTableQuery, "cp");
+            joinStatement.JoinType(RDBJoinType.Inner);
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(allPrefixesTableAlias, codePrefixAlias).TextLeftPart(prefixLength - 1).Column("cp", codePrefixAlias);
+
             return queryContext.GetItems(CodePrefixMapper);
         }
 
@@ -312,6 +320,43 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 CodePrefix = reader.GetString("CodePrefix"),
                 Count = reader.GetInt("codeCount")
             };
+        }
+
+        #endregion
+
+        #region State Backup Methods
+
+        public string BackupAllDataBySupplierId(long stateBackupId, string backupDatabase, int supplierId)
+        {
+
+
+            return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierCode] WITH (TABLOCK)
+                                            SELECT sc.[ID], sc.[Code], sc.[ZoneID], sc.[CodeGroupID], sc.[BED], sc.[EED], sc.[SourceID],  {1} AS StateBackupID,sc.[LastModifiedTime]  FROM [TOneWhS_BE].[SupplierCode] sc
+                                            WITH (NOLOCK)  Inner Join [TOneWhS_BE].[SupplierZone] sz  WITH (NOLOCK)  on sz.ID = sc.ZoneID
+                                            Where sz.SupplierID = {2}", backupDatabase, stateBackupId, supplierId);
+        }
+
+        public string GetRestoreCommands(long stateBackupId, string backupDatabase)
+        {
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierCode] ([ID], [Code], [ZoneID], [CodeGroupID], [BED], [EED], [SourceID],[LastModifiedTime])
+                                            SELECT [ID], [Code], [ZoneID], [CodeGroupID], [BED], [EED], [SourceID],[LastModifiedTime] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierCode]
+                                            WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
+        }
+
+        public void GetDeleteCommandsBySupplierId(RDBQueryContext queryContext, int supplierId)
+        {
+            SupplierZoneDataManager supplierZoneDataManager = new SupplierZoneDataManager();
+            string supplierZoneTableAlias = "splz";
+
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+
+            var joinContext = deleteQuery.Join(TABLE_ALIAS);
+            supplierZoneDataManager.JoinSupplierZone(joinContext, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
+
+            var whereContext = deleteQuery.Where();
+            whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
+
         }
 
         #endregion

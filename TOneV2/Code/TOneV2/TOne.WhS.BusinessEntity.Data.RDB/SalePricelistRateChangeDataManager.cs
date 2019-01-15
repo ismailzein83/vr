@@ -1,7 +1,6 @@
-﻿using System;
-using Vanrise.Common;
-using Vanrise.Data.RDB;
+﻿using Vanrise.Data.RDB;
 using System.Collections.Generic;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Data.RDB
@@ -82,6 +81,21 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.GetItems(SalePricelistRateChangeMapper);
         }
 
+        public List<SalePricelistRateChange> GetSalePricelistRateChanges(int priceListId, List<int> countryIds)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(COL_PricelistId).Value(priceListId);
+
+            if (countryIds != null && countryIds.Any())
+                whereQuery.ListCondition(COL_CountryID, RDBListConditionOperator.IN, countryIds);
+
+            return queryContext.GetItems(SalePricelistRateChangeMapper);
+        }
         public void BuildInsertQuery(RDBInsertQuery insertQuery, long processInstanceID)
         {
             insertQuery.IntoTable(TABLE_NAME);
@@ -90,7 +104,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
 
         #endregion
-        
+
         #region Mappper
 
         private SalePricelistRateChange SalePricelistRateChangeMapper(IRDBDataReader reader)
@@ -109,5 +123,5 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
 
         #endregion
-    } 
+    }
 }
