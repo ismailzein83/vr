@@ -67,10 +67,15 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.AddSelectGeneratedId();
             var id = queryContext.ExecuteScalar().NullableIntValue;
             if (id.HasValue)
+            {
                 insertedId = id.Value;
+                return true;
+            }
             else
+            {
                 insertedId = -1;
-            return insertedId != -1;
+                return false;
+            }
         }
 
         public bool AreOrgChartsUpdated(ref object updateHandle)

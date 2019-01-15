@@ -74,10 +74,15 @@ namespace Vanrise.Security.Data.RDB
                 insertQuery.Column(COL_ParentTenantID).Value(tenant.ParentTenantId.Value);
             var id = queryContext.ExecuteScalar().NullableIntValue;
             if (id.HasValue)
+            {
                 insertedId = id.Value;
+                return true;
+            }
             else
+            {
                 insertedId = -1;
-            return insertedId != -1;
+                return false;
+            }
         }
 
         public bool AreTenantsUpdated(ref object updateHandle)

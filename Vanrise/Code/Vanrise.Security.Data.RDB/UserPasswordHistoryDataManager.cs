@@ -68,10 +68,15 @@ namespace Vanrise.Security.Data.RDB
             insertQuery.Column(COL_IsChangedByAdmin).Value(history.IsChangedByAdmin);
             var id = queryContext.ExecuteScalar().NullableIntValue;
             if (id.HasValue)
+            {
                 insertedId = id.Value;
+                return true;
+            }
             else
+            {
                 insertedId = -1;
-            return insertedId != -1;
+                return false;
+            }
         }
 
         public IEnumerable<UserPasswordHistory> GetUserPasswordHistoryByUserId(int userId, int maxRecordsCount)
