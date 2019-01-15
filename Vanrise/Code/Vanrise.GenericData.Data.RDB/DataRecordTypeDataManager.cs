@@ -112,15 +112,15 @@ namespace Vanrise.GenericData.Data.RDB
             var selectQueryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = selectQueryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, 1, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-            var item = selectQueryContext.GetItem(DataRecordTypeMapper);
-            if (item != null)
+            selectQuery.SelectColumns().Column(COL_ID);
+            var dataRecordTypeId = selectQueryContext.ExecuteScalar().NullableGuidValue;
+            if (dataRecordTypeId.HasValue)
             {
                 var updateQueryContext = new RDBQueryContext(GetDataProvider());
                 var updateQuery = updateQueryContext.AddUpdateQuery();
                 updateQuery.FromTable(TABLE_NAME);
                 updateQuery.Column(COL_Name).Column(COL_Name);
-                updateQuery.Where().EqualsCondition(COL_ID).Value(item.DataRecordTypeId);
+                updateQuery.Where().EqualsCondition(COL_ID).Value(dataRecordTypeId.Value);
                 updateQueryContext.ExecuteNonQuery();
             }
         }

@@ -79,7 +79,7 @@ namespace Vanrise.GenericData.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, 1 , false);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             var subCondition = selectQuery.Where().ChildConditionGroup(RDBConditionGroupOperator.OR);
-            subCondition.NullCondition(COL_IsDeleted);
+            subCondition.ConditionIfColumnNotNull(COL_IsDeleted);
             subCondition.EqualsCondition(COL_IsDeleted).Value(false);
             selectQuery.Where().EqualsCondition(COL_BusinessEntityDefinitionID).Value(businessEntityDefinitionId);
             selectQuery.Where().EqualsCondition(COL_BusinessEntityID).Value(businessEntityId);
