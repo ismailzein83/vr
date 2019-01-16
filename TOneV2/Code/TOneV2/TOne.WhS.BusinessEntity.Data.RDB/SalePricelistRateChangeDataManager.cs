@@ -29,23 +29,22 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static SalePricelistRateChangeDataManager()
         {
-            var columns = new Dictionary<string, RDBTableColumnDefinition>
-            {
-                {COL_PricelistId, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_Rate, new RDBTableColumnDefinition {DataType = RDBDataType.Decimal, Size = 20, Precision = 8}},
-                {COL_RateTypeId, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_RecentRate,new RDBTableColumnDefinition {DataType = RDBDataType.Decimal, Size = 20, Precision = 8}},
-                {COL_CountryID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_ZoneName, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 150}},
-                {COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
-                {COL_Change, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_RoutingProductID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_CurrencyID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
-            };
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_PricelistId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_Rate, new RDBTableColumnDefinition {DataType = RDBDataType.Decimal, Size = 20, Precision = 8});
+            columns.Add(COL_RateTypeId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_RecentRate, new RDBTableColumnDefinition {DataType = RDBDataType.Decimal, Size = 20, Precision = 8});
+            columns.Add(COL_CountryID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_ZoneName, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 150});
+            columns.Add(COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
+            columns.Add(COL_Change, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_RoutingProductID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
