@@ -14,7 +14,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static string TABLE_NAME = "TOneWhS_BE_SaleCode";
         static string TABLE_ALIAS = "sc";
 
-        internal const string COL_ID = "ID";
+        public const string COL_ID = "ID";
         const string COL_Code = "Code";
         const string COL_ZoneID = "ZoneID";
         const string COL_CodeGroupID = "CodeGroupID";
