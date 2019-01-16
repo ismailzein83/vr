@@ -68,7 +68,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
 
             var whereContext = selectQuery.Where();
-            whereContext.StartsWithCondition(COL_Code, codeNumber);
+
+            var compareConditionContext = whereContext.CompareCondition(RDBCompareConditionOperator.StartWith);
+            compareConditionContext.Expression1().Value(codeNumber);
+            compareConditionContext.Expression2().Column(COL_Code);
+
             whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
             whereContext.LessOrEqualCondition(COL_BED).DateNow();
 
