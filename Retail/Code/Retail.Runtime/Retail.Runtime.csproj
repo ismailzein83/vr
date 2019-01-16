@@ -489,6 +489,12 @@
     <Reference Include="Vanrise.InvToAccBalanceRelation.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.InvToAccBalanceRelation.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.MobileNetwork.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.MobileNetwork.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.MobileNetwork.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.MobileNetwork.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Notification.BP.dll</HintPath>
     </Reference>
