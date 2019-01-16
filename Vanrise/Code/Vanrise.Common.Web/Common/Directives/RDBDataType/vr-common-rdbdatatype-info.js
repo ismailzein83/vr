@@ -48,9 +48,9 @@ appControllers.directive('vrCommonRdbdatatypeInfo', ['VRNotificationService', 'U
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" onselectionchanged="scopeModel.onTypeChanged" datatextfield="Description" datavaluefield="Value" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Schema" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>' +
-                '<vr-columns colnum="{{ctrl.normalColNum/2}}" ng-if="ctrl.selectedvalues.RequireSize"><vr-textbox value="scopeModel.size" label="Size" isrequired type="number"></vr-textbox></vr-columns>' +
-                '<vr-columns colnum="{{ctrl.normalColNum/2}}" ng-if="ctrl.selectedvalues.RequirePrecision"><vr-textbox value="scopeModel.precision" label="Precision" isrequired  type="number"></vr-textbox></vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="scopeModel.onSelectorReady" onselectionchanged="scopeModel.onTypeChanged" datatextfield="Description" datavaluefield="Value" label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' isrequired="ctrl.isrequired"></vr-select></vr-columns>' +
+                '<vr-columns colnum="{{ctrl.normalColNum/2}}" ng-if="ctrl.selectedvalues.RequireSize"><vr-textbox value="scopeModel.size" label="Size" type="number" isrequired="ctrl.selectedvalues.HasSizeRequired"></vr-textbox></vr-columns>' +
+                '<vr-columns colnum="{{ctrl.normalColNum/2}}" ng-if="ctrl.selectedvalues.RequirePrecision"><vr-textbox value="scopeModel.precision" label="Precision" type="number" isrequired="ctrl.selectedvalues.HasPrecisionRequired"></vr-textbox></vr-columns>';
 
         }
 
