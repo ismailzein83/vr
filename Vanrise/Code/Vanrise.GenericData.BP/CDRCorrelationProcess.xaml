@@ -160,22 +160,12 @@
             </Variable>
           </Sequence.Variables>
           <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
-            <vgba1:LoadCDRsToCorrelate sap2010:WorkflowViewState.IdRef="LoadCDRsToCorrelate_1" IsOrderAscending="True">
+            <vgba1:LoadCDRsToCorrelate sap2010:WorkflowViewState.IdRef="LoadCDRsToCorrelate_1" IsDateTimeOrderAscending="True">
               <vgba1:LoadCDRsToCorrelate.CDRCorrelationFilterGroups>
                 <InArgument x:TypeArguments="scg:List(vge:CDRCorrelationFilterGroup)">
                   <mca:CSharpValue x:TypeArguments="scg:List(vge:CDRCorrelationFilterGroup)">cdrCorrelationFilterGroups</mca:CSharpValue>
                 </InArgument>
               </vgba1:LoadCDRsToCorrelate.CDRCorrelationFilterGroups>
-              <vgba1:LoadCDRsToCorrelate.IdFieldName>
-                <InArgument x:TypeArguments="x:String">
-                  <mca:CSharpValue x:TypeArguments="x:String">CDRCorrelationDefinition.Settings.IdFieldName</mca:CSharpValue>
-                </InArgument>
-              </vgba1:LoadCDRsToCorrelate.IdFieldName>
-              <vgba1:LoadCDRsToCorrelate.OrderColumnName>
-                <InArgument x:TypeArguments="x:String">
-                  <mca:CSharpValue x:TypeArguments="x:String">CDRCorrelationDefinition.Settings.DatetimeFieldName</mca:CSharpValue>
-                </InArgument>
-              </vgba1:LoadCDRsToCorrelate.OrderColumnName>
               <vgba1:LoadCDRsToCorrelate.OutputQueue>
                 <InOutArgument x:TypeArguments="vq:MemoryQueue(vge:RecordBatch)">
                   <mca:CSharpReference x:TypeArguments="vq:MemoryQueue(vge:RecordBatch)">loadCDRsToCorrelateOutputQueue</mca:CSharpReference>
@@ -186,6 +176,11 @@
                   <mca:CSharpValue x:TypeArguments="s:Guid">CDRCorrelationDefinition.Settings.InputDataRecordStorageId</mca:CSharpValue>
                 </InArgument>
               </vgba1:LoadCDRsToCorrelate.RecordStorageId>
+              <vgba1:LoadCDRsToCorrelate.RecordTypeId>
+                <InArgument x:TypeArguments="s:Guid">
+                  <mca:CSharpValue x:TypeArguments="s:Guid">CDRCorrelationDefinition.Settings.InputDataRecordTypeId</mca:CSharpValue>
+                </InArgument>
+              </vgba1:LoadCDRsToCorrelate.RecordTypeId>
               <vgba1:LoadCDRsToCorrelate.Status>
                 <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
                   <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadCDRsToCorrelateStatus</mca:CSharpReference>
@@ -258,20 +253,10 @@
             </vgba1:InsertCorrelatedCDRs>
             <vgba1:DeleteRecordsFromStorage Status="{x:Null}" sap2010:WorkflowViewState.IdRef="DeleteRecordsFromStorage_1">
               <vgba1:DeleteRecordsFromStorage.DataRecordStorageId>
-                <InOutArgument x:TypeArguments="s:Guid">
-                  <mca:CSharpReference x:TypeArguments="s:Guid">CDRCorrelationDefinition.Settings.InputDataRecordStorageId</mca:CSharpReference>
-                </InOutArgument>
+                <InArgument x:TypeArguments="s:Guid">
+                  <mca:CSharpValue x:TypeArguments="s:Guid">CDRCorrelationDefinition.Settings.InputDataRecordStorageId</mca:CSharpValue>
+                </InArgument>
               </vgba1:DeleteRecordsFromStorage.DataRecordStorageId>
-              <vgba1:DeleteRecordsFromStorage.DateTimeFieldName>
-                <InArgument x:TypeArguments="x:String">
-                  <mca:CSharpValue x:TypeArguments="x:String">CDRCorrelationDefinition.Settings.DatetimeFieldName</mca:CSharpValue>
-                </InArgument>
-              </vgba1:DeleteRecordsFromStorage.DateTimeFieldName>
-              <vgba1:DeleteRecordsFromStorage.IdFieldName>
-                <InArgument x:TypeArguments="x:String">
-                  <mca:CSharpValue x:TypeArguments="x:String">CDRCorrelationDefinition.Settings.IdFieldName</mca:CSharpValue>
-                </InArgument>
-              </vgba1:DeleteRecordsFromStorage.IdFieldName>
               <vgba1:DeleteRecordsFromStorage.InputQueue>
                 <InArgument x:TypeArguments="vq:MemoryQueue(vge:DeleteRecordsBatch)">
                   <mca:CSharpValue x:TypeArguments="vq:MemoryQueue(vge:DeleteRecordsBatch)">insertCorrelatedCDRsOutputQueue</mca:CSharpValue>
@@ -310,7 +295,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWw8PwO6Ag4CAQFHBU0gAwHMA04FWQ4DAb0DWgVgJAMBtQNhBYUBLAMBgwOGAQWxAgoCAQuyAgW4AiACAQJKC0qFAQMBzgNHYEeDAQMBzQNWC1bdAQMBxQNRC1F9AwG+A10LXYEBAwG2A2QLZGIDAa4DbgtuigEDAacDcwtzeQMBoAN9C31qAwGZA4IBC4IBYQMBkgNpC2l1AwGLA3gLeF8DAYQDiQELiQFZAgEMjQEJpgIUAgEcqQIJrwIkAgETtQILtQKFAQIBBLICYLICgQECAQOUARGUAYoBAgE3mQERmQGYAQIBKp4BEZ4BmAECAR2iAQueAhYCAVKfAgulAisCAUSsAg+sAokBAgEVqQJkqQKCAQIBFKMBDcIBKQMBswLDAQ3nASMDAdcB6AENggIqAwGVAYMCDZ0CLgIBU6ICEaICkgECAUWmAROmAYoBAwH2AroBE7oBiQEDAekCsAETsAGEAQMB3AKrAROrAX4DAc8CvwETvwGAAQMBwgK1ARO1AY4BAwG1AqMBcaMBdwMBtALQARPQAWcDAaYC3wET3wF4AwGZAtUBE9UBhAEDAYwC5AET5AF6AwH/AdoBE9oBjgEDAfIBxgETxgF9AwHlAcsBE8sBZwMB2AH1ARP1AZQBAwHKAfABE/ABjgEDAb0B+gET+gFyAwGwAf8BE/8BgQEDAaMB6wET6wF9AwGWAYsCE4sChAEDAYgBmgITmgJ5AgF7lQITlQKOAQIBbpACE5ACfgIBYYYCE4YCkQECAVQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuQlBcQ0RSQ29ycmVsYXRpb25Qcm9jZXNzLnhhbWw5PwOrAg4CAQFHBU0gAwGlA04FWQ4DAZYDWgVgJAMBjgNhBYUBLAMB3AKGAQWiAgoCAQujAgWpAiACAQJKC0qFAQMBpwNHYEeDAQMBpgNWC1bdAQMBngNRC1F9AwGXA10LXYEBAwGPA2QLZGIDAYcDbgtuigEDAYADcwtzeQMB+QJ9C31qAwHyAoIBC4IBYQMB6wJpC2l1AwHkAngLeF8DAd0CiQELiQFZAgEMjQEJlwIUAgEcmgIJoAIkAgETpgILpgKFAQIBBKMCYKMCgQECAQOUARGUAYoBAgE3mQERmQGYAQIBKp4BEZ4BmAECAR2iAQuPAhYCAVKQAguWAisCAUSdAg+dAokBAgEVmgJkmgKCAQIBFKMBDb0BKQMBmQK+AQ3iASMDAb0B4wEN/QEqAgF7/gENjgIuAgFTkwIRkwKSAQIBRbUBE7UBhgEDAc8CpgETpgGKAQMBwgKwAROwAYkBAwG1AqMBeaMBfwMBtAK6ARO6AYABAwGnAqsBE6sBjgEDAZoCywETywFnAwGMAtoBE9oBeAMB/wHQARPQAYQBAwHyAd8BE98BegMB5QHVARPVAY4BAwHYAcEBE8EBfQMBywHGARPGAWcDAb4B8AET8AGWAQMBsAHrARPrAY4BAwGjAfUBE/UBcgMBlgH6ARP6AYEBAwGJAeYBE+YBfQIBfIsCE4sCeQIBboYCE4YCjgECAWGBAhOBAokBAgFU</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -9,6 +9,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.GenericData.Data.RDB;
 using Vanrise.Entities;
+
 namespace Vanrise.GenericData.RDBDataStorage
 {
     public class RDBRecordStorageDataManager : IDataRecordDataManager, ISummaryRecordDataManager
@@ -114,7 +115,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             DeleteRecords_Private(null, null, dateTime, recordFilterGroup, null);
         }
 
-        public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete, string idFieldName, string dateTimeFieldName)
+        public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete)
         {
             throw new NotImplementedException();
         }
@@ -144,16 +145,15 @@ namespace Vanrise.GenericData.RDBDataStorage
         public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false)
         {
             var dynamicManager = this.DynamicManager;
-            SelectRecords(null, null, from, to, false, recordFilterGroup, isOrderAscending ? OrderDirection.Ascending : OrderDirection.Descending, orderColumnName,
-                (reader) =>
+            SelectRecords(null, null, from, to, false, recordFilterGroup, isOrderAscending ? OrderDirection.Ascending : OrderDirection.Descending, orderColumnName, (reader) =>
+            {
+                while (reader.Read())
                 {
-                    while(reader.Read())
-                    {
-                        onItemReady(dynamicManager.GetDynamicRecordFromReader(reader));
-                        if (shouldStop())
-                            break;
-                    }
-                });
+                    onItemReady(dynamicManager.GetDynamicRecordFromReader(reader));
+                    if (shouldStop())
+                        break;
+                }
+            });
         }
 
         public int GetDBQueryMaxParameterNumber()
@@ -168,7 +168,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             SelectRecords(context.FieldNames, context.LimitResult, context.FromTime, context.ToTime, true, context.FilterGroup, context.Direction, null,
                 (reader) =>
                 {
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         dataRecords.Add(dynamicManager.GetDataRecordFromReader(reader, context.FieldNames));
                     }
@@ -176,12 +176,12 @@ namespace Vanrise.GenericData.RDBDataStorage
             return dataRecords;
         }
 
-        public long? GetMaxId(string idFieldName, string dateTimeFieldName, out DateTime? maxDate, out DateTime? minDate)
+        public long? GetMaxId(out DateTime? maxDate, out DateTime? minDate)
         {
             throw new NotImplementedException();
         }
 
-        public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, string idFieldName, string dateTimeFieldName, out long? maxId)
+        public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, out long? maxId)
         {
             throw new NotImplementedException();
         }
@@ -235,29 +235,29 @@ namespace Vanrise.GenericData.RDBDataStorage
             var insertRecordsToTempTableQuery = queryContext.AddInsertMultipleRowsQuery();
             insertRecordsToTempTableQuery.IntoTable(tempTableQuery);
 
-            foreach(var record in records)
+            foreach (var record in records)
             {
                 var newRowContext = insertRecordsToTempTableQuery.AddRow();
                 dynamicManager.SetRDBInsertColumnsToTempTableFromRecord(record, newRowContext);
             }
-            
+
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(rdbRegistrationInfo.RDBTableQuerySource);
 
             var joinContext = updateQuery.Join("rec");
             var joinCondition = joinContext.Join(tempTableQuery, "updatedTable").On();
-            foreach(var fldToJoin in fieldsToJoin)
+            foreach (var fldToJoin in fieldsToJoin)
             {
                 joinCondition.EqualsCondition(fldToJoin).Column("updatedTable", fldToJoin);
             }
-            
-            foreach(var fldtoUpdate in fieldsToUpdate)
+
+            foreach (var fldtoUpdate in fieldsToUpdate)
             {
                 updateQuery.Column(fldtoUpdate).Column("updatedTable", fldtoUpdate);
             }
             queryContext.ExecuteNonQuery();
         }
-        
+
         public void WriteRecordToStream(object record, object dbApplyStream)
         {
             RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
@@ -491,7 +491,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                                     return registrationInfo;
                                 });
         }
-        
+
         private class RDBRegistrationInfo
         {
             public RDBSchemaManager SchemaManager { get; set; }
@@ -513,8 +513,8 @@ namespace Vanrise.GenericData.RDBDataStorage
             public RDBTableDefinition RDBTableDefinition { get; set; }
         }
 
-        void SelectRecords(List<string> fieldNames, int? numberOfRecords, 
-            DateTime? fromtime, DateTime? toTime, bool toTimeLessOrEqual, RecordFilterGroup filterGroup, 
+        void SelectRecords(List<string> fieldNames, int? numberOfRecords,
+            DateTime? fromtime, DateTime? toTime, bool toTimeLessOrEqual, RecordFilterGroup filterGroup,
             OrderDirection? orderDirection, string orderByFieldName,
             Action<IRDBDataReader> onReaderReady)
         {
@@ -524,8 +524,8 @@ namespace Vanrise.GenericData.RDBDataStorage
             selectQuery.From(rdbRegistrationInfo.RDBTableQuerySource, "rec", numberOfRecords, true);
             var selectColumns = selectQuery.SelectColumns();
             if (fieldNames != null)
-            {                
-                foreach(var fieldName in fieldNames)
+            {
+                foreach (var fieldName in fieldNames)
                 {
                     selectColumns.Column(fieldName);
                 }
@@ -541,7 +541,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                 _dataRecordStorageSettings.DateTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
                 where.GreaterOrEqualCondition(_dataRecordStorageSettings.DateTimeField).Value(fromtime.Value);
             }
-            if(toTime.HasValue)
+            if (toTime.HasValue)
             {
                 _dataRecordStorageSettings.DateTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
                 if (toTimeLessOrEqual)
@@ -550,13 +550,13 @@ namespace Vanrise.GenericData.RDBDataStorage
                     where.LessThanCondition(_dataRecordStorageSettings.DateTimeField).Value(toTime.Value);
             }
 
-            if(filterGroup != null)
+            if (filterGroup != null)
             {
                 var recordFilterRDBBuilder = new RecordFilterRDBBuilder((fieldName, expressionContext) => expressionContext.Column(fieldName));
                 recordFilterRDBBuilder.RecordFilterGroupCondition(where, filterGroup);
             }
 
-            if(orderDirection.HasValue)
+            if (orderDirection.HasValue)
             {
                 if (orderByFieldName == null)
                     orderByFieldName = _dataRecordStorageSettings.DateTimeField;
@@ -574,7 +574,7 @@ namespace Vanrise.GenericData.RDBDataStorage
             var deleteQuery = queryContext.AddDeleteQuery();
             deleteQuery.FromTable(rdbRegistrationInfo.RDBTableQuerySource);
             var where = deleteQuery.Where();
-            if(fromtime.HasValue)
+            if (fromtime.HasValue)
             {
                 _dataRecordStorageSettings.DateTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
                 where.GreaterOrEqualCondition(_dataRecordStorageSettings.DateTimeField).Value(fromtime.Value);
@@ -584,7 +584,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                 _dataRecordStorageSettings.DateTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
                 where.LessThanCondition(_dataRecordStorageSettings.DateTimeField).Value(toTime.Value);
             }
-            if(time.HasValue)
+            if (time.HasValue)
             {
                 _dataRecordStorageSettings.DateTimeField.ThrowIfNull("_dataRecordStorageSettings.CreatedTimeField", _dataRecordStorage.DataRecordStorageId);
                 where.EqualsCondition(_dataRecordStorageSettings.DateTimeField).Value(time.Value);
@@ -594,7 +594,7 @@ namespace Vanrise.GenericData.RDBDataStorage
                 var recordFilterRDBBuilder = new RecordFilterRDBBuilder((fieldName, expressionContext) => expressionContext.Column(fieldName));
                 recordFilterRDBBuilder.RecordFilterGroupCondition(where, filterGroup);
             }
-            if(ids != null)
+            if (ids != null)
             {
                 this.DataRecordType.Settings.IdField.ThrowIfNull("this.DataRecordType.Settings.IdField", this.DataRecordType.DataRecordTypeId);
                 var idsExpressions = new List<BaseRDBExpression>();

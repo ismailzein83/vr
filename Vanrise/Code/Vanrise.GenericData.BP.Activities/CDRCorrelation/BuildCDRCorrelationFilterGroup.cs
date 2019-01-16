@@ -5,6 +5,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using System.Linq;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.BP.Activities
 {
@@ -38,8 +39,13 @@ namespace Vanrise.GenericData.BP.Activities
             TimeSpan batchIntervalTime = this.BatchIntervalTime.Get(context);
             CDRCorrelationProcessState cdrCorrelationProcessState = this.CDRCorrelationProcessState.Get(context);
 
-            DataRecordStorageManager manager = new DataRecordStorageManager();
+            DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
+
             CDRCorrelationDefinitionSettings settings = cdrCorrelationDefinition.Settings;
+            settings.ThrowIfNull("cdrCorrelationDefinition.Settings");
+
+            DataRecordType inputDataRecordType = new DataRecordTypeManager().GetDataRecordType(settings.InputDataRecordTypeId);
+            string idFieldName = inputDataRecordType.Settings.IdField;
 
             long? lastImportedId = null;
             bool newDataImported = false;
@@ -47,19 +53,19 @@ namespace Vanrise.GenericData.BP.Activities
 
             DateTime? overallMinDate;
             DateTime? overallMaxDate;
-            long? overallMaxId = manager.GetMaxId(settings.InputDataRecordStorageId, settings.IdFieldName, settings.DatetimeFieldName, out overallMaxDate, out overallMinDate);
+            long? overallMaxId = dataRecordStorageManager.GetMaxId(settings.InputDataRecordStorageId, out overallMaxDate, out overallMinDate);
 
             if (cdrCorrelationProcessState != null && cdrCorrelationProcessState.LastImportedId.HasValue)
             {
                 long? maxId;
-                DateTime? minDate = manager.GetMinDateTimeWithMaxIdAfterId(settings.InputDataRecordStorageId, cdrCorrelationProcessState.LastImportedId.Value, settings.IdFieldName, settings.DatetimeFieldName, out maxId);
+                DateTime? minDate = dataRecordStorageManager.GetMinDateTimeWithMaxIdAfterId(settings.InputDataRecordStorageId, cdrCorrelationProcessState.LastImportedId.Value, out maxId);
 
                 if (minDate.HasValue)
                 {
                     newDataImported = true;
                     lastImportedId = maxId;
                     DateTime minDateMinusMargin = minDate.Value.AddSeconds(-1 * dateTimeMargin.TotalSeconds);
-                    cdrCorrelationFilterGroups = BuildRecordFilterGroups(minDateMinusMargin, overallMaxDate.Value, batchIntervalTime, settings.DatetimeFieldName, maxId.Value, settings.IdFieldName);
+                    cdrCorrelationFilterGroups = BuildRecordFilterGroups(minDateMinusMargin, overallMaxDate.Value, batchIntervalTime, maxId.Value, idFieldName);
                 }
             }
             else
@@ -68,7 +74,7 @@ namespace Vanrise.GenericData.BP.Activities
                 {
                     newDataImported = true;
                     lastImportedId = overallMaxId;
-                    cdrCorrelationFilterGroups = BuildRecordFilterGroups(overallMinDate.Value, overallMaxDate.Value, batchIntervalTime, settings.DatetimeFieldName, overallMaxId.Value, settings.IdFieldName);
+                    cdrCorrelationFilterGroups = BuildRecordFilterGroups(overallMinDate.Value, overallMaxDate.Value, batchIntervalTime, overallMaxId.Value, idFieldName);
                 }
             }
 
@@ -77,7 +83,7 @@ namespace Vanrise.GenericData.BP.Activities
             this.LastImportedId.Set(context, lastImportedId);
         }
 
-        private List<CDRCorrelationFilterGroup> BuildRecordFilterGroups(DateTime minDate, DateTime maxDate, TimeSpan batchIntervalTime, string datetimeFieldName, long maxId, string idFieldName)
+        private List<CDRCorrelationFilterGroup> BuildRecordFilterGroups(DateTime minDate, DateTime maxDate, TimeSpan batchIntervalTime, long maxId, string idFieldName)
         {
             List<CDRCorrelationFilterGroup> cdrCorrelationFilterGroups = new List<CDRCorrelationFilterGroup>();
             List<DateTimeRange> dateTimeRanges = Vanrise.Common.Utilities.GenerateDateTimeRanges(minDate, maxDate, batchIntervalTime).ToList();
@@ -86,17 +92,9 @@ namespace Vanrise.GenericData.BP.Activities
             {
                 DateTimeRange dateTimeRange = dateTimeRanges[i];
                 DateTime from = dateTimeRange.From;
-                DateTime? to = null;
+                DateTime? to = (i != dateTimeRanges.Count - 1) ? dateTimeRange.To : default(DateTime?);
 
                 RecordFilterGroup recordFilter = new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.And, Filters = new List<RecordFilter>() };
-                recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = datetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.GreaterOrEquals, Value = from });
-
-                if (i != dateTimeRanges.Count - 1)
-                {
-                    to = dateTimeRange.To;
-                    recordFilter.Filters.Add(new DateTimeRecordFilter { FieldName = datetimeFieldName, CompareOperator = DateTimeRecordFilterOperator.Less, Value = to });
-                }
-
                 recordFilter.Filters.Add(new NumberRecordFilter { FieldName = idFieldName, CompareOperator = NumberRecordFilterOperator.LessOrEquals, Value = maxId });
                 recordFilter.Filters.Add(new NumberListRecordFilter { FieldName = "RecordType", CompareOperator = ListRecordFilterOperator.In, Values = new List<decimal>() { 0, 1, 100 } });
 

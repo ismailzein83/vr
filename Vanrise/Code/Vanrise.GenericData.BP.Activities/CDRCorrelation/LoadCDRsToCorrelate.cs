@@ -8,6 +8,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.Entities;
 using System.Threading;
 using System.Configuration;
+using Vanrise.Common;
 
 namespace Vanrise.GenericData.BP.Activities
 {
@@ -15,17 +16,15 @@ namespace Vanrise.GenericData.BP.Activities
 
     public class LoadCDRsToCorrelateInput
     {
-        public Guid RecordStorageId { get; set; }
+        public Guid RecordTypeId { get; set; }
 
-        public string IdFieldName { get; set; }
+        public Guid RecordStorageId { get; set; }
 
         public MemoryQueue<RecordBatch> OutputQueue { get; set; }
 
         public List<CDRCorrelationFilterGroup> CDRCorrelationFilterGroups { get; set; }
 
-        public string OrderColumnName { get; set; }
-
-        public bool IsOrderAscending { get; set; }
+        public bool IsDateTimeOrderAscending { get; set; }
     }
 
     public class LoadCDRsToCorrelateOutput
@@ -37,19 +36,16 @@ namespace Vanrise.GenericData.BP.Activities
     public sealed class LoadCDRsToCorrelate : BaseAsyncActivity<LoadCDRsToCorrelateInput, LoadCDRsToCorrelateOutput>
     {
         [RequiredArgument]
-        public InArgument<Guid> RecordStorageId { get; set; }
+        public InArgument<Guid> RecordTypeId { get; set; }
 
         [RequiredArgument]
-        public InArgument<string> IdFieldName { get; set; }
+        public InArgument<Guid> RecordStorageId { get; set; }
 
         [RequiredArgument]
         public InArgument<List<CDRCorrelationFilterGroup>> CDRCorrelationFilterGroups { get; set; }
 
         [RequiredArgument]
-        public InArgument<string> OrderColumnName { get; set; }
-
-        [RequiredArgument]
-        public InArgument<bool> IsOrderAscending { get; set; }
+        public InArgument<bool> IsDateTimeOrderAscending { get; set; }
 
         [RequiredArgument]
         public InOutArgument<MemoryQueue<RecordBatch>> OutputQueue { get; set; }
@@ -67,16 +63,18 @@ namespace Vanrise.GenericData.BP.Activities
             if (inputArgument.OutputQueue == null)
                 throw new NullReferenceException("inputArgument.OutputQueue");
 
+            DataRecordType inputDataRecordType = new DataRecordTypeManager().GetDataRecordType(inputArgument.RecordTypeId);
+            string datetimeFieldName = inputDataRecordType.Settings.DateTimeField;
+
             LoadCDRsToCorrelateOutput output = new LoadCDRsToCorrelateOutput() { };
             long totalRecordsCount = 0;
 
             RecordBatch recordBatch = new RecordBatch() { Records = new List<dynamic>() };
 
-            List<CDRCorrelationFilterGroup> cdrRCorrelationFilterGroups = inputArgument.CDRCorrelationFilterGroups;
-            string orderColumnName = inputArgument.OrderColumnName;
-            bool isOrderAscending = inputArgument.IsOrderAscending;
+            List<CDRCorrelationFilterGroup> cdrCorrelationFilterGroups = inputArgument.CDRCorrelationFilterGroups;
+            cdrCorrelationFilterGroups.ThrowIfNull("cdrCorrelationFilterGroups");
 
-            foreach (CDRCorrelationFilterGroup cdrCorrelationFilterGroup in cdrRCorrelationFilterGroups)
+            foreach (CDRCorrelationFilterGroup cdrCorrelationFilterGroup in cdrCorrelationFilterGroups)
             {
                 string rangeMessage;
                 if (cdrCorrelationFilterGroup.To.HasValue)
@@ -100,7 +98,7 @@ namespace Vanrise.GenericData.BP.Activities
                         inputArgument.OutputQueue.Enqueue(recordBatch);
                         recordBatch = new RecordBatch() { Records = new List<dynamic>() };
                     }
-                }), orderColumnName, isOrderAscending);
+                }), datetimeFieldName, inputArgument.IsDateTimeOrderAscending);
 
                 if (recordBatch.Records.Count > 0)
                 {
@@ -108,8 +106,9 @@ namespace Vanrise.GenericData.BP.Activities
                     recordBatch = new RecordBatch() { Records = new List<dynamic>() };
                 }
 
-                double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
-                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has finished. Events Count: {1}. Time Elapsed: {2} (s)", rangeMessage, batchRecordsCount, elapsedTime));
+                TimeSpan elapsedTime = DateTime.Now - batchStartTime;
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has finished. Events Count: {1}. ElapsedTime: {2}", 
+                    rangeMessage, batchRecordsCount, elapsedTime.ToString(@"hh\:mm\:ss\.fff")));
 
                 while (inputArgument.OutputQueue.Count >= maximumOutputQueueSize)
                     Thread.Sleep(1000);
@@ -123,12 +122,11 @@ namespace Vanrise.GenericData.BP.Activities
         {
             return new LoadCDRsToCorrelateInput()
             {
-                OutputQueue = this.OutputQueue.Get(context),
-                IdFieldName = this.IdFieldName.Get(context),
+                RecordTypeId = this.RecordTypeId.Get(context),
                 RecordStorageId = this.RecordStorageId.Get(context),
                 CDRCorrelationFilterGroups = this.CDRCorrelationFilterGroups.Get(context),
-                OrderColumnName = this.OrderColumnName.Get(context),
-                IsOrderAscending = this.IsOrderAscending.Get(context)
+                IsDateTimeOrderAscending = this.IsDateTimeOrderAscending.Get(context),
+                OutputQueue = this.OutputQueue.Get(context)
             };
         }
 

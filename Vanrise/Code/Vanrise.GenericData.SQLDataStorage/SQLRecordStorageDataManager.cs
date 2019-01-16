@@ -4,14 +4,12 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-using Vanrise.Common;
-using System.Data.Common;
-using Vanrise.Entities;
-using Vanrise.Common.Business;
 
 namespace Vanrise.GenericData.SQLDataStorage
 {
@@ -528,19 +526,6 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         }
 
-        public bool Delete(List<object> recordFieldsIds)
-        {
-            Dictionary<string, Object> parameterValues = new Dictionary<string, Object>();
-            return ExecuteNonQueryText(BuildDeleteQuery(recordFieldsIds, parameterValues), (cmd) =>
-            {
-                foreach (var prm in parameterValues)
-                {
-                    cmd.Parameters.Add(new SqlParameter(String.Format("{0}", prm.Key), prm.Value != null ? prm.Value : DBNull.Value));
-                }
-
-            }) > 0;
-        }
-
         public void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
         {
             List<string> columnsToJoin = this.GetColumnNamesFromFieldNames(fieldsToJoin);
@@ -579,6 +564,19 @@ namespace Vanrise.GenericData.SQLDataStorage
                 prm.Value = dt;
                 cmd.Parameters.Add(prm);
             });
+        }
+
+        public bool Delete(List<object> recordFieldsIds)
+        {
+            Dictionary<string, Object> parameterValues = new Dictionary<string, Object>();
+            return ExecuteNonQueryText(BuildDeleteQuery(recordFieldsIds, parameterValues), (cmd) =>
+            {
+                foreach (var prm in parameterValues)
+                {
+                    cmd.Parameters.Add(new SqlParameter(String.Format("{0}", prm.Key), prm.Value != null ? prm.Value : DBNull.Value));
+                }
+
+            }) > 0;
         }
 
         public void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
@@ -640,6 +638,42 @@ namespace Vanrise.GenericData.SQLDataStorage
             });
         }
 
+        public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete)
+        {
+            if (idsToDelete == null || idsToDelete.Count == 0)
+                return;
+
+            string tableName = GetTableNameWithSchema();
+            string idFieldName = GetColumnNameFromFieldName(DataRecordType.Settings.IdField);
+            string datetimeFieldName = GetColumnNameFromFieldName(_dataRecordStorage.Settings.DateTimeField);
+
+            string query = $@"DELETE w
+                              FROM {tableName} w
+                              INNER JOIN @Ids temp
+                              ON temp.Id = w.{idFieldName}
+                              WHERE {datetimeFieldName} >= @From AND {datetimeFieldName} < @To";
+
+            DataTable datatable = BuildIDTypeDataTable(idsToDelete);
+            ExecuteNonQueryText(query, (cmd) =>
+            {
+                cmd.CommandTimeout = 0;
+
+                var dtPrm = new SqlParameter("@Ids", SqlDbType.Structured);
+                dtPrm.TypeName = "IDType";
+                dtPrm.Value = datatable;
+                cmd.Parameters.Add(dtPrm);
+
+                var fromPrm = new SqlParameter("@From", SqlDbType.DateTime);
+                fromPrm.Value = fromDate;
+
+                var toPrm = new SqlParameter("@To", SqlDbType.DateTime);
+                toPrm.Value = toDate;
+
+                cmd.Parameters.Add(fromPrm);
+                cmd.Parameters.Add(toPrm);
+            });
+        }
+
         public bool AreDataRecordsUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated(GetTableNameWithSchema(), ref updateHandle);
@@ -650,14 +684,16 @@ namespace Vanrise.GenericData.SQLDataStorage
             return base.GetSQLQueryMaxParameterNumber();
         }
 
-        public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, string idFieldName, string dateTimeFieldName, out long? maxId)
+        public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, out long? maxId)
         {
+            string tableName = GetTableNameWithSchema();
+            string idFieldName = GetColumnNameFromFieldName(DataRecordType.Settings.IdField);
+            string datetimeFieldName = GetColumnNameFromFieldName(_dataRecordStorage.Settings.DateTimeField);
+
+            string query = $"Select Min({datetimeFieldName}) as MinDate, Max({idFieldName}) as MaxId from {tableName} WITH (NOLOCK) WHERE {idFieldName} > {id}";
+
             DateTime? minDateFromReader = null;
             long? maxIdFromReader = null;
-
-            string tableName = GetTableNameWithSchema();
-            string query = string.Format(@"Select Min({0}) as MinDate, Max({1}) as MaxId from {2} WITH (NOLOCK)
-                                           WHERE {1} > {3}", GetColumnNameFromFieldName(dateTimeFieldName), GetColumnNameFromFieldName(idFieldName), tableName, id);
 
             ExecuteReaderText(query, (reader) =>
             {
@@ -667,24 +703,25 @@ namespace Vanrise.GenericData.SQLDataStorage
                     maxIdFromReader = GetReaderValue<long?>(reader, "MaxId");
                 }
             }, (cmd) =>
-                {
-
-                    cmd.CommandTimeout = 0;
-                });
+            {
+                cmd.CommandTimeout = 0;
+            });
 
             maxId = maxIdFromReader;
             return minDateFromReader;
         }
 
-        public long? GetMaxId(string idFieldName, string dateTimeFieldName, out DateTime? maxDate, out DateTime? minDate)
+        public long? GetMaxId(out DateTime? maxDate, out DateTime? minDate)
         {
+            string tableName = GetTableNameWithSchema();
+            string idFieldName = GetColumnNameFromFieldName(DataRecordType.Settings.IdField);
+            string datetimeFieldName = GetColumnNameFromFieldName(_dataRecordStorage.Settings.DateTimeField);
+
+            string query = $"Select Max({idFieldName}) as MaxId, Max({datetimeFieldName}) as MaxDate, Min({datetimeFieldName}) as MinDate from {tableName} WITH (NOLOCK)";
+
             long? maxIdFromReader = null;
             DateTime? maxDateFromReader = null;
             DateTime? minDateFromReader = null;
-
-            string tableName = GetTableNameWithSchema();
-            string query = string.Format(@"Select Max({0}) as MaxId, Max({1}) as MaxDate, Min({1}) as MinDate from {2} WITH (NOLOCK)",
-                GetColumnNameFromFieldName(idFieldName), GetColumnNameFromFieldName(dateTimeFieldName), tableName);
 
             ExecuteReaderText(query, (reader) =>
             {
@@ -700,59 +737,11 @@ namespace Vanrise.GenericData.SQLDataStorage
                 cmd.CommandTimeout = 0;
             });
 
-            minDate = minDateFromReader;
             maxDate = maxDateFromReader;
-
+            minDate = minDateFromReader;
             return maxIdFromReader;
         }
 
-        public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete, string idFieldName, string dateTimeFieldName)
-        {
-            string tableName = GetTableNameWithSchema();
-            if (idsToDelete != null && idsToDelete.Count > 0)
-            {
-                DataTable datatable = BuildTable(idsToDelete);
-                ExecuteNonQueryText(string.Format(@"DELETE w
-                                            FROM {0} w
-                                            INNER JOIN @Ids temp
-                                            ON temp.Id=w.{1}
-                                            WHERE {2} >= @From AND {2} < @To", tableName, GetColumnNameFromFieldName(idFieldName), GetColumnNameFromFieldName(dateTimeFieldName)),
-                (cmd) =>
-                {
-
-                    cmd.CommandTimeout = 0;
-
-                    var dtPrm = new SqlParameter("@Ids", SqlDbType.Structured);
-                    dtPrm.TypeName = "IDType";
-                    dtPrm.Value = datatable;
-                    cmd.Parameters.Add(dtPrm);
-
-                    var fromPrm = new SqlParameter("@From", SqlDbType.DateTime);
-                    fromPrm.Value = fromDate;
-
-                    var toPrm = new SqlParameter("@To", SqlDbType.DateTime);
-                    toPrm.Value = toDate;
-
-                    cmd.Parameters.Add(fromPrm);
-                    cmd.Parameters.Add(toPrm);
-                });
-            }
-        }
-
-        private DataTable BuildTable(List<long> idsToDelete)
-        {
-            DataTable datatable = new DataTable();
-            datatable.Columns.Add("ID", typeof(long));
-            datatable.BeginLoadData();
-            foreach (var id in idsToDelete)
-            {
-                DataRow dr = datatable.NewRow();
-                dr["ID"] = id;
-                datatable.Rows.Add(dr);
-            }
-            datatable.EndLoadData();
-            return datatable;
-        }
 
         #region Private Methods
 
@@ -1289,6 +1278,21 @@ namespace Vanrise.GenericData.SQLDataStorage
         private string GenerateParameterName(ref int parameterIndex)
         {
             return String.Format("@Prm_{0}", parameterIndex++);
+        }
+
+        private DataTable BuildIDTypeDataTable(List<long> idsToDelete)
+        {
+            DataTable datatable = new DataTable();
+            datatable.Columns.Add("ID", typeof(long));
+            datatable.BeginLoadData();
+            foreach (var id in idsToDelete)
+            {
+                DataRow dr = datatable.NewRow();
+                dr["ID"] = id;
+                datatable.Rows.Add(dr);
+            }
+            datatable.EndLoadData();
+            return datatable;
         }
 
         #endregion

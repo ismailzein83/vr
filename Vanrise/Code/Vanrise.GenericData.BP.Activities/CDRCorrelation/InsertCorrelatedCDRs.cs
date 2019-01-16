@@ -35,7 +35,7 @@ namespace Vanrise.GenericData.BP.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<CDRCorrelationBatch>> InputQueueToInsert { get; set; }
 
-        [RequiredArgument]
+        [RequiredArgument] 
         public InOutArgument<MemoryQueue<DeleteRecordsBatch>> OutputQueueToDelete { get; set; }
 
         protected override InsertCorrelatedCDRsOutput DoWorkWithResult(InsertCorrelatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
@@ -46,12 +46,14 @@ namespace Vanrise.GenericData.BP.Activities
             int batchSize;
             if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_InsertCorrelatedCDRs_BatchSize"], out batchSize))
                 batchSize = 50000;
+
             CDRCorrelationBatch batchToInsert = new CDRCorrelationBatch
             {
                 OutputRecordsToInsert = new List<dynamic>(),
-                InputIdsToDelete = new List<long>(),
+                InputIdsToDelete = new HashSet<long>(),
                 DateTimeRange = new DateTimeRange { From = DateTime.MaxValue }
             };
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -60,7 +62,7 @@ namespace Vanrise.GenericData.BP.Activities
                     hasItem = inputArgument.InputQueueToInsert.TryDequeue((recordBatch) =>
                     {
                         batchToInsert.OutputRecordsToInsert.AddRange(recordBatch.OutputRecordsToInsert);
-                        batchToInsert.InputIdsToDelete.AddRange(recordBatch.InputIdsToDelete);
+                        batchToInsert.InputIdsToDelete.UnionWith(recordBatch.InputIdsToDelete);
                         if (batchToInsert.DateTimeRange.From > recordBatch.DateTimeRange.From)
                             batchToInsert.DateTimeRange.From = recordBatch.DateTimeRange.From;
                         if (batchToInsert.DateTimeRange.To < recordBatch.DateTimeRange.To.AddSeconds(1))
@@ -72,17 +74,17 @@ namespace Vanrise.GenericData.BP.Activities
                             batchToInsert = new CDRCorrelationBatch
                             {
                                 OutputRecordsToInsert = new List<dynamic>(),
-                                InputIdsToDelete = new List<long>(),
+                                InputIdsToDelete = new HashSet<long>(),
                                 DateTimeRange = new DateTimeRange { From = DateTime.MaxValue }
                             };
                         }
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
+
             if (batchToInsert.OutputRecordsToInsert.Count > 0)
-            {
                 InsertRecords(batchToInsert, recordStorageDataManager, inputArgument, handle);
-            }
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs is done.");
             return new InsertCorrelatedCDRsOutput();
         }
@@ -92,9 +94,9 @@ namespace Vanrise.GenericData.BP.Activities
             DateTime batchStartTime = DateTime.Now;
             recordStorageDataManager.InsertRecords(recordBatch.OutputRecordsToInsert);
 
-            double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs Batch is done. Events Count: {0}.  ElapsedTime: {1} (s)",
-                recordBatch.OutputRecordsToInsert.Count, elapsedTime.ToString());
+            TimeSpan elapsedTime = DateTime.Now - batchStartTime;
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs Batch is done. Events Count: {0}.  ElapsedTime: {1}",
+                recordBatch.OutputRecordsToInsert.Count, elapsedTime.ToString(@"hh\:mm\:ss\.fff"));
 
             inputArgument.OutputQueueToDelete.Enqueue(new DeleteRecordsBatch() { IdsToDelete = recordBatch.InputIdsToDelete, DateTimeRange = recordBatch.DateTimeRange });
         }

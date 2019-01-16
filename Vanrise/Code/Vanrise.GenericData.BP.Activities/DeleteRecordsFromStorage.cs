@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Activities;
+using System.Configuration;
+using System.Linq;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Queueing;
-using Vanrise.Common;
-using System.Configuration;
 
 namespace Vanrise.GenericData.BP.Activities
 {
@@ -17,15 +17,10 @@ namespace Vanrise.GenericData.BP.Activities
         public MemoryQueue<DeleteRecordsBatch> InputQueue { get; set; }
 
         public Guid DataRecordStorageId { get; set; }
-
-        public string IdFieldName { get; set; }
-
-        public string DateTimeFieldName { get; set; }
     }
 
     public class DeleteRecordsFromStorageOutput
     {
-
     }
 
     #endregion
@@ -36,20 +31,16 @@ namespace Vanrise.GenericData.BP.Activities
         public InArgument<MemoryQueue<DeleteRecordsBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<Guid> DataRecordStorageId { get; set; }
-
-        [RequiredArgument]
-        public InArgument<string> IdFieldName { get; set; }
-
-        [RequiredArgument]
-        public InArgument<string> DateTimeFieldName { get; set; }
+        public InArgument<Guid> DataRecordStorageId { get; set; }
 
         protected override DeleteRecordsFromStorageOutput DoWorkWithResult(DeleteRecordsFromStorageInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             int nbOfThreads;
             if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_NbOfDeleteThreads"], out nbOfThreads))
                 nbOfThreads = 1;
+
             var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(inputArgument.DataRecordStorageId);
+
             System.Threading.Tasks.Parallel.For(0, nbOfThreads, (i) =>
             {
                 DoWhilePreviousRunning(previousActivityStatus, handle, () =>
@@ -60,16 +51,15 @@ namespace Vanrise.GenericData.BP.Activities
                         hasItem = inputArgument.InputQueue.TryDequeue((deleteRecordBatch) =>
                         {
                             DateTime batchStartTime = DateTime.Now;
-                            recordStorageDataManager.DeleteRecords(deleteRecordBatch.DateTimeRange.From, deleteRecordBatch.DateTimeRange.To, deleteRecordBatch.IdsToDelete,
-                                inputArgument.IdFieldName, inputArgument.DateTimeFieldName);
+                            recordStorageDataManager.DeleteRecords(deleteRecordBatch.DateTimeRange.From, deleteRecordBatch.DateTimeRange.To, deleteRecordBatch.IdsToDelete.ToList());
 
-                            double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
-                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete batch CDRs is done. Events Count: {0}. ElapsedTime: {1} (s), {2} Pending Batches",
-                                deleteRecordBatch.IdsToDelete.Count, elapsedTime.ToString(), inputArgument.InputQueue.Count);
+                            TimeSpan elapsedTime = DateTime.Now - batchStartTime;
+                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete batch CDRs is done. Events Count: {0}. ElapsedTime: {1}, {2} Pending Batches",
+                                deleteRecordBatch.IdsToDelete.Count, elapsedTime.ToString(@"hh\:mm\:ss\.fff"), inputArgument.InputQueue.Count);
                         });
                     } while (!ShouldStop(handle) && hasItem);
                 });
-            });            
+            });
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Delete Initial CDRs is done.");
             return new DeleteRecordsFromStorageOutput();
@@ -77,7 +67,6 @@ namespace Vanrise.GenericData.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, DeleteRecordsFromStorageOutput result)
         {
-
         }
 
         protected override DeleteRecordsFromStorageInput GetInputArgument2(AsyncCodeActivityContext context)
@@ -85,9 +74,7 @@ namespace Vanrise.GenericData.BP.Activities
             return new DeleteRecordsFromStorageInput()
             {
                 DataRecordStorageId = this.DataRecordStorageId.Get(context),
-                InputQueue = this.InputQueue.Get(context),
-                DateTimeFieldName = this.DateTimeFieldName.Get(context),
-                IdFieldName = this.IdFieldName.Get(context)
+                InputQueue = this.InputQueue.Get(context)
             };
         }
     }

@@ -36,7 +36,7 @@ namespace Vanrise.GenericData.FileDataStorage
 
         #endregion
 
-        #region ctor/Fields
+        #region Fields/Ctor
 
         static TimeSpan s_transactionLockMaxRetryInterval;
         static FileRecordStorageDataManager()
@@ -156,7 +156,7 @@ namespace Vanrise.GenericData.FileDataStorage
                     fileMetadataId = existingFileMetadataId.Value;
                 }
                 else
-                {                    
+                {
                     fileMetadataId = InsertFileMetadataRecord(preparedConfig, batch, parentFolderRelativePath);
                 }
 
@@ -210,14 +210,14 @@ namespace Vanrise.GenericData.FileDataStorage
 
                     LockFileToChange(fileMetadataId,
                         () =>
-                        {                            
+                        {
                             isExistingFileMetadataUpdated = queryContext.ExecuteNonQuery() > 0;
                         });
                 }
 
                 if (!existingFileMetadataId.HasValue || !isExistingFileMetadataUpdated)
-                {                   
-                    if(existingFileMetadataId.HasValue)
+                {
+                    if (existingFileMetadataId.HasValue)
                     {
                         fileMetadataId = InsertFileMetadataRecord(preparedConfig, batch, parentFolderRelativePath);
                         string oldFileName = fileName;
@@ -273,7 +273,7 @@ namespace Vanrise.GenericData.FileDataStorage
                     if (previousFileMetadatas.Count > 0 && !previousFileMetadatas.Any(prevFile => AreTimePeriodsOverlapped(fileMetadata.MinTime, fileMetadata.MaxTime, prevFile.MinTime, prevFile.MaxTime)))
                     {
                         //if (previousFileMetadatas.Count > 1)
-                            currentRecords = isOrderAscending ? currentRecords.OrderBy(rec => rec.RecordTime).ToList() : currentRecords.OrderByDescending(rec => rec.RecordTime).ToList();
+                        currentRecords = isOrderAscending ? currentRecords.OrderBy(rec => rec.RecordTime).ToList() : currentRecords.OrderByDescending(rec => rec.RecordTime).ToList();
                         foreach (var record in currentRecords)
                         {
                             if (shouldStop())
@@ -303,7 +303,7 @@ namespace Vanrise.GenericData.FileDataStorage
                         if (recordInfo.RecordTime < from.Value)
                         {
                             //if (isOrderAscending)
-                                continue;
+                            continue;
                             //else
                             //    break;
                         }
@@ -316,7 +316,7 @@ namespace Vanrise.GenericData.FileDataStorage
                             //if (isOrderAscending)
                             //    break;
                             //else
-                                continue;
+                            continue;
                         }
                     }
                     dynamic record = dynamicManager.GetDynamicRecordFromRecordInfo(recordInfo);
@@ -341,7 +341,7 @@ namespace Vanrise.GenericData.FileDataStorage
                 if (isOrderByDate)
                 {
                     //if (previousFileMetadatas.Count > 1)
-                        currentRecords = isOrderAscending ? currentRecords.OrderBy(rec => rec.RecordTime).ToList() : currentRecords.OrderByDescending(rec => rec.RecordTime).ToList();
+                    currentRecords = isOrderAscending ? currentRecords.OrderBy(rec => rec.RecordTime).ToList() : currentRecords.OrderByDescending(rec => rec.RecordTime).ToList();
                 }
                 else
                 {
@@ -431,6 +431,44 @@ namespace Vanrise.GenericData.FileDataStorage
             throw new NotImplementedException();
         }
 
+        public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete)
+        {
+            List<long> remainingIdsToDelete = new List<long>(idsToDelete);
+            long maxIdToDelete = remainingIdsToDelete.Max();
+            long minIdToDelete = remainingIdsToDelete.Min();
+
+            List<FileRecordStorageFileMetadata> fileMetadatas = GetFileMetadatas(fromDate, toDate, null,
+                (where) =>
+                {
+                    where.GreaterOrEqualCondition(COL_MaxID).Value(minIdToDelete);
+                    where.LessOrEqualCondition(COL_MinID).Value(maxIdToDelete);
+                });
+
+            foreach (var fileMetadata in fileMetadatas)
+            {
+                HashSet<long> fileIdsToDelete = new HashSet<long>(remainingIdsToDelete.Where(id => id >= fileMetadata.MinId && id <= fileMetadata.MaxId));
+                if (fileIdsToDelete.Count > 0)
+                {
+                    ChangeFileRecordsWithLock(fileMetadata.FileRecordStorageFileMetadataId, fileMetadata.ParentFolderRelativePath, fileMetadata.FromTime,
+                        (existingRecordInfos) =>
+                        {
+                            List<FileRecordStorageRecordInfo> changedRecordInfos = new List<FileRecordStorageRecordInfo>();
+                            foreach (var recordInfo in existingRecordInfos)
+                            {
+                                if (!fileIdsToDelete.Contains(recordInfo.RecordId))
+                                    changedRecordInfos.Add(recordInfo);
+                                else
+                                    remainingIdsToDelete.Remove(recordInfo.RecordId);
+                            }
+                            return changedRecordInfos;
+                        }, true);
+                }
+                if (remainingIdsToDelete.Count == 0)
+                    break;
+            }
+
+        }
+
         public bool AreDataRecordsUpdated(ref object updateHandle)
         {
             throw new NotImplementedException();
@@ -441,13 +479,8 @@ namespace Vanrise.GenericData.FileDataStorage
             return 10000000;
         }
 
-        public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, string idFieldName, string dateTimeFieldName, out long? maxId)
+        public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, out long? maxId)
         {
-            if (idFieldName != this.DataRecordType.Settings.IdField)
-                throw new NotSupportedException($"idFieldName '{idFieldName}' is different than record type Id Field '{this.DataRecordType.Settings.IdField}'. Record TypeId '{this.DataRecordType.DataRecordTypeId}'");
-            if (dateTimeFieldName != this.DataRecordType.Settings.DateTimeField)
-                throw new NotSupportedException($"dateTimeFieldName '{dateTimeFieldName}' is different than record type DateTime Field '{this.DataRecordType.Settings.DateTimeField}'. Record TypeId '{this.DataRecordType.DataRecordTypeId}'");
-            
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(GetPreparedConfig().MetadataRDBTableQuerySource, "mtdata", null, true);
@@ -475,55 +508,8 @@ namespace Vanrise.GenericData.FileDataStorage
             return minDate;
         }
 
-        public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete, string idFieldName, string dateTimeFieldName)
+        public long? GetMaxId(out DateTime? maxDate, out DateTime? minDate)
         {
-            if (idFieldName != this.DataRecordType.Settings.IdField)
-                throw new NotSupportedException($"idFieldName '{idFieldName}' is different than record type Id Field '{this.DataRecordType.Settings.IdField}'. Record TypeId '{this.DataRecordType.DataRecordTypeId}'");
-            if (dateTimeFieldName != this.DataRecordType.Settings.DateTimeField)
-                throw new NotSupportedException($"dateTimeFieldName '{dateTimeFieldName}' is different than record type DateTime Field '{this.DataRecordType.Settings.DateTimeField}'. Record TypeId '{this.DataRecordType.DataRecordTypeId}'");
-
-            List<long> remainingIdsToDelete = new List<long>(idsToDelete);
-            long maxIdToDelete = remainingIdsToDelete.Max();
-            long minIdToDelete = remainingIdsToDelete.Min();
-
-            List<FileRecordStorageFileMetadata> fileMetadatas = GetFileMetadatas(fromDate, toDate, null,
-                (where) =>
-                {
-                    where.GreaterOrEqualCondition(COL_MaxID).Value(minIdToDelete);
-                    where.LessOrEqualCondition(COL_MinID).Value(maxIdToDelete);
-                });
-
-            foreach(var fileMetadata in fileMetadatas)
-            {                
-                HashSet<long> fileIdsToDelete = new HashSet<long>(remainingIdsToDelete.Where(id => id >= fileMetadata.MinId && id <= fileMetadata.MaxId));
-                if(fileIdsToDelete.Count > 0)
-                {
-                    ChangeFileRecordsWithLock(fileMetadata.FileRecordStorageFileMetadataId, fileMetadata.ParentFolderRelativePath, fileMetadata.FromTime,
-                        (existingRecordInfos) =>
-                        {
-                            List<FileRecordStorageRecordInfo> changedRecordInfos = new List<FileRecordStorageRecordInfo>();
-                            foreach (var recordInfo in existingRecordInfos)
-                            {
-                                if (!fileIdsToDelete.Contains(recordInfo.RecordId))
-                                    changedRecordInfos.Add(recordInfo);
-                                else
-                                    remainingIdsToDelete.Remove(recordInfo.RecordId);
-                            }
-                            return changedRecordInfos;
-                        }, true);
-                }
-                if (remainingIdsToDelete.Count == 0)
-                    break;
-            }
-
-        }
-
-        public long? GetMaxId(string idFieldName, string dateTimeFieldName, out DateTime? maxDate, out DateTime? minDate)
-        {
-            if (idFieldName != this.DataRecordType.Settings.IdField)
-                throw new NotSupportedException($"idFieldName '{idFieldName}' is different than record type Id Field '{this.DataRecordType.Settings.IdField}'. Record TypeId '{this.DataRecordType.DataRecordTypeId}'");
-            if (dateTimeFieldName != this.DataRecordType.Settings.DateTimeField)
-                throw new NotSupportedException($"dateTimeFieldName '{dateTimeFieldName}' is different than record type DateTime Field '{this.DataRecordType.Settings.DateTimeField}'. Record TypeId '{this.DataRecordType.DataRecordTypeId}'");
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(GetPreparedConfig().MetadataRDBTableQuerySource, "mtdata", null, true);
@@ -536,7 +522,7 @@ namespace Vanrise.GenericData.FileDataStorage
             DateTime? minDate_Local = null;
             queryContext.ExecuteReader(reader =>
             {
-                if(reader.Read())
+                if (reader.Read())
                 {
                     maxId = reader.GetNullableLong("MaxId");
                     maxDate_Local = reader.GetNullableDateTime("MaxDate");
@@ -557,7 +543,7 @@ namespace Vanrise.GenericData.FileDataStorage
             Lock($"FileRecordStorage_ReadFile_{fileRecordStorageFileMetadataId}", onFileLocked);
         }
 
-        void Lock(string transactionUniqueName, Action action)
+        private void Lock(string transactionUniqueName, Action action)
         {
             transactionUniqueName = string.Concat(transactionUniqueName, "_", this._dataRecordStorage.DataRecordStorageId);
             bool lockSucceeded = false;
@@ -570,7 +556,7 @@ namespace Vanrise.GenericData.FileDataStorage
                         action();
                         lockSucceeded = true;
                     });
-                if(!lockSucceeded)
+                if (!lockSucceeded)
                 {
                     if ((DateTime.Now - startTime) > s_transactionLockMaxRetryInterval)
                         throw new Exception($"Max retry interval exceeded. transactionLockMaxRetryInterval '{s_transactionLockMaxRetryInterval}'");
@@ -578,7 +564,7 @@ namespace Vanrise.GenericData.FileDataStorage
             }
         }
 
-        BaseRDBDataProvider GetDataProvider()
+        private BaseRDBDataProvider GetDataProvider()
         {
             _dataStoreSettings.ThrowIfNull("_dataStoreSettings");
             //_dataStoreSettings.ModuleName.ThrowIfNull("_dataStoreSettings.ModuleName");
@@ -752,7 +738,7 @@ namespace Vanrise.GenericData.FileDataStorage
                 });
         }
 
-        void LockFileToChange(long fileMetadataId, Action onLocked)
+        private void LockFileToChange(long fileMetadataId, Action onLocked)
         {
             Lock($"FileRecordStorage_ChangeFileRecords_{fileMetadataId}", onLocked);
         }
@@ -760,20 +746,20 @@ namespace Vanrise.GenericData.FileDataStorage
         private string GetParentFolderPath(DateTime batchFromTime, bool createIfNotExists, out string parentFolderRelativePath)
         {
             parentFolderRelativePath = null;
-            if(this._dataRecordStorageSettings.FolderStructureType.HasValue)
+            if (this._dataRecordStorageSettings.FolderStructureType.HasValue)
             {
-                switch(this._dataRecordStorageSettings.FolderStructureType.Value)
+                switch (this._dataRecordStorageSettings.FolderStructureType.Value)
                 {
                     case FileDataRecordStorageFolderStructureType.MonthDateHour:
                         parentFolderRelativePath = $@"{batchFromTime.Year}-{batchFromTime.Month.ToString().PadLeft(2, '0')}\{batchFromTime.Day.ToString().PadLeft(2, '0')}\{batchFromTime.Hour.ToString().PadLeft(2, '0')}";
                         break;
-                    default:throw new NotSupportedException($"this._dataRecordStorageSettings.FolderStructureType '{this._dataRecordStorageSettings.FolderStructureType.Value.ToString()}'");
+                    default: throw new NotSupportedException($"this._dataRecordStorageSettings.FolderStructureType '{this._dataRecordStorageSettings.FolderStructureType.Value.ToString()}'");
                 }
             }
             string parentFolderPath = GetParentFolderPath(parentFolderRelativePath);
-            if(createIfNotExists)
+            if (createIfNotExists)
             {
-                if(!Directory.Exists(parentFolderPath))
+                if (!Directory.Exists(parentFolderPath))
                 {
                     LockCreateDirectory(
                         () =>
@@ -806,11 +792,11 @@ namespace Vanrise.GenericData.FileDataStorage
             Lock($"FileRecordStorage_CreateDirectory", onLocked);
         }
 
-        private void SaveRecordsToFile(long fileMetadataId, List<FileRecordStorageRecordInfo> records, 
-            string parentFolderPath, string fileName, out DateTime minRecordTime, out DateTime maxRecordTime, 
+        private void SaveRecordsToFile(long fileMetadataId, List<FileRecordStorageRecordInfo> records,
+            string parentFolderPath, string fileName, out DateTime minRecordTime, out DateTime maxRecordTime,
             out long minRecordId, out long maxRecordId, bool recordsAlreadyOrdered = false)
         {
-            
+
             string targetFileFullPath = Path.Combine(parentFolderPath, fileName);
             Char fieldSeparator = this._dataRecordStorageSettings.FieldSeparator;
             minRecordTime = DateTime.MaxValue;
@@ -1184,7 +1170,7 @@ namespace Vanrise.GenericData.FileDataStorage
                                         };
                                         fileRecordInfos.Add(recordInfo);
                                     }
-                                    lock(recordInfos)
+                                    lock (recordInfos)
                                     {
                                         recordInfos.AddRange(fileRecordInfos);
                                     }
@@ -1248,7 +1234,7 @@ namespace Vanrise.GenericData.FileDataStorage
                         bool isFirstLine = true;
                         while ((s = sr.ReadLine()) != null)
                         {
-                            if(isFirstLine)//first line is the header
+                            if (isFirstLine)//first line is the header
                             {
                                 isFirstLine = false;
                                 continue;
@@ -1312,10 +1298,6 @@ namespace Vanrise.GenericData.FileDataStorage
         }
 
         #endregion
-
-        #region Private Classes
-
-        #endregion
     }
 
     public class FileRecordStoragePreparedConfig
@@ -1362,7 +1344,7 @@ namespace Vanrise.GenericData.FileDataStorage
         public DateTime FromTime { get; set; }
 
         public DateTime ToTime { get; set; }
-        
+
         public List<FileRecordStorageRecordInfo> Records { get; private set; }
     }
 
@@ -1387,20 +1369,8 @@ namespace Vanrise.GenericData.FileDataStorage
 
         public dynamic Record { get; private set; }
 
-        public DateTime RecordTime
-        {
-            get
-            {
-                return this.RecordInfo.RecordTime;
-            }
-        }
+        public DateTime RecordTime { get { return this.RecordInfo.RecordTime; } }
 
-        public long RecordId {
-            get
-            {
-                return this.RecordInfo.RecordId;
-            }
-        }
-
+        public long RecordId { get { return this.RecordInfo.RecordId; } }
     }
 }

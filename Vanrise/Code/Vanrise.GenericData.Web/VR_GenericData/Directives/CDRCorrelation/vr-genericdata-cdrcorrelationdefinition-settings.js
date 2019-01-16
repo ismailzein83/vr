@@ -55,12 +55,6 @@
             var durationFieldSelectorAPI;
             var durationFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var datetimeFieldSelectorAPI;
-            var datetimeFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
-            var idFieldSelectorAPI;
-            var idFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
             var outputDataRecordTypeSelectorAPI;
             var outputDataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var onOutputRecordTypeSelectionChangedDeferred;
@@ -184,15 +178,15 @@
                     durationFieldSelectorReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.onDatetimeFieldSelectorDirectiveReady = function (api) {
-                    datetimeFieldSelectorAPI = api;
-                    datetimeFieldSelectorReadyDeferred.resolve();
-                };
+                //$scope.scopeModel.onDatetimeFieldSelectorDirectiveReady = function (api) {
+                //    datetimeFieldSelectorAPI = api;
+                //    datetimeFieldSelectorReadyDeferred.resolve();
+                //};
 
-                $scope.scopeModel.onIdFieldSelectorDirectiveReady = function (api) {
-                    idFieldSelectorAPI = api;
-                    idFieldSelectorReadyDeferred.resolve();
-                };
+                //$scope.scopeModel.onIdFieldSelectorDirectiveReady = function (api) {
+                //    idFieldSelectorAPI = api;
+                //    idFieldSelectorReadyDeferred.resolve();
+                //};
 
                 $scope.scopeModel.onOutputDataRecordTypeSelectorReady = function (api) {
                     outputDataRecordTypeSelectorAPI = api;
@@ -266,11 +260,6 @@
                         var loadDurationFieldSelectorPromise = loadDurationFieldSelector();
                         loadInputPromises.push(loadDurationFieldSelectorPromise);
 
-                        var loadDatetimeFieldSelectorPromise = loadDatetimeFieldSelector();
-                        loadInputPromises.push(loadDatetimeFieldSelectorPromise);
-
-                        var loadIdFieldSelectorPromise = loadIdFieldSelector();
-                        loadInputPromises.push(loadIdFieldSelectorPromise);
 
                         UtilsService.waitMultiplePromises(loadInputPromises).then(function () {
                             onInputRecordTypeSelectionChangedDeferred = undefined;
@@ -423,40 +412,6 @@
                         return loadDurationFieldSelectorPromiseDeferred.promise;
                     }
 
-                    function loadDatetimeFieldSelector() {
-                        var loadDatetimeFieldSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                        onInputRecordTypeSelectionChangedDeferred.promise.then(function () {
-                            datetimeFieldSelectorReadyDeferred.promise.then(function () {
-                                var directivePayload = {
-                                    dataRecordTypeId: inputDataRecordTypeSelectorAPI.getSelectedIds()
-                                };
-                                if (settings != undefined) {
-                                    directivePayload.selectedIds = settings.DatetimeFieldName;
-                                }
-                                VRUIUtilsService.callDirectiveLoad(datetimeFieldSelectorAPI, directivePayload, loadDatetimeFieldSelectorPromiseDeferred);
-                            });
-                        });
-                        return loadDatetimeFieldSelectorPromiseDeferred.promise;
-                    }
-
-                    function loadIdFieldSelector() {
-                        var loadIdFieldSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        onInputRecordTypeSelectionChangedDeferred.promise.then(function () {
-                            idFieldSelectorReadyDeferred.promise.then(function () {
-                                var directivePayload = {
-                                    dataRecordTypeId: inputDataRecordTypeSelectorAPI.getSelectedIds()
-                                };
-                                if (settings != undefined) {
-                                    directivePayload.selectedIds = settings.IdFieldName;
-                                }
-                                VRUIUtilsService.callDirectiveLoad(idFieldSelectorAPI, directivePayload, loadIdFieldSelectorPromiseDeferred);
-                            });
-                        });
-
-                        return loadIdFieldSelectorPromiseDeferred.promise;
-                    }
-
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -473,9 +428,7 @@
                             OutputDataRecordStorageId: (outputDataRecordStorageSelectorAPI != undefined) ? outputDataRecordStorageSelectorAPI.getSelectedIds() : null,
                             CallingNumberFieldName: (callingNumberFieldSelectorAPI != undefined) ? callingNumberFieldSelectorAPI.getSelectedIds() : null,
                             CalledNumberFieldName: (calledNumberFieldSelectorAPI != undefined) ? calledNumberFieldSelectorAPI.getSelectedIds() : null,
-                            DurationFieldName: (durationFieldSelectorAPI != undefined) ? durationFieldSelectorAPI.getSelectedIds() : null,
-                            DatetimeFieldName: (datetimeFieldSelectorAPI != undefined) ? datetimeFieldSelectorAPI.getSelectedIds() : null,
-                            IdFieldName: (idFieldSelectorAPI != undefined) ? idFieldSelectorAPI.getSelectedIds() : null
+                            DurationFieldName: (durationFieldSelectorAPI != undefined) ? durationFieldSelectorAPI.getSelectedIds() : null
                         }
                     };
                 };

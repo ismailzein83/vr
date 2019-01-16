@@ -13,11 +13,7 @@ namespace Vanrise.GenericData.Entities
 
         public Guid InputDataRecordTypeId { get; set; }
 
-        public Guid OutputDataRecordTypeId { get; set; }
-
         public Guid InputDataRecordStorageId { get; set; }
-
-        public Guid OutputDataRecordStorageId { get; set; }
 
         public string CallingNumberFieldName { get; set; }
 
@@ -25,8 +21,8 @@ namespace Vanrise.GenericData.Entities
 
         public string DurationFieldName { get; set; }
 
-        public string DatetimeFieldName { get; set; }
+        public Guid OutputDataRecordTypeId { get; set; }
 
-        public string IdFieldName { get; set; }
+        public Guid OutputDataRecordStorageId { get; set; }
     }
 }

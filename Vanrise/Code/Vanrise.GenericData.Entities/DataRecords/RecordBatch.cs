@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
@@ -14,12 +10,8 @@ namespace Vanrise.GenericData.Entities
 
     public class DeleteRecordsBatch
     {
-        //public RecordFilterGroup RecordFilterGroup { get; set; }
-
         public DateTimeRange DateTimeRange { get; set; }
 
-        //public int EventsCount { get; set; }
-
-        public List<long> IdsToDelete { get; set; }
+        public HashSet<long> IdsToDelete { get; set; }
     }
 }

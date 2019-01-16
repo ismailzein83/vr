@@ -11,14 +11,14 @@ namespace Vanrise.GenericData.Entities
     {
         public List<dynamic> OutputRecordsToInsert { get; set; }
 
-        public List<long> InputIdsToDelete { get; set; }
+        public HashSet<long> InputIdsToDelete { get; set; }
 
         public DateTimeRange DateTimeRange { get; set; }
 
         public CDRCorrelationBatch()
         {
             OutputRecordsToInsert = new List<dynamic>();
-            InputIdsToDelete = new List<long>();
+            InputIdsToDelete = new HashSet<long>();
             DateTimeRange = new DateTimeRange();
         }
     }

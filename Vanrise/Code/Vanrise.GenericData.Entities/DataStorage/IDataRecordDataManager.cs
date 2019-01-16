@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
@@ -30,15 +27,15 @@ namespace Vanrise.GenericData.Entities
 
         void DeleteRecords(DateTime dateTime, RecordFilterGroup recordFilterGroup);
 
+        void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete);
+
         bool AreDataRecordsUpdated(ref object updateHandle);
 
         int GetDBQueryMaxParameterNumber();
 
-        DateTime? GetMinDateTimeWithMaxIdAfterId(long id, string idFieldName, string dateTimeFieldName, out long? maxId);
+        DateTime? GetMinDateTimeWithMaxIdAfterId(long id, out long? maxId);
 
-        void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete, string idFieldName, string dateTimeFieldName);
-
-        long? GetMaxId(string idFieldName, string dateTimeFieldName, out DateTime? maxDate, out DateTime? minDate);
+        long? GetMaxId(out DateTime? maxDate, out DateTime? minDate);
     }
 
     public interface IDataRecordDataManagerGetFilteredDataRecordsContext

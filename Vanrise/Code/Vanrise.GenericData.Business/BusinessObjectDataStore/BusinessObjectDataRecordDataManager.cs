@@ -69,6 +69,7 @@ namespace Vanrise.GenericData.Business
             _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.LoadRecords(loadContext);
             return dataRecords;
         }
+
         public bool Delete(List<object> recordFieldIds)
         {
             throw new NotImplementedException();
@@ -136,6 +137,11 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
+        public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool AreDataRecordsUpdated(ref object updateHandle)
         {
             throw new NotImplementedException();
@@ -166,6 +172,16 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
 
+        public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, out long? maxId)
+        {
+            throw new NotImplementedException();
+        } 
+
+        public long? GetMaxId(out DateTime? maxDate, out DateTime? minDate)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Private Classes
 
         private class BusinessObjectDataProviderLoadRecordsContext : IBusinessObjectDataProviderLoadRecordsContext
@@ -192,23 +208,5 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
-
-
-        public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, string idFieldName, string dateTimeFieldName, out long? maxId)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public void DeleteRecords(DateTime fromDate, DateTime toDate, List<long> idsToDelete, string idFieldName, string dateTimeFieldName)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public long? GetMaxId(string idFieldName, string dateTimeFieldName, out DateTime? maxDate, out DateTime? minDate)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
