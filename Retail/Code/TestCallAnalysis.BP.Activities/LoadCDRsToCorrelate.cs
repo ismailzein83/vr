@@ -44,7 +44,7 @@ namespace TestCallAnalysis.BP.Activities
             //if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_MaxCorrelateQueueSize"], out maximumOutputQueueSize))
             //    maximumOutputQueueSize = 20;
 
-            int batchSize = 100000;
+            //int batchSize = 100000;
             //if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_BatchSize"], out batchSize))
             //    batchSize = 100000;
 
@@ -70,30 +70,20 @@ namespace TestCallAnalysis.BP.Activities
 
                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has started.", rangeMessage));
 
-                long batchRecordsCount = 0;
-                DateTime batchStartTime = DateTime.Now;
+                long recordsCount = 0;
+                DateTime startTime = DateTime.Now;
                 var dataRecordStorageId = new Guid();
                 new DataRecordStorageManager().GetDataRecords(dataRecordStorageId, null, null, cdrCorrelationFilterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
                 {
                     totalRecordsCount++;
-                    batchRecordsCount++;
+                    recordsCount++;
                     recordBatch.Records.Add(itm);
-
-                    if (recordBatch.Records.Count >= batchSize)
-                    {
-                        inputArgument.OutputQueue.Enqueue(recordBatch);
-                        recordBatch = new RecordBatch() { Records = new List<dynamic>() };
-                    }
                 }), orderColumnName, isOrderAscending);
 
-                if (recordBatch.Records.Count > 0)
-                {
-                    inputArgument.OutputQueue.Enqueue(recordBatch);
-                    recordBatch = new RecordBatch() { Records = new List<dynamic>() };
-                }
+                inputArgument.OutputQueue.Enqueue(recordBatch);
 
-                double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
-                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has finished. Events Count: {1}. Time Elapsed: {2} (s)", rangeMessage, batchRecordsCount, elapsedTime));
+                double elapsedTime = Math.Round((DateTime.Now - startTime).TotalSeconds);
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has finished. Events Count: {1}. Time Elapsed: {2} (s)", rangeMessage, recordsCount, elapsedTime));
 
                 while (inputArgument.OutputQueue.Count >= maximumOutputQueueSize)
                     Thread.Sleep(1000);
