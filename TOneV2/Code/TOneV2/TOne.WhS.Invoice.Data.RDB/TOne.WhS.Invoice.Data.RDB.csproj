@@ -43,9 +43,28 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvoiceComparisonTemplateDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.Invoice.Data\TOne.WhS.Invoice.Data.csproj">
+      <Project>{23e57496-f040-4b3f-9544-dd158b4c17f1}</Project>
+      <Name>TOne.WhS.Invoice.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Invoice.Entities\TOne.WhS.Invoice.Entities.csproj">
+      <Project>{a3474129-600a-44fa-a71c-bc746f104a39}</Project>
+      <Name>TOne.WhS.Invoice.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
