@@ -20,7 +20,8 @@ IF NOT EXISTS(select 1 from sec.Widget where Name = @Name and Id!=@Id)
 	SET		WidgetDefinitionId = @WidgetDefinitionId,
 			Name = @Name,
 			Title =@Title,
-			Setting = @Setting
+			Setting = @Setting,
+			LastModifiedTime = GETDATE()
 	WHERE	Id = @Id
 	END
 END

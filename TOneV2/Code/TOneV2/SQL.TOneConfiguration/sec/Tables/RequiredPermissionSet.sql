@@ -4,9 +4,12 @@
     [RequiredPermissionString] VARCHAR (255) NOT NULL,
     [CreatedTime]              DATETIME      CONSTRAINT [DF_RequiredPermissionSet_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]                ROWVERSION    NULL,
+    [LastModifiedTime]         DATETIME      CONSTRAINT [DF_RequiredPermissionSet_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_RequiredPermissionSet] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_RequiredPermissionSet_ModuleReqPerm] UNIQUE NONCLUSTERED ([Module] ASC, [RequiredPermissionString] ASC)
 );
+
+
 
 
 

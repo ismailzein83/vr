@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE sec.sp_Permission_Update 
+CREATE PROCEDURE [sec].[sp_Permission_Update] 
 	@HolderType int,
 	@HolderId varchar(50),
 	@EntityType int,
@@ -16,7 +16,7 @@ BEGIN
     and sec.Permission.HolderId = @HolderId and sec.Permission.EntityType = @EntityType
     and sec.Permission.EntityId = @EntityId
     )
-		UPDATE sec.Permission SET sec.Permission.PermissionFlags = @PermissionFlags
+		UPDATE sec.Permission SET sec.Permission.PermissionFlags = @PermissionFlags, LastModifiedTime = GETDATE()
 		WHERE sec.Permission.HolderType = @HolderType
 				and sec.Permission.HolderId = @HolderId 
 				and sec.Permission.EntityType = @EntityType

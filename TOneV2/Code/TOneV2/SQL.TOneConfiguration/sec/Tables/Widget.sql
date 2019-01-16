@@ -5,8 +5,11 @@
     [Title]              NVARCHAR (50)  NULL,
     [Setting]            NVARCHAR (MAX) NULL,
     [timestamp]          ROWVERSION     NULL,
+    [LastModifiedTime]   DATETIME       CONSTRAINT [DF_Widget_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_WidgetManagement] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

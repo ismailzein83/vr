@@ -15,7 +15,8 @@ BEGIN
 		UPDATE [sec].[Group]
 		SET Name = @Name,
 			[Description] = @Description,
-			[Settings] = @Settings
+			[Settings] = @Settings,
+			LastModifiedTime = GETDATE()
 		WHERE ID = @ID
 	end
 END

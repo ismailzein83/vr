@@ -4,7 +4,7 @@
 	@Data nvarchar(max)
 AS
 BEGIN
-IF EXISTS(SELECT 1 FROM common.Setting WHERE ID = @ID )
+IF NOT EXISTS(SELECT 1 FROM common.Setting WHERE ID != @ID and Name = @Name)
 	BEGIN
 		Update common.Setting
 		Set [Name] = @Name,
