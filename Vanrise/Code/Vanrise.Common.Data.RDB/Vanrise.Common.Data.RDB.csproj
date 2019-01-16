@@ -56,6 +56,7 @@
     <!-- <Compile Include="EntityPersonalizationDataManager.cs" />-->
     <Compile Include="ExtensionConfigurationDataManager.cs" />
     <Compile Include="GenericLKUPItemDataManager.cs" />
+    <Compile Include="IDManagerDataManager.cs" />
     <Compile Include="OverriddenConfigurationDataManager.cs" />
     <Compile Include="OverriddenConfigurationGroupDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
