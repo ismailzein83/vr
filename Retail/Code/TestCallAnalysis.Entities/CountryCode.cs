@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TestCallAnalysis.Entities
 {
-    class CountryCode
+    public class CountryCode
     {
+        public string Code { get; set; }
     }
 }
