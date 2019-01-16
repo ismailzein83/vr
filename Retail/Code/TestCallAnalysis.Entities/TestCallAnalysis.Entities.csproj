@@ -54,6 +54,7 @@
     <Compile Include="CDRCorrelationBatch.cs" />
     <Compile Include="CDRCorrelationFilterGroup.cs" />
     <Compile Include="CDRCorrelationProcessState.cs" />
+    <Compile Include="CountryCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
