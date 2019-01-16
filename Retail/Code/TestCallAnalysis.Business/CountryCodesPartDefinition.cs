@@ -12,7 +12,6 @@ namespace TestCallAnalysis.Business
     {
         public override Guid ConfigId { get { return new Guid("51D18FDD-336C-4713-8258-304149B775FC"); } }
 
-        public List<CountryCode> CountryCodes { get; set; }
         public override bool IsPartValid(IAccountPartDefinitionIsPartValidContext context)
         {
             throw new NotImplementedException();
