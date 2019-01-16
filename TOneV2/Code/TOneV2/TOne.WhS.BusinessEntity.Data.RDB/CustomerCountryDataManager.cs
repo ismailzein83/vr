@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static string TABLE_ALIAS = "cc";
         static string TABLE_NAME = "TOneWhS_BE_CustomerCountry";
-        const string COL_ID = "ID";
+        public const string COL_ID = "ID";
         const string COL_CustomerID = "CustomerID";
         const string COL_CountryID = "CountryID";
         const string COL_BED = "BED";
@@ -92,6 +92,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             };
         }
 
+        #endregion
+
+        #region Public Methods
+        public void BuildUpdateQuery(RDBUpdateQuery updateQuery, long processInstanceID, string joinTableAlias, string columnName)
+        {
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_EED).Column(joinTableAlias, COL_EED);
+            updateQuery.Where().EqualsCondition(joinTableAlias, columnName).Value(processInstanceID);
+        }
         #endregion
     }
 }

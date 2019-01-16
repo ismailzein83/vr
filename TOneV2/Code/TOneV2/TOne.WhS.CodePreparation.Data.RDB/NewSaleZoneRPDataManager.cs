@@ -14,6 +14,7 @@ namespace TOne.WhS.CodePreparation.Data.RDB
         #region RDB
 
         static string TABLE_NAME = "TOneWhS_BE_CP_SaleZoneRoutingProduct_New";
+        static string TABLE_ALIAS = "newZoneRP";
         const string COL_ID = "ID";
         const string COL_ProcessInstanceID = "ProcessInstanceID";
         const string COL_ZoneID = "ZoneID";
@@ -98,6 +99,21 @@ namespace TOne.WhS.CodePreparation.Data.RDB
                 recordContext.Value(record.EED.Value);
             else
                 recordContext.Null();
+        }
+        #endregion
+
+        #region CodePreparation
+        public void DeleteRecords(RDBDeleteQuery deleteQuery, long processInstanceId)
+        {
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+        }
+
+        public void BuildSelectQuery(RDBSelectQuery selectQuery, long processInstanceID)
+        {
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_ID, COL_OwnerType, COL_OwnerID, COL_ZoneID, COL_RoutingProductID, COL_BED, COL_EED);
+            selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceID);
         }
         #endregion
     }

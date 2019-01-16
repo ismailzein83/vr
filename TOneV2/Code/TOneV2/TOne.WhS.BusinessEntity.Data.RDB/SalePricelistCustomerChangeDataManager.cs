@@ -54,6 +54,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             joinCondition.EqualsCondition(originalTableAlias, originalTableCountryIdCol, customerChangeTableAlias, COL_CountryID);
             joinCondition.EqualsCondition(originalTableAlias, originalTableBatchIdCol, customerChangeTableAlias, COL_BatchID);
         }
+
+        public void BuildInsertQuery(RDBInsertQuery insertQuery)
+        {
+            insertQuery.IntoTable(TABLE_NAME);
+        }
         #endregion
     }
 }

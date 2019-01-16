@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static string TABLE_ALIAS = "serp";
         static string TABLE_NAME = "TOneWhS_BE_SaleEntityRoutingProduct";
-        const string COL_ID = "ID";
+        public const string COL_ID = "ID";
         const string COL_OwnerType = "OwnerType";
         const string COL_OwnerID = "OwnerID";
         const string COL_ZoneID = "ZoneID";
@@ -453,6 +453,18 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereQuery.NotNullCondition(COL_ZoneID);
             return queryContext.GetItems(SaleZoneRoutingProductMapper);
 
+        }
+
+        public void BuildInsertQuery(RDBInsertQuery insertQuery)
+        {
+            insertQuery.IntoTable(TABLE_NAME);
+        }
+
+        public void BuildUpdateQuery(RDBUpdateQuery updateQuery, long processInstanceID, string joinTableAlias, string columnName)
+        {
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_EED).Column(joinTableAlias, COL_EED);
+            updateQuery.Where().EqualsCondition(joinTableAlias, columnName).Value(processInstanceID);
         }
         #endregion
     }

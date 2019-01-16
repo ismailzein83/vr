@@ -75,7 +75,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             return queryContext.GetItems(SalePricelistCodeChangeMapper);
         }
-
+        public void BuildInsertQuery(RDBInsertQuery insertQuery)
+        {
+            insertQuery.IntoTable(TABLE_NAME);
+        }
         #endregion
 
         #region Mappers

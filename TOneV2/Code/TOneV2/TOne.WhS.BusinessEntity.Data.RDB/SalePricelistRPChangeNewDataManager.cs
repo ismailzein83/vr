@@ -100,7 +100,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             });
             return lstAffectedCustomerIds;
         }
+        public void DeleteRecords(RDBDeleteQuery deleteQuery, long processInstanceId)
+        {
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+        }
 
+        public void BuildSelectQuery(RDBSelectQuery selectQuery, long processInstanceId)
+        {
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_ZoneName, COL_ZoneID, COL_RoutingProductId, COL_RecentRoutingProductId, COL_BED, COL_EED,
+                COL_PriceListId, COL_CountryId, COL_CustomerId);
+            selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+        }
         #endregion
 
         #region Mapper

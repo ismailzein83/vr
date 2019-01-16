@@ -229,6 +229,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereQuery.EqualsCondition(COL_OwnerType).Value(ownerType);
             whereQuery.EqualsCondition(COL_OwnerID).Value(ownerId);
         }
+
+        public void BuildInsertQuery(RDBInsertQuery insertQuery, long processInstanceId, long stateBackupId)
+        {
+            insertQuery.IntoTable(TABLE_NAME);
+            insertQuery.Column(COL_ProcessInstanceID).Value(processInstanceId);
+            insertQuery.Column(COL_UserID).Column(COL_UserID);
+            insertQuery.Column(COL_PricelistStateBackupID).Value(stateBackupId);
+            insertQuery.Column(COL_PricelistSource).Value((int)SalePricelistSource.NumberingPlan);
+        }
         #endregion
     }
 }

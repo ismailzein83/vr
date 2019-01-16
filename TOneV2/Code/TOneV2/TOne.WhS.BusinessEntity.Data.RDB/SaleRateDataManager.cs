@@ -12,12 +12,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static string TABLE_ALIAS = "sr";
         static string TABLE_NAME = "TOneWhS_BE_SaleRate";
-        const string COL_ID = "ID";
+        public const string COL_ID = "ID";
         const string COL_PriceListID = "PriceListID";
         const string COL_ZoneID = "ZoneID";
         const string COL_CurrencyID = "CurrencyID";
         const string COL_RateTypeID = "RateTypeID";
-        const string COL_Rate = "Rate";
+        public const string COL_Rate = "Rate";
         const string COL_BED = "BED";
         const string COL_EED = "EED";
         const string COL_SourceID = "SourceID";
@@ -614,6 +614,21 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             };
         }
 
+        #endregion
+
+        #region Public Methods
+        public void BuildInsertQuery(RDBInsertQuery insertQuery)
+        {
+            insertQuery.IntoTable(TABLE_NAME);
+            insertQuery.Column(COL_Change).Value((int)RateChangeType.New);
+        }
+
+        public void BuildUpdateQuery(RDBUpdateQuery updateQuery, long processInstanceID, string joinTableAlias, string columnName)
+        {
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_EED).Column(joinTableAlias, COL_EED);
+            updateQuery.Where().EqualsCondition(joinTableAlias, columnName).Value(processInstanceID);
+        }
         #endregion
 
     }

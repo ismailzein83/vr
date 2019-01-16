@@ -7,12 +7,15 @@ using TOne.WhS.CodePreparation.Entities;
 using Vanrise.Data.RDB;
 using Vanrise.Common;
 using Vanrise.Entities;
+using TOne.WhS.BusinessEntity.Data.RDB;
+
 namespace TOne.WhS.CodePreparation.Data.RDB
 {
     public class NewSaleRateDataManager : INewSaleRateDataManager
     {
         #region RDB
         static string TABLE_NAME = "TOneWhS_BE_CP_SaleRate_New";
+        static string TABLE_ALIAS = "newRate";
         const string COL_ID = "ID";
         const string COL_ProcessInstanceID = "ProcessInstanceID";
         const string COL_ZoneID = "ZoneID";
@@ -96,6 +99,22 @@ namespace TOne.WhS.CodePreparation.Data.RDB
             RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
             bulkInsertContext.CloseStream();
             return bulkInsertContext;
+        }
+        #endregion
+
+        #region CodePreparation
+        public void DeleteRecords(RDBDeleteQuery deleteQuery, long processInstanceId)
+        {
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+        }
+
+        public void BuildSelectQuery(RDBSelectQuery selectQuery, long processInstanceId)
+        {
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_ID, COL_PriceListID, COL_ZoneID, COL_CurrencyID, COL_BED, COL_EED);
+            selectQuery.SelectColumns().Column(COL_NormalRate, SaleRateDataManager.COL_Rate);
+            selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
         }
         #endregion
     }

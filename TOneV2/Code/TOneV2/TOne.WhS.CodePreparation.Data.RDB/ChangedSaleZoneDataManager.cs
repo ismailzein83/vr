@@ -7,6 +7,8 @@ using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Data.RDB;
 using Vanrise.Common;
 using Vanrise.Entities;
+using TOne.WhS.BusinessEntity.Data.RDB;
+
 namespace TOne.WhS.CodePreparation.Data.RDB
 {
     public class ChangedSaleZoneDataManager : IChangedSaleZoneDataManager
@@ -14,7 +16,7 @@ namespace TOne.WhS.CodePreparation.Data.RDB
         #region RDB
         static string TABLE_NAME = "TOneWhS_BE_CP_SaleZone_Changed";
         const string COL_ID = "ID";
-        const string COL_ProcessInstanceID = "ProcessInstanceID";
+        internal const string COL_ProcessInstanceID = "ProcessInstanceID";
         const string COL_EED = "EED";
 
         static ChangedSaleZoneDataManager()
@@ -40,6 +42,8 @@ namespace TOne.WhS.CodePreparation.Data.RDB
             return RDBDataProviderFactory.CreateProvider("WhS_CodePrep", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
         #endregion
+
+        #region IChangedSaleZoneDataManager
         public long ProcessInstanceId
         {
             set
@@ -78,5 +82,20 @@ namespace TOne.WhS.CodePreparation.Data.RDB
             recordContext.Value(_processInstanceID);
             recordContext.Value(record.EED);
         }
+        #endregion
+
+        #region CodePreparation
+        public void DeleteRecords(RDBDeleteQuery deleteQuery, long processInstanceId)
+        {
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+        }
+
+        public void SetJoinContext(RDBJoinContext joinContext, string joinedTableAlias, string originalTableAlias, string idColumn)
+        {
+            var joinCondition = joinContext.Join(TABLE_NAME, joinedTableAlias).On();
+            joinCondition.EqualsCondition(joinedTableAlias, COL_ID, originalTableAlias, idColumn);
+        }
+        #endregion
     }
 }

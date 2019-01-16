@@ -14,6 +14,7 @@ namespace TOne.WhS.CodePreparation.Data.RDB
         #region RDB
 
         static string TABLE_NAME = "TOneWhS_BE_CP_SaleCode_New";
+        static string TABLE_ALIAS = "scnew";
         const string COL_ID = "ID";
         const string COL_ProcessInstanceID = "ProcessInstanceID";
         const string COL_Code = "Code";
@@ -49,6 +50,8 @@ namespace TOne.WhS.CodePreparation.Data.RDB
             return RDBDataProviderFactory.CreateProvider("WhS_CodePrep", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
         #endregion
+
+        #region INewSaleCodeDataManager
         public long ProcessInstanceId
         {
             set
@@ -95,5 +98,21 @@ namespace TOne.WhS.CodePreparation.Data.RDB
             else
                 recordContext.Null();
         }
+        #endregion
+
+        #region CodePreparation
+        public void DeleteRecords(RDBDeleteQuery deleteQuery, long processInstanceId)
+        {
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+        }
+
+        public void BuildSelectQuery(RDBSelectQuery selectQuery, long processInstanceId)
+        {
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_ID, COL_Code, COL_ZoneID, COL_CodeGroupID, COL_BED, COL_EED);
+            selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+        }
+        #endregion
     }
 }

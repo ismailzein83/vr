@@ -12,7 +12,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static string TABLE_ALIAS = "sz";
         static string TABLE_NAME = "TOneWhS_BE_SaleZone";
-        const string COL_ID = "ID";
+        public const string COL_ID = "ID";
         const string COL_BED = "BED";
         const string COL_EED = "EED";
         const string COL_SourceID = "SourceID";
@@ -177,6 +177,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             joinStatement.JoinType(RDBJoinType.Inner);
             var joinCondition = joinStatement.On();
             joinCondition.EqualsCondition(originalTableAlias, originalTableZoneIdCol, zoneTableAlias, COL_ID);
+        }
+
+        public void BuildInsertQuery(RDBInsertQuery insertQuery, long processInstanceID)
+        {
+            insertQuery.IntoTable(TABLE_NAME);
+            insertQuery.Column(COL_ProcessInstanceID).Value(processInstanceID);
+        }
+
+        public void BuildUpdateQuery(RDBUpdateQuery updateQuery, long processInstanceID, string joinTableAlias, string columnName)
+        {
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_EED).Column(joinTableAlias, COL_EED);
+            updateQuery.Where().EqualsCondition(joinTableAlias, columnName).Value(processInstanceID);
         }
         #endregion
     }

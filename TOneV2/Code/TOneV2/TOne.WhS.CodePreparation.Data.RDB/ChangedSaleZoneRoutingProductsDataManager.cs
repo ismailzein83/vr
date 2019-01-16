@@ -7,6 +7,7 @@ using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Data.RDB;
 using Vanrise.Common;
 using Vanrise.Entities;
+using TOne.WhS.BusinessEntity.Data.RDB;
 
 namespace TOne.WhS.CodePreparation.Data.RDB
 {
@@ -16,7 +17,7 @@ namespace TOne.WhS.CodePreparation.Data.RDB
 
         static string TABLE_NAME = "TOneWhS_BE_CP_SaleZoneRoutingProducts_Changed";
         const string COL_ID = "ID";
-        const string COL_ProcessInstanceID = "ProcessInstanceID";
+        internal const string COL_ProcessInstanceID = "ProcessInstanceID";
         const string COL_EED = "EED";
 
 
@@ -81,6 +82,20 @@ namespace TOne.WhS.CodePreparation.Data.RDB
             recordContext.Value(record.EntityId);
             recordContext.Value(_processInstanceID);
             recordContext.Value(record.EED);
+        }
+        #endregion
+
+        #region CodePreparation
+        public void DeleteRecords(RDBDeleteQuery deleteQuery, long processInstanceId)
+        {
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+        }
+
+        public void SetJoinContext(RDBJoinContext joinContext, string joinedTableAlias, string originalTableAlias, string idColumn)
+        {
+            var joinCondition = joinContext.Join(TABLE_NAME, joinedTableAlias).On();
+            joinCondition.EqualsCondition(joinedTableAlias, COL_ID, originalTableAlias, idColumn);
         }
         #endregion
     }
