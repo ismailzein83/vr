@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("retailBeTestcallanalysisCdrCorrelationProcess", ['UtilsService', 'VRDateTimeService',
+app.directive("tcanalCdrcorrelationProcess", ['UtilsService', 'VRDateTimeService',
     function (UtilsService, VRDateTimeService) {
         var directiveDefinitionObject = {
             restrict: "E",
@@ -28,7 +28,6 @@ app.directive("retailBeTestcallanalysisCdrCorrelationProcess", ['UtilsService', 
         function DirectiveConstructor($scope, ctrl) {
 
             this.initializeController = initializeController;
-            var lastDayOfMonth;
             $scope.scopeModel = {};
             function initializeController() {
                 defineAPI();
@@ -48,7 +47,6 @@ app.directive("retailBeTestcallanalysisCdrCorrelationProcess", ['UtilsService', 
 
                 api.load = function (payload) {
                     var promises = [];
-                    //$scope.datetimeMargin = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
