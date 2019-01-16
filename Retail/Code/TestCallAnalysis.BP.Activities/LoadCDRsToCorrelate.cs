@@ -48,8 +48,8 @@ namespace TestCallAnalysis.BP.Activities
             //if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_BatchSize"], out batchSize))
             //    batchSize = 100000;
 
-            if (inputArgument.OutputQueue == null)
-                throw new NullReferenceException("inputArgument.OutputQueue");   
+            //if (inputArgument.OutputQueue == null)
+            //    throw new NullReferenceException("inputArgument.OutputQueue");   
 
             LoadCDRsToCorrelateOutput output = new LoadCDRsToCorrelateOutput() { };
             long totalRecordsCount = 0;
@@ -60,33 +60,36 @@ namespace TestCallAnalysis.BP.Activities
             string orderColumnName = "";
             bool isOrderAscending =true;
 
-            foreach (Entities.CDRCorrelationFilterGroup cdrCorrelationFilterGroup in cdrRCorrelationFilterGroups)
+            if (cdrRCorrelationFilterGroups != null && cdrRCorrelationFilterGroups.Count > 0)
             {
-                string rangeMessage;
-                if (cdrCorrelationFilterGroup.To.HasValue)
-                    rangeMessage = string.Format("Range From {0}, To {1}", cdrCorrelationFilterGroup.From.ToString("yyyy-MM-dd HH:mm:ss"), cdrCorrelationFilterGroup.To.Value.ToString("yyyy-MM-dd HH:mm:ss"));
-                else
-                    rangeMessage = string.Format("From {0}", cdrCorrelationFilterGroup.From.ToString("yyyy-MM-dd HH:mm:ss"));
-
-                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has started.", rangeMessage));
-
-                long recordsCount = 0;
-                DateTime startTime = DateTime.Now;
-                var dataRecordStorageId = new Guid();
-                new DataRecordStorageManager().GetDataRecords(dataRecordStorageId, null, null, cdrCorrelationFilterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
+                foreach (Entities.CDRCorrelationFilterGroup cdrCorrelationFilterGroup in cdrRCorrelationFilterGroups)
                 {
-                    totalRecordsCount++;
-                    recordsCount++;
-                    recordBatch.Records.Add(itm);
-                }), orderColumnName, isOrderAscending);
+                    string rangeMessage;
+                    if (cdrCorrelationFilterGroup.To.HasValue)
+                        rangeMessage = string.Format("Range From {0}, To {1}", cdrCorrelationFilterGroup.From.ToString("yyyy-MM-dd HH:mm:ss"), cdrCorrelationFilterGroup.To.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                    else
+                        rangeMessage = string.Format("From {0}", cdrCorrelationFilterGroup.From.ToString("yyyy-MM-dd HH:mm:ss"));
 
-                inputArgument.OutputQueue.Enqueue(recordBatch);
+                    handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has started.", rangeMessage));
 
-                double elapsedTime = Math.Round((DateTime.Now - startTime).TotalSeconds);
-                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has finished. Events Count: {1}. Time Elapsed: {2} (s)", rangeMessage, recordsCount, elapsedTime));
+                    long recordsCount = 0;
+                    DateTime startTime = DateTime.Now;
+                    var dataRecordStorageId = new Guid();
+                    new DataRecordStorageManager().GetDataRecords(dataRecordStorageId, null, null, cdrCorrelationFilterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
+                    {
+                        totalRecordsCount++;
+                        recordsCount++;
+                        recordBatch.Records.Add(itm);
+                    }), orderColumnName, isOrderAscending);
 
-                while (inputArgument.OutputQueue.Count >= maximumOutputQueueSize)
-                    Thread.Sleep(1000);
+                    inputArgument.OutputQueue.Enqueue(recordBatch);
+
+                    double elapsedTime = Math.Round((DateTime.Now - startTime).TotalSeconds);
+                    handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has finished. Events Count: {1}. Time Elapsed: {2} (s)", rangeMessage, recordsCount, elapsedTime));
+
+                    while (inputArgument.OutputQueue.Count >= maximumOutputQueueSize)
+                        Thread.Sleep(1000);
+                }
             }
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", totalRecordsCount);
