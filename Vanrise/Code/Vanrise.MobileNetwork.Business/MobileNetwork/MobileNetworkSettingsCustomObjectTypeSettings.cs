@@ -4,7 +4,7 @@ using Vanrise.MobileNetwork.Entities;
 
 namespace Vanrise.MobileNetwork.Business
 {
-    class MobileNetworkSettingsCustomObjectTypeSettings : FieldCustomObjectTypeSettings
+    public class MobileNetworkSettingsCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
         public override Guid ConfigId { get { return new Guid("E4B2A13C-66DB-462C-973E-F06765056B1D"); } }
 

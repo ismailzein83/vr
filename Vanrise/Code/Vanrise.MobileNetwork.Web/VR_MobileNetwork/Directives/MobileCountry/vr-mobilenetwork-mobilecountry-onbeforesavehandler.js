@@ -18,7 +18,7 @@ app.directive("vrMobilenetworkMobilecountryOnbeforesavehandler", ["UtilsService"
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/MobileNetwork/Directives/MobileCountry/Templates/MobileCountryOnBeforeSaveHandler.html"
+            templateUrl: "/Client/Modules/VR_MobileNetwork/Directives/MobileCountry/Templates/MobileCountryOnBeforeSaveHandler.html"
         };
 
         function Handler($scope, ctrl, $attrs) {

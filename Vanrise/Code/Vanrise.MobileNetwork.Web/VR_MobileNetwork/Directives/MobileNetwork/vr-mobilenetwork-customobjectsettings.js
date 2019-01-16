@@ -15,7 +15,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/MobileNetwork/Directives/MobileNetwork/Templates/MobileNetworkSettingsCustomObjectSettingsTemplate.html"
+            templateUrl: "/Client/Modules/VR_MobileNetwork/Directives/MobileNetwork/Templates/MobileNetworkSettingsCustomObjectSettingsTemplate.html"
         };
         function MNCSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;

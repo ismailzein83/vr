@@ -15,7 +15,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/MobileNetwork/Directives/MobileNetwork/Templates/MobileNetworkSettingsTemplate.html"
+            templateUrl: "/Client/Modules/VR_MobileNetwork/Directives/MobileNetwork/Templates/MobileNetworkSettingsTemplate.html"
         };
 
         function MobileNetworkSettingsCtor($scope, ctrl, $attrs) {
