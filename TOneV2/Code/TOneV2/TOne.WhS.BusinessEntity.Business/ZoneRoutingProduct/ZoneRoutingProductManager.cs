@@ -231,8 +231,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
 				return zoneRoutingProducts;
 			}
-			#endregion
-		}
+
+            protected override ResultProcessingHandler<ZoneRoutingProductDetail> GetResultProcessingHandler(DataRetrievalInput<ZoneRoutingProductQuery> input, BigResult<ZoneRoutingProductDetail> bigResult)
+            {
+                return new ResultProcessingHandler<ZoneRoutingProductDetail>
+                {
+                    ExportExcelHandler = new ZoneRoutingProductExcelExportHandler()
+                };
+            }
+            #endregion
+        }
 
 		private class ZoneRoutingProductExcelExportHandler : ExcelExportHandler<ZoneRoutingProductDetail>
 		{
