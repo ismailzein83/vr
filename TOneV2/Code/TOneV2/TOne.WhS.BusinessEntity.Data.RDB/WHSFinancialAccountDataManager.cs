@@ -1,9 +1,9 @@
 ﻿using System;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
+using Vanrise.Entities;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class WHSFinancialAccountDataManager : IWHSFinancialAccountDataManager
@@ -27,20 +27,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static WHSFinancialAccountDataManager()
         {
-            var columns = new Dictionary<string, RDBTableColumnDefinition>
-            {
-                {COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_CarrierProfileId, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_CarrierAccountId, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_FinancialAccountDefinitionId,new RDBTableColumnDefinition {DataType = RDBDataType.UniqueIdentifier}},
-                {COL_FinancialAccountSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar}},
-                {COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_CreatedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_LastModifiedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
-            };
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_CarrierProfileId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_CarrierAccountId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_FinancialAccountDefinitionId, new RDBTableColumnDefinition {DataType = RDBDataType.UniqueIdentifier});
+            columns.Add(COL_FinancialAccountSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
+            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_CreatedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",

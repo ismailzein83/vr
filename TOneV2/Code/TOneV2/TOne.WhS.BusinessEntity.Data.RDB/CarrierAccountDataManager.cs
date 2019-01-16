@@ -30,25 +30,23 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static CarrierAccountDataManager()
         {
-            var columns = new Dictionary<string, RDBTableColumnDefinition>
-            {
-                {COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_NameSuffix, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 255}},
-                {COL_CarrierProfileID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_AccountType, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_SupplierSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar}},
-                {COL_CustomerSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar}},
-                {COL_CarrierAccountSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar}},
-                {COL_ExtendedSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar}},
-                {COL_SellingNumberPlanID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_SellingProductID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50}},
-                {COL_IsDeleted, new RDBTableColumnDefinition {DataType = RDBDataType.Boolean}},
-                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_CreatedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_LastModifiedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
-            };
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_NameSuffix, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 255});
+            columns.Add(COL_CarrierProfileID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_AccountType, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_SupplierSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
+            columns.Add(COL_CustomerSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
+            columns.Add(COL_CarrierAccountSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
+            columns.Add(COL_ExtendedSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
+            columns.Add(COL_SellingNumberPlanID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_SellingProductID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
+            columns.Add(COL_IsDeleted, new RDBTableColumnDefinition {DataType = RDBDataType.Boolean});
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_CreatedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {

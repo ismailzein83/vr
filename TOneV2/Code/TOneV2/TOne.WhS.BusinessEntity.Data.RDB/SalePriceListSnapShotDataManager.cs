@@ -1,4 +1,5 @@
-﻿using Vanrise.Entities;
+﻿using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
@@ -18,13 +19,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static SalePriceListSnapShotDataManager()
         {
-            var columns = new Dictionary<string, RDBTableColumnDefinition>
-            {
-                {COL_PriceListID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_SnapShotDetail, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar}},
-                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
-            };
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_PriceListID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_SnapShotDetail, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
@@ -44,6 +44,18 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
         #region Public Methods
 
+        public void Bulk(IEnumerable<SalePriceListSnapShot> salePriceListSaleCodeSnapshots)
+        {
+            object dbApplyStream = InitialiazeStreamForDBApply();
+
+            foreach (var salePriceListCodeSnapshot in salePriceListSaleCodeSnapshots)
+            {
+                WriteRecordToStream(salePriceListCodeSnapshot, dbApplyStream);
+            }
+
+            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
+            ApplyForDB(prepareToApplyInfo);
+        }
         public SalePriceListSnapShot GetSalePriceListSnapShot(int priceListId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
@@ -56,6 +68,40 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             return queryContext.GetItem(SalePricelistSnapShotMapper);
         }
+        #endregion
+
+        #region Bulk Methods
+        private object InitialiazeStreamForDBApply()
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var streamForBulkInsert = queryContext.StartBulkInsert();
+            streamForBulkInsert.IntoTable(TABLE_NAME, '^', COL_PriceListID, COL_SnapShotDetail);
+            return streamForBulkInsert;
+        }
+        private void WriteRecordToStream(SalePriceListSnapShot record, object dbApplyStream)
+        {
+            RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
+            var recordContext = bulkInsertContext.WriteRecord();
+            recordContext.Value(record.PriceListId);
+
+            if (record.SnapShotDetail != null)
+                recordContext.Value(Serializer.Serialize(record.SnapShotDetail));
+            else
+                recordContext.Value(string.Empty);
+
+        }
+        private object FinishDBApplyStream(object dbApplyStream)
+        {
+            RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
+            bulkInsertContext.CloseStream();
+            return bulkInsertContext;
+        }
+        private void ApplyForDB(object preparedObject)
+        {
+            preparedObject.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream").Apply();
+
+        }
+
         #endregion
 
         #region Mapper

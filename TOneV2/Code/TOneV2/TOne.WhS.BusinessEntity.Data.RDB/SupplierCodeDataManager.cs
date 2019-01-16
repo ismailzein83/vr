@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Linq;
+using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
-using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
@@ -26,18 +26,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static SupplierCodeDataManager()
         {
-            var columns = new Dictionary<string, RDBTableColumnDefinition>
-            {
-                {COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
-                {COL_Code, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 20}},
-                {COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
-                {COL_CodeGroupID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50}},
-                {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_CreatedTime, new RDBTableColumnDefinition{DataType = RDBDataType.DateTime}}
-        };
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_Code, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 20 });
+            columns.Add(COL_ZoneID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_CodeGroupID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
@@ -69,7 +68,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
 
             var whereContext = selectQuery.Where();
-            whereContext.ContainsCondition(COL_Code, codeNumber);
+            whereContext.StartsWithCondition(COL_Code, codeNumber);
             whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
             whereContext.LessOrEqualCondition(COL_BED).DateNow();
 
@@ -77,6 +76,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             orDateCondition.NullCondition(COL_EED);
             orDateCondition.GreaterThanCondition(COL_EED).DateNow();
 
+            selectQuery.Sort().ByColumn(COL_Code, RDBSortDirection.ASC);
             return queryContext.GetItems(SupplierCodeMapper);
         }
 
@@ -334,8 +334,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             return codeGroupsByZone.Select(itm => new ZoneCodeGroup() { CodeGroups = itm.Value, ZoneId = itm.Key, IsSale = true }).ToList();
         }
-        #endregion
 
+        #endregion
 
         #region Mappers
         SupplierCode SupplierCodeMapper(IRDBDataReader reader)

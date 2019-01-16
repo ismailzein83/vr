@@ -1,9 +1,9 @@
-﻿using System;
-using Vanrise.Common;
+﻿using Vanrise.Common;
 using Vanrise.Data.RDB;
+using Vanrise.Entities;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class ZoneServiceConfigDataManager : IZoneServiceConfigDataManager
@@ -22,15 +22,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static ZoneServiceConfigDataManager()
         {
-            var columns = new Dictionary<string, RDBTableColumnDefinition>
-            {
-                {COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_Symbol, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 50}},
-                {COL_Settings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar}},
-                {COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50}},
-                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
-            };
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Symbol, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 50 });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",

@@ -227,10 +227,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereQuery.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
             whereQuery.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(ownerId);
 
-            if (zoneIds != null && zoneIds.Any())
-                whereQuery.ListCondition(RDBListConditionOperator.IN, zoneIds);
-            else
-                whereQuery.FalseCondition();
+            whereQuery.ListCondition(RDBListConditionOperator.IN, zoneIds);
 
             SetDateCondition(whereQuery, minEED);
 
@@ -293,10 +290,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereQuery.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
             whereQuery.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(ownerId);
 
-            if (zoneIds != null && zoneIds.Any())
-                whereQuery.ListCondition(RDBListConditionOperator.IN, zoneIds);
-            else
-                whereQuery.FalseCondition();
+            whereQuery.ListCondition(RDBListConditionOperator.IN, zoneIds);
 
             whereQuery.GreaterThanCondition(COL_EED).Value(effectiveOn);
             return queryContext.GetItems(SaleRateMapper);
@@ -324,16 +318,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             whereQuery.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)SalePriceListOwnerType.SellingProduct);
 
-            if (saleZoneIds != null && saleZoneIds.Any())
-                whereQuery.ListCondition(RDBListConditionOperator.IN, saleZoneIds);
-            else
-                whereQuery.FalseCondition();
+            whereQuery.ListCondition(RDBListConditionOperator.IN, saleZoneIds);
 
-            if (sellingProductIds != null && sellingProductIds.Any())
-                whereQuery.ListCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID, RDBListConditionOperator.IN, sellingProductIds);
-            else
-                whereQuery.FalseCondition();
-
+            whereQuery.ListCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerID, RDBListConditionOperator.IN, sellingProductIds);
 
             return queryContext.GetItems(SaleRateMapper);
         }

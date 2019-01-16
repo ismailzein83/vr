@@ -25,17 +25,16 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static SaleCodeDataManager()
         {
-            var columns = new Dictionary<string, RDBTableColumnDefinition>
-            {
-                {COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
-                {COL_Code, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 20}},
-                {COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
-                {COL_CodeGroupID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50}},
-                {COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}}
-            };
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
+            columns.Add(COL_Code, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 20});
+            columns.Add(COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
+            columns.Add(COL_CodeGroupID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
+            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",

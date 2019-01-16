@@ -28,21 +28,20 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static SupplierRateDataManager()
         {
-            var columns = new Dictionary<string, RDBTableColumnDefinition>
-            {
-                {COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
-                {COL_PriceListID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
-                {COL_CurrencyID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_Rate, new RDBTableColumnDefinition {DataType = RDBDataType.Decimal, Size = 20, Precision = 8}},
-                {COL_RateTypeID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_Change, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50}},
-                {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
-            };
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_PriceListID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_ZoneID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Rate, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 8 });
+            columns.Add(COL_RateTypeID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Change, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
@@ -168,10 +167,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereQuery.NullCondition(COL_RateTypeID);
             BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
 
-            if (supplierZoneIds != null && supplierZoneIds.Any())
-                whereQuery.ListCondition(RDBListConditionOperator.IN, supplierZoneIds);
-            else
-                whereQuery.FalseCondition();
+            whereQuery.ListCondition(RDBListConditionOperator.IN, supplierZoneIds);
 
             return queryContext.GetItems(SupplierRateMapper);
         }
@@ -185,11 +181,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereQuery = selectQuery.Where();
 
-            if (supplierZoneIds != null && supplierZoneIds.Any())
-
-                whereQuery.ListCondition(RDBListConditionOperator.IN, supplierZoneIds);
-            else
-                whereQuery.FalseCondition();
+            whereQuery.ListCondition(RDBListConditionOperator.IN, supplierZoneIds);
 
             //whereQuery.NullCondition(COL_RateTypeID);
             //if()
@@ -235,10 +227,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereQuery = selectQuery.Where();
 
-            if (supplierInfos != null && supplierInfos.Any())
-                whereQuery.ListCondition(supplierPriceListTableAlias, SupplierPriceListDataManager.COL_SupplierID, RDBListConditionOperator.IN, supplierInfos.Select(item => item.SupplierId));
-            else
-                whereQuery.FalseCondition();
+            whereQuery.ListCondition(supplierPriceListTableAlias, SupplierPriceListDataManager.COL_SupplierID, RDBListConditionOperator.IN, supplierInfos.Select(item => item.SupplierId));
 
             if (effectiveOn.HasValue)
             {
@@ -304,10 +293,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereQuery = selectQuery.Where();
 
-            if (supplierRateIds != null && supplierRateIds.Any())
-                whereQuery.ListCondition(RDBListConditionOperator.IN, supplierRateIds);
-            else
-                whereQuery.FalseCondition();
+            whereQuery.ListCondition(RDBListConditionOperator.IN, supplierRateIds);
 
             return queryContext.GetItems(SupplierRateMapper);
         }

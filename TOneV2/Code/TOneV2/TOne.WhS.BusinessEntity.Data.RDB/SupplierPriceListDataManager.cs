@@ -27,21 +27,20 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static SupplierPriceListDataManager()
         {
-            var columns = new Dictionary<string, RDBTableColumnDefinition>
-            {
-                {COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_SupplierID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_CurrencyID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_FileID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
-                {COL_EffectiveOn, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_PricelistType, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50}},
-                {COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
-                {COL_SPLStateBackupID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt}},
-                {COL_UserID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
-            };
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_SupplierID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_FileID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
+            columns.Add(COL_EffectiveOn, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_PricelistType, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
+            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
+            columns.Add(COL_SPLStateBackupID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
+            columns.Add(COL_UserID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",

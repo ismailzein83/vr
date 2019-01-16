@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.Entities.SalePricelistChanges;
@@ -50,22 +51,30 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void SaveCustomerRateChangesToDb(IEnumerable<SalePricelistRateChange> rateChanges, long processInstanceId)
         {
-            throw new NotImplementedException();
+            SalePricelistRateChangeNewDataManager salePricelistRateChangeNewDataManager = new SalePricelistRateChangeNewDataManager();
+            salePricelistRateChangeNewDataManager.Bulk(rateChanges, processInstanceId);
         }
 
         public void SaveSalePriceListSnapshotToDb(IEnumerable<SalePriceListSnapShot> salePriceListSaleCodeSnapshots)
         {
-            throw new NotImplementedException();
+            if (salePriceListSaleCodeSnapshots == null || !salePriceListSaleCodeSnapshots.Any())
+                return;
+
+            SalePriceListSnapShotDataManager salePriceListSnapShotDataManager = new SalePriceListSnapShotDataManager();
+            salePriceListSnapShotDataManager.Bulk(salePriceListSaleCodeSnapshots);
+
         }
 
         public List<SalePriceListNew> GetTemporaryPriceLists(TemporarySalePriceListQuery query)
         {
-            throw new NotImplementedException();
+            SalePriceListNewDataManager salePriceListNewDataManager = new SalePriceListNewDataManager();
+            return salePriceListNewDataManager.GetOwnerSalePriceListsNew((int)SalePriceListOwnerType.Customer, (int)SalePriceListType.None, query.ProcessInstanceId);
         }
 
         public IEnumerable<CustomerRatePreview> GetCustomerRatePreviews(CustomerRatePreviewQuery query)
         {
-            throw new NotImplementedException();
+            SalePricelistRateChangeNewDataManager salePricelistRateChangeNewDataManager = new SalePricelistRateChangeNewDataManager();
+            return salePricelistRateChangeNewDataManager.GetCustomerRatePreviews(query.ProcessInstanceId, query.CustomerIds);
         }
 
         public IEnumerable<ZoneCustomerPair> GetCustomerRatePreviewZonePairs(CustomerRatePreviewQuery query)

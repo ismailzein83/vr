@@ -21,15 +21,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static SalePricelistCustomerChangeDataManager()
         {
-            var columns = new Dictionary<string, RDBTableColumnDefinition>
-            {
-                {COL_BatchID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_PricelistID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_CountryID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_CustomerID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
-            };
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_BatchID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_PricelistID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_CountryID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_CustomerID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",

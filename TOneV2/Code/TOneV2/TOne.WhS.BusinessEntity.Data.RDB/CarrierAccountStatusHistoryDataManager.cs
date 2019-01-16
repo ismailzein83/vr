@@ -23,16 +23,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static CarrierAccountStatusHistoryDataManager()
         {
-            var columns = new Dictionary<string, RDBTableColumnDefinition>
-            {
-                {COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_CarrierAccountID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_StatusID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_PreviousStatusID, new RDBTableColumnDefinition {DataType = RDBDataType.Int}},
-                {COL_StatusChangedDate, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}},
-                {COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime}}
-            };
+            var columns = new Dictionary<string, RDBTableColumnDefinition>();
+            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_CarrierAccountID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_StatusID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_PreviousStatusID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
+            columns.Add(COL_StatusChangedDate, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
