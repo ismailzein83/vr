@@ -48,6 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
+      <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
+      <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TestCallAnalysis.Entities\TestCallAnalysis.Entities.csproj">
       <Project>{7247a3c2-23b2-42f9-aced-2e2884953be3}</Project>
       <Name>TestCallAnalysis.Entities</Name>
