@@ -108,6 +108,10 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                     if (iAttrs.ngShow != undefined)
                         show = $scope.$eval(iAttrs.ngShow);
 
+                    if (col.type == "Number" && col.headerText.toUpperCase() === 'ID' && col.numberPrecision == "NoDecimal") {
+                        col.type = "Text";
+                    }
+
                     var colDef = dataGridCtrl.addColumn(col, columnIndex);
 
                     var headertextWatch;
