@@ -14,7 +14,7 @@ namespace TestCallAnalysis.Business
 
         public override bool IsPartValid(IAccountPartDefinitionIsPartValidContext context)
         {
-            throw new NotImplementedException();
+            return true;
         }
     }
 }

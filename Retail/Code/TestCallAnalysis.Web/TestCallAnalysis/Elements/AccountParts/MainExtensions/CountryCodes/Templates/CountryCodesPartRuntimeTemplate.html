@@ -1,1 +1,15 @@
-﻿
+﻿<vr-tab header="'Country Codes'">
+    <vr-columns colnum="5">
+        <vr-textbox value="scopeModel.countryCode" type="number" label="Code" customvalidate="scopeModel.validateCountryCode()"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="1" withemptyline haschildcolumns>
+        <vr-button type="Add" data-onclick="scopeModel.addCountryCode" standalone vr-disabled="!scopeModel.isCountryCodeValid() || scopeModel.countryCode==undefined"></vr-button>
+    </vr-columns>
+    <vr-columns colnum="12" haschildcolumns>
+        <vr-datalist maxitemsperrow="4" datasource="scopeModel.countryCodes" autoremoveitem="true">
+            <vr-columns colnum="3">
+                <vr-label>{{dataItem.Code}}</vr-label>
+            </vr-columns>
+        </vr-datalist>
+    </vr-columns>
+</vr-tab>

@@ -22,7 +22,7 @@ app.directive("retailBeTestcallanalysisCdrCorrelationProcess", ['UtilsService', 
                     }
                 };
             },
-            templateUrl: '/Client/Modules/TestCallAnalysis/Elements/Directives/Templates/CDRCorrelationProcessTemplate.html'
+            templateUrl: '/Client/Modules/TestCallAnalysis/Elements/CDRCorrelation/Directives/Templates/CDRCorrelationProcessTemplate.html'
         };
 
         function DirectiveConstructor($scope, ctrl) {
