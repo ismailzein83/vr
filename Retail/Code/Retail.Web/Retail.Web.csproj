@@ -1080,6 +1080,30 @@
       <Project>{ec403ab6-b9fd-4437-8ae9-935f26f3c939}</Project>
       <Name>Retail.Zajil.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestCallAnalysis.BP.Activities\TestCallAnalysis.BP.Activities.csproj">
+      <Project>{9569c863-faa1-49af-95a9-4c295fc9f206}</Project>
+      <Name>TestCallAnalysis.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCallAnalysis.BP.Arguments\TestCallAnalysis.BP.Arguments.csproj">
+      <Project>{cffa10a5-a267-460f-9f33-30e41284a02c}</Project>
+      <Name>TestCallAnalysis.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCallAnalysis.BP\TestCallAnalysis.BP.csproj">
+      <Project>{4ec50608-9e41-458b-8854-00952aa1e892}</Project>
+      <Name>TestCallAnalysis.BP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCallAnalysis.Business\TestCallAnalysis.Business.csproj">
+      <Project>{f6fd0703-9ed3-46a8-9204-91647185a3e5}</Project>
+      <Name>TestCallAnalysis.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCallAnalysis.Entities\TestCallAnalysis.Entities.csproj">
+      <Project>{7247a3c2-23b2-42f9-aced-2e2884953be3}</Project>
+      <Name>TestCallAnalysis.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestCallAnalysis.Web\TestCallAnalysis.Web.csproj">
+      <Project>{87394636-0184-4b71-a1f2-0b3f0db07dc1}</Project>
+      <Name>TestCallAnalysis.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
