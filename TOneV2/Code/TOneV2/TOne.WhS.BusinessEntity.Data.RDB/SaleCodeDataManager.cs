@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Data.RDB
@@ -12,7 +13,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         static string TABLE_NAME = "TOneWhS_BE_SaleCode";
         static string TABLE_ALIAS = "sc";
-        public const string COL_ID = "ID";
+
+        internal const string COL_ID = "ID";
         const string COL_Code = "Code";
         const string COL_ZoneID = "ZoneID";
         const string COL_CodeGroupID = "CodeGroupID";
@@ -26,14 +28,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static SaleCodeDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_Code, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 20});
-            columns.Add(COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_CodeGroupID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
-            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_Code, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 20 });
+            columns.Add(COL_ZoneID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_CodeGroupID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -47,7 +49,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return RDBDataProviderFactory.CreateProvider("TOneWhS_BE_SaleCode", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
-
 
         #endregion
 
@@ -171,7 +172,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             where.ListCondition(COL_CodeGroupID, RDBListConditionOperator.IN, codeGroupsIds);
 
             return queryContext.GetItems(SaleCodeMapper);
-
         }
 
         public List<SaleCode> GetSaleCodesByCodeId(IEnumerable<long> codeIds)  //To Test.. Changed but always same result
@@ -260,7 +260,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             AddEffectiveOnDateCondition(where, effectiveDate);
 
             return queryContext.GetItems(SaleCodeMapper);
-
         }
 
         public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes) //to test // need revising: and or to if
@@ -292,9 +291,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (isFuture == true)
                 AddEffectiveAfterDateCondition(where, DateTime.Today);
 
-
             return queryContext.GetItems(SaleCodeMapper);
-
         }
 
         public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
@@ -350,8 +347,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             where.EqualsCondition("sz", SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
             where.EqualsCondition("sz", SaleZoneDataManager.COL_CountryID).Value(countryId);
 
-
-
             return queryContext.GetItems(SaleCodeMapper);
         }
 
@@ -365,6 +360,55 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             throw new NotImplementedException();
         }
 
+        public List<ZoneCodeGroup> GetSaleZoneCodeGroups(DateTime? effectiveOn, bool isFuture)
+        {
+            CodeGroupDataManager codeGroupDataManager = new CodeGroupDataManager();
+            Dictionary<long, List<string>> codeGroupsByZone = new Dictionary<long, List<string>>();
+
+            string codeGroupTableAlias = "cg";
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+
+            var selectColoumns = selectQuery.SelectColumns();
+            selectColoumns.Column(COL_ZoneID);
+            selectColoumns.Column(TABLE_ALIAS, COL_Code, "CodeGroup");
+
+            var joinCondition = selectQuery.Join();
+            codeGroupDataManager.JoinCodeGroup(joinCondition, codeGroupTableAlias, TABLE_ALIAS, COL_CodeGroupID);
+
+            var whereContext = selectQuery.Where();
+
+            if (!effectiveOn.HasValue)
+            {
+                if (isFuture)
+                    BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                else
+                    BEDataUtility.SetFutureDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+            }
+            else
+            {
+                whereContext.FalseCondition();
+            }
+
+            whereContext.EqualsCondition(TABLE_ALIAS, COL_Code).Column(codeGroupTableAlias, CodeGroupDataManager.COL_Code);
+
+            queryContext.ExecuteReader(
+               (reader) =>
+               {
+                   while (reader.Read())
+                   {
+                       long zoneId = reader.GetLong(COL_ZoneID);
+                       string codeGroup = reader.GetString("CodeGroup");
+                       List<string> codeGroups = codeGroupsByZone.GetOrCreateItem(zoneId);
+                       codeGroups.Add(codeGroup);
+                   }
+               });
+
+            return codeGroupsByZone.Select(itm => new ZoneCodeGroup() { CodeGroups = itm.Value, ZoneId = itm.Key, IsSale = false }).ToList();
+        }
         #endregion
 
         #region Private Methods
@@ -419,7 +463,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             insertQuery.IntoTable(TABLE_NAME);
             insertQuery.Column(COL_ProcessInstanceID).Value(processInstanceID);
-        } 
+        }
 
         public void BuildUpdateQuery(RDBUpdateQuery updateQuery, long processInstanceID, string joinTableAlias, string columnName)
         {
