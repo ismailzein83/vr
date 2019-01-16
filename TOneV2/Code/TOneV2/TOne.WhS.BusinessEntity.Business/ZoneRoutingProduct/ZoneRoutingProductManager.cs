@@ -254,7 +254,6 @@ namespace TOne.WhS.BusinessEntity.Business
 					Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
 				};
 
-				sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
 				sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone", Width = 30 });
 				sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Routing Product" });
 				sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
@@ -270,7 +269,6 @@ namespace TOne.WhS.BusinessEntity.Business
 						{
 							var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
 							sheet.Rows.Add(row);
-							row.Cells.Add(new ExportExcelCell { Value = record.Entity.SaleEntityZoneRoutingProductId });
 							row.Cells.Add(new ExportExcelCell { Value = record.ZoneName });
 							row.Cells.Add(new ExportExcelCell { Value = record.RoutingProductName });
 							row.Cells.Add(new ExportExcelCell { Value = record.Entity.ServiceIds == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.Entity.ServiceIds) });
