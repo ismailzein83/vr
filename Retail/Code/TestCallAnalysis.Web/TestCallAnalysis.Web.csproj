@@ -176,12 +176,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="TestCallAnalysis\Elements\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestCallAnalysis\Constant\ModuleConfig.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestCallAnalysis\Elements\Directives\retail-be-testcallanalysis-cdr-correlation-process.js" />
+    <Content Include="TestCallAnalysis\Elements\Directives\Templates\CDRCorrelationProcessTemplate.html" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
