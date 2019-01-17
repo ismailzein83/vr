@@ -1,0 +1,39 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_BranchEditorController" vr-loader="scopeModel.isLoading" width="'60%'">
+    <vr-modalbody>
+        <vr-form name="formBranchEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                        <demo-module-company-selector on-ready="scopeModel.onCompanySelectorReady" isrequired="true" isdisabled="scopeModel.disableCompany" normal-col-num="6"></demo-module-company-selector>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.address" label="Address" isrequired></vr-textbox>
+                        </vr-columns>
+                        <demo-module-branch-branchType normal-col-num="6" isrequired="true" on-ready="scopeModel.onBranchTypeDirectiveReady"></demo-module-branch-branchType>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Departments'">
+                    <vr-row removeline>
+                       <demo-module-branch-departments-grid on-ready="scopeModel.onBranchDepartmentsdirectiveReady"></demo-module-branch-departments-grid>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formBranchEditor" data-onclick="scopeModel.saveBranch"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+
+

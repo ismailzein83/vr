@@ -60,7 +60,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BranchDataManager.cs" />
     <Compile Include="CityDataManager.cs" />
+    <Compile Include="CompanyDataManager.cs" />
     <Compile Include="CountryDataManager.cs" />
     <Compile Include="OldEntities\CDRDataManager.cs" />
     <Compile Include="OldEntities\ComplaintDataManager.cs" />

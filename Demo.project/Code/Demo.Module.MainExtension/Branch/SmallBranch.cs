@@ -1,21 +1,17 @@
 ﻿using Demo.Module.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Demo.Module.MainExtension.Branch
 {
     public class SmallBranch : BranchType
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId { get { return new Guid("BCE471CE-F9AC-4F01-A10A-E63B08DAB86B"); } }
 
         public int NumberOfRooms { get; set; }
 
         public override string GetDescription()
         {
-            throw new NotImplementedException();
+           return string.Format("Small size branch with {0} rooms", this.NumberOfRooms);
         }
     }
 }

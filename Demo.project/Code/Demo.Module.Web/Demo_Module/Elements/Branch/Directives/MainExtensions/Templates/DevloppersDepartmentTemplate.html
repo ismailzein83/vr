@@ -1,0 +1,16 @@
+﻿<vr-columns width="fullrow">
+    <vr-button type="Add" data-onclick="scopeModel.addEmployee" standalone></vr-button>
+</vr-columns>
+<vr-columns width="fullrow" simplecol>
+    <vr-datagrid on-ready="scopeModel.onGridReady"
+                 datasource="scopeModel.employees"
+                 ondeleterow="scopeModel.onDeleteRow"
+                 menuactions="scopeModel.gridMenuActions"
+                 disablesorting="true"
+                 disabledraggablecolumns>
+
+        <vr-datagridcolumn headertext="'Employee Name'" field="'Name'" typeof="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Birth Date'" field="'BirthDate'" type="dateTime" ></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Hiring Date'" field="'HiringDate'" type="dateTime"></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-columns>

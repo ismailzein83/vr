@@ -1,0 +1,14 @@
+﻿<vr-datagrid datasource="scopeModel.companies"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="CompanyId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'CompanyId'" typeof="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" typeof="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Headquarter Address'" field="'Settings.HeadquarterAddress'" typeof="'Text'"></vr-datagridcolumn>
+
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

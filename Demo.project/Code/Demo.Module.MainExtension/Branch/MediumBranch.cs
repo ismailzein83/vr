@@ -1,21 +1,17 @@
 ﻿using Demo.Module.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Demo.Module.MainExtension.Branch
 {
     public class MediumBranch : BranchType
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId { get { return new Guid("56F72729-D48E-4EBC-812C-07FA88177DE2"); } }
 
         public int NumberOfBlocks { get; set; }
 
         public override string GetDescription()
         {
-            throw new NotImplementedException();
+            return string.Format("Medium size branch with {0} blocks", this.NumberOfBlocks);
         }
     }
 }

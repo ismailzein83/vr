@@ -54,12 +54,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Branch\Branch.cs" />
+    <Compile Include="Branch\BranchDetail.cs" />
+    <Compile Include="Branch\BranchQuery.cs" />
+    <Compile Include="Branch\BranchTypeConfig.cs" />
     <Compile Include="City\City.cs" />
     <Compile Include="City\CityDetails.cs" />
     <Compile Include="City\CityQuery.cs" />
     <Compile Include="City\CitySettingsConfig.cs" />
     <Compile Include="Company\Company.cs" />
+    <Compile Include="Company\CompanyDetails.cs" />
+    <Compile Include="Company\CompanyInfo.cs" />
+    <Compile Include="Company\CompanyInfoFilter.cs" />
+    <Compile Include="Company\CompanyQuery.cs" />
     <Compile Include="Department\Department.cs" />
+    <Compile Include="Department\DepartmentSettingsConfig.cs" />
     <Compile Include="District\District.cs" />
     <Compile Include="Country\Country.cs" />
     <Compile Include="Country\CountryDetails.cs" />
@@ -68,6 +76,7 @@
     <Compile Include="Country\CountryQuery.cs" />
     <Compile Include="District\DistrictSettingsConfig.cs" />
     <Compile Include="Employee\Employee.cs" />
+    <Compile Include="Employee\EmployeeSettingsConfig.cs" />
     <Compile Include="Factory\Factory.cs" />
     <Compile Include="Factory\FactoryTypeConfig.cs" />
     <Compile Include="OldEntities\CallCenterCustomer\CDR.cs" />

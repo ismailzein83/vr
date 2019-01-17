@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="scopeModel.branches"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="BranchId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'BranchId'" typeof="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" typeof="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Company'" field="'CompanyName'" typeof="'Text'" ng-show="!scopeModel.hideCompanyColumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Address'" field="'Address'" typeof="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'BranchTypeDescription'" typeof="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

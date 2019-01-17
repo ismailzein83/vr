@@ -1,14 +1,10 @@
 ﻿using Demo.Module.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Demo.Module.MainExtension.Department
 {
     public class QADepartment : DepartmentSettings
     {
-        public override Guid ConfigId => throw new NotImplementedException();
+        public override Guid ConfigId { get { return new Guid("6AD0D992-8756-45D4-96C3-0A5AE6D3A706"); } }
     }
 }

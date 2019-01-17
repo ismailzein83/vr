@@ -1,0 +1,17 @@
+﻿<vr-columns width="fullrow">
+    <vr-button type="Add" data-onclick="scopeModel.addDepartment" standalone></vr-button>
+</vr-columns>
+<vr-columns width="fullrow" simplecol>
+    <vr-datagrid on-ready="scopeModel.onGridReady"
+                 datasource="scopeModel.departments"
+                 ondeleterow="scopeModel.onDeleteRow"
+                 menuactions="scopeModel.gridMenuActions"
+                 disablesorting="true" 
+                 disabledraggablecolumns>
+       
+            <vr-datagridcolumn headertext="'Department Name'" field="'Name'" typeof="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Floor Number'" field="'FloorNumber'" type="number" minvalue="1" maxvalue="100"></vr-datagridcolumn>
+            <!--<vr-datagridcolumn headertext="'Settings'" field="'Settings'" typeof="Text"></vr-datagridcolumn>-->
+    </vr-datagrid>
+</vr-columns>
+
