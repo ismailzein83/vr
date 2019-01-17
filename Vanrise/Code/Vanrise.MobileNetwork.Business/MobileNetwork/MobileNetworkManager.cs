@@ -63,6 +63,7 @@ namespace Vanrise.MobileNetwork.Business
                             Id = (int)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             MobileNetworkSettings = (MobileNetworkSettings)genericBusinessEntity.FieldValues.GetRecord("Settings"),
                             MobileCountryId = (int)genericBusinessEntity.FieldValues.GetRecord("MobileCountry"),
+                            NetworkName = (string)genericBusinessEntity.FieldValues.GetRecord("NetworkName"),
                         };
                         MobileNetworkList.Add(mobileNetwork);
                     }
@@ -89,6 +90,7 @@ namespace Vanrise.MobileNetwork.Business
                             Id = mobileNetwork.Id,
                             MobileNetworkSettings = mobileNetwork.MobileNetworkSettings,
                             MobileCountryId = mobileNetwork.MobileCountryId,
+                            NetworkName = mobileNetwork.NetworkName
                         });
                     }
                 }
