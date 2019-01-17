@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Data.RDB;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-using Vanrise.Common;
-using Vanrise.Entities;
-using System.IO;
-using System.Configuration;
-using System.Collections.Concurrent;
-using System.Threading;
 
 namespace Vanrise.GenericData.FileDataStorage
 {
@@ -39,11 +36,7 @@ namespace Vanrise.GenericData.FileDataStorage
         #region Fields/Ctor
 
         static TimeSpan s_transactionLockMaxRetryInterval;
-        static FileRecordStorageDataManager()
-        {
-            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["FileRecordStorage_TransactionLockMaxRetryInterval"], out s_transactionLockMaxRetryInterval))
-                s_transactionLockMaxRetryInterval = TimeSpan.FromMinutes(10);
-        }
+        static RecordFilterManager s_recordFilterManager = new RecordFilterManager();
 
         FileDataStoreSettings _dataStoreSettings;
         FileDataRecordStorageSettings _dataRecordStorageSettings;
@@ -99,7 +92,12 @@ namespace Vanrise.GenericData.FileDataStorage
             }
         }
 
-        static RecordFilterManager s_recordFilterManager = new RecordFilterManager();
+
+        static FileRecordStorageDataManager()
+        {
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["FileRecordStorage_TransactionLockMaxRetryInterval"], out s_transactionLockMaxRetryInterval))
+                s_transactionLockMaxRetryInterval = TimeSpan.FromMinutes(10);
+        }
 
         internal FileRecordStorageDataManager(FileDataStoreSettings dataStoreSettings, FileDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage)
         {
@@ -120,11 +118,14 @@ namespace Vanrise.GenericData.FileDataStorage
         public void WriteRecordToStream(object record, object dbApplyStream)
         {
             var batches = dbApplyStream.CastWithValidate<FileRecordStorageBatches>("dbApplyStream");
+
             var recordInfo = new FileRecordStorageRecordInfo();
             this.DynamicManager.FillRecordInfoFromDynamicRecord(recordInfo, record);
+
             DateTime batchStartTime;
             DateTime batchEndTime;
             GetBatchTimesFromRecordTime(recordInfo.RecordTime, out batchStartTime, out batchEndTime);
+
             var matchBatch = batches.Batches.GetOrCreateItem(batchStartTime, () => new FileRecordStorageBatchInfo { FromTime = batchStartTime, ToTime = batchEndTime });
             matchBatch.Records.Add(recordInfo);
             batches.RecordCount++;
@@ -150,22 +151,16 @@ namespace Vanrise.GenericData.FileDataStorage
                 long? existingFileMetadataId = GetMatchFileMetadataId(batch.FromTime, batch.ToTime);
 
                 long fileMetadataId;
-
                 if (existingFileMetadataId.HasValue)
-                {
                     fileMetadataId = existingFileMetadataId.Value;
-                }
                 else
-                {
                     fileMetadataId = InsertFileMetadataRecord(preparedConfig, batch, parentFolderRelativePath);
-                }
 
                 string fileName = BuildFileName(fileMetadataId, batch.FromTime);
 
                 DateTime minRecordTime, maxRecordTime;
                 long minRecordId, maxRecordId;
-                SaveRecordsToFile(fileMetadataId, batch.Records, parentFolderPath, fileName,
-                    out minRecordTime, out maxRecordTime, out minRecordId, out maxRecordId);
+                SaveRecordsToFile(fileMetadataId, batch.Records, parentFolderPath, fileName, out minRecordTime, out maxRecordTime, out minRecordId, out maxRecordId);
 
                 bool isExistingFileMetadataUpdated = false;
                 if (existingFileMetadataId.HasValue)
@@ -251,7 +246,6 @@ namespace Vanrise.GenericData.FileDataStorage
 
         public void GetDataRecords(DateTime? from, DateTime? to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady, string orderColumnName = null, bool isOrderAscending = false)
         {
-            //FillTimeFilterFromFilterGroupIfAny(recordFilterGroup, ref from, ref to);
             bool isOrderByDate = orderColumnName == this.DataRecordType.Settings.DateTimeField;
 
             List<FileRecordStorageFileMetadata> fileMetadatas = GetFileMetadatas(from, to, isOrderAscending, null);
@@ -263,6 +257,7 @@ namespace Vanrise.GenericData.FileDataStorage
                 currentRecords = new List<FileRecordStorageRecord>();
             else
                 currentRecords = null;
+
             foreach (var fileMetadata in fileMetadatas)
             {
                 if (shouldStop())
@@ -272,12 +267,12 @@ namespace Vanrise.GenericData.FileDataStorage
                 {
                     if (previousFileMetadatas.Count > 0 && !previousFileMetadatas.Any(prevFile => AreTimePeriodsOverlapped(fileMetadata.MinTime, fileMetadata.MaxTime, prevFile.MinTime, prevFile.MaxTime)))
                     {
-                        //if (previousFileMetadatas.Count > 1)
                         currentRecords = isOrderAscending ? currentRecords.OrderBy(rec => rec.RecordTime).ToList() : currentRecords.OrderByDescending(rec => rec.RecordTime).ToList();
                         foreach (var record in currentRecords)
                         {
                             if (shouldStop())
                                 break;
+
                             onItemReady(record.Record);
                         }
                         currentRecords = new List<FileRecordStorageRecord>();
@@ -291,34 +286,24 @@ namespace Vanrise.GenericData.FileDataStorage
                 string[] fileNames;
                 List<string> fileFullPaths;
                 var recordInfos = ReadRecordInfosFromFileWithLock(fileMetadata.FileRecordStorageFileMetadataId, fileMetadata.ParentFolderRelativePath, out fileNames, out fileFullPaths);
-                if (!isOrderAscending)
-                    recordInfos.Reverse();
 
                 foreach (var recordInfo in recordInfos)
                 {
                     if (shouldStop())
                         break;
+
                     if (filterFromTime)
                     {
                         if (recordInfo.RecordTime < from.Value)
-                        {
-                            //if (isOrderAscending)
                             continue;
-                            //else
-                            //    break;
-                        }
-
                     }
+
                     if (filterToTime)
                     {
                         if (recordInfo.RecordTime >= to.Value)
-                        {
-                            //if (isOrderAscending)
-                            //    break;
-                            //else
                             continue;
-                        }
                     }
+
                     dynamic record = dynamicManager.GetDynamicRecordFromRecordInfo(recordInfo);
 
                     if (recordFilterGroup != null)
@@ -327,6 +312,7 @@ namespace Vanrise.GenericData.FileDataStorage
                         if (!s_recordFilterManager.IsFilterGroupMatch(recordFilterGroup, recordIsFilterGroupMatchContext))
                             continue;
                     }
+
                     if (currentRecords != null)
                         currentRecords.Add(new FileRecordStorageRecord(recordInfo, record));
                     else
@@ -340,7 +326,6 @@ namespace Vanrise.GenericData.FileDataStorage
             {
                 if (isOrderByDate)
                 {
-                    //if (previousFileMetadatas.Count > 1)
                     currentRecords = isOrderAscending ? currentRecords.OrderBy(rec => rec.RecordTime).ToList() : currentRecords.OrderByDescending(rec => rec.RecordTime).ToList();
                 }
                 else
@@ -361,24 +346,6 @@ namespace Vanrise.GenericData.FileDataStorage
         {
             return minTime1 <= maxTime2 && maxTime1 >= minTime2;
         }
-
-        //private void FillTimeFilterFromFilterGroupIfAny(RecordFilterGroup recordFilterGroup, ref DateTime? from, ref DateTime? to)
-        //{
-        //    if (from.HasValue && to.HasValue)
-        //        return;
-        //    if (recordFilterGroup == null || recordFilterGroup.Filters == null || recordFilterGroup.LogicalOperator == RecordQueryLogicalOperator.Or)
-        //        return;
-        //    foreach(var filter in recordFilterGroup.Filters)
-        //    {
-        //        var dateFilter = filter as DateTimeRecordFilter;
-        //        if (dateFilter != null)
-        //        {
-        //            if (filter.FieldName == this.DataRecordType.Settings.DateTimeField)
-        //            {
-        //                if(dateFilter.CompareOperator == DateTimeRecordFilterOperator.)
-        //            }
-        //        }
-        //}
 
         private static void AddFileMetadataReadyCondition(RDBConditionContext where)
         {
@@ -411,12 +378,12 @@ namespace Vanrise.GenericData.FileDataStorage
             throw new NotImplementedException();
         }
 
-        public bool Delete(List<object> recordFieldIds)
+        public void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateRecords(IEnumerable<dynamic> records, List<string> fieldsToJoin, List<string> fieldsToUpdate)
+        public bool Delete(List<object> recordFieldIds)
         {
             throw new NotImplementedException();
         }
@@ -446,8 +413,8 @@ namespace Vanrise.GenericData.FileDataStorage
 
             foreach (var fileMetadata in fileMetadatas)
             {
-                HashSet<long> fileIdsToDelete = new HashSet<long>(remainingIdsToDelete.Where(id => id >= fileMetadata.MinId && id <= fileMetadata.MaxId));
-                if (fileIdsToDelete.Count > 0)
+                HashSet<long> recordIdsToDelete = new HashSet<long>(remainingIdsToDelete.Where(id => id >= fileMetadata.MinId && id <= fileMetadata.MaxId));
+                if (recordIdsToDelete.Count > 0)
                 {
                     ChangeFileRecordsWithLock(fileMetadata.FileRecordStorageFileMetadataId, fileMetadata.ParentFolderRelativePath, fileMetadata.FromTime,
                         (existingRecordInfos) =>
@@ -455,7 +422,7 @@ namespace Vanrise.GenericData.FileDataStorage
                             List<FileRecordStorageRecordInfo> changedRecordInfos = new List<FileRecordStorageRecordInfo>();
                             foreach (var recordInfo in existingRecordInfos)
                             {
-                                if (!fileIdsToDelete.Contains(recordInfo.RecordId))
+                                if (!recordIdsToDelete.Contains(recordInfo.RecordId))
                                     changedRecordInfos.Add(recordInfo);
                                 else
                                     remainingIdsToDelete.Remove(recordInfo.RecordId);
@@ -463,10 +430,10 @@ namespace Vanrise.GenericData.FileDataStorage
                             return changedRecordInfos;
                         }, true);
                 }
+
                 if (remainingIdsToDelete.Count == 0)
                     break;
             }
-
         }
 
         public bool AreDataRecordsUpdated(ref object updateHandle)
@@ -580,162 +547,156 @@ namespace Vanrise.GenericData.FileDataStorage
 
         private FileRecordStoragePreparedConfig GetPreparedConfig()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordStorageManager.CacheManager>().GetOrCreateObject(
-                                string.Concat("FileRecordStorageDataManager_GetPreparedConfig_", _dataRecordStorage.DataRecordStorageId),
-                                () =>
-                                {
-                                    var metadataTableSchema = _dataRecordStorageSettings.MetadataSchemaName;
-                                    var metadataTableName = _dataRecordStorageSettings.MetadataTableName;
-                                    string metadataRDBTableName = string.Concat(metadataTableSchema, "_", metadataTableName, Guid.NewGuid());
+            string cacheName = string.Concat("FileRecordStorageDataManager_GetPreparedConfig_", _dataRecordStorage.DataRecordStorageId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DataRecordStorageManager.CacheManager>().GetOrCreateObject(cacheName, () =>
+                     {
+                         var metadataTableSchema = _dataRecordStorageSettings.MetadataSchemaName;
+                         var metadataTableName = _dataRecordStorageSettings.MetadataTableName;
+                         string metadataRDBTableName = string.Concat(metadataTableSchema, "_", metadataTableName, Guid.NewGuid());
 
-                                    var metadataRDBColumns = new Dictionary<string, RDBTableColumnDefinition>();
-                                    metadataRDBColumns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-                                    metadataRDBColumns.Add(COL_RuntimeNodeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
-                                    metadataRDBColumns.Add(COL_ParentFolderRelativePath, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 1000 });
-                                    metadataRDBColumns.Add(COL_FileNames, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
-                                    metadataRDBColumns.Add(COL_FromTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-                                    metadataRDBColumns.Add(COL_ToTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-                                    metadataRDBColumns.Add(COL_NbOfRecords, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-                                    metadataRDBColumns.Add(COL_MinTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-                                    metadataRDBColumns.Add(COL_MaxTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-                                    metadataRDBColumns.Add(COL_MinID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-                                    metadataRDBColumns.Add(COL_MaxID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
-                                    metadataRDBColumns.Add(COL_IsReady, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
-                                    metadataRDBColumns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-                                    metadataRDBColumns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+                         var metadataRDBColumns = new Dictionary<string, RDBTableColumnDefinition>();
+                         metadataRDBColumns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+                         metadataRDBColumns.Add(COL_RuntimeNodeID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
+                         metadataRDBColumns.Add(COL_ParentFolderRelativePath, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 1000 });
+                         metadataRDBColumns.Add(COL_FileNames, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+                         metadataRDBColumns.Add(COL_FromTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+                         metadataRDBColumns.Add(COL_ToTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+                         metadataRDBColumns.Add(COL_NbOfRecords, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+                         metadataRDBColumns.Add(COL_MinTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+                         metadataRDBColumns.Add(COL_MaxTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+                         metadataRDBColumns.Add(COL_MinID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+                         metadataRDBColumns.Add(COL_MaxID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+                         metadataRDBColumns.Add(COL_IsReady, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+                         metadataRDBColumns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+                         metadataRDBColumns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
-                                    var metadataRDBTableDefinition = new RDBTableDefinition
-                                    {
-                                        DBSchemaName = metadataTableSchema,
-                                        DBTableName = metadataTableName,
-                                        Columns = metadataRDBColumns,
-                                        IdColumnName = COL_ID,
-                                        CreatedTimeColumnName = COL_CreatedTime,
-                                        ModifiedTimeColumnName = COL_LastModifiedTime
-                                    };
+                         var metadataRDBTableDefinition = new RDBTableDefinition
+                         {
+                             DBSchemaName = metadataTableSchema,
+                             DBTableName = metadataTableName,
+                             Columns = metadataRDBColumns,
+                             IdColumnName = COL_ID,
+                             CreatedTimeColumnName = COL_CreatedTime,
+                             ModifiedTimeColumnName = COL_LastModifiedTime
+                         };
 
+                         List<string> fieldNamesToInsert = new List<string>();
+                         this.DataRecordType.Settings.IdField.ThrowIfNull("this.DataRecordType.Settings.IdField", this.DataRecordType.DataRecordTypeId);
+                         this.DataRecordType.Settings.DateTimeField.ThrowIfNull("this.DataRecordType.Settings.DateTimeField", this.DataRecordType.DataRecordTypeId);
+                         string idFieldName = this.DataRecordType.Settings.IdField;
+                         string dateTimeFieldName = this.DataRecordType.Settings.DateTimeField;
+                         bool idFieldFound = false;
+                         bool dateTimeFieldFound = false;
+                         foreach (var fld in this.DataRecordFieldsByName.Values.OrderBy(fld => fld.Name))
+                         {
+                             if (fld.Formula != null)
+                             {
+                                 continue;
+                             }
+                             if (fld.Name == idFieldName)
+                             {
+                                 idFieldFound = true;
+                                 continue;
+                             }
+                             if (fld.Name == dateTimeFieldName)
+                             {
+                                 dateTimeFieldFound = true;
+                                 continue;
+                             }
+                             fieldNamesToInsert.Add(fld.Name);
+                         }
 
-                                    List<string> fieldNamesToInsert = new List<string>();
-                                    this.DataRecordType.Settings.IdField.ThrowIfNull("this.DataRecordType.Settings.IdField", this.DataRecordType.DataRecordTypeId);
-                                    this.DataRecordType.Settings.DateTimeField.ThrowIfNull("this.DataRecordType.Settings.DateTimeField", this.DataRecordType.DataRecordTypeId);
-                                    string idFieldName = this.DataRecordType.Settings.IdField;
-                                    string dateTimeFieldName = this.DataRecordType.Settings.DateTimeField;
-                                    bool idFieldFound = false;
-                                    bool dateTimeFieldFound = false;
-                                    foreach (var fld in this.DataRecordFieldsByName.Values.OrderBy(fld => fld.Name))
-                                    {
-                                        if (fld.Formula != null)
-                                        {
-                                            continue;
-                                        }
-                                        if (fld.Name == idFieldName)
-                                        {
-                                            idFieldFound = true;
-                                            continue;
-                                        }
-                                        if (fld.Name == dateTimeFieldName)
-                                        {
-                                            dateTimeFieldFound = true;
-                                            continue;
-                                        }
-                                        fieldNamesToInsert.Add(fld.Name);
-                                    }
-                                    if (!idFieldFound)
-                                        throw new Exception($"ID field '{idFieldName}' not found in DataRecordType '{this.DataRecordType.DataRecordTypeId}'");
-                                    if (!dateTimeFieldFound)
-                                        throw new Exception($"ID field '{dateTimeFieldName}' not found in DataRecordType '{this.DataRecordType.DataRecordTypeId}'");
+                         if (!idFieldFound)
+                             throw new Exception($"ID field '{idFieldName}' not found in DataRecordType '{this.DataRecordType.DataRecordTypeId}'");
+                         if (!dateTimeFieldFound)
+                             throw new Exception($"ID field '{dateTimeFieldName}' not found in DataRecordType '{this.DataRecordType.DataRecordTypeId}'");
 
-                                    RDBSchemaManager.Current.RegisterDefaultTableDefinition(metadataRDBTableName, metadataRDBTableDefinition);
+                         RDBSchemaManager.Current.RegisterDefaultTableDefinition(metadataRDBTableName, metadataRDBTableDefinition);
 
-                                    FileRecordStoragePreparedConfig preparedConfig = new FileRecordStoragePreparedConfig
-                                    {
-                                        MetadataRDBTableUniqueName = metadataRDBTableName,
-                                        IdFieldName = idFieldName,
-                                        DateTimeFieldName = dateTimeFieldName,
-                                        GenerateRecordId = this._dataRecordStorageSettings.GenerateRecordIds,
-                                        FieldNamesForInsert = fieldNamesToInsert.ToArray(),
-                                        ConcatenatedFieldNamesForInsert = string.Join(this._dataRecordStorageSettings.FieldSeparator.ToString(), fieldNamesToInsert)
-                                    };
-                                    return preparedConfig;
-                                });
+                         FileRecordStoragePreparedConfig preparedConfig = new FileRecordStoragePreparedConfig
+                         {
+                             MetadataRDBTableUniqueName = metadataRDBTableName,
+                             IdFieldName = idFieldName,
+                             DateTimeFieldName = dateTimeFieldName,
+                             GenerateRecordId = this._dataRecordStorageSettings.GenerateRecordIds,
+                             FieldNamesForInsert = fieldNamesToInsert.ToArray(),
+                             ConcatenatedFieldNamesForInsert = string.Join(this._dataRecordStorageSettings.FieldSeparator.ToString(), fieldNamesToInsert)
+                         };
+                         return preparedConfig;
+                     });
         }
 
         private void ChangeFileRecordsWithLock(long fileMetadataId, string parentFolderRelativePath, DateTime batchFromTime,
             Func<List<FileRecordStorageRecordInfo>, List<FileRecordStorageRecordInfo>> changeRecords, bool recordsAlreadyOrdered = false)
         {
             string parentFolderPath = GetParentFolderPath(parentFolderRelativePath);
-            LockFileToChange(fileMetadataId,
-                () =>
-                {
-                    string[] oldFileNames;
-                    List<string> oldFileFullPaths;
-                    var existingRecordInfos = ReadRecordInfosFromFileWithLock(fileMetadataId, parentFolderRelativePath, out oldFileNames, out oldFileFullPaths);
-                    var changedRecordInfos = changeRecords(existingRecordInfos);
-                    if (changedRecordInfos != null && changedRecordInfos.Count > 0)
-                    {
-                        string newFileName = BuildFileName(fileMetadataId, batchFromTime);
-                        DateTime minRecordTime, maxRecordTime;
-                        long minRecordId, maxRecordId;
-                        SaveRecordsToFile(fileMetadataId, changedRecordInfos, parentFolderPath, newFileName,
-                            out minRecordTime, out maxRecordTime, out minRecordId, out maxRecordId, recordsAlreadyOrdered);
+            LockFileToChange(fileMetadataId, () =>
+                 {
+                     string[] oldFileNames;
+                     List<string> oldFileFullPaths;
+                     var existingRecordInfos = ReadRecordInfosFromFileWithLock(fileMetadataId, parentFolderRelativePath, out oldFileNames, out oldFileFullPaths);
+                     var changedRecordInfos = changeRecords(existingRecordInfos);
+                     if (changedRecordInfos != null && changedRecordInfos.Count > 0)
+                     {
+                         string newFileName = BuildFileName(fileMetadataId, batchFromTime);
+                         DateTime minRecordTime, maxRecordTime;
+                         long minRecordId, maxRecordId;
+                         SaveRecordsToFile(fileMetadataId, changedRecordInfos, parentFolderPath, newFileName, out minRecordTime, out maxRecordTime, out minRecordId,
+                             out maxRecordId, recordsAlreadyOrdered);
 
-                        LockReadFile(fileMetadataId,
-                            () =>
-                            {
-                                UpdateFileMetadata(fileMetadataId, newFileName, changedRecordInfos.Count, minRecordTime, maxRecordTime, minRecordId, maxRecordId);
-                            });
-                        if (oldFileFullPaths != null)
-                        {
-                            foreach (var oldFileFullPath in oldFileFullPaths)
-                            {
-                                File.Delete(oldFileFullPath);
-                            }
-                        }
+                         LockReadFile(fileMetadataId, () =>
+                         {
+                             UpdateFileMetadata(fileMetadataId, newFileName, changedRecordInfos.Count, minRecordTime, maxRecordTime, minRecordId, maxRecordId);
+                         });
 
-                    }
-                    else
-                    {
-                        var queryContext = new RDBQueryContext(GetDataProvider());
-                        var deleteQuery = queryContext.AddDeleteQuery();
-                        deleteQuery.FromTable(GetPreparedConfig().MetadataRDBTableQuerySource);
-                        deleteQuery.Where().EqualsCondition(COL_ID).Value(fileMetadataId);
-                        LockReadFile(fileMetadataId,
-                            () =>
-                            {
-                                queryContext.ExecuteNonQuery();
-                            });
-                        foreach (var oldFileFullPath in oldFileFullPaths)
-                        {
-                            File.Delete(oldFileFullPath);
-                        }
-                        if (parentFolderRelativePath != null)
-                        {
-                            LockCreateDirectory(
-                                () =>
-                                {
-                                    string folderRelativePath = parentFolderRelativePath;
-                                    while (!string.IsNullOrEmpty(folderRelativePath))
-                                    {
-                                        string folderFullPath = Path.Combine(GetRootFolderPath(), folderRelativePath);
-                                        if (Directory.Exists(folderFullPath) && !Directory.EnumerateFiles(folderFullPath).Any() && !Directory.EnumerateDirectories(folderFullPath).Any())
-                                        {
-                                            Directory.Delete(folderFullPath);
-                                            int lastIndexOfSlash = folderRelativePath.LastIndexOf('\\');
+                         if (oldFileFullPaths != null)
+                         {
+                             foreach (var oldFileFullPath in oldFileFullPaths)
+                             {
+                                 File.Delete(oldFileFullPath);
+                             }
+                         }
+                     }
+                     else
+                     {
+                         var queryContext = new RDBQueryContext(GetDataProvider());
+                         var deleteQuery = queryContext.AddDeleteQuery();
+                         deleteQuery.FromTable(GetPreparedConfig().MetadataRDBTableQuerySource);
+                         deleteQuery.Where().EqualsCondition(COL_ID).Value(fileMetadataId);
+                         LockReadFile(fileMetadataId, () => { queryContext.ExecuteNonQuery(); });
 
-                                            if (lastIndexOfSlash >= 0)
-                                                folderRelativePath = folderRelativePath.Substring(0, lastIndexOfSlash);
-                                            else
-                                                break;
-                                        }
-                                        else
-                                        {
-                                            break;
-                                        }
-                                    }
-                                });
-                        }
-                    }
-                });
+                         foreach (var oldFileFullPath in oldFileFullPaths)
+                         {
+                             File.Delete(oldFileFullPath);
+                         }
+
+                         if (parentFolderRelativePath != null)
+                         {
+                             LockCreateDirectory(() =>
+                             {
+                                 string folderRelativePath = parentFolderRelativePath;
+                                 while (!string.IsNullOrEmpty(folderRelativePath))
+                                 {
+                                     string folderFullPath = Path.Combine(GetRootFolderPath(), folderRelativePath);
+                                     if (Directory.Exists(folderFullPath) && !Directory.EnumerateFiles(folderFullPath).Any() && !Directory.EnumerateDirectories(folderFullPath).Any())
+                                     {
+                                         Directory.Delete(folderFullPath);
+                                         int lastIndexOfSlash = folderRelativePath.LastIndexOf('\\');
+
+                                         if (lastIndexOfSlash >= 0)
+                                             folderRelativePath = folderRelativePath.Substring(0, lastIndexOfSlash);
+                                         else
+                                             break;
+                                     }
+                                     else
+                                     {
+                                         break;
+                                     }
+                                 }
+                             });
+                         }
+                     }
+                 });
         }
 
         private void LockFileToChange(long fileMetadataId, Action onLocked)
@@ -756,6 +717,7 @@ namespace Vanrise.GenericData.FileDataStorage
                     default: throw new NotSupportedException($"this._dataRecordStorageSettings.FolderStructureType '{this._dataRecordStorageSettings.FolderStructureType.Value.ToString()}'");
                 }
             }
+
             string parentFolderPath = GetParentFolderPath(parentFolderRelativePath);
             if (createIfNotExists)
             {
@@ -792,19 +754,19 @@ namespace Vanrise.GenericData.FileDataStorage
             Lock($"FileRecordStorage_CreateDirectory", onLocked);
         }
 
-        private void SaveRecordsToFile(long fileMetadataId, List<FileRecordStorageRecordInfo> records,
-            string parentFolderPath, string fileName, out DateTime minRecordTime, out DateTime maxRecordTime,
-            out long minRecordId, out long maxRecordId, bool recordsAlreadyOrdered = false)
+        private void SaveRecordsToFile(long fileMetadataId, List<FileRecordStorageRecordInfo> records, string parentFolderPath, string fileName, out DateTime minRecordTime,
+            out DateTime maxRecordTime, out long minRecordId, out long maxRecordId, bool recordsAlreadyOrdered = false)
         {
-
             string targetFileFullPath = Path.Combine(parentFolderPath, fileName);
             Char fieldSeparator = this._dataRecordStorageSettings.FieldSeparator;
+
             minRecordTime = DateTime.MaxValue;
             maxRecordTime = DateTime.MinValue;
             minRecordId = long.MaxValue;
             maxRecordId = long.MinValue;
             if (!recordsAlreadyOrdered)
                 records = records.OrderBy(rec => rec.RecordTime).ToList();
+
             List<string> lines = new List<string>();
             foreach (var record in records)
             {
@@ -820,6 +782,7 @@ namespace Vanrise.GenericData.FileDataStorage
                 if (record.RecordId > maxRecordId)
                     maxRecordId = record.RecordId;
             }
+
             WriteAllLinesToFile(targetFileFullPath, lines);
         }
 
@@ -865,6 +828,7 @@ namespace Vanrise.GenericData.FileDataStorage
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(GetPreparedConfig().MetadataRDBTableQuerySource, "mtdata", null, true);
             selectQuery.SelectColumns().AllTableColumns("mtdata");
+
             var where = selectQuery.Where();
             if (to.HasValue)
                 where.LessOrEqualCondition(COL_FromTime).Value(to.Value);
@@ -872,6 +836,7 @@ namespace Vanrise.GenericData.FileDataStorage
                 where.GreaterOrEqualCondition(COL_ToTime).Value(from.Value);
             if (addConditionsToWhere != null)
                 addConditionsToWhere(where);
+
             AddFileMetadataReadyCondition(where);
             if (isOrderAscending.HasValue)
             {
@@ -880,6 +845,7 @@ namespace Vanrise.GenericData.FileDataStorage
                 sortContext.ByColumn(COL_FromTime, sortDirection);
                 sortContext.ByColumn(COL_ToTime, sortDirection);
             }
+
             List<FileRecordStorageFileMetadata> fileMetadatas = queryContext.GetItems(FileRecordStorageFileMetadataMapper);
             return fileMetadatas;
         }
@@ -890,238 +856,13 @@ namespace Vanrise.GenericData.FileDataStorage
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(GetPreparedConfig().MetadataRDBTableQuerySource, "mtdata", 1, true);
             selectQuery.SelectColumns().Column(COL_ID);
+
             var where = selectQuery.Where();
             where.EqualsCondition(COL_FromTime).Value(fromTime);
             where.EqualsCondition(COL_ToTime).Value(toTime);
             AddFileMetadataReadyCondition(where);
             return queryContext.ExecuteScalar().NullableLongValue;
         }
-
-        #region Deleted Code
-
-        //public DateTime? GetMinDateTimeWithMaxIdAfterId(long id, string idFieldName, string dateTimeFieldName, out long? maxId)
-        //{
-        //    if (idFieldName != this.DataRecordType.Settings.IdField)
-        //        throw new NotSupportedException($"idFieldName '{idFieldName}' is different than record type Id Field '{this.DataRecordType.Settings.IdField}'. Record TypeId '{this.DataRecordType.DataRecordTypeId}'");
-        //    if (dateTimeFieldName != this.DataRecordType.Settings.DateTimeField)
-        //        throw new NotSupportedException($"dateTimeFieldName '{dateTimeFieldName}' is different than record type DateTime Field '{this.DataRecordType.Settings.DateTimeField}'. Record TypeId '{this.DataRecordType.DataRecordTypeId}'");
-
-        //    var queryContext = new RDBQueryContext(GetDataProvider());
-        //    var selectQuery = queryContext.AddSelectQuery();
-        //    selectQuery.From(GetPreparedConfig().MetadataRDBTableQuerySource, "mtdata", null, true);
-        //    selectQuery.SelectColumns().AllTableColumns("mtdata");
-
-        //    var where = selectQuery.Where();
-        //    where.GreaterThanCondition(COL_MaxID).Value(id);
-        //    AddFileMetadataReadyCondition(where);
-
-        //    List<FileRecordStorageFileMetadata> fileMetadatas = queryContext.GetItems(FileRecordStorageFileMetadataMapper);
-
-        //    DateTime? minDate = null;
-        //    maxId = null;
-        //    if (fileMetadatas != null && fileMetadatas.Count > 0)
-        //    {
-        //        foreach (var fileMetadata in fileMetadatas)
-        //        {
-        //            string[] fileNames;
-        //            List<string> fileFullPaths;
-        //            List<FileRecordStorageRecordInfo> recordInfos = ReadRecordInfosFromFileWithLock(fileMetadata.FileRecordStorageFileMetadataId, fileMetadata.ParentFolderRelativePath, out fileNames, out fileFullPaths);
-        //            if (recordInfos != null)
-        //            {
-        //                foreach (var recordInfo in recordInfos)
-        //                {
-        //                    if (recordInfo.RecordId > id)
-        //                    {
-        //                        if (!minDate.HasValue || minDate.Value > recordInfo.RecordTime)
-        //                            minDate = recordInfo.RecordTime;
-        //                        if (!maxId.HasValue || maxId.Value < recordInfo.RecordId)
-        //                            maxId = recordInfo.RecordId;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return minDate;
-        //}
-
-        //private class ReadRecordInfosTaskHandle
-        //{
-        //    public bool IsTaskStopped { get; set; }
-        //}
-
-        //private void ReadRecordsFromFileWithLock(long fileRecordStorageFileMetadataId, string parentFolderRelativePath, string fileName,
-        //    Func<FileRecordStorageRecordInfo, bool> shouldReadRecordFromInfo, Action<FileRecordStorageRecordInfo, dynamic> onRecordRead, ReadRecordInfosTaskHandle taskHandle)
-        //{
-        //    ConcurrentQueue<FileRecordStorageRecordInfo> qRecordInfos = new ConcurrentQueue<FileRecordStorageRecordInfo>();
-
-        //    bool isTaskReadRecordInfosCompleted = false;
-        //    Task taskReadRecordInfos = new Task(
-        //        () =>
-        //        {
-        //            try
-        //            {
-        //                ReadRecordInfosFromFileWithLock(fileRecordStorageFileMetadataId, parentFolderRelativePath, fileName,
-        //                    (recordInfo) =>
-        //                    {
-        //                        if (shouldReadRecordFromInfo(recordInfo))
-        //                            qRecordInfos.Enqueue(recordInfo);
-        //                    }, taskHandle);
-        //            }
-        //            finally
-        //            {
-        //                isTaskReadRecordInfosCompleted = true;
-        //            }
-        //        });
-        //    taskReadRecordInfos.Start();
-
-        //    var dynamicManager = this.DynamicManager;
-        //    while (!taskHandle.IsTaskStopped && (!isTaskReadRecordInfosCompleted || qRecordInfos.Count > 0))
-        //    {
-        //        FileRecordStorageRecordInfo recordInfo;
-        //        while (!taskHandle.IsTaskStopped && qRecordInfos.TryDequeue(out recordInfo))
-        //        {
-        //            dynamic record = dynamicManager.GetDynamicRecordFromRecordInfo(recordInfo);
-        //            onRecordRead(recordInfo, record);
-        //        }
-        //        Thread.Sleep(50);
-        //    }
-
-        //    if (taskReadRecordInfos.Exception != null)
-        //        throw taskReadRecordInfos.Exception;
-        //}
-
-        //private void ReadRecordInfosFromFileWithLock(long fileRecordStorageFileMetadataId, string parentFolderRelativePath, string fileName,
-        //    Action<FileRecordStorageRecordInfo> onRecordInfoRead, ReadRecordInfosTaskHandle taskHandle)
-        //{
-        //    ConcurrentQueue<string> qLines = new ConcurrentQueue<string>();
-        //    ConcurrentQueue<FileRecordStorageRecordInfo> qRecordInfos = new ConcurrentQueue<FileRecordStorageRecordInfo>();
-
-        //    bool isTaskReadLinesCompleted = false;
-        //    Task taskReadLines = new Task(
-        //        () =>
-        //        {
-        //            try
-        //            {
-        //                ReadFileWithLock(fileRecordStorageFileMetadataId, parentFolderRelativePath, fileName,
-        //                    (line) => qLines.Enqueue(line));
-        //            }
-        //            finally
-        //            {
-        //                isTaskReadLinesCompleted = true;
-        //            }
-        //        });
-
-        //    bool isTaskParseLinesCompleted = false;
-        //    Task taskParseLines = new Task(
-        //        () =>
-        //        {
-        //            try
-        //            {
-        //                while(!taskHandle.IsTaskStopped && (!isTaskReadLinesCompleted || qLines.Count > 0))
-        //                {
-        //                    string line;
-        //                    while(!taskHandle.IsTaskStopped && qLines.TryDequeue(out line))
-        //                    {
-        //                        string datetimeValue = line.Substring(0, line.IndexOf(this._dataRecordStorageSettings.FieldSeparator));
-        //                        datetimeValue.ThrowIfNull("datetimeValue");
-        //                        string lineWithoutDate = line.Substring(datetimeValue.Length + 1);
-        //                        string idValue = lineWithoutDate.Substring(0, lineWithoutDate.IndexOf(this._dataRecordStorageSettings.FieldSeparator));
-        //                        idValue.ThrowIfNull("idValue");
-        //                        DateTime recordDateTime;
-        //                        if (!DateTime.TryParse(datetimeValue, out recordDateTime))
-        //                            throw new Exception($"Cannot parse datetimeValue '{datetimeValue}' in line '{line}'");
-        //                        long recordId;
-        //                        if (!long.TryParse(idValue, out recordId))
-        //                            throw new Exception($"Cannot parse idValue '{idValue}' in line '{line}'");
-        //                        var recordInfo = new FileRecordStorageRecordInfo
-        //                        {
-        //                            RecordTime = recordDateTime,
-        //                            RecordId = recordId,
-        //                            RecordContent = lineWithoutDate.Substring(idValue.Length + 1)
-        //                        };
-        //                        qRecordInfos.Enqueue(recordInfo);
-        //                    }
-        //                    Thread.Sleep(50);
-        //                }
-        //            }
-        //            finally
-        //            {
-        //                isTaskParseLinesCompleted = true;
-        //            }
-        //        });
-
-        //    taskReadLines.Start();
-        //    taskParseLines.Start();
-
-        //    while(!taskHandle.IsTaskStopped && (!isTaskParseLinesCompleted || qRecordInfos.Count > 0))
-        //    {
-        //        FileRecordStorageRecordInfo recordInfo;
-        //        while(!taskHandle.IsTaskStopped && qRecordInfos.TryDequeue(out recordInfo))
-        //        {
-        //            onRecordInfoRead(recordInfo);
-        //        }
-        //        Thread.Sleep(50);
-        //    }
-
-        //    if (taskReadLines.Exception != null)
-        //        throw taskReadLines.Exception;
-        //    if (taskParseLines.Exception != null)
-        //        throw taskParseLines.Exception;
-        //}
-
-
-        //private void ReadFileWithLock(long fileRecordStorageFileMetadataId, string parentFolderRelativePath, string fileName, Action<string> onLineRead)
-        //{
-        //    string fullFilePath;
-        //    fullFilePath = GetFileFullPath(parentFolderRelativePath, fileName);
-
-        //    LockReadFile(fileRecordStorageFileMetadataId,
-        //        () =>
-        //        {
-        //            if (File.Exists(fullFilePath))
-        //            {
-        //                ReadAllLinesFromFile(fullFilePath, onLineRead);
-        //            }
-        //            else
-        //            {
-        //                var queryContext = new RDBQueryContext(GetDataProvider());
-        //                var selectQuery = queryContext.AddSelectQuery();
-        //                selectQuery.From(GetPreparedConfig().MetadataRDBTableQuerySource, "mtdata", null, true);
-        //                selectQuery.SelectColumns().Columns(COL_FileName);
-        //                selectQuery.Where().EqualsCondition(COL_ID).Value(fileRecordStorageFileMetadataId);
-        //                fileName = queryContext.ExecuteScalar().StringValue;
-        //                if (fileName != null)
-        //                {
-        //                    fullFilePath = GetFileFullPath(parentFolderRelativePath, fileName);
-        //                    ReadAllLinesFromFile(fullFilePath, onLineRead);
-        //                }
-        //            }
-        //        });
-        //}
-
-        //private void ReadAllLinesFromFile(string fullFilePath, Action<string> onLineRead)
-        //{
-        //    using (FileStream fs = File.Open(fullFilePath, FileMode.Open))
-        //    {
-        //        using (BufferedStream bs = new BufferedStream(fs))
-        //        {
-        //            using (StreamReader sr = new StreamReader(bs))
-        //            {
-        //                string s;
-        //                while ((s = sr.ReadLine()) != null)
-        //                {
-        //                    onLineRead(s);
-        //                }
-        //                sr.Close();
-        //            }
-        //            bs.Close();
-        //        }
-        //        fs.Close();
-        //    }
-        //    //return File.ReadAllLines(fullFilePath);
-        //}
-
-        #endregion
 
         private List<FileRecordStorageRecordInfo> ReadRecordInfosFromFileWithLock(long fileRecordStorageFileMetadataId, string parentFolderRelativePath, out string[] fileNames, out List<string> fileFullPaths)
         {
@@ -1136,6 +877,7 @@ namespace Vanrise.GenericData.FileDataStorage
                     selectQuery.From(GetPreparedConfig().MetadataRDBTableQuerySource, "mtdata", null, true);
                     selectQuery.SelectColumns().Columns(COL_FileNames);
                     selectQuery.Where().EqualsCondition(COL_ID).Value(fileRecordStorageFileMetadataId);
+
                     string fileNamesConcatenated = queryContext.ExecuteScalar().StringValue;
                     if (fileNamesConcatenated != null)
                     {
@@ -1156,12 +898,15 @@ namespace Vanrise.GenericData.FileDataStorage
                                         string lineWithoutDate = line.Substring(datetimeValue.Length + 1);
                                         string idValue = lineWithoutDate.Substring(0, lineWithoutDate.IndexOf(this._dataRecordStorageSettings.FieldSeparator));
                                         idValue.ThrowIfNull("idValue");
+
                                         DateTime recordDateTime;
                                         if (!DateTime.TryParse(datetimeValue, out recordDateTime))
                                             throw new Exception($"Cannot parse datetimeValue '{datetimeValue}' in line '{line}'");
+
                                         long recordId;
                                         if (!long.TryParse(idValue, out recordId))
                                             throw new Exception($"Cannot parse idValue '{idValue}' in line '{line}'");
+
                                         var recordInfo = new FileRecordStorageRecordInfo
                                         {
                                             RecordTime = recordDateTime,
@@ -1178,6 +923,7 @@ namespace Vanrise.GenericData.FileDataStorage
                             });
                     }
                 });
+
             fileNames = fileNames_Local;
             fileFullPaths = fileFullPaths_Local;
             return recordInfos;
@@ -1196,11 +942,13 @@ namespace Vanrise.GenericData.FileDataStorage
                     selectQuery.From(GetPreparedConfig().MetadataRDBTableQuerySource, "mtdata", null, true);
                     selectQuery.SelectColumns().Columns(COL_FileNames);
                     selectQuery.Where().EqualsCondition(COL_ID).Value(fileRecordStorageFileMetadataId);
+
                     string fileNamesConcatenated = queryContext.ExecuteScalar().StringValue;
                     if (fileNamesConcatenated != null)
                     {
                         fileNames_Local = fileNamesConcatenated.Split(',');
                         fileFullPaths_Local = fileNames_Local.Select(fileName => GetFileFullPath(parentFolderRelativePath, fileName)).ToList();
+
                         lines = new List<string>();
                         Parallel.ForEach(fileFullPaths_Local,
                             (fullFilePath) =>
@@ -1216,6 +964,7 @@ namespace Vanrise.GenericData.FileDataStorage
                             });
                     }
                 });
+
             fileNames = fileNames_Local;
             fileFullPaths = fileFullPaths_Local;
             return lines;
@@ -1329,6 +1078,7 @@ namespace Vanrise.GenericData.FileDataStorage
         {
             this.Batches = new Dictionary<DateTime, FileRecordStorageBatchInfo>();
         }
+
         public Dictionary<DateTime, FileRecordStorageBatchInfo> Batches { get; private set; }
 
         public int RecordCount { get; set; }
