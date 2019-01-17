@@ -35,16 +35,14 @@ namespace Vanrise.Common.Business
             InsertOperationOutput<VRDynamicAPIModuleDetails> insertOperationOutput = new InsertOperationOutput<VRDynamicAPIModuleDetails>();
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int vrDynamicAPIModuleId = -1;
-
+            vrDynamicAPIModule.VRDynamicAPIModuleId = Guid.NewGuid();
             int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
             vrDynamicAPIModule.CreatedBy = loggedInUserId;
             vrDynamicAPIModule.LastModifiedBy = loggedInUserId;
 
-            bool insertActionSuccess = vrDynamicAPIModuleDataManager.Insert(vrDynamicAPIModule, out vrDynamicAPIModuleId);
+            bool insertActionSuccess = vrDynamicAPIModuleDataManager.Insert(vrDynamicAPIModule);
             if (insertActionSuccess)
             {
-                vrDynamicAPIModule.VRDynamicAPIModuleId = vrDynamicAPIModuleId;
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 VRActionLogger.Current.TrackAndLogObjectAdded(VRDynamicAPIModuleLoggableEntity.Instance, vrDynamicAPIModule);
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
@@ -57,13 +55,13 @@ namespace Vanrise.Common.Business
             return insertOperationOutput;
         }
 
-        public VRDynamicAPIModule GetVRDynamicAPIModuleById(int vrDynamicAPIModuleId)
+        public VRDynamicAPIModule GetVRDynamicAPIModuleById(Guid vrDynamicAPIModuleId)
         {
             var allVRDynamicAPIModules = GetCachedVRDynamicAPIModules();
             return allVRDynamicAPIModules.GetRecord(vrDynamicAPIModuleId);
         }
 
-        public string GetVRDynamicAPIModuleName(int vrDynamicAPIModuleID)
+        public string GetVRDynamicAPIModuleName(Guid vrDynamicAPIModuleID)
         {
             var vRDynamicAPIModule = GetVRDynamicAPIModuleById(vrDynamicAPIModuleID);
             if (vRDynamicAPIModule == null)
@@ -93,7 +91,7 @@ namespace Vanrise.Common.Business
             return updateOperationOutput;
         }
 
-        public Dictionary<int, VRDynamicAPIModule> GetAllVRDynamicAPIModules()
+        public Dictionary<Guid, VRDynamicAPIModule> GetAllVRDynamicAPIModules()
         {
             return GetCachedVRDynamicAPIModules();
         }
@@ -113,7 +111,7 @@ namespace Vanrise.Common.Business
                 return vrDynamicAPIModuleDataManager.AreVRDynamicAPIModulesUpdated(ref _updateHandle);
             }
         }
-        private Dictionary<int, VRDynamicAPIModule> GetCachedVRDynamicAPIModules()
+        private Dictionary<Guid, VRDynamicAPIModule> GetCachedVRDynamicAPIModules()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
                .GetOrCreateObject("GetCachedVRDynamicAPIModules", () =>

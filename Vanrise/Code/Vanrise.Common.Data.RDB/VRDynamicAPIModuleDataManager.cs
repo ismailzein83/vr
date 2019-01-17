@@ -25,7 +25,7 @@ namespace Vanrise.Common.Data.RDB
 		static VRDynamicAPIModuleDataManager()
 		{
 			var columns = new Dictionary<string, RDBTableColumnDefinition>();
-			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
 			columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
 			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 			columns.Add(COL_CreatedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
@@ -55,26 +55,18 @@ namespace Vanrise.Common.Data.RDB
 			return queryContext.GetItems(VRDynamicAPIModuleMapper);
 		}
 
-		public bool Insert(VRDynamicAPIModule vrDynamicAPIModule, out int insertedId)
+		public bool Insert(VRDynamicAPIModule vrDynamicAPIModule)
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var insertQuery = queryContext.AddInsertQuery();
 			insertQuery.IntoTable(TABLE_NAME);
 			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.EqualsCondition(COL_Name).Value(vrDynamicAPIModule.Name);
-			insertQuery.AddSelectGeneratedId();
-			insertQuery.Column(COL_Name).Value(vrDynamicAPIModule.Name);
+            insertQuery.Column(COL_ID).Value(vrDynamicAPIModule.VRDynamicAPIModuleId);
+            insertQuery.Column(COL_Name).Value(vrDynamicAPIModule.Name);
 			insertQuery.Column(COL_CreatedBy).Value(vrDynamicAPIModule.CreatedBy);
 			insertQuery.Column(COL_LastModifiedBy).Value(vrDynamicAPIModule.LastModifiedBy);
-
-			int? id = queryContext.ExecuteScalar().NullableIntValue;
-			if (id.HasValue)
-			{
-				insertedId = id.Value;
-				return true;
-			}
-			insertedId = 0;
-			return false;
+			return queryContext.ExecuteNonQuery() > 0;
 		}
 
 		public bool Update(VRDynamicAPIModule vrDynamicAPIModule)
@@ -109,7 +101,7 @@ namespace Vanrise.Common.Data.RDB
 		{
 			return new VRDynamicAPIModule
 			{
-				VRDynamicAPIModuleId = reader.GetInt(COL_ID),
+				VRDynamicAPIModuleId = reader.GetGuid(COL_ID),
 				Name = reader.GetString(COL_Name),
 				CreatedTime = reader.GetDateTime(COL_CreatedTime),
 				CreatedBy = reader.GetInt(COL_CreatedBy),

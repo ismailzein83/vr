@@ -48,16 +48,14 @@ namespace Vanrise.Common.Business
             InsertOperationOutput<VRDynamicAPIDetails> insertOperationOutput = new InsertOperationOutput<VRDynamicAPIDetails>();
             insertOperationOutput.Result = InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int vrDynamicAPIId = -1;
-
+            vrDynamicAPI.VRDynamicAPIId = Guid.NewGuid();
             int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
             vrDynamicAPI.CreatedBy = loggedInUserId;
             vrDynamicAPI.LastModifiedBy = loggedInUserId;
 
-            bool insertActionSuccess = vrDynamicAPIDataManager.Insert(vrDynamicAPI, out vrDynamicAPIId);
+            bool insertActionSuccess = vrDynamicAPIDataManager.Insert(vrDynamicAPI);
             if (insertActionSuccess)
             {
-                vrDynamicAPI.VRDynamicAPIId = vrDynamicAPIId;
                 GetCacheManager().SetCacheExpired();
                 VRActionLogger.Current.TrackAndLogObjectAdded(VRDynamicAPILoggableEntity.Instance, vrDynamicAPI);
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
@@ -70,7 +68,7 @@ namespace Vanrise.Common.Business
             return insertOperationOutput;
         }
 
-        public VRDynamicAPI GetVRDynamicAPIById(int vrDynamicAPIId)
+        public VRDynamicAPI GetVRDynamicAPIById(Guid vrDynamicAPIId)
         {
             var allVRDynamicAPIs = GetCachedVRDynamicAPIs();
             return allVRDynamicAPIs.GetRecord(vrDynamicAPIId);
@@ -136,7 +134,7 @@ namespace Vanrise.Common.Business
 
         #region Private Methods
        
-        private Dictionary<long, VRDynamicAPI> GetCachedVRDynamicAPIs()
+        private Dictionary<Guid, VRDynamicAPI> GetCachedVRDynamicAPIs()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
                .GetOrCreateObject("GetCachedVRDynamicAPIs", () =>

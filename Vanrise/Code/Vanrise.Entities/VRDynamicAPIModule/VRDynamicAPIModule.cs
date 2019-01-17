@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public class VRDynamicAPIModule
     {
-        public int VRDynamicAPIModuleId { get; set; }
+        public Guid VRDynamicAPIModuleId { get; set; }
         public string Name { get; set; }
         public DateTime CreatedTime { get; set; }
         public int CreatedBy { get; set; }

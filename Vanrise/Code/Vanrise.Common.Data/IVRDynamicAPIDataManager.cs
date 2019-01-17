@@ -11,7 +11,7 @@ namespace Vanrise.Common.Data
     {
         List<VRDynamicAPI> GetVRDynamicAPIs();
         bool AreVRDynamicAPIsUpdated(ref object updateHandle);
-        bool Insert(VRDynamicAPI vrDynamicAPI, out int insertedId);
+        bool Insert(VRDynamicAPI vrDynamicAPI);
         bool Update(VRDynamicAPI vrDynamicAPI);
 
     }

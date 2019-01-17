@@ -27,9 +27,9 @@ namespace Vanrise.Common.Data.RDB
 		static VRDynamicAPIDataManager()
 		{
 			var columns = new Dictionary<string, RDBTableColumnDefinition>();
-			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+			columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
 			columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 255 });
-			columns.Add(COL_ModuleId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+			columns.Add(COL_ModuleId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
 			columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
 			columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 			columns.Add(COL_CreatedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
@@ -65,7 +65,7 @@ namespace Vanrise.Common.Data.RDB
 			return queryContext.GetItems(VRDynamicAPIMapper);
 		}
 
-		public bool Insert(VRDynamicAPI vrDynamicAPI, out int insertedId)
+		public bool Insert(VRDynamicAPI vrDynamicAPI)
 		{
 			var queryContext = new RDBQueryContext(GetDataProvider());
 			var insertQuery = queryContext.AddInsertQuery();
@@ -73,23 +73,16 @@ namespace Vanrise.Common.Data.RDB
 			var ifNotExist = insertQuery.IfNotExists(TABLE_ALIAS);
 			ifNotExist.EqualsCondition(COL_Name).Value(vrDynamicAPI.Name);
 			ifNotExist.EqualsCondition(COL_ModuleId).Value(vrDynamicAPI.ModuleId);
-			insertQuery.AddSelectGeneratedId();
-			insertQuery.Column(COL_Name).Value(vrDynamicAPI.Name);
+            insertQuery.Column(COL_ID).Value(vrDynamicAPI.VRDynamicAPIId);
+            insertQuery.Column(COL_Name).Value(vrDynamicAPI.Name);
 			insertQuery.Column(COL_ModuleId).Value(vrDynamicAPI.ModuleId);
             if(vrDynamicAPI.Settings != null)
 			    insertQuery.Column(COL_Settings).Value(Vanrise.Common.Serializer.Serialize(vrDynamicAPI.Settings));
 			insertQuery.Column(COL_CreatedBy).Value(vrDynamicAPI.CreatedBy);
 			insertQuery.Column(COL_LastModifiedBy).Value(vrDynamicAPI.LastModifiedBy);
+			return queryContext.ExecuteNonQuery() > 0;
 
-			int? id = queryContext.ExecuteScalar().NullableIntValue;
-			if (id.HasValue)
-			{
-				insertedId = id.Value;
-				return true;
-			}
-			insertedId = 0;
-			return false;
-		}
+        }
 
 		public bool Update(VRDynamicAPI vrDynamicAPI)
 		{
@@ -125,9 +118,9 @@ namespace Vanrise.Common.Data.RDB
 		{
 			return new VRDynamicAPI
 			{
-				VRDynamicAPIId =reader.GetLong(COL_ID),
+				VRDynamicAPIId =reader.GetGuid(COL_ID),
 				Name = reader.GetString(COL_Name),
-				ModuleId = reader.GetInt(COL_ModuleId),
+				ModuleId = reader.GetGuid(COL_ModuleId),
 				Settings = Vanrise.Common.Serializer.Deserialize<VRDynamicAPISettings>(reader.GetString(COL_Settings)),
 				CreatedTime =reader.GetDateTime(COL_CreatedTime),
 				CreatedBy =reader.GetInt(COL_CreatedBy),

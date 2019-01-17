@@ -22,17 +22,13 @@ namespace Vanrise.Common.Data.SQL
             return GetItemsSP("[common].[sp_VRDynamicAPI_GetAll]", VRDynamicAPIMapper);
         }
 
-        public bool Insert(VRDynamicAPI vrDynamicAPI, out int insertedId)
+        public bool Insert(VRDynamicAPI vrDynamicAPI)
         {
-            object id;
-
             string serializedVRDynamicAPISettings = null;
 
             if (vrDynamicAPI.Settings != null)
                 serializedVRDynamicAPISettings = Vanrise.Common.Serializer.Serialize(vrDynamicAPI.Settings);
-            int nbOfRecordsAffected = ExecuteNonQuerySP("[common].[sp_VRDynamicAPI_Insert]", out id, vrDynamicAPI.Name, vrDynamicAPI.ModuleId, serializedVRDynamicAPISettings, vrDynamicAPI.CreatedBy, vrDynamicAPI.LastModifiedBy);
-            insertedId = Convert.ToInt32(id);
-
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[common].[sp_VRDynamicAPI_Insert]", vrDynamicAPI.VRDynamicAPIId, vrDynamicAPI.Name, vrDynamicAPI.ModuleId, serializedVRDynamicAPISettings, vrDynamicAPI.CreatedBy, vrDynamicAPI.LastModifiedBy);
             return (nbOfRecordsAffected > 0);
         }
 
@@ -55,9 +51,9 @@ namespace Vanrise.Common.Data.SQL
         {
             return new VRDynamicAPI
             {
-                VRDynamicAPIId = GetReaderValue<long>(reader, "ID"),
+                VRDynamicAPIId = GetReaderValue<Guid>(reader, "ID"),
                 Name = GetReaderValue<string>(reader, "Name"),
-                ModuleId= GetReaderValue<int>(reader, "ModuleId"),
+                ModuleId= GetReaderValue<Guid>(reader, "ModuleId"),
                 Settings = Vanrise.Common.Serializer.Deserialize<VRDynamicAPISettings>(reader["Settings"] as string),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 CreatedBy = GetReaderValue<int>(reader, "CreatedBy"),

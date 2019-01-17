@@ -24,7 +24,7 @@ namespace Vanrise.Common.Web.Controllers
 
         [HttpGet]
         [Route("GetVRDynamicAPIModuleById")]
-        public VRDynamicAPIModule GetVRDynamicAPIModuleById(int vrDynamicAPIModuleId)
+        public VRDynamicAPIModule GetVRDynamicAPIModuleById(Guid vrDynamicAPIModuleId)
         {
             return vrDynamicAPIModuleManager.GetVRDynamicAPIModuleById(vrDynamicAPIModuleId);
         }

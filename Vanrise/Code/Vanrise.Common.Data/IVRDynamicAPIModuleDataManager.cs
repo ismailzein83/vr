@@ -13,7 +13,7 @@ namespace Vanrise.Common.Data
 
         List<VRDynamicAPIModule> GetVRDynamicAPIModules();
 
-        bool Insert(VRDynamicAPIModule vrDynamicAPIModule, out int insertedId);
+        bool Insert(VRDynamicAPIModule vrDynamicAPIModule);
 
         bool Update(VRDynamicAPIModule vrDynamicAPIModule);
 
