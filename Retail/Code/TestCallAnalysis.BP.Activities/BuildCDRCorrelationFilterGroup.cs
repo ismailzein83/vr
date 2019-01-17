@@ -33,27 +33,27 @@ namespace TestCallAnalysis.BP.Activities
         {
             TimeSpan dateTimeMargin = this.DateTimeMargin.Get(context);
             TestCallAnalysis.Entities.CDRCorrelationProcessState cdrCorrelationProcessState = this.CDRCorrelationProcessState.Get(context);
-            DataRecordStorageManager manager = new DataRecordStorageManager();
+            DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
             long? lastImportedId = null;
             bool newDataImported = false;
             List<TestCallAnalysis.Entities.CDRCorrelationFilterGroup> cdrCorrelationFilterGroups = new List<TestCallAnalysis.Entities.CDRCorrelationFilterGroup>();
 
             DateTime? overallMinDate;
             DateTime? overallMaxDate;
-            DataRecordTypeManager _dataRecordTypeManager = new DataRecordTypeManager();
+            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             var inputDataRecordStorageId = new Guid("f8c165ad-21c3-4e29-9e3a-7d3e332fdc42");
-            var dataRecordStorage = manager.GetDataRecordStorage(inputDataRecordStorageId);
+            var dataRecordStorage = dataRecordStorageManager.GetDataRecordStorage(inputDataRecordStorageId);
             
-            var dataRecordType = _dataRecordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
+            var dataRecordType = dataRecordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
             var idFieldName = dataRecordType.Settings.IdField;
             var datetimeFieldName = dataRecordType.Settings.DateTimeField;
 
-            long? overallMaxId = manager.GetMaxId(inputDataRecordStorageId, idFieldName, datetimeFieldName, out overallMaxDate, out overallMinDate);
+            long? overallMaxId = dataRecordStorageManager.GetMaxId(inputDataRecordStorageId, out overallMaxDate, out overallMinDate);
 
             if (cdrCorrelationProcessState != null && cdrCorrelationProcessState.LastImportedId.HasValue)
             {
                 long? maxId;
-                DateTime? minDate = manager.GetMinDateTimeWithMaxIdAfterId(inputDataRecordStorageId, cdrCorrelationProcessState.LastImportedId.Value, idFieldName, datetimeFieldName, out maxId);
+                DateTime? minDate = dataRecordStorageManager.GetMinDateTimeWithMaxIdAfterId(inputDataRecordStorageId, cdrCorrelationProcessState.LastImportedId.Value, out maxId);
 
                 if (minDate.HasValue)
                 {
