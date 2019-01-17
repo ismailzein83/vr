@@ -1,0 +1,19 @@
+﻿<div vr-modalcontent ng-controller="Vanrise_Tools_GeneratedScriptTableCellEditorController" vr-loader="scopeModel.isLoading" size="medium">
+    <vr-modalbody>
+        <vr-form name="formGeneratedScripTableCellEditor">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-textarea value="scopeModel.cellValue" rows="10"></vr-textarea>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formGeneratedScripTableCellEditor" data-onclick="scopeModel.saveTableCell"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

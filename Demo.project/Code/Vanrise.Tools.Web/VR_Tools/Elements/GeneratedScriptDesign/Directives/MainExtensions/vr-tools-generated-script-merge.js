@@ -338,7 +338,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                     }
 
                     return {
-                        $type: "Vanrise.Tools.Business.MergeGeneratedScriptItem, Vanrise.Tools.Business",
+                        $type: "Vanrise.Common.MainExtensions.MergeGeneratedScriptItem, Vanrise.Common.MainExtensions",
                         IdentifierColumns: identifierColumnsToJson,
                         InsertColumns: insertColumnsToJson,
                         UpdateColumns: updateColumnsToJson,

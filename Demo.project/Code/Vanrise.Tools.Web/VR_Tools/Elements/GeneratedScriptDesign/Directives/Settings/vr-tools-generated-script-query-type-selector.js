@@ -1,6 +1,6 @@
 ﻿
-appControllers.directive('vrToolsGeneratedScriptQueryTypeSelector', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService','VR_Tools_GeneratedScriptQueryTypeEnum',
-    function (VRNotificationService, UtilsService, VRUIUtilsService, VR_Tools_GeneratedScriptQueryTypeEnum) {
+appControllers.directive('vrToolsGeneratedScriptQueryTypeSelector', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService','VR_Devtools_GeneratedScriptQueryTypeEnum',
+    function (VRNotificationService, UtilsService, VRUIUtilsService, VR_Devtools_GeneratedScriptQueryTypeEnum) {
     'use strict';
     
     var directiveDefinitionObject = {
@@ -78,7 +78,7 @@ appControllers.directive('vrToolsGeneratedScriptQueryTypeSelector', ['VRNotifica
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
                 }
-                ctrl.datasource = UtilsService.getArrayEnum(VR_Tools_GeneratedScriptQueryTypeEnum);
+                ctrl.datasource = UtilsService.getArrayEnum(VR_Devtools_GeneratedScriptQueryTypeEnum);
                 if (selectedIds != undefined) {
                     VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                 }

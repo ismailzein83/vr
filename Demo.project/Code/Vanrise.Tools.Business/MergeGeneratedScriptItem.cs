@@ -51,6 +51,12 @@ namespace Vanrise.Tools.Business
         public List<GeneratedScriptItemTableRow> DataRows { get; set; }
         public GeneratedScriptQueryType? QueryType { get; set; }
         public bool IsIdentity { get; set; }
+        private string MapRecord(object value)
+        {
+            if (value.GetType() == null || value.GetType() == typeof(int) || value.GetType() == typeof(float) || value.GetType() == typeof(decimal) || value.GetType() == typeof(long) || value.GetType() == typeof(double))
+                return string.Format("{0}", value);
+            else return string.Format("'{0}'", value);
+        }
         private string GenerateSQLQuery(GeneratedScriptItemTable item)
         {
             StringBuilder queryBuilder = new StringBuilder();
@@ -85,7 +91,7 @@ namespace Vanrise.Tools.Business
                     valuesBuilder.AppendLine();
                 }
                 valuesBuilder.Append("(");
-                valuesBuilder.Append(string.Join(",", row.FieldValues.MapRecords(x => string.Format("'{0}'", x.Value))));
+                valuesBuilder.Append(string.Join(",", row.FieldValues.MapRecords(x =>MapRecord(x.Value))));
                 valuesBuilder.Append(")");
             }
 

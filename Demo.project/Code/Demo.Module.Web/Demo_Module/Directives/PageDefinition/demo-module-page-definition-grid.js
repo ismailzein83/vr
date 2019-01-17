@@ -53,7 +53,7 @@ function (UtilsService, VRNotificationService, Demo_Module_PageDefinitionAPIServ
 
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) { // takes retrieveData object
 
-                return VR_Tools_ColumnsAPIService.GetFilteredPageDefinitions(dataRetrievalInput)
+                return Demo_Module_PageDefinitionAPIService.GetFilteredPageDefinitions(dataRetrievalInput)
                 .then(function (response) {
                     onResponseReady(response);
                 })

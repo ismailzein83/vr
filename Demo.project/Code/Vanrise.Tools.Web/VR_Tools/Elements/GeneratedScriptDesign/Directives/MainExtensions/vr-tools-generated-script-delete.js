@@ -124,7 +124,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_Tools_Columns
                     api.getData = function () {
                   
                         return {
-                            $type: "Vanrise.Tools.Business.DeleteGeneratedScriptItem, Vanrise.Tools.Business",
+                            $type: "Vanrise.Common.MainExtensions.DeleteGeneratedScriptItem, Vanrise.Common.MainExtensions",
                             IdentifierColumn: { ColumnName: identifierColumnsDirectiveApi.getSelectedIds() },
                             KeyValues:$scope.keyValues
                         };

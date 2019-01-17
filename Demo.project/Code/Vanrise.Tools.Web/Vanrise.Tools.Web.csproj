@@ -163,6 +163,8 @@
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Services\APIServices\TableAPIService.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Services\APIServices\SchemaAPIService.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Services\GeneratedScriptService.js" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptTableCellEditor.html" />
+    <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptTableCellEditorController.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptQueriesDisplayer.js" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptQueriesDisplayer.html" />
     <Content Include="VR_Tools\Elements\GeneratedScriptDesign\Views\GeneratedScriptManagement.html" />

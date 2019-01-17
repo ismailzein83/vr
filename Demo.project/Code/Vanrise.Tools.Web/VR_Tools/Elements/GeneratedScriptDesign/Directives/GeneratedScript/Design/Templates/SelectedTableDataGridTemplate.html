@@ -1,10 +1,11 @@
-﻿<vr-datagrid datasource="scopeModel.selectedTableData"
+﻿
+<vr-datagrid datasource="scopeModel.selectedTableData"
              on-ready="scopeModel.onGridReady"
              pagingtype="'PagingOnScroll'"
              menuactions="scopeModel.gridMenuActions"
              ondeleterow="scopeModel.deleteTableDataRow"
              enableautoexport="true">
-    <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x.Name" field="'Entity.FieldValues.'+ x.Name"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x.Name" field="'Entity.FieldValues.'+ x.Name" isclickable="true" onclicked="scopeModel.editCell" isfielddynamic="true"></vr-datagridcolumn>
 </vr-datagrid>
 
 
