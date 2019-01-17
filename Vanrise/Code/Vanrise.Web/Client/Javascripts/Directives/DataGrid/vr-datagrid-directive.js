@@ -27,7 +27,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            gridmenuactions: '=',
 	            margin: '=',
 	            dragdropsetting: '=',
-	            mobilegridlayout: '='
+	            mobilegridlayout: '=',
+	            alternativecolor:'='
 	        },
 	        controller: function ($scope, $element, $attrs) {
 	            columnVisibilities = [];
@@ -69,6 +70,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 
 	            ctrl.layoutOption = UISettingsService.getGridLayoutOptions();
+	            if (ctrl.alternativecolor != undefined)
+	                ctrl.layoutOption.alternativeColor = ctrl.alternativecolor;
 
 	            if (ctrl.isMobile)
 	                ctrl.layoutOption.verticalLine = false;
