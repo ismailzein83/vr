@@ -48,7 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TechnicalDetails.cs" />
+    <Compile Include="Inventory\ServiceResponse\TechnicalDetails.cs" />
+    <Compile Include="Billing\WorkflowInput\CreateCustomerInput.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Billing\ServiceResponse\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
