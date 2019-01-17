@@ -54,6 +54,8 @@
     <Compile Include="MobileCountry\MobileCountryOnBeforeSaveHandler.cs" />
     <Compile Include="MobileNetwork\MobileNetworkManager.cs" />
     <Compile Include="MobileNetwork\MobileNetworkSettingsCustomObjectTypeSettings.cs" />
+    <Compile Include="NumberPrefix\NumberPrefixManager.cs" />
+    <Compile Include="NumberPrefix\NumberPrefixOnBeforeSaveHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

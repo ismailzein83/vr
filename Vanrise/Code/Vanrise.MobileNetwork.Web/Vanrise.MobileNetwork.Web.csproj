@@ -77,6 +77,8 @@
     <Content Include="VR_MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkSettingsTemplate.html" />
     <Content Include="VR_MobileNetwork\Directives\MobileNetwork\vr-mobilenetwork-customobjectsettings.js" />
     <Content Include="VR_MobileNetwork\Directives\MobileNetwork\vr-mobilenetwork-settings.js" />
+    <Content Include="VR_MobileNetwork\Directives\NumberPrefix\Templates\NumberPrefixOnBeforeSaveHandler.html" />
+    <Content Include="VR_MobileNetwork\Directives\NumberPrefix\vr-mobilenetwork-numberprefix-onbeforesavehandler.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

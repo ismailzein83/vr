@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrMobilenetworkMobilecountryOnbeforesavehandler", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrMobilenetworkNumberprefixOnbeforesavehandler", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -18,7 +18,7 @@ app.directive("vrMobilenetworkMobilecountryOnbeforesavehandler", ["UtilsService"
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_MobileNetwork/Directives/MobileCountry/Templates/MobileCountryOnBeforeSaveHandler.html"
+            templateUrl: "/Client/Modules/VR_MobileNetwork/Directives/NumberPrefix/Templates/NumberPrefixOnBeforeSaveHandler.html"
         };
 
         function Handler($scope, ctrl, $attrs) {
@@ -29,14 +29,14 @@ app.directive("vrMobilenetworkMobilecountryOnbeforesavehandler", ["UtilsService"
                 defineAPI();
             }
 
-            function defineAPI() {
+            function defineAPI() {  
                 var api = {};
 
-                api.getData = function () { 
+                api.getData = function () {
 
                     return {
-                        $type: "Vanrise.MobileNetwork.Business.MobileCountryOnBeforeSaveHandler,Vanrise.MobileNetwork.Business"
-                    };   
+                        $type: "Vanrise.MobileNetwork.Business.NumberPrefixOnBeforeSaveHandler,Vanrise.MobileNetwork.Business"
+                    };
                 };
 
                 api.load = function (payload) {

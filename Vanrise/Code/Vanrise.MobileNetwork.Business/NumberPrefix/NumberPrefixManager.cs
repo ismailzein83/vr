@@ -1,0 +1,82 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Common;
+using Vanrise.GenericData.Entities;
+using Vanrise.MobileNetwork.Entities;
+
+namespace Vanrise.MobileNetwork.Business
+{
+    public class NumberPrefixManager
+    {
+        static readonly Guid BeDefinitionId = new Guid("7BE6F504-91EE-418F-9615-66929A4C06C2");
+        #region Public
+        public List<NumberPrefix> GetNumberPrefixesByCode(long code)
+        {
+            var numberPrefixes = GetCachedNumberPrefixesByCode();
+            numberPrefixes.ThrowIfNull("numberPrefixesbyCode");
+            return numberPrefixes.GetRecord(code);
+        }
+        #endregion
+
+        #region Private
+        private List<NumberPrefix> GetCachedNumberPrefixes()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedNumberPrefixes", BeDefinitionId, () =>
+            {
+                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(BeDefinitionId);
+                List<NumberPrefix> NumberPrefixList = new List<NumberPrefix>();
+
+                if (genericBusinessEntities != null)
+                {
+                    foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
+                    {
+                        if (genericBusinessEntity.FieldValues == null)
+                            continue;
+
+                        NumberPrefix numberPrefix = new NumberPrefix
+                        {
+                            Id = (long)genericBusinessEntity.FieldValues.GetRecord("ID"),
+                            Code = (long)genericBusinessEntity.FieldValues.GetRecord("Code"),
+                            BED = (DateTime)genericBusinessEntity.FieldValues.GetRecord("BED"),
+                            EED = (DateTime)genericBusinessEntity.FieldValues.GetRecord("EED"),
+                            MobileNetworkId = (int)genericBusinessEntity.FieldValues.GetRecord("MobileNetworkId")
+                        };
+                        NumberPrefixList.Add(numberPrefix);
+                    }
+                }
+                return NumberPrefixList;
+            });
+        }
+
+        private Dictionary<long, List<NumberPrefix>> GetCachedNumberPrefixesByCode()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedNumberPrefixesByCode", BeDefinitionId, () =>
+            {
+                var cachedNumberPrefixes = GetCachedNumberPrefixes();
+                cachedNumberPrefixes.ThrowIfNull("cachedNumberPrefixes");
+                Dictionary<long, List<NumberPrefix>> numberPrefixesByCode = new Dictionary<long, List<NumberPrefix>>();
+                foreach (var numberPrefix in cachedNumberPrefixes)
+                {
+                    var numberPrefixes = numberPrefixesByCode.GetRecord(numberPrefix.Code);
+                    if (numberPrefixes == null)
+                    {
+                        List<NumberPrefix> newNumberPrefixes = new List<NumberPrefix>();
+                        newNumberPrefixes.Add(numberPrefix);
+                        numberPrefixesByCode.Add(numberPrefix.Code, newNumberPrefixes);
+                    }
+                    else
+                        numberPrefixes.Add(numberPrefix);
+                }
+
+                return numberPrefixesByCode;
+            });
+        }
+        #endregion
+
+    }
+}

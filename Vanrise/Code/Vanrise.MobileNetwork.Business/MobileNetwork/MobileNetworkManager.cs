@@ -9,7 +9,12 @@ namespace Vanrise.MobileNetwork.Business
     public class MobileNetworkManager
     {
         static readonly Guid BeDefinitionId = new Guid("48a58d93-1620-48d7-9f78-2270a6f3f1d4");
-
+        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetworkById (int mobileNetworkId)
+        {
+            var mobileNetworks = GetCachedMobileNetworks();
+            mobileNetworks.ThrowIfNull("mobileNetworks");
+            return mobileNetworks.FindRecord(item => item.Id == mobileNetworkId);
+        }
         public int? GetMobileNetworkID(string mobileNetworkCode, int mobileCountryId)
         {
             var mobileNetwork = GetMobileNetwork(mobileNetworkCode, mobileCountryId);
@@ -57,7 +62,7 @@ namespace Vanrise.MobileNetwork.Business
                         {
                             Id = (int)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             MobileNetworkSettings = (MobileNetworkSettings)genericBusinessEntity.FieldValues.GetRecord("Settings"),
-                            MobileCountryId = (int)genericBusinessEntity.FieldValues.GetRecord("MobileCountryId"),
+                            MobileCountryId = (int)genericBusinessEntity.FieldValues.GetRecord("MobileCountry"),
                         };
                         MobileNetworkList.Add(mobileNetwork);
                     }
