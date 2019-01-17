@@ -932,5 +932,6 @@
     <None Include="VR_BEBridge.PostDeployment.sql" />
     <None Include="Mediation_Mobile.Common.PostDeployment.sql" />
     <None Include="DBsStructure.txt" />
+    <None Include="SomST.PostDeployment.sql" />
   </ItemGroup>
 </Project>

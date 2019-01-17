@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [common].[sp_VRDynamicAPIModule_Update]
-    @ID INT,
+    @ID uniqueidentifier,
     @Name nvarchar(255),
 	@LastModifiedBy int
 

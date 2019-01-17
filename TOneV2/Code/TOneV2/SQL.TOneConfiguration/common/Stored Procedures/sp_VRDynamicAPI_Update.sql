@@ -4,12 +4,11 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [common].[sp_VRDynamicAPI_Update]
-    @ID BIGINT,
+    @ID uniqueidentifier,
     @Name nvarchar(255),
-	@ModuleId int,
+	@ModuleId uniqueidentifier,
 	@Settings nvarchar(max),
 	@LastModifiedBy int
-
 AS
 BEGIN
 
