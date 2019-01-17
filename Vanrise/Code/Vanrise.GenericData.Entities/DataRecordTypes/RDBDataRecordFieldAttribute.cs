@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Entities
 {
     public class RDBDataRecordFieldAttribute
     {
-        public RDBDataType RDBDataType { get; set; }
+        public RDBDataType RdbDataType { get; set; }
         public int? Size { get; set; }
         public int? Precision { get; set; }
     }

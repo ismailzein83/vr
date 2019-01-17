@@ -15,6 +15,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public bool IsNullable { get; set; }
 
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            return new RDBDataRecordFieldAttribute
+            {
+                RdbDataType = RDBDataType.NVarchar
+            };
+        }
         public override Type GetRuntimeType()
         {
             return GetNonNullableRuntimeType();

@@ -1,4 +1,4 @@
-﻿<!--<vr-tabs vertical>
+﻿<vr-tabs vertical>
     <vr-tab header="'Table Definition'">
         <vr-row removeline>
             <vr-columns width="1/4row">
@@ -16,7 +16,7 @@
                 <vr-button type="Add" data-onclick="ctrl.addColumn" standalone></vr-button>
             </vr-columns>
         </vr-row>
-        <vr-row removeline>
+        <vr-row removeline vr-loader="scopeModel.isLoading">
             <vr-columns width="fullrow">
                 <vr-validator validate="ctrl.validateColumns()">
                     <vr-datagrid on-ready="ctrl.onGridReady"
@@ -25,23 +25,28 @@
                                  ondeleterow="ctrl.removeColumn"
                                  maxheight="400px"
                                  hidegridmenu>
-                        <vr-datagridcolumn headertext="'Field Name'" disablesorting>
-                            <vr-textbox value="dataItem.fieldName" isrequired="true" vr-disabled="dataItem.isDisabled"></vr-textbox>
+                        <vr-datagridcolumn headertext="'Field Name'" widthfactor="3" disablesorting>
+                            <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onDataRecordTypeFieldsSelectorReady" vr-loader="dataItem.isLoadingDataRecordTypeFieldsDirective" hidelabel isrequired="true"></vr-genericdata-datarecordtypefields-selector>
                         </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Column Name'" disablesorting>
-                            <vr-textbox value="dataItem.columnName" isrequired="true" vr-disabled="dataItem.isDisabled"></vr-textbox>
+                        <vr-datagridcolumn headertext="'Column Name'" widthfactor="3" disablesorting>
+                            <vr-textbox value="dataItem.columnName" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'RDB Data Type'" disablesorting>
-                            <vr-common-rdbdatatype-info normal-col-num="12" on-ready="dataItem.onRDBDataTypeSelectorReady" label="RDB Data Type" vr-loader="dataItem.isLoadingRDBDataTypeDirective" isrequired="true" hidelabel></vr-common-rdbdatatype-info>
+                            <vr-common-rdbdatatype-info normal-col-num="6" on-ready="dataItem.onRDBDataTypeSelectorReady" label="RDB Type" vr-loader="dataItem.isLoadingRDBDataTypeDirective" isrequired="true" hidelabel></vr-common-rdbdatatype-info>
                         </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Unique'" disablesorting>
+                        <vr-datagridcolumn headertext="'Unique'" widthfactor="2" disablesorting>
                             <vr-switch value="dataItem.isUnique"></vr-switch>
                         </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Identity'" disablesorting>
+                        <vr-datagridcolumn headertext="'Identity'" widthfactor="2" disablesorting>
                             <vr-switch value="dataItem.isIdentity"></vr-switch>
                         </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-validator>
+            </vr-columns>
+        </vr-row>
+        <vr-row removeline>
+            <vr-columns width="fullrow">
+                <a href="" class="link" ng-click="ctrl.loadDefaultRDBTypeTableSettings()" ng-show="scopeModel.showAddAllFields()">Add All Fields</a>
             </vr-columns>
         </vr-row>
     </vr-tab>
@@ -58,4 +63,4 @@
             </vr-columns>
         </vr-row>
     </vr-tab>
-</vr-tabs>-->
+</vr-tabs>

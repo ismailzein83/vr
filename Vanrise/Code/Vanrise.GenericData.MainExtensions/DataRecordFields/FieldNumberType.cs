@@ -21,7 +21,27 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public FieldNumberDataType DataType { get; set; }
 
         public bool IsNullable { get; set; }
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            RDBDataRecordFieldAttribute rDBDataRecordFieldAttribute = new RDBDataRecordFieldAttribute();
+            switch (DataType)
+            {
+                case FieldNumberDataType.Decimal:
+                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.Decimal;
+                    break;
+                case FieldNumberDataType.Int:
+                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.Int;
+                    break;
+                case FieldNumberDataType.BigInt:
+                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.BigInt;
+                    break;
 
+                default:
+                    throw new NotSupportedException(String.Format("Field Number Type"));
+            }
+
+            return rDBDataRecordFieldAttribute;
+        }
 
         #region Public Methods
 

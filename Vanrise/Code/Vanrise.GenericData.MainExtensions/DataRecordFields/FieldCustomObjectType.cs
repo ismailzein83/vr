@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
@@ -12,6 +13,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override Guid ConfigId { get { return new Guid("28411D23-EA66-47AC-A323-106BE0B9DA7E"); } }
 
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-customobject-viewereditor"; } }
+
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            return new RDBDataRecordFieldAttribute
+            {
+                RdbDataType = RDBDataType.NVarchar
+            };
+        }
 
         public bool IsNullable { get; set; }
 

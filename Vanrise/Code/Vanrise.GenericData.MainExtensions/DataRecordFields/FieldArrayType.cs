@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
@@ -37,6 +38,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             }
             return _nonNullableRuntimeType;
+        }
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            return new RDBDataRecordFieldAttribute
+            {
+                RdbDataType = RDBDataType.NVarchar
+            };
         }
 
         public override string GetDescription(object value)

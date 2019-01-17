@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
@@ -26,6 +27,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return GetNonNullableRuntimeType();
         }
+
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            return new RDBDataRecordFieldAttribute
+            {
+                RdbDataType = RDBDataType.NVarchar,
+                Size = 255
+            };
+        }
+
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             if (newValue == null && oldValue == null)

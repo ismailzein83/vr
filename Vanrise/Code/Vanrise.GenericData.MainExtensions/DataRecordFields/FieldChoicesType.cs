@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields.Filters;
@@ -36,6 +37,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             {
                 _choices = value;
             }
+        }
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            return new RDBDataRecordFieldAttribute
+            {
+                RdbDataType = RDBDataType.NVarchar
+            };
         }
 
         public Guid? ChoiceDefinitionId { get; set; }

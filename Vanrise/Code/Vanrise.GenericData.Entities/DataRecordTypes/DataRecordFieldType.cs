@@ -41,6 +41,7 @@ namespace Vanrise.GenericData.Entities
 
         }
 
+        public abstract RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context);
         public virtual string DifferenceEditor { get; set; }
         public virtual string ViewerEditor { get; set; }
         public abstract string GetDescription(Object value);
@@ -134,6 +135,15 @@ namespace Vanrise.GenericData.Entities
         {
             return Convert.ChangeType(originalValue, GetNonNullableRuntimeType());
         }
+    }
+    public interface IDataRecordFieldTypeDefaultRDBFieldAttributeContext
+    {
+
+    }
+
+    public class DataRecordFieldTypeDefaultRDBFieldAttributeContext: IDataRecordFieldTypeDefaultRDBFieldAttributeContext
+    {
+
     }
 
     public interface IDataRecordFieldTypeConvertToRecordFilterContext

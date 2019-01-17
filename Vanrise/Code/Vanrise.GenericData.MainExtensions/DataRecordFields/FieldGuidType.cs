@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
@@ -23,6 +24,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
         }
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-guid-viewereditor"; } }
+
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            return new RDBDataRecordFieldAttribute
+            {
+                RdbDataType = RDBDataType.UniqueIdentifier
+            };
+        }
 
         public bool IsNullable { get; set; }
         public override bool TryGenerateUniqueIdentifier(out Guid? uniqueIdentifier)

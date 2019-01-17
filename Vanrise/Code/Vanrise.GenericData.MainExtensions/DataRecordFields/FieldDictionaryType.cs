@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
@@ -44,6 +45,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             foreach (var item in valueAsDict)
                 descriptions.Add(string.Format("{0}:{1}", item.Key, item.Value));
             return String.Join(",", descriptions);
+        }
+
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            return new RDBDataRecordFieldAttribute
+            {
+                RdbDataType = RDBDataType.NVarchar
+            };
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)

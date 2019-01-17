@@ -296,21 +296,34 @@ namespace Vanrise.GenericData.Business
         public List<DataRecordFieldTransaltedToRDB> GetDataRecordFieldsTranslatedToRDB(Guid dataRecordTypeId)
         {
             DataRecordType dataRecordType = GetDataRecordType(dataRecordTypeId);
-
             DataRecordFieldManager dataRecordFieldManager = new DataRecordFieldManager();
             IEnumerable<DataRecordFieldInfo> dataRecordFields = dataRecordFieldManager.GetDataRecordFieldsInfo(dataRecordTypeId, null);
-   
             List<DataRecordFieldTransaltedToRDB> dataRecordFieldTransaltedToRDBs = new List<DataRecordFieldTransaltedToRDB>();
-            foreach (var dataRecordField in dataRecordFields)
+
+            if(dataRecordFields != null)
             {
-
-                dataRecordFieldTransaltedToRDBs.Add(new DataRecordFieldTransaltedToRDB
+                foreach (var dataRecordField in dataRecordFields)
                 {
-                    FieldName = dataRecordField.Entity.Name,
-                    IsUnique = dataRecordField.Entity.Name == dataRecordType.Settings.IdField
+                    var dataRecordFieldTypeDefaultRDBFieldAttributeContext = new DataRecordFieldTypeDefaultRDBFieldAttributeContext();
+                    var defaultRDBFieldAttribute = new RDBDataRecordFieldAttribute();
 
-                });
+                    dataRecordField.ThrowIfNull("dataRecordField");
+                    dataRecordField.Entity.ThrowIfNull("dataRecordField.Entity");
+                    dataRecordField.Entity.Type.ThrowIfNull("dataRecordField.Entity.Type");
+
+                    defaultRDBFieldAttribute = dataRecordField.Entity.Type.GetDefaultRDBFieldAttribute(dataRecordFieldTypeDefaultRDBFieldAttributeContext);
+
+                    dataRecordFieldTransaltedToRDBs.Add(new DataRecordFieldTransaltedToRDB
+                    {
+                        FieldName = dataRecordField.Entity.Name,
+                        IsUnique = dataRecordField.Entity.Name == dataRecordType.Settings.IdField,
+                        RDBDataType = defaultRDBFieldAttribute.RdbDataType,
+                        Size = defaultRDBFieldAttribute.Size,
+                        Precision = defaultRDBFieldAttribute.Precision,
+                    });
+                }
             }
+            
             return dataRecordFieldTransaltedToRDBs;
         }
 

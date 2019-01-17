@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields.Filters;
@@ -16,6 +17,28 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-businessentity-viewereditor"; } }
 
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            RDBDataRecordFieldAttribute rDBDataRecordFieldAttribute = new RDBDataRecordFieldAttribute();
+
+            switch (GetBusinessEntityDefinition().Settings.IdType)
+            {
+                case "System.Int64":
+                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.BigInt;
+                    break;
+                case "System.Int32":
+                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.Int;
+                    break;
+                case "System.Guid":
+                    rDBDataRecordFieldAttribute.RdbDataType = RDBDataType.UniqueIdentifier;
+                    break;
+
+                default:
+                    throw new NotSupportedException(String.Format("Field Business Entity Type"));
+            }
+
+            return rDBDataRecordFieldAttribute;
+        }
         public Guid BusinessEntityDefinitionId { get; set; }
 
         public bool IsNullable { get; set; }

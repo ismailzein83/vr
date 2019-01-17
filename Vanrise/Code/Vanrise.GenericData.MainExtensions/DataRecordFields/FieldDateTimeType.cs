@@ -35,6 +35,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-datetime-viewereditor"; } }
 
+        public override RDBDataRecordFieldAttribute GetDefaultRDBFieldAttribute(IDataRecordFieldTypeDefaultRDBFieldAttributeContext context)
+        {
+            return new RDBDataRecordFieldAttribute
+            {
+                RdbDataType = RDBDataType.DateTime
+            };
+        }
+
         public FieldDateTimeDataType DataType { get; set; }
 
         public bool IsNullable { get; set; }
