@@ -20,12 +20,14 @@ namespace Vanrise.MobileNetwork.Business
             return numberPrefixes.GetRecord(code);
         }
 
-        public int? GetMobileNetworkByNumberPrefix(string numberPrefix)
+        public int? GetMobileNetworkByNumberPrefix(string numberPrefix , out string matchedPrefix)
         {
+            matchedPrefix = null;
             CodeIterator<NumberPrefix> codeIterator = GetCodeIterator();
             var matchedNumberPrefix = codeIterator.GetLongestMatch(numberPrefix);
             if (matchedNumberPrefix == null)
                 return null;
+            matchedPrefix = matchedNumberPrefix.Code;
             return matchedNumberPrefix.MobileNetworkId;
         }
         #endregion
