@@ -30,7 +30,7 @@ namespace Vanrise.MobileNetwork.Business
             var mobileNetworkId = context.GenericBusinessEntity.FieldValues.GetRecord("MobileNetworkId");
             mobileNetworkId.ThrowIfNull("mobileNetworkId");
 
-            var numberPrefixesWithSameCode = numberPrefixManager.GetNumberPrefixesByCode((long)code);
+            var numberPrefixesWithSameCode = numberPrefixManager.GetNumberPrefixesByCode((string)code);
             if (numberPrefixesWithSameCode != null)
             {
                 foreach (var numberPrefix in numberPrefixesWithSameCode)

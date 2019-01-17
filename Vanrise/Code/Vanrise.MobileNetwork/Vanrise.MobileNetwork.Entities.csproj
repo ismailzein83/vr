@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICode.cs" />
     <Compile Include="MobileCountry\MobileCountry.cs" />
     <Compile Include="MobileNetwork\MobileNetwork.cs" />
     <Compile Include="MobileNetwork\MobileNetworkSettings.cs" />

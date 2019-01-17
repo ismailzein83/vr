@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeIterator.cs" />
     <Compile Include="MobileCountry\MobileCountryManager.cs" />
     <Compile Include="MobileCountry\MobileCountryOnBeforeSaveHandler.cs" />
     <Compile Include="MobileNetwork\MobileNetworkManager.cs" />
