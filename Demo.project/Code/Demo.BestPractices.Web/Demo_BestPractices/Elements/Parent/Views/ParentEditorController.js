@@ -107,7 +107,7 @@
             $scope.scopeModel.isLoading = true;
 
             var parentObject = buildParentObjectFromScope();
-            Demo_BestPractices_ParentAPIService.UpdateParent(parentObject).then(function (response) {
+            return Demo_BestPractices_ParentAPIService.UpdateParent(parentObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Parent", response, "Name")) {
                     if ($scope.onParentUpdated != undefined) {
                         $scope.onParentUpdated(response.UpdatedObject);

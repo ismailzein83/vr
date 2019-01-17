@@ -1,4 +1,5 @@
 ﻿"use strict"
+
 app.directive("demoBestpracticesChildGrid", ["UtilsService", "VRNotificationService", "Demo_BestPractices_ChildAPIService", "Demo_BestPractices_ChildService", "VRUIUtilsService", "VRCommon_ObjectTrackingService",
     function (UtilsService, VRNotificationService, Demo_BestPractices_ChildAPIService, Demo_BestPractices_ChildService, VRUIUtilsService, VRCommon_ObjectTrackingService) {
 
@@ -18,10 +19,10 @@ app.directive("demoBestpracticesChildGrid", ["UtilsService", "VRNotificationServ
         };
 
         function ChildGrid($scope, ctrl) {
+            this.initializeController = initializeController;
 
             var gridApi;
             var parentId;
-            this.initializeController = initializeController;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -30,58 +31,67 @@ app.directive("demoBestpracticesChildGrid", ["UtilsService", "VRNotificationServ
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridApi = api;
-
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
-                        ctrl.onReady(getDirectiveApi());
-                    }
-
-                    function getDirectiveApi() {
-                        var directiveApi = {};
-
-                        directiveApi.load = function (payload) {
-                            var query = payload.query;
-                            parentId = payload.parentId;
-                            if (payload.hideParentColumn)
-                                $scope.scopeModel.hideParentColumn = payload.hideParentColumn;
-                            return gridApi.retrieveData(query);
-                        };
-
-                        directiveApi.onChildAdded = function (child) {
-                            gridApi.itemAdded(child);
-                        };
-                        return directiveApi;
-                    };
+                    defineAPI();
                 };
+
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) { // takes retrieveData object
 
-                    return Demo_BestPractices_ChildAPIService.GetFilteredChilds(dataRetrievalInput)
-                        .then(function (response) {
-                            onResponseReady(response);
-                        })
-                        .catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        });
+                    return Demo_BestPractices_ChildAPIService.GetFilteredChilds(dataRetrievalInput).then(function (response) {
+                        onResponseReady(response);
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    });
                 };
 
                 defineMenuActions();
             };
 
+            function defineAPI() {
+                var api = {};
+
+                api.load = function (payload) {
+
+                    var query;
+
+                    if (payload != undefined) {
+                        query = payload.query;
+                        parentId = payload.parentId;
+
+                        if (payload.hideParentColumn)
+                            $scope.scopeModel.hideParentColumn = (payload.hideParentColumn != undefined) ;
+                    }
+
+                    return gridApi.retrieveData(query);
+                };
+
+                api.onChildAdded = function (child) {
+                    gridApi.itemAdded(child);
+                };
+
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
+                    ctrl.onReady(api);
+                }
+            }
+
             function defineMenuActions() {
                 $scope.scopeModel.gridMenuActions = [{
                     name: "Edit",
                     clicked: editChild,
-
                 }];
             };
+
             function editChild(child) {
                 var onChildUpdated = function (child) {
                     gridApi.itemUpdated(child);
                 };
-                var parentIdItem = parentId != undefined ? { ParentId: parentId } : undefined;
+
+                var parentIdItem;
+                if (parentId != undefined) {
+                    parentIdItem = { ParentId: parentId };
+                }
                 Demo_BestPractices_ChildService.editChild(onChildUpdated, child.ChildId, parentIdItem);
             };
-
-
         };
+
         return directiveDefinitionObject;
     }]);

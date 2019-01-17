@@ -13,9 +13,8 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
             $scope.scopeModel.onGridReady = function (api) {
-                gridAPI = api;
+                gridAPI = api;             
                 api.load(getFilter());
             };
 
