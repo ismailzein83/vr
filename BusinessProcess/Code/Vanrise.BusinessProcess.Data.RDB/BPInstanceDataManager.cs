@@ -176,8 +176,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             groupByContext.SelectAggregates().Count(RunningProcessNumberColumnName);
 
             var whereContext = selectQuery.Where();
-            whereContext.TrueCondition();
-            whereContext.ListCondition(COL_ExecutionStatus, RDBListConditionOperator.IN, executionStatus.Select(itm => (int)itm));
+            BuildExecutionStatusFilter(executionStatus, whereContext);
 
             return queryContext.GetItems<BPDefinitionSummary>(BPDefinitionSummaryMapper);
         }
@@ -241,7 +240,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             //First Select Query
             var selectStatusUpdatedTimeQuery = queryContext.AddSelectQuery();
 
-            selectStatusUpdatedTimeQuery.From(BPINSTANCE_NAME, BPINSTANCE_ALIAS, 1);
+            selectStatusUpdatedTimeQuery.From(BPINSTANCE_NAME, BPINSTANCE_ALIAS, 1, true);
             var columns = selectStatusUpdatedTimeQuery.SelectColumns();
             columns.Column(COL_StatusUpdatedTime, MaxGlobalStatusUpdatedTime);
             columns.Column(COL_ID, GlobalId);
@@ -322,9 +321,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             whereContext.EqualsCondition(COL_DefinitionID).Value(definitionId);
             whereContext.EqualsCondition(COL_ServiceInstanceID).Value(serviceInstanceId);
 
-            var groupCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            groupCondition.NullCondition(COL_AssignmentStatus);
-            groupCondition.EqualsCondition(COL_AssignmentStatus).Value((int)assignmentStatus);
+            whereContext.ConditionIfColumnNotNull(COL_AssignmentStatus).EqualsCondition(COL_AssignmentStatus).Value((int)assignmentStatus);
             BuildExecutionStatusFilter(acceptableBPStatuses, whereContext);
 
             selectQuery.Sort().ByColumn(COL_ID, RDBSortDirection.ASC);
@@ -593,12 +590,11 @@ namespace Vanrise.BusinessProcess.Data.RDB
         }
         private void BuildGrantedPermissionsSetIdsFilter(List<int> grantedPermissionSetIds, RDBConditionContext whereContext)
         {
-            if (grantedPermissionSetIds != null && grantedPermissionSetIds.Count > 0)
-            {
-                var ChildConditionGroupContext = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-                ChildConditionGroupContext.NotNullCondition(COL_ViewRequiredPermissionSetId);
-                ChildConditionGroupContext.ListCondition(COL_ViewRequiredPermissionSetId, RDBListConditionOperator.IN, grantedPermissionSetIds);
-            }
+            if (grantedPermissionSetIds == null || grantedPermissionSetIds.Count == 0)
+                whereContext.NullCondition(COL_ViewRequiredPermissionSetId);
+            else
+               whereContext.ConditionIfColumnNotNull(COL_ViewRequiredPermissionSetId, RDBConditionGroupOperator.OR).ListCondition(COL_ViewRequiredPermissionSetId, RDBListConditionOperator.IN, grantedPermissionSetIds);
+            
         }
         private void BuildParentIdFilter(int parentId, RDBConditionContext whereContext)
         {
@@ -628,7 +624,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
         }
         private void BuildExecutionStatusFilter(IEnumerable<BPInstanceStatus> statuses, RDBConditionContext whereContext)
         {
-            whereContext.ListCondition(COL_ExecutionStatus, RDBListConditionOperator.IN, statuses.Select(itm => (int)itm));
+            if (statuses != null && statuses.Count() > 0)
+                whereContext.ListCondition(COL_ExecutionStatus, RDBListConditionOperator.IN, statuses.Select(itm => (int)itm));
         }
         private void BuildFilters(List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, RDBConditionContext whereContext)
         {

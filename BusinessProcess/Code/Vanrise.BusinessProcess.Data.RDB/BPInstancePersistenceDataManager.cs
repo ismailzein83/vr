@@ -15,8 +15,6 @@ namespace Vanrise.BusinessProcess.Data.RDB
         const string COL_ProcessInstanceID = "ProcessInstanceID";
         const string COL_BPState = "BPState";
         const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
-
 
         static BPInstancePersistenceDataManager()
         {
@@ -24,15 +22,13 @@ namespace Vanrise.BusinessProcess.Data.RDB
             columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
             columns.Add(COL_BPState, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "bp",
                 DBTableName = "BPInstancePersistence",
                 Columns = columns,
                 IdColumnName = COL_ProcessInstanceID,
-                CreatedTimeColumnName = COL_CreatedTime,
-                ModifiedTimeColumnName = COL_LastModifiedTime
+                CreatedTimeColumnName = COL_CreatedTime
 
             });
         }

@@ -127,46 +127,32 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            if (!afterLastUpdateTime.HasValue)
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, nbOfRows, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereContext = selectQuery.Where();
+
+            if (processInstanceId.HasValue)
+                whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId.Value);
+
+            if (userId.HasValue)
+                whereContext.ContainsCondition(COL_AssignedUsers, userId.Value.ToString());
+
+            if (lastUpdateHandle == null)
             {
-                var selectQuery = queryContext.AddSelectQuery();
-                selectQuery.From(TABLE_NAME, TABLE_ALIAS, nbOfRows, true);
-                selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-                var whereContext = selectQuery.Where();
-
-                if (processInstanceId.HasValue)
-                    whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId.Value);
-
-                if (userId.HasValue)
-                    whereContext.ContainsCondition(COL_AssignedUsers, userId.Value.ToString());
-
                 var sortContext = selectQuery.Sort();
                 sortContext.ByColumn(COL_ID, RDBSortDirection.DESC);
             }
             else
             {
-                var selectQuery = queryContext.AddSelectQuery();
-                selectQuery.From(TABLE_NAME, TABLE_ALIAS, nbOfRows, true);
-                selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-                var whereContext = selectQuery.Where();
-
-                if (processInstanceId.HasValue)
-                    whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId.Value);
-
-                if (userId.HasValue)
-                    whereContext.ContainsCondition(COL_AssignedUsers, userId.Value.ToString());
-
                 var lastUpdatedTimeConditionContext = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
                 lastUpdatedTimeConditionContext.GreaterThanCondition(COL_LastUpdatedTime).Value(afterLastUpdateTime.Value);
 
                 var lastUpdatedTimeSecondConditionContext = lastUpdatedTimeConditionContext.ChildConditionGroup(RDBConditionGroupOperator.AND);
                 lastUpdatedTimeSecondConditionContext.EqualsCondition(COL_LastUpdatedTime).Value(afterLastUpdateTime.Value);
-                if (afterId.HasValue)
+                
                     lastUpdatedTimeSecondConditionContext.GreaterThanCondition(COL_ID).Value(afterId.Value);
-                else
-                    lastUpdatedTimeSecondConditionContext.FalseCondition();
 
                 var sortContext = selectQuery.Sort();
                 sortContext.ByColumn(COL_LastUpdatedTime, RDBSortDirection.ASC);

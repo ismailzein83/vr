@@ -86,7 +86,11 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             var whereContext = updateQuery.Where();
             whereContext.EqualsCondition(COL_DefinitionID).Value(definitionId);
-            whereContext.EqualsCondition(COL_ObjectKey).Value(objectKey);
+
+            if (!string.IsNullOrEmpty(objectKey))
+                whereContext.EqualsCondition(COL_ObjectKey).Value(objectKey);
+            else
+                whereContext.EqualsCondition(COL_ObjectKey).EmptyString();
 
             return queryContext.ExecuteNonQuery();
         }
