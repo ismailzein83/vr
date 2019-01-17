@@ -40,11 +40,12 @@
 	WhS_CDRComparison	    C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.CDRComparison.Web\WhS_CDRComparison
 	CDRComparison			C:\TFS\Xbooster\Code\CDRComparison.Web\CDRComparison
 	WhS_SMSBusinessEntity	C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.SMSBusinessEntity.Web\WhS_SMSBusinessEntity
-	
+	WhS_Jazz				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Jazz.Web\WhS_Jazz
+
 	--do not create below directories
 	-removed-Main					C:\TFS\TOneV2\Code\TOneV2\TOne.Main.Web\Main
 	-removed-Analytics				C:\TFS\TOneV2\Code\TOneV2\TOne.Analytics.Web\Analytics
 	-removed-Routing					C:\TFS\TOneV2\Code\TOneV2\TOne.LCR.Web\Routing
 	-removed-BusinessEntity			C:\TFS\TOneV2\Code\TOneV2\TOne.BusinessEntity.Web\BusinessEntity
 	-removed-Billing					C:\TFS\TOneV2\Code\TOneV2\TOne.Billing.Web\Billing
-	-removed-CDR						C:\TFS\TOneV2\Code\TOneV2\TOne.CDR.Web\CDR
+	-removed-CDR						C:\TFS\TOneV2\Code\TOneV2\TOne.CDR.Web\CDR		

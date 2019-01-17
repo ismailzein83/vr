@@ -1151,6 +1151,14 @@
       <Project>{f99abd6c-3d5c-40c2-8d37-de2f9707b038}</Project>
       <Name>TOne.WhS.InvToAccBalanceRelation.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Jazz.Business\TOne.WhS.Jazz.Business.csproj">
+      <Project>{13b1e299-0735-4740-85f3-5ef085d4d206}</Project>
+      <Name>TOne.WhS.Jazz.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Jazz.Entities\TOne.WhS.Jazz.Entities.csproj">
+      <Project>{bc05ef6d-43a5-48a9-8d1d-5ba1a1f4f7ca}</Project>
+      <Name>TOne.WhS.Jazz.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.BP.Activities\TOne.WhS.RouteSync.BP.Activities.csproj">
       <Project>{6af7a0ad-f82d-4b4c-9085-0fe891b78863}</Project>
       <Name>TOne.WhS.RouteSync.BP.Activities</Name>
