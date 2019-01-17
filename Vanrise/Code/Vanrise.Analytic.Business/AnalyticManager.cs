@@ -104,7 +104,7 @@ namespace Vanrise.Analytic.Business
             {
                 if (query.FilterGroup != null)
                 {
-                    
+
                     if (query.FilterGroup.LogicalOperator == RecordQueryLogicalOperator.And)
                     {
                         if (query.FilterGroup.Filters == null)
@@ -879,7 +879,7 @@ namespace Vanrise.Analytic.Business
                     }
 
                 }
-                measureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleDefinitionId = styleDefinitionId.Value });
+               measureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleDefinitionId = styleDefinitionId });
             }
             return measureValues;
         }
