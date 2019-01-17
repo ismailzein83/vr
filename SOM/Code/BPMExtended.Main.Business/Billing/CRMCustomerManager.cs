@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using BPMExtended.Main.Entities;
 using Terrasoft.Core;
+using Terrasoft.Core.DB;
 using Terrasoft.Core.Entities;
 
 namespace BPMExtended.Main.Business
@@ -25,27 +26,42 @@ namespace BPMExtended.Main.Business
             bool isSkip = false;
             string msg = "";
             ResultStatus status;
-            CRMCustomerInfo info;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+            string customerCategoryId="";
+            string customerId = "";
 
-            //get customer info (CRM)
+
             if (contactId != null)
             {
-                info = GetCRMCustomerInfo(contactId, null);
+                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
+                esq.AddColumn("StCustomerCategoryID");
+                esq.AddColumn("StCustomerId");
+
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId);
+                esq.Filters.Add(esqFirstFilter);
+                entities = esq.GetEntityCollection(BPM_UserConnection);
+                if (entities.Count > 0)
+                {
+                     customerCategoryId = entities[0].GetColumnValue("StCustomerCategoryID").ToString();
+                     customerId = entities[0].GetColumnValue("StCustomerId").ToString();
+                }
             }
             else
             {
-                info = GetCRMCustomerInfo(null, accountId);
+                //account
             }
 
             // check categories catalog
-            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesCatalog");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesCatalog");
             esq.AddColumn("Id");
             esq.AddColumn("StSkip");
 
-            var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryId", info.CustomerCategoryId);
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryId", customerCategoryId);
             esq.Filters.Add(esqFirstFilter);
 
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
                 isSkip = (bool)entities[0].GetColumnValue("StSkip");
@@ -59,7 +75,7 @@ namespace BPMExtended.Main.Business
             else
             {
                 //check customer balance
-                if (new BillingManager().GetCustomerBalance(info.CustomerId).Balance > 0)
+                if (new BillingManager().GetCustomerBalance(customerId).Balance > 0)
                 {
                     msg = "You must pay all invoices before proceeding this operation";
                     status = ResultStatus.Error;
@@ -80,32 +96,104 @@ namespace BPMExtended.Main.Business
 
         }
 
-
-        public bool NeedsAttachment(string customerCategoryId)
+        public bool IsCustomerCategoryNormal(string customerCategoryId)
         {
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
             bool isNormal = false;
 
             //Call Categories catalog and check the 'IsNormal' field if true => no need for attachments (optional), if false => attachment is required 
-            var esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesCatalog");
+            esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCustomerCategoriesCatalog");
             esq.AddColumn("Id");
             esq.AddColumn("StIsNormal");
 
-            var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryId", customerCategoryId);
+            esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "StCustomerCategoryId", customerCategoryId);
             esq.Filters.Add(esqFirstFilter);
 
-            var entities = esq.GetEntityCollection(BPM_UserConnection);
+            entities = esq.GetEntityCollection(BPM_UserConnection);
             if (entities.Count > 0)
             {
                 isNormal = (bool)entities[0].GetColumnValue("StIsNormal");
+
             }
+
 
             return isNormal;
         }
 
-        public CRMCustomerInfo GetCRMCustomerInfo(string contactId, string accountId)
+        public OutputResult NeedsAttachment(string contactId , string accountId , string customerCategoryId)
+        {
+            bool isNormal;
+            string msg = "";
+            ResultStatus status = ResultStatus.Success;
+            EntitySchemaQuery esq;
+            IEntitySchemaQueryFilterItem esqFirstFilter;
+            EntityCollection entities;
+
+                isNormal = IsCustomerCategoryNormal(customerCategoryId);
+
+                if(isNormal)
+                {
+                    msg = "No need for attachments";
+                    status = ResultStatus.Success;
+
+                }
+                else
+                {
+
+                if (contactId != null)
+                {
+                    //need attachment
+                    esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "ContactFile");
+                    esq.AddColumn("Id");
+
+                    esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Contact.Id", contactId);
+                    esq.Filters.Add(esqFirstFilter);
+                    entities = esq.GetEntityCollection(BPM_UserConnection);
+
+                    if (entities.Count > 0)
+                    {
+                        msg = "Attachment exist";
+                        status = ResultStatus.Success;
+                    }
+                    else
+                    {
+                        msg = "Please Add Attachments";
+                        status = ResultStatus.Error;
+                    }
+
+
+                }
+                else
+                {
+                    //account
+                }
+
+                }
+            
+            return new OutputResult()
+            {
+                    messages = new List<string>() { msg },
+                    status = status
+            };
+        }
+
+        public void AddRequestHeaderStatusToCompleted(Guid requestId)
+        {
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            //var update = new Update(connection, "Contact").Set("StCustomerId", Func.IsNull(Column.SourceColumn("StCustomerId"), Column.Parameter(contactId)));
+            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
+                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
+            update.Execute();
+            
+        }
+
+        public List<CRMCustomerInfo> GetCRMCustomerInfo(string contactId, string accountId)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
+            List<CRMCustomerInfo> customerInfo = new List<CRMCustomerInfo>();
 
             //Get infos from contact table in CRM database 
 
@@ -127,14 +215,10 @@ namespace BPMExtended.Main.Business
                     var documentId = entities[0].GetColumnValue("StDocumentID");
                     var customerId = entities[0].GetColumnValue("StCustomerId");
                     var customerCategoryId = entities[0].GetColumnValue("StCustomerCategoryID");
-                    return new CRMCustomerInfo()
-                    {
-                        CustomerName = name.ToString(),
-                        CustomerId = customerId.ToString(),
-                        DocumentId = documentId.ToString(),
-                        CustomerCategoryId = customerCategoryId.ToString(),
-                        CustomerCategoryName = new RatePlanManager().GetCustomerCategoryById(customerCategoryId.ToString()).Name
-                    };
+
+                    customerInfo.Add(new CRMCustomerInfo() { Label = "Customer Name" , Description = name.ToString()});
+                    customerInfo.Add(new CRMCustomerInfo() { Label = "Document Id", Description = documentId.ToString()});
+                    customerInfo.Add(new CRMCustomerInfo() { Label = "Customer Category", Description = new RatePlanManager().GetCustomerCategoryById(customerCategoryId.ToString()).Name});
 
                 }
 
@@ -145,59 +229,48 @@ namespace BPMExtended.Main.Business
             }
 
 
-            return new CRMCustomerInfo();
+            return customerInfo;
 
         }
 
 
-        public PaymentMethod CheckCSO(string contactId, string accountId)
+
+        public PaymentMethod CheckCSO(string sysUserId)
         {
             EntitySchemaQuery esq;
             IEntitySchemaQueryFilterItem esqFirstFilter;
 
-            if (contactId != null)
-            {
-                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "Contact");
-                esq.AddColumn("StCSO");
 
-                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId);
+                esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "SysUserInRole");
+                esq.AddColumn("SysUser");
+                var cashierColumn =  esq.AddColumn("SysUser.Contact.StCSO.StCashier");
+
+                //var csoidcol = esq.AddColumn("StCSO.Id");
+
+                esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "SysUser", sysUserId);
                 esq.Filters.Add(esqFirstFilter);
 
                 var entities = esq.GetEntityCollection(BPM_UserConnection);
+
                 if (entities.Count > 0)
                 {
-                    var csoId = entities[0].GetColumnValue("StCSO");
+                    bool isCashier = entities[0].GetTypedColumnValue<bool>(cashierColumn.Name);
+            
+                    if (isCashier)
+                        return new PaymentMethod()
+                        {
+                            Id = "E78BC2E8-119B-475B-AFB1-962B11842597",
+                            Name = "Cash"
+                        };
 
-                    esq = new EntitySchemaQuery(BPM_UserConnection.EntitySchemaManager, "StCSO");
-                    esq.AddColumn("StCashier");
-                    esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", contactId);
-                    esq.Filters.Add(esqFirstFilter);
-                    var entities2 = esq.GetEntityCollection(BPM_UserConnection);
-                    if (entities2.Count > 0)
-                    {
-                        bool isCashier = (bool)entities[0].GetColumnValue("StCashier");
-
-                        if (isCashier)
-                            return new PaymentMethod()
-                            {
-                                Id = "E78BC2E8-119B-475B-AFB1-962B11842597",
-                                name = "Cash"
-                            };
-
-                        else
-                            return new PaymentMethod()
-                            {
-                                Id = "E9F030F4-BF08-4E99-96C2-86C92134FC0F",
-                                name = "Invoice"
-                            };
-                    }
+                    else
+                        return new PaymentMethod()
+                        {
+                            Id = "E9F030F4-BF08-4E99-96C2-86C92134FC0F",
+                            Name = "Invoice"
+                        };
+                    
                 }
-
-            }
-            else
-            {
-                //account
-            }
 
             return null;
         }

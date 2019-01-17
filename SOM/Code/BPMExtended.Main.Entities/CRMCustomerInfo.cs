@@ -8,14 +8,9 @@ namespace BPMExtended.Main.Entities
 {
     public class CRMCustomerInfo
     {
-        public string CustomerName { get; set; }
+        public string Label { get; set; }
 
-        public string DocumentId { get; set; }
-
-        public string CustomerId { get; set; }
-
-        public string CustomerCategoryId { get; set; }
-
-        public string CustomerCategoryName { get; set; }
+        public string Description { get; set; }
+        
     }
 }

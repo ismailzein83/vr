@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
+using BPMExtended.Main.SOMAPI;
 using SOM.Main.BP.Arguments;
 using SOM.Main.Entities;
 
@@ -12,14 +13,15 @@ namespace BPMExtended.Main.Business
 {
     public class InventoryManager
     {
-        public InventoryPhoneItemDetail GetTechnicalDetails(string phoneNumber)
+
+        public TechnicalDetails GetTechnicalDetails(string phoneNumber) // old : GetInventoryDetail()
         {
-            InventoryPhoneItem item = null;
+            TechnicalDetails item = null;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<InventoryPhoneItem>(String.Format("api/SOM/Inventory/GetInventoryPhoneItem?id={0}", phoneNumber));
+                item = client.Get<TechnicalDetails>(String.Format("api/SOM/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
             }
-            return new InventoryPhoneItemDetail
+            return new TechnicalDetails
             {
                 Cabinet = item.Cabinet,
                 CabinetPrimaryPort = item.CabinetPrimaryPort,
@@ -35,8 +37,8 @@ namespace BPMExtended.Main.Business
                 MSAN_EID = item.MSAN_EID,
                 MSAN_TID = item.MSAN_TID,
                 MSANType = item.MSANType,
-                PhoneStatus = (BPMExtended.Main.Entities.PhoneStatus)item.PhoneStatus,
-                PhoneType = (BPMExtended.Main.Entities.PhoneType)item.PhoneType,
+                PhoneStatus = item.PhoneStatus,
+                PhoneType = item.PhoneType,
                 Receiver = item.Receiver,
                 ReceiverPort = item.ReceiverPort,
                 Switch = item.Switch,
@@ -51,7 +53,72 @@ namespace BPMExtended.Main.Business
 
             };
         }
-        public InventoryPhoneItemDetail GetInventoryDetail(string phoneNumber)
+
+        public TechnicalReservationDetail GetTechnicalReservation(string phoneNumber)
+        {
+            TechnicalReservationDetail item = null;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<TechnicalReservationDetail>(String.Format("api/SOM/Inventory/GetTemporaryTechnicalReservation?phoneNumber={0}", phoneNumber));
+            }
+            return new TechnicalReservationDetail
+            {
+                Switch = item.Switch,
+                SwitchId = item.SwitchId,
+
+                MDFPort = item.MDFPort,
+                MDF = item.MDF,
+                MDFPortId = item.MDFPortId,
+                MDFId = item.MDFId,
+                VerticalMDFId = item.VerticalMDFId,
+                VerticalMDF = item.VerticalMDF,
+
+                Cabinet = item.Cabinet,
+                CabinetId = item.CabinetId,
+                PrimaryPort = item.PrimaryPort,
+                PrimaryPortId = item.PrimaryPortId,
+                SecondaryPort = item.SecondaryPort,
+                SecondaryPortId = item.SecondaryPortId,
+                PrimaryMUXPort = item.PrimaryMUXPort,
+                PrimaryMUXPortId = item.PrimaryMUXPortId,
+
+                DP = item.DP,
+                DPPortId = item.DPPortId,
+                DPPort = item.DPPort,
+                DPId = item.DPId,
+                DPMUXPort = item.DPMUXPort,
+                DPMUXPortId = item.DPMUXPortId,
+
+
+                TransmitterId = item.TransmitterId,
+                TransmitterModule = item.TransmitterModule,
+                TransmitterModuleId = item.TransmitterModuleId,
+                TransmitterPortId = item.TransmitterPortId,
+                Transmitter = item.Transmitter,
+                TransmitterPort = item.TransmitterPort,
+
+                ReceiverId = item.ReceiverId,
+                ReceiverPortId = item.ReceiverPortId,
+                Receiver = item.Receiver,
+                ReceiverPort = item.ReceiverPort,
+
+                CanReserve = item.CanReserve,
+                CurrentUtilization = item.CurrentUtilization,
+                DIDExist = item.DIDExist,
+                ISDNExist = item.ISDNExist,
+                PSTNExist = item.PSTNExist,
+                Threshold = item.Threshold
+
+            };
+        }
+
+
+
+        //////////////////////////////////////////////////////////////////////////////
+
+
+
+         /*public InventoryPhoneItemDetail GetInventoryDetail(string phoneNumber)
         {
             InventoryPhoneItem item = null;
             using (SOMClient client = new SOMClient())
@@ -89,7 +156,7 @@ namespace BPMExtended.Main.Business
                 DPId = item.DPId
 
             };
-        }
+        }*/ // old
 
         public InventoryPhoneItemDetail GetGSHDSLInventoryDetailById(string contractId)
         {
@@ -125,63 +192,63 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        public TechnicalReservationDetail GetTechnicalReservation(string phoneNumber)
-        {
-            TechnicalReservationPhoneItem item = null;
-            using (SOMClient client = new SOMClient())
-            {
-                item = client.Get<TechnicalReservationPhoneItem>(String.Format("api/SOM_Main/Inventory/GetTechnicalReservation?phoneNumber={0}", phoneNumber));
-            }
-            return new TechnicalReservationDetail
-            {
-                Switch = item.Switch,
-                SwitchId = item.SwitchId,
+        //public TechnicalReservationDetail GetTechnicalReservation(string phoneNumber)
+        //{
+        //    TechnicalReservationPhoneItem item = null;
+        //    using (SOMClient client = new SOMClient())
+        //    {
+        //        item = client.Get<TechnicalReservationPhoneItem>(String.Format("api/SOM_Main/Inventory/GetTechnicalReservation?phoneNumber={0}", phoneNumber));
+        //    }
+        //    return new TechnicalReservationDetail
+        //    {
+        //        Switch = item.Switch,
+        //        SwitchId = item.SwitchId,
 
-                MDFPort = item.MDFPort,
-                MDF = item.MDF,
-                MDFPortId = item.MDFPortId,
-                MDFId = item.MDFId,
-                VerticalMDFId = item.VerticalMDFId,
-                VerticalMDF = item.VerticalMDF,
+        //        MDFPort = item.MDFPort,
+        //        MDF = item.MDF,
+        //        MDFPortId = item.MDFPortId,
+        //        MDFId = item.MDFId,
+        //        VerticalMDFId = item.VerticalMDFId,
+        //        VerticalMDF = item.VerticalMDF,
 
-                Cabinet = item.Cabinet,
-                CabinetId = item.CabinetId,
-                PrimaryPort = item.PrimaryPort,
-                PrimaryPortId = item.PrimaryPortId,
-                SecondaryPort = item.SecondaryPort,
-                SecondaryPortId = item.SecondaryPortId,
-                PrimaryMUXPort = item.PrimaryMUXPort,
-                PrimaryMUXPortId = item.PrimaryMUXPortId,
+        //        Cabinet = item.Cabinet,
+        //        CabinetId = item.CabinetId,
+        //        PrimaryPort = item.PrimaryPort,
+        //        PrimaryPortId = item.PrimaryPortId,
+        //        SecondaryPort = item.SecondaryPort,
+        //        SecondaryPortId = item.SecondaryPortId,
+        //        PrimaryMUXPort = item.PrimaryMUXPort,
+        //        PrimaryMUXPortId = item.PrimaryMUXPortId,
 
-                DP = item.DP,
-                DPPortId = item.DPPortId,
-                DPPort = item.DPPort,
-                DPId = item.DPId,
-                DPMUXPort = item.DPMUXPort,
-                DPMUXPortId = item.DPMUXPortId,
+        //        DP = item.DP,
+        //        DPPortId = item.DPPortId,
+        //        DPPort = item.DPPort,
+        //        DPId = item.DPId,
+        //        DPMUXPort = item.DPMUXPort,
+        //        DPMUXPortId = item.DPMUXPortId,
 
                 
-                TransmitterId = item.TransmitterId,
-                TransmitterModule = item.TransmitterModule,
-                TransmitterModuleId = item.TransmitterModuleId,
-                TransmitterPortId = item.TransmitterPortId,
-                Transmitter = item.Transmitter,
-                TransmitterPort = item.TransmitterPort,
+        //        TransmitterId = item.TransmitterId,
+        //        TransmitterModule = item.TransmitterModule,
+        //        TransmitterModuleId = item.TransmitterModuleId,
+        //        TransmitterPortId = item.TransmitterPortId,
+        //        Transmitter = item.Transmitter,
+        //        TransmitterPort = item.TransmitterPort,
 
-                ReceiverId = item.ReceiverId,
-                ReceiverPortId = item.ReceiverPortId,
-                Receiver = item.Receiver,
-                ReceiverPort = item.ReceiverPort,
+        //        ReceiverId = item.ReceiverId,
+        //        ReceiverPortId = item.ReceiverPortId,
+        //        Receiver = item.Receiver,
+        //        ReceiverPort = item.ReceiverPort,
 
-                CanReserve = item.CanReserve,
-                CurrentUtilization = item.CurrentUtilization,
-                DIDExist = item.DIDExist,
-                ISDNExist = item.ISDNExist,
-                PSTNExist = item.PSTNExist,
-                Threshold = item.Threshold
+        //        CanReserve = item.CanReserve,
+        //        CurrentUtilization = item.CurrentUtilization,
+        //        DIDExist = item.DIDExist,
+        //        ISDNExist = item.ISDNExist,
+        //        PSTNExist = item.PSTNExist,
+        //        Threshold = item.Threshold
                 
-            };
-        }
+        //    };
+        //} //old
 
         public GSHDSLTechnicalReservationDetail GSHDSLGetTechnicalReservation(string phoneNumber)
         {
@@ -318,7 +385,7 @@ namespace BPMExtended.Main.Business
 
         public bool MultiplexerValidation(string phoneNumber)
         {
-            InventoryPhoneItemDetail inventoryItem = GetInventoryDetail(phoneNumber);
+            TechnicalDetails inventoryItem = GetTechnicalDetails(phoneNumber);
 
             return inventoryItem.IsMultiplexed ? true : false;
 
@@ -504,8 +571,8 @@ namespace BPMExtended.Main.Business
             TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
             TelephonyContractDetail pilotContract = contractManager.GetTelephonyContract(pilotContractId);
 
-            InventoryPhoneItemDetail phoneitem = GetInventoryDetail(contract.PhoneNumber);
-            InventoryPhoneItemDetail pilotPhoneItem = GetInventoryDetail(pilotContract.PhoneNumber);
+            TechnicalDetails phoneitem = GetTechnicalDetails(contract.PhoneNumber);
+            TechnicalDetails pilotPhoneItem = GetTechnicalDetails(pilotContract.PhoneNumber);
 
             return phoneitem.SwitchId == pilotPhoneItem.SwitchId ? true : false;
         }
