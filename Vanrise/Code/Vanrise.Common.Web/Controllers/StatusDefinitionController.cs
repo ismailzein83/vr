@@ -22,6 +22,14 @@ namespace Vanrise.Common.Web.Controllers
             return GetWebResponse(input, _manager.GetFilteredStatusDefinitions(input), "Status Definitions");
         }
 
+        [HttpGet]
+        [Route("GetStatusDefinitionStylesByBusinessEntityId")]
+        public List<StatusDefinitionStyle> GetStatusDefinitionStylesByBusinessEntityId(Guid businessEntityId)
+        {
+            return _manager.GetStatusDefinitionStylesByBusinessEntityId(businessEntityId);
+        }
+
+
         [HttpPost]
         [Route("AddStatusDefinition")]
         public Vanrise.Entities.InsertOperationOutput<StatusDefinitionDetail> AddStatusDefinition(StatusDefinition statusDefinitionItem)

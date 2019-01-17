@@ -1,0 +1,14 @@
+﻿<vr-columns width="fullrow">
+    <vr-datagrid datasource="ctrl.mergedMeasureStyles" on-ready="ctrl.onGridReady" normalcell>
+        <vr-datagridcolumn headertext="'Measure Name'" field="'MeasureName'" disablesorting="true" widthfactor="5"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Measure Description'" field="'MeasureDescription'" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Recommended'" field="'Entity.MeasureStyleRuleDetail.RecommendedRecordFilterDescription'" disablesorting="true" ng-show="ctrl.showRecommended"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Rules'" disablesorting="true" widthfactor="6" ng-show="ctrl.showRules">
+            <span style="display:block " ng-repeat="rule in dataItem.Entity.MeasureStyleRuleDetail.Rules">
+                {{rule.StatusValueDescription}} if {{rule.RecordFilterDescription}}
+            </span>
+        </vr-datagridcolumn>
+
+    </vr-datagrid>
+</vr-columns>
+

@@ -1,0 +1,16 @@
+﻿<div vr-modalcontent ng-controller="VR_Analytic_AnalyticMeasureStyleEditorController" vr-loader="scopeModel.isLoading" width="'60%'">
+    <vr-modalbody maxheight="'600px'">
+        <vr-form validationcontext="analyticMeasureStyleEditorGroup">
+            <vr-analytic-measurestyle-grid-editor on-ready="scopeModel.onMeasureStyleGridReady"></vr-analytic-measurestyle-grid-editor>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="analyticMeasureStyleEditorGroup" data-onclick="scopeModel.saveMeasureStyles"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

@@ -76,10 +76,12 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRCommon_ObjectTrackingService', 
                 name: "Edit",
                 clicked: editTable,
                 haspermission: hasEditAnalyticTablePermission
-            
-            
-
-            }];
+            },
+                {
+                    name: "Measure Styles",
+                    clicked: openMeasureStyles,
+                }
+            ];
         }
         function hasEditAnalyticTablePermission() {
             return VR_Analytic_AnalyticTableAPIService.HasEditAnalyticTablePermission();
@@ -90,6 +92,9 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRCommon_ObjectTrackingService', 
                 gridAPI.itemUpdated(tableObj);
             };
             VR_Analytic_AnalyticTableService.editAnalyticTable(dataItem.Entity.AnalyticTableId, onEditTable);
+        }
+        function openMeasureStyles(dataItem) {
+            VR_Analytic_AnalyticTableService.openMeasureStyles(dataItem.Entity.AnalyticTableId);
         }
 
         function getGridDrillDownDefinitions() {

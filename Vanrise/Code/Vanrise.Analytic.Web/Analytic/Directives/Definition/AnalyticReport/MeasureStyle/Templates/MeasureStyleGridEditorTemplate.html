@@ -1,17 +1,17 @@
 ﻿<vr-columns width="fullrow">
     <vr-datagrid datasource="ctrl.measureStyles" norowhighlightonclick="true"
                  on-ready="ctrl.onGridReady" menuactions="ctrl.measureStylesGridMenuActions" hidegridmenu>
-        <vr-datagridcolumn headertext="'Measure Name'" field="'MeasureName'" disablesorting="true" isclickable="true" onclicked="ctrl.saveMeasureStyle"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Measure Name'" field="'MeasureTitle'" disablesorting="true" isclickable="true" onclicked="ctrl.onMeasureClicked"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Recommended'" field="'Entity.MeasureStyleRuleDetail.RecommendedRecordFilterDescription'" disablesorting="true" ng-show="ctrl.showRecommendedColumn()" ></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Description'" disablesorting="true">
             <span style="display:block " ng-repeat="rule in dataItem.Entity.MeasureStyleRuleDetail.Rules">
                 {{rule.StatusValueDescription}} if {{rule.RecordFilterDescription}}
             </span>
         </vr-datagridcolumn>
-        <vr-datagridcolumn field="'Reset'" headertext="''" fixedwidth="'120'">
-            <span ng-if="dataItem.Entity != undefined">
+        <vr-datagridcolumn field="'Reset'" headertext="''" widthfactor="'3'">
+            <span ng-if="dataItem.Entity.MeasureStyleRuleDetail.Rules.length > 0">
                 <vr-columns width="fullrow">
-                    <span ng-click="viewScope.onResetClicked(dataItem)" style="cursor: pointer; text-decoration: underline">Clear</span>
+                    <span ng-click="viewScope.onClearClicked(dataItem)" style="cursor: pointer; text-decoration: underline">Clear</span>
                 </vr-columns>
             </span>
         </vr-datagridcolumn>

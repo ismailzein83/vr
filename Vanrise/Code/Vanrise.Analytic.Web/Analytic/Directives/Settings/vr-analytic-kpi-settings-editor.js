@@ -21,7 +21,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
             templateUrl: "/Client/Modules/Analytic/Directives/Settings/Templates/KPISettingsTemplate.html"
         };
 
-        function KPISettingsEditor(ctrl, $scope, $attrs) {  
+        function KPISettingsEditor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
             var measureStyleRules;
@@ -90,38 +90,15 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                     title: itemTab.analytictable.Name,
                     analyticTableId: itemTab.analytictable.AnalyticTableId,
                     isMeasureStyleGridLoading: true,
-                    isRecordFilterLoading:true,
-                    showKPISection: itemTab.analytictable.StatusBEDefinitionId != undefined? true : false
+                    isRecordFilterLoading: true,
+                    showKPISection: itemTab.analytictable.StatusBEDefinitionId != undefined ? true : false
                 };
                 var input = {
                     TableIds: [itemTab.analytictable.AnalyticTableId],
                     ItemType: VR_Analytic_AnalyticTypeEnum.Measure.value,
                 };
 
-                var context = {};
-                context.getMeasures = function () {
-                    var selectedMeasures = [];
-                    for (var i = 0; i < measures.length; i++) {
-                        selectedMeasures.push(measures[i]);
-                    }
-                    return selectedMeasures;
-                };
-                var analyticItemConfigPromise = VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
-                    if (response != undefined) {
-                        for (var i = 0; i < response.length; i++) {
-                            var measureData = response[i];
-                            var measure = {
-                                FieldType: measureData.Config.FieldType,
-                                Name: measureData.Name,
-                                Title: measureData.Title,
-                                AnalyticItemConfigId: measureData.AnalyticItemConfigId
-                            };
-                            measures.push(measure);
-                        };
-                    }
-                });
-                promises.push(analyticItemConfigPromise);
-                var measuresByAnalyticTable = UtilsService.getItemByVal(measureStyleRules, itemTab.analytictable.AnalyticTableId, "AnalyticTableId");
+                var measuresByKPI = UtilsService.getItemByVal(measureStyleRules, itemTab.analytictable.AnalyticTableId, "AnalyticTableId");
                 dataItem.measureStyleLoadDeferred = UtilsService.createPromiseDeferred();
                 dataItem.measureStyleLoadDeferred.promise.then(function () {
                     dataItem.isMeasureStyleGridLoading = false;
@@ -130,10 +107,11 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                     dataItem.measureStyleGridAPI = api;
                     UtilsService.waitMultiplePromises(promises).then(function () {
                         var payload = {
-                            context: context,
-                            measureStyles: measuresByAnalyticTable != undefined ? measuresByAnalyticTable.MeasureStyleRules : undefined,
+                            measureStyles: measuresByKPI != undefined ? measuresByKPI.MeasureStyleRules : undefined,
                             analyticTableId: itemTab.analytictable.AnalyticTableId,
+                            isLoadedFromKpis :true
                         };
+
                         VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.measureStyleLoadDeferred);
                     });
                 };
@@ -156,7 +134,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                     getFields: function () {
                         return fields;
                     },
-                   
+
                 };
                 dataItem.recordFilterLoadDeferred = UtilsService.createPromiseDeferred();
                 dataItem.recordFilterLoadDeferred.promise.then(function () {
@@ -167,7 +145,7 @@ app.directive('vrAnalyticKpiSettingsEditor', ['UtilsService', 'VRUIUtilsService'
                     analyticTableDimensionsPromise.then(function () {
                         var payload = {
                             context: recordFilterContext,
-                            FilterGroup: measuresByAnalyticTable != undefined ? measuresByAnalyticTable.GlobalFilter : undefined
+                            FilterGroup: measuresByKPI != undefined ? measuresByKPI.GlobalFilter : undefined
                         };
 
                         VRUIUtilsService.callDirectiveLoad(api, payload, dataItem.recordFilterLoadDeferred);

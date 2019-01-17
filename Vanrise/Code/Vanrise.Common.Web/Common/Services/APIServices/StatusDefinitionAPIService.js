@@ -16,6 +16,11 @@
         function AddStatusDefinition(statusDefinitionItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'AddStatusDefinition'), statusDefinitionItem);
         }
+        function GetStatusDefinitionStylesByBusinessEntityId(businessEntityId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetStatusDefinitionStylesByBusinessEntityId'), {
+                businessEntityId: businessEntityId
+            });
+        }
 
         function UpdateStatusDefinition(statusDefinitionItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateStatusDefinition'), statusDefinitionItem);
@@ -55,7 +60,8 @@
             HasUpdateStatusDefinitionPermission: HasUpdateStatusDefinitionPermission,
             GetStatusDefinition: GetStatusDefinition,
             GetStatusDefinitionsInfo: GetStatusDefinitionsInfo,
-            GetRemoteStatusDefinitionsInfo: GetRemoteStatusDefinitionsInfo
+            GetRemoteStatusDefinitionsInfo: GetRemoteStatusDefinitionsInfo,
+            GetStatusDefinitionStylesByBusinessEntityId: GetStatusDefinitionStylesByBusinessEntityId
         });
     }
 

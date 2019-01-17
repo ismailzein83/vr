@@ -41,6 +41,12 @@ namespace Vanrise.Analytic.Data.SQL
             int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_Update", analyticTable.AnalyticTableId, analyticTable.Name, Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
             return (recordesEffected > 0);
         }
+        public bool SaveAnalyticTableMeasureStyles(AnalyticTableMeasureStyles measureStyles,Guid analyticTableId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_SaveMeasureStyles", analyticTableId, Vanrise.Common.Serializer.Serialize(measureStyles));
+            return (recordesEffected > 0);
+        }
+        
         #endregion
 
 
@@ -52,6 +58,7 @@ namespace Vanrise.Analytic.Data.SQL
                 AnalyticTableId = (Guid)reader["ID"],
                 Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<AnalyticTableSettings>(reader["Settings"] as string),
+                MeasureStyles = Vanrise.Common.Serializer.Deserialize<AnalyticTableMeasureStyles>(reader["MeasureStyles"] as string),
             };
         }
         #endregion

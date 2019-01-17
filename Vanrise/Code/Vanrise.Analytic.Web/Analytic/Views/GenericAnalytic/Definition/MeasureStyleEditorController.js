@@ -22,6 +22,7 @@
         var measureName;
         var statusDefinitionBeId;
         var recommendedId;
+        var isLoadedFromKpis;
 
         loadParameters();
         defineScope();
@@ -36,6 +37,7 @@
                 measureName = parameters.measureName;
                 statusDefinitionBeId = parameters.statusDefinitionBeId;
                 recommendedId = parameters.recommendedId;
+                isLoadedFromKpis = parameters.isLoadedFromKpis;
             }
             $scope.scopeModel.isEditMode = parameters.isEditMode;
         }
@@ -87,7 +89,6 @@
 
             measure = context.getMeasure(measureName);
             var fieldType = UtilsService.getItemByVal(fieldTypeConfigs, measure.FieldType.ConfigId, "ExtensionConfigurationId");
-
             var dataItem = {
                 id: countId++,
                 configId: fieldType != undefined ? fieldType.ExtensionConfigurationId : undefined,
@@ -325,7 +326,7 @@
             return VR_Analytic_MeasureStyleRuleAPIService.GetMeasureStyleRuleDetail(measureStyleRuleInput).then(function (response) {
                 var measureStyleDetail = response;
                 if ($scope.onMeasureStyleAdded != undefined) {
-                    $scope.onMeasureStyleAdded(measureStyleDetail);
+                    $scope.onMeasureStyleAdded(measureStyleDetail,isLoadedFromKpis);
                 }
                 $scope.modalContext.closeModal();
             });
@@ -340,7 +341,7 @@
             return VR_Analytic_MeasureStyleRuleAPIService.GetMeasureStyleRuleDetail(measureStyleRuleInput).then(function (response) {
                 var measureStyleDetail = response;
                 if ($scope.onMeasureStyleUpdated != undefined)
-                    $scope.onMeasureStyleUpdated(measureStyleDetail);
+                    $scope.onMeasureStyleUpdated(measureStyleDetail,isLoadedFromKpis);
                 $scope.modalContext.closeModal();
             });
 

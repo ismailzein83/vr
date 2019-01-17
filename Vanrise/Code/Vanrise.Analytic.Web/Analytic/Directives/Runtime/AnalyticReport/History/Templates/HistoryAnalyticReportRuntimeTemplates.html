@@ -8,9 +8,8 @@
                 </vr-choices-filter>
             </vr-columns>
         </vr-row>
-
         <vr-row removeline>
-            <vr-columns colnum="2" ng-show="scopeModel.groupingDimentions != undefined && scopeModel.groupingDimentions.length>0">
+            <vr-columns colnum="2" ng-show="scopeModel.groupingDimentions != undefined && scopeModel.groupingDimentions.length > 0">
                 <vr-select datatextfield="Title" datavaluefield="DimensionName" label="Grouping By" isrequired="scopeModel.isGroupingRequired"
                            entityname="Grouping" selectedvalues="scopeModel.selectedGroupingDimentions" datasource="scopeModel.groupingDimentions " ismultipleselection></vr-select>
             </vr-columns>
@@ -26,9 +25,10 @@
             <span ng-repeat="filter in scopeModel.filters">
                 <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2" isrequired="filter.isRequired"></vr-directivewrapper>
             </span>
-            <vr-columns colnum="4" ng-repeat="legend in scopeModel.legends" withemptyline>
-                <vr-legend header="{{legend.Header}}" content="{{legend.Content}}"></vr-legend>
+            <vr-columns colnum="12">
+                <vr-analytic-legend on-ready="scopeModel.onLegendDirectiveReady"></vr-analytic-legend>
             </vr-columns>
+
         </vr-row>
 
         <vr-row removeline ng-if="advancedSelected">

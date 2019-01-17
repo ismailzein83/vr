@@ -104,13 +104,11 @@
     <vr-columns width="fullrow">
         <vr-section title="Legends">
             <vr-row>
-                <vr-columns width="1/3row">
-                    <vr-textbox type="text" value="scopeModel.legendHeader" label="Header" isrequired="scopeModel.legendContent != undefined && scopeModel.legendContent.length > 0"></vr-textbox>
+                <vr-columns colnum="4">
+                    <vr-switch value="scopeModel.showLegend" label="Show Legend"></vr-switch>
                 </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-editor value="scopeModel.legendContent" label="Content" isrequired="scopeModel.legendHeader != undefined  && scopeModel.legendHeader.length > 0"></vr-editor>
+                <vr-columns colnum="4">
+                    <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady"  ondeselectitem="scopeModel.onTableDeselect" selectedvalues="scopeModel.selectedTables"  onselectionchanged="scopeModel.onTableSelectionChanged"></vr-analytic-table-selector>
                 </vr-columns>
             </vr-row>
         </vr-section>

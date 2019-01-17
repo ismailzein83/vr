@@ -53,6 +53,14 @@ namespace Vanrise.Analytic.Web.Controllers
         }
 
         [HttpPost]
+        [Route("SaveAnalyticTableMeasureStyles")]
+        public Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail> SaveAnalyticTableMeasureStyles(AnalyticTableMeasureStylesInput analyticTableMeasureStylesInput)
+        {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            return manager.SaveAnalyticTableMeasureStyles(analyticTableMeasureStylesInput.MeasureStyles, analyticTableMeasureStylesInput.AnalyticTableId);
+        }
+
+        [HttpPost]
         [Route("AddAnalyticTable")]
         public Vanrise.Entities.InsertOperationOutput<AnalyticTableDetail> AddAnalyticTable(AnalyticTable analyticTable)
         {
@@ -73,9 +81,21 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticTableManager manager = new AnalyticTableManager();
             return manager.GetClientAnalyitTableInfo();
         }
+        [HttpGet]
+        [Route("GetAnalyticTableMergedMeasureStylesEditorRuntime")]
+        public MeasureStyleRuleEditorRuntime GetAnalyticTableMergedMeasureStylesEditorRuntime(Guid analyticTableId)
+        {
+            AnalyticTableManager manager = new AnalyticTableManager();
+            return manager.GetAnalyticTableMergedMeasureStylesEditorRuntime(analyticTableId);
+        }
     }
     public class AnalyticTableConnectionInput
     {
         public List<Guid> AnalyticTableIds { get; set; }
+    }
+    public class AnalyticTableMeasureStylesInput
+    {
+        public Guid AnalyticTableId { get; set; }
+        public AnalyticTableMeasureStyles MeasureStyles { get; set; }
     }
 }

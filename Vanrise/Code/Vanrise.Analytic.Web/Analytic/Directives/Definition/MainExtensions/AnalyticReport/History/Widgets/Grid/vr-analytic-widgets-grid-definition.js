@@ -31,9 +31,6 @@
             var measureSelectorAPI;
             var measureReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var measureStyleGridAPI;
-            var measureStyleGridReadyDeferred = UtilsService.createPromiseDeferred();
-
             var itemActionGridAPI;
             var itemActionGridReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -119,11 +116,6 @@
                     return "At least one measure should be selected.";
                 };
 
-                $scope.scopeModel.onSelectionMeasureChanged = function (measure) {
-                    if (measureStyleGridAPI != undefined)
-                        measureStyleGridAPI.reloadMeasures();
-                };
-              
                 $scope.scopeModel.onSelectMeasureItem = function (measure) {
                     var dataItem = {
                         AnalyticItemConfigId: measure.AnalyticItemConfigId,
@@ -161,14 +153,9 @@
                     $scope.scopeModel.selectedMeasures.splice(index, 1);
                     var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.measures, dataItem.AnalyticItemConfigId, 'Name');
                     $scope.scopeModel.measures.splice(datasourceIndex, 1);
-                    if (measureStyleGridAPI != undefined)
-                        measureStyleGridAPI.reloadMeasures();
+                  
                 };
 
-                $scope.scopeModel.onMeasureStyleGridDirectiveReady = function (api) {
-                    measureStyleGridAPI = api;
-                    measureStyleGridReadyDeferred.resolve();
-                };
 
                 $scope.scopeModel.onAnalyticItemActionDirectiveReady = function (api) {
                     itemActionGridAPI = api;
@@ -239,18 +226,6 @@
                             VRUIUtilsService.callDirectiveLoad(dimensionSelectorAPI, payloadGroupingDirective, loadDimensionDirectivePromiseDeferred);
                         });
                         promises.push(loadDimensionDirectivePromiseDeferred.promise);
-
-
-                        var loadMeasureStyleGridDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                        measureStyleGridReadyDeferred.promise.then(function () {
-                            var payloadMeasureStyleGridDirective = {
-                                context: getContext(),
-                                analyticTableId :tableIds[0],
-                                measureStyles: payload != undefined && payload.widgetEntity != undefined ? payload.widgetEntity.MeasureStyleRules : undefined
-                            };
-                            VRUIUtilsService.callDirectiveLoad(measureStyleGridAPI, payloadMeasureStyleGridDirective, loadMeasureStyleGridDirectivePromiseDeferred);
-                        });
-                        promises.push(loadMeasureStyleGridDirectivePromiseDeferred.promise);
 
                         var loadMeasureDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         measureReadyDeferred.promise.then(function () {
@@ -338,7 +313,6 @@
                         RootDimensionsFromSearchSection: $scope.scopeModel.rootDimensionsFromSearch,
                         Dimensions: dimensions,
                         Measures: measures,
-                        MeasureStyleRules: measureStyleGridAPI != undefined ? measureStyleGridAPI.getData() : undefined,
                         WithSummary: $scope.scopeModel.withSummary,
                         OrderType: orderTypeEntity != undefined?orderTypeEntity.OrderType:undefined,
                         ItemActions: itemActionGridAPI != undefined ? itemActionGridAPI.getData() : undefined,

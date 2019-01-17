@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType', 'VR_Analytic_StyleCodeEnum', 'Analytic_AnalyticService', 'VR_Analytic_GridWidthEnum', 'VR_Analytic_AnalyticItemActionService', 'DataRetrievalResultTypeEnum', 'VRCommon_StyleDefinitionAPIService', 'VR_Analytic_KPISettingsAPIService',
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType, VR_Analytic_StyleCodeEnum, Analytic_AnalyticService, VR_Analytic_GridWidthEnum, VR_Analytic_AnalyticItemActionService, DataRetrievalResultTypeEnum, VRCommon_StyleDefinitionAPIService, VR_Analytic_KPISettingsAPIService) {
+app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_Analytic_AnalyticAPIService', 'VRModalService', 'VR_Analytic_AnalyticItemConfigAPIService', 'DataGridRetrieveDataEventType', 'VR_Analytic_StyleCodeEnum', 'Analytic_AnalyticService', 'VR_Analytic_GridWidthEnum', 'VR_Analytic_AnalyticItemActionService', 'DataRetrievalResultTypeEnum', 'VRCommon_StyleDefinitionAPIService', 'VR_Analytic_KPISettingsAPIService','VR_Analytic_AnalyticTableAPIService',
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Analytic_AnalyticAPIService, VRModalService, VR_Analytic_AnalyticItemConfigAPIService, DataGridRetrieveDataEventType, VR_Analytic_StyleCodeEnum, Analytic_AnalyticService, VR_Analytic_GridWidthEnum, VR_Analytic_AnalyticItemActionService, DataRetrievalResultTypeEnum, VRCommon_StyleDefinitionAPIService, VR_Analytic_KPISettingsAPIService, VR_Analytic_AnalyticTableAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -27,7 +27,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             var groupingDimensions = [];
             var initialQueryOrderType;
             var gridPayload;
-            var measureStyleRules;
+            var measureStyleRules=[];
 
             var gridApi;
             var tableId;
@@ -87,20 +87,16 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                         styleDefinitions = response;
                                 });
                                 promises.push(styleDefinitionsPromiseDeferred);
-                                var kpiSettingsPromise = VR_Analytic_KPISettingsAPIService.GetAnalytictableKPISettings(tableId).then(function (response) {
-                                    measureStyleRules = response;
-                                    if (measureStyleRules == undefined)
-                                        measureStyleRules = [];
-                                    if (payLoad.Settings.MeasureStyleRules != undefined && payLoad.Settings.MeasureStyleRules.length > 0) {
-                                        for (var i = 0; i < payLoad.Settings.MeasureStyleRules.length; i++) {
-                                            var measureRule = payLoad.Settings.MeasureStyleRules[i];
-                                            if (UtilsService.getItemByVal(measureStyleRules, measureRule.MeasureName, 'MeasureName') == null) {
-                                                measureStyleRules.push(measureRule);
-                                            }
+                                var mergedMeasureStylesPromise = VR_Analytic_AnalyticTableAPIService.GetAnalyticTableMergedMeasureStylesEditorRuntime(tableId).then(function (response) {
+                                    if (response.MeasureStyleRulesRuntime != undefined) {
+                                        for (var i = 0; i < response.MeasureStyleRulesRuntime.length; i++) {
+                                            
+                                            var measureStyle = response.MeasureStyleRulesRuntime[i];
+                                            measureStyleRules.push(measureStyle.MeasureStyleRule);
                                         }
                                     }
                                 });
-                                promises.push(kpiSettingsPromise);
+                                promises.push(mergedMeasureStylesPromise);
                             }
                             else {
                                 styleDefinitions = payLoad.StyleDefinitions;
@@ -660,7 +656,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         measureStyleRules = settings.MeasureStyleRules;
                         if (gridPayload != undefined) {
                             if (gridPayload.Settings != undefined)
-                                gridPayload.Settings.MeasureStyleRules = settings.MeasureStyleRules;
+                                gridPayload.Settings.MeasureStyleRules = measureStyleRules;
 
                             var payload = {
                                 Settings: gridPayload.Settings,

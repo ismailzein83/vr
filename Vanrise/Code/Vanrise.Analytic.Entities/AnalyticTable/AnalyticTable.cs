@@ -13,5 +13,10 @@ namespace Vanrise.Analytic.Entities
         public string Name { get; set; }
 
         public AnalyticTableSettings Settings { get; set; }
+        public AnalyticTableMeasureStyles MeasureStyles { get; set; }
+    }
+    public class AnalyticTableMeasureStyles
+    {
+        public List<MeasureStyleRule> MeasureStyleRules { get; set; }
     }
 }

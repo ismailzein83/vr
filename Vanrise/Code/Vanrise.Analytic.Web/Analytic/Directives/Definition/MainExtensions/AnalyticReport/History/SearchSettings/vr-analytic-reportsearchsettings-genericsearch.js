@@ -36,8 +36,12 @@
             var advancedFilterDimensionSelectorAPI;
             var advancedFilterDimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var tableSelectorAPI;
+            var tableSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.analyticTables = [];
                 $scope.scopeModel.groupingDimensions = [];
                 $scope.scopeModel.filterDimensions = [];
                 $scope.scopeModel.showAdvancedFilterFields = false;
@@ -54,6 +58,12 @@
                     filterDimensionSelectorAPI = api;
                     filterDimensionReadyDeferred.resolve();
                 };
+
+                $scope.scopeModel.onTableSelectorDirectiveReady = function (api) {
+                    tableSelectorAPI = api;
+                    tableSelectorReadyDeferred.resolve();
+                };
+
                 $scope.scopeModel.onAdvancedFilterDimensionSelectorDirectiveReady = function (api) {
                     advancedFilterDimensionSelectorAPI = api;
                     advancedFilterDimensionReadyDeferred.resolve();
@@ -158,9 +168,10 @@
                 var api = {};
 
                 api.load = function (payload) {
-
+                    var promises = [];
                     if (payload != undefined && payload.tableIds != undefined) {
                         var tableIds = payload.tableIds;
+                        $scope.scopeModel.analyticTables = tableIds;
 
                         var selectedGroupingIds;
                         var selectedFilterIds;
@@ -196,7 +207,8 @@
                                     $scope.scopeModel.filterDimensions.push(dataItem);
                                 }
                             }
-
+                            if (payload.searchSettings != undefined)
+                                $scope.scopeModel.showLegend = payload.searchSettings.ShowLegend;
                             if (payload.searchSettings.AdvancedFilters != undefined) {
                                 $scope.scopeModel.advancedFilterFieldsRelationTypeSelectedValues =
                                     UtilsService.getItemByVal($scope.scopeModel.advancedFilterFieldsRelationTypeDS, payload.searchSettings.AdvancedFilters.FieldsRelationType, "value");
@@ -215,48 +227,63 @@
                                 }
                             }
 
-                            if (payload.searchSettings.Legends) {
-                                $scope.scopeModel.legendHeader = payload.searchSettings.Legends[0].Header;
-                                $scope.scopeModel.legendContent = payload.searchSettings.Legends[0].Content;
-                            }
+
+                            
+
+
+                            
+
+
+                            var loadGroupingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                            groupingDimensionReadyDeferred.promise.then(function () {
+                                var payloadGroupingDirective = {
+                                    filter: { TableIds: tableIds, HideIsRequiredFromParent: true },
+                                    selectedIds: selectedGroupingIds
+                                };
+                                VRUIUtilsService.callDirectiveLoad(groupingDimensionSelectorAPI, payloadGroupingDirective, loadGroupingDirectivePromiseDeferred);
+                            });
+                            promises.push(loadGroupingDirectivePromiseDeferred.promise);
+
+                            var loadFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                            filterDimensionReadyDeferred.promise.then(function () {
+                                var payloadFilterDirective = {
+                                    filter: { TableIds: tableIds, HideIsRequiredFromParent: true },
+                                    selectedIds: selectedFilterIds
+                                };
+                                VRUIUtilsService.callDirectiveLoad(filterDimensionSelectorAPI, payloadFilterDirective, loadFilterDirectivePromiseDeferred);
+                            });
+                            promises.push(loadFilterDirectivePromiseDeferred.promise);
+
+                            var loadAdvancedFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                            advancedFilterDimensionReadyDeferred.promise.then(function () {
+                                var payloadAdvancedFilterDirective = {
+                                    filter: { TableIds: tableIds },
+                                    selectedIds: selectedAdvancedFilterFieldIds
+                                };
+                                VRUIUtilsService.callDirectiveLoad(advancedFilterDimensionSelectorAPI, payloadAdvancedFilterDirective, loadAdvancedFilterDirectivePromiseDeferred);
+                            });
+                            promises.push(loadAdvancedFilterDirectivePromiseDeferred.promise);
+
+                           
                         }
-
-                        var promises = [];
-
-                        var loadGroupingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                        groupingDimensionReadyDeferred.promise.then(function () {
-                            var payloadGroupingDirective = {
-                                filter: { TableIds: tableIds, HideIsRequiredFromParent: true },
-                                selectedIds: selectedGroupingIds
+                        var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadTableSelectorPromiseDeferred.promise);
+                        tableSelectorReadyDeferred.promise.then(function () {
+                            var tableSelectorpayLoad = {
+                                filter: {
+                                    OnlySelectedIds: tableIds
+                                }
                             };
-                            VRUIUtilsService.callDirectiveLoad(groupingDimensionSelectorAPI, payloadGroupingDirective, loadGroupingDirectivePromiseDeferred);
+                            if (payload.searchSettings != undefined && payload.searchSettings.Legends != undefined && payload.searchSettings.Legends.length > 0) {
+                                tableSelectorpayLoad.selectedIds = payload.searchSettings.Legends[0].AnalyticTableId
+                            }
+                            VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, tableSelectorpayLoad, loadTableSelectorPromiseDeferred);
                         });
-                        promises.push(loadGroupingDirectivePromiseDeferred.promise);
-
-                        var loadFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                        filterDimensionReadyDeferred.promise.then(function () {
-                            var payloadFilterDirective = {
-                                filter: { TableIds: tableIds, HideIsRequiredFromParent: true },
-                                selectedIds: selectedFilterIds
-                            };
-                            VRUIUtilsService.callDirectiveLoad(filterDimensionSelectorAPI, payloadFilterDirective, loadFilterDirectivePromiseDeferred);
-                        });
-                        promises.push(loadFilterDirectivePromiseDeferred.promise);
-
-                        var loadAdvancedFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                        advancedFilterDimensionReadyDeferred.promise.then(function () {
-                            var payloadAdvancedFilterDirective = {
-                                filter: { TableIds: tableIds },
-                                selectedIds: selectedAdvancedFilterFieldIds
-                            };
-                            VRUIUtilsService.callDirectiveLoad(advancedFilterDimensionSelectorAPI, payloadAdvancedFilterDirective, loadAdvancedFilterDirectivePromiseDeferred);
-                        });
-                        promises.push(loadAdvancedFilterDirectivePromiseDeferred.promise);
+                       
 
                         return UtilsService.waitMultiplePromises(promises);
-                    }
-                };
-
+                    };
+                }
                 api.getData = function getData() {
 
                     var groupingDimensions;
@@ -297,10 +324,10 @@
                         }
                     }
 
-                    var legends;
-                    if ($scope.scopeModel.legendHeader != undefined && $scope.scopeModel.legendContent != undefined)
-                        legends = [{ Header: $scope.scopeModel.legendHeader, Content: $scope.scopeModel.legendContent }];
-
+                    var legends = [];
+                    legends.push({
+                        AnalyticTableId:tableSelectorAPI.getSelectedIds()
+                    });
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.History.SearchSettings.GenericSearchSettings, Vanrise.Analytic.MainExtensions ",
                         IsRequiredGroupingDimensions: $scope.scopeModel.isRequiredGroupingDimensions,
@@ -308,6 +335,7 @@
                         GroupingDimensions: groupingDimensions,
                         Filters: filterDimensions,
                         AdvancedFilters: advancedFilters,
+                        ShowLegend: $scope.scopeModel.showLegend,
                         Legends: legends
                     };
 
@@ -317,10 +345,10 @@
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
+
             }
         }
     }
-
     app.directive('vrAnalyticReportsearchsettingsGenericsearch', ReportsearchsettingsGenericsearch);
 
 })(app);

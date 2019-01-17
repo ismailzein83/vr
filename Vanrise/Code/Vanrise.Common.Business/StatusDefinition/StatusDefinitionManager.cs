@@ -19,6 +19,33 @@ namespace Vanrise.Common.Business
 
             return cachedStatusDefinitions.GetRecord(statusDefinitionId);
         }
+        public List<StatusDefinitionStyle> GetStatusDefinitionStylesByBusinessEntityId(Guid businessEntityId)
+        {
+            StyleDefinitionManager styleDefinitionManager = new StyleDefinitionManager();
+            var statusDefinitionStyles = new List<StatusDefinitionStyle>();
+            StatusDefinitionInfoFilter filter = new StatusDefinitionInfoFilter()
+            {
+                BusinessEntityDefinitionId = businessEntityId
+            };
+            var statusDefinitions = GetFilteredStatusDefinitions(filter);
+            foreach(var statusDefinition in statusDefinitions)
+            {
+                statusDefinition.ThrowIfNull("statusDefinition");
+                statusDefinition.Settings.ThrowIfNull("statusDefinition.Settings");
+                var statusDefinitionStyle = new StatusDefinitionStyle()
+                {
+                    StatusDefinitionId = statusDefinition.StatusDefinitionId,
+                    Name = statusDefinition.Name,
+                };
+                var styleDefinition = styleDefinitionManager.GetStyleDefinition(statusDefinition.Settings.StyleDefinitionId);
+                styleDefinition.ThrowIfNull("styleDefinition");
+                styleDefinition.StyleDefinitionSettings.ThrowIfNull("styleDefinition.StyleDefinitionSettings");
+                statusDefinitionStyle.StyleFormatingSettings = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings;
+                statusDefinitionStyles.Add(statusDefinitionStyle);
+            }
+              
+            return statusDefinitionStyles;
+        }
         public Guid GetStyleDefinitionId(Guid statusDefinitionId)
         {
             Dictionary<Guid, StatusDefinition> cachedStatusDefinitions = this.GetCachedStatusDefinitions();
@@ -26,7 +53,7 @@ namespace Vanrise.Common.Business
             statusDefinition.ThrowIfNull("statusDefinition");
             statusDefinition.Settings.ThrowIfNull("statusDefinition.Settings");
             return statusDefinition.Settings.StyleDefinitionId;
-      }
+        }
         public string GetStatusDefinitionName(Guid statusDefinitionId)
         {
             StatusDefinition statusDefinition = this.GetStatusDefinition(statusDefinitionId);

@@ -17,6 +17,7 @@ namespace Vanrise.Analytic.MainExtensions.History.SearchSettings
         public List<GenericSearchSettingsFilter> Filters { get; set; }
 
         public GenericSearchSettingsAdvancedFilters AdvancedFilters { get; set; }
+        public bool ShowLegend { get; set; }
 
         public List<GenericSearchSettingsLegend> Legends { get; set; }
     }
@@ -53,8 +54,6 @@ namespace Vanrise.Analytic.MainExtensions.History.SearchSettings
 
     public class GenericSearchSettingsLegend
     {
-        public string Header { get; set; }
-
-        public string Content { get; set; }
+        public Guid AnalyticTableId { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace Vanrise.Analytic.Business
         {
             List<AnalyticTableClientDetail> analyticTableClientDetails = new List<AnalyticTableClientDetail>();
             var analyticTables = GetCachedAnalyticTables();
-            foreach (var analyticTable in  analyticTables.Values)
+            foreach (var analyticTable in analyticTables.Values)
             {
                 var analyticTableClientDetail = new AnalyticTableClientDetail()
                 {
@@ -38,15 +38,61 @@ namespace Vanrise.Analytic.Business
                 };
                 analyticTableClientDetails.Add(analyticTableClientDetail);
             }
-         
+
             return analyticTableClientDetails;
 
         }
+        public MeasureStyleRuleEditorRuntime GetAnalyticTableMergedMeasureStylesEditorRuntime(Guid analyticTbaleId)
+        {
+            MeasureStyleRuleManager measureStyleRuleManager = new MeasureStyleRuleManager();
+            List<MeasureStyleRule> mergedMeasureStyles = new List<MeasureStyleRule>();
+            ConfigManager configManager = new ConfigManager();
+            var analyticTable = GetAnalyticTableById(analyticTbaleId);
+            analyticTable.ThrowIfNull("analyticTable");
+            var analyticTableMeasureStyles = analyticTable.MeasureStyles;
+            var analyticTableKpiSettings = configManager.GetAnalytictableKPISettings(analyticTbaleId);
+            analyticTableKpiSettings.ThrowIfNull("analyticTableKpiSettings");
+            var analyticTableKPIMeasureStyles = analyticTableKpiSettings.MeasureStyleRules;
 
+            if (analyticTableKPIMeasureStyles != null && analyticTableKPIMeasureStyles.Count() > 0)
+                mergedMeasureStyles.AddRange(analyticTableKPIMeasureStyles);
+
+            if (analyticTableMeasureStyles != null && analyticTableMeasureStyles.MeasureStyleRules != null && analyticTableMeasureStyles.MeasureStyleRules.Count() > 0)
+            {
+                foreach (var measureStyleRule in analyticTableMeasureStyles.MeasureStyleRules)
+                {
+                    if (!mergedMeasureStyles.Any(x => x.MeasureName.Equals(measureStyleRule.MeasureName)))
+                        mergedMeasureStyles.Add(measureStyleRule);
+                }
+            }
+
+            return measureStyleRuleManager.GetMeasureStyleRuleEditorRuntime(mergedMeasureStyles, analyticTbaleId);
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail> SaveAnalyticTableMeasureStyles(AnalyticTableMeasureStyles measureStyles, Guid analyticTableId)
+        {
+            IAnalyticTableDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticTableDataManager>();
+            bool updateActionSucc = dataManager.SaveAnalyticTableMeasureStyles(measureStyles, analyticTableId);
+            UpdateOperationOutput<AnalyticTableDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                var analyticTable = GetAnalyticTableById(analyticTableId);
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.LogObjectCustomAction(AnalyticTableLoggableEntity.Instance, "Update", true, analyticTable, "Measure Style");
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = AnalyticTableDetailMapper(analyticTable);
+            }
+
+            return updateOperationOutput;
+        }
         public IEnumerable<AnalyticTableInfo> GetAnalyticTablesInfo(AnalyticTableInfoFilter filter)
         {
             var analyticTables = GetCachedAnalyticTables();
-          
+
             if (filter != null)
             {
                 Func<AnalyticTable, bool> filterExpression = (item) =>
@@ -134,7 +180,7 @@ namespace Vanrise.Analytic.Business
 
         public bool DoesUserHaveAccess(int userId, Guid analyticTableId)
         {
-            AnalyticTable table = GetAnalyticTableById(analyticTableId); 
+            AnalyticTable table = GetAnalyticTableById(analyticTableId);
             SecurityManager secManager = new SecurityManager();
             if (table.Settings.RequiredPermission != null && !secManager.IsAllowed(table.Settings.RequiredPermission, userId))
             {
@@ -170,7 +216,7 @@ namespace Vanrise.Analytic.Business
                 });
         }
         #endregion
-      
+
         #region Private Classes
 
         public class CacheManager : Vanrise.Caching.BaseCacheManager

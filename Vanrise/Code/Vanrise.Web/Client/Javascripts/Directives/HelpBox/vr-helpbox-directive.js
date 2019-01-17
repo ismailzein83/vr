@@ -60,14 +60,14 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
             if (attrs.leftalignment != undefined)
                 layoutClass += " left-alignment";
             var addedClasses = "";
-            if (attrs.isclickable)
+            if (attrs.isclickable != undefined)
                 addedClasses += " clickable";
             var mainTemplate = '<div  class="vr-helpbox' + layoutClass + '" >'
-				+ '<span style="margin-left: -5px;border: 1px solid #ccc;border-radius: 4px;"><div class="item ' + addedClasses + '" ng-repeat="item in ctrl.datasource">'
-				+ '<div class="badge-color" ng-class="ctrl.getObjectClass(item)"></div>'
-				+ '<span title="{{ctrl.getObjectText(item)}}" ng-class="ctrl.getLabelClass(item)" >{{ctrl.getObjectText(item)}}</span>'
-				+ '</div>'
-				+ '</div></span>';
+                + '<span style="margin-left: -5px;border: 1px solid #ccc;border-radius: 4px;"><div class="item ' + addedClasses + '" ng-repeat="item in ctrl.datasource">'
+                + '<div class="badge-color" ng-class="ctrl.getObjectClass(item)"></div>'
+                + '<span title="{{ctrl.getObjectText(item)}}" ng-class="ctrl.getLabelClass(item)" >{{ctrl.getObjectText(item)}}</span>'
+                + '</div>'
+                + '</div></span>';
             return labelTemplate + mainTemplate;
         }
 

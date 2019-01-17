@@ -39,9 +39,17 @@
             var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var connectionId;
 
+            var legendDirectiveAPI;
+            var legendDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var statusBeDefinitionId;
+            var recommendedId;
+
+            var showLegend;
+
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.selectedPeriod = PeriodEnum.Today.value;
+               
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.widgets = [];
                 $scope.scopeModel.filters = [];
@@ -49,18 +57,23 @@
                 $scope.scopeModel.groupingDimentions = [];
                 $scope.scopeModel.selectedGroupingDimentions = [];
                 $scope.scopeModel.isGroupingRequired = false;
-                $scope.scopeModel.fromdate = VRDateTimeService.getNowDateTime();
-                $scope.scopeModel.todate;
 
+                $scope.scopeModel.todate;
+                $scope.scopeModel.selectedPeriod = PeriodEnum.Today;
+                $scope.scopeModel.fromdate = VRDateTimeService.getNowDateTime();
                 $scope.scopeModel.onTimeRangeDirectiveReady = function (api) {
                     timeRangeDirectiveAPI = api;
                     timeRangeReadyPromiseDeferred.resolve();
                 };
-
+                $scope.scopeModel.onLegendDirectiveReady = function (api) {
+                    legendDirectiveAPI = api;
+                    legendDirectiveReadyPromiseDeferred.resolve();
+                };
                 $scope.scopeModel.onCurrencySelectorReady = function (api) {
                     currencySelectorAPI = api;
                     currencySelectorReadyDeferred.resolve();
                 };
+           
 
                 $scope.scopeModel.addFilter = function () {
                     var onDimensionFilterAdded = function (filter, expression) {
@@ -98,7 +111,7 @@
                     $scope.scopeModel.expression = undefined;
                     filterObj = null;
                 };
-
+               
                 $scope.search = function () {
                     if (!$scope.scopeModel.isLoadedData) {
                         $scope.scopeModel.isLoadedData = true;
@@ -126,23 +139,30 @@
                 var api = {};
 
                 api.load = function (payload) {
-
+                   
                     if (payload != undefined) {
                         reportName = payload.ReportName ? payload.ReportName : "Analytic Report";
                         settings = payload.settings;
+                        if (settings != undefined && settings.SearchSettings != undefined && settings.SearchSettings.Legends != undefined && settings.SearchSettings.Legends.length >0) {
+                            if (settings.SearchSettings.ShowLegend == true && UtilsService.getItemByVal(settings.SearchSettings.Legends, settings.AnalyticTableIds[0], "AnalyticTableId") != undefined)
+                                showLegend = true;
+                        }
                     }
 
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
+                    getAnalyticTable().then(function () {
 
-                    UtilsService.waitMultipleAsyncOperations([getWidgetsTemplateConfigs, getFieldTypeConfigs, loadMeasures, loadDimensions, loadTimeRangeDirective, getRemoteConnection]).then(function () {
-                        UtilsService.waitMultipleAsyncOperations([loadFilters]).finally(function () {
-                            loadPromiseDeffer.resolve();
+                        UtilsService.waitMultipleAsyncOperations([getWidgetsTemplateConfigs, getFieldTypeConfigs, loadMeasures, loadLegendDirective, loadDimensions, loadTimeRangeDirective, getRemoteConnection]).then(function () {
+                            UtilsService.waitMultipleAsyncOperations([loadFilters]).then(function () {
+                                loadPromiseDeffer.resolve();
+                            }).catch(function (error) {
+                                loadPromiseDeffer.reject(error);
+                            });
                         }).catch(function (error) {
                             loadPromiseDeffer.reject(error);
                         });
-                    }).catch(function (error) {
-                        loadPromiseDeffer.reject(error);
                     });
+                    
 
                     return loadPromiseDeffer.promise;
                 };
@@ -171,7 +191,29 @@
                 });
                 return loadTimeDimentionPromiseDeferred.promise;
             }
+            function loadLegendDirective() {
+                var loadLegendDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                legendDirectiveReadyPromiseDeferred.promise.then(function () {
+                    var payload = {
+                        statusBeDefinitionId: statusBeDefinitionId,
+                        recommendedId: recommendedId,
+                        analyticTableId: settings.AnalyticTableIds[0],
+                        showLegend: showLegend
+                    };
+                    VRUIUtilsService.callDirectiveLoad(legendDirectiveAPI, payload, loadLegendDirectivePromiseDeferred);
 
+                });
+                return loadLegendDirectivePromiseDeferred.promise;
+            }
+            function getAnalyticTable() {
+                return VR_Analytic_AnalyticTableAPIService.GetTableById(settings.AnalyticTableIds[0]).then(function (response) {
+                    if (response != null) {
+                        statusBeDefinitionId = response.Settings.StatusDefinitionBEId;
+                        recommendedId = response.Settings.RecommendedStatusDefinitionId;
+                       
+                    }
+                });
+            }
             function getWidgetsTemplateConfigs() {
                 return VR_Analytic_AnalyticConfigurationAPIService.GetWidgetsTemplateConfigs().then(function (response) {
 
@@ -217,7 +259,7 @@
                 }
 
                 if (settings.SearchSettings.GroupingDimensions != undefined) {
-                    for (var i = 0; i < settings.SearchSettings.GroupingDimensions.length; i++) {
+                     for (var i = 0; i < settings.SearchSettings.GroupingDimensions.length; i++) {
                         var groupingDimention = settings.SearchSettings.GroupingDimensions[i];
                         var dimension = UtilsService.getItemByVal(dimensions, groupingDimention.DimensionName, "Name");
                         if (dimension != undefined && dimension.Config.RequiredParentDimension == undefined) {

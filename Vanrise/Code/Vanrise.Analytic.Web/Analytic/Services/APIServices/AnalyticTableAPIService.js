@@ -43,6 +43,9 @@
         function UpdateAnalyticTable(tableObj) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'UpdateAnalyticTable'), tableObj);
         }
+        function SaveAnalyticTableMeasureStyles(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, 'SaveAnalyticTableMeasureStyles'), input);
+        }
         function HasEditAnalyticTablePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Analytic_ModuleConfig.moduleName, controllerName, ['UpdateAnalyticTable']));
         }
@@ -51,6 +54,9 @@
         }
         function GetClientAnalyitTableInfo() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetClientAnalyitTableInfo"));
+        }
+        function GetAnalyticTableMergedMeasureStylesEditorRuntime(analyticTableId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticTableMergedMeasureStylesEditorRuntime"), { analyticTableId: analyticTableId});
         }
        
         return ({
@@ -64,6 +70,8 @@
             GetRemoteAnalyticTablesInfo: GetRemoteAnalyticTablesInfo,
             GetAnalyticTableConnectionId: GetAnalyticTableConnectionId,
             GetClientAnalyitTableInfo: GetClientAnalyitTableInfo,
+            SaveAnalyticTableMeasureStyles: SaveAnalyticTableMeasureStyles,
+            GetAnalyticTableMergedMeasureStylesEditorRuntime: GetAnalyticTableMergedMeasureStylesEditorRuntime
         });
     }
 

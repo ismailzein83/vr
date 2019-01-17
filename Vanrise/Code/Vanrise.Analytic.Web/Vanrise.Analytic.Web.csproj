@@ -167,6 +167,10 @@
     <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-querydefinition-automatedreport.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-automatedreportprocessquery-selector.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalc-alertrulefilterdefinition.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\Templates\MeasureStyleGridViewerTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\vr-analytic-measurestyle-grid-viewer.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\Templates\AnalyticLegendTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-legend.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\CustomCode\Templates\ReportGenerationCustomCodeFileGeneratorTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\CustomCode\vr-analytic-reportgenerationcustomcode-filegenerator.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\FlatFile\Templates\FlatFileGeneratorTemplate.html" />
@@ -480,6 +484,8 @@
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemActionEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemConfigEditor.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticItemConfigEditorController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticMeasureStyleEditor.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticMeasureStyleEditorController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportManagement.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportManagementController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Definition\AnalyticReportSettingsEditor.html" />
@@ -502,6 +508,8 @@
     <Content Include="Analytic\Views\GenericAnalytic\Definition\RealTimeWidgetEditorController.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\Templates\AnalyticSubtableEditor.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\AnalyticSubtableEditorController.js" />
+    <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticMeasureStyleViewer.html" />
+    <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticMeasureStyleViewerController.js" />
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReport.html" />
     <Content Include="Analytic\Views\GenericAnalytic\Runtime\GenericAnalyticReportController.js" />
     <Content Include="Analytic\Views\Reports\AnalyticReport.html" />

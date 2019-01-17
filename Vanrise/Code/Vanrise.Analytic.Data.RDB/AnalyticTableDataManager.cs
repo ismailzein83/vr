@@ -110,10 +110,10 @@ namespace Vanrise.Analytic.Data.RDB
             return queryContext.ExecuteNonQuery() > 0;
         }
 
-        //public bool SaveAnalyticTableMeasureStyles(AnalyticTableMeasureStyles measureStyles, Guid analyticTableId)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public bool SaveAnalyticTableMeasureStyles(AnalyticTableMeasureStyles measureStyles, Guid analyticTableId)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

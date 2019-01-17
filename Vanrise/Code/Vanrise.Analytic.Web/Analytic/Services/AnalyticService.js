@@ -82,7 +82,7 @@
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/RealTimeWidgetEditor.html', modalParameters, modalSettings);
         }
 
-        function addMeasureStyle(onMeasureStyleAdded, context, analyticTableId, measureName, statusDefinitionBeId, recommendedId) {
+        function addMeasureStyle(onMeasureStyleAdded, context, analyticTableId, measureName, statusDefinitionBeId, recommendedId,isLoadedFromKpis) {
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
@@ -93,12 +93,13 @@
                 analyticTableId: analyticTableId,
                 measureName: measureName,
                 statusDefinitionBeId: statusDefinitionBeId,
-                recommendedId: recommendedId
+                recommendedId: recommendedId,
+                isLoadedFromKpis: isLoadedFromKpis
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Definition/MeasureStyleEditor.html', modalParameters, modalSettings);
         }
 
-        function editMeasureStyle(measureStyle, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId, isEditMode, measureName, statusDefinitionBeId, recommendedIds) {
+        function editMeasureStyle(measureStyle, onMeasureStyleUpdated, selectedMeasure, context, analyticTableId, isEditMode, measureName, statusDefinitionBeId, recommendedIds,isLoadedFromKpis) {
             var modalParameters = {
                 selectedMeasure: selectedMeasure,
                 measureStyle: measureStyle,
@@ -107,7 +108,8 @@
                 isEditMode: isEditMode,
                 measureName: measureName,
                 statusDefinitionBeId: statusDefinitionBeId,
-                recommendedId: recommendedIds
+                recommendedId: recommendedIds,
+                isLoadedFromKpis: isLoadedFromKpis
             };
 
             var modalSettings = {};
