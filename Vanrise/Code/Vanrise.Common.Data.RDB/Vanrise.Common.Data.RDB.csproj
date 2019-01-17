@@ -89,7 +89,7 @@
     <Compile Include="VRNamespaceItemDataManager.cs" />
     <Compile Include="VRObjectTrackingDataManager.cs" />
     <Compile Include="VRObjectTypeDefinitionDataManager.cs" />
-    <!--<Compile Include="VRRuleDataManager.cs" />-->
+    <Compile Include="VRRuleDataManager.cs" />
     <Compile Include="VRTempPayloadDataManager.cs" />
     <Compile Include="VRTimeZoneDataManager.cs" />
   </ItemGroup>
