@@ -12,7 +12,7 @@ namespace BPMExtended.Main.Business
         const string reserveNumber = "170E4B07-9263-4631-BF82-D647EC0D484E";
         const string print = "BF1F7C56-5219-4206-9834-C9813DB540B0";
         const string technicalStep = "A8F7C0E8-4903-4343-93E4-87295BF4D64E";
-        //const string completed = "";
+        const string completed = "2A290E4F-A034-46A5-95BF-E0C8ED760805";
 
         public string GetNextStep(string id, string currentStepId)
         {
@@ -23,7 +23,7 @@ namespace BPMExtended.Main.Business
                 case startingProcess: nextStepId = reserveNumber; break;
                 case reserveNumber: nextStepId = print; break;
                 case print: nextStepId = technicalStep; break;
-                //case technicalStep: nextStepId = completed; break;
+                case technicalStep: nextStepId = completed; break;
             }
             return nextStepId;
         }
