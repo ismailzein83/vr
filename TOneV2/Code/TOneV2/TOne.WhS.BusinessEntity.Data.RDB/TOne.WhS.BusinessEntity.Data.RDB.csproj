@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -93,6 +94,11 @@
     <Compile Include="SaleZoneDataManager.cs" />
     <Compile Include="SellingNumberPlanDataManager.cs" />
     <Compile Include="SellingProductDataManager.cs" />
+    <Compile Include="StateBackup\StateBackupAllSaleEntitiesBehavior.cs" />
+    <Compile Include="StateBackup\StateBackupDataManager.cs" />
+    <Compile Include="StateBackup\StateBackupSaleEntityBehavior.cs" />
+    <Compile Include="StateBackup\StateBackupSupplierBehavior.cs" />
+    <Compile Include="StateBackup\StateBackupTypeBehavior.cs" />
     <Compile Include="SupplierCodeDataManager.cs" />
     <Compile Include="SupplierOtherRateDataManager.cs" />
     <Compile Include="SupplierPriceListDataManager.cs" />
