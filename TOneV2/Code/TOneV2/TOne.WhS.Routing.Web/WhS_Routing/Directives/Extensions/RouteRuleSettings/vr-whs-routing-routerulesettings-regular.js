@@ -291,7 +291,7 @@ app.directive('vrWhsRoutingRouterulesettingsRegular', ['UtilsService', 'WhS_Rout
                         OrderType: orderType,
                         OptionOrderSettings: optionOrderSettings,
                         OptionFilters: routeRuleOptionFilterSettingsDirectiveAPI.getData(),
-                        OptionPercentageSettings: VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, routeRuleOptionPercentageSettingsDirectiveAPI, 'selectedPercentageSettingsGroupTemplate')
+                        OptionPercentageSettings: $scope.scopeModel.showPercentageSettings ? VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, routeRuleOptionPercentageSettingsDirectiveAPI, 'selectedPercentageSettingsGroupTemplate') : null
                     };
                 };
 
