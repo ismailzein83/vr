@@ -64,6 +64,11 @@ namespace Vanrise.Common
             return x;
         }
 
+        public string Serialize(Object o)
+        {
+            return new DotNetXmlSerializer().Serialize(o);
+        }
+
         private static void RemoveNamespace(XDocument xdoc)
         {
             if (xdoc.Root == null) return;
@@ -407,6 +412,76 @@ namespace Vanrise.Common
                     d => useExactName
                         ? d.Name == name
                         : names.Contains(d.Name.LocalName.RemoveUnderscoresAndDashes()));
+        }
+    }
+
+    internal class DotNetXmlSerializer 
+    {
+        /// <summary>
+        ///     Default constructor, does not specify namespace
+        /// </summary>
+        public DotNetXmlSerializer()
+        {
+             Encoding = Encoding.UTF8;
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        ///     Specify the namespaced to be used when serializing
+        /// </summary>
+        /// <param name="namespace">XML namespace</param>
+        public DotNetXmlSerializer(string @namespace)
+            : this()
+        {
+            Namespace = @namespace;
+        }
+
+        /// <summary>
+        ///     Encoding for serialized content
+        /// </summary>
+        public Encoding Encoding { get; set; }
+
+        /// <summary>
+        ///     Serialize the object as XML
+        /// </summary>
+        /// <param name="obj">Object to serialize</param>
+        /// <returns>XML as string</returns>
+        public string Serialize(object obj)
+        {
+            var ns = new System.Xml.Serialization.XmlSerializerNamespaces();
+
+            ns.Add(string.Empty, Namespace);
+
+            var serializer = new System.Xml.Serialization.XmlSerializer(obj.GetType());
+            var writer = new EncodingStringWriter(Encoding);
+
+            serializer.Serialize(writer, obj, ns);
+
+            return writer.ToString();
+        }
+
+        /// <summary>
+        ///     Name of the root element to use when serializing
+        /// </summary>
+        public string RootElement { get; set; }
+
+        /// <summary>
+        ///     XML namespace to use when serializing
+        /// </summary>
+        public string Namespace { get; set; }
+
+        /// <summary>
+        ///     Format string to use when serializing dates
+        /// </summary>
+        public string DateFormat { get; set; }
+        
+
+        private class EncodingStringWriter : System.IO.StringWriter
+        {
+            // Need to subclass StringWriter in order to override Encoding
+            public EncodingStringWriter(Encoding encoding) => Encoding = encoding;
+
+            public override Encoding Encoding { get; }
         }
     }
 }
