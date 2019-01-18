@@ -17,6 +17,7 @@ xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Analytic.PostDeployment.s
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VR_Notification.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\ExcelConversion.PostDeployment.sql" 		/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\SOM.PostDeployment.sql" /y /v /z /i /Q /R					"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\SomST.PostDeployment.sql" /y /v /z /i /Q /R					"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" /y /v /z /i /Q /R							"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneTransaction\BusinessProcess.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Transaction\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneLogging\Script.PostDeployment.sql" /y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Logging\"
