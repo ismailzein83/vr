@@ -24,16 +24,16 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static CarrierProfileDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Name, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 255});
-            columns.Add(COL_Settings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
-            columns.Add(COL_ExtendedSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
-            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
-            columns.Add(COL_IsDeleted, new RDBTableColumnDefinition {DataType = RDBDataType.Boolean});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_CreatedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_ExtendedSettings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_IsDeleted, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -43,7 +43,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
-
             });
         }
 
@@ -57,7 +56,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             return queryContext.GetItems(CarrierProfileMapper);
         }
@@ -71,7 +70,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.EqualsCondition(COL_Name).Value(carrierProfile.Name);
-            notExistsCondition.EqualsCondition(COL_IsDeleted).Value(false);
+            notExistsCondition.ConditionIfColumnNotNull(COL_IsDeleted);
 
             insertQuery.Column(COL_Name).Value(carrierProfile.Name);
 
@@ -103,17 +102,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.EqualsCondition(COL_Name).Value(carrierProfile.Name);
             notExistsCondition.NotEqualsCondition(COL_ID).Value(carrierProfile.CarrierProfileId);
-            notExistsCondition.EqualsCondition(COL_IsDeleted).Value(0);
+            notExistsCondition.ConditionIfColumnNotNull(COL_IsDeleted);
 
             updateQuery.Column(COL_Name).Value(carrierProfile.Name);
 
             if (carrierProfile.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Serializer.Serialize(carrierProfile.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
 
             if (carrierProfile.LastModifiedBy.HasValue)
                 updateQuery.Column(COL_LastModifiedBy).Value(carrierProfile.LastModifiedBy.Value);
-
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
+            else
+                updateQuery.Column(COL_LastModifiedBy).Null();
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(carrierProfile.CarrierProfileId);
 
@@ -132,7 +133,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            if (extendedSettings != null && extendedSettings.Count > 1)
+            if (extendedSettings != null)
                 updateQuery.Column(COL_ExtendedSettings).Value(Serializer.Serialize(extendedSettings));
             else
                 updateQuery.Column(COL_ExtendedSettings).Null();

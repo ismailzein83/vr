@@ -1,9 +1,10 @@
 ﻿using System;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
+using Vanrise.Entities;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class CarrierAccountDataManager : ICarrierAccountDataManager
@@ -31,22 +32,22 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static CarrierAccountDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_NameSuffix, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 255});
-            columns.Add(COL_CarrierProfileID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_AccountType, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_SupplierSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
-            columns.Add(COL_CustomerSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
-            columns.Add(COL_CarrierAccountSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
-            columns.Add(COL_ExtendedSettings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
-            columns.Add(COL_SellingNumberPlanID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_SellingProductID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
-            columns.Add(COL_IsDeleted, new RDBTableColumnDefinition {DataType = RDBDataType.Boolean});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_CreatedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_NameSuffix, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_CarrierProfileID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_AccountType, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_SupplierSettings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CustomerSettings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CarrierAccountSettings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_ExtendedSettings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_SellingNumberPlanID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_SellingProductID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_IsDeleted, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -83,7 +84,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.EqualsCondition(COL_NameSuffix).Value(carrierAccount.NameSuffix);
             notExistsCondition.EqualsCondition(COL_CarrierProfileID).Value(carrierAccount.CarrierProfileId);
-            notExistsCondition.EqualsCondition(COL_IsDeleted).Value(false);
+            notExistsCondition.ConditionIfColumnNotNull(COL_IsDeleted);
 
             insertQuery.Column(COL_NameSuffix).Value(carrierAccount.NameSuffix);
             insertQuery.Column(COL_CarrierProfileID).Value(carrierAccount.CarrierProfileId);
@@ -130,26 +131,34 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             notExistsCondition.NotEqualsCondition(COL_ID).Value(carrierAccount.CarrierAccountId);
             notExistsCondition.EqualsCondition(COL_NameSuffix).Value(carrierAccount.NameSuffix);
             notExistsCondition.EqualsCondition(COL_CarrierProfileID).Value(carrierProfileId);
-            notExistsCondition.EqualsCondition(COL_IsDeleted).Value(false);
+            notExistsCondition.ConditionIfColumnNotNull(COL_IsDeleted);
 
             updateQuery.Column(COL_NameSuffix).Value(carrierAccount.NameSuffix);
 
             if (carrierAccount.SellingProductId.HasValue)
                 updateQuery.Column(COL_SellingProductID).Value(carrierAccount.SellingProductId.Value);
+            else
+                updateQuery.Column(COL_SellingProductID).Null();
 
             if (carrierAccount.SupplierSettings != null)
                 updateQuery.Column(COL_SupplierSettings).Value(Serializer.Serialize(carrierAccount.SupplierSettings));
+            else
+                updateQuery.Column(COL_SupplierSettings).Null();
 
             if (carrierAccount.CustomerSettings != null)
                 updateQuery.Column(COL_CustomerSettings).Value(Serializer.Serialize(carrierAccount.CustomerSettings));
+            else
+                updateQuery.Column(COL_CustomerSettings).Null();
 
             if (carrierAccount.CarrierAccountSettings != null)
                 updateQuery.Column(COL_CarrierAccountSettings).Value(Serializer.Serialize(carrierAccount.CarrierAccountSettings));
+            else
+                updateQuery.Column(COL_CarrierAccountSettings).Null();
 
             if (carrierAccount.LastModifiedBy.HasValue)
                 updateQuery.Column(COL_LastModifiedBy).Value(carrierAccount.LastModifiedBy.Value);
-
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
+            else
+                updateQuery.Column(COL_LastModifiedBy).Null();
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(carrierAccount.CarrierAccountId);
 
@@ -168,7 +177,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
-            if (extendedSettings != null && extendedSettings.Count > 0)
+            if (extendedSettings != null)
                 updateQuery.Column(COL_ExtendedSettings).Value(Serializer.Serialize(extendedSettings));
             else
                 updateQuery.Column(COL_ExtendedSettings).Null();
