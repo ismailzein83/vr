@@ -233,6 +233,30 @@ namespace BPMExtended.Main.Business
             }).ToList();
         }
 
+        public List<ISPInfo> GetISPs()
+        {
+            List<ISPInfo> result = new List<ISPInfo>();
+            List<ISPInfo> phoneNumbers;
+            using (SOMClient client = new SOMClient())
+            {
+                phoneNumbers = client.Get<List<ISPInfo>>(String.Format("api/SOM/Inventory/GetISPs"));
+            }
+
+            if (phoneNumbers != null)
+            {
+                foreach (var phoneNumber in phoneNumbers)
+                {
+                    result.Add(new ISPInfo
+                    {
+                        Id = phoneNumber.Id,
+                        Name = phoneNumber.Name
+                    });
+                }
+            }
+            return result;
+
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
 
@@ -637,29 +661,7 @@ namespace BPMExtended.Main.Business
             return item;
         }
         
-        public List<ISPInfo> GetISPs()
-        {
-            List<ISPInfo> result = new List<ISPInfo>();
-            List<ISPItem> phoneNumbers;
-            using (SOMClient client = new SOMClient())
-            {
-                phoneNumbers = client.Get<List<ISPItem>>(String.Format("api/SOM_Main/Inventory/GetISPs"));
-            }
-
-            if (phoneNumbers != null)
-            {
-                foreach (var phoneNumber in phoneNumbers)
-                {
-                    result.Add(new ISPInfo
-                    {
-                        Id = phoneNumber.Id,
-                        Name = phoneNumber.Name
-                    });
-                }
-            }
-            return result;
-
-        }
+   
 
     }
 }

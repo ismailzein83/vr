@@ -1,5 +1,6 @@
 ﻿using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
+using BPMExtended.Main.SOMAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,10 +85,10 @@ namespace BPMExtended.Main.Business
             ContractManager contractManager = new ContractManager();
             TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
 
-            SOM.Main.Entities.LinePath item = new SOM.Main.Entities.LinePath();
+            ADSLLinePath item = new ADSLLinePath();
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<SOM.Main.Entities.LinePath>(String.Format("api/SOM_Main/Inventory/CheckADSL?phoneNumber={0}", contract.PhoneNumber));
+                item = client.Get<ADSLLinePath>(String.Format("api/SOM/Inventory/CheckADSL?phoneNumber={0}", contract.PhoneNumber));
             }
             string[] path = item.Path.Split(',');
             return path[6] == "1";
