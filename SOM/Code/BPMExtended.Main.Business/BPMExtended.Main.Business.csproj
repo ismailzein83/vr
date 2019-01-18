@@ -99,6 +99,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Billing\RatePlanManager.cs" />
     <Compile Include="Provisioning\ProvisioningManager.cs" />
+    <Compile Include="Request Flow Management\ChangeLeasedLineSpeedFlowManagement.cs" />
     <Compile Include="Request Flow Management\TelephonyTechnicalComplaintsFlowManagement.cs" />
     <Compile Include="Request Flow Management\DeactivateCptFlowManagement.cs" />
     <Compile Include="Request Flow Management\AdditionServicesFlowManagement.cs" />
