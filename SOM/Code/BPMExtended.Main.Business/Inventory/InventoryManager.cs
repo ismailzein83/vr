@@ -112,51 +112,74 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        public List<PhoneNumberInfo> GetAvailablePhoneNumbers(string switchId, string category, string type, int top)
+        {
+            List<PhoneNumberInfo> result = new List<PhoneNumberInfo>();
+            List<PhoneNumberInfo> phoneNumbers;
+            using (SOMClient client = new SOMClient())
+            {
+                phoneNumbers = client.Get<List<PhoneNumberInfo>>(String.Format("api/SOM/Inventory/GetAvailableNumbers?switchId={0}&category={1}&type={2}&top={3}", switchId, category, type, top));
+            }
 
+            if (phoneNumbers != null)
+            {
+                foreach (var phoneNumber in phoneNumbers)
+                {
+                    result.Add(new PhoneNumberInfo
+                    {
+                        IsGold = phoneNumber.IsGold,
+                        IsISDN = phoneNumber.IsISDN,
+                        Number = phoneNumber.Number,
+                        Id = phoneNumber.Id
+                    });
+                }
+            }
+            return result;
+        }
 
         //////////////////////////////////////////////////////////////////////////////
 
 
 
-         /*public InventoryPhoneItemDetail GetInventoryDetail(string phoneNumber)
-        {
-            InventoryPhoneItem item = null;
-            using (SOMClient client = new SOMClient())
-            {
-                item = client.Get<InventoryPhoneItem>(String.Format("api/SOM_Main/Inventory/GetInventoryPhoneItem?phoneNumber={0}", phoneNumber));
-            }
-            return new InventoryPhoneItemDetail
-            {
-                Cabinet = item.Cabinet,
-                CabinetPrimaryPort = item.CabinetPrimaryPort,
-                CabinetSecondaryPort = item.CabinetSecondaryPort,
-                DP = item.DP,
-                DPPorts = item.DPPorts,
-                DPSecondaryPorts = item.DPSecondaryPorts,
-                DSlam = item.DSlam,
-                DSlamOMC = item.DSlamOMC,
-                DSlamPort = item.DSlamPort,
-                IsMultiplexed = item.IsMultiplexed,
-                MDFPort = item.MDFPort,
-                MSAN_EID = item.MSAN_EID,
-                MSAN_TID = item.MSAN_TID,
-                MSANType = item.MSANType,
-                PhoneStatus = (BPMExtended.Main.Entities.PhoneStatus)item.PhoneStatus,
-                PhoneType = (BPMExtended.Main.Entities.PhoneType)item.PhoneType,
-                Receiver = item.Receiver,
-                ReceiverPort = item.ReceiverPort,
-                Switch = item.Switch,
-                SwitchId = item.SwitchId,
-                SwitchOMC = item.SwitchOMC,
-                SWITCH_TYPE = item.SWITCH_TYPE,
-                Transmitter = item.Transmitter,
-                TransmitterPort = item.TransmitterPort,
-                VerticalMDF = item.VerticalMDF,
-                DPPortId = item.DPPortId,
-                DPId = item.DPId
+        /*public InventoryPhoneItemDetail GetInventoryDetail(string phoneNumber)
+       {
+           InventoryPhoneItem item = null;
+           using (SOMClient client = new SOMClient())
+           {
+               item = client.Get<InventoryPhoneItem>(String.Format("api/SOM_Main/Inventory/GetInventoryPhoneItem?phoneNumber={0}", phoneNumber));
+           }
+           return new InventoryPhoneItemDetail
+           {
+               Cabinet = item.Cabinet,
+               CabinetPrimaryPort = item.CabinetPrimaryPort,
+               CabinetSecondaryPort = item.CabinetSecondaryPort,
+               DP = item.DP,
+               DPPorts = item.DPPorts,
+               DPSecondaryPorts = item.DPSecondaryPorts,
+               DSlam = item.DSlam,
+               DSlamOMC = item.DSlamOMC,
+               DSlamPort = item.DSlamPort,
+               IsMultiplexed = item.IsMultiplexed,
+               MDFPort = item.MDFPort,
+               MSAN_EID = item.MSAN_EID,
+               MSAN_TID = item.MSAN_TID,
+               MSANType = item.MSANType,
+               PhoneStatus = (BPMExtended.Main.Entities.PhoneStatus)item.PhoneStatus,
+               PhoneType = (BPMExtended.Main.Entities.PhoneType)item.PhoneType,
+               Receiver = item.Receiver,
+               ReceiverPort = item.ReceiverPort,
+               Switch = item.Switch,
+               SwitchId = item.SwitchId,
+               SwitchOMC = item.SwitchOMC,
+               SWITCH_TYPE = item.SWITCH_TYPE,
+               Transmitter = item.Transmitter,
+               TransmitterPort = item.TransmitterPort,
+               VerticalMDF = item.VerticalMDF,
+               DPPortId = item.DPPortId,
+               DPId = item.DPId
 
-            };
-        }*/ // old
+           };
+       }*/ // old
 
         public InventoryPhoneItemDetail GetGSHDSLInventoryDetailById(string contractId)
         {
@@ -475,30 +498,7 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
-        public List<PhoneNumberDetail> GetAvailablePhoneNumbers(string switchId, string category, string type, int top)
-        {
-            List<PhoneNumberDetail> result = new List<PhoneNumberDetail>();
-            List<PhoneNumberItem> phoneNumbers;
-            using (SOMClient client = new SOMClient())
-            {
-                phoneNumbers = client.Get<List<PhoneNumberItem>>(String.Format("api/SOM_Main/Inventory/GetAvailableNumbers?switchId={0}&category={1}&type={2}&top={3}", switchId, category, type, top));
-            }
-
-            if (phoneNumbers != null)
-            {
-                foreach (var phoneNumber in phoneNumbers)
-                {
-                    result.Add(new PhoneNumberDetail
-                    {
-                        IsGold = phoneNumber.IsGold,
-                        IsISDN = phoneNumber.IsISDN,
-                        Number = phoneNumber.Number,
-                        Id = phoneNumber.Id
-                    });
-                }
-            }
-            return result;
-        }
+       
 
         public List<DeviceItemDetail> GetDevices(string switchId, string type, int top)
         {

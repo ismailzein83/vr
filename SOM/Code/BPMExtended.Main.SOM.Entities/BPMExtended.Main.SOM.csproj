@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Inventory\ServiceResponse\PhoneNumberInfo.cs" />
+    <Compile Include="Inventory\ServiceResponse\TechnicalReservation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Inventory\ServiceResponse\TechnicalDetails.cs" />
     <Compile Include="Billing\WorkflowInput\CreateCustomerInput.cs" />
