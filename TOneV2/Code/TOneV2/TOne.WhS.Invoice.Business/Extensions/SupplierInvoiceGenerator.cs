@@ -100,7 +100,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 partnerType = "Account";
             }
             IEnumerable<VRTaxItemDetail> taxItemDetails = financialAccountManager.GetFinancialAccountTaxItemDetails(financialAccount);
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId);
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId, offsetValue);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
                 context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
@@ -113,7 +113,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 return;
             }
 
-            var supplierInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails);
+            var supplierInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails, offsetValue);
 
             SupplierRecurringChargeManager supplierRecurringChargeManager = new SupplierRecurringChargeManager();
             List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate, context.IssueDate);
@@ -309,12 +309,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
 
 
-        private List<SupplierInvoiceBySaleCurrencyItemDetails> loadCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        private List<SupplierInvoiceBySaleCurrencyItemDetails> loadCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
         {
 
             List<string> listMeasures = new List<string> { "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
-            List<string> listDimensions = new List<string> { "CostCurrency", "Month" };
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, null);
+            List<string> listDimensions = new List<string> { "CostCurrency", "MonthQueryTimeShift" };
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, null, offsetValue);
             if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() != 0)
             {
                 return BuildCurrencyItemSetNameFromAnalytic(analyticResult.Data, commission, commissionType, taxItemDetails);
@@ -577,9 +577,16 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             return generatedInvoiceItemSets;
         }
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId)
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId,TimeSpan? offset)
         {
             AnalyticManager analyticManager = new AnalyticManager();
+
+            Dictionary<string, dynamic> queryParameters = null;
+            if(offset.HasValue)
+            {
+                queryParameters = new Dictionary<string, dynamic>();
+                queryParameters.Add("BatchStart_TimeShift", offset.Value);
+            }
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
                 Query = new AnalyticQuery()
@@ -592,6 +599,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     ParentDimensions = new List<string>(),
                     Filters = new List<DimensionFilter>(),
                     CurrencyId = currencyId,
+                    QueryParameters = queryParameters
                     //  OrderType = AnalyticQueryOrderType.ByAllDimensions
                 },
                 SortByColumnName = "DimensionValues[0].Name"

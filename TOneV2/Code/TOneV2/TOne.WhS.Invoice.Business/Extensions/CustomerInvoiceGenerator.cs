@@ -99,7 +99,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 partnerType = "Account";
             }
             IEnumerable<VRTaxItemDetail> taxItemDetails = financialAccountManager.GetFinancialAccountTaxItemDetails(financialAccount);
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId);
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId, offsetValue);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
                 context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
@@ -114,7 +114,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             CustomerRecurringChargeManager customerRecurringChargeManager = new CustomerRecurringChargeManager();
             List<RecurringChargeItem> evaluatedCustomerRecurringCharges = customerRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate, context.IssueDate);
-            var customerInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails);
+            var customerInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails, offsetValue);
             AddRecurringChargeToCustomerCurrency(customerInvoiceBySaleCurrency, evaluatedCustomerRecurringCharges);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails, customerInvoiceBySaleCurrency, evaluatedCustomerRecurringCharges);
             #region BuildCustomerInvoiceDetails
@@ -306,12 +306,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
         }
 
-        private List<CustomerInvoiceBySaleCurrencyItemDetails> loadCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        private List<CustomerInvoiceBySaleCurrencyItemDetails> loadCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
         {
 
             List<string> listMeasures = new List<string> { "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
-            List<string> listDimensions = new List<string> { "SaleCurrency", "Month" };
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, null);
+            List<string> listDimensions = new List<string> { "SaleCurrency", "MonthQueryTimeShift" };
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, null, offsetValue);
             if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() != 0)
             {
                 return BuildCurrencyItemSetNameFromAnalytic(analyticResult.Data, commission, commissionType, taxItemDetails);
@@ -579,8 +579,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             return generatedInvoiceItemSets;
         }
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId)
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue)
         {
+            Dictionary<string, dynamic> queryParameters = null;
+            if (offsetValue.HasValue)
+            {
+                queryParameters = new Dictionary<string, dynamic>();
+                queryParameters.Add("BatchStart_TimeShift", offsetValue.Value);
+            }
             AnalyticManager analyticManager = new AnalyticManager();
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
@@ -594,7 +600,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     ParentDimensions = new List<string>(),
                     Filters = new List<DimensionFilter>(),
                     CurrencyId = currencyId,
-                    // OrderType =AnalyticQueryOrderType.ByAllDimensions
+                    // OrderType =AnalyticQueryOrderType.ByAllDimensions,
+                    QueryParameters = queryParameters
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
