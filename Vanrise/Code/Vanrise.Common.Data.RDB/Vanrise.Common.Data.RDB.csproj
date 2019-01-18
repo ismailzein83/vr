@@ -53,7 +53,7 @@
     <Compile Include="CurrencyExchangeRateDataManager.cs" />
     <Compile Include="DataEncryptionKeyDataManager.cs" />
     <!--<Compile Include="DataGroupingAnalysisInfoDataManager.cs" />-->
-    <!-- <Compile Include="EntityPersonalizationDataManager.cs" />-->
+    <Compile Include="EntityPersonalizationDataManager.cs" />
     <Compile Include="ExtensionConfigurationDataManager.cs" />
     <Compile Include="GenericLKUPItemDataManager.cs" />
     <Compile Include="IDManagerDataManager.cs" />
