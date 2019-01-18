@@ -108,6 +108,7 @@ CDRAnalysisBE.PostDeployment.sql
 
 SOM
 SOM.PostDeployment.sql
+SomST.PostDeployment.sql
 
 RA
 Retail_RA_Overridden.PostDeployment.sql
