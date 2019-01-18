@@ -8,8 +8,7 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO.
 ECHO SOM Runtime
-xcopy "C:\TFS\SOM\Code\SOM.Runtime\bin\x64\Release" 				/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\SOM\runtime-list-of-excluded-files.txt
-xcopy "C:\TFS\SOM\Code\SOM.Runtime\app.config.exclude" 				/y /v /z /i /Q /R "\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\"
-rename "\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\app.config.exclude" "SOM.Runtime.exe.config"
-
-del /s /q /f "\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\*.pdb"
+xcopy "C:\TFS\SOM\Code\SOM.Runtime\bin\x64\Release" 				/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\SOM\runtime-list-of-excluded-files.txt
+xcopy "C:\TFS\SOM\Code\SOM.Runtime\app.config.exclude" 				/y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\"
+rename																					"\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\app.config.exclude" "SOM.Runtime.exe.config"
+del /s /q /f																			"\\192.168.110.185\Fixes\WebSite\BIL\Runtime\%YYYYMMDD%\*.pdb"

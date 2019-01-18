@@ -2,17 +2,7 @@
 \appSettings.config
 \ConnectionStrings.config
 
-\*.exclude
-
-\Images\iconheader.ico
-\Images\login.png
-\Images\logoonheader.png
-
-\images\nTegra-
-\images\RA-
-\images\ICX-
-\images\ISP-
-\images\SMS-
+\Images
 
 \bin\Retail.Ringo.
 \bin\Retail.Zajil.
@@ -22,3 +12,5 @@
 \bin\Retail.RA.
 \bin\Retail.Demo.
 \bin\Vanrise.Voucher.
+\bin\TestCallAnalysis.
+\bin\Vanrise.MobileNetwork.

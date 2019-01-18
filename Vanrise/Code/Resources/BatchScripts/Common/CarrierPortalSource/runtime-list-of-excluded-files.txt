@@ -1,0 +1,9 @@
+\CarrierPortal.DevRuntime.exe.config
+
+\PartnerPortal.
+\CP.
+\Retail.
+\TOne.
+
+.aspx\
+.cs\

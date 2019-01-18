@@ -10,7 +10,6 @@ ECHO.
 ECHO Retail.MultiNet Runtime
 
 xcopy "C:\TFS\Retail\Code\Retail.MultiNet.Web\Retail_MultiNet\Reports\*.rdlc" /S /E /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\Runtime\%YYYYMMDD%\Modules\Retail_MultiNet\Reports"
-xcopy "C:\Publish\Retail\bin\Retail.MultiNet*" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\Runtime\%YYYYMMDD%\"
-xcopy "C:\Publish\Retail\bin\Retail.Teles*" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\Runtime\%YYYYMMDD%\"
+xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release\Retail.MultiNet*" /S /E /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\Runtime\%YYYYMMDD%\"
+xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release\Retail.Teles*" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\Runtime\%YYYYMMDD%\"
 del /s /q /f /Q																							"\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\Runtime\%YYYYMMDD%\*.pdb"
-del /s /q /f /Q																							"\\192.168.110.185\Fixes\WebSite\Retail.MultiNet\Runtime\%YYYYMMDD%\Retail.*.Web.*"

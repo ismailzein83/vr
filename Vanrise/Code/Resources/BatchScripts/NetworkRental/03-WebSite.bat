@@ -32,5 +32,6 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanc
 xcopy "C:\TFS\Retail\Code\Retail.BusinessEntity.Web\Retail_BusinessEntity" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Modules\Retail_BusinessEntity\"
 xcopy "C:\TFS\Retail\Code\Retail.Demo.Web\Retail_Demo" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Client\Modules\Retail_Demo\"
 xcopy "C:\Publish\Retail\bin\Retail.Demo*" /S /E /R /y /v /i /z /Q													"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Bin\"
-rename			"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Web.config.NR.exclude" "Web.config"
-del /s /q /f /Q	"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Bin\*.pdb"
+rename																												"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Web.config.NR.exclude" "Web.config"
+del /s /q /f /Q																										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Bin\*.pdb"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\NetworkRental\%YYYYMMDD%\Bin\*.config"

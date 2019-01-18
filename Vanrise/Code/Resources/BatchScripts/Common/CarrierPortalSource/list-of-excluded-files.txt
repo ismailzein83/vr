@@ -1,0 +1,8 @@
+\Web.config
+\appSettings.config
+\ConnectionStrings.config
+
+\bin\PartnerPortal.
+\bin\CP.
+\bin\Retail.
+\bin\TOne.

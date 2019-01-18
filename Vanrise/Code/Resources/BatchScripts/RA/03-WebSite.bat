@@ -13,12 +13,13 @@ xcopy "C:\TFS\Retail\Code\Retail.Web\Web.config.RA.exclude" /y /v /z /i /Q /R			
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-logoonheader.png" /S /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-login.png" /S /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-iconheader.ico" /S /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\menu-icons" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\menu-icons\"
 rename																												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Web.config.RA.exclude" "Web.config"
 rename																												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\RA-logoonheader.png" "logoonheader.png"
 rename																												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\RA-login.png" "login.png"
 rename																												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\RA-iconheader.ico" "iconheader.ico"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Bin\"
-xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\RetailSource\Client-list-of-excluded-files.txt
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Common\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.AccountBalance.Web\VR_AccountBalance" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\VR_AccountBalance\"
@@ -42,4 +43,6 @@ xcopy "C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS" /S /E /R /y /v /i /z /Q				
 xcopy "C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_Data\"
 xcopy "C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_Invoice\"
 xcopy "C:\TFS\Retail\Code\Retail.RA.Web\Retail_RA" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_RA\"
+xcopy "C:\Publish\Retail\bin\Retail.RA*" /S /E /R /y /v /i /z /Q													"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Bin\"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Bin\*.pdb"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Bin\*.config"

@@ -8,3 +8,5 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO.
 ECHO CarrierPortal.SupplierPricelist Runtime
+xcopy "C:\TFS\CarrierPortal\Code\CarrierPortal.DevRuntime\bin\x64\Release\CP.SupplierPricelist*" /S /E /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\CP.SupplierPricelist\Runtime\%YYYYMMDD%\"
+del /s /q /f																												"\\192.168.110.185\Fixes\WebSite\CP.SupplierPricelist\Runtime\%YYYYMMDD%\*.pdb"

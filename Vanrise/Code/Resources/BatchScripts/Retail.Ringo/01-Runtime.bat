@@ -8,9 +8,5 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO.
 ECHO Retail.Ringo Runtime
-
-xcopy "C:\TFS\Retail\Code\Retail.Ringo.Business\bin\Release\Retail.Ringo.Business.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Retail.Ringo\Runtime\%YYYYMMDD%\"
-xcopy "C:\TFS\Retail\Code\Retail.Ringo.Data\bin\Release\Retail.Ringo.Data.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Retail.Ringo\Runtime\%YYYYMMDD%\"
-xcopy "C:\TFS\Retail\Code\Retail.Ringo.Data.SQL\bin\Release\Retail.Ringo.Data.SQL.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Retail.Ringo\Runtime\%YYYYMMDD%\"
-xcopy "C:\TFS\Retail\Code\Retail.Ringo.Entities\bin\Release\Retail.Ringo.Entities.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Retail.Ringo\Runtime\%YYYYMMDD%\"
-xcopy "C:\TFS\Retail\Code\Retail.BusinessEntity.RingoExtensions\bin\Release\Retail.Ringo.MainExtensions.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Retail.Ringo\Runtime\%YYYYMMDD%\"
+xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release\Retail.Ringo*" /S /E /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\Retail.Ringo\Runtime\%YYYYMMDD%\"
+del /s /q /f																					"\\192.168.110.185\Fixes\WebSite\Retail.Ringo\Runtime\%YYYYMMDD%\*.pdb"

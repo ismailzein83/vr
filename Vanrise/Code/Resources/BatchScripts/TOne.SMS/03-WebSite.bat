@@ -14,6 +14,7 @@ xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R			
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\SMS-WHS-logoonheader.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\SMS-WHS-login.png" /S /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\SMS-WHS-iconheader.ico" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\menu-icons" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\Images\menu-icons\"
 rename																												"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\Web.config.SMS-WHS.exclude" "Web.config"
 rename																												"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\Images\SMS-WHS-logoonheader.png" "logoonheader.png"
 rename																												"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\Images\SMS-WHS-login.png" "login.png"
@@ -41,3 +42,4 @@ xcopy "C:\TFS\Retail\Code\Retail.Demo.Web\Retail_Demo" /S /E /R /y /v /i /z /Q		
 xcopy "C:\Publish\Retail\bin\Retail.Demo*" /S /E /R /y /v /i /z /Q													"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\Bin\"
 xcopy "C:\Publish\Retail\bin\Retail.SMS*" /S /E /R /y /v /i /z /Q													"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\Bin\"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\Bin\*.pdb"
+del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\TOne.SMS\%YYYYMMDD%\Bin\*.config"

@@ -8,6 +8,8 @@
 \Retail.RA.
 \Retail.Demo.
 \Vanrise.Voucher.
+\TestCallAnalysis.
+\Vanrise.MobileNetwork.
 
 .aspx\
 .cs\
