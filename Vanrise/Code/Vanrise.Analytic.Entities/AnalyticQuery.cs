@@ -29,6 +29,7 @@ namespace Vanrise.Analytic.Entities
 
         public bool WithSummary { get; set; }
         public int? TopRecords { get; set; }
+        public Dictionary<string, dynamic> QueryParameters { get; set; }
 
         public List<AnalyticQuerySubTable> SubTables { get; set; }
 

@@ -17,5 +17,6 @@ namespace Vanrise.Analytic.Entities
         dynamic GetDimensionDescription(string dimensionName);
         DateTime GetQueryFromTime();
         DateTime GetQueryToTime();
+        dynamic GetQueryParameter(string parameterName);
     }
 }

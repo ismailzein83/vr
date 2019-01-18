@@ -194,7 +194,13 @@ namespace Vanrise.Analytic.Business
                 return _queryToTime;
             }
         }
-
+        public Dictionary<string, dynamic> QueryParameters
+        {
+            get
+            {
+                return _query.QueryParameters;
+            }
+        }
         public TimeGroupingUnit? TimeGroupingUnit 
         {
             get        

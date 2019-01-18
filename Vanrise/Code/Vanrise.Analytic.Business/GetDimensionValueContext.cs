@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
-
+using Vanrise.Common;
 namespace Vanrise.Analytic.Business
 {
     public class GetDimensionValueContext : IGetDimensionValueContext
@@ -48,6 +48,13 @@ namespace Vanrise.Analytic.Business
         public DateTime GetQueryToTime()
         {
             return _analyticTableQueryContext.ToTime;
+        }
+
+        public dynamic GetQueryParameter(string parameterName)
+        {
+            if(_analyticTableQueryContext.QueryParameters != null)
+                return _analyticTableQueryContext.QueryParameters.GetRecord(parameterName);
+            return null;
         }
     }
 }

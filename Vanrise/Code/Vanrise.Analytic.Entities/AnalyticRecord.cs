@@ -110,7 +110,7 @@ namespace Vanrise.Analytic.Entities
         TimeGroupingUnit? TimeGroupingUnit { get; }
 
         int? TopRecords { get; }
-
+        Dictionary<string, dynamic> QueryParameters { get; }
         T GetOrCreateCachedObjectBasedOnItemConfig<T>(object cacheName, Func<T> createObject);
     }
 }
