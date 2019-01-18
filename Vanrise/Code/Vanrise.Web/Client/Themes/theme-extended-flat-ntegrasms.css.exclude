@@ -1,0 +1,33 @@
+﻿.flat-logo-container {
+    background-color: #32509b !important;
+}
+
+.flat .login-btn {
+    background-color: #32509b !important;
+}
+.flat .vr-sidebar-header {
+    background-color: #32509b;
+}
+.flat .badge {
+    background-color: #32509b !important;
+}
+.flat .menu-item-list-ligth {
+    background-color: #e3e3e3 !important;
+}
+.flat .module-icon {
+    background-color: #ababab !important;
+}
+.flat .panel-heading-vr.selected-menu {
+    background-color: #ababab !important;
+}
+.flat .vr-datagrid-header-simple {
+    background: #32509b !important;
+}
+.flat .vr-remote-footer {
+    background-color: #e3e3e3 !important;
+    color: #88898B !important;
+    margin-top: 3px;
+}
+.flat .vr-modal-header {
+    background: #32509b !important;
+}

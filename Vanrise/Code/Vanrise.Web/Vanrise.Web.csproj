@@ -1212,6 +1212,7 @@
     <None Include="Client\Themes\theme-extended-blue.css.exclude" />
     <Content Include="Client\Themes\theme-extended-INSOFT.css.exclude" />
     <Content Include="Client\Themes\theme-extended-Zebra.css.exclude" />
+    <Content Include="Client\Themes\theme-extended-flat-ntegrasms.css.exclude" />
     <None Include="Client\Themes\theme-extended-red.css.exclude" />
     <None Include="Client\Themes\theme-extended-green.css.exclude" />
     <None Include="Client\Themes\theme-extended-cloudXPoint.css.exclude" />

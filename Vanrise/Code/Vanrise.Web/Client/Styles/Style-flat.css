@@ -464,6 +464,14 @@
     margin: 0px !important;
 }
 
+.flat .flat-logo-container {
+    width: 349px;
+    background-color: #0177b5;
+    text-align: center;
+    height: 68px;
+    padding-top: 6px;
+}
+
 .flat .flat-login-container .row {
     margin: 0px !important;
 }
