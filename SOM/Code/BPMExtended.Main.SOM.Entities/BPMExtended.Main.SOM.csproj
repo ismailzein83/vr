@@ -48,7 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Inventory\ServiceResponse\DeviceInfo.cs" />
+    <Compile Include="Inventory\ServiceResponse\DPPortInfo.cs" />
+    <Compile Include="Inventory\ServiceResponse\DSLAMPortInfo.cs" />
     <Compile Include="Inventory\ServiceResponse\PhoneNumberInfo.cs" />
+    <Compile Include="Inventory\ServiceResponse\PortInfo.cs" />
     <Compile Include="Inventory\ServiceResponse\TechnicalReservation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Inventory\ServiceResponse\TechnicalDetails.cs" />

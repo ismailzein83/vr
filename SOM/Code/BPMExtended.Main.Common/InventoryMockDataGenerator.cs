@@ -1,4 +1,5 @@
 ﻿using BPMExtended.Main.Entities;
+using BPMExtended.Main.SOMAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -137,13 +137,13 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
-        public List<DeviceInfo> GetFreeDevices(string switchId, string type, int top)
+        public List<DeviceInfo> GetFreeDevices(string switchId, string lineType, int top)
         {
             List<DeviceInfo> result = new List<DeviceInfo>();
             List<DeviceInfo> deviceItems;
             using (SOMClient client = new SOMClient())
             {
-                deviceItems = client.Get<List<DeviceInfo>>(String.Format("api/SOM_Main/Inventory/GetDevices?switchId={0}&type={1}&top={2}", switchId, type, top));
+                deviceItems = client.Get<List<DeviceInfo>>(String.Format("api/SOM/Inventory/GetFreeDevices?switchId={0}&lineType={1}&top={2}", switchId, lineType, top));
             }
 
             if (deviceItems != null)
@@ -158,6 +158,79 @@ namespace BPMExtended.Main.Business
                 }
             }
             return result;
+        }
+
+        public bool IsManualSwitch(string contractId)
+        {
+
+            ContractManager contractManager = new ContractManager();
+            TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
+
+            bool item = false;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<bool>(String.Format("api/SOM/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
+            }
+            return item;
+        }
+
+        public bool IsManualDSLAM(string contractId)
+        {
+
+            ContractManager contractManager = new ContractManager();
+            ADSLContractDetail contract = contractManager.GetADSLContract(contractId);
+
+            bool item = false;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<bool>(String.Format("api/SOM/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
+            }
+            return item;
+        }
+
+        public List<PortInfo> GetCabinetPrimaryPorts(string cabinetId)
+        {
+            List<PortInfo> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM/Inventory/GetCabinetPrimaryPorts?cabinetId={0}", cabinetId));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new PortInfo
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
+        }
+
+        public List<PortInfo> GetCabinetSecondaryPorts(string cabinetId)
+        {
+            List<PortInfo> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM/Inventory/GetCabinetSecondaryPorts?cabinetId={0}", cabinetId));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new PortInfo
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
+        }
+
+        public List<DPPortInfo> GetFreeDPPorts(string dpId)
+        {
+            List<DPPortInfo> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<DPPortInfo>>(String.Format("api/SOM/Inventory/GetDPPorts?dpId={0}", dpId));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new DPPortInfo
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -452,50 +525,11 @@ namespace BPMExtended.Main.Business
             }).ToList();
         }
 
-        public List<PortItemDetail> GetCabinetPrimaryPorts(string cabinetId)
-        {
-            List<PortItem> apiResult;
-            using (SOMClient client = new SOMClient())
-            {
-                apiResult = client.Get<List<PortItem>>(String.Format("api/SOM_Main/Inventory/GetCabinetPrimaryPorts?cabinetId={0}", cabinetId));
-            }
 
-            return apiResult == null ? null : apiResult.MapRecords(r => new PortItemDetail
-            {
-                Id = r.Id,
-                Name = r.Name
-            }).ToList();
-        }
 
-        public List<PortItemDetail> GetCabinetSecondaryPorts(string cabinetId)
-        {
-            List<PortItem> apiResult;
-            using (SOMClient client = new SOMClient())
-            {
-                apiResult = client.Get<List<PortItem>>(String.Format("api/SOM_Main/Inventory/GetCabinetSecondaryPorts?cabinetId={0}", cabinetId));
-            }
+    
 
-            return apiResult == null ? null : apiResult.MapRecords(r => new PortItemDetail
-            {
-                Id = r.Id,
-                Name = r.Name
-            }).ToList();
-        }
 
-        public List<DPPortItemDetail> GetDPPorts(string dpPortId)
-        {
-            List<DPPortItem> apiResult;
-            using (SOMClient client = new SOMClient())
-            {
-                apiResult = client.Get<List<DPPortItem>>(String.Format("api/SOM_Main/Inventory/GetDPPorts?dpId={0}", dpPortId));
-            }
-
-            return apiResult == null ? null : apiResult.MapRecords(r => new DPPortItemDetail
-            {
-                Id = r.Id,
-                Name = r.Name
-            }).ToList();
-        }
 
         public List<PhoneNumberDetail> GetAvailablePhoneNumbers(string cabinetPort, string dpPort, bool isGold, bool isISDN, string startsWith)
         {
@@ -579,34 +613,7 @@ namespace BPMExtended.Main.Business
             return phoneitem.SwitchId == pilotPhoneItem.SwitchId ? true : false;
         }
 
-        public bool IsManualSwitch(string contractId)
-        {
-
-            ContractManager contractManager = new ContractManager();
-            TelephonyContractDetail contract = contractManager.GetTelephonyContract(contractId);
-            
-            bool item = false;
-            using (SOMClient client = new SOMClient())
-            {
-                item = client.Get<bool>(String.Format("api/SOM_Main/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
-            }
-            return  item;
-        }
-
-
-        public bool IsManualDSLAM(string contractId)
-        {
-
-            ContractManager contractManager = new ContractManager();
-            ADSLContractDetail contract = contractManager.GetADSLContract(contractId);
-
-            bool item = false;
-            using (SOMClient client = new SOMClient())
-            {
-                item = client.Get<bool>(String.Format("api/SOM_Main/Inventory/IsManualSwitch?phoneNumber={0}", contract.PhoneNumber));
-            }
-            return item;
-        }
+      
 
         public bool IsManualDSLAMForGSHDSL(string contractId)
         {

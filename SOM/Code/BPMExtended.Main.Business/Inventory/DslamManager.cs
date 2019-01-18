@@ -1,5 +1,6 @@
 ﻿using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
+using BPMExtended.Main.SOMAPI;
 using SOM.Main.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,17 +15,17 @@ namespace BPMExtended.Main.Business
 
         public List<DSLAMPortInfo> GetFreeDSLAMPorts(string phoneNumber)
         {
-            InventoryPhoneItem item = null;
+            TechnicalDetails item = null;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<InventoryPhoneItem>(String.Format("api/SOM_Main/Inventory/GetInventoryPhoneItem?phoneNumber={0}", phoneNumber));
+                item = client.Get<TechnicalDetails>(String.Format("api/SOM/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
             }
 
             string switchId = item.SwitchId;
-            List<PortItem> apiResult;
+            List<PortInfo> apiResult;
             using (SOMClient client = new SOMClient())
             {
-                apiResult = client.Get<List<PortItem>>(String.Format("api/SOM_Main/Inventory/GetDSLAMPorts?switchId={0}", switchId));
+                apiResult = client.Get<List<PortInfo>>(String.Format("api/SOM/Inventory/GetDSLAMPorts?switchId={0}", switchId));
             }
 
             return apiResult == null ? null : apiResult.MapRecords(r => new DSLAMPortInfo

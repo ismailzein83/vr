@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using BPMExtended.Main.Entities;
+using BPMExtended.Main.SOMAPI;
 using Terrasoft.Core;
 using Terrasoft.Core.Entities;
 

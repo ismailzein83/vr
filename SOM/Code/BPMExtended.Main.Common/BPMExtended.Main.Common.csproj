@@ -93,6 +93,10 @@
       <Project>{69b59125-bef7-4864-a609-85db39f0f177}</Project>
       <Name>BPMExtended.Main.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BPMExtended.Main.SOM.Entities\BPMExtended.Main.SOM.csproj">
+      <Project>{25A7B453-CDC4-4C51-86CB-2483386F6BC6}</Project>
+      <Name>BPMExtended.Main.SOM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
       <Project>{cdd52ad1-64a7-4255-b9b4-783959756de9}</Project>
       <Name>SOM.Main.Entities</Name>
