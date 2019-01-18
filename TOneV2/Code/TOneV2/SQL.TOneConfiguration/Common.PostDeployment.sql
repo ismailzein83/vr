@@ -134,7 +134,10 @@ as (select * from (values
 ('VRCommon/VRDynamicAPI/GetFilteredVRDynamicAPIs','VRDynamicAPI: View'),
 ('VRCommon/VRDynamicAPIModule/AddVRDynamicAPIModule','VRDynamicAPIModule: Add'),
 ('VRCommon/VRDynamicAPIModule/UpdateVRDynamicAPIModule','VRDynamicAPIModule: Edit'),
-('VRCommon/VRDynamicAPIModule/GetFilteredVRDynamicAPIModules','VRDynamicAPIModule: View')
+('VRCommon/VRDynamicAPIModule/GetFilteredVRDynamicAPIModules','VRDynamicAPIModule: View'),
+('VRCommon/VRNamespaceItem/UpdateVRNamespaceItem','VR_SystemConfiguration: Edit'),
+('VRCommon/VRNamespaceItem/AddVRNamespaceItem','VR_SystemConfiguration: Add'),
+('VRCommon/VRNamespaceItem/GetFilteredVRNamespaceItems','VR_SystemConfiguration: View')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
