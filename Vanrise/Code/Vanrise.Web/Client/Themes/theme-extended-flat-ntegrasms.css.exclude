@@ -20,6 +20,9 @@
 .flat .panel-heading-vr.selected-menu {
     background-color: #ababab !important;
 }
+.flat .collapsed-menu-item {
+    background-color: #ababab !important;
+}
 .flat .vr-datagrid-header-simple {
     background: #32509b !important;
 }
