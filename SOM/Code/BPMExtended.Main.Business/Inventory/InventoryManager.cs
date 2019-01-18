@@ -54,6 +54,46 @@ namespace BPMExtended.Main.Business
             };
         }
 
+        public TechnicalDetails GetTechnicalDetailsByPath(string pathID) // old : GetInventoryDetail()
+        {
+            TechnicalDetails item = null;
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<TechnicalDetails>(String.Format("api/SOM/Inventory/GetTechnicalDetailsByPath?pathID={0}", pathID));
+            }
+            return new TechnicalDetails
+            {
+                Cabinet = item.Cabinet,
+                CabinetPrimaryPort = item.CabinetPrimaryPort,
+                CabinetSecondaryPort = item.CabinetSecondaryPort,
+                DP = item.DP,
+                DPPorts = item.DPPorts,
+                DPSecondaryPorts = item.DPSecondaryPorts,
+                DSlam = item.DSlam,
+                DSlamOMC = item.DSlamOMC,
+                DSlamPort = item.DSlamPort,
+                IsMultiplexed = item.IsMultiplexed,
+                MDFPort = item.MDFPort,
+                MSAN_EID = item.MSAN_EID,
+                MSAN_TID = item.MSAN_TID,
+                MSANType = item.MSANType,
+                PhoneStatus = item.PhoneStatus,
+                PhoneType = item.PhoneType,
+                Receiver = item.Receiver,
+                ReceiverPort = item.ReceiverPort,
+                Switch = item.Switch,
+                SwitchId = item.SwitchId,
+                SwitchOMC = item.SwitchOMC,
+                SWITCH_TYPE = item.SWITCH_TYPE,
+                Transmitter = item.Transmitter,
+                TransmitterPort = item.TransmitterPort,
+                VerticalMDF = item.VerticalMDF,
+                DPPortId = item.DPPortId,
+                DPId = item.DPId
+
+            };
+        }
+
         public TechnicalReservation GetTechnicalReservation(string phoneNumber)
         {
             TechnicalReservation item = null;
@@ -257,6 +297,61 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public List<Device> GetDevices(string phoneNumbers)
+        {
+            List<DeviceDetailItem> apiResult;
+
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<DeviceDetailItem>>(String.Format("api/SOM/Inventory/GetDeviceIDs?phoneNumbers={0}",phoneNumbers));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new Device
+            {
+                DeviceId = r.DEV_ID,
+                phoneNumber = r.PHONE_NUMBER
+
+            }).ToList();
+
+        }
+
+        public string GetDeviceID(string phoneNumberID)
+        {
+            string apiResult="";
+
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<string>(String.Format("api/SOM/Inventory/GetDeviceID?phoneNumbers={0}", phoneNumberID));
+            }
+
+            return apiResult;
+
+        }
+
+        public string CreateFullPath(string phoneNumber , string pathID)
+        {
+            string apiResult="";
+
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<string>(String.Format("api/SOM/Inventory/CreateFullPath?phoneNumber={0}&pathID={1}", phoneNumber, pathID));
+            }
+
+            return apiResult;
+        }
+
+        public ADSLLinePath CheckADSL(string phoneNumber)
+        {
+            ADSLLinePath item = null;
+
+            using (SOMClient client = new SOMClient())
+            {
+                item = client.Get<ADSLLinePath>(String.Format("api/SOM/Inventory/CreateFullPath?CheckADSL={0}", phoneNumber));
+            }
+
+            return item;
+
+        }
         //////////////////////////////////////////////////////////////////////////////
 
 

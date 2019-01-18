@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Inventory\ServiceResponse\Device.cs" />
     <Compile Include="Inventory\ServiceResponse\DeviceInfo.cs" />
     <Compile Include="Inventory\ServiceResponse\DPPortInfo.cs" />
     <Compile Include="Inventory\ServiceResponse\DSLAMPortInfo.cs" />
