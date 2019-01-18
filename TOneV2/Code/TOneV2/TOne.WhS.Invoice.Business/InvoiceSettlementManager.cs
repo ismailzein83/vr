@@ -401,24 +401,41 @@ namespace TOne.WhS.Invoice.Business
                                         }
                                         if (invoiceAvailableForSettlement.IsSelected)
                                         {
+                                            string currencySymbol = _currencyManager.GetCurrencySymbol(invoiceItemDetail.CurrencyId);
+                                            currencySymbol.ThrowIfNull("currencySymbol", invoiceItemDetail.CurrencyId);
+
                                             OriginalDataCurrrency originalDataCurrrency;
                                             if (partnerCustomerInvoiceDetail.OriginalAmountByCurrency != null && partnerCustomerInvoiceDetail.OriginalAmountByCurrency.TryGetValue(invoiceItemDetail.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && originalDataCurrrency.OriginalAmount.HasValue)
                                             {
                                                 if (customerAmountByCurrency == null)
                                                     customerAmountByCurrency = new Dictionary<string, decimal>();
-
-                                                string currencySymbol = _currencyManager.GetCurrencySymbol(invoiceItemDetail.CurrencyId);
-                                                currencySymbol.ThrowIfNull("currencySymbol", invoiceItemDetail.CurrencyId);
                                                 decimal amountValue;
                                                 if(!customerAmountByCurrency.TryGetValue(currencySymbol, out amountValue))
                                                 {
                                                     customerAmountByCurrency.Add(currencySymbol, Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue));
+                                                }else
+                                                {
+                                                    customerAmountByCurrency[currencySymbol] = amountValue + Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue);
                                                 }
                                             }
                                             else
                                             {
                                                 if(!alreadyInvoiceAdded)
                                                   selectedInvoiceIds.Add(new SelectedInvoiceItem { InvoiceId = invoiceAvailableForSettlement.InvoiceId, CurrencyId = invoiceAvailableForSettlement.CurrencyId });
+
+                                                if (customerAmountByCurrency == null)
+                                                    customerAmountByCurrency = new Dictionary<string, decimal>();
+
+                                                decimal amountValue;
+
+                                                if (!customerAmountByCurrency.TryGetValue(currencySymbol, out amountValue))
+                                                {
+                                                    customerAmountByCurrency.Add(currencySymbol, Math.Round(invoiceItemDetail.AmountAfterCommissionWithTaxes, normalPrecisionValue));
+                                                }
+                                                else
+                                                {
+                                                    customerAmountByCurrency[currencySymbol] = amountValue + Math.Round(invoiceItemDetail.AmountAfterCommissionWithTaxes, normalPrecisionValue);
+                                                }
                                             }
                                         }
                                     }
@@ -516,24 +533,43 @@ namespace TOne.WhS.Invoice.Business
                                         }
                                             if (invoiceAvailableForSettlement.IsSelected)
                                         {
+                                            string currencySymbol = _currencyManager.GetCurrencySymbol(invoiceItemDetail.CurrencyId);
+                                            currencySymbol.ThrowIfNull("currencySymbol", invoiceItemDetail.CurrencyId);
                                             OriginalDataCurrrency originalDataCurrrency;
                                             if (supplierInvoiceDetails.OriginalAmountByCurrency != null && supplierInvoiceDetails.OriginalAmountByCurrency.TryGetValue(invoiceItemDetail.CurrencyId, out originalDataCurrrency) && originalDataCurrrency.IncludeOriginalAmountInSettlement && originalDataCurrrency.OriginalAmount.HasValue)
                                             {
                                                 if (supplierAmountByCurrency == null)
                                                     supplierAmountByCurrency = new Dictionary<string, decimal>();
 
-                                                string currencySymbol = _currencyManager.GetCurrencySymbol(invoiceItemDetail.CurrencyId);
-                                                currencySymbol.ThrowIfNull("currencySymbol", invoiceItemDetail.CurrencyId);
+                                               
                                                 decimal amountValue;
                                                 if (!supplierAmountByCurrency.TryGetValue(currencySymbol, out amountValue))
                                                 {
                                                     supplierAmountByCurrency.Add(currencySymbol, Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue));
+                                                }
+                                                else
+                                                {
+                                                    supplierAmountByCurrency[currencySymbol] = amountValue + Math.Round(originalDataCurrrency.OriginalAmount.Value, normalPrecisionValue);
                                                 }
                                             }
                                             else
                                             {
                                                 if (!alreadyInvoiceAdded)
                                                     selectedInvoiceIds.Add(new SelectedInvoiceItem { InvoiceId = invoiceAvailableForSettlement.InvoiceId, CurrencyId = invoiceAvailableForSettlement.CurrencyId });
+
+                                                if (supplierAmountByCurrency == null)
+                                                    supplierAmountByCurrency = new Dictionary<string, decimal>();
+
+                                                decimal amountValue;
+
+                                                if (!supplierAmountByCurrency.TryGetValue(currencySymbol, out amountValue))
+                                                {
+                                                    supplierAmountByCurrency.Add(currencySymbol, Math.Round(invoiceItemDetail.AmountAfterCommissionWithTaxes, normalPrecisionValue));
+                                                }
+                                                else
+                                                {
+                                                    supplierAmountByCurrency[currencySymbol] = amountValue + Math.Round(invoiceItemDetail.AmountAfterCommissionWithTaxes, normalPrecisionValue);
+                                                }
                                             }
                                         }
                                     }
