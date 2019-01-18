@@ -366,5 +366,20 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #endregion
 
+        #region Public Methods
+        public SupplierCode GetSupplierCodeByCodeGroup(int codeGroupId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(COL_CodeGroupID).Value(codeGroupId);
+            return queryContext.GetItem(SupplierCodeMapper);
+        }
+
+        #endregion
+
     }
 }
