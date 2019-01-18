@@ -54,14 +54,14 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        public TechnicalReservationDetail GetTechnicalReservation(string phoneNumber)
+        public TechnicalReservation GetTechnicalReservation(string phoneNumber)
         {
-            TechnicalReservationDetail item = null;
+            TechnicalReservation item = null;
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<TechnicalReservationDetail>(String.Format("api/SOM/Inventory/GetTemporaryTechnicalReservation?phoneNumber={0}", phoneNumber));
+                item = client.Get<TechnicalReservation>(String.Format("api/SOM/Inventory/GetTemporaryTechnicalReservation?phoneNumber={0}", phoneNumber));
             }
-            return new TechnicalReservationDetail
+            return new TechnicalReservation
             {
                 Switch = item.Switch,
                 SwitchId = item.SwitchId,
@@ -131,6 +131,29 @@ namespace BPMExtended.Main.Business
                         IsISDN = phoneNumber.IsISDN,
                         Number = phoneNumber.Number,
                         Id = phoneNumber.Id
+                    });
+                }
+            }
+            return result;
+        }
+
+        public List<DeviceInfo> GetFreeDevices(string switchId, string type, int top)
+        {
+            List<DeviceInfo> result = new List<DeviceInfo>();
+            List<DeviceInfo> deviceItems;
+            using (SOMClient client = new SOMClient())
+            {
+                deviceItems = client.Get<List<DeviceInfo>>(String.Format("api/SOM_Main/Inventory/GetDevices?switchId={0}&type={1}&top={2}", switchId, type, top));
+            }
+
+            if (deviceItems != null)
+            {
+                foreach (var deviceItem in deviceItems)
+                {
+                    result.Add(new DeviceInfo
+                    {
+                        Id = deviceItem.Id,
+                        DeviceId = deviceItem.DeviceId
                     });
                 }
             }
@@ -500,28 +523,7 @@ namespace BPMExtended.Main.Business
 
        
 
-        public List<DeviceItemDetail> GetDevices(string switchId, string type, int top)
-        {
-            List<DeviceItemDetail> result = new List<DeviceItemDetail>();
-            List<DeviceItem> deviceItems;
-            using (SOMClient client = new SOMClient())
-            {
-                deviceItems = client.Get<List<DeviceItem>>(String.Format("api/SOM_Main/Inventory/GetDevices?switchId={0}&type={1}&top={2}", switchId, type, top));
-            }
-
-            if (deviceItems != null)
-            {
-                foreach (var deviceItem in deviceItems)
-                {
-                    result.Add(new DeviceItemDetail
-                    {
-                        Id = deviceItem.Id,
-                        DeviceId = deviceItem.DeviceId
-                    });
-                }
-            }
-            return result;
-        }
+      
 
         public ReserveLineRequestOutput ReservePhoneNumber(BPMCustomerType customerType, Guid accountOrContactId, ReserveLineRequestInput reserveLineInput)
         {
