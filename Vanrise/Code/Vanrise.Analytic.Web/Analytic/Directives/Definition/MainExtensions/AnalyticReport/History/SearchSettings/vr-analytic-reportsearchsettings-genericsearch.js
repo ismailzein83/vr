@@ -228,10 +228,10 @@
                             }
 
 
-                            
 
 
-                            
+
+
 
 
                             var loadGroupingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -264,7 +264,7 @@
                             });
                             promises.push(loadAdvancedFilterDirectivePromiseDeferred.promise);
 
-                           
+
                         }
                         var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadTableSelectorPromiseDeferred.promise);
@@ -279,11 +279,11 @@
                             }
                             VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, tableSelectorpayLoad, loadTableSelectorPromiseDeferred);
                         });
-                       
+
 
                         return UtilsService.waitMultiplePromises(promises);
                     };
-                }
+                };
                 api.getData = function getData() {
 
                     var groupingDimensions;

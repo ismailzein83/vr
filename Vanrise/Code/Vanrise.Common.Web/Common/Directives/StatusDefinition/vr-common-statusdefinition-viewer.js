@@ -66,7 +66,7 @@
                                     for (var i = 0; i < response.length; i++) {
                                         var statusDefinitionStyle = response[i];
                                         if (statusDefinitionStyle.StatusDefinitionId == highlightedId)
-                                            statusDefinitionStyle.LabelClass = "bold-label"
+                                            statusDefinitionStyle.LabelClass = "bold-label";
                                         $scope.statusDefinitionStyles.push(statusDefinitionStyle);
                                     }
                                 }
