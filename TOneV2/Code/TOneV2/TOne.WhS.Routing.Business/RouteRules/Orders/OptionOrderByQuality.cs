@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Common;
 
 namespace TOne.WhS.Routing.Business.RouteRules.Orders
 {
@@ -17,10 +15,8 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
             context.OrderDirection = OrderDirection.Descending;
 
             QualityConfigurationManager manager = new QualityConfigurationManager();
-            List<IRouteOptionOrderTarget> suppliersNotFound = new List<IRouteOptionOrderTarget>();
 
             decimal? supplierTQI;
-            decimal maxTQI = 0;
 
             var defaultRouteRuleQualityConfiguration = new ConfigManager().GetDefaultRouteRuleQualityConfiguration();
 
@@ -32,20 +28,9 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
                     supplierTQI = manager.GetRoutingProductQualityValue(option.SaleZoneId, option.SupplierId, context.RoutingDatabase, defaultRouteRuleQualityConfiguration, this.QualityConfigurationId);
 
                 if (supplierTQI.HasValue)
-                {
                     option.OptionWeight = supplierTQI.Value;
-                    maxTQI = Math.Max(maxTQI, supplierTQI.Value);
-                }
                 else
-                {
-                    suppliersNotFound.Add(option);
-                }
-            }
-
-            if (suppliersNotFound.Count > 0)
-            {
-                foreach (IRouteOptionOrderTarget option in suppliersNotFound)
-                    option.OptionWeight = maxTQI;
+                    option.OptionWeight = 0;
             }
         }
     }
