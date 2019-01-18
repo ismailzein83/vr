@@ -14,7 +14,7 @@ AS
 BEGIN
 IF NOT EXISTS(SELECT 1 FROM common.[VRDynamicAPI] where Name=@Name AND ModuleId = @ModuleId )
 	BEGIN
-	INSERT INTO common.VRDynamicAPI(Name,ModuleId,Settings,CreatedBy,LastModifiedTime,LastModifiedBy)
-	VALUES (@Name,@ModuleId,@Settings,@CreatedBy, GETDATE(), @LastModifiedBy)
+	INSERT INTO common.VRDynamicAPI(Id,Name,ModuleId,Settings,CreatedBy,LastModifiedTime,LastModifiedBy)
+	VALUES (@Id,@Name,@ModuleId,@Settings,@CreatedBy, GETDATE(), @LastModifiedBy)
 	END
 END
