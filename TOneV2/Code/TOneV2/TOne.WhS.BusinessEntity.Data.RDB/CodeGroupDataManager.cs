@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
@@ -24,13 +24,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static CodeGroupDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CountryID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Name, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 200});
-            columns.Add(COL_Code, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 20});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CountryID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 200 });
+            columns.Add(COL_Code, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 20 });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -45,7 +45,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("TOneWhS_BE_CodeGroup", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
+            return RDBDataProviderFactory.CreateProvider("TOneWhS_BE", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
 
         #endregion
@@ -56,9 +56,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
             return queryContext.GetItems(CodeGroupMapper);
         }
 
@@ -72,7 +71,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var notExistsCondition = updateQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.NotEqualsCondition(COL_ID).Value(codeGroup.CodeGroupId);
-            notExistsCondition.EqualsCondition(COL_Name).Value(codeGroup.Name);
+            notExistsCondition.EqualsCondition(COL_Code).Value(codeGroup.Code);
 
             updateQuery.Column(COL_Code).Value(codeGroup.Code);
             updateQuery.Column(COL_CountryID).Value(codeGroup.CountryId);
@@ -115,17 +114,20 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void SaveCodeGroupToDB(List<CodeGroup> codeGroups)
         {
+            if (codeGroups == null || !codeGroups.Any())
+                return;
+
             var queryContext = new RDBQueryContext(GetDataProvider());
+            var insertMultipleRowsContext = queryContext.AddInsertMultipleRowsQuery();
+            insertMultipleRowsContext.IntoTable(TABLE_NAME);
 
             foreach (CodeGroup codeGroup in codeGroups)
             {
                 codeGroup.Code = codeGroup.Code.Trim();
-
-                var insertQuery = queryContext.AddInsertQuery();
-                insertQuery.IntoTable(TABLE_NAME);
-                insertQuery.Column(COL_Code).Value(codeGroup.Code);
-                insertQuery.Column(COL_Name).Value(codeGroup.Name);
-                insertQuery.Column(COL_CountryID).Value(codeGroup.CountryId);
+                var rowContext = insertMultipleRowsContext.AddRow();
+                rowContext.Column(COL_Code).Value(codeGroup.Code);
+                rowContext.Column(COL_Name).Value(codeGroup.Name);
+                rowContext.Column(COL_CountryID).Value(codeGroup.CountryId);
             }
 
             queryContext.ExecuteNonQuery();
@@ -139,7 +141,16 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public bool CheckIfCodeGroupHasRelatedCodes(int codeGroupId)
         {
-            return false;
+            SaleCodeDataManager saleCodeDataManager = new SaleCodeDataManager();
+            var saleCode = saleCodeDataManager.GetSaleCodeByCodeGroup(codeGroupId);
+
+            if (saleCode != null)
+                return true;
+
+            SupplierCodeDataManager supplierCodeDataManager = new SupplierCodeDataManager();
+            var supplierCode = supplierCodeDataManager.GetSupplierCodeByCodeGroup(codeGroupId);
+
+            return supplierCode != null;
         }
 
         public void JoinCodeGroup(RDBJoinContext joinContext, string codeTableAlias, string originalTableAlias, string originalTableCodeIdCol)
