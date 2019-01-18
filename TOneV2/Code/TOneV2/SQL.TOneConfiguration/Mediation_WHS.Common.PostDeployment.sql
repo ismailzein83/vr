@@ -58,7 +58,8 @@ set nocount on;
 ;with cte_data([ID],[Name],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('F83A615A-6514-4B9D-9E10-5C5EC4234069','CDR_Data_Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"Mediation_CDR_DBConnString","IsRemoteDataStore":false}')
+('F83A615A-6514-4B9D-9E10-5C5EC4234069','CDR Data Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"Mediation_CDR_DBConnString","IsRemoteDataStore":false}'),
+('B092FC56-5D9D-4A41-B385-0BFB24C72CBA','CDR File Store','{"$type":"Vanrise.GenericData.FileDataStorage.FileDataStoreSettings, Vanrise.GenericData.FileDataStorage","ConfigId":"DB1224D0-CC3D-481D-9163-E4E7C5231D00","ConnectionStringName":"Mediation_CDR_DBConnString"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[genericdata].[DataStore] as t
