@@ -35,23 +35,23 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static SalePricelistRateChangeNewDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_PricelistId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Rate, new RDBTableColumnDefinition {DataType = RDBDataType.Decimal, Size = 20, Precision = 8});
-            columns.Add(COL_RateTypeId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_RecentCurrencyId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_RecentRate, new RDBTableColumnDefinition {DataType = RDBDataType.Decimal, Size = 20, Precision = 8});
-            columns.Add(COL_RecentRateConverted, new RDBTableColumnDefinition {DataType = RDBDataType.Decimal, Size = 20, Precision = 8});
-            columns.Add(COL_CountryID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_ZoneName, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 150});
-            columns.Add(COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_Change, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_RoutingProductID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_PricelistId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Rate, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 8 });
+            columns.Add(COL_RateTypeId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_RecentCurrencyId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_RecentRate, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 8 });
+            columns.Add(COL_RecentRateConverted, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 8 });
+            columns.Add(COL_CountryID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_ZoneName, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 150 });
+            columns.Add(COL_ZoneID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_Change, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_RoutingProductID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -116,20 +116,20 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public IEnumerable<SalePricelistRateChange> GetFilteredRatesPreviewByProcessInstanceId(int processInstanceId, string zoneName, int customerId)
         {
             var salePriceLisNewDataManager = new SalePriceListNewDataManager();
-
+            string salePricelistNewTableAlias = "spn";
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var join = selectQuery.Join();
-            salePriceLisNewDataManager.JoinSalePriceListNew(join, "ID", TABLE_ALIAS, COL_PricelistId);
+            salePriceLisNewDataManager.JoinSalePriceListNew(join, TABLE_ALIAS, salePricelistNewTableAlias, COL_PricelistId);
 
             var whereQueryContext = selectQuery.Where();
             whereQueryContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
             whereQueryContext.EqualsCondition(COL_ZoneName).Value(zoneName);
             whereQueryContext.NotNullCondition(COL_RateTypeId);
-            whereQueryContext.EqualsCondition("spn", "OwnerID").Value(customerId);
+            whereQueryContext.EqualsCondition(salePricelistNewTableAlias, SalePriceListNewDataManager.COL_OwnerID).Value(customerId);
 
             return queryContext.GetItems(SalePricelistRateChangeMapper);
         }

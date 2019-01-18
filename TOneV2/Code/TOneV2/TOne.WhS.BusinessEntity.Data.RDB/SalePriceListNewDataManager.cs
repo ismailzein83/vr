@@ -95,13 +95,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
 
 
-        public void JoinSalePriceListNew(RDBJoinContext joinContext, string salePriceListTableAlias, string originalTableAlias, string originalTableCol)
+        public void JoinSalePriceListNew(RDBJoinContext joinContext, string salePriceListTableAlias, string originalTableAlias, string originalTablePriceListIDCol)
         {
             //TODO need to Add NoLock on Join Statement
             var joinStatement = joinContext.Join(TABLE_NAME, salePriceListTableAlias);
             joinStatement.JoinType(RDBJoinType.Inner);
             var joinCondition = joinStatement.On();
-            joinCondition.EqualsCondition(originalTableAlias, originalTableCol, salePriceListTableAlias, COL_ID);
+            joinCondition.EqualsCondition(originalTableAlias, originalTablePriceListIDCol, salePriceListTableAlias, COL_ID);
         }
         public void BuildSelectQuery(RDBSelectQuery selectQuery, long processInstanceId)
         {

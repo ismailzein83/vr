@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
@@ -39,12 +36,12 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             return _manager.GetRoutingProductsInfoBySellingNumberPlan(sellingNumberPlanId);
         }
-        
+
         [HttpGet]
         [Route("GetRoutingProduct")]
         public RoutingProduct GetRoutingProduct(int routingProductId)
         {
-            return _manager.GetRoutingProduct(routingProductId,true);
+            return _manager.GetRoutingProduct(routingProductId, true);
         }
 
         [HttpGet]
@@ -69,17 +66,10 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("DeleteRoutingProduct")]
-        public DeleteOperationOutput<object> DeleteRoutingProduct(int routingProductId)
-        {
-            return _manager.DeleteRoutingProduct(routingProductId);
-        }
-
-        [HttpGet]
         [Route("CheckIfRoutingProductHasRelatedSaleEntities")]
         public bool CheckIfRoutingProductHasRelatedSaleEntities(int routingProductId)
         {
             return _manager.CheckIfRoutingProductHasRelatedSaleEntities(routingProductId);
-        } 
+        }
     }
 }

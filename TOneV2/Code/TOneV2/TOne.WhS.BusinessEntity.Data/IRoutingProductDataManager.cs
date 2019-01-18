@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data
@@ -18,8 +14,6 @@ namespace TOne.WhS.BusinessEntity.Data
         bool Insert(RoutingProduct routingProduct, out int insertedId);
 
         bool Update(RoutingProductToEdit routingProduct);
-
-        bool Delete(int routingProductId);
 
         bool AreRoutingProductsUpdated(ref object updateHandle);
 

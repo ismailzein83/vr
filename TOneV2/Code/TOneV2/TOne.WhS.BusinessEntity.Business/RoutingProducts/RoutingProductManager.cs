@@ -217,25 +217,6 @@ namespace TOne.WhS.BusinessEntity.Business
 			return updateOperationOutput;
 		}
 
-		public DeleteOperationOutput<object> DeleteRoutingProduct(int routingProductId)
-		{
-			IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
-
-			DeleteOperationOutput<object> deleteOperationOutput = new DeleteOperationOutput<object>();
-			deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Failed;
-
-			bool deleteActionSucc = dataManager.Delete(routingProductId);
-
-			if (deleteActionSucc)
-			{
-				deleteOperationOutput.Result = Vanrise.Entities.DeleteOperationResult.Succeeded;
-			}
-
-			return deleteOperationOutput;
-		}
-
-
-
 		public RoutingProduct GetRoutingProduct(int routingProductId, bool isViewedFromUI)
 		{
 			var allRoutingProducts = GetAllRoutingProducts();

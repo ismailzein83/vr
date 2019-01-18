@@ -24,12 +24,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static RoutingProductDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Name, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 255});
-            columns.Add(COL_SellingNumberPlanID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Settings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_SellingNumberPlanID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -111,20 +111,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             if (routingProduct.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Serializer.Serialize(routingProduct.Settings));
-
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
+            else
+                updateQuery.Column(COL_Settings).Null();
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(routingProduct.RoutingProductId);
 
-            return queryContext.ExecuteNonQuery() > 0;
-        }
-
-        public bool Delete(int routingProductId)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var deleteQuery = queryContext.AddDeleteQuery();
-            deleteQuery.FromTable(TABLE_NAME);
-            deleteQuery.Where().EqualsCondition(COL_ID).Value(routingProductId);
             return queryContext.ExecuteNonQuery() > 0;
         }
 
@@ -137,7 +128,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public bool CheckIfRoutingProductHasRelatedSaleEntities(int routingProductId)
         {
             var routingProduct = GetRoutingProduct(routingProductId);
-            return routingProduct == null;
+            return routingProduct != null;
         }
         #endregion
 
