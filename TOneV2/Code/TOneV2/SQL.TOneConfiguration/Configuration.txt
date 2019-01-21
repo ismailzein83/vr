@@ -61,6 +61,7 @@ Retail_Multinet
 Retail_Multinet_Overridden.PostDeployment.sql
 Retail_Multinet.PostDeployment.sql
 Retail_Cost.PostDeployment.sql
+DataAnalysis.Retail_Centrex.PostDeployment.sql
 
 REtail_Ringo
 Retail_Ringo.PostDeployment.sql
