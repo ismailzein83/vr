@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [RA_ICX_Analytics].[BillingStatsDaily] (
-    [ID]                         BIGINT          NULL,
+    [ID]                         BIGINT          NOT NULL,
     [BatchStart]                 DATETIME        NULL,
     [OperatorID]                 BIGINT          NULL,
     [InterconnectOperatorID]     BIGINT          NULL,
@@ -17,8 +17,16 @@
     [MaximumDurationInSeconds]   DECIMAL (20, 4) NULL,
     [TotalRevenue]               DECIMAL (26, 8) NULL,
     [TotalIncome]                DECIMAL (26, 8) NULL,
-    [CurrencyID]                 INT             NULL
+    [CurrencyID]                 INT             NULL,
+    CONSTRAINT [IX_RA_ICX_BillingStatsDaily_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
 
 
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_RA_ICX_BillingStatsDaily_BatchStart]
+    ON [RA_ICX_Analytics].[BillingStatsDaily]([BatchStart] ASC);
 

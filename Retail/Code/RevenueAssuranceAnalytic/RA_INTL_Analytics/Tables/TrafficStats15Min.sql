@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [RA_INTL_Analytics].[TrafficStats15Min] (
-    [ID]                     BIGINT           NULL,
+    [ID]                     BIGINT           NOT NULL,
     [BatchStart]             DATETIME         NULL,
     [OperatorID]             BIGINT           NULL,
     [NumberOfCDRs]           INT              NULL,
@@ -12,6 +12,15 @@
     [DestinationZoneID]      BIGINT           NULL,
     [OriginationCountryID]   INT              NULL,
     [DestinationCountryID]   INT              NULL,
-    [TotalDurationInSeconds] DECIMAL (20, 4)  NULL
+    [TotalDurationInSeconds] DECIMAL (20, 4)  NULL,
+    [SumOfPGADInSeconds]     DECIMAL (20, 4)  NULL,
+    CONSTRAINT [IX_RA_INTL_TrafficStats15Min_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_RA_INTL_TrafficStats15Min_BatchStart]
+    ON [RA_INTL_Analytics].[TrafficStats15Min]([BatchStart] ASC);
 
