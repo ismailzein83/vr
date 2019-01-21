@@ -31,7 +31,7 @@ namespace TestCallAnalysis.BP.Activities
 
         protected override InsertCorrelatedCDRsOutput DoWorkWithResult(InsertCorrelatedCDRsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            Guid dataRecordStorage = new Guid();
+            Guid dataRecordStorage = new Guid("230581C3-644E-495A-A958-22EA1CFFBA98");
             var recordStorageDataManager = new DataRecordStorageManager().GetStorageDataManager(dataRecordStorage);
             int maxDBNumberQuery = recordStorageDataManager.GetDBQueryMaxParameterNumber();
 
@@ -40,14 +40,18 @@ namespace TestCallAnalysis.BP.Activities
                 bool hasItem = false;
                 do
                 {
-                    hasItem = inputArgument.InputQueueToInsert.TryDequeue((recordBatch) =>
+                    if (inputArgument.InputQueueToInsert != null && inputArgument.InputQueueToInsert.Count > 0)
                     {
-                        DateTime batchStartTime = DateTime.Now;
-                        recordStorageDataManager.InsertRecords(recordBatch.OutputRecordsToInsert);
-                        double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
-                        handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs Batch is done. Events Count: {0}.  ElapsedTime: {1} (s)",
-                            recordBatch.OutputRecordsToInsert.Count, elapsedTime.ToString());
-                    });
+                        hasItem = inputArgument.InputQueueToInsert.TryDequeue((recordBatch) =>
+                        {
+                            DateTime batchStartTime = DateTime.Now;
+                            recordStorageDataManager.InsertRecords(recordBatch.OutputRecordsToInsert);
+                            double elapsedTime = Math.Round((DateTime.Now - batchStartTime).TotalSeconds);
+                            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs Batch is done. Events Count: {0}.  ElapsedTime: {1} (s)",
+                                recordBatch.OutputRecordsToInsert.Count, elapsedTime.ToString());
+                        });
+                    }
+
                 } while (!ShouldStop(handle) && hasItem);
             });
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Insert Correlated CDRs is done.");

@@ -28,16 +28,19 @@ namespace TestCallAnalysis.BP.Activities
         public InOutArgument<MemoryQueue<CDRCorrelationBatch>> InputQueue { get; set; }
         protected override PrepareCDRCasesOutput DoWorkWithResult(PrepareCDRCasesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-          
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
                 do
                 {
-                    hasItem = inputArgument.InputQueue.TryDequeue((recordBatch) =>
+                    if (inputArgument.InputQueue != null && inputArgument.InputQueue.Count > 0)
                     {
-                     
-                    });
+                        hasItem = inputArgument.InputQueue.TryDequeue((recordBatch) =>
+                        {
+
+                        });
+                    }
                 } while (!ShouldStop(handle) && hasItem);
             });
             return new PrepareCDRCasesOutput();

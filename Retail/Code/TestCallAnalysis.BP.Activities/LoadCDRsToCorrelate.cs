@@ -22,7 +22,6 @@ namespace TestCallAnalysis.BP.Activities
         public List<Entities.CDRCorrelationFilterGroup> CDRCorrelationFilterGroups { get; set; }
 
     }
-
     public class LoadCDRsToCorrelateOutput
     {
     }
@@ -41,46 +40,32 @@ namespace TestCallAnalysis.BP.Activities
         protected override LoadCDRsToCorrelateOutput DoWorkWithResult(LoadCDRsToCorrelateInput inputArgument, AsyncActivityHandle handle)
         {
             int maximumOutputQueueSize = 20;
-            //if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_MaxCorrelateQueueSize"], out maximumOutputQueueSize))
-            //    maximumOutputQueueSize = 20;
-
-            //int batchSize = 100000;
-            //if (!int.TryParse(ConfigurationManager.AppSettings["CDRCorrelation_BatchSize"], out batchSize))
-            //    batchSize = 100000;
-
-            //if (inputArgument.OutputQueue == null)
-            //    throw new NullReferenceException("inputArgument.OutputQueue");   
-
-            LoadCDRsToCorrelateOutput output = new LoadCDRsToCorrelateOutput() { };
             long totalRecordsCount = 0;
 
             RecordBatch recordBatch = new RecordBatch() { Records = new List<dynamic>() };
 
-            List<Entities.CDRCorrelationFilterGroup> cdrRCorrelationFilterGroups = inputArgument.CDRCorrelationFilterGroups;
-            string orderColumnName = "";
-            bool isOrderAscending =true;
+            List<Entities.CDRCorrelationFilterGroup> cdrCorrelationFilterGroups = inputArgument.CDRCorrelationFilterGroups;
 
-            if (cdrRCorrelationFilterGroups != null && cdrRCorrelationFilterGroups.Count > 0)
+            if (cdrCorrelationFilterGroups != null && cdrCorrelationFilterGroups.Count > 0)
             {
-                foreach (Entities.CDRCorrelationFilterGroup cdrCorrelationFilterGroup in cdrRCorrelationFilterGroups)
+                foreach (var filterGroup in cdrCorrelationFilterGroups)
                 {
                     string rangeMessage;
-                    if (cdrCorrelationFilterGroup.To.HasValue)
-                        rangeMessage = string.Format("Range From {0}, To {1}", cdrCorrelationFilterGroup.From.ToString("yyyy-MM-dd HH:mm:ss"), cdrCorrelationFilterGroup.To.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                    if (filterGroup.To.HasValue)
+                        rangeMessage = string.Format("Range From {0}, To {1}", filterGroup.From.ToString("yyyy-MM-dd HH:mm:ss"), filterGroup.To.Value.ToString("yyyy-MM-dd HH:mm:ss"));
                     else
-                        rangeMessage = string.Format("From {0}", cdrCorrelationFilterGroup.From.ToString("yyyy-MM-dd HH:mm:ss"));
+                        rangeMessage = string.Format("From {0}", filterGroup.From.ToString("yyyy-MM-dd HH:mm:ss"));
 
                     handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading {0} has started.", rangeMessage));
 
                     long recordsCount = 0;
                     DateTime startTime = DateTime.Now;
-                    var dataRecordStorageId = new Guid();
-                    new DataRecordStorageManager().GetDataRecords(dataRecordStorageId, null, null, cdrCorrelationFilterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
+                    new DataRecordStorageManager().GetDataRecords(new Guid("F8C165AD-21C3-4E29-9E3A-7D3E332FDC42"), filterGroup.From, filterGroup.To, filterGroup.RecordFilterGroup, () => ShouldStop(handle), ((itm) =>
                     {
                         totalRecordsCount++;
                         recordsCount++;
                         recordBatch.Records.Add(itm);
-                    }), orderColumnName, isOrderAscending);
+                    }), null, true);
 
                     inputArgument.OutputQueue.Enqueue(recordBatch);
 
@@ -93,9 +78,15 @@ namespace TestCallAnalysis.BP.Activities
             }
 
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", totalRecordsCount);
-            return output;
+            return new LoadCDRsToCorrelateOutput();
         }
 
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<RecordBatch>());
+            base.OnBeforeExecute(context, handle);
+        }
         protected override LoadCDRsToCorrelateInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new LoadCDRsToCorrelateInput()
