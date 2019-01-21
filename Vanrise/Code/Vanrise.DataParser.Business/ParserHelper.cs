@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +10,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.DataParser.Business
 {
-    public class ParserHelper
+    public static class ParserHelper
     {
         public static void ExecuteParser(Stream stream, string fileName, Guid dataSourceId, Guid parserTypeId, Action<ParsedBatch> onParsedBatch)
         {
@@ -77,10 +78,10 @@ namespace Vanrise.DataParser.Business
 
                 long startingId;
                 var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType(parsedRecords.Key);
-
                 Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, parsedRecords.Value.Count, out startingId);
-                List<dynamic> records = new List<dynamic>();
                 long currentId = startingId;
+
+                List<dynamic> records = new List<dynamic>();
 
                 foreach (Vanrise.DataParser.Entities.FldDictParsedRecord item in parsedRecords.Value)
                 {
@@ -163,6 +164,13 @@ namespace Vanrise.DataParser.Business
             return result;
         }
 
+        public static string GetIntWithLeftPadding(byte[] data, int offset, int length, int minOutputLength)
+        {
+            int result = GetInt(data, offset, length);
+            string resultAsString = result.ToString();
+            return resultAsString.PadLeft(minOutputLength, '0');
+        }
+
         public static string GetHexFromInt(int value)
         {
             return value.ToString("X2");
@@ -216,7 +224,7 @@ namespace Vanrise.DataParser.Business
             return number.ToString();
         }
 
-        static string GetNumberValue(int val, bool removeHexa, bool aIsZero)
+        public static string GetNumberValue(int val, bool removeHexa, bool aIsZero)
         {
             if (aIsZero && val == 10)
                 return "0";
@@ -232,6 +240,58 @@ namespace Vanrise.DataParser.Business
                              .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
                              .ToArray();
         }
+
+        public static byte GetReversedByte(byte b)
+        {
+            int results = 0;
+
+            for (int i = 0; i < 8; i++)
+            {
+                if ((b & (1 << i)) != 0)
+                    results |= 1 << (7 - i);
+            }
+
+            return (byte)results;
+        }
+
+        public static BitArray GetReversedBitArray(BitArray bitArray)
+        {
+            int bitArrayLength = bitArray.Length;
+            int mid = (bitArrayLength / 2);
+
+            BitArray reversedBitArray = new BitArray(bitArrayLength);
+            reversedBitArray[mid] = bitArray[mid];
+
+            for (int i = 0; i < mid; i++)
+            {
+                reversedBitArray[i] = bitArray[bitArrayLength - i - 1];
+                reversedBitArray[bitArrayLength - i - 1] = bitArray[i];
+            }
+
+            return reversedBitArray;
+        }
+
+        public static int BitArrayToNumber(BitArray bitArray)
+        {
+            int[] bits = new int[1];
+            bitArray.CopyTo(bits, 0);
+            return bits[0];
+        }
+
+        public static bool BitToBoolean(BitArray bitArray, int index)
+        {
+            return bitArray.Get(index);
+        }
+
+        public static BitArray CopyTo(BitArray bitArray, int index, int length)
+        {
+            BitArray results = new BitArray(length);
+
+            for (int i = 0; i < length; i++)
+                results[i] = bitArray[index + i];
+
+            return results;
+        }
     }
 
     public class ParserTypeExecuteContext : IParserTypeExecuteContext
@@ -239,22 +299,22 @@ namespace Vanrise.DataParser.Business
         Dictionary<string, List<FldDictParsedRecord>> _parsedRecords;
         Dictionary<string, dynamic> _globalVariables;
         Action<ParsedRecord> _OnRecordParsed;
-        
+
         public Dictionary<string, List<FldDictParsedRecord>> ParsedRecords { get { return _parsedRecords; } }
-        
+
         public ParserTypeExecuteContext(Action<ParsedRecord> onRecordParsed)
         {
             _OnRecordParsed = onRecordParsed;
             _parsedRecords = new Dictionary<string, List<FldDictParsedRecord>>();
             _globalVariables = new Dictionary<string, dynamic>();
         }
-        
+
         public IDataParserInput Input
         {
             get;
             set;
         }
-        
+
         public void OnRecordParsed(ParsedRecord parsedRecord)
         {
             FldDictParsedRecord fldParsedRecord = parsedRecord as FldDictParsedRecord;
@@ -263,7 +323,7 @@ namespace Vanrise.DataParser.Business
 
             _OnRecordParsed(parsedRecord);
         }
-        
+
         public ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames)
         {
             FldDictParsedRecord parsedRecord = new FldDictParsedRecord
@@ -274,10 +334,10 @@ namespace Vanrise.DataParser.Business
             return parsedRecord;
         }
 
-        public Dictionary<string, dynamic> GetGlobalVariables() 
+        public Dictionary<string, dynamic> GetGlobalVariables()
         {
             return _globalVariables;
-        } 
+        }
 
         public void SetGlobalVariable(string variableName, dynamic value)
         {

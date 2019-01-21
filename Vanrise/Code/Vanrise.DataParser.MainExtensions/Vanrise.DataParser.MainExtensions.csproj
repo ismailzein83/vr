@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="BinaryParsers\AlcatelParsers\FieldParsers\NumberFieldParser.cs" />
     <Compile Include="BinaryParsers\AlcatelParsers\RecordParsers\HeaderRecordParser.cs" />
+    <Compile Include="BinaryParsers\Common\FieldParsers\BoolBitFieldParser.cs" />
+    <Compile Include="BinaryParsers\Common\FieldParsers\NumberBitFieldParser.cs" />
     <Compile Include="BinaryParsers\Common\FieldParsers\PositionedBitsBinaryFieldParser.cs" />
     <Compile Include="BinaryParsers\HuaweiParser\RecordParsers\HeaderRecordParser.cs" />
     <Compile Include="BinaryParsers\HuaweiParser\RecordParsers\HuaweiRecordParser.cs" />

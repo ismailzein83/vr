@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -44,7 +45,7 @@ namespace Vanrise.DataParser.Business
             }
         }
 
-        public static void ReadRecordFieldFromStream(byte[] data, int position, int length, Action<RecordValue> onRecordFieldValue)
+        public static void ReadRecordFieldFromStream(byte[] data, int position, int length, Action<RecordValue> onRecordFieldValueRead)
         {
             byte[] bytes = new byte[length];
             Array.Copy(data, position, bytes, 0, length);
@@ -54,7 +55,19 @@ namespace Vanrise.DataParser.Business
                 Length = length,
                 Value = bytes
             };
-            onRecordFieldValue(recordType);
+            onRecordFieldValueRead(recordType);
+        }
+
+        public static void ReadRecordFieldFromBitArray(BitArray dataBitArray, int position, int length, Action<BitRecordValue> onRecordFieldValueRead)
+        {
+            BitArray value = ParserHelper.CopyTo(dataBitArray, position, length);
+
+            BitRecordValue recordType = new BitRecordValue
+            {
+                Length = length,
+                Value = value
+            };
+            onRecordFieldValueRead(recordType);
         }
 
         public static void ReadBlockFromStream(Stream stream, int blockSize, Action<RecordValue> onBlockRead, bool readOnce = false)
@@ -114,7 +127,6 @@ namespace Vanrise.DataParser.Business
             return ret;
         }
 
-
         #region Private Classes
 
         private class SubRecordBinaryRecordParserContext : IBinaryRecordParserContext
@@ -173,5 +185,11 @@ namespace Vanrise.DataParser.Business
     {
         public int Length { get; set; }
         public byte[] Value { get; set; }
+    }
+
+    public class BitRecordValue
+    {
+        public int Length { get; set; }
+        public BitArray Value { get; set; }
     }
 }

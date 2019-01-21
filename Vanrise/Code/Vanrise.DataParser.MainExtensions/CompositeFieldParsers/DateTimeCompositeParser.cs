@@ -3,13 +3,14 @@ using Vanrise.DataParser.Entities;
 
 namespace Vanrise.DataParser.MainExtensions.CompositeFieldParsers
 {
+    public enum TimeFieldUnit { Seconds = 0 }
     public class DateTimeCompositeParser : CompositeFieldsParser
     {
         public override Guid ConfigId { get { return new Guid("068FFEDC-9779-4BCA-AE67-D8A2ACE540D4"); } }
         public string FieldName { get; set; }
         public string DateFieldName { get; set; }
         public string TimeFieldName { get; set; }
-        public string SecondsToAddFieldName { get; set; }
+        public TimeFieldUnit TimeFieldUnit { get; set; }
         public bool SubtractTime { get; set; }
 
         public override void Execute(ICompositeFieldsParserContext context)
@@ -20,21 +21,25 @@ namespace Vanrise.DataParser.MainExtensions.CompositeFieldParsers
 
             DateTime dateTimeField = (DateTime)dateTimeFieldObj;
 
-            double timeSpanField = default(double);
+            double timeFieldValue = default(double);
             if (!string.IsNullOrEmpty(TimeFieldName))
             {
                 object timeFieldObj = context.Record.GetFieldValue(TimeFieldName);
                 if (timeFieldObj != null)
-                    timeSpanField = (double)timeFieldObj;
+                    timeFieldValue = Convert.ToDouble(timeFieldObj);
             }
-            timeSpanField = SubtractTime ? -timeSpanField : timeSpanField;
+            timeFieldValue = SubtractTime ? -timeFieldValue : timeFieldValue;
 
-            var value = dateTimeField.AddSeconds(timeSpanField);
-            if (!string.IsNullOrEmpty(this.SecondsToAddFieldName))
+            DateTime? value = null;
+            switch (this.TimeFieldUnit)
             {
-                int seconds = (int)context.Record.GetFieldValue(SecondsToAddFieldName);
-                value.AddSeconds(seconds);
+                case TimeFieldUnit.Seconds:
+                    value = dateTimeField.AddSeconds(timeFieldValue); break;
+
+                default:
+                    throw new NotSupportedException(string.Format("TimeFieldUnit '{0}'", this.TimeFieldUnit));
             }
+
             context.Record.SetFieldValue(FieldName, value);
         }
     }

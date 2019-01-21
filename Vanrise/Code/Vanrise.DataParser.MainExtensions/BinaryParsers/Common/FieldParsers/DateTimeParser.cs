@@ -4,7 +4,6 @@ using Vanrise.DataParser.Entities;
 
 namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers
 {
-
     public class DateTimeParser : BinaryFieldParserSettings
     {
         public override Guid ConfigId { get { return new Guid("F95D8834-4A38-4197-A6C7-D3D4BCD1B0FD"); } }
@@ -27,11 +26,22 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers
             Object recordValue = context.Record.GetFieldValue(FieldName);
             DateTime value = recordValue == null ? default(DateTime) : (DateTime)recordValue;
 
-            string yearValue = IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[YearIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[YearIndex])).ToString();
-            string monthValue = IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[MonthIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[MonthIndex])).ToString();
-            string dayValue = IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[DayIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[DayIndex])).ToString();
-            monthValue = monthValue.Length == 1 ? "0" + monthValue : monthValue;
-            dayValue = dayValue.Length == 1 ? "0" + dayValue : dayValue;
+            string yearValue;
+            string monthValue;
+            string dayValue;
+
+            if (IsBCD)
+            {
+                yearValue = ParserHelper.GetHexFromByte(context.FieldValue[YearIndex]);
+                monthValue = ParserHelper.GetHexFromByte(context.FieldValue[MonthIndex]);
+                dayValue = ParserHelper.GetHexFromByte(context.FieldValue[DayIndex]);
+            }
+            else
+            {
+                yearValue = ParserHelper.GetIntWithLeftPadding(context.FieldValue, YearIndex, 1, 2);
+                monthValue = ParserHelper.GetIntWithLeftPadding(context.FieldValue, MonthIndex, 1, 2);
+                dayValue = ParserHelper.GetIntWithLeftPadding(context.FieldValue, DayIndex, 1, 2);
+            }
 
             bool dateParsed = false;
             switch (DateTimeParsingType)
@@ -43,25 +53,51 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers
                                                         System.Globalization.DateTimeStyles.None,
                                                         out value);
                     break;
+
                 case DateTimeParsingType.Time:
-                    TimeSpan timeSpan = new TimeSpan(
-                                            ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[HoursIndex]))
-                                          , ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[MinutesIndex]))
-                                          , ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[SecondsIndex])));
+                    int hoursValue;
+                    int minutesValue;
+                    int secondsValue;
+
+                    if (IsBCD)
+                    {
+                        hoursValue = int.Parse(ParserHelper.GetHexFromByte(context.FieldValue[HoursIndex]));
+                        minutesValue = int.Parse(ParserHelper.GetHexFromByte(context.FieldValue[MinutesIndex]));
+                        secondsValue = int.Parse(ParserHelper.GetHexFromByte(context.FieldValue[SecondsIndex]));
+                    }
+                    else
+                    {
+                        hoursValue = ParserHelper.GetInt(context.FieldValue, HoursIndex, 1);
+                        minutesValue = ParserHelper.GetInt(context.FieldValue, MinutesIndex, 1);
+                        secondsValue = ParserHelper.GetInt(context.FieldValue, SecondsIndex, 1);
+                    }
+
+                    TimeSpan timeSpan = new TimeSpan(hoursValue, minutesValue, secondsValue);
                     value = new DateTime(value.Year, value.Month, value.Day, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
                     break;
+
                 case DateTimeParsingType.DateTime:
-                    dateParsed = DateTime.TryParseExact(string.Format("{0}/{1}/{2} {3}:{4}:{5}",
-                                                          dayValue,
-                                                          monthValue,
-                                                          yearValue,
-                                                          IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[HoursIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[HoursIndex])).ToString(),
-                                                          IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[MinutesIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[MinutesIndex])).ToString(),
-                                                          IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[SecondsIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[SecondsIndex])).ToString()),
-                                                          "dd/MM/yy HH:mm:ss",
-                                                          System.Globalization.CultureInfo.InvariantCulture,
-                                                          System.Globalization.DateTimeStyles.None,
-                                                          out value);
+                    string hoursValueAsString;
+                    string minutesValueAsString;
+                    string secondsValueAsString;
+
+                    if (IsBCD)
+                    {
+                        hoursValueAsString = ParserHelper.GetHexFromByte(context.FieldValue[HoursIndex]);
+                        minutesValueAsString = ParserHelper.GetHexFromByte(context.FieldValue[MinutesIndex]);
+                        secondsValueAsString = ParserHelper.GetHexFromByte(context.FieldValue[SecondsIndex]);
+                    }
+                    else
+                    {
+                        hoursValueAsString = ParserHelper.GetIntWithLeftPadding(context.FieldValue, HoursIndex, 1, 2);
+                        minutesValueAsString = ParserHelper.GetIntWithLeftPadding(context.FieldValue, MinutesIndex, 1, 2);
+                        secondsValueAsString = ParserHelper.GetIntWithLeftPadding(context.FieldValue, SecondsIndex, 1, 2);
+                    }
+
+                    string datetimeAsString = string.Format("{0}/{1}/{2} {3}:{4}:{5}", dayValue, monthValue, yearValue, hoursValueAsString, minutesValueAsString, secondsValueAsString);
+
+                    dateParsed = DateTime.TryParseExact(datetimeAsString, "dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture,
+                        System.Globalization.DateTimeStyles.None, out value);
 
                     //Removed As discussed with Sari, date should be saved without time shift from mediation
                     //if (dateParsed && WithOffset)
