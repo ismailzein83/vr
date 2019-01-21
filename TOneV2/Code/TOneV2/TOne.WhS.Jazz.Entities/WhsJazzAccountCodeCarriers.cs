@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 
-namespace TOne.WhS.BusinessEntity.Business
+namespace TOne.WhS.Jazz.Entities
 {
 public class WhsJazzAccountCodeCarriers
     {
@@ -12,6 +12,6 @@ public class WhsJazzAccountCodeCarriers
     }
     public class WhsJazzAccountCodeCarrierAccount
     {
-        public Guid WhsJazzCarrierAccountId { get; set; }
+        public int CarrierAccountId { get; set; }
     }
 }

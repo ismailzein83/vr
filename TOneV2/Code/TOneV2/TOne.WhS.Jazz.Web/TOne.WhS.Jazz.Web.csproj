@@ -114,6 +114,17 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -125,16 +136,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\WhSJazzAcountCodeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="WhS_Jazz\Elements\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="WhS_Jazz\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\Templates\AccountCodeCustomObjectRuntime.html" />
+    <Content Include="WhS_Jazz\Elements\Directives\Templates\AccountCodeCustomObjectDefintion.html" />
+    <Content Include="WhS_Jazz\Elements\Directives\whs-jazz-account-code-custom-object-runtime.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\whs-jazz-account-code-custom-object-definition.js" />
+    <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzAccountCodeAPIService.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598E-8526-4BB4-9D1B-87A6B3B1CE72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Jazz.Business\TOne.WhS.Jazz.Business.csproj">
       <Project>{13b1e299-0735-4740-85f3-5ef085d4d206}</Project>
       <Name>TOne.WhS.Jazz.Business</Name>

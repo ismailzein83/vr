@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TOne.WhS.BusinessEntity.Business;
 using Vanrise.GenericData.Entities;
-
+using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
 public class AccountCodeCustomObject : FieldCustomObjectTypeSettings

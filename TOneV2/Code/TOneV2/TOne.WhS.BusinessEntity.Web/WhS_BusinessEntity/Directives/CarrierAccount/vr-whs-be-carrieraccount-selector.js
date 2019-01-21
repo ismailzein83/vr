@@ -33,6 +33,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                     ctrl.selectedvalues = [];
 
                 ctrl.datasource = [];
+                ctrl.label = "Carriers";
                 var ctor = new carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs);
                 ctor.initializeController();
             },
@@ -51,31 +52,6 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         };
 
         function getTemplate(attrs) {
-
-            var label;
-
-            if (attrs.ismultipleselection != undefined) {
-                if ((attrs.getcustomers != undefined && attrs.getsuppliers != undefined) || attrs.getexchangecarriers != undefined) {
-                    label = 'Carriers';
-                }
-                else if (attrs.getcustomers != undefined) {
-                    label = 'Customers';
-                }
-                else {
-                    label = 'Suppliers';
-                }
-            }
-            else {
-                if ((attrs.getcustomers != undefined && attrs.getsuppliers != undefined) || attrs.getexchangecarriers != undefined) {
-                    label = 'Carrier';
-                }
-                else if (attrs.getcustomers != undefined) {
-                    label = 'Customer';
-                }
-                else {
-                    label = 'Supplier';
-                }
-            }
 
             var hidelabel = "";
             if (attrs.hidelabel != undefined)
@@ -124,7 +100,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 ' datatooltipfield="additionalInfo"' +
                 ' datastylefield="colorStyle" ' +
                 ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" ' +
-                ' datadisabledfield="IsDisabled" ' + ' label="' + label + '" ' + customlabel + ' ' + hidelabel + ' ' + hideselectall + ' ' + hideselectall + ' ' + hideselectedvaluessection + ' ' + hideremoveicon +
+                ' datadisabledfield="IsDisabled" ' + ' label={{ctrl.label}} ' + customlabel + ' ' + hidelabel + ' ' + hideselectall + ' ' + hideselectall + ' ' + hideselectedvaluessection + ' ' + hideremoveicon +
                 ' ' + ismultipleselection + ' ' + viewCliked + '>' +
                 '</vr-select>' +
                 '</vr-columns>';
@@ -166,11 +142,43 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                         lockedIds = payload.lockedIds;
                     }
 
+                    if (attrs.ismultipleselection != undefined) {
+                        if ((attrs.getcustomers != undefined && attrs.getsuppliers != undefined) || attrs.getexchangecarriers != undefined) {
+                            ctrl.label = 'Carriers';
+                        }
+                        else if (attrs.getcustomers != undefined) {
+                            ctrl.label = 'Customers';
+                        }
+                        else if (attrs.getsuppliers != undefined){
+                            ctrl.label = 'Suppliers';
+                        }
+                    }
+                    else {
+                        if ((attrs.getcustomers != undefined && attrs.getsuppliers != undefined) || attrs.getexchangecarriers != undefined) {
+                            ctrl.label = 'Carrier';
+                        }
+                        else if (attrs.getcustomers != undefined) {
+                            ctrl.label = 'Customer';
+                        }
+                        else if (attrs.getsuppliers != undefined){
+                            ctrl.label = 'Supplier';
+                        }
+                    }
+
                     if (filter == undefined)
                         filter = {};
-                    filter.GetCustomers = attrs.getcustomers != undefined;
-                    filter.GetSuppliers = attrs.getsuppliers != undefined;
-                    filter.GetExchangeCarriers = attrs.getexchangecarriers != undefined;
+
+                    if (filter.GetCustomers == undefined)
+                        filter.GetCustomers = attrs.getcustomers != undefined;
+                    if (filter.GetSuppliers == undefined)
+                        filter.GetSuppliers = attrs.getsuppliers != undefined;
+                    if (filter.GetExchangeCarriers == undefined)
+                        filter.GetExchangeCarriers = attrs.getexchangecarriers != undefined;
+
+                    if (filter.GetCustomers && !filter.GetSuppliers)
+                        ctrl.label = "Customers";
+                    if (filter.GetSuppliers && !filter.GetCustomers)
+                        ctrl.label = "Suppliers";
 
                     var serializedFilter = {};
                     if (filter != undefined)

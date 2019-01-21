@@ -1,3 +1,3 @@
-﻿app.constant('WWhS_Jazz_ModuleConfig', {
+﻿app.constant('WhS_Jazz_ModuleConfig', {
     moduleName: "WhS_Jazz"
 });
