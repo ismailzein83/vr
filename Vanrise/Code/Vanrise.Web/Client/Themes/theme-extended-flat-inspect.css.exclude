@@ -1,0 +1,45 @@
+﻿.flat-logo-container {
+    background-color: #58c0e0 !important;
+}
+
+.flat .login-btn {
+    background-color: #58c0e0 !important;
+}
+
+.flat .vr-sidebar-header {
+    background-color: #58c0e0;
+}
+
+.flat .badge {
+    background-color: #58c0e0 !important;
+}
+
+.flat .menu-item-list-ligth {
+    background-color: #e3e3e3 !important;
+}
+
+.flat .module-icon {
+    background-color: #a2a2a2 !important;
+}
+
+.flat .panel-heading-vr.selected-menu {
+    background-color: #a2a2a2 !important;
+}
+
+.flat .collapsed-menu-item {
+    background-color: #a2a2a2 !important;
+}
+
+.flat .vr-datagrid-header-simple {
+    background: #58c0e0 !important;
+}
+
+.flat .vr-remote-footer {
+    background-color: #e3e3e3 !important;
+    color: #88898B !important;
+    margin-top: 3px;
+}
+
+.flat .vr-modal-header {
+    background: #58c0e0 !important;
+}
