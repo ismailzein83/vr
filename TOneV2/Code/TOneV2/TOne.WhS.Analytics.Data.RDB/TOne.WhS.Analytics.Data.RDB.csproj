@@ -55,7 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlockedAttemptDataManager.cs" />
+    <Compile Include="FailedBillingCDRDataManager.cs" />
     <Compile Include="InvalidBillingCDRDataManager.cs" />
+    <Compile Include="MainBillingCDRDataManager.cs" />
+    <Compile Include="PartialPricedBillingCDRDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
