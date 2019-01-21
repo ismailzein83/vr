@@ -72,6 +72,9 @@
     <Folder Include="RA_ICX_CDR\Tables\" />
     <Folder Include="RA_INTL_CDR\User Defined Types\" />
     <Folder Include="RA_ICX_CDR\User Defined Types\" />
+    <Folder Include="RA_INTL_SMS\" />
+    <Folder Include="RA_INTL_SMS\Tables\" />
+    <Folder Include="RA_INTL_SMS\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
@@ -99,5 +102,14 @@
     <Build Include="RA_ICX_CDR\User Defined Types\CDRType.sql" />
     <Build Include="Security\RA_INTL_CDR.sql" />
     <Build Include="Security\RA_ICX_CDR.sql" />
+    <Build Include="RA_INTL_SMS\Tables\SMS.sql" />
+    <Build Include="RA_INTL_SMS\Tables\BillingSMS_Uncharged.sql" />
+    <Build Include="RA_INTL_SMS\Tables\BillingSMS_Invalid.sql" />
+    <Build Include="RA_INTL_SMS\Tables\BillingSMS_Charged.sql" />
+    <Build Include="RA_INTL_SMS\User Defined Types\BillingSMS_ChargedType.sql" />
+    <Build Include="RA_INTL_SMS\User Defined Types\BillingSMS_InvalidType.sql" />
+    <Build Include="RA_INTL_SMS\User Defined Types\BillingSMS_UnchargedType.sql" />
+    <Build Include="RA_INTL_SMS\User Defined Types\SMSType.sql" />
+    <Build Include="Security\RA_INTL_SMS.sql" />
   </ItemGroup>
 </Project>

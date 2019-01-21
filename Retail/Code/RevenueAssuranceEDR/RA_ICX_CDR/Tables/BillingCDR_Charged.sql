@@ -28,8 +28,16 @@
     [TaxRuleID]              INT              NULL,
     [QueueItemId]            BIGINT           NULL,
     [CurrencyID]             INT              NULL,
-    [PDDInSeconds]           DECIMAL (20, 4)  NULL
+    [PDDInSeconds]           DECIMAL (20, 4)  NULL,
+    CONSTRAINT [IX_RA_ICX_BillingCDR_Charged_CDRID] PRIMARY KEY NONCLUSTERED ([CDRID] ASC)
 );
 
 
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_RA_ICX_BillingCDR_Charged_AttemptDateTime]
+    ON [RA_ICX_CDR].[BillingCDR_Charged]([AttemptDateTime] ASC);
 

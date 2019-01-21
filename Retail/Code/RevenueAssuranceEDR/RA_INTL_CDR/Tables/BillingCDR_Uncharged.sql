@@ -1,4 +1,4 @@
-﻿CREATE TABLE [RA_INTL_CDR].[BillingCDR_UnCharged] (
+CREATE TABLE [RA_INTL_CDR].[BillingCDR_UnCharged] (
     [CDRID]                 BIGINT           NOT NULL,
     [DurationInSeconds]     DECIMAL (20, 4)  NULL,
     [SaleDurationInSeconds] DECIMAL (20, 4)  NULL,
@@ -27,20 +27,24 @@
     [DestinationZoneID]     BIGINT           NULL,
     [OriginationZoneID]     BIGINT           NULL,
     [CurrencyID]            INT              NULL,
-    [PDDInSeconds]          DECIMAL (22, 8)  NULL
+    [PDDInSeconds]          DECIMAL (22, 8)  NULL,
+    CONSTRAINT [IX_RA_INTL_BillingCDR_UnCharged_CDRID] PRIMARY KEY NONCLUSTERED ([CDRID] ASC)
 );
 
 
 
 
+
+
+GO
+
+
+
 GO
 
 
 
 GO
-
-
-
-GO
-
+CREATE CLUSTERED INDEX [IX_RA_INTL_BillingCDR_UnCharged_AttemptDateTime]
+    ON [RA_INTL_CDR].[BillingCDR_UnCharged]([AttemptDateTime] ASC);
 

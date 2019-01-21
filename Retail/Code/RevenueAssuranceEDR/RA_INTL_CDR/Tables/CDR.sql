@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [RA_INTL_CDR].[CDR] (
-    [ID]                   BIGINT           NULL,
+    [ID]                   BIGINT           NOT NULL,
     [OperatorID]           INT              NULL,
     [DataSourceID]         UNIQUEIDENTIFIER NULL,
     [ProbeID]              BIGINT           NULL,
@@ -18,8 +18,16 @@
     [DisconnectReason]     NVARCHAR (MAX)   NULL,
     [TrafficDirection]     INT              NULL,
     [DurationInSeconds]    DECIMAL (20, 4)  NULL,
-    [QueueItemId]          BIGINT           NULL
+    [QueueItemId]          BIGINT           NULL,
+    CONSTRAINT [IX_RA_INTL_CDR_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
 
 
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_RA_INTL_CDR_AttemptDateTime]
+    ON [RA_INTL_CDR].[CDR]([AttemptDateTime] ASC);
 
