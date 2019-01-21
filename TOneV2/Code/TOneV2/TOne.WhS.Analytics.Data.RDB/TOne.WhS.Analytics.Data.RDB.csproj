@@ -60,6 +60,7 @@
     <Compile Include="MainBillingCDRDataManager.cs" />
     <Compile Include="PartialPricedBillingCDRDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReleaseCodeDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.Analytics.Data\TOne.WhS.Analytics.Data.csproj">
