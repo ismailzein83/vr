@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 using Vanrise.MobileNetwork.Entities;
@@ -20,14 +17,14 @@ namespace Vanrise.MobileNetwork.Business
             return numberPrefixes.GetRecord(code);
         }
 
-        public int? GetMobileNetworkByNumberPrefix(string numberPrefix , out string matchedPrefix)
+        public int? GetMobileNetworkByNumberPrefix(string numberPrefix, out long? matchedPrefix)
         {
             matchedPrefix = null;
             CodeIterator<NumberPrefix> codeIterator = GetCodeIterator();
             var matchedNumberPrefix = codeIterator.GetLongestMatch(numberPrefix);
             if (matchedNumberPrefix == null)
                 return null;
-            matchedPrefix = matchedNumberPrefix.Code;
+            matchedPrefix = matchedNumberPrefix.Id;
             return matchedNumberPrefix.MobileNetworkId;
         }
         #endregion

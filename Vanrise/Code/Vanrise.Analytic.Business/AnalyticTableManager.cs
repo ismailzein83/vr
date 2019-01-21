@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
 using Vanrise.Caching;
@@ -51,11 +49,13 @@ namespace Vanrise.Analytic.Business
             analyticTable.ThrowIfNull("analyticTable");
             var analyticTableMeasureStyles = analyticTable.MeasureStyles;
             var analyticTableKpiSettings = configManager.GetAnalytictableKPISettings(analyticTbaleId);
-            analyticTableKpiSettings.ThrowIfNull("analyticTableKpiSettings");
-            var analyticTableKPIMeasureStyles = analyticTableKpiSettings.MeasureStyleRules;
+            if (analyticTableKpiSettings != null)
+            {
+                var analyticTableKPIMeasureStyles = analyticTableKpiSettings.MeasureStyleRules;
 
-            if (analyticTableKPIMeasureStyles != null && analyticTableKPIMeasureStyles.Count() > 0)
-                mergedMeasureStyles.AddRange(analyticTableKPIMeasureStyles);
+                if (analyticTableKPIMeasureStyles != null && analyticTableKPIMeasureStyles.Count() > 0)
+                    mergedMeasureStyles.AddRange(analyticTableKPIMeasureStyles);
+            }
 
             if (analyticTableMeasureStyles != null && analyticTableMeasureStyles.MeasureStyleRules != null && analyticTableMeasureStyles.MeasureStyleRules.Count() > 0)
             {

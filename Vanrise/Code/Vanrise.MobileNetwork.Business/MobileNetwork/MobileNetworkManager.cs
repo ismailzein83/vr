@@ -9,7 +9,7 @@ namespace Vanrise.MobileNetwork.Business
     public class MobileNetworkManager
     {
         static readonly Guid BeDefinitionId = new Guid("48a58d93-1620-48d7-9f78-2270a6f3f1d4");
-        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetworkById (int mobileNetworkId)
+        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetworkById(int mobileNetworkId)
         {
             var mobileNetworks = GetCachedMobileNetworks();
             mobileNetworks.ThrowIfNull("mobileNetworks");
@@ -22,6 +22,15 @@ namespace Vanrise.MobileNetwork.Business
                 return null;
 
             return mobileNetwork.Id;
+        }
+
+        public int? GetMobileNetworkCountryID(int mobileNetworkID)
+        {
+            var mobileNetwork = GetMobileNetworkById(mobileNetworkID);
+            if (mobileNetwork == null)
+                return null;
+
+            return mobileNetwork.MobileCountryId;
         }
 
         public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mobileNetworkCode, int mobileCountryId)
@@ -41,6 +50,16 @@ namespace Vanrise.MobileNetwork.Business
             var mobileNetwork = mobileNetworkList.FindRecord(item => item.MobileNetworkSettings != null && item.MobileNetworkSettings.Codes != null && item.MobileNetworkSettings.Codes.FindIndex(code => string.Compare(code.Code, mobileNetworkCode) == 0) > -1);
 
             return mobileNetwork;
+        }
+
+        public List<Vanrise.MobileNetwork.Entities.MobileNetwork> GetAllMobileNetworks()
+        {
+            return GetCachedMobileNetworks();
+        }
+
+        public Dictionary<int, List<Vanrise.MobileNetwork.Entities.MobileNetwork>> GetAllMobileNetworksByMobileCountryId()
+        {
+            return GetCachedMobileNetowrksByMobileCountryId();
         }
 
         private List<Vanrise.MobileNetwork.Entities.MobileNetwork> GetCachedMobileNetworks()

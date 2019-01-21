@@ -73,9 +73,11 @@
   <ItemGroup>
     <Content Include="VR_MobileNetwork\Directives\MobileCountry\Templates\MobileCountryOnBeforeSaveHandler.html" />
     <Content Include="VR_MobileNetwork\Directives\MobileCountry\vr-mobilenetwork-mobilecountry-onbeforesavehandler.js" />
+    <Content Include="VR_MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkOnBeforeSaveHandler.html" />
     <Content Include="VR_MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkSettingsCustomObjectSettingsTemplate.html" />
     <Content Include="VR_MobileNetwork\Directives\MobileNetwork\Templates\MobileNetworkSettingsTemplate.html" />
     <Content Include="VR_MobileNetwork\Directives\MobileNetwork\vr-mobilenetwork-customobjectsettings.js" />
+    <Content Include="VR_MobileNetwork\Directives\MobileNetwork\vr-mobilenetwork-onbeforesavehandler.js" />
     <Content Include="VR_MobileNetwork\Directives\MobileNetwork\vr-mobilenetwork-settings.js" />
     <Content Include="VR_MobileNetwork\Directives\NumberPrefix\Templates\NumberPrefixOnBeforeSaveHandler.html" />
     <Content Include="VR_MobileNetwork\Directives\NumberPrefix\vr-mobilenetwork-numberprefix-onbeforesavehandler.js" />
