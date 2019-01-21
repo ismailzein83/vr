@@ -1,52 +1,59 @@
-﻿<vr-row>
-    <vr-validator validate="scopeModel.validateSpecialNumbers()">
-    <vr-columns width="1/2row">
-        <vr-section header="Number" collapsible>
-            <vr-row removeline>
-                <vr-columns colnum="4" left-medium-spacing>
-                        <vr-textbox value="scopeModel.numberToAdd" type="number" label="Number" customvalidate="scopeModel.validateNumber()"></vr-textbox>
-                </vr-columns>
-                    <vr-columns colnum="1" withemptyline haschildcolumns>
-                        <vr-button type="Add" data-onclick="scopeModel.addNumber" standalone vr-disabled="!scopeModel.isNumberValid()"></vr-button>
-                    </vr-columns>
-                    <vr-columns colnum="12" haschildcolumns >
-                        <vr-datalist maxitemsperrow="2" datasource="scopeModel.numberList" autoremoveitem="true">
-                            <vr-columns colnum="4">
-                                <vr-label>{{dataItem}}</vr-label>
+﻿<vr-row removeline>
+    <!--<vr-columns width="fullrow" haschildcolumns>-->
+        <vr-validator validate="scopeModel.validateSpecialNumbers()">
+            <vr-section header="Number" collapsible customvalidate="scopeModel.validateSpecialNumbers()">
+                <vr-row removeline>
+                    <vr-row>
+                        <vr-columns colnum="3" left-medium-spacing>
+                            <vr-textbox value="scopeModel.numberToAdd" type="number" label="Number" customvalidate="scopeModel.validateNumber()"></vr-textbox>
+                        </vr-columns>
+
+                        <vr-columns colnum="1" withemptyline haschildcolumns>
+                            <vr-button type="Add" data-onclick="scopeModel.addNumber" standalone vr-disabled="!scopeModel.isNumberValid()"></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns colnum="12" haschildcolumns>
+                            <vr-datalist maxitemsperrow="6" datasource="scopeModel.numberList" autoremoveitem="true">
+                                <vr-columns colnum="2">
+                                    <vr-label>{{dataItem}}</vr-label>
+                                </vr-columns>
+                            </vr-datalist>
+                        </vr-columns>
+                    </vr-row>
+                </vr-row>
+            </vr-section>
+        </vr-validator>
+</vr-row>
+<vr-row removeline>
+        <vr-validator validate="scopeModel.validateSpecialNumbers()">
+            <vr-section header="Range" collapsible>
+                <vr-row removeline>
+                    <vr-columns colnum="12" haschildcolumns>
+                        <vr-validator validate="scopeModel.validateNewRange()">
+                            <vr-columns colnum="3" left-medium-spacing>
+                                <vr-textbox label="From Range: " value="scopeModel.from" type="number" minvalue="0"></vr-textbox>
                             </vr-columns>
+                            <vr-columns colnum="3" left-medium-spacing>
+                                <vr-textbox label="To Range: " value="scopeModel.to" type="number" minvalue="0"></vr-textbox>
+                            </vr-columns>
+                            <vr-columns colnum="2" haschildcolumns withemptyline>
+                                <vr-button type="Add" data-onclick="scopeModel.addRange" standalone vr-disabled="!scopeModel.isRangeValid()"></vr-button>
+                            </vr-columns>
+                        </vr-validator>
+                    </vr-columns>
+                    <vr-columns colnum="12" haschildcolumns>
+                        <vr-datalist maxitemsperrow="6" datasource="scopeModel.rangeList" autoremoveitem="true">
+                            <vr-row removeline>
+                                <vr-columns colnum="10">
+                                    <vr-label ellipsis>{{dataItem.From}} </vr-label>
+                                    <vr-label ellipsis ng-if="!viewScope.scopeModel.isEmpty(dataItem.To)"> To {{dataItem.To}}</vr-label>
+                                </vr-columns>
+                            </vr-row>
                         </vr-datalist>
                     </vr-columns>
-            </vr-row>
-        </vr-section>
-    </vr-columns>
-    <vr-columns width="1/2row">
-        <vr-section header="Range" collapsible>
-            <vr-row removeline>
-                <vr-columns colnum="12" haschildcolumns>
-                    <vr-validator validate="scopeModel.validateNewRange()">                       
-                        <vr-columns colnum="4" left-medium-spacing>
-                            <vr-textbox  label="From: " value="scopeModel.from" type="number" minvalue="0"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns colnum="4" left-medium-spacing>
-                            <vr-textbox label="To: " value="scopeModel.to" type="number" minvalue="0"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns colnum="2" haschildcolumns withemptyline>
-                            <vr-button type="Add" data-onclick="scopeModel.addRange" standalone vr-disabled="!scopeModel.isRangeValid()"></vr-button>
-                        </vr-columns>
-                    </vr-validator>
-                </vr-columns>
-                <vr-columns colnum="12" haschildcolumns>
-                    <vr-datalist maxitemsperrow="2" datasource="scopeModel.rangeList" autoremoveitem="true" >
-                        <vr-row removeline>
-                            <vr-columns colnum="10">
-                                <vr-label ellipsis>{{dataItem.From}} </vr-label>
-                                <vr-label ellipsis ng-if="!viewScope.scopeModel.isEmpty(dataItem.To)"> To {{dataItem.To}}</vr-label>
-                            </vr-columns>
-                        </vr-row>
-                    </vr-datalist>
-                </vr-columns>
-            </vr-row>
-        </vr-section>
-    </vr-columns>
+                </vr-row>
+            </vr-section>
         </vr-validator>
+    <!--</vr-columns>-->
 </vr-row>
