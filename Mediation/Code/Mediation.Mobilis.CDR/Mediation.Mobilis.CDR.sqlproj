@@ -84,5 +84,9 @@
     <Build Include="Mediation_WHS\User Defined Types\MobilisEricsson111BadCDRType.sql" />
     <Build Include="Mediation_WHS\User Defined Types\MobilisEricsson111CDRType.sql" />
     <Build Include="Security\Mediation_WHS.sql" />
+    <Build Include="Mediation_WHS\Tables\MobilisHuaweiCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\MobilisHuaweiBadCDR.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\MobilisHuaweiCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\MobilisHuaweiBadCDRType.sql" />
   </ItemGroup>
 </Project>
