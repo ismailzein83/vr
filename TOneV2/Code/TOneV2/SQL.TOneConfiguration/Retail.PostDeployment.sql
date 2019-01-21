@@ -270,8 +270,9 @@ as (select * from (values
 ('2045E39B-B9AA-4720-AD1E-7DEF11985335','Retail_BE_ChargingPolicy','Charging Policy'				,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit"]'),
 ('32E40D20-A8B9-4286-AADE-F4E229D054A9','Retail_BE_CreditClasses','Credit Classes'					,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit"]'),
 
-('B5634DD0-11C7-4074-B902-8A7C0B68E5AC','Retail_CDRRules','CDR Rules'								,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]')
+('B5634DD0-11C7-4074-B902-8A7C0B68E5AC','Retail_CDRRules','CDR Rules'								,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]'),
 
+('219C0512-7A4D-41C9-A93B-97B2DF5FC673','BillingAlerts','Billing Alerts'							,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View Rules","Add Rules","Edit Rules","Start Process","View Process Logs","View Alerts"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t

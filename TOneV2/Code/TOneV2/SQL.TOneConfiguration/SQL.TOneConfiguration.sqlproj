@@ -925,6 +925,7 @@
     <None Include="DataParser.PostDeployment.sql" />
     <None Include="Retail.WhS_SMS.sql" />
     <None Include="Mediation_Mobilis.PostDeployment.sql" />
+    <None Include="DataAnalysis.Retail_Centrex.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
