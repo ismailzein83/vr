@@ -45,7 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountCode\WhsJazzAccountCode.cs" />
+    <Compile Include="WhSJazzCustomerTypeCode\WhsJazzCustomerTypeCode.cs" />
+    <Compile Include="AccountCode - Copy %283%29\WhsJazzAccountCode.cs" />
+    <Compile Include="AccountCode - Copy %284%29\WhsJazzAccountCode.cs" />
+    <Compile Include="AccountCode - Copy %285%29\WhsJazzAccountCode.cs" />
+    <Compile Include="AccountCode - Copy %286%29\WhsJazzAccountCode.cs" />
+    <Compile Include="AccountCode - Copy %287%29\WhsJazzAccountCode.cs" />
+    <Compile Include="WhSRegionRegion\WhsJazzRegion.cs" />
+    <Compile Include="WhSJazzAccountCode\WhsJazzAccountCode.cs" />
     <Compile Include="WhsJazzAccountCodeCarriers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

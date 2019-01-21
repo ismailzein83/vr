@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using TOne.WhS.Jazz.Entities;
+
 namespace TOne.WhS.Jazz.Business
 {
     public class WhsJazzAccountCodeManager
