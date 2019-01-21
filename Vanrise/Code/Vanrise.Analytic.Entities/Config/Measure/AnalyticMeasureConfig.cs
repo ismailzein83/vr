@@ -8,7 +8,7 @@ using Vanrise.Security.Entities;
 namespace Vanrise.Analytic.Entities
 {
     public enum AnalyticSummaryFunction { Count = 0, Sum = 1, Avg = 2, Max = 3, Min = 4 }
-
+    public enum AnalyticMeasureUnit { Fixed = 1, QueryCurrency = 2}
     public class AnalyticMeasureConfig
     {
         public string GetValueMethod { get; set; }
@@ -26,6 +26,8 @@ namespace Vanrise.Analytic.Entities
         public string Description { get; set; }
 
         public bool HideDescriptionInLegend { get; set; }
+        public AnalyticMeasureUnit MeasureUnit { get; set; }
+        public string FixedMeasureUnit { get; set; }
 
     }
 }
