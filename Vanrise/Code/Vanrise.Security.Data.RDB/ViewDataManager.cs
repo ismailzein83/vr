@@ -77,14 +77,10 @@ namespace Vanrise.Security.Data.RDB
                 ActionNames = reader.GetString(COL_ActionNames),
                 Audience = Common.Serializer.Deserialize<AudienceWrapper>(reader.GetString(COL_Audience)),
                 ViewContent = Common.Serializer.Deserialize<ViewContent>(reader.GetString(COL_Content)),
-                Type = reader.GetGuid(COL_Type)
+                Type = reader.GetGuid(COL_Type), 
+                ModuleId = reader.GetNullableGuid(COL_Module),
+                Rank = reader.GetIntWithNullHandling(COL_Rank)
             };
-            var module = reader.GetNullableGuid(COL_Module);
-            if (module.HasValue)
-                view.ModuleId = module.Value;
-            var rank = reader.GetNullableInt(COL_Rank);
-            if (rank.HasValue)
-                view.Rank = rank.Value;
             var settings = reader.GetString(COL_Settings);
             if (!string.IsNullOrEmpty(settings))
                 view.Settings = Common.Serializer.Deserialize(settings) as ViewSettings;
