@@ -86,5 +86,11 @@
     <Build Include="RA_ICX\User Defined Types\OperatorDeclarationType.sql" />
     <Build Include="Security\RA_INTL.sql" />
     <Build Include="Security\RA_ICX.sql" />
+    <Build Include="RA\Tables\NumberPrefix.sql" />
+    <Build Include="RA\Tables\MobileNetwork.sql" />
+    <Build Include="RA\Tables\MobileCountry.sql" />
+    <Build Include="RA\User Defined Types\NumberPrefixType.sql" />
+    <Build Include="RA\User Defined Types\MobileNetworkType.sql" />
+    <Build Include="RA\User Defined Types\MobileCountryType.sql" />
   </ItemGroup>
 </Project>
