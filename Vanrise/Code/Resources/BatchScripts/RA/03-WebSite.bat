@@ -44,5 +44,7 @@ xcopy "C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data" /S /E /R /y /v /i /z /Q		
 xcopy "C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_Invoice\"
 xcopy "C:\TFS\Retail\Code\Retail.RA.Web\Retail_RA" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_RA\"
 xcopy "C:\Publish\Retail\bin\Retail.RA*" /S /E /R /y /v /i /z /Q													"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Bin\"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.MobileNetwork.Web\VR_MobileNetwork" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_RA\"
+xcopy "C:\Publish\Retail\bin\Vanrise.MobileNetwork*" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Bin\"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Bin\*.pdb"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Bin\*.config"
