@@ -45,6 +45,7 @@ namespace Mediation.Runtime.DataParser
                 CreateMediationSettingsFile(GetHuaweiIMSOgero_ParserSettings(), "HuaweiIMS_Ogero");
                 CreateMediationSettingsFile(GetHuaweiMGCFOgero_ParserSettings(), "HuaweiMGCF_Ogero");
                 CreateMediationSettingsFile(GetHuaweiEPCOgero_ParserSettings(), "HuaweiEPC_Ogero");
+                CreateMediationSettingsFile(GetHuaweiMobilis_ParserSettings(), "Huawei_Mobilis");
             }
             catch (Exception ex)
             {
@@ -8371,6 +8372,1098 @@ namespace Mediation.Runtime.DataParser
         }
 
         #endregion
+
+        #endregion
+
+        #region Huawei Mobilis
+
+        public string GetHuaweiMobilis_ParserSettings()
+        {
+            BinaryParserType hexParser = new BinaryParserType
+            {
+                RecordParser = new PositionedBlockRecordParser()
+                {
+                    BlockSize = 154,
+                    RecordParser = new BinaryRecordParser()
+                    {
+                        Settings = new PositionedFieldsRecordParser()
+                        {
+                            RecordType = "Mobilis_Huawei_CDR",
+                            FieldParsers = GetMobilisHuaweiPositionedFieldParsers(),
+                            CompositeFieldsParsers = GetMobilisHuaweiCompositeParsers(),
+                            ZeroBytesBlockAction = ZeroBytesBlockAction.Skip
+                        }
+                    }
+                }
+            };
+
+            ParserType parserType = new ParserType
+            {
+                ParserTypeId = new Guid("9B613038-9F64-47C7-B9FA-2F41ABE85286"),
+                Settings = new ParserTypeSettings { ExtendedSettings = hexParser }
+            };
+
+            return Serializer.Serialize(parserType.Settings);
+        }
+        private List<PositionedFieldParser> GetMobilisHuaweiPositionedFieldParsers()
+        {
+            List<PositionedFieldParser> positionedFieldParsers = new List<PositionedFieldParser>();
+
+            PositionedFieldParser serialNumber = new PositionedFieldParser
+            {
+                Position = 0,
+                Length = 4,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "SerialNumber",
+                        NumberType = NumberType.BigInt
+                    }
+                }
+            };
+            positionedFieldParsers.Add(serialNumber);
+
+            PositionedFieldParser ticketType = new PositionedFieldParser
+            {
+                Position = 4,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "TicketType",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(ticketType);
+
+            PositionedFieldParser checkSum = new PositionedFieldParser
+            {
+                Position = 5,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CheckSum",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(checkSum);
+
+            PositionedFieldParser partialRecordIndicator = new PositionedFieldParser
+            {
+                Position = 6,
+                Length = 2,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new PositionedBitsBinaryFieldParser
+                    {
+                        BitParsers = new List<PositionedBitFieldParser>
+                        {
+                             new PositionedBitFieldParser{
+                                Position = 0,
+                                Length = 2,
+                                FieldParser = new BitFieldParser
+                                {
+                                    Settings = new NumberBitFieldParser
+                                    {
+                                        FieldName = "PartialRecordIndicator"
+                                    }
+                                }
+                             },
+                             new PositionedBitFieldParser {
+                                Position = 2,
+                                Length = 1,
+                                FieldParser = new BitFieldParser
+                                {
+                                    Settings = new BoolBitFieldParser
+                                    {
+                                        FieldName = "ClockChangedFlag"
+                                    }
+                                }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position = 3,
+                                 Length = 1,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new NumberBitFieldParser
+                                     {
+                                         FieldName = "FreeFlag"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position = 4,
+                                 Length = 1,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new NumberBitFieldParser
+                                     {
+                                         FieldName = "Validity"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser {
+                                 Position = 5,
+                                 Length = 1,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new NumberBitFieldParser
+                                     {
+                                         FieldName = "CallAttemptFlag"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position = 6,
+                                 Length = 1,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new NumberBitFieldParser
+                                     {
+                                         FieldName = "ComplaintFlag"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position = 7,
+                                 Length = 1,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new BoolBitFieldParser
+                                     {
+                                         FieldName = "CentralizedChargingFlag"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position = 8,
+                                 Length = 1,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new BoolBitFieldParser
+                                     {
+                                         FieldName = "PPSFlag"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position =9,
+                                 Length = 2,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new NumberBitFieldParser
+                                     {
+                                         FieldName = "ChargingMethod"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position = 11,
+                                 Length = 1,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new BoolBitFieldParser
+                                     {
+                                         FieldName = "NPCallFlag"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position = 12,
+                                 Length = 4,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new NumberBitFieldParser
+                                     {
+                                         FieldName = "Payer"
+                                     }
+                                 }
+                             }
+                        }
+                    }
+                }
+            };
+            positionedFieldParsers.Add(partialRecordIndicator);
+
+            PositionedFieldParser conversationEndTime = new PositionedFieldParser
+            {
+                Position = 8,
+                Length = 6,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "ConversationEndTime",
+                        YearIndex = 0,
+                        MonthIndex = 1,
+                        DayIndex = 2,
+                        HoursIndex = 3,
+                        MinutesIndex = 4,
+                        SecondsIndex = 5
+                    }
+                }
+            };
+            positionedFieldParsers.Add(conversationEndTime);
+
+            PositionedFieldParser conversationDuration = new PositionedFieldParser
+            {
+                Position = 14,
+                Length = 4,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.BigInt,
+                        FieldName = "ConversationDuration"
+                    }
+                }
+            };
+            positionedFieldParsers.Add(conversationDuration);
+
+            PositionedFieldParser callerSeizureDuration = new PositionedFieldParser
+            {
+                Position = 18,
+                Length = 4,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.BigInt,
+                        FieldName = "CallerSeizureDuration"
+                    }
+                }
+            };
+            positionedFieldParsers.Add(callerSeizureDuration);
+
+            PositionedFieldParser calledSeizureDuration = new PositionedFieldParser
+            {
+                Position = 22,
+                Length = 4,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.BigInt,
+                        FieldName = "CalledSeizureDuration"
+                    }
+                }
+            };
+            positionedFieldParsers.Add(calledSeizureDuration);
+
+            PositionedFieldParser incompleteCallWatch = new PositionedFieldParser
+            {
+                Position = 26,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new PositionedBitsBinaryFieldParser
+                    {
+                        BitParsers = new List<PositionedBitFieldParser>
+                        {
+                             new PositionedBitFieldParser{
+                                 Position = 0,
+                                 Length = 2,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new NumberBitFieldParser
+                                     {
+                                         FieldName = "IncompleteCallWatch"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position = 2,
+                                 Length = 1,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new BoolBitFieldParser
+                                     {
+                                         FieldName = "CallerISDNAccess"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position = 3,
+                                 Length = 1,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new BoolBitFieldParser
+                                     {
+                                         FieldName = "CalledISDNAccess"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position =4,
+                                 Length = 1,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new BoolBitFieldParser
+                                     {
+                                         FieldName = "ISUPIndication"
+                                     }
+                                 }
+                             }
+                        }
+                    }
+                }
+            };
+            positionedFieldParsers.Add(incompleteCallWatch);
+
+            PositionedFieldParser numberAddressNature = new PositionedFieldParser
+            {
+                Position = 27,
+                Length = 2,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new PositionedBitsBinaryFieldParser
+                    {
+                        BitParsers = new List<PositionedBitFieldParser>
+                        {
+                            new PositionedBitFieldParser{
+                                Position = 0,
+                                Length = 4,
+                                FieldParser = new BitFieldParser
+                                {
+                                    Settings = new NumberBitFieldParser
+                                    {
+                                        FieldName = "ChargingNumberAddressNature"
+                                    }
+                                }
+                            },
+                            new PositionedBitFieldParser{
+                                Position = 4,
+                                Length = 4,
+                                FieldParser = new BitFieldParser
+                                {
+                                    Settings = new NumberBitFieldParser
+                                    {
+                                        FieldName = "CallerNumberAddressNature"
+                                    }
+                                }
+                            },
+                            new PositionedBitFieldParser {
+                                Position = 8,
+                                Length = 4,
+                                FieldParser = new BitFieldParser
+                                {
+                                    Settings = new NumberBitFieldParser
+                                    {
+                                        FieldName = "ConnectedNumberAddressNature"
+                                    }
+                                }
+                            },
+                            new PositionedBitFieldParser{
+                                Position = 12,
+                                Length = 4,
+                                FieldParser = new BitFieldParser
+                                {
+                                    Settings = new NumberBitFieldParser
+                                    {
+                                        FieldName = "CalledNumberAddressNature"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            positionedFieldParsers.Add(numberAddressNature);
+
+            PositionedFieldParser chargingNumberDNSet = new PositionedFieldParser
+            {
+                Position = 29,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "ChargingNumberDNSet",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(chargingNumberDNSet);
+
+            PositionedFieldParser chargingNumber = new PositionedFieldParser
+            {
+                Position = 30,
+                Length = 10,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new BCDNumberParser
+                    {
+                        FieldName = "ChargingNumber",
+                        RemoveHexa = true
+                    }
+                }
+            };
+            positionedFieldParsers.Add(chargingNumber);
+
+            PositionedFieldParser callerNumberDNSet = new PositionedFieldParser
+            {
+                Position = 40,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallerNumberDNSet",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(callerNumberDNSet);
+
+            PositionedFieldParser callerNumber = new PositionedFieldParser
+            {
+                Position = 41,
+                Length = 10,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new BCDNumberParser
+                    {
+                        FieldName = "CallerNumber",
+                        RemoveHexa = true
+                    }
+                }
+            };
+            positionedFieldParsers.Add(callerNumber);
+
+            PositionedFieldParser connectedNumberDNSet = new PositionedFieldParser
+            {
+                Position = 51,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "ConnectedNumberDNSet",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(connectedNumberDNSet);
+
+            PositionedFieldParser connectedNumber = new PositionedFieldParser
+            {
+                Position = 52,
+                Length = 10,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new BCDNumberParser
+                    {
+                        FieldName = "ConnectedNumber",
+                        RemoveHexa = true
+                    }
+                }
+            };
+            positionedFieldParsers.Add(connectedNumber);
+
+            PositionedFieldParser calledNumberDNSet = new PositionedFieldParser
+            {
+                Position = 62,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CalledNumberDNSet",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(calledNumberDNSet);
+
+            PositionedFieldParser calledNumber = new PositionedFieldParser
+            {
+                Position = 63,
+                Length = 10,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new BCDNumberParser
+                    {
+                        FieldName = "CalledNumber",
+                        RemoveHexa = true
+                    }
+                }
+            };
+            positionedFieldParsers.Add(calledNumber);
+
+            PositionedFieldParser dialedNumber = new PositionedFieldParser
+            {
+                Position = 73,
+                Length = 12,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new BCDNumberParser
+                    {
+                        FieldName = "DialedNumber",
+                        RemoveHexa = true
+                    }
+                }
+            };
+            positionedFieldParsers.Add(dialedNumber);
+
+            PositionedFieldParser centrexGroupNumber = new PositionedFieldParser
+            {
+                Position = 85,
+                Length = 2,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CentrexGroupNumber",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(centrexGroupNumber);
+
+            PositionedFieldParser callerCentrexShortNumber = new PositionedFieldParser
+            {
+                Position = 87,
+                Length = 4,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallerCentrexShortNumber",
+                        NumberType = NumberType.BigInt
+                    }
+                }
+            };
+            positionedFieldParsers.Add(callerCentrexShortNumber);
+
+            PositionedFieldParser calledCentrexShortNumber = new PositionedFieldParser
+            {
+                Position = 91,
+                Length = 4,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CalledCentrexShortNumber",
+                        NumberType = NumberType.BigInt
+                    }
+                }
+            };
+            positionedFieldParsers.Add(calledCentrexShortNumber);
+
+            PositionedFieldParser callerModuleNumber = new PositionedFieldParser
+            {
+                Position = 95,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallerModuleNumber",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(callerModuleNumber);
+
+            PositionedFieldParser calledModuleNumber = new PositionedFieldParser
+            {
+                Position = 96,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CalledModuleNumber",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(calledModuleNumber);
+
+            PositionedFieldParser incomingTrunkGroupNumber = new PositionedFieldParser
+            {
+                Position = 97,
+                Length = 2,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IncomingTrunkGroupNumber"
+                    }
+                }
+            };
+            positionedFieldParsers.Add(incomingTrunkGroupNumber);
+
+            PositionedFieldParser outgoingTrunkGroupNumber = new PositionedFieldParser
+            {
+                Position = 99,
+                Length = 2,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "OutgoingTrunkGroupNumber"
+                    }
+                }
+            };
+            positionedFieldParsers.Add(outgoingTrunkGroupNumber);
+
+            PositionedFieldParser incomingSubrouteNumber = new PositionedFieldParser
+            {
+                Position = 101,
+                Length = 2,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "IncomingSubrouteNumber",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(incomingSubrouteNumber);
+
+            PositionedFieldParser outgoingSubrouteNumber = new PositionedFieldParser
+            {
+                Position = 103,
+                Length = 2,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "OutgoingSubrouteNumber",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(outgoingSubrouteNumber);
+
+            PositionedFieldParser callerDeviceType = new PositionedFieldParser
+            {
+                Position = 105,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallerDeviceType",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(callerDeviceType);
+
+            PositionedFieldParser calledDeviceType = new PositionedFieldParser
+            {
+                Position = 106,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CalledDeviceType",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(calledDeviceType);
+
+            PositionedFieldParser callerPortNumber = new PositionedFieldParser
+            {
+                Position = 107,
+                Length = 2,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallerPortNumber",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(callerPortNumber);
+
+            PositionedFieldParser calledPortNumber = new PositionedFieldParser
+            {
+                Position = 109,
+                Length = 2,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CalledPortNumber",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(calledPortNumber);
+
+            PositionedFieldParser callerCategory = new PositionedFieldParser
+            {
+                Position = 111,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallerCategory",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(callerCategory);
+
+            PositionedFieldParser calledCategory = new PositionedFieldParser
+            {
+                Position = 112,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CalledCategory",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(calledCategory);
+
+            PositionedFieldParser callType = new PositionedFieldParser
+            {
+                Position = 113,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new PositionedBitsBinaryFieldParser
+                    {
+                        BitParsers = new List<PositionedBitFieldParser>
+                        {
+                            new PositionedBitFieldParser{
+                                Position = 0,
+                                Length = 4,
+                                FieldParser = new BitFieldParser
+                                {
+                                    Settings = new NumberBitFieldParser
+                                    {
+                                        FieldName = "CallType"
+                                    }
+                                }
+                            },
+                            new PositionedBitFieldParser{
+                                Position = 4,
+                                Length = 4,
+                                FieldParser = new BitFieldParser
+                                {
+                                    Settings = new NumberBitFieldParser
+                                    {
+                                        FieldName = "ServiceType"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            positionedFieldParsers.Add(callType);
+
+            PositionedFieldParser supplementaryServiceType = new PositionedFieldParser
+            {
+                Position = 114,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "SupplementaryServiceType",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(supplementaryServiceType);
+
+            PositionedFieldParser chargingCase = new PositionedFieldParser
+            {
+                Position = 115,
+                Length = 2,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "ChargingCase",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(chargingCase);
+
+            PositionedFieldParser tariff = new PositionedFieldParser
+            {
+                Position = 117,
+                Length = 2,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "Tariff",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(tariff);
+
+            PositionedFieldParser chargingPulse = new PositionedFieldParser
+            {
+                Position = 119,
+                Length = 4,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "ChargingPulse",
+                        NumberType = NumberType.BigInt
+                    }
+                }
+            };
+            positionedFieldParsers.Add(chargingPulse);
+
+            PositionedFieldParser fee = new PositionedFieldParser
+            {
+                Position = 123,
+                Length = 4,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "Fee",
+                        NumberType = NumberType.BigInt
+                    }
+                }
+            };
+            positionedFieldParsers.Add(fee);
+
+            PositionedFieldParser balance = new PositionedFieldParser
+            {
+                Position = 127,
+                Length = 4,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "Balance",
+                        NumberType = NumberType.BigInt
+                    }
+                }
+            };
+            positionedFieldParsers.Add(balance);
+
+            PositionedFieldParser bearerService = new PositionedFieldParser
+            {
+                Position = 131,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "BearerService",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(bearerService);
+
+            PositionedFieldParser teleservice = new PositionedFieldParser
+            {
+                Position = 132,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new PositionedBitsBinaryFieldParser
+                    {
+                        BitParsers = new List<PositionedBitFieldParser>
+                        {
+                             new PositionedBitFieldParser{
+                                 Position = 0,
+                                 Length = 4,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new NumberBitFieldParser
+                                     {
+                                         FieldName = "Teleservice"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position = 4,
+                                 Length = 3,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new NumberBitFieldParser
+                                     {
+                                         FieldName = "ReleaseParty"
+                                     }
+                                 }
+                             },
+                             new PositionedBitFieldParser{
+                                 Position = 7,
+                                 Length = 1,
+                                 FieldParser = new BitFieldParser
+                                 {
+                                     Settings = new NumberBitFieldParser
+                                     {
+                                         FieldName = "ReleaseIndex"
+                                     }
+                                 }
+                             }
+                        }
+                    }
+                }
+            };
+            positionedFieldParsers.Add(teleservice);
+
+            PositionedFieldParser releaseCauseValue = new PositionedFieldParser
+            {
+                Position = 133,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "ReleaseCauseValue",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(releaseCauseValue);
+
+            PositionedFieldParser uUS1Count = new PositionedFieldParser
+            {
+                Position = 134,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "UUS1Count",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(uUS1Count);
+
+            PositionedFieldParser uUS2Count = new PositionedFieldParser
+            {
+                Position = 135,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "UUS2Count",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(uUS2Count);
+
+            PositionedFieldParser uUS3Count = new PositionedFieldParser
+            {
+                Position = 136,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "UUS3Count",
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(uUS3Count);
+
+            PositionedFieldParser opc = new PositionedFieldParser
+            {
+                Position = 137,
+                Length = 4,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "OPC",
+                        NumberType = NumberType.BigInt
+                    }
+                }
+            };
+            positionedFieldParsers.Add(opc);
+
+            PositionedFieldParser dpc = new PositionedFieldParser
+            {
+                Position = 141,
+                Length = 4,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "DPC",
+                        NumberType = NumberType.BigInt
+                    }
+                }
+            };
+            positionedFieldParsers.Add(dpc);
+
+            PositionedFieldParser bNum = new PositionedFieldParser
+            {
+                Position = 145,
+                Length = 1,
+                FieldParser = new BinaryFieldParser
+                {
+                    Settings = new PositionedBitsBinaryFieldParser
+                    {
+                        BitParsers = new List<PositionedBitFieldParser>
+                        {
+                            new PositionedBitFieldParser{
+                                Position = 0,
+                                Length = 5,
+                                FieldParser = new BitFieldParser
+                                {
+                                    Settings = new NumberBitFieldParser
+                                    {
+                                        FieldName = "B_Num"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            positionedFieldParsers.Add(bNum);
+
+            return positionedFieldParsers;
+        }
+        private List<CompositeFieldsParser> GetMobilisHuaweiCompositeParsers()
+        {
+            List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
+            compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
+            compositeParsers.Add(new DataSourceCompositeParser() { DataSourceFieldName = "DataSourceId" });
+            compositeParsers.Add(new DateTimeCompositeParser()
+            {
+                FieldName = "ConversationBeginTime",
+                DateFieldName = "ConversationEndTime",
+                TimeFieldName = "ConversationDuration",
+                TimeFieldUnit = TimeFieldUnit.Seconds,
+                SubtractTime = true
+            });
+
+            return compositeParsers;
+        }
 
         #endregion
 
