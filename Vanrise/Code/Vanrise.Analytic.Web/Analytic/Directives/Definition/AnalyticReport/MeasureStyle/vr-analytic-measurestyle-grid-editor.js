@@ -133,7 +133,6 @@
                             ItemType: VR_Analytic_AnalyticTypeEnum.Measure.value,
                         };
                         var analyticItemConfigPromise = VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
-                            console.log(response);
                             if (response != undefined) {
                                 for (var i = 0; i < response.length; i++) {
                                     var measureData = response[i];
@@ -151,11 +150,8 @@
                         UtilsService.waitMultiplePromises(promises).then(function () {
                             var measureNames = allMeasures;
                             context.getMeasure = function (name) {
-                                console.log(name);
                                 var measureFields = allMeasures;
-                                console.log(measureFields);
                                 var measure = UtilsService.getItemByVal(measureFields, name, "Name");
-                                console.log(measure);
                                 return measure;
                             };
                             ctrl.measureFields = getMeasureNames();
