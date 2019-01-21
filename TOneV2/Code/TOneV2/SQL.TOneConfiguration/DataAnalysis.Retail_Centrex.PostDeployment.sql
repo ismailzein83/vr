@@ -155,7 +155,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('F480E751-BC0D-4750-B7FF-56854F69C205','Billing Alerts','Billing Alerts',null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,null,null,'{"$type":"Vanrise.Notification.Entities.VRNotificationViewSettings, Vanrise.Notification.Entities","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities]], mscorlib","$values":[{"$type":"Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities","VRNotificationTypeId":"381cbece-98e1-4801-9a8e-8e45eb9c77c3"}]}}','A196C40A-30B5-4297-B7B0-4344C41CE5A2',5,0)
+('F480E751-BC0D-4750-B7FF-56854F69C205','Billing Alerts','Billing Alerts',null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,null,null,'{"$type":"Vanrise.Notification.Entities.VRNotificationViewSettings, Vanrise.Notification.Entities","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities]], mscorlib","$values":[{"$type":"Vanrise.Notification.Entities.VRNotificationViewSettingItem, Vanrise.Notification.Entities","VRNotificationTypeId":"381cbece-98e1-4801-9a8e-8e45eb9c77c3"}]}}','A196C40A-30B5-4297-B7B0-4344C41CE5A2',15,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
 merge	[sec].[View] as t
