@@ -36,6 +36,7 @@ namespace TOne.WhS.Invoice.Entities
         public bool UseOriginalAmount { get; set; }
         public decimal? OriginalAmount { get; set; }
         public bool IsLocked { get; set; }
+        public bool HasRecurringCharge { get; set; }
 
     }
     public class SupplierInvoiceDetail
@@ -58,5 +59,6 @@ namespace TOne.WhS.Invoice.Entities
         public decimal? OriginalAmount { get; set; }
         public bool UseOriginalAmount { get; set; }
         public bool IsLocked { get; set; }
+        public bool HasRecurringCharge { get; set; }
     }
 }

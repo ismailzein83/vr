@@ -189,6 +189,9 @@ namespace TOne.WhS.Invoice.Business
                                 supplierInvoiceDetail.TotalNumberOfCalls += currentInvoiceItemDetail.NumberOfCalls;
                                 supplierInvoiceDetail.Duration += currentInvoiceItemDetail.Duration;
                                 supplierInvoiceDetail.OriginalAmount = originalAmount;
+                                if (!supplierInvoiceDetail.HasRecurringCharge)
+                                    supplierInvoiceDetail.HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0;
+
                             }
                             else
                             {
@@ -211,8 +214,9 @@ namespace TOne.WhS.Invoice.Business
                                 TimeZoneDescription = supplierDetail.TimeZoneId.HasValue ? vrTimeZoneManager.GetVRTimeZoneName(supplierDetail.TimeZoneId.Value) : null,
                                 OriginalAmount = originalAmount ,
                                 UseOriginalAmount= useOriginalAmount,
-                                IsLocked = invoiceDetail.Entity.LockDate.HasValue
-                            });
+                                IsLocked = invoiceDetail.Entity.LockDate.HasValue,
+                                HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0
+                                });
                             }
                         }
                     }
@@ -267,6 +271,8 @@ namespace TOne.WhS.Invoice.Business
                                 customerInvoiceDetail.TotalNumberOfCalls += currentInvoiceItemDetail.NumberOfCalls;
                                 customerInvoiceDetail.Duration += currentInvoiceItemDetail.Duration;
                                 customerInvoiceDetail.OriginalAmount = originalAmount;
+                                if (!customerInvoiceDetail.HasRecurringCharge)
+                                    customerInvoiceDetail.HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0;
                             }
                             else
                             {
@@ -290,6 +296,8 @@ namespace TOne.WhS.Invoice.Business
                                     IsLocked = invoiceDetail.Entity.LockDate.HasValue,
                                     OriginalAmount = originalAmount,
                                     UseOriginalAmount = useOriginalAmount,
+                                    HasRecurringCharge = currentInvoiceItemDetail.TotalRecurringChargeAmount > 0
+
                                 });
                             }
                         }
