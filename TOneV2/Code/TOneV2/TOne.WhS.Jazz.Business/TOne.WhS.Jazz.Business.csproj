@@ -56,13 +56,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountCodeCustomObject.cs" />
-    <Compile Include="WhSJazzTaxManager.cs" />
+    <Compile Include="WhSJazzTaxCodeManager.cs" />
     <Compile Include="WhSJazzTransactionTypeManager.cs" />
     <Compile Include="WhSJazzSwitchCodeManager.cs" />
-    <Compile Include="WhSJazzMarketManager.cs" />
-    <Compile Include="WhSJazzProductServiceManager.cs" />
-    <Compile Include="WhSJazzCustomerTypeManager.cs" />
-    <Compile Include="WhSJazzRegionManager.cs" />
+    <Compile Include="WhSJazzMarketCodeManager.cs" />
+    <Compile Include="WhSJazzProductServiceCodeManager.cs" />
+    <Compile Include="WhSJazzCustomerTypeCodeManager.cs" />
+    <Compile Include="WhSJazzRegionCodeManager.cs" />
     <Compile Include="WhSJazzAccountCodeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -19,58 +19,58 @@ namespace TOne.WhS.Jazz.Business
 
         }
 
-        public List<WhSJazzAccountCode> GetAllAccountCode()
-        {
-            var records = GetCachedAccountCodes();
-            List<WhSJazzAccountCode> accountCodes = null;
+        //public List<WhSJazzAccountCode> GetAllAccountCode()
+        //{
+        //    var records = GetCachedAccountCodes();
+        //    List<WhSJazzAccountCode> accountCodes = null;
 
-            if (records != null && records.Count > 0)
-            {
-                accountCodes = new List<WhSJazzAccountCode>();
-                foreach (var record in records)
-                {
-                    accountCodes.Add(record.Value);
-                }
-            }
-            return accountCodes;
-        }
+        //    if (records != null && records.Count > 0)
+        //    {
+        //        accountCodes = new List<WhSJazzAccountCode>();
+        //        foreach (var record in records)
+        //        {
+        //            accountCodes.Add(record.Value);
+        //        }
+        //    }
+        //    return accountCodes;
+        //}
 
 
-        private Dictionary<Guid, WhSJazzAccountCode> GetCachedAccountCodes()
-        {
-            GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedAccountCodes", _definitionId, () =>
-            {
-                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
-                Dictionary<Guid, WhSJazzAccountCode> result = new Dictionary<Guid, WhSJazzAccountCode>();
+        //private Dictionary<Guid, WhSJazzAccountCode> GetCachedAccountCodes()
+        //{
+        //    GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
+        //    return genericBusinessEntityManager.GetCachedOrCreate("GetCachedAccountCodes", _definitionId, () =>
+        //    {
+        //        List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
+        //        Dictionary<Guid, WhSJazzAccountCode> result = new Dictionary<Guid, WhSJazzAccountCode>();
 
-                if (genericBusinessEntities != null)
-                {
-                    foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
-                    {
-                        if (genericBusinessEntity.FieldValues == null)
-                            continue;
+        //        if (genericBusinessEntities != null)
+        //        {
+        //            foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
+        //            {
+        //                if (genericBusinessEntity.FieldValues == null)
+        //                    continue;
 
-                        WhSJazzAccountCode accountCode = new WhSJazzAccountCode()
-                        {
-                            ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
-                            Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
-                            SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
-                            TransactionTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("TransactionTypeId"),
-                            Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
-                            CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
-                            CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
-                            LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
-                            LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
+        //                WhSJazzAccountCode accountCode = new WhSJazzAccountCode()
+        //                {
+        //                    ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
+        //                    Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
+        //                    SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
+        //                    TransactionTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("TransactionTypeId"),
+        //                    Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
+        //                    CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
+        //                    CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
+        //                    LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
+        //                    LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
 
-                        };
-                        result.Add(accountCode.ID, accountCode);
-                    }
-                }
+        //                };
+        //                result.Add(accountCode.ID, accountCode);
+        //            }
+        //        }
 
-                return result;
-            });
-        }
+        //        return result;
+        //    });
+        //}
 
     }
 
