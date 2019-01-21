@@ -1361,6 +1361,10 @@
       <Project>{4828ee84-66e3-48c8-a055-53d981f8daaa}</Project>
       <Name>TOne.WhS.Sales.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.BP.Arguments\TOne.WhS.SMSBusinessEntity.BP.Arguments.csproj">
+      <Project>{6b78e318-2c5f-48e3-814b-b91820493918}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Business\TOne.WhS.SMSBusinessEntity.Business.csproj">
       <Project>{6f1a165b-f322-41f7-82b5-170b83616fe9}</Project>
       <Name>TOne.WhS.SMSBusinessEntity.Business</Name>
