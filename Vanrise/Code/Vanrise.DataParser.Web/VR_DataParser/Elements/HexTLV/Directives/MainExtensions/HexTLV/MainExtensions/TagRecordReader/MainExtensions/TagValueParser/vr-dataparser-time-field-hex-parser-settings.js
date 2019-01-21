@@ -43,9 +43,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         function defineAPI() {
             var api = {};
-            //console.log(api)
             api.load = function (payload) {
-                console.log("gdfgdfgdf")
                 var promises = [];
                 if (payload != undefined) {
                     if (payload.ValueParser != undefined)

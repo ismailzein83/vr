@@ -78,8 +78,7 @@
     
 
                     function loadGrid() {
-                        if (payload != undefined && payload.ValueParser != undefined && payload.ValueParser.FieldParsers != undefined && payload.ValueParser.FieldParsers.FieldParsersByTag != undefined) {
-                            console.log(payload)
+                        if (payload != undefined && payload.ValueParser != undefined && payload.ValueParser.FieldParsers != undefined && payload.ValueParser.FieldParsers.FieldParsersByTag != undefined) {                            
                             for (var tag in payload.ValueParser.FieldParsers.FieldParsersByTag) {
                                 if (tag != "$type") {
                                     var gridItem = {

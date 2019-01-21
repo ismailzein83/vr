@@ -69,7 +69,6 @@
 
                     if (payload != undefined && payload.Parser != undefined && payload.Parser.ValueParser != undefined && payload.Parser.ValueParser.Parser != undefined) {
                         context = payload.context;
-                        console.log(payload)
                         tagValueParserEntity = payload.Parser.ValueParser.Parser;
                     }
 

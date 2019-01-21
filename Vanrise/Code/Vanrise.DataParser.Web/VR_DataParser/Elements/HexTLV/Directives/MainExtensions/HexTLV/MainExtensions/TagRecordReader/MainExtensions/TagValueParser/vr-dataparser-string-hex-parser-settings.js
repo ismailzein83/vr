@@ -49,7 +49,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
 
             api.load = function (payload) {
-                console.log(payload)
                 var promises = [];
                 var binaryParserTypeEntity;
                     if (payload != undefined) {

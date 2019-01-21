@@ -49,7 +49,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_DataParser_Nu
                 recordTypeFieldTypeDirectiveAPI = api;
                 recordTypeFieldTypeDirectiveReadyDeferred.resolve();
                 defineAPI();
-            }
+            };
             
         }
 
@@ -68,7 +68,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_DataParser_Nu
 
                 if (payload != undefined) {
                     if (payload.ValueParser != undefined) {
-                        console.log(payload)
                         $scope.scopeModel.selectedValue = UtilsService.getItemByVal($scope.scopeModel.recordTypeFieldType, payload.ValueParser.NumberType, "value");
                         $scope.scopeModel.fieldName = payload.ValueParser.FieldName;
                         $scope.scopeModel.fieldBytesLength = payload.ValueParser.FieldBytesLength;
@@ -83,16 +82,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService,VR_DataParser_Nu
 
                 };
 
-            api.getData = function () {
-                console.log($scope.scopeModel.selectedValue.value)
-                   return {
-                        $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.NumberFieldParser,Vanrise.DataParser.MainExtensions",
-                        FieldName: $scope.scopeModel.fieldName,
-                        NumberType: $scope.scopeModel.selectedValue != undefined ? $scope.scopeModel.selectedValue.value : undefined,
-                        Reverse: $scope.scopeModel.reverse,
-                        FieldIndex: $scope.scopeModel.fieldIndex,
-                        FieldBytesLength: $scope.scopeModel.fieldBytesLength
-                    }
+            api.getData = function () {                
+                return {
+                    $type: "Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers.NumberFieldParser,Vanrise.DataParser.MainExtensions",
+                    FieldName: $scope.scopeModel.fieldName,
+                    NumberType: $scope.scopeModel.selectedValue != undefined ? $scope.scopeModel.selectedValue.value : undefined,
+                    Reverse: $scope.scopeModel.reverse,
+                    FieldIndex: $scope.scopeModel.fieldIndex,
+                    FieldBytesLength: $scope.scopeModel.fieldBytesLength
+                };
                 };
 
                 if (ctrl.onReady != null) {
