@@ -829,6 +829,7 @@
     <Build Include="common\Stored Procedures\sp_VRNamespaceItem_Update.sql" />
     <Build Include="common\Stored Procedures\sp_VRNamespaceItem_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_VRNamespaceItem_GetAll.sql" />
+    <Build Include="Analytic\Stored Procedures\sp_AnalyticTable_SaveMeasureStyles.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

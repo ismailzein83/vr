@@ -17,6 +17,7 @@ BEGIN
 		IsEnabled = @IsEnabled,
 		TriggerTypeId = @TriggerTypeId,
 		ActionTypeId = @ActionTypeId,
-		TaskSettings = @TaskSettings
+		TaskSettings = @TaskSettings,
+		LastModifiedTime= GETDATE()
 	WHERE ID = @ID
 END

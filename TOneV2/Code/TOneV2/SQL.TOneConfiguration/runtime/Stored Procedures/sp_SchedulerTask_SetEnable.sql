@@ -4,7 +4,8 @@ AS
 BEGIN
 	begin
 		UPDATE	[runtime].[ScheduleTask]
-		SET		IsEnabled = 1
+		SET		IsEnabled = 1,
+		LastModifiedTime=GETDATE()
 		WHERE	ID = @ID
 	end
 END

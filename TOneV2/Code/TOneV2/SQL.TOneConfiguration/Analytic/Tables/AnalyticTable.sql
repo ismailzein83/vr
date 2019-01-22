@@ -5,9 +5,12 @@
     [CreatedTime]      DATETIME         CONSTRAINT [DF_AnalyticTable_CreatedTime] DEFAULT (getdate()) NULL,
     [LastModifiedTime] DATETIME         CONSTRAINT [DF_AnalyticTable_LastModifiedTime] DEFAULT (getdate()) NULL,
     [timestamp]        ROWVERSION       NULL,
+    [MeasureStyles]    NVARCHAR (MAX)   NULL,
     CONSTRAINT [PK_AnalyticTable] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_AnalyticTable_Name] UNIQUE NONCLUSTERED ([Name] ASC)
 );
+
+
 
 
 

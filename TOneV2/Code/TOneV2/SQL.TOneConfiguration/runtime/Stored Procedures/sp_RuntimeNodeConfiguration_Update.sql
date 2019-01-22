@@ -9,7 +9,8 @@ IF NOT EXISTS(SELECT 1 FROM runtime.RuntimeNodeConfiguration WHERE ID != @ID AND
 	BEGIN
 		Update runtime.[RuntimeNodeConfiguration]
 	Set Name = @Name,
-	Settings = @Setting
+	Settings = @Setting,
+	LastModifiedTime= GETDATE()
 	Where ID = @ID
 	END
 END
