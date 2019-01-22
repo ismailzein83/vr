@@ -1,6 +1,4 @@
-﻿using System;
-using Vanrise.Common;
-using Vanrise.Data.RDB;
+﻿using Vanrise.Data.RDB;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
@@ -24,13 +22,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static CarrierAccountStatusHistoryDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CarrierAccountID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_StatusID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_PreviousStatusID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_StatusChangedDate, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CarrierAccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_StatusID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_PreviousStatusID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_StatusChangedDate, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -56,13 +54,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
 
-            var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
-            notExistsCondition.EqualsCondition(COL_CreatedTime).Value(carrierAccountId);
-            notExistsCondition.EqualsCondition(COL_StatusID).Value((int)status);
-
+            insertQuery.Column(COL_ID).Value(carrierAccountId);
+            insertQuery.Column(COL_StatusID).Value((int)status);
             if (previousStatus.HasValue)
-                notExistsCondition.EqualsCondition(COL_PreviousStatusID).Value((int)previousStatus.Value);
-            
+                insertQuery.Column(COL_PreviousStatusID).Value((int)previousStatus.Value);
+            insertQuery.Column(COL_StatusChangedDate).DateNow();
+
             queryContext.ExecuteNonQuery();
         }
         #endregion
