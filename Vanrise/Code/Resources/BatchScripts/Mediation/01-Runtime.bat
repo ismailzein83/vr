@@ -11,7 +11,5 @@ ECHO Mediation Runtime
 xcopy "C:\TFS\Mediation\Code\Mediation.Runtime\bin\x64\Release" /y /v /z /i /Q /R  		"\\192.168.110.185\Fixes\WebSite\Mediation\Runtime\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Mediation\runtime-list-of-excluded-files.txt
 xcopy "C:\TFS\Mediation\Code\Mediation.Runtime\app.config.exclude" /y /v /z /i /Q /R 	"\\192.168.110.185\Fixes\WebSite\Mediation\Runtime\%YYYYMMDD%\"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 			"\\192.168.110.185\Fixes\WebSite\Mediation\Runtime\%YYYYMMDD%\"
-
-rename "\\192.168.110.185\Fixes\WebSite\Mediation\Runtime\%YYYYMMDD%\app.config.exclude" "Mediation.Runtime.exe.config"
-
-del /s /q /f "\\192.168.110.185\Fixes\WebSite\Mediation\Runtime\%YYYYMMDD%\*.pdb"
+rename																					"\\192.168.110.185\Fixes\WebSite\Mediation\Runtime\%YYYYMMDD%\app.config.exclude" "Mediation.Runtime.exe.config"
+del /s /q /f																			"\\192.168.110.185\Fixes\WebSite\Mediation\Runtime\%YYYYMMDD%\*.pdb"

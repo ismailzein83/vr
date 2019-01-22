@@ -11,7 +11,7 @@ xcopy "C:\Publish\Mediation" /S /E /R /y /v /i /z /Q													"\\192.168.110.
 xcopy "C:\TFS\Mediation\Code\Mediation.Web\Web.config.exclude" /y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R							"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Bin\"
 
-xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\Modules\Common\"
 xcopy "C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess" /S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\Modules\BusinessProcess\"
@@ -26,5 +26,6 @@ xcopy "C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion" /S /E /R
 
 xcopy "C:\TFS\Mediation\Code\Mediation.Generic.Web\Mediation_Generic" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\Modules\Mediation_Generic\"
 xcopy "C:\TFS\Mediation\Code\Mediation.Huawei.Web\Mediation_Huawei" /S /E /R /y /v /i /z /Q				"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Client\Modules\Mediation_Huawei\"
-
-rename "\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Web.config.exclude" "Web.config"
+del /s /q /f																							"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Bin\*.pdb"
+del /s /q /f																							"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Bin\*.config"
+rename																									"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\Web.config.exclude" "Web.config"
