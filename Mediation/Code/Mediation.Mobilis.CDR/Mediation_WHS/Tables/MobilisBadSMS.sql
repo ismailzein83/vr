@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Mediation_WHS].[MobilisBadSMS] (
-    [Id]                       BIGINT           NULL,
+    [Id]                       BIGINT           NOT NULL,
     [SMID]                     VARCHAR (50)     NULL,
     [OriginalAddress]          VARCHAR (50)     NULL,
     [DestAddr]                 VARCHAR (50)     NULL,
@@ -82,6 +82,9 @@
     [CalledCellID]             VARCHAR (50)     NULL,
     [SpecialServiceIndicator]  VARCHAR (50)     NULL,
     [FileName]                 VARCHAR (255)    NULL,
-    [DataSourceId]             UNIQUEIDENTIFIER NULL
+    [DataSourceId]             UNIQUEIDENTIFIER NULL,
+    CONSTRAINT [PK_MobilisBadSMS] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
