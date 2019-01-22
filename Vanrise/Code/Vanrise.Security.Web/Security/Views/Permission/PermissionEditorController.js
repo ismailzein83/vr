@@ -249,7 +249,7 @@
                 var currentFlags = currentPermission && currentPermission.PermissionFlags || [];
                 var editedFlags = editedPermission.PermissionFlags;
                 for (var i = 0 ; i < currentFlags.length; i++) {
-                    var currentPermission = currentFlags[i];
+                    currentPermission = currentFlags[i];
                     var updatedItem = UtilsService.getItemByVal(editedFlags, currentPermission.Name, "Name");
                     if (updatedItem != null && updatedItem.Value != currentPermission.Value)
                         return true;
