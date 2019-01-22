@@ -93,7 +93,7 @@
             return VR_Sec_BusinessEntityNodeAPIService.HasBreakInheritancePermission().then(function (response) {
                 $scope.showBreakInheritane = response;
             });
-        };
+        }
 
     }
 

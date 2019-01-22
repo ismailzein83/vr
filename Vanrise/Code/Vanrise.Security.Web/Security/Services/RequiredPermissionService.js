@@ -37,7 +37,7 @@
 
             VRModalService.showModal('/Client/Modules/Security/Views/RequiredPermission/EditRequiredPermission.html', parameters, modalSettings);
         }
-    };
+    }
 
     appControllers.service('VR_Sec_RequiredPermissionService', RequiredPermissionService);
 
