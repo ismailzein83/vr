@@ -108,12 +108,77 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VRGeneratedScriptTableDataController.cs" />
+    <Compile Include="Controllers\VRGeneratedScriptTableController.cs" />
+    <Compile Include="Controllers\VRGeneratedScriptSchemaController.cs" />
+    <Compile Include="Controllers\VRGeneratedScriptColumnsController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="VR_DevTools\Constant\" />
-    <Folder Include="VR_DevTools\Elements\" />
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.DevTools.Business\Vanrise.DevTools.Business.csproj">
+      <Project>{b92a7351-49ef-4da9-ab76-0ffdde313ec7}</Project>
+      <Name>Vanrise.DevTools.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.DevTools.Entities\Vanrise.DevTools.Entities.csproj">
+      <Project>{30df9a71-05b6-4199-ae6b-68db57864909}</Project>
+      <Name>Vanrise.DevTools.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{CFECFD8A-51F6-4020-9F80-FB334684FA3D}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="VR_DevTools\Constant\VRGeneratedScriptModuleConfig.js" />
+    <Content Include="VR_DevTools\Constant\VRGeneratedScriptQueryType.js" />
+    <Content Include="VR_DevTools\Constant\VRGenertedScriptFieldValueType.js" />
+    <Content Include="VR_DevTools\Constant\VRGenertedScriptType.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptColumns\vr-devtools-columns-selector.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptMainExtensions\Templates\VRGeneratedScriptMergeTemplate.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptMainExtensions\Templates\VRGeneratedScriptDeleteTemplate.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptMainExtensions\VariableSettings\Templates\VRGeneratedScriptSelectVariable.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptMainExtensions\VariableSettings\vr-devtools-generated-script-select-variable.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptMainExtensions\vr-devtools-generated-script-merge.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptMainExtensions\vr-devtools-generated-script-delete.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptSchema\vr-devtools-schema-selector.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptSettings\vr-devtools-generated-script-settings.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptSettings\vr-devtools-generated-script-field-value-type-selector.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptSettings\vr-devtools-generated-script-type-selector.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptSettings\vr-devtools-generated-script-query-type-selector.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptTable\vr-devtools-table-selector.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScriptVariableSettings\vr-devtools-generated-script-variable-settings.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\Templates\VRGeneratedScriptVariablesGridTemplate.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\Templates\VRTableDataGridTemplate.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\Templates\VRSelectedTableDataGridTemplate.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\Templates\VRGeneratedScriptDesignGridTemplate.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-generated-script-variables-grid.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-generated-script-design-grid.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-selected-table-data-grid.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Directives\VRGeneratedScript\vr-devtools-table-data-grid.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Services\APIServices\VRGeneratedScriptTableDataAPIService.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Services\APIServices\VRGeneratedScriptTableAPIService.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Services\APIServices\VRGeneratedScriptSchemaAPIService.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Services\APIServices\VRGeneratedScriptColumnsAPIService.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Services\VRGeneratedScriptService.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptVariableEditor.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptVariableEditorController.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptTableCellEditor.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptQueriesDisplayer.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptManagement.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptDesignEditor.html" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptDesignEditorController.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptManagementController.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptQueriesDisplayer.js" />
+    <Content Include="VR_DevTools\Elements\GeneratedScript\Views\VRGeneratedScriptTableCellEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,21 @@
+﻿<div vr-modalcontent ng-controller="VR_Devtools_GeneratedScriptVariableEditorController" vr-loader="scopeModel.isLoading" size="medium">
+    <vr-modalbody>
+        <vr-form name="formGeneratedScriptVariableEditor">
+            <vr-row removeline>
+                <vr-columns width="1/3row">
+                    <vr-textbox value="scopeModel.variableName" label="Name" isrequired></vr-textbox>
+                </vr-columns>
+            <vr-common-rdbdatatype-info on-ready="scopeModel.onVariableTypeDirectiveReady" label="RDB Data Type"  isrequired="true" normal-col-num="4"></vr-common-rdbdatatype-info>
+            </vr-row>
+                    <vr-devtools-generated-script-variable-settings on-ready="scopeModel.onVariableSettingsDirectiveReady" isrequired="true" normal-col-num="4"></vr-devtools-generated-script-variable-settings>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formGeneratedScriptVariableEditor" data-onclick="scopeModel.saveGeneratedScriptVariable"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

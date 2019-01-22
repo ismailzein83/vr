@@ -1,0 +1,17 @@
+﻿<vr-button type="SelectAll" standalone data-onclick="scopeModel.selectAll" vr-disabled="scopeModel.disableSelectAll"></vr-button>
+<vr-button type="DeselectAll" standalone data-onclick="scopeModel.deSelectAll" vr-disabled="scopeModel.disableDeSelectAll"></vr-button>
+<vr-datagrid datasource="scopeModel.tableData"
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'Pager'"
+             menuactions="scopeModel.gridMenuActions"
+             idfield="Connection"
+             enableautoexport="true"
+             defaultsortbyfieldname="scopeModel.key">
+    <vr-datagridcolumn>
+        <vr-check value="dataItem.isSelected" onvaluechanged="dataItem.onSelectItem"></vr-check>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x.Name" field="'FieldValues.'+ x.Name"></vr-datagridcolumn>
+</vr-datagrid>
+
+

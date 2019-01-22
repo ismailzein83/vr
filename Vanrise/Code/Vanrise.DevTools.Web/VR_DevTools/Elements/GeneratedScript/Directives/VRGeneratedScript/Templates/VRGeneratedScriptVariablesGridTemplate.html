@@ -1,0 +1,14 @@
+﻿<vr-columns width="1/2row">
+    <vr-button type="Add" standalone data-onclick="scopeModel.onGeneratedScriptVariableAdded"></vr-button>
+</vr-columns>
+<vr-columns width="fullrow">
+    <vr-datagrid datasource="scopeModel.variables"
+                 on-ready="scopeModel.onGridReady"
+                 dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                 pagingtype="'PagingOnScroll'"
+                 menuactions="scopeModel.gridMenuActions"
+                 idfield="ConnectionId"
+                 enableautoexport="true">
+        <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-columns>

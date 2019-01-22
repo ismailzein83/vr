@@ -1,0 +1,20 @@
+﻿<div>
+    <vr-row removeline>
+        <span vr-loader="scopeModel.isSchemaDirectiveloading">
+            <vr-devtools-schema-selector on-ready="scopeModel.onSchemaDirectiveReady" onselectionchanged="scopeModel.onSchemaChanged" isrequired="true" normal-col-num="4"></vr-devtools-schema-selector>
+        </span>
+        <span vr-loader="scopeModel.isTableDirectiveloading">
+            <vr-devtools-table-selector on-ready="scopeModel.onTableDirectiveReady" onselectionchanged="scopeModel.onTableChanged" isrequired="true" normal-col-num="4"></vr-devtools-table-selector>
+        </span>
+        <span vr-loader="scopeModel.isColumnsDirectiveloading">
+            <vr-devtools-columns-selector  label="Column Name" on-ready="scopeModel.onColumnDirectiveReady" isrequired="true" normal-col-num="4"></vr-devtools-columns-selector>
+        </span>
+        <span vr-loader="scopeModel.isFilterColumnsDirectiveloading">
+            <vr-devtools-columns-selector  label="Filter Column" on-ready="scopeModel.onFilterColumnDirectiveReady"  isrequired="true" normal-col-num="4"></vr-devtools-columns-selector>
+        </span>
+
+        <vr-columns colnum="4">
+            <vr-textbox value="scopeModel.filterColumnValue" label="Filter Column Value" isrequired></vr-textbox>
+        </vr-columns>
+    </vr-row>
+</div>
