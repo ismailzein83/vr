@@ -45,14 +45,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WhSJazzAccountCode\WhsJazzAccountCodeDetail.cs" />
+    <Compile Include="WhSJazzAccountCode\WhsJazzAccountCodeFilter.cs" />
+    <Compile Include="WhSJazzCustomerTypeCode\WhsJazzCustomerTypeCodeDetail.cs" />
     <Compile Include="WhSJazzCustomerTypeCode\WhsJazzCustomerTypeCode.cs" />
-    <Compile Include="AccountCode - Copy %283%29\WhsJazzAccountCode.cs" />
-    <Compile Include="AccountCode - Copy %284%29\WhsJazzAccountCode.cs" />
-    <Compile Include="AccountCode - Copy %285%29\WhsJazzAccountCode.cs" />
-    <Compile Include="AccountCode - Copy %286%29\WhsJazzAccountCode.cs" />
-    <Compile Include="AccountCode - Copy %287%29\WhsJazzAccountCode.cs" />
-    <Compile Include="WhSRegionRegion\WhsJazzRegion.cs" />
     <Compile Include="WhSJazzAccountCode\WhsJazzAccountCode.cs" />
+    <Compile Include="WhSJazzCustomerTypeCode\WhsJazzCustomerTypeCodeFilter.cs" />
+    <Compile Include="WhSJazzMarketCode\WhsJazzMarketCodeDetail.cs" />
+    <Compile Include="WhSJazzMarketCode\WhsJazzMarketCode.cs" />
+    <Compile Include="WhSJazzMarketCode\WhsJazzMarketCodeFilter.cs" />
+    <Compile Include="WhSJazzProductServiceCode\WhsJazzProductServiceCodeDetail.cs" />
+    <Compile Include="WhSJazzProductServiceCode\WhsJazzProductServiceCode.cs" />
+    <Compile Include="WhSJazzProductServiceCode\WhsJazzProductServiceCodeFilter.cs" />
+    <Compile Include="WhSJazzRegionCode\WhsJazzRegionCodeFilter.cs" />
+    <Compile Include="WhSJazzRegionCode\WhsJazzRegionCodeDetail.cs" />
+    <Compile Include="WhSJazzSwitchCode\WhsJazzSwitchCodeFilter.cs" />
+    <Compile Include="WhSJazzSwitchCode\WhsJazzSwitchCodeDetail.cs" />
+    <Compile Include="WhSJazzSwitchCode\WhsJazzSwitchCode.cs" />
+    <Compile Include="WhSJazzTaxCode\WhsJazzTaxCodeFilter.cs" />
+    <Compile Include="WhSJazzTaxCode\WhsJazzTaxCodeDetail.cs" />
+    <Compile Include="WhSJazzTaxCode\WhsJazzTaxCode.cs" />
+    <Compile Include="WhSJazzRegionCode\WhsJazzRegionCode.cs" />
+    <Compile Include="WhSJazzTransactionTypeCode\WhsJazzTransactionTypeCodeFilter.cs" />
+    <Compile Include="WhSJazzTransactionTypeCode\WhsJazzTransactionTypeCodeDetail.cs" />
+    <Compile Include="WhSJazzTransactionTypeCode\WhsJazzTransactionTypeCode.cs" />
     <Compile Include="WhsJazzAccountCodeCarriers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
