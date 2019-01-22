@@ -19,7 +19,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexConnectionIdentificationPackageFieldParser.html"
+		templateUrl: "/Client/Modules/VR_DataParser/Elements/HexTLV/Directives/MainExtensions/HexTLV/MainExtensions/TagRecordReader/MainExtensions/TagValueParser/Templates/HexConnectionFieldParser.html"
 
 
     };
@@ -43,7 +43,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         function defineAPI() {
             var api = {};
-            api.load = function (payload) {
+			api.load = function (payload) {
                 var promises = [];
                 if (payload != undefined) {
                     if (payload.ValueParser != undefined)
