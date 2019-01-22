@@ -72,6 +72,7 @@
     <Compile Include="ExecuteNonQuery\RDBCreateIndexQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBCreateTableQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBDeleteQuery.cs" />
+    <Compile Include="ExecuteNonQuery\RDBCheckIfTableExistsQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBDropTableQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBIfQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBInsertMultipleRowsQuery.cs" />

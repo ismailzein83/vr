@@ -62,6 +62,8 @@ namespace Vanrise.Data.RDB
 
         public abstract RDBResolvedQuery ResolveTableDropQuery(IRDBDataProviderResolveTableDropQueryContext context);
 
+        public abstract RDBResolvedQuery ResolveCheckIfTableExistsQuery(IRDBDataProviderResolveCheckIfTableExistsQueryContext context);
+
         public virtual RDBResolvedQuery ResolveIndexCreationQuery(IRDBDataProviderResolveIndexCreationQueryContext context)
         {
             throw new NotImplementedException();
@@ -604,6 +606,36 @@ namespace Vanrise.Data.RDB
     public class RDBDataProviderResolveTableDropQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveTableDropQueryContext
     {
         public RDBDataProviderResolveTableDropQueryContext(string schemaName, string tableName,
+            IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {
+            this.SchemaName = schemaName;
+            this.TableName = tableName;
+        }
+
+        public string SchemaName
+        {
+            get;
+            private set;
+        }
+
+        public string TableName
+        {
+            get;
+            private set;
+        }
+    }
+
+    public interface IRDBDataProviderResolveCheckIfTableExistsQueryContext : IBaseRDBResolveQueryContext
+    {
+        string SchemaName { get; }
+
+        string TableName { get; }
+    }
+
+    public class RDBDataProviderResolveCheckIfTableExistsQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveCheckIfTableExistsQueryContext
+    {
+        public RDBDataProviderResolveCheckIfTableExistsQueryContext(string schemaName, string tableName,
             IBaseRDBResolveQueryContext parentContext)
             : base(parentContext)
         {

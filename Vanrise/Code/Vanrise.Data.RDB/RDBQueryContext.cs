@@ -129,6 +129,13 @@ namespace Vanrise.Data.RDB
             return query;
         }
 
+        public RDBCheckIfTableExistsQuery AddCheckIfTableExistsQuery()
+        {
+            var query = new RDBCheckIfTableExistsQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
         public RDBCreateIndexQuery AddCreateIndexQuery()
         {
             var query = new RDBCreateIndexQuery(QueryBuilderContext.CreateChildContext());

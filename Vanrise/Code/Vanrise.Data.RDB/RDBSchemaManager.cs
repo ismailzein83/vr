@@ -33,12 +33,12 @@ namespace Vanrise.Data.RDB
 
         #region Public Methods
 
-        public void RegisterDefaultTableDefinition(string tableName, RDBTableDefinition tableDefinition)
+        public bool TryRegisterDefaultTableDefinition(string tableName, RDBTableDefinition tableDefinition)
         {
             lock (this)
             {
                 if (_defaultTableDefinitionsByName.ContainsKey(tableName))
-                    throw new Exception(String.Format("Table '{0}' already registered in default table definitions", tableName));
+                    return false;
                 tableDefinition.Columns.ThrowIfNull("tableDefinition.Columns", tableName);
                 foreach (var columnEntry in tableDefinition.Columns)
                 {
@@ -46,7 +46,14 @@ namespace Vanrise.Data.RDB
                         columnEntry.Value.DBColumnName = columnEntry.Key;
                 }
                 _defaultTableDefinitionsByName.Add(tableName, tableDefinition);
+                return true;
             }
+        }
+
+        public void RegisterDefaultTableDefinition(string tableName, RDBTableDefinition tableDefinition)
+        {
+            if (!TryRegisterDefaultTableDefinition(tableName, tableDefinition))
+                throw new Exception(String.Format("Table '{0}' already registered in default table definitions", tableName));
         }
 
         public void OverrideTableInfo(string providerUniqueName, string tableName, string dbSchemaName, string dbTableName)

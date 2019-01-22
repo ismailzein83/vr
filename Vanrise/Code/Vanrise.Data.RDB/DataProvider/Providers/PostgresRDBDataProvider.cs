@@ -398,6 +398,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             throw new NotImplementedException();
         }
 
+        public override RDBResolvedQuery ResolveCheckIfTableExistsQuery(IRDBDataProviderResolveCheckIfTableExistsQueryContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Private Classes
 
         private class PostgresDataManager : Vanrise.Data.SQL.BaseSQLDataManager
