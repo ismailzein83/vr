@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <!-- <Compile Include="BigDataServiceDataManager.cs" />-->
+    <Compile Include="BigDataServiceDataManager.cs" />
     <Compile Include="CacheRefreshDataManager.cs" />
     <Compile Include="CityDataManager.cs" />
     <Compile Include="CountryDataManager.cs" />
@@ -90,6 +90,7 @@
     <Compile Include="VRNamespaceItemDataManager.cs" />
     <Compile Include="VRObjectTrackingDataManager.cs" />
     <Compile Include="VRObjectTypeDefinitionDataManager.cs" />
+    <!--<Compile Include="VRReceivedMailMessageDataManager.cs" />-->
     <Compile Include="VRRuleDataManager.cs" />
     <Compile Include="VRSequenceDataManager.cs" />
     <Compile Include="VRTempPayloadDataManager.cs" />
