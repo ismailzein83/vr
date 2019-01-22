@@ -26,17 +26,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static SalePricelistCodeChangeDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_Code, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 150});
-            columns.Add(COL_RecentZoneName, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 150});
-            columns.Add(COL_ZoneName, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 150});
-            columns.Add(COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_Change, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_BatchID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_CountryID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_Code, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 150 });
+            columns.Add(COL_RecentZoneName, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 150 });
+            columns.Add(COL_ZoneName, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 150 });
+            columns.Add(COL_ZoneID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_Change, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_BatchID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CountryID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
@@ -58,11 +58,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public List<SalePricelistCodeChange> GetSalePricelistCodeChanges(int pricelistId, List<int> countryIds)
         {
+            SalePricelistCustomerChangeDataManager salePricelistCustomerChangeDataManager = new SalePricelistCustomerChangeDataManager();
             var salePricelistCustomerChangeTableAlias = "spcustc";
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var join = selectQuery.Join();
+            salePricelistCustomerChangeDataManager.JoinCustomerChange(join, salePricelistCustomerChangeTableAlias, TABLE_ALIAS, SalePricelistCustomerChangeDataManager.COL_CountryID, SalePricelistCustomerChangeDataManager.COL_BatchID);
 
             var whereQuery = selectQuery.Where();
             whereQuery.EqualsCondition(salePricelistCustomerChangeTableAlias, SalePricelistCustomerChangeDataManager.COL_PricelistID).Value(pricelistId);

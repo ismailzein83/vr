@@ -142,15 +142,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public bool CheckIfCodeGroupHasRelatedCodes(int codeGroupId)
         {
             SaleCodeDataManager saleCodeDataManager = new SaleCodeDataManager();
-            var saleCode = saleCodeDataManager.GetSaleCodeByCodeGroup(codeGroupId);
+            var hasSaleCode = saleCodeDataManager.HasSaleCodesByCodeGroup(codeGroupId);
 
-            if (saleCode != null)
+            if (hasSaleCode)
                 return true;
 
             SupplierCodeDataManager supplierCodeDataManager = new SupplierCodeDataManager();
-            var supplierCode = supplierCodeDataManager.GetSupplierCodeByCodeGroup(codeGroupId);
+            var hasSupplierCode = supplierCodeDataManager.HasSupplierCodesByCodeGroup(codeGroupId);
 
-            return supplierCode != null;
+            return hasSupplierCode;
         }
 
         public void JoinCodeGroup(RDBJoinContext joinContext, string codeTableAlias, string originalTableAlias, string originalTableCodeIdCol)

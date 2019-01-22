@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
+using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
@@ -43,10 +41,26 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 Columns = columns
             });
         }
+        BaseRDBDataProvider GetDataProvider()
+        {
+            return RDBDataProviderFactory.CreateProvider("TOneWhS_BE", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
+        }
 
         #endregion
 
         #region Public Methods
+        public void Bulk(IEnumerable<SalePricelistCodeChange> codeChanges)
+        {
+            object dbApplyStream = InitialiazeStreamForDBApply();
+
+            foreach (var codeChange in codeChanges)
+            {
+                WriteRecordToStream(codeChange, dbApplyStream);
+            }
+
+            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
+            ApplyForDB(prepareToApplyInfo);
+        }
         public void DeleteRecords(RDBDeleteQuery deleteQuery, long processInstanceId)
         {
             deleteQuery.FromTable(TABLE_NAME);
@@ -60,5 +74,54 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.Where().EqualsCondition(COL_BatchID).Value(processInstanceID);
         }
         #endregion
+
+        #region Bulk Methods
+        private object InitialiazeStreamForDBApply()
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var streamForBulkInsert = queryContext.StartBulkInsert();
+            streamForBulkInsert.IntoTable(TABLE_NAME, '^', COL_Code, COL_RecentZoneName, COL_ZoneName, COL_ZoneID
+            , COL_Change, COL_BatchID, COL_BED, COL_EED, COL_CountryID);
+            return streamForBulkInsert;
+        }
+        private void WriteRecordToStream(SalePricelistCodeChange record, object dbApplyStream)
+        {
+            RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
+            var recordContext = bulkInsertContext.WriteRecord();
+
+            recordContext.Value(record.Code);
+            recordContext.Value(record.RecentZoneName);
+            recordContext.Value(record.ZoneName);
+
+            if (record.ZoneId.HasValue)
+                recordContext.Value(record.ZoneId.Value);
+            else
+                recordContext.Value(string.Empty);
+
+            recordContext.Value((int)record.ChangeType);
+            recordContext.Value(record.BatchId);
+            recordContext.Value(record.BED);
+
+            if (record.EED.HasValue)
+                recordContext.Value(record.EED.Value);
+            else
+                recordContext.Value(string.Empty);
+
+            recordContext.Value(record.CountryId);
+        }
+        private object FinishDBApplyStream(object dbApplyStream)
+        {
+            RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
+            bulkInsertContext.CloseStream();
+            return bulkInsertContext;
+        }
+        private void ApplyForDB(object preparedObject)
+        {
+            preparedObject.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream").Apply();
+
+        }
+
+        #endregion
+
     }
 }

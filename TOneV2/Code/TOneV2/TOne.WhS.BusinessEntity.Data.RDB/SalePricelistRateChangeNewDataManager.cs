@@ -123,7 +123,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var join = selectQuery.Join();
-            salePriceLisNewDataManager.JoinSalePriceListNew(join, TABLE_ALIAS, salePricelistNewTableAlias, COL_PricelistId);
+            salePriceLisNewDataManager.JoinSalePriceListNew(join, salePricelistNewTableAlias, TABLE_ALIAS, COL_PricelistId);
 
             var whereQueryContext = selectQuery.Where();
             whereQueryContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
@@ -221,7 +221,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 ChangeType = (RateChangeType)reader.GetInt(COL_Change),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                CurrencyId = reader.GetInt(COL_CurrencyID),
+                CurrencyId = reader.GetNullableInt(COL_CurrencyID),
             };
         }
         private CustomerRatePreview CustomerRatePreviewMapper(IRDBDataReader reader)

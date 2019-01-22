@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Vanrise.Entities;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SaleEntityRoutingProductDataManager : ISaleEntityRoutingProductDataManager
@@ -18,27 +19,30 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_ZoneID = "ZoneID";
         const string COL_RoutingProductID = "RoutingProductID";
         const string COL_BED = "BED";
-        const string COL_EED = "EED";
+        private const string COL_EED = "EED";
         const string COL_LastModifiedTime = "LastModifiedTime";
+        const string COL_CreatedTime = "CreatedTime";
         static SaleEntityRoutingProductDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_OwnerType, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_OwnerID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_RoutingProductID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_OwnerType, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_OwnerID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_ZoneID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_RoutingProductID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
                 DBTableName = "SaleEntityRoutingProduct",
                 Columns = columns,
                 IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
-
             });
         }
         BaseRDBDataProvider GetDataProvider()
@@ -64,36 +68,36 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<DefaultRoutingProduct> GetDefaultRoutingProducts(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            List<DefaultRoutingProduct> res = new List<DefaultRoutingProduct>();
+            List<DefaultRoutingProduct> routingProducts = new List<DefaultRoutingProduct>();
             RDBQueryContext queryContext = GetRoutingProducts(customerIds, effectiveOn, isEffectiveInFuture, true);
             queryContext.ExecuteReader(reader =>
             {
                 while (reader.Read())
                 {
-                    res.Add(DefaultRoutingProductMapper(reader));
+                    routingProducts.Add(DefaultRoutingProductMapper(reader));
                 }
 
                 reader.NextResult();
                 while (reader.Read())
                 {
-                    res.Add(DefaultRoutingProductMapper(reader));
+                    routingProducts.Add(DefaultRoutingProductMapper(reader));
                 }
             });
 
-            return queryContext.GetItems(DefaultRoutingProductMapper);
+            return routingProducts;
         }
 
         public IEnumerable<DefaultRoutingProduct> GetEffectiveDefaultRoutingProducts(DateTime effectiveOn)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
             whereContext.NullCondition(COL_ZoneID);
 
-            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
+            BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
 
             return queryContext.GetItems(DefaultRoutingProductMapper);
         }
@@ -101,14 +105,28 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProducts(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             RDBQueryContext queryContext = GetRoutingProducts(customerIds, effectiveOn, isEffectiveInFuture, false);
-            return queryContext.GetItems(SaleZoneRoutingProductMapper);
+            List<SaleZoneRoutingProduct> routingProducts = new List<SaleZoneRoutingProduct>();
+            queryContext.ExecuteReader(reader =>
+            {
+                while (reader.Read())
+                {
+                    routingProducts.Add(SaleZoneRoutingProductMapper(reader));
+                }
+
+                reader.NextResult();
+                while (reader.Read())
+                {
+                    routingProducts.Add(SaleZoneRoutingProductMapper(reader));
+                }
+            });
+            return routingProducts;
         }
 
         public IEnumerable<SaleZoneRoutingProduct> GetEffectiveZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
@@ -116,7 +134,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereContext.EqualsCondition(COL_OwnerID).Value(ownerId);
             whereContext.NotNullCondition(COL_ZoneID);
 
-            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
+            BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
 
             return queryContext.GetItems(SaleZoneRoutingProductMapper);
         }
@@ -131,7 +149,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
@@ -150,7 +168,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
@@ -171,7 +189,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereCondition = selectQuery.Where();
@@ -199,7 +217,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereCondition = selectQuery.Where();
@@ -229,7 +247,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
@@ -244,7 +262,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
@@ -367,7 +385,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (customerIds != null && customerIds.Any())
             {
                 var selectQuery = queryContext.AddSelectQuery();
-                selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+                selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
                 selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
                 var whereContext = selectQuery.Where();
@@ -377,7 +395,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             }
 
             var secondSelectQuery = queryContext.AddSelectQuery();
-            secondSelectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            secondSelectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             secondSelectQuery.SelectColumns().Columns(COL_ID, COL_OwnerType, COL_OwnerID, COL_ZoneID, COL_RoutingProductID, COL_BED, COL_EED);
             var secondWhereContext = secondSelectQuery.Where();
             SetRoutingProductWhereContext(secondWhereContext, effectiveOn, isEffectiveInFuture, isDefault, (int)SalePriceListOwnerType.SellingProduct);
@@ -411,7 +429,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
@@ -433,16 +451,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProductsEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
         {
             SaleZoneDataManager saleZoneDataManager = new SaleZoneDataManager();
+            string saleZoneTableAlias = "sz";
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinContext = selectQuery.Join();
-            saleZoneDataManager.JoinSaleZone(joinContext, "sz", TABLE_ALIAS, COL_ZoneID);
+            saleZoneDataManager.JoinSaleZone(joinContext, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
 
             var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition("z", SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+            whereQuery.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
 
             var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
             orCondition.NullCondition(COL_EED);

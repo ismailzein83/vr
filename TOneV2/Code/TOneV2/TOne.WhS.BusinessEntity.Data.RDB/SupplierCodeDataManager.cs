@@ -105,7 +105,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (query.ZoneIds != null && query.ZoneIds.Any())
                 whereContext.ListCondition(RDBListConditionOperator.IN, query.ZoneIds);
 
-            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, query.EffectiveOn);
+            BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, query.EffectiveOn);
 
             return queryContext.GetItems(SupplierCodeMapper);
         }
@@ -158,15 +158,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
-            if (effectiveOn.HasValue)
-            {
-                if (isFuture)
-                    BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                else
-                    BEDataUtility.SetFutureDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-            }
-            else
-                whereContext.FalseCondition();
+            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn);
 
             var groupByContext = selectQuery.GroupBy();
             var groupSelect = groupByContext.Select();
@@ -197,15 +189,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             fromSelectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = fromSelectQuery.Where();
-            if (effectiveOn.HasValue)
-            {
-                if (isFuture)
-                    BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                else
-                    BEDataUtility.SetFutureDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-            }
-            else
-                whereContext.FalseCondition();
+            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn);
 
             var groupByContext = fromSelectQuery.GroupBy();
             var groupSelect = groupByContext.Select();
@@ -226,9 +210,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 rowContext.Column(codePrefixAlias).Value(queryItem);
             }
 
-
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(tempCodePrefixesTableQuery, "allPrefixes", null, false);
+            selectQuery.From(tempCodePrefixesTableQuery, "allPrefixes", null);
             selectQuery.SelectColumns().AllTableColumns("allPrefixes");
             return queryContext.GetItems(CodePrefixMapper);
         }
@@ -276,7 +259,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (effectiveOn.HasValue)
             {
                 if (isFuture)
-                    BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                    BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
                 else
                     BEDataUtility.SetFutureDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
             }
@@ -316,7 +299,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (effectiveOn.HasValue)
             {
                 if (isFuture)
-                    BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                    BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
                 else
                     BEDataUtility.SetFutureDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
             }
@@ -367,7 +350,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
 
         #region Public Methods
-        public SupplierCode GetSupplierCodeByCodeGroup(int codeGroupId)
+        public bool HasSupplierCodesByCodeGroup(int codeGroupId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
@@ -376,7 +359,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(COL_CodeGroupID).Value(codeGroupId);
-            return queryContext.GetItem(SupplierCodeMapper);
+
+            return queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
 
         #endregion

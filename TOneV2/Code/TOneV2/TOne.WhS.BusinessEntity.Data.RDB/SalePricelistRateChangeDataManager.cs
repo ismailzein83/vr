@@ -30,20 +30,20 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static SalePricelistRateChangeDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_PricelistId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Rate, new RDBTableColumnDefinition {DataType = RDBDataType.Decimal, Size = 20, Precision = 8});
-            columns.Add(COL_RateTypeId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_RecentRate, new RDBTableColumnDefinition {DataType = RDBDataType.Decimal, Size = 20, Precision = 8});
-            columns.Add(COL_CountryID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_ZoneName, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 150});
-            columns.Add(COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_Change, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_RoutingProductID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_PricelistId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Rate, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 8 });
+            columns.Add(COL_RateTypeId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_RecentRate, new RDBTableColumnDefinition { DataType = RDBDataType.Decimal, Size = 20, Precision = 8 });
+            columns.Add(COL_CountryID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_ZoneName, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 150 });
+            columns.Add(COL_ZoneID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_Change, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_RoutingProductID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -97,7 +97,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
         public void BuildInsertQuery(RDBInsertQuery insertQuery)
         {
-            insertQuery.IntoTable(TABLE_NAME); 
+            insertQuery.IntoTable(TABLE_NAME);
         }
 
         #endregion
@@ -116,6 +116,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
                 CurrencyId = reader.GetInt(COL_CurrencyID),
+                PricelistId = reader.GetInt(COL_PricelistId),
+                CountryId = reader.GetInt(COL_CountryID),
+                RoutingProductId = reader.GetIntWithNullHandling(COL_RoutingProductID),
+                ZoneId = reader.GetNullableLong(COL_ZoneID)
             };
         }
 

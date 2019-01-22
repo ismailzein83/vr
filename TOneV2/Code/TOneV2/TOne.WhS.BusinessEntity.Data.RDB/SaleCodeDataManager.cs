@@ -523,7 +523,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #region Public Methods
 
-        public SaleCode GetSaleCodeByCodeGroup(int codeGroupId)
+        public bool HasSaleCodesByCodeGroup(int codeGroupId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
@@ -532,7 +532,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(COL_CodeGroupID).Value(codeGroupId);
-            return queryContext.GetItem(SaleCodeMapper);
+
+            return queryContext.ExecuteScalar().NullableLongValue.HasValue;
         }
         public void BuildInsertQuery(RDBInsertQuery insertQuery, long processInstanceID)
         {

@@ -34,22 +34,22 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static SalePriceListDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_OwnerType, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_OwnerID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_EffectiveOn, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_PriceListType, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
-            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_FileID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_IsSent, new RDBTableColumnDefinition {DataType = RDBDataType.Boolean});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_UserID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Description, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
-            columns.Add(COL_PricelistStateBackupID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_PricelistSource, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_OwnerType, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_OwnerID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_EffectiveOn, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_PriceListType, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_FileID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_IsSent, new RDBTableColumnDefinition { DataType = RDBDataType.Boolean });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_UserID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Description, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_PricelistStateBackupID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_PricelistSource, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
@@ -72,7 +72,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             return queryContext.GetItems(SalePriceListMapper);
         }
@@ -220,7 +220,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void SetSelectPriceListIDsQuery(RDBSelectQuery selectQuery, int ownerType, int ownerId)
         {
-            selectQuery.From(TABLE_NAME,TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
             selectQuery.SelectColumns().Columns(COL_ID);
 
             var whereQuery = selectQuery.Where();

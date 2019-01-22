@@ -27,16 +27,16 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static SaleZoneDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_SellingNumberPlanID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CountryID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Name, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 255});
-            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
-            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_SellingNumberPlanID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CountryID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -76,7 +76,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             var where = selectQuery.Where();
-            where.ConditionIfColumnNotNull(COL_SellingNumberPlanID).EqualsCondition(COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+            where.NotNullCondition(COL_SellingNumberPlanID);
+            where.EqualsCondition(COL_SellingNumberPlanID).Value(sellingNumberPlanId);
 
             if (!string.IsNullOrEmpty(filter))
                 where.ContainsCondition(TABLE_ALIAS, COL_Name, filter);
@@ -155,13 +156,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 if (isEffectiveInFuture.Value)
                 {
-                    conditionContext.ConditionIfColumnNotNull(TABLE_ALIAS, COL_EED).GreaterOrEqualCondition(TABLE_ALIAS, COL_BED).DateNow();
+                    conditionContext.NotNullCondition(TABLE_ALIAS, COL_EED);
+                    conditionContext.GreaterOrEqualCondition(TABLE_ALIAS, COL_BED).DateNow();
                 }
                 else if (effectiveDate.HasValue)
                 {
                     conditionContext.LessOrEqualCondition(TABLE_ALIAS, COL_BED).Value(effectiveDate.Value);
                     var orCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-                    orCondition.ConditionIfColumnNotNull(TABLE_ALIAS, COL_EED).GreaterOrEqualCondition(TABLE_ALIAS, COL_EED).Value(effectiveDate.Value);
+                    orCondition.NotNullCondition(TABLE_ALIAS, COL_EED);
+                    orCondition.GreaterOrEqualCondition(TABLE_ALIAS, COL_EED).Value(effectiveDate.Value);
                 }
             }
         }

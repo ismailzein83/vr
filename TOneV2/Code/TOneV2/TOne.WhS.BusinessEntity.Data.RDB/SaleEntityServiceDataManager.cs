@@ -21,6 +21,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_EED = "EED";
         const string COL_SourceID = "SourceID";
         const string COL_LastModifiedTime = "LastModifiedTime";
+        const string COL_CreatedTime = "CreatedTime";
 
 
         static SaleEntityServiceDataManager()
@@ -34,14 +35,16 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
             columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
                 DBTableName = "SaleEntityService",
                 Columns = columns,
                 IdColumnName = COL_ID,
+                CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
-
             });
         }
         BaseRDBDataProvider GetDataProvider()
@@ -56,14 +59,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
             whereContext.NullCondition(COL_ZoneID);
 
             if (effectiveOn.HasValue)
-                BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
             else
                 whereContext.FalseCondition();//effectiveOn should be required
 
@@ -73,22 +76,23 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServices(SalePriceListOwnerType ownerType, int ownerId, DateTime? effectiveOn)
         {
             var salePriceListDataManager = new SalePriceListDataManager();
+            string salePriceListTableAlias = "sp";
             var queryContext = new RDBQueryContext(GetDataProvider());
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinQuery = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinQuery, "p", TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(joinQuery, salePriceListTableAlias, TABLE_ALIAS, COL_PriceListID);
 
             var whereQuery = selectQuery.Where();
             whereQuery.NotNullCondition(COL_ZoneID);
-            whereQuery.EqualsCondition("p", SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
-            whereQuery.EqualsCondition("p", SalePriceListDataManager.COL_OwnerID).Value(ownerId);
+            whereQuery.EqualsCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
+            whereQuery.EqualsCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(ownerId);
 
             if (effectiveOn.HasValue)
-                BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
             else
                 whereQuery.FalseCondition();//effectiveOn should be required
 
@@ -97,22 +101,76 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<SaleEntityZoneService> GetEffectiveSaleEntityZoneServicesByOwner(IEnumerable<RoutingCustomerInfoDetails> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            throw new NotImplementedException();
+            SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
+            string salePriceListTableAlias = "sp";
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var tempTableQuery = queryContext.CreateTempTable();
+            tempTableQuery.AddColumn(SalePriceListDataManager.COL_OwnerID, RDBDataType.Int, true);
+            tempTableQuery.AddColumn(SalePriceListDataManager.COL_OwnerType, RDBDataType.Int, true);
+
+            var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+            insertMultipleRowsQuery.IntoTable(tempTableQuery);
+
+            HashSet<int> addedSellingProductIds = new HashSet<int>();
+            foreach (var queryItem in customerInfos)
+            {
+                var rowContext = insertMultipleRowsQuery.AddRow();
+                rowContext.Column(SalePriceListDataManager.COL_OwnerID).Value(queryItem.CustomerId);
+                rowContext.Column(SalePriceListDataManager.COL_OwnerType).Value((int)SalePriceListOwnerType.Customer);
+
+                if (addedSellingProductIds.Contains(queryItem.SellingProductId))
+                    continue;
+
+                var rowSellingProductContext = insertMultipleRowsQuery.AddRow();
+                rowSellingProductContext.Column(SalePriceListDataManager.COL_OwnerID).Value(queryItem.SellingProductId);
+                rowSellingProductContext.Column(SalePriceListDataManager.COL_OwnerType).Value((int)SalePriceListOwnerType.SellingProduct);
+
+                addedSellingProductIds.Add(queryItem.SellingProductId);
+            }
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinContext = selectQuery.Join();
+            salePriceListDataManager.JoinSalePriceList(joinContext, salePriceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+
+            var joinStatement = joinContext.Join(tempTableQuery, "customerInfo");
+            joinStatement.JoinType(RDBJoinType.Inner);
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerID, "customerInfo", SalePriceListDataManager.COL_OwnerID);
+            joinCondition.EqualsCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerType, "customerInfo", SalePriceListDataManager.COL_OwnerType);
+
+            var whereQuery = selectQuery.Where();
+
+            if (effectiveOn.HasValue)
+            {
+                if (isEffectiveInFuture)
+                    BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, DateTime.Now);
+                else
+                    BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+            }
+            else
+                whereQuery.FalseCondition();
+
+            return queryContext.GetItems(SaleEntityZoneServiceMapper);
         }
 
         public IEnumerable<SaleEntityZoneService> GetSaleZonesServicesEffectiveAfter(int sellingNumberPlanId, DateTime effectiveOn)
         {
             SaleZoneDataManager saleZoneDataManager = new SaleZoneDataManager();
+            string saleZoneTableAlias = "sz";
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinContext = selectQuery.Join();
-            saleZoneDataManager.JoinSaleZone(joinContext, "sz", TABLE_ALIAS, COL_ZoneID);
+            saleZoneDataManager.JoinSaleZone(joinContext, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
 
             var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition("z", SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+            whereQuery.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
 
             var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
             orCondition.NullCondition(COL_EED);
@@ -130,12 +188,52 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<SaleEntityDefaultService> GetDefaultServicesEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate)
         {
-            throw new NotImplementedException();
+            SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
+            string salePriceListTableAlias = "sp";
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinContext = selectQuery.Join();
+            salePriceListDataManager.JoinSalePriceList(joinContext, salePriceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
+            whereQuery.EqualsCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(ownerId);
+            whereQuery.NullCondition(COL_ZoneID);
+
+            var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orCondition.NullCondition(COL_EED);
+            orCondition.GreaterThanCondition(COL_EED).Value(minimumDate);
+
+            return queryContext.GetItems(SaleEntityDefaultServiceMapper);
         }
 
         public IEnumerable<SaleEntityZoneService> GetZoneServicesEffectiveAfter(SalePriceListOwnerType ownerType, int ownerId, DateTime minimumDate)
         {
-            throw new NotImplementedException();
+            SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
+            string salePriceListTableAlias = "sp";
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var joinContext = selectQuery.Join();
+            salePriceListDataManager.JoinSalePriceList(joinContext, salePriceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
+            whereQuery.EqualsCondition(salePriceListTableAlias, SalePriceListDataManager.COL_OwnerID).Value(ownerId);
+            whereQuery.NotNullCondition(COL_ZoneID);
+
+            var orCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orCondition.NullCondition(COL_EED);
+            orCondition.GreaterThanCondition(COL_EED).Value(minimumDate);
+
+            return queryContext.GetItems(SaleEntityZoneServiceMapper);
         }
 
         public bool AreSaleEntityServicesUpdated(ref object updateHandle)

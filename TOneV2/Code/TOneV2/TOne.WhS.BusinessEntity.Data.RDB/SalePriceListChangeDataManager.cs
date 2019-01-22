@@ -8,40 +8,48 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SalePriceListChangeDataManager : ISalePriceListChangeDataManager
     {
+        SalePricelistRateChangeDataManager _salePricelistRateChangeDataManager = new SalePricelistRateChangeDataManager();
+        SalePricelistRPChangeDataManager _salePricelistRpChangeDataManager = new SalePricelistRPChangeDataManager();
+        SalePriceListSnapShotDataManager _salePriceListSnapShotDataManager = new SalePriceListSnapShotDataManager();
+        SalePricelistCustomerChangeNewDataManager _salePricelistCustomerChangeNewDataManager = new SalePricelistCustomerChangeNewDataManager();
+        SalePricelistRateChangeNewDataManager _salePricelistRateChangeNewDataManager = new SalePricelistRateChangeNewDataManager();
+        SalePriceListNewDataManager _salePriceListNewDataManager = new SalePriceListNewDataManager();
+        SalePricelistRPChangeNewDataManager _salePricelistRpChangeNewDataManager = new SalePricelistRPChangeNewDataManager();
 
         #region ISalePriceListChangeDataManager Members
         public List<SalePricelistCodeChange> GetFilteredSalePricelistCodeChanges(int pricelistId, List<int> countryIds)
         {
-            SalePricelistCodeChangeDataManager salePricelistCodeChangeDataManager = new SalePricelistCodeChangeDataManager();
-            return salePricelistCodeChangeDataManager.GetSalePricelistCodeChanges(pricelistId, countryIds);
+            SalePricelistCodeChangeDataManager _salePricelistCodeChangeDataManager = new SalePricelistCodeChangeDataManager();
+            return _salePricelistCodeChangeDataManager.GetSalePricelistCodeChanges(pricelistId, countryIds);
         }
 
         public List<SalePricelistRateChange> GetFilteredSalePricelistRateChanges(int pricelistId, List<int> countryIds)
         {
-            SalePricelistRateChangeDataManager salePricelistRateChangeDataManager = new SalePricelistRateChangeDataManager();
-            return salePricelistRateChangeDataManager.GetSalePricelistRateChanges(pricelistId, countryIds);
+            return _salePricelistRateChangeDataManager.GetSalePricelistRateChanges(pricelistId, countryIds);
         }
 
         public List<SalePricelistRPChange> GetFilteredSalePriceListRPChanges(int pricelistId, List<int> countryIds)
         {
-            SalePricelistRPChangeDataManager salePricelistRpChangeDataManager = new SalePricelistRPChangeDataManager();
-            return salePricelistRpChangeDataManager.GetSalePriceListRPChanges(pricelistId, countryIds);
+            return _salePricelistRpChangeDataManager.GetSalePriceListRPChanges(pricelistId, countryIds);
         }
 
         public SalePriceListSnapShot GetSalePriceListSnapShot(int priceListId)
         {
-            SalePriceListSnapShotDataManager salePriceListSnapShotDataManager = new SalePriceListSnapShotDataManager();
-            return salePriceListSnapShotDataManager.GetSalePriceListSnapShot(priceListId);
+            return _salePriceListSnapShotDataManager.GetSalePriceListSnapShot(priceListId);
         }
 
-        public void SaveCustomerChangesToDb(IEnumerable<SalePriceListCustomerChange> salePriceLists)
+        public void SaveCustomerChangesToDb(IEnumerable<SalePriceListCustomerChange> salePriceListsCustomerChange)
         {
-            throw new NotImplementedException();
+            if (salePriceListsCustomerChange == null || !salePriceListsCustomerChange.Any())
+                return;
+
+            _salePricelistCustomerChangeNewDataManager.Bulk(salePriceListsCustomerChange);
         }
 
         public void SaveCustomerCodeChangesToDb(IEnumerable<SalePricelistCodeChange> codeChanges)
         {
-            throw new NotImplementedException();
+            SalePricelistCodeChangeNewDataManager salePricelistCodeChangeNewDataManager = new SalePricelistCodeChangeNewDataManager();
+            salePricelistCodeChangeNewDataManager.Bulk(codeChanges);
         }
 
         public void SaveCustomerRoutingProductChangesToDb(IEnumerable<SalePricelistRPChange> routingProductChanges, long processInstanceId)
@@ -51,8 +59,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void SaveCustomerRateChangesToDb(IEnumerable<SalePricelistRateChange> rateChanges, long processInstanceId)
         {
-            SalePricelistRateChangeNewDataManager salePricelistRateChangeNewDataManager = new SalePricelistRateChangeNewDataManager();
-            salePricelistRateChangeNewDataManager.Bulk(rateChanges, processInstanceId);
+            _salePricelistRateChangeNewDataManager.Bulk(rateChanges, processInstanceId);
         }
 
         public void SaveSalePriceListSnapshotToDb(IEnumerable<SalePriceListSnapShot> salePriceListSaleCodeSnapshots)
@@ -60,15 +67,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (salePriceListSaleCodeSnapshots == null || !salePriceListSaleCodeSnapshots.Any())
                 return;
 
-            SalePriceListSnapShotDataManager salePriceListSnapShotDataManager = new SalePriceListSnapShotDataManager();
-            salePriceListSnapShotDataManager.Bulk(salePriceListSaleCodeSnapshots);
+            _salePriceListSnapShotDataManager.Bulk(salePriceListSaleCodeSnapshots);
 
         }
 
         public List<SalePriceListNew> GetTemporaryPriceLists(TemporarySalePriceListQuery query)
         {
-            SalePriceListNewDataManager salePriceListNewDataManager = new SalePriceListNewDataManager();
-            return salePriceListNewDataManager.GetOwnerSalePriceListsNew((int)SalePriceListOwnerType.Customer, (int)SalePriceListType.None, query.ProcessInstanceId);
+            return _salePriceListNewDataManager.GetOwnerSalePriceListsNew((int)SalePriceListOwnerType.Customer, (int)SalePriceListType.None, query.ProcessInstanceId);
         }
 
         public IEnumerable<CustomerRatePreview> GetCustomerRatePreviews(CustomerRatePreviewQuery query)
@@ -85,14 +90,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<RoutingProductPreview> GetRoutingProductPreviews(RoutingProductPreviewQuery query)
         {
-            SalePricelistRPChangeNewDataManager salePricelistRpChangeNewDataManager = new SalePricelistRPChangeNewDataManager();
-            return salePricelistRpChangeNewDataManager.GetSalePriceListRPChangeNewByCustomerId(query.ProcessInstanceId, query.CustomerIds);
+            return _salePricelistRpChangeNewDataManager.GetSalePriceListRPChangeNewByCustomerId(query.ProcessInstanceId, query.CustomerIds);
         }
 
         public IEnumerable<int> GetAffectedCustomerIdsRPChangesByProcessInstanceId(long processInstanceId)
         {
-            SalePricelistRPChangeNewDataManager salePricelistRpChangeNewDataManager = new SalePricelistRPChangeNewDataManager();
-            return salePricelistRpChangeNewDataManager.GetAffectedCustomerIds(processInstanceId);
+            return _salePricelistRpChangeNewDataManager.GetAffectedCustomerIds(processInstanceId);
         }
 
         public IEnumerable<int> GetAffectedCustomerIdsNewCountryChangesByProcessInstanceId(long processInstanceId)
@@ -103,20 +106,17 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<int> GetAffectedCustomerIdsRateChangesByProcessInstanceId(long processInstanceId)
         {
-            SalePricelistRateChangeNewDataManager salePricelistRateChangeNewDataManager = new SalePricelistRateChangeNewDataManager();
-            return salePricelistRateChangeNewDataManager.GetDistinctAffectedCustomerIds(processInstanceId);
+            return _salePricelistRateChangeNewDataManager.GetDistinctAffectedCustomerIds(processInstanceId);
         }
 
         public bool AreSalePriceListCodeSnapShotUpdated(ref object updateHandle)
         {
-            SalePriceListSnapShotDataManager salePriceListSnapShotDataManager = new SalePriceListSnapShotDataManager();
-            return salePriceListSnapShotDataManager.AreSalePriceListCodeSnapShotUpdated(ref updateHandle);
+            return _salePriceListSnapShotDataManager.AreSalePriceListCodeSnapShotUpdated(ref updateHandle);
         }
 
         public bool DoCustomerTemporaryPricelistsExists(long processInstanceId)
         {
-            SalePriceListNewDataManager salePriceListNewDataManager = new SalePriceListNewDataManager();
-            var salePriceListNew = salePriceListNewDataManager.GetSalePriceListNew(processInstanceId);
+            var salePriceListNew = _salePriceListNewDataManager.GetSalePriceListNew(processInstanceId);
             return salePriceListNew != null;
         }
         #endregion

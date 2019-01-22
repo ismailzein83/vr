@@ -116,7 +116,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             }
 
             whereQuery.NullCondition(COL_RateTypeID);
-            BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
+            BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
             return queryContext.GetItems(SupplierRateMapper);
         }
 
@@ -165,7 +165,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereQuery = selectQuery.Where();
             whereQuery.NullCondition(COL_RateTypeID);
-            BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
+            BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
 
             whereQuery.ListCondition(RDBListConditionOperator.IN, supplierZoneIds);
 
@@ -232,7 +232,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (effectiveOn.HasValue)
             {
                 if (isEffectiveInFuture)
-                    BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                    BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
                 else
                     BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
             }
@@ -326,7 +326,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereQuery.EqualsCondition(COL_ZoneID).Value(zoneId);
             whereQuery.NotNullCondition(COL_RateTypeID);
 
-            BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
+            BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
 
             return queryContext.GetItems(SupplierOtherRateMapper);
         }

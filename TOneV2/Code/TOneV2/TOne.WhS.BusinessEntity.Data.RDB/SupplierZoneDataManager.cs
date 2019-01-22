@@ -67,7 +67,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var whereQuery = selectQuery.Where();
             whereQuery.EqualsCondition(COL_SupplierID).Value(supplierId);
 
-            BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveDate);
+            BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveDate);
 
             return queryContext.GetItems(SupplierZoneMapper);
         }
@@ -117,7 +117,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 if (isEffectiveInFuture)
                 {
-                    BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                    BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
                 }
                 else
                 {

@@ -1,4 +1,5 @@
-﻿using Vanrise.Entities;
+﻿using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
 
