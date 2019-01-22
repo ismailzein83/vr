@@ -226,11 +226,11 @@
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\SubAccountsGridTemplate.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Services\APIService\RetailAccountBEAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Services\APIService\RetailAccountInfoAPIService.js" />
-    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-whsaccountanalyticqueryinterceptor.js" />
-    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\Templates\RetailAccountVRRestAPIAnalyticQueryInterceptorTemplate.html" />
-    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-retailaccountanalyticqueryinterceptor.js" />
-    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\Templates\WhSAccountVRRestAPIAnalyticQueryInterceptorTemplate.html" />
-    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-retailaccountqueryinterceptor.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-whsaccountqueryinterceptor.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\Templates\RetailAccountVRRestAPIQueryInterceptorTemplate.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-retailaccountqueryinterceptor.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\Templates\WhSAccountVRRestAPIQueryInterceptorTemplate.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-retailaccountrecordinterceptor.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\Templates\RetailAccountVRRestAPIRecordQueryInterceptorTemplate.html" />
   </ItemGroup>
   <ItemGroup>

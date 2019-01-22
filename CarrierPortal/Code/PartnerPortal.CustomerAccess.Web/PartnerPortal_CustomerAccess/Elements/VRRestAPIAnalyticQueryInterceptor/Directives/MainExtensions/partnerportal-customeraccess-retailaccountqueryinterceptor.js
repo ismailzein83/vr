@@ -20,16 +20,16 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Elements/VRRestAPIAnalyticQueryInterceptor/Directives/MainExtensions/Templates/RetailAccountVRRestAPIAnalyticQueryInterceptorTemplate.html'
+			templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Elements/VRRestAPIAnalyticQueryInterceptor/Directives/MainExtensions/Templates/RetailAccountVRRestAPIQueryInterceptorTemplate.html'
         };
 
         function VRRestAPIAnalyticQueryInterceptorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
-                $scope.scopeModel = {};
+				$scope.scopeModel = {};
 
-                defineAPI();
+				defineAPI();
             }
             function defineAPI() {
                 var api = {};
@@ -58,6 +58,6 @@
         }
     }
 
-    app.directive('partnerportalCustomeraccessRetailaccountanalyticqueryinterceptor', VRRestAPIAnalyticQueryInterceptorDirective);
+    app.directive('partnerportalCustomeraccessRetailaccountqueryinterceptor', VRRestAPIAnalyticQueryInterceptorDirective);
 
 })(app);

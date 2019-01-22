@@ -17,7 +17,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Elements/VRRestAPIAnalyticQueryInterceptor/Directives/MainExtensions/Templates/WhSAccountVRRestAPIAnalyticQueryInterceptorTemplate.html'
+            templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Elements/VRRestAPIAnalyticQueryInterceptor/Directives/MainExtensions/Templates/WhSAccountVRRestAPIQueryInterceptorTemplate.html'
         };
 
         function VRRestAPIAnalyticQueryInterceptorCtor($scope, ctrl, $attrs) {
@@ -29,7 +29,7 @@
                 defineAPI();
             }
             function defineAPI() {
-                var api = {};
+				var api = {};
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.vrRestAPIAnalyticQueryInterceptor != undefined) {
@@ -53,6 +53,6 @@
         }
     }
 
-    app.directive('partnerportalCustomeraccessWhsaccountanalyticqueryinterceptor', VRRestAPIAnalyticQueryInterceptorDirective);
+    app.directive('partnerportalCustomeraccessWhsaccountqueryinterceptor', VRRestAPIAnalyticQueryInterceptorDirective);
 
 })(app);

@@ -27,13 +27,13 @@
             this.initializeController = initializeController;
             $scope.scopeModel = {};
 
-            function initializeController() {
+			function initializeController() {
                 defineAPI();
             }
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
+				api.load = function (payload) {
                     if (payload != undefined) {
                         if (payload.vrRestAPIRecordQueryInterceptor != undefined)
                         {
@@ -58,6 +58,6 @@
         }
     }
 
-    app.directive('partnerportalCustomeraccessRetailaccountqueryinterceptor', RestAPIRecordQueryInterceptorDirective);
+    app.directive('partnerportalCustomeraccessRetailaccountrecordinterceptor', RestAPIRecordQueryInterceptorDirective);
 
 })(app);
