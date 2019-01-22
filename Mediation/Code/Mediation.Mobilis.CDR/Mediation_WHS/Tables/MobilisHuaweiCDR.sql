@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Mediation_WHS].[MobilisHuaweiCDR] (
-    [Id]                           BIGINT           NULL,
+    [Id]                           BIGINT           NOT NULL,
     [SerialNumber]                 BIGINT           NULL,
     [TicketType]                   INT              NULL,
     [CheckSum]                     INT              NULL,
@@ -71,6 +71,9 @@
     [DPC]                          BIGINT           NULL,
     [B_Num]                        INT              NULL,
     [FileName]                     VARCHAR (255)    NULL,
-    [DataSourceId]                 UNIQUEIDENTIFIER NULL
+    [DataSourceId]                 UNIQUEIDENTIFIER NULL,
+    CONSTRAINT [PK_MobilisHuaweiCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
