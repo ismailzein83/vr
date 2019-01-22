@@ -532,8 +532,6 @@
     <Content Include="Images\iconheader.ico" />
     <Content Include="Images\login.png" />
     <Content Include="Images\logoonheader.png" />
-    <Content Include="Images\menu-icons\admin.png" />
-    <Content Include="Images\menu-icons\Administration.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -610,6 +608,9 @@
       <Project>{8dde7260-624a-4e06-ab69-de5fa7742a5d}</Project>
       <Name>Mediation.Teles.Business</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\menu-icons\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
