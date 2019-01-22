@@ -86,7 +86,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var join = selectQuery.Join();//TODO Join needs NoLock
-            saleZoneDataManager.JoinSaleZone(join, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
+            saleZoneDataManager.JoinSaleZone(join, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
             var whereQuery = selectQuery.Where();
             BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, minimumDate);
@@ -105,7 +105,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var join = selectQuery.Join();//TODO Join needs NoLock
-            salePriceListDataManager.JoinSalePriceList(join, "sp", TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(join, "sp", TABLE_ALIAS, COL_PriceListID, true);
 
             var whereQuery = selectQuery.Where();
             whereQuery.EqualsCondition("sp", SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
@@ -148,7 +148,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var salePriceListJoin = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(salePriceListJoin, salePriceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(salePriceListJoin, salePriceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
 
             var joinContext = selectQuery.Join();
             var joinStatement = joinContext.Join(tempTableQuery, "customerInfo");
@@ -187,7 +187,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var joinContext = selectQuery.Join();
 
-            salePriceListDataManager.JoinSalePriceList(joinContext, salePriceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(joinContext, salePriceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
 
             var joinStatement = joinContext.Join(tempTableQuery, "customerInfo");
             joinStatement.JoinType(RDBJoinType.Inner);
@@ -223,7 +223,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var join = selectQuery.Join();
 
-            salePriceListDataManager.JoinSalePriceList(join, priceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(join, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
 
             var whereQuery = selectQuery.Where();
             whereQuery.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
@@ -247,7 +247,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var join = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(join, priceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(join, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
 
             var whereQuery = selectQuery.Where();
             whereQuery.EqualsCondition(priceListTableAlias, SalePriceListDataManager.COL_OwnerType).Value((int)ownerType);
@@ -282,7 +282,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             //TODO add withNolock on join
             var joinContext = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
 
             var whereQuery = selectQuery.Where();
             whereQuery.LessOrEqualCondition(COL_BED).DateNow();
@@ -310,7 +310,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             //TODO add withNolock on join
             var joinContext = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
 
             var whereQuery = selectQuery.Where();
 
@@ -339,7 +339,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             //TODO add withNolock on join
             var joinContext = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
 
             var whereQuery = selectQuery.Where();
 
@@ -375,7 +375,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             //TODO add withNolock on join
             var joinContext = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
 
             var whereQuery = selectQuery.Where();
 
@@ -413,7 +413,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             //TODO add withNolock on join
             var joinContext = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
 
             var whereQuery = selectQuery.Where();
 
@@ -456,7 +456,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             //TODO add withNolock on join
             var joinContext = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(joinContext, priceListTableAlias, TABLE_ALIAS, COL_PriceListID, true);
 
             var whereQuery = selectQuery.Where();
 
@@ -510,8 +510,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.GetItems(SaleRateMapper);
         }
 
-        public IEnumerable<SaleRate> GetAllSaleRatesByOwnerType(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds,
-            bool getNormalRates, bool getOtherRates)
+        public IEnumerable<SaleRate> GetAllSaleRatesByOwnerType(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
         {
             var salePriceListDataManager = new SalePriceListDataManager();
             var queryContext = new RDBQueryContext(GetDataProvider());
@@ -521,7 +520,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             //TODO add withNolock on join
             var joinContext = selectQuery.Join();
-            salePriceListDataManager.JoinSalePriceList(joinContext, "p", TABLE_ALIAS, COL_PriceListID);
+            salePriceListDataManager.JoinSalePriceList(joinContext, "p", TABLE_ALIAS, COL_PriceListID, true);
 
             var whereQuery = selectQuery.Where();
 

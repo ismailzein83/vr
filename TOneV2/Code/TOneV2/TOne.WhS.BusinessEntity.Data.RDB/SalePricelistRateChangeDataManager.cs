@@ -23,8 +23,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_EED = "EED";
         const string COL_RoutingProductID = "RoutingProductID";
         const string COL_CurrencyID = "CurrencyID";
-        const string COL_LastModifiedTime = "LastModifiedTime";
-        const string COL_CreatedTime = "CreatedTime";
 
 
         static SalePricelistRateChangeDataManager()
@@ -42,16 +40,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_RoutingProductID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_CurrencyID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
                 DBTableName = "SalePricelistRateChange",
-                Columns = columns,
-                CreatedTimeColumnName = COL_CreatedTime,
-                ModifiedTimeColumnName = COL_LastModifiedTime
+                Columns = columns
 
             });
         }
@@ -108,18 +102,18 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SalePricelistRateChange
             {
-                ZoneName = reader.GetString(COL_ZoneName),
+                PricelistId = reader.GetInt(COL_PricelistId),
+                Rate = reader.GetDecimal(COL_Rate),
                 RateTypeId = reader.GetNullableInt(COL_RateTypeId),
                 RecentRate = reader.GetNullableDecimal(COL_RecentRate),
-                Rate = reader.GetDecimal(COL_Rate),
+                CountryId = reader.GetInt(COL_CountryID),
+                ZoneName = reader.GetString(COL_ZoneName),
+                ZoneId = reader.GetNullableLong(COL_ZoneID),
                 ChangeType = (RateChangeType)reader.GetInt(COL_Change),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                CurrencyId = reader.GetInt(COL_CurrencyID),
-                PricelistId = reader.GetInt(COL_PricelistId),
-                CountryId = reader.GetInt(COL_CountryID),
                 RoutingProductId = reader.GetIntWithNullHandling(COL_RoutingProductID),
-                ZoneId = reader.GetNullableLong(COL_ZoneID)
+                CurrencyId = reader.GetNullableInt(COL_CurrencyID)
             };
         }
 

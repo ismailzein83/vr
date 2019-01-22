@@ -1,5 +1,4 @@
-﻿using Vanrise.Common;
-using Vanrise.Entities;
+﻿using Vanrise.Entities;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
 
@@ -23,12 +22,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static SalePricelistCustomerChangeDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_BatchID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_PricelistID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CountryID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CustomerID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_BatchID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_PricelistID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CountryID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CustomerID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
@@ -49,6 +48,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var joinStatement = joinContext.Join(TABLE_NAME, customerChangeTableAlias);
             joinStatement.JoinType(RDBJoinType.Inner);
+            joinStatement.WithNoLock();
             var joinCondition = joinStatement.On();
             joinCondition.EqualsCondition(originalTableAlias, originalTableCountryIdCol, customerChangeTableAlias, COL_CountryID);
             joinCondition.EqualsCondition(originalTableAlias, originalTableBatchIdCol, customerChangeTableAlias, COL_BatchID);

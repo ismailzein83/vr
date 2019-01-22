@@ -71,7 +71,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var whereQuery = selectQuery.Where();
             whereQuery.EqualsCondition(salePricelistCustomerChangeTableAlias, SalePricelistCustomerChangeDataManager.COL_PricelistID).Value(pricelistId);
 
-            whereQuery.ListCondition(salePricelistCustomerChangeTableAlias, SalePricelistCustomerChangeDataManager.COL_CountryID, RDBListConditionOperator.IN, countryIds);
+            if (countryIds != null && countryIds.Count > 0)
+                whereQuery.ListCondition(salePricelistCustomerChangeTableAlias, SalePricelistCustomerChangeDataManager.COL_CountryID, RDBListConditionOperator.IN, countryIds);
 
             return queryContext.GetItems(SalePricelistCodeChangeMapper);
         }

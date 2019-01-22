@@ -218,10 +218,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 RateTypeId = reader.GetNullableInt(COL_RateTypeId),
                 RecentRate = reader.GetNullableDecimal(COL_RecentRate),
                 Rate = reader.GetDecimal(COL_Rate),
-                ChangeType = (RateChangeType)reader.GetInt(COL_Change),
+                ChangeType = (RateChangeType)reader.GetIntWithNullHandling(COL_Change),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
-                CurrencyId = reader.GetNullableInt(COL_CurrencyID),
+                CurrencyId = reader.GetNullableInt(COL_CurrencyID)
             };
         }
         private CustomerRatePreview CustomerRatePreviewMapper(IRDBDataReader reader)

@@ -54,7 +54,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void SaveCustomerRoutingProductChangesToDb(IEnumerable<SalePricelistRPChange> routingProductChanges, long processInstanceId)
         {
-            throw new NotImplementedException();
+            SalePricelistRPChangeNewDataManager salePricelistRpChangeNewDataManager = new SalePricelistRPChangeNewDataManager();
+            salePricelistRpChangeNewDataManager.Bulk(routingProductChanges, processInstanceId);
         }
 
         public void SaveCustomerRateChangesToDb(IEnumerable<SalePricelistRateChange> rateChanges, long processInstanceId)
@@ -68,7 +69,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 return;
 
             _salePriceListSnapShotDataManager.Bulk(salePriceListSaleCodeSnapshots);
-
         }
 
         public List<SalePriceListNew> GetTemporaryPriceLists(TemporarySalePriceListQuery query)

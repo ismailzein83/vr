@@ -210,7 +210,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
 
         #region Public Methods
-        public void JoinSalePriceList(RDBJoinContext joinContext, string priceListTableAlias, string originalTableAlias, string originalTablePricelistIdCol)
+        public void JoinSalePriceList(RDBJoinContext joinContext, string priceListTableAlias, string originalTableAlias, string originalTablePricelistIdCol, bool withNoLockOnJoin)
         {
             var joinStatement = joinContext.Join(TABLE_NAME, priceListTableAlias);
             joinStatement.JoinType(RDBJoinType.Inner);
