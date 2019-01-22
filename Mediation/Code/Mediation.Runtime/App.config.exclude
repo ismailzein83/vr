@@ -71,7 +71,9 @@
     
     <add key="Mediation_GenericRecord_DBConnStringKey"          value="Mediation_CDR_DBConnString"/>
     <add key="Mediation_GenericConfig_DBConnStringKey"          value="ConfigurationDBConnString"/>
-    
+    <!-- Begin, keep only one key depending on the client-->
+    <add key="Mediation_CDR_Mobilis_DBConnStringKey"            value="Mediation_CDR_DBConnString"/>
+    <!-- End, keep only one key depending on the client-->
     <add key="BCPDonotDeleteFiles" value="false"/>
     <add key="BusinessProcess_ActivityEventsTracking" value="false"/>
     
