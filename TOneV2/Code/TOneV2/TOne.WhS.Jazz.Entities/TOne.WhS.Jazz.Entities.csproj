@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JazzReportDefinition.cs" />
     <Compile Include="WhSJazzAccountCode\WhsJazzAccountCodeDetail.cs" />
     <Compile Include="WhSJazzAccountCode\WhsJazzAccountCodeFilter.cs" />
     <Compile Include="WhSJazzCustomerTypeCode\WhsJazzCustomerTypeCodeDetail.cs" />
