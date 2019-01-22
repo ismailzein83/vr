@@ -43,5 +43,10 @@ namespace Vanrise.Data.RDB
         {
             _join.JoinType = joinType;
         }
+
+        public void WithNoLock()
+        {
+            _join.WithNoLock = true;
+        }
     }
 }

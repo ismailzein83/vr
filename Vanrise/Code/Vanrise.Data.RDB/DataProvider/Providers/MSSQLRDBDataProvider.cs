@@ -50,6 +50,14 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             else
                 return null;
         }
+
+        protected override string GetTableHintForJoin(RDBJoin join)
+        {
+            if (join.WithNoLock)
+                return "with(nolock)";
+            else
+                return null;
+        }
         public override RDBResolvedQuery ResolveSelectTableRowsCountQuery(IRDBDataProviderResolveSelectTableRowsCountQueryContext context)
         {
             var resolvedQuery = new RDBResolvedQuery();

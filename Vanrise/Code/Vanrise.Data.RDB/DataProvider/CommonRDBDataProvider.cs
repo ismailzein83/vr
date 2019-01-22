@@ -675,11 +675,19 @@ namespace Vanrise.Data.RDB.DataProvider
                     queryBuilder.Append(" LEFT ");
                 queryBuilder.Append(" JOIN ");
                 AddTableToDBQueryBuilder(queryBuilder, join.Table, join.TableAlias, context);
+                var tableHint = GetTableHintForJoin(join);
+                if (tableHint != null)
+                    queryBuilder.Append(string.Concat(" ", tableHint, " "));
                 string joinConditionDBQuery = join.Condition.ToDBQuery(rdbConditionToDBQueryContext);
                 joinConditionDBQuery.ThrowIfNull("joinConditionDBQuery");
                 queryBuilder.Append(" ON ");
                 queryBuilder.Append(joinConditionDBQuery);
             }
+        }
+
+        protected virtual string GetTableHintForJoin(RDBJoin join)
+        {
+            return null;
         }
 
         public override BaseRDBStreamForBulkInsert InitializeStreamForBulkInsert(IRDBDataProviderInitializeStreamForBulkInsertContext context)
