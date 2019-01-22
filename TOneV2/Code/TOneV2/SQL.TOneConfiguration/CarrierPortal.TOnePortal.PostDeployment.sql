@@ -300,7 +300,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('2CF9EADE-97AB-467F-B24B-35345324930A','WhS Account Query Interceptor','WhS Account Query Interceptor','VR_Analytic_RestAPIAnalyticQueryInterceptorConfig','{"Editor":"partnerportal-customeraccess-whsaccountanalyticqueryinterceptor"}'),
+('2CF9EADE-97AB-467F-B24B-35345324930A','WhS Account Query Interceptor','WhS Account Query Interceptor','VR_Analytic_RestAPIAnalyticQueryInterceptorConfig','{"Editor":"partnerportal-customeraccess-whsaccountqueryinterceptor"}'),
 ('1D04AAD6-B9DB-4608-8635-470568A4D193','WhSCarrierAccountsBEDefinition','WhS Carrier Accounts BE','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"cp-whs-carrieraccountsbedefinition-editor"}'),
 ('ECBDB7D3-0664-4F32-A8D0-596E11C3FB3E','WhSSupplierZonesBEDefinition','WhS Supplier Zones BE Definition','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"cp-whs-supplierzonesbedefinition-editor"}'),
 ('0BF49C64-F195-4B0F-9C48-68BEC9D41B9D','WhS Account Query Interceptor','WhS Account Query Interceptor','VR_GenericData_RestAPIRecordQueryInterceptorConfig','{"Editor":"cp-whs-whsaccountqueryinterceptor"}'),

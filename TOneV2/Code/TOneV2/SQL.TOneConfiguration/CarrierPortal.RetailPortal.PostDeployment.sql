@@ -13,8 +13,8 @@ as (select * from (values
 ('bb59e6be-a590-4142-a5b4-f65daaf02ff6','Default','Default','PartnerPortal_CustomerAccess_AccountStatementExtendedSettings','{"Editor":"pportal-custaccess-accountstatement-settings-default"}'),
 ('06377156-8265-4424-bd62-46fa5ab2ce41','Default','Default','PartnerPortal_Invoice_InvoiceViewerTypeExtendedSettings','{"Editor":"partnerportal-invoice-extendedsettings-default"}'),
 
-('B3A94A20-92ED-47BF-86D6-1034B720BE73','Retail Account Query Interceptor','Retail Account Query Interceptor','VR_GenericData_RestAPIRecordQueryInterceptorConfig','{"Editor":"partnerportal-customeraccess-retailaccountqueryinterceptor"}'),
-('1DC33B53-B625-4E51-B427-7952E3817708','Retail Account Query Interceptor','Retail Account Query Interceptor','VR_Analytic_RestAPIAnalyticQueryInterceptorConfig','{"Editor":"partnerportal-customeraccess-retailaccountanalyticqueryinterceptor"}')
+('B3A94A20-92ED-47BF-86D6-1034B720BE73','Retail Account Query Interceptor','Retail Account Query Interceptor','VR_GenericData_RestAPIRecordQueryInterceptorConfig','{"Editor":"partnerportal-customeraccess-retailaccountrecordinterceptor"}'),
+('1DC33B53-B625-4E51-B427-7952E3817708','Retail Account Query Interceptor','Retail Account Query Interceptor','VR_Analytic_RestAPIAnalyticQueryInterceptorConfig','{"Editor":"partnerportal-customeraccess-retailaccountqueryinterceptor"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
