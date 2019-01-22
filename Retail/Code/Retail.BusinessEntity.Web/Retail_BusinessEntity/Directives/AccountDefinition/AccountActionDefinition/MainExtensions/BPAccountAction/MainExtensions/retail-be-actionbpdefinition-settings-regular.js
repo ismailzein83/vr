@@ -101,6 +101,6 @@
         }
     }
 
-    app.directive('retailBeActionbpdefinitionDefinitionsettingsRegular', RegularActionbpdefinitionDefinitionsettingsDirective);
+    app.directive('retailBeActionbpdefinitionSettingsRegular', RegularActionbpdefinitionDefinitionsettingsDirective);
 
 })(app);

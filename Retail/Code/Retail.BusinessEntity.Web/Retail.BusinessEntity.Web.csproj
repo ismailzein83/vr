@@ -292,7 +292,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-accountactiondefinitionsettings-bpaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\EditAccountAction\Templates\EditAccountActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\Templates\BPAccountActionSettingsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\Open360DegreeAccountAction\retail-be-accountactiondefinitionsettings-open360degreeaccount.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\Open360DegreeAccountAction\retail-be-accountactiondefinitionsettings-open360degree.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\Open360DegreeAccountAction\Templates\Open360DegreeAccountActionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-backendexecutor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-selector.js" />
@@ -629,7 +629,7 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeGenericPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypePersonalInfoPartRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountType\Part\Runtime\Templates\AccountTypeResidentialProfilePartRuntimeTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\retail-be-actionbpdefinition-definitionsettings-regular.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\retail-be-actionbpdefinition-settings-regular.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\Templates\RegularActionBPDefinitionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\retail-be-provisioner-definitionsettings-radiussql.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\Action\Definition\ProvisionerDefinition\Templates\RadiusSQLProvisionerDefinitionSettingsTemplate.html" />

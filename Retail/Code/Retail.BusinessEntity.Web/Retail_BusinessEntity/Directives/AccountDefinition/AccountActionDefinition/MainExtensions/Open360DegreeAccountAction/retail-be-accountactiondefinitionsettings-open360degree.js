@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountactiondefinitionsettingsOpen360degreeaccount', ['UtilsService',
+app.directive('retailBeAccountactiondefinitionsettingsOpen360degree', ['UtilsService',
     function (UtilsService) {
         return {
             restrict: 'E',
