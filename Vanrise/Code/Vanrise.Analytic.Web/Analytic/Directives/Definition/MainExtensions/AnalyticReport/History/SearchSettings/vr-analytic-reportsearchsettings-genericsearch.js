@@ -325,9 +325,12 @@
                     }
 
                     var legends = [];
-                    legends.push({
-                        AnalyticTableId:tableSelectorAPI.getSelectedIds()
-                    });
+                    var selectedTableId = tableSelectorAPI.getSelectedIds();
+                    if (selectedTableId != undefined) {
+                        legends.push({
+                            AnalyticTableId: selectedTableId
+                        });
+                    }
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.History.SearchSettings.GenericSearchSettings, Vanrise.Analytic.MainExtensions ",
                         IsRequiredGroupingDimensions: $scope.scopeModel.isRequiredGroupingDimensions,
