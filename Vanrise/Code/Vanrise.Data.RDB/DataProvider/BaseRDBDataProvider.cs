@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Entities;
 
@@ -15,13 +11,7 @@ namespace Vanrise.Data.RDB
 
         public abstract string NowDateTimeFunction { get; }
 
-        public virtual string EmptyStringValue
-        {
-            get
-            {
-                return string.Empty;
-            }
-        }
+        public virtual string EmptyStringValue { get { return string.Empty; } }
 
         public abstract string ConvertToDBParameterName(string parameterName, RDBParameterDirection parameterDirection);
 
@@ -175,35 +165,17 @@ namespace Vanrise.Data.RDB
 
         bool IsMainStatement { get; }
 
-        IRDBTableQuerySource Table
-        {
-            get;
-        }
+        IRDBTableQuerySource Table { get; }
 
-        string TableAlias
-        {
-            get;
-        }
+        string TableAlias { get; }
 
-        long? NbOfRecords
-        {
-            get;
-        }
+        long? NbOfRecords { get; }
 
-        List<RDBSelectColumn> Columns
-        {
-            get;
-        }
+        List<RDBSelectColumn> Columns { get; }
 
-        List<RDBJoin> Joins
-        {
-            get;
-        }
+        List<RDBJoin> Joins { get; }
 
-        BaseRDBCondition Condition
-        {
-            get;
-        }
+        BaseRDBCondition Condition { get; }
 
         RDBGroupBy GroupBy { get; }
 
@@ -245,60 +217,27 @@ namespace Vanrise.Data.RDB
             this.WithNoLock = withNoLock;
         }
 
-        public RDBQueryBuilderContext QueryBuilderContext
-        {
-            get;
-            private set;
-        }
+        public RDBQueryBuilderContext QueryBuilderContext { get; private set; }
 
-        public bool IsMainStatement
-        {
-            get;
-            private set;
-        }
+        public bool IsMainStatement { get; private set; }
 
-        public IRDBTableQuerySource Table
-        {
-            get;
-            private set;
-        }
+        public IRDBTableQuerySource Table { get; private set; }
 
-        public string TableAlias
-        {
-            get;
-            private set;
-        }
+        public string TableAlias { get; private set; }
 
-        public long? NbOfRecords
-        {
-            get;
-            private set;
-        }
+        public long? NbOfRecords { get; private set; }
 
-        public List<RDBSelectColumn> Columns
-        {
-            get;
-            private set;
-        }
+        public List<RDBSelectColumn> Columns { get; private set; }
 
-        public List<RDBJoin> Joins
-        {
-            get;
-            private set;
-        }
+        public List<RDBJoin> Joins { get; private set; }
 
-        public BaseRDBCondition Condition
-        {
-            get;
-            private set;
-        }
+        public BaseRDBCondition Condition { get; private set; }
 
         public RDBGroupBy GroupBy { get; private set; }
 
         public List<RDBSelectSortColumn> SortColumns { get; private set; }
 
         public bool WithNoLock { get; private set; }
-
     }
 
     public interface IRDBDataProviderResolveSelectTableRowsCountQueryContext : IBaseRDBResolveQueryContext
@@ -318,17 +257,9 @@ namespace Vanrise.Data.RDB
             this.TableName = tableName;
         }
 
-        public string SchemaName
-        {
-            get;
-            private set;
-        }
+        public string SchemaName { get; private set; }
 
-        public string TableName
-        {
-            get;
-            private set;
-        }
+        public string TableName { get; private set; }
     }
 
     public class RDBResolvedQuery
@@ -425,19 +356,11 @@ namespace Vanrise.Data.RDB
             this.SelectColumns = selectColumns;
         }
 
-        public RDBQueryBuilderContext QueryBuilderContext
-        {
-            get;
-            private set;
-        }
+        public RDBQueryBuilderContext QueryBuilderContext { get; private set; }
 
         public IRDBTableQuerySource Table { get; private set; }
 
-        public string TableAlias
-        {
-            get;
-            private set;
-        }
+        public string TableAlias { get; private set; }
 
         public List<RDBUpdateColumn> ColumnValues { get; private set; }
 
@@ -571,29 +494,13 @@ namespace Vanrise.Data.RDB
             this.PrimaryKeyIndexNonClustered = primaryKeyIndexNonClustered;
         }
 
-        public string SchemaName
-        {
-            get;
-            private set;
-        }
+        public string SchemaName { get; private set; }
 
-        public string TableName
-        {
-            get;
-            private set;
-        }
+        public string TableName { get; private set; }
 
-        public Dictionary<string, RDBCreateTableColumnDefinition> Columns
-        {
-            get;
-            private set;
-        }
+        public Dictionary<string, RDBCreateTableColumnDefinition> Columns { get; private set; }
 
-        public bool PrimaryKeyIndexNonClustered
-        {
-            get;
-            private set;
-        }
+        public bool PrimaryKeyIndexNonClustered { get; private set; }
     }
 
     public interface IRDBDataProviderResolveTableDropQueryContext : IBaseRDBResolveQueryContext
@@ -613,17 +520,9 @@ namespace Vanrise.Data.RDB
             this.TableName = tableName;
         }
 
-        public string SchemaName
-        {
-            get;
-            private set;
-        }
+        public string SchemaName { get; private set; }
 
-        public string TableName
-        {
-            get;
-            private set;
-        }
+        public string TableName { get; private set; }
     }
 
     public interface IRDBDataProviderResolveCheckIfTableExistsQueryContext : IBaseRDBResolveQueryContext
@@ -643,17 +542,9 @@ namespace Vanrise.Data.RDB
             this.TableName = tableName;
         }
 
-        public string SchemaName
-        {
-            get;
-            private set;
-        }
+        public string SchemaName { get; private set; }
 
-        public string TableName
-        {
-            get;
-            private set;
-        }
+        public string TableName { get; private set; }
     }
 
     public interface IRDBDataProviderResolveIndexCreationQueryContext : IBaseRDBResolveQueryContext
@@ -682,35 +573,15 @@ namespace Vanrise.Data.RDB
             this.IndexName = indexName;
         }
 
-        public string SchemaName
-        {
-            get;
-            private set;
-        }
+        public string SchemaName { get; private set; }
 
-        public string TableName
-        {
-            get;
-            private set;
-        }
+        public string TableName { get; private set; }
 
-        public RDBCreateIndexType IndexType
-        {
-            get;
-            private set;
-        }
+        public RDBCreateIndexType IndexType { get; private set; }
 
-        public string IndexName
-        {
-            get;
-            private set;
-        }
+        public string IndexName { get; private set; }
 
-        public Dictionary<string, RDBCreateIndexDirection> ColumnNames
-        {
-            get;
-            private set;
-        }
+        public Dictionary<string, RDBCreateIndexDirection> ColumnNames { get; private set; }
     }
 
     public interface IRDBDataProviderResolveTempTableCreationQueryContext : IBaseRDBResolveQueryContext
@@ -735,19 +606,9 @@ namespace Vanrise.Data.RDB
             this.Columns = columns;
         }
 
+        public Dictionary<string, RDBTempTableColumnDefinition> Columns { get; private set; }
 
-        public Dictionary<string, RDBTempTableColumnDefinition> Columns
-        {
-            get;
-            private set;
-        }
-
-
-        public string TempTableName
-        {
-            set;
-            get;
-        }
+        public string TempTableName { set; get; }
     }
 
     public interface IRDBDataProviderResolveTempTableDropQueryContext : IBaseRDBResolveQueryContext
@@ -764,11 +625,7 @@ namespace Vanrise.Data.RDB
         }
 
 
-        public string TempTableName
-        {
-            get;
-            private set;
-        }
+        public string TempTableName { get; private set; }
     }
 
     public interface IBaseRDBDataProviderExecuteQueryContext
@@ -792,31 +649,13 @@ namespace Vanrise.Data.RDB
             this.Parameters = parameters;
         }
 
-        public IBaseRDBResolveQueryContext ResolveQueryContext
-        {
-            get;
-            private set;
-        }
+        public IBaseRDBResolveQueryContext ResolveQueryContext { get; private set; }
 
-        public RDBResolvedQuery Query
-        {
-            get;
-            private set;
-        }
+        public RDBResolvedQuery Query { get; private set; }
 
+        public bool ExecuteTransactional { get; private set; }
 
-        public bool ExecuteTransactional
-        {
-            get;
-            private set;
-        }
-
-        public Dictionary<string, RDBParameter> Parameters
-        {
-
-            get;
-            private set;
-        }
+        public Dictionary<string, RDBParameter> Parameters { get; private set; }
     }
 
     public interface IRDBDataProviderExecuteReaderContext : IBaseRDBDataProviderExecuteQueryContext
@@ -862,17 +701,9 @@ namespace Vanrise.Data.RDB
             }
         }
 
-        public string DBTableName
-        {
-            get;
-            private set;
-        }
+        public string DBTableName { get; private set; }
 
-        public List<RDBTableColumnDefinition> Columns
-        {
-            get;
-            private set;
-        }
+        public List<RDBTableColumnDefinition> Columns { get; private set; }
 
         public char FieldSeparator { get; private set; }
 
