@@ -71,5 +71,8 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.Telephony)]
         ServiceAddition = 19,
 
+        [LineOfBusiness(LineOfBusiness.LeasedLine)]
+        ChangeSpeed = 20,
+
     }
 }
