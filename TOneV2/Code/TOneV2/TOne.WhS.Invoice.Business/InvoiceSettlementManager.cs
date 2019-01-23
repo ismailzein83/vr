@@ -467,7 +467,7 @@ namespace TOne.WhS.Invoice.Business
                         if (innvoiceDetails != null)
                         {
                             var items = invoiceItems.FindAllRecords(x => x.InvoiceId == invoice.InvoiceId);
-                            foreach (var invoiceItem in invoiceItems)
+                            foreach (var invoiceItem in items)
                             {
                                 var invoiceItemDetail = invoiceItem.Details as InvoiceBySaleCurrencyItemDetails;
                                 invoiceItemDetail.ThrowIfNull("invoiceBySaleCurrencyItemDetails");

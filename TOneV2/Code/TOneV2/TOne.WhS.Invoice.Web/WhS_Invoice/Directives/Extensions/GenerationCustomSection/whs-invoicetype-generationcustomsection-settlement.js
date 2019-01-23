@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_BE_FinancialAccountAPIService", "WhS_BE_CommisssionTypeEnum",'WhS_Invoice_IncludedInvoicesInSettlementService','WhS_Invoice_IncludedInvoicesInSettlementAPIService',
-    function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_FinancialAccountAPIService, WhS_BE_CommisssionTypeEnum, WhS_Invoice_IncludedInvoicesInSettlementService, WhS_Invoice_IncludedInvoicesInSettlementAPIService) {
+app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ['$filter',"UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_BE_FinancialAccountAPIService", "WhS_BE_CommisssionTypeEnum",'WhS_Invoice_IncludedInvoicesInSettlementService','WhS_Invoice_IncludedInvoicesInSettlementAPIService',
+    function ($filter,UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_FinancialAccountAPIService, WhS_BE_CommisssionTypeEnum, WhS_Invoice_IncludedInvoicesInSettlementService, WhS_Invoice_IncludedInvoicesInSettlementAPIService) {
 
         var directiveDefinitionObject = {
 
@@ -214,8 +214,9 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
                         if (s != "$type")
                         {
                             if (counter > 0)
-                                $scope.scopeModel.supplierCountSummary += ',';
-                            $scope.scopeModel.supplierCountSummary += +summaryPayload[s] + ' ' + s;
+                                $scope.scopeModel.supplierCountSummary += ' | ';
+                            var formatedSummaryPayload = $filter('vrtextOrNumber')(summaryPayload[s]);
+                            $scope.scopeModel.supplierCountSummary += formatedSummaryPayload + ' ' + s;
                             counter++;
                         }
                     }
@@ -247,9 +248,10 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
                         if (s != "$type")
                         {
                             if (counter > 0)
-                                $scope.scopeModel.customerCountSummary += ',';
+                                $scope.scopeModel.customerCountSummary += ' | ';
+                            var formatedSummaryPayload = $filter('vrtextOrNumber')(summaryPayload[s]);
 
-                            $scope.scopeModel.customerCountSummary += summaryPayload[s] + ' ' + s;
+                            $scope.scopeModel.customerCountSummary += formatedSummaryPayload + ' ' + s;
                             counter++;
                         }
                     }
