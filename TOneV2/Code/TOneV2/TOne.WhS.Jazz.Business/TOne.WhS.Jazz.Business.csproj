@@ -55,9 +55,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WhSJazzRegionSettingsCustomObject.cs" />
+    <Compile Include="WhSJazzMarketSettingsCustomObject.cs" />
+    <Compile Include="WhSJazzAmountCalculationCustomObject.cs" />
     <Compile Include="AccountCodeCustomObject.cs" />
     <Compile Include="WhSJazzTaxCodeManager.cs" />
-    <Compile Include="WhSJazzTransactionTypeManager.cs" />
+    <Compile Include="WhSJazzTransactionTypeCodeManager.cs" />
     <Compile Include="WhSJazzSwitchCodeManager.cs" />
     <Compile Include="WhSJazzMarketCodeManager.cs" />
     <Compile Include="WhSJazzProductServiceCodeManager.cs" />

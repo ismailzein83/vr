@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
-
+using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
     public class WhSJazzSwitchCodeManager
@@ -89,43 +89,5 @@ namespace TOne.WhS.Jazz.Business
         }
 
     }
-
-    public class WhSJazzSwitchCode
-    {
-        public Guid ID { get; set; }
-        public int SwitchId { get; set; }
-        public string Code { get; set; }
-        public DateTime CreatedTime { get; set; }
-        public DateTime LastModifiedTime { get; set; }
-        public int LastModifiedBy { get; set; }
-        public int CreatedBy { get; set; }
-    }
-
-    public class WhSJazzSwitchCodeDetail
-    {
-        public Guid ID { get; set; }
-        public int SwitchId { get; set; }
-        
-    }
-    public class WhSJazzSwitchCodeInfoFilter
-    {
-        public IEnumerable<IWhSJazzSwitchCodeFilter> Filters { get; set; }
-
-    }
    
-
-    public interface IWhSJazzSwitchCodeFilter
-    {
-        bool IsMatch(IWhSJazzSwitchCodeFilterContext context);
-    }
-
-    public interface IWhSJazzSwitchCodeFilterContext
-    {
-        WhSJazzSwitchCode SwitchCode { get; }
-    }
-
-    public class WhSJazzSwitchCodeFilterContext : IWhSJazzSwitchCodeFilterContext
-    {
-        public WhSJazzSwitchCode SwitchCode { get; set; }
-    }
 }

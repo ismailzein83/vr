@@ -7,65 +7,66 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using TOne.WhS.Jazz.Entities;
+
 namespace TOne.WhS.Jazz.Business
 {
-    public class WhsJazzMarketCodeManager
+    public class WhSJazzTransactionTypeCodeManager
     {
-        public static Guid _definitionId = new Guid("A4E5560B-C331-486D-88A5-263F8DB7F161");
+        public static Guid _definitionId = new Guid("476CC49C-7FAB-482A-B5F3-F91772AF9EDF");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
-        public List<WhSJazzMarketCode> GetAllMarketCodes()
+        public List<WhSJazzTransactionTypeCode> GetAllTransactionTypeCodes()
         {
-            var records = GetCachedMarketCodes();
-            List<WhSJazzMarketCode> marketCodes = null;
+            var records = GetCachedTransactionTypeCodes();
+            List<WhSJazzTransactionTypeCode> transactionTypeCodes = null;
 
             if (records != null && records.Count > 0)
             {
-                marketCodes = new List<WhSJazzMarketCode>();
+                transactionTypeCodes = new List<WhSJazzTransactionTypeCode>();
                 foreach (var record in records)
                 {
-                    marketCodes.Add(record.Value);
+                    transactionTypeCodes.Add(record.Value);
                 }
             }
-            return marketCodes;
+            return transactionTypeCodes;
         }
 
-        public IEnumerable<WhSJazzMarketCodeDetail> GetMarketCodesInfo(WhSJazzMarketCodeInfoFilter filter)
+
+        public IEnumerable<WhSJazzTransactionTypeCodeDetail> GetTransactionTypeCodesInfo(WhSJazzTransactionTypeCodeInfoFilter filter)
         {
-            var marketCodes = GetCachedMarketCodes();
-            Func<WhSJazzMarketCode, bool> filterFunc = (marketCode) =>
+            var transactionTypeCodes = GetCachedTransactionTypeCodes();
+            Func<WhSJazzTransactionTypeCode, bool> filterFunc = (transactionTypeCode) =>
             {
                 if (filter != null)
                 {
                     if (filter.Filters != null && filter.Filters.Count() > 0)
                     {
-                        var context = new WhSJazzMarketCodeFilterContext
+                        var context = new WhSJazzTransactionTypeCodeFilterContext
                         {
-                            MarketCode = marketCode
+                            TransactionTypeCode = transactionTypeCode
                         };
-                        foreach (var marketCodeFilter in filter.Filters)
+                        foreach (var transactionTypeCodeFilter in filter.Filters)
                         {
-                            if (!marketCodeFilter.IsMatch(context))
+                            if (!transactionTypeCodeFilter.IsMatch(context))
                                 return false;
                         }
                     }
                 }
                 return true;
             };
-            return marketCodes.MapRecords((record) =>
+            return transactionTypeCodes.MapRecords((record) =>
             {
-                return MarketCodeInfoMapper(record);
+                return TransactionTypeCodeInfoMapper(record);
             }, filterFunc);
 
         }
-
-        private Dictionary<Guid, WhSJazzMarketCode> GetCachedMarketCodes()
+        private Dictionary<Guid, WhSJazzTransactionTypeCode> GetCachedTransactionTypeCodes()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedMarketCodes", _definitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedTransactionTypeCodes", _definitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
-                Dictionary<Guid, WhSJazzMarketCode> result = new Dictionary<Guid, WhSJazzMarketCode>();
+                Dictionary<Guid, WhSJazzTransactionTypeCode> result = new Dictionary<Guid, WhSJazzTransactionTypeCode>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -74,34 +75,33 @@ namespace TOne.WhS.Jazz.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        WhSJazzMarketCode marketCode = new WhSJazzMarketCode()
+                        WhSJazzTransactionTypeCode transactionType = new WhSJazzTransactionTypeCode()
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
-                            Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
-                            ProductServiceId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ProductServiceId"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
                             LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
 
                         };
-                        result.Add(marketCode.ID, marketCode);
+                        result.Add(transactionType.ID, transactionType);
                     }
                 }
 
                 return result;
             });
         }
-        private WhSJazzMarketCodeDetail MarketCodeInfoMapper(WhSJazzMarketCode marketCode)
+
+        private WhSJazzTransactionTypeCodeDetail TransactionTypeCodeInfoMapper(WhSJazzTransactionTypeCode whSJazzTransactionTypeCode)
         {
-            return new WhSJazzMarketCodeDetail
+            return new WhSJazzTransactionTypeCodeDetail
             {
-                ID = marketCode.ID,
-                Name = marketCode.Name
+                ID = whSJazzTransactionTypeCode.ID,
+                Name = whSJazzTransactionTypeCode.Name
             };
         }
 
     }
-
+  
 }

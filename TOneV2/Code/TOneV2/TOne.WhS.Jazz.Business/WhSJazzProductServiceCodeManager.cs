@@ -6,76 +6,102 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
-
+using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
-    public class WhsJazzProductServiceCodeManager
+    public class WhSJazzProductServiceCodeManager
     {
-        //    public static Guid _definitionId = new Guid("6222BD42-668C-4574-86B5-A71A1F21B623");
-        //    GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
+        public static Guid _definitionId = new Guid("6222BD42-668C-4574-86B5-A71A1F21B623");
+        GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
-        //    public List<WhSJazzProductService> GetAllProductServices()
-        //    {
-        //        var records = GetCachedProductServices();
-        //        List<WhSJazzProductService> productServices = null;
-
-        //        if (records != null && records.Count > 0)
-        //        {
-        //            productServices = new List<WhSJazzProductService>();
-        //            foreach (var record in records)
-        //            {
-        //                productServices.Add(record.Value);
-        //            }
-        //        }
-        //        return productServices;
-        //    }
-
-
-        //    private Dictionary<Guid, WhSJazzProductService> GetCachedProductServices()
-        //    {
-        //        GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-        //        return genericBusinessEntityManager.GetCachedOrCreate("GetCachedProductServices", _definitionId, () =>
-        //        {
-        //            List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
-        //            Dictionary<Guid, WhSJazzProductService> result = new Dictionary<Guid, WhSJazzProductService>();
-
-        //            if (genericBusinessEntities != null)
-        //            {
-        //                foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
-        //                {
-        //                    if (genericBusinessEntity.FieldValues == null)
-        //                        continue;
-
-        //                    WhSJazzProductService productService = new WhSJazzProductService()
-        //                    {
-        //                        ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
-        //                        Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
-        //                        Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
-        //                        CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
-        //                        CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
-        //                        LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
-        //                        LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
-
-        //                    };
-        //                    result.Add(productService.ID, productService);
-        //                }
-        //            }
-
-        //            return result;
-        //        });
-        //    }
-
-        //}
-
-        public class WhSJazzProductService
+        public List<WhSJazzProductServiceCode> GetAllProductServiceCodes()
         {
-            public Guid ID { get; set; }
-            public string Name { get; set; }
-            public string Code { get; set; }
-            public DateTime CreatedTime { get; set; }
-            public DateTime LastModifiedTime { get; set; }
-            public int LastModifiedBy { get; set; }
-            public int CreatedBy { get; set; }
+            var records = GetCachedProductServiceCodes();
+            List<WhSJazzProductServiceCode> productServiceCodes = null;
+
+            if (records != null && records.Count > 0)
+            {
+                productServiceCodes = new List<WhSJazzProductServiceCode>();
+                foreach (var record in records)
+                {
+                    productServiceCodes.Add(record.Value);
+                }
+            }
+            return productServiceCodes;
         }
+
+
+        private Dictionary<Guid, WhSJazzProductServiceCode> GetCachedProductServiceCodes()
+        {
+            GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedProductServiceCodes", _definitionId, () =>
+            {
+                List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
+                Dictionary<Guid, WhSJazzProductServiceCode> result = new Dictionary<Guid, WhSJazzProductServiceCode>();
+
+                if (genericBusinessEntities != null)
+                {
+                    foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
+                    {
+                        if (genericBusinessEntity.FieldValues == null)
+                            continue;
+
+                        WhSJazzProductServiceCode productServiceCode = new WhSJazzProductServiceCode()
+                        {
+                            ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
+                            Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
+                            Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
+                            CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
+                            CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
+                            LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
+                            LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
+
+                        };
+                        result.Add(productServiceCode.ID, productServiceCode);
+                    }
+                }
+
+                return result;
+            });
+        }
+
+        public IEnumerable<WhSJazzProductServiceCodeDetail> GetProductServiceCodesInfo(WhSJazzProductServiceCodeInfoFilter filter)
+        {
+            var productServiceCodes = GetCachedProductServiceCodes();
+            Func<WhSJazzProductServiceCode, bool> filterFunc = (productServiceCode) =>
+            {
+                if (filter != null)
+                {
+                    if (filter.Filters != null && filter.Filters.Count() > 0)
+                    {
+                        var context = new WhSJazzProductServiceCodeFilterContext
+                        {
+                            ProductServiceCode = productServiceCode
+                        };
+                        foreach (var productServiceCodeFilter in filter.Filters)
+                        {
+                            if (!productServiceCodeFilter.IsMatch(context))
+                                return false;
+                        }
+                    }
+                }
+                return true;
+            };
+            return productServiceCodes.MapRecords((record) =>
+            {
+                return ProductServiceCodeInfoMapper(record);
+            }, filterFunc);
+
+        }
+        private WhSJazzProductServiceCodeDetail ProductServiceCodeInfoMapper(WhSJazzProductServiceCode productServiceCode)
+        {
+            return new WhSJazzProductServiceCodeDetail
+            {
+                ID = productServiceCode.ID,
+                Name = productServiceCode.Name
+            };
+        }
+
+
     }
 }

@@ -9,32 +9,32 @@ using Vanrise.Common;
 using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
-    public class WhsJazzCustomerTypeCodeManager
+    public class WhSJazzCustomerTypeCodeManager
     {
         public static Guid _definitionId = new Guid("D1A82FF2-E1F4-4496-93D5-626BBDA9CDC9");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
-        public List<WhSJazzCustomerTypeCode> GetAllCustomerTypes()
+        public List<WhSJazzCustomerTypeCode> GetAllCustomerTypeCodes()
         {
-            var records = GetCachedCustomerTypes();
-            List<WhSJazzCustomerTypeCode> customerTypes = null;
+            var records = GetCachedCustomerTypeCodes();
+            List<WhSJazzCustomerTypeCode> customerTypeCodes = null;
 
             if (records != null && records.Count > 0)
             {
-                customerTypes = new List<WhSJazzCustomerTypeCode>();
+                customerTypeCodes = new List<WhSJazzCustomerTypeCode>();
                 foreach (var record in records)
                 {
-                    customerTypes.Add(record.Value);
+                    customerTypeCodes.Add(record.Value);
                 }
             }
-            return customerTypes;
+            return customerTypeCodes;
         }
 
 
-        private Dictionary<Guid, WhSJazzCustomerTypeCode> GetCachedCustomerTypes()
+        private Dictionary<Guid, WhSJazzCustomerTypeCode> GetCachedCustomerTypeCodes()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedCustomerTypes", _definitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedCustomerTypeCodes", _definitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
                 Dictionary<Guid, WhSJazzCustomerTypeCode> result = new Dictionary<Guid, WhSJazzCustomerTypeCode>();
@@ -46,7 +46,7 @@ namespace TOne.WhS.Jazz.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        WhSJazzCustomerTypeCode customerType = new WhSJazzCustomerTypeCode()
+                        WhSJazzCustomerTypeCode customerTypeCode = new WhSJazzCustomerTypeCode()
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
@@ -57,15 +57,50 @@ namespace TOne.WhS.Jazz.Business
                             LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
 
                         };
-                        result.Add(customerType.ID, customerType);
+                        result.Add(customerTypeCode.ID, customerTypeCode);
                     }
                 }
 
                 return result;
             });
-        }       
+        }
 
-       
+        public IEnumerable<WhSJazzCustomerTypeCodeDetail> GetCustomerTypeCodesInfo(WhSJazzCustomerTypeCodeInfoFilter filter)
+        {
+            var customerTypeCodes = GetCachedCustomerTypeCodes();
+            Func<WhSJazzCustomerTypeCode, bool> filterFunc = (customerTypeCode) =>
+            {
+                if (filter != null)
+                {
+                    if (filter.Filters != null && filter.Filters.Count() > 0)
+                    {
+                        var context = new WhSJazzCustomerTypeCodeFilterContext
+                        {
+                            CustomerTypeCode = customerTypeCode
+                        };
+                        foreach (var customerTypeCodeFilter in filter.Filters)
+                        {
+                            if (!customerTypeCodeFilter.IsMatch(context))
+                                return false;
+                        }
+                    }
+                }
+                return true;
+            };
+            return customerTypeCodes.MapRecords((record) =>
+            {
+                return CustomerTypeCodeInfoMapper(record);
+            }, filterFunc);
+
+        }
+        private WhSJazzCustomerTypeCodeDetail CustomerTypeCodeInfoMapper(WhSJazzCustomerTypeCode customerTypeCode)
+        {
+            return new WhSJazzCustomerTypeCodeDetail
+            {
+                ID = customerTypeCode.ID,
+                Name = customerTypeCode.Name
+            };
+        }
 
     }
 
