@@ -62,7 +62,7 @@ namespace Vanrise.RDB.Tests.Common
 
             public override bool InsertEntity(IEntityMainOperationTesterInsertEntityContext<VRDynamicAPIModule, IVRDynamicAPIModuleDataManager> context)
             {
-                return context.DataManager.Insert(context.Entity, out int id);
+                return context.DataManager.Insert(context.Entity);
             }
 
             public override bool UpdateEntity(IEntityMainOperationTesterUpdateEntityContext<VRDynamicAPIModule, IVRDynamicAPIModuleDataManager> context)

@@ -25,11 +25,11 @@ namespace Vanrise.RDB.Tests.Common
             VRDynamicAPI VRDynamicAPI = new VRDynamicAPI
             {
                 Name = "RDB TEST",
-                ModuleId = 1,
+                ModuleId = Guid.NewGuid(),
                 Settings = new VRDynamicAPISettings
                 {
                 },
-                VRDynamicAPIId = 1,
+                VRDynamicAPIId = Guid.NewGuid(),
                 CreatedBy = 1,
                 LastModifiedBy = 1
             };
@@ -70,7 +70,7 @@ namespace Vanrise.RDB.Tests.Common
 
             public override bool InsertEntity(IEntityMainOperationTesterInsertEntityContext<VRDynamicAPI, IVRDynamicAPIDataManager> context)
             {
-                return context.DataManager.Insert(context.Entity, out int id);
+                return context.DataManager.Insert(context.Entity);
             }
 
             public override bool UpdateEntity(IEntityMainOperationTesterUpdateEntityContext<VRDynamicAPI, IVRDynamicAPIDataManager> context)
