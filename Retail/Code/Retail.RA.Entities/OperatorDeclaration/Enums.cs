@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retail.RA.Business
 {
@@ -22,13 +18,14 @@ namespace Retail.RA.Business
     public enum CustomerDeliveryStatus
     {
         Delivered = 0,
-        NotDelivered = 1
+        Failed = 1,
+        Submitted = 2
     }
 
     public enum VendorDeliveryStatus
     {
         Delivered = 0,
-        NotDelivered = 1
+        Failed = 1
     }
 
     public enum ServiceType

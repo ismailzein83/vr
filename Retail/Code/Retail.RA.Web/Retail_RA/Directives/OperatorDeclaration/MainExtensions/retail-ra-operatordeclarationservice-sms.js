@@ -49,7 +49,7 @@
                     if (payload != undefined) {
 
                         SMSEntity = payload.settings;
-                        $scope.scopeModel.amount = SMSEntity.Amount;
+                        $scope.scopeModel.revenue = SMSEntity.Revenue;
                         $scope.scopeModel.numberOfSMSs = SMSEntity.NumberOfSMSs;
                     }
 
@@ -80,7 +80,7 @@
                         $type: "Retail.RA.Business.SMS,Retail.RA.Business",
                         TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
                         NumberOfSMSs: $scope.scopeModel.numberOfSMSs,
-                        Amount: $scope.scopeModel.amount
+                        Revenue: $scope.scopeModel.Revenue
                     };
                 };
 

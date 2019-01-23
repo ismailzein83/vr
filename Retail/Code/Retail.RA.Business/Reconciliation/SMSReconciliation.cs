@@ -35,7 +35,7 @@ namespace Retail.RA.Business
             if (periodDefinitions == null || periodDefinitions.Count == 0)
                 return rawMemoryRecords;
 
-            var allOperatorDeclarations = operatorDeclarationManager.GetVoiceDeclarationServices(periodDefinitions, filteredOperatorIds);
+            var allOperatorDeclarations = operatorDeclarationManager.GetSMSDeclarationServices(periodDefinitions, filteredOperatorIds);
 
             var analyticManager = new AnalyticManager();
             AnalyticQuery analyticQuery = new AnalyticQuery
@@ -79,9 +79,9 @@ namespace Retail.RA.Business
                     {
                         PeriodId = operatorDeclaration.PeriodDefinition.PeriodDefinitionId,
                         OperatorId = operatorId,
-                        TrafficDirection = operatorDeclaration.VoiceSettings.TrafficDirection,
-                        DeclaredRevenue = operatorDeclaration.VoiceSettings.DeclaredRevenue,
-                        DeclaredNbrOfSMS = operatorDeclaration.VoiceSettings.DeclaredNumberOfCalls
+                        TrafficDirection = operatorDeclaration.SMSSettings.TrafficDirection,
+                        DeclaredRevenue = operatorDeclaration.SMSSettings.Revenue,
+                        DeclaredNbrOfSMS = operatorDeclaration.SMSSettings.NumberOfSMSs
                     };
 
                     if (smsBillingRecordsByOperator.TryGetValue(operatorId, out var operatorSMSBillingRecords))
@@ -90,7 +90,7 @@ namespace Retail.RA.Business
                         for (int i = startingIndex; i < orderedBillingRecords.Count; i++)
                         {
                             var smsbillingRecord = orderedBillingRecords[i];
-                            if (smsbillingRecord.PeriodDefinitionId == operatorDeclaration.PeriodDefinition.PeriodDefinitionId && smsbillingRecord.TrafficDirection == operatorDeclaration.VoiceSettings.TrafficDirection)
+                            if (smsbillingRecord.PeriodDefinitionId == operatorDeclaration.PeriodDefinition.PeriodDefinitionId && smsbillingRecord.TrafficDirection == operatorDeclaration.SMSSettings.TrafficDirection)
                             {
                                 smsReconcilationObj.CalculatedRevenue += smsbillingRecord.Revenue;
                                 smsReconcilationObj.CalculatedNbrOfSMS += smsbillingRecord.NbrOfSMS;

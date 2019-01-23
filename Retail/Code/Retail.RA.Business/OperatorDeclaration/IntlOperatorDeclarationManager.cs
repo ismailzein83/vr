@@ -71,6 +71,60 @@ namespace Retail.RA.Business
             return operatorDeclarations.OrderBy(item => item.OperatorId).ThenBy(item => item.PeriodDefinition.FromDate);
         }
 
+        public IEnumerable<IntlSMSDeclarationService> GetSMSDeclarationServices(List<PeriodDefinition> periodDefinitions, IEnumerable<long> filteredOperatorIds)
+        {
+            List<IntlSMSDeclarationService> operatorDeclarations = new List<IntlSMSDeclarationService>();
+            Dictionary<int, List<IntlSMSDeclarationService>> operatorDeclarationByPeriodId = GetCachedSMSDeclaration();
+
+            foreach (var periodDefinition in periodDefinitions)
+            {
+                if (operatorDeclarationByPeriodId.TryGetValue(periodDefinition.PeriodDefinitionId, out var operatorDeclaration))
+                {
+                    var filteredOperatorDeclaration = operatorDeclaration.FindAllRecords(item => filteredOperatorIds == null || filteredOperatorIds.Contains(item.OperatorId));
+                    if (filteredOperatorDeclaration != null && filteredOperatorDeclaration.Any())
+                        operatorDeclarations.AddRange(filteredOperatorDeclaration);
+                }
+            }
+            return operatorDeclarations.OrderBy(item => item.OperatorId).ThenBy(item => item.PeriodDefinition.FromDate);
+        }
+
+        public IEnumerable<IntlSMSDeclarationService> GetSMSDeclarationServices(List<PeriodDefinition> periodDefinitions, TrafficDirection trafficDirection)
+        {
+            List<IntlSMSDeclarationService> operatorDeclarations = new List<IntlSMSDeclarationService>();
+            Dictionary<int, List<IntlSMSDeclarationService>> operatorDeclarationByPeriodId =
+                trafficDirection == TrafficDirection.IN
+                    ? GetCachedInSMSDeclaration()
+                    : GetCachedOutSMSDeclaration();
+
+            foreach (var periodDefinition in periodDefinitions)
+            {
+                if (operatorDeclarationByPeriodId.TryGetValue(periodDefinition.PeriodDefinitionId, out var operatorDeclaration))
+                    operatorDeclarations.AddRange(operatorDeclaration);
+            }
+            return operatorDeclarations.OrderBy(item => item.OperatorId).ThenBy(item => item.PeriodDefinition.FromDate);
+        }
+
+        public IEnumerable<IntlSMSDeclarationService> GetSMSDeclarationServices(List<PeriodDefinition> periodDefinitions, TrafficDirection trafficDirection, IEnumerable<long> filteredOperatorIds)
+        {
+            List<IntlSMSDeclarationService> operatorDeclarations = new List<IntlSMSDeclarationService>();
+            Dictionary<int, List<IntlSMSDeclarationService>> operatorDeclarationByPeriodId =
+                trafficDirection == TrafficDirection.IN
+                    ? GetCachedInSMSDeclaration()
+                    : GetCachedOutSMSDeclaration();
+
+            foreach (var periodDefinition in periodDefinitions)
+            {
+                if (operatorDeclarationByPeriodId.TryGetValue(periodDefinition.PeriodDefinitionId, out var operatorDeclaration))
+                {
+                    var filteredOperatorDeclaration = operatorDeclaration.FindAllRecords(item => filteredOperatorIds.Contains(item.OperatorId));
+                    if (filteredOperatorDeclaration != null && filteredOperatorDeclaration.Any())
+                        operatorDeclarations.AddRange(filteredOperatorDeclaration);
+                }
+            }
+            return operatorDeclarations.OrderBy(item => item.OperatorId).ThenBy(item => item.PeriodDefinition.FromDate);
+        }
+
+
         #region Private Methhods
         private Dictionary<int, List<IntlVoiceDeclarationService>> GetCachedOutVoiceDeclaration()
         {
@@ -130,7 +184,6 @@ namespace Retail.RA.Business
                     return operatorDeclarationByPeriod;
                 });
         }
-
         private Dictionary<int, List<IntlVoiceDeclarationService>> GetCachedVoiceDeclaration()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
@@ -152,6 +205,94 @@ namespace Retail.RA.Business
                                     OperatorId = operatorDeclaration.OperatorId,
                                     PeriodDefinition = new PeriodDefinitionManager().GetPeriodDefinition(operatorDeclaration.PeriodId),
                                     VoiceSettings = voiceDeclarationServiceSettings
+                                });
+                            }
+                        }
+
+                    }
+                    return operatorDeclarationByPeriod;
+                });
+        }
+        
+        private Dictionary<int, List<IntlSMSDeclarationService>> GetCachedOutSMSDeclaration()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedOutSMSDeclaration", BeDefinitionId,
+                () =>
+                {
+                    List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+                    Dictionary<int, List<IntlSMSDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlSMSDeclarationService>>();
+                    foreach (var operatorDeclaration in cachedOperatorDeclarations)
+                    {
+                        foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
+                        {
+                            if (operatorDeclarationService.Settings is SMS smsDeclarationServiceSettings && smsDeclarationServiceSettings.TrafficDirection == TrafficDirection.OUT)
+                            {
+                                List<IntlSMSDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
+                                operatorDeclarations.Add(new IntlSMSDeclarationService
+                                {
+                                    ID = operatorDeclaration.ID,
+                                    OperatorId = operatorDeclaration.OperatorId,
+                                    PeriodDefinition = new PeriodDefinitionManager().GetPeriodDefinition(operatorDeclaration.PeriodId),
+                                    SMSSettings = smsDeclarationServiceSettings
+                                });
+                            }
+                        }
+
+                    }
+                    return operatorDeclarationByPeriod;
+                });
+        }
+        private Dictionary<int, List<IntlSMSDeclarationService>> GetCachedInSMSDeclaration()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedInSMSDeclaration", BeDefinitionId,
+                () =>
+                {
+                    List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+                    Dictionary<int, List<IntlSMSDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlSMSDeclarationService>>();
+                    foreach (var operatorDeclaration in cachedOperatorDeclarations)
+                    {
+                        foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
+                        {
+                            if (operatorDeclarationService.Settings is SMS smsDeclarationServiceSettings && smsDeclarationServiceSettings.TrafficDirection == TrafficDirection.IN)
+                            {
+                                List<IntlSMSDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
+                                operatorDeclarations.Add(new IntlSMSDeclarationService
+                                {
+                                    ID = operatorDeclaration.ID,
+                                    OperatorId = operatorDeclaration.OperatorId,
+                                    PeriodDefinition = new PeriodDefinitionManager().GetPeriodDefinition(operatorDeclaration.PeriodId),
+                                    SMSSettings = smsDeclarationServiceSettings
+                                });
+                            }
+                        }
+
+                    }
+                    return operatorDeclarationByPeriod;
+                });
+        }
+        private Dictionary<int, List<IntlSMSDeclarationService>> GetCachedSMSDeclaration()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedSMSDeclaration", BeDefinitionId,
+                () =>
+                {
+                    List<OperatorDeclaration> cachedOperatorDeclarations = GetCachedOperatorDeclarations();
+                    Dictionary<int, List<IntlSMSDeclarationService>> operatorDeclarationByPeriod = new Dictionary<int, List<IntlSMSDeclarationService>>();
+                    foreach (var operatorDeclaration in cachedOperatorDeclarations)
+                    {
+                        foreach (var operatorDeclarationService in operatorDeclaration.OperatorDeclarationServices.Services)
+                        {
+                            if (operatorDeclarationService.Settings is SMS smsDeclarationServiceSettings)
+                            {
+                                List<IntlSMSDeclarationService> operatorDeclarations = operatorDeclarationByPeriod.GetOrCreateItem(operatorDeclaration.PeriodId);
+                                operatorDeclarations.Add(new IntlSMSDeclarationService
+                                {
+                                    ID = operatorDeclaration.ID,
+                                    OperatorId = operatorDeclaration.OperatorId,
+                                    PeriodDefinition = new PeriodDefinitionManager().GetPeriodDefinition(operatorDeclaration.PeriodId),
+                                    SMSSettings = smsDeclarationServiceSettings
                                 });
                             }
                         }
@@ -198,5 +339,13 @@ namespace Retail.RA.Business
         public PeriodDefinition PeriodDefinition { get; set; }
         public long OperatorId { get; set; }
         public Voice VoiceSettings { get; set; }
+    }
+
+    public class IntlSMSDeclarationService
+    {
+        public long ID { get; set; }
+        public PeriodDefinition PeriodDefinition { get; set; }
+        public long OperatorId { get; set; }
+        public SMS SMSSettings { get; set; }
     }
 }

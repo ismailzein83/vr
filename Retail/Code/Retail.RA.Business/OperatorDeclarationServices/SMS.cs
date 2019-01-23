@@ -22,6 +22,7 @@ namespace Retail.RA.Business
         public TrafficDirection TrafficDirection { get; set; }
 
         public long NumberOfSMSs { get; set; }
-        public Decimal Amount { get; set; }
+
+        public Decimal Revenue { get; set; }
     }
 }
