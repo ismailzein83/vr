@@ -823,3 +823,26 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
+
+
+	
+--[common].[VRComponentType]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[ConfigID],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('0355BD70-FF28-4038-8626-25479134AF87','Billing Statistic','A5B07696-61B4-4371-B52C-770667E0EB05','{"$type":"Vanrise.Analytic.Entities.VRAutomatedReportQueryDefinitionSettings, Vanrise.Analytic.Entities","VRComponentTypeConfigId":"a5b07696-61b4-4371-b52c-770667e0eb05","ExtendedSettings":{"$type":"Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.AnalyticTableQueryDefinitionSettings, Vanrise.Analytic.MainExtensions","ConfigId":"4ecc5dc2-5781-437a-af6c-acaedc3c4a5d","AnalyticTableId":"4f4c1dc0-6024-4ab9-933d-20f456360112","RuntimeEditor":"vr-analytic-analytictablequerydefinitionsettings-runtimeeditor"}}'),
+('2E407CC3-996E-4F19-92A7-255B7CE72001','Billing CDRs','A5B07696-61B4-4371-B52C-770667E0EB05','{"$type":"Vanrise.Analytic.Entities.VRAutomatedReportQueryDefinitionSettings, Vanrise.Analytic.Entities","VRComponentTypeConfigId":"a5b07696-61b4-4371-b52c-770667e0eb05","ExtendedSettings":{"$type":"Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.RecordSearchQueryDefinitionSettings, Vanrise.Analytic.MainExtensions","ConfigId":"76dc3174-8fb1-445b-a118-b9e86db46a5e","DataRecordTypeId":"d818c097-822d-4ea5-ae22-f7d208154a78","DataRecordStorages":{"$type":"System.Collections.Generic.List`1[[Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.RecordSearchQueryDefinitionDataRecordStorage, Vanrise.Analytic.MainExtensions]], mscorlib","$values":[{"$type":"Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.RecordSearchQueryDefinitionDataRecordStorage, Vanrise.Analytic.MainExtensions","DataRecordStorageId":"df2e0c11-750b-4c9b-b232-829421f1187d","IsSelected":false},{"$type":"Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.RecordSearchQueryDefinitionDataRecordStorage, Vanrise.Analytic.MainExtensions","DataRecordStorageId":"01811e55-6f13-42db-92b7-589aa6ee4b75","IsSelected":false},{"$type":"Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.RecordSearchQueryDefinitionDataRecordStorage, Vanrise.Analytic.MainExtensions","DataRecordStorageId":"5cd31703-3bc6-41eb-b204-ef473cb394e4","IsSelected":true}]},"RuntimeEditor":"vr-analytic-recordsearchquerydefinitionsettings-runtimeeditor"}}'),
+('83A05CAA-D996-4989-BFCD-5D21B2A61A87','Traffic Statistic','A5B07696-61B4-4371-B52C-770667E0EB05','{"$type":"Vanrise.Analytic.Entities.VRAutomatedReportQueryDefinitionSettings, Vanrise.Analytic.Entities","VRComponentTypeConfigId":"a5b07696-61b4-4371-b52c-770667e0eb05","ExtendedSettings":{"$type":"Vanrise.Analytic.MainExtensions.AutomatedReport.Queries.AnalyticTableQueryDefinitionSettings, Vanrise.Analytic.MainExtensions","ConfigId":"4ecc5dc2-5781-437a-af6c-acaedc3c4a5d","AnalyticTableId":"d722f557-9cdc-4634-a86e-a941bf51c035","RuntimeEditor":"vr-analytic-analytictablequerydefinitionsettings-runtimeeditor"}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ConfigID],[Settings]))
+merge	[common].[VRComponentType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ConfigID] = s.[ConfigID],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[ConfigID],[Settings])
+	values(s.[ID],s.[Name],s.[ConfigID],s.[Settings]);
