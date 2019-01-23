@@ -83,32 +83,26 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             var queryContext = new RDBQueryContext(GetDataProvider());
 
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, input.NbOfRows, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(COL_ProcessInstanceID).Value(input.BPInstanceID);
+
             if (input.GreaterThanID == default(long))
             {
-                var selectQuery = queryContext.AddSelectQuery();
-                selectQuery.From(TABLE_NAME, TABLE_ALIAS, input.NbOfRows, true);
-                selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-                var whereContext = selectQuery.Where();
-                whereContext.EqualsCondition(COL_ProcessInstanceID).Value(input.BPInstanceID);
-
                 var sortContext = selectQuery.Sort();
                 sortContext.ByColumn(COL_ID, RDBSortDirection.DESC);
             }
             else
             {
-                var selectQuery = queryContext.AddSelectQuery();
-                selectQuery.From(TABLE_NAME, TABLE_ALIAS, input.NbOfRows, true);
-                selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-                var whereContext = selectQuery.Where();
-                whereContext.EqualsCondition(COL_ProcessInstanceID).Value(input.BPInstanceID);
                 whereContext.GreaterThanCondition(COL_ID).Value(input.GreaterThanID);
 
                 var sortContext = selectQuery.Sort();
-                sortContext.ByColumn(COL_ID, RDBSortDirection.DESC);
-
+                sortContext.ByColumn(COL_ID, RDBSortDirection.ASC);
             }
+
             return queryContext.GetItems(BPValidationMessageMapper);
         }
         public void Insert(IEnumerable<Entities.BPValidationMessage> messages)
@@ -136,13 +130,13 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             BPValidationMessage bpValidationMessage = new BPValidationMessage()
             {
-                ValidationMessageId = reader.GetLong("ID"),
-                ProcessInstanceId = reader.GetLong("ProcessInstanceID"),
-                ParentProcessId = reader.GetNullableLong("ParentProcessId"),
-                TargetKey = reader.GetString("TargetKey"),
-                TargetType = reader.GetString("TargetType"),
-                Severity = (ActionSeverity)reader.GetInt("Severity"),
-                Message = reader.GetString("Message")
+                ValidationMessageId = reader.GetLong(COL_ID),
+                ProcessInstanceId = reader.GetLong(COL_ProcessInstanceID),
+                ParentProcessId = reader.GetNullableLong(COL_ParentProcessID),
+                TargetKey = reader.GetString(COL_TargetKey),
+                TargetType = reader.GetString(COL_TargetType),
+                Severity = (ActionSeverity)reader.GetInt(COL_Severity),
+                Message = reader.GetString(COL_Message)
             };
             return bpValidationMessage;
         }

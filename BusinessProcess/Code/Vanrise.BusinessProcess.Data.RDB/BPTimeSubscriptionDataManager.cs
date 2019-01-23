@@ -91,15 +91,15 @@ namespace Vanrise.BusinessProcess.Data.RDB
         #region Private Methods
         BPTimeSubscription BPTimeSubscriptionMapper(IRDBDataReader reader)
         {
-            string serializedPayload = reader.GetString("Payload");
+            string serializedPayload = reader.GetString(COL_Payload);
 
             return new BPTimeSubscription
             {
-                BPTimeSubscriptionId = reader.GetLong("ID"),
-                ProcessInstanceId = reader.GetLong("ProcessInstanceID"),
-                Bookmark = reader.GetString("Bookmark"),
+                BPTimeSubscriptionId = reader.GetLong(COL_ID),
+                ProcessInstanceId = reader.GetLong(COL_ProcessInstanceID),
+                Bookmark = reader.GetString(COL_Bookmark),
                 Payload = !string.IsNullOrEmpty(serializedPayload) ? Vanrise.Common.Serializer.Deserialize<BPTimeSubscriptionPayload>(serializedPayload) : null,
-                DueTime = reader.GetDateTime("DueTime")
+                DueTime = reader.GetDateTime(COL_DueTime)
             };
         }
         #endregion

@@ -64,10 +64,10 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             var bpTaskType = new BPTaskType
             {
-                BPTaskTypeId = reader.GetGuid("ID"),
-                Name = reader.GetString("Name")
+                BPTaskTypeId = reader.GetGuid(COL_ID),
+                Name = reader.GetString(COL_Name)
             };
-            string settings = reader.GetString("Settings");
+            string settings = reader.GetString(COL_Settings);
             if (!String.IsNullOrWhiteSpace(settings))
                 bpTaskType.Settings = Serializer.Deserialize<BPTaskTypeSettings>(settings);
 

@@ -147,26 +147,23 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
         public void WriteTrackingMessagesToDB(List<BPTrackingMessage> lstTrackingMsgs)
         {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-
             if (lstTrackingMsgs != null)
             {
+                var queryContext = new RDBQueryContext(GetDataProvider());
+
+                var multipleInsertQuery = queryContext.AddInsertMultipleRowsQuery();
+                multipleInsertQuery.IntoTable(TABLE_NAME);
+
                 foreach (var msg in lstTrackingMsgs)
                 {
-                    var insertQuery = queryContext.AddInsertQuery();
-                    insertQuery.IntoTable(TABLE_NAME);
-
+                    var insertQuery = multipleInsertQuery.AddRow();
                     insertQuery.Column(COL_ProcessInstanceID).Value(msg.ProcessInstanceId);
 
                     if (msg.ParentProcessId.HasValue)
                         insertQuery.Column(COL_ParentProcessID).Value(msg.ParentProcessId.Value);
 
-                    if (!string.IsNullOrEmpty(msg.TrackingMessage))
-                        insertQuery.Column(COL_TrackingMessage).Value(msg.TrackingMessage);
-
-                    if (!string.IsNullOrEmpty(msg.ExceptionDetail))
-                        insertQuery.Column(COL_ExceptionDetail).Value(msg.ExceptionDetail);
-
+                    insertQuery.Column(COL_TrackingMessage).Value(msg.TrackingMessage);
+                    insertQuery.Column(COL_ExceptionDetail).Value(msg.ExceptionDetail);
                     insertQuery.Column(COL_Severity).Value((int)msg.Severity);
                     insertQuery.Column(COL_EventTime).Value(msg.EventTime);
                 }
@@ -180,7 +177,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             {
                 Id = reader.GetLong(COL_ID),
                 ProcessInstanceId = reader.GetLong(COL_ProcessInstanceID),
-                ParentProcessId = reader.GetNullableLong(COL_ProcessInstanceID),
+                ParentProcessId = reader.GetNullableLong(COL_ParentProcessID),
                 Severity = (LogEntryType)reader.GetInt(COL_Severity),
                 TrackingMessage = reader.GetString(COL_TrackingMessage),
                 ExceptionDetail = reader.GetString(COL_ExceptionDetail),

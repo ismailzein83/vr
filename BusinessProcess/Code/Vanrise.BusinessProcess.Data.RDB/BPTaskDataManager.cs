@@ -67,15 +67,13 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
-            // --Status: 50 = Completed, 60 = Canceled
-
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
-            updateQuery.Column(COL_Status).Value(60);
+            updateQuery.Column(COL_Status).Value((int)BPTaskStatus.Cancelled);
 
             var whereContext = updateQuery.Where();
             whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
-            whereContext.NotEqualsCondition(COL_Status).Value(50);
+            whereContext.NotEqualsCondition(COL_Status).Value((int)BPTaskStatus.Completed);
 
             queryContext.ExecuteNonQuery();
         }
@@ -93,8 +91,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             if (processInstanceId.HasValue)
                 whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId.Value);
 
-            if (userId.HasValue)
-                whereContext.ContainsCondition(COL_AssignedUsers, userId.Value.ToString());
+            createUserIdCondition(userId, whereContext);
 
             var sortContext = selectQuery.Sort();
             sortContext.ByColumn(COL_ID, RDBSortDirection.DESC);
@@ -135,9 +132,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             if (processInstanceId.HasValue)
                 whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId.Value);
-
-            if (userId.HasValue)
-                whereContext.ContainsCondition(COL_AssignedUsers, userId.Value.ToString());
+            createUserIdCondition(userId, whereContext);
 
             if (lastUpdateHandle == null)
             {
@@ -151,8 +146,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
                 var lastUpdatedTimeSecondConditionContext = lastUpdatedTimeConditionContext.ChildConditionGroup(RDBConditionGroupOperator.AND);
                 lastUpdatedTimeSecondConditionContext.EqualsCondition(COL_LastUpdatedTime).Value(afterLastUpdateTime.Value);
-                
-                    lastUpdatedTimeSecondConditionContext.GreaterThanCondition(COL_ID).Value(afterId.Value);
+
+                lastUpdatedTimeSecondConditionContext.GreaterThanCondition(COL_ID).Value(afterId.Value);
 
                 var sortContext = selectQuery.Sort();
                 sortContext.ByColumn(COL_LastUpdatedTime, RDBSortDirection.ASC);
@@ -186,6 +181,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             return bpTasks;
         }
+
         public bool InsertTask(string title, long processInstanceId, Guid typeId, List<int> assignedUserIds, BPTaskStatus bpTaskStatus, BPTaskData taskData, string assignedUsersDescription, out long taskId)
         {
 
@@ -248,6 +244,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
         #endregion
 
         #region Private Methods
+
         private object BuildLastUpdateHandle(DateTime? lastUpdateTime, long? id)
         {
             if (lastUpdateTime.HasValue && id.HasValue)
@@ -268,36 +265,52 @@ namespace Vanrise.BusinessProcess.Data.RDB
                 id = long.Parse(data[1]);
             }
         }
+
+        private void createUserIdCondition(int? userId, RDBConditionContext whereContext)
+        {
+            if (!userId.HasValue)
+                return;
+
+            var compareConditionContext = whereContext.CompareCondition(RDBCompareConditionOperator.Contains);
+
+            var textConcat = compareConditionContext.Expression1().TextConcatenation();
+            textConcat.Expression1().Value(",");
+            var textConcat1 = textConcat.Expression2().TextConcatenation();
+            textConcat1.Expression1().Column(COL_AssignedUsers);
+            textConcat1.Expression2().Value(",");
+
+            compareConditionContext.Expression2().Value($",{userId.Value},");
+        }
         #endregion
         #region Mappers
         Entities.BPTask BPTaskMapper(IRDBDataReader reader)
         {
             var bpTask = new Entities.BPTask
             {
-                BPTaskId = reader.GetLong("ID"),
-                ProcessInstanceId = reader.GetLong("ProcessInstanceID"),
-                TypeId = reader.GetGuid("TypeID"),
-                Title = reader.GetString("Title"),
-                ExecutedById = reader.GetNullableInt("ExecutedBy"),
-                Status = (BPTaskStatus)reader.GetInt("Status"),
-                CreatedTime = reader.GetDateTime("CreatedTime"),
-                LastUpdatedTime = reader.GetDateTime("LastUpdatedTime"),
-                AssignedUsersDescription = reader.GetString("AssignedUsersDescription"),
-                Notes = reader.GetString("Notes"),
-                Decision = reader.GetString("Decision")
+                BPTaskId = reader.GetLong(COL_ID),
+                ProcessInstanceId = reader.GetLong(COL_ProcessInstanceID),
+                TypeId = reader.GetGuid(COL_TypeID),
+                Title = reader.GetString(COL_Title),
+                ExecutedById = reader.GetNullableInt(COL_ExecutedBy),
+                Status = (BPTaskStatus)reader.GetInt(COL_Status),
+                CreatedTime = reader.GetDateTime(COL_CreatedTime),
+                LastUpdatedTime = reader.GetDateTime(COL_LastUpdatedTime),
+                AssignedUsersDescription = reader.GetString(COL_AssignedUsersDescription),
+                Notes = reader.GetString(COL_Notes),
+                Decision = reader.GetString(COL_Decision)
             };
 
-            string taskData = reader.GetString("TaskData");
+            string taskData = reader.GetString(COL_TaskData);
             if (!String.IsNullOrWhiteSpace(taskData))
                 bpTask.TaskData = Serializer.Deserialize<BPTaskData>(taskData);
 
-            string taskExecutionInformation = reader.GetString("TaskExecutionInformation");
+            string taskExecutionInformation = reader.GetString(COL_TaskExecutionInformation);
             if (!String.IsNullOrWhiteSpace(taskExecutionInformation))
             {
                 bpTask.TaskExecutionInformation = Serializer.Deserialize<BPTaskExecutionInformation>(taskExecutionInformation);
             }
 
-            string assignedUsers = reader.GetString("AssignedUsers");
+            string assignedUsers = reader.GetString(COL_AssignedUsers);
             if (!String.IsNullOrWhiteSpace(assignedUsers))
                 bpTask.AssignedUsers = assignedUsers.Split(',').Select(itm => int.Parse(itm)).ToList();
 

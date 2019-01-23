@@ -62,9 +62,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
-            updateQuery.Column(COL_IsEnabled).Value(0);
+            updateQuery.Column(COL_IsEnabled).Value(false);
             updateQuery.Column(COL_LastModifiedBy).Value(lastModifiedBy);
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
 
             var whereContext = updateQuery.Where();
             whereContext.EqualsCondition(COL_ID).Value(processSynchronisationId);
@@ -77,9 +76,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
-            updateQuery.Column(COL_IsEnabled).Value(1);
+            updateQuery.Column(COL_IsEnabled).Value(true);
             updateQuery.Column(COL_LastModifiedBy).Value(lastModifiedBy);
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
 
             var whereContext = updateQuery.Where();
             whereContext.EqualsCondition(COL_ID).Value(processSynchronisationId);
@@ -121,7 +119,6 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
-            updateQuery.Column(COL_ID).Value(processSynchronisationToUpdate.ProcessSynchronisationId);
             updateQuery.Column(COL_Name).Value(processSynchronisationToUpdate.Name);
             updateQuery.Column(COL_IsEnabled).Value(processSynchronisationToUpdate.IsEnabled);
             if (processSynchronisationToUpdate.Settings != null)
@@ -144,17 +141,17 @@ namespace Vanrise.BusinessProcess.Data.RDB
         #region Mappers
         ProcessSynchronisation ProcessSynchronisationMapper(IRDBDataReader reader)
         {
-            string settings = reader.GetString("Settings");
+            string settings = reader.GetString(COL_Settings);
             return new ProcessSynchronisation
             {
-                ProcessSynchronisationId = reader.GetGuid("ID"),
-                Name = reader.GetString("Name"),
-                IsEnabled = reader.GetBoolean("IsEnabled"),
+                ProcessSynchronisationId = reader.GetGuid(COL_ID),
+                Name = reader.GetString(COL_Name),
+                IsEnabled = reader.GetBoolean(COL_IsEnabled),
                 Settings = !string.IsNullOrEmpty(settings) ? Vanrise.Common.Serializer.Deserialize<ProcessSynchronisationSettings>(settings) : null,
-                CreatedBy = reader.GetInt("CreatedBy"),
-                CreatedTime = reader.GetDateTime("CreatedTime"),
-                LastModifiedBy = reader.GetInt("LastModifiedBy"),
-                LastModifiedTime = reader.GetDateTime("LastModifiedTime")
+                CreatedBy = reader.GetInt(COL_CreatedBy),
+                CreatedTime = reader.GetDateTime(COL_CreatedTime),
+                LastModifiedBy = reader.GetInt(COL_LastModifiedBy),
+                LastModifiedTime = reader.GetDateTime(COL_LastModifiedTime)
             };
         }
         #endregion }

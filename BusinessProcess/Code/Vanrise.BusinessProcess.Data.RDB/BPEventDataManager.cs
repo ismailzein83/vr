@@ -117,11 +117,11 @@ namespace Vanrise.BusinessProcess.Data.RDB
         {
             BPEvent instance = new BPEvent
             {
-                BPEventID = reader.GetLong("ID"),
-                ProcessInstanceID = reader.GetLong("ProcessInstanceID"),
-                Bookmark = reader.GetString("Bookmark")
+                BPEventID = reader.GetLong(COL_ID),
+                ProcessInstanceID = reader.GetLong(COL_ProcessInstanceID),
+                Bookmark = reader.GetString(COL_Bookmark)
             };
-            string payload = reader.GetString("Payload");
+            string payload = reader.GetString(COL_Payload);
             if (!String.IsNullOrWhiteSpace(payload))
                 instance.Payload = Serializer.Deserialize(payload);
             return instance;

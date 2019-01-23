@@ -479,7 +479,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             var whereContext = updateQuery.Where();
             whereContext.EqualsCondition(COL_ID).Value(bpInstanceId);
             whereContext.NullCondition(COL_CancellationRequestUserId);
-            BuildExecutionStatusFilter(allowedStatuses, whereContext);
+            whereContext.ListCondition(COL_ExecutionStatus, RDBListConditionOperator.IN, allowedStatuses.Select(itm => (int)itm));
 
             queryContext.ExecuteNonQuery();
         }
@@ -522,7 +522,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
             updateQuery.Column(COL_AssignmentStatus).Value((int)assignmentStatus);
             updateQuery.Column(COL_StatusUpdatedTime).DateNow();
 
-            if (message != null && message.Length > 0)
+            if (!string.IsNullOrWhiteSpace(message))
                 updateQuery.Column(COL_LastMessage).Value(message);
 
             if (clearServiceInstanceId)
@@ -539,13 +539,13 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
         public void UpdateServiceInstancesAndAssignmentStatus(List<BPInstance> pendingInstancesToUpdate)
         {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
             foreach (var pendingInstance in pendingInstancesToUpdate)
             {
                 if (!pendingInstance.ServiceInstanceId.HasValue)
                     throw new NullReferenceException(String.Format("pendingInstance.ServiceInstanceId. ProcessInstanceId '{0}'", pendingInstance.ProcessInstanceID));
-
-                var queryContext = new RDBQueryContext(GetDataProvider());
-
+                
                 var updateQuery = queryContext.AddUpdateQuery();
                 updateQuery.FromTable(BPINSTANCE_NAME);
                 updateQuery.Column(COL_ServiceInstanceID).Value(pendingInstance.ServiceInstanceId.Value);
@@ -553,9 +553,9 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
                 var whereContext = updateQuery.Where();
                 whereContext.EqualsCondition(COL_ID).Value(pendingInstance.ProcessInstanceID);
-                queryContext.ExecuteNonQuery();
             }
 
+            queryContext.ExecuteNonQuery();
         }
         #endregion
 
@@ -593,8 +593,8 @@ namespace Vanrise.BusinessProcess.Data.RDB
             if (grantedPermissionSetIds == null || grantedPermissionSetIds.Count == 0)
                 whereContext.NullCondition(COL_ViewRequiredPermissionSetId);
             else
-               whereContext.ConditionIfColumnNotNull(COL_ViewRequiredPermissionSetId, RDBConditionGroupOperator.OR).ListCondition(COL_ViewRequiredPermissionSetId, RDBListConditionOperator.IN, grantedPermissionSetIds);
-            
+                whereContext.ConditionIfColumnNotNull(COL_ViewRequiredPermissionSetId, RDBConditionGroupOperator.OR).ListCondition(COL_ViewRequiredPermissionSetId, RDBListConditionOperator.IN, grantedPermissionSetIds);
+
         }
         private void BuildParentIdFilter(int parentId, RDBConditionContext whereContext)
         {
