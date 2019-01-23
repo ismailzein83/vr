@@ -13,9 +13,21 @@
                 trasctionTypeId: genericBusinessEntityId
             });
         }
+
+        function GetAllAccountCodes() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetAllAccountCodes'), {
+            });
+        }
+        function GetAccountCodesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetAccountCodesInfo'), {
+                filter: filter
+            });
+        }
         
         return ({
-            GetTransctionType: GetTransctionType
+            GetTransctionType: GetTransctionType,
+            GetAccountCodesInfo: GetAccountCodesInfo,
+            GetAllAccountCodes: GetAllAccountCodes
         });
     }
 

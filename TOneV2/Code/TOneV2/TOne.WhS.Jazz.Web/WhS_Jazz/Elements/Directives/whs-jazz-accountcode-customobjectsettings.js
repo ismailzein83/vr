@@ -2,9 +2,9 @@
 
     'use strict';
 
-    whsJazzAccountCodeCustomObject.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    whsJazzAccountCodeCustomObjectSettings.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function whsJazzAccountCodeCustomObject(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function whsJazzAccountCodeCustomObjectSettings(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -45,9 +45,9 @@
                     ctrl.onReady(api);
                 }
             }
-        }
+        } 
     }
 
-    app.directive('whsJazzAccountCodeCustomObjectDefinition', whsJazzAccountCodeCustomObject);
+    app.directive('whsJazzAccountcodeCustomobjectsettings', whsJazzAccountCodeCustomObjectSettings);
 
 })(app);

@@ -9,6 +9,7 @@ using TOne.WhS.Jazz.Web;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using TOne.WhS.Jazz.Business;
+using TOne.WhS.Jazz.Entities;
 
 namespace TOne.WhS.Jazz.Web.Controllers
 {
@@ -16,7 +17,7 @@ namespace TOne.WhS.Jazz.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "WhSJazzAccountCode")]
     public class WhSJazzAccountCodeController:BaseAPIController
     {
-        WhsJazzAccountCodeManager _manager = new WhsJazzAccountCodeManager();
+        WhSJazzAccountCodeManager _manager = new WhSJazzAccountCodeManager();
 
         [HttpGet]
         [Route("GetTransctionType")]
@@ -24,6 +25,19 @@ namespace TOne.WhS.Jazz.Web.Controllers
         {
             return _manager.GetAccountCodeGenericBusinessEntity(trasctionTypeId, businessEntityDefinitionId);
         }
+        [HttpGet]
+        [Route("GetAccountCodesInfo")]
+        public IEnumerable<WhSJazzAccountCodeDetail> GetAccountCodesInfo(string filter = null)
+        {
+            WhSJazzAccountCodeInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<WhSJazzAccountCodeInfoFilter>(filter) : null;
+            return _manager.GetAccountCodesInfo(deserializedFilter);
+        }
 
+        [HttpGet]
+        [Route("GetAllAccountCodes")]
+        public IEnumerable<WhSJazzAccountCode> GetAllAccountCodes()
+        {
+            return _manager.GetAllAccountCodes();
+        }
     }
 }

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    whsJazzAccountCodeCustomObject.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService','WhS_Jazz_AccountCodeAPIService'];
+    whsJazzAccountCodeCustomObjectStaticEditor.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService','WhS_Jazz_AccountCodeAPIService'];
 
-    function whsJazzAccountCodeCustomObject(UtilsService, VRUIUtilsService, VRNotificationService, WhS_Jazz_AccountCodeAPIService) {
+    function whsJazzAccountCodeCustomObjectStaticEditor(UtilsService, VRUIUtilsService, VRNotificationService, WhS_Jazz_AccountCodeAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -114,11 +114,13 @@
 
                 api.setData = function (payload) {
                     var Carriers = [];
-                    var selectedIds = carriersSelectorAPI != undefined ? carriersSelectorAPI.getSelectedIds() : carriersSelectorAPI.getSelectedIds();
-                    for (var i = 0; i < selectedIds.length; i++) {
-                        Carriers.push({
-                           CarrierAccountId: selectedIds[i]
-                        });
+                    if (carriersSelectorAPI != undefined && carriersSelectorAPI.getSelectedIds() != undefined) {
+                        var selectedIds = carriersSelectorAPI.getSelectedIds();
+                        for (var i = 0; i < selectedIds.length; i++) {
+                            Carriers.push({
+                                CarrierAccountId: selectedIds[i]
+                            });
+                        }
                     }
                     
                     payload.Carriers = {
@@ -126,7 +128,7 @@
                         Carriers: Carriers,
                     };
                     
-                    payload.TransactionTypeId=transactionTypeSelectorAPI.getSelectedIds()
+                    payload.TransactionTypeId = transactionTypeSelectorAPI.getSelectedIds();
 
                     return payload;
                 };
@@ -138,6 +140,6 @@
         }
     }
 
-    app.directive('whsJazzAccountCodeCustomObjectRuntime', whsJazzAccountCodeCustomObject);
+    app.directive('whsJazzAccountcodeCustomobjectStaticeditor', whsJazzAccountCodeCustomObjectStaticEditor);
 
 })(app);
