@@ -4115,24 +4115,30 @@ vr-overall-widget .list-group-item {
     }
 
     .vr-helpbox .item {
-        width: 120px;
+        width: 129px;
         color: #635F5F;
         background-color: transparent;
         text-align: left;
-        margin-top: 5px;
+        margin-top: 3px;
         border: 0px solid #666;
         cursor: default !important;
-        display:inline-flex;
+        display: inline-flex;
     }
+
     .vr-helpbox .item.clickable {        
         cursor: pointer !important;
     }
 
     .vr-helpbox .item .badge-color {
         display: inline-block;
-        width: 20px;
-        height: 10px;
-        margin: 4px 3px;
+        width: 17px;
+        height: 9px;
+        margin: 1px 3px;
+        border: 1px solid #ddd;
+        box-sizing: content-box;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: bold;
     }
 
 vr-toolbox[medium] .item {

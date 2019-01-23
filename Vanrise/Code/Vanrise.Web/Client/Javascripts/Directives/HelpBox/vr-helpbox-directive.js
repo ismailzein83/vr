@@ -4,6 +4,7 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
         restrict: 'E',
         scope: {
             datasource: '=',
+            onhelpboxclicked: '=',
             datavaluefield: '@',
             datatextfield: '@',
             dataclassfield: '@',
@@ -41,7 +42,11 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
                 if (ctrl.datavaluefield) return ctrl.getObjectProperty(item, ctrl.datavaluefield);
                 return item;
             };
-
+            ctrl.onHelpBoxClicked = function () {
+                if (ctrl.onhelpboxclicked != undefined && typeof (ctrl.onhelpboxclicked) == 'function') {
+                    ctrl.onhelpboxclicked();
+                }
+            };
 
         },
         controllerAs: 'ctrl',
@@ -63,9 +68,9 @@ app.directive('vrHelpbox', ['BaseDirService', function (BaseDirService) {
             if (attrs.isclickable != undefined)
                 addedClasses += " clickable";
             var mainTemplate = '<div  class="vr-helpbox' + layoutClass + '" >'
-                + '<span style="margin-left: -5px;border: 1px solid #ccc;border-radius: 4px;"><div class="item ' + addedClasses + '" ng-repeat="item in ctrl.datasource">'
-                + '<div class="badge-color" ng-class="ctrl.getObjectClass(item)"></div>'
-                + '<span title="{{ctrl.getObjectText(item)}}" ng-class="ctrl.getLabelClass(item)" >{{ctrl.getObjectText(item)}}</span>'
+                + '<span style="margin-left: -5px;border: 1px solid #ccc;border-radius: 4px;" class="' + addedClasses + '" ng-click="ctrl.onHelpBoxClicked()" ><div class="item ' + addedClasses + '" ng-repeat="item in ctrl.datasource">'
+                + '<div class="label badge-color " ng-class="ctrl.getObjectClass(item)" ><span ng-class="ctrl.getLabelClass(item)">abc</span></div>'
+                + '<span title="{{ctrl.getObjectText(item)}}" ng-class="ctrl.getLabelClass(item)" style="text-overflow: ellipsis;overflow: hidden;" >{{ctrl.getObjectText(item)}}</span>'
                 + '</div>'
                 + '</div></span>';
             return labelTemplate + mainTemplate;
