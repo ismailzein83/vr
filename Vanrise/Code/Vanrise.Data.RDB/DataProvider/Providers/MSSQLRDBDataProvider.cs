@@ -373,8 +373,9 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             {
                 var queryBuilder = new StringBuilder();
 
-                if (parameters != null)
+                if (parameters != null && parameters.Count > 0)
                 {
+                    var inParamsQueryBuilder = new StringBuilder();
                     foreach (var prm in parameters.Values)
                     {
                         if (prm.Direction == RDBParameterDirection.Declared)
@@ -386,7 +387,19 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                             queryBuilder.Append(string.Concat(prm.DBParameterName, " ", _dataProvider.GetColumnDBType(prm.DBParameterName, prm.Type, prm.Size, prm.Precision)));
                             queryBuilder.AppendLine();
                         }
+                        else if(prm.Direction == RDBParameterDirection.In)
+                        {
+                            if (inParamsQueryBuilder.Length == 0)
+                                inParamsQueryBuilder.Append(" DECLARE ");
+                            else
+                                inParamsQueryBuilder.Append(", ");
+                            string newDBPrmName = string.Concat(prm.DBParameterName, "_FromOut");
+                            inParamsQueryBuilder.Append(string.Concat(prm.DBParameterName, " ", _dataProvider.GetColumnDBType(prm.DBParameterName, prm.Type, prm.Size, prm.Precision), " = ", newDBPrmName));
+                            prm.DBParameterName = newDBPrmName;
+                            inParamsQueryBuilder.AppendLine();
+                        }
                     }
+                    queryBuilder.Append(inParamsQueryBuilder);
                 }
 
                 foreach (var statement in resolvedQuery.Statements)

@@ -41,7 +41,12 @@ namespace Vanrise.Data.RDB
         internal List<BaseRDBQuery> Queries { get; private set; }
 
         public RDBQueryContext(BaseRDBDataProvider dataProvider)
-            : this(new RDBQueryBuilderContext(dataProvider))
+            : this(dataProvider, false)
+        {
+        }
+
+        public RDBQueryContext(BaseRDBDataProvider dataProvider, bool dontGenerateParameters)
+            : this(new RDBQueryBuilderContext(dataProvider, dontGenerateParameters))
         {
         }
 
@@ -395,10 +400,12 @@ namespace Vanrise.Data.RDB
 
         Dictionary<string, IRDBTableQuerySource> _tableAliases = new Dictionary<string, IRDBTableQuerySource>();
         IRDBTableQuerySource _mainQueryTable;
-
-        public RDBQueryBuilderContext(BaseRDBDataProvider dataProvider)
+        bool _dontGenerateParameters;
+        
+        public RDBQueryBuilderContext(BaseRDBDataProvider dataProvider, bool dontGenerateParameters)
         {
             this.DataProvider = dataProvider;
+            this._dontGenerateParameters = dontGenerateParameters;
         }
 
         public void AddTableAlias(IRDBTableQuerySource table, string tableAlias)
@@ -430,8 +437,16 @@ namespace Vanrise.Data.RDB
 
         public RDBQueryBuilderContext CreateChildContext()
         {
-            RDBQueryBuilderContext childContext = new RDBQueryBuilderContext(this.DataProvider);
+            RDBQueryBuilderContext childContext = new RDBQueryBuilderContext(this.DataProvider, _dontGenerateParameters);
             return childContext;
+        }
+
+        public bool DontGenerateParameters
+        {
+            get
+            {
+                return this._dontGenerateParameters;
+            }
         }
     }
 

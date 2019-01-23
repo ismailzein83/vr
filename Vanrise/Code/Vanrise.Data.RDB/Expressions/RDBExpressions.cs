@@ -32,16 +32,23 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
-            context.AddParameter(new RDBParameter
+            if (context.QueryBuilderContext.DontGenerateParameters)
             {
-                Name = parameterName,
-                DBParameterName = parameterName,
-                Type = RDBDataType.NVarchar,
-                Direction = RDBParameterDirection.In,
-                Value = this.Value
-            });
-            return parameterName;
+                return string.Concat("'", this.Value, "'");
+            }
+            else
+            {
+                string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
+                context.AddParameter(new RDBParameter
+                {
+                    Name = parameterName,
+                    DBParameterName = parameterName,
+                    Type = RDBDataType.NVarchar,
+                    Direction = RDBParameterDirection.In,
+                    Value = this.Value
+                });
+                return parameterName;
+            }
         }
     }
 
@@ -91,16 +98,23 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
-            context.AddParameter(new RDBParameter
+            if (context.QueryBuilderContext.DontGenerateParameters)
             {
-                Name = parameterName,
-                DBParameterName = parameterName,
-                Type = RDBDataType.DateTime,
-                Direction = RDBParameterDirection.In,
-                Value = this.Value
-            });
-            return parameterName;
+                return string.Concat("'", BaseDataManager.GetDateTimeForBCP(this.Value), "'");
+            }
+            else
+            {
+                string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
+                context.AddParameter(new RDBParameter
+                {
+                    Name = parameterName,
+                    DBParameterName = parameterName,
+                    Type = RDBDataType.DateTime,
+                    Direction = RDBParameterDirection.In,
+                    Value = this.Value
+                });
+                return parameterName;
+            }
         }
     }
 
@@ -120,16 +134,23 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
-            context.AddParameter(new RDBParameter
+            if (context.QueryBuilderContext.DontGenerateParameters)
             {
-                Name = parameterName,
-                DBParameterName = parameterName,
-                Type = RDBDataType.UniqueIdentifier,
-                Direction = RDBParameterDirection.In,
-                Value = this.Value
-            });
-            return parameterName;
+                return string.Concat("'", this.Value, "'");
+            }
+            else
+            {
+                string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
+                context.AddParameter(new RDBParameter
+                {
+                    Name = parameterName,
+                    DBParameterName = parameterName,
+                    Type = RDBDataType.UniqueIdentifier,
+                    Direction = RDBParameterDirection.In,
+                    Value = this.Value
+                });
+                return parameterName;
+            }
         }
     }
 
@@ -139,8 +160,14 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
-            context.AddParameter(new RDBParameter
+            if (context.QueryBuilderContext.DontGenerateParameters)
+            {
+                return this.Value ? "1" : "0";
+            }
+            else
+            {
+                string parameterName = context.GenerateUniqueDBParameterName(RDBParameterDirection.In);
+                context.AddParameter(new RDBParameter
                 {
                     Name = parameterName,
                     DBParameterName = parameterName,
@@ -148,7 +175,8 @@ namespace Vanrise.Data.RDB
                     Direction = RDBParameterDirection.In,
                     Value = this.Value
                 });
-            return parameterName;
+                return parameterName;
+            }
         }
     }
 
