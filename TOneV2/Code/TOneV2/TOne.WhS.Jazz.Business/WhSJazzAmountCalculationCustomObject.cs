@@ -32,7 +32,7 @@ public class WhSJazzAmountCalculationCustomObject : FieldCustomObjectTypeSetting
 
         public override string GetRuntimeTypeDescription()
         {
-            return "Ammount Calculation Custom Object";
+            return "Ammount Calculation";
         }
     }
 }

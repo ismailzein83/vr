@@ -32,7 +32,7 @@ public class WhSJazzMarketSettingsCustomObject : FieldCustomObjectTypeSettings
 
         public override string GetRuntimeTypeDescription()
         {
-            return "Market Settings Custom Object";
+            return "Market Settings";
         }
     }
 }

@@ -32,7 +32,7 @@ public class WhSJazzRegionSettingsCustomObject : FieldCustomObjectTypeSettings
 
         public override string GetRuntimeTypeDescription()
         {
-            return "Region Settings Custom Object";
+            return "Region Settings";
         }
     }
 }
