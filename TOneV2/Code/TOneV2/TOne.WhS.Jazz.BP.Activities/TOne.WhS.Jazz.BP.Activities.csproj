@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivitiesClasses\JazzReport.cs" />
+    <Compile Include="ApplyJazzReportTransactions.cs" />
+    <Compile Include="DeleteJazzReportFile.cs" />
     <Compile Include="GenerateJazzReportFile.cs" />
     <Compile Include="LoadJazzReportDefinitions.cs" />
     <Compile Include="ProcessJazzReport.cs" />
