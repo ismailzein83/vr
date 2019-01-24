@@ -13,7 +13,9 @@
                     <vr-columns width="1/2row">
                         <vr-common-connectiontypeconfig-selector on-ready="scopeModel.onConnectionTypeConfigReady" selectedvalues="scopeModel.connectionType" isrequired="true"></vr-common-connectiontypeconfig-selector>
                     </vr-columns>
-                    <vr-directivewrapper ng-if="scopeModel.connectionType.Editor" directive="scopeModel.connectionType.Editor" normal-col-num="6" on-ready="scopeModel.onConnectionEditorReady"></vr-directivewrapper>
+                    <span vr-loader="scopeModel.isConnectionDirectiveDirectiveloading">
+                        <vr-directivewrapper ng-if="scopeModel.connectionType.Editor" directive="scopeModel.connectionType.Editor" normal-col-num="6" on-ready="scopeModel.onConnectionEditorReady"></vr-directivewrapper>
+                        </span>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

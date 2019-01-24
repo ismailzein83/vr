@@ -15,7 +15,7 @@
         var connectionTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var connectionEditorAPI;
-        var connectionEditorAPIReadyDeferred = UtilsService.createPromiseDeferred();
+        var connectionEditorAPIReadyDeferred;
 
         loadParameters();
         defineScope();
@@ -38,7 +38,8 @@
             };
             $scope.scopeModel.onConnectionEditorReady = function (api) {
                 connectionEditorAPI = api;
-                connectionEditorAPIReadyDeferred.resolve();
+                var setLoader = function (value) { $scope.scopeModel.isConnectionDirectiveDirectiveloading = value; };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, connectionEditorAPI, undefined, setLoader, connectionEditorAPIReadyDeferred);
             };
             
             $scope.saveVRConnection = function () {
@@ -59,6 +60,7 @@
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
+                connectionEditorAPIReadyDeferred = UtilsService.createPromiseDeferred();
                 getVRConnection().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
@@ -82,7 +84,8 @@
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
-              .finally(function () {
+                .finally(function () {
+                    connectionEditorAPIReadyDeferred = undefined;
                   $scope.scopeModel.isLoading = false;
               });
         }
@@ -101,16 +104,16 @@
 
         function loadVRConnectionEditor() {
             if (isEditMode) {
-                var loadConnectionEditorPromiseDeferred = UtilsService.createPromiseDeferred();
+            var loadConnectionEditorPromiseDeferred = UtilsService.createPromiseDeferred();
                 connectionEditorAPIReadyDeferred.promise.then(function () {
-                    var payloadDirective = {
-                        data: vrConnectionEntity && vrConnectionEntity.Settings || undefined
+                var payloadDirective = {
+                    data: vrConnectionEntity && vrConnectionEntity.Settings || undefined
                     };
-                    VRUIUtilsService.callDirectiveLoad(connectionEditorAPI, payloadDirective, loadConnectionEditorPromiseDeferred);
-                });
-                return loadConnectionEditorPromiseDeferred.promise;
-            }
+                VRUIUtilsService.callDirectiveLoad(connectionEditorAPI, payloadDirective, loadConnectionEditorPromiseDeferred);
+            });
+            return loadConnectionEditorPromiseDeferred.promise;
         }
+    }
         function setTitle() {
             if (isEditMode) {
                 $scope.title = UtilsService.buildTitleForUpdateEditor(vrConnectionEntity.Name, "Connection");
