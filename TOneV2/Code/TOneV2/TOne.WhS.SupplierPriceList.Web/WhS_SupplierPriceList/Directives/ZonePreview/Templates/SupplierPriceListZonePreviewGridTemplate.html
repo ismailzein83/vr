@@ -4,14 +4,14 @@
              pagingtype="'PagingOnScroll'"
              menuactions="[]" enableautoexport="true">
     <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn fixedwidth="'35'">
+    <vr-datagridcolumn fixedwidth="'35'" headertext="'Zone Change Type'" invisibleheader>
         <vr-icon iconurl="dataItem.ZoneStatusIconUrl" tooltip="dataItem.ZoneStatusIconTooltip"></vr-icon>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" headerdescription="'Zone BED'" field="'ZoneBED'" type="'Datetime'" fixedwidth="'105'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'EED'" headerdescription="'Zone EED'" field="'ZoneEED'" type="'Datetime'" fixedwidth="'105'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'C.Rate'" headerdescription="'Current Rate'" field="'SystemRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'50'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'I.Rate'" headerdescription="'Imported Rate'" field="'ImportedRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'50'"></vr-datagridcolumn>
-    <vr-datagridcolumn fixedwidth="'35'">
+    <vr-datagridcolumn fixedwidth="'35'" headertext="'Rate Change Type'" invisibleheader>
         <vr-icon icontype="dataItem.RateChangeTypeIconType" iconurl="dataItem.RateStatusIconUrl" tooltip="dataItem.RateStatusIconTooltip" inline></vr-icon>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'C.R.BED'" headerdescription="'Current Rate BED'" field="'SystemRateBED'" type="'Datetime'" fixedwidth="'105'"></vr-datagridcolumn>
