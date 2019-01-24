@@ -74,6 +74,7 @@
     <Compile Include="Country\VRRestCountryManager.cs" />
     <Compile Include="DataEncryptionKeyManager.cs" />
     <Compile Include="DBReplicationDefinitionManager.cs" />
+    <Compile Include="ErlangBCalculatorManager.cs" />
     <Compile Include="ExcelFileUploader\ExcelFileUploaderManager.cs" />
     <Compile Include="Filters\CommentBEDefinitionFilter.cs" />
     <Compile Include="LicenseManager.cs" />
