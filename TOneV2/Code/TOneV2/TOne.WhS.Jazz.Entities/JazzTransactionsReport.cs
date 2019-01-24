@@ -8,15 +8,15 @@ namespace TOne.WhS.Jazz.Entities
 {
     public class JazzTransactionsReport
     {
-        public string ReportName { get; set; }
         public Guid ReportDefinitionId { get; set; }
+        public string ReportDefinitionName { get; set; }
         public List<JazzTransactionsReportData> ReportData { get; set; }
     }
     public class JazzTransactionsReportData
     {
-        public string AccountDescription { get; set; }
-        public string AccountCode { get; set; }
-        public decimal Credit { get; set; }
-        public decimal Debit { get; set; }
+        public string TransationDescription { get; set; }
+        public string TransactionCode { get; set; }
+        public decimal? Credit { get; set; }
+        public decimal? Debit { get; set; }
     }
 }

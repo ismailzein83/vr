@@ -106,18 +106,6 @@
                   <Variable x:TypeArguments="twje:JazzTransactionsReport" Name="TransactionsReport" />
                   <Variable x:TypeArguments="twjba1:JazzReport" Name="JazzReport" />
                 </Sequence.Variables>
-                <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
-                  <Assign.To>
-                    <OutArgument x:TypeArguments="twjba1:JazzReport">
-                      <mca:CSharpReference x:TypeArguments="twjba1:JazzReport">JazzReport</mca:CSharpReference>
-                    </OutArgument>
-                  </Assign.To>
-                  <Assign.Value>
-                    <InArgument x:TypeArguments="twjba1:JazzReport">
-                      <mca:CSharpValue x:TypeArguments="twjba1:JazzReport">null</mca:CSharpValue>
-                    </InArgument>
-                  </Assign.Value>
-                </Assign>
                 <twjba1:ProcessJazzReport sap2010:WorkflowViewState.IdRef="ProcessJazzReport_1">
                   <twjba1:ProcessJazzReport.FromDate>
                     <InArgument x:TypeArguments="s:DateTime">
@@ -216,13 +204,6 @@
             <If.Then>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
                 <twjba1:ApplyJazzReportTransactions sap2010:WorkflowViewState.IdRef="ApplyJazzReportTransactions_1" />
-                <twjba1:DeleteJazzReportFile sap2010:WorkflowViewState.IdRef="DeleteJazzReportFile_1">
-                  <twjba1:DeleteJazzReportFile.FileId>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">FileId</mca:CSharpValue>
-                    </InArgument>
-                  </twjba1:DeleteJazzReportFile.FileId>
-                </twjba1:DeleteJazzReportFile>
                 <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Finish Report Process">
                   <vbw:WriteTrackingMessage.Severity>
                     <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
@@ -234,13 +215,6 @@
             </If.Then>
             <If.Else>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
-                <twjba1:DeleteJazzReportFile sap2010:WorkflowViewState.IdRef="DeleteJazzReportFile_2">
-                  <twjba1:DeleteJazzReportFile.FileId>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">FileId</mca:CSharpValue>
-                    </InArgument>
-                  </twjba1:DeleteJazzReportFile.FileId>
-                </twjba1:DeleteJazzReportFile>
                 <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Process is cancelled">
                   <vbw:WriteTrackingMessage.Severity>
                     <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
@@ -251,6 +225,13 @@
               </Sequence>
             </If.Else>
           </If>
+          <twjba1:DeleteJazzReportFile sap2010:WorkflowViewState.IdRef="DeleteJazzReportFile_1">
+            <twjba1:DeleteJazzReportFile.FileId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">FileId</mca:CSharpValue>
+              </InArgument>
+            </twjba1:DeleteJazzReportFile.FileId>
+          </twjba1:DeleteJazzReportFile>
         </Sequence>
       </If.Then>
       <If.Else>
@@ -263,13 +244,12 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkphenouQlBcSmF6elJlcG9ydFByb2Nlc3MueGFtbDc7A4sCDgIBAUELQXgCAQJFBUsgAwHUAUwFUigDAc4BUwWJAgoCAQdIC0iGAQMB1gFFYEV2AwHVAU8LT30DAc8BVgtWYwIBCFoJ/gEUAgEUgQIJhwIkAgENXguwARUCAV6xAQu8ASsCAVG9AQvRARwCAT3SAQv9ARACARWEAg+EAokBAgEPgQJkgQJ8AgEOYRFhggEDAcgBaA+uARoCAV+5ARG5AW0CAVi0ARG0AVwCAVLOARHOAYUBAgFLxQERyQEhAgFFvQGmAb0BtgECAUTAARHAAZ0BAgE+1QER1QFyAgEW2QEP6QEaAgEs7AEP+wEaAgEcbRF4GgMBtQF5EZMBLAMBhwGUARGaAS4CAX2bARGtARYCAWDaARHaAXcCATzbARHhAS8CATXiARHoASwCAS3tARHzAS8CASX0ARH6ASwCAR11F3ViAwG/AXAXcHADAbYBhgEXhgGCAQMBrAF8F3xlAwGjAZABF5ABYwMBmgGBAReBAXADAZEBiwEXiwF2AwGIAZcBF5cBegIBfp4BF54BaAIBYaIBFasBJwIBat4BF94BWgIBNuUBF+UBkgECAS/iAWziAYMBAgEu8AEX8AFaAgEm9wEX9wGSAQIBH/QBbPQBggECAR6pARmpAXwCAXSlARulAWwCAWs=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkphenouQlBcSmF6elJlcG9ydFByb2Nlc3MueGFtbDI7A/gBDgIBAUELQXgCAQJFBUsgAwG6AUwFUigDAbQBUwX2AQoCAQdIC0iGAQMBvAFFYEV2AwG7AU8LT30DAbUBVgtWYwIBCFoJ6wEUAgEU7gEJ9AEkAgENXgukARUCAVelAQuwASsCAUqxAQvFARwCATbGAQvjARACARzkAQvqASkCARXxAQ/xAYkBAgEP7gFk7gF8AgEOYRFhggEDAa4BaA+iARoCAVitARGtAW0CAVGoARGoAVwCAUvCARHCAYUBAgFEuQERvQEhAgE+sQGmAbEBtgECAT20ARG0AZ0BAgE3yQERyQFyAgEdzQEP1gEaAgEs2QEP4QEaAgEj5wER5wFUAgEWbRGHASwDAYABiAERjgEuAgF2jwERoQEWAgFZzgERzgF3AgE1zwER1QEsAgEt2gER4AEsAgEkehd6ggEDAaUBcBdwZQMBnAGEAReEAWMDAZMBdRd1cAMBigF/F392AwGBAYsBF4sBegIBd5IBF5IBaAIBWpYBFZ8BJwIBY9IBF9IBkgECAS/PAWzPAYMBAgEu3QEX3QGSAQIBJtoBbNoBggECASWdARmdAXwCAW2ZARuZAWwCAWQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="763,22" />
       <sap2010:ViewStateData Id="LoadJazzReportDefinitions_1" sap:VirtualizedContainerService.HintSize="763,22" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="ProcessJazzReport_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="SaveJazzReportDraft_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -281,37 +261,36 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,560">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,458">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="516,710" />
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="516,608" />
       <sap2010:ViewStateData Id="GenerateJazzReportFile_1" sap:VirtualizedContainerService.HintSize="516,22" />
       <sap2010:ViewStateData Id="AssignTask`1_1" sap:VirtualizedContainerService.HintSize="516,22" />
       <sap2010:ViewStateData Id="ApplyJazzReportTransactions_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="DeleteJazzReportFile_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,270">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="DeleteJazzReportFile_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="222,208">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="516,420" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="538,1418">
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="516,358" />
+      <sap2010:ViewStateData Id="DeleteJazzReportFile_1" sap:VirtualizedContainerService.HintSize="516,22" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="538,1316">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -319,15 +298,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="763,1568" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="785,1816">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="763,1466" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="785,1714">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Jazz.BP.JazzReportProcess_1" sap:VirtualizedContainerService.HintSize="825,1896" />
+      <sap2010:ViewStateData Id="TOne.WhS.Jazz.BP.JazzReportProcess_1" sap:VirtualizedContainerService.HintSize="825,1834" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
