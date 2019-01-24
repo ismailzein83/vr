@@ -50,6 +50,8 @@
   <ItemGroup>
     <Compile Include="JazzReportProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\PreviewTaskData.cs" />
+    <Compile Include="Tasks\PreviewTaskExecutionInformation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

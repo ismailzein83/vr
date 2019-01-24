@@ -12,10 +12,18 @@ namespace TOne.WhS.Jazz.BP.Activities
     {
         [RequiredArgument]
         public InArgument<JazzReportDefinition> ReportDefinition { get; set; }
+
         [RequiredArgument]
         public InArgument<DateTime> FromDate { get; set; }
+
         [RequiredArgument]
         public InArgument<DateTime> ToDate { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<JazzTransactionsReport> JazzTransactionsReport { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<JazzReport> JazzReport { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {

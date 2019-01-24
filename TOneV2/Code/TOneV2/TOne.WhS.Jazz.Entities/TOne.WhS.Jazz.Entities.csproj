@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JazzReportDefinition.cs" />
+    <Compile Include="JazzTransactionsReport.cs" />
     <Compile Include="WhSJazzAccountCode\WhsJazzAccountCodeDetail.cs" />
     <Compile Include="WhSJazzAccountCode\WhsJazzAccountCodeFilter.cs" />
     <Compile Include="WhSJazzCustomerTypeCode\WhsJazzCustomerTypeCodeDetail.cs" />

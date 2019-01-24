@@ -49,6 +49,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivitiesClasses\JazzReport.cs" />
+    <Compile Include="GenerateJazzReportFile.cs" />
     <Compile Include="LoadJazzReportDefinitions.cs" />
     <Compile Include="ProcessJazzReport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
