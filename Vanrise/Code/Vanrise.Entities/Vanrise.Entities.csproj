@@ -69,6 +69,7 @@
     <Compile Include="City\CityQuery.cs" />
     <Compile Include="DBReplication\DBDefinitionInfo.cs" />
     <Compile Include="DBReplication\DBReplicationPreInsertConfig.cs" />
+    <Compile Include="ErlangBCalculatorParameters.cs" />
     <Compile Include="File\VRRemoteFileInfo.cs" />
     <Compile Include="ProcessState.cs" />
     <Compile Include="RDBDataType\RDBDataType.cs" />
