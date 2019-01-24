@@ -101,12 +101,12 @@ namespace Vanrise.Common.Business
             {
                 var currentSetting = GetSetting(settingToEdit.SettingId);
                 var settingOnBeforeSaveContext = new SettingOnBeforeSaveContext()
-                    {
-                        SettingId = settingToEdit.SettingId,
-                        SaveOperationType = SaveOperationType.Update,
-                        NewSettingData = settingToEdit.Data,
-                        CurrentSettingData = currentSetting!=null?currentSetting.Data:null,
-                    };
+                {
+                    SettingId = settingToEdit.SettingId,
+                    SaveOperationType = SaveOperationType.Update,
+                    NewSettingData = settingToEdit.Data,
+                    CurrentSettingData = currentSetting != null ? currentSetting.Data : null,
+                };
                 settingToEdit.Data.OnBeforeSave(settingOnBeforeSaveContext);
 
                 ISettingDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
@@ -148,7 +148,9 @@ namespace Vanrise.Common.Business
             if (setting != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(SettingLoggableEntity.Instance, setting);
 
-            setting.Data.PrepareSettingBeforeLoad(new SettingPrepareSettingBeforeLoadContext());
+            if (setting != null && setting.Data != null)
+                setting.Data.PrepareSettingBeforeLoad(new SettingPrepareSettingBeforeLoadContext());
+
             return setting;
         }
 
@@ -350,7 +352,7 @@ namespace Vanrise.Common.Business
 
     }
 
-    public class SettingPrepareSettingBeforeLoadContext: ISettingPrepareSettingBeforeLoadContext
+    public class SettingPrepareSettingBeforeLoadContext : ISettingPrepareSettingBeforeLoadContext
     {
     }
 }
