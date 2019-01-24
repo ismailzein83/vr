@@ -9,6 +9,8 @@ namespace TOne.WhS.Routing.Entities
 
         public long SaleZoneId { get; set; }
 
+        public int SellingNumberPlanID { get; set; }
+
         public string SaleZoneName { get; set; }
 
         public HashSet<int> SaleZoneServiceIds { get; set; }

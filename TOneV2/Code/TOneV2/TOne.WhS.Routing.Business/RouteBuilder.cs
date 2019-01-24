@@ -244,13 +244,14 @@ namespace TOne.WhS.Routing.Business
             {
                 if (context.SupplierCodeMatches != null && context.SupplierCodeMatches.Count > 0)
                 {
-                    return ExecuteRule(routingProduct.RoutingProductId, saleZone.SaleZoneId, saleZoneServiceIds, context, routeRuleTarget, routeRule, context.RoutingDatabase);
+                    return ExecuteRule(routingProduct.RoutingProductId, saleZone.SaleZoneId, saleZone.SellingNumberPlanId, saleZoneServiceIds, context, routeRuleTarget, routeRule, context.RoutingDatabase);
                 }
                 else
                 {
                     return new RPRoute()
                     {
                         RoutingProductId = routingProduct.RoutingProductId,
+                        SellingNumberPlanID = saleZone.SellingNumberPlanId,
                         SaleZoneId = saleZone.SaleZoneId,
                         SaleZoneName = saleZone.Name,
                         SaleZoneServiceIds = saleZoneServiceIds,
@@ -515,7 +516,7 @@ namespace TOne.WhS.Routing.Business
             return results;
         }
 
-        private RPRoute ExecuteRule(int routingProductId, long saleZoneId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase)
+        private RPRoute ExecuteRule(int routingProductId, long saleZoneId, int sellingNumberPlanId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase)
         {
             var customer = routeRuleTarget != null && routeRuleTarget.CustomerId.HasValue ? _carrierAccounts.GetRecord(routeRuleTarget.CustomerId.Value) : null;
             bool keepBackupsForRemovedOptions = new ConfigManager().GetProductRouteBuildKeepBackUpsForRemovedOptions();
@@ -531,6 +532,7 @@ namespace TOne.WhS.Routing.Business
             RPRoute route = new RPRoute
             {
                 RoutingProductId = routingProductId,
+                SellingNumberPlanID = sellingNumberPlanId,
                 SaleZoneId = saleZoneId,
                 SaleZoneServiceIds = saleZoneServiceIds,
                 ExecutedRuleId = routeRule.RuleId,

@@ -423,6 +423,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     Create Table ProductRoute(
                                                         RoutingProductId int Not Null,
                                                         SaleZoneId bigint Not Null,
+                                                        SellingNumberPlanId int Not NULL,
                                                         SaleZoneServices varchar(max) NULL,
                                                         ExecutedRuleId int Null,
                                                         OptionsDetailsBySupplier nvarchar(max) NULL,
@@ -433,6 +434,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     Create Table ProductRouteByCustomer_#CustomerID#(
                                                         RoutingProductId int Not Null,
                                                         SaleZoneId bigint Not Null,
+	                                                    SellingNumberPlanId int Not NULL,
                                                         SaleZoneServices varchar(max) NULL,
                                                         ExecutedRuleId int Null,
                                                         OptionsByPolicy nvarchar(max) NULL,

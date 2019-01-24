@@ -261,19 +261,6 @@ namespace TOne.WhS.Routing.Business
             return routingDatabaseManager.GetLatestRoutingDatabase(routingDatabase.ProcessType, routingDatabase.Type);
         }
 
-        private string GetSellingNumberPlan(long saleZoneId)
-        {
-            SaleZone saleZone = _saleZoneManager.GetSaleZone(saleZoneId);
-            if (saleZone == null)
-                return null;
-
-            SellingNumberPlan sellingNumberPlan = _sellingNumberPlanManager.GetSellingNumberPlan(saleZone.SellingNumberPlanId);
-            if (sellingNumberPlan == null)
-                return null;
-
-            return sellingNumberPlan.Name;
-        }
-
         private SupplierRate GetFutureRate(SupplierRate supplierRate, SupplierZoneRateLocator futureSupplierZoneRateLocator, int supplierId, long supplierZoneId)
         {
             SupplierZoneRate futureSupplierZoneRate = futureSupplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId, null);
@@ -738,7 +725,7 @@ namespace TOne.WhS.Routing.Business
                 SaleZoneId = rpRoute.SaleZoneId,
                 SaleZoneServiceIds = rpRoute.SaleZoneServiceIds,
                 RoutingProductName = _routingProductManager.GetRoutingProductName(rpRoute.RoutingProductId),
-                SellingNumberPlan = GetSellingNumberPlan(rpRoute.SaleZoneId),
+                SellingNumberPlan = _sellingNumberPlanManager.GetSellingNumberPlanName(rpRoute.SellingNumberPlanID),
                 SaleZoneName = rpRoute.SaleZoneName,
                 IsBlocked = rpRoute.IsBlocked,
                 RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions, systemCurrencyId, toCurrencyId, customerProfileId, includeBlockedSuppliers, effectiveRateValue, maxSupplierRate),
@@ -818,7 +805,7 @@ namespace TOne.WhS.Routing.Business
                 Code = rpRoute.Code,
                 SaleZoneId = rpRoute.SaleZoneId,
                 SaleZoneServiceIds = rpRoute.SaleZoneServiceIds,
-                SellingNumberPlan = GetSellingNumberPlan(rpRoute.SaleZoneId),
+                SellingNumberPlan = _sellingNumberPlanManager.GetSellingNumberPlanName(rpRoute.SellingNumberPlanID),
                 SaleZoneName = rpRoute.SaleZoneName,
                 IsBlocked = rpRoute.IsBlocked,
                 RouteOptionsDetails = details,

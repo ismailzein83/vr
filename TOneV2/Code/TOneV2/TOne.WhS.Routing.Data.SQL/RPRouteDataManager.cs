@@ -13,8 +13,8 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class RPRouteDataManager : RoutingDataManager, IRPRouteDataManager
     {
-        readonly string[] productRouteColumns = { "RoutingProductId", "SaleZoneId", "SaleZoneServices", "ExecutedRuleId", "OptionsDetailsBySupplier", "OptionsByPolicy", "IsBlocked" };
-        readonly string[] productRouteByCustomerColumns = { "RoutingProductId", "SaleZoneId", "SaleZoneServices", "ExecutedRuleId", "OptionsByPolicy", "IsBlocked" };
+        readonly string[] productRouteColumns = { "RoutingProductId", "SaleZoneId", "SellingNumberPlanId", "SaleZoneServices", "ExecutedRuleId", "OptionsDetailsBySupplier", "OptionsByPolicy", "IsBlocked" };
+        readonly string[] productRouteByCustomerColumns = { "RoutingProductId", "SaleZoneId", "SellingNumberPlanId", "SaleZoneServices", "ExecutedRuleId", "OptionsByPolicy", "IsBlocked" };
 
 
         const char RouteOptionSuppliersSeparator = '|';
@@ -61,7 +61,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     string optionsDetailsBySupplier = this.SerializeOptionsDetailsBySupplier(rproute.OptionsDetailsBySupplier);
                     string rpOptionsByPolicy = this.SerializeOptionsByPolicy(rproute.RPOptionsByPolicy);
 
-                    streamForBulkInsert.RPRoutesStream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", rproute.RoutingProductId, rproute.SaleZoneId, saleZoneServices, rproute.ExecutedRuleId,
+                    streamForBulkInsert.RPRoutesStream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", rproute.RoutingProductId, rproute.SaleZoneId, rproute.SellingNumberPlanID, saleZoneServices, rproute.ExecutedRuleId,
                                                                                    optionsDetailsBySupplier, rpOptionsByPolicy, rproute.IsBlocked ? 1 : 0);
                 }
             }
@@ -74,7 +74,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     string saleZoneServices = (rproute.SaleZoneServiceIds != null && rproute.SaleZoneServiceIds.Count > 0) ? string.Join(",", rproute.SaleZoneServiceIds) : null;
                     string rpOptionsByPolicy = this.SerializeOptionsByPolicy(rproute.RPOptionsByPolicy);
 
-                    customerStream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", rproute.RoutingProductId, rproute.SaleZoneId, saleZoneServices, rproute.ExecutedRuleId,
+                    customerStream.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", rproute.RoutingProductId, rproute.SaleZoneId, rproute.SellingNumberPlanID, saleZoneServices, rproute.ExecutedRuleId,
                                                                                     rpOptionsByPolicy, rproute.IsBlocked ? 1 : 0);
                 }
             }
@@ -158,7 +158,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 saleZoneIdsFilter = string.Format(" AND pr.SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
 
             if (input.Query.SellingNumberPlanId.HasValue)
-                sellingNumberPlanIdFilter = string.Format("AND czd.SellingNumberPlanId = {0}", input.Query.SellingNumberPlanId.Value);
+                sellingNumberPlanIdFilter = string.Format("AND pr.SellingNumberPlanId = {0}", input.Query.SellingNumberPlanId.Value);
 
             if (input.Query.CustomerId.HasValue)
             {
@@ -177,8 +177,6 @@ namespace TOne.WhS.Routing.Data.SQL
             }
             else
             {
-                if (input.Query.SellingNumberPlanId.HasValue)
-                    joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId and pr.RoutingProductId = czd.RoutingProductId ";
                 effectiveRateValue = "null as EffectiveRateValue ";
             }
 
@@ -286,7 +284,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 saleZoneIdsFilter = string.Format(" AND pr.SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
 
             if (input.Query.SellingNumberPlanId.HasValue)
-                sellingNumberPlanIdFilter = string.Format("AND czd.SellingNumberPlanId = {0}", input.Query.SellingNumberPlanId.Value);
+                sellingNumberPlanIdFilter = string.Format("AND pr.SellingNumberPlanId = {0}", input.Query.SellingNumberPlanId.Value);
 
             if (input.Query.CustomerId.HasValue)
             {
@@ -305,8 +303,6 @@ namespace TOne.WhS.Routing.Data.SQL
             }
             else
             {
-                if (input.Query.SellingNumberPlanId.HasValue)
-                    joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId and pr.RoutingProductId = czd.RoutingProductId ";
                 effectiveRateValue = " ,null as EffectiveRateValue ";
             }
 
@@ -474,6 +470,7 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 RoutingProductId = (int)reader["RoutingProductId"],
                 SaleZoneId = (long)reader["SaleZoneId"],
+                SellingNumberPlanID = (int)reader["SellingNumberPlanID"],
                 SaleZoneName = reader["Name"] as string,
                 SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServices) ? new HashSet<int>(saleZoneServices.Split(',').Select(itm => int.Parse(itm))) : null,
                 IsBlocked = (bool)reader["IsBlocked"],
@@ -737,6 +734,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         private StringBuilder query_GetFilteredRPRoutesByZone = new StringBuilder(@"SELECT TOP #LimitResult# pr.[RoutingProductId]
                                                                                     ,pr.[SaleZoneId]
+                                                                                    ,pr.[SellingNumberPlanID]
                                                                                     ,sz.[Name] 
                                                                                     ,pr.[SaleZoneServices]
                                                                                     #EFFECTIVERATE#
@@ -751,7 +749,7 @@ namespace TOne.WhS.Routing.Data.SQL
         private StringBuilder query_GetFilteredRPRoutesByCode = new StringBuilder(@"SELECT TOP #LimitResult# pr.[RoutingProductId], 
                                                                                     pr.[SaleZoneId], 
                                                                                     sz.Name as SaleZoneName, 
-                                                                                    cszm.SellingNumberPlanID,
+                                                                                    pr.SellingNumberPlanID,
                                                                                     [SaleZoneServices],
                                                                                     [ExecutedRuleId], 
                                                                                     cszm.Code, 
@@ -802,6 +800,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         private const string query_GetRPRoutesByRPZones = @"SELECT pr.[RoutingProductId],
                                                                 pr.[SaleZoneId],
+                                                                pr.[SellingNumberPlanID],
                                                                 sz.[Name],
                                                                 pr.[SaleZoneServices],
                                                                 pr.[ExecutedRuleId],
