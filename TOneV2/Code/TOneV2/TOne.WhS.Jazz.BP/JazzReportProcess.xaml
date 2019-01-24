@@ -1,0 +1,133 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Jazz.BP.JazzReportProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twjba="clr-namespace:TOne.WhS.Jazz.BP.Arguments;assembly=TOne.WhS.Jazz.BP.Arguments"
+ xmlns:twjba1="clr-namespace:TOne.WhS.Jazz.BP.Activities;assembly=TOne.WhS.Jazz.BP.Activities"
+ xmlns:twje="clr-namespace:TOne.WhS.Jazz.Entities;assembly=TOne.WhS.Jazz.Entities"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(twjba:JazzReportProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Jazz.BP.JazzReportProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.WhS.Jazz.BP.Arguments</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Jazz.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Jazz.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Jazz.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Jazz.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:List(twje:JazzReportDefinition)" Name="reportDefinitions" />
+    </Sequence.Variables>
+    <twjba1:LoadJazzReportDefinitions sap2010:WorkflowViewState.IdRef="LoadJazzReportDefinitions_1">
+      <twjba1:LoadJazzReportDefinitions.RepportDefinitions>
+        <OutArgument x:TypeArguments="scg:List(twje:JazzReportDefinition)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twje:JazzReportDefinition)">reportDefinitions</mca:CSharpReference>
+        </OutArgument>
+      </twjba1:LoadJazzReportDefinitions.RepportDefinitions>
+    </twjba1:LoadJazzReportDefinitions>
+    <If sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">reportDefinitions != null</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <ForEach x:TypeArguments="twje:JazzReportDefinition" DisplayName="ForEach&lt;JazzReportDefinition&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
+          <ForEach.Values>
+            <InArgument x:TypeArguments="scg:IEnumerable(twje:JazzReportDefinition)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twje:JazzReportDefinition)">reportDefinitions</mca:CSharpValue>
+            </InArgument>
+          </ForEach.Values>
+          <ActivityAction x:TypeArguments="twje:JazzReportDefinition">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="twje:JazzReportDefinition" Name="reportDefinition" />
+            </ActivityAction.Argument>
+            <twjba1:ProcessJazzReport sap2010:WorkflowViewState.IdRef="ProcessJazzReport_1">
+              <twjba1:ProcessJazzReport.FromDate>
+                <InArgument x:TypeArguments="s:DateTime">
+                  <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+                </InArgument>
+              </twjba1:ProcessJazzReport.FromDate>
+              <twjba1:ProcessJazzReport.ReportDefinition>
+                <InArgument x:TypeArguments="twje:JazzReportDefinition">
+                  <mca:CSharpValue x:TypeArguments="twje:JazzReportDefinition">reportDefinition</mca:CSharpValue>
+                </InArgument>
+              </twjba1:ProcessJazzReport.ReportDefinition>
+              <twjba1:ProcessJazzReport.ToDate>
+                <InArgument x:TypeArguments="s:DateTime">
+                  <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+                </InArgument>
+              </twjba1:ProcessJazzReport.ToDate>
+            </twjba1:ProcessJazzReport>
+          </ActivityAction>
+        </ForEach>
+      </If.Then>
+      <If.Else>
+        <vbw:WriteTrackingMessage Message="No reports to generate">
+          <vbw:WriteTrackingMessage.Severity>
+            <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+            </InArgument>
+          </vbw:WriteTrackingMessage.Severity>
+          <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_1</sap2010:WorkflowViewState.IdRef>
+        </vbw:WriteTrackingMessage>
+      </If.Else>
+    </If>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkphenouQlBcSmF6elJlcG9ydFByb2Nlc3MueGFtbA43A3MOAgEBOwVBKAIBHEIFcQoCAQI+Cz59AgEdRQtFYwIBA0kJZRMCAQtoCW8kAgEGTA9MgAECARlTDWMoAgEMaw9riQECAQhoK2hDAgEHVhNWYQIBFWATYF8CARFbE1tyAgEN</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LoadJazzReportDefinitions_1" sap:VirtualizedContainerService.HintSize="512,22" />
+      <sap2010:ViewStateData Id="ProcessJazzReport_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="287,210" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="512,360" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="534,546">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Jazz.BP.JazzReportProcess_1" sap:VirtualizedContainerService.HintSize="574,626" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

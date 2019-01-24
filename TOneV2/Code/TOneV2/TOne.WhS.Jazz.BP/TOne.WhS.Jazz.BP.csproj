@@ -47,9 +47,38 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.WFActivities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="JazzReportProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.Jazz.BP.Activities\TOne.WhS.Jazz.BP.Activities.csproj">
+      <Project>{1ba2d12d-7562-4bba-b527-5d78270e0ea3}</Project>
+      <Name>TOne.WhS.Jazz.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Jazz.BP.Arguments\TOne.WhS.Jazz.BP.Arguments.csproj">
+      <Project>{97fcd3fb-7c13-4c40-b150-bdcf81e4ab19}</Project>
+      <Name>TOne.WhS.Jazz.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Jazz.Entities\TOne.WhS.Jazz.Entities.csproj">
+      <Project>{bc05ef6d-43a5-48a9-8d1d-5ba1a1f4f7ca}</Project>
+      <Name>TOne.WhS.Jazz.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
