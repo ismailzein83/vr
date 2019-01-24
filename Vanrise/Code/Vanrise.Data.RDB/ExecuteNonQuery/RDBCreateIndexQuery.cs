@@ -15,10 +15,11 @@ namespace Vanrise.Data.RDB
         Dictionary<string, DBTableInfo> _dbTableInfosByProviderUniqueName = new Dictionary<string, DBTableInfo>();
 
         Dictionary<string, RDBCreateIndexDirection> _columnNames = new Dictionary<string, RDBCreateIndexDirection>();
+
         string _indexName;
         RDBCreateIndexType _indexType;
-
         RDBQueryBuilderContext _queryBuilderContext;
+        int? _maxDOP;
 
         internal RDBCreateIndexQuery(RDBQueryBuilderContext queryBuilderContext)
         {
@@ -59,6 +60,11 @@ namespace Vanrise.Data.RDB
             _indexName = indexName;
         }
 
+        public void MaxDOP(int maxDOP)
+        {
+            _maxDOP = maxDOP;
+        }
+
         public void AddColumn(string columnName, RDBCreateIndexDirection direction = RDBCreateIndexDirection.ASC)
         {
             _columnNames.Add(columnName, direction);
@@ -69,7 +75,8 @@ namespace Vanrise.Data.RDB
             DBTableInfo dbTableInfo;
             if (!_dbTableInfosByProviderUniqueName.TryGetValue(context.DataProvider.UniqueName, out dbTableInfo))
                 dbTableInfo = _dbTableInfo;
-            var resolveQueryContext = new RDBDataProviderResolveIndexCreationQueryContext(_dbTableInfo.DBSchemaName, _dbTableInfo.DBTableName, _indexType, _indexName ,_columnNames, context);
+
+            var resolveQueryContext = new RDBDataProviderResolveIndexCreationQueryContext(_dbTableInfo.DBSchemaName, _dbTableInfo.DBTableName, _indexType, _indexName, _columnNames, _maxDOP, context);
             return context.DataProvider.ResolveIndexCreationQuery(resolveQueryContext);
         }
 

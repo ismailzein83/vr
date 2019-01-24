@@ -30,17 +30,21 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
         public override void ExecuteReader(IRDBDataProviderExecuteReaderContext context)
         {
-            _dataManager.ExecuteReader(context.Query, context.Parameters, context.ExecuteTransactional, (originalReader) => context.OnReaderReady(new MSSQLRDBDataReader(originalReader)));
+            _dataManager.ExecuteReader(context.Query, context.Parameters, context.ExecuteTransactional, context.CommandTimeoutInSeconds,
+                (originalReader) =>
+                {
+                    context.OnReaderReady(new MSSQLRDBDataReader(originalReader));
+                });
         }
 
         public override int ExecuteNonQuery(IRDBDataProviderExecuteNonQueryContext context)
         {
-            return _dataManager.ExecuteNonQuery(context.Query, context.Parameters, context.ExecuteTransactional);
+            return _dataManager.ExecuteNonQuery(context.Query, context.Parameters, context.ExecuteTransactional, context.CommandTimeoutInSeconds);
         }
 
         public override RDBFieldValue ExecuteScalar(IRDBDataProviderExecuteScalarContext context)
         {
-            return new MSSQLRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters, context.ExecuteTransactional));
+            return new MSSQLRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters, context.ExecuteTransactional, context.CommandTimeoutInSeconds));
         }
 
         protected override string GetTableHintForSelectQuery(IRDBDataProviderResolveSelectQueryContext context)
@@ -72,10 +76,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             return resolvedQuery;
         }
 
-        public override string NowDateTimeFunction
-        {
-            get { return " GETDATE() "; }
-        }
+        public override string NowDateTimeFunction { get { return " GETDATE() "; } }
 
         protected override string GetGuidDBType()
         {
@@ -117,6 +118,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
             string tableDBName = GetTableDBName(context.SchemaName, context.TableName);
             string indexName = string.IsNullOrEmpty(context.IndexName) ? string.Concat("IX_", tableDBNameForIndex, "_", string.Join("", context.ColumnNames.Select(itm => itm.Key))) : context.IndexName;
+
             var queryBuilder = new StringBuilder();
             if (context.IndexType == RDBCreateIndexType.UniqueClustered || context.IndexType == RDBCreateIndexType.UniqueNonClustered)
             {
@@ -142,9 +144,14 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 queryBuilder.Append(" ON ");
                 queryBuilder.Append(tableDBName);
             }
+
             queryBuilder.Append(" (");
             queryBuilder.Append(string.Join(", ", context.ColumnNames.Select(colName => string.Concat(colName.Key, colName.Value == RDBCreateIndexDirection.ASC ? " ASC " : " DESC "))));
             queryBuilder.Append(")");
+
+            if(context.MaxDOP.HasValue)
+                queryBuilder.Append($" WITH (MAXDOP = {context.MaxDOP.Value}) ON [PRIMARY]");
+
             var resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
             return resolvedQuery;
@@ -227,13 +234,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             {
                 string dataFilePath = Path.Combine(context.DataFileDirectory, context.DatabaseName);
                 string logFilePath = Path.Combine(context.LogFileDirectory, context.DatabaseName);
-                strBuilder.AppendLine(String.Format(@"
-                                                        CREATE DATABASE {0} ON PRIMARY
-                                                        ( NAME = '{0}', FILENAME = N'{1}.mdf')
-                                                         LOG ON 
-                                                        ( NAME = '{0}_log',FILENAME = N'{2}_log.ldf' )",
-                                                         context.DatabaseName, dataFilePath, logFilePath));
-
+                strBuilder.AppendLine(String.Format(@"CREATE DATABASE {0} ON PRIMARY
+                                                      ( NAME = '{0}', FILENAME = N'{1}.mdf')
+                                                       LOG ON 
+                                                      ( NAME = '{0}_log',FILENAME = N'{2}_log.ldf' )",
+                                                      context.DatabaseName, dataFilePath, logFilePath));
             }
             else
             {
@@ -245,7 +250,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             RDBResolvedQuery resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = strBuilder.ToString() });
 
-            _dataManager.ExecuteNonQuery(resolvedQuery, null, false);
+            _dataManager.ExecuteNonQuery(resolvedQuery, null, false, null);
         }
 
         public override void DropDatabase(IRDBDataProviderDropDatabaseContext context)
@@ -260,7 +265,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             RDBResolvedQuery resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryDropDatabase });
 
-            _dataManager.ExecuteNonQuery(resolvedQuery, null, false);
+            _dataManager.ExecuteNonQuery(resolvedQuery, null, false, null);
         }
 
         public override RDBResolvedQuery ResolveTableDropQuery(IRDBDataProviderResolveTableDropQueryContext context)
@@ -296,9 +301,9 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 _dataProvider = dataProvider;
             }
 
-            public void ExecuteReader(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional, Action<IDataReader> onReaderReady)
+            public void ExecuteReader(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional, int? commandTimeoutInSeconds, Action<IDataReader> onReaderReady)
             {
-                CreateCommandWithParams(query, parameters, executeTransactional,
+                CreateCommandWithParams(query, parameters, executeTransactional, commandTimeoutInSeconds,
                     (cmd) =>
                     {
                         using (var reader = cmd.ExecuteReader())
@@ -310,10 +315,10 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     });
             }
 
-            public int ExecuteNonQuery(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional)
+            public int ExecuteNonQuery(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional, int? commandTimeoutInSeconds)
             {
                 int rslt = 0;
-                CreateCommandWithParams(query, parameters, executeTransactional,
+                CreateCommandWithParams(query, parameters, executeTransactional, commandTimeoutInSeconds,
                     (cmd) =>
                     {
                         rslt = cmd.ExecuteNonQuery();
@@ -321,10 +326,10 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 return rslt;
             }
 
-            public Object ExecuteScalar(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional)
+            public Object ExecuteScalar(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional, int? commandTimeoutInSeconds)
             {
                 Object rslt = 0;
-                CreateCommandWithParams(query, parameters, executeTransactional,
+                CreateCommandWithParams(query, parameters, executeTransactional, commandTimeoutInSeconds,
                     (cmd) =>
                     {
                         rslt = cmd.ExecuteScalar();
@@ -332,7 +337,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 return rslt;
             }
 
-            void CreateCommandWithParams(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional, Action<SqlCommand> onCommandReady)
+            void CreateCommandWithParams(RDBResolvedQuery query, Dictionary<string, RDBParameter> parameters, bool executeTransactional, int? commandTimeoutInSeconds, Action<SqlCommand> onCommandReady)
             {
                 using (var connection = new SqlConnection(_connString))
                 {
@@ -340,8 +345,12 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
                     using (var cmd = new SqlCommand(GetQueryAsText(query, parameters), connection))
                     {
+                        if (commandTimeoutInSeconds.HasValue)
+                            cmd.CommandTimeout = commandTimeoutInSeconds.Value;
+
                         if (parameters != null)
                             AddParameters(cmd, parameters);
+
                         if (executeTransactional)
                         {
                             using (var transaction = connection.BeginTransaction(IsolationLevel.ReadUncommitted))
@@ -387,7 +396,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                             queryBuilder.Append(string.Concat(prm.DBParameterName, " ", _dataProvider.GetColumnDBType(prm.DBParameterName, prm.Type, prm.Size, prm.Precision)));
                             queryBuilder.AppendLine();
                         }
-                        else if(prm.Direction == RDBParameterDirection.In)
+                        else if (prm.Direction == RDBParameterDirection.In)
                         {
                             if (inParamsQueryBuilder.Length == 0)
                                 inParamsQueryBuilder.Append(" DECLARE ");

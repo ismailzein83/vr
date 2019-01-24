@@ -223,11 +223,16 @@ namespace Vanrise.Data.RDB
             return this.ExecuteNonQuery(false);
         }
 
-        public int ExecuteNonQuery(bool executeTransactional)
+        public int ExecuteNonQuery(int commandTimeoutInSeconds)
+        {
+            return this.ExecuteNonQuery(false, commandTimeoutInSeconds);
+        }
+
+        public int ExecuteNonQuery(bool executeTransactional, int? commandTimeoutInSeconds = null)
         {
             var resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
             var resolvedQuery = this.GetResolvedQuery(resolveQueryContext);
-            var context = new RDBDataProviderExecuteNonQueryContext(resolveQueryContext, resolvedQuery, executeTransactional, resolveQueryContext.Parameters);
+            var context = new RDBDataProviderExecuteNonQueryContext(resolveQueryContext, resolvedQuery, executeTransactional, resolveQueryContext.Parameters, commandTimeoutInSeconds);
             return this.DataProvider.ExecuteNonQuery(context);
         }
 
@@ -236,11 +241,16 @@ namespace Vanrise.Data.RDB
             return ExecuteScalar(false);
         }
 
-        public RDBFieldValue ExecuteScalar(bool executeTransactional)
+        public RDBFieldValue ExecuteScalar(int commandTimeoutInSeconds)
+        {
+            return ExecuteScalar(false, commandTimeoutInSeconds);
+        }
+
+        public RDBFieldValue ExecuteScalar(bool executeTransactional, int? commandTimeoutInSeconds = null)
         {
             var resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
             var resolvedQuery = GetResolvedQuery(resolveQueryContext);
-            var context = new RDBDataProviderExecuteScalarContext(resolveQueryContext, resolvedQuery, executeTransactional, resolveQueryContext.Parameters);
+            var context = new RDBDataProviderExecuteScalarContext(resolveQueryContext, resolvedQuery, executeTransactional, resolveQueryContext.Parameters, commandTimeoutInSeconds);
             return this.DataProvider.ExecuteScalar(context);
         }
 
@@ -280,11 +290,16 @@ namespace Vanrise.Data.RDB
             ExecuteReader(onReaderReady, false);
         }
 
-        public void ExecuteReader(Action<IRDBDataReader> onReaderReady, bool executeTransactional)
+        public void ExecuteReader(Action<IRDBDataReader> onReaderReady, int commandTimeoutInSeconds)
+        {
+            ExecuteReader(onReaderReady, false, commandTimeoutInSeconds);
+        }
+
+        public void ExecuteReader(Action<IRDBDataReader> onReaderReady, bool executeTransactional, int? commandTimeoutInSeconds = null)
         {
             var resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
             var resolvedQuery = GetResolvedQuery(resolveQueryContext);
-            var context = new RDBDataProviderExecuteReaderContext(resolveQueryContext, resolvedQuery, executeTransactional, resolveQueryContext.Parameters, onReaderReady);
+            var context = new RDBDataProviderExecuteReaderContext(resolveQueryContext, resolvedQuery, executeTransactional, resolveQueryContext.Parameters, commandTimeoutInSeconds, onReaderReady);
             this.DataProvider.ExecuteReader(context);
         }
 
@@ -362,8 +377,9 @@ namespace Vanrise.Data.RDB
 
         private class RDBDataProviderExecuteNonQueryContext : BaseRDBDataProviderExecuteQueryContext, IRDBDataProviderExecuteNonQueryContext
         {
-            public RDBDataProviderExecuteNonQueryContext(IBaseRDBResolveQueryContext resolveQueryContext, RDBResolvedQuery query, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
-                : base(resolveQueryContext, query, executeTransactional, parameters)
+            public RDBDataProviderExecuteNonQueryContext(IBaseRDBResolveQueryContext resolveQueryContext, RDBResolvedQuery query, bool executeTransactional,
+                Dictionary<string, RDBParameter> parameters, int? commandTimeoutInSeconds)
+                : base(resolveQueryContext, query, executeTransactional, parameters, commandTimeoutInSeconds)
             {
             }
         }
@@ -371,8 +387,10 @@ namespace Vanrise.Data.RDB
         private class RDBDataProviderExecuteReaderContext : BaseRDBDataProviderExecuteQueryContext, IRDBDataProviderExecuteReaderContext
         {
             Action<IRDBDataReader> _onReaderReady;
-            public RDBDataProviderExecuteReaderContext(IBaseRDBResolveQueryContext resolveQueryContext, RDBResolvedQuery query, bool executeTransactional, Dictionary<string, RDBParameter> parameters, Action<IRDBDataReader> onReaderReady)
-                : base(resolveQueryContext, query, executeTransactional, parameters)
+
+            public RDBDataProviderExecuteReaderContext(IBaseRDBResolveQueryContext resolveQueryContext, RDBResolvedQuery query, bool executeTransactional,
+                Dictionary<string, RDBParameter> parameters, int? commandTimeoutInSeconds, Action<IRDBDataReader> onReaderReady)
+                : base(resolveQueryContext, query, executeTransactional, parameters, commandTimeoutInSeconds)
             {
                 _onReaderReady = onReaderReady;
             }
@@ -385,8 +403,9 @@ namespace Vanrise.Data.RDB
 
         private class RDBDataProviderExecuteScalarContext : BaseRDBDataProviderExecuteQueryContext, IRDBDataProviderExecuteScalarContext
         {
-            public RDBDataProviderExecuteScalarContext(IBaseRDBResolveQueryContext resolveQueryContext, RDBResolvedQuery query, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
-                : base(resolveQueryContext, query, executeTransactional, parameters)
+            public RDBDataProviderExecuteScalarContext(IBaseRDBResolveQueryContext resolveQueryContext, RDBResolvedQuery query, bool executeTransactional,
+                Dictionary<string, RDBParameter> parameters, int? commandTimeoutInSeconds)
+                : base(resolveQueryContext, query, executeTransactional, parameters, commandTimeoutInSeconds)
             {
             }
         }
@@ -401,7 +420,7 @@ namespace Vanrise.Data.RDB
         Dictionary<string, IRDBTableQuerySource> _tableAliases = new Dictionary<string, IRDBTableQuerySource>();
         IRDBTableQuerySource _mainQueryTable;
         bool _dontGenerateParameters;
-        
+
         public RDBQueryBuilderContext(BaseRDBDataProvider dataProvider, bool dontGenerateParameters)
         {
             this.DataProvider = dataProvider;

@@ -249,8 +249,7 @@ namespace Vanrise.Data.RDB
 
     public class RDBDataProviderResolveSelectTableRowsCountQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveSelectTableRowsCountQueryContext
     {
-        public RDBDataProviderResolveSelectTableRowsCountQueryContext(string schemaName, string tableName,
-            IBaseRDBResolveQueryContext parentContext)
+        public RDBDataProviderResolveSelectTableRowsCountQueryContext(string schemaName, string tableName, IBaseRDBResolveQueryContext parentContext)
             : base(parentContext)
         {
             this.SchemaName = schemaName;
@@ -512,8 +511,7 @@ namespace Vanrise.Data.RDB
 
     public class RDBDataProviderResolveTableDropQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveTableDropQueryContext
     {
-        public RDBDataProviderResolveTableDropQueryContext(string schemaName, string tableName,
-            IBaseRDBResolveQueryContext parentContext)
+        public RDBDataProviderResolveTableDropQueryContext(string schemaName, string tableName, IBaseRDBResolveQueryContext parentContext)
             : base(parentContext)
         {
             this.SchemaName = schemaName;
@@ -557,19 +555,22 @@ namespace Vanrise.Data.RDB
 
         string IndexName { get; }
 
+        int? MaxDOP { get; }
+
         Dictionary<string, RDBCreateIndexDirection> ColumnNames { get; }
     }
 
     public class RDBDataProviderResolveIndexCreationQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveIndexCreationQueryContext
     {
         public RDBDataProviderResolveIndexCreationQueryContext(string schemaName, string tableName, RDBCreateIndexType indexType, string indexName, Dictionary<string, RDBCreateIndexDirection> columnNames,
-            IBaseRDBResolveQueryContext parentContext)
+            int? maxDOP, IBaseRDBResolveQueryContext parentContext)
             : base(parentContext)
         {
             this.SchemaName = schemaName;
             this.TableName = tableName;
             this.ColumnNames = columnNames;
             this.IndexType = indexType;
+            this.MaxDOP = maxDOP;
             this.IndexName = indexName;
         }
 
@@ -580,6 +581,8 @@ namespace Vanrise.Data.RDB
         public RDBCreateIndexType IndexType { get; private set; }
 
         public string IndexName { get; private set; }
+
+        public int? MaxDOP { get; private set; }
 
         public Dictionary<string, RDBCreateIndexDirection> ColumnNames { get; private set; }
     }
@@ -637,16 +640,20 @@ namespace Vanrise.Data.RDB
         bool ExecuteTransactional { get; }
 
         Dictionary<string, RDBParameter> Parameters { get; }
+
+        int? CommandTimeoutInSeconds { get; }
     }
 
     public abstract class BaseRDBDataProviderExecuteQueryContext : IBaseRDBDataProviderExecuteQueryContext
     {
-        public BaseRDBDataProviderExecuteQueryContext(IBaseRDBResolveQueryContext resolveQueryContext, RDBResolvedQuery query, bool executeTransactional, Dictionary<string, RDBParameter> parameters)
+        public BaseRDBDataProviderExecuteQueryContext(IBaseRDBResolveQueryContext resolveQueryContext, RDBResolvedQuery query, bool executeTransactional,
+            Dictionary<string, RDBParameter> parameters, int? commandTimeoutInSeconds)
         {
             this.ResolveQueryContext = resolveQueryContext;
             this.Query = query;
             this.ExecuteTransactional = executeTransactional;
             this.Parameters = parameters;
+            this.CommandTimeoutInSeconds = commandTimeoutInSeconds;
         }
 
         public IBaseRDBResolveQueryContext ResolveQueryContext { get; private set; }
@@ -656,6 +663,8 @@ namespace Vanrise.Data.RDB
         public bool ExecuteTransactional { get; private set; }
 
         public Dictionary<string, RDBParameter> Parameters { get; private set; }
+
+        public int? CommandTimeoutInSeconds { get; private set; }
     }
 
     public interface IRDBDataProviderExecuteReaderContext : IBaseRDBDataProviderExecuteQueryContext
