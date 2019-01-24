@@ -5,7 +5,7 @@ using Vanrise.GenericData.Entities;
 using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
-public class WhSJazzAmountCalculationCustomObject : FieldCustomObjectTypeSettings
+public class WhSJazzReportDefinitionSettingsCustomObject : FieldCustomObjectTypeSettings
     {
 
         public override Guid ConfigId { get { return new Guid("7AF6055C-86A5-4E3F-A3B8-F37EC1A056E9"); } }
@@ -22,17 +22,17 @@ public class WhSJazzAmountCalculationCustomObject : FieldCustomObjectTypeSetting
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(AmountCalculation);
+            return typeof(JazzReportDefinitionSettings);
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-                return originalValue as AmountCalculation;
+                return originalValue as JazzReportDefinitionSettings;
         }
 
         public override string GetRuntimeTypeDescription()
         {
-            return "Ammount Calculation";
+            return "Jazz Report Definition Settings";
         }
     }
 }
