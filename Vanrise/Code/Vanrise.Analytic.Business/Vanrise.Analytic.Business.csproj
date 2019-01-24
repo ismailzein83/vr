@@ -108,6 +108,9 @@
     <Compile Include="VRRestAPIDataProvider\RemoteAnalyticDataProvider.cs" />
     <Compile Include="VRRestAPIDataProvider\VRRestAPIAnalyticDataProvider.cs" />
     <Compile Include="VRRestAPIAnalyticQueryInterceptor\VRRestAPIAnalyticQueryInterceptorContext.cs" />
+    <Compile Include="VRTiles\AnalyticWidgetTile.cs" />
+    <Compile Include="VRTiles\OverallAnalyticFiguresTileQuery.cs" />
+    <Compile Include="VRTiles\TopAnalyticDimensionFiguresTileQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.BP.Arguments\Vanrise.Analytic.BP.Arguments.csproj">
