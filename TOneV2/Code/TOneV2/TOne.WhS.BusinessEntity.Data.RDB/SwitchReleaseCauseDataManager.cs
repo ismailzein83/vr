@@ -1,5 +1,4 @@
-﻿using System;
-using Vanrise.Common;
+﻿using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
 using System.Collections.Generic;
@@ -10,6 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
     public class SwitchReleaseCauseDataManager : ISwitchReleaseCauseDataManager
     {
         #region RDB
+
         static string TABLE_ALIAS = "src";
         static string TABLE_NAME = "TOneWhS_BE_SwitchReleaseCause";
         const string COL_ID = "ID";
@@ -57,7 +57,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             return queryContext.GetItems(SwitchReleaseCauseMapper);
         }
@@ -114,11 +114,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             if (switchReleaseCause.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Serializer.Serialize(switchReleaseCause.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
 
             if (switchReleaseCause.LastModifiedBy.HasValue)
                 updateQuery.Column(COL_LastModifiedBy).Value(switchReleaseCause.LastModifiedBy.Value);
-
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
+            else
+                updateQuery.Column(COL_LastModifiedBy).Null();
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(switchReleaseCause.SwitchReleaseCauseId);
 
