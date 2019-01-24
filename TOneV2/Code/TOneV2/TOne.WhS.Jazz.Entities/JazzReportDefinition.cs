@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Vanrise.GenericData.Entities;
 namespace TOne.WhS.Jazz.Entities
 {
     public enum ReportDefinitionDirectionEnum  { In = 0,Out = 1 }
@@ -14,6 +14,12 @@ namespace TOne.WhS.Jazz.Entities
         public string Name  { get; set; }
         public ReportDefinitionDirectionEnum Direction { get; set; }
         public int SwitchId { get; set; }
+        public JazzReportDefinitionSettings Settings { get; set; }
+        public bool IsEnabled { get; set; }
+
+    }
+    public class JazzReportDefinitionSettings
+    {
         public AmountCalculation AmountCalculation { get; set; }
         public bool DivideByMarket { get; set; }
         public MarketSettings MarketSettings { get; set; }
@@ -21,6 +27,8 @@ namespace TOne.WhS.Jazz.Entities
         public RegionSettings RegionSettings { get; set; }
         public bool CreateTax { get; set; }
         public decimal TaxPercentage { get; set; }
+        public RecordFilter TaxFilter { get; set; }
+        public RecordFilter ReportFilter { get; set; }
     }
     public class AmountCalculation
     {
