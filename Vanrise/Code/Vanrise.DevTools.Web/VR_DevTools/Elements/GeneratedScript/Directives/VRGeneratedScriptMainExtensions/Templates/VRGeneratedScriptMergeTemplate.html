@@ -5,9 +5,9 @@
         <vr-label>Identity</vr-label>
         <vr-switch value="scopeModel.IsIdentity"></vr-switch>
     </vr-columns>
-    <vr-devtools-columns-selector vr-loader="scopeModel.isInsertColumnsDirectiveloading" label="Insert Columns" onselectionchanged="scopeModel.onInsertColumnsChanged" on-ready="scopeModel.onInsertColumnsDirectiveReady" ismultipleselection isrequired="true" normal-col-num="2"></vr-devtools-columns-selector>
-    <vr-devtools-columns-selector vr-loader="scopeModel.isUpdateColumnsDirectiveloading" label="Update Columns" onselectionchanged="scopeModel.onUpdateColumnsChanged"  on-ready="scopeModel.onUpdateColumnsDirectiveReady" ismultipleselection isrequired="true" normal-col-num="2"></vr-devtools-columns-selector>
-    <vr-devtools-generated-script-query-type-selector vr-loader="scopeModel.isQueryTypeDirectiveloading" label="Query Type" on-ready="scopeModel.onQueryTypeDirectiveReady" normal-col-num="2"></vr-devtools-generated-script-query-type-selector>
+    <vr-devtools-generated-script-query-type-selector vr-loader="scopeModel.isQueryTypeDirectiveloading" label="Query Type" on-ready="scopeModel.onQueryTypeDirectiveReady" normal-col-num="2" onselectionchanged="scopeModel.onQueryTypeChanged"></vr-devtools-generated-script-query-type-selector>
+    <vr-devtools-columns-selector vr-loader="scopeModel.isInsertColumnsDirectiveloading" label="Insert Columns" onselectionchanged="scopeModel.onInsertColumnsChanged" on-ready="scopeModel.onInsertColumnsDirectiveReady" ismultipleselection isrequired="scopeModel.insertColumnsRequired" normal-col-num="2"></vr-devtools-columns-selector>
+    <vr-devtools-columns-selector vr-loader="scopeModel.isUpdateColumnsDirectiveloading" label="Update Columns" onselectionchanged="scopeModel.onUpdateColumnsChanged" on-ready="scopeModel.onUpdateColumnsDirectiveReady" ismultipleselection isrequired="scopeModel.updateColumnsRequired" normal-col-num="2"></vr-devtools-columns-selector>
 </vr-row>
 <vr-label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Where Condition:</vr-label>
 <vr-row removeline>

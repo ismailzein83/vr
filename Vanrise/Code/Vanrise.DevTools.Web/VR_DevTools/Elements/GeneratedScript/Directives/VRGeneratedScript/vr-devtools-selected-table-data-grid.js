@@ -52,7 +52,7 @@
             
                             getVariables = payload.getVariables;
                             var variables = getVariables();
-                            var columnNames = payload.ColumnNames;
+                            var columnNames = payload.ColumnNames; 
                             $scope.scopeModel.columnNames = [];
                             if (columnNames!=undefined)
                             for (var j = 0; j < columnNames.length; j++) {
@@ -75,7 +75,7 @@
                                     $scope.scopeModel.selectedTableData.push({
                                         Entity: payload.DataRows[i],
                                         DescriptionEntity: dataRowDescription
-                                    });
+                                    }); 
                                 }
                             } 
 
@@ -110,15 +110,19 @@
                                                 if(!exists) {
                                                     var dataRow = response[i];
                                                     var dataRowDescription = {};
+                                                    var dataRowEntity = {
+                                                        FieldValues: {}
+                                                    };
                                                     for (var j = 0; j < $scope.scopeModel.columnNames.length; j++) {
                                                         var columnName = $scope.scopeModel.columnNames[j];
+                                                        dataRowEntity.FieldValues[columnName] = dataRow.FieldValues[columnName];
                                                         dataRowDescription[columnName] = dataRow.FieldValues[columnName];
 
                                                         if (dataRow.FieldValues[columnName]!=undefined && typeof (dataRow.FieldValues[columnName]) == "object" && dataRow.FieldValues[columnName].IsVariable)
                                                             dataRowDescription[columnName] = '@' + UtilsService.getItemByVal(variables, dataRowDescription[columnName].VariableId, 'Id').Name;
                                                     }
                                                     $scope.scopeModel.selectedTableData.push({
-                                                        Entity: response[i],
+                                                        Entity: dataRowEntity,
                                                         DescriptionEntity: dataRowDescription
                                                     });
                                                 }
@@ -172,7 +176,7 @@
                     var cellValue = $scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name];
 
                     var modifySelectedTableData = function (newCellValue) {
-                        $scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name] = newCellValue;
+                        $scope.scopeModel.selectedTableData[dataItem.rowIndex].Entity.FieldValues[column.name] = newCellValue != undefined ? newCellValue:null;
                         if (newCellValue !=undefined && typeof (newCellValue) == "object" && newCellValue.IsVariable)
                             $scope.scopeModel.selectedTableData[dataItem.rowIndex].DescriptionEntity[column.name] = '@' + UtilsService.getItemByVal(variables, newCellValue.VariableId, 'Id').Name;
                         else

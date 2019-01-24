@@ -56,9 +56,10 @@ namespace Vanrise.DevTools.MainExtensions
         {
                 GeneratedScriptVariableData variable = value as GeneratedScriptVariableData;
             if(variable !=null)
-                return "@" + Variables.Find(x => x.Id == (variable.VariableId)).Name+'_'+variable.VariableId;
-             
-            if (value is null || value is int || value is float || value is decimal || value is long || value is double)
+                return "@" + Variables.Find(x => x.Id == variable.VariableId).Name + '_'+variable.VariableId.ToString("N");
+            if (value is null)
+                return "NULL";
+            if (value is int || value is float || value is decimal || value is long || value is double)
                 return string.Format("{0}", value);
             else return string.Format("'{0}'", value);
         }

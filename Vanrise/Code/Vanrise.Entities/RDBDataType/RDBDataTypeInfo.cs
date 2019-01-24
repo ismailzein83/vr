@@ -12,5 +12,7 @@ namespace Vanrise.Entities
         public string Description { get; set; }
         public bool RequireSize { get; set; }
         public bool RequirePrecision { get; set; }
+        public bool HasSizeRequired { get; set; }
+        public bool HasPrecisionRequired { get; set; }
     }
 }

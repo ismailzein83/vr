@@ -35,6 +35,12 @@ namespace Vanrise.DevTools.MainExtensions
 
 
         }
+        private string MapRecord(object value)
+        {
+            if (value is null)
+                return "NULL";
+            else return string.Format("{0}", value);
+        }
         private string GenerateSQLQuery(GeneratedScriptItemTable item)
         {
             StringBuilder queryBuilder = new StringBuilder();
@@ -46,7 +52,7 @@ namespace Vanrise.DevTools.MainExtensions
             queryBuilder.Replace("#Schema#", item.Schema);
             queryBuilder.Replace("#TableName#", item.TableName);
             queryBuilder.Replace("#IdentifierColumn#", this.IdentifierColumn.ColumnName);
-            queryBuilder.Replace("#IDs#", string.Join(",", this.KeyValues.MapRecords(x => string.Format("'{0}'", x))));
+            queryBuilder.Replace("#IDs#", string.Join(",", this.KeyValues.MapRecords(x => MapRecord(x))));
 
             return queryBuilder.ToString();
         }

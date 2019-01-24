@@ -1,12 +1,14 @@
 ﻿<vr-validator validate="scopeModel.validateTableSelection()">
-    <vr-datagrid datasource="scopeModel.selectedTableData"
-                 on-ready="scopeModel.onGridReady"
-                 pagingtype="'PagingOnScroll'"
-                 menuactions="scopeModel.gridMenuActions"
-                 ondeleterow="scopeModel.deleteTableDataRow"
-                 enableautoexport="true">
-        <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x" field="'DescriptionEntity.'+ x" isclickable="true" onclicked="scopeModel.editCell" isfielddynamic="true"></vr-datagridcolumn>
-    </vr-datagrid>
+    <vr-columns width="fullrow">
+        <vr-datagrid datasource="scopeModel.selectedTableData"
+                     on-ready="scopeModel.onGridReady"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="scopeModel.gridMenuActions"
+                     ondeleterow="scopeModel.deleteTableDataRow"
+                     enableautoexport="true">
+            <vr-datagridcolumn ng-repeat="x in scopeModel.columnNames" headertext="x" field="'DescriptionEntity.'+ x" isclickable="true" onclicked="scopeModel.editCell" isfielddynamic="true"></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
 </vr-validator>
 
 

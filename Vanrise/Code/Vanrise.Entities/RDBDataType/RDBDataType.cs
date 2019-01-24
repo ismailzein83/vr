@@ -8,15 +8,15 @@ namespace Vanrise.Entities
 {
     public enum RDBDataType
     {
-        [RDBDataTypeAttribute(Description = "Varchar", RequireSize = true)]
+        [RDBDataTypeAttribute(Description = "Varchar", RequireSize = true, HasSizeRequired=false)]
         Varchar = 0,
-        [RDBDataTypeAttribute(Description = "NVarchar", RequireSize = true)]
+        [RDBDataTypeAttribute(Description = "NVarchar", RequireSize = true, HasSizeRequired = false)]
         NVarchar = 1,
         [RDBDataTypeAttribute(Description = "Int")]
         Int = 2,
         [RDBDataTypeAttribute(Description = "BigInt")]
         BigInt = 3,
-        [RDBDataTypeAttribute(Description = "Decimal", RequireSize = true, RequirePrecision = true)]
+        [RDBDataTypeAttribute(Description = "Decimal", RequireSize = true, RequirePrecision = true, HasSizeRequired = true, HasPrecisionRequired = true)]
         Decimal = 4,
         [RDBDataTypeAttribute(Description = "DateTime")]
         DateTime = 5,
@@ -24,7 +24,7 @@ namespace Vanrise.Entities
         UniqueIdentifier = 6,
         [RDBDataTypeAttribute(Description = "Boolean")]
         Boolean = 7,
-        [RDBDataTypeAttribute(Description = "VarBinary", RequireSize = true)]
+        [RDBDataTypeAttribute(Description = "VarBinary", RequireSize = true, HasSizeRequired = false)]
         VarBinary = 8,
         [RDBDataTypeAttribute(Description = "Cursor")]
         Cursor = 9
@@ -45,6 +45,8 @@ namespace Vanrise.Entities
         public string Description { get; set; }
         public bool RequireSize { get; set; }
         public bool RequirePrecision { get; set; }
+        public bool HasSizeRequired { get; set; }
+        public bool HasPrecisionRequired { get; set; }
         public static RDBDataTypeAttribute GetAttribute(RDBDataType rdbDataType)
         {
             return _cachedAttributes[rdbDataType];

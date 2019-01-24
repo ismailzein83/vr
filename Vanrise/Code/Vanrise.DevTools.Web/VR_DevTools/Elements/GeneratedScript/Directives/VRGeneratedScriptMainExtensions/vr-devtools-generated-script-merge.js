@@ -29,6 +29,7 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
         function Merge($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             $scope.scopeModel = {};
+
             var entity = {};
             var directivesReadyPromises = [];
 
@@ -82,6 +83,24 @@ appControllers.directive("vrDevtoolsGeneratedScriptMerge", ["UtilsService", "VRN
                 $scope.scopeModel.onSelectedTableDataGridReady = function (api) {
                     selectedTableDataGridApi = api;
                     selectTableDataGridReadyPromiseDeferred.resolve();
+
+                };
+                $scope.scopeModel.onQueryTypeChanged = function (value) {
+                    if (queryTypeDirectiveApi != undefined) {
+                        $scope.scopeModel.insertColumnsRequired = true;
+                        $scope.scopeModel.updateColumnsRequired = true;
+                        if (value) {
+                            if (value.value == 1) { 
+                                $scope.scopeModel.insertColumnsRequired = true;
+                            $scope.scopeModel.updateColumnsRequired = false;
+
+                            }
+                            else {
+                                $scope.scopeModel.insertColumnsRequired = false;
+                                $scope.scopeModel.updateColumnsRequired = true;
+                            }
+                        }
+                    }
 
                 };
                 $scope.scopeModel.onInsertColumnsChanged = function (value) {
