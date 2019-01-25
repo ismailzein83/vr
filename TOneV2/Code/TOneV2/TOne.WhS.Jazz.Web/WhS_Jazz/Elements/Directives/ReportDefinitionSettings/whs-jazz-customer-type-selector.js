@@ -47,9 +47,7 @@
             var selectorAPI;
             var specificTypeName;
             function initializeController() {
-
-
-
+                
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
 

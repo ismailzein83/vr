@@ -2,9 +2,9 @@
 
     'use strict';
 
-    whsJazzAccountCodeCustomObjectSettings.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    whsJazzReportDefinitionSettingsCustomObjectSettings.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function whsJazzAccountCodeCustomObjectSettings(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function whsJazzReportDefinitionSettingsCustomObjectSettings(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -17,14 +17,16 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_Jazz/Elements/Directives/Templates/AccountCodeCustomObjectDefintion.html"
+            templateUrl: "/Client/Modules/WhS_Jazz/Elements/Directives/ReportDefinitionSettings/Templates/ReportDefinitionSettingsCustomObjectSettings.html"
 
         };
         function SettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var gridAPI;
 
             function initializeController() {
                 $scope.scopeModel = {};
+
                 defineAPI();
             }
             function defineAPI() {
@@ -36,7 +38,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "TOne.WhS.Jazz.Business.AccountCodeCustomObject,TOne.WhS.Jazz.Business"
+                        $type: "TOne.WhS.Jazz.Business.WhSJazzReportDefinitionSettingsCustomObject,TOne.WhS.Jazz.Business"
                     };
                     return data;
                 };
@@ -45,9 +47,9 @@
                     ctrl.onReady(api);
                 }
             }
-        } 
+        }
     }
 
-    app.directive('whsJazzAccountcodeCustomobjectsettings', whsJazzAccountCodeCustomObjectSettings);
+    app.directive('whsJazzReportdefinitionsettingsCustomobjectsettings', whsJazzReportDefinitionSettingsCustomObjectSettings);
 
 })(app);

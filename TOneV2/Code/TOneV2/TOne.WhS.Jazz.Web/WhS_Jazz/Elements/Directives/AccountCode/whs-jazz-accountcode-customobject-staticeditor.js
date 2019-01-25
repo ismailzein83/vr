@@ -18,7 +18,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_Jazz/Elements/Directives/Templates/AccountCodeCustomObjectRuntime.html"
+            templateUrl: "/Client/Modules/WhS_Jazz/Elements/Directives/AccountCode/Templates/AccountCodeCustomObjectRuntime.html"
 
         };
         function SettingsCtor($scope, ctrl, $attrs) {
@@ -125,7 +125,7 @@
                     
                     payload.Carriers = {
                         $type:"TOne.WhS.Jazz.Entities.WhsJazzAccountCodeCarriers,TOne.WhS.Jazz.Entities",
-                        Carriers: Carriers,
+                        Carriers: Carriers
                     };
                     
                     payload.TransactionTypeId = transactionTypeSelectorAPI.getSelectedIds();

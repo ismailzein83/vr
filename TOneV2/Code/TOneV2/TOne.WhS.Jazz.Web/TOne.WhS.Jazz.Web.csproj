@@ -150,30 +150,26 @@
     <Compile Include="Controllers\WhSJazzAcountCodeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WhS_Jazz\Elements\Directives\AmountCalculation\Templates\" />
+    <Folder Include="WhS_Jazz\Elements\Directives\MarketSettings\" />
+    <Folder Include="WhS_Jazz\Elements\Directives\Templates\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Jazz\Constant\WhSJazzRateCalculationTypeEnum.js" />
     <Content Include="WhS_Jazz\Constant\ModuleConfig.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\AmountCalculation\Templates\AmountCalculationCustomObjectStaticEditor.html" />
-    <Content Include="WhS_Jazz\Elements\Directives\AmountCalculation\whs-jazz-amountcalculation-customobject-staticeditor.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\AmountCalculation\whs-jazz-rate-calculation-type-selector.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\MarketSettings\Templates\MarketSettingsCustomObjectStaticEditor.html" />
-    <Content Include="WhS_Jazz\Elements\Directives\MarketSettings\whs-jazz-region-selector.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\MarketSettings\whs-jazz-market-selector.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\MarketSettings\whs-jazz-customer-type-selector.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\MarketSettings\whs-jazz-marketsettings-customobject-staticeditor.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\RegionSettings\Templates\RegionSettingsCustomObjectStaticEditor.html" />
-    <Content Include="WhS_Jazz\Elements\Directives\RegionSettings\Templates\RegionSettingsCustomObjectSettings.html" />
-    <Content Include="WhS_Jazz\Elements\Directives\RegionSettings\whs-jazz-regionsettings-customobject-staticeditor.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\RegionSettings\whs-jazz-regionsettings-customobjectsettings.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\MarketSettings\Templates\MarketSettingsCustomObjectSettings.html" />
-    <Content Include="WhS_Jazz\Elements\Directives\MarketSettings\whs-jazz-marketsettings-customobjectsettings.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\AmountCalculation\Templates\AmountCalculationCustomObjectSettings.html" />
-    <Content Include="WhS_Jazz\Elements\Directives\AmountCalculation\whs-jazz-amountcalculation-customobjectsettings.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\Templates\AccountCodeCustomObjectRuntime.html" />
-    <Content Include="WhS_Jazz\Elements\Directives\Templates\AccountCodeCustomObjectDefintion.html" />
-    <Content Include="WhS_Jazz\Elements\Directives\whs-jazz-accountcode-customobject-staticeditor.js" />
-    <Content Include="WhS_Jazz\Elements\Directives\whs-jazz-accountcode-customobjectsettings.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\Templates\ReportDefinitionSettingsCustomObjectStaticEditor.html" />
+    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-reportdefinitionsettings-customobject-staticeditor.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-rate-calculation-type-selector.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-region-selector.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-market-selector.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-customer-type-selector.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\Templates\ReportDefinitionSettingsCustomObjectSettings.html" />
+    <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-reportdefinitionsettings-customobjectsettings.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\AccountCode\Templates\AccountCodeCustomObjectRuntime.html" />
+    <Content Include="WhS_Jazz\Elements\Directives\AccountCode\Templates\AccountCodeCustomObjectDefintion.html" />
+    <Content Include="WhS_Jazz\Elements\Directives\AccountCode\whs-jazz-accountcode-customobject-staticeditor.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\AccountCode\whs-jazz-accountcode-customobjectsettings.js" />
     <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzCustomerTypeCodeAPIService.js" />
     <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzTaxCodeAPIService.js" />
     <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzSwitchCodeAPIService.js" />

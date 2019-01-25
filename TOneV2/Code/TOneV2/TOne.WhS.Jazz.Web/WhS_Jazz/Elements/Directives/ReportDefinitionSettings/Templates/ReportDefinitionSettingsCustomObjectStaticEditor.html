@@ -1,0 +1,98 @@
+﻿    <vr-tab header="'Report Filter'">
+        <vr-row>
+            <vr-span vr-loader="scopeModel.isReportFilterDirectiveloading">
+                <vr-columns width="fullrow">
+                    <vr-section title="Report Filter">
+                        <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+                    </vr-section>
+                </vr-columns>
+            </vr-span>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Amount Calculation'">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-section title="Amount Calculation">
+                    <whs-jazz-rate-calculation-type-selector on-ready="scopeModel.onRateCalculationTypeSelectorReady" isrequired="true" normal-col-num="8"></whs-jazz-rate-calculation-type-selector>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Market Settings'">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-switch value="scopeModel.divideByMarket" label="Divide By Market"></vr-switch>
+                <vr-section ng-if="scopeModel.divideByMarket" title="Markets">
+                    <vr-columns width="1/2row">
+                        <vr-button type="Add" data-onclick="scopeModel.addMarket" standalone></vr-button>
+                    </vr-columns>
+                    <vr-columns width="fullrow">
+                        <vr-datagrid datasource="scopeModel.markets"
+                                     enabledraggablerow="true"
+                                     hidegridmenu
+                                     ondeleterow="scopeModel.onDeleteMarket">
+                            <vr-datagridcolumn headertext="'Market'">
+                                <vr-span vr-loader="scopeModel.isMarketDirectiveloading">
+                                    <whs-jazz-market-selector on-ready="dataItem.onMarketSelectorReady" isrequired="true" hidelabel></whs-jazz-market-selector>
+                                </vr-span>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Customer Type'">
+                                <vr-span vr-loader="scopeModel.isCustomerTypeDirectiveloading">
+                                    <whs-jazz-customer-type-selector on-ready="dataItem.onCustomerTypeSelectorReady" isrequired="true" hidelabel></whs-jazz-customer-type-selector>
+                                </vr-span>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Percentage'">
+                                <vr-textbox value="dataItem.Percentage" isrequired type="number"></vr-textbox>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-columns>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+    </vr-tab >
+    <vr-tab header="'Region Settings'">
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-switch value="scopeModel.divideByRegion" label="Divide By Region"></vr-switch>
+                <vr-section ng-if="scopeModel.divideByRegion" title="Regions">
+                    <vr-columns width="1/2row">
+                        <vr-button type="Add" data-onclick="scopeModel.addRegion" standalone></vr-button>
+                    </vr-columns>
+                    <vr-columns width="fullrow">
+                        <vr-datagrid datasource="scopeModel.regions"
+                                     enabledraggablerow="true"
+                                     hidegridmenu
+                                     ondeleterow="scopeModel.onDeleteRegion">
+                            <vr-datagridcolumn headertext="'Region'">
+                                <vr-span vr-loader="scopeModel.isRegionDirectiveloading">
+                                    <whs-jazz-region-selector on-ready="        dataItem.onRegionSelectorReady" isrequired="true" hidelabel></whs-jazz-region-selector>
+                                </vr-span>
+                            </vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'Percentage'">
+                                <vr-textbox value="dataItem.Percentage" isrequired type="number"></vr-textbox>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-columns>
+                </vr-section>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Tax Settings'">
+        <vr-row>
+            <vr-columns width="1/3row">
+                <vr-switch value="scopeModel.createTax" label="Create Tax" onvaluechanged="scopeModel.onCreateTaxChanged"></vr-switch>
+            </vr-columns>
+            <vr-columns width="1/3row" ng-show="scopeModel.createTax">
+                <vr-textbox value="scopeModel.taxPercentage" label="Tax Percentage" type="number" isrequired="scopeModel.createTax"></vr-textbox>
+            </vr-columns>
+            <vr-row ng-show="scopeModel.createTax">
+                <vr-span vr-loader="scopeModel.isTaxFilterDirectiveloading">
+                    <vr-columns width="fullrow">
+                        <vr-section title="Tax Filter">
+                            <vr-genericdata-recordfilter on-ready="scopeModel.onTaxFilterDirectiveReady"></vr-genericdata-recordfilter>
+                        </vr-section>
+                    </vr-columns>
+                </vr-span>
+            </vr-row>
+        </vr-row>
+    </vr-tab>

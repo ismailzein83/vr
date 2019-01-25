@@ -2,9 +2,9 @@
 
     'use strict';
 
-    whsJazzRegionSettingsCustomObjectSettings.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    whsJazzAccountCodeCustomObjectSettings.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function whsJazzRegionSettingsCustomObjectSettings(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function whsJazzAccountCodeCustomObjectSettings(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_Jazz/Elements/Directives/RegionSettings/Templates/RegionSettingsCustomObjectSettings.html"
+            templateUrl: "/Client/Modules/WhS_Jazz/Elements/Directives/AccountCode/Templates/AccountCodeCustomObjectDefintion.html"
 
         };
         function SettingsCtor($scope, ctrl, $attrs) {
@@ -36,7 +36,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "TOne.WhS.Jazz.Business.WhSJazzRegionSettingsCustomObject,TOne.WhS.Jazz.Business"
+                        $type: "TOne.WhS.Jazz.Business.AccountCodeCustomObject,TOne.WhS.Jazz.Business"
                     };
                     return data;
                 };
@@ -45,9 +45,9 @@
                     ctrl.onReady(api);
                 }
             }
-        }
+        } 
     }
 
-    app.directive('whsJazzRegionsettingsCustomobjectsettings', whsJazzRegionSettingsCustomObjectSettings);
+    app.directive('whsJazzAccountcodeCustomobjectsettings', whsJazzAccountCodeCustomObjectSettings);
 
 })(app);
