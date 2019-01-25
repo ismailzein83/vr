@@ -388,12 +388,53 @@ namespace TestRuntime
                             if (!string.IsNullOrEmpty(routeName))
                                 rdr.RouteName = routeName.Trim();
 
-                            rdr.NumberOfDevices = Convert.ToInt64(currentRecord.Substring(7, 10));
-                            rdr.NumberOfBids = Convert.ToInt64(currentRecord.Substring(17, 10));
-                            rdr.NumberOfRejections = Convert.ToInt64(currentRecord.Substring(27, 10));
-                            rdr.AccNbOfBlockedDevices = Convert.ToInt64(currentRecord.Substring(37, 10));
-                            rdr.AccTrafficLevel = Convert.ToInt64(currentRecord.Substring(47, 10));
-                            rdr.NumberOfBAnswers = Convert.ToInt64(currentRecord.Substring(57, 10));
+                            string numberOfDevicesAsString = currentRecord.Substring(7, 10);
+                            if (!string.IsNullOrEmpty(numberOfDevicesAsString))
+                            {
+                                long numberOfDevicesAsNumber;
+                                if (long.TryParse(numberOfDevicesAsString.Trim(), out numberOfDevicesAsNumber))
+                                    rdr.NumberOfDevices = numberOfDevicesAsNumber;
+                            }
+
+                            string numberOfBidsAsString = currentRecord.Substring(17, 10);
+                            if (!string.IsNullOrEmpty(numberOfBidsAsString))
+                            {
+                                long numberOfBidsAsNumber;
+                                if (long.TryParse(numberOfBidsAsString.Trim(), out numberOfBidsAsNumber))
+                                    rdr.NumberOfBids = numberOfBidsAsNumber;
+                            }
+
+                            string numberOfRejectionsAsString = currentRecord.Substring(27, 10);
+                            if (!string.IsNullOrEmpty(numberOfRejectionsAsString))
+                            {
+                                long numberOfRejectionsAsNumber;
+                                if (long.TryParse(numberOfRejectionsAsString.Trim(), out numberOfRejectionsAsNumber))
+                                    rdr.NumberOfRejections = numberOfRejectionsAsNumber;
+                            }
+
+                            string accNbOfBlockedDevicesAsString = currentRecord.Substring(37, 10);
+                            if (!string.IsNullOrEmpty(accNbOfBlockedDevicesAsString))
+                            {
+                                long accNbOfBlockedDevicesAsNumber;
+                                if (long.TryParse(accNbOfBlockedDevicesAsString.Trim(), out accNbOfBlockedDevicesAsNumber))
+                                    rdr.AccNbOfBlockedDevices = accNbOfBlockedDevicesAsNumber;
+                            }
+
+                            string accTrafficLevelAsString = currentRecord.Substring(47, 10);
+                            if (!string.IsNullOrEmpty(accTrafficLevelAsString))
+                            {
+                                long accTrafficLevelAsNumber;
+                                if (long.TryParse(accTrafficLevelAsString.Trim(), out accTrafficLevelAsNumber))
+                                    rdr.AccTrafficLevel = accTrafficLevelAsNumber;
+                            }
+
+                            string numberOfBAnswersAsString = currentRecord.Substring(57, 10);
+                            if (!string.IsNullOrEmpty(numberOfBAnswersAsString))
+                            {
+                                long numberOfBAnswersAsNumber;
+                                if (long.TryParse(numberOfBAnswersAsString.Trim(), out numberOfBAnswersAsNumber))
+                                    rdr.NumberOfBAnswers = numberOfBAnswersAsNumber;
+                            }
 
                             string skip_67_79 = currentRecord.Substring(67, 13);
                             if (!string.IsNullOrEmpty(skip_67_79))
