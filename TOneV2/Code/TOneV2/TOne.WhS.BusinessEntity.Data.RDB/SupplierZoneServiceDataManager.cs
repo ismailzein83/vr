@@ -54,7 +54,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             });
         }
-
         BaseRDBDataProvider GetDataProvider()
         {
             return RDBDataProviderFactory.CreateProvider("TOneWhS_BE", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
@@ -76,7 +75,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             orDateCondition.NullCondition(COL_EED);
             orDateCondition.GreaterThanCondition(COL_EED).Value(minimumDate);
 
-            whereQuery.EqualsCondition(COL_SupplierID).Value(COL_SupplierID);
+            whereQuery.EqualsCondition(COL_SupplierID).Value(supplierId);
             whereQuery.NotNullCondition(COL_ZoneID);
 
             return queryContext.GetItems(SupplierZoneServiceMapper);
@@ -91,21 +90,25 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereQuery = selectQuery.Where();
 
-            whereQuery.ListCondition(RDBListConditionOperator.IN, supplierInfos.Select((item => item.SupplierId)));
-
-            whereQuery.NotNullCondition(COL_ZoneID);
-            if (effectiveOn.HasValue)
-            {
-                if (isEffectiveInFuture)
-                    BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                else
-                    BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-            }
+            if (supplierInfos != null && supplierInfos.Any())
+                whereQuery.ListCondition(COL_SupplierID, RDBListConditionOperator.IN, supplierInfos.Select((item => item.SupplierId)));
             else
                 whereQuery.FalseCondition();
 
+            whereQuery.NotNullCondition(COL_ZoneID);
+
+            if (isEffectiveInFuture)
+                BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, DateTime.Now);
+            else
+            {
+                if (effectiveOn.HasValue)
+                    BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                else
+                    whereQuery.FalseCondition();
+            }
+
             var groupByContext = selectQuery.GroupBy();
-            groupByContext.Select().Columns(COL_ID, COL_ZoneID, COL_SupplierID, COL_ReceivedServicesFlag, COL_EffectiveServiceFlag, COL_BED, COL_EED, COL_SourceID);
+            groupByContext.Select().Columns(COL_ID, COL_ZoneID, COL_PriceListID, COL_SupplierID, COL_ReceivedServicesFlag, COL_EffectiveServiceFlag, COL_BED, COL_EED, COL_SourceID);
 
             return queryContext.GetItems(SupplierZoneServiceMapper);
         }
@@ -119,19 +122,22 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereQuery = selectQuery.Where();
 
-            whereQuery.ListCondition(RDBListConditionOperator.IN, supplierInfos.Select((item => item.SupplierId)));
+            if (supplierInfos != null && supplierInfos.Any())
+                whereQuery.ListCondition(COL_SupplierID, RDBListConditionOperator.IN, supplierInfos.Select((item => item.SupplierId)));
+            else
+                whereQuery.FalseCondition();
 
             whereQuery.NullCondition(COL_ZoneID);
 
-            if (effectiveOn.HasValue)
+            if (isEffectiveInFuture)
+                BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, DateTime.Now);
+            else
             {
-                if (isEffectiveInFuture)
+                if (effectiveOn.HasValue)
                     BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
                 else
-                    BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                    whereQuery.FalseCondition();
             }
-            else
-                whereQuery.FalseCondition();
 
             return queryContext.GetItems(SupplierDefaultServiceMapper);
         }
@@ -158,7 +164,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             updateQuery.FromTable(TABLE_NAME);
 
             updateQuery.Column(COL_EED).Value(effectiveDate);
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
             updateQuery.Where().EqualsCondition(COL_ID).Value(supplierZoneServiceId);
 
             var insertQuery = queryContext.AddInsertQuery();
@@ -175,7 +180,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             insertQuery.Column(COL_BED).Value(effectiveDate);
 
-            return queryContext.ExecuteNonQuery(true) > 0;
+            return queryContext.ExecuteNonQuery(false) > 0;
         }
 
         public bool Insert(SupplierDefaultService supplierDefaultService)
@@ -221,8 +226,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_EED).Column("szrsToClose", COL_EED);
             var joinContext = updateQuery.Join(TABLE_ALIAS);
             joinContext.JoinOnEqualOtherTableColumn(tempTableQuery, "szrsToClose", COL_ID, TABLE_ALIAS, COL_ID);
+
 
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
@@ -256,11 +263,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereQuery = selectQuery.Where();
-            whereQuery.NullCondition(COL_ZoneID);
+
             whereQuery.LessOrEqualCondition(COL_BED).Value(to);
             var orDateCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
             orDateCondition.NullCondition(COL_EED);
             orDateCondition.GreaterThanCondition(COL_EED).Value(from);
+
+            whereQuery.NullCondition(COL_ZoneID);
 
             return queryContext.GetItems(SupplierDefaultServiceMapper);
         }
@@ -273,12 +282,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereQuery = selectQuery.Where();
-            whereQuery.NotNullCondition(COL_ZoneID);
+
             whereQuery.EqualsCondition(COL_SupplierID).Value(supplierId);
             whereQuery.LessOrEqualCondition(COL_BED).Value(to);
             var orDateCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
             orDateCondition.NullCondition(COL_EED);
             orDateCondition.GreaterThanCondition(COL_EED).Value(from);
+
+            whereQuery.NotNullCondition(COL_ZoneID);
 
             return queryContext.GetItems(SupplierZoneServiceMapper);
         }
@@ -316,6 +327,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereQuery.EqualsCondition(COL_SupplierID).Value(supplierId);
             whereQuery.NullCondition(COL_ZoneID);
 
+            selectQuery.Sort().ByColumn(TABLE_ALIAS, COL_BED, RDBSortDirection.ASC);
+
             return queryContext.GetItems(SupplierDefaultServiceMapper);
         }
 
@@ -325,7 +338,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         SupplierZoneService SupplierZoneServiceMapper(IRDBDataReader reader)
         {
-            return new SupplierZoneService()
+            return new SupplierZoneService
             {
                 SupplierZoneServiceId = reader.GetInt(COL_ID),
                 ZoneId = reader.GetLongWithNullHandling(COL_ZoneID),
@@ -334,14 +347,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 ReceivedServices = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_ReceivedServicesFlag)),
                 EffectiveServices = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_EffectiveServiceFlag)),
                 BED = reader.GetDateTime(COL_BED),
-                EED = reader.GetDateTimeWithNullHandling(COL_EED)
+                EED = reader.GetNullableDateTime(COL_EED)
             };
         }
 
 
         SupplierDefaultService SupplierDefaultServiceMapper(IRDBDataReader reader)
         {
-            return new SupplierDefaultService()
+            return new SupplierDefaultService
             {
                 SupplierZoneServiceId = reader.GetInt(COL_ID),
                 SupplierId = reader.GetInt(COL_SupplierID),
@@ -349,7 +362,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 ReceivedServices = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_ReceivedServicesFlag)),
                 EffectiveServices = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_EffectiveServiceFlag)),
                 BED = reader.GetDateTime(COL_BED),
-                EED = reader.GetDateTimeWithNullHandling(COL_EED)
+                EED = reader.GetNullableDateTime(COL_EED)
             };
         }
 
