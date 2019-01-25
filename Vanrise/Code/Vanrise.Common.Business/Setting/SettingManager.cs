@@ -148,9 +148,6 @@ namespace Vanrise.Common.Business
             if (setting != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(SettingLoggableEntity.Instance, setting);
 
-            if (setting != null && setting.Data != null)
-                setting.Data.PrepareSettingBeforeLoad(new SettingPrepareSettingBeforeLoadContext());
-
             return setting;
         }
 
@@ -194,7 +191,16 @@ namespace Vanrise.Common.Business
                {
                    ISettingDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
                    IEnumerable<Setting> settings = dataManager.GetSettings();
-                   return settings.ToDictionary(item => item.SettingId, item => item);
+
+                   Dictionary<Guid, Setting> dictSettings = new Dictionary<Guid, Setting>();
+                   foreach (var setting in settings)
+                   {
+                       if (setting != null && setting.Data != null)
+                           setting.Data.PrepareSettingBeforeLoad(new SettingPrepareSettingBeforeLoadContext());
+
+                       dictSettings.Add(setting.SettingId, setting);
+                   }
+                   return dictSettings;
                });
         }
 
