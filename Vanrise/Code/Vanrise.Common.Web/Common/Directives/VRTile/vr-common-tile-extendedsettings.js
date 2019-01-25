@@ -131,7 +131,7 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + ' isrequired="true"'
+                            //+ ' isrequired="true"'
                             + ' label="Tile"'
                             + ' hideremoveicon>'
                         + '</vr-select>'

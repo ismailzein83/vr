@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
 
-namespace Vanrise.Entities
+namespace Vanrise.Common.Business
 {
     public class VRTileCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {

@@ -168,7 +168,9 @@
     <Content Include="Common\Directives\TextPattern\vr-common-textpatternbuilder.js" />
     <Content Include="Common\Directives\VRNamespace\vr-common-namespaceitem-search.js" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileCustomObjectSettingsTemplate.html" />
+    <Content Include="Common\Directives\VRTile\Templates\VRTileReportSettingsTemplate.html" />
     <Content Include="Common\Directives\VRTile\vr-common-tile-customobjectsettings.js" />
+    <Content Include="Common\Directives\VRTile\vr-common-tile-reportsettings.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\SpecificDaysDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-specificdays.js" />

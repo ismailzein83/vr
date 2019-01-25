@@ -38,7 +38,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "Vanrise.Entities.VRTileCustomObjectTypeSettings,Vanrise.Entities"
+                        $type: "Vanrise.Common.Business.VRTileCustomObjectTypeSettings,Vanrise.Common.Business"
                     };
                     return data;
                 };
