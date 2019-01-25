@@ -1205,9 +1205,21 @@
       <Project>{3576c635-48b8-47b2-ac5d-6117110f3ccf}</Project>
       <Name>TOne.WhS.InvToAccBalanceRelation.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Jazz.BP.Arguments\TOne.WhS.Jazz.BP.Arguments.csproj">
+      <Project>{97fcd3fb-7c13-4c40-b150-bdcf81e4ab19}</Project>
+      <Name>TOne.WhS.Jazz.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Jazz.Business\TOne.WhS.Jazz.Business.csproj">
       <Project>{13b1e299-0735-4740-85f3-5ef085d4d206}</Project>
       <Name>TOne.WhS.Jazz.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Jazz.Data.RDB\TOne.WhS.Jazz.Data.RDB.csproj">
+      <Project>{a383886a-af2e-48f8-b8ff-e14260a67640}</Project>
+      <Name>TOne.WhS.Jazz.Data.RDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Jazz.Data\TOne.WhS.Jazz.Data.csproj">
+      <Project>{f2903613-8320-47db-aa72-db7bcf9aa7ae}</Project>
+      <Name>TOne.WhS.Jazz.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Jazz.Entities\TOne.WhS.Jazz.Entities.csproj">
       <Project>{bc05ef6d-43a5-48a9-8d1d-5ba1a1f4f7ca}</Project>
