@@ -201,6 +201,7 @@
     <Compile Include="VRRule\VRRuleManager.cs" />
     <Compile Include="VRSequence\VRSequenceManager.cs" />
     <Compile Include="VRTempPayload\VRTempPayloadManager.cs" />
+    <Compile Include="VRTile\VRTileCustomObjectTypeSettings.cs" />
     <Compile Include="VRTile\VRTileManager.cs" />
     <Compile Include="VRTile\VRTileViewSettings.cs" />
     <Compile Include="VRTimePeriod\VRTimePeriodManager.cs" />
