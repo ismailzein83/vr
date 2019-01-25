@@ -1,0 +1,24 @@
+﻿<vr-row removeline>
+    <vr-columns colnum="3">
+        <vr-common-menuoption-selector on-ready="scopeModel.onMenuOptionSelectReady" onselectionchanged="scopeModel.onMenuOptionSelectIonChanged" isrequired="true" hideremoveicon></vr-common-menuoption-selector>
+    </vr-columns>
+    <vr-columns colnum="2" ng-hide="noMenu">
+        <vr-switch value="scopeModel.expandedMenu" label="Expanded Menu"></vr-switch>
+    </vr-columns>
+    <vr-columns colnum="2">
+        <vr-switch value="scopeModel.isBreadcrumbVisible" label="Breadcrumb Visible" vr-disabled="noMenu"></vr-switch>
+    </vr-columns>
+    <vr-columns colnum="2">
+        <vr-switch value="scopeModel.showApplicationTiles" label="Show Application Tiles" vr-disabled="noMenu || moduleFilter"></vr-switch>
+    </vr-columns>
+    <vr-columns colnum="2">
+        <vr-switch value="scopeModel.showModuleTiles" label="Show Module Tiles" vr-disabled="noMenu"></vr-switch>
+    </vr-columns>
+    <vr-columns colnum="2">
+        <vr-switch value="scopeModel.tilesMode" label="Tiles Mode"></vr-switch>
+    </vr-columns>
+    <vr-columns colnum="2">
+        <vr-switch value="scopeModel.moduleTilesMode" label="Module Tiles Mode"></vr-switch>
+    </vr-columns>
+    
+</vr-row>

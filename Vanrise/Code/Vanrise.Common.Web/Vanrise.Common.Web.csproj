@@ -118,6 +118,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Constant\MasterLayoutMenuOptionEnum.js" />
     <Content Include="Common\Constant\PatternPartsEnum.js" />
     <Content Include="Common\Constant\VRCustomCodeDynamicAPIMethodTypeEnum.js" />
     <Content Include="Common\Constant\VRHttpMessageFormatEnum.js" />
@@ -170,6 +171,9 @@
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-specificdays.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-yesterday.js" />
+    <Content Include="Common\Directives\MasterLayoutSettings\Templates\MasterLayoutTemplateSettings.html" />
+    <Content Include="Common\Directives\MasterLayoutSettings\vr-common-masterlayout-settings-editor.js" />
+    <Content Include="Common\Directives\MasterLayoutSettings\vr-common-menuoption-selector.js" />
     <Content Include="Common\Services\APIServices\RDBDataTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRBulkActionDraftAPIService.js" />
     <Content Include="Common\Services\APIServices\VRNamespaceItemAPIService.js" />
