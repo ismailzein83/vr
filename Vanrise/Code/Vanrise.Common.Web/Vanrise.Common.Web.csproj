@@ -128,7 +128,9 @@
     <Content Include="Common\Directives\Country\vr-common-country-remoteselector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\FTPConnectionEditorTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\HttpConnectionCallInterceptorSelectiveTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-ftpconnection-editor.js" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-httpconnectioncallinterceptor-selective.js" />
     <Content Include="Common\Directives\RDBDataType\vr-common-rdbdatatype-info.js" />
     <Content Include="Common\Directives\StatusDefinition\Templates\StatusDefinitionViewerTemplate.html" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-viewer.js" />
@@ -178,6 +180,7 @@
     <Content Include="Common\Directives\MasterLayoutSettings\Templates\MasterLayoutTemplateSettings.html" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-masterlayout-settings-editor.js" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-menuoption-selector.js" />
+    <Content Include="Common\Services\APIServices\HttpCallConnectionInterceptorAPIService.js" />
     <Content Include="Common\Services\APIServices\RDBDataTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRBulkActionDraftAPIService.js" />
     <Content Include="Common\Services\APIServices\VRNamespaceItemAPIService.js" />
@@ -210,6 +213,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
     <Compile Include="Controllers\CacheRefreshController.cs" />
+    <Compile Include="Controllers\HttpCallConnectionInterceptorsController.cs" />
     <Compile Include="Controllers\RDBDataTypeController.cs" />
     <Compile Include="Controllers\VRBulkActionDraftController.cs" />
     <Compile Include="Controllers\VRCommentController.cs" />

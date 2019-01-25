@@ -1,0 +1,15 @@
+﻿<vr-row removeline>
+    <vr-columns width="1/4row">
+        <vr-select on-ready="onSelectorReady"
+                   datasource="interceptorTemplates"
+                   selectedvalues="selectedInterceptorTemplate"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Title"
+                   label="Interceptor"
+                   isrequired>
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="3/4row" ng-show="interceptorTemplates!=undefined">
+        <vr-directivewrapper directive="selectedInterceptorTemplate.Editor" on-ready="onDirectiveReady"></vr-directivewrapper>
+    </vr-columns>
+</vr-row>
