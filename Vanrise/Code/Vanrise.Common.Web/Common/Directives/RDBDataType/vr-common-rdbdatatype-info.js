@@ -74,7 +74,7 @@ appControllers.directive('vrCommonRdbdatatypeInfo', ['VRNotificationService', 'U
                     if (selectorAPI) {
                         if (value) {
                             if (typeSelectedPromise != undefined) {
-                                typeSelectedPromise.resolve();
+                                typeSelectedPromise=undefined;
                             }
                             else {
                                 $scope.scopeModel.size = undefined;

@@ -150,11 +150,7 @@
     <Compile Include="Controllers\WhSJazzAcountCodeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_Jazz\Elements\Directives\AmountCalculation\Templates\" />
-    <Folder Include="WhS_Jazz\Elements\Directives\MarketSettings\" />
-    <Folder Include="WhS_Jazz\Elements\Directives\Templates\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="WhS_Jazz\Constant\WhSJazzRateCalculationTypeEnum.js" />
     <Content Include="WhS_Jazz\Constant\ModuleConfig.js" />

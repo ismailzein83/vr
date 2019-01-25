@@ -69,7 +69,9 @@ appControllers.directive('whsJazzRateCalculationTypeSelector', ['VRNotificationS
                 $scope.scopeModel.onRateTypeChanged = function (value) {
                     if (selectorAPI) {
                         if (value) {
-                            if (rateTypeSelectedPromise == undefined)
+                            if (rateTypeSelectedPromise != undefined)
+                                rateTypeSelectedPromise = undefined;
+                            else
                                 $scope.scopeModel.fixedRateValue = undefined;
                         }
                     }
@@ -98,6 +100,7 @@ appControllers.directive('whsJazzRateCalculationTypeSelector', ['VRNotificationS
                     if (selectedIds != undefined) {
                         rateTypeSelectedPromise = UtilsService.createPromiseDeferred();
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
+
                     }
                 };
 
