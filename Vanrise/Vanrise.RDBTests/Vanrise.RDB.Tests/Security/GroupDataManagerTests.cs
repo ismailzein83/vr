@@ -12,7 +12,7 @@ namespace Vanrise.RDB.Tests.Security
     [TestClass]
     public class GroupDataManagerTests
     {
-        const string DBTABLE_NAME_Group = "Group";
+        const string DBTABLE_NAME_Group = "[Group]";
 
         IGroupDataManager _rdbDataManager = RDBDataManagerFactory.GetDataManager<IGroupDataManager>();
         IGroupDataManager _sqlDataManager = SQLDataManagerFactory.GetDataManager<IGroupDataManager>();
@@ -24,7 +24,6 @@ namespace Vanrise.RDB.Tests.Security
             {
                 Name = "RDB TEST",
                 Description = Guid.NewGuid().ToString(),
-                GroupId = 1,
                 TenantId = 1
             };
             var tester = new GroupMainOperationTester(Group, _rdbDataManager, _sqlDataManager);

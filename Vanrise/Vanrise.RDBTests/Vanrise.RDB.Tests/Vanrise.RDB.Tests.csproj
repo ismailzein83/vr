@@ -247,6 +247,12 @@
     <Compile Include="Security\CookieNameDataManagerTests.cs" />
     <Compile Include="Security\EncryptionKeyDataManagerTests.cs" />
     <Compile Include="Security\GroupDataManagerTests.cs" />
+    <Compile Include="Security\OrgChartDataManagerTests.cs" />
+    <Compile Include="Security\RequiredPermissionSetDataManagerTests.cs" />
+    <Compile Include="Security\SecurityProviderDataManagerTests.cs" />
+    <Compile Include="Security\SystemActionDataManagerTests.cs" />
+    <Compile Include="Security\TenantDataManagerTests.cs" />
+    <Compile Include="Security\WidgetDefinitionDataManagerTests.cs" />
     <Compile Include="SQLDataManagerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
