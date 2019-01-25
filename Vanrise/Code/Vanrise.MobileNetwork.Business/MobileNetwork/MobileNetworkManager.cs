@@ -15,6 +15,17 @@ namespace Vanrise.MobileNetwork.Business
             mobileNetworks.ThrowIfNull("mobileNetworks");
             return mobileNetworks.FindRecord(item => item.Id == mobileNetworkId);
         }
+
+        public bool IsCountryNational(int mobileNetworkId)
+        {
+            var mobileNetwork = GetMobileNetworkById(mobileNetworkId);
+            mobileNetwork.ThrowIfNull("mobileNetwork", mobileNetworkId);
+            MobileCountryManager mobileCountryManager = new MobileCountryManager();
+            var mobileCountry = mobileCountryManager.GetMobileCountryById(mobileNetwork.MobileCountryId);
+            mobileCountry.ThrowIfNull("mobileCountry", mobileNetwork.MobileCountryId);
+            Vanrise.Common.Business.ConfigManager commonConfigManager = new Common.Business.ConfigManager();
+            return commonConfigManager.IsCountryNational(mobileCountry.CountryId);
+        }
         public int? GetMobileNetworkID(string mobileNetworkCode, int mobileCountryId)
         {
             var mobileNetwork = GetMobileNetwork(mobileNetworkCode, mobileCountryId);
