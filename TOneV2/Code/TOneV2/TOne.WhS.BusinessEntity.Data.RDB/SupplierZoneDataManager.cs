@@ -28,15 +28,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static SupplierZoneDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_CountryID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Name, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 255});
-            columns.Add(COL_SupplierID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_CountryID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_SupplierID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -113,19 +113,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereQuery = selectQuery.Where();
 
-            if (effectiveOn.HasValue)
-            {
-                if (isEffectiveInFuture)
-                {
-                    BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                }
-                else
-                {
-                    BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                }
-            }
+            if (isEffectiveInFuture)
+                BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, DateTime.Now);
             else
-                whereQuery.FalseCondition();
+            {
+                if (effectiveOn.HasValue)
+                    BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                else
+                    whereQuery.FalseCondition();
+            }
 
             return queryContext.GetItems(SupplierZoneMapper);
         }
