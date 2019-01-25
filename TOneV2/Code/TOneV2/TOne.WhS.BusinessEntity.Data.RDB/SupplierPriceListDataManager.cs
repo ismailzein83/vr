@@ -28,18 +28,18 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static SupplierPriceListDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_SupplierID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_FileID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_EffectiveOn, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_PricelistType, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
-            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_SPLStateBackupID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_UserID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_SupplierID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_FileID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_EffectiveOn, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_PricelistType, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_SPLStateBackupID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_UserID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -49,7 +49,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 IdColumnName = COL_ID,
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
-
             });
         }
 
@@ -61,18 +60,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
 
         #region ISupplierPriceListDataManager Members
-
-        public SupplierPriceList GetPriceList(int priceListId)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-            var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition(COL_ID).Value(priceListId);
-            return queryContext.GetItem(SupplierPriceListMapper);
-        }
 
         public List<SupplierPriceList> GetPriceLists()
         {
@@ -91,6 +78,22 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #endregion
 
+        #region Not Used Functions
+
+        public SupplierPriceList GetPriceList(int priceListId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var whereQuery = selectQuery.Where();
+            whereQuery.EqualsCondition(COL_ID).Value(priceListId);
+            return queryContext.GetItem(SupplierPriceListMapper);
+        }
+
+        #endregion
+
         #region StateBackup
 
         //TODO Not yet implemented
@@ -102,16 +105,16 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SupplierPriceList
             {
+                PriceListId = reader.GetInt(COL_ID),
                 SupplierId = reader.GetInt(COL_SupplierID),
                 CurrencyId = reader.GetInt(COL_CurrencyID),
-                PriceListId = reader.GetInt(COL_ID),
                 FileId = reader.GetNullableLong(COL_FileID),
+                EffectiveOn = reader.GetDateTimeWithNullHandling(COL_EffectiveOn),
+                PricelistType = (SupplierPricelistType?)reader.GetNullableInt(COL_PricelistType),
                 CreateTime = reader.GetDateTimeWithNullHandling(COL_CreatedTime),
                 ProcessInstanceId = reader.GetNullableLong(COL_ProcessInstanceID),
                 SPLStateBackupId = reader.GetNullableLong(COL_SPLStateBackupID),
-                UserId = reader.GetInt(COL_UserID),
-                PricelistType = (SupplierPricelistType?)reader.GetNullableInt(COL_PricelistType),
-                EffectiveOn = reader.GetDateTimeWithNullHandling(COL_EffectiveOn)
+                UserId = reader.GetIntWithNullHandling(COL_UserID),
             };
         }
 
