@@ -85,8 +85,22 @@ namespace TOne.WhS.Routing.Entities
 
             if (RouteOptionRuleConfiguration == null)
             {
+                Dictionary<Guid, RouteOptionRuleTypeConfiguration> defaultRouteOptionRuleTypeConfigurationDict = new Dictionary<Guid, RouteOptionRuleTypeConfiguration>()
+                {
+                    { new Guid("9d66822e-adb3-4088-8e94-33647e523c29"), new RouteOptionRuleTypeConfiguration() { IsExcluded = false } },
+                    { new Guid("5a998636-0de9-4654-b430-c24805dd78d9"), new RouteOptionRuleTypeConfiguration() { IsExcluded = false } }
+                };
+
                 RouteOptionRuleConfiguration = new RouteOptionRuleConfiguration
                 {
+                    CustomerRouteOptionRuleTypeConfiguration = new CustomerRouteOptionRuleTypeConfiguration()
+                    {
+                        RouteOptionRuleTypeConfiguration = defaultRouteOptionRuleTypeConfigurationDict
+                    },
+                    ProductRouteOptionRuleTypeConfiguration = new ProductRouteOptionRuleTypeConfiguration()
+                    {
+                        RouteOptionRuleTypeConfiguration = defaultRouteOptionRuleTypeConfigurationDict
+                    },
                     RuleCriteriasPriority = defaultRouteOptionRuleCriteriasPriority
                 };
             }
