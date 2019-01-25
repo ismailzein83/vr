@@ -179,17 +179,32 @@ namespace Vanrise.Data.RDB
 
         public bool IsDataUpdated(string tableName, ref object lastReceivedDataInfo)
         {
-            var tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(this.DataProvider, tableName);
+            return IsDataUpdated(RDBSchemaManager.Current, tableName, ref lastReceivedDataInfo);
+        }
+
+        public bool IsDataUpdated(RDBSchemaManager schemaManager, string tableName, ref object lastReceivedDataInfo)
+        {
+            var tableDefinition = schemaManager.GetTableDefinitionWithValidate(this.DataProvider, tableName);
             tableDefinition.ModifiedTimeColumnName.ThrowIfNull("tableDefinition.ModifiedTimeColumnName", tableName);
-            return this.DataProvider.IsDataUpdated(tableName, tableDefinition, ref lastReceivedDataInfo);
+            return this.DataProvider.IsDataUpdated(schemaManager, tableName, tableDefinition, ref lastReceivedDataInfo);
         }
 
         public bool IsDataUpdated<T>(string tableName, T cachePartitionColumnValue, ref object lastReceivedDataInfo)
         {
-            var tableDefinition = RDBSchemaManager.Current.GetTableDefinitionWithValidate(this.DataProvider, tableName);
+            return IsDataUpdated<T>(RDBSchemaManager.Current, tableName, cachePartitionColumnValue, ref lastReceivedDataInfo);
+        }
+
+        public bool IsDataUpdated<T>(RDBSchemaManager schemaManager, string tableName, T cachePartitionColumnValue, ref object lastReceivedDataInfo)
+        {
+            var tableDefinition = schemaManager.GetTableDefinitionWithValidate(this.DataProvider, tableName);
             tableDefinition.ModifiedTimeColumnName.ThrowIfNull("tableDefinition.ModifiedTimeColumnName", tableName);
             tableDefinition.CachePartitionColumnName.ThrowIfNull("tableDefinition.CachePartitionColumnName", tableName);
-            return this.DataProvider.IsDataUpdated(tableName, tableDefinition, tableDefinition.CachePartitionColumnName, cachePartitionColumnValue, ref lastReceivedDataInfo);
+            return this.DataProvider.IsDataUpdated(schemaManager, tableName, tableDefinition, tableDefinition.CachePartitionColumnName, cachePartitionColumnValue, ref lastReceivedDataInfo);
+        }
+
+        public int GetDBQueryMaxParameterNumber()
+        {
+            return 2000;
         }
 
         public object GetMaxReceivedDataInfo(string tableName)

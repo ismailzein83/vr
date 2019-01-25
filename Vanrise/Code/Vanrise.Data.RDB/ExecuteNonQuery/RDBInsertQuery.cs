@@ -7,15 +7,31 @@ using Vanrise.Common;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBInsertQuery : BaseRDBQuery
+    public abstract class BaseRDBWriteDataQuery : BaseRDBQuery
     {
-        RDBQueryBuilderContext _queryBuilderContext;
-
-        string _notExistConditionTableAlias;
-
-        internal RDBInsertQuery(RDBQueryBuilderContext queryBuilderContext)
+        protected RDBQueryBuilderContext _queryBuilderContext;
+        protected BaseRDBWriteDataQuery(RDBQueryBuilderContext queryBuilderContext)
         {
             _queryBuilderContext = queryBuilderContext;
+        }
+
+        public RDBExpressionContext Column(string columnName)
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (expression) => ColumnValue(columnName, expression), null);
+        }
+
+        public abstract void ColumnValue(string columnName, BaseRDBExpression value);
+
+        public abstract RDBConditionContext IfNotExists(string tableAlias, RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND);
+    }
+
+    public class RDBInsertQuery : BaseRDBWriteDataQuery
+    {
+        string _notExistConditionTableAlias;
+
+        internal RDBInsertQuery(RDBQueryBuilderContext queryBuilderContext) 
+            : base(queryBuilderContext)
+        {
         }
 
         IRDBTableQuerySource _table;
@@ -41,7 +57,7 @@ namespace Vanrise.Data.RDB
         }
 
         RDBConditionContext _notExistsConditionContext;
-        public RDBConditionContext IfNotExists(string tableAlias, RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
+        public override RDBConditionContext IfNotExists(string tableAlias, RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
         {
             this._notExistConditionTableAlias = tableAlias;
             if(_notExistsConditionContext == null)
@@ -64,12 +80,7 @@ namespace Vanrise.Data.RDB
             _addSelectGeneratedId = true;
         }
 
-        public RDBExpressionContext Column(string columnName)
-        {
-            return new RDBExpressionContext(_queryBuilderContext, (expression) => ColumnValue(columnName, expression), null);
-        }
-        
-        public void ColumnValue(string columnName, BaseRDBExpression value)
+        public override void ColumnValue(string columnName, BaseRDBExpression value)
         {
             this._columnValues.Add(new RDBInsertColumn
             {

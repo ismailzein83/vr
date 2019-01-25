@@ -106,21 +106,21 @@ namespace Vanrise.Data.RDB
             conditionContext.GreaterThanCondition(tableDefinition.ModifiedTimeColumnName).Value(lastModifiedTime);
         }
 
-        public virtual bool IsDataUpdated(string tableName, RDBTableDefinition tableDefinition, ref object lastReceivedDataInfo)
+        public virtual bool IsDataUpdated(RDBSchemaManager schemaManager, string tableName, RDBTableDefinition tableDefinition, ref object lastReceivedDataInfo)
         {
             var queryContext = new RDBQueryContext(this);
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(tableName, "tab", null, true);
+            selectQuery.From(new RDBTableDefinitionQuerySource(tableName, schemaManager), "tab", null, true);
             selectQuery.SelectAggregates().Aggregate(RDBNonCountAggregateType.MAX, tableDefinition.ModifiedTimeColumnName);
             var newReceivedDataInfo = queryContext.ExecuteScalar().NullableDateTimeValue;
             return IsDataUpdated(ref lastReceivedDataInfo, newReceivedDataInfo);
         }
 
-        public virtual bool IsDataUpdated<T>(string tableName, RDBTableDefinition tableDefinition, string columnName, T columnValue, ref object lastReceivedDataInfo)
+        public virtual bool IsDataUpdated<T>(RDBSchemaManager schemaManager, string tableName, RDBTableDefinition tableDefinition, string columnName, T columnValue, ref object lastReceivedDataInfo)
         {
             var queryContext = new RDBQueryContext(this);
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(tableName, "tab", null, true);
+            selectQuery.From(new RDBTableDefinitionQuerySource(tableName, schemaManager), "tab", null, true);
             selectQuery.SelectAggregates().Aggregate(RDBNonCountAggregateType.MAX, tableDefinition.ModifiedTimeColumnName);
             selectQuery.Where().EqualsCondition(columnName).ObjectValue(columnValue);
             var newReceivedDataInfo = queryContext.ExecuteScalar().NullableDateTimeValue;

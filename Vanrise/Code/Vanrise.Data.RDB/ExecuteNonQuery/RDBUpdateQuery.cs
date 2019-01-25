@@ -7,15 +7,14 @@ using Vanrise.Common;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBUpdateQuery : BaseRDBQuery
+    public class RDBUpdateQuery : BaseRDBWriteDataQuery
     {
-        RDBQueryBuilderContext _queryBuilderContext;
         string _notExistConditionTableAlias;
         string _tableAlias;
 
         internal RDBUpdateQuery(RDBQueryBuilderContext queryBuilderContext)
+            : base(queryBuilderContext)
         {
-            _queryBuilderContext = queryBuilderContext;
         }
 
         IRDBTableQuerySource _table;
@@ -44,7 +43,7 @@ namespace Vanrise.Data.RDB
         }
 
         RDBConditionContext _notExistsConditionContext;
-        public RDBConditionContext IfNotExists(string tableAlias, RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
+        public override RDBConditionContext IfNotExists(string tableAlias, RDBConditionGroupOperator groupOperator = RDBConditionGroupOperator.AND)
         {
             this._notExistConditionTableAlias = tableAlias;
             if(_notExistsConditionContext == null)
@@ -61,13 +60,8 @@ namespace Vanrise.Data.RDB
             }
             return _notExistsConditionContext;
         }
-
-        public RDBExpressionContext Column(string columnName)
-        {
-            return new RDBExpressionContext(_queryBuilderContext, (expression) => ColumnValue(columnName, expression), null);
-        }
-
-        public void ColumnValue(string columnName, BaseRDBExpression value)
+        
+        public override void ColumnValue(string columnName, BaseRDBExpression value)
         {
             this._columnValues.Add(new RDBUpdateColumn
             {

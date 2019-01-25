@@ -171,14 +171,14 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             conditionContext.GreaterThanCondition("timestamp").Value(lastReceivedDataInfo as byte[]);
         }
 
-        public override bool IsDataUpdated(string tableName, RDBTableDefinition tableDefinition, ref object lastReceivedDataInfo)
+        public override bool IsDataUpdated(RDBSchemaManager schemaManager, string tableName, RDBTableDefinition tableDefinition, ref object lastReceivedDataInfo)
         {
             string query = String.Format("SELECT MAX(timestamp) FROM {0} WITH(NOLOCK)", GetTableDBName(tableDefinition.DBSchemaName, tableDefinition.DBTableName));
             var newReceivedDataInfo = _dataManager.ExecuteScalar(query, null);
             return IsDataUpdated(ref lastReceivedDataInfo, newReceivedDataInfo);
         }
 
-        public override bool IsDataUpdated<T>(string tableName, RDBTableDefinition tableDefinition, string columnName, T columnValue, ref object lastReceivedDataInfo)
+        public override bool IsDataUpdated<T>(RDBSchemaManager schemaManager, string tableName, RDBTableDefinition tableDefinition, string columnName, T columnValue, ref object lastReceivedDataInfo)
         {
             string query = String.Format("SELECT MAX(timestamp) FROM {0} WITH(NOLOCK) WHERE {1} = @ColumnValue", GetTableDBName(tableDefinition.DBSchemaName, tableDefinition.DBTableName), columnName);
 
