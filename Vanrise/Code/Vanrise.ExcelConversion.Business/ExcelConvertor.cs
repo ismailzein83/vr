@@ -36,6 +36,8 @@ namespace Vanrise.ExcelConversion.Business
             MemoryStream stream = new MemoryStream(file.Content);
             Common.Utilities.ActivateAspose();
             var workbook = excelManager.CreateWorkbook(file, stream);
+
+            workbook.CalculateFormula();
             Common.Utilities.ActivateAspose();
             ConvertFields(conversionSettings, convertedExcel, workbook, isCommaDecimalSeparator);
             ConvertLists(conversionSettings, convertedExcel, workbook, stopOnFirstEmptyRow, isCommaDecimalSeparator);

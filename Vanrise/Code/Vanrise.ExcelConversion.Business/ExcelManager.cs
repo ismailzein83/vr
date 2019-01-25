@@ -28,6 +28,8 @@ namespace Vanrise.ExcelConversion.Business
 
             Common.Utilities.ActivateAspose();
             var workbook = CreateWorkbook(file, stream);
+            workbook.CalculateFormula();
+
             ExcelWorkbook ewb = new ExcelWorkbook() { Sheets = new List<ExcelWorksheet>() };
             foreach (var sheet in workbook.Worksheets)
             {
@@ -129,6 +131,7 @@ namespace Vanrise.ExcelConversion.Business
             MemoryStream stream = new MemoryStream(file.Content);
             Common.Utilities.ActivateAspose();
             var workbook = CreateWorkbook(file, stream);
+            workbook.CalculateFormula();
             ExcelWorkbook ewb = new ExcelWorkbook() { Sheets = new List<ExcelWorksheet>() };
             var sheet = workbook.Worksheets[Query.SheetIndex];
             if (sheet == null)
