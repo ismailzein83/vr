@@ -14,7 +14,7 @@ namespace Vanrise.Common.MainExtensions.VRTile
         public override string RuntimeEditor { get { return ""; } }
         public Guid? ViewId { get; set; }
         public List<FiguresTileQuery> Queries { get; set; }
-        public List<FiguresTileDisplayItem> ItemsToDiplay { get; set; }
+        public List<FiguresTileDisplayItem> ItemsToDisplay { get; set; }
     }
     public class FiguresTileDisplayItem
     {
