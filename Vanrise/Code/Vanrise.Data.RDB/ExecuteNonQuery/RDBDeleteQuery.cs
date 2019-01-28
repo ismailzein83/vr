@@ -22,15 +22,18 @@ namespace Vanrise.Data.RDB
 
         List<RDBJoin> _joins;
 
-        public void FromTable(IRDBTableQuerySource table)
+        bool _withNoLock;
+
+        public void FromTable(IRDBTableQuerySource table, bool withNoLock = false)
         {
             this._table = table; 
             _queryBuilderContext.SetMainQueryTable(table);
+            this._withNoLock = withNoLock;
         }
 
-        public void FromTable(string tableName)
+        public void FromTable(string tableName, bool withNoLock = false)
         {
-            FromTable(new RDBTableDefinitionQuerySource(tableName));
+            FromTable(new RDBTableDefinitionQuerySource(tableName), withNoLock);
         }
 
         RDBJoinContext _joinContext;
@@ -65,7 +68,8 @@ namespace Vanrise.Data.RDB
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
-            var resolveDeleteQueryContext = new RDBDataProviderResolveDeleteQueryContext(this._table, this._tableAlias, this._conditionGroup, this._joins, context, _queryBuilderContext);
+            var resolveDeleteQueryContext = new RDBDataProviderResolveDeleteQueryContext(this._table, this._tableAlias, this._conditionGroup, 
+                this._joins, this._withNoLock, context, _queryBuilderContext);
             return context.DataProvider.ResolveDeleteQuery(resolveDeleteQueryContext);
         }
     }

@@ -380,7 +380,7 @@ namespace Vanrise.Data.RDB.DataProvider
 
             if (context.Joins != null && context.Joins.Count > 0)
             {
-                queryBuilder.Insert(0, String.Format("UPDATE {0} {1}", context.TableAlias, columnQueryBuilder.ToString()));
+                queryBuilder.Insert(0, String.Format("UPDATE {0} {1}", GetDBAlias(context.TableAlias), columnQueryBuilder.ToString()));
             }
             else
             {
@@ -446,20 +446,18 @@ namespace Vanrise.Data.RDB.DataProvider
 
             var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);
+            
+            string tableAlias = context.TableAlias;
+            if (string.IsNullOrEmpty(tableAlias))
+                tableAlias = "tab";
 
-            bool hasJoins = context.Joins != null && context.Joins.Count > 0;
-            string tableAlias = hasJoins ? context.TableAlias : string.Empty;
-
-            StringBuilder queryBuilder = new StringBuilder($" DELETE {tableAlias} FROM ");
-            if (hasJoins)
-            {
-                AddTableToDBQueryBuilder(queryBuilder, context.Table, context.TableAlias, context);
+            StringBuilder queryBuilder = new StringBuilder($" DELETE {GetDBAlias(tableAlias)} FROM ");
+            AddTableToDBQueryBuilder(queryBuilder, context.Table, tableAlias, context);
+            var tableHint = GetTableHintForDeleteQuery(context);
+            if (tableHint != null)
+                queryBuilder.Append(string.Concat(" ", tableHint, " "));
+            if (context.Joins != null && context.Joins.Count > 0)
                 AddJoinsToQuery(context, queryBuilder, context.Joins, rdbConditionToDBQueryContext);
-            }
-            else
-            {
-                AddTableToDBQueryBuilder(queryBuilder, context.Table, null, context);
-            }
 
             if (context.Condition != null)
             {
@@ -473,6 +471,11 @@ namespace Vanrise.Data.RDB.DataProvider
             var resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
             return resolvedQuery;
+        }
+
+        protected virtual string GetTableHintForDeleteQuery(IRDBDataProviderResolveDeleteQueryContext context)
+        {
+            return null;
         }
 
         public override RDBResolvedQuery ResolveTableCreationQuery(IRDBDataProviderResolveTableCreationQueryContext context)

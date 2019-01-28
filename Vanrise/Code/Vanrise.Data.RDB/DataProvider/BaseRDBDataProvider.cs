@@ -383,12 +383,14 @@ namespace Vanrise.Data.RDB
         BaseRDBCondition Condition { get; }
 
         List<RDBJoin> Joins { get; }
+
+        bool WithNoLock { get;}
     }
 
     public class RDBDataProviderResolveDeleteQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveDeleteQueryContext
     {
         public RDBDataProviderResolveDeleteQueryContext(IRDBTableQuerySource table, string tableAlias, BaseRDBCondition condition,
-            List<RDBJoin> joins, IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
+            List<RDBJoin> joins, bool withNoLock, IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
             : base(parentContext)
         {
             this.QueryBuilderContext = queryBuilderContext;
@@ -396,6 +398,7 @@ namespace Vanrise.Data.RDB
             this.TableAlias = tableAlias;
             this.Condition = condition;
             this.Joins = joins;
+            this.WithNoLock = withNoLock;
         }
 
         public RDBQueryBuilderContext QueryBuilderContext { get; private set; }
@@ -407,6 +410,8 @@ namespace Vanrise.Data.RDB
         public BaseRDBCondition Condition { get; private set; }
 
         public List<RDBJoin> Joins { get; private set; }
+
+        public bool WithNoLock { get; private set; }
     }
 
     public interface IRDBDataProviderGetConnectionStringContext

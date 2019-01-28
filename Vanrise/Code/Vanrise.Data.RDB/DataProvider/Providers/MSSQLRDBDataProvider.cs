@@ -55,6 +55,14 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 return null;
         }
 
+        protected override string GetTableHintForDeleteQuery(IRDBDataProviderResolveDeleteQueryContext context)
+        {
+            if (context.WithNoLock)
+                return "with(nolock)";
+            else
+                return null;
+        }
+
         protected override string GetTableHintForJoin(RDBJoin join)
         {
             if (join.WithNoLock)
