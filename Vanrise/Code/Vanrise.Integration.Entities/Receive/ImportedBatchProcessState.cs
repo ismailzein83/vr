@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Entities;
+﻿using Vanrise.Entities;
 
 namespace Vanrise.Integration.Entities.Receive
 {
-    public class ImportedBatchProcessState : ProcessState
+    public class DataSourceImportedBatchProcessStateSettings : ProcessStateSettings
     {
-        public override Guid Id { get; }
-
+        public long LastFinalizedId { get; set; }
     }
 }
