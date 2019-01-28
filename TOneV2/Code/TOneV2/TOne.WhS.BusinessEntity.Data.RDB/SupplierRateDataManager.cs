@@ -60,6 +60,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
 
         #region ISupplierRateDataManager Members
+
         public IEnumerable<SupplierRate> GetZoneRateHistory(List<long> zoneIds)
         {
             string supplierZoneTableAlias = "spz";
@@ -71,21 +72,22 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
-            var joinSupplierPricelist = selectQuery.Join();//TODO Join needs NoLock
-            supplierPriceListDataManager.JoinSupplierPriceList(joinSupplierPricelist, "sp", TABLE_ALIAS, COL_PriceListID);
+            var joinSupplierPricelist = selectQuery.Join();
+            supplierPriceListDataManager.JoinSupplierPriceList(joinSupplierPricelist, "sp", TABLE_ALIAS, COL_PriceListID, RDBJoinType.Inner, true);
 
-            var joinSupplierZone = selectQuery.Join();//TODO Join needs NoLock
-            supplierZoneDataManager.JoinSupplierZone(joinSupplierZone, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
+            var joinSupplierZone = selectQuery.Join();
+            supplierZoneDataManager.JoinSupplierZone(joinSupplierZone, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
             var whereQuery = selectQuery.Where();
             if (zoneIds != null && zoneIds.Any())
-                whereQuery.ListCondition(RDBListConditionOperator.IN, zoneIds);
+                whereQuery.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, zoneIds);
             whereQuery.NullCondition(COL_RateTypeID);
 
             var ordDateCondition = whereQuery.ChildConditionGroup(RDBConditionGroupOperator.OR);
             ordDateCondition.NullCondition(COL_EED);
-            ordDateCondition.GreaterThanCondition(COL_BED).Column(COL_EED);
+            ordDateCondition.NotEqualsCondition(COL_BED).Column(COL_EED);
 
+            selectQuery.Sort().ByColumn(COL_BED, RDBSortDirection.ASC);
             return queryContext.GetItems(SupplierRateMapper);
         }
 
@@ -100,11 +102,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinSupplierZone = selectQuery.Join();//TODO Join needs NoLock
-            supplierZoneDataManager.JoinSupplierZone(joinSupplierZone, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
+            supplierZoneDataManager.JoinSupplierZone(joinSupplierZone, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
             var whereQuery = selectQuery.Where();
 
-            whereQuery.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_ID).Value(input.SupplierId);
+            whereQuery.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(input.SupplierId);
 
             if (input.CountriesIds != null && input.CountriesIds.Any())
                 whereQuery.ListCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_CountryID, RDBListConditionOperator.IN, input.CountriesIds);
@@ -130,8 +132,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
-            var joinSupplierZone = selectQuery.Join();//TODO Join needs NoLock
-            supplierZoneDataManager.JoinSupplierZone(joinSupplierZone, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
+            var joinSupplierZone = selectQuery.Join();
+            supplierZoneDataManager.JoinSupplierZone(joinSupplierZone, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
             var whereQuery = selectQuery.Where();
 
@@ -167,7 +169,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereQuery.NullCondition(COL_RateTypeID);
             BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
 
-            whereQuery.ListCondition(RDBListConditionOperator.IN, supplierZoneIds);
+            whereQuery.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, supplierZoneIds);
 
             return queryContext.GetItems(SupplierRateMapper);
         }
@@ -181,11 +183,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereQuery = selectQuery.Where();
 
-            whereQuery.ListCondition(RDBListConditionOperator.IN, supplierZoneIds);
+            whereQuery.NullCondition(COL_RateTypeID);
+            whereQuery.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, supplierZoneIds);
 
-            //whereQuery.NullCondition(COL_RateTypeID);
-            //if()
-            //BEDataUtility.SetEffectiveAfterDateCondition();
+
+            var dateAndCondition = whereQuery.ChildConditionGroup();
+
+            if (EED.HasValue)
+                dateAndCondition.LessThanCondition(COL_BED).Value(EED.Value);
+
+            var orDateCondition = dateAndCondition.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orDateCondition.NullCondition(COL_EED);
+            orDateCondition.GreaterThanCondition(COL_EED).Value(BED);
+
             return queryContext.GetItems(SupplierRateMapper);
         }
 
@@ -199,7 +209,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var join = selectQuery.Join();
-            supplierPriceListDataManager.JoinSupplierPriceList(join, supplierPriceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            supplierPriceListDataManager.JoinSupplierPriceList(join, supplierPriceListTableAlias, TABLE_ALIAS, COL_PriceListID, RDBJoinType.Left, true);
 
             var whereQuery = selectQuery.Where();
 
@@ -223,7 +233,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var join = selectQuery.Join();
-            supplierPriceListDataManager.JoinSupplierPriceList(join, supplierPriceListTableAlias, TABLE_ALIAS, COL_PriceListID);
+            supplierPriceListDataManager.JoinSupplierPriceList(join, supplierPriceListTableAlias, TABLE_ALIAS, COL_PriceListID, RDBJoinType.Inner, true);
 
             var whereQuery = selectQuery.Where();
 
@@ -320,7 +330,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var join = selectQuery.Join();
-            supplierPriceListDataManager.JoinSupplierPriceList(join, "spr", TABLE_ALIAS, COL_PriceListID);
+            supplierPriceListDataManager.JoinSupplierPriceList(join, "spr", TABLE_ALIAS, COL_PriceListID, RDBJoinType.Inner, true);
 
             var whereQuery = selectQuery.Where();
             whereQuery.EqualsCondition(COL_ZoneID).Value(zoneId);
@@ -365,6 +375,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             };
             return supplierOtherRate;
         }
+
         #endregion
 
     }

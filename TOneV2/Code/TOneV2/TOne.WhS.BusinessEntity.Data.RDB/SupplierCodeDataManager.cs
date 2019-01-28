@@ -65,7 +65,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinCondition = selectQuery.Join();
-            supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
+            supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, false);
 
             var whereContext = selectQuery.Where();
 
@@ -94,7 +94,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinCondition = selectQuery.Join();
-            supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
+            supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(query.SupplierId);
@@ -120,7 +120,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var joinCondition = selectQuery.Join();
-            supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
+            supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
@@ -246,7 +246,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             }
 
             var joinCondition = selectQuery.Join();
-            supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID);
+            supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
             var supplierJoinCondition = selectQuery.Join();
             var supplierJoinStatement = supplierJoinCondition.Join(tempTableQuery, "supplierInfo");

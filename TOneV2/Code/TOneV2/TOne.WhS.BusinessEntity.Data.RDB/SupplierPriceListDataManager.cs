@@ -122,10 +122,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #region
 
-        public void JoinSupplierPriceList(RDBJoinContext joinContext, string priceListTableAlias, string originalTableAlias, string originalTablePriceListIdCol)
+        public void JoinSupplierPriceList(RDBJoinContext joinContext, string priceListTableAlias, string originalTableAlias, string originalTablePriceListIdCol, RDBJoinType joinType, bool withNoLock)
         {
             var joinStatement = joinContext.Join(TABLE_NAME, priceListTableAlias);
-            joinStatement.JoinType(RDBJoinType.Inner);
+            joinStatement.JoinType(joinType);
+            if (withNoLock)
+                joinStatement.WithNoLock();
+
             var joinCondition = joinStatement.On();
             joinCondition.EqualsCondition(originalTableAlias, originalTablePriceListIdCol, priceListTableAlias, COL_ID);
         }

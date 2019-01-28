@@ -129,10 +129,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #region Public Methods
 
-        public void JoinSupplierZone(RDBJoinContext joinContext, string zoneTableAlias, string originalTableAlias, string originalTableZoneIdCol)
+        public void JoinSupplierZone(RDBJoinContext joinContext, string zoneTableAlias, string originalTableAlias, string originalTableZoneIdCol, bool withNoLock)
         {
             var joinStatement = joinContext.Join(TABLE_NAME, zoneTableAlias);
-            joinStatement.JoinType(RDBJoinType.Inner);
+            if (withNoLock)
+                joinStatement.WithNoLock();
             var joinCondition = joinStatement.On();
             joinCondition.EqualsCondition(originalTableAlias, originalTableZoneIdCol, zoneTableAlias, COL_ID);
         }
