@@ -64,6 +64,7 @@
     <Compile Include="DBReplicationTableDataManager.cs" />
     <Compile Include="DBReplicationDataManager.cs" />
     <Compile Include="EnumerationDataManager.cs" />
+    <Compile Include="ProcessStateDataManager.cs" />
     <Compile Include="RegionDataManager.cs" />
     <Compile Include="CityDataManager.cs" />
     <Compile Include="GenericLKUPItemDataManager.cs" />

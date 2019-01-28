@@ -49,6 +49,7 @@
     <Compile Include="IDataEncryptionKeyDataManager.cs" />
     <Compile Include="IDBReplicationDataManager.cs" />
     <Compile Include="IEnumerationDataManager.cs" />
+    <Compile Include="IProcessStateDataManager.cs" />
     <Compile Include="IVRCommentDataManager.cs" />
     <Compile Include="IVRDynamicAPIDataManager.cs" />
     <Compile Include="IVRDynamicAPIModuleDataManager.cs" />

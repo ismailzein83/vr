@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Vanrise.Entities
+﻿namespace Vanrise.Entities
 {
-    public abstract class ProcessState
+    public class ProcessState
     {
-        public abstract Guid Id { get; }
+        public string UniqueName { get; set; }
+        public ProcessStateSettings Settings { get; set; }
+    }
+
+    public abstract class ProcessStateSettings
+    {
+
     }
 }

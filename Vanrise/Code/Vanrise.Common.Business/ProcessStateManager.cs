@@ -1,54 +1,46 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using Vanrise.Caching;
-//using Vanrise.Common.Data;
-//using Vanrise.Entities;
-//using static Vanrise.Common.Business.ExtensionConfigurationManager;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Vanrise.Common.Data;
+using Vanrise.Entities;
 
-//namespace Vanrise.Common.Business
-//{
-//    public class ProcessStateManager : IProcessStateManager
-//    {
-//        #region ctor/Local Variables
-//        #endregion
+namespace Vanrise.Common.Business
+{
+    public class ProcessStateManager
+    {
+        #region Public Methods
 
-//        #region Public Methods
+        public T GetProcessStateSetting<T>(string processStateUniqueName) where T : ProcessStateSettings
+        {
+            if (string.IsNullOrEmpty(processStateUniqueName))
+                throw new ArgumentNullException("processStateUniqueName");
 
-//        IProcessStateDataManager dataManager = CommonDataManagerFactory.GetDataManager<IProcessStateDataManager>();
-//        public T GetProcessStateSetting<T>(string uniqueName) where T : ProcessStateSettings
-//        {
-//            if (uniqueName == null)
-//                throw new ArgumentNullException("processStateUniqueName");
+            var processState = GetProcessStates().GetRecord(processStateUniqueName);
+            if (processState == null)
+                return null;
 
-//            var setting = GetCachedProcessStates().GetRecord(uniqueName);
-//            return setting != null ? setting as T : null;
-//        }
+            return processState.Settings.CastWithValidate<T>("processState.Settings", processStateUniqueName);
+        }
 
-//        public bool InsertOrUpdate(string uniqueName, ProcessStateSettings processState)
-//        {
-//            return dataManager.InsertOrUpdate(uniqueName, processState);
-//        }
+        public bool InsertOrUpdate(string processStateUniqueName, ProcessStateSettings processState)
+        {
+            if (string.IsNullOrEmpty(processStateUniqueName))
+                throw new ArgumentNullException("processStateUniqueName");
 
-//        #endregion
+            IProcessStateDataManager dataManager = CommonDataManagerFactory.GetDataManager<IProcessStateDataManager>();
+            return dataManager.InsertOrUpdate(processStateUniqueName, processState);
+        }
 
-//        #region Private Methods
+        #endregion
 
-//        private Dictionary<string, ProcessStateSettings> GetCachedProcessStates()
-//        {
-//            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetProcessStates",
-//               () =>
-//               {
-//                   IProcessStateDataManager dataManager = CommonDataManagerFactory.GetDataManager<IProcessStateDataManager>();
-//                   IEnumerable<ProcessState> processStates = dataManager.GetProcessStates();
-//                   return processStates.ToDictionary(item => item.UniqueName, item=> item.Settings);
-//               });
-//        }
+        #region Private Methods
 
-
-
-//        #endregion
-//    }
-//}
+        private Dictionary<string, ProcessState> GetProcessStates()
+        {
+            IProcessStateDataManager dataManager = CommonDataManagerFactory.GetDataManager<IProcessStateDataManager>();
+            IEnumerable<ProcessState> processStates = dataManager.GetProcessStates();
+            return processStates.ToDictionary(item => item.UniqueName, item => item);
+        }
+        #endregion
+    }
+}
