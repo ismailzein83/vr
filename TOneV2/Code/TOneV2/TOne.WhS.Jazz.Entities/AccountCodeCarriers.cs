@@ -5,12 +5,12 @@ using System.Text;
 
 namespace TOne.WhS.Jazz.Entities
 {
-public class WhsJazzAccountCodeCarriers
+public class AccountCodeCarriers
     {
-        public List<WhsJazzAccountCodeCarrierAccount> Carriers { get; set; }
+        public List<AccountCodeCarrierAccount> Carriers { get; set; }
 
     }
-    public class WhsJazzAccountCodeCarrierAccount
+    public class AccountCodeCarrierAccount
     {
         public int CarrierAccountId { get; set; }
     }

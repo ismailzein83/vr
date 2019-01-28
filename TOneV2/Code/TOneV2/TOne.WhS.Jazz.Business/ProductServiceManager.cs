@@ -9,35 +9,35 @@ using Vanrise.Common;
 using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
-    public class WhSJazzProductServiceCodeManager
+    public class ProductServiceManager
     {
         public static Guid _definitionId = new Guid("6222BD42-668C-4574-86B5-A71A1F21B623");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
-        public List<WhSJazzProductServiceCode> GetAllProductServiceCodes()
+        public List<ProductService> GetAllProductServices()
         {
-            var records = GetCachedProductServiceCodes();
-            List<WhSJazzProductServiceCode> productServiceCodes = null;
+            var records = GetCachedProductServices();
+            List<ProductService> productServices = null;
 
             if (records != null && records.Count > 0)
             {
-                productServiceCodes = new List<WhSJazzProductServiceCode>();
+                productServices = new List<ProductService>();
                 foreach (var record in records)
                 {
-                    productServiceCodes.Add(record.Value);
+                    productServices.Add(record.Value);
                 }
             }
-            return productServiceCodes;
+            return productServices;
         }
 
 
-        private Dictionary<Guid, WhSJazzProductServiceCode> GetCachedProductServiceCodes()
+        private Dictionary<Guid, ProductService> GetCachedProductServices()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedProductServiceCodes", _definitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedProductServices", _definitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
-                Dictionary<Guid, WhSJazzProductServiceCode> result = new Dictionary<Guid, WhSJazzProductServiceCode>();
+                Dictionary<Guid, ProductService> result = new Dictionary<Guid, ProductService>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -46,7 +46,7 @@ namespace TOne.WhS.Jazz.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        WhSJazzProductServiceCode productServiceCode = new WhSJazzProductServiceCode()
+                        ProductService productService = new ProductService()
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
@@ -57,7 +57,7 @@ namespace TOne.WhS.Jazz.Business
                             LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
 
                         };
-                        result.Add(productServiceCode.ID, productServiceCode);
+                        result.Add(productService.ID, productService);
                     }
                 }
 
@@ -65,40 +65,40 @@ namespace TOne.WhS.Jazz.Business
             });
         }
 
-        public IEnumerable<WhSJazzProductServiceCodeDetail> GetProductServiceCodesInfo(WhSJazzProductServiceCodeInfoFilter filter)
+        public IEnumerable<ProductServiceDetail> GetProductServicesInfo(ProductServiceInfoFilter filter)
         {
-            var productServiceCodes = GetCachedProductServiceCodes();
-            Func<WhSJazzProductServiceCode, bool> filterFunc = (productServiceCode) =>
+            var productServices = GetCachedProductServices();
+            Func<ProductService, bool> filterFunc = (productService) =>
             {
                 if (filter != null)
                 {
                     if (filter.Filters != null && filter.Filters.Count() > 0)
                     {
-                        var context = new WhSJazzProductServiceCodeFilterContext
+                        var context = new ProductServiceFilterContext
                         {
-                            ProductServiceCode = productServiceCode
+                            ProductService = productService
                         };
-                        foreach (var productServiceCodeFilter in filter.Filters)
+                        foreach (var productServiceFilter in filter.Filters)
                         {
-                            if (!productServiceCodeFilter.IsMatch(context))
+                            if (!productServiceFilter.IsMatch(context))
                                 return false;
                         }
                     }
                 }
                 return true;
             };
-            return productServiceCodes.MapRecords((record) =>
+            return productServices.MapRecords((record) =>
             {
-                return ProductServiceCodeInfoMapper(record);
+                return ProductServiceInfoMapper(record);
             }, filterFunc);
 
         }
-        private WhSJazzProductServiceCodeDetail ProductServiceCodeInfoMapper(WhSJazzProductServiceCode productServiceCode)
+        private ProductServiceDetail ProductServiceInfoMapper(ProductService productService)
         {
-            return new WhSJazzProductServiceCodeDetail
+            return new ProductServiceDetail
             {
-                ID = productServiceCode.ID,
-                Name = productServiceCode.Name
+                ID = productService.ID,
+                Name = productService.Name
             };
         }
 

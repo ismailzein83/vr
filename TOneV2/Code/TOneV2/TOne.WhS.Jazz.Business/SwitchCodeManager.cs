@@ -9,26 +9,26 @@ using Vanrise.Common;
 using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
-    public class WhSJazzSwitchCodeManager
+    public class SwitchCodeManager
     {
         public static Guid _definitionId = new Guid("05E5BBB0-60D3-4D82-B25C-8EA378AFDF84");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
-        public IEnumerable<WhSJazzSwitchCode> GetAllSwitchCodes()
+        public IEnumerable<SwitchCode> GetAllSwitchCodes()
         {
             return GetCachedSwitchCodes().Values;
         }
 
-        public IEnumerable<WhSJazzSwitchCodeDetail> GetSwitchCodesInfo(WhSJazzSwitchCodeInfoFilter filter)
+        public IEnumerable<SwitchCodeDetail> GetSwitchCodesInfo(SwitchCodeInfoFilter filter)
         {
             var switchCodes = GetCachedSwitchCodes();
-            Func<WhSJazzSwitchCode, bool> filterFunc = (switchCode) =>
+            Func<SwitchCode, bool> filterFunc = (switchCode) =>
             {
                 if (filter != null)
                 {
                     if (filter.Filters != null && filter.Filters.Count() > 0)
                     {
-                        var context = new WhSJazzSwitchCodeFilterContext
+                        var context = new SwitchCodeFilterContext
                         {
                             SwitchCode = switchCode
                         };
@@ -47,13 +47,13 @@ namespace TOne.WhS.Jazz.Business
             }, filterFunc);
 
         }
-        private Dictionary<Guid, WhSJazzSwitchCode> GetCachedSwitchCodes()
+        private Dictionary<Guid, SwitchCode> GetCachedSwitchCodes()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedSwitchCodes", _definitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
-                Dictionary<Guid, WhSJazzSwitchCode> result = new Dictionary<Guid, WhSJazzSwitchCode>();
+                Dictionary<Guid, SwitchCode> result = new Dictionary<Guid, SwitchCode>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -62,7 +62,7 @@ namespace TOne.WhS.Jazz.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        WhSJazzSwitchCode switchCode = new WhSJazzSwitchCode()
+                        SwitchCode switchCode = new SwitchCode()
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
@@ -79,9 +79,9 @@ namespace TOne.WhS.Jazz.Business
                 return result;
             });
         }
-        private WhSJazzSwitchCodeDetail SwitchCodeInfoMapper(WhSJazzSwitchCode switchCode)
+        private SwitchCodeDetail SwitchCodeInfoMapper(SwitchCode switchCode)
         {
-            return new WhSJazzSwitchCodeDetail
+            return new SwitchCodeDetail
             {
                 ID = switchCode.ID,
                 SwitchId = switchCode.SwitchId

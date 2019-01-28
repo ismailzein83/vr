@@ -9,24 +9,35 @@ using Vanrise.Common;
 using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
-    public class WhSJazzTaxCodeManager
+    public class CustomerTypeManager
     {
-        public static Guid _definitionId = new Guid("EA7443B5-EEC8-4A51-AA26-3A15FE9B2ABE");
+        public static Guid _definitionId = new Guid("D1A82FF2-E1F4-4496-93D5-626BBDA9CDC9");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
-        public IEnumerable<WhSJazzTaxCode> GetAllTaxCodes()
+        public List<CustomerType> GetAllCustomerTypes()
         {
-            return GetCachedTaxCodes().Values;
+            var records = GetCachedCustomerTypes();
+            List<CustomerType> customerTypes = null;
+
+            if (records != null && records.Count > 0)
+            {
+                customerTypes = new List<CustomerType>();
+                foreach (var record in records)
+                {
+                    customerTypes.Add(record.Value);
+                }
+            }
+            return customerTypes;
         }
 
 
-        private Dictionary<Guid, WhSJazzTaxCode> GetCachedTaxCodes()
+        private Dictionary<Guid, CustomerType> GetCachedCustomerTypes()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedTaxCodes", _definitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedCustomerTypes", _definitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
-                Dictionary<Guid, WhSJazzTaxCode> result = new Dictionary<Guid, WhSJazzTaxCode>();
+                Dictionary<Guid, CustomerType> result = new Dictionary<Guid, CustomerType>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -35,20 +46,18 @@ namespace TOne.WhS.Jazz.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        WhSJazzTaxCode taxCode = new WhSJazzTaxCode()
+                        CustomerType customerType = new CustomerType()
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
-                            SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
                             Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
-                            Type = (TaxCodeTypeEnum)genericBusinessEntity.FieldValues.GetRecord("Type"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
                             LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
 
                         };
-                        result.Add(taxCode.ID, taxCode);
+                        result.Add(customerType.ID, customerType);
                     }
                 }
 
@@ -56,44 +65,44 @@ namespace TOne.WhS.Jazz.Business
             });
         }
 
-        public IEnumerable<WhSJazzTaxCodeDetail> GetTaxCodesInfo(WhSJazzTaxCodeInfoFilter filter)
+        public IEnumerable<CustomerTypeDetail> GetCustomerTypesInfo(CustomerTypeInfoFilter filter)
         {
-            var taxCodes = GetCachedTaxCodes();
-            Func<WhSJazzTaxCode, bool> filterFunc = (taxCode) =>
+            var customerTypes = GetCachedCustomerTypes();
+            Func<CustomerType, bool> filterFunc = (customerType) =>
             {
                 if (filter != null)
                 {
                     if (filter.Filters != null && filter.Filters.Count() > 0)
                     {
-                        var context = new WhSJazzTaxCodeFilterContext
+                        var context = new CustomerTypeFilterContext
                         {
-                            TaxCode = taxCode
+                            CustomerType = customerType
                         };
-                        foreach (var taxCodeFilter in filter.Filters)
+                        foreach (var customerTypeFilter in filter.Filters)
                         {
-                            if (!taxCodeFilter.IsMatch(context))
+                            if (!customerTypeFilter.IsMatch(context))
                                 return false;
                         }
                     }
                 }
                 return true;
             };
-            return taxCodes.MapRecords((record) =>
+            return customerTypes.MapRecords((record) =>
             {
-                return TaxCodeInfoMapper(record);
+                return CustomerTypeInfoMapper(record);
             }, filterFunc);
 
         }
-        private WhSJazzTaxCodeDetail TaxCodeInfoMapper(WhSJazzTaxCode taxCode)
+        private CustomerTypeDetail CustomerTypeInfoMapper(CustomerType customerType)
         {
-            return new WhSJazzTaxCodeDetail
+            return new CustomerTypeDetail
             {
-                ID = taxCode.ID,
-                Name = taxCode.Name
+                ID = customerType.ID,
+                Name = customerType.Name
             };
         }
 
     }
 
-
+ 
 }

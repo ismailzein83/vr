@@ -10,63 +10,63 @@ using TOne.WhS.Jazz.Entities;
 
 namespace TOne.WhS.Jazz.Business
 {
-    public class WhSJazzTransactionTypeCodeManager
+    public class TransactionTypeManager
     {
         public static Guid _definitionId = new Guid("476CC49C-7FAB-482A-B5F3-F91772AF9EDF");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
-        public List<WhSJazzTransactionTypeCode> GetAllTransactionTypeCodes()
+        public List<TransactionType> GetAllTransactionTypes()
         {
-            var records = GetCachedTransactionTypeCodes();
-            List<WhSJazzTransactionTypeCode> transactionTypeCodes = null;
+            var records = GetCachedTransactionTypes();
+            List<TransactionType> transactionTypes = null;
 
             if (records != null && records.Count > 0)
             {
-                transactionTypeCodes = new List<WhSJazzTransactionTypeCode>();
+                transactionTypes = new List<TransactionType>();
                 foreach (var record in records)
                 {
-                    transactionTypeCodes.Add(record.Value);
+                    transactionTypes.Add(record.Value);
                 }
             }
-            return transactionTypeCodes;
+            return transactionTypes;
         }
 
 
-        public IEnumerable<WhSJazzTransactionTypeCodeDetail> GetTransactionTypeCodesInfo(WhSJazzTransactionTypeCodeInfoFilter filter)
+        public IEnumerable<TransactionTypeDetail> GetTransactionTypesInfo(TransactionTypeInfoFilter filter)
         {
-            var transactionTypeCodes = GetCachedTransactionTypeCodes();
-            Func<WhSJazzTransactionTypeCode, bool> filterFunc = (transactionTypeCode) =>
+            var transactionTypes = GetCachedTransactionTypes();
+            Func<TransactionType, bool> filterFunc = (transactionType) =>
             {
                 if (filter != null)
                 {
                     if (filter.Filters != null && filter.Filters.Count() > 0)
                     {
-                        var context = new WhSJazzTransactionTypeCodeFilterContext
+                        var context = new TransactionTypeFilterContext
                         {
-                            TransactionTypeCode = transactionTypeCode
+                            TransactionType = transactionType
                         };
-                        foreach (var transactionTypeCodeFilter in filter.Filters)
+                        foreach (var transactionTypeFilter in filter.Filters)
                         {
-                            if (!transactionTypeCodeFilter.IsMatch(context))
+                            if (!transactionTypeFilter.IsMatch(context))
                                 return false;
                         }
                     }
                 }
                 return true;
             };
-            return transactionTypeCodes.MapRecords((record) =>
+            return transactionTypes.MapRecords((record) =>
             {
-                return TransactionTypeCodeInfoMapper(record);
+                return TransactionTypeInfoMapper(record);
             }, filterFunc);
 
         }
-        private Dictionary<Guid, WhSJazzTransactionTypeCode> GetCachedTransactionTypeCodes()
+        private Dictionary<Guid, TransactionType> GetCachedTransactionTypes()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedTransactionTypeCodes", _definitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedTransactionTypes", _definitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
-                Dictionary<Guid, WhSJazzTransactionTypeCode> result = new Dictionary<Guid, WhSJazzTransactionTypeCode>();
+                Dictionary<Guid, TransactionType> result = new Dictionary<Guid, TransactionType>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -75,7 +75,7 @@ namespace TOne.WhS.Jazz.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        WhSJazzTransactionTypeCode transactionType = new WhSJazzTransactionTypeCode()
+                        TransactionType transactionType = new TransactionType()
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
@@ -93,12 +93,12 @@ namespace TOne.WhS.Jazz.Business
             });
         }
 
-        private WhSJazzTransactionTypeCodeDetail TransactionTypeCodeInfoMapper(WhSJazzTransactionTypeCode whSJazzTransactionTypeCode)
+        private TransactionTypeDetail TransactionTypeInfoMapper(TransactionType transactionType)
         {
-            return new WhSJazzTransactionTypeCodeDetail
+            return new TransactionTypeDetail
             {
-                ID = whSJazzTransactionTypeCode.ID,
-                Name = whSJazzTransactionTypeCode.Name
+                ID = transactionType.ID,
+                Name = transactionType.Name
             };
         }
 

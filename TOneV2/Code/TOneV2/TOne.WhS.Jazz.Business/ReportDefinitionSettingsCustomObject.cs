@@ -5,10 +5,10 @@ using Vanrise.GenericData.Entities;
 using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
-public class WhSJazzReportDefinitionSettingsCustomObject : FieldCustomObjectTypeSettings
+public class ReportDefinitionSettingsCustomObject : FieldCustomObjectTypeSettings
     {
 
-        public override Guid ConfigId { get { return new Guid("7AF6055C-86A5-4E3F-A3B8-F37EC1A056E9"); } }
+        public override Guid ConfigId { get { return new Guid("86B10ADF-853F-439A-ADF2-FFFF8F54384A"); } }
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {

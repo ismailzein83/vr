@@ -9,35 +9,24 @@ using Vanrise.Common;
 using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
-    public class WhSJazzRegionCodeManager
+    public class TaxCodeManager
     {
-        public static Guid _definitionId = new Guid("37BE59A4-FCED-45BB-BE80-490B883FA0D1");
+        public static Guid _definitionId = new Guid("EA7443B5-EEC8-4A51-AA26-3A15FE9B2ABE");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
-        public List<WhSJazzRegionCode> GetAllRegionCodes()
+        public IEnumerable<TaxCode> GetAllTaxCodes()
         {
-            var records = GetCachedRegionCodes();
-            List<WhSJazzRegionCode> regionCodes = null;
-
-            if (records != null && records.Count > 0)
-            {
-                regionCodes = new List<WhSJazzRegionCode>();
-                foreach (var record in records)
-                {
-                    regionCodes.Add(record.Value);
-                }
-            }
-            return regionCodes;
-        } 
+            return GetCachedTaxCodes().Values;
+        }
 
 
-        private Dictionary<Guid, WhSJazzRegionCode> GetCachedRegionCodes()
+        private Dictionary<Guid, TaxCode> GetCachedTaxCodes()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedRegionCodes", _definitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedTaxCodes", _definitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
-                Dictionary<Guid, WhSJazzRegionCode> result = new Dictionary<Guid, WhSJazzRegionCode>();
+                Dictionary<Guid, TaxCode> result = new Dictionary<Guid, TaxCode>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -46,18 +35,20 @@ namespace TOne.WhS.Jazz.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        WhSJazzRegionCode regionCode = new WhSJazzRegionCode()
+                        TaxCode taxCode = new TaxCode()
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
+                            SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
                             Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
+                            Type = (TaxCodeTypeEnum)genericBusinessEntity.FieldValues.GetRecord("Type"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
                             LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
 
                         };
-                        result.Add(regionCode.ID, regionCode);
+                        result.Add(taxCode.ID, taxCode);
                     }
                 }
 
@@ -65,40 +56,40 @@ namespace TOne.WhS.Jazz.Business
             });
         }
 
-        public IEnumerable<WhSJazzRegionCodeDetail> GetRegionCodesInfo(WhSJazzRegionCodeInfoFilter filter)
+        public IEnumerable<TaxCodeDetail> GetTaxCodesInfo(TaxCodeInfoFilter filter)
         {
-            var regionCodes = GetCachedRegionCodes();
-            Func<WhSJazzRegionCode, bool> filterFunc = (regionCode) =>
+            var taxCodes = GetCachedTaxCodes();
+            Func<TaxCode, bool> filterFunc = (taxCode) =>
             {
                 if (filter != null)
                 {
                     if (filter.Filters != null && filter.Filters.Count() > 0)
                     {
-                        var context = new WhSJazzRegionCodeFilterContext
+                        var context = new TaxCodeFilterContext
                         {
-                            RegionCode = regionCode
+                            TaxCode = taxCode
                         };
-                        foreach (var regionCodeFilter in filter.Filters)
+                        foreach (var taxCodeFilter in filter.Filters)
                         {
-                            if (!regionCodeFilter.IsMatch(context))
+                            if (!taxCodeFilter.IsMatch(context))
                                 return false;
                         }
                     }
                 }
                 return true;
             };
-            return regionCodes.MapRecords((record) =>
+            return taxCodes.MapRecords((record) =>
             {
-                return RegionCodeInfoMapper(record);
+                return TaxCodeInfoMapper(record);
             }, filterFunc);
 
         }
-        private WhSJazzRegionCodeDetail RegionCodeInfoMapper(WhSJazzRegionCode regionCode)
+        private TaxCodeDetail TaxCodeInfoMapper(TaxCode taxCode)
         {
-            return new WhSJazzRegionCodeDetail
+            return new TaxCodeDetail
             {
-                ID = regionCode.ID,
-                Name = regionCode.Name
+                ID = taxCode.ID,
+                Name = taxCode.Name
             };
         }
 
@@ -106,4 +97,3 @@ namespace TOne.WhS.Jazz.Business
 
 
 }
-

@@ -22,12 +22,12 @@ public class AccountCodeCustomObject : FieldCustomObjectTypeSettings
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(WhsJazzAccountCodeCarriers);
+            return typeof(AccountCodeCarriers);
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-                return originalValue as WhsJazzAccountCodeCarriers;
+                return originalValue as AccountCodeCarriers;
         }
 
         public override string GetRuntimeTypeDescription()

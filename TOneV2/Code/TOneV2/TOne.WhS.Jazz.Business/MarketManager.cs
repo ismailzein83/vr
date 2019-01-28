@@ -9,63 +9,69 @@ using Vanrise.Common;
 using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
-    public class WhsJazzMarketCodeManager
+    public class MarketManager
     {
         public static Guid _definitionId = new Guid("A4E5560B-C331-486D-88A5-263F8DB7F161");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
 
-        public List<WhSJazzMarketCode> GetAllMarketCodes()
+        public List<Market> GetAllMarkets()
         {
-            var records = GetCachedMarketCodes();
-            List<WhSJazzMarketCode> marketCodes = null;
+            var records = GetCachedMarkets();
+            List<Market> markets = null;
 
             if (records != null && records.Count > 0)
             {
-                marketCodes = new List<WhSJazzMarketCode>();
+                markets = new List<Market>();
                 foreach (var record in records)
                 {
-                    marketCodes.Add(record.Value);
+                    markets.Add(record.Value);
                 }
             }
-            return marketCodes;
+            return markets;
         }
 
-        public IEnumerable<WhSJazzMarketCodeDetail> GetMarketCodesInfo(WhSJazzMarketCodeInfoFilter filter)
+        public IEnumerable<MarketDetail> GetMarketsInfo(MarketInfoFilter filter)
         {
-            var marketCodes = GetCachedMarketCodes();
-            Func<WhSJazzMarketCode, bool> filterFunc = (marketCode) =>
+            var markets = GetCachedMarkets();
+            Func<Market, bool> filterFunc = (market) =>
             {
                 if (filter != null)
                 {
                     if (filter.Filters != null && filter.Filters.Count() > 0)
                     {
-                        var context = new WhSJazzMarketCodeFilterContext
+                        var context = new MarketFilterContext
                         {
-                            MarketCode = marketCode
+                            Market = market
                         };
-                        foreach (var marketCodeFilter in filter.Filters)
+                        foreach (var marketFilter in filter.Filters)
                         {
-                            if (!marketCodeFilter.IsMatch(context))
+                            if (!marketFilter.IsMatch(context))
                                 return false;
                         }
                     }
                 }
                 return true;
             };
-            return marketCodes.MapRecords((record) =>
+            return markets.MapRecords((record) =>
             {
-                return MarketCodeInfoMapper(record);
+                return MarketInfoMapper(record);
             }, filterFunc);
 
         }
 
-        private Dictionary<Guid, WhSJazzMarketCode> GetCachedMarketCodes()
+        public Market GetMarketById(Guid marketId)
+        {
+            var markets = GetCachedMarkets();
+            return markets.GetRecord(marketId);
+        }
+
+        private Dictionary<Guid, Market> GetCachedMarkets()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedMarketCodes", _definitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedMarkets", _definitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
-                Dictionary<Guid, WhSJazzMarketCode> result = new Dictionary<Guid, WhSJazzMarketCode>();
+                Dictionary<Guid, Market> result = new Dictionary<Guid, Market>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -74,7 +80,7 @@ namespace TOne.WhS.Jazz.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        WhSJazzMarketCode marketCode = new WhSJazzMarketCode()
+                        Market market = new Market()
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
@@ -86,19 +92,19 @@ namespace TOne.WhS.Jazz.Business
                             LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
 
                         };
-                        result.Add(marketCode.ID, marketCode);
+                        result.Add(market.ID, market);
                     }
                 }
 
                 return result;
             });
         }
-        private WhSJazzMarketCodeDetail MarketCodeInfoMapper(WhSJazzMarketCode marketCode)
+        private MarketDetail MarketInfoMapper(Market market)
         {
-            return new WhSJazzMarketCodeDetail
+            return new MarketDetail
             {
-                ID = marketCode.ID,
-                Name = marketCode.Name
+                ID = market.ID,
+                Name = market.Name
             };
         }
 

@@ -9,35 +9,40 @@ using Vanrise.Common;
 using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
-    public class WhSJazzCustomerTypeCodeManager
+    public class AccountCodeManager
     {
-        public static Guid _definitionId = new Guid("D1A82FF2-E1F4-4496-93D5-626BBDA9CDC9");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
+        public static Guid _definitionId = new Guid("005F9C7F-3213-4BBE-B1D0-560423008B30");
 
-        public List<WhSJazzCustomerTypeCode> GetAllCustomerTypeCodes()
+        public GenericBusinessEntity GetAccountCodeGenericBusinessEntity(Object genericBusinessEntityId, Guid businessEntityDefinitionId)
         {
-            var records = GetCachedCustomerTypeCodes();
-            List<WhSJazzCustomerTypeCode> customerTypeCodes = null;
+            return _genericBusinessEntityManager.GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
+
+        }
+
+        public List<AccountCode> GetAllAccountCodes()
+        {
+            var records = GetCachedAccountCodes();
+            List<AccountCode> accountCodes = null;
 
             if (records != null && records.Count > 0)
             {
-                customerTypeCodes = new List<WhSJazzCustomerTypeCode>();
+                accountCodes = new List<AccountCode>();
                 foreach (var record in records)
                 {
-                    customerTypeCodes.Add(record.Value);
+                    accountCodes.Add(record.Value);
                 }
             }
-            return customerTypeCodes;
+            return accountCodes;
         }
 
-
-        private Dictionary<Guid, WhSJazzCustomerTypeCode> GetCachedCustomerTypeCodes()
+        private Dictionary<Guid, AccountCode> GetCachedAccountCodes()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedCustomerTypeCodes", _definitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedAccountCodes", _definitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
-                Dictionary<Guid, WhSJazzCustomerTypeCode> result = new Dictionary<Guid, WhSJazzCustomerTypeCode>();
+                Dictionary<Guid, AccountCode> result = new Dictionary<Guid, AccountCode>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -46,10 +51,12 @@ namespace TOne.WhS.Jazz.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        WhSJazzCustomerTypeCode customerTypeCode = new WhSJazzCustomerTypeCode()
+                        AccountCode accountCode = new AccountCode()
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
+                            SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
+                            TransactionTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("TransactionTypeId"),
                             Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
@@ -57,7 +64,7 @@ namespace TOne.WhS.Jazz.Business
                             LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
 
                         };
-                        result.Add(customerTypeCode.ID, customerTypeCode);
+                        result.Add(accountCode.ID, accountCode);
                     }
                 }
 
@@ -65,44 +72,47 @@ namespace TOne.WhS.Jazz.Business
             });
         }
 
-        public IEnumerable<WhSJazzCustomerTypeCodeDetail> GetCustomerTypeCodesInfo(WhSJazzCustomerTypeCodeInfoFilter filter)
+        public IEnumerable<AccountCodeDetail> GetAccountCodesInfo(AccountCodeInfoFilter filter)
+
         {
-            var customerTypeCodes = GetCachedCustomerTypeCodes();
-            Func<WhSJazzCustomerTypeCode, bool> filterFunc = (customerTypeCode) =>
+        var accountCodes = GetCachedAccountCodes();
+
+            Func<AccountCode, bool> filterFunc = (accountCode) =>
             {
                 if (filter != null)
                 {
                     if (filter.Filters != null && filter.Filters.Count() > 0)
                     {
-                        var context = new WhSJazzCustomerTypeCodeFilterContext
+                        var context = new AccountCodeFilterContext
                         {
-                            CustomerTypeCode = customerTypeCode
+                            AccountCode = accountCode
                         };
-                        foreach (var customerTypeCodeFilter in filter.Filters)
+                        foreach (var accountCodeFilter in filter.Filters)
                         {
-                            if (!customerTypeCodeFilter.IsMatch(context))
+                            if (!accountCodeFilter.IsMatch(context))
                                 return false;
                         }
                     }
                 }
                 return true;
             };
-            return customerTypeCodes.MapRecords((record) =>
+            return accountCodes.MapRecords((record) =>
             {
-                return CustomerTypeCodeInfoMapper(record);
+                return AccountCodeInfoMapper(record);
             }, filterFunc);
-
         }
-        private WhSJazzCustomerTypeCodeDetail CustomerTypeCodeInfoMapper(WhSJazzCustomerTypeCode customerTypeCode)
+
+        private AccountCodeDetail AccountCodeInfoMapper(AccountCode accountCode)
         {
-            return new WhSJazzCustomerTypeCodeDetail
+            return new AccountCodeDetail
             {
-                ID = customerTypeCode.ID,
-                Name = customerTypeCode.Name
+                ID = accountCode.ID,
+                Name = accountCode.Name
             };
         }
 
     }
 
- 
 }
+
+

@@ -9,40 +9,35 @@ using Vanrise.Common;
 using TOne.WhS.Jazz.Entities;
 namespace TOne.WhS.Jazz.Business
 {
-    public class WhSJazzAccountCodeManager
+    public class RegionManager
     {
+        public static Guid _definitionId = new Guid("37BE59A4-FCED-45BB-BE80-490B883FA0D1");
         GenericBusinessEntityManager _genericBusinessEntityManager = new GenericBusinessEntityManager();
-        public static Guid _definitionId = new Guid("005F9C7F-3213-4BBE-B1D0-560423008B30");
 
-        public GenericBusinessEntity GetAccountCodeGenericBusinessEntity(Object genericBusinessEntityId, Guid businessEntityDefinitionId)
+        public List<Region> GetAllRegions()
         {
-            return _genericBusinessEntityManager.GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
-
-        }
-
-        public List<WhSJazzAccountCode> GetAllAccountCodes()
-        {
-            var records = GetCachedAccountCodes();
-            List<WhSJazzAccountCode> accountCodes = null;
+            var records = GetCachedRegions();
+            List<Region> regions = null;
 
             if (records != null && records.Count > 0)
             {
-                accountCodes = new List<WhSJazzAccountCode>();
+                regions = new List<Region>();
                 foreach (var record in records)
                 {
-                    accountCodes.Add(record.Value);
+                    regions.Add(record.Value);
                 }
             }
-            return accountCodes;
-        }
+            return regions;
+        } 
 
-        private Dictionary<Guid, WhSJazzAccountCode> GetCachedAccountCodes()
+
+        private Dictionary<Guid, Region> GetCachedRegions()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedAccountCodes", _definitionId, () =>
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedRegions", _definitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_definitionId);
-                Dictionary<Guid, WhSJazzAccountCode> result = new Dictionary<Guid, WhSJazzAccountCode>();
+                Dictionary<Guid, Region> result = new Dictionary<Guid, Region>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -51,12 +46,10 @@ namespace TOne.WhS.Jazz.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        WhSJazzAccountCode accountCode = new WhSJazzAccountCode()
+                        Region region = new Region()
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
-                            SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
-                            TransactionTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("TransactionTypeId"),
                             Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
@@ -64,7 +57,7 @@ namespace TOne.WhS.Jazz.Business
                             LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
 
                         };
-                        result.Add(accountCode.ID, accountCode);
+                        result.Add(region.ID, region);
                     }
                 }
 
@@ -72,47 +65,51 @@ namespace TOne.WhS.Jazz.Business
             });
         }
 
-        public IEnumerable<WhSJazzAccountCodeDetail> GetAccountCodesInfo(WhSJazzAccountCodeInfoFilter filter)
-
+        public IEnumerable<RegionDetail> GetRegionsInfo(RegionInfoFilter filter)
         {
-        var accountCodes = GetCachedAccountCodes();
-
-            Func<WhSJazzAccountCode, bool> filterFunc = (accountCode) =>
+            var regions = GetCachedRegions();
+            Func<Region, bool> filterFunc = (region) =>
             {
                 if (filter != null)
                 {
                     if (filter.Filters != null && filter.Filters.Count() > 0)
                     {
-                        var context = new WhSJazzAccountCodeFilterContext
+                        var context = new RegionFilterContext
                         {
-                            AccountCode = accountCode
+                            Region = region
                         };
-                        foreach (var accountCodeFilter in filter.Filters)
+                        foreach (var regionFilter in filter.Filters)
                         {
-                            if (!accountCodeFilter.IsMatch(context))
+                            if (!regionFilter.IsMatch(context))
                                 return false;
                         }
                     }
                 }
                 return true;
             };
-            return accountCodes.MapRecords((record) =>
+            return regions.MapRecords((record) =>
             {
-                return AccountCodeInfoMapper(record);
+                return RegionInfoMapper(record);
             }, filterFunc);
+
         }
 
-        private WhSJazzAccountCodeDetail AccountCodeInfoMapper(WhSJazzAccountCode accountCode)
+        public Region GetRegionById(Guid regionId)
         {
-            return new WhSJazzAccountCodeDetail
+            var regions = GetCachedRegions();
+            return regions.GetRecord(regionId);
+        }
+        private RegionDetail RegionInfoMapper(Region region)
+        {
+            return new RegionDetail
             {
-                ID = accountCode.ID,
-                Name = accountCode.Name
+                ID = region.ID,
+                Name = region.Name
             };
         }
 
     }
 
-}
 
+}
 
