@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public class VRReportTypeDefinition
+    public class VRReportTypeDefinition : Vanrise.Entities.VRComponentType<VRReportTypeDefinitionSettings>
     {
+    }
+    public class VRReportTypeDefinitionSettings: Vanrise.Entities.VRComponentTypeSettings
+    {
+        public override Guid VRComponentTypeConfigId
+        {
+            get { return new Guid("D5A05B29-0329-4E28-8010-D55C01F1BFB3"); }
+        }
         public Guid DataStorageId { get; set; }
         public List<VRReportTypeFilterField> FilterFields { get; set; }
         public List<VRReportTypeAttachement> Attachements { get; set; }
