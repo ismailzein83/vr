@@ -54,6 +54,8 @@ namespace Vanrise.Data.RDB
 
         public abstract RDBResolvedQuery ResolveCheckIfTableExistsQuery(IRDBDataProviderResolveCheckIfTableExistsQueryContext context);
 
+        public abstract RDBResolvedQuery ResolveSwapTablesQuery(IRDBDataProviderResolveSwapTablesQueryContext context);
+
         public virtual RDBResolvedQuery ResolveIndexCreationQuery(IRDBDataProviderResolveIndexCreationQueryContext context)
         {
             throw new NotImplementedException();
@@ -543,6 +545,37 @@ namespace Vanrise.Data.RDB
         public string SchemaName { get; private set; }
 
         public string TableName { get; private set; }
+    }
+
+    public interface IRDBDataProviderResolveSwapTablesQueryContext : IBaseRDBResolveQueryContext
+    {
+        string SchemaName { get; }
+
+        string ExistingTable { get; }
+
+        string NewTable { get; }
+
+        bool KeepExistingTable { get; }
+    }
+
+    public class RDBDataProviderResolveSwapTablesQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveSwapTablesQueryContext
+    {
+        public RDBDataProviderResolveSwapTablesQueryContext(string schemaName, string existingTable, string newTable, bool keepExistingTable, IBaseRDBResolveQueryContext parentContext) 
+            : base(parentContext)
+        {
+            this.SchemaName = schemaName;
+            this.ExistingTable = existingTable;
+            this.NewTable = newTable;
+            this.KeepExistingTable = keepExistingTable;
+        }
+
+        public string SchemaName { get; private set; }
+
+        public string ExistingTable { get; private set; }
+
+        public string NewTable { get; private set; }
+
+        public bool KeepExistingTable { get; private set; }
     }
 
     public interface IRDBDataProviderResolveIndexCreationQueryContext : IBaseRDBResolveQueryContext

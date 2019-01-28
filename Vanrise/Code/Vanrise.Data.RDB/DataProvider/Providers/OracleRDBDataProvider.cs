@@ -754,6 +754,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             throw new NotImplementedException();
         }
 
+        public override RDBResolvedQuery ResolveSwapTablesQuery(IRDBDataProviderResolveSwapTablesQueryContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Private Classes
 
         public enum OracleRDBResolvedQueryStatementType { Regular, CreateTempTable, DropTempTable }

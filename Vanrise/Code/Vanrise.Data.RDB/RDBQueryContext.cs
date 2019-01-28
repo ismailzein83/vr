@@ -148,6 +148,13 @@ namespace Vanrise.Data.RDB
             return query;
         }
 
+        public RDBSwapTablesQuery AddSwapTablesQuery()
+        {
+            var query = new RDBSwapTablesQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
         public string GetConnectionString()
         {
             return GetOverridenConnectionString(null);

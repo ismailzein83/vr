@@ -149,7 +149,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             queryBuilder.Append(string.Join(", ", context.ColumnNames.Select(colName => string.Concat(colName.Key, colName.Value == RDBCreateIndexDirection.ASC ? " ASC " : " DESC "))));
             queryBuilder.Append(")");
 
-            if(context.MaxDOP.HasValue)
+            if (context.MaxDOP.HasValue)
                 queryBuilder.Append($" WITH (MAXDOP = {context.MaxDOP.Value}) ON [PRIMARY]");
 
             var resolvedQuery = new RDBResolvedQuery();
@@ -282,6 +282,18 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
         {
             string tableDBName = GetTableDBName(context.SchemaName, context.TableName);
             string query = $"IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{tableDBName}') AND s.type in (N'U')) SELECT 1 ELSE SELECT 0";
+
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = query });
+            return resolvedQuery;
+        }
+
+        public override RDBResolvedQuery ResolveSwapTablesQuery(IRDBDataProviderResolveSwapTablesQueryContext context)
+        {
+            string existingTable = GetTableDBName(context.SchemaName, context.ExistingTable);
+            string newTable = GetTableDBName(context.SchemaName, context.NewTable);
+
+            string query = string.Format(context.KeepExistingTable ? keepExistingTableQuery : dropExistingTableQuery, newTable, existingTable);
 
             var resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = query });
@@ -721,6 +733,35 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 _streamForBulkInsert.WriteRecord(_valuesBuilder.ToString());
             }
         }
+
+        #endregion
+
+        #region Queries
+
+        const string keepExistingTableQuery = @"IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{0}') AND s.type in (N'U'))
+                                                   BEGIN
+                                                   IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{1}_old') AND s.type in (N'U'))
+											          BEGIN
+											              DROP {1}_old
+											          END
+
+									               IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{1}') AND s.type in (N'U'))
+								               	      BEGIN
+                                                          EXEC sp_rename '{1}', '{1}_old'
+								               	      END
+
+	                                               EXEC sp_rename '{0}', '{1}';
+                                                   END";
+
+        const string dropExistingTableQuery = @"IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{0}') AND s.type in (N'U'))
+                                                   BEGIN
+                                                   IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{1}') AND s.type in (N'U'))
+										   	          BEGIN
+											              DROP {1}
+											          END
+
+	                                               EXEC sp_rename '{0}', '{1}';
+                                                   END ";
 
         #endregion
     }

@@ -79,6 +79,7 @@
     <Compile Include="ExecuteNonQuery\RDBInsertMultipleRowsQueryRowContext.cs" />
     <Compile Include="ExecuteNonQuery\RDBParameterDeclarationQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBSetParameterValuesQuery.cs" />
+    <Compile Include="ExecuteNonQuery\RDBSwapTableQuery.cs" />
     <Compile Include="Expressions\BaseRDBExpression.cs" />
     <Compile Include="BaseAndDefs\BaseRDBQuery.cs" />
     <Compile Include="BaseAndDefs\IRDBDataReader.cs" />
