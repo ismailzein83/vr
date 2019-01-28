@@ -38,7 +38,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "TOne.WhS.Jazz.Business.WhSJazzReportDefinitionSettingsCustomObject,TOne.WhS.Jazz.Business"
+                        $type: "TOne.WhS.Jazz.Business.ReportDefinitionSettingsCustomObject,TOne.WhS.Jazz.Business"
                     };
                     return data;
                 };

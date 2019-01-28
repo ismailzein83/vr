@@ -140,19 +140,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\WhSJazzProductServiceController.cs" />
-    <Compile Include="Controllers\WhSJazzCustomerTypeCodeController.cs" />
-    <Compile Include="Controllers\WhSJazzTaxCodeController.cs" />
-    <Compile Include="Controllers\WhSJazzTransactionTypeCodeController.cs" />
-    <Compile Include="Controllers\WhSJazzSwitchCodeController.cs" />
-    <Compile Include="Controllers\WhSJazzMarketCodeController.cs" />
-    <Compile Include="Controllers\WhSJazzRegionCodeController.cs" />
-    <Compile Include="Controllers\WhSJazzAcountCodeController.cs" />
+    <Compile Include="Controllers\ProductServiceController.cs" />
+    <Compile Include="Controllers\CustomerTypeController.cs" />
+    <Compile Include="Controllers\TaxCodeController.cs" />
+    <Compile Include="Controllers\TransactionTypeController.cs" />
+    <Compile Include="Controllers\SwitchCodeController.cs" />
+    <Compile Include="Controllers\MarketController.cs" />
+    <Compile Include="Controllers\RegionController.cs" />
+    <Compile Include="Controllers\AcountCodeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="WhS_Jazz\Constant\WhSJazzRateCalculationTypeEnum.js" />
+    <Content Include="WhS_Jazz\Constant\RateCalculationTypeEnum.js" />
     <Content Include="WhS_Jazz\Constant\ModuleConfig.js" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\Templates\ReportDefinitionSettingsCustomObjectStaticEditor.html" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-reportdefinitionsettings-customobject-staticeditor.js" />
@@ -166,14 +166,14 @@
     <Content Include="WhS_Jazz\Elements\Directives\AccountCode\Templates\AccountCodeCustomObjectDefintion.html" />
     <Content Include="WhS_Jazz\Elements\Directives\AccountCode\whs-jazz-accountcode-customobject-staticeditor.js" />
     <Content Include="WhS_Jazz\Elements\Directives\AccountCode\whs-jazz-accountcode-customobjectsettings.js" />
-    <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzCustomerTypeCodeAPIService.js" />
-    <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzTaxCodeAPIService.js" />
-    <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzSwitchCodeAPIService.js" />
-    <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzTransactionTypeCodeAPIService.js" />
-    <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzMarketCodeAPIService.js" />
-    <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzProductServiceCodeAPIService.js" />
-    <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzRegionCodeAPIService.js" />
-    <Content Include="WhS_Jazz\Elements\Services\APIServices\WhSJazzAccountCodeAPIService.js" />
+    <Content Include="WhS_Jazz\Elements\Services\APIServices\CustomerTypeAPIService.js" />
+    <Content Include="WhS_Jazz\Elements\Services\APIServices\TaxCodeAPIService.js" />
+    <Content Include="WhS_Jazz\Elements\Services\APIServices\SwitchCodeAPIService.js" />
+    <Content Include="WhS_Jazz\Elements\Services\APIServices\TransactionTypeAPIService.js" />
+    <Content Include="WhS_Jazz\Elements\Services\APIServices\MarketAPIService.js" />
+    <Content Include="WhS_Jazz\Elements\Services\APIServices\ProductServiceAPIService.js" />
+    <Content Include="WhS_Jazz\Elements\Services\APIServices\RegionAPIService.js" />
+    <Content Include="WhS_Jazz\Elements\Services\APIServices\AccountCodeAPIService.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
