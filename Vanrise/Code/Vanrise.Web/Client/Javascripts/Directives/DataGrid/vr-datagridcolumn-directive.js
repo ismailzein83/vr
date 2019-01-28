@@ -28,7 +28,8 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                             tag: gridColumnAttribute.Tag,
                             sysName: gridColumnAttribute.SysName,
                             listViewWidth: gridColumnAttribute.listViewWidth,
-                            isHiddenInListView: gridColumnAttribute.isHiddenInListView
+                            isHiddenInListView: gridColumnAttribute.isHiddenInListView,
+                            invisibleheader: gridColumnAttribute.InvisibleHeader
 
                         };
                         if (gridColumnAttribute.GridColCSSClassValue != undefined) {

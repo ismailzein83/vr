@@ -209,15 +209,16 @@ namespace Vanrise.AccountBalance.Business
                             var matchField = sourceFields.FirstOrDefault(x => x.Name == column.FieldName);
                             if (matchField.FieldType == null)
                                 throw new NullReferenceException(string.Format("{0} is not mapped to field type.", matchField.Name));
-                           
+
                             FieldTypeGetGridColumnAttributeContext context = new FieldTypeGetGridColumnAttributeContext();
                             context.ValueFieldPath = "Items." + column.FieldName + ".Value";
                             context.DescriptionFieldPath = "Items." + column.FieldName + ".Description";
 
                             var gridAttribute = matchField.FieldType.GetGridColumnAttribute(context);
-                          //  gridAttribute.Field = matchField.Name;
+                            //  gridAttribute.Field = matchField.Name;
                             gridAttribute.Tag = matchField.Name;
-                            gridAttribute.HeaderText = column.UseEmptyHeader ? "" : column.Title;
+                            gridAttribute.HeaderText = column.Title;
+                            gridAttribute.InvisibleHeader = column.UseEmptyHeader;
                             gridAttribute.HeaderDescription = column.HeaderDescription;
                             gridAttribute.GridColCSSClassValue = column.GridColCSSValue;
                             //if (column.GridColumnSettings != null)

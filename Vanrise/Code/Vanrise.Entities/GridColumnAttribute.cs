@@ -22,5 +22,6 @@ namespace Vanrise.Entities
         public string NumberPrecision { get; set; }
         public string HeaderDescription { get; set; }
         public GridColCSSClassValue? GridColCSSClassValue { get; set; }
+        public bool InvisibleHeader { get; set; }
     }
 }
