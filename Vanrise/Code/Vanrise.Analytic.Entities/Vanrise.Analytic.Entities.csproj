@@ -74,6 +74,7 @@
     <Compile Include="AutomatedReportQueries.cs" />
     <Compile Include="AutomatedReport\FileGenerator\VRAutomatedReportHandlerValidateContext.cs" />
     <Compile Include="AutomatedReport\FileGenerator\VRAutomatedReportFileGeneratorConfig.cs" />
+    <Compile Include="AutomatedReport\GenerateFilesActionType.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportFileGeneratorGenerateFileContext.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportHandlerExecuteContext.cs" />
     <Compile Include="AutomatedReport\Handler\VRAutomatedReportHandlerSettingsActionTypeConfig.cs" />
@@ -134,7 +135,8 @@
     <Compile Include="VRReportGeneration\VRReportGenerationQuery.cs" />
     <Compile Include="VRReportGeneration\VRReportGeneration.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationDetail.cs" />
-    <Compile Include="VRReportProcessDefinition\VRReportProcessDefinition.cs" />
+    <Compile Include="VRScheduledReport\VRReportTypeDefinition.cs" />
+    <Compile Include="VRScheduledReport\VRScheduledReport.cs" />
     <Compile Include="VRRestAPIAnalyticQueryInterceptor\VRRestAPIAnalyticQueryInterceptorConfig.cs" />
     <Compile Include="Config\AnalyticItemConfigDetail.cs" />
     <Compile Include="Config\AnalyticItemConfigInput.cs" />

@@ -12,11 +12,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
 {
-    public class GeneratedFileItem
-    {
-        public string FileName { get; set; }
-        public byte[] FileContent { get; set; }
-    }
+
     public class GenerateFilesHandler : VRAutomatedReportHandlerSettings
     {
         public override Guid ConfigId
@@ -97,23 +93,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Handlers
         }
 
     }
-    public abstract class GenerateFilesActionType
-    {
-        public abstract Guid ConfigId { get; }
-        public abstract void Execute(IGenerateFilesActionTypeContext context);
-
-    }
-    public interface IGenerateFilesActionTypeContext
-    {
-        IVRAutomatedReportHandlerExecuteContext HandlerContext { get; }
-        List<GeneratedFileItem> GeneratedFileItems { get; }
-    }
-    public class GenerateFilesActionTypeContext : IGenerateFilesActionTypeContext
-    {
-        public IVRAutomatedReportHandlerExecuteContext HandlerContext { get; set; }
-        public List<GeneratedFileItem> GeneratedFileItems { get; set; }
-    }
-
+   
     public class FTPActionType : GenerateFilesActionType
     {
         public override Guid ConfigId
