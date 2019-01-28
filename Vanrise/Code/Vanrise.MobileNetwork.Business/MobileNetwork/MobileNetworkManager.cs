@@ -16,7 +16,7 @@ namespace Vanrise.MobileNetwork.Business
             return mobileNetworks.FindRecord(item => item.Id == mobileNetworkId);
         }
 
-        public bool IsCountryNational(int mobileNetworkId)
+        public bool IsMobileNetworkNational(int mobileNetworkId)
         {
             var mobileNetwork = GetMobileNetworkById(mobileNetworkId);
             mobileNetwork.ThrowIfNull("mobileNetwork", mobileNetworkId);
