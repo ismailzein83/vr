@@ -121,7 +121,7 @@ namespace Vanrise.Common.Business
         #endregion
 
         #region Private Classes
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IVRDynamicAPIDataManager vrDynamicAPIDataManager = CommonDataManagerFactory.GetDataManager<IVRDynamicAPIDataManager>();
             object _updateHandle;

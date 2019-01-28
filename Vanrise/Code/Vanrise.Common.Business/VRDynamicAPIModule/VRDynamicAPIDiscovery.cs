@@ -25,15 +25,7 @@ namespace Vanrise.Common.Business
 
         public override bool IsCacheExpired(ref DateTime? lastCheckTime)
         {
-            if (!lastCheckTime.HasValue || (DateTime.Now - lastCheckTime.Value).TotalSeconds >= 20)
-            {
-                lastCheckTime = DateTime.Now;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<Vanrise.Common.Business.VRDynamicAPIManager.CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
         public override System.Collections.Generic.List<string> GetModuleNames(IVRAPIDiscoveryGetModuleNamesContext context)
