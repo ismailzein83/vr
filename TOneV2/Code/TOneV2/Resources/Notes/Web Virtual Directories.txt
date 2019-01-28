@@ -41,6 +41,7 @@
 	CDRComparison			C:\TFS\Xbooster\Code\CDRComparison.Web\CDRComparison
 	WhS_SMSBusinessEntity	C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.SMSBusinessEntity.Web\WhS_SMSBusinessEntity
 	WhS_Jazz				C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.Jazz.Web\WhS_Jazz
+	VR_MobileNetwork        C:\TFS\Vanrise\Code\Vanrise.MobileNetwork.Web\VR_MobileNetwork
 
 	--do not create below directories
 	-removed-Main					C:\TFS\TOneV2\Code\TOneV2\TOne.Main.Web\Main
