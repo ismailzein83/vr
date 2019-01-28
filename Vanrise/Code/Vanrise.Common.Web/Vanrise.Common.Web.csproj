@@ -127,6 +127,8 @@
     <Content Include="Common\Directives\AdditionalErrors\vr-common-additionalerrors.js" />
     <Content Include="Common\Directives\Country\vr-common-country-remoteselector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
+    <Content Include="Common\Directives\FiguresTileSettings\Templates\FiguresTileSettingsDefinitionTemplate.html" />
+    <Content Include="Common\Directives\FiguresTileSettings\vr-common-figurestilesettings-definition.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\FTPConnectionEditorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\HttpConnectionCallInterceptorSelectiveTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-ftpconnection-editor.js" />
@@ -169,9 +171,11 @@
     <Content Include="Common\Directives\TextPattern\Templates\TextPatternHelperTemplate.html" />
     <Content Include="Common\Directives\TextPattern\vr-common-textpatternbuilder.js" />
     <Content Include="Common\Directives\VRNamespace\vr-common-namespaceitem-search.js" />
+    <Content Include="Common\Directives\VRTile\Templates\FiguresTileQueriesTemplate.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileCustomObjectSettingsTemplate.html" />
     <Content Include="Common\Directives\VRTile\Templates\VRTileReportSettingsTemplate.html" />
     <Content Include="Common\Directives\VRTile\vr-common-tile-customobjectsettings.js" />
+    <Content Include="Common\Directives\VRTile\vr-common-tile-figurestile-queries.js" />
     <Content Include="Common\Directives\VRTile\vr-common-tile-reportsettings.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\SpecificDaysDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\YesterdayDirectiveTemplate.html" />
