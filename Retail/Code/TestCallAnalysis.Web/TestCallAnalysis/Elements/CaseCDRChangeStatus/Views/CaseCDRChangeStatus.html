@@ -1,0 +1,23 @@
+﻿<div vr-modalcontent ng-controller="VR_TestCallAnalysis_CaseCDRChangeStatusController" resclass="small" vr-loader="isLoading" width="'50%'">
+    <vr-modalbody width="1/4row">
+        <vr-form name="formCaseCdRChangeStatus">
+            <vr-tabs>
+                <vr-row removeline>
+                    <vr-columns width="1/2row">
+                        <span vr-loader="isLoadingStatusDefinitions">
+                            <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusDefinitionSelectorReady" selectedvalues="scopeModel.selectedStatusDefinition" customlabel="Case Status" isrequired="true"></vr-common-statusdefinition-selector>
+                        </span>
+                    </vr-columns>
+                </vr-row>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formCaseCdRChangeStatus" data-onclick="scopeModel.saveStatus"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
