@@ -136,6 +136,8 @@
     <Content Include="Common\Directives\RDBDataType\vr-common-rdbdatatype-info.js" />
     <Content Include="Common\Directives\StatusDefinition\Templates\StatusDefinitionViewerTemplate.html" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-viewer.js" />
+    <Content Include="Common\Directives\VRDashboard\Templates\VRDashboardViewEditor.html" />
+    <Content Include="Common\Directives\VRDashboard\vr-common-dashboard-vieweditor.js" />
     <Content Include="Common\Directives\VRDynamicAPIModule\Templates\DynamicAPIModuleGridTemplate.html" />
     <Content Include="Common\Directives\VRDynamicAPIModule\vr-common-dynamicapi-module-grid.js" />
     <Content Include="Common\Directives\VRDynamicAPI\MainExtensions\Templates\CallMethodDynamicAPITemplate.html" />
@@ -197,6 +199,8 @@
     <Content Include="Common\Services\VRDynamicAPIService.js" />
     <Content Include="Common\Services\TextPatternBuilderService.js" />
     <Content Include="Common\Services\VRNamespaceItemService.js" />
+    <Content Include="Common\Views\VRDashboard\VRDashboardManagement.html" />
+    <Content Include="Common\Views\VRDashboard\VRDashboardManagementController.js" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleEditor.html" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleEditorController.js" />
     <Content Include="Common\Views\VRDynamicAPIModule\VRDynamicAPIModuleManagement.html" />
@@ -928,9 +932,7 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
