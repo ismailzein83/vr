@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Integration.Entities;
-using System.Linq;
 
 namespace Mediation.Runtime
 {
@@ -1113,7 +1112,9 @@ namespace Mediation.Runtime
             return result;
         }
 
-        #region Ericsson Mobilis
+        #endregion
+
+        #region Mobilis
 
         public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_111_Mobilis(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
@@ -1266,8 +1267,468 @@ namespace Mediation.Runtime
             return result;
         }
 
-        #endregion
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_Mobilis_102_WHS_Txt(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            Vanrise.Integration.Entities.StreamReaderImportedData importedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var cdrs = new List<dynamic>();
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type mediationCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Mobilis_Ericsson_102_CDR");
 
+            var lengthToRead = 102;
+
+            System.IO.StreamReader sr = importedData.StreamReader;
+            string currentLine = sr.ReadLine();
+            if (!string.IsNullOrEmpty(currentLine))
+            {
+                currentLine = currentLine.Replace("\0", "");
+
+                while (true)
+                {
+                    if (currentLine.Length < lengthToRead)
+                        break;
+
+                    string cdrAsString = currentLine.Substring(0, lengthToRead);
+
+                    dynamic cdr = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
+
+                    cdr.DataSourceId = dataSourceId;
+                    cdr.FileName = importedData.Name;
+                    cdr.RecordType = cdrAsString.Substring(0, 2);
+                    cdr.CauseForOutput = cdrAsString.Substring(2, 1);
+                    cdr.RecordNumber = cdrAsString.Substring(3, 2);
+
+                    string aNumber = cdrAsString.Substring(5, 15);
+                    if (!string.IsNullOrWhiteSpace(aNumber))
+                        cdr.ANumber = aNumber.Trim();
+
+                    string bNumber = cdrAsString.Substring(20, 18);
+                    if (!string.IsNullOrWhiteSpace(bNumber))
+                        cdr.BNumber = bNumber.Trim();
+
+                    string redirectingNumber = cdrAsString.Substring(38, 20);
+                    if (!string.IsNullOrWhiteSpace(redirectingNumber))
+                        cdr.RedirectingNumber = redirectingNumber.Trim();
+
+                    string dateForStartCharging = cdrAsString.Substring(58, 6);
+                    if (!string.IsNullOrWhiteSpace(dateForStartCharging))
+                    {
+                        int year;
+                        if (!int.TryParse(dateForStartCharging.Substring(0, 2), out year))
+                            throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Year value", dateForStartCharging));
+
+                        year += 2000;
+
+                        int month;
+                        if (!int.TryParse(dateForStartCharging.Substring(2, 2), out month))
+                            throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Month value", dateForStartCharging));
+
+                        int day;
+                        if (!int.TryParse(dateForStartCharging.Substring(4, 2), out day))
+                            throw new Exception(String.Format("DateForStartCharging '{0}' contains invalid Day value", dateForStartCharging));
+
+                        cdr.DateForStartCharging = new DateTime(year, month, day);
+                    }
+
+                    string timeForStartCharging = cdrAsString.Substring(64, 6);
+                    if (!string.IsNullOrWhiteSpace(timeForStartCharging))
+                    {
+                        int startHour;
+                        if (!int.TryParse(timeForStartCharging.Substring(0, 2), out startHour))
+                            throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Hour value", timeForStartCharging));
+
+                        int startMinute;
+                        if (!int.TryParse(timeForStartCharging.Substring(2, 2), out startMinute))
+                            throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Minute value", timeForStartCharging));
+
+                        int startSecond;
+                        if (!int.TryParse(timeForStartCharging.Substring(4, 2), out startSecond))
+                            throw new Exception(String.Format("TimeForStartCharging '{0}' contains invalid Second value", timeForStartCharging));
+
+                        cdr.TimeForStartCharging = new Time(startHour, startMinute, startSecond, 0);
+                    }
+
+                    string timeForStopCharging = cdrAsString.Substring(70, 6);
+                    if (!string.IsNullOrWhiteSpace(timeForStopCharging))
+                    {
+                        int stopHour;
+                        if (!int.TryParse(timeForStopCharging.Substring(0, 2), out stopHour))
+                            throw new Exception(String.Format("TimeForStopCharging '{0}' contains invalid Hour value", timeForStopCharging));
+
+                        int stopMinute;
+                        if (!int.TryParse(timeForStopCharging.Substring(2, 2), out stopMinute))
+                            throw new Exception(String.Format("TimeForStopCharging '{0}' contains invalid Minute value", timeForStopCharging));
+
+                        int stopSecond;
+                        if (!int.TryParse(timeForStopCharging.Substring(4, 2), out stopSecond))
+                            throw new Exception(String.Format("TimeForStopCharging '{0}' contains invalid Second value", timeForStopCharging));
+
+                        cdr.TimeForStopCharging = new Time(stopHour, stopMinute, stopSecond, 0);
+                    }
+
+                    string chargeableDuration = cdrAsString.Substring(76, 6);
+                    if (!string.IsNullOrWhiteSpace(chargeableDuration))
+                    {
+                        int hour;
+                        if (!int.TryParse(chargeableDuration.Substring(0, 2), out hour))
+                            throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Hour value", chargeableDuration));
+
+                        int minute;
+                        if (!int.TryParse(chargeableDuration.Substring(2, 2), out minute))
+                            throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Minute value", chargeableDuration));
+
+                        int second;
+                        if (!int.TryParse(chargeableDuration.Substring(4, 2), out second))
+                            throw new Exception(String.Format("ChargeableDuration '{0}' contains invalid Second value", chargeableDuration));
+
+                        cdr.ChargeableDuration = (int)new TimeSpan(hour, minute, second).TotalSeconds;
+                    }
+
+                    cdr.NumberOfMeterPulses = cdrAsString.Substring(82, 6);
+
+                    string outgoingRoute = cdrAsString.Substring(88, 7);
+                    if (!string.IsNullOrWhiteSpace(outgoingRoute))
+                        cdr.OutgoingRoute = outgoingRoute.Trim();
+
+                    string incomingRoute = cdrAsString.Substring(95, 7);
+                    if (!string.IsNullOrWhiteSpace(incomingRoute))
+                        cdr.IncomingRoute = incomingRoute.Trim();
+
+                    cdrs.Add(cdr);
+
+                    currentLine = currentLine.Remove(0, lengthToRead);
+                }
+            }
+
+            if (cdrs.Count > 0)
+            {
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "Mobilis_Ericsson_102_CDR");
+                mappedBatches.Add("CDRTransformationStage", batch);
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            return result;
+        }
+
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Mobilis_SMS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            var smss = new List<dynamic>();
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type smsRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Mobilis_SMS");
+
+            int batchSize = 0;
+
+            System.IO.StreamReader sr = ImportedData.StreamReader;
+            while (!sr.EndOfStream)
+            {
+                string smsLine = sr.ReadLine();
+                if (string.IsNullOrEmpty(smsLine))
+                    continue;
+
+                batchSize++;
+                dynamic sms = Activator.CreateInstance(smsRuntimeType) as dynamic;
+
+
+                try
+                {
+                    string[] fields = smsLine.Split(',');
+
+                    sms.DataSourceId = dataSourceId;
+                    sms.FileName = ImportedData.Name;
+
+                    sms.SMID = fields[0];
+                    sms.OriginalAddress = fields[1];
+                    sms.DestAddr = fields[2];
+                    sms.MOMSCAddr = fields[3];
+                    sms.ScAddr = fields[4];
+                    sms.EsmClass = fields[5];
+                    sms.PriorityLevel = fields[6];
+                    sms.RD = fields[7];
+                    sms.ReplyPath = fields[8];
+                    sms.UDHI = fields[9];
+                    sms.SRR = fields[10];
+                    sms.MR = fields[11];
+                    sms.PID = fields[12];
+                    sms.DCS = fields[13];
+
+                    string scheduleTimeAsString = fields[14];
+                    if (!string.IsNullOrEmpty(scheduleTimeAsString))
+                    {
+                        DateTime scheduleTime;
+                        if (scheduleTimeAsString.Length < 23 || !DateTime.TryParseExact(scheduleTimeAsString.Substring(0, 23), "yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out scheduleTime))
+                            throw new Exception($"Invalid date format for ScheduleTime '{scheduleTimeAsString}'");
+                        sms.ScheduleTime = scheduleTime;
+                    }
+
+                    string expireTimeAsString = fields[15];
+                    if (!string.IsNullOrEmpty(expireTimeAsString))
+                    {
+                        DateTime expireTime;
+                        if (expireTimeAsString.Length < 23 || !DateTime.TryParseExact(expireTimeAsString.Substring(0, 23), "yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out expireTime))
+                            throw new Exception($"Invalid date format for ExpireTime '{expireTimeAsString}'");
+                        sms.ExpireTime = expireTime;
+                    }
+
+                    sms.DefaultID = fields[16];
+                    sms.UDL = fields[17];
+                    sms.SMType = fields[18];
+                    sms.SMSubmissionResult = fields[19];
+                    sms.FCS = fields[20];
+
+                    string writeTimeAsString = fields[21];
+                    if (!string.IsNullOrEmpty(writeTimeAsString))
+                    {
+                        DateTime writeTime = new DateTime();
+                        if (writeTimeAsString.Length < 23 || !DateTime.TryParseExact(writeTimeAsString.Substring(0, 23), "yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out writeTime))
+                            throw new Exception($"Invalid date format for WriteTime '{writeTimeAsString}'");
+                        else sms.WriteTime = writeTime;
+                    }
+
+                    sms.Message = fields[22];
+                    sms.ServiceType = fields[23];
+                    sms.PPSUser = fields[24];
+                    sms.OrgAccount = fields[25];
+                    sms.CalledServiceFlag = fields[26];
+                    sms.RawOrgAddress = fields[27];
+                    sms.RawDestAddress = fields[28];
+                    sms.SubmitMultiID = fields[29];
+                    sms.OriginalGroup = fields[30];
+                    sms.OrgCommandID = fields[31];
+                    sms.RawOrgTON = fields[32];
+                    sms.RawOrgNPI = fields[33];
+                    sms.RawDestTON = fields[34];
+                    sms.RawDestNPI = fields[35];
+                    sms.MOMSCAddrType = fields[36];
+                    sms.MOMSCTON = fields[37];
+                    sms.MOMSCNPI = fields[38];
+                    sms.DestNetType = fields[39];
+                    sms.DestIFType = fields[40];
+                    sms.TLVsDataLen = fields[41];
+                    sms.TLVsData = fields[42];
+                    sms.IFForward = fields[43];
+                    sms.UDEncryptType = fields[44];
+                    sms.OrgOPID = fields[45];
+                    sms.DestOPID = fields[46];
+                    sms.QueryOrgOPIDResult = fields[47];
+                    sms.QueryDestOPIDResult = fields[48];
+                    sms.NetworkErrorCode = fields[49];
+                    sms.OrgOCSID = fields[50];
+                    sms.DestOCSID = fields[51];
+                    sms.DestAccount = fields[52];
+                    sms.MessageType = fields[53];
+                    sms.SRICallingSCCP = fields[54];
+                    sms.MTSubmitCallingSCCP = fields[55];
+                    sms.OrgIMSIAddr = fields[56];
+                    sms.DestIMSIAddr = fields[57];
+
+                    string mOSubmitTimeAsString = fields[58];
+                    if (!string.IsNullOrEmpty(mOSubmitTimeAsString))
+                    {
+                        DateTime mOSubmitTime = new DateTime();
+                        if (mOSubmitTimeAsString.Length < 23 || !DateTime.TryParseExact(mOSubmitTimeAsString.Substring(0, 23), "yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out mOSubmitTime))
+                            throw new Exception($"Invalid date format for MOSubmitTime '{mOSubmitTimeAsString}'");
+                        else sms.MOSubmitTime = mOSubmitTime;
+                    }
+
+                    sms.BillingIdentification = fields[59];
+                    sms.AntiSpammingCheckResult = fields[60];
+                    sms.FilterdAVP = fields[61];
+                    sms.IsDestNative = fields[62];
+                    sms.SMContentKeyword = fields[63];
+                    sms.SMMR = fields[64];
+                    sms.SMRN = fields[65];
+                    sms.SMMN = fields[66];
+                    sms.SMSN = fields[67];
+                    sms.ServiceControlResultCode = fields[68];
+                    sms.RealTimeRated = fields[69];
+                    sms.ServiceCtrlResult = fields[70];
+                    sms.CgiAddr = fields[71];
+                    sms.IMEIAddr = fields[72];
+                    sms.LastResort = fields[73];
+                    sms.OriginalValidityPeriod = fields[74];
+
+                    string originalSubmissionTimeAsString = fields[75];
+                    if (!string.IsNullOrEmpty(originalSubmissionTimeAsString))
+                    {
+                        DateTime originalSubmissionTime = new DateTime();
+                        if (originalSubmissionTimeAsString.Length < 23 || !DateTime.TryParseExact(originalSubmissionTimeAsString.Substring(0, 23), "yyyy-MM-dd HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out originalSubmissionTime))
+                            throw new Exception($"Invalid date format for OriginalSubmissionTime '{mOSubmitTimeAsString}'");
+                        else sms.OriginalSubmissionTime = originalSubmissionTime;
+                    }
+
+                    sms.SMBufferingForAntiSpam = fields[76];
+                    sms.AntiSpoofingResult = fields[77];
+                    sms.RealMSCAddr = fields[78];
+                    sms.CalledCellID = fields[79];
+                    sms.SpecialServiceIndicator = fields[80];
+
+                    smss.Add(sms);
+                }
+                catch (Exception ex)
+                {
+                    failedRecordIdentifiers.Add(batchSize);
+                }
+            }
+
+            if (smss.Count > 0)
+            {
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(smss, "#RECORDSCOUNT# of Raw SMSs", "Mobilis_SMS");
+                mappedBatches.Add("CDRTransformationStage", batch);
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+
+            LogVerbose("Finished");
+            return result;
+        }
+
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_ZTE_Mobilis_WLL_WHS_Txt(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            Vanrise.Integration.Entities.StreamReaderImportedData importedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var cdrs = new List<dynamic>();
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type mediationCDRRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Mobilis_ZTE_WLL_CDR");
+
+            var lengthToRead = 82;
+
+            System.IO.StreamReader sr = importedData.StreamReader;
+            string currentLine = sr.ReadLine();
+            if (!string.IsNullOrEmpty(currentLine))
+            {
+                currentLine = currentLine.Replace("\0", "");
+
+                while (true)
+                {
+                    if (currentLine.Length < lengthToRead)
+                        break;
+
+                    string cdrAsString = currentLine.Substring(0, lengthToRead);
+
+                    dynamic cdr = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
+
+                    cdr.DataSourceId = dataSourceId;
+                    cdr.FileName = importedData.Name;
+
+                    string lACOfSubscriber = cdrAsString.Substring(0, 5);
+                    if (!string.IsNullOrWhiteSpace(lACOfSubscriber))
+                        cdr.LACOfSubscriber = lACOfSubscriber.Trim();
+
+                    cdr.CIOfSubscriber = cdrAsString.Substring(5, 5);
+
+                    cdr.TicketType = cdrAsString.Substring(10, 1);
+
+                    string cityCodeOfCallingNumber = cdrAsString.Substring(11, 7);
+                    if (!string.IsNullOrWhiteSpace(cityCodeOfCallingNumber))
+                        cdr.CityCodeOfCallingNumber = cityCodeOfCallingNumber.Trim();
+
+                    string callingNumber = cdrAsString.Substring(18, 10);
+                    if (!string.IsNullOrWhiteSpace(callingNumber))
+                        cdr.CallingNumber = callingNumber.Trim();
+
+                    string calldate = cdrAsString.Substring(28, 8);
+                    if (!string.IsNullOrWhiteSpace(calldate))
+                    {
+                        int day;
+                        if (!int.TryParse(calldate.Substring(0, 2), out day))
+                            throw new Exception(String.Format("CallDate '{0}' contains invalid Day value", calldate));
+
+                        int month;
+                        if (!int.TryParse(calldate.Substring(2, 2), out month))
+                            throw new Exception(String.Format("CallDate '{0}' contains invalid Month value", calldate));
+
+                        int year;
+                        if (!int.TryParse(calldate.Substring(4, 4), out year))
+                            throw new Exception(String.Format("CallDate '{0}' contains invalid Year value", calldate));
+
+                        cdr.CallDate = new DateTime(year, month, day);
+                    }
+
+                    string callTime = cdrAsString.Substring(36, 6);
+                    if (!string.IsNullOrWhiteSpace(callTime))
+                    {
+                        int callTimeHour;
+                        if (!int.TryParse(callTime.Substring(0, 2), out callTimeHour))
+                            throw new Exception(String.Format("CallTime '{0}' contains invalid Hour value", callTime));
+
+                        int callTimeMinute;
+                        if (!int.TryParse(callTime.Substring(2, 2), out callTimeMinute))
+                            throw new Exception(String.Format("CallTime '{0}' contains invalid Minute value", callTime));
+
+                        int callTimeSecond;
+                        if (!int.TryParse(callTime.Substring(4, 2), out callTimeSecond))
+                            throw new Exception(String.Format("CallTime '{0}' contains invalid Second value", callTime));
+
+                        cdr.CallTime = new Time(callTimeHour, callTimeMinute, callTimeSecond, 0);
+                    }
+
+                    string calledNumber = cdrAsString.Substring(42, 18);
+                    if (!string.IsNullOrWhiteSpace(calledNumber))
+                        cdr.CalledNumber = calledNumber.Trim();
+
+                    string durationAsString = cdrAsString.Substring(60, 6);
+                    if (!string.IsNullOrWhiteSpace(durationAsString))
+                    {
+                        durationAsString = durationAsString.Trim();
+                        int duration;
+                        if (!int.TryParse(durationAsString, out duration))
+                            cdr.Duration = null;
+                        else cdr.Duration = duration;
+                    }
+
+                    string pulse = cdrAsString.Substring(66, 6);
+                    if (!string.IsNullOrWhiteSpace(pulse))
+                        cdr.Pulse = pulse.Trim();
+
+                    cdr.CallType = cdrAsString.Substring(72, 1);
+                    cdr.SPS800 = cdrAsString.Substring(73, 1);
+
+
+                    string filler = cdrAsString.Substring(74, 8);
+                    if (!string.IsNullOrWhiteSpace(filler))
+                        cdr.Filler = filler.Trim();
+
+                    cdrs.Add(cdr);
+
+                    currentLine = currentLine.Remove(0, lengthToRead);
+                }
+            }
+
+            if (cdrs.Count > 0)
+            {
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "Mobilis_ZTE_WLL_CDR");
+                mappedBatches.Add("CDRTransformationStage", batch);
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+
+            LogVerbose("Finished");
+            return result;
+        }
+
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawei_Mobilis(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions();
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("9B613038-9F64-47C7-B9FA-2F41ABE85286"), options, (parsedBatch) =>
+            {
+                Vanrise.Integration.Entities.MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of CDRs", parsedBatch.RecordType);
+                switch (parsedBatch.RecordType)
+                {
+                    case "Mobilis_Huawei_CDR":
+                        mappedBatches.Add("CDRTransformationStage", batch);
+                        break;
+                    default: break;
+                }
+            });
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
         #endregion
 
         #region Teles
@@ -1532,6 +1993,8 @@ namespace Mediation.Runtime
             return result;
         }
 
+        #endregion
+
         #region Huawei Ogero
 
         public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_HuaweiIMS_Ogero_WHS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
@@ -1599,34 +2062,6 @@ namespace Mediation.Runtime
             LogVerbose("Finished");
             return result;
         }
-
-        #endregion
-
-        #region Huawei Mobilis
-
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawei_Mobilis(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
-        {
-            Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions();
-            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("9B613038-9F64-47C7-B9FA-2F41ABE85286"), options, (parsedBatch) =>
-            {
-                Vanrise.Integration.Entities.MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of CDRs", parsedBatch.RecordType);
-                switch (parsedBatch.RecordType)
-                {
-                    case "Mobilis_Huawei_CDR":
-                        mappedBatches.Add("CDRTransformationStage", batch);
-                        break;
-                    default: break;
-                }
-            });
-
-            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
-            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
-            LogVerbose("Finished");
-            return result;
-        }
-
-        #endregion
 
         #endregion
 
