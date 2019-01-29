@@ -118,6 +118,10 @@ namespace Vanrise.Analytic.Business
             return analyticTables.GetRecord(analyticTableId); ;
         }
 
+        public bool IsAnalyticTableExist(Guid analyticTableId)
+        {
+            return GetAnalyticTableById(analyticTableId) != null;
+        }
 
         public string GetAnalyticTableName(Guid analyticTableId)
         {
