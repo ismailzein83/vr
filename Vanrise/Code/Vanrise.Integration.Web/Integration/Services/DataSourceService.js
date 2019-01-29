@@ -59,6 +59,12 @@
                 case VR_Integration_ExecutionStatusEnum.NoBatches.value:
                     color = LabelColorsEnum.Default.color;
                     break;
+                case VR_Integration_ExecutionStatusEnum.Suspended.value:
+                    color = LabelColorsEnum.Failed.color;
+                    break;
+                case VR_Integration_ExecutionStatusEnum.NotIdentified.value:
+                    color = LabelColorsEnum.Default.color;
+                    break;
             }
 
             return color;

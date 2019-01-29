@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Integration.Data;
@@ -22,11 +23,15 @@ namespace Vanrise.Integration.Business
         DataSourceRuntimeInstanceManager _dsRuntimeInstanceManager = new DataSourceRuntimeInstanceManager();
         IDataSourceRuntimeInstanceDataManager _dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceRuntimeInstanceDataManager>();
         DataSourceManager _dataSourceManager = new DataSourceManager();
+        bool _isImportedBatchLockedAndExecuted = false;
 
         public override Guid ConfigId { get { return new Guid("BDD330B6-3557-4AFC-8C69-A23890DA82E7"); } }
 
         public override void Execute()
         {
+            //in case of true, it will work on separate thread
+            TryEvaluateImportedBatchExecutionFlowStatus();
+
             List<DataSourceRuntimeInstance> dataSourceRuntimeInstances = _dataManager.GetAll();
             if (dataSourceRuntimeInstances != null && dataSourceRuntimeInstances.Count > 0)
             {
@@ -35,31 +40,60 @@ namespace Vanrise.Integration.Business
                 {
                     bool isInstanceLockedAndExecuted = false;
                     TransactionLocker.Instance.TryLock(String.Concat("DataSourceRuntimeInstance_", dsRuntimeInstance.DataSourceRuntimeInstanceId),
-                        () =>
-                        {
-                            if (_dataManager.IsStillExist(dsRuntimeInstance.DataSourceRuntimeInstanceId))
-                            {
-                                var dataSource = _dataSourceManager.GetDataSourceDetail(dsRuntimeInstance.DataSourceId);
-                                if (dataSource == null)
-                                    throw new ArgumentNullException(String.Format("dataSource '{0}'", dsRuntimeInstance.DataSourceId));
-
-                                try
-                                {
-                                    if (dataSource.Entity.IsEnabled)
+                                    () =>
                                     {
-                                        ExecuteDataSource(dataSource);
-                                        isInstanceLockedAndExecuted = true;
-                                    }
-                                }
-                                finally
-                                {
-                                    _dataManager.DeleteInstance(dsRuntimeInstance.DataSourceRuntimeInstanceId);
-                                }
-                            }
-                        });
+                                        if (_dataManager.IsStillExist(dsRuntimeInstance.DataSourceRuntimeInstanceId))
+                                        {
+                                            var dataSource = _dataSourceManager.GetDataSourceDetail(dsRuntimeInstance.DataSourceId);
+                                            if (dataSource == null)
+                                                throw new ArgumentNullException(String.Format("dataSource '{0}'", dsRuntimeInstance.DataSourceId));
+
+                                            try
+                                            {
+                                                if (dataSource.Entity.IsEnabled)
+                                                {
+                                                    ExecuteDataSource(dataSource);
+                                                    isInstanceLockedAndExecuted = true;
+                                                }
+                                            }
+                                            finally
+                                            {
+                                                _dataManager.DeleteInstance(dsRuntimeInstance.DataSourceRuntimeInstanceId);
+                                            }
+                                        }
+                                    });
                     if (isInstanceLockedAndExecuted)
                         break;
                 }
+            }
+        }
+
+        private void TryEvaluateImportedBatchExecutionFlowStatus()
+        {
+            if (!_isImportedBatchLockedAndExecuted)
+            {
+                _isImportedBatchLockedAndExecuted = true;
+                Task t = new Task(() =>
+                {
+                    try
+                    {
+                        TransactionLocker.Instance.TryLock("DataSourceImportedBatchUpdateExecutionStatus",
+                            () =>
+                            {
+                                new DataSourceImportedBatchManager().ApplyEvaluatedExecutionStatus();
+                            });
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerFactory.GetExceptionLogger().WriteException(ex);
+                    }
+                    finally
+                    {
+                        _isImportedBatchLockedAndExecuted = false;
+                    }
+
+                });
+                t.Start();
             }
         }
 
@@ -242,7 +276,7 @@ namespace Vanrise.Integration.Business
             }
         }
 
-        private void SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput mappingOutput, bool? isDuplicateSameSize)   
+        private void SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput mappingOutput, bool? isDuplicateSameSize)
         {
             if (dataSource.Entity.Settings.ErrorMailTemplateId.HasValue)
             {

@@ -1,6 +1,6 @@
 ﻿using Vanrise.Entities;
 
-namespace Vanrise.Integration.Entities.Receive
+namespace Vanrise.Integration.Entities
 {
     public class DataSourceImportedBatchProcessStateSettings : ProcessStateSettings
     {

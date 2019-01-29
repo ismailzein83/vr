@@ -13,17 +13,17 @@ namespace Vanrise.Integration.Business
 {
     public class DataSourceImportedBatchManager
     {
-        public long WriteEntry(Entities.ImportedBatchEntry entry, Guid dataSourceId, string logEntryTime)
+
+        #region Public Methods
+        public long WriteEntry(Entities.ImportedBatchEntry entry, Guid dataSourceId, string logEntryTime, ItemExecutionFlowStatus executionStatus = ItemExecutionFlowStatus.New)
         {
             IDataSourceImportedBatchDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
-            return manager.InsertEntry(dataSourceId, entry.BatchDescription, entry.BatchSize, entry.BatchState, entry.IsDuplicateSameSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds, logEntryTime, entry.BatchStart, entry.BatchEnd);
+            return manager.InsertEntry(dataSourceId, entry.BatchDescription, entry.BatchSize, entry.BatchState, entry.IsDuplicateSameSize, entry.RecordsCount, entry.Result, entry.MapperMessage, entry.QueueItemsIds, logEntryTime, entry.BatchStart, entry.BatchEnd, executionStatus);
         }
 
         public Vanrise.Entities.IDataRetrievalResult<DataSourceImportedBatchDetail> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
         {
-
             return BigDataManager.Instance.RetrieveData(input, new DataSourceImportedBatchRequestHandler());
-
         }
 
         public List<DataSourceImportedBatch> GetDataSourceImportedBatches(Guid DataSourceId, DateTime from)
@@ -37,6 +37,185 @@ namespace Vanrise.Integration.Business
             IDataSourceImportedBatchDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
             return dataManager.GetDataSourcesSummary(fromTime, dataSourcesIds);
         }
+
+        public void UpdateExecutionStatus(Dictionary<long, ItemExecutionFlowStatus> executionStatusToUpdateById)
+        {
+            IDataSourceImportedBatchDataManager manager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
+            manager.UpdateExecutionStatus(executionStatusToUpdateById);
+        }
+
+        public void ApplyEvaluatedExecutionStatus()
+        {
+            string processStateUniqueName = "DataSourceImportedBatch_EvaluateExecutionStatus";
+            int limitResult = 1000;
+
+            ProcessStateManager processStateManager = new ProcessStateManager();
+            DataSourceImportedBatchProcessStateSettings processState = processStateManager.GetProcessStateSetting<DataSourceImportedBatchProcessStateSettings>(processStateUniqueName);
+
+            long? afterId = null;
+            if (processState != null)
+                afterId = processState.LastFinalizedId;
+
+            IDataSourceImportedBatchDataManager importedBatchDataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
+            List<ItemExecutionFlowStatus> executionFlowsOpenStatus = new List<ItemExecutionFlowStatus>() { ItemExecutionFlowStatus.New, ItemExecutionFlowStatus.Processing };
+
+            long? lastFinalizedIdToStore = null;
+            bool loadMoreData = true;
+
+            bool allPreviousBatchesAreFinalized = true;
+
+            while (loadMoreData)
+            {
+                List<DataSourceImportedBatch> dataSourceImportedBatches = importedBatchDataManager.GetDataSourceImportedBatchesAfterID(limitResult, afterId, executionFlowsOpenStatus);
+
+                if (dataSourceImportedBatches == null || dataSourceImportedBatches.Count == 0)
+                    break;
+
+                long lastFinalizedIdPerBatch;
+                Dictionary<long, ItemExecutionFlowStatus> executionStatusToUpdateById = EvaluateImportedBatchesExecutionStatus(dataSourceImportedBatches, out lastFinalizedIdPerBatch);
+
+                if (executionStatusToUpdateById.Count > 0)
+                    UpdateExecutionStatus(executionStatusToUpdateById);
+
+                long lastId = dataSourceImportedBatches.Last().ID;
+
+                bool currentBatchIsFinalized = lastFinalizedIdPerBatch == lastId;
+
+                if (allPreviousBatchesAreFinalized)
+                    lastFinalizedIdToStore = lastFinalizedIdPerBatch;
+
+                allPreviousBatchesAreFinalized = allPreviousBatchesAreFinalized && currentBatchIsFinalized;
+
+                loadMoreData = (dataSourceImportedBatches.Count == limitResult);
+                afterId = lastId;
+            }
+
+            if (lastFinalizedIdToStore.HasValue)
+                processStateManager.InsertOrUpdate(processStateUniqueName, new DataSourceImportedBatchProcessStateSettings() { LastFinalizedId = lastFinalizedIdToStore.Value });
+        }
+
+        #endregion
+
+        #region Private Methods
+        private HashSet<long> GetQueueItemIds(List<DataSourceImportedBatch> dataSourceImportedBatches)
+        {
+            //Technically no need to use Hashset because ids in seperate rows will not repeat. 
+            //Just in case it did, the use of hashset is to avoid this problem.
+            HashSet<long> queueItemIds = new HashSet<long>();
+            foreach (DataSourceImportedBatch batch in dataSourceImportedBatches)
+            {
+                if (string.IsNullOrEmpty(batch.QueueItemIds))
+                    continue;
+
+                string[] qIds = batch.QueueItemIds.Split(',');
+                queueItemIds.UnionWith(qIds.Select(itm => long.Parse(itm)));
+            }
+            return queueItemIds;
+        }
+
+        private Dictionary<long, ItemExecutionFlowStatus> EvaluateImportedBatchesExecutionStatus(List<DataSourceImportedBatch> dataSourceImportedBatches, out long lastFinalizedExecutionStatusItemId)
+        {
+            HashSet<long> queueItemIds = GetQueueItemIds(dataSourceImportedBatches);
+
+            QueueingManager queueingManager = new QueueingManager();
+            Dictionary<long, ItemExecutionFlowInfo> dicItemExecutionStatus = queueingManager.GetItemsExecutionFlowStatus(queueItemIds.ToList());
+
+            lastFinalizedExecutionStatusItemId = dataSourceImportedBatches.First().ID - 1;
+            bool checkExecutionStatus = true;
+
+            Dictionary<long, ItemExecutionFlowStatus> dictUpdatedDataSourceImportedBatches = new Dictionary<long, ItemExecutionFlowStatus>();
+
+            foreach (DataSourceImportedBatch batch in dataSourceImportedBatches)
+            {
+                ItemExecutionFlowStatus previousStatus = batch.ExecutionStatus;
+
+                if (batch.MappingResult == MappingResult.Invalid)
+                {
+                    if (checkExecutionStatus)
+                        lastFinalizedExecutionStatusItemId = batch.ID;
+
+                    batch.ExecutionStatus = ItemExecutionFlowStatus.Failed;
+
+                    dictUpdatedDataSourceImportedBatches.Add(batch.ID, batch.ExecutionStatus);
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(batch.QueueItemIds))
+                {
+                    if (checkExecutionStatus)
+                        lastFinalizedExecutionStatusItemId = batch.ID;
+
+                    batch.ExecutionStatus = ItemExecutionFlowStatus.NoBatches;
+
+                    dictUpdatedDataSourceImportedBatches.Add(batch.ID, batch.ExecutionStatus);
+
+                    continue;
+                }
+
+                string[] batchQueueItemIds = batch.QueueItemIds.Split(',');
+                if (dicItemExecutionStatus == null || dicItemExecutionStatus.Count == 0)
+                {
+                    if (checkExecutionStatus)
+                        lastFinalizedExecutionStatusItemId = batch.ID;
+
+                    batch.ExecutionStatus = ItemExecutionFlowStatus.NotIdentified;
+
+                    dictUpdatedDataSourceImportedBatches.Add(batch.ID, batch.ExecutionStatus);
+
+                    continue;
+                }
+
+                bool shouldEvaluateStatus = true;
+
+                List<ItemExecutionFlowInfo> list = new List<ItemExecutionFlowInfo>();
+                foreach (var queueItemId in batchQueueItemIds)
+                {
+                    ItemExecutionFlowInfo item = dicItemExecutionStatus.GetRecord(long.Parse(queueItemId));
+                    if (item == null)
+                    {
+                        batch.ExecutionStatus = ItemExecutionFlowStatus.NotIdentified;
+
+                        // no need to try to evaluate status in the following code block because one of the queue items is deleted -> ExecutionStatus will be NotIdentified
+                        shouldEvaluateStatus = false;
+
+                        dictUpdatedDataSourceImportedBatches.Add(batch.ID, batch.ExecutionStatus);
+                        break;
+                    }
+                    list.Add(item);
+                }
+
+                if (shouldEvaluateStatus) 
+                {
+                    batch.ExecutionStatus = list.Count > 1 ? queueingManager.GetExecutionFlowStatus(list) : list.First().Status;
+
+                    if (batch.ExecutionStatus != previousStatus)
+                        dictUpdatedDataSourceImportedBatches.Add(batch.ID, batch.ExecutionStatus);
+                }
+
+                if (checkExecutionStatus) // this value will be true as long as we don't have any not closed item
+                {
+                    if (IsClosedExecution(batch.ExecutionStatus))
+                        lastFinalizedExecutionStatusItemId = batch.ID;
+                    else
+                        checkExecutionStatus = false;
+                }
+            }
+
+            return dictUpdatedDataSourceImportedBatches;
+        }
+
+        private bool IsClosedExecution(ItemExecutionFlowStatus executionStatus)
+        {
+            switch (executionStatus)
+            {
+                case ItemExecutionFlowStatus.New:
+                case ItemExecutionFlowStatus.Processing: return false;
+                default: return true;
+            }
+        }
+
+        #endregion
 
         #region Private Classes
 
@@ -62,8 +241,6 @@ namespace Vanrise.Integration.Business
                 };
             }
 
-           
-
             public override IEnumerable<DataSourceImportedBatch> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
             {
                 var maxTop = new Vanrise.Common.Business.ConfigManager().GetMaxSearchRecordCount();
@@ -73,50 +250,9 @@ namespace Vanrise.Integration.Business
                 return dataManager.GetFilteredDataSourceImportedBatches(input.Query);
             }
 
-            protected override Vanrise.Entities.BigResult<DataSourceImportedBatchDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input, IEnumerable<DataSourceImportedBatch> allRecords)
-            {
-                var bigResult = base.AllRecordsToBigResult(input, allRecords);
-
-                if (bigResult != null && bigResult.Data != null)
-                {
-                    HashSet<long> queueItemIds = new HashSet<long>();
-                    foreach (DataSourceImportedBatchDetail batch in bigResult.Data)
-                    {
-                        if (string.IsNullOrEmpty(batch.QueueItemIds))
-                            continue;
-
-                        string[] qIds = batch.QueueItemIds.Split(',');
-                        queueItemIds.UnionWith(qIds.Select(itm => long.Parse(itm)));
-                    }
-
-                    QueueingManager queueingManager = new QueueingManager();
-                    Dictionary<long, ItemExecutionFlowInfo> dicItemExecutionStatus = queueingManager.GetItemsExecutionFlowStatus(queueItemIds.ToList());
-
-                    foreach (DataSourceImportedBatchDetail batch in bigResult.Data)
-                    {
-                        if (batch.MappingResult == MappingResult.Invalid)
-                        {
-                            batch.ExecutionStatus = ItemExecutionFlowStatus.Failed;
-                            continue;
-                        }
-
-                        if (string.IsNullOrEmpty(batch.QueueItemIds))
-                        {
-                            batch.ExecutionStatus = ItemExecutionFlowStatus.NoBatches;
-                            continue;
-                        }
-
-                        string[] batchQueueItemIds = batch.QueueItemIds.Split(',');
-                        List<ItemExecutionFlowInfo> list = batchQueueItemIds.Select(itm => dicItemExecutionStatus.GetRecord(long.Parse(itm))).ToList();
-                        batch.ExecutionStatus = list.Count > 1 ? queueingManager.GetExecutionFlowStatus(list) : list.First().Status;
-                    }
-                }
-                return bigResult;
-            }
-
             protected override ResultProcessingHandler<DataSourceImportedBatchDetail> GetResultProcessingHandler(DataRetrievalInput<DataSourceImportedBatchQuery> input, BigResult<DataSourceImportedBatchDetail> bigResult)
             {
-                return  new ResultProcessingHandler<DataSourceImportedBatchDetail>
+                return new ResultProcessingHandler<DataSourceImportedBatchDetail>
                 {
                     ExportExcelHandler = new DataSourceImportedBatchExcelExportHandler()
                 };

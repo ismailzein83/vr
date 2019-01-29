@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Integration.Entities
 {
@@ -14,5 +15,6 @@ namespace Vanrise.Integration.Entities
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
         public int Top { get; set; }
+        public List<ItemExecutionFlowStatus> ExecutionFlowsStatus { get; set; }
     }
 }
