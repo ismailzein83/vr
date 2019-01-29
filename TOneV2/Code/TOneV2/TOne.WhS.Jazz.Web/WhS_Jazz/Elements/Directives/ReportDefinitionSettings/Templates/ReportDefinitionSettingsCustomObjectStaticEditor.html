@@ -1,15 +1,4 @@
-﻿<vr-tab header="'Report Filter'">
-
-    <vr-row>
-        <vr-span vr-loader="scopeModel.isReportFilterDirectiveloading">
-            <vr-columns width="fullrow">
-                <vr-section title="Report Filter">
-                    <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
-                </vr-section>
-            </vr-columns>
-        </vr-span>
-    </vr-row>
-    </vr-tab>
+﻿
     <vr-tab header="'Amount Calculation'">
         <vr-row>
             <vr-columns width="fullrow">
@@ -97,5 +86,16 @@
                     </vr-columns>
                 </vr-span>
             </vr-row>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Report Filter'">
+        <vr-row>
+            <vr-span vr-loader="scopeModel.isReportFilterDirectiveloading">
+                <vr-columns width="fullrow">
+                    <vr-section title="Report Filter">
+                        <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+                    </vr-section>
+                </vr-columns>
+            </vr-span>
         </vr-row>
     </vr-tab>
