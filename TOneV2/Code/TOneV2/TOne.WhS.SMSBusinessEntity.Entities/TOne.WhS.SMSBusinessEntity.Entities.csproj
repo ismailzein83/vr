@@ -64,8 +64,10 @@
     <Compile Include="ProcessDraft.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SMSFutureRate.cs" />
+    <Compile Include="SMSImportSettings\SMSImportSettings.cs" />
     <Compile Include="SupplierSMSRateChanges\SupplierSMSRateChanges.cs" />
     <Compile Include="SupplierSMSRateChanges\SupplierSMSRateDetail.cs" />
+    <Compile Include="Switch\SwitchReceiversForIdentification.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SupplierSMSRate\" />
