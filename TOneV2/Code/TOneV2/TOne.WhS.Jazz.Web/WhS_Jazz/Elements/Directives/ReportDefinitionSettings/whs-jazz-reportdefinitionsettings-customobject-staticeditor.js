@@ -105,6 +105,17 @@
                     reportDefintionFilterDirectiveReadyDeferred.resolve();
                 };
 
+                $scope.scopeModel.validateRegions = function () {
+                    if ($scope.scopeModel.regions.length == 0)
+                        return 'You Should At Least Add One Region ';
+                    return null;
+                };
+
+                $scope.scopeModel.validateMarkets = function () {
+                    if ($scope.scopeModel.markets.length == 0)
+                        return 'You Should At Least Add One Market ';
+                    return null;
+                };
                 defineAPI();
             }
             function loadTaxRecordFilterDirective() {

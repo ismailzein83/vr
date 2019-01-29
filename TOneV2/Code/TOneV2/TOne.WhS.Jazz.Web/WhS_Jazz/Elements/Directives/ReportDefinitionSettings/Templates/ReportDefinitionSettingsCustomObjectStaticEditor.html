@@ -1,5 +1,4 @@
-﻿    <vr-tab header="'Report Filter'">
-        <vr-row>
+﻿        <vr-row>
             <vr-span vr-loader="scopeModel.isReportFilterDirectiveloading">
                 <vr-columns width="fullrow">
                     <vr-section title="Report Filter">
@@ -8,7 +7,6 @@
                 </vr-columns>
             </vr-span>
         </vr-row>
-    </vr-tab>
     <vr-tab header="'Amount Calculation'">
         <vr-row>
             <vr-columns width="fullrow">
@@ -25,24 +23,26 @@
                         <vr-button type="Add" data-onclick="scopeModel.addMarket" standalone></vr-button>
                     </vr-columns>
                     <vr-columns width="fullrow">
-                        <vr-datagrid datasource="scopeModel.markets"
-                                     enabledraggablerow="true"
-                                     hidegridmenu
-                                     ondeleterow="scopeModel.onDeleteMarket">
-                            <vr-datagridcolumn headertext="'Market'">
-                                <vr-span vr-loader="scopeModel.isMarketDirectiveloading">
-                                    <whs-jazz-market-selector on-ready="dataItem.onMarketSelectorReady" isrequired="true" hidelabel></whs-jazz-market-selector>
-                                </vr-span>
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Customer Type'">
-                                <vr-span vr-loader="scopeModel.isCustomerTypeDirectiveloading">
-                                    <whs-jazz-customer-type-selector on-ready="dataItem.onCustomerTypeSelectorReady" isrequired="true" hidelabel></whs-jazz-customer-type-selector>
-                                </vr-span>
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Percentage'">
-                                <vr-textbox value="dataItem.Percentage" isrequired type="number"></vr-textbox>
-                            </vr-datagridcolumn>
-                        </vr-datagrid>
+                        <vr-validator validate="scopeModel.validateMarkets()">
+                            <vr-datagrid datasource="scopeModel.markets"
+                                         enabledraggablerow="true"
+                                         hidegridmenu
+                                         ondeleterow="scopeModel.onDeleteMarket">
+                                <vr-datagridcolumn headertext="'Market'">
+                                    <vr-span vr-loader="scopeModel.isMarketDirectiveloading">
+                                        <whs-jazz-market-selector on-ready="dataItem.onMarketSelectorReady" isrequired="true" hidelabel></whs-jazz-market-selector>
+                                    </vr-span>
+                                </vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Customer Type'">
+                                    <vr-span vr-loader="scopeModel.isCustomerTypeDirectiveloading">
+                                        <whs-jazz-customer-type-selector on-ready="dataItem.onCustomerTypeSelectorReady" isrequired="true" hidelabel></whs-jazz-customer-type-selector>
+                                    </vr-span>
+                                </vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Percentage'">
+                                    <vr-textbox value="dataItem.Percentage" isrequired type="number"></vr-textbox>
+                                </vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-validator>
                     </vr-columns>
                 </vr-section>
             </vr-columns>
@@ -57,19 +57,21 @@
                         <vr-button type="Add" data-onclick="scopeModel.addRegion" standalone></vr-button>
                     </vr-columns>
                     <vr-columns width="fullrow">
-                        <vr-datagrid datasource="scopeModel.regions"
-                                     enabledraggablerow="true"
-                                     hidegridmenu
-                                     ondeleterow="scopeModel.onDeleteRegion">
-                            <vr-datagridcolumn headertext="'Region'">
-                                <vr-span vr-loader="scopeModel.isRegionDirectiveloading">
-                                    <whs-jazz-region-selector on-ready="        dataItem.onRegionSelectorReady" isrequired="true" hidelabel></whs-jazz-region-selector>
-                                </vr-span>
-                            </vr-datagridcolumn>
-                            <vr-datagridcolumn headertext="'Percentage'">
-                                <vr-textbox value="dataItem.Percentage" isrequired type="number"></vr-textbox>
-                            </vr-datagridcolumn>
-                        </vr-datagrid>
+                        <vr-validator validate="scopeModel.validateRegions()">
+                            <vr-datagrid datasource="scopeModel.regions"
+                                         enabledraggablerow="true"
+                                         hidegridmenu
+                                         ondeleterow="scopeModel.onDeleteRegion">
+                                <vr-datagridcolumn headertext="'Region'">
+                                    <vr-span vr-loader="scopeModel.isRegionDirectiveloading">
+                                        <whs-jazz-region-selector on-ready="        dataItem.onRegionSelectorReady" isrequired="true" hidelabel></whs-jazz-region-selector>
+                                    </vr-span>
+                                </vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Percentage'">
+                                    <vr-textbox value="dataItem.Percentage" isrequired type="number"></vr-textbox>
+                                </vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-validator>
                     </vr-columns>
                 </vr-section>
             </vr-columns>
