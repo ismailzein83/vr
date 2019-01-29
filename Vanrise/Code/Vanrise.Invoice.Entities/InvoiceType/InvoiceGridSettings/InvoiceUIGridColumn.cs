@@ -16,5 +16,20 @@ namespace Vanrise.Invoice.Entities
         public string CustomFieldName { get; set; }
         public GridColumnSettings GridColumnSettings { get; set; }
         public bool UseDescription { get; set; }
+        public InvoiceUIGridColumnFilter Filter { get; set; }
+    }
+    public abstract class InvoiceUIGridColumnFilter
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract bool IsFilterMatch(IInvoiceUIGridColumnFilterContext context);
+
+    }
+    public interface IInvoiceUIGridColumnFilterContext
+    {
+        InvoiceType InvoiceType { get; }
+    }
+    public class InvoiceUIGridColumnFilterContext : IInvoiceUIGridColumnFilterContext
+    {
+        public InvoiceType InvoiceType { get; set; }
     }
 }

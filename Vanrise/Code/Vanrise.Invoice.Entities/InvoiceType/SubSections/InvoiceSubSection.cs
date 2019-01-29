@@ -11,8 +11,22 @@ namespace Vanrise.Invoice.Entities
         public Guid InvoiceSubSectionId { get; set; }
         public string SectionTitle { get; set; }
         public Vanrise.GenericData.Entities.RecordFilterGroup SubSectionFilter { get; set; }
+        public InvoiceSubSectionFilter Filter { get; set; }
         public InvoiceSubSectionSettings Settings { get; set; }
-       
+
+    }
+    public abstract class InvoiceSubSectionFilter
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract bool IsFilterMatch(IInvoiceSubSectionFilterContext context);
+    }
+    public interface IInvoiceSubSectionFilterContext
+    {
+        InvoiceType InvoiceType { get; }
+    }
+    public class InvoiceSubSectionFilterContext : IInvoiceSubSectionFilterContext
+    {
+        public InvoiceType InvoiceType { get; set; }
     }
     public abstract class InvoiceSubSectionSettings
     {
