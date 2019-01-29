@@ -1,26 +1,26 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    whSJazzProductServiceCodeAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_Jazz_ModuleConfig"];
+    whSJazzProductServiceAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_Jazz_ModuleConfig"];
 
-    function whSJazzProductServiceCodeAPIService(BaseAPIService, UtilsService, WhS_Jazz_ModuleConfig) {
+    function whSJazzProductServiceAPIService(BaseAPIService, UtilsService, WhS_Jazz_ModuleConfig) {
 
         var controllerName = "ProductService";
 
-        function GetAllProductServiceCodes() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetAllProductServiceCodes'), {
+        function GetAllProductServices() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetAllProductServices'), {
             });
         }
-        function GetProductServiceCodesInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetProductServiceCodesInfo'), {
+        function GetProductServicesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetProductServicesInfo'), {
                 filter:filter
             });
         }
         return ({
-            GetAllProductServiceCodes: GetAllProductServiceCodes,
-            GetProductServiceCodesInfo: GetProductServiceCodesInfo
+            GetAllProductServices: GetAllProductServices,
+            GetProductServicesInfo: GetProductServicesInfo
         });
     }
 
-    appControllers.service("WhS_Jazz_ProductServiceCodeAPIService", whSJazzProductServiceCodeAPIService);
+    appControllers.service("WhS_Jazz_ProductServiceAPIService", whSJazzProductServiceAPIService);
 })(appControllers);

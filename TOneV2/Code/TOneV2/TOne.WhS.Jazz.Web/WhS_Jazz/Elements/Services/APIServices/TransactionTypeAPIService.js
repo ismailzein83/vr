@@ -1,26 +1,26 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    whSJazzTransactionTypeCodeAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_Jazz_ModuleConfig"];
+    whSJazzTransactionTypeAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_Jazz_ModuleConfig"];
 
-    function whSJazzTransactionTypeCodeAPIService(BaseAPIService, UtilsService, WhS_Jazz_ModuleConfig) {
+    function whSJazzTransactionTypeAPIService(BaseAPIService, UtilsService, WhS_Jazz_ModuleConfig) {
 
         var controllerName = "TransactionType";
 
-        function GetAllTransactionTypeCodes() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetAllTransactionTypeCodes'), {
+        function GetAllTransactionTypes() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetAllTransactionTypes'), {
             });
         }
-        function GetTransactionTypeCodesInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetTransactionTypeCodesInfo'), {
+        function GetTransactionTypesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetTransactionTypesInfo'), {
                 filter:filter
             });
         }
         return ({
-            GetAllTransactionTypeCodes: GetAllTransactionTypeCodes,
-            GetTransactionTypeCodesInfo: GetTransactionTypeCodesInfo
+            GetAllTransactionTypes: GetAllTransactionTypes,
+            GetTransactionTypesInfo: GetTransactionTypesInfo
         });
     }
 
-    appControllers.service("WhS_Jazz_TransactionTypeCodeAPIService", whSJazzTransactionTypeCodeAPIService);
+    appControllers.service("WhS_Jazz_TransactionTypeAPIService", whSJazzTransactionTypeAPIService);
 })(appControllers);

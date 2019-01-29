@@ -1,26 +1,26 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    whSJazzCustomerTypeCodeAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_Jazz_ModuleConfig"];
+    whSJazzCustomerTypeAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_Jazz_ModuleConfig"];
+    
+    function whSJazzCustomerTypeAPIService(BaseAPIService, UtilsService, WhS_Jazz_ModuleConfig) {
 
-    function whSJazzCustomerTypeCodeAPIService(BaseAPIService, UtilsService, WhS_Jazz_ModuleConfig) {
+        var controllerName = "CustomerType";
 
-        var controllerName = "Customer";
-
-        function GetAllCustomerTypeCodes() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetAllCustomerTypeCodes'), {
+        function GetAllCustomerTypes() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetAllCustomerTypes'), {
             });
         }
-        function GetCustomerTypeCodesInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetCustomerTypeCodesInfo'), {
+        function GetCustomerTypesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetCustomerTypesInfo'), {
                 filter:filter
             });
         }
         return ({
-            GetAllCustomerTypeCodes: GetAllCustomerTypeCodes,
-            GetCustomerTypeCodesInfo: GetCustomerTypeCodesInfo
+            GetAllCustomerTypes: GetAllCustomerTypes,
+            GetCustomerTypesInfo: GetCustomerTypesInfo
         });
     }
 
-    appControllers.service("WhS_Jazz_CustomerTypeCodeAPIService", whSJazzCustomerTypeCodeAPIService);
+    appControllers.service("WhS_Jazz_CustomerTypeAPIService", whSJazzCustomerTypeAPIService);
 })(appControllers);

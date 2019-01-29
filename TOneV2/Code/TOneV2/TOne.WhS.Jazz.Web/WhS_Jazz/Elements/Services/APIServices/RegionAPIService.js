@@ -1,26 +1,26 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    whSJazzRegionCodeAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_Jazz_ModuleConfig"];
+    whSJazzRegionAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_Jazz_ModuleConfig"];
 
-    function whSJazzRegionCodeAPIService(BaseAPIService, UtilsService, WhS_Jazz_ModuleConfig) {
+    function whSJazzRegionAPIService(BaseAPIService, UtilsService, WhS_Jazz_ModuleConfig) {
 
         var controllerName = "Region";
 
-        function GetAllRegionCodes() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetAllRegionCodes'), {
+        function GetAllRegions() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetAllRegions'), {
             });
         }
-        function GetRegionCodesInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetRegionCodesInfo'), {
+        function GetRegionsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Jazz_ModuleConfig.moduleName, controllerName, 'GetRegionsInfo'), {
                 filter:filter
             });
         }
         return ({
-            GetAllRegionCodes: GetAllRegionCodes,
-            GetRegionCodesInfo: GetRegionCodesInfo
+            GetAllRegions: GetAllRegions,
+            GetRegionsInfo: GetRegionsInfo
         });
     }
 
-    appControllers.service("WhS_Jazz_RegionCodeAPIService", whSJazzRegionCodeAPIService);
+    appControllers.service("WhS_Jazz_RegionAPIService", whSJazzRegionAPIService);
 })(appControllers);

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WhSJazzCustomerTypeSelectorDirective.$inject = ['UtilsService', 'VRUIUtilsService','WhS_Jazz_CustomerTypeCodeAPIService'];
+    WhSJazzCustomerTypeSelectorDirective.$inject = ['UtilsService', 'VRUIUtilsService','WhS_Jazz_CustomerTypeAPIService'];
 
-    function WhSJazzCustomerTypeSelectorDirective(UtilsService, VRUIUtilsService, WhS_Jazz_CustomerTypeCodeAPIService) {
+    function WhSJazzCustomerTypeSelectorDirective(UtilsService, VRUIUtilsService, WhS_Jazz_CustomerTypeAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -72,7 +72,7 @@
                         selectedIds = payload.selectedIds;
                     }
 
-                    return WhS_Jazz_CustomerTypeCodeAPIService.GetCustomerTypeCodesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return WhS_Jazz_CustomerTypeAPIService.GetCustomerTypesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
 
                         if (response) {

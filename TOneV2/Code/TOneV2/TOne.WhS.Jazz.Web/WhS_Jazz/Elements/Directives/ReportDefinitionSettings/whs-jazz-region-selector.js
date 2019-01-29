@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WhSJazzRegionSelectorDirective.$inject = ['UtilsService', 'VRUIUtilsService','WhS_Jazz_RegionCodeAPIService'];
+    WhSJazzRegionSelectorDirective.$inject = ['UtilsService', 'VRUIUtilsService','WhS_Jazz_RegionAPIService'];
 
-    function WhSJazzRegionSelectorDirective(UtilsService, VRUIUtilsService, WhS_Jazz_RegionCodeAPIService) {
+    function WhSJazzRegionSelectorDirective(UtilsService, VRUIUtilsService, WhS_Jazz_RegionAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -71,7 +71,7 @@
                         selectedIds = payload.selectedIds;
                     }
 
-                    return WhS_Jazz_RegionCodeAPIService.GetRegionCodesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return WhS_Jazz_RegionAPIService.GetRegionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
 
                         if (response) {

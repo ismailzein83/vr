@@ -50,14 +50,15 @@ namespace TOne.WhS.Jazz.Business
 
                         JazzReportDefinition reportDefintion = new JazzReportDefinition()
                         {
-                            JazzReportDefinitionId = (Guid)genericBusinessEntity.FieldValues.GetRecord("JazzReportDefinitionId"),
+                            JazzReportDefinitionId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
                             Direction = (ReportDefinitionDirectionEnum)genericBusinessEntity.FieldValues.GetRecord("Direction"),
                             SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
-                            IsEnabled = (bool)genericBusinessEntity.FieldValues.GetRecord("IsEnabled"),
-                            Settings = (JazzReportDefinitionSettings)genericBusinessEntity.FieldValues.GetRecord("Settings")
-
+                            IsEnabled = (bool)genericBusinessEntity.FieldValues.GetRecord("IsEnabled")
                         };
+                        reportDefintion.Direction = new ReportDefinitionDirectionEnum();
+                        reportDefintion.Settings = new JazzReportDefinitionSettings();
+                        reportDefintion.Settings = (JazzReportDefinitionSettings)genericBusinessEntity.FieldValues.GetRecord("Settings");
                         result.Add(reportDefintion.JazzReportDefinitionId, reportDefintion);
                     }
                 }

@@ -154,6 +154,8 @@
   <ItemGroup>
     <Content Include="WhS_Jazz\Constant\RateCalculationTypeEnum.js" />
     <Content Include="WhS_Jazz\Constant\ModuleConfig.js" />
+    <Content Include="WhS_Jazz\Elements\Directives\ReportsProcess\Templates\ReportsProcess.html" />
+    <Content Include="WhS_Jazz\Elements\Directives\ReportsProcess\whs-jazz-reports-process.js" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\Templates\ReportDefinitionSettingsCustomObjectStaticEditor.html" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-reportdefinitionsettings-customobject-staticeditor.js" />
     <Content Include="WhS_Jazz\Elements\Directives\ReportDefinitionSettings\whs-jazz-rate-calculation-type-selector.js" />

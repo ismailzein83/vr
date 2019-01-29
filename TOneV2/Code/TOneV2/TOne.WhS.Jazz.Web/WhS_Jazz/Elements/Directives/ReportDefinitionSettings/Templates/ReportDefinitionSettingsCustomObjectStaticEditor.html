@@ -12,13 +12,11 @@
     <vr-tab header="'Amount Calculation'">
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-section title="Amount Calculation">
                     <whs-jazz-rate-calculation-type-selector on-ready="scopeModel.onRateCalculationTypeSelectorReady" isrequired="true" normal-col-num="8"></whs-jazz-rate-calculation-type-selector>
-                </vr-section>
             </vr-columns>
         </vr-row>
     </vr-tab>
-    <vr-tab header="'Market Settings'">
+    <vr-tab header="'Markets'">
         <vr-row>
             <vr-columns width="fullrow">
                 <vr-switch value="scopeModel.divideByMarket" label="Divide By Market"></vr-switch>
@@ -50,7 +48,7 @@
             </vr-columns>
         </vr-row>
     </vr-tab >
-    <vr-tab header="'Region Settings'">
+    <vr-tab header="'Regions'">
         <vr-row>
             <vr-columns width="fullrow">
                 <vr-switch value="scopeModel.divideByRegion" label="Divide By Region"></vr-switch>
@@ -77,7 +75,7 @@
             </vr-columns>
         </vr-row>
     </vr-tab>
-    <vr-tab header="'Tax Settings'">
+    <vr-tab header="'Tax'">
         <vr-row>
             <vr-columns width="1/3row">
                 <vr-switch value="scopeModel.createTax" label="Create Tax" onvaluechanged="scopeModel.onCreateTaxChanged"></vr-switch>

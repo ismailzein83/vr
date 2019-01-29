@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WhSJazzMarketSelectorDirective.$inject = ['UtilsService', 'VRUIUtilsService','WhS_Jazz_MarketCodeAPIService'];
+    WhSJazzMarketSelectorDirective.$inject = ['UtilsService', 'VRUIUtilsService','WhS_Jazz_MarketAPIService'];
 
-    function WhSJazzMarketSelectorDirective(UtilsService, VRUIUtilsService, WhS_Jazz_MarketCodeAPIService) {
+    function WhSJazzMarketSelectorDirective(UtilsService, VRUIUtilsService, WhS_Jazz_MarketAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -74,7 +74,7 @@
                         selectedIds = payload.selectedIds;
                     }
 
-                    return WhS_Jazz_MarketCodeAPIService.GetMarketCodesInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                    return WhS_Jazz_MarketAPIService.GetMarketsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         selectorAPI.clearDataSource();
 
                         if (response) {
