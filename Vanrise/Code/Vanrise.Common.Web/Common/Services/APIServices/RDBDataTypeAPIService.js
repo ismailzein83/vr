@@ -7,8 +7,7 @@
         var controllerName = 'RDBDataType';
 
         function GetRDBDataTypeInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetRDBDataTypeInfo"), {
-            });
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetRDBDataTypeInfo"), {}, { useCache: true });
         }
 
         return {

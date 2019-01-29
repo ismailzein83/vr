@@ -40,6 +40,8 @@
                 $scope.scopeModel.showAddAllFields = function () {
                     if (ctrl.columns.length == 0)
                         return true;
+                    else if (dataRecordTypeFields != undefined && ctrl.columns.length < dataRecordTypeFields.length)
+                        return true;
                     else
                         return false;
                 };
@@ -62,7 +64,7 @@
                 };
 
                 ctrl.removeColumn = function (dataItem) {
-                    var index = UtilsService.getItemIndexByVal(ctrl.columns, dataItem.id, 'id');
+                    var index = UtilsService.getItemIndexByVal(ctrl.columns, dataItem.fieldName, 'fieldName');
                     if (index > -1) {
                         ctrl.columns.splice(index, 1);
                     }
@@ -127,26 +129,52 @@
 
                 ctrl.loadDefaultRDBTypeTableSettings = function () {
                     $scope.scopeModel.isLoading = true;
+                    var columns = getColumns();
+                    for (var i = 0; i < dataRecordTypeFields.length; i++) {
+                        var dataRecordField = dataRecordTypeFields[i];
 
-                    return VR_GenericData_DataRecordTypeAPIService.GetDataRecordFieldsTranslatedToRDB(dataRecordTypeId).then(function (response) {
-                        for (var i = 0; i < response.length; i++) {
-                            var dataRecordField = response[i];
-                            var gridItem = {
-                                columnName: dataRecordField.FieldName,
-                                isUnique: dataRecordField.IsUnique,
-                                fieldName: dataRecordField.FieldName,
-                                rdbDataType: dataRecordField.RDBDataType,
-                                size: dataRecordField.Size,
-                                precision: dataRecordField.Precision
-                            };
-
-                            loadFieldNameItem(gridItem);
-                            loadRDBDataTypeFieldItem(gridItem);
-                            ctrl.columns.push(gridItem);
-                        };
-                        $scope.scopeModel.isLoading = false;
-                    });
+                        if (ctrl.columns.length == 0) {
+                            addDataRecordFieldToColumns(dataRecordField);
+                        }
+                        else if (columns.findIndex(x => x.FieldName === dataRecordField.FieldName) == -1) {
+                            addDataRecordFieldToColumns(dataRecordField);
+                        }
+                    }
+                    $scope.scopeModel.isLoading = false;
                 };
+            }
+
+            function addDataRecordFieldToColumns(dataRecordField) {
+                var gridItem = {
+                    columnName: dataRecordField.FieldName,
+                    isUnique: dataRecordField.IsUnique,
+                    fieldName: dataRecordField.FieldName,
+                    rdbDataType: dataRecordField.RDBDataType,
+                    size: dataRecordField.Size,
+                    precision: dataRecordField.Precision
+                };
+
+                loadFieldNameItem(gridItem);
+                loadRDBDataTypeFieldItem(gridItem);
+                ctrl.columns.push(gridItem);
+            }
+
+            function getColumns() {
+                var columns = [];
+                for (var i = 0; i < ctrl.columns.length; i++) {
+                    var column = ctrl.columns[i];
+                    columns.push({
+                        $type: 'Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage',
+                        FieldName: column.dataRecordTypeFieldSelectorAPI != undefined ? column.dataRecordTypeFieldSelectorAPI.getSelectedIds() : undefined,
+                        ColumnName: column.columnName,
+                        DataType: column.rdbDataTypeFieldSelectorAPI != undefined ? column.rdbDataTypeFieldSelectorAPI.getSelectedIds().Type : undefined,
+                        Size: column.rdbDataTypeFieldSelectorAPI != undefined ? column.rdbDataTypeFieldSelectorAPI.getSelectedIds().Size : undefined,
+                        Precision: column.rdbDataTypeFieldSelectorAPI != undefined ? column.rdbDataTypeFieldSelectorAPI.getSelectedIds().Precision : undefined,
+                        IsUnique: column.isUnique,
+                        IsIdentity: column.isIdentity
+                    });
+                }
+                return columns;
             }
 
             function getDirectiveAPI() {
@@ -165,8 +193,9 @@
                         ctrl.includeQueueItemId = payload.IncludeQueueItemId;
                     }
 
-                    if (payload.DataRecordTypeId != undefined) {  
+                    if (payload.DataRecordTypeId != undefined) {
                         dataRecordTypeId = payload.DataRecordTypeId;
+                        loadDefaultRDBTypeList();
                         loadColumns();
                     }
 
@@ -222,24 +251,6 @@
                         Columns: ctrl.columns.length > 0 ? getColumns() : null,
                     };
                 };
-
-                function getColumns() {
-                    var columns = [];
-                    for (var i = 0; i < ctrl.columns.length; i++) {
-                        var column = ctrl.columns[i];
-                        columns.push({
-                            $type: 'Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageColumn, Vanrise.GenericData.RDBDataStorage',
-                            FieldName: column.dataRecordTypeFieldSelectorAPI != undefined ? column.dataRecordTypeFieldSelectorAPI.getSelectedIds() : undefined,
-                            ColumnName: column.columnName,
-                            DataType: column.rdbDataTypeFieldSelectorAPI != undefined ? column.rdbDataTypeFieldSelectorAPI.getSelectedIds().Type : undefined,
-                            Size: column.rdbDataTypeFieldSelectorAPI != undefined ? column.rdbDataTypeFieldSelectorAPI.getSelectedIds().Size : undefined,
-                            Precision: column.rdbDataTypeFieldSelectorAPI != undefined ? column.rdbDataTypeFieldSelectorAPI.getSelectedIds().Precision : undefined,
-                            IsUnique: column.isUnique,
-                            IsIdentity: column.isIdentity
-                        });
-                    }
-                    return columns;
-                }
 
                 function getNullableFields() {
                     var nullableFields = [];
@@ -299,6 +310,12 @@
                     promises.push(gridItem.loadRDBDataTypeFieldItemPromiseDeferred.promise);
             }
 
+            function loadDefaultRDBTypeList() {
+                return VR_GenericData_DataRecordTypeAPIService.GetDataRecordFieldsTranslatedToRDB(dataRecordTypeId).then(function (response) {
+                    dataRecordTypeFields = response;
+                });
+            }
+
             function addColumn(data, promises) {
 
                 var gridItem = {
@@ -318,12 +335,16 @@
 
                 loadFieldNameItem(gridItem, promises);
                 loadRDBDataTypeFieldItem(gridItem, promises);
-
-                gridItem.onSelectorReady = function (api) {
-                    setDataRecordTypeFields(gridItem);
-                };
-
+               
                 ctrl.columns.push(gridItem);
+            }
+
+            function setDataRecordTypeFields(gridItem) {
+                ctrl.columns = [];
+                gridItem.dataRecordTypeFields = [];
+                for (var i = 0; i < dataRecordTypeFields.length; i++) {
+                    gridItem.dataRecordTypeFields.push(dataRecordTypeFields[i]);
+                }
             }
         }
     }
