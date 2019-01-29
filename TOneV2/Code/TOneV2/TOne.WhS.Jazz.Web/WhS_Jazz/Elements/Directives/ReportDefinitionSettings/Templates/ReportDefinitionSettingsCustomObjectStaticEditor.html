@@ -1,16 +1,19 @@
-﻿        <vr-row>
-            <vr-span vr-loader="scopeModel.isReportFilterDirectiveloading">
-                <vr-columns width="fullrow">
-                    <vr-section title="Report Filter">
-                        <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
-                    </vr-section>
-                </vr-columns>
-            </vr-span>
-        </vr-row>
+﻿<vr-tab header="'Report Filter'">
+
+    <vr-row>
+        <vr-span vr-loader="scopeModel.isReportFilterDirectiveloading">
+            <vr-columns width="fullrow">
+                <vr-section title="Report Filter">
+                    <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+                </vr-section>
+            </vr-columns>
+        </vr-span>
+    </vr-row>
+    </vr-tab>
     <vr-tab header="'Amount Calculation'">
         <vr-row>
             <vr-columns width="fullrow">
-                    <whs-jazz-rate-calculation-type-selector on-ready="scopeModel.onRateCalculationTypeSelectorReady" isrequired="true" normal-col-num="8"></whs-jazz-rate-calculation-type-selector>
+                <whs-jazz-rate-calculation-type-selector on-ready="scopeModel.onRateCalculationTypeSelectorReady" isrequired="true" normal-col-num="8"></whs-jazz-rate-calculation-type-selector>
             </vr-columns>
         </vr-row>
     </vr-tab>
@@ -47,7 +50,7 @@
                 </vr-section>
             </vr-columns>
         </vr-row>
-    </vr-tab >
+    </vr-tab>
     <vr-tab header="'Regions'">
         <vr-row>
             <vr-columns width="fullrow">
