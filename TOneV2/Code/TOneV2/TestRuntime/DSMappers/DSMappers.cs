@@ -91,18 +91,14 @@ namespace TestRuntime
 
         public static Vanrise.Integration.Entities.MappingOutput MapCDR_MySQL(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
         {
-            //Retail.Runtime.Mappers.RingoMapper mapper = new Retail.Runtime.Mappers.RingoMapper();
-            //return DSMappers.ImportingCDR_MySQL(data);
-
             LogVerbose("Started");
 
-            var cdrs = new List<dynamic>();
+            List<dynamic> cdrs = new List<dynamic>();
             var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
             Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("CDR");
 
-            int maximumBatchSize = 15000;
+            int maximumBatchSize = 50000;
             var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("CDR");
-
 
             var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
 
@@ -112,59 +108,62 @@ namespace TestRuntime
             while (reader.Read())
             {
                 dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
-                cdr.SwitchId = 83;
-                cdr.IDonSwitch = Utils.GetReaderValue<long>(reader, "CDRId");
+                cdr.SwitchId = 1;
+                cdr.IDonSwitch = Utils.GetReaderValue<long>(reader, "ID");
                 //cdr.Tag = reader["Tag"] as string;
-                cdr.AttemptDateTime = (DateTime)reader["AttemptDateTime"];
+                cdr.AttemptDateTime = (DateTime)reader["AttemptTime"];
                 //cdr.AlertDateTime = Utils.GetReaderValue<DateTime>(reader, "AlertDateTime");
-                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime>(reader, "ConnectDateTime");
-                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime>(reader, "DisconnectDateTime");
-                //cdr.DurationInSeconds = Utils.GetReaderValue<Decimal>(reader, "DurationInSeconds");
-                cdr.InTrunk = reader["INTRUNK"] as string;
-                // cdr.InCircuit = reader["IN_CIRCUIT"] != DBNull.Value ? Convert.ToInt64(reader["IN_CIRCUIT"]) : default(Int64);
-                //cdr.InCarrier = reader["IN_CARRIER"] as string;
-                cdr.InIP = reader["INIP"] as string;
-                cdr.OutTrunk = reader["OUTTRUNK"] as string;
+                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime>(reader, "ConnectTime");
+                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime>(reader, "DisconnectTime");
+                cdr.DurationInSeconds = Utils.GetReaderValue<Decimal>(reader, "DurationInSeconds");
+                cdr.InTrunk = reader["TrunkIN"] as string;
+                //cdr.InCircuit = reader["IN_CIRCUIT"] != DBNull.Value ? Convert.ToInt64(reader["IN_CIRCUIT"]) : default(Int64);
+                cdr.InCarrier = reader["CarrierIN"] as string;
+                cdr.InIP = reader["IPIN"] as string;
+                cdr.OutTrunk = reader["TrunkOUT"] as string;
                 //cdr.OutCircuit = reader["OUT_CIRCUIT"] != DBNull.Value ? Convert.ToInt64(reader["OUT_CIRCUIT"]) : default(Int64);
-                //cdr.OutCarrier = reader["OUT_CARRIER"] as string;
-                cdr.OutIP = reader["OUTIP"] as string;
+                cdr.OutCarrier = reader["CarrierOUT"] as string;
+                cdr.OutIP = reader["IPOUT"] as string;
 
                 cdr.CGPN = reader["CGPN"] as string;
                 cdr.CDPN = reader["CDPN"] as string;
-                // cdr.CauseFromReleaseCode = reader["CAUSE_FROM_RELEASE_CODE"] as string;
-                // cdr.CauseFrom = reader["CAUSE_FROM"] as string;
-                // cdr.CauseToReleaseCode = reader["CAUSE_TO_RELEASE_CODE"] as string;
+                //cdr.CauseFromReleaseCode = reader["CAUSE_FROM_RELEASE_CODE"] as string;
+                //cdr.CauseFrom = reader["CAUSE_FROM"] as string;
+                //cdr.CauseToReleaseCode = reader["CAUSE_TO_RELEASE_CODE"] as string;
                 //cdr.CauseTo = reader["CAUSE_TO"] as string;
                 // cdr.IsRerouted = reader["IsRerouted"] != DBNull.Value ? ((reader["IsRerouted"] as string) == "Y") : false;
-                // cdr.CDPNOut = reader["CDPNOut"] as string;
-                // cdr.CDPNIn = reader["CDPNIn"] as string;
-                // cdr.SIP = reader["SIP"] as string;
+                //cdr.CDPNOut = reader["CDPNOut"] as string;
+                //cdr.CDPNIn = reader["CDPNIn"] as string;
+                //cdr.SIP = reader["SIP"] as string;
 
                 cdrs.Add(cdr);
-                importedData.LastImportedId = reader["CDRID"];
+                importedData.LastImportedId = reader["ID"];
 
                 rowCount++;
                 if (rowCount == maximumBatchSize)
                     break;
-            }
 
-            long startingId;
-            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);
-            long currentCDRId = startingId;
-
-            foreach (var cdr in cdrs)
-            {
-                cdr.Id = currentCDRId;
-                currentCDRId++;
             }
 
             if (cdrs.Count > 0)
             {
+                long startingId;
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);
+                long currentCDRId = startingId;
+
+                foreach (var cdr in cdrs)
+                {
+                    cdr.Id = currentCDRId;
+                    currentCDRId++;
+                }
+
                 var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDR");
                 mappedBatches.Add("Distribute Raw CDRs Stage", batch);
             }
             else
+            {
                 importedData.IsEmpty = true;
+            }
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;

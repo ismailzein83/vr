@@ -1,0 +1,1 @@
+﻿select * from sourcecdr Where (ID > IFNULL(@RangeStart, 0)) AND (ID <= IFNULL(@RangeEnd, 999999999999)) #TopRows#;

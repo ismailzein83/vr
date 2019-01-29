@@ -1,0 +1,15 @@
+﻿CREATE TABLE `sourcecdr` (
+  `ID` bigint(20) NOT NULL,
+  `AttemptTime` datetime NOT NULL,
+  `ConnectTime` datetime DEFAULT NULL,
+  `DisconnectTime` datetime DEFAULT NULL,
+  `CDPN` varchar(45) DEFAULT NULL,
+  `CGPN` varchar(45) DEFAULT NULL,
+  `CarrierIN` varchar(45) DEFAULT NULL,
+  `CarrierOUT` varchar(45) DEFAULT NULL,
+  `TrunkIN` varchar(45) DEFAULT NULL,
+  `TrunkOUT` varchar(45) DEFAULT NULL,
+  `IPIN` varchar(45) DEFAULT NULL,
+  `IPOUT` varchar(45) DEFAULT NULL,
+  `DurationInSeconds` decimal(20,0) DEFAULT NULL
+) ;
