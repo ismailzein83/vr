@@ -6,14 +6,20 @@
 
 //namespace Vanrise.Entities
 //{
-//    public class ErlangBCalculatorParameters
+//    public struct ErlangBEntityIdentifier
 //    {
 //        public int NumberOfDevices { get; set; }
-//        public decimal BlockingPercentage { get; set; }
+//        public float BlockingPercentage { get; set; }
+
+//        public override int GetHashCode()
+//        {
+//            return this.NumberOfDevices.GetHashCode() + this.BlockingPercentage.GetHashCode();
+//        }
 //    }
-//    public class ErlangBValueEntity
+//    public class ErlangBEntity
 //    {
-//        public ErlangBCalculatorParameters ErlangBCalculatorParameters { get; set; }
-//        public Decimal Value { get; set; }
+//        public int NumberOfDevices { get; set; }
+//        public float BlockingPercentage { get; set; }
+//        public double BHT { get; set; }
 //    }
 //}
