@@ -57,6 +57,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\root\9d7c09cc\30023d\assembly\dl3\8ac09896\4f67815b_a781d401\System.Web.Http.DLL</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -64,11 +68,34 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.config" />
+    <Content Include="WhS_SMSBusinessEntity\Constants\ModuleConfig.js" />
+    <Content Include="WhS_SMSBusinessEntity\Constants\ProcessEntityTypeEnum.js" />
+    <Content Include="WhS_SMSBusinessEntity\Constants\SMSRatePlanStatusEnum.js" />
+    <Content Include="WhS_SMSBusinessEntity\Constants\WhS_SMSBE_SMSRateChangeTypeEnum.js" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\Templates\CustomerSMSRatePlanGridTemplate.html" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\vr-whs-smsbusinessentity-customerrateplan-grid.js" />
+    <Content Include="WhS_SMSBusinessEntity\Services\APIServices\CustomerSMSRateAPIService.js" />
+    <Content Include="WhS_SMSBusinessEntity\Services\APIServices\CustomerSMSRateChangesAPIService.js" />
+    <Content Include="WhS_SMSBusinessEntity\Services\CustomerSMSRatePlanService.js" />
+    <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSRatePlanEditorController.js" />
+    <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSRatePlanEditor.html" />
+    <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSRatePlan.html" />
+    <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSRatePlanController.js" />
+    <Content Include="WhS_SMSBusinessEntity\Views\FutureSMSRate.html" />
+    <Content Include="WhS_SMSBusinessEntity\Views\FutureSMSRateController.js" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CustomerSMSRateController.cs" />
+    <Compile Include="Controllers\CustomerSMSRateChangesController.cs" />
+    <Compile Include="Controllers\SupplierSMSRateChangesController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,9 +106,24 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="WhS_SMSBusinessEntity\" />
+    <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
+      <Project>{C527C7B2-A481-4D1D-B25A-4A540E812153}</Project>
+      <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Business\TOne.WhS.SMSBusinessEntity.Business.csproj">
+      <Project>{6f1a165b-f322-41f7-82b5-170b83616fe9}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Entities\TOne.WhS.SMSBusinessEntity.Entities.csproj">
+      <Project>{0cb909be-06ad-43c1-8632-d58e334a324a}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.MainExtensions\TOne.WhS.SMSBusinessEntity.MainExtensions.csproj">
+      <Project>{cba925e3-0ba2-4ba2-b4bf-2083506bce7a}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.MainExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

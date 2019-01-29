@@ -1,0 +1,48 @@
+﻿<div vr-modalcontent ng-controller="WhS_SMSBusinessEntity_CustomerSMSRatePlanEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formCustomerSMSRateEditor">
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-datetimepicker type="date" value="scopeModel.effectiveDate" label="Effective Date" onvaluechanged="scopeModel.onEffectiveDateChanged()" isrequired="true"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+
+            <vr-row>
+                <vr-columns width="fullrow">
+
+                    <vr-choices ng-if="scopeModel.effectiveDate" selectedindex="scopeModel.selectedCountryLetterIndex" onselectionchanged="scopeModel.onCountryLetterSelectionChanged()" stopreadonly>
+                        <vr-choice ng-repeat="letter in scopeModel.countryLetters">{{ letter | uppercase }}</vr-choice>
+                    </vr-choices>
+                    <vr-choices ng-if="!scopeModel.effectiveDate" selectedindex="scopeModel.selectedCountryLetterIndex">
+                        <vr-choice ng-repeat="letter in scopeModel.countryLetters" readonly>{{ letter | uppercase }}</vr-choice>
+                    </vr-choices>
+                </vr-columns>
+            </vr-row>
+
+            <vr-datagrid datasource="scopeModel.datastore"
+                         on-ready="scopeModel.onGridReady"
+                         getrowstyle="scopeModel.getGridRowColor"
+                         dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                         pagingtype="'PagingOnScroll'">
+                <vr-datagridcolumn headertext="'Country'" type="'Text'" field="'MobileCountryName'" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Mobile Network'" type="'Text'" field="'MobileNetworkName'" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Current Rate'" type="'number'" disablesorting>
+                    {{dataItem.CurrentRate}}     <vr-span ng-if="(dataItem.HasFutureRate == true)"
+                                           style="cursor: pointer; text-decoration: underline" ng-click="viewScope.scopeModel.onFutureRateClicked(dataItem)">*</vr-span>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'New Rate'" disablesorting>
+                    <vr-textbox type="number" value="dataItem.NewRate" minvalue="0" onvaluechanged="viewScope.scopeModel.onRateValueChanged(dataItem)"></vr-textbox>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formCustomerSMSRateEditor" data-onclick="scopeModel.saveChanges"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

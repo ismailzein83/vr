@@ -44,9 +44,27 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.RDB">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.RDB.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICustomerSMSPriceListDataManager.cs" />
+    <Compile Include="ICustomerSMSRateDataManager.cs" />
+    <Compile Include="IDataManager.cs" />
+    <Compile Include="IProcessDraftDataManager.cs" />
+    <Compile Include="CustomerSMSRateDataManagerFactory.cs" />
+    <Compile Include="ProcessDraftDataManagerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Entities\TOne.WhS.SMSBusinessEntity.Entities.csproj">
+      <Project>{0cb909be-06ad-43c1-8632-d58e334a324a}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

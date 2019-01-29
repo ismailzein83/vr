@@ -1,0 +1,34 @@
+﻿<vr-panel ng-controller="WhS_SMSBusinessEntity_CustomerSMSRatePlanController" vr-loader="scopeModel.isLoading">
+    <div ng-hide="filterSectionCollapsed">
+        <vr-form name="formCustomerSMSRateController">
+            <vr-row>
+                <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCustomerSelectorReady"
+                                                   getcustomers selectedvalues="scopeModel.selectedCustomer"
+                                                   onselectionchanged="scopeModel.onCustomerChanged"
+                                                   normal-col-num="2" isrequired="true" hideremoveicon>
+                </vr-whs-be-carrieraccount-selector>
+
+                <span ng-show="scopeModel.selectedCustomer != undefined">
+                    <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" selectedvalues="scopeModel.currencySymbol" normal-col-num="2" vr-disabled="true"></vr-common-currency-selector>
+                </span>
+                <vr-columns colnum="2" ng-show="scopeModel.selectedCustomer != undefined">
+                    <vr-datetimepicker type="date" value="scopeModel.effectiveDate" label="Effective Date" isrequired="true"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </div>
+
+    <vr-row removeline>
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+            <div transclude-to="buttons">
+                <vr-button type="Load" formname="formCustomerSMSRateController" data-onclick="scopeModel.loadCustomerSMSRates"></vr-button>
+                <vr-button type="CancelChanges" ng-if="scopeModel.isCustomerSMSRateDraftExist" data-onclick="scopeModel.cancelCustomerDraft"></vr-button>
+                <vr-button type="Add" formname="formCustomerSMSRateController" data-onclick="scopeModel.addCustomerRates"></vr-button>
+            </div>
+        </vr-actionbar>
+    </vr-row>
+
+    <div ng-show="scopeModel.selectedCustomer != undefined">
+        <vr-whs-smsbusinessentity-customerrateplan-grid on-ready="scopeModel.onGridReady"></vr-whs-smsbusinessentity-customerrateplan-grid>
+    </div>
+</vr-panel>
