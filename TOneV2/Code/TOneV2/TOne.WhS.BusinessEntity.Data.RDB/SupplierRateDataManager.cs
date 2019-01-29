@@ -239,15 +239,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             whereQuery.ListCondition(supplierPriceListTableAlias, SupplierPriceListDataManager.COL_SupplierID, RDBListConditionOperator.IN, supplierInfos.Select(item => item.SupplierId));
 
-            if (effectiveOn.HasValue)
-            {
-                if (isEffectiveInFuture)
-                    BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                else
-                    BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-            }
-            else
-                whereQuery.FalseCondition();
+            BEDataUtility.SetDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, isEffectiveInFuture, effectiveOn);
 
             return queryContext.GetItems(SupplierRateMapper);
         }
@@ -262,10 +254,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var whereQuery = selectQuery.Where();
 
             var andConditionContext = whereQuery.ChildConditionGroup();
-            andConditionContext.LessOrEqualCondition(COL_BED).Value(fromDateTime);
+            andConditionContext.LessOrEqualCondition(COL_BED).Value(tillDateTime);
             var orCondition = andConditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
             orCondition.NullCondition(COL_EED);
-            orCondition.GreaterThanCondition(COL_EED).Value(tillDateTime);
+            orCondition.GreaterThanCondition(COL_EED).Value(fromDateTime);
 
             return queryContext.GetItems(SupplierRateMapper);
         }
@@ -303,7 +295,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereQuery = selectQuery.Where();
 
-            whereQuery.ListCondition(RDBListConditionOperator.IN, supplierRateIds);
+            whereQuery.ListCondition(COL_ID, RDBListConditionOperator.IN, supplierRateIds);
 
             return queryContext.GetItems(SupplierRateMapper);
         }
