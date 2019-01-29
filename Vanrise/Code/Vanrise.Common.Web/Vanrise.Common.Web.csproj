@@ -211,6 +211,8 @@
     <Content Include="Common\Views\VRNamespace\VRDynamicCodeEditorController.js" />
     <Content Include="Common\Views\VRNamespace\VRNamespaceItemCompilationResult.html" />
     <Content Include="Common\Views\VRNamespace\VRNamespaceItemCompilationResultController.js" />
+    <Content Include="Common\Views\VRTile\FiguresTileQueryEditor.html" />
+    <Content Include="Common\Views\VRTile\FiguresTileQueryEditorController.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

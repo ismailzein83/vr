@@ -296,6 +296,7 @@
     <Compile Include="VRTax\VRTaxSetting.cs" />
     <Compile Include="VRTempPayload\VRTempPayload.cs" />
     <Compile Include="VRTile\FiguresTileQuery.cs" />
+    <Compile Include="VRTile\FiguresTileQueryDefinitionSettingsConfig.cs" />
     <Compile Include="VRTile\VRTile.cs" />
     <Compile Include="VRTile\VRTileExtendedSettingsConfig.cs" />
     <Compile Include="VRTile\VRTileReportSettings.cs" />
