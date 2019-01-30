@@ -189,6 +189,7 @@
     <Content Include="Common\Services\APIServices\HttpCallConnectionInterceptorAPIService.js" />
     <Content Include="Common\Services\APIServices\RDBDataTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRBulkActionDraftAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRDashboardAPIService.js" />
     <Content Include="Common\Services\APIServices\VRNamespaceItemAPIService.js" />
     <Content Include="Common\Services\APIServices\VRDynamicAPIAPIService.js" />
     <Content Include="Common\Services\APIServices\VRDynamicAPIModuleAPIService.js" />
@@ -241,6 +242,7 @@
     <Compile Include="Controllers\SMSMessageTemplateController.cs" />
     <Compile Include="Controllers\SMSMessageTypeController.cs" />
     <Compile Include="Controllers\RemoteFileController.cs" />
+    <Compile Include="Controllers\VRDashboardController.cs" />
     <Compile Include="Controllers\VRDynamicAPIController.cs" />
     <Compile Include="Controllers\VRDynamicAPIModuleController.cs" />
     <Compile Include="Controllers\VRExclusiveSessionController.cs" />
