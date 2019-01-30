@@ -119,6 +119,7 @@
     <Compile Include="DataRetrieval\RemoteExcelManager.cs" />
     <Compile Include="DataRetrieval\ExcelManager.cs" />
     <Compile Include="Communicator\FTPCommunicator.cs" />
+    <Compile Include="ErlangBCalculator.cs" />
     <Compile Include="LabelColorManager.cs" />
     <Compile Include="LicenceManagerControl.cs" />
     <Compile Include="PathResolver.cs" />
