@@ -87,6 +87,19 @@ namespace Vanrise.Data.RDB
             return FromSelect(inlineQueryAlias, null);
         }
 
+        public RDBSelectUnionContext FromSelectUnion(string selectUnionAlias, long? nbOfRecords)
+        {
+            var selectUnionQuery = new RDBSelectUnionContext(_queryBuilderContext.CreateChildContext());
+            From(selectUnionQuery, selectUnionAlias, nbOfRecords);
+            return selectUnionQuery;
+        }
+
+        public RDBSelectUnionContext FromSelectUnion(string selectUnionAlias)
+        {
+            return FromSelectUnion(selectUnionAlias, null);
+        }
+
+
         RDBJoinContext _joinContext;
         public RDBJoinContext Join()
         {
@@ -240,5 +253,79 @@ namespace Vanrise.Data.RDB
         public string ColumnAlias { get; set; }
 
         public RDBSortDirection SortDirection { get; set; }
+    }
+
+    public class RDBSelectUnionContext : IRDBTableQuerySource
+    {
+        RDBQueryBuilderContext _queryBuilderContext;
+
+        public List<RDBSelectQuery> _selectQueries = new List<RDBSelectQuery>();
+
+        internal RDBSelectUnionContext(RDBQueryBuilderContext queryBuilderContext)
+        {
+            _queryBuilderContext = queryBuilderContext;
+        }
+
+        public RDBSelectQuery AddSelect()
+        {
+            var selectQuery = new RDBSelectQuery(_queryBuilderContext.CreateChildContext(), false);
+            this._selectQueries.Add(selectQuery);
+            return selectQuery;
+        }
+
+        public string GetUniqueName()
+        {
+            if (this._selectQueries.Count > 0)
+                return this._selectQueries[0].GetUniqueName();
+            else
+                return null;
+        }
+
+        public string GetDescription()
+        {
+            if (this._selectQueries.Count > 0)
+                return this._selectQueries[0].GetDescription();
+            else
+                return null;
+        }
+
+        public string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context)
+        {
+            return string.Join(" UNION ALL ", this._selectQueries.Select(selectQuery => selectQuery.ToDBQuery(context)));
+        }
+
+        public string GetDBColumnName(IRDBTableQuerySourceGetDBColumnNameContext context)
+        {
+            if (this._selectQueries.Count > 0)
+                return this._selectQueries[0].GetDBColumnName(context);
+            else
+                return null;
+        }
+
+        public void GetIdColumnInfo(IRDBTableQuerySourceGetIdColumnInfoContext context)
+        {
+            if (this._selectQueries.Count > 0)
+                this._selectQueries[0].GetIdColumnInfo(context);
+        }
+
+        public void GetColumnDefinition(IRDBTableQuerySourceGetColumnDefinitionContext context)
+        {
+            if (this._selectQueries.Count > 0)
+                this._selectQueries[0].GetColumnDefinition(context);
+        }
+
+        public List<string> GetColumnNames(IRDBTableQuerySourceGetColumnNamesContext context)
+        {
+            if (this._selectQueries.Count > 0)
+                return this._selectQueries[0].GetColumnNames(context);
+            else
+                return null;
+        }
+
+        public void GetCreatedAndModifiedTime(IRDBTableQuerySourceGetCreatedAndModifiedTimeContext context)
+        {
+            if (this._selectQueries.Count > 0)
+                this._selectQueries[0].GetCreatedAndModifiedTime(context);
+        }
     }
 }

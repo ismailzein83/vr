@@ -51,8 +51,13 @@ namespace Vanrise.Data.RDB
 
         public void AddColumnsFromTable(string tableName)
         {
-            var tableDefinition =RDBSchemaManager.Current.GetTableDefinitionWithValidate(_queryBuilderContext.DataProvider, tableName);
-            foreach(var columnEntry in tableDefinition.Columns)
+            AddColumnsFromTable(tableName, RDBSchemaManager.Current);
+        }
+
+        public void AddColumnsFromTable(string tableName, RDBSchemaManager schemaManager)
+        {
+            var tableDefinition = schemaManager.GetTableDefinitionWithValidate(_queryBuilderContext.DataProvider, tableName);
+            foreach (var columnEntry in tableDefinition.Columns)
             {
                 this._columns.Add(columnEntry.Key, new RDBTempTableColumnDefinition { ColumnDefinition = columnEntry.Value, IsPrimaryKey = tableDefinition.IdColumnName == columnEntry.Key });
             }
