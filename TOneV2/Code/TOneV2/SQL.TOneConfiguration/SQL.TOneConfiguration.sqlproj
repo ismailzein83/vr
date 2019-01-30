@@ -931,6 +931,8 @@
     <None Include="Mediation_Mobilis.PostDeployment.sql" />
     <None Include="DataAnalysis.Retail_Centrex.PostDeployment.sql" />
     <None Include="VR_MobileNetwork.PostDeployment.sql" />
+    <None Include="InterConnect.Voice.PostDeployment.sql" />
+    <None Include="InterConnect.SMS.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
