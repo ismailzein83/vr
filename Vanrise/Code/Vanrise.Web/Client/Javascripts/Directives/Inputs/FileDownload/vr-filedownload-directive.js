@@ -30,21 +30,25 @@ app.directive('vrFiledownload', ['VRValidationService', 'BaseDirService', 'VRNot
             }, 10);
 
 
-          
-            $scope.$watch('ctrl.value', function () {               
+
+            $scope.$watch('ctrl.value', function () {
                 if (ctrl.value != null) {
+                    if (ctrl.value.fileName && ctrl.value.fileUniqueId == undefined && ctrl.value.fileId == undefined) {
+                        ctrl.file = {
+                            name: ctrl.value.fileName
+                        };
+                        return;
+                    }
                     var connectionId = getConnectionId();
                     var input = {
                         moduleName: getModuleName(),
                     };
                     var url = "/api/VRCommon/File/";
-                    if (connectionId != undefined)
-                    {
+                    if (connectionId != undefined) {
                         url = "/api/VRCommon/RemoteFile/";
                         input.connectionId = connectionId;
                     }
-                    if (ctrl.value.fileUniqueId == undefined)
-                    {
+                    if (ctrl.value.fileUniqueId == undefined) {
                         input.fileId = ctrl.value.fileId;
                         if (connectionId == undefined) {
                             url += "GetFileInfo";
@@ -54,7 +58,7 @@ app.directive('vrFiledownload', ['VRValidationService', 'BaseDirService', 'VRNot
                         }
 
                     } else {
-                        input.fileUniqueId= ctrl.value.fileUniqueId;
+                        input.fileUniqueId = ctrl.value.fileUniqueId;
                         url += "GetFileInfoByUniqueId";
                     }
                     BaseAPIService.get(url, input).then(function (response) {
@@ -88,18 +92,29 @@ app.directive('vrFiledownload', ['VRValidationService', 'BaseDirService', 'VRNot
                 }
             });
             ctrl.downloadFile = function () {
+
                 var id = ctrl.value.fileId;
-                var connectionId = getConnectionId();
-                if (connectionId ==undefined) {
-                    FileAPIService.DownloadFile(id, getModuleName()).then(function(response) {
-                        UtilsService.downloadFile(response.data, response.headers);
-                    });
+                if (id == undefined) {
+                    if (ctrl.value.downloadFileCallBackAPI != undefined && typeof (ctrl.value.downloadFileCallBackAPI) == 'function') {
+                        ctrl.value.downloadFileCallBackAPI().then(function (response) {
+                            UtilsService.downloadFile(response.data, response.headers);
+                        });
+                    }
                 }
                 else {
-                    RemoteFileAPIService.DownloadRemoteFile(connectionId, id, getModuleName()).then(function (response) { 
-                        UtilsService.downloadFile(response.data, response.headers);
-                    });
+                    var connectionId = getConnectionId();
+                    if (connectionId == undefined) {
+                        FileAPIService.DownloadFile(id, getModuleName()).then(function (response) {
+                            UtilsService.downloadFile(response.data, response.headers);
+                        });
+                    }
+                    else {
+                        RemoteFileAPIService.DownloadRemoteFile(connectionId, id, getModuleName()).then(function (response) {
+                            UtilsService.downloadFile(response.data, response.headers);
+                        });
+                    }
                 }
+
             };
             if ($attrs.hint != undefined)
                 ctrl.hint = $attrs.hint;
@@ -138,7 +153,7 @@ app.directive('vrFiledownload', ['VRValidationService', 'BaseDirService', 'VRNot
         },
         controllerAs: 'ctrl',
         compile: function (element, attrs) {
-          
+
             return {
                 pre: function ($scope, iElem, iAttrs) {
 
@@ -189,8 +204,8 @@ app.directive('vrFiledownload', ['VRValidationService', 'BaseDirService', 'VRNot
                      + '<div id="mainInput" ng-model="ctrl.value" class="form-control vr-file-upload"  style="border-radius: 4px;padding: 0px;">'
                             + '<div  class="vr-file">'
                                + '<div ng-if=" ctrl.file !=null "  title="{{ctrl.file.name}}">'
-                               + ' <a href="" class="vr-file-name" ng-click="ctrl.downloadFile()">{{ctrl.file.name}}</a>'                              
-                               +'</div>'
+                               + ' <a href="" class="vr-file-name" ng-click="ctrl.downloadFile()">{{ctrl.file.name}}</a>'
+                               + '</div>'
                            + '</div>'
                       + '</div>'
                   + '</vr-validator>'
