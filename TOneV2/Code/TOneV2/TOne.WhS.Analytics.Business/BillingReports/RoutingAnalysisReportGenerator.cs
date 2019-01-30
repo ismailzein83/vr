@@ -85,7 +85,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 var analyticQuery = new AnalyticQuery
                 {
                     DimensionFields = new List<string> { "SaleZone", "Supplier" },
-                    MeasureFields = new List<string> { "DurationNet", "TotalCostNet", "TotalSaleNet", "Profit", "SaleRate_DurAvg", "CostRate_DurAvg" },
+                    MeasureFields = new List<string> { "DurationNet", "TotalCostNet", "TotalSaleNet", "TotalProfit", "SaleRate_DurAvg", "CostRate_DurAvg" },
                     TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -216,7 +216,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
 
                         MeasureValue profit;
-                        analyticRecord.MeasureValues.TryGetValue("Profit", out profit);
+                        analyticRecord.MeasureValues.TryGetValue("TotalProfit", out profit);
                         routingAnalysis.Profit = Convert.ToDouble(profit.Value ?? 0.0);
                         routingAnalysis.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(routingAnalysis.Profit);
 
