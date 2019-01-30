@@ -144,7 +144,8 @@
     <Compile Include="TextManipulationManager.cs" />
     <Compile Include="VRConnections\MainImplementations\VRHttpConnection.cs" />
     <Compile Include="VRConnections\MainImplementations\VRInterAppRestConnection.cs" />
-    <Compile Include="VRDashboardViewSettings.cs" />
+    <Compile Include="VRDashboard\VRDashboardViewSettings.cs" />
+    <Compile Include="VRDashboard\VRDashboardManager.cs" />
     <Compile Include="VRDynamicAPIModule\VRDynamicAPIDiscovery.cs" />
     <Compile Include="VRDynamicAPIModule\VRDynamicAPIModuleManager.cs" />
     <Compile Include="VRDynamicAPI\VRDynamicAPIManager.cs" />
