@@ -57,6 +57,115 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
 
         #region ISaleZoneDataManager Members
+
+        public bool AreZonesUpdated(ref object updateHandle)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
+
+        public IEnumerable<SaleZone> GetAllSaleZones()
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+            return queryContext.GetItems(SaleZoneMapper);
+        }
+
+        public IOrderedEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Column(COL_ID);
+
+            var whereContext = selectQuery.Where();
+
+            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isEffectiveInFuture, effectiveOn);
+
+            return queryContext.GetItems(reader => reader.GetLong(COL_ID)).OrderBy(itm => itm);
+        }
+
+        public bool UpdateSaleZoneName(long zoneId, string zoneName, int sellingNumberPlanId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+
+            updateQuery.Column(COL_Name).Value(zoneName);
+            updateQuery.Where().EqualsCondition(COL_ID).Value(zoneId);
+
+            var salePriceListRateChangeDataManager = new SalePricelistRateChangeDataManager();
+            salePriceListRateChangeDataManager.SetUpdateContext(queryContext, zoneName, zoneId);
+
+            var salePriceListCodeChangeDataManager = new SalePricelistCodeChangeDataManager();
+            salePriceListCodeChangeDataManager.SetUpdateContext(queryContext, zoneName, zoneId);
+
+            var salePriceListRPChangeDataManager = new SalePricelistRPChangeDataManager();
+            salePriceListRPChangeDataManager.SetUpdateContext(queryContext, zoneName, zoneId);
+
+            return queryContext.ExecuteNonQuery(true) > 0;
+        }
+
+        #endregion
+
+        #region Mappers
+
+        SaleZone SaleZoneMapper(IRDBDataReader reader)
+        {
+            return new SaleZone
+            {
+                SaleZoneId = reader.GetLong(COL_ID),
+                SellingNumberPlanId = reader.GetInt(COL_SellingNumberPlanID),
+                CountryId = reader.GetInt(COL_CountryID),
+                Name = reader.GetString(COL_Name),
+                BED = reader.GetDateTime(COL_BED),
+                EED = reader.GetNullableDateTime(COL_EED),
+                SourceId = reader.GetString(COL_SourceID)
+            };
+        }
+        SaleZoneInfo SaleZoneInfoMapper(IRDBDataReader reader)
+        {
+            return new SaleZoneInfo
+            {
+                SaleZoneId = reader.GetLong(COL_ID),
+                Name = reader.GetString(COL_Name),
+                SellingNumberPlanId = reader.GetInt(COL_SellingNumberPlanID)
+            };
+        }
+
+        #endregion
+
+
+        #region Public Methods
+
+        public void JoinSaleZone(RDBJoinContext joinContext, string zoneTableAlias, string originalTableAlias, string originalTableZoneIdCol, bool withNoLockJoin)
+        {
+            var joinStatement = joinContext.Join(TABLE_NAME, zoneTableAlias);
+            if (withNoLockJoin)
+                joinStatement.WithNoLock();
+            var joinCondition = joinStatement.On();
+            joinCondition.EqualsCondition(originalTableAlias, originalTableZoneIdCol, zoneTableAlias, COL_ID);
+        }
+
+        public void BuildInsertQuery(RDBInsertQuery insertQuery, long processInstanceID)
+        {
+            insertQuery.IntoTable(TABLE_NAME);
+            insertQuery.Column(COL_ProcessInstanceID).Value(processInstanceID);
+        }
+
+        public void BuildUpdateQuery(RDBUpdateQuery updateQuery, long processInstanceID, string joinTableAlias, string columnName)
+        {
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_EED).Column(joinTableAlias, COL_EED);
+            updateQuery.Where().EqualsCondition(joinTableAlias, columnName).Value(processInstanceID);
+        }
+
+        #endregion
+
+        #region Not Used Functions
+
         public List<SaleZone> GetSaleZones(int sellingNumberPlanId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
@@ -87,112 +196,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.GetItems(SaleZoneInfoMapper);
         }
 
-        public bool AreZonesUpdated(ref object updateHandle)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
-        }
-
-        public IEnumerable<SaleZone> GetAllSaleZones()
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-            return queryContext.GetItems(SaleZoneMapper);
-        }
-
-        public IOrderedEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            var where = selectQuery.Where();
-            AddIsEffectiveQuery(where, effectiveOn, isEffectiveInFuture);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-            return queryContext.GetItems(reader => reader.GetLong(COL_ID)).OrderBy(itm => itm);
-        }
-
-        public bool UpdateSaleZoneName(long zoneId, string zoneName, int sellingNumberPlanId)
-        {
-            throw new NotImplementedException();
-
-            //Todo
-            // [SalePricelistRateChange] , [SalePricelistCodeChange] , [SalePricelistRPChange] convert it first to RDB
-        }
-        #endregion
-
-        #region Mappers
-        SaleZone SaleZoneMapper(IRDBDataReader reader)
-        {
-            return new SaleZone
-            {
-                SaleZoneId = reader.GetLong(COL_ID),
-                SellingNumberPlanId = reader.GetInt(COL_SellingNumberPlanID),
-                CountryId = reader.GetInt(COL_CountryID),
-                Name = reader.GetString(COL_Name),
-                BED = reader.GetDateTime(COL_BED),
-                EED = reader.GetNullableDateTime(COL_EED),
-                SourceId = reader.GetString(COL_SourceID)
-            };
-        }
-        SaleZoneInfo SaleZoneInfoMapper(IRDBDataReader reader)
-        {
-            return new SaleZoneInfo
-            {
-                SaleZoneId = reader.GetLong("ID"),
-                Name = reader.GetString("Name"),
-                SellingNumberPlanId = reader.GetInt("SellingNumberPlanID")
-            };
-        }
-        #endregion
-
-        #region Private Methods
-
-        private void AddIsEffectiveQuery(RDBConditionContext conditionContext, DateTime? effectiveDate, bool? isEffectiveInFuture)
-        {
-            if (isEffectiveInFuture.HasValue)
-            {
-                if (isEffectiveInFuture.Value)
-                {
-                    conditionContext.NotNullCondition(TABLE_ALIAS, COL_EED);
-                    conditionContext.GreaterOrEqualCondition(TABLE_ALIAS, COL_BED).DateNow();
-                }
-                else if (effectiveDate.HasValue)
-                {
-                    conditionContext.LessOrEqualCondition(TABLE_ALIAS, COL_BED).Value(effectiveDate.Value);
-                    var orCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-                    orCondition.NotNullCondition(TABLE_ALIAS, COL_EED);
-                    orCondition.GreaterOrEqualCondition(TABLE_ALIAS, COL_EED).Value(effectiveDate.Value);
-                }
-            }
-        }
-        #endregion
-
-        #region Public Methods
-
-        public void JoinSaleZone(RDBJoinContext joinContext, string zoneTableAlias, string originalTableAlias, string originalTableZoneIdCol, bool withNoLockJoin)
-        {
-            var joinStatement = joinContext.Join(TABLE_NAME, zoneTableAlias);
-            if (withNoLockJoin)
-                joinStatement.WithNoLock();
-            var joinCondition = joinStatement.On();
-            joinCondition.EqualsCondition(originalTableAlias, originalTableZoneIdCol, zoneTableAlias, COL_ID);
-        }
-
-        public void BuildInsertQuery(RDBInsertQuery insertQuery, long processInstanceID)
-        {
-            insertQuery.IntoTable(TABLE_NAME);
-            insertQuery.Column(COL_ProcessInstanceID).Value(processInstanceID);
-        }
-
-        public void BuildUpdateQuery(RDBUpdateQuery updateQuery, long processInstanceID, string joinTableAlias, string columnName)
-        {
-            updateQuery.FromTable(TABLE_NAME);
-            updateQuery.Column(COL_EED).Column(joinTableAlias, COL_EED);
-            updateQuery.Where().EqualsCondition(joinTableAlias, columnName).Value(processInstanceID);
-        }
         #endregion
     }
 }

@@ -44,11 +44,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public static void SetDateCondition(RDBConditionContext context, string tableAlias, string colBED, string ColEED, bool isFuture, DateTime? effectiveOn)
         {
             if (isFuture)
-                BEDataUtility.SetFutureDateCondition(context, tableAlias, colBED, ColEED, DateTime.Now);
+                SetFutureDateCondition(context, tableAlias, colBED, ColEED, DateTime.Now);
             else
             {
                 if (effectiveOn.HasValue)
-                    BEDataUtility.SetEffectiveDateCondition(context, tableAlias, colBED, ColEED, effectiveOn.Value);
+                    SetEffectiveDateCondition(context, tableAlias, colBED, ColEED, effectiveOn.Value);
                 else
                     context.FalseCondition();
             }

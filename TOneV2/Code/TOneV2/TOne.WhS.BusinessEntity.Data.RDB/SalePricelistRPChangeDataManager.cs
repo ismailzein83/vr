@@ -21,32 +21,26 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_PriceListId = "PriceListId";
         const string COL_CountryId = "CountryId";
         const string COL_CustomerId = "CustomerId";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
 
 
         static SalePricelistRPChangeDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ZoneName, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
-            columns.Add(COL_ZoneID, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_RoutingProductId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_RecentRoutingProductId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_PriceListId, new RDBTableColumnDefinition {DataType = RDBDataType.BigInt});
-            columns.Add(COL_CountryId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CustomerId, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ZoneName, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_ZoneID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_RoutingProductId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_RecentRoutingProductId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_PriceListId, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
+            columns.Add(COL_CountryId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_CustomerId, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
                 DBTableName = "SalePricelistRPChange",
-                Columns = columns,
-                CreatedTimeColumnName = COL_CreatedTime,
-                ModifiedTimeColumnName = COL_LastModifiedTime
-
+                Columns = columns
             });
         }
         BaseRDBDataProvider GetDataProvider()
@@ -78,6 +72,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             insertQuery.IntoTable(TABLE_NAME);
         }
+        public void SetUpdateContext(RDBQueryContext queryContext, string zoneName, long zoneId)
+        {
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_ZoneName).Value(zoneName);
+            updateQuery.Where().EqualsCondition(COL_ZoneID).Value(zoneId);
+        }
+
         #endregion
 
         #region Mapper

@@ -94,6 +94,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
         }
 
+        public void SetUpdateContext(RDBQueryContext queryContext, string zoneName, long zoneId)
+        {
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+            updateQuery.Column(COL_ZoneName).Value(zoneName);
+            updateQuery.Where().EqualsCondition(COL_ZoneID).Value(zoneId);
+        }
         #endregion
 
         #region Mappper
