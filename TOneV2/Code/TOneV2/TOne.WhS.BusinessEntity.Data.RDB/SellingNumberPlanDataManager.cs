@@ -1,6 +1,4 @@
-﻿using System;
-using Vanrise.Common;
-using Vanrise.Data.RDB;
+﻿using Vanrise.Data.RDB;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
@@ -20,12 +18,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static SellingNumberPlanDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Name, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 255});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_CreatedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 255 });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -47,7 +45,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             return queryContext.GetItems(SellingNumberPlanMapper);
         }
@@ -72,8 +70,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             if (sellingNumberPlan.LastModifiedBy.HasValue)
                 updateQuery.Column(COL_LastModifiedBy).Value(sellingNumberPlan.LastModifiedBy.Value);
-            
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
+            else
+                updateQuery.Column(COL_LastModifiedBy).Null();
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(sellingNumberPlan.SellingNumberPlanId);
 
@@ -87,7 +85,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
             insertQuery.AddSelectGeneratedId();
 
-            var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS, RDBConditionGroupOperator.OR);
+            var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
             notExistsCondition.EqualsCondition(COL_Name).Value(sellingNumberPlan.Name);
 
             insertQuery.Column(COL_Name).Value(sellingNumberPlan.Name);
