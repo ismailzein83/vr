@@ -48,11 +48,13 @@ namespace TOne.WhS.Jazz.BP.Activities
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };
-            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
-            recordFilterGroup.Filters = new List<RecordFilter>();
-            recordFilterGroup.Filters.Add(recordFilter);
-            analyticQuery.Query.FilterGroup = recordFilterGroup;
-
+            if (recordFilter != null)
+            {
+                RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+                recordFilterGroup.Filters = new List<RecordFilter>();
+                recordFilterGroup.Filters.Add(recordFilter);
+                analyticQuery.Query.FilterGroup = recordFilterGroup;
+            }
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
         private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)
@@ -71,7 +73,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                 foreach (var analyticRecord in analyticRecords)
                 {
                     #region ReadDataFromAnalyticResult
-                    DimensionValue carrierAccountId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
+                    DimensionValue carrierAccount = analyticRecord.DimensionValues.ElementAtOrDefault(0);
                     MeasureValue netValue = null;
                     MeasureValue durationValue = null;
 
@@ -88,67 +90,47 @@ namespace TOne.WhS.Jazz.BP.Activities
                     #endregion
 
                    
-                        CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                           var jazzReportData = new JazzReportData
-                        {
-                            CarrierAccountId = Convert.ToInt32(carrierAccountId.Value),
-                            CarrierAccountName = carrierAccountManager.GetCarrierAccount(carrierAccountId.Name).ProfileName,
-                            Duration = Convert.ToDecimal(durationValue.Value ?? 0.0),
-                            Amount = Convert.ToDecimal(netValue.Value ?? 0.0),
-                        };
-                        if (reportDefinition.Settings != null)
-                        {
-                            if (reportDefinition.Settings.DivideByMarket)
-                            {
-                                if (reportDefinition.Settings.MarketSettings != null && reportDefinition.Settings.MarketSettings.MarketOptions != null && reportDefinition.Settings.MarketSettings.MarketOptions.Count > 0)
-                                {
-                                    jazzReportData.Markets = new List<JazzReportMarket>();
-                                    MarketManager _marketManager = new MarketManager();
-                                    foreach (var market in reportDefinition.Settings.MarketSettings.MarketOptions)
-                                    {
-                                        JazzReportMarket reportMarket = new JazzReportMarket
-                                        {
-                                            MarketId = market.MarketCodeId,
-                                            MarketName = _marketManager.GetMarketById(market.MarketCodeId).Name,
-                                            MarketValue = market.Percentage * jazzReportData.Amount
-                                        };
-                                        if (reportDefinition.Settings.DivideByRegion && reportDefinition.Settings.RegionSettings != null && reportDefinition.Settings.RegionSettings.RegionOptions != null && reportDefinition.Settings.RegionSettings.RegionOptions.Count > 0)
-                                        {
-                                            reportMarket.Regions = new List<JazzReportRegion>();
-                                            RegionManager _regionManager = new RegionManager();
-                                            foreach (var region in reportDefinition.Settings.RegionSettings.RegionOptions)
-                                                reportMarket.Regions.Add(new JazzReportRegion
-                                                {
-                                                    RegionId = region.RegionCodeId,
-                                                    RegionName = _regionManager.GetRegionById(region.RegionCodeId).Name,
-                                                    RegionValue = region.Percentage * reportMarket.MarketValue
-                                                });
-                                        }
-                                        jazzReportData.Markets.Add(reportMarket);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (reportDefinition.Settings.RegionSettings != null && reportDefinition.Settings.RegionSettings.RegionOptions != null && reportDefinition.Settings.RegionSettings.RegionOptions.Count > 0)
-                                {
-                                    jazzReportData.Regions = new List<JazzReportRegion>();
-                                    RegionManager _regionManager = new RegionManager();
-                                    foreach (var region in reportDefinition.Settings.RegionSettings.RegionOptions)
-                                        jazzReportData.Regions.Add(new JazzReportRegion
-                                        {
-                                            RegionId = region.RegionCodeId,
-                                            RegionName = _regionManager.GetRegionById(region.RegionCodeId).Name,
-                                            RegionValue = region.Percentage * jazzReportData.Amount
-                                        });
-                                }
-                            }
+                    var jazzReportData = new JazzReportData
 
+                    {
+                        CarrierAccountId = Convert.ToInt32(carrierAccount.Value),
+                        CarrierAccountName = carrierAccount.Name,
+                        Duration = Convert.ToDecimal(durationValue.Value ?? 0.0),
+                        Amount = Convert.ToDecimal(netValue.Value ?? 0.0),
+                    };
+
+                    if (reportDefinition.Settings != null && reportDefinition.Settings.MarketSettings != null && reportDefinition.Settings.MarketSettings.MarketOptions != null && reportDefinition.Settings.MarketSettings.MarketOptions.Count > 0)
+                    {
+                        jazzReportData.Markets = new List<JazzReportMarket>();
+                        MarketManager _marketManager = new MarketManager();
+                        foreach (var market in reportDefinition.Settings.MarketSettings.MarketOptions)
+                        {
+                            JazzReportMarket reportMarket = new JazzReportMarket
+                            {
+                                MarketId = market.MarketCodeId,
+                                MarketName = _marketManager.GetMarketById(market.MarketCodeId).Name,
+                                MarketValue = market.Percentage * jazzReportData.Amount,
+                                Percentage =market.Percentage,
+                            };
+                            if (reportDefinition.Settings.DivideByRegion && reportDefinition.Settings.RegionSettings != null && reportDefinition.Settings.RegionSettings.RegionOptions != null && reportDefinition.Settings.RegionSettings.RegionOptions.Count > 0)
+                            {
+                                reportMarket.Regions = new List<JazzReportRegion>();
+                                RegionManager _regionManager = new RegionManager();
+                                foreach (var region in reportDefinition.Settings.RegionSettings.RegionOptions)
+                                    reportMarket.Regions.Add(new JazzReportRegion
+                                    {
+                                        RegionId = region.RegionCodeId,
+                                        RegionName = _regionManager.GetRegionById(region.RegionCodeId).Name,
+                                        RegionValue = region.Percentage * reportMarket.MarketValue,
+                                        Percentage =region.Percentage,
+                                    });
+                            }
+                            jazzReportData.Markets.Add(reportMarket);
                         }
-                        jazzReportsData.Add(jazzReportData);
                     }
+                    jazzReportsData.Add(jazzReportData);
                 }
-            
+            }
             return jazzReportsData;
         }
 
@@ -159,7 +141,7 @@ namespace TOne.WhS.Jazz.BP.Activities
             var fromDate = FromDate.Get(context);
             var toDate = ToDate.Get(context);
             RecordFilter recordFilter = null;
-            if (reportDefinition != null && reportDefinition.Settings != null)
+            if (reportDefinition != null && reportDefinition.Settings != null && reportDefinition.Settings.ReportFilter!=null)
                 recordFilter = reportDefinition.Settings.ReportFilter;
             List<string> dimensions =null;
             List<string> measures = null;

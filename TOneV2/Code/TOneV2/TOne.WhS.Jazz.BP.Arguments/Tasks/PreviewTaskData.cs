@@ -9,7 +9,7 @@ namespace TOne.WhS.Jazz.BP.Arguments
 {
     public class PreviewTaskData : BPTaskData
     {
-        public int? FileId { get; set; }
+        public long? FileId { get; set; }
         public int ProcessInstanceId { get; set; }
     }
 }

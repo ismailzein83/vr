@@ -9,8 +9,6 @@
     <vr-tab header="'Markets'">
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-switch value="scopeModel.divideByMarket" label="Divide By Market"></vr-switch>
-                <vr-section ng-if="scopeModel.divideByMarket" title="Markets">
                     <vr-columns width="1/2row">
                         <vr-button type="Add" data-onclick="scopeModel.addMarket" standalone></vr-button>
                     </vr-columns>
@@ -36,7 +34,6 @@
                             </vr-datagrid>
                         </vr-validator>
                     </vr-columns>
-                </vr-section>
             </vr-columns>
         </vr-row>
     </vr-tab>

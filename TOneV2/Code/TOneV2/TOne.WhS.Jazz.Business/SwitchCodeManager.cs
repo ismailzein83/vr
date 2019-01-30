@@ -66,6 +66,7 @@ namespace TOne.WhS.Jazz.Business
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
+                            Name=(string)genericBusinessEntity.FieldValues.GetRecord("Name"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
@@ -84,7 +85,7 @@ namespace TOne.WhS.Jazz.Business
             return new SwitchCodeDetail
             {
                 ID = switchCode.ID,
-                SwitchId = switchCode.SwitchId
+                Name = switchCode.Name
             };
         }
 

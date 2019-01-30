@@ -9,7 +9,7 @@ namespace TOne.WhS.Jazz.BP.Activities
 {
     public sealed class DeleteJazzReportFile : CodeActivity
     {
-        public InArgument<int> FileId { get; set; }
+        public InArgument<long> FileId { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             throw new NotImplementedException();

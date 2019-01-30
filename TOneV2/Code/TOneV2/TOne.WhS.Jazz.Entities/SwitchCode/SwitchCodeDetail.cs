@@ -8,7 +8,7 @@ namespace TOne.WhS.Jazz.Entities
     public class SwitchCodeDetail
     {
         public Guid ID { get; set; }
-        public int SwitchId { get; set; }
+        public string Name { get; set; }
 
     }
 }

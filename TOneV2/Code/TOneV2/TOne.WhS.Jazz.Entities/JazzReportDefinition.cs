@@ -21,7 +21,6 @@ namespace TOne.WhS.Jazz.Entities
     public class JazzReportDefinitionSettings
     {
         public AmountCalculation AmountCalculation { get; set; }
-        public bool DivideByMarket { get; set; }
         public MarketSettings MarketSettings { get; set; }
         public bool DivideByRegion { get; set; }
         public RegionSettings RegionSettings { get; set; }

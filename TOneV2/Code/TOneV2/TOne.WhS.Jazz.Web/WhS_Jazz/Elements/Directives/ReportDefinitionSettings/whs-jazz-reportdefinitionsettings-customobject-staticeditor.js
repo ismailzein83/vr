@@ -106,17 +106,32 @@
                 };
 
                 $scope.scopeModel.validateRegions = function () {
-                    if ($scope.scopeModel.regions.length == 0)
+                    if ($scope.scopeModel.regions.length == 0 )
                         return 'You Should At Least Add One Region ';
+                    if (validatePercentages($scope.scopeModel.regions))
+                        return 'Percentages Sum Must Be Equal To 100';
                     return null;
                 };
 
                 $scope.scopeModel.validateMarkets = function () {
                     if ($scope.scopeModel.markets.length == 0)
                         return 'You Should At Least Add One Market ';
+                    if (validatePercentages($scope.scopeModel.markets))
+                        return 'Percentages Sum Must Be Equal To 100';
                     return null;
                 };
                 defineAPI();
+            }
+
+            function validatePercentages(items) {
+                var percentagesSum=0;
+                for (var i = 0; i < items.length; i++) {
+                    percentagesSum += items[i].Percentage;
+                    console.log(percentagesSum)
+                }
+                if (percentagesSum == 100)
+                    return false;
+                return true;
             }
             function loadTaxRecordFilterDirective() {
                 var taxRecordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -215,7 +230,6 @@
                             $scope.scopeModel.createTax = settings.CreateTax;
                             $scope.scopeModel.taxPercentage = settings.TaxPercentage;
                             $scope.scopeModel.divideByRegion = settings.DivideByRegion;
-                            $scope.scopeModel.divideByMarket = settings.DivideByMarket;
                             reportDefintionFilterGroup = settings.ReportFilter;
                             taxFilterGroup = settings.TaxFilter;
                             if (settings.MarketSettings != undefined) {
@@ -287,7 +301,6 @@
                         $type: "TOne.WhS.Jazz.Entities.JazzReportDefinitionSettings,TOne.WhS.Jazz.Entities",
                         AmountCalculation: rateCalculationTypeSelectorAPI.getSelectedIds(),
                       
-                        DivideByMarket: $scope.scopeModel.divideByMarket,
                         MarketSettings: {
                             MarketOptions: marketOptions
                         },

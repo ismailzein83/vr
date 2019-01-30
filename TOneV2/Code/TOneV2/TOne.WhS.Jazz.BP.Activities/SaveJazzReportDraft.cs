@@ -14,7 +14,7 @@ namespace TOne.WhS.Jazz.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 

@@ -89,7 +89,7 @@
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
           <Sequence.Variables>
-            <Variable x:TypeArguments="x:Int32" Name="FileId" />
+            <Variable x:TypeArguments="x:Int64" Name="FileId" />
           </Sequence.Variables>
           <ForEach x:TypeArguments="twje:JazzReportDefinition" DisplayName="ForEach&lt;JazzReportDefinition&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
             <ForEach.Values>
@@ -164,8 +164,8 @@
           </ForEach>
           <twjba1:GenerateJazzReportFile sap2010:WorkflowViewState.IdRef="GenerateJazzReportFile_1">
             <twjba1:GenerateJazzReportFile.FileId>
-              <OutArgument x:TypeArguments="x:Int32">
-                <mca:CSharpReference x:TypeArguments="x:Int32">FileId</mca:CSharpReference>
+              <OutArgument x:TypeArguments="x:Int64">
+                <mca:CSharpReference x:TypeArguments="x:Int64">FileId</mca:CSharpReference>
               </OutArgument>
             </twjba1:GenerateJazzReportFile.FileId>
             <twjba1:GenerateJazzReportFile.JazzReports>
@@ -227,8 +227,8 @@
           </If>
           <twjba1:DeleteJazzReportFile sap2010:WorkflowViewState.IdRef="DeleteJazzReportFile_1">
             <twjba1:DeleteJazzReportFile.FileId>
-              <InArgument x:TypeArguments="x:Int32">
-                <mca:CSharpValue x:TypeArguments="x:Int32">FileId</mca:CSharpValue>
+              <InArgument x:TypeArguments="x:Int64">
+                <mca:CSharpValue x:TypeArguments="x:Int64">FileId</mca:CSharpValue>
               </InArgument>
             </twjba1:DeleteJazzReportFile.FileId>
           </twjba1:DeleteJazzReportFile>
@@ -306,7 +306,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Jazz.BP.JazzReportProcess_1" sap:VirtualizedContainerService.HintSize="825,1834" />
+      <sap2010:ViewStateData Id="TOne.WhS.Jazz.BP.JazzReportProcess_1" sap:VirtualizedContainerService.HintSize="825,1794" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
