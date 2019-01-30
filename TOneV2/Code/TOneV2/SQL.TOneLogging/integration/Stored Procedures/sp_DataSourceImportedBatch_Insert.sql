@@ -15,13 +15,14 @@ CREATE PROCEDURE [integration].[sp_DataSourceImportedBatch_Insert]
 	@QueueItemIds nvarchar(50),
 	@LogEntryTime dateTime,
 	@BatchStart dateTime,
-	@BatchEnd dateTime
+	@BatchEnd dateTime,
+	@ExecutionStatus int
 AS
 BEGIN
 DECLARE @NewItemID BIGINT
   Insert into integration.DataSourceImportedBatch (DataSourceId, BatchDescription, [BatchSize], BatchState, IsDuplicateSameSize, RecordsCount, MappingResult, 
-												   MapperMessage, QueueItemIds, LogEntryTime, BatchStart, BatchEnd)
-  values (@DataSourceId, @BatchDescription, @BatchSize, @BatchState, @IsDuplicateSameSize, @RecordsCount, @MappingResult, @MapperMessage, @QueueItemIds, @LogEntryTime, @BatchStart, @BatchEnd)
+												   MapperMessage, QueueItemIds, LogEntryTime, BatchStart, BatchEnd,ExecutionStatus)
+  values (@DataSourceId, @BatchDescription, @BatchSize, @BatchState, @IsDuplicateSameSize, @RecordsCount, @MappingResult, @MapperMessage, @QueueItemIds, @LogEntryTime, @BatchStart, @BatchEnd, @ExecutionStatus)
    
   SET @NewItemID = SCOPE_IDENTITY()
   select @NewItemID

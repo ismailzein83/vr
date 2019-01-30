@@ -12,8 +12,11 @@
     [LogEntryTime]        DATETIME         NOT NULL,
     [BatchStart]          DATETIME         NULL,
     [BatchEnd]            DATETIME         NULL,
+    [ExecutionStatus]     INT              NULL,
     CONSTRAINT [IX_DataSourceImportedBatch_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

@@ -10,7 +10,8 @@ CREATE PROCEDURE [integration].[sp_DataSourceImportedBatch_GetFiltered]
 	@MappingResults nvarchar(max),
 	@From DATETIME = NULL,
 	@To DATETIME = NULL,
-	@Top int
+	@Top int,
+	@ExecutionsStatus VARCHAR(MAX) = NULL
 AS
 
 SET NOCOUNT ON;
@@ -19,6 +20,10 @@ SET NOCOUNT ON;
 		DECLARE @MappingResultsTable TABLE (MappingResult int)
 		INSERT INTO @MappingResultsTable (MappingResult)
 		select Convert(int, ParsedString) from [bp].[ParseStringList](@MappingResults)
+
+		DECLARE @ExecutionsStatusTable TABLE (ExecutionStatus int)
+		Insert @ExecutionsStatusTable 
+		SELECT  ParsedString FROM [integration].[ParseStringList](@ExecutionsStatus)
 
 	select TOP(@Top) [ID]
 	,[BatchDescription]
@@ -31,6 +36,7 @@ SET NOCOUNT ON;
 	,[LogEntryTime]
 	,[BatchStart]
 	,[BatchEnd]
+	,[ExecutionStatus]
 	FROM [integration].[DataSourceImportedBatch] as ib WITH(NOLOCK) 
 	WHERE 
 		(@DataSourceId IS NULL OR DataSourceId = @DataSourceId) 
@@ -38,6 +44,7 @@ SET NOCOUNT ON;
 		AND (@MappingResults is null  or ib.MappingResult in (select MappingResult from @MappingResultsTable))
 		AND (@From IS NULL OR LogEntryTime >= @From) 
 		AND (@To IS NULL OR LogEntryTime <= @To)
+		AND (@ExecutionsStatus IS NULL OR ExecutionStatus IN (Select ExecutionStatus FROM @ExecutionsStatusTable) )
 	ORDER BY ID DESC
 	END
 SET NOCOUNT OFF
