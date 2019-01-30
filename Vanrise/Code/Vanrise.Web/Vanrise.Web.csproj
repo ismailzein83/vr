@@ -196,6 +196,7 @@
     <Content Include="Client\Javascripts\Directives\DataGrid\RowActionPopupController.js" />
     <Content Include="Client\Javascripts\Directives\Diagram\vr-diagram-directive.js" />
     <Content Include="Client\Javascripts\Directives\HelpBox\vr-helpbox-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Inputs\FileDownload\vr-filedownload-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\MobileOptionPopup.html" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\MobileOptionPopupController.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-toolbox-select.html" />
