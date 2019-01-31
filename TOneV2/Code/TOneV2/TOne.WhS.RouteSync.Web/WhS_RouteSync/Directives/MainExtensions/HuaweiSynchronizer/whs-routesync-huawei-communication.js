@@ -18,8 +18,8 @@
             controllerAs: "Ctrl",
             bindToController: true,
             templateUrl: "/Client/Modules/WhS_RouteSync/Directives/MainExtensions/HuaweiSynchronizer/Templates/HuaweiCommunicationTemplate.html"
-
         };
+
         function SwitchCommunicationCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
@@ -68,22 +68,17 @@
                     return;
                 };
 
-                var initPromises = [];
-                initPromises.push(sshGridReadyDeferred.promise);
-                initPromises.push(loggerGridReadyDeferred.promise);
-
                 var loadSwitchSSHCommunicationsPromise = UtilsService.createPromiseDeferred();
+
                 WhS_RouteSync_HuaweiSwitchLoggerAPIService.GetSwitchLoggerTemplates().then(function (response) {
                     $scope.scopeModel.loggerTypes = response;
                     loadSwitchSSHCommunicationsPromise.resolve();
                 });
 
-                initPromises.push(loadSwitchSSHCommunicationsPromise.promise);
-
-                UtilsService.waitMultiplePromises(initPromises).then(function () {
+                var promises = [loggerGridReadyDeferred.promise, sshGridReadyDeferred.promise, loadSwitchSSHCommunicationsPromise.promise];
+                UtilsService.waitMultiplePromises(promises).then(function () {
                     defineAPI();
                 });
-
             }
 
             function defineAPI() {
@@ -91,6 +86,7 @@
 
                 api.load = function (payload) {
                     var promises = [];
+
                     var sshCommunication;
                     var logger;
 
@@ -112,7 +108,6 @@
 
                     extendSSHCommunicationItem(sshCommnunicationItem, sshCommunication);
                     $scope.scopeModel.switchSSHCommunications.push(sshCommnunicationItem);
-
 
                     var loggerItem = {
                         isActive: false,
@@ -141,23 +136,30 @@
                             sshCommnunicationItem.sshCommunicatorSettingsReadyDeferred = UtilsService.createPromiseDeferred();
                             sshCommnunicationItem.isSelected = true;
                             sshCommnunicationItem.isActive = sshCommunication.IsActive;
-                            sshCommnunicationItem.interfaceIP = sshCommunication.InterfaceIP;
+
+                            if (sshCommunication.SSLSettings != undefined) {
+                                sshCommnunicationItem.sslHost = sshCommunication.SSLSettings.Host;
+                                sshCommnunicationItem.sslPort = sshCommunication.SSLSettings.Port;
+                                sshCommnunicationItem.sslUsername = sshCommunication.SSLSettings.Username;
+                                sshCommnunicationItem.sslPassword = sshCommunication.SSLSettings.Password;
+                                sshCommnunicationItem.sslInterfaceIP = sshCommunication.SSLSettings.InterfaceIP;
+                            }
 
                             sshCommnunicationItem.sshCommunicationSettingsLoadPromise = getSSHCommunicationSettingsLoadPromise();
                             promises.push(sshCommnunicationItem.sshCommunicationSettingsLoadPromise);
-
-                            function getSSHCommunicationSettingsLoadPromise() {
-                                var sshCommunicatorSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                                sshCommnunicationItem.sshCommunicatorSettingsReadyDeferred.promise.then(function () {
-                                    sshCommnunicationItem.sshCommunicatorSettingsReadyDeferred = undefined;
-                                    var sshCommunicatorSettingsPayload = { sshCommunicatorSettings: sshCommunication.SSHCommunicatorSettings };
-                                    VRUIUtilsService.callDirectiveLoad(sshCommnunicationItem.api, sshCommunicatorSettingsPayload, sshCommunicatorSettingsLoadPromiseDeferred);
-                                });
-
-                                return sshCommunicatorSettingsLoadPromiseDeferred.promise;
-                            }
                         }
+                    }
+
+                    function getSSHCommunicationSettingsLoadPromise() {
+                        var sshCommunicatorSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        sshCommnunicationItem.sshCommunicatorSettingsReadyDeferred.promise.then(function () {
+                            sshCommnunicationItem.sshCommunicatorSettingsReadyDeferred = undefined;
+                            var sshCommunicatorSettingsPayload = { sshCommunicatorSettings: sshCommunication.SSHCommunicatorSettings };
+                            VRUIUtilsService.callDirectiveLoad(sshCommnunicationItem.api, sshCommunicatorSettingsPayload, sshCommunicatorSettingsLoadPromiseDeferred);
+                        });
+
+                        return sshCommunicatorSettingsLoadPromiseDeferred.promise;
                     }
 
                     function extendLoggerItem(loggerItem, logger) {
@@ -203,14 +205,29 @@
 
                 api.getData = function () {
                     var switchSSHCommunicationItem = $scope.scopeModel.switchSSHCommunications[0];
-                    var sshCommunicatorSettings = switchSSHCommunicationItem.isSelected && switchSSHCommunicationItem.api != undefined ? switchSSHCommunicationItem.api.getData() : undefined;
+                    var sshCommunicatorSettings = (switchSSHCommunicationItem.isSelected && switchSSHCommunicationItem.api != undefined) ? switchSSHCommunicationItem.api.getData() : undefined;
 
                     var loggerItem = $scope.scopeModel.switchLoggers[0];
                     var loggerSettings = loggerItem.api != undefined ? loggerItem.api.getData() : undefined;
                     loggerSettings.IsActive = loggerItem.isActive;
 
+                    var sshCommunicationList;
+                    if (sshCommunicatorSettings != undefined) {
+                        sshCommunicationList = [{
+                            IsActive: switchSSHCommunicationItem.isActive,
+                            SSHCommunicatorSettings: sshCommunicatorSettings,
+                            SSLSettings: {
+                                Host: switchSSHCommunicationItem.sslHost,
+                                Port: switchSSHCommunicationItem.sslPort,
+                                Username: switchSSHCommunicationItem.sslUsername,
+                                Password: switchSSHCommunicationItem.sslPassword,
+                                InterfaceIP: switchSSHCommunicationItem.sslInterfaceIP   
+                            }
+                        }];
+                    }
+
                     var result = {
-                        sshCommunicationList: sshCommunicatorSettings != undefined ? [{ SSHCommunicatorSettings: sshCommunicatorSettings, IsActive: switchSSHCommunicationItem.isActive, InterfaceIP: switchSSHCommunicationItem.interfaceIP }] : undefined,
+                        sshCommunicationList: sshCommunicationList,
                         switchLoggerList: [loggerSettings]
                     };
 
@@ -225,5 +242,4 @@
     }
 
     app.directive('whsRoutesyncHuaweiCommunication', whsRoutesyncHuaweiCommunication);
-
 })(app);

@@ -14,7 +14,15 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
 
         public const string CSA_TON = "TON";
 
-        public const string RegistrationSucceeded = "RETCODE=0SUCCESS";
+        public const string OpenSSLSucceeded = "RETURN:0";
+
+        public const string LoginSucceeded = "RETCODE=0";
+
+        public const string RegistrationSucceeded = "RETCODE=0";
+
+        public const string UnregistrationSucceeded = "RETCODE=0";
+
+        public const string LogoutSucceeded = "RETCODE=0";
 
         public const string OperationSucceeded = "RETCODE=0OPERATIONSUCCEEDED";
     }

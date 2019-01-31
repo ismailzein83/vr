@@ -11,8 +11,6 @@ namespace TOne.WhS.RouteSync.Huawei
 {
     public class HuaweiSWSync : SwitchRouteSynchronizer
     {
-        const string CommandPrompt = "<";
-
         public override Guid ConfigId { get { return new Guid("376687E2-268D-4DFA-AA39-3205C3CD18E5"); } }
 
         public int NumberOfOptions { get; set; }
@@ -286,7 +284,7 @@ namespace TOne.WhS.RouteSync.Huawei
                         continue;
                     }
 
-                    if(customerMapping.RSSN.Length > 50)
+                    if (customerMapping.RSSN.Length > 50)
                     {
                         invalidMappingCustomerIds.Add(carrierMapping.CarrierId);
                         continue;
@@ -705,56 +703,63 @@ namespace TOne.WhS.RouteSync.Huawei
                 return;
             }
 
-            int batchSize = 100;
-            var routeCaseNumbersToUpdate = new List<int>();
-            succeedRouteCasesWithCommands = new List<RouteCaseWithCommands>();
-            failedRouteCasesWithCommands = new List<RouteCaseWithCommands>();
-
-            foreach (var routeCaseWithCommands in routeCasesWithCommands)
+            try
             {
-                bool isCommandExecuted = false;
-                int numberOfTriesDone = 0;
+                int batchSize = 100;
+                var routeCaseNumbersToUpdate = new List<int>();
+                succeedRouteCasesWithCommands = new List<RouteCaseWithCommands>();
+                failedRouteCasesWithCommands = new List<RouteCaseWithCommands>();
 
-                while (!isCommandExecuted && numberOfTriesDone < maxNumberOfTries)
+                foreach (var routeCaseWithCommands in routeCasesWithCommands)
                 {
-                    try
+                    bool isCommandExecuted = false;
+                    int numberOfTriesDone = 0;
+
+                    while (!isCommandExecuted && numberOfTriesDone < maxNumberOfTries)
                     {
-                        string command = routeCaseWithCommands.Commands[0];
-
-                        string response;
-                        sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
-                        commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
-                        if (IsCommandSucceed(response))
+                        try
                         {
-                            succeedRouteCasesWithCommands.Add(routeCaseWithCommands);
+                            string command = routeCaseWithCommands.Commands[0];
 
-                            routeCaseNumbersToUpdate.Add(routeCaseWithCommands.RouteCase.RCNumber);
-                            if (routeCaseNumbersToUpdate.Count == batchSize)
+                            string response;
+                            sshCommunicator.ExecuteCommand(command, new List<string>() { "END" }, out response);
+                            commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
+                            if (IsExecutedCommandSucceeded(response, HuaweiCommands.OperationSucceeded))
                             {
-                                routeCaseManager.UpdateSyncedRouteCases(routeCaseNumbersToUpdate);
-                                routeCaseNumbersToUpdate = new List<int>();
-                            }
-                        }
-                        else
-                        {
-                            failedRouteCasesWithCommands.Add(routeCaseWithCommands);
-                        }
+                                succeedRouteCasesWithCommands.Add(routeCaseWithCommands);
 
-                        isCommandExecuted = true;
+                                routeCaseNumbersToUpdate.Add(routeCaseWithCommands.RouteCase.RCNumber);
+                                if (routeCaseNumbersToUpdate.Count == batchSize)
+                                {
+                                    routeCaseManager.UpdateSyncedRouteCases(routeCaseNumbersToUpdate);
+                                    routeCaseNumbersToUpdate = new List<int>();
+                                }
+                            }
+                            else
+                            {
+                                failedRouteCasesWithCommands.Add(routeCaseWithCommands);
+                            }
+
+                            isCommandExecuted = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            numberOfTriesDone++;
+                            isCommandExecuted = false;
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        numberOfTriesDone++;
-                        isCommandExecuted = false;
-                    }
+
+                    if (!isCommandExecuted)
+                        failedRouteCasesWithCommands.Add(routeCaseWithCommands);
                 }
 
-                if (!isCommandExecuted)
-                    failedRouteCasesWithCommands.Add(routeCaseWithCommands);
+                if (routeCaseNumbersToUpdate.Count > 0)
+                    routeCaseManager.UpdateSyncedRouteCases(routeCaseNumbersToUpdate);
             }
-
-            if (routeCaseNumbersToUpdate.Count > 0)
-                routeCaseManager.UpdateSyncedRouteCases(routeCaseNumbersToUpdate);
+            finally
+            {
+                CloseConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults);
+            }
         }
 
         private void ExecuteRoutesCommands(Dictionary<string, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN, HuaweiSSHCommunication huaweiSSHCommunication,
@@ -779,94 +784,153 @@ namespace TOne.WhS.RouteSync.Huawei
                 return;
             }
 
-            succeededRoutesWithCommandsByRSSN = new Dictionary<string, List<HuaweiRouteWithCommands>>();
-            failedRoutesWithCommandsByRSSN = new Dictionary<string, List<HuaweiRouteWithCommands>>();
-
-            foreach (var routeWithCommandsKvp in routesWithCommandsByRSSN)
+            try
             {
-                var rssn = routeWithCommandsKvp.Key;
-                var orderedRoutesWithCommands = routeWithCommandsKvp.Value.OrderBy(itm => itm.RouteCompareResult.Route.Code);
 
-                foreach (var routeWithCommands in orderedRoutesWithCommands)
+                succeededRoutesWithCommandsByRSSN = new Dictionary<string, List<HuaweiRouteWithCommands>>();
+                failedRoutesWithCommandsByRSSN = new Dictionary<string, List<HuaweiRouteWithCommands>>();
+
+                foreach (var routeWithCommandsKvp in routesWithCommandsByRSSN)
                 {
-                    if (routeWithCommands.RouteCompareResult.Route != null && failedRSNames != null && failedRSNames.Contains(routeWithCommands.RouteCompareResult.Route.RSName))
-                    {
-                        var failedRoutesWithCommands = failedRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
-                        failedRoutesWithCommands.Add(routeWithCommands);
-                        continue;
-                    }
+                    var rssn = routeWithCommandsKvp.Key;
+                    var orderedRoutesWithCommands = routeWithCommandsKvp.Value.OrderBy(itm => itm.RouteCompareResult.Route.Code);
 
-                    int numberOfTriesDone = 0;
-                    bool isCommandExecuted = false;
-
-                    while (!isCommandExecuted && numberOfTriesDone < maxNumberOfTries)
+                    foreach (var routeWithCommands in orderedRoutesWithCommands)
                     {
-                        try
+                        if (routeWithCommands.RouteCompareResult.Route != null && failedRSNames != null && failedRSNames.Contains(routeWithCommands.RouteCompareResult.Route.RSName))
                         {
-                            string command = routeWithCommands.Commands[0];
-
-                            string response;
-
-                            sshCommunicator.ExecuteCommand(command, CommandPrompt, out response);
-                            commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
-                            if (IsCommandSucceed(response))
-                            {
-                                List<HuaweiRouteWithCommands> tempHuaweiRouteWithCommands = succeededRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
-                                tempHuaweiRouteWithCommands.Add(routeWithCommands);
-                            }
-                            else
-                            {
-                                List<HuaweiRouteWithCommands> tempHuaweiRouteWithCommands = failedRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
-                                tempHuaweiRouteWithCommands.Add(routeWithCommands);
-                            }
-
-                            isCommandExecuted = true;
+                            var failedRoutesWithCommands = failedRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
+                            failedRoutesWithCommands.Add(routeWithCommands);
+                            continue;
                         }
-                        catch (Exception ex)
+
+                        int numberOfTriesDone = 0;
+                        bool isCommandExecuted = false;
+
+                        while (!isCommandExecuted && numberOfTriesDone < maxNumberOfTries)
                         {
-                            numberOfTriesDone++;
-                            isCommandExecuted = false;
-                        }
-                    }
+                            try
+                            {
+                                string command = routeWithCommands.Commands[0];
 
-                    if (!isCommandExecuted)
-                    {
-                        List<HuaweiRouteWithCommands> tempHuaweiRouteWithCommands = failedRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
-                        tempHuaweiRouteWithCommands.Add(routeWithCommands);
+                                string response;
+
+                                sshCommunicator.ExecuteCommand(command, new List<string>() { "END" }, out response);
+                                commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
+                                if (IsExecutedCommandSucceeded(response, HuaweiCommands.OperationSucceeded))
+                                {
+                                    List<HuaweiRouteWithCommands> tempHuaweiRouteWithCommands = succeededRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
+                                    tempHuaweiRouteWithCommands.Add(routeWithCommands);
+                                }
+                                else
+                                {
+                                    List<HuaweiRouteWithCommands> tempHuaweiRouteWithCommands = failedRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
+                                    tempHuaweiRouteWithCommands.Add(routeWithCommands);
+                                }
+
+                                isCommandExecuted = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                numberOfTriesDone++;
+                                isCommandExecuted = false;
+                            }
+                        }
+
+                        if (!isCommandExecuted)
+                        {
+                            List<HuaweiRouteWithCommands> tempHuaweiRouteWithCommands = failedRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
+                            tempHuaweiRouteWithCommands.Add(routeWithCommands);
+                        }
                     }
                 }
+            }
+            finally
+            {
+                CloseConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults);
             }
         }
 
         private bool TryOpenConnectionWithSwitch(HuaweiSSHCommunication sshCommunication, SSHCommunicator sshCommunicator, List<CommandResult> commandResults)
         {
-            sshCommunicator.OpenConnection();
-            sshCommunicator.OpenShell();
-            sshCommunicator.ReadPrompt(">");
+            sshCommunication.ThrowIfNull("sshCommunication");
+            sshCommunication.SSLSettings.ThrowIfNull("sshCommunication.SSLSettings");
 
-            string registerToMSCServerCommand = string.Format("REG NE:IP=\"{0}\";", sshCommunication.InterfaceIP);
+            try
+            {
+                sshCommunicator.OpenConnection();
+                sshCommunicator.OpenShell();
 
-            string response;
-            sshCommunicator.ExecuteCommand(registerToMSCServerCommand, CommandPrompt, out response);
-            commandResults.Add(new CommandResult() { Command = registerToMSCServerCommand, Output = new List<string>() { response } });
+                string openSSLCommand = $"openssl s_client -port {sshCommunication.SSLSettings.Port} -host {sshCommunication.SSLSettings.Host} -ssl3 -quiet -crlf";
+                bool isOpenSSLSucceeded = ExecuteCommand(openSSLCommand, sshCommunicator, commandResults, new List<string>() { "RETURN:0", "ERRNO" }, HuaweiCommands.OpenSSLSucceeded);
+                if (!isOpenSSLSucceeded)
+                {
+                    sshCommunicator.Dispose();
+                    return false;
+                }
 
-            if (string.IsNullOrEmpty(response))
-                return false;
+                string loginCommand = $"LGI:OP=\"{sshCommunication.SSLSettings.Username}\",PWD=\"{sshCommunication.SSLSettings.Password}\";";
+                bool isLoginSucceeded = ExecuteCommand(loginCommand, sshCommunicator, commandResults, new List<string>() { "END" }, HuaweiCommands.LoginSucceeded);
+                if (!isLoginSucceeded)
+                {
+                    sshCommunicator.Dispose();
+                    return false;
+                }
 
-            string responseToUpper = response.Replace(" ", "").ToUpper();
-            if (!responseToUpper.Contains(HuaweiCommands.RegistrationSucceeded))
-                return false;
+                string registerToMSCServerCommand = $"REG NE:IP=\"{sshCommunication.SSLSettings.InterfaceIP}\";";
+                bool isRegistrationSucceeded = ExecuteCommand(registerToMSCServerCommand, sshCommunicator, commandResults, new List<string>() { "END" }, HuaweiCommands.RegistrationSucceeded);
+                if (!isRegistrationSucceeded)
+                {
+                    string logoutCommand = $"LGO:OP=\"{sshCommunication.SSLSettings.Username}\";";
+                    ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, HuaweiCommands.LogoutSucceeded);
 
-            return true;
+                    sshCommunicator.Dispose();
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                sshCommunicator.Dispose();
+                throw;
+            }
         }
 
-        private bool IsCommandSucceed(string response)
+        private void CloseConnectionWithSwitch(HuaweiSSHCommunication sshCommunication, SSHCommunicator sshCommunicator, List<CommandResult> commandResults)
+        {
+            try
+            {
+                string unregisterCommand = $"UNREG NE:IP=\"{sshCommunication.SSLSettings.InterfaceIP}\";";
+                bool isUnregistrationSucceeded = ExecuteCommand(unregisterCommand, sshCommunicator, commandResults, new List<string>() { "END" }, HuaweiCommands.UnregistrationSucceeded);
+                if (isUnregistrationSucceeded)
+                {
+                    string logoutCommand = $"LGO:OP=\"{sshCommunication.SSLSettings.Username}\";";
+                    ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, HuaweiCommands.LogoutSucceeded);
+                }
+            }
+            finally
+            {
+                sshCommunicator.Dispose();
+            }
+        }
+
+        private bool ExecuteCommand(string command, SSHCommunicator sshCommunicator, List<CommandResult> commandResults, List<string> endOfResultList, string executedCommandSuccessKey)
+        {
+            string response;
+            sshCommunicator.ExecuteCommand(command, endOfResultList, out response);
+            commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
+
+            return IsExecutedCommandSucceeded(response, executedCommandSuccessKey);
+        }
+
+        private bool IsExecutedCommandSucceeded(string response, string executedCommandSuccessKey)
         {
             if (string.IsNullOrEmpty(response))
                 return false;
 
             string responseToUpper = response.Replace(" ", "").ToUpper();
-            if (!responseToUpper.Contains(HuaweiCommands.OperationSucceeded))
+            if (!responseToUpper.Contains(executedCommandSuccessKey))
                 return false;
 
             return true;
