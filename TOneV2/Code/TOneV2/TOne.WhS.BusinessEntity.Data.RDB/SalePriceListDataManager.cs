@@ -154,7 +154,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 UserId = reader.GetIntWithNullHandling(COL_UserID),
                 Description = reader.GetString(COL_Description),
                 PricelistStateBackupId = reader.GetNullableLong(COL_PricelistStateBackupID),
-                PricelistSource = (SalePricelistSource?)reader.GetIntWithNullHandling(COL_PricelistSource)
+                PricelistSource = (SalePricelistSource?)reader.GetNullableInt(COL_PricelistSource)
             };
             return salePriceList;
         }

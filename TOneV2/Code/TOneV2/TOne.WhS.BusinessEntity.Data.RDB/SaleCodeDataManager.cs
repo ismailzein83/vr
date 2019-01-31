@@ -328,7 +328,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var whereContext = selectQuery.Where();
             whereContext.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, zoneIds);
 
-            var andCondition = whereContext.ChildConditionGroup();
+            var andCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
             andCondition.NullCondition(COL_EED);
             andCondition.GreaterThanCondition(COL_EED).Value(effectiveDate);
 

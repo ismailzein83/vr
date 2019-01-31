@@ -46,7 +46,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 DBSchemaName = "TOneWhS_BE",
                 DBTableName = "SalePricelistRateChange",
                 Columns = columns
-
             });
         }
 

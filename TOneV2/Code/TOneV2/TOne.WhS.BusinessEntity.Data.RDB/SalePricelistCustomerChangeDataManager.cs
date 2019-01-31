@@ -47,7 +47,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public void JoinCustomerChange(RDBJoinContext joinContext, string customerChangeTableAlias, string originalTableAlias, string originalTableCountryIdCol, string originalTableBatchIdCol)
         {
             var joinStatement = joinContext.Join(TABLE_NAME, customerChangeTableAlias);
-            joinStatement.JoinType(RDBJoinType.Inner);
+
             joinStatement.WithNoLock();
             var joinCondition = joinStatement.On();
             joinCondition.EqualsCondition(originalTableAlias, originalTableCountryIdCol, customerChangeTableAlias, COL_CountryID);

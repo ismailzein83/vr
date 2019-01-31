@@ -74,11 +74,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
         public IEnumerable<int> GetAffectedCustomerIds(long processInstanceId)
         {
-            var lstAffectedCustomerIds = new List<int>();
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+            selectQuery.SelectColumns().Column(COL_CustomerId);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
@@ -86,6 +85,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var groupByContext = selectQuery.GroupBy();
             groupByContext.Select().Column(COL_CustomerId);
 
+            var lstAffectedCustomerIds = new List<int>();
             queryContext.ExecuteReader(reader =>
             {
                 while (reader.Read())
@@ -128,14 +128,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var streamForBulkInsert = queryContext.StartBulkInsert();
             streamForBulkInsert.IntoTable(TABLE_NAME, '^', COL_ZoneName, COL_ZoneID, COL_RoutingProductId, COL_RecentRoutingProductId, COL_BED,
-                COL_EED, COL_PriceListId, COL_CountryId, COL_ZoneName, COL_ProcessInstanceID, COL_CustomerId);
+                COL_EED, COL_PriceListId, COL_CountryId, COL_ProcessInstanceID, COL_CustomerId);
             return streamForBulkInsert;
         }
         private void WriteRecordToStream(SalePricelistRPChange record, long processInstanceId, object dbApplyStream)
         {
             RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
             var recordContext = bulkInsertContext.WriteRecord();
-
+            
             recordContext.Value(record.ZoneName);
 
             if (record.ZoneId.HasValue)
@@ -144,6 +144,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 recordContext.Value(string.Empty);
 
             recordContext.Value(record.RoutingProductId);
+
+            if (record.RecentRoutingProductId.HasValue)
+                recordContext.Value(record.RecentRoutingProductId.Value);
+            else
+                recordContext.Value(string.Empty);
+            
             recordContext.Value(record.BED);
 
             if (record.EED.HasValue)
