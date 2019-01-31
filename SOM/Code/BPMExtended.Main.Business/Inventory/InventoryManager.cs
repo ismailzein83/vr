@@ -21,6 +21,8 @@ namespace BPMExtended.Main.Business
             {
                 item = client.Get<TechnicalDetails>(String.Format("api/SOM/Inventory/GetTechnicalDetails?phoneNumber={0}", phoneNumber));
             }
+            return item;
+            /*
             return new TechnicalDetails
             {
                 Cabinet = item.Cabinet,
@@ -52,6 +54,7 @@ namespace BPMExtended.Main.Business
                 DPId = item.DPId
 
             };
+            */
         }
 
         public TechnicalDetails GetTechnicalDetailsByPath(string pathID) // old : GetInventoryDetail()
@@ -61,6 +64,8 @@ namespace BPMExtended.Main.Business
             {
                 item = client.Get<TechnicalDetails>(String.Format("api/SOM/Inventory/GetTechnicalDetailsByPath?pathID={0}", pathID));
             }
+            return item;
+            /*
             return new TechnicalDetails
             {
                 Cabinet = item.Cabinet,
@@ -92,6 +97,7 @@ namespace BPMExtended.Main.Business
                 DPId = item.DPId
 
             };
+            */
         }
 
         public TechnicalReservation GetTechnicalReservation(string phoneNumber)
@@ -101,55 +107,56 @@ namespace BPMExtended.Main.Business
             {
                 item = client.Get<TechnicalReservation>(String.Format("api/SOM/Inventory/GetTemporaryTechnicalReservation?phoneNumber={0}", phoneNumber));
             }
-            return new TechnicalReservation
-            {
-                Switch = item.Switch,
-                SwitchId = item.SwitchId,
+            return item;
+            //return new TechnicalReservation
+            //{
+            //    Switch = item.Switch,
+            //    SwitchId = item.SwitchId,
 
-                MDFPort = item.MDFPort,
-                MDF = item.MDF,
-                MDFPortId = item.MDFPortId,
-                MDFId = item.MDFId,
-                VerticalMDFId = item.VerticalMDFId,
-                VerticalMDF = item.VerticalMDF,
+            //    MDFPort = item.MDFPort,
+            //    MDF = item.MDF,
+            //    MDFPortId = item.MDFPortId,
+            //    MDFId = item.MDFId,
+            //    VerticalMDFId = item.VerticalMDFId,
+            //    VerticalMDF = item.VerticalMDF,
 
-                Cabinet = item.Cabinet,
-                CabinetId = item.CabinetId,
-                PrimaryPort = item.PrimaryPort,
-                PrimaryPortId = item.PrimaryPortId,
-                SecondaryPort = item.SecondaryPort,
-                SecondaryPortId = item.SecondaryPortId,
-                PrimaryMUXPort = item.PrimaryMUXPort,
-                PrimaryMUXPortId = item.PrimaryMUXPortId,
+            //    Cabinet = item.Cabinet,
+            //    CabinetId = item.CabinetId,
+            //    PrimaryPort = item.PrimaryPort,
+            //    PrimaryPortId = item.PrimaryPortId,
+            //    SecondaryPort = item.SecondaryPort,
+            //    SecondaryPortId = item.SecondaryPortId,
+            //    PrimaryMUXPort = item.PrimaryMUXPort,
+            //    PrimaryMUXPortId = item.PrimaryMUXPortId,
 
-                DP = item.DP,
-                DPPortId = item.DPPortId,
-                DPPort = item.DPPort,
-                DPId = item.DPId,
-                DPMUXPort = item.DPMUXPort,
-                DPMUXPortId = item.DPMUXPortId,
+            //    DP = item.DP,
+            //    DPPortId = item.DPPortId,
+            //    DPPort = item.DPPort,
+            //    DPId = item.DPId,
+            //    DPMUXPort = item.DPMUXPort,
+            //    DPMUXPortId = item.DPMUXPortId,
 
 
-                TransmitterId = item.TransmitterId,
-                TransmitterModule = item.TransmitterModule,
-                TransmitterModuleId = item.TransmitterModuleId,
-                TransmitterPortId = item.TransmitterPortId,
-                Transmitter = item.Transmitter,
-                TransmitterPort = item.TransmitterPort,
+            //    TransmitterId = item.TransmitterId,
+            //    TransmitterModule = item.TransmitterModule,
+            //    TransmitterModuleId = item.TransmitterModuleId,
+            //    TransmitterPortId = item.TransmitterPortId,
+            //    Transmitter = item.Transmitter,
+            //    TransmitterPort = item.TransmitterPort,
 
-                ReceiverId = item.ReceiverId,
-                ReceiverPortId = item.ReceiverPortId,
-                Receiver = item.Receiver,
-                ReceiverPort = item.ReceiverPort,
+            //    ReceiverId = item.ReceiverId,
+            //    ReceiverPortId = item.ReceiverPortId,
+            //    Receiver = item.Receiver,
+            //    ReceiverPort = item.ReceiverPort,
 
-                CanReserve = item.CanReserve,
-                CurrentUtilization = item.CurrentUtilization,
-                DIDExist = item.DIDExist,
-                ISDNExist = item.ISDNExist,
-                PSTNExist = item.PSTNExist,
-                Threshold = item.Threshold
+            //    CanReserve = item.CanReserve,
+            //    CurrentUtilization = item.CurrentUtilization,
+            //    DIDExist = item.DIDExist,
+            //    ISDNExist = item.ISDNExist,
+            //    PSTNExist = item.PSTNExist,
+            //    Threshold = item.Threshold
 
-            };
+            //};
         }
 
         public List<PhoneNumberInfo> GetAvailablePhoneNumbers(string switchId, string category, string type, int top)

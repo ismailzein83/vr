@@ -43,5 +43,19 @@ namespace BPMExtended.Main.SOMAPI
         public string DPId { get; set; }
         public string DPPortId { get; set; }
         public bool IsMultiplexed { get; set; }
+
+        public string SwitchStatus { get; set; }
+        public string MDFStatus { get; set; }
+        public string CabinetStatus { get; set; }
+        public string DPStatus { get; set; }
+
+        public string IsSwitchFaulty { get; set; }
+        public string IsMDFFaulty { get; set; }
+        public string IsCabinetFaulty { get; set; }
+        public string IsDPFaulty { get; set; }
+        public string MDF { get; set; }
+
+
+
     }
 }
