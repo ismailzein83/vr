@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.SMSBusinessEntity.Business
 {
-    class Constants
+    public class Constants
     {
+        public const string SMSImportSettings = "WhS_SMSBE_SMSImport_Settings";
     }
 }
