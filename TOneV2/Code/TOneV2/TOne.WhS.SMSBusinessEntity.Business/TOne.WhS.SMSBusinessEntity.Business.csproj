@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="CustomerSMSRateCacheManager.cs" />
     <Compile Include="CustomerSMSRateManager.cs" />
     <Compile Include="CustomerSMSRateDraftManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
