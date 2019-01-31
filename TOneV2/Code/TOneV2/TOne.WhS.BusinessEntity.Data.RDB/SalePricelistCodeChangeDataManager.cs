@@ -20,8 +20,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_BED = "BED";
         const string COL_EED = "EED";
         const string COL_CountryID = "CountryID";
-        const string COL_CreatedTime = "CreatedTime";
-        const string COL_LastModifiedTime = "LastModifiedTime";
 
         static SalePricelistCodeChangeDataManager()
         {
@@ -35,16 +33,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_CountryID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
                 DBTableName = "SalePricelistCodeChange",
-                Columns = columns,
-                CreatedTimeColumnName = COL_CreatedTime,
-                ModifiedTimeColumnName = COL_LastModifiedTime
-
+                Columns = columns
             });
         }
         BaseRDBDataProvider GetDataProvider()
@@ -63,7 +57,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var selectContext = selectQuery.SelectColumns();
+            selectContext.AllTableColumns(TABLE_ALIAS);
+            selectContext.Column(salePricelistCustomerChangeTableAlias, SalePricelistCustomerChangeDataManager.COL_PricelistID, SalePricelistCustomerChangeDataManager.COL_PricelistID);
 
             var join = selectQuery.Join();
             salePricelistCustomerChangeDataManager.JoinCustomerChange(join, salePricelistCustomerChangeTableAlias, TABLE_ALIAS, SalePricelistCustomerChangeDataManager.COL_CountryID, SalePricelistCustomerChangeDataManager.COL_BatchID);
@@ -94,7 +91,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         SalePricelistCodeChange SalePricelistCodeChangeMapper(IRDBDataReader reader)
         {
-            SalePricelistCodeChange salePricelistCodeChange = new SalePricelistCodeChange
+            return new SalePricelistCodeChange
             {
                 PricelistId = reader.GetInt(SalePricelistCustomerChangeDataManager.COL_PricelistID),
                 Code = reader.GetString(COL_Code),
@@ -103,10 +100,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 ZoneName = reader.GetString(COL_ZoneName),
                 ChangeType = (CodeChange)reader.GetIntWithNullHandling(COL_Change),
                 BED = reader.GetDateTime(COL_BED),
-                EED = reader.GetDateTime(COL_EED),
+                EED = reader.GetNullableDateTime(COL_EED),
                 ZoneId = reader.GetNullableLong(COL_ZoneID)
             };
-            return salePricelistCodeChange;
         }
         #endregion
     }
