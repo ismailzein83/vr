@@ -6,7 +6,7 @@ using Renci.SshNet;
 
 namespace Vanrise.Common
 {
-    public class SSHCommunicator
+    public class SSHCommunicator : IDisposable
     {
         private SshClient client;
 
@@ -79,19 +79,20 @@ namespace Vanrise.Common
             return result;
         }
 
-        public void Disconnect()
-        {
-            if (client != null) client.Disconnect();
-        }
-
-        #region IDisposable Members
-
         public void Dispose()
         {
-            if (client != null) client.Disconnect();
-        }
+            if(shellStream != null)
+            {
+                shellStream.Close();
+                shellStream.Dispose();
+            }
 
-        #endregion
+            if (client != null)
+            {
+                client.Disconnect();
+                client.Dispose();
+            }
+        }
     }
 
     public class SSHCommunicatorSettings
