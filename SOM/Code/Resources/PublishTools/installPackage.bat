@@ -1,0 +1,2 @@
+C:\BPMV1\Terrasoft.WebApp\DesktopBin\WorkspaceConsole\Terrasoft.Tools.WorkspaceConsole.exe -packageName=ST_Package -workspaceName=Default -operation=InstallFromRepository -sourcePath=C:\SavedPackages -destinationPath=C:\TempPackages -skipConstraints=false -skipValidateActions=true -regenerateSchemaSources=true -updateDBStructure=true -updateSystemDBStructure=true -installPackageSqlScript=true -installPackageData=true -continueIfError=true -webApplicationPath=C:\BPMV2 -confRuntimeParentDirectory=C:\BPMV2\Terrasoft.WebApp -logPath=C:\Log
+pause

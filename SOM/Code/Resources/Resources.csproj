@@ -45,7 +45,11 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="PublishTools\buildConfiguration.bat" />
+    <None Include="PublishTools\exportpackage.bat" />
+    <None Include="PublishTools\installPackage.bat" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Notes\Web Virtual Directories.txt" />
   </ItemGroup>

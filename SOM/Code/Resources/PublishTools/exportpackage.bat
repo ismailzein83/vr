@@ -1,0 +1,2 @@
+C:\BPMV1\Terrasoft.WebApp\DesktopBin\WorkspaceConsole\Terrasoft.Tools.WorkspaceConsole.exe -operation=SaveVersionSvnContent -destinationPath=C:\SavedPackages\ -workingCopyPath=C:\WorkingCopy -sourcePath=https://94.130.72.65/svn/ST_RepoStorage/ -packageName=ST_Package -packageVersion=1.0.0 -sourceControlLogin=mis -sourceControlPassword=123456 -logPath=C:\Log -cultureName=ru-RU -excludeDependentPackages=true
+pause
