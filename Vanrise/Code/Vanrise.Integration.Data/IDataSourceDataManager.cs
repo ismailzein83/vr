@@ -21,6 +21,6 @@ namespace Vanrise.Integration.Data
 
         bool UpdateAdapterState(Guid dataSourceId, Entities.BaseAdapterState adapterState);
 
-        bool AreDataSourcesUpdated(ref object updateHandle);
+        bool AreDataSourcesUpdated(ref object lastReceivedDataInfo);
     }
 }

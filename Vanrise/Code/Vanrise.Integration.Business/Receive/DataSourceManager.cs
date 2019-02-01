@@ -413,12 +413,12 @@ namespace Vanrise.Integration.Business
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IDataSourceDataManager _dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
-            object _updateHandle;
+            object _lastReceivedDataInfo;
             DateTime? _schedulerTaskCacheLastCheck;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreDataSourcesUpdated(ref _updateHandle)
+                return _dataManager.AreDataSourcesUpdated(ref _lastReceivedDataInfo)
                      |
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<SchedulerTaskManager.CacheManager>().IsCacheExpired(ref _schedulerTaskCacheLastCheck);
             }

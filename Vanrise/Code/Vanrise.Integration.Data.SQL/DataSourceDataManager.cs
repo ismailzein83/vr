@@ -18,9 +18,9 @@ namespace Vanrise.Integration.Data.SQL
         {
             return GetItemsSP("integration.sp_DataSource_GetAll", DataSourceMapper);
         }
-        public bool AreDataSourcesUpdated(ref object updateHandle)
+        public bool AreDataSourcesUpdated(ref object lastReceivedDataInfo)
         {
-            return base.IsDataUpdated("[integration].[DataSource]", ref updateHandle);
+            return base.IsDataUpdated("[integration].[DataSource]", ref lastReceivedDataInfo);
         }
 
         public bool AddDataSource(Entities.DataSource dataSourceObject)
