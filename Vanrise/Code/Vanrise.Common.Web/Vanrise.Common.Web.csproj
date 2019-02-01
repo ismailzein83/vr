@@ -128,7 +128,9 @@
     <Content Include="Common\Directives\Country\vr-common-country-remoteselector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\FiguresTileSettings\Templates\FiguresTileSettingsDefinitionTemplate.html" />
+    <Content Include="Common\Directives\FiguresTileSettings\Templates\FiguresTileSettingsRuntimeTemplate.html" />
     <Content Include="Common\Directives\FiguresTileSettings\vr-common-figurestilesettings-definition.js" />
+    <Content Include="Common\Directives\FiguresTileSettings\vr-common-figurestilesettings-runtime.js" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\FTPConnectionEditorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\HttpConnectionCallInterceptorSelectiveTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-ftpconnection-editor.js" />
@@ -186,6 +188,10 @@
     <Content Include="Common\Directives\MasterLayoutSettings\Templates\MasterLayoutTemplateSettings.html" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-masterlayout-settings-editor.js" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-menuoption-selector.js" />
+    <Content Include="Common\Directives\WidgetSettings\Templates\WidgetSettingsRuntimeTemplate.html" />
+    <Content Include="Common\Directives\WidgetSettings\vr-common-widgetsettings-definition.js" />
+    <Content Include="Common\Directives\WidgetSettings\Templates\WidgetSettingsDefinitionTemplate.html" />
+    <Content Include="Common\Directives\WidgetSettings\vr-common-widgetsettings-runtime.js" />
     <Content Include="Common\Services\APIServices\HttpCallConnectionInterceptorAPIService.js" />
     <Content Include="Common\Services\APIServices\RDBDataTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRBulkActionDraftAPIService.js" />
