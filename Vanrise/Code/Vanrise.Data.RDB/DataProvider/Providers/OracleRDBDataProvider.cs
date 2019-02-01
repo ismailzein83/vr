@@ -759,6 +759,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             throw new NotImplementedException();
         }
 
+        public override RDBResolvedQuery ResolveSchemaCreationIfNotExistsQuery(IRDBDataProviderResolveSchemaCreationIfNotExistsQueryContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Private Classes
 
         public enum OracleRDBResolvedQueryStatementType { Regular, CreateTempTable, DropTempTable }

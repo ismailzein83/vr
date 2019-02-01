@@ -70,6 +70,7 @@
     <Compile Include="DataProvider\Providers\OracleRDBDataProvider.cs" />
     <Compile Include="DataProvider\Providers\PostgresRDBDataProvider.cs" />
     <Compile Include="ExecuteNonQuery\RDBCreateIndexQuery.cs" />
+    <Compile Include="ExecuteNonQuery\RDBCreateSchemaQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBCreateTableQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBDeleteQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBCheckIfTableExistsQuery.cs" />

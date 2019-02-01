@@ -54,6 +54,8 @@ namespace Vanrise.Data.RDB
 
         public abstract RDBResolvedQuery ResolveCheckIfTableExistsQuery(IRDBDataProviderResolveCheckIfTableExistsQueryContext context);
 
+        public abstract RDBResolvedQuery ResolveSchemaCreationIfNotExistsQuery(IRDBDataProviderResolveSchemaCreationIfNotExistsQueryContext context);
+        
         public abstract RDBResolvedQuery ResolveSwapTablesQuery(IRDBDataProviderResolveSwapTablesQueryContext context);
 
         public virtual RDBResolvedQuery ResolveIndexCreationQuery(IRDBDataProviderResolveIndexCreationQueryContext context)
@@ -550,6 +552,21 @@ namespace Vanrise.Data.RDB
         public string SchemaName { get; private set; }
 
         public string TableName { get; private set; }
+    }
+    public interface IRDBDataProviderResolveSchemaCreationIfNotExistsQueryContext : IBaseRDBResolveQueryContext
+    {
+        string SchemaName { get; }
+    }
+
+    public class RDBDataProviderResolveSchemaCreationIfNotExistsQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveSchemaCreationIfNotExistsQueryContext
+    {
+        public RDBDataProviderResolveSchemaCreationIfNotExistsQueryContext(string schemaName,
+            IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {
+            this.SchemaName = schemaName;
+        }
+        public string SchemaName { get; private set; }
     }
 
     public interface IRDBDataProviderResolveSwapTablesQueryContext : IBaseRDBResolveQueryContext

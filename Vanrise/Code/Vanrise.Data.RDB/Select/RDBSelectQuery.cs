@@ -291,7 +291,7 @@ namespace Vanrise.Data.RDB
 
         public string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context)
         {
-            return string.Join(" UNION ALL ", this._selectQueries.Select(selectQuery => selectQuery.ToDBQuery(context)));
+            return $"({string.Join(" UNION ALL ", this._selectQueries.Select(selectQuery => selectQuery.ToDBQuery(context)))})";
         }
 
         public string GetDBColumnName(IRDBTableQuerySourceGetDBColumnNameContext context)

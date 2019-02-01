@@ -295,14 +295,33 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = query });
             return resolvedQuery;
         }
+        public override RDBResolvedQuery ResolveSchemaCreationIfNotExistsQuery(IRDBDataProviderResolveSchemaCreationIfNotExistsQueryContext context)
+        {
+            string query = $@"IF NOT EXISTS(SELECT * FROM sys.schemas s WHERE s.name = '{context.SchemaName}')
+                                            BEGIN
+                                                 EXEC('CREATE SCHEMA {context.SchemaName}')
+                                            END";
+
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = query });
+            return resolvedQuery;
+        }
 
         public override RDBResolvedQuery ResolveSwapTablesQuery(IRDBDataProviderResolveSwapTablesQueryContext context)
         {
-            string existingTable = GetTableDBName(context.SchemaName, context.ExistingTable);
-            string newTable = GetTableDBName(context.SchemaName, context.NewTable);
+            string existingTableDBNameWithSchema = GetTableDBName(context.SchemaName, context.ExistingTable);
+            string newTableDBNameWithSchema = GetTableDBName(context.SchemaName, context.NewTable);
+            string query;
 
-            string query = string.Format(context.KeepExistingTable ? keepExistingTableQuery : dropExistingTableQuery, newTable, existingTable);
-
+            if (context.KeepExistingTable)
+            {
+                string oldTableDBNameWithSchema = ($"\"{context.SchemaName}\".\"{context.ExistingTable}_old\"");
+                query = string.Format(swapQueryWithKeepingExistingTable, newTableDBNameWithSchema, existingTableDBNameWithSchema, oldTableDBNameWithSchema, context.ExistingTable);
+            }
+            else
+            {
+                query = string.Format(swapQueryWithoutKeepingExistingTable, newTableDBNameWithSchema, existingTableDBNameWithSchema, context.ExistingTable);
+            }
             var resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = query });
             return resolvedQuery;
@@ -746,29 +765,29 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
         #region Queries
 
-        const string keepExistingTableQuery = @"IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{0}') AND s.type in (N'U'))
+        const string swapQueryWithKeepingExistingTable = @"IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{0}') AND s.type in (N'U'))
                                                    BEGIN
-                                                   IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{1}_old') AND s.type in (N'U'))
+                                                   IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{2}') AND s.type in (N'U'))
 											          BEGIN
-											              DROP {1}_old
+											              DROP TABLE {2}
 											          END
 
 									               IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{1}') AND s.type in (N'U'))
 								               	      BEGIN
-                                                          EXEC sp_rename '{1}', '{1}_old'
+                                                          EXEC sp_rename '{1}', '{3}_old'
 								               	      END
 
-	                                               EXEC sp_rename '{0}', '{1}';
+	                                               EXEC sp_rename '{0}', '{3}';
                                                    END";
 
-        const string dropExistingTableQuery = @"IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{0}') AND s.type in (N'U'))
+        const string swapQueryWithoutKeepingExistingTable = @"IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{0}') AND s.type in (N'U'))
                                                    BEGIN
                                                    IF EXISTS(SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'{1}') AND s.type in (N'U'))
 										   	          BEGIN
-											              DROP {1}
+											              DROP TABLE {1}
 											          END
 
-	                                               EXEC sp_rename '{0}', '{1}';
+	                                               EXEC sp_rename '{0}', '{2}';
                                                    END ";
 
         #endregion
