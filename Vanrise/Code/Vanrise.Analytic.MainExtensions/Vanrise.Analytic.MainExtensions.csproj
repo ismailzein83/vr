@@ -105,6 +105,7 @@
     <Compile Include="VRReportGeneration\DownloadFileAction.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationFilter\StandardReportGenerationFilter.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationFilter\StandardReportGenerationRuntimeFilter.cs" />
+    <Compile Include="Widget\WidgetSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.BP.Arguments\Vanrise.Analytic.BP.Arguments.csproj">
