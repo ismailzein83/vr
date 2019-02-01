@@ -722,7 +722,7 @@ namespace TOne.WhS.RouteSync.Huawei
                             string command = routeCaseWithCommands.Commands[0];
 
                             string response;
-                            sshCommunicator.ExecuteCommand(command, new List<string>() { "END" }, out response);
+                            sshCommunicator.ExecuteCommand(command, new List<string>() { "END" }, false, false, out response);
                             commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
                             if (IsExecutedCommandSucceeded(response, HuaweiCommands.OperationSucceeded))
                             {
@@ -815,7 +815,7 @@ namespace TOne.WhS.RouteSync.Huawei
 
                                 string response;
 
-                                sshCommunicator.ExecuteCommand(command, new List<string>() { "END" }, out response);
+                                sshCommunicator.ExecuteCommand(command, new List<string>() { "END" }, false, false, out response);
                                 commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
                                 if (IsExecutedCommandSucceeded(response, HuaweiCommands.OperationSucceeded))
                                 {
@@ -862,7 +862,7 @@ namespace TOne.WhS.RouteSync.Huawei
                 sshCommunicator.OpenShell();
 
                 string openSSLCommand = $"openssl s_client -port {sshCommunication.SSLSettings.Port} -host {sshCommunication.SSLSettings.Host} -ssl3 -quiet -crlf";
-                bool isOpenSSLSucceeded = ExecuteCommand(openSSLCommand, sshCommunicator, commandResults, new List<string>() { "RETURN:0", "ERRNO" }, HuaweiCommands.OpenSSLSucceeded);
+                bool isOpenSSLSucceeded = this.ExecuteCommand(openSSLCommand, sshCommunicator, commandResults, new List<string>() { "RETURN:0", "ERRNO" }, false, true, HuaweiCommands.OpenSSLSucceeded);
                 if (!isOpenSSLSucceeded)
                 {
                     sshCommunicator.Dispose();
@@ -870,7 +870,7 @@ namespace TOne.WhS.RouteSync.Huawei
                 }
 
                 string loginCommand = $"LGI:OP=\"{sshCommunication.SSLSettings.Username}\",PWD=\"{sshCommunication.SSLSettings.Password}\";";
-                bool isLoginSucceeded = ExecuteCommand(loginCommand, sshCommunicator, commandResults, new List<string>() { "END" }, HuaweiCommands.LoginSucceeded);
+                bool isLoginSucceeded = this.ExecuteCommand(loginCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LoginSucceeded);
                 if (!isLoginSucceeded)
                 {
                     sshCommunicator.Dispose();
@@ -878,11 +878,11 @@ namespace TOne.WhS.RouteSync.Huawei
                 }
 
                 string registerToMSCServerCommand = $"REG NE:IP=\"{sshCommunication.SSLSettings.InterfaceIP}\";";
-                bool isRegistrationSucceeded = ExecuteCommand(registerToMSCServerCommand, sshCommunicator, commandResults, new List<string>() { "END" }, HuaweiCommands.RegistrationSucceeded);
+                bool isRegistrationSucceeded = this.ExecuteCommand(registerToMSCServerCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.RegistrationSucceeded);
                 if (!isRegistrationSucceeded)
                 {
                     string logoutCommand = $"LGO:OP=\"{sshCommunication.SSLSettings.Username}\";";
-                    ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, HuaweiCommands.LogoutSucceeded);
+                    this.ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded);
 
                     sshCommunicator.Dispose();
                     return false;
@@ -902,11 +902,11 @@ namespace TOne.WhS.RouteSync.Huawei
             try
             {
                 string unregisterCommand = $"UNREG NE:IP=\"{sshCommunication.SSLSettings.InterfaceIP}\";";
-                bool isUnregistrationSucceeded = ExecuteCommand(unregisterCommand, sshCommunicator, commandResults, new List<string>() { "END" }, HuaweiCommands.UnregistrationSucceeded);
+                bool isUnregistrationSucceeded = this.ExecuteCommand(unregisterCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.UnregistrationSucceeded);
                 if (isUnregistrationSucceeded)
                 {
                     string logoutCommand = $"LGO:OP=\"{sshCommunication.SSLSettings.Username}\";";
-                    ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, HuaweiCommands.LogoutSucceeded);
+                    this.ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded);
                 }
             }
             finally
@@ -915,22 +915,23 @@ namespace TOne.WhS.RouteSync.Huawei
             }
         }
 
-        private bool ExecuteCommand(string command, SSHCommunicator sshCommunicator, List<CommandResult> commandResults, List<string> endOfResultList, string executedCommandSuccessKey)
+        private bool ExecuteCommand(string command, SSHCommunicator sshCommunicator, List<CommandResult> commandResults, List<string> endOfResponseList,
+            bool isEndOfResponseCaseSensitive, bool ignoreEmptySpacesInResponse, string responseSuccessKey)
         {
             string response;
-            sshCommunicator.ExecuteCommand(command, endOfResultList, out response);
+            sshCommunicator.ExecuteCommand(command, endOfResponseList, isEndOfResponseCaseSensitive, ignoreEmptySpacesInResponse, out response);
             commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
 
-            return IsExecutedCommandSucceeded(response, executedCommandSuccessKey);
+            return IsExecutedCommandSucceeded(response, responseSuccessKey);
         }
 
-        private bool IsExecutedCommandSucceeded(string response, string executedCommandSuccessKey)
+        private bool IsExecutedCommandSucceeded(string response, string responseSuccessKey)
         {
             if (string.IsNullOrEmpty(response))
                 return false;
 
             string responseToUpper = response.Replace(" ", "").ToUpper();
-            if (!responseToUpper.Contains(executedCommandSuccessKey))
+            if (!responseToUpper.Contains(responseSuccessKey))
                 return false;
 
             return true;
