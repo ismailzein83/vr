@@ -20,11 +20,19 @@ namespace Vanrise.Entities
     }
     public interface IFiguresTileQueryGetSchemaContext
     {
+       
+    }
+    public class FiguresTileQueryGetSchemaContext : IFiguresTileQueryGetSchemaContext
+    {
 
     }
     public interface IFiguresTileQueryExecuteContext
     {
-
+        List<string> ItemsToDisplayNames { get; set; }
+    }
+    public class FiguresTileQueryExecuteContext: IFiguresTileQueryExecuteContext
+    {
+        public List<string> ItemsToDisplayNames { get; set; }
     }
     public class FigureItemValue
     {
