@@ -85,7 +85,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
-            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Applying Codes To Code Sale Zone Table is done", null);
+            //handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, $"Appling Routes to switch '{switchInProcess.Switch.Name}' is done", null);
 
             return new ApplySwitchRouteSyncRoutesOutput { SwitchSyncOutput = switchSyncOutput.SwitchSyncResult != SwitchSyncResult.Succeed ? switchSyncOutput : null };
         }

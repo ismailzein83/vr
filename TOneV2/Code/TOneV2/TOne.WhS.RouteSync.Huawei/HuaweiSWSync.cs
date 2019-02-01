@@ -724,7 +724,7 @@ namespace TOne.WhS.RouteSync.Huawei
                             string response;
                             sshCommunicator.ExecuteCommand(command, new List<string>() { "END" }, false, false, out response);
                             commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
-                            if (IsExecutedCommandSucceeded(response, HuaweiCommands.OperationSucceeded))
+                            if (IsExecutedCommandSucceeded(response, HuaweiCommands.RouteCaseAddedSuccessfully) || IsExecutedCommandSucceeded(response, HuaweiCommands.RouteCaseExists))
                             {
                                 succeedRouteCasesWithCommands.Add(routeCaseWithCommands);
 
@@ -817,7 +817,7 @@ namespace TOne.WhS.RouteSync.Huawei
 
                                 sshCommunicator.ExecuteCommand(command, new List<string>() { "END" }, false, false, out response);
                                 commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
-                                if (IsExecutedCommandSucceeded(response, HuaweiCommands.OperationSucceeded))
+                                if (IsExecutedCommandSucceeded(response, HuaweiCommands.RouteOperationSucceeded))
                                 {
                                     List<HuaweiRouteWithCommands> tempHuaweiRouteWithCommands = succeededRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
                                     tempHuaweiRouteWithCommands.Add(routeWithCommands);

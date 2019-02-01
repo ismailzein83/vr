@@ -24,7 +24,11 @@ namespace TOne.WhS.RouteSync.Huawei.Entities
 
         public const string LogoutSucceeded = "RETCODE=0";
 
-        public const string OperationSucceeded = "RETCODE=0OPERATIONSUCCEEDED";
+        public const string RouteCaseAddedSuccessfully = "RETCODE=0OPERATIONSUCCEEDED";
+
+        public const string RouteCaseExists = "ROUTEANALYSISRECORDEXISTS";
+
+        public const string RouteOperationSucceeded = "RETCODE=0OPERATIONSUCCEEDED";
     }
 
     public class RouteCaseWithCommands
