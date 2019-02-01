@@ -200,12 +200,13 @@ namespace Vanrise.GenericData.RDBDataStorage
                 dataRecordMapperBuilder.AppendLine($@"if(fieldNames == null || fieldNames.Contains(""{column.FieldName}""))");
                 dataRecordMapperBuilder.AppendLine("{");
                 string valueExpression;
+                bool isNullableField = false;
                 if (!matchField.Type.StoreValueSerialized)
                 {
                     var runtimeType = matchField.Type.GetRuntimeType();
+                    isNullableField = runtimeType.IsValueType && Nullable.GetUnderlyingType(runtimeType) != null;
                     string getReaderValueMethodName = RDBUtilities.GetGetReaderValueMethodNameWithValidate(runtimeType);
                     valueExpression = string.Format(@"reader.{0}(""{1}"")", getReaderValueMethodName, column.FieldName);
-                    
                 }
                 else
                 {
@@ -215,12 +216,16 @@ namespace Vanrise.GenericData.RDBDataStorage
                     dynamicRecordMapperBuilder.AppendLine(readDeserializedValueBuilder.ToString());
                     dataRecordMapperBuilder.AppendLine(readDeserializedValueBuilder.ToString());
                     valueExpression = String.Format(@"{0}DeserializedValue != null? ({1}){0}DeserializedValue : null", matchField.Name, CSharpCompiler.TypeToString(matchField.Type.GetNonNullableRuntimeType()));                    
-                }                
-                dynamicRecordMapperBuilder.AppendLine($@"dataRecord.{matchField.Name} = {valueExpression};");
-                dataRecordMapperBuilder.AppendLine($@"fieldValues.Add(""{matchField.Name}"", {valueExpression});");
+                }
+                string fieldValueVariableName = $"{matchField.Name}_FieldValue";
+                dynamicRecordMapperBuilder.AppendLine($"var {fieldValueVariableName} = {valueExpression};");
+                dynamicRecordMapperBuilder.AppendLine($@"dataRecord.{matchField.Name} = {fieldValueVariableName};");
+                dataRecordMapperBuilder.AppendLine($"var {fieldValueVariableName} = {valueExpression};");
+                dataRecordMapperBuilder.AppendLine($@"fieldValues.Add(""{matchField.Name}"", {fieldValueVariableName});");
                 if(column.FieldName == dataRecordStorageSettings.DateTimeField)
                 {
-                    dataRecordMapperBuilder.AppendLine($@"dataRecord.RecordTime = {valueExpression};");
+                    dataRecordMapperBuilder.AppendLine($"if({fieldValueVariableName} != null)");
+                    dataRecordMapperBuilder.AppendLine($@"dataRecord.RecordTime = {fieldValueVariableName}{(isNullableField ? ".Value" : "")};");
                 }
                 dataRecordMapperBuilder.AppendLine("}");
             }
