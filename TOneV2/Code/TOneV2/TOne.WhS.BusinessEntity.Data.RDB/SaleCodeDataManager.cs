@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Data.RDB
@@ -341,55 +340,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
-        public List<ZoneCodeGroup> GetSaleZoneCodeGroups(DateTime? effectiveOn, bool isFuture)
-        {
-            CodeGroupDataManager codeGroupDataManager = new CodeGroupDataManager();
-            Dictionary<long, List<string>> codeGroupsByZone = new Dictionary<long, List<string>>();
-
-            string codeGroupTableAlias = "cg";
-
-            var queryContext = new RDBQueryContext(GetDataProvider());
-
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-
-            var selectColoumns = selectQuery.SelectColumns();
-            selectColoumns.Column(COL_ZoneID);
-            selectColoumns.Column(TABLE_ALIAS, COL_Code, "CodeGroup");
-
-            var joinCondition = selectQuery.Join();
-            codeGroupDataManager.JoinCodeGroup(joinCondition, codeGroupTableAlias, TABLE_ALIAS, COL_CodeGroupID);
-
-            var whereContext = selectQuery.Where();
-
-            if (!effectiveOn.HasValue)
-            {
-                if (isFuture)
-                    BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                else
-                    BEDataUtility.SetFutureDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-            }
-            else
-            {
-                whereContext.FalseCondition();
-            }
-
-            whereContext.EqualsCondition(TABLE_ALIAS, COL_Code).Column(codeGroupTableAlias, CodeGroupDataManager.COL_Code);
-
-            queryContext.ExecuteReader(
-               (reader) =>
-               {
-                   while (reader.Read())
-                   {
-                       long zoneId = reader.GetLong(COL_ZoneID);
-                       string codeGroup = reader.GetString("CodeGroup");
-                       List<string> codeGroups = codeGroupsByZone.GetOrCreateItem(zoneId);
-                       codeGroups.Add(codeGroup);
-                   }
-               });
-
-            return codeGroupsByZone.Select(itm => new ZoneCodeGroup() { CodeGroups = itm.Value, ZoneId = itm.Key, IsSale = false }).ToList();
-        }
         #endregion
 
         #region Not Used Functions
@@ -527,8 +477,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, 1, true);
+            selectQuery.SelectColumns().Column(COL_ID);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(COL_CodeGroupID).Value(codeGroupId);

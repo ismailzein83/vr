@@ -354,8 +354,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, 2, true);
+            selectQuery.SelectColumns().Column(COL_ID);
 
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(COL_CodeGroupID).Value(codeGroupId);
