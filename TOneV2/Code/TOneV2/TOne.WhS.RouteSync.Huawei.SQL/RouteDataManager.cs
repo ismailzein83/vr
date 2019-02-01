@@ -244,7 +244,7 @@ namespace TOne.WhS.RouteSync.Huawei.SQL
         private DataTable BuildRouteTable(IEnumerable<HuaweiConvertedRoute> routes)
         {
             DataTable dtRoutes = new DataTable();
-            dtRoutes.Columns.Add("RSSN", typeof(int));
+            dtRoutes.Columns.Add("RSSN", typeof(string));
             dtRoutes.Columns.Add("Code", typeof(string));
             dtRoutes.Columns.Add("RSName", typeof(string));
             dtRoutes.Columns.Add("DNSet", typeof(int));
