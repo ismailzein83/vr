@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class SalePriceListDataManager : ISalePriceListDataManager
@@ -103,17 +103,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.ExecuteNonQuery() > 0;
         }
 
-        public void SavePriceListsToDb(IEnumerable<NewPriceList> salePriceLists)
+        public void SavePriceListsToDb(IEnumerable<NewPriceList> newSalePriceLists)
         {
-            object dbApplyStream = InitialiazeStreamForDBApply();
-
-            foreach (var salePriceList in salePriceLists)
-            {
-                WriteRecordToStream(salePriceList, dbApplyStream);
-            }
-
-            object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
-            ApplyForDB(prepareToApplyInfo);
+            SalePriceListNewDataManager salePriceListNewDataManager = new SalePriceListNewDataManager();
+            salePriceListNewDataManager.BulkNewPriceLists(newSalePriceLists);
         }
 
         #endregion
@@ -161,47 +154,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         #endregion
 
-        #region Bulk 
-
-        private object InitialiazeStreamForDBApply()
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var streamForBulkInsert = queryContext.StartBulkInsert();
-            streamForBulkInsert.IntoTable(TABLE_NAME, '^', COL_ID, COL_OwnerType, COL_OwnerID, COL_CurrencyID, COL_EffectiveOn, COL_PriceListType, COL_ProcessInstanceID, COL_FileID, COL_UserID, COL_Description);
-            return streamForBulkInsert;
-        }
-        private void WriteRecordToStream(NewPriceList record, object dbApplyStream)
-        {
-            RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
-            var recordContext = bulkInsertContext.WriteRecord();
-            recordContext.Value(record.PriceListId);
-            recordContext.Value((int)record.OwnerType);
-            recordContext.Value(record.OwnerId);
-            recordContext.Value(record.CurrencyId);
-            recordContext.Value(record.EffectiveOn);
-
-            if (record.PriceListType.HasValue)
-                recordContext.Value((int)record.PriceListType);
-            else
-                recordContext.Value(string.Empty);
-
-            recordContext.Value(record.ProcessInstanceId);
-            recordContext.Value(record.FileId);
-            recordContext.Value(record.UserId);
-            recordContext.Value(record.Description);
-        }
-        private object FinishDBApplyStream(object dbApplyStream)
-        {
-            RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
-            bulkInsertContext.CloseStream();
-            return bulkInsertContext;
-        }
-        private void ApplyForDB(object preparedObject)
-        {
-            preparedObject.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream").Apply();
-
-        }
-        #endregion
 
         #region StateBackup
 
@@ -217,16 +169,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 joinStatement.WithNoLock();
             var joinCondition = joinStatement.On();
             joinCondition.EqualsCondition(originalTableAlias, originalTablePricelistIdCol, priceListTableAlias, COL_ID);
-        }
-
-        public void SetSelectPriceListIDsQuery(RDBSelectQuery selectQuery, int ownerType, int ownerId)
-        {
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
-            selectQuery.SelectColumns().Columns(COL_ID);
-
-            var whereQuery = selectQuery.Where();
-            whereQuery.EqualsCondition(COL_OwnerType).Value(ownerType);
-            whereQuery.EqualsCondition(COL_OwnerID).Value(ownerId);
         }
 
         public void BuildInsertQuery(RDBInsertQuery insertQuery, long processInstanceId, long stateBackupId)

@@ -73,7 +73,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public List<SalePriceListNew> GetTemporaryPriceLists(TemporarySalePriceListQuery query)
         {
-            return _salePriceListNewDataManager.GetOwnerSalePriceListsNew((int)SalePriceListOwnerType.Customer, (int)SalePriceListType.None, query.ProcessInstanceId);
+            return _salePriceListNewDataManager.GeSalePriceListsNewByOwner((int)SalePriceListOwnerType.Customer, (int)SalePriceListType.None, query.ProcessInstanceId);
         }
 
         public IEnumerable<CustomerRatePreview> GetCustomerRatePreviews(CustomerRatePreviewQuery query)
@@ -116,8 +116,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public bool DoCustomerTemporaryPricelistsExists(long processInstanceId)
         {
-            var salePriceListNew = _salePriceListNewDataManager.GetSalePriceListNew(processInstanceId);
-            return salePriceListNew != null;
+            return _salePriceListNewDataManager.HasPriceListByProcessInstanceId(processInstanceId);
         }
         #endregion
 
