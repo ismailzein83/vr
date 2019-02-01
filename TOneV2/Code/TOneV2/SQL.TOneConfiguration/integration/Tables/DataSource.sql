@@ -5,6 +5,7 @@
     [AdapterState] VARCHAR (1000)   NULL,
     [TaskId]       UNIQUEIDENTIFIER NOT NULL,
     [Settings]     VARCHAR (MAX)    NOT NULL,
+	[LastModifiedTime] [datetime]	NULL CONSTRAINT [DF_DataSource_LastModifiedTime]  DEFAULT (getdate()),
     [CreatedTime]  DATETIME         CONSTRAINT [DF_DataSource_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]    ROWVERSION       NULL,
     CONSTRAINT [pk_DataSource] PRIMARY KEY CLUSTERED ([ID] ASC)
