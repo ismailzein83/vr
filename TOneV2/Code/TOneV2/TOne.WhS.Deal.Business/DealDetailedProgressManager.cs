@@ -95,9 +95,9 @@ namespace TOne.WhS.Deal.Business
             _dataManager.DeleteDealDetailedProgresses(isSale, beginDate, endDate);
         }
 
-        public DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp)
+        public DateTime? GetDealEvaluatorBeginDate(object lastDealDetailedProgressUpdateHandle)
         {
-            return _dataManager.GetDealEvaluatorBeginDate(lastTimestamp);
+            return _dataManager.GetDealEvaluatorBeginDate(lastDealDetailedProgressUpdateHandle);
         }
 
         public bool AreEqual(DealDetailedProgress dealDetailedProgress, DealBillingSummary dealBillingSummary)
@@ -128,10 +128,9 @@ namespace TOne.WhS.Deal.Business
 
             return true;
         }
-
-        public Byte[] GetMaxTimestamp()
+        public object GetMaxUpdateHandle()
         {
-            return _dataManager.GetMaxTimestamp();
+            return _dataManager.GetMaxUpdateHandle();
         }
 
         #endregion

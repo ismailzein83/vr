@@ -141,16 +141,16 @@ namespace TOne.WhS.Deal.Business
 
         public abstract BaseDealLoggableEntity GetLoggableEntity();
 
-        public Byte[] GetMaxTimestamp()
+        public object GetMaxUpdateHandle()
         {
             IDealDataManager _dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
-            return _dataManager.GetMaxTimestamp();
+            return _dataManager.GetMaxUpdateHandle();
         }
 
-        public DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp, DateTime effectiveAfter)
+        public DateTime? GetDealEvaluatorBeginDate(object lastDealDefinitionUpdateHandle, DateTime effectiveAfter)
         {
             IDealDataManager _dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
-            IEnumerable<DealDefinition> deals = _dataManager.GetDealsModifiedAfterTimestamp(lastTimestamp);
+            IEnumerable<DealDefinition> deals = _dataManager.GetDealsModifiedAfterLastUpdateHandle(lastDealDefinitionUpdateHandle);
             if (deals == null || !deals.Any())
                 return null;
 

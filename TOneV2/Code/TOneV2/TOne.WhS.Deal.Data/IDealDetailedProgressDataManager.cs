@@ -9,6 +9,7 @@ namespace TOne.WhS.Deal.Data
         List<DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate, DateTime? endDate);
 
         List<DealDetailedProgress> GetDealsDetailedProgress(List<int> dealIds, DateTime fromDate, DateTime toDate);
+
         List<DealDetailedProgress> GetDealDetailedProgressesByDate(bool isSale, DateTime? beginDate, DateTime? endDate);
 
         void InsertDealDetailedProgresses(List<DealDetailedProgress> dealDetailedProgresses);
@@ -17,9 +18,9 @@ namespace TOne.WhS.Deal.Data
 
         void DeleteDealDetailedProgresses(List<long> dealDetailedProgressIds);
 
-        DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp);
+        DateTime? GetDealEvaluatorBeginDate(object lastDealDetailedProgressUpdateHandle);
 
-        Byte[] GetMaxTimestamp();
+        object GetMaxUpdateHandle();
 
         void DeleteDealDetailedProgresses(bool isSale, DateTime? beginDate, DateTime? endDate);
     }

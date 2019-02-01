@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.Data
 {
-	public interface IDealDataManager : IDataManager
+    public interface IDealDataManager : IDataManager
 	{
 		IEnumerable<DealDefinition> GetDeals();
 
@@ -17,8 +13,8 @@ namespace TOne.WhS.Deal.Data
 
 		bool Update(DealDefinition deal);
 
-		Byte[] GetMaxTimestamp();
+        object GetMaxUpdateHandle();
 
-		IEnumerable<DealDefinition> GetDealsModifiedAfterTimestamp(byte[] lastTimestamp);
+        IEnumerable<DealDefinition> GetDealsModifiedAfterLastUpdateHandle(object lastDealDefinitionUpdateHandle);
 	}
 }

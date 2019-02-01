@@ -10,49 +10,49 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Deal.Data.SQL
 {
-	public class DealDataManager : BaseSQLDataManager, IDealDataManager
-	{
-		#region Constructors
+    public class DealDataManager : BaseSQLDataManager, IDealDataManager
+    {
+        #region Constructors
 
-		public DealDataManager()
-			: base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
-		{
+        public DealDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        {
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Methods
+        #region Public Methods
 
-		public IEnumerable<DealDefinition> GetDeals()
-		{
+        public IEnumerable<DealDefinition> GetDeals()
+        {
 
-			return GetItemsSP("TOneWhS_Deal.sp_Deal_GetAll", DealMapper);
-		}
+            return GetItemsSP("TOneWhS_Deal.sp_Deal_GetAll", DealMapper);
+        }
 
-		public bool AreDealsUpdated(ref object updateHandle)
-		{
-			return base.IsDataUpdated("TOneWhS_Deal.Deal", ref updateHandle);
-		}
+        public bool AreDealsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_Deal.Deal", ref updateHandle);
+        }
 
-		public bool Insert(DealDefinition deal, out int insertedId)
-		{
-			object dealId;
+        public bool Insert(DealDefinition deal, out int insertedId)
+        {
+            object dealId;
 
-			int recordsEffected = ExecuteNonQuerySP("TOneWhS_Deal.sp_Deal_Insert", out dealId, deal.Name, Vanrise.Common.Serializer.Serialize(deal.Settings));
-			bool insertedSuccesfully = (recordsEffected > 0);
-			if (insertedSuccesfully)
-				insertedId = (int)dealId;
-			else
-				insertedId = 0;
-			return insertedSuccesfully;
-		}
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_Deal.sp_Deal_Insert", out dealId, deal.Name, Vanrise.Common.Serializer.Serialize(deal.Settings));
+            bool insertedSuccesfully = (recordsEffected > 0);
+            if (insertedSuccesfully)
+                insertedId = (int)dealId;
+            else
+                insertedId = 0;
+            return insertedSuccesfully;
+        }
 
-		public bool Update(DealDefinition deal)
-		{
-			int recordsEffected = ExecuteNonQuerySP("TOneWhS_Deal.sp_Deal_Update", deal.DealId, deal.Name, Vanrise.Common.Serializer.Serialize(deal.Settings));
-			return (recordsEffected > 0);
-		}
+        public bool Update(DealDefinition deal)
+        {
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_Deal.sp_Deal_Update", deal.DealId, deal.Name, Vanrise.Common.Serializer.Serialize(deal.Settings));
+            return (recordsEffected > 0);
+        }
 
         public bool Delete(int dealId)
         {
@@ -60,35 +60,35 @@ namespace TOne.WhS.Deal.Data.SQL
             return (recordsEffected > 0);
         }
 
-        public Byte[] GetMaxTimestamp()
-		{
-			object maxTimestamp = ExecuteScalarSP("[TOneWhS_Deal].[sp_Deal_GetMaxTimeStamp]");
-			if (maxTimestamp == null || maxTimestamp == DBNull.Value)
-				return null;
-			return (Byte[])maxTimestamp;
-		}
+        public object GetMaxUpdateHandle()
+        {
+            object maxTimestamp = ExecuteScalarSP("[TOneWhS_Deal].[sp_Deal_GetMaxTimeStamp]");
+            if (maxTimestamp == null || maxTimestamp == DBNull.Value)
+                return null;
+            return maxTimestamp;
+        }
 
-		public IEnumerable<DealDefinition> GetDealsModifiedAfterTimestamp(byte[] lastTimestamp)
-		{
-			return GetItemsSP("TOneWhS_Deal.sp_Deal_GetDealsModifiedAfterTimestamp", DealMapper, lastTimestamp);
-		}
+        public IEnumerable<DealDefinition> GetDealsModifiedAfterLastUpdateHandle(object lastDealDefinitionUpdateHandle)
+        {
+            byte[] lastTimestamp = lastDealDefinitionUpdateHandle as byte[];
+            return GetItemsSP("TOneWhS_Deal.sp_Deal_GetDealsModifiedAfterTimestamp", DealMapper, lastTimestamp);
+        }
 
-		#endregion
+        #endregion
 
-		#region  Mappers
+        #region  Mappers
 
-		private DealDefinition DealMapper(IDataReader reader)
-		{
-			DealDefinition deal = new DealDefinition
-			{
-				DealId = (int)reader["ID"],
-				Name = reader["Name"] as string,
+        private DealDefinition DealMapper(IDataReader reader)
+        {
+            DealDefinition deal = new DealDefinition
+            {
+                DealId = (int)reader["ID"],
+                Name = reader["Name"] as string,
                 IsDeleted = GetReaderValue<bool>(reader, "IsDeleted"),
-				Settings = Vanrise.Common.Serializer.Deserialize<DealSettings>(reader["Settings"] as string)
-			};
-			return deal;
-		}
-
-		#endregion
-	}
+                Settings = Vanrise.Common.Serializer.Deserialize<DealSettings>(reader["Settings"] as string)
+            };
+            return deal;
+        }
+        #endregion
+    }
 }

@@ -62,12 +62,12 @@ namespace TOne.WhS.Deal.BP.Activities
 			}
 
 			//Loading DealDetailedProgressBeginDate
-			byte[] lastTimestamp = dealEvaluatorProcessState != null ? dealEvaluatorProcessState.DealDetailedProgressMaxTimestamp : null;
-			DateTime? dealDetailedProgressBeginDate = new DealDetailedProgressManager().GetDealEvaluatorBeginDate(lastTimestamp);
+			object lastDealDetailedProgressUpdateHandle = dealEvaluatorProcessState != null ? dealEvaluatorProcessState.DealDetailedProgressMaxTimestamp : null;
+			DateTime? dealDetailedProgressBeginDate = new DealDetailedProgressManager().GetDealEvaluatorBeginDate(lastDealDetailedProgressUpdateHandle);
 
 			//Loading DealDefinitionBeginDate
-			byte[] lastDealDefinitionTimestamp = dealEvaluatorProcessState != null ? dealEvaluatorProcessState.DealDefinitionMaxTimestamp : null;
-			DateTime? dealDefinitionBeginDate = new DealDefinitionManager().GetDealEvaluatorBeginDate(lastDealDefinitionTimestamp, dealEffectiveAfter);
+			object lastDealDefinitionUpdateHandle = dealEvaluatorProcessState != null ? dealEvaluatorProcessState.DealDefinitionMaxTimestamp : null;
+			DateTime? dealDefinitionBeginDate = new DealDefinitionManager().GetDealEvaluatorBeginDate(lastDealDefinitionUpdateHandle, dealEffectiveAfter);
 
             //Calculating BeginDate
 			DateTime? beginDate = GetMinimumDate(new List<DateTime?>() { reprocessMinFromTime, dealDetailedProgressBeginDate, dealDefinitionBeginDate });

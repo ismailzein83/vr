@@ -90,8 +90,9 @@ namespace TOne.WhS.Deal.Data.SQL
             ExecuteNonQuerySP("[TOneWhS_Deal].[sp_DealDetailedProgress_Delete]", string.Join(",", dealDetailedProgressIds));
         }
 
-        public DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp)
+        public DateTime? GetDealEvaluatorBeginDate(object lastDealDetailedProgressUpdateHandle)
         {
+            byte[] lastTimestamp = lastDealDetailedProgressUpdateHandle as byte[];
             object beginDateAsObj = ExecuteScalarSP("[TOneWhS_Deal].[sp_DealDetailedProgress_GetDealEvaluatorBeginDate]", lastTimestamp);
 
             DateTime? beginDate = null;
@@ -101,10 +102,10 @@ namespace TOne.WhS.Deal.Data.SQL
             return beginDate;
         }
 
-        public Byte[] GetMaxTimestamp()
+        public object GetMaxUpdateHandle()
         {
             string query = String.Format("SELECT MAX(timestamp) FROM [TOneWhS_Deal].[DealDetailedProgress] WITH(NOLOCK)");
-            return (Byte[])ExecuteScalarText(query, null);
+            return ExecuteScalarText(query, null);
         }
 
         public void DeleteDealDetailedProgresses(bool isSale, DateTime? beginDate, DateTime? endDate)
@@ -206,7 +207,6 @@ namespace TOne.WhS.Deal.Data.SQL
             };
             return dealDetailedProgress;
         }
-
         #endregion
     }
 }

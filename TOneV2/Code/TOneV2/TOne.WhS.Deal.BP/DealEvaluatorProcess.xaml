@@ -83,9 +83,9 @@
       <Variable x:TypeArguments="twde:DealTechnicalSettingData" Name="dealTechnicalSettingData" />
       <Variable x:TypeArguments="x:Int32" Default="0" Name="daysToReprocessCompleted" />
       <Variable x:TypeArguments="s:Nullable(x:Int64)" Name="lastBPInstanceId" />
-      <Variable x:TypeArguments="s:Byte[]" Name="DealDetailedProgressMaxTimeStamp" />
+      <Variable x:TypeArguments="x:Object" Name="DealDetailedProgressMaxUpdateHandle" />
       <Variable x:TypeArguments="scg:List(twde:DayToReprocessSummary)" Name="DaysToReprocessSummary" />
-      <Variable x:TypeArguments="s:Byte[]" Name="DealDefinitionMaxTimestamp" />
+      <Variable x:TypeArguments="x:Object" Name="DealDefinitionMaxUpdateHandle" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Deal Evaluator Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -139,13 +139,13 @@
           <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
             <Assign sap2010:WorkflowViewState.IdRef="Assign_8">
               <Assign.To>
-                <OutArgument x:TypeArguments="s:Byte[]">
-                  <mca:CSharpReference x:TypeArguments="s:Byte[]">DealDefinitionMaxTimestamp</mca:CSharpReference>
+                <OutArgument x:TypeArguments="x:Object">
+                  <mca:CSharpReference x:TypeArguments="x:Object">DealDefinitionMaxUpdateHandle</mca:CSharpReference>
                 </OutArgument>
               </Assign.To>
               <Assign.Value>
-                <InArgument x:TypeArguments="s:Byte[]">
-                  <mca:CSharpValue x:TypeArguments="s:Byte[]">new TOne.WhS.Deal.Business.DealDefinitionManager().GetMaxTimestamp();</mca:CSharpValue>
+                <InArgument x:TypeArguments="x:Object">
+                  <mca:CSharpValue x:TypeArguments="x:Object">new TOne.WhS.Deal.Business.DealDefinitionManager().GetMaxUpdateHandle();</mca:CSharpValue>
                 </InArgument>
               </Assign.Value>
             </Assign>
@@ -204,13 +204,13 @@
             </Parallel>
             <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
               <Assign.To>
-                <OutArgument x:TypeArguments="s:Byte[]">
-                  <mca:CSharpReference x:TypeArguments="s:Byte[]">DealDetailedProgressMaxTimeStamp</mca:CSharpReference>
+                <OutArgument x:TypeArguments="x:Object">
+                  <mca:CSharpReference x:TypeArguments="x:Object">DealDetailedProgressMaxUpdateHandle</mca:CSharpReference>
                 </OutArgument>
               </Assign.To>
               <Assign.Value>
-                <InArgument x:TypeArguments="s:Byte[]">
-                  <mca:CSharpValue x:TypeArguments="s:Byte[]">new TOne.WhS.Deal.Business.DealDetailedProgressManager().GetMaxTimestamp();</mca:CSharpValue>
+                <InArgument x:TypeArguments="x:Object">
+                  <mca:CSharpValue x:TypeArguments="x:Object">new TOne.WhS.Deal.Business.DealDetailedProgressManager().GetMaxUpdateHandle();</mca:CSharpValue>
                 </InArgument>
               </Assign.Value>
             </Assign>
@@ -435,16 +435,16 @@
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_13">
           <twdba1:BuildDealEvaluatorProcessState sap2010:WorkflowViewState.IdRef="BuildDealEvaluatorProcessState_2">
-            <twdba1:BuildDealEvaluatorProcessState.DealDefinitionMaxTimestamp>
-              <InArgument x:TypeArguments="s:Byte[]">
-                <mca:CSharpValue x:TypeArguments="s:Byte[]">DealDefinitionMaxTimestamp</mca:CSharpValue>
+            <twdba1:BuildDealEvaluatorProcessState.DealDefinitionMaxUpdateHandle>
+              <InArgument x:TypeArguments="x:Object">
+                <mca:CSharpValue x:TypeArguments="x:Object">DealDefinitionMaxUpdateHandle</mca:CSharpValue>
               </InArgument>
-            </twdba1:BuildDealEvaluatorProcessState.DealDefinitionMaxTimestamp>
-            <twdba1:BuildDealEvaluatorProcessState.DealDetailedProgressMaxTimestamp>
-              <InArgument x:TypeArguments="s:Byte[]">
-                <mca:CSharpValue x:TypeArguments="s:Byte[]">DealDetailedProgressMaxTimeStamp</mca:CSharpValue>
+            </twdba1:BuildDealEvaluatorProcessState.DealDefinitionMaxUpdateHandle>
+            <twdba1:BuildDealEvaluatorProcessState.DealDetailedProgressMaxUpdateHandle>
+              <InArgument x:TypeArguments="x:Object">
+                <mca:CSharpValue x:TypeArguments="x:Object">DealDetailedProgressMaxUpdateHandle</mca:CSharpValue>
               </InArgument>
-            </twdba1:BuildDealEvaluatorProcessState.DealDetailedProgressMaxTimestamp>
+            </twdba1:BuildDealEvaluatorProcessState.DealDetailedProgressMaxUpdateHandle>
             <twdba1:BuildDealEvaluatorProcessState.DealEvaluatorProcessState>
               <OutArgument x:TypeArguments="twde:DealEvaluatorProcessState">
                 <mca:CSharpReference x:TypeArguments="twde:DealEvaluatorProcessState">dealEvaluatorProcessState</mca:CSharpReference>
@@ -479,7 +479,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbFdOA+MDDgIBAVQzVDYCAQJaBWAgAwGVBGEFbCQDAf4DbQWCASEDAdEDgwEFhwIQAwHsAogCBYgCVQMB6wKJAgWPAiEDAd8CkAIFrAMKAgFirQMF2gMKAgEQ2wMF4QMgAgEDXQtdhQEDAZcEWmBaggEDAZYEaQtpgAEDAYoEZAtkTQMB/wNwC3BoAwHzA3ULdWMDAegDegt6eAMB3QN/C39sAwHSA4QBB9sBDAMB+QLcAQeGAiUDAe0CjAILjAKDAQMB4AKTAguTApcBAgFjlwIJoQMUAgF7pAMJqgMkAgFusAMLsANcAgERtAMJ2AMUAgEc3gML3gOFAQIBBdsDYNsDgAECAQSHAQ2HAV4DAfoCiwEL2QEWAwGFA98BDd8BZQMB7gKYAgueAjADAdMCnwILqgImAwG8AqsCC6ADHQIBfKcDD6cDiQECAXCkA2WkA3sCAW+1AwvKAzMCATXLAwvWAysCAR7XAwvXA2UCAR2MAQ2XARYDAboDmAENzAEYAwGdA80BDdgBFgMBhgObAhGbAoQBAwHUAqcCEacCiwEDAcgCogIRogKbAQMBvQKuAhGuAogBAwGxArUCD54DGgIBfcIDEcIDhgECAVe4AxG4A2kCAUzHAxHHA2oCAUG9AxG9A28CATbTAxHTA2gCASrOAxHOA1MCAR+UAROUAZYBAwHGA48BE48BcwMBuwOcAQ+zAS8DAawDtAEPywEvAwGeA9UBE9UBnAEDAZID0AET0AF5AwGHA7kCEcUCLAMBlgLGAhHVAhoDAfsB1gIR6QIiAwHfAeoCEZ0DFgIBfpwB+QGcAf8BAwG5A7ABFbABZAMBrQO0AfkBtAGAAgMBqwPIARXIAWQDAZ8DwgIXwgKRAQMBpAK8Ahe9Al0DAZcCzgIX0gIgAwGJAskCF8kCfQMB/AHZAhfhAhcDAe4B5gIX5gKbAQMB4QHWAr0B1gLDAQMB4AHtAhftAsoBAgF/8QIV9wIpAwHRAfoCFZsDIAMBjAH0Ahv0AvIBAwHSAfsCF4EDPAMBwwGCAxeNAyADAagBjgMXmgMyAwGNAf4CHf4CdwMBxAGKAx2KA3YDAbYBhQMdhQN6AwGpAZcDHZcDlwEDAZsBkQMdkgOYAQMBjgE=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcRGVhbEV2YWx1YXRvclByb2Nlc3MueGFtbFdOA+MDDgIBAVQzVDYCAQJaBWAgAwGVBGEFbCQDAf4DbQWCASEDAdEDgwEFhwIQAwHsAogCBYgCVQMB6wKJAgWPAiEDAd8CkAIFrAMKAgFirQMF2gMKAgEQ2wMF4QMgAgEDXQtdhQEDAZcEWmBaggEDAZYEaQtpgAEDAYoEZAtkTQMB/wNwC3BoAwHzA3ULdWMDAegDegt6eAMB3QN/C39sAwHSA4QBB9sBDAMB+QLcAQeGAiUDAe0CjAILjAKDAQMB4AKTAguTApcBAgFjlwIJoQMUAgF7pAMJqgMkAgFusAMLsANcAgERtAMJ2AMUAgEc3gML3gOFAQIBBdsDYNsDgAECAQSHAQ2HAV4DAfoCiwEL2QEWAwGFA98BDd8BZQMB7gKYAgueAjADAdMCnwILqgImAwG8AqsCC6ADHQIBfKcDD6cDiQECAXCkA2WkA3sCAW+1AwvKAzMCATXLAwvWAysCAR7XAwvXA2UCAR2MAQ2XARYDAboDmAENzAEYAwGdA80BDdgBFgMBhgObAhGbAoQBAwHUAqcCEacCiwEDAcgCogIRogKbAQMBvQKuAhGuAogBAwGxArUCD54DGgIBfb0DEb0DcgIBV8IDEcIDhgECAUzHAxHHA2oCAUG4AxG4A2wCATbTAxHTA2gCASrOAxHOA1MCAR+UAROUAZkBAwHGA48BE48BdgMBuwOcAQ+zAS8DAawDtAEPywEvAwGeA9UBE9UBnwEDAZID0AET0AF8AwGHA7kCEcUCLAMBlgLGAhHVAhoDAfsB1gIR6QIiAwHfAeoCEZ0DFgIBfpwB+QGcAf8BAwG5A7ABFbABZAMBrQO0AfkBtAGAAgMBqwPIARXIAWQDAZ8DwgIXwgKRAQMBpAK8Ahe9Al0DAZcCzgIX0gIgAwGJAskCF8kCfQMB/AHZAhfhAhcDAe4B5gIX5gKbAQMB4QHWAr0B1gLDAQMB4AHtAhftAsoBAgF/8QIV9wIpAwHRAfoCFZsDIAMBjAH0Ahv0AvIBAwHSAfsCF4EDPAMBwwGCAxeNAyADAagBjgMXmgMyAwGNAf4CHf4CdwMBxAGKAx2KA3YDAbYBhQMdhQN6AwGpAZcDHZcDlwEDAZsBkQMdkgOYAQMBjgE=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
