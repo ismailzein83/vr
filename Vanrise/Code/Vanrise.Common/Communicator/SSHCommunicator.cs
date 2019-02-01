@@ -39,34 +39,71 @@ namespace Vanrise.Common
             shellStream.WriteLine(command);
         }
 
-        public void ExecuteCommand(string command, string prompt, out string response)
+        public void ExecuteCommand(string command, string endOfResponse, out string response)
         {
             shellStream.WriteLine(command);
-            response = ReadPrompt(prompt);
+            response = ReadPrompt(endOfResponse);
         }
 
-        public void ExecuteCommand(string command, List<string> endOfResultList, out string response)
+        public void ExecuteCommand(string command, string endOfResponse, bool isEndOfResponseCaseSensitive, bool ignoreEmptySpacesInResponse, out string response)
         {
             shellStream.WriteLine(command);
-            response = ReadResponse(endOfResultList);
+            response = ReadResponse(new List<string>() { endOfResponse }, isEndOfResponseCaseSensitive, ignoreEmptySpacesInResponse);
+        }
+
+        public void ExecuteCommand(string command, List<string> endOfResponseList, out string response)
+        {
+            shellStream.WriteLine(command);
+            response = ReadResponse(endOfResponseList, true, false);
+        }
+
+        public void ExecuteCommand(string command, List<string> endOfResponseList, bool isEndOfResponseCaseSensitive, bool ignoreEmptySpacesInResponse, out string response)
+        {
+            shellStream.WriteLine(command);
+            response = ReadResponse(endOfResponseList, isEndOfResponseCaseSensitive, ignoreEmptySpacesInResponse);
         }
 
         public String ReadPrompt(String prompt)
         {
-            return ReadResponse(new List<string>() { prompt });
+            return ReadResponse(new List<string>() { prompt }, true, false);
         }
 
-        public String ReadResponse(List<string> endOfResultList)
+        public String ReadResponse(List<string> endOfResponseList, bool isEndOfResponseCaseSensitive, bool ignoreEmptySpacesInResponse)
         {
-            String result = string.Empty;
+            List<string> modifiedEndOfResponseList = null;
+            if (endOfResponseList != null)
+            {
+                modifiedEndOfResponseList = new List<string>();
+                foreach (string str in endOfResponseList)
+                {
+                    string modifiedStr = str;
+                    if (!isEndOfResponseCaseSensitive)
+                        modifiedStr = modifiedStr.ToLower();
+
+                    if (ignoreEmptySpacesInResponse)
+                        modifiedStr = modifiedStr.Replace(" ", "");
+
+                    modifiedEndOfResponseList.Add(modifiedStr);
+                }
+            }
+
+            String response = string.Empty;
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
             while (true)
             {
                 String data = shellStream.Read();
-                result += data;
-                if (endOfResultList != null && endOfResultList.Any(result.Contains))//; result.Contains("EXECUTED") || result.Contains("NOT ACCEPTED"))
+                response += data;
+
+                string modifiedResponse = response;
+                if (!isEndOfResponseCaseSensitive)
+                    modifiedResponse = modifiedResponse.ToLower();
+
+                if (ignoreEmptySpacesInResponse)
+                    modifiedResponse = modifiedResponse.Replace(" ", "");
+
+                if (modifiedEndOfResponseList != null && modifiedEndOfResponseList.Any(modifiedResponse.Contains))
                     break;
 
                 if (sw.Elapsed > new TimeSpan(0, 0, SSHCommunicatorSettings.ReadTimeOutInSeconds))
@@ -76,12 +113,12 @@ namespace Vanrise.Common
                 }
             }
             sw.Stop();
-            return result;
+            return response;
         }
 
         public void Dispose()
         {
-            if(shellStream != null)
+            if (shellStream != null)
             {
                 shellStream.Close();
                 shellStream.Dispose();
