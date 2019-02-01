@@ -167,7 +167,7 @@ namespace BPMExtended.Main.Business
             };
         }
 
-        public void ChangeADSLLineTerminationRequestHeaderStatusToCompleted(Guid requestId)
+        public void PostADSLLineTerminationToOM(Guid requestId)
         {
             UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
             var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
@@ -176,6 +176,15 @@ namespace BPMExtended.Main.Business
 
             //TODO : Get taxes
             //TODO: If the contract has active VPN service, CRM should add another OCC/fees
+        }
+
+        public void PostADSLSubscriptionToOM (Guid requestId)
+        {
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StRequestHeader").Set("StStatusId", Column.Parameter("8057E9A4-24DE-484D-B202-0D189F5B7758"))
+                .Where("StRequestId").IsEqual(Column.Parameter(requestId));
+            update.Execute();
+
         }
 
         public void ChangeLeasedLineSpeedRequestHeaderStatusToCompleted(Guid requestId)
