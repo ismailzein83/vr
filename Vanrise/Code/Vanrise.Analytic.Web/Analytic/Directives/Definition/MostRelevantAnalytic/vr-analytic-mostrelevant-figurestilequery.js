@@ -2,9 +2,9 @@
 
     'use strict';
 
-    OverallAnalyticFiguresTileQuery.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Analytic_AnalyticItemConfigAPIService'];
+    MostRelevantAnalyticFiguresTileQuery.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Analytic_AnalyticItemConfigAPIService'];
 
-    function OverallAnalyticFiguresTileQuery(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticItemConfigAPIService) {
+    function MostRelevantAnalyticFiguresTileQuery(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticItemConfigAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -12,8 +12,8 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var overallAnalyticFiguresTileQueryEditor = new OverallAnalyticFiguresTileQueryEditor(ctrl, $scope, $attrs);
-                overallAnalyticFiguresTileQueryEditor.initializeController();
+                var mostRelevantAnalyticFiguresTileQuery = new MostRelevantAnalyticFiguresTileQuery(ctrl, $scope, $attrs);
+                mostRelevantAnalyticFiguresTileQuery.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -26,11 +26,11 @@
             },
 
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/Analytic/Directives/Definition/OverallAnalytic/Templates/OverallAnalyticFiguresTileQueryTemplate.html';
+                return '/Client/Modules/Analytic/Directives/Definition/MostRelevantAnalytic/Templates/MostRelevantFiguresTileQueryTemplate.html';
             }
         };
 
-        function OverallAnalyticFiguresTileQueryEditor(ctrl, $scope, attrs) {
+        function MostRelevantAnalyticFiguresTileQuery(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
             var analyticTableSelectorAPI;
@@ -39,14 +39,22 @@
             var measuresSelectorAPI;
             var measuresSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var dimensionsSelectorAPI;
+            var dimensionsSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var recordFilterDirectiveAPI;
             var recordFilterDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var advancedOrderOptionDirectiveAPI;
+            var advancedOrderOptionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var periodSelectorAPI;
             var periodSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var analyticTableMeasureSelectedPromiseDeferred;
+            var analyticTableDimesnionSelectedPromiseDeferred;
             var analyticTableRecordFilterSelectedPromiseDeferred;
+            var advancedOrderOptionDirectiveSelectedPromiseDeferred;
 
             var entity;
 
@@ -60,9 +68,15 @@
 
             var measureNames;
 
+            var dimensionName;
+
             var timePeriod;
 
             var configId;
+
+            var dimensionId;
+
+            var advancedOrderOptions;
 
 
             function initializeController() {
@@ -75,6 +89,16 @@
 
                 $scope.scopeModel.onMeasureSelectorReady = function (api) {
                     measuresSelectorAPI = api;
+                    dimensionsSelectorReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.orderOptionsDirectiveReady = function (api) {
+                    advancedOrderOptionDirectiveAPI = api;
+                    advancedOrderOptionReadyPromiseDeferred.resolve();
+                }
+
+                $scope.scopeModel.onDimensionSelectorReady = function (api) {
+                    dimensionsSelectorAPI = api;
                     measuresSelectorReadyPromiseDeferred.resolve();
                 };
 
@@ -112,6 +136,23 @@
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, measuresSelectorAPI, measuresSelectorPayload, setMeasuresLoader, analyticTableMeasureSelectedPromiseDeferred);
 
+
+                            var setAdvancedOptionsLoader = function (value) { $scope.isLoadingAdvancedOptions = value; };
+                            var advancedOptionDirectivePayload = {
+                                tableIds: [analyticTableSelectorAPI.getSelectedIds()]
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, advancedOrderOptionDirectiveAPI, advancedOptionDirectivePayload, setAdvancedOptionsLoader, advancedOrderOptionDirectiveSelectedPromiseDeferred);
+
+
+
+                            var setDimensionsLoader = function (value) { $scope.isLoadingDimensions = value; };
+                            var dimesionsSelectorPayload = {
+                                filter: {
+                                    TableIds: [analyticTableSelectorAPI.getSelectedIds()]
+                                }
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dimensionsSelectorAPI, dimesionsSelectorPayload, setDimensionsLoader, analyticTableDimesnionSelectedPromiseDeferred);
+
                             var setRecordFilterLoader = function (value) { $scope.isLoadingRecordFilter = value; };
                             var recordFilterPayload = {
                                 context: context,
@@ -140,15 +181,19 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     var measures;
                     var promises = [];
                     var entity;
                     if (payload != undefined) {
 
                         analyitcTableId = payload.analyticTableId;
+
+
+
                         filterObject = payload.filterObj;
                         var measureIds = payload.measures;
-                       
+
                         if (measureIds != undefined) {
                             var measureNamesInput = {
                                 AnalyticTableId: analyitcTableId,
@@ -160,6 +205,21 @@
                             });
                             promises.push(measureNamesPromiseDeferrred);
                         }
+
+                        dimensionId = payload.dimensionId;
+
+                        if (dimensionId != undefined) {
+                            var dimensionNameInput = {
+                                AnalyticTableId: analyitcTableId,
+                                DimensionId: dimensionId
+                            };
+                            var dimensionNamePromiseDeferrred = VR_Analytic_AnalyticItemConfigAPIService.GetDimensionName(dimensionNameInput).then(function (response) {
+                                if (response != undefined)
+                                    dimensionName = response;
+                            });
+                            promises.push(dimensionNamePromiseDeferrred);
+                        }
+                        advancedOrderOptions = payload.advancedOrderOptions;
                         timePeriod = payload.timePeriod;
                         configId = payload.configId;
                     }
@@ -179,13 +239,20 @@
                         var measure = selectedMeasures[i];
                         measuresIds.push(measure.AnalyticItemConfigId);
                     }
+                    var dimensionId;
+                    var selectedDimension = $scope.scopeModel.selectedDimension;
+                    dimensionId = selectedDimension.AnalyticItemConfigId;
+                    console.log("selectedDimension");
+                    console.log(selectedDimension);
                     return {
-                        $type: "Vanrise.Analytic.Business.OverallAnalyticFiguresTileQuery,Vanrise.Analytic.Business",
+                        $type: "Vanrise.Analytic.Business.MostRelevantAnalyticDimensionFiguresTileQuery,Vanrise.Analytic.Business",
                         AnalyticTableId: analyticTableSelectorAPI.getSelectedIds(),
                         Measures: measuresIds,
                         TimePeriod: periodSelectorAPI.getData(),
                         RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
-                        ConfigId: configId
+                        ConfigId: configId,
+                        AdvancedOrderOptions: advancedOrderOptionDirectiveAPI.getData(),
+                        DimensionId: dimensionId
                     }
                 };
 
@@ -204,10 +271,12 @@
                     };
 
                     if (analyitcTableId != undefined) {
-                        analyticTableSelectorPayload.selectedIds = analyitcTableId; 
+                        analyticTableSelectorPayload.selectedIds = analyitcTableId;
 
                         analyticTableMeasureSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                         analyticTableRecordFilterSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                        analyticTableDimesnionSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                        advancedOrderOptionDirectiveSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                     }
 
                     analyticTableReadyPromiseDeferred.promise.then(function () {
@@ -220,30 +289,61 @@
                         var loadMeasureSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadMeasureSelectorPromiseDeferred.promise);
 
+                        var loadAdvamcedOrderOptionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadAdvamcedOrderOptionDirectivePromiseDeferred.promise);
+
+
+                        var loadDimensionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadDimensionSelectorPromiseDeferred.promise);
+
                         var loadRecordFilterPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadRecordFilterPromiseDeferred.promise);
 
-                        UtilsService.waitMultiplePromises([measuresSelectorReadyPromiseDeferred.promise, recordFilterDirectiveReadyPromiseDeferred.promise, analyticTableMeasureSelectedPromiseDeferred.promise, analyticTableRecordFilterSelectedPromiseDeferred.promise]).then(function () {
+                        UtilsService.waitMultiplePromises([measuresSelectorReadyPromiseDeferred.promise, recordFilterDirectiveReadyPromiseDeferred.promise, analyticTableMeasureSelectedPromiseDeferred.promise, analyticTableRecordFilterSelectedPromiseDeferred.promise, analyticTableDimesnionSelectedPromiseDeferred.promise, advancedOrderOptionDirectiveSelectedPromiseDeferred.promise]).then(function () {
                             var measuresSelectorPayload = {
                                 filter: {
                                     TableIds: [analyticTableSelectorAPI.getSelectedIds()]
                                 }
                             };
-                            if (measureNames!= undefined && measureNames.length > 0)
-                                measuresSelectorPayload.selectedIds = measureNames  ;
-                                    
+                            if (measureNames != undefined && measureNames.length > 0)
+                                measuresSelectorPayload.selectedIds = measureNames;
+                            console.log("measuresPayload");
+                            console.log(measuresSelectorPayload);
                             VRUIUtilsService.callDirectiveLoad(measuresSelectorAPI, measuresSelectorPayload, loadMeasureSelectorPromiseDeferred);
                             analyticTableMeasureSelectedPromiseDeferred = undefined;
+
+                            var advancedOrderOptionDirectivePayload = {
+                                tableIds: [analyticTableSelectorAPI.getSelectedIds()]
+                            };
+                            if (advancedOrderOptions != undefined )
+                                advancedOrderOptionDirectivePayload.advancedOrderOptions = advancedOrderOptions;
+
+                            VRUIUtilsService.callDirectiveLoad(advancedOrderOptionDirectiveAPI, advancedOrderOptionDirectivePayload, loadAdvamcedOrderOptionDirectivePromiseDeferred);
+                            advancedOrderOptionDirectiveSelectedPromiseDeferred = undefined;
+
+                            var dimensionsSelectorPayload = {
+                                filter: {
+                                    TableIds: [analyticTableSelectorAPI.getSelectedIds()]
+                                }
+                            };
+                            if (dimensionName != undefined)
+                                dimensionsSelectorPayload.selectedIds = dimensionName;
+                            console.log("dimensionsSelectorPayload");
+                            console.log(dimensionsSelectorPayload);
+                            VRUIUtilsService.callDirectiveLoad(dimensionsSelectorAPI, dimensionsSelectorPayload, loadDimensionSelectorPromiseDeferred);
+                            analyticTableDimesnionSelectedPromiseDeferred = undefined;
+
+
                             context.getFields = function () {
                                 return analyticTableDimensions;
                             };
                             var recordFilterSelectorPayload =
                             {
-                                context:context
+                                context: context
                             };
                             if (filterObject != undefined)
                                 recordFilterSelectorPayload.FilterGroup = filterObject;
-                               
+
                             VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterSelectorPayload, loadRecordFilterPromiseDeferred);
                             analyticTableRecordFilterSelectedPromiseDeferred = undefined;
 
@@ -252,7 +352,7 @@
 
                     return UtilsService.waitMultiplePromises(promises);
                 }
-               
+
                 function loadPeriodSelector() {
                     var loadPeriodSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                     periodSelectorReadyPromiseDeferred.promise.then(function () {
@@ -270,6 +370,6 @@
         }
     }
 
-    app.directive('vrAnalyticOverallanalyticFigurestilequery', OverallAnalyticFiguresTileQuery);
+    app.directive('vrAnalyticMostrelevantFigurestilequery', MostRelevantAnalyticFiguresTileQuery);
 
 })(app);

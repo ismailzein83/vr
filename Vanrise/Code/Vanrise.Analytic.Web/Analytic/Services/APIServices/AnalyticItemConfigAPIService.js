@@ -40,6 +40,9 @@
         function GetFilteredAnalyticItemConfigs(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetFilteredAnalyticItemConfigs"), input);
         }
+        function GetMeasuresNames(measureNamesInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasuresNames"), measureNamesInput);
+        }
 
         function GetAnalyticItemConfigsById(tableId, itemType, analyticItemConfigId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticItemConfigsById"), {
@@ -61,6 +64,9 @@
         function GetAnalyticDimensionEditorRuntime(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticDimensionEditorRuntime"), input);
         }
+        function GetDimensionName(dimensionNameInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDimensionName"), dimensionNameInput);
+        }
         return ({
             GetDimensionsInfo: GetDimensionsInfo,
             GetMeasuresInfo: GetMeasuresInfo,
@@ -73,7 +79,9 @@
             GetAnalyticItemConfigs: GetAnalyticItemConfigs,
             GetAnalyticDimensionEditorRuntime: GetAnalyticDimensionEditorRuntime,
             GetRemoteMeasuresInfo: GetRemoteMeasuresInfo,
-            GetDimensions: GetDimensions
+            GetDimensions: GetDimensions,
+            GetMeasuresNames: GetMeasuresNames,
+            GetDimensionName: GetDimensionName
         });
     }
 

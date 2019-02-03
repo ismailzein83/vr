@@ -22,5 +22,32 @@ namespace Vanrise.Common.Web.Controllers
         {
             return _manager.GetTileExtendedSettingsConfigs();
         }
+
+        [HttpGet]
+        [Route("GetFiguresTilesDefinitionSettingsConfigs")]
+        public IEnumerable<FiguresTileQueryDefinitionSettingsConfig> GetFiguresTilesDefinitionSettingsConfigs()
+        {
+            return _manager.GetFiguresTilesDefinitionSettingsConfigs();
+        }
+        [HttpPost]
+        [Route("GetFiguresTileItemsToDiplayInfo")]
+        public IEnumerable<FiguresTileSchemaInfo> GetFiguresTileItemsToDiplayInfo(FiguresTileQueriesInput queriesInput)
+        {
+            return _manager.GetFiguresTileItemsToDiplayInfo(queriesInput);
+        }
+        [HttpPost]
+        [Route("GetFigureItemsValue")]
+        public IEnumerable<FigureItemValue> GetFigureItemsValue(FigureStyleInput figureStyleInput)
+        {
+            return _manager.GetFigureItemsValue(figureStyleInput.Queries,figureStyleInput.ItemsToDisplay);
+        }
+        
+
     }
+    public class FigureStyleInput
+    {
+        public List<FiguresTileQuery> Queries { get; set; }
+        public List<FiguresTileDisplayItem> ItemsToDisplay { get; set; }
+    }
+   
 }

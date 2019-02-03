@@ -83,7 +83,21 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
             return manager.GetAnalyticItemConfigsById(tableId, itemType, analyticItemConfigId);
         }
+        [HttpPost]
+        [Route("GetMeasuresNames")]
+        public IEnumerable<string> GetMeasuresNames(MeasureNamesInput measureNameInput)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            return manager.GetMeasuresNames(measureNameInput.AnalyticTableId, measureNameInput.MeasureIds);
+        }
 
+        [HttpPost]
+        [Route("GetDimensionName")]
+        public string GetDimensionName(DimensionNameInput dimensionNameInput)
+        {
+            AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
+            return manager.GetDimensionName(dimensionNameInput.AnalyticTableId, dimensionNameInput.DimensionId);
+        }
         [HttpPost]
         [Route("AddAnalyticItemConfig")]
         public Object AddAnalyticItemConfig(AnalyticItemConfigInput analyticItemConfig)
@@ -157,5 +171,15 @@ namespace Vanrise.Analytic.Web.Controllers
     {
         public List<Guid> TableIds { get; set; }
         public AnalyticItemType ItemType { get; set; }
+    }
+    public class MeasureNamesInput
+    {
+        public Guid AnalyticTableId { get; set; }
+        public List<Guid> MeasureIds { get; set; }
+    }
+    public class DimensionNameInput
+    {
+        public Guid AnalyticTableId { get; set; }
+        public Guid DimensionId { get; set; }
     }
 }

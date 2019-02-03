@@ -171,6 +171,35 @@ namespace Vanrise.Analytic.Business
             return null;
 
         }
+        public List<string> GetMeasuresNames (Guid analyticTableId,List<Guid> measureIds)
+            {
+            List<string> names = new List<string>();
+            var allMeasuresByMeasureName = GetMeasures(analyticTableId);
+            allMeasuresByMeasureName.ThrowIfNull("allMeasuresByMeasureName");
+            foreach (var measureId in measureIds)
+            {
+                var selectedMeasure = allMeasuresByMeasureName.First(x => x.Value.AnalyticMeasureConfigId == measureId);
+
+                if (selectedMeasure.Value == null)
+                    throw new NullReferenceException("selectedMeasure");
+
+                names.Add(selectedMeasure.Key);
+            }
+            return names;
+        }
+        public string GetDimensionName(Guid analyticTableId, Guid dimensionId)
+        {
+            List<string> names = new List<string>();
+            var allDimensionsByDimensionName = GetDimensions(analyticTableId);
+            allDimensionsByDimensionName.ThrowIfNull("allMeasuresByMeasureName");
+
+                var selectedDimension = allDimensionsByDimensionName.First(x => x.Value.AnalyticDimensionConfigId == dimensionId);
+                if (selectedDimension.Value == null)
+                    throw new NullReferenceException("selectedMeasure");
+
+             
+            return selectedDimension.Key;
+        }
         public IEnumerable<AnalyticDimensionConfigInfo> GetDimensionsInfo(AnalyticDimensionConfigInfoFilter filter)
         {
             if (filter == null || filter.TableIds == null || filter.TableIds.Count == 0)

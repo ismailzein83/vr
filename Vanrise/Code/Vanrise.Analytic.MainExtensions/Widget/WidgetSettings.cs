@@ -14,7 +14,7 @@ namespace Vanrise.Analytic.MainExtensions.Widget
     {
         public override Guid ConfigId { get { return new Guid("76285A3E-C385-49C3-8833-DEA21A40471E"); } }
 
-        public override string RuntimeEditor { get { return ""; } }
+        public override string RuntimeEditor { get { return "vr-common-widgetsettings-runtime"; } }
         public Guid AnalyticTableId { get; set; }
         public VRTimePeriod TimePeriod { get; set; }
         public RecordFilter RecordFilter { get; set; }

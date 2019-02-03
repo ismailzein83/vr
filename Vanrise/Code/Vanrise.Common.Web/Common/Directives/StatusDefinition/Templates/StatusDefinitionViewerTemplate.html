@@ -1,4 +1,4 @@
 ﻿<vr-label isclickable ng-click="onHelpBoxClicked()">Legend</vr-label>
-<span ng-if="showHelpBox" ng-click="onHelpBoxClicked()">
-    <vr-helpbox datasource="statusDefinitionStyles" datatextfield="Name" dataclassfield="StyleFormatingSettings" labelclassfield="LabelClass" isclickable></vr-helpbox>
+<span ng-if="showHelpBox" >
+    <vr-helpbox datasource="statusDefinitionStyles" onhelpboxclicked="onHelpBoxClicked" datatextfield="Name" dataclassfield="StyleFormatingSettings" labelclassfield="LabelClass" isclickable></vr-helpbox>
 </span>

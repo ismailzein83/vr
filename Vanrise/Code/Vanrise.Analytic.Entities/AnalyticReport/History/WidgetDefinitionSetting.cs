@@ -11,6 +11,6 @@ namespace Vanrise.Analytic.Entities
     {
         public const string EXTENSION_TYPE = "Analytic_AnalyticWidgetsSettings";
         public string Editor { get; set; }
-        public string RuntimeEditor { get; set; }
+        public string RuntimeEditor { get; set;}
     }
 }

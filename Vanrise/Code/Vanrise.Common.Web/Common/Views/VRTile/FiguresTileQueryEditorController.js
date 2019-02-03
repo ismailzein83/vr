@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FiguresTileQueryEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    FiguresTileQueryEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VRCommon_VRTileAPIService'];
 
-    function FiguresTileQueryEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function FiguresTileQueryEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VRCommon_VRTileAPIService) {
 
         var isEditMode;
         var settings;
@@ -14,23 +14,28 @@
 
         var selectorAPI;
 
+        var figureTileQueries;
+
+        var figureTileEntity;
+
+
         loadParameters();
         defineScope();
         load();
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-
             if (parameters != undefined) {
                 settings = parameters.settings;
+                figureTileEntity = parameters.figuresTileQueryEntity;
+                figureTileQueries = parameters.figureTileQueries;
             }
-
-            isEditMode = (objectVariableEntity != undefined);
+            isEditMode = (figureTileEntity != undefined);
         }
         function defineScope() {
 
-            $scope.scopeModal = {};
-
+            $scope.scopeModel = {};
+            $scope.scopeModel.templateConfigs = [];
             $scope.scopeModel.onSelectorReady = function (api) {
                 selectorAPI = api;
             };
@@ -46,13 +51,14 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivepPayload, setLoader, directiveReadyDeferred);
             };
 
-            $scope.scopeModal.save = function () {
-                if (isEditMode)
+            $scope.scopeModel.save = function () {
+                if (isEditMode) {
                     return update();
+                }
                 else
                     return insert();
             };
-            $scope.scopeModal.close = function () {
+            $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
@@ -70,14 +76,17 @@
 
             function setTitle() {
                 $scope.title = (isEditMode) ?
-                    UtilsService.buildTitleForUpdateEditor((objectVariableEntity != undefined) ? objectVariableEntity.ObjectName : null, 'Object Variable') :
-                    UtilsService.buildTitleForAddEditor('Object Variable');
+                    UtilsService.buildTitleForUpdateEditor((figureTileEntity != undefined) ? figureTileEntity.ObjectName : null, 'Figure Tile Query') :
+                    UtilsService.buildTitleForAddEditor('Figure Tile Query');
             }
             function loadStaticData() {
-                if (objectVariableEntity == undefined) {
+                if (figureTileEntity == undefined)
                     return;
+                else {
+                    $scope.scopeModel.name = figureTileEntity.Name;
                 }
-                $scope.scopeModal.objectName = objectVariableEntity.ObjectName;
+
+                $scope.scopeModel.objectName = figureTileEntity.ObjectName;
             }
 
             function getFiguresTilesDefinitionSettingsConfigs() {
@@ -86,9 +95,9 @@
                         for (var i = 0; i < response.length; i++) {
                             $scope.scopeModel.templateConfigs.push(response[i]);
                         }
-                        if (settings != undefined) {
+                        if (figureTileEntity != undefined) {
                             $scope.scopeModel.selectedTemplateConfig =
-                                UtilsService.getItemByVal($scope.scopeModel.templateConfigs, settings.ConfigId, 'ExtensionConfigurationId');
+                                UtilsService.getItemByVal($scope.scopeModel.templateConfigs, figureTileEntity.Settings.ConfigId, 'ExtensionConfigurationId');
                         }
                     }
                 });
@@ -100,10 +109,17 @@
                 directiveReadyDeferred.promise.then(function () {
                     directiveReadyDeferred = undefined;
                     var directivePayload = {
-                        //context: getContext()
+                        configId: $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId
                     };
-                    if (settings != undefined) {
-                        directivePayload.settings = settings;
+                    if (figureTileEntity != undefined && figureTileEntity.Settings != undefined) {
+                        var settings = figureTileEntity.Settings;
+                        directivePayload.analyticTableId = settings.AnalyticTableId;
+                        directivePayload.measures = settings.Measures;
+                        directivePayload.timePeriod = settings.TimePeriod;
+                        directivePayload.filterObj = settings.RecordFilter;
+                        directivePayload.dimensionId = settings.DimensionId;
+                        directivePayload.advancedOrderOptions = settings.AdvancedOrderOptions;
+
                     };
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                 });
@@ -113,28 +129,30 @@
 
             return UtilsService.waitMultiplePromises(promises);
         };
-    
+
 
 
 
         function insert() {
-            var objectVariable = buildObjectVariableFromScope();
+            var query = buildObjectFromScope();
             if ($scope.onFigureTileQueryAdded != undefined && typeof ($scope.onFigureTileQueryAdded) == 'function') {
-                $scope.onFigureTileQueryAdded(objectVariable);
+                $scope.onFigureTileQueryAdded(query);
             }
             $scope.modalContext.closeModal();
         }
         function update() {
-            var objectVariable = buildObjectVariableFromScope();
+            var query = buildObjectFromScope();
             if ($scope.onFigureTileQueryUpdated != undefined && typeof ($scope.onFigureTileQueryUpdated) == 'function') {
-                $scope.onFigureTileQueryUpdated(objectVariable);
+                $scope.onFigureTileQueryUpdated(query);
             }
             $scope.modalContext.closeModal();
         }
 
-        function buildObjectVariableFromScope() {
+        function buildObjectFromScope() {
             return {
-         
+                FiguresTileQueryId: isEditMode ? figureTileEntity.FiguresTileQueryId : UtilsService.guid(),
+                Name: $scope.scopeModel.name,
+                Settings: directiveAPI.getData()
             };
         }
     }

@@ -188,10 +188,6 @@
     <Content Include="Common\Directives\MasterLayoutSettings\Templates\MasterLayoutTemplateSettings.html" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-masterlayout-settings-editor.js" />
     <Content Include="Common\Directives\MasterLayoutSettings\vr-common-menuoption-selector.js" />
-    <Content Include="Common\Directives\WidgetSettings\Templates\WidgetSettingsRuntimeTemplate.html" />
-    <Content Include="Common\Directives\WidgetSettings\vr-common-widgetsettings-definition.js" />
-    <Content Include="Common\Directives\WidgetSettings\Templates\WidgetSettingsDefinitionTemplate.html" />
-    <Content Include="Common\Directives\WidgetSettings\vr-common-widgetsettings-runtime.js" />
     <Content Include="Common\Services\APIServices\HttpCallConnectionInterceptorAPIService.js" />
     <Content Include="Common\Services\APIServices\RDBDataTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRBulkActionDraftAPIService.js" />

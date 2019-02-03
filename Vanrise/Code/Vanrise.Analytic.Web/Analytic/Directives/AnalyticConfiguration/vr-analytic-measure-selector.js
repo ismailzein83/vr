@@ -87,6 +87,11 @@
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('Name', attrs, ctrl);
                 };
+                api.clearDataSource = function () {
+                    if (ctrl.datasource == undefined) return;
+                    ctrl.datasource = [];
+                    ctrl.datasource.length = 0;
+                };
 
                 return api;
             }

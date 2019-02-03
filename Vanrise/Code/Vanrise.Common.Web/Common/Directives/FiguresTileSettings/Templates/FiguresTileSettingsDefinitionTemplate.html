@@ -1,6 +1,10 @@
-﻿<!--|<vr-section title="Definition">
-    <vr-sec-view-selector on-ready ="scopeModel.onViewsSelectorReady" onselectionchanged ="scopeModel.onViewsSelectorSelectionChanged"></vr-sec-view-selector>
+﻿<vr-section title="Definition">
+    <vr-columns width="1/3row">
+        <vr-sec-view-selector on-ready="scopeModel.onViewsSelectorReady" onselectionchanged="scopeModel.onViewsSelectorSelectionChanged"></vr-sec-view-selector>
+    </vr-columns>
 </vr-section>
-<vr-section title="Settings">
-    <vr-common-tile-figurestile-queries on-ready ="scopeModel.onQueriesGridReady"></vr-common-tile-figurestile-queries>
-</vr-section>-->
+<vr-section title="Queries">
+    <vr-row>
+        <vr-common-tile-figurestile-queries on-ready="scopeModel.onQueriesGridReady"></vr-common-tile-figurestile-queries>
+    </vr-row>
+</vr-section>

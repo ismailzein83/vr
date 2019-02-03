@@ -172,6 +172,8 @@
     <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\vr-analytic-measurestyle-grid-viewer.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\Templates\AnalyticLegendTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-legend.js" />
+    <Content Include="Analytic\Directives\Definition\MostRelevantAnalytic\Templates\MostRelevantFiguresTileQueryTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\MostRelevantAnalytic\vr-analytic-mostrelevant-figurestilequery.js" />
     <Content Include="Analytic\Directives\Definition\OverallAnalytic\Templates\OverallAnalyticFiguresTileQueryTemplate.html" />
     <Content Include="Analytic\Directives\Definition\OverallAnalytic\vr-analytic-overallanalytic-figurestilequery.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\CustomCode\Templates\ReportGenerationCustomCodeFileGeneratorTemplate.html" />

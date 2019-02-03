@@ -10,12 +10,17 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Business
 {
-    public class OverallAnalyticFiguresTileQuery : FiguresTileQuerySettings
+    public class MostRelevantAnalyticDimensionFiguresTileQuery : FiguresTileQuerySettings
     {
-        public override Guid ConfigId { get { return new Guid("1A67CEF6-7472-4151-8A74-8AF12D245E27"); } }
+        public override Guid ConfigId { get { return new Guid("A0833F27-6718-40E1-BB69-344B0BD3CFAF"); } }
 
         public override List<FigureItemValue> Execute(IFiguresTileQueryExecuteContext context)
         {
+            List<string> dimensionFields = new List<string>();
+            AnalyticItemConfigManager analyticItemConfigmanager = new AnalyticItemConfigManager();
+            var dimensionName = analyticItemConfigmanager.GetDimensionName(AnalyticTableId, DimensionId);
+            dimensionName.ThrowIfNull("dimensionName");
+            dimensionFields.Add(dimensionName);
             List<FigureItemValue> figureItemValues = new List<FigureItemValue>();
             VRTimePeriodContext timePeriodContext = new VRTimePeriodContext() { EffectiveDate = DateTime.Today };
             TimePeriod.GetTimePeriod(timePeriodContext);
@@ -24,6 +29,7 @@ namespace Vanrise.Analytic.Business
             var Query = new AnalyticQuery()
             {
                 MeasureFields = context.ItemsToDisplayNames,
+                DimensionFields = dimensionFields,
                 TableId = AnalyticTableId,
                 FromTime = timePeriodContext.FromTime,
                 ToTime = timePeriodContext.ToTime,
@@ -36,15 +42,13 @@ namespace Vanrise.Analytic.Business
             analyticRecords.ThrowIfNull("analyticRecords");
             var record = analyticRecords.FirstOrDefault();
             record.ThrowIfNull("record");
-            var measures = record.MeasureValues;
-            foreach (var measure in measures)
-            {
+            var dimensions = record.DimensionValues;
+            var selectedDimension = dimensions.First();
                 figureItemValues.Add(new FigureItemValue()
                 {
-                    Name = measure.Key,
-                    Value = measure.Value.Value
+                    Name = selectedDimension.Name,
+                    Value = selectedDimension.Value
                 });
-            }
 
             return figureItemValues;
         }
@@ -70,11 +74,12 @@ namespace Vanrise.Analytic.Business
             }
             return figureItemsSchema;
         }
-
         public Guid AnalyticTableId { get; set; }
+        public Guid DimensionId { get; set; }
         public List<Guid> Measures { get; set; }
         public VRTimePeriod TimePeriod { get; set; }
         public RecordFilter RecordFilter { get; set; }
+        public AnalyticQueryAdvancedMeasureOrderOptions AdvancedOrderOptions { get; set; }
 
     }
 
