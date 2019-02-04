@@ -8,6 +8,7 @@ using System.Text;
 using Vanrise.Analytic.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.GenericData.Data.SQL;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Analytic.Data.SQL
 {
@@ -26,7 +27,7 @@ namespace Vanrise.Analytic.Data.SQL
             HashSet<string> includedSQLDimensions = context.AllQueryDBDimensions;
             HashSet<string> includedSQLAggregates = context.AllQueryDBAggregates;
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-            string querySQL = BuildAnalyticQuery(query, includedSQLDimensions, includedSQLAggregates, parameterValues);
+            string querySQL = BuildAnalyticQuery(query, includedSQLDimensions, includedSQLAggregates, context.DBFilterGroup, parameterValues);
 
             if (parameterValues.Count > 0)
             {
@@ -70,7 +71,7 @@ namespace Vanrise.Analytic.Data.SQL
 
         #region Query Builder
 
-        string BuildAnalyticQuery(AnalyticQuery query, HashSet<string> includedSQLDimensionNames, HashSet<string> includedSQLAggregateNames, Dictionary<string, Object> parameterValues)
+        string BuildAnalyticQuery(AnalyticQuery query, HashSet<string> includedSQLDimensionNames, HashSet<string> includedSQLAggregateNames, RecordFilterGroup dbFilterGroup, Dictionary<string, Object> parameterValues)
         {
             StringBuilder selectPartBuilder = new StringBuilder();
             HashSet<string> includeJoinConfigNames = new HashSet<string>();
@@ -85,8 +86,9 @@ namespace Vanrise.Analytic.Data.SQL
             string joinPart = BuildQueryJoins(includeJoinConfigNames, joinStatements);
 
             RecordFilterSQLBuilder recordFilterSQLBuilder = new RecordFilterSQLBuilder(GetDimensionColumnIdFromFieldName);
-            String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(query.FilterGroup, ref parameterIndex, parameterValues);
-
+            String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(dbFilterGroup, ref parameterIndex, parameterValues);
+            if (!string.IsNullOrEmpty(recordFilter))
+                filterPart = string.Concat(filterPart, " AND ", recordFilter);
 
             StringBuilder queryBuilder = BuildGlobalQuery(query.FromTime, toTime,
                 parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, recordFilter, ref parameterIndex);
