@@ -14,5 +14,6 @@ namespace TOne.WhS.Sales.Data
 		void ApplyChangedCustomerCountryPreviewsToDB(IEnumerable<ChangedCustomerCountryPreview> changedCustomerCountryPreviews);
 
 		IEnumerable<ChangedCustomerCountryPreview> GetChangedCustomerCountryPreviews(RatePlanPreviewQuery query);
-	}
+	    IEnumerable<int> GetAffectedCustomerIds(long processInstanceId);
+    }
 }

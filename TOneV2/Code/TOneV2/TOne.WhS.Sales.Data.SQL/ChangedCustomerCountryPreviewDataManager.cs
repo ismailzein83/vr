@@ -54,10 +54,21 @@ namespace TOne.WhS.Sales.Data.SQL
                 strcustomerIds = string.Join(",", query.CustomerIds);
             return GetItemsSP("TOneWhS_Sales.sp_CustomerCountry_GetChangedPreviews", ChangedCustomerCountryPreviewMapper, query.ProcessInstanceId, strcustomerIds);
 		}
+	    public IEnumerable<int> GetAffectedCustomerIds(long processInstanceId)
+	    {
+	        List<int> listAffectedCustomerIds = new List<int>();
+	        ExecuteReaderSP("TOneWhS_BE.SP_SalePricelistChangedCountryChanges_GetAffectedCustomerIds", (reader) =>
+	        {
+	            while (reader.Read())
+	            {
+	                listAffectedCustomerIds.Add(GetReaderValue<int>(reader, "CustomerId"));
+	            }
+	        }, processInstanceId);
+	        return listAffectedCustomerIds;
+	    }
+        #region Bulk Apply Methods
 
-		#region Bulk Apply Methods
-
-		public object InitialiazeStreamForDBApply()
+        public object InitialiazeStreamForDBApply()
 		{
 			return base.InitializeStreamForBulkInsert();
 		}

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Business
@@ -26,7 +22,7 @@ namespace TOne.WhS.Sales.Business
 
             public CustomObject(long processInstanceId)
             {
-                AffectedCustomerIds = new SalePriceListChangeManager().GetAffectedCustomerIdsChangedCountryChangesByProcessInstanceId(processInstanceId);
+                AffectedCustomerIds = new ChangedCustomerCountryPreviewManager().GetAffectedCustomerIds(processInstanceId);
             }
         }
     }

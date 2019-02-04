@@ -15,10 +15,14 @@ namespace TOne.WhS.Sales.Business
 		{
 			return Vanrise.Common.Business.BigDataManager.Instance.RetrieveData(input, new ChangedCustomerCountryPreviewRequestHandler());
 		}
+	    public IEnumerable<int> GetAffectedCustomerIds(long processInstanceId)
+	    {
+	        IChangedCustomerCountryPreviewDataManager dataManager = SalesDataManagerFactory.GetDataManager<IChangedCustomerCountryPreviewDataManager>();
+	        return dataManager.GetAffectedCustomerIds(processInstanceId);
+	    }
+        #region Private Classes
 
-		#region Private Classes
-
-		private class ChangedCustomerCountryPreviewRequestHandler
+        private class ChangedCustomerCountryPreviewRequestHandler
 			: Vanrise.Common.Business.BigDataRequestHandler<RatePlanPreviewQuery, ChangedCustomerCountryPreview, ChangedCustomerCountryPreviewDetail>
 		{
 			private Vanrise.Common.Business.CountryManager _countryManager = new Vanrise.Common.Business.CountryManager();

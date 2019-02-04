@@ -1,12 +1,8 @@
-﻿using System;
-using System.Activities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Sales.Data;
+﻿using System.Activities;
 using TOne.WhS.Sales.Entities;
+using TOne.WhS.Sales.Business;
+using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -59,7 +55,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             if (ownerType == SalePriceListOwnerType.Customer)
             {
-                var dataManager = SalesDataManagerFactory.GetDataManager<INewCustomerCountryDataManager>();
+                var dataManager = new NewCustomerCountryManager();
                 long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
                 dataManager.ProcessInstanceId = rootProcessInstanceId;
                 dataManager.ApplyNewCustomerCountriesToDB(newCustomerCountries);
