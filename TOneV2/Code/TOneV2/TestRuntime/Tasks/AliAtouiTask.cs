@@ -21,6 +21,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Data.RDB;
 using Vanrise.GenericData.Entities;
+using Vanrise.Integration.Mappers;
 using Vanrise.Queueing;
 using Vanrise.Rules.Normalization;
 using Vanrise.Runtime;
@@ -732,8 +733,10 @@ namespace TOne.WhS.Runtime.Tasks
 
         private string DeserializeCustomerRouteOptions(string serializedOptions)
         {
-            List<TOne.WhS.Routing.Entities.RouteOption> routeOptions = TOne.WhS.Routing.Entities.Helper.DeserializeOptions(serializedOptions);
-            return Vanrise.Common.Serializer.Serialize(routeOptions, true);
+            throw new NotImplementedException();
+
+            //List<TOne.WhS.Routing.Entities.RouteOption> routeOptions = TOne.WhS.Routing.Entities.Helper.DeserializeOptions(serializedOptions);
+            //return Vanrise.Common.Serializer.Serialize(routeOptions, true);
         }
 
         private string DeserializeOptionsDetailsBySupplier(string serializedOptionsDetailsBySupplier)
