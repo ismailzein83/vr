@@ -78,6 +78,9 @@
     <Folder Include="integration\Stored Procedures\" />
     <Folder Include="integration\User Defined Types\" />
     <Folder Include="integration\Functions\" />
+    <Folder Include="RouteSync" />
+    <Folder Include="RouteSync\Stored Procedures" />
+    <Folder Include="RouteSync\Tables" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="bp\Tables\BPTracking.sql" />
@@ -121,6 +124,9 @@
     <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_UpdateStatus.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceImportedBatch_GetAfterID.sql" />
     <Build Include="integration\User Defined Types\DataSourceImportedBatchExecutionStatusType.sql" />
+    <Build Include="RouteSync\Stored Procedures\sp_SwitchCommandLog_Insert.sql" />
+    <Build Include="RouteSync\Tables\SwitchCommandLog.sql" />
+    <Build Include="Security\RouteSync.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
