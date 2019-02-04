@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text;
 using TestRuntime;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
@@ -18,6 +19,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Caching.Runtime;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Data.RDB;
 using Vanrise.GenericData.Entities;
 using Vanrise.Queueing;
 using Vanrise.Rules.Normalization;
@@ -30,6 +32,12 @@ namespace TOne.WhS.Runtime.Tasks
     {
         public void Execute()
         {
+            #region RDBTestingTask
+            //var columnNames = new Dictionary<string, RDBCreateIndexDirection>();
+            //columnNames.Add("CustomerId", RDBCreateIndexDirection.ASC);
+            //var rdbResolvedQuery = RDBTestingTask.ResolveIndexCreationQuery("dbo", "CustomerRoute", RDBCreateIndexType.UniqueClustered, "IX_Customer", columnNames, 2);
+            #endregion
+
             #region RuntimeTask
             //RuntimeTask.RuntimeTask_Main();
             #endregion
@@ -73,6 +81,59 @@ namespace TOne.WhS.Runtime.Tasks
             //IEnumerable<CodePrefixInfo> codePrefixesResult = prepareCodePrefixesTask.PrepareCodePrefixesTask_Main();
             //prepareCodePrefixesTask.DisplayList(codePrefixesResult);
             #endregion
+        }
+    }
+
+    public class RDBTestingTask
+    {
+        public static RDBResolvedQuery ResolveIndexCreationQuery(string schemaName, string tableName, RDBCreateIndexType indexType, string indexName, 
+            Dictionary<string, RDBCreateIndexDirection> columnNames, int? maxDOP)
+        {
+            string tableDBNameForIndex;
+            if (!string.IsNullOrEmpty(schemaName))
+                tableDBNameForIndex = string.Concat(schemaName, "_", tableName);
+            else
+                tableDBNameForIndex = tableName;
+
+            string tableDBName = "CustomerRoute";
+            indexName = string.IsNullOrEmpty(indexName) ? string.Concat("IX_", tableDBNameForIndex, "_", string.Join("", columnNames.Select(itm => itm.Key))) : indexName;
+
+            var queryBuilder = new StringBuilder();
+            if (indexType == RDBCreateIndexType.UniqueClustered || indexType == RDBCreateIndexType.UniqueNonClustered)
+            {
+                queryBuilder.Append(" ALTER TABLE ");
+                queryBuilder.Append(tableDBName);
+                queryBuilder.Append(" ADD CONSTRAINT ");
+                queryBuilder.Append(indexName);
+                queryBuilder.Append(" UNIQUE ");
+                if (indexType == RDBCreateIndexType.UniqueClustered)
+                    queryBuilder.Append(" CLUSTERED ");
+                else
+                    queryBuilder.Append(" NONCLUSTERED ");
+            }
+            else
+            {
+                queryBuilder.Append(" CREATE ");
+                if (indexType == RDBCreateIndexType.Clustered)
+                    queryBuilder.Append(" CLUSTERED ");
+                else
+                    queryBuilder.Append(" NONCLUSTERED ");
+                queryBuilder.Append(" INDEX ");
+                queryBuilder.Append(indexName);
+                queryBuilder.Append(" ON ");
+                queryBuilder.Append(tableDBName);
+            }
+
+            queryBuilder.Append(" (");
+            queryBuilder.Append(string.Join(", ", columnNames.Select(colName => string.Concat(colName.Key, colName.Value == RDBCreateIndexDirection.ASC ? " ASC " : " DESC "))));
+            queryBuilder.Append(")");
+
+            if (maxDOP.HasValue)
+                queryBuilder.Append($" WITH (MAXDOP = {maxDOP.Value}) ON [PRIMARY]");
+
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
+            return resolvedQuery;
         }
     }
 
@@ -677,7 +738,7 @@ namespace TOne.WhS.Runtime.Tasks
 
         private string DeserializeOptionsDetailsBySupplier(string serializedOptionsDetailsBySupplier)
         {
-            Dictionary<int, RPRouteOptionSupplier> optionsDetailsBySupplier = rpRouteDataManager.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
+            Dictionary<int, RPRouteOptionSupplier> optionsDetailsBySupplier = TOne.WhS.Routing.Entities.Helper.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
             return Vanrise.Common.Serializer.Serialize(optionsDetailsBySupplier, true);
         }
 
