@@ -472,7 +472,55 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
 
         #region Public Methods
+        public List<ZoneCodeGroup> GetSaleZoneCodeGroups(DateTime? effectiveOn, bool isFuture)
+        {
+            CodeGroupDataManager codeGroupDataManager = new CodeGroupDataManager();
+            Dictionary<long, List<string>> codeGroupsByZone = new Dictionary<long, List<string>>();
 
+            string codeGroupTableAlias = "cg";
+
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+
+            var selectColoumns = selectQuery.SelectColumns();
+            selectColoumns.Column(COL_ZoneID);
+            selectColoumns.Column(TABLE_ALIAS, COL_Code, "CodeGroup");
+
+            var joinCondition = selectQuery.Join();
+            codeGroupDataManager.JoinCodeGroup(joinCondition, codeGroupTableAlias, TABLE_ALIAS, COL_CodeGroupID);
+
+            var whereContext = selectQuery.Where();
+
+            if (!effectiveOn.HasValue)
+            {
+                if (isFuture)
+                    BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+                else
+                    BEDataUtility.SetFutureDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
+            }
+            else
+            {
+                whereContext.FalseCondition();
+            }
+
+            whereContext.EqualsCondition(TABLE_ALIAS, COL_Code).Column(codeGroupTableAlias, CodeGroupDataManager.COL_Code);
+
+            queryContext.ExecuteReader(
+               (reader) =>
+               {
+                   while (reader.Read())
+                   {
+                       long zoneId = reader.GetLong(COL_ZoneID);
+                       string codeGroup = reader.GetString("CodeGroup");
+                       List<string> codeGroups = codeGroupsByZone.GetOrCreateItem(zoneId);
+                       codeGroups.Add(codeGroup);
+                   }
+               });
+
+            return codeGroupsByZone.Select(itm => new ZoneCodeGroup() { CodeGroups = itm.Value, ZoneId = itm.Key, IsSale = false }).ToList();
+        }
         public bool HasSaleCodesByCodeGroup(int codeGroupId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
