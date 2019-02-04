@@ -43,8 +43,8 @@ namespace BPMExtended.Main.Business
             string nextStepId = "";
             switch (currentStepId)
             {
-                case welcomeStep: nextStepId = chooseTelephonyContractStep; break;
-                case chooseTelephonyContractStep: nextStepId = printStep; break;
+                case welcomeStep: nextStepId = printStep; break;
+               // case chooseTelephonyContractStep: nextStepId = printStep; break;
                 case printStep: nextStepId = DSLAMStep; break;
                 case DSLAMStep: nextStepId = FreeDSLAMPorts(id) !=null  ? servicesStep : waitingListStep; break;
                 case waitingListStep: nextStepId = DSLAMStep; break;

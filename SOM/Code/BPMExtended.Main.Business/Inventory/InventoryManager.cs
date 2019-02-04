@@ -347,18 +347,20 @@ namespace BPMExtended.Main.Business
             return apiResult;
         }
 
-        public ADSLLinePath CheckADSL(string phoneNumber)
-        {
-            ADSLLinePath item = null;
+        //public ADSLLinePath CheckADSL(string phoneNumber)
+        //{
+        //    ADSLLinePath item = null;
 
-            using (SOMClient client = new SOMClient())
-            {
-                item = client.Get<ADSLLinePath>(String.Format("api/SOM/Inventory/CreateFullPath?CheckADSL={0}", phoneNumber));
-            }
+        //    using (SOMClient client = new SOMClient())
+        //    {
+        //        item = client.Get<ADSLLinePath>(String.Format("api/SOM/Inventory/CreateFullPath?CheckADSL={0}", phoneNumber));
+        //    }
 
-            return item;
+        //    return item;
 
-        }
+        //}
+
+
         //////////////////////////////////////////////////////////////////////////////
 
 

@@ -77,7 +77,7 @@ namespace BPMExtended.Main.Business
         {
             return RatePlanMockDataGenerator.GetADSLContractsByUsername(userName);
         }
-        public bool IsTelephonyLineHasADSLContract(string contractId, string phoneNumber)
+        public bool IsTelephonyLineHasADSLContract(string contractId)
         {
             //TODO: check if Telephony Line  mapped to an ADSL contract
 
