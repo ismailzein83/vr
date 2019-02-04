@@ -63,7 +63,7 @@ namespace Vanrise.Common.Business
             VRNamespaceItemCompilationOutput output;
             if (TryCompileNamespaceItem(vrNamespaceItem, null, out output))
             {
-
+                CSharpCompiler.SetExpiredAssembly(output.OutputAssembly.FullName);
                 if (dataManager.Insert(vrNamespaceItem))
                 {
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -95,6 +95,7 @@ namespace Vanrise.Common.Business
             VRNamespaceItemCompilationOutput output;
             if (TryCompileNamespaceItem(vrNamespaceItem, null, out output))
             {
+                CSharpCompiler.SetExpiredAssembly(output.OutputAssembly.FullName);
                 if (dataManager.Update(vrNamespaceItem))
                 {
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
