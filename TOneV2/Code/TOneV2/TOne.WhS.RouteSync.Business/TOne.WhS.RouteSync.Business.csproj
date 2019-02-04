@@ -73,6 +73,7 @@
     <Compile Include="RouteSyncProcessBPDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteSyncDefinitionManager.cs" />
+    <Compile Include="SwitchCommandLogManager.cs" />
     <Compile Include="SwitchFTPLoggerHelper.cs" />
     <Compile Include="SwitchInfoGetterContext.cs" />
     <Compile Include="SwitchManager.cs" />

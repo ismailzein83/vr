@@ -91,6 +91,8 @@ namespace TOne.WhS.RouteSync.Entities
         SwitchSyncOutput SwitchSyncOutput { set; }
 
         Action<Exception, bool> WriteBusinessHandledException { get; }
+
+        long ProcessInstanceID { get; }
     }
 
     public interface ISwitchRouteSynchronizerPrepareDataForApplyContext
@@ -122,7 +124,6 @@ namespace TOne.WhS.RouteSync.Entities
 
         Action<Exception, bool> WriteBusinessHandledException { get; }
     }
-
     public class SwitchRouteSynchronizerApplyRoutesContext : ISwitchRouteSynchronizerApplyRoutesContext
     {
         public SwitchRouteSynchronizerApplyRoutesContext(Object preparedItemsForApply, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput, Action<Exception, bool> writeBusinessHandledException)
@@ -260,7 +261,10 @@ namespace TOne.WhS.RouteSync.Entities
         public SwitchSyncOutput SwitchSyncOutput { get; set; }
     }
 
-    public interface ISwitchRouteSynchronizerRemoveConnectionContext { }
-
-    public class SwitchRouteSynchronizerRemoveConnectionContext : ISwitchRouteSynchronizerRemoveConnectionContext { }
+    public interface ISwitchRouteSynchronizerRemoveConnectionContext
+    {
+    }
+    public class SwitchRouteSynchronizerRemoveConnectionContext : ISwitchRouteSynchronizerRemoveConnectionContext
+    {
+    }
 }

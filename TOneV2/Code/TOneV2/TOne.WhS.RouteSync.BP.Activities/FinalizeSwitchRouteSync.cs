@@ -61,8 +61,11 @@ namespace TOne.WhS.RouteSync.BP.Activities
                     ConfigManager configManager = new ConfigManager();
                     int indexesCommandTimeoutInSeconds = configManager.GetRouteSyncProcessIndexesCommandTimeoutInSeconds();
 
-                    var switchRouteSynchronizerFinalizeContext = new SwitchRouteSynchronizerFinalizeContext(inputArgument.RouteRangeType, inputArgument.InitializationData, handle.SharedInstanceData.WriteTrackingMessage, inputArgument.Switch.Name, indexesCommandTimeoutInSeconds, inputArgument.Switch.SwitchId, previousSwitchSyncOutput, handle.SharedInstanceData.WriteBusinessHandledException);
+                    var switchRouteSynchronizerFinalizeContext = new SwitchRouteSynchronizerFinalizeContext(inputArgument.RouteRangeType, inputArgument.InitializationData,
+                        handle.SharedInstanceData.WriteTrackingMessage, inputArgument.Switch.Name, indexesCommandTimeoutInSeconds, inputArgument.Switch.SwitchId, previousSwitchSyncOutput,
+                        handle.SharedInstanceData.WriteBusinessHandledException, handle.SharedInstanceData.InstanceInfo.ProcessInstanceID);
                     inputArgument.Switch.RouteSynchronizer.Finalize(switchRouteSynchronizerFinalizeContext);
+
                     switchSyncOutput = switchRouteSynchronizerFinalizeContext.SwitchSyncOutput;
                 }
                 catch (Exception ex)
@@ -70,11 +73,18 @@ namespace TOne.WhS.RouteSync.BP.Activities
                     string errorBusinessMessage = Utilities.GetExceptionBusinessMessage(ex);
                     string exceptionDetail = ex.ToString();
                     SwitchRouteSynchroniserOutput output = new SwitchRouteSynchroniserOutput() { ErrorBusinessMessage = errorBusinessMessage, ExceptionDetail = exceptionDetail };
-                    switchSyncOutput = new SwitchSyncOutput() { SwitchId = inputArgument.Switch.SwitchId, SwitchSyncResult = SwitchSyncResult.Failed, SwitchRouteSynchroniserOutputList = new System.Collections.Generic.List<SwitchRouteSynchroniserOutput>() { output } };
+
+                    switchSyncOutput = new SwitchSyncOutput()
+                    {
+                        SwitchId = inputArgument.Switch.SwitchId,
+                        SwitchSyncResult = SwitchSyncResult.Failed,
+                        SwitchRouteSynchroniserOutputList = new System.Collections.Generic.List<SwitchRouteSynchroniserOutput>() { output }
+                    };
                     VRBusinessException exception = new VRBusinessException(string.Format("Error occured while finalizing Switch '{0}'", inputArgument.Switch.Name), ex);
                     handle.SharedInstanceData.WriteBusinessHandledException(exception);
                 }
             }
+
             return new FinalizeSwitchRouteSyncOutput() { SwitchSyncOutput = switchSyncOutput };
         }
 
@@ -99,7 +109,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
         private class SwitchRouteSynchronizerFinalizeContext : ISwitchRouteSynchronizerFinalizeContext
         {
             public SwitchRouteSynchronizerFinalizeContext(RouteRangeType? routeRangeType, SwitchRouteSyncInitializationData initializationData, Action<LogEntryType, string, object[]> writeTrackingMessage,
-                string switchName, int indexesCommandTimeoutInSeconds, string switchId, SwitchSyncOutput previousSwitchSyncOutput, Action<Exception, bool> writeBusinessHandledException)
+                string switchName, int indexesCommandTimeoutInSeconds, string switchId, SwitchSyncOutput previousSwitchSyncOutput, Action<Exception, bool> writeBusinessHandledException, long processInstanceID)
             {
                 RouteRangeType = routeRangeType;
                 InitializationData = initializationData;
@@ -109,6 +119,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
                 SwitchId = switchId;
                 PreviousSwitchSyncOutput = previousSwitchSyncOutput;
                 WriteBusinessHandledException = writeBusinessHandledException;
+                ProcessInstanceID = processInstanceID;
             }
 
             public string SwitchName { get; set; }
@@ -128,7 +139,10 @@ namespace TOne.WhS.RouteSync.BP.Activities
             public SwitchSyncOutput PreviousSwitchSyncOutput { get; set; }
 
             public Action<Exception, bool> WriteBusinessHandledException { get; set; }
+
+            public long ProcessInstanceID { get; set; }
         }
+
         #endregion
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.RouteSync.Business;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Huawei.Business;
 using TOne.WhS.RouteSync.Huawei.Entities;
@@ -197,7 +197,7 @@ namespace TOne.WhS.RouteSync.Huawei
             List<RouteCaseWithCommands> failedRouteCasesWithCommands;
 
             ExecuteRouteCasesCommands(routeCasesToBeAddedWithCommands, huaweiSSHCommunication, sshCommunicator, commandResults, routeCaseManager, maxNumberOfTries,
-                out succeedRouteCasesWithCommands, out failedRouteCasesWithCommands);
+                context.SwitchId, context.ProcessInstanceID, out succeedRouteCasesWithCommands, out failedRouteCasesWithCommands);
 
             LogRouteCaseCommands(succeedRouteCasesWithCommands, failedRouteCasesWithCommands, ftpLogger, finalizeTime);
 
@@ -208,7 +208,7 @@ namespace TOne.WhS.RouteSync.Huawei
             Dictionary<string, List<HuaweiRouteWithCommands>> failedRoutesWithCommandsByRSSN;
 
             ExecuteRoutesCommands(routesWithCommandsByRSSN, huaweiSSHCommunication, sshCommunicator, commandResults, failedRSNames, maxNumberOfTries,
-                out succeedRoutesWithCommandsByRSSN, out failedRoutesWithCommandsByRSSN);
+                context.SwitchId, context.ProcessInstanceID, out succeedRoutesWithCommandsByRSSN, out failedRoutesWithCommandsByRSSN);
 
             LogHuaweiRouteCommands(succeedRoutesWithCommandsByRSSN, failedRoutesWithCommandsByRSSN, ftpLogger, finalizeTime);
 
@@ -681,8 +681,8 @@ namespace TOne.WhS.RouteSync.Huawei
         #region SSH
 
         private void ExecuteRouteCasesCommands(List<RouteCaseWithCommands> routeCasesWithCommands, HuaweiSSHCommunication huaweiSSHCommunication, SSHCommunicator sshCommunicator,
-            List<CommandResult> commandResults, RouteCaseManager routeCaseManager, int maxNumberOfTries, out List<RouteCaseWithCommands> succeedRouteCasesWithCommands,
-            out List<RouteCaseWithCommands> failedRouteCasesWithCommands)
+            List<CommandResult> commandResults, RouteCaseManager routeCaseManager, int maxNumberOfTries, string switchId, long processInstanceId,
+            out List<RouteCaseWithCommands> succeedRouteCasesWithCommands, out List<RouteCaseWithCommands> failedRouteCasesWithCommands)
         {
             succeedRouteCasesWithCommands = null;
             failedRouteCasesWithCommands = null;
@@ -697,7 +697,9 @@ namespace TOne.WhS.RouteSync.Huawei
                 return;
             }
 
-            if (!TryOpenConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults))
+            SwitchCommandLogManager switchCommandLogManager = new SwitchCommandLogManager();
+
+            if (!TryOpenConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults, switchCommandLogManager, switchId, processInstanceId))
             {
                 failedRouteCasesWithCommands = routeCasesWithCommands;
                 return;
@@ -723,7 +725,6 @@ namespace TOne.WhS.RouteSync.Huawei
 
                             string response;
                             sshCommunicator.ExecuteCommand(command, new List<string>() { "END" }, false, false, out response);
-                            commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
                             if (IsExecutedCommandSucceeded(response, HuaweiCommands.RouteCaseAddedSuccessfully) || IsExecutedCommandSucceeded(response, HuaweiCommands.RouteCaseExists))
                             {
                                 succeedRouteCasesWithCommands.Add(routeCaseWithCommands);
@@ -741,6 +742,10 @@ namespace TOne.WhS.RouteSync.Huawei
                             }
 
                             isCommandExecuted = true;
+                            commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
+
+                            SwitchCommandLog switchCommandLog = new SwitchCommandLog() { ProcessInstanceId = processInstanceId, SwitchId = switchId, Command = command, Response = response, };
+                            switchCommandLogManager.Insert(switchCommandLog, out long intsertedId);
                         }
                         catch (Exception ex)
                         {
@@ -758,12 +763,12 @@ namespace TOne.WhS.RouteSync.Huawei
             }
             finally
             {
-                CloseConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults);
+                CloseConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults, switchCommandLogManager, switchId, processInstanceId);
             }
         }
 
         private void ExecuteRoutesCommands(Dictionary<string, List<HuaweiRouteWithCommands>> routesWithCommandsByRSSN, HuaweiSSHCommunication huaweiSSHCommunication,
-            SSHCommunicator sshCommunicator, List<CommandResult> commandResults, IEnumerable<string> failedRSNames, int maxNumberOfTries,
+            SSHCommunicator sshCommunicator, List<CommandResult> commandResults, IEnumerable<string> failedRSNames, int maxNumberOfTries, string switchId, long processInstanceId,
             out Dictionary<string, List<HuaweiRouteWithCommands>> succeededRoutesWithCommandsByRSSN, out Dictionary<string, List<HuaweiRouteWithCommands>> failedRoutesWithCommandsByRSSN)
         {
             succeededRoutesWithCommandsByRSSN = null;
@@ -778,7 +783,9 @@ namespace TOne.WhS.RouteSync.Huawei
                 return;
             }
 
-            if (!TryOpenConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults))
+            SwitchCommandLogManager switchCommandLogManager = new SwitchCommandLogManager();
+
+            if (!TryOpenConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults, switchCommandLogManager, switchId, processInstanceId))
             {
                 failedRoutesWithCommandsByRSSN = routesWithCommandsByRSSN;
                 return;
@@ -786,7 +793,6 @@ namespace TOne.WhS.RouteSync.Huawei
 
             try
             {
-
                 succeededRoutesWithCommandsByRSSN = new Dictionary<string, List<HuaweiRouteWithCommands>>();
                 failedRoutesWithCommandsByRSSN = new Dictionary<string, List<HuaweiRouteWithCommands>>();
 
@@ -816,7 +822,6 @@ namespace TOne.WhS.RouteSync.Huawei
                                 string response;
 
                                 sshCommunicator.ExecuteCommand(command, new List<string>() { "END" }, false, false, out response);
-                                commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
                                 if (IsExecutedCommandSucceeded(response, HuaweiCommands.RouteOperationSucceeded))
                                 {
                                     List<HuaweiRouteWithCommands> tempHuaweiRouteWithCommands = succeededRoutesWithCommandsByRSSN.GetOrCreateItem(rssn);
@@ -829,6 +834,10 @@ namespace TOne.WhS.RouteSync.Huawei
                                 }
 
                                 isCommandExecuted = true;
+                                commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
+
+                                SwitchCommandLog switchCommandLog = new SwitchCommandLog() { ProcessInstanceId = processInstanceId, SwitchId = switchId, Command = command, Response = response, };
+                                switchCommandLogManager.Insert(switchCommandLog, out long intsertedId);
                             }
                             catch (Exception ex)
                             {
@@ -847,11 +856,12 @@ namespace TOne.WhS.RouteSync.Huawei
             }
             finally
             {
-                CloseConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults);
+                CloseConnectionWithSwitch(huaweiSSHCommunication, sshCommunicator, commandResults, switchCommandLogManager, switchId, processInstanceId);
             }
         }
 
-        private bool TryOpenConnectionWithSwitch(HuaweiSSHCommunication sshCommunication, SSHCommunicator sshCommunicator, List<CommandResult> commandResults)
+        private bool TryOpenConnectionWithSwitch(HuaweiSSHCommunication sshCommunication, SSHCommunicator sshCommunicator, List<CommandResult> commandResults,
+            SwitchCommandLogManager switchCommandLogManager, string switchId, long processInstanceId)
         {
             sshCommunication.ThrowIfNull("sshCommunication");
             sshCommunication.SSLSettings.ThrowIfNull("sshCommunication.SSLSettings");
@@ -862,7 +872,8 @@ namespace TOne.WhS.RouteSync.Huawei
                 sshCommunicator.OpenShell();
 
                 string openSSLCommand = $"openssl s_client -port {sshCommunication.SSLSettings.Port} -host {sshCommunication.SSLSettings.Host} -ssl3 -quiet -crlf";
-                bool isOpenSSLSucceeded = this.ExecuteCommand(openSSLCommand, sshCommunicator, commandResults, new List<string>() { "RETURN:0", "ERRNO" }, false, true, HuaweiCommands.OpenSSLSucceeded);
+                bool isOpenSSLSucceeded = this.ExecuteCommand(openSSLCommand, sshCommunicator, commandResults, new List<string>() { "RETURN:0", "ERRNO" }, false, true,
+                    HuaweiCommands.OpenSSLSucceeded, switchCommandLogManager, switchId, processInstanceId);
                 if (!isOpenSSLSucceeded)
                 {
                     sshCommunicator.Dispose();
@@ -870,7 +881,8 @@ namespace TOne.WhS.RouteSync.Huawei
                 }
 
                 string loginCommand = $"LGI:OP=\"{sshCommunication.SSLSettings.Username}\",PWD=\"{sshCommunication.SSLSettings.Password}\";";
-                bool isLoginSucceeded = this.ExecuteCommand(loginCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LoginSucceeded);
+                bool isLoginSucceeded = this.ExecuteCommand(loginCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false,
+                    HuaweiCommands.LoginSucceeded, switchCommandLogManager, switchId, processInstanceId);
                 if (!isLoginSucceeded)
                 {
                     sshCommunicator.Dispose();
@@ -878,11 +890,13 @@ namespace TOne.WhS.RouteSync.Huawei
                 }
 
                 string registerToMSCServerCommand = $"REG NE:IP=\"{sshCommunication.SSLSettings.InterfaceIP}\";";
-                bool isRegistrationSucceeded = this.ExecuteCommand(registerToMSCServerCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.RegistrationSucceeded);
+                bool isRegistrationSucceeded = this.ExecuteCommand(registerToMSCServerCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false,
+                    HuaweiCommands.RegistrationSucceeded, switchCommandLogManager, switchId, processInstanceId);
                 if (!isRegistrationSucceeded)
                 {
                     string logoutCommand = $"LGO:OP=\"{sshCommunication.SSLSettings.Username}\";";
-                    this.ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded);
+                    this.ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded, 
+                        switchCommandLogManager, switchId, processInstanceId);
 
                     sshCommunicator.Dispose();
                     return false;
@@ -897,16 +911,19 @@ namespace TOne.WhS.RouteSync.Huawei
             }
         }
 
-        private void CloseConnectionWithSwitch(HuaweiSSHCommunication sshCommunication, SSHCommunicator sshCommunicator, List<CommandResult> commandResults)
+        private void CloseConnectionWithSwitch(HuaweiSSHCommunication sshCommunication, SSHCommunicator sshCommunicator, List<CommandResult> commandResults,
+            SwitchCommandLogManager switchCommandLogManager, string switchId, long processInstanceId)
         {
             try
             {
                 string unregisterCommand = $"UNREG NE:IP=\"{sshCommunication.SSLSettings.InterfaceIP}\";";
-                bool isUnregistrationSucceeded = this.ExecuteCommand(unregisterCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.UnregistrationSucceeded);
+                bool isUnregistrationSucceeded = this.ExecuteCommand(unregisterCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false,
+                    HuaweiCommands.UnregistrationSucceeded, switchCommandLogManager, switchId, processInstanceId);
                 if (isUnregistrationSucceeded)
                 {
                     string logoutCommand = $"LGO:OP=\"{sshCommunication.SSLSettings.Username}\";";
-                    this.ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded);
+                    this.ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded,
+                        switchCommandLogManager, switchId, processInstanceId);
                 }
             }
             finally
@@ -915,12 +932,16 @@ namespace TOne.WhS.RouteSync.Huawei
             }
         }
 
-        private bool ExecuteCommand(string command, SSHCommunicator sshCommunicator, List<CommandResult> commandResults, List<string> endOfResponseList,
-            bool isEndOfResponseCaseSensitive, bool ignoreEmptySpacesInResponse, string responseSuccessKey)
+        private bool ExecuteCommand(string command, SSHCommunicator sshCommunicator, List<CommandResult> commandResults, List<string> endOfResponseList, bool isEndOfResponseCaseSensitive,
+            bool ignoreEmptySpacesInResponse, string responseSuccessKey, SwitchCommandLogManager switchCommandLogManager, string switchId, long processInstanceId)
         {
             string response;
             sshCommunicator.ExecuteCommand(command, endOfResponseList, isEndOfResponseCaseSensitive, ignoreEmptySpacesInResponse, out response);
+
             commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
+
+            SwitchCommandLog switchCommandLog = new SwitchCommandLog() { ProcessInstanceId = processInstanceId, SwitchId = switchId, Command = command, Response = response, };
+            switchCommandLogManager.Insert(switchCommandLog, out long intsertedId);
 
             return IsExecutedCommandSucceeded(response, responseSuccessKey);
         }
