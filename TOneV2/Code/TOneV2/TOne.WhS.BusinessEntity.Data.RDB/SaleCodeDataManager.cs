@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
 namespace TOne.WhS.BusinessEntity.Data.RDB
