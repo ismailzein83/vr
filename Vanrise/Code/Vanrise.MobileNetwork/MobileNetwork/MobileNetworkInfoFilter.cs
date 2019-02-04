@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.MobileNetwork.Entities.MobileNetwork
+namespace Vanrise.MobileNetwork.Entities
 {
-    class MobileNetworkInfoFilter
+    public class MobileNetworkInfoFilter
     {
+        public List<int> MobileCountryIds { get; set; }
     }
 }
