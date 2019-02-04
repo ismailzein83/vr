@@ -49,5 +49,10 @@ namespace Vanrise.HelperTools
         {
             OpenForm(new RDBGenerator());
         }
+
+        private void tcpClient_Click(object sender, EventArgs e)
+        {
+            OpenForm(new TCPClient());
+        }
     }
 }

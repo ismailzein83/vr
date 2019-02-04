@@ -33,6 +33,7 @@
             this.bcpCommand = new System.Windows.Forms.Button();
             this.CompressJS = new System.Windows.Forms.Button();
             this.rdb_Generator = new System.Windows.Forms.Button();
+            this.TCPCLient = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -85,11 +86,22 @@
             this.rdb_Generator.UseVisualStyleBackColor = true;
             this.rdb_Generator.Click += new System.EventHandler(this.RDBGenerator_Click);
             // 
+            // TCPCLient
+            // 
+            this.TCPCLient.Location = new System.Drawing.Point(169, 12);
+            this.TCPCLient.Name = "TCPCLient";
+            this.TCPCLient.Size = new System.Drawing.Size(103, 23);
+            this.TCPCLient.TabIndex = 5;
+            this.TCPCLient.Text = "TCP Client";
+            this.TCPCLient.UseVisualStyleBackColor = true;
+            this.TCPCLient.Click += new System.EventHandler(this.tcpClient_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.TCPCLient);
             this.Controls.Add(this.rdb_Generator);
             this.Controls.Add(this.CompressJS);
             this.Controls.Add(this.bcpCommand);
@@ -108,6 +120,7 @@
         private System.Windows.Forms.Button bcpCommand;
         private System.Windows.Forms.Button CompressJS;
         private System.Windows.Forms.Button rdb_Generator;
+        private System.Windows.Forms.Button TCPCLient;
     }
 }
 

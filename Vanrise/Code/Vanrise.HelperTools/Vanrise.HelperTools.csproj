@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -103,6 +104,12 @@
     <Compile Include="RDBGenerator.Designer.cs">
       <DependentUpon>RDBGenerator.cs</DependentUpon>
     </Compile>
+    <Compile Include="TCPClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TCPClient.Designer.cs">
+      <DependentUpon>TCPClient.cs</DependentUpon>
+    </Compile>
     <Compile Include="TraceBCPCommand.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,6 +135,9 @@
     <EmbeddedResource Include="RDBGenerator.resx">
       <DependentUpon>RDBGenerator.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TCPClient.resx">
+      <DependentUpon>TCPClient.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TraceBCPCommand.resx">
       <DependentUpon>TraceBCPCommand.cs</DependentUpon>
     </EmbeddedResource>
@@ -140,6 +150,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="server.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
