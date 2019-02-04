@@ -98,12 +98,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return _salePricelistRpChangeNewDataManager.GetAffectedCustomerIds(processInstanceId);
         }
 
-        public IEnumerable<int> GetAffectedCustomerIdsNewCountryChangesByProcessInstanceId(long processInstanceId)
-        {
-            //need to implement it in Sales - RP
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<int> GetAffectedCustomerIdsRateChangesByProcessInstanceId(long processInstanceId)
         {
             return _salePricelistRateChangeNewDataManager.GetDistinctAffectedCustomerIds(processInstanceId);
@@ -131,10 +125,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             throw new NotImplementedException();
         }
         public IEnumerable<CustomerRatePreview> GetCustomerOtherRatePreviews(CustomerRatePreviewQuery query)
-        {
-            throw new NotImplementedException();
-        }
-        public IEnumerable<int> GetAffectedCustomerIdsChangedCountryChangesByProcessInstanceId(long ProcessInstanceId)
         {
             throw new NotImplementedException();
         }

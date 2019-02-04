@@ -29,9 +29,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_EED = "EED";
         const string COL_RoutingProductID = "RoutingProductID";
         const string COL_CurrencyID = "CurrencyID";
-        const string COL_LastModifiedTime = "LastModifiedTime";
-        const string COL_CreatedTime = "CreatedTime";
-
         static SalePricelistRateChangeNewDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -50,17 +47,12 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_RoutingProductID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_CurrencyID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
                 DBSchemaName = "TOneWhS_BE",
                 DBTableName = "SalePricelistRateChange_New",
-                Columns = columns,
-                CreatedTimeColumnName = COL_CreatedTime,
-                ModifiedTimeColumnName = COL_LastModifiedTime
-
+                Columns = columns
             });
         }
         BaseRDBDataProvider GetDataProvider()
@@ -84,16 +76,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             object prepareToApplyInfo = FinishDBApplyStream(dbApplyStream);
             ApplyForDB(prepareToApplyInfo);
         }
-
         public IEnumerable<int> GetDistinctAffectedCustomerIds(long processInstanceId)
         {
-            var lstAffectedCustomerIds = new List<int>();
-            SalePriceListNewDataManager salePriceListNewDataManager = new SalePriceListNewDataManager();
+            var salePriceListNewDataManager = new SalePriceListNewDataManager();
             string salePriceListTableAlias = "sp";
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+            selectQuery.SelectColumns().Column(salePriceListTableAlias, SalePriceListNewDataManager.COL_OwnerID, SalePriceListNewDataManager.COL_OwnerID);
 
             var joinContext = selectQuery.Join();
             salePriceListNewDataManager.JoinSalePriceListNew(joinContext, salePriceListTableAlias, TABLE_ALIAS, COL_PricelistId);
@@ -102,8 +92,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereContext.EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
 
             var groupByContext = selectQuery.GroupBy();
-            groupByContext.Select().Column(salePriceListTableAlias, SalePriceListNewDataManager.COL_OwnerID);
+            groupByContext.Select().Column(salePriceListTableAlias, SalePriceListNewDataManager.COL_OwnerID, SalePriceListNewDataManager.COL_OwnerID);
 
+            var lstAffectedCustomerIds = new List<int>();
             queryContext.ExecuteReader(reader =>
             {
                 while (reader.Read())
@@ -137,10 +128,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             SalePriceListNewDataManager salePriceListNewDataManager = new SalePriceListNewDataManager();
             string salePriceListNewTableAlias = "spn";
+
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+            selectQuery.SelectColumns().Column(TABLE_ALIAS);
 
             var join = selectQuery.Join();
             salePriceListNewDataManager.JoinSalePriceListNew(join, salePriceListNewTableAlias, TABLE_ALIAS, COL_PricelistId);
@@ -151,23 +143,21 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             if (customerIds != null && customerIds.Any())
                 whereContext.ListCondition(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID, RDBListConditionOperator.IN, customerIds);
 
-            whereContext.NotNullCondition(COL_RateTypeId);
-
-            var groupByContext = selectQuery.GroupBy();
-            var groupByColumnsContext = groupByContext.Select();
-            groupByColumnsContext.Column(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID);
-            groupByColumnsContext.Column(TABLE_ALIAS, COL_ZoneID);
+            whereContext.NullCondition(COL_RateTypeId);
 
             return queryContext.GetItems(CustomerRatePreviewMapper);
         }
         public List<ZoneCustomerPair> GetCustomerRatePreviewZonePairs(long processInstanceId, List<int> customerIds)
         {
-            SalePriceListNewDataManager salePriceListNewDataManager = new SalePriceListNewDataManager();
+            var salePriceListNewDataManager = new SalePriceListNewDataManager();
             string salePriceListNewTableAlias = "spn";
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var selectContext = selectQuery.SelectColumns();
+            selectContext.Column(COL_ZoneID);
+            selectContext.Column(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID, SalePriceListNewDataManager.COL_OwnerID);
 
             var join = selectQuery.Join();
             salePriceListNewDataManager.JoinSalePriceListNew(join, salePriceListNewTableAlias, TABLE_ALIAS, COL_PricelistId);
@@ -182,8 +172,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var groupByContext = selectQuery.GroupBy();
             var groupByColumnsContext = groupByContext.Select();
-            groupByColumnsContext.Column(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID);
-            groupByColumnsContext.Column(TABLE_ALIAS, COL_ZoneID);
+            groupByColumnsContext.Column(salePriceListNewTableAlias, SalePriceListNewDataManager.COL_OwnerID, SalePriceListNewDataManager.COL_OwnerID);
+            groupByColumnsContext.Column(COL_ZoneID);
 
             return queryContext.GetItems(CustomerRatePreviewZonePairsMapper);
         }
@@ -230,13 +220,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 ZoneName = reader.GetString(COL_ZoneName),
                 ZoneId = reader.GetNullableLong(COL_ZoneID),
-                RoutingProductId = reader.GetInt(COL_RoutingProductID),
-                CountryId = reader.GetInt(COL_CountryID),
+                RoutingProductId = reader.GetIntWithNullHandling(COL_RoutingProductID),
+                CountryId = reader.GetIntWithNullHandling(COL_CountryID),
                 RecentCurrencyId = reader.GetNullableInt(COL_RecentCurrencyId),
                 RecentRate = reader.GetNullableDecimal(COL_RecentRate),
                 RecentRateConverted = reader.GetNullableDecimal(COL_RecentRateConverted),
                 Rate = reader.GetDecimal(COL_Rate),
-                ChangeType = (RateChangeType)reader.GetInt(COL_Change),
+                ChangeType = (RateChangeType)reader.GetIntWithNullHandling(COL_Change),
                 PricelistId = reader.GetInt(COL_PricelistId),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),

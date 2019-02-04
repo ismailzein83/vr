@@ -90,7 +90,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             {
                 while (reader.Read())
                 {
-                    lstAffectedCustomerIds.Add(reader.GetInt("OwnerID"));
+                    lstAffectedCustomerIds.Add(reader.GetInt(COL_CustomerId));
                 }
             });
             return lstAffectedCustomerIds;
@@ -135,7 +135,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             RDBBulkInsertQueryContext bulkInsertContext = dbApplyStream.CastWithValidate<RDBBulkInsertQueryContext>("dbApplyStream");
             var recordContext = bulkInsertContext.WriteRecord();
-            
+
             recordContext.Value(record.ZoneName);
 
             if (record.ZoneId.HasValue)
@@ -149,7 +149,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 recordContext.Value(record.RecentRoutingProductId.Value);
             else
                 recordContext.Value(string.Empty);
-            
+
             recordContext.Value(record.BED);
 
             if (record.EED.HasValue)
