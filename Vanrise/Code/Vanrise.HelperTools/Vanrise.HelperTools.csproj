@@ -73,6 +73,12 @@
   <ItemGroup>
     <Compile Include="Common.cs" />
     <Compile Include="DataManager\HelperToolDataManager.cs" />
+    <Compile Include="DataRecordStorageTransformationToRDB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataRecordStorageTransformationToRDB.Designer.cs">
+      <DependentUpon>DataRecordStorageTransformationToRDB.cs</DependentUpon>
+    </Compile>
     <Compile Include="ECMAScriptPacker.cs" />
     <Compile Include="EncryptDecryptForm.cs">
       <SubType>Form</SubType>
@@ -116,6 +122,9 @@
     <Compile Include="TraceBCPCommand.Designer.cs">
       <DependentUpon>TraceBCPCommand.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="DataRecordStorageTransformationToRDB.resx">
+      <DependentUpon>DataRecordStorageTransformationToRDB.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EncryptDecryptForm.resx">
       <DependentUpon>EncryptDecryptForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -177,6 +186,18 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data.RDB\Vanrise.GenericData.Data.RDB.csproj">
+      <Project>{93106d20-6446-4278-bfb0-889bbff760d5}</Project>
+      <Name>Vanrise.GenericData.Data.RDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data.SQL\Vanrise.GenericData.Data.SQL.csproj">
+      <Project>{00bce586-bffb-4679-92b7-9b65988fe346}</Project>
+      <Name>Vanrise.GenericData.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
