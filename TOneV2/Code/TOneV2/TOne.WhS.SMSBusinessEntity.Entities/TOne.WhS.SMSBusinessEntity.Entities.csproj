@@ -59,6 +59,7 @@
     <Compile Include="CustomerSMSRateDraft\UpdateCustomerSMSDraftStatusInput.cs" />
     <Compile Include="CustomerSMSRateDraft\CustomerSMSRateChangesQuery.cs" />
     <Compile Include="CustomerSMSRate\CustomerSMSRateDetail.cs" />
+    <Compile Include="CustomerSMSRate\CustomerSMSRateItem.cs" />
     <Compile Include="CustomerSMSRate\CustomerSMSRateQuery.cs" />
     <Compile Include="CustomerSMSRateDraft\DraftData.cs" />
     <Compile Include="ProcessDraft.cs" />
