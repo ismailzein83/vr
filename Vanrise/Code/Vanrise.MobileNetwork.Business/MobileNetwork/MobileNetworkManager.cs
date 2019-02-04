@@ -34,6 +34,29 @@ namespace Vanrise.MobileNetwork.Business
             return null;
         }
 
+        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix, out long? matchedPrefixId)
+        {
+            matchedPrefixId = null;
+
+            if (!string.IsNullOrEmpty(mnc) && !string.IsNullOrEmpty(mcc))
+            {
+                var mobileCountryId = new MobileCountryManager().GetMobileCountryIdByMCC(mcc);
+
+                if (mobileCountryId.HasValue)
+                    return new MobileNetworkManager().GetMobileNetwork(mnc, mobileCountryId.Value);
+            }
+
+            if (string.IsNullOrEmpty(mnc) && string.IsNullOrEmpty(mcc))
+            {
+                var mobileNetworkId = new NumberPrefixManager().GetMobileNetworkByNumberPrefix(numberPrefix, out matchedPrefixId);
+
+                if (mobileNetworkId.HasValue)
+                    return new MobileNetworkManager().GetMobileNetworkById(mobileNetworkId.Value);
+            }
+
+            return null;
+        }
+
         public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetworkById(int mobileNetworkId)
         {
             var mobileNetworks = GetCachedMobileNetworks();
