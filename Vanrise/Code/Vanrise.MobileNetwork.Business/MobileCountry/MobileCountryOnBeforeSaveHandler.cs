@@ -24,7 +24,7 @@ namespace Vanrise.MobileNetwork.Business
             code.ThrowIfNull("code");
             var id = context.GenericBusinessEntity.FieldValues.GetRecord("ID");
             int? mobileCountryId = (int?)id;
-           var mobileCountryByCode = mobileCountryManager.GetMobileCountryByCode((string)code);
+           var mobileCountryByCode = mobileCountryManager.GetMobileCountryByMCC((string)code);
             if(mobileCountryByCode != null && mobileCountryId != mobileCountryByCode.Id)
             {
                 context.OutputResult.Result = false;

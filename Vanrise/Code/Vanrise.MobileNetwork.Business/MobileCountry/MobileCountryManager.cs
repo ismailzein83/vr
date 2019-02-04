@@ -12,7 +12,7 @@ namespace Vanrise.MobileNetwork.Business
 
         public int? GetMobileCountryEntityCountryID(string code)
         {
-            var mobileCountry = GetMobileCountryByCode(code);
+            var mobileCountry = GetMobileCountryByMCC(code);
 
             if (mobileCountry != null)
                 return mobileCountry.CountryId;
@@ -31,7 +31,7 @@ namespace Vanrise.MobileNetwork.Business
             return mobileCountry;
         }
 
-        public Dictionary<string,MobileCountry> GetMobileCoutriesByCodes ()
+        public Dictionary<string, MobileCountry> GetMobileCoutriesByCodes()
         {
             return GetCachedMobileCountriesByCode();
         }
@@ -46,9 +46,9 @@ namespace Vanrise.MobileNetwork.Business
             return null;
         }
 
-        public int? GetMobileCountryId(string code)
+        public int? GetMobileCountryIdByMCC(string mcc)
         {
-            var mobileCountry = GetMobileCountryByCode(code);
+            var mobileCountry = GetMobileCountryByMCC(mcc);
 
             if (mobileCountry != null)
                 return mobileCountry.Id;
@@ -56,16 +56,16 @@ namespace Vanrise.MobileNetwork.Business
             return null;
         }
 
-        public MobileCountry GetMobileCountryByCode(string code)
+        public MobileCountry GetMobileCountryByMCC(string mcc)
         {
-            if (string.IsNullOrEmpty(code))
+            if (string.IsNullOrEmpty(mcc))
                 return null;
 
             var cachedMobileCountriesByCode = GetCachedMobileCountriesByCode();
             if (cachedMobileCountriesByCode == null || cachedMobileCountriesByCode.Count == 0)
                 return null;
 
-            var mobileCountry = cachedMobileCountriesByCode.GetRecord(code);
+            var mobileCountry = cachedMobileCountriesByCode.GetRecord(mcc);
 
             return mobileCountry;
         }

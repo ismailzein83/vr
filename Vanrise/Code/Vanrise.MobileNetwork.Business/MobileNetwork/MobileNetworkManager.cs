@@ -9,6 +9,31 @@ namespace Vanrise.MobileNetwork.Business
     public class MobileNetworkManager
     {
         static readonly Guid BeDefinitionId = new Guid("48a58d93-1620-48d7-9f78-2270a6f3f1d4");
+
+        #region Public Methods
+
+        public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix)
+        {
+            if (!string.IsNullOrEmpty(mnc) && !string.IsNullOrEmpty(mcc))
+            {
+                var mobileCountryId = new MobileCountryManager().GetMobileCountryIdByMCC(mcc);
+
+                if (mobileCountryId.HasValue)
+                    return new MobileNetworkManager().GetMobileNetwork(mnc, mobileCountryId.Value);
+            }
+
+            if (string.IsNullOrEmpty(mnc) && string.IsNullOrEmpty(mcc))
+            {
+                long? matchedNumberPrefixId;
+                var mobileNetworkId = new NumberPrefixManager().GetMobileNetworkByNumberPrefix(numberPrefix, out matchedNumberPrefixId);
+
+                if (mobileNetworkId.HasValue)
+                    return new MobileNetworkManager().GetMobileNetworkById(mobileNetworkId.Value);
+            }
+
+            return null;
+        }
+
         public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetworkById(int mobileNetworkId)
         {
             var mobileNetworks = GetCachedMobileNetworks();
@@ -26,6 +51,7 @@ namespace Vanrise.MobileNetwork.Business
             Vanrise.Common.Business.ConfigManager commonConfigManager = new Common.Business.ConfigManager();
             return commonConfigManager.IsCountryNational(mobileCountry.CountryId);
         }
+
         public int? GetMobileNetworkID(string mobileNetworkCode, int mobileCountryId)
         {
             var mobileNetwork = GetMobileNetwork(mobileNetworkCode, mobileCountryId);
@@ -72,6 +98,10 @@ namespace Vanrise.MobileNetwork.Business
         {
             return GetCachedMobileNetowrksByMobileCountryId();
         }
+
+        #endregion
+
+        #region Private Methods
 
         private List<Vanrise.MobileNetwork.Entities.MobileNetwork> GetCachedMobileNetworks()
         {
@@ -127,5 +157,7 @@ namespace Vanrise.MobileNetwork.Business
                 return mobileNetworksByMobileCountry;
             });
         }
+
+        #endregion
     }
 }
