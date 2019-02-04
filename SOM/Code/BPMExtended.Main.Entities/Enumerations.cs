@@ -74,5 +74,14 @@ namespace BPMExtended.Main.Entities
         [LineOfBusiness(LineOfBusiness.LeasedLine)]
         ChangeSpeed = 20,
 
+        [LineOfBusiness(LineOfBusiness.ADSL)]
+        ADSLComplaint = 21,
+
+        [LineOfBusiness(LineOfBusiness.Telephony)]
+        TelephonyComplaint = 22,
+
+        [LineOfBusiness(LineOfBusiness.LeasedLine)]
+        LeasedLineComplaint = 23,
+
     }
 }
