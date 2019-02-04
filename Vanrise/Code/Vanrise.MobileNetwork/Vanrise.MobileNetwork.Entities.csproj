@@ -51,6 +51,7 @@
     <Compile Include="MobileCountry\MobileCountry.cs" />
     <Compile Include="MobileNetwork\MobileNetwork.cs" />
     <Compile Include="MobileNetwork\MobileNetworkInfo.cs" />
+    <Compile Include="MobileNetwork\MobileNetworkInfoFilter.cs" />
     <Compile Include="MobileNetwork\MobileNetworkSettings.cs" />
     <Compile Include="Number Prefix\NumberPrefix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.MobileNetwork.Entities
 {
-    class MobileNetworkInfo
+    public class MobileNetworkInfo
     {
+        public int Id { get; set; }
+        public string NetworkName { get; set; }
     }
 }
