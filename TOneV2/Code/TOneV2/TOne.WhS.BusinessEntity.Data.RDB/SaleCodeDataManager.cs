@@ -485,26 +485,16 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
 
-            var selectColoumns = selectQuery.SelectColumns();
-            selectColoumns.Column(COL_ZoneID);
-            selectColoumns.Column(TABLE_ALIAS, COL_Code, "CodeGroup");
+            var selectColumns = selectQuery.SelectColumns();
+            selectColumns.Column(COL_ZoneID);
+            selectColumns.Column(TABLE_ALIAS, COL_Code, "CodeGroup");
 
             var joinCondition = selectQuery.Join();
             codeGroupDataManager.JoinCodeGroup(joinCondition, codeGroupTableAlias, TABLE_ALIAS, COL_CodeGroupID);
 
             var whereContext = selectQuery.Where();
 
-            if (!effectiveOn.HasValue)
-            {
-                if (isFuture)
-                    BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                else
-                    BEDataUtility.SetFutureDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-            }
-            else
-            {
-                whereContext.FalseCondition();
-            }
+            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn);
 
             whereContext.EqualsCondition(TABLE_ALIAS, COL_Code).Column(codeGroupTableAlias, CodeGroupDataManager.COL_Code);
 
