@@ -66,39 +66,27 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var join = selectQuery.Join();
             saleZoneDataManager.JoinSaleZone(join, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
-            var where = selectQuery.Where();
+            var whereContext = selectQuery.Where();
 
             if (query.GetEffectiveAfter)
-                BEDataUtility.SetEffectiveAfterDateCondition(where, TABLE_ALIAS, COL_BED, COL_EED, query.EffectiveOn);
+            {
+                var orDateCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
+                orDateCondition.NullCondition(COL_EED);
+                var andDateCondition = orDateCondition.ChildConditionGroup();
+                andDateCondition.GreaterThanCondition(COL_EED).Column(COL_BED);
+                andDateCondition.GreaterThanCondition(COL_EED).Value(query.EffectiveOn);
+            }
             else
-                BEDataUtility.SetEffectiveDateCondition(where, TABLE_ALIAS, COL_BED, COL_EED, query.EffectiveOn);
+                BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, query.EffectiveOn);
 
             if (query.Code != null)
-                where.StartsWithCondition(COL_Code, query.Code);
+                whereContext.StartsWithCondition(COL_Code, query.Code);
 
             if (query.SellingNumberPlanId.HasValue)
-                where.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(query.SellingNumberPlanId.Value);
+                whereContext.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(query.SellingNumberPlanId.Value);
 
             if (query.ZonesIds != null && query.ZonesIds.Any())
-                where.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, query.ZonesIds);
-
-            return queryContext.GetItems(SaleCodeMapper);
-        }
-
-        public List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-            var where = selectQuery.Where();
-            where.EqualsCondition(COL_ZoneID).Value(zoneID);
-
-            where.LessOrEqualCondition(COL_BED).Value(effectiveDate);
-            var orDateCondition = where.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            orDateCondition.NullCondition(COL_EED);
-            orDateCondition.GreaterThanCondition(COL_EED).Value(effectiveDate);
+                whereContext.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, query.ZonesIds);
 
             return queryContext.GetItems(SaleCodeMapper);
         }
@@ -197,7 +185,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.GetItems(SaleCodeMapper);
         }
 
-        public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes) //to test // need revising: and or to if
+        public List<SaleCode> GetSaleCodesByPrefix(string codePrefix, DateTime? effectiveOn, bool isFuture, bool getChildCodes, bool getParentCodes)
         {
             var saleZoneDataManager = new SaleZoneDataManager();
             string saleZoneTableAlias = "sz";
@@ -235,7 +223,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
             BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn);
@@ -253,36 +240,32 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public IEnumerable<CodePrefixInfo> GetSpecificCodeByPrefixes(int prefixLength, IEnumerable<string> codePrefixes, DateTime? effectiveOn, bool isFuture)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
+
             string codePrefixAlias = "CodePrefix";
             string codeCountAlias = "CodeCount";
 
-            var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumnsFromTable(codePrefixAlias);
-            tempTableQuery.AddColumnsFromTable(codeCountAlias);
+            var allPrefixesTempTableQuery = queryContext.CreateTempTable();
+            allPrefixesTempTableQuery.AddColumn(codePrefixAlias, RDBDataType.Varchar);
+            allPrefixesTempTableQuery.AddColumn(codeCountAlias, RDBDataType.Int);
 
             var insertToTempTableQuery = queryContext.AddInsertQuery();
-            insertToTempTableQuery.IntoTable(tempTableQuery);
+            insertToTempTableQuery.IntoTable(allPrefixesTempTableQuery);
 
             var fromSelectQuery = insertToTempTableQuery.FromSelect();
-
             fromSelectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            fromSelectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = fromSelectQuery.Where();
             BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn);
 
-            var groupByContext = fromSelectQuery.GroupBy();
-            var groupSelect = groupByContext.Select();
+            var groupBy = fromSelectQuery.GroupBy();
+            groupBy.SelectAggregates().Count(codeCountAlias);
+            var groupSelectContext = groupBy.Select();
+            groupSelectContext.Expression(codePrefixAlias).TextLeftPart(prefixLength).Column(TABLE_ALIAS, COL_Code);
 
-            groupSelect.Expression(TABLE_ALIAS).TextLeftPart(prefixLength).Column(COL_Code);
-            groupByContext.SelectAggregates().Count(codeCountAlias);
-
-
-            var tempCodePrefixesTableQuery = queryContext.CreateTempTable();
-            tempCodePrefixesTableQuery.AddColumn(codePrefixAlias, RDBDataType.NVarchar, true);
-
+            var codePrefixesTempTableQuery = queryContext.CreateTempTable();
+            codePrefixesTempTableQuery.AddColumn(codePrefixAlias, RDBDataType.Varchar);
             var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
-            insertMultipleRowsQuery.IntoTable(tempCodePrefixesTableQuery);
+            insertMultipleRowsQuery.IntoTable(codePrefixesTempTableQuery);
 
             foreach (var queryItem in codePrefixes)
             {
@@ -291,29 +274,34 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             }
 
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(tempCodePrefixesTableQuery, "allPrefixes", null);
+            selectQuery.From(allPrefixesTempTableQuery, "allPrefixes", null);
             selectQuery.SelectColumns().AllTableColumns("allPrefixes");
+            var joinContext = selectQuery.Join();
+            var joinStatement = joinContext.Join(codePrefixesTempTableQuery, "cp");
+            var onStatement = joinStatement.On();
+            onStatement.EqualsCondition("cp", codePrefixAlias).TextLeftPart(prefixLength - 1).Column("allPrefixes", codePrefixAlias);
+
             return queryContext.GetItems(CodePrefixMapper);
         }
 
         public List<SaleCode> GetSaleCodesEffectiveAfter(int sellingNumberPlanId, int countryId, DateTime minimumDate)
         {
             SaleZoneDataManager saleZoneDataManager = new SaleZoneDataManager();
-            string saleZoneTablAlias = "sz";
+            string saleZoneTableAlias = "sz";
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var join = selectQuery.Join();
-            saleZoneDataManager.JoinSaleZone(join, saleZoneTablAlias, TABLE_ALIAS, COL_ZoneID, true);
+            saleZoneDataManager.JoinSaleZone(join, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
             var whereContext = selectQuery.Where();
 
             BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, minimumDate);
 
-            whereContext.EqualsCondition(saleZoneTablAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
-            whereContext.EqualsCondition(saleZoneTablAlias, SaleZoneDataManager.COL_CountryID).Value(countryId);
+            whereContext.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_CountryID).Value(countryId);
+            whereContext.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
 
             return queryContext.GetItems(SaleCodeMapper);
         }
@@ -344,6 +332,23 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #endregion
 
         #region Not Used Functions
+        public List<SaleCode> GetSaleCodesByZoneID(long zoneID, DateTime effectiveDate)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
+            var where = selectQuery.Where();
+            where.EqualsCondition(COL_ZoneID).Value(zoneID);
+
+            where.LessOrEqualCondition(COL_BED).Value(effectiveDate);
+            var orDateCondition = where.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            orDateCondition.NullCondition(COL_EED);
+            orDateCondition.GreaterThanCondition(COL_EED).Value(effectiveDate);
+
+            return queryContext.GetItems(SaleCodeMapper);
+        }
         public bool AreZonesUpdated(ref object updateHandle)
         {
             throw new NotImplementedException();
