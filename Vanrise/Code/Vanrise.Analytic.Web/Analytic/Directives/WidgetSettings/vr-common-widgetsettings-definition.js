@@ -68,13 +68,10 @@
                     periodSelectorReadyPromiseDeferred.resolve();
                 };
                 $scope.scopeModel.onDirectiveReady = function (api) {
-                    console.log("in directive ready");
                     directiveAPI = api;
                     directivePayload = {
                         tableIds: $scope.scopeModel.selectedTable != undefined ? [$scope.scopeModel.selectedTable.AnalyticTableId] : undefined
                     };
-                    console.log("directive payload")
-                    console.log(directivePayload);
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
@@ -122,11 +119,9 @@
 
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var promises = [];
 
                     if (payload != undefined) {
-
                         if (payload.tileExtendedSettings != undefined) {
 
                             settings = payload.tileExtendedSettings;
@@ -139,7 +134,7 @@
                             promises.push(loadDirectivePromiseDeffered.promise);
 
                             UtilsService.waitMultiplePromises([directiveReadyDeferred.promise, tableSelectedPromiseDeffered.promise]).then(function () {
-                                console.log("in table selected");
+                               
                                 directiveReadyDeferred = undefined;
                                 var widgetEntity = {
                                     ChartType: settings.Settings.ChartType,
@@ -148,6 +143,7 @@
                                     OrderType: settings.Settings.OrderType,
                                     RootDimensionsFromSearch: settings.Settings.RootDimensionsFromSearch,
                                     TopRecords: settings.Settings.TopRecords,
+                                    Measure: settings.Settings.Measure
                                 };
                                 directivePayload = {
                                     tableIds: $scope.scopeModel.selectedTable != undefined ? [$scope.scopeModel.selectedTable.AnalyticTableId] : undefined,
@@ -163,7 +159,6 @@
 
                     var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                     tableSelectorReadyDeferred.promise.then(function () {
-                        console.log("in load");
                         var payLoadTableSelector = {
                             selectedIds: settings != undefined ? settings.AnalyticTableId : undefined
                         };
@@ -236,7 +231,6 @@
                         for (var i = 0; i < response.length; i++) {
                             $scope.scopeModel.templateConfigs.push(response[i]);
                         }
-                        console.log($scope.scopeModel.templateConfigs);
                         if (settings != undefined && settings.Settings != undefined)
                             $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, settings.Settings.ConfigId, 'ExtensionConfigurationId');
                     
