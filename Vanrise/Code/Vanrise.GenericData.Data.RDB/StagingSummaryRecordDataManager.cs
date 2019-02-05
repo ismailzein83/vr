@@ -130,7 +130,7 @@ namespace Vanrise.GenericData.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+            selectQuery.SelectColumns().Columns(COL_BatchStart, COL_BatchEnd, COL_AlreadyFinalised, COL_Payload);
             var where = selectQuery.Where();
             where.EqualsCondition(COL_ProcessInstanceId).Value(processInstanceId);
             where.EqualsCondition(COL_StageName).Value(stageName);
