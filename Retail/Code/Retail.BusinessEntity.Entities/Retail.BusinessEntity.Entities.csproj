@@ -341,6 +341,7 @@
     <Compile Include="ServiceType\ServiceTypeToEdit.cs" />
     <Compile Include="RecurringPeriod\RecurringPeriodSettings.cs" />
     <Compile Include="FinancialAccount\FinancialAccountLocator.cs" />
+    <Compile Include="Settings\LocalOperatorSettings.cs" />
     <Compile Include="Settings\RetailInvoiceSetting.cs" />
     <Compile Include="Settings\RetailTechnicalSettings.cs" />
     <Compile Include="StatusChargingSetDetail.cs" />
