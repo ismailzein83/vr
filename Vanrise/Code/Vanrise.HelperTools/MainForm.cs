@@ -54,5 +54,10 @@ namespace Vanrise.HelperTools
         {
             OpenForm(new TCPClient());
         }
+
+        private void DataRecordRDB_Click(object sender, EventArgs e)
+        {
+            OpenForm(new DataRecordStorageTransformationToRDB());
+        }
     }
 }

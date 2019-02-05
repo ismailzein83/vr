@@ -34,6 +34,7 @@
             this.CompressJS = new System.Windows.Forms.Button();
             this.rdb_Generator = new System.Windows.Forms.Button();
             this.TCPCLient = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -88,19 +89,30 @@
             // 
             // TCPCLient
             // 
-            this.TCPCLient.Location = new System.Drawing.Point(169, 12);
+            this.TCPCLient.Location = new System.Drawing.Point(181, 12);
             this.TCPCLient.Name = "TCPCLient";
-            this.TCPCLient.Size = new System.Drawing.Size(103, 23);
+            this.TCPCLient.Size = new System.Drawing.Size(140, 23);
             this.TCPCLient.TabIndex = 5;
             this.TCPCLient.Text = "TCP Client";
             this.TCPCLient.UseVisualStyleBackColor = true;
             this.TCPCLient.Click += new System.EventHandler(this.tcpClient_Click);
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(181, 62);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(140, 23);
+            this.button3.TabIndex = 7;
+            this.button3.Text = "Data Record -> RDB";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.DataRecordRDB_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(334, 262);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.TCPCLient);
             this.Controls.Add(this.rdb_Generator);
             this.Controls.Add(this.CompressJS);
@@ -121,6 +133,7 @@
         private System.Windows.Forms.Button CompressJS;
         private System.Windows.Forms.Button rdb_Generator;
         private System.Windows.Forms.Button TCPCLient;
+        private System.Windows.Forms.Button button3;
     }
 }
 

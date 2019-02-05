@@ -199,6 +199,18 @@
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.RDBDataStorage\Vanrise.GenericData.RDBDataStorage.csproj">
+      <Project>{5c0e46fd-e38f-4062-9a05-dd716424a15f}</Project>
+      <Name>Vanrise.GenericData.RDBDataStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.SQLDataStorage\Vanrise.GenericData.SQLDataStorage.csproj">
+      <Project>{fd370b6a-aad0-447c-b784-32e5da4e5424}</Project>
+      <Name>Vanrise.GenericData.SQLDataStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
+      <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
+      <Name>Vanrise.Security.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
