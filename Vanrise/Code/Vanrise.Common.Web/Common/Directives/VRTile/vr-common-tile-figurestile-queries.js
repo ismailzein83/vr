@@ -38,8 +38,6 @@ app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsServi
 
                 };
                 ctrl.onSelectedItemChange = function (value) {
-                    console.log("value on select. change");
-                    console.log(value);
                     if (value != undefined) {
                         var existingItem = UtilsService.getItemByVal(ctrl.itemsToDisplayDatasource, value.QueryId, 'QueryId');
                         if (existingItem != undefined && existingItem.Name == value.Name)
@@ -48,19 +46,15 @@ app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsServi
                             Name: value.Name,
                             Title: value.Title,
                             FiguresTileQueryId: value.QueryId,
-                            QueryName : value.QueryName
+                            QueryName: value.QueryName
                         });
-                        console.log("ctrl.itemsToDisplayDatasource");
-                        console.log(ctrl.itemsToDisplayDatasource);
                     }
-                }
+                };
                 ctrl.addQuery = function () {
                     var onFigureTileQueryAdded = function (query) {
-                        console.log("figureTileQuery on add");
-                        console.log(query)
                         ctrl.datasource.push(query);
                         return loadItemsToDisplaySelector();
-                    }
+                    };
                     VRCommon_VRTileService.addFiguresTileQuery(onFigureTileQueryAdded,ctrl.datasource);
                 };
 
@@ -124,8 +118,6 @@ app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsServi
                             itemsToDisplay.push(item);
                         }
                     }
-                    console.log("itemsToDisplay");
-                    console.log(itemsToDisplay);
                     return {
                         queries: queries,
                         itemsToDisplay: itemsToDisplay
@@ -148,16 +140,15 @@ app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsServi
             }
 
             function editFigureTileQuery(obj) {
-                console.log("edit obj")
-                console.log(obj);
                 var onFigureTileQueryUpdated = function (figureTileQuery) {
-                    console.log("figureTileQuery on edit");
-                    console.log(figureTileQuery)
                     var index = ctrl.datasource.indexOf(obj);
                     ctrl.datasource[index] = figureTileQuery;
                     return loadItemsToDisplaySelector();
                 };
-                VRCommon_VRTileService.editFiguresTileQuery(obj, onFigureTileQueryUpdated, ctrl.datasource);
+                var clearItemsToDisplayDataSource = function () {
+                    ctrl.itemsToDisplayDatasource = [];
+                };
+                VRCommon_VRTileService.editFiguresTileQuery(obj, onFigureTileQueryUpdated, ctrl.datasource, clearItemsToDisplayDataSource);
             }
             function loadItemsToDisplaySelector() {
                 ctrl.itemsToDisplay = [];
