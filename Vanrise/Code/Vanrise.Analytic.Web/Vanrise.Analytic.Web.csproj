@@ -176,6 +176,8 @@
     <Content Include="Analytic\Directives\Definition\MostRelevantAnalytic\vr-analytic-mostrelevant-figurestilequery.js" />
     <Content Include="Analytic\Directives\Definition\OverallAnalytic\Templates\OverallAnalyticFiguresTileQueryTemplate.html" />
     <Content Include="Analytic\Directives\Definition\OverallAnalytic\vr-analytic-overallanalytic-figurestilequery.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AnalyticDataProvider\Templates\RDBAnalyticDataProviderTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AnalyticDataProvider\vr-analytic-rdb-dataprovider.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\CustomCode\Templates\ReportGenerationCustomCodeFileGeneratorTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\CustomCode\vr-analytic-reportgenerationcustomcode-filegenerator.js" />
     <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\FlatFile\Templates\FlatFileGeneratorTemplate.html" />
