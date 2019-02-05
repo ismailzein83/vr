@@ -44,9 +44,34 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.RDB">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangedCustomerCountryPreviewDataManager.cs" />
+    <Compile Include="NewCustomerCountryDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.Sales.Data\TOne.WhS.Sales.Data.csproj">
+      <Project>{49d742c7-dbc2-4ff5-9197-0c504076a2fe}</Project>
+      <Name>TOne.WhS.Sales.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.Entities\TOne.WhS.Sales.Entities.csproj">
+      <Project>{d604102b-eca7-4f50-b9a1-be46ee701dc0}</Project>
+      <Name>TOne.WhS.Sales.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
