@@ -97,7 +97,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var updateQuery = queryContext.AddUpdateQuery();
             updateQuery.FromTable(TABLE_NAME);
 
+            updateQuery.Column(COL_IsSent).Value(true);
             var whereContext = updateQuery.Where();
+            whereContext.EqualsCondition(COL_OwnerType).Value((int)SalePriceListOwnerType.Customer);
             whereContext.EqualsCondition(COL_ID).Value(priceListId.Value);
             whereContext.ListCondition(COL_OwnerID, RDBListConditionOperator.IN, customerIds);
             return queryContext.ExecuteNonQuery() > 0;
