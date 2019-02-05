@@ -741,8 +741,10 @@ namespace TOne.WhS.Runtime.Tasks
 
         private string DeserializeOptionsDetailsBySupplier(string serializedOptionsDetailsBySupplier)
         {
-            Dictionary<int, RPRouteOptionSupplier> optionsDetailsBySupplier = TOne.WhS.Routing.Entities.Helper.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
-            return Vanrise.Common.Serializer.Serialize(optionsDetailsBySupplier, true);
+            throw new NotImplementedException();
+
+            //Dictionary<int, RPRouteOptionSupplier> optionsDetailsBySupplier = TOne.WhS.Routing.Entities.Helper.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
+            //return Vanrise.Common.Serializer.Serialize(optionsDetailsBySupplier, true);
         }
 
         private string DeserializeOptionsByPolicy(string serializedOptionsByPolicy)
