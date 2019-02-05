@@ -98,7 +98,7 @@
                                         FieldName: response[i].Name,
                                         FieldTitle: response[i].Title,
                                         Type: response[i].Config.FieldType,
-                                    }
+                                    };
                                     analyticTableDimensions.push(dimension);
                                 }
                             context.getFields = function () {
@@ -114,7 +114,7 @@
 
                             var setRecordFilterLoader = function (value) { $scope.isLoadingRecordFilter = value; };
                             var recordFilterPayload = {
-                                context: context,
+                                context: context
                                 //filterObj: filterObject
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, recordFilterDirectiveAPI, recordFilterPayload, setRecordFilterLoader, analyticTableRecordFilterSelectedPromiseDeferred);
@@ -186,7 +186,7 @@
                         TimePeriod: periodSelectorAPI.getData(),
                         RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
                         ConfigId: configId
-                    }
+                    };
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
