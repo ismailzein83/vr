@@ -318,7 +318,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             throw new NotImplementedException();
         }
-
         public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwner(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> saleZoneIds)
         {
             throw new NotImplementedException();
@@ -351,7 +350,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new DefaultRoutingProduct
             {
-                SaleEntityRoutingProductId = reader.GetInt(COL_ID),
+                SaleEntityRoutingProductId = reader.GetLong(COL_ID),
                 RoutingProductId = reader.GetInt(COL_RoutingProductID),
                 OwnerType = (SalePriceListOwnerType)reader.GetInt(COL_OwnerType),
                 OwnerId = reader.GetInt(COL_OwnerID),
@@ -364,7 +363,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SaleZoneRoutingProduct
             {
-                SaleEntityRoutingProductId = reader.GetInt(COL_ID),
+                SaleEntityRoutingProductId = reader.GetLong(COL_ID),
                 RoutingProductId = reader.GetInt(COL_RoutingProductID),
                 OwnerType = (SalePriceListOwnerType)reader.GetInt(COL_OwnerType),
                 OwnerId = reader.GetInt(COL_OwnerID),
@@ -405,18 +404,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         private void SetRoutingProductWhereContext(RDBConditionContext conditionContext, DateTime? effectiveOn, bool isEffectiveInFuture, bool isDefault, int ownerType)
         {
-            if (isEffectiveInFuture)
-            {
-                conditionContext.NullCondition(COL_EED);
-                conditionContext.GreaterThanCondition(COL_BED).DateNow();
-            }
-            else if (effectiveOn.HasValue)
-            {
-                conditionContext.LessOrEqualCondition(COL_BED).Value(effectiveOn.Value);
-                var orCondition = conditionContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-                orCondition.GreaterThanCondition(COL_EED).Value(effectiveOn.Value);
-                orCondition.NullCondition(COL_EED);
-            }
+            BEDataUtility.SetDateCondition(conditionContext, TABLE_ALIAS, COL_BED, COL_EED, isEffectiveInFuture, effectiveOn);
 
             conditionContext.EqualsCondition(COL_OwnerType).Value(ownerType);
             if (isDefault)
