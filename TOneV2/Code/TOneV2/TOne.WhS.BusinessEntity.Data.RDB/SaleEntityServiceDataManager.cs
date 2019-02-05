@@ -143,15 +143,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereQuery = selectQuery.Where();
 
-            if (effectiveOn.HasValue)
-            {
-                if (isEffectiveInFuture)
-                    BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, DateTime.Now);
-                else
-                    BEDataUtility.SetEffectiveAfterDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-            }
-            else
-                whereQuery.FalseCondition();
+            BEDataUtility.SetDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, isEffectiveInFuture, effectiveOn);
 
             return queryContext.GetItems(SaleEntityZoneServiceMapper);
         }
@@ -255,7 +247,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SaleEntityDefaultService
             {
-                SaleEntityServiceId = reader.GetInt(COL_ID),
+                SaleEntityServiceId = reader.GetLong(COL_ID),
                 PriceListId = reader.GetInt(COL_PriceListID),
                 Services = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_Services)),
                 BED = reader.GetDateTime(COL_BED),
@@ -273,20 +265,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 Services = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_Services)),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED)
-            };
-        }
-
-        private SaleZoneRoutingProduct SaleZoneRoutingProductMapper(IRDBDataReader reader)
-        {
-            return new SaleZoneRoutingProduct
-            {
-                //SaleEntityRoutingProductId = reader.GetLong("ID"),
-                //RoutingProductId = (int)reader["RoutingProductID"],
-                //OwnerId = (int)reader["OwnerID"],
-                //OwnerType = GetReaderValue<SalePriceListOwnerType>(reader, "OwnerType"),
-                //SaleZoneId = (long)reader["ZoneID"],
-                //BED = (DateTime)reader["BED"],
-                //EED = GetReaderValue<DateTime?>(reader, "EED")
             };
         }
 
