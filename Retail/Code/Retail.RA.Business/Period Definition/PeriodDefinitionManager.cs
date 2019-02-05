@@ -1,9 +1,8 @@
 ﻿using System;
-using Vanrise.Common;
-using Retail.RA.Entities;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using Retail.RA.Entities;
+using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 
 namespace Retail.RA.Business
@@ -28,7 +27,7 @@ namespace Retail.RA.Business
 
             foreach (var periodDefinition in cachedPeriodDefinition.Values)
             {
-                if (day >= periodDefinition.FromDate && day < periodDefinition.ToDate)
+                if (day >= periodDefinition.FromDate && day <= periodDefinition.ToDate)
                     return periodDefinition.PeriodDefinitionId;
             }
 
@@ -47,7 +46,7 @@ namespace Retail.RA.Business
             var periodDefinitions = new List<PeriodDefinition>();
             foreach (var periodDefinition in cachedPeriods.Values)
             {
-                if (periodDefinition.ToDate >= fromDate && periodDefinition.FromDate < toDate)
+                if (periodDefinition.ToDate >= fromDate && periodDefinition.FromDate <= toDate)
                     periodDefinitions.Add(periodDefinition);
             }
 
@@ -91,7 +90,7 @@ namespace Retail.RA.Business
                 return periodDefinitionById;
             });
         }
-        public bool IsPeriodOverlapping(DateTime bed, DateTime eed , int? periodDefinitionId)
+        public bool IsPeriodOverlapping(DateTime bed, DateTime eed, int? periodDefinitionId)
         {
             var cacehdPeriodDefintions = GetCachedPeriodDefinitions();
             List<PeriodDefinition> overlappingPeriodDefinitions = new List<PeriodDefinition>();
@@ -101,7 +100,7 @@ namespace Retail.RA.Business
                 periodDefinitions.ThrowIfNull("periodDefinitions");
                 foreach (var periodDefinition in periodDefinitions)
                 {
-                    if (periodDefinition.ToDate > bed && eed > periodDefinition.FromDate && periodDefinition.FromDate != periodDefinition.ToDate && (periodDefinitionId == null || periodDefinitionId.Value != periodDefinition.PeriodDefinitionId))
+                    if (periodDefinition.ToDate >= bed && eed >= periodDefinition.FromDate && periodDefinition.FromDate != periodDefinition.ToDate && (periodDefinitionId == null || periodDefinitionId.Value != periodDefinition.PeriodDefinitionId))
                         overlappingPeriodDefinitions.Add(periodDefinition);
                 }
             }
