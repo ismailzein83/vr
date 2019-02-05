@@ -1459,16 +1459,16 @@ as (select * from (values
 ('D26604D5-A663-42A1-8404-EE1187CACEC1','Traffic Statistic Postgres','{"$type":"Vanrise.Analytic.Entities.AnalyticTableSettings, Vanrise.Analytic.Entities","ConnectionString":"Database=IDBTeles;Server=192.168.110.185;User Id=postgres;Password=postgres;Port=5432;","TableName":"[TOneWhS_Analytics].[TrafficStats15Min]","TimeColumnName":"BatchStart","DataRecordTypeIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["6cf5f7ad-5123-45d2-b47f-eca613d454f7"]},"RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"a611a651-b60b-483d-bc83-1c2b667a120a","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}}]}},"DataProvider":{"$type":"Vanrise.Analytic.Data.Postgres.PostgresAnalyticDataProvider, Vanrise.Analytic.Data.Postgres","ConfigId":"10631f32-9116-4443-a73d-2d4b77111634"}}',null),
 ('D5DC938B-D415-4F99-AC5B-7524DB24D2D0','CDR Problems','{"$type":"Vanrise.Analytic.Entities.AnalyticTableSettings, Vanrise.Analytic.Entities","ConnectionStringName":"TOneCDRDBConnString","TableName":"[TOneWhS_CDR].[vw_CDRProblems]","TimeColumnName":"AttemptDateTime","DataRecordTypeIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["4feed7ba-7cdc-48e8-bd1a-6540152d759f"]},"RequiredPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":{"$type":"System.Collections.Generic.List`1[[Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities]], mscorlib","$values":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"8dcd6e7b-7f93-4fb5-86c1-77a40939dec7","PermissionOptions":{"$type":"System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib","$values":["View"]}}]}},"DataProvider":{"$type":"Vanrise.Analytic.Data.SQL.SQLAnalyticDataProvider, Vanrise.Analytic.Data.SQL","ConfigId":"3cba3f20-6535-4ebf-9704-df65ac605671"}}',null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Settings]))
+)c([ID],[Name],[Settings],[MeasureStyles]))
 merge	[Analytic].[AnalyticTable] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
 when matched then
 	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
+	[Name] = s.[Name],[Settings] = s.[Settings],[MeasureStyles] = s.[MeasureStyles]
 when not matched by target then
-	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);
+	insert([ID],[Name],[Settings],[MeasureStyles])
+	values(s.[ID],s.[Name],s.[Settings],s.[MeasureStyles]);
 ----------------------------------------------------------------------------------------------------
 end
 
