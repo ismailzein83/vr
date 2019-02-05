@@ -89,17 +89,17 @@
 
                 $scope.scopeModel.onMeasureSelectorReady = function (api) {
                     measuresSelectorAPI = api;
-                    dimensionsSelectorReadyPromiseDeferred.resolve();
+                    measuresSelectorReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.orderOptionsDirectiveReady = function (api) {
                     advancedOrderOptionDirectiveAPI = api;
                     advancedOrderOptionReadyPromiseDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.onDimensionSelectorReady = function (api) {
                     dimensionsSelectorAPI = api;
-                    measuresSelectorReadyPromiseDeferred.resolve();
+                    dimensionsSelectorReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
@@ -111,7 +111,28 @@
                     periodSelectorAPI = api;
                     periodSelectorReadyPromiseDeferred.resolve();
                 };
+                $scope.scopeModel.onMeasureSelectionChanged = function () {
+                    var selectedMeasures = $scope.scopeModel.selectedMeasures;
+                    if (selectedMeasures != undefined && selectedMeasures.length > 0) {
+                        var onlySelectedMeasureIds = [];
+                        for (var i = 0; i < $scope.scopeModel.selectedMeasures.length; i++) {
+                            var selectedMeasure = $scope.scopeModel.selectedMeasures[i];
+                            onlySelectedMeasureIds.push(selectedMeasure.AnalyticItemConfigId)
+                        }
 
+                        if (onlySelectedMeasureIds != undefined) {
+                            var advancedDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                            var setAdvancedOptionsLoader = function (value) { $scope.isLoadingAdvancedOptions = value; };
+                            var advancedOrderOptionDirectivePayload = {
+                                tableIds: [analyticTableSelectorAPI.getSelectedIds()],
+                                onlySelectedMeasureIds: onlySelectedMeasureIds
+                            };
+                            if (advancedOrderOptions != undefined)
+                                advancedOrderOptionDirectivePayload.advancedOrderOptions = advancedOrderOptions;
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, advancedOrderOptionDirectiveAPI, advancedOrderOptionDirectivePayload, setAdvancedOptionsLoader, advancedOrderOptionDirectiveSelectedPromiseDeferred);
+                        }
+                    }
+                };
                 $scope.scopeModel.onTableSelectionChanged = function () {
                     var selectedAnalyticTable = analyticTableSelectorAPI.getSelectedIds();
                     if (selectedAnalyticTable != undefined) {
@@ -122,7 +143,7 @@
                                         FieldName: response[i].Name,
                                         FieldTitle: response[i].Title,
                                         Type: response[i].Config.FieldType,
-                                    }
+                                    };
                                     analyticTableDimensions.push(dimension);
                                 }
                             context.getFields = function () {
@@ -135,14 +156,6 @@
                                 }
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, measuresSelectorAPI, measuresSelectorPayload, setMeasuresLoader, analyticTableMeasureSelectedPromiseDeferred);
-
-
-                            var setAdvancedOptionsLoader = function (value) { $scope.isLoadingAdvancedOptions = value; };
-                            var advancedOptionDirectivePayload = {
-                                tableIds: [analyticTableSelectorAPI.getSelectedIds()]
-                            };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, advancedOrderOptionDirectiveAPI, advancedOptionDirectivePayload, setAdvancedOptionsLoader, advancedOrderOptionDirectiveSelectedPromiseDeferred);
-
 
 
                             var setDimensionsLoader = function (value) { $scope.isLoadingDimensions = value; };
@@ -181,7 +194,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var measures;
                     var promises = [];
                     var entity;
@@ -242,8 +254,6 @@
                     var dimensionId;
                     var selectedDimension = $scope.scopeModel.selectedDimension;
                     dimensionId = selectedDimension.AnalyticItemConfigId;
-                    console.log("selectedDimension");
-                    console.log(selectedDimension);
                     return {
                         $type: "Vanrise.Analytic.Business.MostRelevantAnalyticDimensionFiguresTileQuery,Vanrise.Analytic.Business",
                         AnalyticTableId: analyticTableSelectorAPI.getSelectedIds(),
@@ -276,7 +286,7 @@
                         analyticTableMeasureSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                         analyticTableRecordFilterSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                         analyticTableDimesnionSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-                        advancedOrderOptionDirectiveSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
+                       
                     }
 
                     analyticTableReadyPromiseDeferred.promise.then(function () {
@@ -299,7 +309,7 @@
                         var loadRecordFilterPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadRecordFilterPromiseDeferred.promise);
 
-                        UtilsService.waitMultiplePromises([measuresSelectorReadyPromiseDeferred.promise, recordFilterDirectiveReadyPromiseDeferred.promise, analyticTableMeasureSelectedPromiseDeferred.promise, analyticTableRecordFilterSelectedPromiseDeferred.promise, analyticTableDimesnionSelectedPromiseDeferred.promise, advancedOrderOptionDirectiveSelectedPromiseDeferred.promise]).then(function () {
+                        UtilsService.waitMultiplePromises([measuresSelectorReadyPromiseDeferred.promise, recordFilterDirectiveReadyPromiseDeferred.promise, analyticTableMeasureSelectedPromiseDeferred.promise, analyticTableRecordFilterSelectedPromiseDeferred.promise, dimensionsSelectorReadyPromiseDeferred.promise, analyticTableDimesnionSelectedPromiseDeferred.promise]).then(function () {
                             var measuresSelectorPayload = {
                                 filter: {
                                     TableIds: [analyticTableSelectorAPI.getSelectedIds()]
@@ -307,19 +317,30 @@
                             };
                             if (measureNames != undefined && measureNames.length > 0)
                                 measuresSelectorPayload.selectedIds = measureNames;
-                            console.log("measuresPayload");
-                            console.log(measuresSelectorPayload);
+                            advancedOrderOptionDirectiveSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
                             VRUIUtilsService.callDirectiveLoad(measuresSelectorAPI, measuresSelectorPayload, loadMeasureSelectorPromiseDeferred);
                             analyticTableMeasureSelectedPromiseDeferred = undefined;
 
-                            var advancedOrderOptionDirectivePayload = {
-                                tableIds: [analyticTableSelectorAPI.getSelectedIds()]
-                            };
-                            if (advancedOrderOptions != undefined )
-                                advancedOrderOptionDirectivePayload.advancedOrderOptions = advancedOrderOptions;
-
-                            VRUIUtilsService.callDirectiveLoad(advancedOrderOptionDirectiveAPI, advancedOrderOptionDirectivePayload, loadAdvamcedOrderOptionDirectivePromiseDeferred);
-                            advancedOrderOptionDirectiveSelectedPromiseDeferred = undefined;
+                            UtilsService.waitMultiplePromises([advancedOrderOptionReadyPromiseDeferred.promise, advancedOrderOptionDirectiveSelectedPromiseDeferred.promise]).then(function () {
+                                var selectedMeasures = $scope.scopeModel.selectedMeasures;
+                                if (selectedMeasures != undefined && selectedMeasures.length > 0) {
+                                    var onlySelectedMeasureIds = [];
+                                    for (var i = 0; i < $scope.scopeModel.selectedMeasures.length; i++) {
+                                        var selectedMeasure = $scope.scopeModel.selectedMeasures[i];
+                                        onlySelectedMeasureIds.push(selectedMeasure.AnalyticItemConfigId)
+                                    }
+                                }
+                                var advancedOrderOptionDirectivePayload = {
+                                    tableIds: [analyticTableSelectorAPI.getSelectedIds()],
+                                    onlySelectedMeasureIds: onlySelectedMeasureIds
+                                };
+                                if (advancedOrderOptions != undefined)
+                                    advancedOrderOptionDirectivePayload.advancedOrderOptions = advancedOrderOptions;
+                                VRUIUtilsService.callDirectiveLoad(advancedOrderOptionDirectiveAPI, advancedOrderOptionDirectivePayload, loadAdvamcedOrderOptionDirectivePromiseDeferred);
+                                advancedOrderOptionDirectiveSelectedPromiseDeferred = undefined;
+                            });
+                            
+                          
 
                             var dimensionsSelectorPayload = {
                                 filter: {
@@ -328,8 +349,6 @@
                             };
                             if (dimensionName != undefined)
                                 dimensionsSelectorPayload.selectedIds = dimensionName;
-                            console.log("dimensionsSelectorPayload");
-                            console.log(dimensionsSelectorPayload);
                             VRUIUtilsService.callDirectiveLoad(dimensionsSelectorAPI, dimensionsSelectorPayload, loadDimensionSelectorPromiseDeferred);
                             analyticTableDimesnionSelectedPromiseDeferred = undefined;
 
