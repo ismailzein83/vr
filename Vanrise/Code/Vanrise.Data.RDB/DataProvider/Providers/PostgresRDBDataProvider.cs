@@ -73,7 +73,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             else if (context.SelectQuery != null)
             {
                 List<RDBSelectColumn> selectColumns = context.SelectQuery.Columns;
-                if (selectColumns == null)
+                if (selectColumns == null || selectColumns.Count == 0)
                 {
                     var selectQueryGroupBy = context.SelectQuery.GroupBySettings;
                     if (selectQueryGroupBy == null)
