@@ -126,6 +126,10 @@
     <Content Include="Retail_RA\Directives\SpecialNumbers\retail-ra-specialnumbers.js" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\Template\SpecialNumbersCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\SpecialNumbers\Template\SpecialNumbersTemplate.html" />
+    <Content Include="Retail_RA\Directives\TimePeriod\ra-timeperiod-lastperiod.js" />
+    <Content Include="Retail_RA\Directives\TimePeriod\ra-timeperiod-lastyearperiod.js" />
+    <Content Include="Retail_RA\Directives\TimePeriod\Templates\LastPeriodTemplate.html" />
+    <Content Include="Retail_RA\Directives\TimePeriod\Templates\LastYearPeriodTemplate.html" />
     <Content Include="Retail_RA\Services\APIServices\OperatorDirectionServicesAPIService.js" />
     <Content Include="Retail_RA\Services\APIServices\TaxRuleAPIService.js" />
     <Content Include="Web.config" />

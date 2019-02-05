@@ -114,6 +114,8 @@
     <Compile Include="TaxRules\Voice\VoiceTaxRuleManager.cs" />
     <Compile Include="TaxRules\Voice\VoiceTaxRuleSettings.cs" />
     <Compile Include="TaxRules\Voice\VoiceTaxRuleSettingsConfig.cs" />
+    <Compile Include="TimePeriod\LastPeriodTimePeriod.cs" />
+    <Compile Include="TimePeriod\LastYeasrPeriodTimePeriod.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.RA.Entities\Retail.RA.Entities.csproj">

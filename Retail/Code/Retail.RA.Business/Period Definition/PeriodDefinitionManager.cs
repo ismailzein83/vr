@@ -18,6 +18,42 @@ namespace Retail.RA.Business
             var cachedPeriodDefinitions = GetCachedPeriodDefinitions();
             return cachedPeriodDefinitions.GetRecord(periodDefinitionId);
         }
+        // Returns the last period defined before date;
+        public PeriodDefinition GetLastPeriod(DateTime date)
+        {
+            var periodDefinitionId = GetPeriodDefinitionIdByDay(date);
+
+            var cachedPeriodDefinition = GetCachedPeriodDefinitions();
+
+            if (cachedPeriodDefinition == null)
+                return null;
+
+            var period = periodDefinitionId.HasValue ? cachedPeriodDefinition.GetRecord(periodDefinitionId.Value) : null;
+            var lastPeriod = new PeriodDefinition();
+            bool isPeriodUpdated = false;
+
+            var effectiveDate = period != null ? period.FromDate : date;
+            foreach (var periodDefinition in cachedPeriodDefinition.Values)
+            {
+
+                if (periodDefinition.ToDate <= effectiveDate && periodDefinition.FromDate >= lastPeriod.ToDate)
+                {
+                    lastPeriod = periodDefinition;
+                    isPeriodUpdated = true;
+                }
+            }
+            if (isPeriodUpdated)
+                return lastPeriod;
+            else
+                return null;
+
+        }
+        public Dictionary<int, PeriodDefinition> GetAllPeriodDefinitionsById()
+        {
+            var cachedPeriods = GetCachedPeriodDefinitions();
+            cachedPeriods.ThrowIfNull("cachedPriods");
+            return cachedPeriods;
+        }
         public int? GetPeriodDefinitionIdByDay(DateTime day)
         {
             var cachedPeriodDefinition = GetCachedPeriodDefinitions();
