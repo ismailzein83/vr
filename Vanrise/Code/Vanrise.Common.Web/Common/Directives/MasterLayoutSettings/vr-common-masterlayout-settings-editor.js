@@ -29,15 +29,14 @@ function (UtilsService, VRUIUtilsService, MasterLayoutMenuOptionEnum) {
         };
 
         $scope.scopeModel.onMenuOptionSelectIonChanged = function () {
-            var selectedId = menuOptionApi.getSelectedIds()
+            var selectedId = menuOptionApi.getSelectedIds();
             if (selectedId != undefined) {
                 $scope.fullMenu = false;
                 $scope.moduleFilter = false;
                 $scope.noMenu = false;
                 switch (selectedId) {
                     case MasterLayoutMenuOptionEnum.FullMenu.value:
-                        $scope.fullMenu = true;
-                        
+                        $scope.fullMenu = true;                        
                         break;
                     case MasterLayoutMenuOptionEnum.ModuleFilteredMenu.value:
                         $scope.moduleFilter = true;
@@ -91,7 +90,6 @@ function (UtilsService, VRUIUtilsService, MasterLayoutMenuOptionEnum) {
 
             api.getData = function () {
                 return {
-                    $type: "Vanrise.Entities.MasterLayoutSettingData, Vanrise.Entities",
                     MenuOption: menuOptionApi.getSelectedIds(),
                     ExpandedMenu: $scope.scopeModel.expandedMenu,
                     IsBreadcrumbVisible: $scope.scopeModel.isBreadcrumbVisible,
