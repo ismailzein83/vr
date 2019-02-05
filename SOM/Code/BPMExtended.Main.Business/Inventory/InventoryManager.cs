@@ -751,6 +751,14 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public bool IsDSLAMProviderHuawei(string dslamPortId)
+        {
+            Random gen = new Random();
+            int prob = gen.Next(10);
+            return prob <= 5;
+
+        }
+
         public string ReserveTelephonyNumber(string phoneNumber, string pathType, string phoneNumberID, string deviceID, string mDFPortID, string dPPortID, string primaryPort, string secondaryPort)
         {
             string objectlist = phoneNumberID + "," + deviceID + "," + mDFPortID + "," + primaryPort + "," + secondaryPort + "," + dPPortID;
