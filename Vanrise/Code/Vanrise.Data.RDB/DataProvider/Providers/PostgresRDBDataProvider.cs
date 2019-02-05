@@ -72,11 +72,23 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             }
             else if (context.SelectQuery != null)
             {
-                context.SelectQuery.Columns.ThrowIfNull("context.SelectQuery.Columns");
-                if (context.SelectQuery.Columns == null || context.SelectQuery.Columns.Count == 0)
-                    throw new Exception("context.SelectQuery.Columns.Count = 0");
+                List<RDBSelectColumn> selectColumns = context.SelectQuery.Columns;
+                if (selectColumns == null)
+                {
+                    var selectQueryGroupBy = context.SelectQuery.GroupBySettings;
+                    if (selectQueryGroupBy == null)
+                        throw new NullReferenceException("context.SelectQuery.Columns & context.SelectQuery.GroupBySetting");
+                    selectColumns = new List<RDBSelectColumn>();
+                    if (selectQueryGroupBy.Columns != null)
+                        selectColumns.AddRange(selectQueryGroupBy.Columns);
+                    if (selectQueryGroupBy.AggregateColumns != null)
+                        selectColumns.AddRange(selectQueryGroupBy.AggregateColumns);
+                }
+                if (selectColumns == null || selectColumns.Count == 0)
+                    throw new Exception("selectColumns.Count = 0");
+
                 int colIndex = 0;
-                foreach (var selectColumn in context.SelectQuery.Columns)
+                foreach (var selectColumn in selectColumns)
                 {
                     if (colIndex > 0)
                     {

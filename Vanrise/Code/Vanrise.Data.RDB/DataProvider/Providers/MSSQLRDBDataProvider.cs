@@ -79,7 +79,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                                     FROM sys.tables AS tbl
                                     INNER JOIN sys.indexes AS idx ON idx.object_id = tbl.object_id and idx.index_id < 2
                                     INNER JOIN sys.partitions AS p ON p.object_id = CAST(tbl.object_id AS int) and p.index_id = idx.index_id
-                                    WHERE ((tbl.name=N'{context.TableName}' AND SCHEMA_NAME(tbl.schema_id)=N'{context.SchemaName}'))"
+                                    WHERE ((tbl.name=N'{context.TableName}' AND SCHEMA_NAME(tbl.schema_id)=N'{(!String.IsNullOrEmpty(context.SchemaName) ? context.SchemaName : "dbo") }'))"
             });
             return resolvedQuery;
         }

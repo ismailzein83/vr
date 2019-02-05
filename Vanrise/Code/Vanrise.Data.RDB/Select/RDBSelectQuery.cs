@@ -47,6 +47,14 @@ namespace Vanrise.Data.RDB
 
         RDBGroupBy _groupBy;
 
+        internal RDBGroupBy GroupBySettings
+        {
+            get
+            {
+                return _groupBy;
+            }
+        }
+
         List<RDBSelectSortColumn> _sortColumns;
 
         bool _withNoLock;
