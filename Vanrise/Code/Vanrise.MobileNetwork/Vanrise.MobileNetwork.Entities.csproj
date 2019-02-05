@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="ICode.cs" />
     <Compile Include="MobileCountry\MobileCountry.cs" />
+    <Compile Include="MobileCountry\MobileCountryInfoFilter.cs" />
+    <Compile Include="MobileCountry\MobileCountryInfo.cs" />
     <Compile Include="MobileNetwork\MobileNetwork.cs" />
     <Compile Include="MobileNetwork\MobileNetworkInfo.cs" />
     <Compile Include="MobileNetwork\MobileNetworkInfoFilter.cs" />
