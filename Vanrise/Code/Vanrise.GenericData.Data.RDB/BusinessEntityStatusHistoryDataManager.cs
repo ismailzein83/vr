@@ -78,12 +78,11 @@ namespace Vanrise.GenericData.Data.RDB
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, 1 , false);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-            var subCondition = selectQuery.Where().ChildConditionGroup(RDBConditionGroupOperator.OR);
-            subCondition.ConditionIfColumnNotNull(COL_IsDeleted);
-            subCondition.EqualsCondition(COL_IsDeleted).Value(false);
-            selectQuery.Where().EqualsCondition(COL_BusinessEntityDefinitionID).Value(businessEntityDefinitionId);
-            selectQuery.Where().EqualsCondition(COL_BusinessEntityID).Value(businessEntityId);
-            selectQuery.Where().EqualsCondition(COL_FieldName).Value(fieldName);
+            var whereStatement = selectQuery.Where();
+            whereStatement.ConditionIfColumnNotNull(COL_IsDeleted).EqualsCondition(COL_IsDeleted).Value(false);
+            whereStatement.EqualsCondition(COL_BusinessEntityDefinitionID).Value(businessEntityDefinitionId);
+            whereStatement.EqualsCondition(COL_BusinessEntityID).Value(businessEntityId);
+            whereStatement.EqualsCondition(COL_FieldName).Value(fieldName);
             selectQuery.Sort().ByColumn(COL_StatusChangedDate, RDBSortDirection.DESC);
             return queryContext.GetItem(BusinessEntityStatusHistoryMapper);
         }
