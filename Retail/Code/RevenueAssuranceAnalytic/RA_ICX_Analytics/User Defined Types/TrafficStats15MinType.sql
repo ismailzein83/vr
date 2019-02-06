@@ -15,7 +15,11 @@
     [TotalDurationInSeconds]   DECIMAL (20, 4)  NULL,
     [SumOfPDDInSeconds]        DECIMAL (20, 4)  NULL,
     [MaximumDurationInSeconds] DECIMAL (20, 4)  NULL,
-    [MinimumDurationInSeconds] DECIMAL (20, 4)  NULL);
+    [MinimumDurationInSeconds] DECIMAL (20, 4)  NULL,
+    [SumOfPGADInSeconds]       DECIMAL (20, 4)  NULL,
+    [NumberOfClearCLIs]        BIGINT           NULL);
+
+
 
 
 

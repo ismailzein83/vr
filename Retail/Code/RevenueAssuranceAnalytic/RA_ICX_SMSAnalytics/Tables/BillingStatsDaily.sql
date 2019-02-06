@@ -1,5 +1,5 @@
-﻿CREATE TYPE [RA_INTL_SMSAnalytics].[BillingStatsDailyType] AS TABLE (
-    [ID]                       BIGINT          NULL,
+﻿CREATE TABLE [RA_ICX_SMSAnalytics].[BillingStatsDaily] (
+    [ID]                       BIGINT          NOT NULL,
     [BatchStart]               DATETIME        NULL,
     [OperatorID]               BIGINT          NULL,
     [NumberOfSMSs]             INT             NULL,
@@ -20,7 +20,13 @@
     [OriginationMobileNetwork] INT             NULL,
     [OriginationMobileCountry] INT             NULL,
     [DestinationMobileNetwork] INT             NULL,
-    [DestinationMobileCountry] INT             NULL);
+    [DestinationMobileCountry] INT             NULL,
+    [InterconnectOperator]     BIGINT          NULL,
+    CONSTRAINT [IX_RA_ICX_SMS_BillingStatsDaily_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
+);
 
 
+GO
+CREATE CLUSTERED INDEX [IX_RA_ICX_SMS_BillingStatsDaily_BatchStart]
+    ON [RA_ICX_SMSAnalytics].[BillingStatsDaily]([BatchStart] ASC);
 

@@ -79,6 +79,9 @@
     <Folder Include="RA_INTL_SMSAnalytics\" />
     <Folder Include="RA_INTL_SMSAnalytics\Tables\" />
     <Folder Include="RA_INTL_SMSAnalytics\User Defined Types\" />
+    <Folder Include="RA_ICX_SMSAnalytics\" />
+    <Folder Include="RA_ICX_SMSAnalytics\Tables\" />
+    <Folder Include="RA_ICX_SMSAnalytics\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
@@ -89,7 +92,6 @@
     <Build Include="COMMON\Functions\getExchangeRates.sql" />
     <Build Include="RA_ICX_Analytics\User Defined Types\TrafficStats15MinType.sql" />
     <Build Include="RA_ICX_Analytics\User Defined Types\BillingStatsDailyType.sql" />
-    <Build Include="RA_Analytics\User Defined Types\TrafficStats15MinType.sql" />
     <Build Include="Security\RA_ICX_Analytics.sql" />
     <Build Include="Security\RA_Analytics.sql" />
     <Build Include="Security\COMMON.sql" />
@@ -103,5 +105,10 @@
     <Build Include="RA_INTL_SMSAnalytics\User Defined Types\TrafficStats15MinType.sql" />
     <Build Include="RA_INTL_SMSAnalytics\User Defined Types\BillingStatsDailyType.sql" />
     <Build Include="Security\RA_INTL_SMSAnalytics.sql" />
+    <Build Include="RA_ICX_SMSAnalytics\Tables\BillingStatsDaily.sql" />
+    <Build Include="RA_ICX_SMSAnalytics\Tables\TrafficStats15Min.sql" />
+    <Build Include="RA_ICX_SMSAnalytics\User Defined Types\TrafficStats15MinType.sql" />
+    <Build Include="RA_ICX_SMSAnalytics\User Defined Types\BillingStatsDailyType.sql" />
+    <Build Include="Security\RA_ICX_SMSAnalytics.sql" />
   </ItemGroup>
 </Project>

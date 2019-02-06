@@ -1,4 +1,4 @@
-﻿CREATE TYPE [RA_INTL_SMSAnalytics].[TrafficStats15MinType] AS TABLE (
+﻿CREATE TYPE [RA_ICX_SMSAnalytics].[TrafficStats15MinType] AS TABLE (
     [ID]                       BIGINT           NULL,
     [BatchStart]               DATETIME         NULL,
     [OperatorID]               BIGINT           NULL,
@@ -21,7 +21,6 @@
     [OriginationMobileCountry] INT              NULL,
     [DestinationMobileNetwork] INT              NULL,
     [DestinationMobileCountry] INT              NULL,
-    [DeliveredAttempts]        INT              NULL);
-
-
+    [DeliveredAttempts]        INT              NULL,
+    [InterconnectOperator]     BIGINT           NULL);
 

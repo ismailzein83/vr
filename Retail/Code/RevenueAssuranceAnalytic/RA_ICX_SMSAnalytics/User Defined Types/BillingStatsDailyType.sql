@@ -1,4 +1,4 @@
-﻿CREATE TYPE [RA_INTL_SMSAnalytics].[BillingStatsDailyType] AS TABLE (
+﻿CREATE TYPE [RA_ICX_SMSAnalytics].[BillingStatsDailyType] AS TABLE (
     [ID]                       BIGINT          NULL,
     [BatchStart]               DATETIME        NULL,
     [OperatorID]               BIGINT          NULL,
@@ -20,7 +20,6 @@
     [OriginationMobileNetwork] INT             NULL,
     [OriginationMobileCountry] INT             NULL,
     [DestinationMobileNetwork] INT             NULL,
-    [DestinationMobileCountry] INT             NULL);
-
-
+    [DestinationMobileCountry] INT             NULL,
+    [InterconnectOperator]     BIGINT          NULL);
 
