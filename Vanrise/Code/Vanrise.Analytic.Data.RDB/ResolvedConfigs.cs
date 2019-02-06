@@ -57,11 +57,43 @@ namespace Vanrise.Analytic.Data.RDB
         public IAnalyticItemRDBReaderValueGetter ReaderValueGetter { get; set; }
     }
 
+    internal class ResolvedAnalyticJoinConfig
+    {
+        public string JoinName { get; set; }
+
+        public AnalyticJoin JoinConfig { get; set; }
+
+        public IAnalyticJoinRDBExpressionSetter JoinRDBExpressionSetter { get; set; }
+    }
+
+    public interface IAnalyticJoinRDBExpressionSetter
+    {
+        void SetExpression(IAnalyticJoinRDBExpressionSetterContext context);
+    }
+
+    public interface IAnalyticJoinRDBExpressionSetterContext
+    {
+        RDBJoinContext RDBJoinContext { get; }
+    }
+
+
+    public class AnalyticJoinRDBExpressionSetterContext : IAnalyticJoinRDBExpressionSetterContext
+    {
+        public AnalyticJoinRDBExpressionSetterContext(RDBJoinContext rdbJoinContext)
+        {
+            this.RDBJoinContext = rdbJoinContext;
+        }
+        public RDBJoinContext RDBJoinContext { get; private set; }
+    }
+
+
     internal class ResolvedConfigs
     {
         public Dictionary<string, ResolvedAnalyticDimensionConfig> DimensionConfigs { get; set; }
 
         public Dictionary<string, ResolvedAnalyticAggregateConfig> AggregateConfigs { get; set; }
+
+        public Dictionary<string, ResolvedAnalyticJoinConfig> JoinConfigs { get; set; }
 
     }
 }

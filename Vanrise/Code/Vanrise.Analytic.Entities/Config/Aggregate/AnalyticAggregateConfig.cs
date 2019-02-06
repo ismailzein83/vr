@@ -17,5 +17,10 @@ namespace Vanrise.Analytic.Entities
         public List<string> JoinConfigNames { get; set; }
 
         public string CurrencySQLColumnName { get; set; }
+
+        /// <summary>
+        /// this is optional property
+        /// </summary>
+        public Vanrise.GenericData.Entities.DataRecordFieldType FieldType { get; set; }
     }
 }

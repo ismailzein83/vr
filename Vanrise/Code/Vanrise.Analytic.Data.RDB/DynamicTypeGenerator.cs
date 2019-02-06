@@ -35,6 +35,19 @@ public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValue
 }
 
 ";
+
+        const string JoinRDBExpressionSetter_CLASS_CODETEMPLATE = @"
+
+public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticJoinRDBExpressionSetter
+{
+    public void SetExpression(Vanrise.Analytic.Data.RDB.IAnalyticJoinRDBExpressionSetterContext context)
+    {
+        #CODE#
+    }
+}
+
+";
+
         public static ResolvedConfigs GetResolvedConfigs(IAnalyticTableQueryContext queryContext)
         {
             Guid tableId = queryContext.GetTable().AnalyticTableId;
@@ -44,6 +57,7 @@ public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValue
                 {                    
                     List<ResolvedAnalyticDimensionConfig> resolvedDimensionConfigs = new List<ResolvedAnalyticDimensionConfig>();
                     List<ResolvedAnalyticAggregateConfig> resolvedAggregateConfigs = new List<ResolvedAnalyticAggregateConfig>();
+                    List<ResolvedAnalyticJoinConfig> resolvedJoinConfigs = new List<ResolvedAnalyticJoinConfig>();
                     StringBuilder codeBuilder = new StringBuilder(@"
                 using System;                
                 using System.Data;
@@ -79,7 +93,23 @@ public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValue
                             Guid itemId = aggConfig.AnalyticAggregateConfigId;
                             string itemName = aggConfig.Name;
                             GenerateAndAddRDBExpressionSetterClass(aggConfig.Config.SQLColumn, itemId, itemName, resolvedAggregateConfig, classes, actionsAfterCompilation);
-                            GenerateAndAddRDBReaderValueGetterClass(typeof(Decimal), itemId, itemName, resolvedAggregateConfig, classes, actionsAfterCompilation);
+                            var runtimeType = aggConfig.Config.FieldType != null ? aggConfig.Config.FieldType.GetRuntimeType() : typeof(Decimal?);
+                            GenerateAndAddRDBReaderValueGetterClass(runtimeType, itemId, itemName, resolvedAggregateConfig, classes, actionsAfterCompilation);
+                        }
+                    }
+
+                    if(queryContext.Joins != null)
+                    {
+                        foreach(var joinConfigEntry in queryContext.Joins)
+                        {
+                            var joinConfig = joinConfigEntry.Value;
+                            var resolvedJoinConfig = new ResolvedAnalyticJoinConfig
+                            {
+                                JoinName = joinConfigEntry.Key,
+                                JoinConfig = joinConfig
+                            };
+                            resolvedJoinConfigs.Add(resolvedJoinConfig);
+                            GenerateAndAddJoinRDBExpressionSetterClass(resolvedJoinConfig, classes, actionsAfterCompilation);
                         }
                     }
                     
@@ -112,7 +142,8 @@ public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValue
                     ResolvedConfigs resolvedConfigs = new ResolvedConfigs
                     {
                         DimensionConfigs = resolvedDimensionConfigs.ToDictionary(itm => itm.DimensionConfig.Name, itm => itm),
-                        AggregateConfigs = resolvedAggregateConfigs.ToDictionary(itm => itm.AggregateConfig.Name, itm => itm)
+                        AggregateConfigs = resolvedAggregateConfigs.ToDictionary(itm => itm.AggregateConfig.Name, itm => itm),
+                        JoinConfigs = resolvedJoinConfigs.ToDictionary(itm => itm.JoinName, itm => itm)
                     };
                     return resolvedConfigs;
                 });
@@ -143,13 +174,28 @@ public class #CLASSNAME# : Vanrise.Analytic.Data.RDB.IAnalyticItemRDBReaderValue
             StringBuilder rdbReaderValueGetterClassBuilder = new StringBuilder(RDBReaderValueGetter_CLASS_CODETEMPLATE);
             string className = string.Concat("RDBReaderValueGetter", itemName, "_", itemId.ToString().Replace("-", ""));
             rdbReaderValueGetterClassBuilder.Replace("#CLASSNAME#", className);
-            rdbReaderValueGetterClassBuilder.Replace("#METHODNAME#", RDBUtilities.GetGetReaderValueMethodNameWithValidate(fieldType));
+            rdbReaderValueGetterClassBuilder.Replace("#METHODNAME#", RDBUtilities.GetGetReaderValueMethodNameWithValidate(fieldType, true));
             classes.Add(rdbReaderValueGetterClassBuilder.ToString());
             actionsAfterCompilation.Add((assbly, nmspace) =>
             {
                 Type type = assbly.GetType($"{nmspace}.{className}");
                 type.ThrowIfNull("type", className);
                 resolvedDimensionConfig.ReaderValueGetter = Activator.CreateInstance(type).CastWithValidate<IAnalyticItemRDBReaderValueGetter>("RDBReaderValueGetter", className);
+            });
+        }
+
+        private static void GenerateAndAddJoinRDBExpressionSetterClass(ResolvedAnalyticJoinConfig resolvedJoinConfig, List<string> classes, List<Action<Assembly, string>> actionsAfterCompilation)
+        {
+            StringBuilder joinRDBExpressionSetterClassBuilder = new StringBuilder(JoinRDBExpressionSetter_CLASS_CODETEMPLATE);
+            string className = string.Concat("JoinRDBExpressionSetter", "_", resolvedJoinConfig.JoinName);
+            joinRDBExpressionSetterClassBuilder.Replace("#CLASSNAME#", className);
+            joinRDBExpressionSetterClassBuilder.Replace("#CODE#", resolvedJoinConfig.JoinConfig.Config.JoinStatement);
+            classes.Add(joinRDBExpressionSetterClassBuilder.ToString());
+            actionsAfterCompilation.Add((assbly, nmspace) =>
+            {
+                Type type = assbly.GetType($"{nmspace}.{className}");
+                type.ThrowIfNull("type", className);
+                resolvedJoinConfig.JoinRDBExpressionSetter = Activator.CreateInstance(type).CastWithValidate<IAnalyticJoinRDBExpressionSetter>("JoinRDBExpressionSetter", className);
             });
         }
     }
