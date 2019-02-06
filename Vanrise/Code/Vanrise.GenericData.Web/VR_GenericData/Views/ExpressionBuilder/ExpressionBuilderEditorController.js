@@ -58,7 +58,7 @@
 
             $scope.validateExpression = function () {
                 if ($scope.expressionValue == expressionBuilderValue)
-                    return 'No changed.';
+                    return 'No changes.';
                 return null;
             };
         }
