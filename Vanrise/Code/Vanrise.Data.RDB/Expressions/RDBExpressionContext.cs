@@ -191,6 +191,55 @@ namespace Vanrise.Data.RDB
         {
             return new RDBDateTimeDiffExpressionContext(_queryBuilderContext, _tableAlias, diffInterval, (exp) => Expression(exp));
         }
+        
+        public RDBExpressionContext ConvertDecimal()
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (expression) => Expression(new RDBConvertDecimalExpression{ Expression = expression }), _tableAlias);
+        }
+
+        #region Aggregates
+
+        public void Count(string alias)
+        {
+            Expression(new RDBCountExpression());
+        }
+
+        public void Aggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression expression)
+        {
+            BaseRDBExpression aggregateExpression = CreateNonCountAggregate(aggregateType, expression);
+            Expression(aggregateExpression);
+        }
+
+        public static BaseRDBExpression CreateNonCountAggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression expression)
+        {
+            BaseRDBExpression aggregateExpression;
+            switch (aggregateType)
+            {
+                case RDBNonCountAggregateType.SUM: aggregateExpression = new RDBSumExpression { Expression = expression }; break;
+                case RDBNonCountAggregateType.AVG: aggregateExpression = new RDBAvgExpression { Expression = expression }; break;
+                case RDBNonCountAggregateType.MAX: aggregateExpression = new RDBMaxExpression { Expression = expression }; break;
+                case RDBNonCountAggregateType.MIN: aggregateExpression = new RDBMinExpression { Expression = expression }; break;
+                default: throw new NotSupportedException(String.Format("aggregateType '{0}'", aggregateType.ToString()));
+            }
+            return aggregateExpression;
+        }
+
+        public void Aggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName)
+        {
+            Aggregate(aggregateType, new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName });
+        }
+
+        public void Aggregate(RDBNonCountAggregateType aggregateType, string columnName)
+        {
+            Aggregate(aggregateType, _tableAlias, columnName);
+        }
+        
+        public RDBExpressionContext ExpressionAggregate(RDBNonCountAggregateType aggregateType)
+        {
+            return new RDBExpressionContext(_queryBuilderContext, (exp) => Aggregate(aggregateType, exp), _tableAlias);
+        }
+
+        #endregion
     }
 
     public class RDBArithmeticExpressionContext : RDBTwoExpressionsContext

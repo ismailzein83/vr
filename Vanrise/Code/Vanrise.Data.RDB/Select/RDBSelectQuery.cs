@@ -132,16 +132,17 @@ namespace Vanrise.Data.RDB
             return _selectColumnsContext;
         }
 
-        RDBSelectAggregateContext _selectAggregateContext;
-        public RDBSelectAggregateContext SelectAggregates()
+        //RDBSelectAggregateContext _selectAggregateContext;
+        public RDBSelectColumnsContext SelectAggregates()
         {
-            if (_selectAggregateContext == null)
-            {
-                if (this._columns == null)
-                    this._columns = new List<RDBSelectColumn>();
-                _selectAggregateContext = new RDBSelectAggregateContext(_queryBuilderContext, this._columns, this._table, this._tableAlias);
-            }
-            return _selectAggregateContext;
+            return this.SelectColumns();
+            //if (_selectAggregateContext == null)
+            //{
+            //    if (this._columns == null)
+            //        this._columns = new List<RDBSelectColumn>();
+            //    _selectAggregateContext = new RDBSelectAggregateContext(_queryBuilderContext, this._columns, this._table, this._tableAlias);
+            //}
+            //return _selectAggregateContext;
         }
 
         RDBConditionContext _conditionContext;

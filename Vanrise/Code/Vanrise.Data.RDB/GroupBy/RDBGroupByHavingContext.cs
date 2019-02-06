@@ -43,7 +43,7 @@ namespace Vanrise.Data.RDB
         
         public void CompareAggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression valueToAggregate, RDBCompareConditionOperator oper, BaseRDBExpression compareToValue)
         {
-            BaseRDBExpression aggregateExpression = RDBSelectAggregateContext.CreateNonCountAggregate(aggregateType, valueToAggregate);
+            BaseRDBExpression aggregateExpression = RDBExpressionContext.CreateNonCountAggregate(aggregateType, valueToAggregate);
             _conditionGroup.Conditions.Add(new RDBCompareCondition
             {
                 Expression1 = aggregateExpression,

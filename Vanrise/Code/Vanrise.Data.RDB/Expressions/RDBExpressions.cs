@@ -424,6 +424,16 @@ namespace Vanrise.Data.RDB
             return $"DATEDiff({sqlInteval}, {this.DateTimeExpression1.ToDBQuery(context)}, {this.DateTimeExpression2.ToDBQuery(context)})";
         }
     }
+
+    internal class RDBConvertDecimalExpression : BaseRDBExpression
+    {
+        public BaseRDBExpression Expression { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return string.Concat("CONVERT(DECIMAL(38, 8), ", this.Expression.ToDBQuery(context), ")");
+        }
+    }
     //internal class RDBParameterExpression : BaseRDBExpression
     //{
     //    public string ParameterName { get; set; }

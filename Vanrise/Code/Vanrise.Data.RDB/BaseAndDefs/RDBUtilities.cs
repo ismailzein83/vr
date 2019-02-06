@@ -12,11 +12,25 @@ namespace Vanrise.Data.RDB
 
         public static string GetGetReaderValueMethodNameWithValidate(Type runtimeType)
         {
+            return GetGetReaderValueMethodNameWithValidate(runtimeType, false);
+        }
+
+        public static string GetGetReaderValueMethodNameWithValidate(Type runtimeType, bool alwaysReturnNullableMethod)
+        {
             Dictionary<Type, string> methodNamesByType = GetRDBReaderMethodNamesByType();
 
             string functionName;
             if (!methodNamesByType.TryGetValue(runtimeType, out functionName))
                 throw new Exception($"No GetReaderValueMethod found for type {runtimeType}");
+            if(alwaysReturnNullableMethod)
+            {
+                if(!functionName.StartsWith("GetNullable"))
+                {
+                    string newFunctionName = string.Concat("GetNullable", functionName.Substring(3).Replace("WithNullHandling", ""));
+                    if (s_methodNamesByType.Values.Contains(newFunctionName))
+                        functionName = newFunctionName;
+                }
+            }
             return functionName;
         }
 
