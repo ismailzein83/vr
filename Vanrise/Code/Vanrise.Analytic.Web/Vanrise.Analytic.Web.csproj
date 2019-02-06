@@ -367,6 +367,8 @@
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-previousperiodfilter.js" />
     <Content Include="Analytic\Directives\Settings\Templates\KPISettingsTemplate.html" />
     <Content Include="Analytic\Directives\Settings\vr-analytic-kpi-settings-editor.js" />
+    <Content Include="Analytic\Directives\VRRDBAnalyticDataProviderTable\Templates\RDBAnalyticDataProviderTableTemplate.html" />
+    <Content Include="Analytic\Directives\VRRDBAnalyticDataProviderTable\vr-rdb-analytic-dataprovider-table-selector.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\CustomCodeCompilationErrorsEditorController.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\MainExtensions\ReportGenerationFilter\vr-analytic-reportgeneration-filter-standard.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\MainExtensions\SourceSettings\Templates\DataRecordSourceSubviewSettingsTemplate.html" />
