@@ -744,11 +744,11 @@
     <Content Include="Retail_BusinessEntity\Directives\ServiceType\Templates\ServiceTypeSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-didtechnicalsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-faultticket-settings-editor.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-localoperatorsettings-editor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-interconnectsettings-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\retail-be-retailinvoicesettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\DIDTechnicalSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\FaultTicketSettingsTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\LocalOperatorSettingsEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\InterconnectSettingsEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Settings\Templates\RetailInvoiceSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-recurringperiod-definition.js" />
     <Content Include="Retail_BusinessEntity\Directives\StatusChargingSet\retail-be-statuschargingset-grid.js" />
