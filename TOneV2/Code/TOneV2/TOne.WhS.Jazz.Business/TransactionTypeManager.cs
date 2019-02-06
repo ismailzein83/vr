@@ -30,8 +30,28 @@ namespace TOne.WhS.Jazz.Business
             }
             return transactionTypes;
         }
+       
+        public TransactionType GetTransactionByName(string transactionName)
+        {
+            var transactionTypes= GetCachedTransactionTypes();
+            return transactionTypes.FindRecord(x => x.Name == transactionName);
+        }
 
-
+        public List<TransactionType> GetMatchedTransactionTypes( ReportDefinitionDirectionEnum reportDefinitionDirection)
+        {
+            var allTransactionTypes = GetCachedTransactionTypes();
+            List<TransactionType> transactionTypes = null;
+            if(allTransactionTypes!=null && allTransactionTypes.Count > 0)
+            {
+                transactionTypes = new List<TransactionType>();
+                foreach (var transactionType in allTransactionTypes)
+                {
+                    if ((transactionType.Value.CarrierType == CarrierTypeEnum.ApplicableForCustomers && reportDefinitionDirection == ReportDefinitionDirectionEnum.In) || (transactionType.Value.CarrierType == CarrierTypeEnum.ApplicableForSuppliers && reportDefinitionDirection == ReportDefinitionDirectionEnum.Out))
+                        transactionTypes.Add(transactionType.Value);
+                }
+            }
+            return transactionTypes;
+        }
         public IEnumerable<TransactionTypeDetail> GetTransactionTypesInfo(TransactionTypeInfoFilter filter)
         {
             var transactionTypes = GetCachedTransactionTypes();
@@ -79,6 +99,9 @@ namespace TOne.WhS.Jazz.Business
                         {
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
+                            CarrierType = (CarrierTypeEnum)genericBusinessEntity.FieldValues.GetRecord("CarrierType"),
+                            TransactionScope =(TransactionScopeEnum)genericBusinessEntity.FieldValues.GetRecord("TransactionScope"),
+                            IsCredit=(bool)genericBusinessEntity.FieldValues.GetRecord("IsCredit"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),

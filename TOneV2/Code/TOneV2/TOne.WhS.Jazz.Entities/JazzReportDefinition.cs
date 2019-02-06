@@ -22,7 +22,6 @@ namespace TOne.WhS.Jazz.Entities
     {
         public AmountCalculation AmountCalculation { get; set; }
         public MarketSettings MarketSettings { get; set; }
-        public bool DivideByRegion { get; set; }
         public RegionSettings RegionSettings { get; set; }
         public bool CreateTax { get; set; }
         public decimal TaxPercentage { get; set; }

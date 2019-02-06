@@ -48,7 +48,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountCode\AccountCodeQuery.cs" />
     <Compile Include="JazzReportDefinition.cs" />
+    <Compile Include="ERPTransactionsReport.cs" />
     <Compile Include="JazzTransactionsReport.cs" />
     <Compile Include="AccountCode\AccountCodeDetail.cs" />
     <Compile Include="AccountCode\AccountCodeFilter.cs" />

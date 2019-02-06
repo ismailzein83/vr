@@ -126,8 +126,7 @@
             function validatePercentages(items) {
                 var percentagesSum=0;
                 for (var i = 0; i < items.length; i++) {
-                    percentagesSum += items[i].Percentage;
-                    console.log(percentagesSum)
+                    percentagesSum = Number(percentagesSum) +Number(items[i].Percentage);
                 }
                 if (percentagesSum == 100)
                     return false;
@@ -229,7 +228,6 @@
                             rateCalculationPayload = { AmountCalculation: settings.AmountCalculation }; 
                             $scope.scopeModel.createTax = settings.CreateTax;
                             $scope.scopeModel.taxPercentage = settings.TaxPercentage;
-                            $scope.scopeModel.divideByRegion = settings.DivideByRegion;
                             reportDefintionFilterGroup = settings.ReportFilter;
                             taxFilterGroup = settings.TaxFilter;
                             if (settings.MarketSettings != undefined) {
@@ -305,7 +303,6 @@
                             MarketOptions: marketOptions
                         },
 
-                        DivideByRegion: $scope.scopeModel.divideByRegion,
                         RegionSettings: {
                             RegionOptions: regionOptions,
 

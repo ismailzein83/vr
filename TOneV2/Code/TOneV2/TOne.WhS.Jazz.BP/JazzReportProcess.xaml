@@ -45,13 +45,13 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Jazz.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Jazz.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Jazz.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
-      <AssemblyReference>Vanrise.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.Jazz.BP</AssemblyReference>
     </sco:Collection>
@@ -103,8 +103,9 @@
               </ActivityAction.Argument>
               <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
                 <Sequence.Variables>
-                  <Variable x:TypeArguments="twje:JazzTransactionsReport" Name="TransactionsReport" />
+                  <Variable x:TypeArguments="scg:List(twje:JazzTransactionsReport)" Name="TransactionsReports" />
                   <Variable x:TypeArguments="twjba1:JazzReport" Name="JazzReport" />
+                  <Variable x:TypeArguments="scg:List(twje:JazzTransactionsReport)" Name="TransactionsReport" />
                 </Sequence.Variables>
                 <twjba1:ProcessJazzReport sap2010:WorkflowViewState.IdRef="ProcessJazzReport_1">
                   <twjba1:ProcessJazzReport.FromDate>
@@ -118,8 +119,8 @@
                     </OutArgument>
                   </twjba1:ProcessJazzReport.JazzReport>
                   <twjba1:ProcessJazzReport.JazzTransactionsReport>
-                    <OutArgument x:TypeArguments="twje:JazzTransactionsReport">
-                      <mca:CSharpReference x:TypeArguments="twje:JazzTransactionsReport">TransactionsReport</mca:CSharpReference>
+                    <OutArgument x:TypeArguments="scg:List(twje:JazzTransactionsReport)">
+                      <mca:CSharpReference x:TypeArguments="scg:List(twje:JazzTransactionsReport)">TransactionsReport</mca:CSharpReference>
                     </OutArgument>
                   </twjba1:ProcessJazzReport.JazzTransactionsReport>
                   <twjba1:ProcessJazzReport.ReportDefinition>
@@ -135,8 +136,8 @@
                 </twjba1:ProcessJazzReport>
                 <twjba1:SaveJazzReportDraft sap2010:WorkflowViewState.IdRef="SaveJazzReportDraft_1">
                   <twjba1:SaveJazzReportDraft.TransactionsReport>
-                    <InArgument x:TypeArguments="twje:JazzTransactionsReport">
-                      <mca:CSharpValue x:TypeArguments="twje:JazzTransactionsReport">TransactionsReport</mca:CSharpValue>
+                    <InArgument x:TypeArguments="scg:List(twje:JazzTransactionsReport)">
+                      <mca:CSharpValue x:TypeArguments="scg:List(twje:JazzTransactionsReport)">TransactionsReport</mca:CSharpValue>
                     </InArgument>
                   </twjba1:SaveJazzReportDraft.TransactionsReport>
                 </twjba1:SaveJazzReportDraft>
@@ -174,6 +175,13 @@
               </InArgument>
             </twjba1:GenerateJazzReportFile.JazzReports>
           </twjba1:GenerateJazzReportFile>
+          <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5">
+            <vbw:WriteTrackingMessage.Message>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">string.Format("FileId:{0} ",FileId)</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Message>
+          </vbw:WriteTrackingMessage>
           <vbw:AssignTask x:TypeArguments="twjba:PreviewTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_1" TaskTitle="Review Reports">
             <vbw:AssignTask.AssignedTo>
               <InArgument x:TypeArguments="vbe:BPTaskAssignee">
@@ -244,7 +252,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkphenouQlBcSmF6elJlcG9ydFByb2Nlc3MueGFtbDI7A/gBDgIBAUELQXgCAQJFBUsgAwG6AUwFUigDAbQBUwX2AQoCAQdIC0iGAQMBvAFFYEV2AwG7AU8LT30DAbUBVgtWYwIBCFoJ6wEUAgEU7gEJ9AEkAgENXgukARUCAVelAQuwASsCAUqxAQvFARwCATbGAQvjARACARzkAQvqASkCARXxAQ/xAYkBAgEP7gFk7gF8AgEOYRFhggEDAa4BaA+iARoCAVitARGtAW0CAVGoARGoAVwCAUvCARHCAYUBAgFEuQERvQEhAgE+sQGmAbEBtgECAT20ARG0AZ0BAgE3yQERyQFyAgEdzQEP1gEaAgEs2QEP4QEaAgEj5wER5wFUAgEWbRGHASwDAYABiAERjgEuAgF2jwERoQEWAgFZzgERzgF3AgE1zwER1QEsAgEt2gER4AEsAgEkehd6ggEDAaUBcBdwZQMBnAGEAReEAWMDAZMBdRd1cAMBigF/F392AwGBAYsBF4sBegIBd5IBF5IBaAIBWpYBFZ8BJwIBY9IBF9IBkgECAS/PAWzPAYMBAgEu3QEX3QGSAQIBJtoBbNoBggECASWdARmdAXwCAW2ZARuZAWwCAWQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkphenouQlBcSmF6elJlcG9ydFByb2Nlc3MueGFtbDQ7A4ACDgIBAUELQXgCAQJFBUsgAwHKAUwFUigDAcQBUwX+AQoCAQdIC0iGAQMBzAFFYEV2AwHLAU8LT30DAcUBVgtWYwIBCFoJ8wEUAgEU9gEJ/AEkAgENXgulARUCAV6mAQuxASsCAVGyAQu4ASYCAUq5AQvNARwCATbOAQvrARACARzsAQvyASkCARX5AQ/5AYkBAgEP9gFk9gF8AgEOYRFhggEDAb4BaA+jARoCAV+uARGuAW0CAVipARGpAVwCAVK1ARG1AXICAUvKARHKAYUBAgFEwQERxQEhAgE+uQGmAbkBtgECAT28ARG8AZ0BAgE30QER0QFyAgEd1QEP3gEaAgEs4QEP6QEaAgEj7wER7wFUAgEWbhGIASwDAYsBiQERjwEuAwGAAZABEaIBFgIBYNYBEdYBdwIBNdcBEd0BLAIBLeIBEegBLAIBJHsXe4wBAwG0AXEXcWUDAaoBhQEXhQFjAwGgAXYXdnADAZYBgAEXgAF2AwGMAYwBF4wBhAEDAYEBkwEXkwFoAgFhlwEVoAEnAgFr2gEX2gGSAQIBL9cBbNcBgwECAS7lARflAZIBAgEm4gFs4gGCAQIBJZ4BGZ4BfAIBdpoBG5oBbAIBbA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -270,6 +278,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="516,608" />
       <sap2010:ViewStateData Id="GenerateJazzReportFile_1" sap:VirtualizedContainerService.HintSize="516,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="516,22" />
       <sap2010:ViewStateData Id="AssignTask`1_1" sap:VirtualizedContainerService.HintSize="516,22" />
       <sap2010:ViewStateData Id="ApplyJazzReportTransactions_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -290,7 +299,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="516,358" />
       <sap2010:ViewStateData Id="DeleteJazzReportFile_1" sap:VirtualizedContainerService.HintSize="516,22" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="538,1316">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="538,1378">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -298,15 +307,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="763,1466" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="785,1714">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="763,1528" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="785,1776">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Jazz.BP.JazzReportProcess_1" sap:VirtualizedContainerService.HintSize="825,1794" />
+      <sap2010:ViewStateData Id="TOne.WhS.Jazz.BP.JazzReportProcess_1" sap:VirtualizedContainerService.HintSize="825,1856" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

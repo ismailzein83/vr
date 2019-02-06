@@ -124,13 +124,12 @@
                     }
                     
                     payload.Carriers = {
-                        $type:"TOne.WhS.Jazz.Entities.WhsJazzAccountCodeCarriers,TOne.WhS.Jazz.Entities",
+                        $type:"TOne.WhS.Jazz.Entities.AccountCodeCarriers,TOne.WhS.Jazz.Entities",
                         Carriers: Carriers
                     };
                     
                     payload.TransactionTypeId = transactionTypeSelectorAPI.getSelectedIds();
-
-                    return payload;
+                    return payload; 
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

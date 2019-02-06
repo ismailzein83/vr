@@ -16,6 +16,11 @@ namespace TOne.WhS.Jazz.Entities
         bool IsMatch(IAccountCodeFilterContext context);
     }
 
+    public abstract class AccountCodeFilter: IAccountCodeFilter
+    {
+        public abstract bool IsMatch(IAccountCodeFilterContext context);
+
+    }
     public interface IAccountCodeFilterContext
     {
         AccountCode AccountCode { get; }

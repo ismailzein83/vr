@@ -29,8 +29,17 @@ namespace TOne.WhS.Jazz.Business
             }
             return customerTypes;
         }
+        public CustomerType GetCustomerTypeById(Guid customerTypeId)
+        {
+            var customerTypes = GetCachedCustomerTypes();
+            return customerTypes.GetRecord(customerTypeId);
+        }
 
+        public string GetCustomerTypeName(Guid customerTypeId)
+        {
+            return GetCustomerTypeById(customerTypeId).Name;
 
+        }
         private Dictionary<Guid, CustomerType> GetCachedCustomerTypes()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();

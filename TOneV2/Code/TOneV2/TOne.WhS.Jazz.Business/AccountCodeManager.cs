@@ -58,6 +58,7 @@ namespace TOne.WhS.Jazz.Business
                             SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
                             TransactionTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("TransactionTypeId"),
                             Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
+                            Carriers=(AccountCodeCarriers)genericBusinessEntity.FieldValues.GetRecord("Carriers"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
@@ -102,6 +103,24 @@ namespace TOne.WhS.Jazz.Business
             }, filterFunc);
         }
 
+        public IEnumerable<AccountCode> GetAccountCodes(Guid transactionTypeId,int switchId)
+        {
+            var accountCodes = GetCachedAccountCodes();
+
+            Func<AccountCode, bool> filterFunc = (accountCode) =>
+            {
+                {
+                    if (accountCode.SwitchId != switchId) return false;
+                    if (accountCode.TransactionTypeId != transactionTypeId) return false;
+                }
+                return true;
+            };
+            return accountCodes.MapRecords((record) =>
+            {
+                return record;
+            }, filterFunc);
+
+        }
         private AccountCodeDetail AccountCodeInfoMapper(AccountCode accountCode)
         {
             return new AccountCodeDetail

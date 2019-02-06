@@ -40,8 +40,6 @@
     <vr-tab header="'Regions'">
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-switch value="scopeModel.divideByRegion" label="Divide By Region"></vr-switch>
-                <vr-section ng-if="scopeModel.divideByRegion" title="Regions">
                     <vr-columns width="1/2row">
                         <vr-button type="Add" data-onclick="scopeModel.addRegion" standalone></vr-button>
                     </vr-columns>
@@ -62,7 +60,6 @@
                             </vr-datagrid>
                         </vr-validator>
                     </vr-columns>
-                </vr-section>
             </vr-columns>
         </vr-row>
     </vr-tab>

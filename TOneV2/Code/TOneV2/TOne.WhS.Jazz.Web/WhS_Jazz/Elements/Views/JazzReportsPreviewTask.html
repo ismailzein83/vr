@@ -1,0 +1,22 @@
+﻿<div vr-modalcontent ng-controller="WhS_Jazz_ReportsPreviewTaskController" vr-loader="scopeModal.isLoading" size="large">
+    <vr-modalbody>
+        <vr-form name="formSupplierPriceListPreview">
+            <vr-row>
+                <vr-columns colnum="2">
+                    <vr-filedownload on-ready="onFileDownloadDirectiveReady" value="scopeModal.value"></vr-filedownload>
+                </vr-columns>
+                <vr-columns colnum="2">
+                    <vr-filedownload on-ready="onFileDownloadDirectiveReady" value="scopeModal.downloadFile"></vr-filedownload>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Continue" data-onclick="scopeModal.continueTask" formname="formSupplierPriceListPreview"></vr-button>
+                <vr-button type="Stop" data-onclick="scopeModal.stopTask"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

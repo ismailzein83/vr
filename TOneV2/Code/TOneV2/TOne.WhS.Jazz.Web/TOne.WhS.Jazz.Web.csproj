@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\TransactionsReportController.cs" />
     <Compile Include="Controllers\ProductServiceController.cs" />
     <Compile Include="Controllers\CustomerTypeController.cs" />
     <Compile Include="Controllers\TaxCodeController.cs" />
@@ -169,6 +170,7 @@
     <Content Include="WhS_Jazz\Elements\Directives\AccountCode\whs-jazz-accountcode-customobject-staticeditor.js" />
     <Content Include="WhS_Jazz\Elements\Directives\AccountCode\whs-jazz-accountcode-customobjectsettings.js" />
     <Content Include="WhS_Jazz\Elements\Services\APIServices\CustomerTypeAPIService.js" />
+    <Content Include="WhS_Jazz\Elements\Services\APIServices\TransactionsReportAPIService.js" />
     <Content Include="WhS_Jazz\Elements\Services\APIServices\TaxCodeAPIService.js" />
     <Content Include="WhS_Jazz\Elements\Services\APIServices\SwitchCodeAPIService.js" />
     <Content Include="WhS_Jazz\Elements\Services\APIServices\TransactionTypeAPIService.js" />
@@ -176,6 +178,8 @@
     <Content Include="WhS_Jazz\Elements\Services\APIServices\ProductServiceAPIService.js" />
     <Content Include="WhS_Jazz\Elements\Services\APIServices\RegionAPIService.js" />
     <Content Include="WhS_Jazz\Elements\Services\APIServices\AccountCodeAPIService.js" />
+    <Content Include="WhS_Jazz\Elements\Views\JazzReportsPreviewTaskController.js" />
+    <Content Include="WhS_Jazz\Elements\Views\JazzReportsPreviewTask.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">

@@ -47,6 +47,20 @@ namespace TOne.WhS.Jazz.Business
             }, filterFunc);
 
         }
+
+        public SwitchCode GetSwitchCodeById(Guid switchCodeId)
+        {
+
+            var switchCodes = GetCachedSwitchCodes();
+            return switchCodes.GetRecord(switchCodeId);
+        }
+
+        public SwitchCode GetSwitchCodeBySwitchId(int switchId)
+        {
+            var switchCodes = GetCachedSwitchCodes();
+            return switchCodes.FindRecord(x => x.SwitchId == switchId);
+
+        }
         private Dictionary<Guid, SwitchCode> GetCachedSwitchCodes()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
@@ -67,6 +81,7 @@ namespace TOne.WhS.Jazz.Business
                             ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
                             Name=(string)genericBusinessEntity.FieldValues.GetRecord("Name"),
+                            Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),

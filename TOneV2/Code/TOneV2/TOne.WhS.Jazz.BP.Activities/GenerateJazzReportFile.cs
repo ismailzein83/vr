@@ -8,6 +8,8 @@ using Vanrise.Common.Excel;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using TOne.WhS.Jazz.Entities;
+using System.IO;
+using Aspose.Cells;
 
 namespace TOne.WhS.Jazz.BP.Activities
 {
@@ -24,6 +26,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                 foreach(var report in jazzReports)
                 {
                     var excelSheet = excelFile.CreateSheet();
+                    excelSheet.SheetName = report.ReportName;
                     var excelTable = excelSheet.CreateTable(0,0);
                     var headerRow=  excelTable.CreateHeaderRow();
                     if (report.Direction.Equals(ReportDefinitionDirectionEnum.In))
@@ -55,11 +58,11 @@ namespace TOne.WhS.Jazz.BP.Activities
                                         foreach(var region in market.Regions)
                                         {
                                             var row = excelTable.CreateDataRow();
-                                            CreateCell(string.Join(reportData.CarrierAccountId.ToString(), reportData.CarrierAccountName), row);
-                                            CreateCell(reportData.Amount.ToString(), row);
+                                            CreateCell(string.Format("{0}{1}",reportData.CarrierAccountId.ToString(), reportData.CarrierAccountName), row);
                                             CreateCell(reportData.Duration.ToString(), row);
-                                            CreateCell(string.Join(market.MarketName," ", market.Percentage), row);
-                                            CreateCell(string.Join(region.RegionName," ", region.Percentage), row);
+                                            CreateCell(reportData.Amount.ToString(), row);
+                                            CreateCell(string.Format("{0} {1}%",market.MarketName, market.Percentage), row);
+                                            CreateCell(string.Format("{0} {1}%", region.RegionName, region.Percentage), row);
                                             CreateCell(market.MarketValue.ToString(), row);
                                             CreateCell(region.RegionValue.ToString(), row);
                                         }
@@ -73,12 +76,17 @@ namespace TOne.WhS.Jazz.BP.Activities
             var file = excelFile.GenerateExcelFile();
             var fileManager = new VRFileManager();
             var fileId = fileManager.AddFile(new VRFile {
-                Name="Jazz Reports",
-                Content = file });
+                Name="JazzReports.xlsx",
+                Content = file
+            });
+            FileStream fs = new FileStream(string.Format(@"C:\mohammad\{0}.xlsx",Guid.NewGuid()), FileMode.Create);
+            StreamWriter writer = new StreamWriter(fs);
+            writer.Write(file);
+            writer.Close();
             FileId.Set(context, fileId);
 
         }
-        public void CreateCell(string cellValue, VRExcelTableRow row)
+        private void CreateCell(string cellValue, VRExcelTableRow row)
         {
             var cell = row.CreateCell();
             cell.SetValue(cellValue);

@@ -12,6 +12,7 @@ namespace TOne.WhS.Jazz.Entities
         public int SwitchId { get; set; }
         public Guid TransactionTypeId { get; set; }
         public string Code { get; set; }
+        public AccountCodeCarriers Carriers { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime LastModifiedTime { get; set; }
         public int LastModifiedBy { get; set; }

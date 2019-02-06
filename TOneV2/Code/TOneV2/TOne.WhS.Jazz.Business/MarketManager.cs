@@ -65,6 +65,10 @@ namespace TOne.WhS.Jazz.Business
             return markets.GetRecord(marketId);
         }
 
+        public string GetMarketName(Guid marketId)
+        {
+            return GetMarketById(marketId).Name;
+        }
         private Dictionary<Guid, Market> GetCachedMarkets()
         {
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();

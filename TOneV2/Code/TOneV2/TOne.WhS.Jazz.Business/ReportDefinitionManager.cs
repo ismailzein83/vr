@@ -56,7 +56,6 @@ namespace TOne.WhS.Jazz.Business
                             SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
                             IsEnabled = (bool)genericBusinessEntity.FieldValues.GetRecord("IsEnabled")
                         };
-                        reportDefintion.Direction = new ReportDefinitionDirectionEnum();
                         reportDefintion.Settings = new JazzReportDefinitionSettings();
                         reportDefintion.Settings = (JazzReportDefinitionSettings)genericBusinessEntity.FieldValues.GetRecord("Settings");
                         result.Add(reportDefintion.JazzReportDefinitionId, reportDefintion);
