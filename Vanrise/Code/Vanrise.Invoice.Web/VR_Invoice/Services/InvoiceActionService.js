@@ -362,7 +362,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
             generateInvoices: generateInvoices,
             reGenerateInvoice: reGenerateInvoice,
             registerSendEmailAction: registerSendEmailAction,
-            registerSendFTPAction: registerSendFTPAction,
+            //registerSendFTPAction: registerSendFTPAction,
             registerDownloadFileInvoiceAction: registerDownloadFileInvoiceAction,
             registerSetInvoiceDeletedAction: registerSetInvoiceDeletedAction,
             registerApproveInvoiceAction: registerApproveInvoiceAction
