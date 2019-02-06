@@ -4274,12 +4274,18 @@ vr-overall-widget .list-group-item {
     display: flex;
     width: 100%;
     height: min-content;
-    flex-wrap: wrap;
 }
 .vr-figure .figure-data-content .figure-item .item-label {
     display: inline-flex;
     align-self: flex-start;
     font-weight: bold;
+    overflow: hidden;
+}
+.vr-figure .figure-data-content .figure-item .item-label div {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .vr-figure .figure-data-content .figure-item .item-value {
     display: inline-flex;
