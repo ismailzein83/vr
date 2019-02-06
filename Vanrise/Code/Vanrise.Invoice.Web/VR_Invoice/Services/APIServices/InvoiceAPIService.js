@@ -147,7 +147,7 @@
             ReGenerateInvoiceGenerationDraft: ReGenerateInvoiceGenerationDraft,
             ApproveInvoice: ApproveInvoice,
             GetAvailableMenualBulkActionIds: GetAvailableMenualBulkActionIds,
-            SendFTPFile: SendFTPFile
+            //SendFTPFile: SendFTPFile
         });
     }
 
