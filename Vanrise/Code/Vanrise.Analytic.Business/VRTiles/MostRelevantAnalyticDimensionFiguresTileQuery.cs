@@ -49,6 +49,10 @@ namespace Vanrise.Analytic.Business
 
             var analyticRecords = analyticManager.GetAllFilteredRecords(Query) as List<AnalyticRecord>;
             analyticRecords.ThrowIfNull("analyticRecords");
+            figureItemValues.Add(new FigureItemValue()
+            {
+                Name = itemsToDisplay.First().Title,
+            });
             if (analyticRecords.Count() > 0)
             {
                 var record = analyticRecords.FirstOrDefault();
@@ -56,11 +60,7 @@ namespace Vanrise.Analytic.Business
                 var dimensions = record.DimensionValues;
                 var selectedDimension = dimensions.First();
                 // var selectedItem = context.ItemsToDisplayNames
-                figureItemValues.Add(new FigureItemValue()
-                {
-                    Name = itemsToDisplay.First().Title,
-                    Value = selectedDimension.Name
-                });
+                figureItemValues.First().Value = selectedDimension.Value;
             }
             return figureItemValues;
         }
