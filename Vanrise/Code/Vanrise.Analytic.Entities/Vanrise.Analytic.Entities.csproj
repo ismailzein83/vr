@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalyticDataProvider\RDBAnalyticDataProviderTable\RDBAnalyticDataProviderTableConfig.cs" />
+    <Compile Include="AnalyticDataProvider\AnalyticDataProviderTable\AnalyticDataProviderTableConfig.cs" />
     <Compile Include="AnalyticItemAction.cs" />
     <Compile Include="AnalyticQuery.cs" />
     <Compile Include="AnalyticRecord.cs" />
