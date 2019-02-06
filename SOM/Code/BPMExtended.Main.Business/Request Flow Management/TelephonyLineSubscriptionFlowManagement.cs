@@ -39,7 +39,7 @@ namespace BPMExtended.Main.Business
                 //print template
                 case "6895f711-7e76-4043-8777-9267d7cd27ec": nextStepId = findFreeTechnicalStep; break;
                 //find free technical
-                case "ee7c2188-77a0-406c-baa5-e29925509ae8": !isWaitingOrNetwork? nextStepId = subscriptionAddressStep : ; break;
+                //case "ee7c2188-77a0-406c-baa5-e29925509ae8": !isWaitingOrNetwork? nextStepId = subscriptionAddressStep : ; break;
 
                 case "424131a8-9d04-4f9f-8d18-279bb00bcdda": nextStepId = technicalStep; break;
                 case "E3DB01E7-71B5-4658-9681-2DBC3DF301F9": nextStepId = completedStep; break;
