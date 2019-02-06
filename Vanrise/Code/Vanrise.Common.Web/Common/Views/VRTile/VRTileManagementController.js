@@ -53,7 +53,8 @@ function VRTileManagementController($scope, VRUIUtilsService, VRNavigationServic
                 var tile = {
                     name: tileEntity.Name,
                     runtimeEditor: tileEntity.Settings.ExtendedSettings.RuntimeEditor,
-                    columnWidth: columnWidthObj!= undefined?columnWidthObj.numberOfColumns:undefined
+                    columnWidth: columnWidthObj != undefined ? columnWidthObj.numberOfColumns : undefined,
+                    showTitle : tileEntity.ShowTitle
                 };
                 tile.onVRTileDirectiveReady = function (api) {
                     tile.tileAPI = api;

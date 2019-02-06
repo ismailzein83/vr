@@ -7,7 +7,7 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
             scope:
             {
                 onReady: "=",
-                title: '=',
+                header: '=',
                 index: '='
             },
             controller: function ($scope, $element, $attrs) {
@@ -27,7 +27,7 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.tileTitle = ctrl.title;
+                $scope.scopeModel.tileTitle = ctrl.header;
                 $scope.scopeModel.fields = [];
                 defineAPI();
             }

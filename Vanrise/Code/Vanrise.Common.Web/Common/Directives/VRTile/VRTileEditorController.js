@@ -66,6 +66,7 @@
                 if (vrTileEntity == undefined)
                     return;
                 $scope.scopeModel.tileName = vrTileEntity.Name;
+                $scope.scopeModel.showTitle = vrTileEntity.ShowTitle;
                 if(vrTileEntity.Settings != undefined)
                 {
                     $scope.scopeModel.selectedColumnWidth = UtilsService.getEnum(ColumnWidthEnum, "value", vrTileEntity.Settings.NumberOfColumns);
@@ -99,6 +100,7 @@
             var obj = {
                 VRTileId: vrTileEntity != undefined ? vrTileEntity.VRTileId : UtilsService.guid(),
                 Name: $scope.scopeModel.tileName,
+                ShowTitle: $scope.scopeModel.showTitle,
                 Settings: {
                     ExtendedSettings: extendedSettingsDirectiveApi.getData(),
                     NumberOfColumns : $scope.scopeModel.selectedColumnWidth.value,

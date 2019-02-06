@@ -10,6 +10,7 @@ namespace Vanrise.Entities
     {
         public Guid VRTileId { get; set; }
         public string Name { get; set; }
+        public bool ShowTitle { get; set; }
         public VRTileSettings Settings { get; set; }
     }
 
