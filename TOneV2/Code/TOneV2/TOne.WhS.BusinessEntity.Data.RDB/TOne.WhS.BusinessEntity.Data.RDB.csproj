@@ -73,7 +73,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingProductDataManager.cs" />
     <Compile Include="SaleCodeDataManager.cs" />
-    <Compile Include="SaleCodePreviewDataManager.cs" />
     <Compile Include="SaleEntityRoutingProductDataManager.cs" />
     <Compile Include="SaleEntityServiceDataManager.cs" />
     <Compile Include="SalePriceListChangeDataManager.cs" />
