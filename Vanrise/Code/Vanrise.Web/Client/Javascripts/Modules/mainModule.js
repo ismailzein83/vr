@@ -421,7 +421,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                     value.keyclass = key % 16;
                     value.isSelected = false;
                     value.parent = null;
-                    value.tileIcon = buildTileIconPath(value.Icon)
+                    value.tileIcon = buildTileIconPath(value.Icon);
                     allMenuItems.push(value);
                     matchParentNode(value);
 
