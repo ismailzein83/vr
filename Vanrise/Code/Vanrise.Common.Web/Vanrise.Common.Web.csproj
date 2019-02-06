@@ -118,7 +118,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Common\Constant\MasterLayoutMenuOptionEnum.js" />
     <Content Include="Common\Constant\PatternPartsEnum.js" />
     <Content Include="Common\Constant\VRCustomCodeDynamicAPIMethodTypeEnum.js" />
     <Content Include="Common\Constant\VRHttpMessageFormatEnum.js" />
