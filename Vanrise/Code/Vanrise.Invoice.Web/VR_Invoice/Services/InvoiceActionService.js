@@ -161,6 +161,21 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
             };
             registerActionType(actionType);
         }
+        //function registerSendFTPAction() {
+        //    var actionType = {
+        //        ActionTypeName: "SendFTPAction",
+        //        actionMethod: function (payload) {
+        //            var promiseDeffered = UtilsService.createPromiseDeferred();
+
+        //            var onInvoiceFTPSend = function (response) {
+        //                promiseDeffered.resolve(true);
+        //            };
+        //            openFTPTemplate(onInvoiceFTPSend, payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceTypeId);
+        //            return promiseDeffered.promise;
+        //        }
+        //    };
+        //    registerActionType(actionType);
+        //}
         function openInvoiceNote(onInvoiceNoteAdded, invoiceId, invoiceActionId) {
             var settings = {
 
@@ -187,6 +202,21 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
                 invoiceTypeId: invoiceTypeId
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceEmailTemplate.html', parameters, settings);
+        }
+
+        function openFTPTemplate(onInvoiceFTPSend, invoiceId, invoiceActionId, invoiceTypeId) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onInvoiceFTPSend = onInvoiceFTPSend;
+            };
+            var parameters = {
+                invoiceId: invoiceId,
+                invoiceActionId: invoiceActionId,
+                invoiceTypeId: invoiceTypeId
+            };
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceFTPTemplate.html', parameters, settings);
         }
         function addInvoiceAction(onInvoiceActionAdded, context) {
             var settings = {
@@ -332,6 +362,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
             generateInvoices: generateInvoices,
             reGenerateInvoice: reGenerateInvoice,
             registerSendEmailAction: registerSendEmailAction,
+            registerSendFTPAction: registerSendFTPAction,
             registerDownloadFileInvoiceAction: registerDownloadFileInvoiceAction,
             registerSetInvoiceDeletedAction: registerSetInvoiceDeletedAction,
             registerApproveInvoiceAction: registerApproveInvoiceAction

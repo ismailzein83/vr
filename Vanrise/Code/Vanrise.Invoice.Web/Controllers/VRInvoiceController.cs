@@ -221,6 +221,18 @@ namespace Vanrise.Invoice.Web.Controllers
             return manager.ApproveInvoice(invoiceId, isApproved);
         }
 
+        //[HttpGet]
+        //[Route("SendFTPFile")]
+        //public object SendFTPFile(Guid invoiceActionId, long invoiceId, Guid connectionId)
+        //{
+        //    InvoiceManager manager = new InvoiceManager();
+        //    if (!manager.DosesUserHaveActionAccess(InvoiceActionType.SendFTP, invoiceId, invoiceActionId))
+        //        return GetUnauthorizedResponse();
+
+        //    return manager.SendFTPFile(invoiceId, connectionId);
+        //}
+
+
         [HttpGet]
         [Route("GetAvailableMenualBulkActionIds")]
         public object GetAvailableMenualBulkActionIds(Guid invoiceTypeId)

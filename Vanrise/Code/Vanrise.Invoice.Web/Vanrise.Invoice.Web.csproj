@@ -27,7 +27,8 @@
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <Use64BitIISExpress />
     <UseGlobalApplicationHostFile />
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -274,7 +275,9 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\vr-invoicetype-invoicebulkaction-recreateinvoice.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\vr-invoicetype-invoicebulkaction-recreateinvoice-runtime .js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\ApproveInvoiceActionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\SendFTPActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-approveinvoice.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-sendftp.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceBulkAction\InvoiceBulkActionEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceBulkAction\Templates\InvoiceBulkActionEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceBulkAction\Templates\InvoiceBulkActionsGridTemplate.html" />
@@ -487,6 +490,7 @@
     <Content Include="VR_Invoice\ModuleInitialization.js" />
     <Content Include="VR_Invoice\Reports\InvoiceReport.aspx" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceAPIService.js" />
+    <Content Include="VR_Invoice\Services\APIServices\InvoiceFTPActionService.js" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceItemAPISevice.js" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceSettingAPIService.js" />
     <Content Include="VR_Invoice\Services\APIServices\InvoiceTypeAPIService.js" />
@@ -571,7 +575,9 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\SubSectionGridColumnEditorController.js" />
     <Content Include="VR_Invoice\Views\Runtime\InvoiceEmailTemplate.html" />
     <Content Include="VR_Invoice\Views\Runtime\InvoiceEmailTemplateController.js" />
+    <Content Include="VR_Invoice\Views\Runtime\InvoiceFTPTemplate.html" />
     <Content Include="VR_Invoice\Views\Runtime\InvoiceNoteActionEditor.html" />
+    <Content Include="VR_Invoice\Views\Runtime\InvoiceFTPActionEditorController.js" />
     <Content Include="VR_Invoice\Views\Runtime\InvoiceNoteActionEditorController.js" />
     <Content Include="VR_Invoice\Views\Runtime\MenualInvoiceBulkActionsRunTimeEditor.html" />
     <Content Include="VR_Invoice\Views\Runtime\MenualInvoiceBulkActionsRunTimeEditorController.js" />

@@ -9,6 +9,7 @@
     VR_Invoice_InvoiceActionService.registerDownloadFileInvoiceAction();
     VR_Invoice_InvoiceActionService.registerSetInvoiceDeletedAction();
     VR_Invoice_InvoiceActionService.registerApproveInvoiceAction();
+    //VR_Invoice_InvoiceActionService.registerSendFTPAction();
 }]);
 
       

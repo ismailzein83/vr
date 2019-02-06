@@ -117,6 +117,13 @@
                 invoiceTypeId: invoiceTypeId
             });
         }
+        //function SendFTPFile(invoiceActionId, invoiceId, connectionId) {
+        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'SendFTPFile'), {
+        //        invoiceActionId: invoiceActionId,
+        //        invoiceId: invoiceId,
+        //        connectionId: connectionId
+        //    });
+        //} 
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -139,7 +146,8 @@
             ExecuteMenualInvoiceActions: ExecuteMenualInvoiceActions,
             ReGenerateInvoiceGenerationDraft: ReGenerateInvoiceGenerationDraft,
             ApproveInvoice: ApproveInvoice,
-            GetAvailableMenualBulkActionIds: GetAvailableMenualBulkActionIds
+            GetAvailableMenualBulkActionIds: GetAvailableMenualBulkActionIds,
+            SendFTPFile: SendFTPFile
         });
     }
 
