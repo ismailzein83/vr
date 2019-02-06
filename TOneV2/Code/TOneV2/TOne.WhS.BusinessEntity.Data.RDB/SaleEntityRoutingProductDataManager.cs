@@ -176,11 +176,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             whereContext.EqualsCondition(COL_OwnerID).Value(ownerId);
             whereContext.NotNullCondition(COL_ZoneID);
 
-            var orCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            orCondition.NullCondition(COL_EED);
-            var andCondition = orCondition.ChildConditionGroup();
-            andCondition.GreaterThanCondition(COL_EED).Value(minimumDate);
-            andCondition.NotEqualsCondition(COL_BED).Column(COL_EED);
+            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, minimumDate);
 
             return queryContext.GetItems(SaleZoneRoutingProductMapper);
         }
