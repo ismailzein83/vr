@@ -4,7 +4,7 @@
 
     AdvancedMeasureOrderOptions.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticTypeEnum', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_OrderDirectionEnum'];
 
-    function AdvancedMeasureOrderOptions(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService,VR_Analytic_OrderDirectionEnum) {
+    function AdvancedMeasureOrderOptions(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticTypeEnum, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_OrderDirectionEnum) {
         return {
             restrict: "E",
             scope: {
@@ -81,15 +81,16 @@
                 var api = {};
 
                 api.load = function (payload) {
+
+                    var onlySelectedMeasuresIds;
                     if (payload != undefined && payload.tableIds != undefined) {
                         tableIds = payload.tableIds;
+                        onlySelectedMeasuresIds = payload.onlySelectedMeasureIds;
                         var promises = [];
                         var selectedMeasureIds;
-                        if (payload.advancedOrderOptions != undefined)
-                        {
+                        if (payload.advancedOrderOptions != undefined) {
                             if (payload.advancedOrderOptions.MeasureOrders != undefined && payload.advancedOrderOptions.MeasureOrders.length > 0) {
                                 selectedMeasureIds = [];
-
                                 for (var i = 0; i < payload.advancedOrderOptions.MeasureOrders.length; i++) {
                                     var measure = payload.advancedOrderOptions.MeasureOrders[i];
                                     var measureOrder = {
@@ -98,14 +99,16 @@
                                     selectedMeasureIds.push(measure.MeasureName);
                                     addMeasureGridWidthAPI(measureOrder);
                                 }
-
                             }
                         }
 
                         var loadMeasureDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         measureReadyDeferred.promise.then(function () {
                             var payloadFilterDirective = {
-                                filter: { TableIds: tableIds },
+                                filter: {
+                                    TableIds: tableIds,
+                                    MeasureIds: onlySelectedMeasuresIds
+                                },
                                 selectedIds: selectedMeasureIds
                             };
                             VRUIUtilsService.callDirectiveLoad(measureSelectorAPI, payloadFilterDirective, loadMeasureDirectivePromiseDeferred);
@@ -148,13 +151,14 @@
             }
 
             function addMeasureGridWidthAPI(measureOrder) {
-               
+
                 var dataItem = {};
                 if (measureOrder.payload != undefined) {
                     dataItem.Name = measureOrder.payload.MeasureName;
                     dataItem.SelectedOrderDirection = UtilsService.getItemByVal($scope.scopeModel.orderDirectionList, measureOrder.payload.OrderDirection, 'value');
                 }
-                $scope.scopeModel.measures.push(dataItem);
+                if (UtilsService.getItemByVal($scope.scopeModel.measures, dataItem.Name, 'Name') == undefined)
+                    $scope.scopeModel.measures.push(dataItem);
             }
             function getAllMeasures() {
                 var input = {

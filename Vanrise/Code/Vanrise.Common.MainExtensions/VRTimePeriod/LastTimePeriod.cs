@@ -3,7 +3,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.Common.MainExtensions
 {
-    public enum TimeUnit { Day = 0, Hour = 1, Minute = 2 }
+    public enum TimeUnit { Year = 0, Month = 1, Day = 2, Hour = 3, Minute = 4, }
     public enum StartingFrom { ExecutionTime = 0, Midnight = 1 }
     public class LastTimePeriod : VRTimePeriod
     {
@@ -27,6 +27,8 @@ namespace Vanrise.Common.MainExtensions
 
             switch (this.TimeUnit)
             {
+                case TimeUnit.Year: context.FromTime = effectiveDate.AddYears(-1); break;
+                case TimeUnit.Month: context.FromTime = effectiveDate.AddMonths(-1); break;
                 case TimeUnit.Day: context.FromTime = effectiveDate.Subtract(new TimeSpan(TimeValue, 0, 0, 0)); break;
                 case TimeUnit.Hour: context.FromTime = effectiveDate.Subtract(new TimeSpan(TimeValue, 0, 0)); break;
                 case TimeUnit.Minute: context.FromTime = effectiveDate.Subtract(new TimeSpan(0, TimeValue, 0)); break;

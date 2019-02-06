@@ -2,9 +2,9 @@
 
     'use strict';
 
-    WidgetSettingsRuntime.$inject = ['VR_Analytic_AnalyticConfigurationAPIService', 'VR_Analytic_AnalyticTypeEnum', 'UtilsService', 'VRUIUtilsService', 'ColumnWidthEnum', 'VR_Analytic_AnalyticItemConfigAPIService'];
+    WidgetSettingsRuntime.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VRCommon_VRTimePeriodAPIService','VRDateTimeService'];
 
-    function WidgetSettingsRuntime(VR_Analytic_AnalyticConfigurationAPIService, VR_Analytic_AnalyticTypeEnum, UtilsService, VRUIUtilsService, ColumnWidthEnum, VR_Analytic_AnalyticItemConfigAPIService) {
+    function WidgetSettingsRuntime(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService,VRCommon_VRTimePeriodAPIService, VRDateTimeService) {
         return {
             restrict: "E",
             scope: {
@@ -27,67 +27,95 @@
         function Widgets($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-        
 
+            var definitionSettings;
             var directiveAPI;
-            var directiveReadyDeferred;
-           
+            var directiveReadyDeferred = UtilsService.createPromiseDeferred();
+            var templateConfigs = [];
+            var from;
+            var to;
+          
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.templateConfigs = [];
-                $scope.scopeModel.selectedTemplateConfig;
-
               
-                $scope.scopeModel.onDirectiveReady = function (api) {
-                    directiveAPI = api;
-                    directiveReadyDeferred.resolve();
-                };
-
 
                 defineAPI();
             }
             function defineAPI() {
                 var api = {};
-
-
                 api.load = function (payload) {
-                    var definitionSettings;
-                    console.log(payload);
                     var promises = [];
+                    VR_Analytic_AnalyticConfigurationAPIService.GetWidgetsTemplateConfigs().then(function (response) {
+                      
+                        if (response != null) {
 
-                    if (payload != undefined) {
-                        console.log(payload);
-                        definitionSettings = payload.definitionSettings;
-
-                        promises.push(loadDirective());
-
-                    }
-                    return UtilsService.waitMultiplePromises(promises);
-
-                     
-
+                            for (var i = 0; i < response.length; i++) {
+                                templateConfigs.push(response[i]);
+                            }
+                        }
+                        if (payload != undefined) {
+                            definitionSettings = payload.definitionSettings;
+                            var matchItem = UtilsService.getItemByVal(templateConfigs, definitionSettings.Settings.ConfigId, "ExtensionConfigurationId");
+                          
+                            if (matchItem == null)
+                                return;
+                        
+                            $scope.scopeModel.runtimeEditor = matchItem.RuntimeEditor;
+                            if ($scope.scopeModel.runtimeEditor != undefined) {
+                                $scope.scopeModel.onDirectiveReady = function (api) {
+                                    directiveAPI = api;
+                                    directiveReadyDeferred.resolve();
+                                };
+                            }
+                            var timePeriodInput = {
+                                TimePeriod: definitionSettings.TimePeriod,
+                                EffectiveDate: VRDateTimeService.getTodayDate()
+                            };
+                            var getPeriodRangePromise = VRCommon_VRTimePeriodAPIService.GetTimePeriod(timePeriodInput).then(function (response) {
+                                if (response != undefined) {
+                                    from = response.From;
+                                    to = response.To
+                                }
+                                
+                            });
+                        }
+                        getPeriodRangePromise.then(function () {
+                            promises.push(loadDirective());
+                            return UtilsService.waitMultiplePromises(promises).then(function () {
+                                $scope.scopeModel.isLoading = false;
+                            });
+                        });
+                       
+                    });
 
                 };
 
                 api.getData = function () {
-                   
+
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
             }
-
+          
             function loadDirective() {
-                //var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                //directiveReadyDeferred.promise.then(function () {
-                //    var directivePayload;
-                //    VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadPromiseDeferred);
-                //})
-                //return directiveLoadPromiseDeferred.promise;
+                $scope.scopeModel.isLoading = true;
+                var directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                directiveReadyDeferred.promise.then(function () {
+                    var directivePayload = {
+                        Settings: definitionSettings.Settings,
+                        TableId: definitionSettings.AnalyticTableId,
+                        FromTime: from,
+                        FilterGroup: definitionSettings.RecordFilter,
+                        ToTime: to,
+                    };
+                    VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadPromiseDeferred);
+                });
+           
+                return directiveLoadPromiseDeferred.promise;
             }
-            
         }
     }
 

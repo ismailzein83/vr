@@ -51,22 +51,23 @@ namespace Vanrise.Common.Business
             List<FigureItemValue> queriesFigureItemsValue = new List<FigureItemValue>();
             foreach (var query in queries)
             {
-                var selectedItemsToDisplayNames = new List<string>();
+                var selectedItemsToDisplay = new List<FiguresTileDisplayItem>();
                 foreach(var item in itemsToDisplay)
                 {
                     if (item.FiguresTileQueryId == query.FiguresTileQueryId)
-                        selectedItemsToDisplayNames.Add(item.Name);
+                        selectedItemsToDisplay.Add(item);
                 }
-                if(selectedItemsToDisplayNames.Count()>0)
+               
+                if(selectedItemsToDisplay.Count()>0)
                 {
-                    context.ItemsToDisplayNames = selectedItemsToDisplayNames;
+                    context.ItemsToDisplay = selectedItemsToDisplay;
                      queriesFigureItemsValue.AddRange(query.Settings.Execute(context)) ;
                 }
             }
             if(queriesFigureItemsValue.Count() >0)
             foreach(var item in itemsToDisplay)
             {
-                    var figureItem = queriesFigureItemsValue.FindRecord(x=>x.Name == item.Name);
+                    var figureItem = queriesFigureItemsValue.FindRecord(x=>x.Name == item.Title);
                     if (figureItem != null)
                         orderedfigureItemValue.Add(figureItem);
             }

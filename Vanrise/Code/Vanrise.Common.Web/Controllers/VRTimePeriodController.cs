@@ -21,5 +21,18 @@ namespace Vanrise.Common.Web.Controllers
         {
             return _manager.GetVRTimePeriodConfigs();
         }
+        [HttpPost]
+        [Route("GetTimePeriod")]
+        public DateTimeRange GetTimePeriod(TimePeriodInput timePeriodInput)
+        {
+            return _manager.GetTimePeriod(timePeriodInput.TimePeriod, timePeriodInput.EffectiveDate);
+        }
+
+
+    }
+    public class TimePeriodInput
+    {
+        public VRTimePeriod TimePeriod { get; set; }  
+        public DateTime EffectiveDate { get; set; }
     }
 }

@@ -40,15 +40,16 @@
             VRModalService.showModal('/Client/Modules/Common/Directives/VRTile/Templates/VRTileEditor.html', modalParameters, modalSettings);
         }
 
-        function editFiguresTileQuery(figuresTileQueryEntity, onFigureTileQueryUpdated, figureTileQueries) {
+        function editFiguresTileQuery(figuresTileQueryEntity, onFigureTileQueryUpdated, figureTileQueries,clearItemsToDisplayDataSource) {
             var modalParameters = {
                 figuresTileQueryEntity: figuresTileQueryEntity,
-                figureTileQueries: figureTileQueries
+                figureTileQueries: figureTileQueries,
             };
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onFigureTileQueryUpdated = onFigureTileQueryUpdated;
+                modalScope.clearItemsToDisplayDataSource = clearItemsToDisplayDataSource
             };
 
             VRModalService.showModal('/Client/Modules/Common/Views/VRTile/FiguresTileQueryEditor.html', modalParameters, modalSettings);

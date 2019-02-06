@@ -141,7 +141,10 @@
             $scope.modalContext.closeModal();
         }
         function update() {
+            
             var query = buildObjectFromScope();
+            if (query.Settings.AnalyticTableId != figureTileEntity.Settings.AnalyticTableId)
+                $scope.clearItemsToDisplayDataSource();
             if ($scope.onFigureTileQueryUpdated != undefined && typeof ($scope.onFigureTileQueryUpdated) == 'function') {
                 $scope.onFigureTileQueryUpdated(query);
             }

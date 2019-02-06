@@ -171,8 +171,8 @@ namespace Vanrise.Analytic.Business
             return null;
 
         }
-        public List<string> GetMeasuresNames (Guid analyticTableId,List<Guid> measureIds)
-            {
+        public List<string> GetMeasuresNames(Guid analyticTableId, List<Guid> measureIds)
+        {
             List<string> names = new List<string>();
             var allMeasuresByMeasureName = GetMeasures(analyticTableId);
             allMeasuresByMeasureName.ThrowIfNull("allMeasuresByMeasureName");
@@ -193,11 +193,11 @@ namespace Vanrise.Analytic.Business
             var allDimensionsByDimensionName = GetDimensions(analyticTableId);
             allDimensionsByDimensionName.ThrowIfNull("allMeasuresByMeasureName");
 
-                var selectedDimension = allDimensionsByDimensionName.First(x => x.Value.AnalyticDimensionConfigId == dimensionId);
-                if (selectedDimension.Value == null)
-                    throw new NullReferenceException("selectedMeasure");
+            var selectedDimension = allDimensionsByDimensionName.First(x => x.Value.AnalyticDimensionConfigId == dimensionId);
+            if (selectedDimension.Value == null)
+                throw new NullReferenceException("selectedMeasure");
 
-             
+
             return selectedDimension.Key;
         }
         public IEnumerable<AnalyticDimensionConfigInfo> GetDimensionsInfo(AnalyticDimensionConfigInfoFilter filter)
@@ -220,8 +220,18 @@ namespace Vanrise.Analytic.Business
             foreach (var tableId in filter.TableIds)
             {
                 var measures = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, AnalyticItemType.Measure);
-                measureConfigs.AddRange(measures.MapRecords(AnalyticMeasureConfigInfoMapper));
+                if (filter.MeasureIds == null || filter.MeasureIds.Count == 0)
+                    measureConfigs.AddRange(measures.MapRecords(AnalyticMeasureConfigInfoMapper));
+                else
+                {
+                    foreach(var measure in measures)
+                    {
+                        if (filter.MeasureIds.Any(x => x == measure.AnalyticItemConfigId))
+                            measureConfigs.Add(AnalyticMeasureConfigInfoMapper(measure));
+                    }
+                }
             }
+
             return measureConfigs;
         }
         public List<RemoteAnalyticMeasureConfigInfo> GetRemoteMeasuresInfo(AnalyticMeasureConfigInfoFilter filter)

@@ -20,10 +20,15 @@ namespace Vanrise.Analytic.Business
             VRTimePeriodContext timePeriodContext = new VRTimePeriodContext() { EffectiveDate = DateTime.Today };
             TimePeriod.GetTimePeriod(timePeriodContext);
             AnalyticManager analyticManager = new AnalyticManager();
-
+            List<string> selectedItemsToDisplayNames = new List<string>();
+            var itemsToDisplay = context.ItemsToDisplay;
+            foreach (var item in itemsToDisplay)
+            {
+                    selectedItemsToDisplayNames.Add(item.Name);
+            }
             var Query = new AnalyticQuery()
             {
-                MeasureFields = context.ItemsToDisplayNames,
+                MeasureFields = selectedItemsToDisplayNames,
                 TableId = AnalyticTableId,
                 FromTime = timePeriodContext.FromTime,
                 ToTime = timePeriodContext.ToTime,
@@ -39,9 +44,10 @@ namespace Vanrise.Analytic.Business
             var measures = record.MeasureValues;
             foreach (var measure in measures)
             {
+                var item= itemsToDisplay.FindRecord(x=>x.Name == measure.Key);
                 figureItemValues.Add(new FigureItemValue()
                 {
-                    Name = measure.Key,
+                    Name = item.Title,
                     Value = measure.Value.Value
                 });
             }

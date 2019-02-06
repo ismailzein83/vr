@@ -17,7 +17,10 @@ namespace Vanrise.Analytic.Business
         public override List<FigureItemValue> Execute(IFiguresTileQueryExecuteContext context)
         {
             List<string> dimensionFields = new List<string>();
+            
             AnalyticItemConfigManager analyticItemConfigmanager = new AnalyticItemConfigManager();
+            var measureNames = analyticItemConfigmanager.GetMeasuresNames(AnalyticTableId, Measures);
+            measureNames.ThrowIfNull("measureNames");
             var dimensionName = analyticItemConfigmanager.GetDimensionName(AnalyticTableId, DimensionId);
             dimensionName.ThrowIfNull("dimensionName");
             dimensionFields.Add(dimensionName);
@@ -25,17 +28,23 @@ namespace Vanrise.Analytic.Business
             VRTimePeriodContext timePeriodContext = new VRTimePeriodContext() { EffectiveDate = DateTime.Today };
             TimePeriod.GetTimePeriod(timePeriodContext);
             AnalyticManager analyticManager = new AnalyticManager();
-
+            List<string> selectedItemsToDisplayNames = new List<string>();
+            var itemsToDisplay = context.ItemsToDisplay;
+            foreach (var item in itemsToDisplay)
+            {
+                selectedItemsToDisplayNames.Add(item.Name);
+            }
             var Query = new AnalyticQuery()
             {
-                MeasureFields = context.ItemsToDisplayNames,
-                DimensionFields = dimensionFields,
+                MeasureFields = measureNames,
+                DimensionFields = selectedItemsToDisplayNames,
                 TableId = AnalyticTableId,
                 FromTime = timePeriodContext.FromTime,
                 ToTime = timePeriodContext.ToTime,
                 ParentDimensions = new List<string>(),
                 Filters = new List<DimensionFilter>(),
-                // OrderType =AnalyticQueryOrderType.ByAllDimensions,
+                OrderType =AnalyticQueryOrderType.AdvancedMeasureOrder,
+                AdvancedOrderOptions = AdvancedOrderOptions
             };
 
             var analyticRecords = analyticManager.GetAllFilteredRecords(Query) as List<AnalyticRecord>;
@@ -44,10 +53,11 @@ namespace Vanrise.Analytic.Business
             record.ThrowIfNull("record");
             var dimensions = record.DimensionValues;
             var selectedDimension = dimensions.First();
+           // var selectedItem = context.ItemsToDisplayNames
                 figureItemValues.Add(new FigureItemValue()
                 {
-                    Name = selectedDimension.Name,
-                    Value = selectedDimension.Value
+                    Name = itemsToDisplay.First().Title,
+                    Value = selectedDimension.Name
                 });
 
             return figureItemValues;
@@ -57,21 +67,20 @@ namespace Vanrise.Analytic.Business
         {
             List<FigureItemSchema> figureItemsSchema = new List<FigureItemSchema>();
             AnalyticItemConfigManager analyticItemConfigmanager = new AnalyticItemConfigManager();
-            var allMeasuresByMeasureName = analyticItemConfigmanager.GetMeasures(AnalyticTableId);
-            allMeasuresByMeasureName.ThrowIfNull("allMeasuresByMeasureName");
-            foreach (var measureId in Measures)
-            {
-                var selectedMeasure = allMeasuresByMeasureName.First(x => x.Value.AnalyticMeasureConfigId == measureId);
+            var allDimensionsByDimensionName = analyticItemConfigmanager.GetDimensions(AnalyticTableId);
+            allDimensionsByDimensionName.ThrowIfNull("allDimensionsByDimensionName");
+           
+                var selectedDimension = allDimensionsByDimensionName.First(x => x.Value.AnalyticDimensionConfigId == DimensionId);
 
-                if (selectedMeasure.Value == null)
+                if (selectedDimension.Value == null)
                     throw new NullReferenceException("selectedMeasure");
 
                 figureItemsSchema.Add(new FigureItemSchema
                 {
-                    Name = selectedMeasure.Key,
-                    Title = selectedMeasure.Value.Title,
+                    Name = selectedDimension.Key,
+                    Title = selectedDimension.Value.Title,
                 });
-            }
+           
             return figureItemsSchema;
         }
         public Guid AnalyticTableId { get; set; }

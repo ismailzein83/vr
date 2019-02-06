@@ -9,5 +9,6 @@ namespace Vanrise.Analytic.Entities
     public class AnalyticMeasureConfigInfoFilter
     {
         public List<Guid> TableIds { get; set; }
+        public List<Guid> MeasureIds { get; set; }
     }
 }

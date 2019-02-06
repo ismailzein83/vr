@@ -28,11 +28,13 @@ namespace Vanrise.Entities
     }
     public interface IFiguresTileQueryExecuteContext
     {
-        List<string> ItemsToDisplayNames { get; set; }
+        List<FiguresTileDisplayItem> ItemsToDisplay { get; set; }
+        string Title { get; set; }
     }
     public class FiguresTileQueryExecuteContext: IFiguresTileQueryExecuteContext
     {
-        public List<string> ItemsToDisplayNames { get; set; }
+        public List<FiguresTileDisplayItem> ItemsToDisplay { get; set; }
+        public string Title { get; set; }
     }
     public class FigureItemValue
     {
