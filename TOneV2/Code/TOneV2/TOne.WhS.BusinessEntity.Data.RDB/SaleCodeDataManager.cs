@@ -166,19 +166,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var join = selectQuery.Join();
             saleZoneDataManager.JoinSaleZone(join, saleZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
 
-            var where = selectQuery.Where();
-            where.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
+            var whereContext = selectQuery.Where();
+            whereContext.EqualsCondition(saleZoneTableAlias, SaleZoneDataManager.COL_SellingNumberPlanID).Value(sellingNumberPlanId);
 
-            var orDateCondition = where.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            orDateCondition.NullCondition(COL_EED);
-
-            var andDateCondition = orDateCondition.ChildConditionGroup();
-            andDateCondition.NotEqualsCondition(COL_BED).Column(COL_EED);
-            andDateCondition.GreaterThanCondition(COL_EED).Value(effectiveOn);
+            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn);
 
             if (processInstanceId != null)
             {
-                var processCondition = where.ChildConditionGroup(RDBConditionGroupOperator.OR);
+                var processCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
                 processCondition.NullCondition(TABLE_ALIAS, COL_ProcessInstanceID);
                 processCondition.LessThanCondition(TABLE_ALIAS, COL_ProcessInstanceID).Value(processInstanceId.Value);
             }
@@ -213,7 +208,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 codeCondition.FalseCondition();
 
             BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn);
-
 
             return queryContext.GetItems(SaleCodeMapper);
         }
