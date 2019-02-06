@@ -39,19 +39,21 @@ namespace Vanrise.Analytic.Business
 
             var analyticRecords = analyticManager.GetAllFilteredRecords(Query) as List<AnalyticRecord>;
             analyticRecords.ThrowIfNull("analyticRecords");
-            var record = analyticRecords.FirstOrDefault();
-            record.ThrowIfNull("record");
-            var measures = record.MeasureValues;
-            foreach (var measure in measures)
+            if (analyticRecords.Count() > 0)
             {
-                var item= itemsToDisplay.FindRecord(x=>x.Name == measure.Key);
-                figureItemValues.Add(new FigureItemValue()
+                var record = analyticRecords.FirstOrDefault();
+                record.ThrowIfNull("record");
+                var measures = record.MeasureValues;
+                foreach (var measure in measures)
                 {
-                    Name = item.Title,
-                    Value = measure.Value.Value
-                });
+                    var item = itemsToDisplay.FindRecord(x => x.Name == measure.Key);
+                    figureItemValues.Add(new FigureItemValue()
+                    {
+                        Name = item.Title,
+                        Value = measure.Value.Value
+                    });
+                }
             }
-
             return figureItemValues;
         }
 

@@ -52,7 +52,6 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                     function loadLiveBalance() {
                         return VRCommon_VRTileAPIService.GetFigureItemsValue(figureStyleInput).then(function (response) {
                             if (response != undefined) {
-                                console.log(response);
                                     for (var i = 0, length = response.length; i < length; i++) {
                                         var figureStyle = response[i];
                                         $scope.scopeModel.fields.push({

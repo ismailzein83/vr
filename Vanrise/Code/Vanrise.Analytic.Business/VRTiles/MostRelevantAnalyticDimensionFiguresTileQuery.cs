@@ -49,17 +49,19 @@ namespace Vanrise.Analytic.Business
 
             var analyticRecords = analyticManager.GetAllFilteredRecords(Query) as List<AnalyticRecord>;
             analyticRecords.ThrowIfNull("analyticRecords");
-            var record = analyticRecords.FirstOrDefault();
-            record.ThrowIfNull("record");
-            var dimensions = record.DimensionValues;
-            var selectedDimension = dimensions.First();
-           // var selectedItem = context.ItemsToDisplayNames
+            if (analyticRecords.Count() > 0)
+            {
+                var record = analyticRecords.FirstOrDefault();
+                record.ThrowIfNull("record");
+                var dimensions = record.DimensionValues;
+                var selectedDimension = dimensions.First();
+                // var selectedItem = context.ItemsToDisplayNames
                 figureItemValues.Add(new FigureItemValue()
                 {
                     Name = itemsToDisplay.First().Title,
                     Value = selectedDimension.Name
                 });
-
+            }
             return figureItemValues;
         }
 
