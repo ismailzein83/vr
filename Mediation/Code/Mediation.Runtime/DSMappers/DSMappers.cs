@@ -1749,7 +1749,7 @@ namespace Mediation.Runtime
                     string currentLine = sr.ReadLine();
                     if (string.IsNullOrEmpty(currentLine))
                         continue;
-                    string[] rowData = currentLine.Split(',');
+                    var rowData = System.Text.RegularExpressions.Regex.Split(currentLine, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                     dynamic cdr = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
                     cdr.TC_VERSIONID = rowData[0].Trim('"');
                     cdr.TC_CALLID = rowData[13].Trim('"');
