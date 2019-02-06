@@ -40,7 +40,6 @@
             }
         }
     }
-    vrRdbAnalyticDataproviderTable
 
     app.directive('vrRdbAnalyticDataproviderTable', RdbAnalyticDataproviderTableSelector);
 
