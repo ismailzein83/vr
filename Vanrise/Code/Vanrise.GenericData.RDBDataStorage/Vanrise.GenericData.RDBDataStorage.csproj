@@ -48,6 +48,7 @@
     <Compile Include="DynamicTypeGenerator.cs" />
     <Compile Include="IDynamicManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RDBDataRecordStorageFilter.cs" />
     <Compile Include="RDBDataRecordStorageSettings.cs" />
     <Compile Include="RDBDataStoreSettings.cs" />
     <Compile Include="RDBRecordStorageDataManager.cs" />
