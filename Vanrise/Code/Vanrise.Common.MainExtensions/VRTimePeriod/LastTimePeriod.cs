@@ -27,8 +27,8 @@ namespace Vanrise.Common.MainExtensions
 
             switch (this.TimeUnit)
             {
-                case TimeUnit.Year: context.FromTime = effectiveDate.AddYears(-1); break;
-                case TimeUnit.Month: context.FromTime = effectiveDate.AddMonths(-1); break;
+                case TimeUnit.Year: context.FromTime = effectiveDate.AddYears(-TimeValue); break;
+                case TimeUnit.Month: context.FromTime = effectiveDate.AddMonths(-TimeValue); break;
                 case TimeUnit.Day: context.FromTime = effectiveDate.Subtract(new TimeSpan(TimeValue, 0, 0, 0)); break;
                 case TimeUnit.Hour: context.FromTime = effectiveDate.Subtract(new TimeSpan(TimeValue, 0, 0)); break;
                 case TimeUnit.Minute: context.FromTime = effectiveDate.Subtract(new TimeSpan(0, TimeValue, 0)); break;
