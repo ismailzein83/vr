@@ -15,7 +15,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile /><_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <TargetFrameworkProfile />
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -79,6 +80,7 @@
     <Compile Include="InvoicePartner\InvoiceAccountData.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingPartsInfoFilter.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingPartDefinitionInfo.cs" />
+    <Compile Include="InvoiceType\Configs\InvoiceUIGridColumnFilterConfig.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\MinAmountInvoiceSettingPart.cs" />
     <Compile Include="Invoice\InvoiceByPartnerInfo.cs" />
     <Compile Include="Invoice\InvoiceGenerationDraft.cs" />
