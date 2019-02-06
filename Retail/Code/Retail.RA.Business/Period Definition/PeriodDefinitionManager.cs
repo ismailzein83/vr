@@ -18,36 +18,54 @@ namespace Retail.RA.Business
             var cachedPeriodDefinitions = GetCachedPeriodDefinitions();
             return cachedPeriodDefinitions.GetRecord(periodDefinitionId);
         }
-        // Returns the last period defined before date;
+       
         public PeriodDefinition GetLastPeriod(DateTime date)
         {
-            var periodDefinitionId = GetPeriodDefinitionIdByDay(date);
-
             var cachedPeriodDefinition = GetCachedPeriodDefinitions();
-
             if (cachedPeriodDefinition == null)
                 return null;
+            cachedPeriodDefinition.OrderBy(item => item.Value.FromDate);
 
-            var period = periodDefinitionId.HasValue ? cachedPeriodDefinition.GetRecord(periodDefinitionId.Value) : null;
-            var lastPeriod = new PeriodDefinition();
-            bool isPeriodUpdated = false;
+            var periodDefinitionList = cachedPeriodDefinition.Values.ToList();
 
-            var effectiveDate = period != null ? period.FromDate : date;
-            foreach (var periodDefinition in cachedPeriodDefinition.Values)
+            if (periodDefinitionList.Last().ToDate < date)
+                return periodDefinitionList.Last();
+
+            for (int i = 0; i < periodDefinitionList.Count(); i++)
             {
+                var periodDefiniton = periodDefinitionList[i];
 
-                if (periodDefinition.ToDate <= effectiveDate && periodDefinition.FromDate >= lastPeriod.ToDate)
+                if (periodDefiniton.FromDate > date || (date > periodDefiniton.FromDate && date < periodDefiniton.ToDate))
                 {
-                    lastPeriod = periodDefinition;
-                    isPeriodUpdated = true;
+                    if (i > 0)
+                        return periodDefinitionList[i - 1];
                 }
             }
-            if (isPeriodUpdated)
-                return lastPeriod;
-            else
-                return null;
-
+            return null;
         }
+        public PeriodDefinition GetCurrentOrNextPeriod(DateTime date)
+        {
+            var periodDefinitionId = GetPeriodDefinitionIdByDay(date);
+            var cachedPeriodDefinition = GetCachedPeriodDefinitions();
+            if (cachedPeriodDefinition == null)
+                return null;
+            if (periodDefinitionId != null)
+                return cachedPeriodDefinition.GetRecord(periodDefinitionId.Value);
+
+            cachedPeriodDefinition.OrderBy(item => item.Value.FromDate);
+
+            var periodDefinitionList = cachedPeriodDefinition.Values.ToList();
+
+            for (int i = 0; i < periodDefinitionList.Count(); i++)
+            {
+                var periodDefiniton = periodDefinitionList[i];
+
+                if (periodDefiniton.FromDate > date)
+                    return periodDefiniton;
+            }
+            return null;
+        }
+
         public Dictionary<int, PeriodDefinition> GetAllPeriodDefinitionsById()
         {
             var cachedPeriods = GetCachedPeriodDefinitions();

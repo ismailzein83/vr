@@ -28,7 +28,7 @@ app.directive("raTimeperiodLastyearperiod", [function () {
     };
 
     function getDirectiveTemplateUrl() {
-        return '/Client/Modules/Retail_RA/Directives/TimePeriod/Template/LastYearPeriodTemplate.html';
+        return '/Client/Modules/Retail_RA/Directives/TimePeriod/Templates/LastYearPeriodTemplate.html';
     }
 
     function DirectiveConstructor($scope, ctrl) {

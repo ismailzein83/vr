@@ -19,7 +19,7 @@ namespace Retail.RA.Business
             var period = periodDefinitionManager.GetLastPeriod(context.EffectiveDate);
             if(period != null)
             {
-                var effectivePeriod = periodDefinitionManager.GetLastPeriod(period.ToDate.AddYears(-1));
+                var effectivePeriod = periodDefinitionManager.GetCurrentOrNextPeriod(period.ToDate.AddYears(-1));
                 if(effectivePeriod != null)
                 {
                     context.FromTime = effectivePeriod.FromDate;

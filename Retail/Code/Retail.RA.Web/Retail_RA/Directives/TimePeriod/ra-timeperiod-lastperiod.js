@@ -28,7 +28,7 @@ app.directive("raTimeperiodLastperiod", [function () {
     };
 
     function getDirectiveTemplateUrl() {
-        return '/Client/Modules/Retail_RA/Directives/TimePeriod/Template/LastPeriodTemplate.html';
+        return '/Client/Modules/Retail_RA/Directives/TimePeriod/Templates/LastPeriodTemplate.html';
     }
 
     function DirectiveConstructor($scope, ctrl) {
