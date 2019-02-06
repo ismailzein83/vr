@@ -363,6 +363,10 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-islockedinvoice.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-issentinvoice.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-reportfileexist.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceUIGridColumnFilter\Templates\SMSInvoiceUIGridColumnFilterTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceUIGridColumnFilter\Templates\VoiceInvoiceUIGridColumnFilterTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceUIGridColumnFilter\vr-invoicetype-invoiceuigridcolumnfilter-sms.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceUIGridColumnFilter\vr-invoicetype-invoiceuigridcolumnfilter-voice.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\vr-invoicetype-invoiceuigridcolumnfilter.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceItemGrouping\Templates\AggregateItemGroupingTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceItemGrouping\Templates\DimensionItemGroupingTemplate.html" />
@@ -586,7 +590,6 @@
     <Content Include="VR_Invoice\Views\Runtime\PartnerInvoiceSettingEditorController.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceUIGridColumnFilter\" />
     <Folder Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\MainExtensions\Templates\" />
     <Folder Include="VR_Invoice\Directives\Invoice\ProcessInput\Normal\Templates\" />
   </ItemGroup>
