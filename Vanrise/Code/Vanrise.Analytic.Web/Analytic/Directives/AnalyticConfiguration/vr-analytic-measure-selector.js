@@ -17,6 +17,7 @@
                 isrequired: "=",
                 isdisabled: "=",
                 customlabel: "@",
+                customvalidate: '=',
                 normalColNum: '=',
                 isloading: "="
             },
@@ -120,6 +121,7 @@
                             + '<vr-select on-ready="ctrl.onSelectorReady"'
                                 + ' datasource="ctrl.datasource"'
                                 + ' selectedvalues="ctrl.selectedvalues"'
+                                + ' customvalidate="ctrl.customvalidate"'
                                 + ' onselectionchanged="ctrl.onselectionchanged"'
                                 + ' onselectitem="ctrl.onselectitem"'
                                 + ' ondeselectitem="ctrl.ondeselectitem"'

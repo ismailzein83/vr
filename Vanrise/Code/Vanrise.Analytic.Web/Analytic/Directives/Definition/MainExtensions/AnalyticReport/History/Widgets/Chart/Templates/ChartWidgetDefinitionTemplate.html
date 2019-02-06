@@ -10,7 +10,11 @@
         </vr-row>
         <vr-row>
             <vr-columns width="1/3row" haschildcolumns>
-                <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" isrequired="true" ismultipleselection selectedvalues="scopeModel.selectedMeasures" onselectitem="scopeModel.onSelectMeasureItem" ondeselectitem="scopeModel.onDeselectMeasureItem" hideselectedvaluessection></vr-analytic-measure-selector>
+                <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" isrequired="true" ismultipleselection selectedvalues="scopeModel.selectedMeasures" customvalidate="scopeModel.seriesDimensionsCustomValidation()" onselectitem="scopeModel.onSelectMeasureItem" ondeselectitem="scopeModel.onDeselectMeasureItem" hideselectedvaluessection></vr-analytic-measure-selector>
+            </vr-columns>
+
+            <vr-columns width="1/3row" haschildcolumns>
+                <vr-analytic-dimension-selector on-ready="scopeModel.onSeriesDimensionSelectorDirectiveReady" customlabel="Series Dimensions" ismultipleselection selectedvalues="scopeModel.selectedSeriesDimensions" ></vr-analytic-dimension-selector>
             </vr-columns>
         </vr-row>
         <vr-row>

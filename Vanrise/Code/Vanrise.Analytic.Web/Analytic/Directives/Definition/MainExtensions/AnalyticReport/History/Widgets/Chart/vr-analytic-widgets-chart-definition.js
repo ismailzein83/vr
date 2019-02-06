@@ -32,6 +32,9 @@
             var dimensionSelectorAPI;
             var dimensionReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var seriesDimensionSelectorAPI;
+            var seriesDimensionReadyDeferred = UtilsService.createPromiseDeferred();
+
             var measureSelectorAPI;
             var measureReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -41,6 +44,7 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.dimensions = [];
+                $scope.scopeModel.seriesDimensions = [];
                 $scope.scopeModel.measures = [];
                 $scope.scopeModel.chartTypes = [];
                 $scope.scopeModel.selectedChartType;
@@ -49,6 +53,11 @@
                 $scope.scopeModel.onDimensionSelectorDirectiveReady = function (api) {
                     dimensionSelectorAPI = api;
                     dimensionReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onSeriesDimensionSelectorDirectiveReady = function (api) {
+                    seriesDimensionSelectorAPI = api;
+                    seriesDimensionReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onMeasureSelectorDirectiveReady = function (api) {
@@ -75,6 +84,12 @@
                     orderTypeSelectorReadyDeferred.resolve();
                 };
 
+                $scope.scopeModel.seriesDimensionsCustomValidation = function () {
+                    if ($scope.scopeModel.selectedSeriesDimensions != undefined && $scope.scopeModel.selectedSeriesDimensions.length > 0 && $scope.scopeModel.measures.length !=undefined  && $scope.scopeModel.measures.length > 1)
+                        return "Only One Measure can be selected when Series Dimension is not empty";
+                    return null;
+                };
+
                 defineAPI();
             }
 
@@ -85,17 +100,17 @@
                     var promises = [];
                     loadChartTypes();
 
-                    if (payload != undefined) {
-
-                    }
-
                     if (payload != undefined && payload.tableIds != undefined) {
                         var tableIds = payload.tableIds;
                         var selectedDimensionIds;
+                        var selectedSeriesDimensionIds;
                         var selectedMeasureIds;
+
                         if (payload.widgetEntity != undefined) {
                             $scope.scopeModel.rootDimensionsFromSearch = payload.widgetEntity.RootDimensionsFromSearch;
                             selectedDimensionIds = [];
+                            selectedSeriesDimensionIds = [];
+
                             if (payload.widgetEntity.Dimensions != undefined && payload.widgetEntity.Dimensions.length > 0) {
                                 for (var i = 0; i < payload.widgetEntity.Dimensions.length; i++) {
                                     var dimension = payload.widgetEntity.Dimensions[i];
@@ -120,12 +135,22 @@
                                 }
                             }
 
+                            if (payload.widgetEntity.SeriesDimensions != undefined && payload.widgetEntity.SeriesDimensions.length > 0) {
+                                for (var i = 0; i < payload.widgetEntity.SeriesDimensions.length; i++) {
+                                    var dimension = payload.widgetEntity.SeriesDimensions[i];
+                                    selectedSeriesDimensionIds.push(dimension.DimensionName);
+                                    $scope.scopeModel.seriesDimensions.push({
+                                        Name: dimension.DimensionName,
+                                        Title: dimension.Title
+                                    });
+                                }
+                            }
+
                             setTopMeasure(payload.widgetEntity.TopMeasure);
                             $scope.scopeModel.selectedChartType = UtilsService.getItemByVal($scope.scopeModel.chartTypes, payload.widgetEntity.ChartType, "value");
 
                             $scope.scopeModel.topRecords = payload.widgetEntity.TopRecords;
                         }
-
                     };
 
 
@@ -139,6 +164,17 @@
                         VRUIUtilsService.callDirectiveLoad(dimensionSelectorAPI, payloadGroupingDirective, loadDimensionDirectivePromiseDeferred);
                     });
                     promises.push(loadDimensionDirectivePromiseDeferred.promise);
+
+                    var loadSeriesDimensionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                    seriesDimensionReadyDeferred.promise.then(function () {
+                        var payloadGroupingDirective = {
+                            filter: { TableIds: tableIds },
+                            selectedIds: selectedSeriesDimensionIds
+                        };
+
+                        VRUIUtilsService.callDirectiveLoad(seriesDimensionSelectorAPI, payloadGroupingDirective, loadSeriesDimensionDirectivePromiseDeferred);
+                    });
+                    promises.push(loadSeriesDimensionDirectivePromiseDeferred.promise);
 
                     var loadMeasureDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     measureReadyDeferred.promise.then(function () {
@@ -179,6 +215,7 @@
                         $type: "Vanrise.Analytic.MainExtensions.History.Widgets.AnalyticChartWidget, Vanrise.Analytic.MainExtensions ",
                         Measures: getMeasures(),
                         Dimensions: getDimensions(),
+                        SeriesDimensions: getSeriesDimensions(),
                         TopRecords: $scope.scopeModel.topRecords,
                         OrderType: orderTypeEntity != undefined ? orderTypeEntity.OrderType : undefined,
                         ChartType: $scope.scopeModel.selectedChartType.value,
@@ -193,8 +230,7 @@
 
                 function getDimensions() {
                     var dimensions;
-                    if (!$scope.scopeModel.rootDimensionsFromSearch)
-                    {
+                    if (!$scope.scopeModel.rootDimensionsFromSearch) {
                         if ($scope.scopeModel.selectedDimensions != undefined && $scope.scopeModel.selectedDimensions.length > 0) {
                             dimensions = [];
                             for (var i = 0; i < $scope.scopeModel.selectedDimensions.length; i++) {
@@ -209,6 +245,21 @@
                         }
                     }
                     return dimensions;
+                }
+
+                function getSeriesDimensions() {
+                    var seriesDimensions;
+                    if ($scope.scopeModel.selectedSeriesDimensions != undefined && $scope.scopeModel.selectedSeriesDimensions.length > 0) {
+                        seriesDimensions = [];
+                        for (var i = 0; i < $scope.scopeModel.selectedSeriesDimensions.length; i++) {
+                            var seriesDimension = $scope.scopeModel.selectedSeriesDimensions[i];
+                            seriesDimensions.push({
+                                DimensionName: seriesDimension.Name,
+                                Title: seriesDimension.Title
+                            });
+                        }
+                    }
+                    return seriesDimensions;
                 }
 
                 function getMeasures() {

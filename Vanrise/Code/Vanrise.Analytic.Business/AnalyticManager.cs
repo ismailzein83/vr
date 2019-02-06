@@ -879,7 +879,7 @@ namespace Vanrise.Analytic.Business
                     }
 
                 }
-               measureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleDefinitionId = styleDefinitionId });
+                measureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleDefinitionId = styleDefinitionId });
             }
             return measureValues;
         }
@@ -1305,7 +1305,7 @@ namespace Vanrise.Analytic.Business
         private class AnalyticRecordRequestHandler : BigDataRequestHandler<AnalyticQuery, AnalyticRecord, AnalyticRecord>
         {
             AnalyticRecord _summaryRecord;
-
+            List<AnalyticResultSubTable> _subTables;
             public AnalyticRecordRequestHandler()
             {
             }
@@ -1318,7 +1318,7 @@ namespace Vanrise.Analytic.Business
             public override IEnumerable<AnalyticRecord> RetrieveAllData(DataRetrievalInput<AnalyticQuery> input)
             {
                 var analyticManager = new AnalyticManager();
-                return analyticManager.GetAllFilteredRecords(input.Query, true, out _summaryRecord);
+                return analyticManager.GetAllFilteredRecords(input.Query, true, out _summaryRecord, out _subTables);
             }
 
             protected override BigResult<AnalyticRecord> AllRecordsToBigResult(DataRetrievalInput<AnalyticQuery> input, IEnumerable<AnalyticRecord> allRecords)
@@ -1341,7 +1341,8 @@ namespace Vanrise.Analytic.Business
                 {
                     ResultKey = input.ResultKey,
                     Data = pagedRecords.ToList(),
-                    TotalCount = allRecords.Count()
+                    TotalCount = allRecords.Count(),
+                    SubTables = _subTables
                 };
                 if (input.Query.WithSummary)
                     analyticBigResult.Summary = _summaryRecord;
