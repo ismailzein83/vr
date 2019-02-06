@@ -23,6 +23,8 @@ app.directive('vrCommonGeneralSettingsEditor', ['UtilsService', 'VRUIUtilsServic
             var uiSettingsReadyDeferred = UtilsService.createPromiseDeferred();
             var cacheSettingsAPI;
             var cacheSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+            var masterLayoutSettingsAPI;
+            var masterLayoutSettingsReadyDeferred = UtilsService.createPromiseDeferred();
             $scope.scopeModel = {};
             $scope.scopeModel.onUISettingsReady = function (api) {
                 uiSettingsAPI = api;
@@ -32,6 +34,11 @@ app.directive('vrCommonGeneralSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                 cacheSettingsAPI = api;
                 cacheSettingsReadyDeferred.resolve();
             };
+            $scope.scopeModel.onMasterLayoutSettingsReady = function (api) {
+                masterLayoutSettingsAPI = api;
+                masterLayoutSettingsReadyDeferred.resolve();
+            };
+            
             function initializeController() {
                 defineAPI();
             }
@@ -62,6 +69,15 @@ app.directive('vrCommonGeneralSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         VRUIUtilsService.callDirectiveLoad(cacheSettingsAPI, cachepayload, cacheSettingsLoadDeferred);
                     });
 
+                    var masterLayoutSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(masterLayoutSettingsLoadDeferred.promise);
+
+                    masterLayoutSettingsReadyDeferred.promise.then(function () {
+                        var layoutpayload = {
+                            data: payload != undefined && payload.data != undefined ? payload.data.MasterLayoutData : undefined
+                        };
+                        VRUIUtilsService.callDirectiveLoad(masterLayoutSettingsAPI, layoutpayload, masterLayoutSettingsLoadDeferred);
+                    });
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -71,6 +87,7 @@ app.directive('vrCommonGeneralSettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         $type: "Vanrise.Entities.GeneralSettingData, Vanrise.Entities",
                         UIData: uiSettingsAPI.getData(),
                         CacheData: cacheSettingsAPI.getData(),
+                        MasterLayoutData: masterLayoutSettingsAPI.getData()
                     };
                 };
                 

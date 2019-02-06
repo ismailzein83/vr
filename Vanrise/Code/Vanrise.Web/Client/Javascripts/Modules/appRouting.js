@@ -36,8 +36,10 @@ appRouting.config(['$routeProvider',
               templateUrl: '/Client/Modules/Common/Views/Error.html'
           }).
         when('/default', {
-            templateUrl: '/Client/Views/Default.html',
-            controller: 'DefaultController'
+            templateUrl: '/Client/Modules/Security/Views/Default.html'
+        }).
+        when('/module', {
+            templateUrl: '/Client/Modules/Security/Views/ModuleDefault.html'
         }).
          when('/Documents', {
              templateUrl: '/Client/Views/Documents.html'

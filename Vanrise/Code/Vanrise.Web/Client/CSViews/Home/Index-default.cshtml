@@ -207,7 +207,7 @@
                 <!-- /#sidebar-wrapper -->
                 <!-- Page Content -->
                 <div id="page-content-wrapper">
-                    <div class="container-fluid vr-container">
+                    <div class="container-fluid vr-container">                        
                         <div class="col-lg-12" ng-view id="mainNgView" ng-if="$root.mainViewReady"></div>
                         <div class="col-lg-12" ng-if="$root.mainViewError">
                             <div class="alert alert-danger" style="position:absolute;margin-top: 50px;left: 50%;transform: translate(-50%,0%);">
@@ -237,7 +237,7 @@
                     </div>
                     <div id="navbar" class="navbar-collapse collapse vr-collapse">
                         <ul class="nav navbar-nav">
-                            <li class="panel-default menu-item-list" ng-repeat="item in $root.menuItems">
+                            <li class="panel-default menu-item-list" ng-repeat="item in menuItems">
                                 <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" ng-click="setIndex(item)">
 
                                     <span ng-if="item.Childs.length > 0">

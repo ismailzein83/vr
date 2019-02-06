@@ -1,0 +1,61 @@
+﻿@using Vanrise.Web.Base
+<!DOCTYPE html>
+<html ng-app="mainModule">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="/images/iconheader.ico" type="image/ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewBag.Title</title>
+    <script ng-if="'@ViewBag.isEnabledGA'">
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    </script>
+    @VRWebStyles.Render("~/Content/bootstrap")
+    @VRWebStyles.Render("~/Content/AngularExtensions")
+    @VRWebStyles.Render("~/Content/CodeMirrorStyle")
+    @*@VRWebStyles.Render("~/Content/Semantic")*@
+    @VRWebStyles.Render("~/Content/FontStyle")
+    @VRWebStyles.Render("~/Content/Styles")
+    @VRWebStyles.Render("~/Content/Themes")
+
+</head>
+<body ng-class="isMobile?'vr-mobile-view':''" ng-controller="loginCtrl" ng-init="setCookieName('@ViewBag.CookieName');redirectURL = '@ViewBag.RedirectTo';setLocalizationEnabled(@ViewBag.IsLocalizationEnabled);setLocalizationRTL(@ViewBag.IsRTL);">
+
+    @*<nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
+            <div class="container">
+                <div class="navbar-header">
+                    <img src="/Client/Images/logoonheader.png" class="minilogo" />
+                </div>
+                <div id="navbar">
+
+                </div>/.nav-collapse
+            </div>
+        </nav>*@
+    <div class="main">
+        <div ng-include="'/Client/Modules/Security/Views/Login.html?v='+@ViewBag.version"></div>
+    </div>
+
+</body>
+@VRWebScripts.Render("~/bundles/helpers")
+@VRWebScripts.Render("~/bundles/JQuery")
+@VRWebScripts.Render("~/bundles/codemirror")
+@VRWebScripts.Render("~/bundles/Angular")
+@VRWebScripts.Render("~/bundles/CodemirrorDirective")
+@VRWebScripts.Render("~/bundles/AngularExtensions")
+
+@VRWebScripts.Render("~/bundles/bootstrap")
+@VRWebScripts.Render("~/bundles/highchart")
+@*@VRWebScripts.Render("~/bundles/Semantic")*@
+@VRWebScripts.Render("~/bundles/Javascripts")
+@VRWebScripts.Render("~/bundles/BaseModulesJavascripts")
+@VRWebScripts.Render("~/bundles/waves")
+
+
+</html>

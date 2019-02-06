@@ -1,27 +1,40 @@
 ﻿.flat .vr-nav-custom {
     height: 60px;
     margin-bottom: 0px !important;
-    background-color: #fff;
+    background-color: #085C8B;
     background: unset;
     margin-bottom: 0px !important;
     border-color: #ddd !important;
 }
 
-    .flat .vr-nav-custom .navbar-header {
-        display: block;
-        width: 100%;
-        height: 100%;
-        background-color: #fff;
-    }
+.flat .vr-nav-custom .navbar-header {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #085C8B;
+}
+
+.flat .vr-nav-custom label,
+.flat .vr-nav-custom a,
+.flat .vr-nav-custom a:active,
+.flat .vr-nav-custom a:visited,
+.flat .vr-nav-custom a:focus,
+.flat .vr-nav-custom .glyphicon {
+    color: #fff
+}
 
 .flat #wrapper {
     padding-top: 60px;
 }
 
+.flat .wrapper-normal {
+    padding-left: 0px !important;
+}
+
 .flat .vr-sidebar-header {
     display: inline-block;
     width: 200px;
-    background-color: #0177b5;
+    background-color: #085C8B;
     height: inherit;
     margin-bottom: -1px;
 }
@@ -51,7 +64,7 @@
 .flat .index-logo {
     position: absolute;
     top: 8px;
-    left: 25px;
+    left: 10px;
 }
 
 .flat .vr-page-header {
@@ -69,12 +82,13 @@
 
 .flat .header-item {
     display: inline-flex;
-    padding: 15px
+    padding: 15px;
+    padding-top: 20px;
 }
 
-    .flat .header-item.info-container {
-        width: 100%
-    }
+.flat .header-item.info-container {
+    width: 100%
+}
 
 .flat .company-logo-container {
     display: inline-block;
@@ -91,9 +105,9 @@
 .flat .vr-company-name {
     font-size: 16px;
     text-align: initial;
-    padding-left: 10px;
+    padding-left: 5px;
     width: 100%;
-    color: #6B6B6B;
+    color: #fff;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -105,7 +119,7 @@
 
 .flat .vr-page-title {
     margin-left: 15px;
-    color: #6B6B6B;
+    color: #fff;
     margin-top: 4px;
     font-size: 14px;
 }
@@ -130,12 +144,27 @@
     position: absolute
 }
 
+.flat .flex-user-menu {
+    display: flex !important;
+    margin-top: -2px;
+}
+
+.flat .vr-user-menu label,
+.flat .vr-user-menu a,
+.flat .vr-user-menu a:active,
+.flat .vr-user-menu a:visited,
+.flat .vr-user-menu a:focus {
+    color: #635F5F;
+}
+
 .flat .vr-user-icon {
-    top: -5px;
+    top: -2px;
 }
 
 .flat .vr-user-label {
     max-width: 140px;
+    color: #fff !important;
+    align-self: flex-end;
 }
 
 .flat .header-action-item {
@@ -149,6 +178,7 @@
 
 .flat .vr-notfication-item {
     width: 50px;
+    padding-left:25px;
 }
 
 .flat .vr-nav-custom div .badge {
@@ -165,12 +195,14 @@
 .flat .vr-dateclock-item {
     display: inline-block;
     width: 120px;
-    padding-left: 25px ;
+    padding-left: 25px;
     text-align: right;
 }
 
 .flat .vr-date-container {
-    color: #8B8B8C;
+    position: relative;
+    top: -7px;
+    color: #fff;
     font-size: 10px;
     font-weight: bold
 }
@@ -180,16 +212,64 @@
     width: 100%;
     height: 18px;
     font-size: 9px;
+    top: -14px;
 }
 
 .flat .vr-clock-item {
     color: #6a6a6a;
-    font-weight: bold;
-    color: #9FA0A2
+    color: #fff
 }
 
 .flat .page-content-wrapper {
     padding: 0px;
+}
+
+.flat .menu-tile {
+    background-color: #085C8B !important;
+    height: 120px;
+    margin-top: 30px;
+    text-align: center;
+    padding: 5px 0px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+}
+.flat .vr-view-switch-container {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    z-index: 1;
+}
+.flat .vr-view-switch-container {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    z-index: 1;
+}
+.flat .vr-view-switch-container button[disabled="disabled"] {
+    color: #333333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+    opacity: 0.8;
+}
+.flat .menu-tile:hover {
+    background-color: #0177b5 !important
+}
+
+.flat .menu-tile.module {
+    background-color: #7c8d96 !important
+}
+
+.flat .menu-tile.module:hover {
+    background-color: #b9bdbf !important
+}
+
+.flat .menu-tile.module.page {
+    height: 60px;
+}
+
+.flat .vr-breadcrumb span {
+    color: #075A8C
 }
 /* menu override*/
 .flat .panel-heading-vr {
@@ -210,7 +290,7 @@
 }
 
 .flat .module-icon {
-    background-color: #87888a !important;
+    background-color: #b7b7b7 !important;
     height: 39px;
     width: 30px;
     top: unset;
@@ -240,8 +320,8 @@
 }
 
 .flat .panel-heading-vr.selected-menu {
-    background-color: #87888a !important;
-    color: #e3e3e3 !important;
+    background-color: #b7b7b7 !important;
+    color: #f9f9f9 !important;
 }
 
 .flat .dll-menu a:before {
@@ -259,14 +339,28 @@
     background-color: #fff;
 }
 
-    .flat .version-container.collapsed-menu-in {
-        width: calc(100% - 40px);
-    }
+.flat .version-container.collapsed-menu-in {
+    width: calc(100% - 40px);
+}
 
 .flat .version-label {
     font-size: 10px;
     position: absolute;
     right: 22px;
+}
+
+.flat .vr-breadcrumb {
+    font-size: 13px;
+    color: #075A8C;
+    font-weight: bold;
+    padding-top:5px;
+    padding-left:35px;
+}
+.flat .vr-breadcrumb .glyphicon-menu-right:before {
+    font-size: 10px;
+}
+.flat .vr-breadcrumb * {
+    font-weight: bold;
 }
 /*main view */
 .flat #page-content-wrapper {
@@ -283,21 +377,21 @@
     border-radius: 0px;
 }
 
-    .flat .action-bar .btn {
-        color: #635F5F !important;
-        border-radius: 0px !important;
-        font-weight: bold;
-    }
+.flat .action-bar .btn {
+    color: #635F5F !important;
+    border-radius: 0px !important;
+    font-weight: bold;
+}
 
-    .flat .action-bar .vr-half-circle {
-        background-color: #e3e3e3 !important;
-        border-top-left-radius: 0px;
-        border-bottom-left-radius: 0px;
-    }
+.flat .action-bar .vr-half-circle {
+    background-color: #e3e3e3 !important;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
 
-    .flat .action-bar.include-personalization {
-        border-radius: 0px;
-    }
+.flat .action-bar.include-personalization {
+    border-radius: 0px;
+}
 
 .action-bar .vr-action-menu-dote {
     color: #88898B !important;
@@ -312,7 +406,7 @@
 }
 
 .flat .vr-datagrid-header-simple {
-    background: #0177b5 !important;
+    background: #085C8B !important;
 }
 
 .flat .vr-grid-menu-h-circle {
@@ -367,7 +461,7 @@
 }
 
 .flat .vr-modal-header {
-    background: #0177b5 !important;
+    background: #085C8B !important;
     color: #fff !important;
     border-radius: 0px;
 }
@@ -409,9 +503,16 @@
 /*login section*/
 
 .flat.login-body {
-    background: url("/Client/Images/lg-bg.png") center repeat;
+    background-color: #095B8D;
 }
 
+.flat .securityprovider-container {
+    width: 349px;
+    padding-bottom: 20px;
+}
+.flat .flat-login-container .securityprovider-container  vr-select  label {
+    color:#fff;
+}
 .flat .main-login {
     position: relative;
     width: 100%;
@@ -421,9 +522,19 @@
     width: 349px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 115px;
+    margin-top: 180px;
+}
+.flat .login-action-container{
+}
+.flat .login-action-container .login-btn-container {
+    display: inline-block;
+    width: 100px
 }
 
+.flat .login-action-container .forget-link-container {
+    display: inline-block;
+    padding-left: 10px;
+}
 .flat .main-login .dropdown {
     min-height: 32px !important;
 }
@@ -433,18 +544,16 @@
     padding-bottom: 15px;
 }
 
-.flat .flat-login-container vr-textbox vr-validator[vr-input] > div:nth-child(1) {
-    width: 271px;
-    height: 43px;
-}
+    .flat .flat-login-container vr-textbox vr-validator[vr-input] > div:nth-child(1) {
+        height: 43px;
+    }
 
 
 
-.flat .flat-login-container vr-textbox .form-control {
-    height: 41px;
-    background-color: #d4d4d4;
-    color: #000;
-}
+    .flat .flat-login-container vr-textbox .form-control {
+        height: 41px;
+        color: #000;
+    }
 
 .flat .flat-login-container .required-inpute > div:nth-child(1) {
     border: unset !important;
@@ -466,7 +575,7 @@
 
 .flat .flat-logo-container {
     width: 349px;
-    background-color: #0177b5;
+    background-color: #085C8B;
     text-align: center;
     height: 68px;
     padding-top: 6px;
@@ -478,18 +587,23 @@
 
 .flat .login-btn {
     height: 37px !important;
-    background-color: #0177b5 !important;
+    background-color: #0077B4 !important;
     color: #FFF;
-    text-transform: uppercase;
+    text-transform: capitalize;
     font-weight: 700;
+    border:0px;
 }
 
 .flat .fogetten-label:visited {
-    color: #a9a7a7;
+    color: #fff;
     text-decoration: none;
 }
 
 .flat .fogetten-label {
-    color: #a9a7a7;
+    color: #fff;
     text-decoration: none;
+}
+
+.flat .vr-tone-version {
+    color: #fff;
 }

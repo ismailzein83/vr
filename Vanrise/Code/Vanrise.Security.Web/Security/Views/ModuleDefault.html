@@ -1,0 +1,34 @@
+﻿
+<vr-panel ng-controller="VR_Sec_ModuleDefaultController" ng-if="$root.mainMenuReady">
+    <div class="row" ng-show="$root.showModuleTiles">
+        <vr-columns colnum="12">
+            <vr-section header="Modules" level="2"  ng-show="modules.length > 0">
+                <vr-row>
+                    <vr-columns colnum="12">
+                        <div ng-repeat="item in modules= ( $root.selectedtile.Childs | filter: { MenuType: 0 } )" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="menu-tile module" ng-click="$root.openMenuNode(item)">
+                                <span style="left: 25px;position: absolute;top: 40px;color:#fff;font-size: 30px;" ng-class="item.Childs && item.Childs.length>0 ?  'glyphicon glyphicon-folder-open' : '' "></span>
+                                <h3 style="color:#fff;margin-top:10px">
+                                    {{::item.Name}}
+                                </h3>
+                            </div>
+                        </div>
+                    </vr-columns>
+                </vr-row>
+            </vr-section>
+            <vr-section header="Pages" level="2" ng-show="pages.length > 0">
+                <vr-row>
+                    <vr-columns colnum="12">
+                        <div ng-repeat="item in pages = ($root.selectedtile.Childs | filter: { MenuType: 1 })" class="col-xs-12 col-sm-4 col-md-3 col-lg-2">
+                            <div class="menu-tile module page" ng-click="$root.openMenuNode(item)">
+                                <h5 style="color:#fff;margin-top:15px">
+                                    {{::item.Name}}
+                                </h5>
+                            </div>
+                        </div>
+                    </vr-columns>
+                </vr-row>
+            </vr-section>
+        </vr-columns>
+    </div>
+</vr-panel>

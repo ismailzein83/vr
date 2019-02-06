@@ -6,11 +6,26 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class GeneralSettingData :SettingData
+    public class GeneralSettingData : SettingData
     {
+        MasterLayoutSettingData _masterLayoutData = new MasterLayoutSettingData();
         public UISettingData UIData { get; set; }
 
         public CacheSettingData CacheData { get; set; }
+
+
+        public MasterLayoutSettingData MasterLayoutData
+        {
+            get
+            {
+                return _masterLayoutData;
+            }
+            set
+            {
+                _masterLayoutData = value;
+            }
+
+        }
     }
     public class UISettingData
     {
@@ -50,7 +65,7 @@ namespace Vanrise.Entities
     {
         public long ClientCacheNumber { get; set; }
     }
-    public class GeneralTechnicalSettingData :SettingData
+    public class GeneralTechnicalSettingData : SettingData
     {
 
         public CompanySettingDefinition CompanySettingDefinition { get; set; }
@@ -74,10 +89,10 @@ namespace Vanrise.Entities
     public class CompanyDefinitionSetting
     {
         public Guid CompanyDefinitionSettingId { get; set; }
-        public string Name  { get; set; }
+        public string Name { get; set; }
         public BaseCompanyDefinitionExtendedSetting Setting { get; set; }
     }
-    public abstract class  BaseCompanyDefinitionExtendedSetting
+    public abstract class BaseCompanyDefinitionExtendedSetting
     {
         public abstract Guid ConfigId { get; }
         public abstract string RuntimeEditor { get; }

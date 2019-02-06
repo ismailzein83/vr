@@ -128,7 +128,7 @@
 
 
             var animationClass = MobileService.isMobile() ? "" : "am-fade-and-scale";
-            modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, show: true, animation: animationClass, onHide: onhideModal });
+            modalInstance = $modal({ scope: modalScope, templateUrl: modalUrl, backdrop: backdrop, keyboard : false, show: true, animation: animationClass, onHide: onhideModal });
             return deferred.promise;
         }
     }

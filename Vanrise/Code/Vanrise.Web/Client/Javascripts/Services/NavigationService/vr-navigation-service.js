@@ -7,7 +7,8 @@ app.service('VRNavigationService', function ($location, $routeParams, UtilsServi
     return ({
         goto: goto,
         getParameters: getParameters,
-        setParameters: setParameters
+        setParameters: setParameters,
+        getFullPageURl: getFullPageURl
     });
 
     function goto(url, parameters) {
@@ -32,7 +33,9 @@ app.service('VRNavigationService', function ($location, $routeParams, UtilsServi
         }
 
     }
-
+    function getFullPageURl(url) {
+        return UtilsService.getBaseUrlPrefix() + url;
+    }
     //if the view is in Modal Dialog
     function setParameters(scope, parameters) {
         if (scope.modalContext != undefined)

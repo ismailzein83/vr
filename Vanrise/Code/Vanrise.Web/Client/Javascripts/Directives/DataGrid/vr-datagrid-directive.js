@@ -28,7 +28,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            margin: '=',
 	            dragdropsetting: '=',
 	            mobilegridlayout: '=',
-	            alternativecolor:'='
+	            alternativecolor: '='
 	        },
 	        controller: function ($scope, $element, $attrs) {
 	            columnVisibilities = [];
@@ -236,7 +236,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	    };
 
-	    var cellTemplateNormalContent = '<span ng-style="::$parent.ctrl.cellLayoutStyle" ng-class="#CELLCLASS#"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</span>';
+	    var cellTemplateNormalContent = '<span ng-style="::$parent.ctrl.cellLayoutStyle" ng-class="#CELLCLASS#">{{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</span>';
 	    var cellTemplateClickableContent = '<a ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem , $event)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>';
 	    var cellTemplateExpendableContent = '<a ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onDescriptionClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>';
 
@@ -257,8 +257,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 			+ '   <div class="vr-datagrid-celltext" style="overflow: hidden;"  ng-class="::colDef.textAlignmentClass" title="{{colDef.description}}" >'
 			+ '    <span ng-show="colDef.sortDirection==\'ASC\'">&uarr;</span>'
 			+ '    <span ng-show="colDef.sortDirection==\'DESC\'">&darr;</span>'
-			+ '<span ng-if="!colDef.rotateHeader"> {{colDef.name}}</span>'
-			+ '<p ng-if="colDef.rotateHeader" class="vr-rotate-header" >{{colDef.name}}</p>'
+			+ '<span ng-if="!colDef.rotateHeader" style="white-space: pre;"> {{colDef.name}}</span>'
+			+ '<p ng-if="colDef.rotateHeader" class="vr-rotate-header" style="white-space: pre;" >{{colDef.name}}</p>'
 			+ ' </div>'
 			+ '</div>'
 			+ '</div>';
@@ -521,23 +521,23 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                        if (col.type == "Number") {
 	                            var numberPrecision = UISettingsService.getNormalPrecision() || 2;
 	                            if (col.numberPrecision == "NoDecimal")
-                                { colFixWidth = 65; }
+	                            { colFixWidth = 65; }
 	                            else if (col.numberPrecision == "LongPrecision")
-                                { colFixWidth = 65; }
+	                            { colFixWidth = 65; }
 	                            else {
-                                    colFixWidth = 65;
+	                                colFixWidth = 65;
 	                            }
 	                        }
 	                        else {
 	                            if (col.type == "LongDatetime")
-                                { colFixWidth = 120; }
+	                            { colFixWidth = 120; }
 	                            else if (col.type == "Datetime")
-                                { colFixWidth = 100; }
+	                            { colFixWidth = 100; }
 	                            else if (col.type == "Date") {
-                                    colFixWidth = 80;
+	                                colFixWidth = 80;
 	                            }
 	                            else if (col.type == "Yearmonth") {
-                                    colFixWidth = 50;
+	                                colFixWidth = 50;
 	                            }
 	                        }
 	                        valueWidth = colFixWidth;
@@ -994,8 +994,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 							+ '</div>'
 							+ '</div>' :
 							'<div class="vr-datagrid-cell">'
-							+ '<div class="vr-datagrid-celltext ">'
-							+ cellTemplate
+							+ '<div class="vr-datagrid-celltext ">'+ cellTemplate
 							+ '</div>'
 							+ '</div>'
 							+ '</div>';
@@ -1073,16 +1072,16 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	            }
 	            else {
 	                if (colDef.type == "LongDatetime") {
-                        tooltipFilter = "date:'yyyy-MM-dd HH:mm:ss'";
+	                    tooltipFilter = "date:'yyyy-MM-dd HH:mm:ss'";
 	                }
 	                else if (colDef.type == "Datetime") {
-                        tooltipFilter = "date:'yyyy-MM-dd HH:mm'";
+	                    tooltipFilter = "date:'yyyy-MM-dd HH:mm'";
 	                }
 	                else if (colDef.type == "Date") {
-                        tooltipFilter = "date:'yyyy-MM-dd'";
+	                    tooltipFilter = "date:'yyyy-MM-dd'";
 	                }
 	                else if (colDef.type == "Yearmonth") {
-                        tooltipFilter = "date:'yyyy-MM'";
+	                    tooltipFilter = "date:'yyyy-MM'";
 	                }
 	            }
 	            if (tooltipFilter != "")
@@ -1394,10 +1393,11 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                else {
 	                    var sh = innerHeight;
 	                    var h = 28;
+	                    var bcHeight = UISettingsService.getMasterLayoutBreadcrumbVisibility() ? 20 : 0;
 	                    if (isInModal() == true)
 	                        h += sh * 0.5;
 	                    else
-	                        h += sh - 332;
+	                        h += sh - (376 + bcHeight);
 
 	                    h = h < 30 ? 30 : h;
 	                    setMaxHeight(h + "px");
@@ -1661,9 +1661,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
 	                };
 
-                    ctrl.getRowDeleteIconTitle = function () {
-                        return attrs.rowdeleteicontitle != undefined ? attrs.rowdeleteicontitle : "";
-                    };
+	                ctrl.getRowDeleteIconTitle = function () {
+	                    return attrs.rowdeleteicontitle != undefined ? attrs.rowdeleteicontitle : "";
+	                };
 	            }
 	        }
 

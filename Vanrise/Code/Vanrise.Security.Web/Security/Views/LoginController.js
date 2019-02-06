@@ -5,9 +5,9 @@
     LoginController.$inject = ['$rootScope', '$scope', 'VR_Sec_SecurityAPIService', 'SecurityService', 'VRNotificationService', 'VR_Sec_UserService', 'UISettingsService', 'UtilsService', 'VR_Sec_UserAPIService', 'VRLocalizationService', 'VR_Sec_SecurityProviderAPIService', 'VRUIUtilsService', 'MobileService'];
 
     function LoginController($rootScope, $scope, VR_Sec_SecurityAPIService, SecurityService, VRNotificationService, VR_Sec_UserService, UISettingsService, UtilsService, VR_Sec_UserAPIService, VRLocalizationService, VR_Sec_SecurityProviderAPIService, VRUIUtilsService, MobileService) {
-        
+
         (function () {
-            if(document.getElementById("mainLogin"))
+            if (document.getElementById("mainLogin"))
                 document.getElementById("mainLogin").style.display = "block";
         })();
 
@@ -75,6 +75,16 @@
                 e.stopPropagation();
             };
 
+            $scope.goToHomePage = function () {
+                var toTilesView = UISettingsService.getMasterLayoutDefaultViewTileState();
+                var showApplicationTiles = UISettingsService.getMasterLayoutShowApplicationTilesState();
+                if (UISettingsService.getDefaultPageURl() && (!toTilesView || !showApplicationTiles)) {
+                    window.location.href = UISettingsService.getDefaultPageURl();
+                }
+                else
+                    window.location.href = "/";
+            };
+
             $scope.forgotPassword = function () {
                 VR_Sec_UserService.forgotPassword($scope.email);
             };
@@ -125,10 +135,8 @@
                     if ($scope.redirectURL != undefined && $scope.redirectURL != '' && $scope.redirectURL.indexOf('default') == -1 && $scope.redirectURL.indexOf('#') > -1) {
                         window.location.href = $scope.redirectURL;
                     }
-                    else if (UISettingsService.getDefaultPageURl() != undefined)
-                        window.location.href = UISettingsService.getDefaultPageURl();
                     else
-                        window.location.href = '/';
+                        $scope.goToHomePage();
 
                     loginPromisedeferred.resolve();
                 }).catch(function (error) {

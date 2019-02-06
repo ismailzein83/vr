@@ -48,12 +48,18 @@ namespace Vanrise.Common.Business
 
             var gATechnicalSettingData = GetGoogleAnalyticsSetting();
 
+            var masterLayoutSetting = generalSettingData.MasterLayoutData;
 
             TimeSpan serverUtcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
             uiSettings.Parameters.Add(new UIParameter()
             {
                 Name = "ServerUtcOffsetInMinutes",
                 Value = serverUtcOffset.TotalMinutes
+            });
+            uiSettings.Parameters.Add(new UIParameter()
+            {
+                Name = "MasterLayoutSetting",
+                Value = masterLayoutSetting
             });
 
             if (generalSettingData != null && generalSettingData.UIData != null)
@@ -101,7 +107,7 @@ namespace Vanrise.Common.Business
                     });
                 }
 
-              
+
                 uiSettings.Parameters.Add(new UIParameter()
                 {
                     Name = "MaxSearchRecordCount",
@@ -145,7 +151,7 @@ namespace Vanrise.Common.Business
                         Value = gATechnicalSettingData.Account
                     });
                 }
-                
+
             }
 
             return uiSettings;

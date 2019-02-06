@@ -6,11 +6,33 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class MasterLayoutSettingData : SettingData
+    public class MasterLayoutSettingData 
     {
-        public MasterLayoutMenuOption Menu { get; set; }
+        MasterLayoutMenuOption _menuOption = MasterLayoutMenuOption.FullMenu;
+        bool _expandedMenu = true;
+        public MasterLayoutMenuOption MenuOption
+        {
+            get
+            {
+                return _menuOption;
+            }
+            set
+            {
+                _menuOption = value;
+            }
+        }
 
-        public bool ExpandedMenu { get; set; }
+        public bool ExpandedMenu
+        {
+            get
+            {
+                return _expandedMenu;
+            }
+            set
+            {
+                _expandedMenu = value;
+            }
+        }
 
         public bool IsBreadcrumbVisible { get; set; }
 
@@ -18,11 +40,15 @@ namespace Vanrise.Entities
 
         public bool ShowModuleTiles { get; set; }
 
+        public bool TilesMode { get; set; }
+
+        public bool ModuleTilesMode { get; set; }
+
     }
-   
+
     public enum MasterLayoutMenuOption
     {
-        
+
         FullMenu = 0,
 
         ModuleFilteredMenu = 1,

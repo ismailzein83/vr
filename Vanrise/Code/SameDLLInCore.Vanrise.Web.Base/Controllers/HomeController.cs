@@ -20,6 +20,7 @@ namespace Vanrise.Web.Base.Controllers
             ViewBag.version = cacheSettingData != null ? cacheSettingData.ClientCacheNumber : 0;
             Common.Business.ConfigManager cManager = new Common.Business.ConfigManager();
             ViewBag.ProductVersion = cManager.GetProductVersionNumber();
+            ViewBag.ProductName = cManager.GetProductName();
             ViewBag.CompanyName = cManager.GetDefaultCompanyName();
             ViewBag.isEnabledGA = settingManager.GetGoogleAnalyticsEnabled();
 

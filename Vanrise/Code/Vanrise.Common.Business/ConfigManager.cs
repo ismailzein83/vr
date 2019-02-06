@@ -107,6 +107,7 @@ namespace Vanrise.Common.Business
             var generalSettings = settingManager.GetSetting<GoogleAnalyticsData>(Constants.GATechnicalSettingType);
             return generalSettings;
         }
+       
         public ProductInfo GetProductInfo()
         {
             SettingManager settingManager = new SettingManager();
@@ -245,7 +246,10 @@ namespace Vanrise.Common.Business
         {
             return GetProductInfo().VersionNumber;
         }
-
+        public string GetProductName()
+        {
+            return GetProductInfo().ProductName;
+        }
         public List<CompanyContactType> GetCompanyContactTypes()
         {
             var companyContactTypes = new List<CompanyContactType>();

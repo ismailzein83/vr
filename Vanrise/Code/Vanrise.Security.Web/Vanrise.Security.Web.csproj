@@ -231,6 +231,8 @@
     <Content Include="Security\Services\ViewService.js" />
     <Content Include="Security\Services\UserService.js" />
     <Content Include="Security\Services\WidgetService.js" />
+    <Content Include="Security\Views\RegisteredApplicationLanding.html" />
+    <Content Include="Security\Views\RegisteredApplicationLandingController.js" />
     <Content Include="Security\Views\BusinessEntity\BusinessEntityDefinitionEditor.html" />
     <Content Include="Security\Views\BusinessEntity\BusinessEntityDefinitionEditorController.js" />
     <Content Include="Security\Views\BusinessEntity\BusinessEntityModuleEditor.html" />
@@ -239,6 +241,10 @@
     <Content Include="Security\Views\BusinessEntity\BusinessEntityDefinitionManagementController.js" />
     <Content Include="Security\Views\BusinessEntity\BusinessEntityRankingEditor.html" />
     <Content Include="Security\Views\BusinessEntity\BusinessEntityRankingEditorController.js" />
+    <Content Include="Security\Views\ModuleDefault.html" />
+    <Content Include="Security\Views\Default.html" />
+    <Content Include="Security\Views\ModuleDefaultController .js" />
+    <Content Include="Security\Views\DefaultController.js" />
     <Content Include="Security\Views\Menu\MenuManagement.html" />
     <Content Include="Security\Views\Menu\MenuManagementController.js" />
     <Content Include="Security\Views\Menu\ModuleEditor.html" />

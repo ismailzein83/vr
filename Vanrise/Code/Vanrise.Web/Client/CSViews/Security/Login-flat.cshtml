@@ -45,28 +45,25 @@
             <div ng-controller="VR_Sec_LoginController">
                 <div>
                     <vr-form name="formLogin" submitname="login">
-                        <div style="width: 349px;padding-bottom: 20px;">
+                        <div class="securityprovider-container" >
                             <div class="row login-spacer" ng-show="showSecurityProviderSelector">
                                 <div class="col-md-12">
                                     <vr-sec-securityprovider-selector customlabel="Authentication Method" on-ready="onSecurityProviderSelectorReady" isrequired="true" hideremoveicon selectedvalues="selectedSecurityProvider"></vr-sec-securityprovider-selector>
                                 </div>
                             </div>
                         </div>
-                        <div class="flat-logo-container" >
-                            <img src="/images/login.png" />
-                        </div>
-                        <div style="height:211px;background-color: #fff;padding: 30px 39px">
+                        <div>
                             <span ng-if="selectedSecurityProvider!=undefined" vr-loader="isLoadingAuthenticateUserEditor">
                                 <vr-directivewrapper directive="selectedSecurityProvider.AuthenticateUserEditor" on-ready="onAuthenticateUserEditorReady"></vr-directivewrapper>
                             </span>
-                            <div>
-                                <div style="display:inline-block;width: calc(100% - 147px);">
-                                    <span ng-if="selectedSecurityProvider!=undefined && selectedSecurityProvider.SupportPasswordManagement">
-                                        <a href="" class="fogetten-label" ng-click="forgotPassword()">Forgot Password</a>
-                                    </span>
-                                </div>
-                                <div style="display:inline-block;width:143px">
+                            <div class="login-action-container" >
+                                <div class="login-btn-container">
                                     <vr-button type="Login" formname="formLogin" data-onclick="Login" submitname="login"></vr-button>
+                                </div>
+                                <div class="forget-link-container" >
+                                    <span ng-if="selectedSecurityProvider!=undefined && selectedSecurityProvider.SupportPasswordManagement">
+                                        <a href="" class="fogetten-label" ng-click="forgotPassword()">Forget Password ?</a>
+                                    </span>
                                 </div>
                             </div>
 

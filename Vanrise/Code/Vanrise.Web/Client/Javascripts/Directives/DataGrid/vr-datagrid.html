@@ -174,7 +174,7 @@
                     Actions
                 </button>
             </div>
-            <div class="grid-base-row row-full-view" style="display: flex;">
+            <div class="grid-base-row row-full-view" style="display: flex;" ng-style="::$parent.ctrl.hasDefinedMenuAction(dataItem)?{'padding-top': '32px'}:''">
                 <div ng-repeat="colDef in ctrl.columnDefs">
                     <div ng-style="{ 'width': colDef.mobileWidth, 'display':'inline-flex','vertical-align':'top','border-left': 'none'}" ng-class=" ctrl.getCellContainerClass(dataItem, colDef,true)" class="vr-datagrid-cell-container ng-scope">
                         <div class="mobile-label-container">

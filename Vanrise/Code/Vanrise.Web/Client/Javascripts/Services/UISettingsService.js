@@ -28,7 +28,15 @@
             }
             return url;
         }
-
+        function getDefaultPath() {
+            var path;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "DefaultURL", "Name");
+                if (param != null)
+                    path = param.Value;
+            }
+            return path;
+        }
         function getGoogleTrackingStatus() {
             var status;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
@@ -49,6 +57,69 @@
             return account;
         }
 
+        function getMasterLayoutSettings() {
+            var masterLayoutSetting;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "MasterLayoutSetting", "Name");
+                if (param != null)
+                    masterLayoutSetting = param.Value;
+            }
+            return masterLayoutSetting;
+        }
+
+        function getMasterLayoutDefaultViewTileState() {
+            var tilesMode =  false;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "MasterLayoutSetting", "Name");
+                if (param != null && param.Value != null)
+                    tilesMode = param.Value["TilesMode"];
+
+            }
+            return tilesMode;
+        }
+
+        function getMasterLayoutModuleDefaultViewTileState() {
+            var tilesMode = false;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "MasterLayoutSetting", "Name");
+                if (param != null && param.Value != null)
+                    tilesMode = param.Value["ModuleTilesMode"];
+
+            }
+            return tilesMode;
+        }
+        function getMasterLayoutMenuToogledState() {
+            var expandedMenu = false;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "MasterLayoutSetting", "Name");
+                if (param != null && param.Value != null)
+                    expandedMenu = param.Value["ExpandedMenu"];
+
+            }
+            return expandedMenu;
+        }
+
+        function getMasterLayoutShowApplicationTilesState() {
+            var state = false;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "MasterLayoutSetting", "Name");
+                if (param != null && param.Value != null)
+                    state = param.Value["ShowApplicationTiles"];
+
+            }
+            return state;
+        }
+
+        function getMasterLayoutBreadcrumbVisibility() {
+            var isBreadcrumbVisible = false;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "MasterLayoutSetting", "Name");
+                if (param != null && param.Value != null)
+                    isBreadcrumbVisible = param.Value["IsBreadcrumbVisible"];
+
+            }
+            return isBreadcrumbVisible;
+        }
         function getNormalPrecision() {
             var normalPrecision;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
@@ -122,6 +193,7 @@
         return ({
             loadUISettings: loadUISettings,
             getDefaultPageURl: getDefaultPageURl,
+            getDefaultPath: getDefaultPath,
             getNormalPrecision: getNormalPrecision,
             getLongPrecision: getLongPrecision,
             getUIParameterValue: getUIParameterValue,
@@ -130,8 +202,13 @@
             getGoogleTrackingAccount: getGoogleTrackingAccount,
             getMaxSearchRecordCount: getMaxSearchRecordCount,
             getServerUtcOffsetInMinutes: getServerUtcOffsetInMinutes,
-            getGridLayoutOptions: getGridLayoutOptions
-
+            getGridLayoutOptions: getGridLayoutOptions,
+            getMasterLayoutSettings: getMasterLayoutSettings,
+            getMasterLayoutDefaultViewTileState: getMasterLayoutDefaultViewTileState,
+            getMasterLayoutModuleDefaultViewTileState: getMasterLayoutModuleDefaultViewTileState,
+            getMasterLayoutMenuToogledState: getMasterLayoutMenuToogledState,
+            getMasterLayoutShowApplicationTilesState: getMasterLayoutShowApplicationTilesState,
+            getMasterLayoutBreadcrumbVisibility: getMasterLayoutBreadcrumbVisibility
         });
     }
 
