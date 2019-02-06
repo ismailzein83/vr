@@ -9,6 +9,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 {
     public class CarrierAccountDataManager : ICarrierAccountDataManager
     {
+        #region RDB
+
         static string TABLE_ALIAS = "ca";
         static string TABLE_NAME = "TOneWhS_BE_CarrierAccount";
         const string COL_ID = "ID";
@@ -27,8 +29,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         const string COL_CreatedBy = "CreatedBy";
         const string COL_LastModifiedBy = "LastModifiedBy";
         const string COL_LastModifiedTime = "LastModifiedTime";
-
-
+        
         static CarrierAccountDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
@@ -63,6 +64,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return RDBDataProviderFactory.CreateProvider("TOneWhS_BE", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
+        #endregion
 
         #region ICarrierAccountDataManager Members
         public List<CarrierAccount> GetCarrierAccounts()
