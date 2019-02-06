@@ -11,9 +11,6 @@ namespace Vanrise.Entities
         MasterLayoutSettingData _masterLayoutData = new MasterLayoutSettingData();
         public UISettingData UIData { get; set; }
 
-        public CacheSettingData CacheData { get; set; }
-
-
         public MasterLayoutSettingData MasterLayoutData
         {
             get
@@ -26,6 +23,8 @@ namespace Vanrise.Entities
             }
 
         }
+
+        public CacheSettingData CacheData { get; set; }
     }
     public class UISettingData
     {
