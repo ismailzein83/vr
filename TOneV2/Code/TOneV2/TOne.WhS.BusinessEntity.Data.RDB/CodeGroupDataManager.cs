@@ -105,11 +105,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 insertedId = returnedValue.Value;
                 return true;
             }
-            else
-            {
-                insertedId = 0;
-                return false;
-            }
+
+            insertedId = 0;
+            return false;
         }
 
         public void SaveCodeGroupToDB(List<CodeGroup> codeGroups)
@@ -129,7 +127,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 rowContext.Column(COL_Name).Value(codeGroup.Name);
                 rowContext.Column(COL_CountryID).Value(codeGroup.CountryId);
             }
-
             queryContext.ExecuteNonQuery();
         }
 
@@ -165,15 +162,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         #region Mappers
         private CodeGroup CodeGroupMapper(IRDBDataReader reader)
         {
-            CodeGroup codeGroup = new CodeGroup
+            return new CodeGroup
             {
                 CodeGroupId = reader.GetInt(COL_ID),
                 CountryId = reader.GetInt(COL_CountryID),
                 Name = reader.GetString(COL_Name),
-                Code = reader.GetString(COL_Code).Trim()
+                Code = reader.GetString(COL_Code)
             };
-
-            return codeGroup;
         }
         #endregion
     }
