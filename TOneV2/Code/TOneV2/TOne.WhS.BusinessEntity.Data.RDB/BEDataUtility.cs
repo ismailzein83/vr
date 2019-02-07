@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vanrise.Data.RDB;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data.RDB
 {
@@ -53,6 +55,70 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                     context.FalseCondition();
             }
 
+        }
+
+        public static void SetCodePrefixQuery(RDBQueryContext queryContext, string tableName, string tableAlias, string BEDColumnName, string EEDColumnName, bool isEffectiveInTheFuture,
+            DateTime? effectiveDate, int prefixLength, string codeColumnName, IEnumerable<string> codePrefixes)
+        {
+            string codePrefixAlias = "CodePrefix";
+            string codeCountAlias = "CodeCount";
+
+            var allPrefixesTempTableQuery = queryContext.CreateTempTable();
+            allPrefixesTempTableQuery.AddColumn(codePrefixAlias, RDBDataType.Varchar);
+            allPrefixesTempTableQuery.AddColumn(codeCountAlias, RDBDataType.Int);
+
+            var insertToTempTableQuery = queryContext.AddInsertQuery();
+            insertToTempTableQuery.IntoTable(allPrefixesTempTableQuery);
+
+            var fromSelectQuery = insertToTempTableQuery.FromSelect();
+            fromSelectQuery.From(tableName, tableAlias, null, true);
+
+            var whereContext = fromSelectQuery.Where();
+            SetDateCondition(whereContext, tableAlias, BEDColumnName, EEDColumnName, isEffectiveInTheFuture, effectiveDate);
+
+            var groupBy = fromSelectQuery.GroupBy();
+            groupBy.SelectAggregates().Count(codeCountAlias);
+            var groupSelectContext = groupBy.Select();
+            groupSelectContext.Expression(codePrefixAlias).TextLeftPart(prefixLength).Column(tableAlias, codeColumnName);
+
+            var codePrefixesTempTableQuery = queryContext.CreateTempTable();
+            codePrefixesTempTableQuery.AddColumn(codePrefixAlias, RDBDataType.Varchar);
+            var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+            insertMultipleRowsQuery.IntoTable(codePrefixesTempTableQuery);
+
+            foreach (var queryItem in codePrefixes)
+            {
+                var rowContext = insertMultipleRowsQuery.AddRow();
+                rowContext.Column(codePrefixAlias).Value(queryItem);
+            }
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(allPrefixesTempTableQuery, "allPrefixes", null);
+            selectQuery.SelectColumns().AllTableColumns("allPrefixes");
+            var joinContext = selectQuery.Join();
+            var joinStatement = joinContext.Join(codePrefixesTempTableQuery, "cp");
+            var onStatement = joinStatement.On();
+            onStatement.EqualsCondition("cp", codePrefixAlias).TextLeftPart(prefixLength - 1).Column("allPrefixes", codePrefixAlias);
+        }
+
+        public static void SetDistinctCodePrefixesQuery(RDBQueryContext queryContext, string tableName, string tableAlias, string BEDColumnName, string EEDColumnName, bool isEffectiveInTheFuture,
+            DateTime? effectiveDate, int prefixLength, string codeColumnName)
+        {
+            var selectQuery = queryContext.AddSelectQuery();
+            string codePrefixAlias = "CodePrefix";
+            string codeCountAlias = "CodeCount";
+
+            selectQuery.From(tableName, tableAlias, null, true);
+
+            var whereContext = selectQuery.Where();
+            SetDateCondition(whereContext, tableAlias, BEDColumnName, EEDColumnName, isEffectiveInTheFuture, effectiveDate);
+
+            var groupByContext = selectQuery.GroupBy();
+            var groupSelect = groupByContext.Select();
+            groupSelect.Expression(codePrefixAlias).TextLeftPart(prefixLength).Column(codeColumnName);
+            groupByContext.SelectAggregates().Count(codeCountAlias);
+
+            selectQuery.Sort().ByAlias(codeCountAlias, RDBSortDirection.DESC);
         }
     }
 }

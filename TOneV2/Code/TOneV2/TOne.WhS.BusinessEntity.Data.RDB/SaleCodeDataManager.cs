@@ -215,66 +215,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-
-            var whereContext = selectQuery.Where();
-            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn);
-
-            var groupByContext = selectQuery.GroupBy();
-            var groupSelect = groupByContext.Select();
-            groupSelect.Expression(TABLE_ALIAS).TextLeftPart(prefixLength).Column(COL_Code);
-            groupByContext.SelectAggregates().Count("codeCount");
-
-            selectQuery.Sort().ByAlias("codeCount", RDBSortDirection.DESC);
-
+            BEDataUtility.SetDistinctCodePrefixesQuery(queryContext, TABLE_NAME, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn, prefixLength, COL_Code);
             return queryContext.GetItems(CodePrefixMapper);
         }
 
         public IEnumerable<CodePrefixInfo> GetSpecificCodeByPrefixes(int prefixLength, IEnumerable<string> codePrefixes, DateTime? effectiveOn, bool isFuture)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
-
-            string codePrefixAlias = "CodePrefix";
-            string codeCountAlias = "CodeCount";
-
-            var allPrefixesTempTableQuery = queryContext.CreateTempTable();
-            allPrefixesTempTableQuery.AddColumn(codePrefixAlias, RDBDataType.Varchar);
-            allPrefixesTempTableQuery.AddColumn(codeCountAlias, RDBDataType.Int);
-
-            var insertToTempTableQuery = queryContext.AddInsertQuery();
-            insertToTempTableQuery.IntoTable(allPrefixesTempTableQuery);
-
-            var fromSelectQuery = insertToTempTableQuery.FromSelect();
-            fromSelectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-
-            var whereContext = fromSelectQuery.Where();
-            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn);
-
-            var groupBy = fromSelectQuery.GroupBy();
-            groupBy.SelectAggregates().Count(codeCountAlias);
-            var groupSelectContext = groupBy.Select();
-            groupSelectContext.Expression(codePrefixAlias).TextLeftPart(prefixLength).Column(TABLE_ALIAS, COL_Code);
-
-            var codePrefixesTempTableQuery = queryContext.CreateTempTable();
-            codePrefixesTempTableQuery.AddColumn(codePrefixAlias, RDBDataType.Varchar);
-            var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
-            insertMultipleRowsQuery.IntoTable(codePrefixesTempTableQuery);
-
-            foreach (var queryItem in codePrefixes)
-            {
-                var rowContext = insertMultipleRowsQuery.AddRow();
-                rowContext.Column(codePrefixAlias).Value(queryItem);
-            }
-
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(allPrefixesTempTableQuery, "allPrefixes", null);
-            selectQuery.SelectColumns().AllTableColumns("allPrefixes");
-            var joinContext = selectQuery.Join();
-            var joinStatement = joinContext.Join(codePrefixesTempTableQuery, "cp");
-            var onStatement = joinStatement.On();
-            onStatement.EqualsCondition("cp", codePrefixAlias).TextLeftPart(prefixLength - 1).Column("allPrefixes", codePrefixAlias);
-
+            BEDataUtility.SetCodePrefixQuery(queryContext, TABLE_NAME, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn, prefixLength, COL_Code, codePrefixes);
             return queryContext.GetItems(CodePrefixMapper);
         }
 

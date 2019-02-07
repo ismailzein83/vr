@@ -57,7 +57,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<SupplierCode> GetParentsBySupplier(int supplierId, string codeNumber)
         {
-            SupplierZoneDataManager supplierZoneDataManager = new SupplierZoneDataManager();
+            var supplierZoneDataManager = new SupplierZoneDataManager();
             string supplierZoneTableAlias = "spz";
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
@@ -69,16 +69,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             var whereContext = selectQuery.Where();
 
-            var compareConditionContext = whereContext.CompareCondition(RDBCompareConditionOperator.StartWith);
-            compareConditionContext.Expression1().Value(codeNumber);
-            compareConditionContext.Expression2().Column(COL_Code);
+            BEDataUtility.SetParentCodeCondition(whereContext, codeNumber, TABLE_ALIAS, COL_Code);
 
             whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
-            whereContext.LessOrEqualCondition(COL_BED).DateNow();
 
-            var orDateCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            orDateCondition.NullCondition(COL_EED);
-            orDateCondition.GreaterThanCondition(COL_EED).DateNow();
+            BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, DateTime.Now);
 
             selectQuery.Sort().ByColumn(COL_Code, RDBSortDirection.ASC);
             return queryContext.GetItems(SupplierCodeMapper);
@@ -86,7 +81,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public IEnumerable<SupplierCode> GetFilteredSupplierCodes(SupplierCodeQuery query)
         {
-            SupplierZoneDataManager supplierZoneDataManager = new SupplierZoneDataManager();
+            var supplierZoneDataManager = new SupplierZoneDataManager();
             string supplierZoneTableAlias = "spz";
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
@@ -99,11 +94,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(query.SupplierId);
 
-            if (string.IsNullOrEmpty(query.Code))
-                whereContext.ContainsCondition(COL_Code, query.Code);
+            if (!string.IsNullOrEmpty(query.Code))
+                whereContext.StartsWithCondition(COL_Code, query.Code);
 
             if (query.ZoneIds != null && query.ZoneIds.Any())
-                whereContext.ListCondition(RDBListConditionOperator.IN, query.ZoneIds);
+                whereContext.ListCondition(COL_ZoneID, RDBListConditionOperator.IN, query.ZoneIds);
 
             BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, query.EffectiveOn);
 
@@ -125,10 +120,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var whereContext = selectQuery.Where();
             whereContext.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID).Value(supplierId);
 
-            var ordDateCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            ordDateCondition.NullCondition(COL_EED);
-            ordDateCondition.GreaterThanCondition(COL_EED).Value(minimumDate);
-            ordDateCondition.NotEqualsCondition(COL_EED).Column(COL_BED);
+            BEDataUtility.SetEffectiveAfterDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, minimumDate);
 
             return queryContext.GetItems(SupplierCodeMapper);
         }
@@ -141,11 +133,11 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
             var whereContext = selectQuery.Where();
-            whereContext.LessOrEqualCondition(COL_BED).Value(from);
+            whereContext.LessOrEqualCondition(COL_BED).Value(to);
 
             var orDateCondition = whereContext.ChildConditionGroup(RDBConditionGroupOperator.OR);
             orDateCondition.NullCondition(COL_EED);
-            orDateCondition.GreaterThanCondition(COL_EED).Value(to);
+            orDateCondition.GreaterThanCondition(COL_EED).Value(from);
 
             return queryContext.GetItems(SupplierCodeMapper);
         }
@@ -153,66 +145,14 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         public IEnumerable<CodePrefixInfo> GetDistinctCodeByPrefixes(int prefixLength, DateTime? effectiveOn, bool isFuture)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-            var whereContext = selectQuery.Where();
-            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn);
-
-            var groupByContext = selectQuery.GroupBy();
-            var groupSelect = groupByContext.Select();
-            groupSelect.Expression(TABLE_ALIAS).TextLeftPart(prefixLength).Column(COL_Code);
-            groupByContext.SelectAggregates().Count("codeCount");
-
-            selectQuery.Sort().ByAlias("codeCount", RDBSortDirection.DESC);
-
+            BEDataUtility.SetDistinctCodePrefixesQuery(queryContext, TABLE_NAME, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn, prefixLength, COL_Code);
             return queryContext.GetItems(CodePrefixMapper);
         }
 
         public IEnumerable<CodePrefixInfo> GetSpecificCodeByPrefixes(int prefixLength, IEnumerable<string> codePrefixes, DateTime? effectiveOn, bool isFuture)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
-            string codePrefixAlias = "CodePrefix";
-            string codeCountAlias = "CodeCount";
-
-            var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumnsFromTable(codePrefixAlias);
-            tempTableQuery.AddColumnsFromTable(codeCountAlias);
-
-            var insertToTempTableQuery = queryContext.AddInsertQuery();
-            insertToTempTableQuery.IntoTable(tempTableQuery);
-
-            var fromSelectQuery = insertToTempTableQuery.FromSelect();
-
-            fromSelectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            fromSelectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-
-            var whereContext = fromSelectQuery.Where();
-            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn);
-
-            var groupByContext = fromSelectQuery.GroupBy();
-            var groupSelect = groupByContext.Select();
-
-            groupSelect.Expression(TABLE_ALIAS).TextLeftPart(prefixLength).Column(COL_Code);
-            groupByContext.SelectAggregates().Count(codeCountAlias);
-
-
-            var tempCodePrefixesTableQuery = queryContext.CreateTempTable();
-            tempCodePrefixesTableQuery.AddColumn(codePrefixAlias, RDBDataType.NVarchar, true);
-
-            var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
-            insertMultipleRowsQuery.IntoTable(tempCodePrefixesTableQuery);
-
-            foreach (var queryItem in codePrefixes)
-            {
-                var rowContext = insertMultipleRowsQuery.AddRow();
-                rowContext.Column(codePrefixAlias).Value(queryItem);
-            }
-
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(tempCodePrefixesTableQuery, "allPrefixes", null);
-            selectQuery.SelectColumns().AllTableColumns("allPrefixes");
+            BEDataUtility.SetCodePrefixQuery(queryContext, TABLE_NAME, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn, prefixLength, COL_Code, codePrefixes);
             return queryContext.GetItems(CodePrefixMapper);
         }
 
@@ -224,20 +164,16 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
         public void LoadSupplierCodes(IEnumerable<RoutingSupplierInfo> activeSupplierInfo, string codePrefix, DateTime? effectiveOn, bool isFuture, Func<bool> shouldStop, Action<SupplierCode> onCodeLoaded)
         {
-            //TODO test it in routing
-            SupplierZoneDataManager supplierZoneDataManager = new SupplierZoneDataManager();
+            var supplierZoneDataManager = new SupplierZoneDataManager();
 
             string supplierZoneTableAlias = "spz";
             var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
-            var tempTableQuery = queryContext.CreateTempTable();
-            tempTableQuery.AddColumn(SupplierZoneDataManager.COL_SupplierID, RDBDataType.Int, true);
+            var activeSuppliersInfoTempTableQuery = queryContext.CreateTempTable();
+            activeSuppliersInfoTempTableQuery.AddColumn(SupplierZoneDataManager.COL_SupplierID, RDBDataType.Int, true);
 
             var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
-            insertMultipleRowsQuery.IntoTable(tempTableQuery);
+            insertMultipleRowsQuery.IntoTable(activeSuppliersInfoTempTableQuery);
 
             foreach (var queryItem in activeSupplierInfo)
             {
@@ -245,25 +181,19 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
                 rowContext.Column(SupplierZoneDataManager.COL_SupplierID).Value(queryItem.SupplierId);
             }
 
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
+
             var joinCondition = selectQuery.Join();
             supplierZoneDataManager.JoinSupplierZone(joinCondition, supplierZoneTableAlias, TABLE_ALIAS, COL_ZoneID, true);
-
-            var supplierJoinCondition = selectQuery.Join();
-            var supplierJoinStatement = supplierJoinCondition.Join(tempTableQuery, "supplierInfo");
-            supplierJoinStatement.JoinType(RDBJoinType.Inner);
+            var supplierJoinStatement = joinCondition.Join(activeSuppliersInfoTempTableQuery, "supplierInfo");
             var supplierJoinConditionOn = supplierJoinStatement.On();
             supplierJoinConditionOn.EqualsCondition(supplierZoneTableAlias, SupplierZoneDataManager.COL_SupplierID, "supplierInfo", SupplierZoneDataManager.COL_SupplierID);
 
             var whereContext = selectQuery.Where();
-
-            if (effectiveOn.HasValue)
-            {
-                if (isFuture)
-                    BEDataUtility.SetEffectiveDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                else
-                    BEDataUtility.SetFutureDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-            }
-            else whereContext.FalseCondition();
+            whereContext.StartsWithCondition(COL_Code, codePrefix);
+            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isFuture, effectiveOn);
 
             queryContext.ExecuteReader(reader =>
             {
