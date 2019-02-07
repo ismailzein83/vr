@@ -88,7 +88,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Analytic\Directives\AnalyticDataProvider\AnalyticDataProviderTable\Templates\" />
     <Folder Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Measure\" />
     <Folder Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Templates\" />
     <Folder Include="Analytic\Directives\VRReportGeneration\MainExtensions\ReportGenerationFilter\Templates\" />
@@ -150,6 +149,8 @@
     <Content Include="Analytic\Constants\DAProfCalcChunkTimeEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcTimeUnitEnum.js" />
     <Content Include="Analytic\Constants\TimeUnitEnum.js" />
+    <Content Include="Analytic\Directives\AnalyticDataProvider\AnalyticDataProviderTable\Templates\AnalyticDataProviderTableTemplate.html" />
+    <Content Include="Analytic\Directives\AnalyticDataProvider\AnalyticDataProviderTable\vr-dataprovider-table-selector.js" />
     <Content Include="Analytic\Directives\AnalyticDataProvider\AnalyticDataProviderTable\vr-rdb-analytic-dataprovider-table.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Handler\AutomatedReportFileNamePatternHelperController.js" />
     <Content Include="Analytic\Directives\AutomatedReport\Handler\Templates\AutomatedReportFileNamePartEditor.html" />
