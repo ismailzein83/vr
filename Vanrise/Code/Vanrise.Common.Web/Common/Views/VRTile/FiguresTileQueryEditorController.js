@@ -67,11 +67,11 @@
         }
 
         function loadAllControls() {
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, getFiguresTilesDefinitionSettingsConfigs, loadDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
-                $scope.isLoading = false;
+                $scope.scopeModel.isLoading = false;
             });
 
             function setTitle() {
@@ -105,7 +105,6 @@
             function loadDirective() {
                 directiveReadyDeferred = UtilsService.createPromiseDeferred();
                 var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-
                 directiveReadyDeferred.promise.then(function () {
                     directiveReadyDeferred = undefined;
                     var directivePayload = {
