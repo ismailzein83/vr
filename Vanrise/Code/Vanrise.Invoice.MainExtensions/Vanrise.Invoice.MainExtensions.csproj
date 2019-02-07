@@ -103,10 +103,6 @@
     <Compile Include="InvoiceActionSettings\EmailAction\SendEmailAction.cs" />
     <Compile Include="InvoiceActionSettings\SetInvoicePaidAction.cs" />
     <Compile Include="InvoiceReader\InvoiceSourceReader.cs" />
-    <Compile Include="InvoiceSubSectionFilter\SMSInvoiceSubSectionFilter.cs" />
-    <Compile Include="InvoiceSubSectionFilter\VoiceInvoiceSubSectionFilter.cs" />
-    <Compile Include="InvoiceUIGridColumnFilter\SMSInvoiceUIGridColumnFilter.cs" />
-    <Compile Include="InvoiceUIGridColumnFilter\VoiceInvoiceUIGridColumnFilter.cs" />
     <Compile Include="InvoiceUISubSectionSettings\InvoiceCommentSubSection.cs" />
     <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSectionController.cs" />
     <Compile Include="InvoiceUISubSectionSettings\ItemGrouping\ItemGroupingSection.cs" />
