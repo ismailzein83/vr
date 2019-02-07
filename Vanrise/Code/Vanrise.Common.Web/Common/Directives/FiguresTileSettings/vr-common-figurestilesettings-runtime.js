@@ -47,9 +47,10 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                             Queries : definitionSettings.Queries,
                             ItemsToDisplay: definitionSettings.ItemsToDisplay
                         };
-                        promises.push(loadLiveBalance());
+                        promises.push(loadFigures());
                     }
-                    function loadLiveBalance() {
+                    function loadFigures() {
+                        $scope.scopeModel.isLoading = true;
                         return VRCommon_VRTileAPIService.GetFigureItemsValue(figureStyleInput).then(function (response) {
                             if (response != undefined) {
                                     for (var i = 0, length = response.length; i < length; i++) {
@@ -63,7 +64,9 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                             }
                         });
                     }
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        $scope.scopeModel.isLoading =false;
+                    });
                 };
 
                 api.getData = function () {
