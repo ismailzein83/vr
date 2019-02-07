@@ -63,11 +63,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Normalization">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Normalization.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.MobileNetwork.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.MobileNetwork.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.MobileNetwork.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.MobileNetwork.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Vanrise.Rules.Normalization">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Normalization.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
