@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
@@ -24,7 +22,7 @@ namespace Vanrise.Analytic.Business
             var itemsToDisplay = context.ItemsToDisplay;
             foreach (var item in itemsToDisplay)
             {
-                    selectedItemsToDisplayNames.Add(item.Name);
+                selectedItemsToDisplayNames.Add(item.Name);
             }
             var Query = new AnalyticQuery()
             {
@@ -35,6 +33,8 @@ namespace Vanrise.Analytic.Business
                 ParentDimensions = new List<string>(),
                 Filters = new List<DimensionFilter>(),
                 // OrderType =AnalyticQueryOrderType.ByAllDimensions,
+                FilterGroup = this.RecordFilter
+                // (this.RecordFilter == null) ? null : new RecordFilterGroup() { Filters = new List<RecordFilter>() { this.RecordFilter }, LogicalOperator = RecordQueryLogicalOperator.And, FieldName = this.RecordFilter.FieldName }
             };
 
             var analyticRecords = analyticManager.GetAllFilteredRecords(Query) as List<AnalyticRecord>;
@@ -82,7 +82,7 @@ namespace Vanrise.Analytic.Business
         public Guid AnalyticTableId { get; set; }
         public List<Guid> Measures { get; set; }
         public VRTimePeriod TimePeriod { get; set; }
-        public RecordFilter RecordFilter { get; set; }
+        public RecordFilterGroup RecordFilter { get; set; }
 
     }
 

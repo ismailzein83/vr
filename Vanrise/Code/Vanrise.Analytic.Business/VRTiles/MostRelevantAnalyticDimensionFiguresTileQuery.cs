@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
@@ -17,7 +15,7 @@ namespace Vanrise.Analytic.Business
         public override List<FigureItemValue> Execute(IFiguresTileQueryExecuteContext context)
         {
             List<string> dimensionFields = new List<string>();
-            
+
             AnalyticItemConfigManager analyticItemConfigmanager = new AnalyticItemConfigManager();
             var measureNames = analyticItemConfigmanager.GetMeasuresNames(AnalyticTableId, Measures);
             measureNames.ThrowIfNull("measureNames");
@@ -43,8 +41,10 @@ namespace Vanrise.Analytic.Business
                 ToTime = timePeriodContext.ToTime,
                 ParentDimensions = new List<string>(),
                 Filters = new List<DimensionFilter>(),
-                OrderType =AnalyticQueryOrderType.AdvancedMeasureOrder,
-                AdvancedOrderOptions = AdvancedOrderOptions
+                OrderType = AnalyticQueryOrderType.AdvancedMeasureOrder,
+                AdvancedOrderOptions = AdvancedOrderOptions,
+                FilterGroup = this.RecordFilter
+                // (RecordFilter == null) ? null : new RecordFilterGroup() { Filters = new List<RecordFilter>() { this.RecordFilter }, LogicalOperator = RecordQueryLogicalOperator.And, FieldName = this.RecordFilter.FieldName },
             };
 
             var analyticRecords = analyticManager.GetAllFilteredRecords(Query) as List<AnalyticRecord>;
@@ -71,25 +71,25 @@ namespace Vanrise.Analytic.Business
             AnalyticItemConfigManager analyticItemConfigmanager = new AnalyticItemConfigManager();
             var allDimensionsByDimensionName = analyticItemConfigmanager.GetDimensions(AnalyticTableId);
             allDimensionsByDimensionName.ThrowIfNull("allDimensionsByDimensionName");
-           
-                var selectedDimension = allDimensionsByDimensionName.First(x => x.Value.AnalyticDimensionConfigId == DimensionId);
 
-                if (selectedDimension.Value == null)
-                    throw new NullReferenceException("selectedMeasure");
+            var selectedDimension = allDimensionsByDimensionName.First(x => x.Value.AnalyticDimensionConfigId == DimensionId);
 
-                figureItemsSchema.Add(new FigureItemSchema
-                {
-                    Name = selectedDimension.Key,
-                    Title = selectedDimension.Value.Title,
-                });
-           
+            if (selectedDimension.Value == null)
+                throw new NullReferenceException("selectedMeasure");
+
+            figureItemsSchema.Add(new FigureItemSchema
+            {
+                Name = selectedDimension.Key,
+                Title = selectedDimension.Value.Title,
+            });
+
             return figureItemsSchema;
         }
         public Guid AnalyticTableId { get; set; }
         public Guid DimensionId { get; set; }
         public List<Guid> Measures { get; set; }
         public VRTimePeriod TimePeriod { get; set; }
-        public RecordFilter RecordFilter { get; set; }
+        public RecordFilterGroup RecordFilter { get; set; }
         public AnalyticQueryAdvancedMeasureOrderOptions AdvancedOrderOptions { get; set; }
 
     }
