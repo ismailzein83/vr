@@ -39,6 +39,9 @@
                 removeLine = "removeline";
             }
 
+            var required = "isrequired";
+            if (attrs.isnotrequired != undefined)
+                required = "";
 
             return '<vr-columns colnum="{{normalColNum}}">'
                   + '<vr-select on-ready="scopeModel.onSelectorReady"'
@@ -48,8 +51,8 @@
                   + 'datatextfield="Title"'
                   + label
                   + ' text="None"'
-                   + ' isrequired'
-                   + ' hideremoveicon>'
+                  + ' ' + required
+                  + ' hideremoveicon>'
            + '</vr-select>'
           + '</vr-columns>'
         + ' <span  ng-if="scopeModel.selectedFieldTypeConfig != undefined" vr-loader="scopeModel.isLoadingDirective">'
