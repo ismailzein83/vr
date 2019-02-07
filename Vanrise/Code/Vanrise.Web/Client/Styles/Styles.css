@@ -4278,7 +4278,6 @@ vr-overall-widget .list-group-item {
 .vr-figure .figure-data-content .figure-item .item-label {
     display: inline-flex;
     align-self: flex-start;
-    font-weight: bold;
     overflow: hidden;
 }
 .vr-figure .figure-data-content .figure-item .item-label div {
@@ -4290,7 +4289,8 @@ vr-overall-widget .list-group-item {
 .vr-figure .figure-data-content .figure-item .item-value {
     display: inline-flex;
     align-self: flex-end;
-    margin-left:auto;
+    margin-left: auto;
+    font-weight: bold;
 }
 
 .vr-figure .figure-data-content .figure-item .item-value.centered {
