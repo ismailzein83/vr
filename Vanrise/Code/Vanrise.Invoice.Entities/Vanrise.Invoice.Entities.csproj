@@ -80,6 +80,7 @@
     <Compile Include="InvoicePartner\InvoiceAccountData.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingPartsInfoFilter.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingPartDefinitionInfo.cs" />
+    <Compile Include="InvoiceType\Configs\InvoiceSubSectionFilterConfig.cs" />
     <Compile Include="InvoiceType\Configs\InvoiceUIGridColumnFilterConfig.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\MinAmountInvoiceSettingPart.cs" />
     <Compile Include="Invoice\InvoiceByPartnerInfo.cs" />
