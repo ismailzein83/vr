@@ -145,11 +145,12 @@
     <Content Include="Analytic\Constants\ReportOwner.js" />
     <Content Include="Analytic\Constants\SinceTimeEnum.js" />
     <Content Include="Analytic\Constants\StyleCodeEnum.js" />
-    <Content Include="Analytic\Constants\SubTablePositionTypeEnum.js" />
+    <Content Include="Analytic\Constants\GridSubTablePositionTypeEnum.js" />
     <Content Include="Analytic\Constants\TimeGroupingUnitEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcChunkTimeEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcTimeUnitEnum.js" />
     <Content Include="Analytic\Constants\TimeUnitEnum.js" />
+    <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-gridsubtablepositiontype-selector.js" />
     <Content Include="Analytic\Directives\AnalyticDataProvider\AnalyticDataProviderTable\Templates\AnalyticDataProviderTableTemplate.html" />
     <Content Include="Analytic\Directives\AnalyticDataProvider\AnalyticDataProviderTable\vr-dataprovider-table-selector.js" />
     <Content Include="Analytic\Directives\AnalyticDataProvider\AnalyticDataProviderTable\vr-rdb-analytic-dataprovider-table.js" />
