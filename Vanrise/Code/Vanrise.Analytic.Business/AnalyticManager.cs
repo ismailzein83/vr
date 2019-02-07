@@ -1070,7 +1070,7 @@ namespace Vanrise.Analytic.Business
                 if (measureValue != null)
                     allMeasuresAreNull = false;
 
-                analyticRecord.MeasureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleDefinitionId = styleDefinitionId });
+                analyticRecord.MeasureValues.Add(measureName, new MeasureValue { Value = measureValue, ModifiedValue = modifiedMeasureValue, StyleDefinitionId = styleDefinitionId });
             }
 
             return analyticRecord;

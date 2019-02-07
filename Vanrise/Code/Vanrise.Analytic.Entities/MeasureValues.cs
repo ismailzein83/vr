@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -14,6 +12,7 @@ namespace Vanrise.Analytic.Entities
     public class MeasureValue
     {
         public object Value { get; set; }
+        public object ModifiedValue { get; set; }
         public Guid? StyleDefinitionId { get; set; }
     }
 }

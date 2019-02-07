@@ -23,7 +23,8 @@ namespace Vanrise.Analytic.Business
             foreach (var item in itemsToDisplay)
             {
                 selectedItemsToDisplayNames.Add(item.Name);
-                figureItemValues.Add(new FigureItemValue() {
+                figureItemValues.Add(new FigureItemValue()
+                {
                     Name = item.Title
                 });
             }
@@ -55,7 +56,7 @@ namespace Vanrise.Analytic.Business
                         var figureItemValue = figureItemValues.FindRecord(x => x.Name == item.Title);
                         if (figureItemValue != null)
                         {
-                            figureItemValue.Value = measure.Value.Value;
+                            figureItemValue.Value = measure.Value.ModifiedValue;
                         }
                     }
                 }
