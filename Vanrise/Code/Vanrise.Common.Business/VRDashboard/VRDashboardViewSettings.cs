@@ -19,6 +19,6 @@ namespace Vanrise.Common.Business
 
     public class VRDashboardViewSettingsItem
     {
-        public int DashboardDefinitionId { get; set; }
+        public Guid DashboardDefinitionId { get; set; }
     }
 }
