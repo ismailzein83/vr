@@ -18,15 +18,16 @@ namespace Retail.RA.Business
             var cachedPeriodDefinitions = GetCachedPeriodDefinitions();
             return cachedPeriodDefinitions.GetRecord(periodDefinitionId);
         }
-       
+
         public PeriodDefinition GetLastPeriod(DateTime date)
         {
             var cachedPeriodDefinition = GetCachedPeriodDefinitions();
-            if (cachedPeriodDefinition == null)
+            if (cachedPeriodDefinition == null || cachedPeriodDefinition.Count == 0)
                 return null;
-            cachedPeriodDefinition.OrderBy(item => item.Value.FromDate);
 
-            var periodDefinitionList = cachedPeriodDefinition.Values.ToList();
+            var orderedCachedPeriodDefinitions = cachedPeriodDefinition.OrderBy(item => item.Value.FromDate);
+
+            var periodDefinitionList = orderedCachedPeriodDefinitions.Select(item => item.Value).ToList();
 
             if (periodDefinitionList.Last().ToDate < date)
                 return periodDefinitionList.Last();
@@ -47,14 +48,14 @@ namespace Retail.RA.Business
         {
             var periodDefinitionId = GetPeriodDefinitionIdByDay(date);
             var cachedPeriodDefinition = GetCachedPeriodDefinitions();
-            if (cachedPeriodDefinition == null)
+            if (cachedPeriodDefinition == null || cachedPeriodDefinition.Count == 0)
                 return null;
             if (periodDefinitionId != null)
                 return cachedPeriodDefinition.GetRecord(periodDefinitionId.Value);
 
-            cachedPeriodDefinition.OrderBy(item => item.Value.FromDate);
+            var orderedCachedPeriodDefinitions = cachedPeriodDefinition.OrderBy(item => item.Value.FromDate);
 
-            var periodDefinitionList = cachedPeriodDefinition.Values.ToList();
+            var periodDefinitionList = orderedCachedPeriodDefinitions.Select(item => item.Value).ToList();
 
             for (int i = 0; i < periodDefinitionList.Count(); i++)
             {
