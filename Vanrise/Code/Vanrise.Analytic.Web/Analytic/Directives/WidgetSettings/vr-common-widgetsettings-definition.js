@@ -143,7 +143,8 @@
                                     OrderType: settings.Settings.OrderType,
                                     RootDimensionsFromSearch: settings.Settings.RootDimensionsFromSearch,
                                     TopRecords: settings.Settings.TopRecords,
-                                    Measure: settings.Settings.Measure
+                                    Measure: settings.Settings.Measure,
+                                    SeriesDimensions: settings.Settings.SeriesDimensions
                                 };
                                 directivePayload = {
                                     tableIds: $scope.scopeModel.selectedTable != undefined ? [$scope.scopeModel.selectedTable.AnalyticTableId] : undefined,

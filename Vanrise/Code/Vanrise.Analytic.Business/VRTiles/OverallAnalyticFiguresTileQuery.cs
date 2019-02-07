@@ -23,6 +23,9 @@ namespace Vanrise.Analytic.Business
             foreach (var item in itemsToDisplay)
             {
                 selectedItemsToDisplayNames.Add(item.Name);
+                figureItemValues.Add(new FigureItemValue() {
+                    Name = item.Title
+                });
             }
             var Query = new AnalyticQuery()
             {
@@ -47,11 +50,14 @@ namespace Vanrise.Analytic.Business
                 foreach (var measure in measures)
                 {
                     var item = itemsToDisplay.FindRecord(x => x.Name == measure.Key);
-                    figureItemValues.Add(new FigureItemValue()
+                    if (item != null)
                     {
-                        Name = item.Title,
-                        Value = measure.Value.Value
-                    });
+                        var figureItemValue = figureItemValues.FindRecord(x => x.Name == item.Title);
+                        if (figureItemValue != null)
+                        {
+                            figureItemValue.Value = measure.Value.Value;
+                        }
+                    }
                 }
             }
             return figureItemValues;

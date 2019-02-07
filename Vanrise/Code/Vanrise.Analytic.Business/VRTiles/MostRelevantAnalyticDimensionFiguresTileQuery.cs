@@ -60,7 +60,7 @@ namespace Vanrise.Analytic.Business
                 var dimensions = record.DimensionValues;
                 var selectedDimension = dimensions.First();
                 // var selectedItem = context.ItemsToDisplayNames
-                figureItemValues.First().Value = selectedDimension.Value;
+                figureItemValues.First().Value = selectedDimension.Name;
             }
             return figureItemValues;
         }
