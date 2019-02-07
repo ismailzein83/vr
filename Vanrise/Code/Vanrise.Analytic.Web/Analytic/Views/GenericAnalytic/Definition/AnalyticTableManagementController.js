@@ -30,7 +30,7 @@ function AnalyticTableManagementController($scope, UtilsService, VRNotificationS
 
     function getFilterObject() {
         var query = {
-            Name: $scope.viewName
+            Name: $scope.tableName
         };
         return query;
     }
@@ -42,12 +42,12 @@ function AnalyticTableManagementController($scope, UtilsService, VRNotificationS
 
     function loadAllControls() {
         return UtilsService.waitMultipleAsyncOperations([])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.isLoading = false;
-              });
+            .catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+            .finally(function () {
+                $scope.isLoading = false;
+            });
     }
 
 };
