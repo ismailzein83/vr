@@ -150,6 +150,7 @@
     <Content Include="Analytic\Constants\DAProfCalcChunkTimeEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcTimeUnitEnum.js" />
     <Content Include="Analytic\Constants\TimeUnitEnum.js" />
+    <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-subtablepositiontype-selective.js" />
     <Content Include="Analytic\Directives\AnalyticDataProvider\AnalyticDataProviderTable\Templates\AnalyticDataProviderTableTemplate.html" />
     <Content Include="Analytic\Directives\AnalyticDataProvider\AnalyticDataProviderTable\vr-dataprovider-table-selector.js" />
     <Content Include="Analytic\Directives\AnalyticDataProvider\AnalyticDataProviderTable\vr-rdb-analytic-dataprovider-table.js" />
