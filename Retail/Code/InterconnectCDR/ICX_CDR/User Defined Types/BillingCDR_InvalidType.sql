@@ -30,7 +30,11 @@
     [CDRType]                  INT              NULL,
     [FinancialAccountId]       BIGINT           NULL,
     [BillingAccountId]         VARCHAR (50)     NULL,
+    [CallingOperatorId]        BIGINT           NULL,
+    [CalledOperatorId]         BIGINT           NULL,
     [QueueItemId]              BIGINT           NULL);
+
+
 
 
 

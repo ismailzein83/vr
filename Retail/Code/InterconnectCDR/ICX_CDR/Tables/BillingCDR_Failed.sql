@@ -30,8 +30,12 @@
     [CDRType]                  INT              NULL,
     [FinancialAccountId]       BIGINT           NULL,
     [BillingAccountId]         VARCHAR (50)     NULL,
+    [CallingOperatorId]        BIGINT           NULL,
+    [CalledOperatorId]         BIGINT           NULL,
     CONSTRAINT [IX_BillingCDR_Failed_CDRID] UNIQUE NONCLUSTERED ([CDRID] ASC)
 );
+
+
 
 
 

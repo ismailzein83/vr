@@ -18,6 +18,16 @@
     [OriginationZoneID]  BIGINT           NULL,
     [DestinationZoneID]  BIGINT           NULL,
     [CallType]           INT              NULL,
-    [CDRType]            INT              NULL
+    [CDRType]            INT              NULL,
+    [CallingOperatorId]  BIGINT           NULL,
+    [CalledOperatorId]   BIGINT           NULL,
+    CONSTRAINT [IX_BillingCDR_Interconnect_CDRID] UNIQUE NONCLUSTERED ([CDRID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_BillingCDR_Interconnect_Attempt_Operator]
+    ON [ICX_CDR].[BillingCDR_Interconnect]([AttemptDateTime] ASC, [OperatorID] ASC);
 

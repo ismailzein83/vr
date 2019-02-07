@@ -18,5 +18,9 @@
     [OriginationZoneID]  BIGINT           NULL,
     [DestinationZoneID]  BIGINT           NULL,
     [CallType]           INT              NULL,
-    [CDRType]            INT              NULL);
+    [CDRType]            INT              NULL,
+    [CallingOperatorId]  BIGINT           NULL,
+    [CalledOperatorId]   BIGINT           NULL);
+
+
 
