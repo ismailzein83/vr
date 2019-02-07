@@ -32,7 +32,7 @@
                                    + ' <div class="title">{{vrFigure.header}}</div>'
                                     + '<div class="figure-content">'
                                         + '<div class="figure-info-content">'
-                                          + '<img ng-src="{{vrFigure.imgpath}}"  />'
+                                          + '<img ng-src="{{vrFigure.imgpath}}" style="padding-top: 5px;"  />'
                                         + '</div>'
                                          + '<div class="figure-data-content">'
                                          + '<div style="width:100%;min-height: 100px;" >'

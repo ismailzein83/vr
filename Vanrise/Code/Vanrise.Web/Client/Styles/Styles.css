@@ -4262,8 +4262,6 @@ vr-overall-widget .list-group-item {
 }
 .vr-figure .figure-info-content {
     width: 50px;
-    margin-top: auto;
-    margin-bottom: auto;
 }
 .vr-figure .figure-data-content {
     display: inline-flex;
