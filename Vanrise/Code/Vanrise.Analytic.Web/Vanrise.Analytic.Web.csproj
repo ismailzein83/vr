@@ -145,6 +145,7 @@
     <Content Include="Analytic\Constants\ReportOwner.js" />
     <Content Include="Analytic\Constants\SinceTimeEnum.js" />
     <Content Include="Analytic\Constants\StyleCodeEnum.js" />
+    <Content Include="Analytic\Constants\SubTablePositionTypeEnum.js" />
     <Content Include="Analytic\Constants\TimeGroupingUnitEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcChunkTimeEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcTimeUnitEnum.js" />
