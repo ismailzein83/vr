@@ -39,13 +39,13 @@ as (select * from (values
 --('08F1717A-D4EB-4490-B329-CD74002B5D10','Taxes Management',null,null,'FC0828B5-1B08-4345-9A1B-AB09F5CBB8A7',					null,30,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
 
 
-('A7C8AA1C-AD16-49FD-B108-67AA871E6CA8','International Traffic Monitor',null,null,null,											null,130,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
-('6B22DB59-1792-4EB1-B9C6-36327C682724','International Revenue Audit',null,null,null,											null,135,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
-('F18B501E-5A32-4BE3-BC10-A1394033D10A','International Taxes Management',null,null,null,										null,140,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
+('A7C8AA1C-AD16-49FD-B108-67AA871E6CA8','International Traffic Monitor',null,null,null,											'/images/menu-icons/Traffic Monitoring.png',130,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
+('6B22DB59-1792-4EB1-B9C6-36327C682724','International Revenue Audit',null,null,null,											'/images/menu-icons/Revenue Auditing.png',135,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
+('F18B501E-5A32-4BE3-BC10-A1394033D10A','International Taxes Management',null,null,null,										'/images/menu-icons/Taxes Management.png',140,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
 
-('B8A07690-EA62-48EA-A897-DBC2EA2D7247','Offnet Traffic Monitor',null,null,null,												null,145,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
-('A52F85E7-421D-4065-B383-CF23497646FF','Offnet Revenue Audit',null,null,null,													null,150,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
-('AA603F9E-C9A7-4AB7-8F80-E896E39A7ECE','Offnet Taxes Management',null,null,null,												null,155,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
+('B8A07690-EA62-48EA-A897-DBC2EA2D7247','Offnet Traffic Monitor',null,null,null,												'/images/menu-icons/Traffic Monitoring.png',145,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
+('A52F85E7-421D-4065-B383-CF23497646FF','Offnet Revenue Audit',null,null,null,													'/images/menu-icons/Revenue Auditing.png',150,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
+('AA603F9E-C9A7-4AB7-8F80-E896E39A7ECE','Offnet Taxes Management',null,null,null,												'/images/menu-icons/Taxes Management.png',155,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
 
 ('1BE00B3E-DFFE-4230-BA7F-26B6D20E7CBD','Voice',null,null,'A7C8AA1C-AD16-49FD-B108-67AA871E6CA8',								null,5,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
 ('28268D01-8DC2-4767-B6D6-6B3D84B2C7AE','SMS',null,null,'A7C8AA1C-AD16-49FD-B108-67AA871E6CA8',									null,10,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
