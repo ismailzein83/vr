@@ -50,7 +50,15 @@
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivepPayload, setLoader, directiveReadyDeferred);
             };
-
+            $scope.scopeModel.onExtensionConfigurationSelectionChaged = function (value) {
+                if (value != undefined) {
+                    $scope.scopeModel.isDirectiveLoading = true;
+                    loadDirective().then(function () {
+                        $scope.scopeModel.isDirectiveLoading = false;
+                    });
+                }
+                   
+            };
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -68,7 +76,7 @@
 
         function loadAllControls() {
             $scope.scopeModel.isLoading = true;
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, getFiguresTilesDefinitionSettingsConfigs, loadDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, getFiguresTilesDefinitionSettingsConfigs]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -102,36 +110,34 @@
                     }
                 });
             }
-            function loadDirective() {
-                directiveReadyDeferred = UtilsService.createPromiseDeferred();
-                var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-                directiveReadyDeferred.promise.then(function () {
-                    directiveReadyDeferred = undefined;
-                    var directivePayload = {
-                        configId: $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId
-                    };
-                    if (figureTileEntity != undefined && figureTileEntity.Settings != undefined) {
-                        var settings = figureTileEntity.Settings;
-                        directivePayload.analyticTableId = settings.AnalyticTableId;
-                        directivePayload.measures = settings.Measures;
-                        directivePayload.timePeriod = settings.TimePeriod;
-                        directivePayload.filterObj = settings.RecordFilter;
-                        directivePayload.dimensionId = settings.DimensionId;
-                        directivePayload.advancedOrderOptions = settings.AdvancedOrderOptions;
-
-                    };
-                    VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
-                });
-
-                return directiveLoadDeferred.promise;
-            }
-
+            
             return UtilsService.waitMultiplePromises(promises);
         };
 
 
 
+        function loadDirective() {
+            directiveReadyDeferred = UtilsService.createPromiseDeferred();
+            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+            directiveReadyDeferred.promise.then(function () {
+                directiveReadyDeferred = undefined;
+                var directivePayload = {
+                    configId: $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId
+                };
+                if (figureTileEntity != undefined && figureTileEntity.Settings != undefined) {
+                    var settings = figureTileEntity.Settings;
+                    directivePayload.analyticTableId = settings.AnalyticTableId;
+                    directivePayload.measures = settings.Measures;
+                    directivePayload.timePeriod = settings.TimePeriod;
+                    directivePayload.filterObj = settings.RecordFilter;
+                    directivePayload.dimensionId = settings.DimensionId;
+                    directivePayload.advancedOrderOptions = settings.AdvancedOrderOptions;
 
+                };
+                VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+            });
+            return directiveLoadDeferred.promise;
+        }
         function insert() {
             var query = buildObjectFromScope();
             if ($scope.onFigureTileQueryAdded != undefined && typeof ($scope.onFigureTileQueryAdded) == 'function') {

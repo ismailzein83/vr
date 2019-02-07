@@ -14,6 +14,7 @@
                                        datasource="scopeModel.templateConfigs"
                                        selectedvalues="scopeModel.selectedTemplateConfig"
                                        datavaluefield="ExtensionConfigurationId"
+                                       onselectionchanged="scopeModel.onExtensionConfigurationSelectionChaged"
                                        datatextfield="Title"
                                        label="Figures Tile Settings"
                                        isrequired="true"
@@ -23,9 +24,11 @@
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow">
+                            <span vr-loader="scopeModel.isDirectiveLoading">
                             <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"
                                                  on-ready="scopeModel.onDirectiveReady">
                             </vr-directivewrapper>
+                                </span>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
