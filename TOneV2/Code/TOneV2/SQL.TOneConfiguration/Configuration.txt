@@ -133,3 +133,6 @@ Voucher.PostDeployment.sql
 
 TOne.SMS
 Retail.WhS_SMS.sql
+
+FZero
+FMSV1.PostDeployment.sql
