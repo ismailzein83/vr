@@ -21,6 +21,8 @@ namespace TOne.WhS.RouteSync.Huawei
 
         public List<HuaweiSSHCommunication> SwitchCommunicationList { get; set; }
 
+        public Dictionary<string, string> OverriddenRSSNInRSName { get; set; }
+
         public List<SwitchLogger> SwitchLoggerList { get; set; }
 
         private Dictionary<string, CustomerMapping> _customerMappingsByRSSN;
@@ -895,7 +897,7 @@ namespace TOne.WhS.RouteSync.Huawei
                 if (!isRegistrationSucceeded)
                 {
                     string logoutCommand = $"LGO:OP=\"{sshCommunication.SSLSettings.Username}\";";
-                    this.ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded, 
+                    this.ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded,
                         switchCommandLogManager, switchId, processInstanceId);
 
                     sshCommunicator.Dispose();
