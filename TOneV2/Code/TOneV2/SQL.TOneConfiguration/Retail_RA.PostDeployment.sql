@@ -16,7 +16,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('6E5EAAA7-DE32-4422-BE38-DA6E9F30E8D8','Operator Declaration',null,null,null,													null,25,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
+('6E5EAAA7-DE32-4422-BE38-DA6E9F30E8D8','Operator Declaration',null,null,null,													'/images/menu-icons/operator declaration.png',25,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
 
 --('A689545B-3BF9-4D65-AA63-A1DC71053C23','International Analytics',null,null,null,												null,95,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
 --('B39238DD-DBA6-465F-B6E6-AD076B64048F','Traffic Monitor',null,null,'A689545B-3BF9-4D65-AA63-A1DC71053C23',						null,10,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
