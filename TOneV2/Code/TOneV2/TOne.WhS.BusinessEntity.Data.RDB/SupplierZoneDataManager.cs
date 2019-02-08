@@ -111,17 +111,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
-            var whereQuery = selectQuery.Where();
-
-            if (isEffectiveInFuture)
-                BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, DateTime.Now);
-            else
-            {
-                if (effectiveOn.HasValue)
-                    BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                else
-                    whereQuery.FalseCondition();
-            }
+            var whereContext = selectQuery.Where();
+            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isEffectiveInFuture, effectiveOn);
 
             return queryContext.GetItems(SupplierZoneMapper);
         }
@@ -145,9 +136,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SupplierZone
             {
-                SupplierId = reader.GetInt(COL_SupplierID),
+                SupplierZoneId = reader.GetLong(COL_ID),
                 CountryId = reader.GetInt(COL_CountryID),
-                SupplierZoneId = reader.GetInt(COL_ID),
+                SupplierId = reader.GetInt(COL_SupplierID),
                 Name = reader.GetString(COL_Name),
                 BED = reader.GetDateTime(COL_BED),
                 EED = reader.GetNullableDateTime(COL_EED),
