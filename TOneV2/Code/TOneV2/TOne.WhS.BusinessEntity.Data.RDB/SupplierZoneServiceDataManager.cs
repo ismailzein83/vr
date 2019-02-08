@@ -87,25 +87,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
 
-
-            var whereQuery = selectQuery.Where();
-
-            if (supplierInfos != null && supplierInfos.Any())
-                whereQuery.ListCondition(COL_SupplierID, RDBListConditionOperator.IN, supplierInfos.Select((item => item.SupplierId)));
-            else
-                whereQuery.FalseCondition();
-
-            whereQuery.NotNullCondition(COL_ZoneID);
-
-            if (isEffectiveInFuture)
-                BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, DateTime.Now);
-            else
-            {
-                if (effectiveOn.HasValue)
-                    BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                else
-                    whereQuery.FalseCondition();
-            }
+            var whereContext = selectQuery.Where();
+            whereContext.ListCondition(COL_SupplierID, RDBListConditionOperator.IN, supplierInfos.Select((item => item.SupplierId)));
+            whereContext.NotNullCondition(COL_ZoneID);
+            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isEffectiveInFuture, effectiveOn);
 
             var groupByContext = selectQuery.GroupBy();
             groupByContext.Select().Columns(COL_ID, COL_ZoneID, COL_PriceListID, COL_SupplierID, COL_ReceivedServicesFlag, COL_EffectiveServiceFlag, COL_BED, COL_EED, COL_SourceID);
@@ -120,24 +105,10 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
 
-            var whereQuery = selectQuery.Where();
-
-            if (supplierInfos != null && supplierInfos.Any())
-                whereQuery.ListCondition(COL_SupplierID, RDBListConditionOperator.IN, supplierInfos.Select((item => item.SupplierId)));
-            else
-                whereQuery.FalseCondition();
-
-            whereQuery.NullCondition(COL_ZoneID);
-
-            if (isEffectiveInFuture)
-                BEDataUtility.SetFutureDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, DateTime.Now);
-            else
-            {
-                if (effectiveOn.HasValue)
-                    BEDataUtility.SetEffectiveDateCondition(whereQuery, TABLE_ALIAS, COL_BED, COL_EED, effectiveOn.Value);
-                else
-                    whereQuery.FalseCondition();
-            }
+            var whereContext = selectQuery.Where();
+            whereContext.ListCondition(COL_SupplierID, RDBListConditionOperator.IN, supplierInfos.Select((item => item.SupplierId)));
+            whereContext.NullCondition(COL_ZoneID);
+            BEDataUtility.SetDateCondition(whereContext, TABLE_ALIAS, COL_BED, COL_EED, isEffectiveInFuture, effectiveOn);
 
             return queryContext.GetItems(SupplierDefaultServiceMapper);
         }
@@ -229,7 +200,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             updateQuery.Column(COL_EED).Column("szrsToClose", COL_EED);
             var joinContext = updateQuery.Join(TABLE_ALIAS);
             joinContext.JoinOnEqualOtherTableColumn(tempTableQuery, "szrsToClose", COL_ID, TABLE_ALIAS, COL_ID);
-
 
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
@@ -340,7 +310,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SupplierZoneService
             {
-                SupplierZoneServiceId = reader.GetInt(COL_ID),
+                SupplierZoneServiceId = reader.GetLong(COL_ID),
                 ZoneId = reader.GetLongWithNullHandling(COL_ZoneID),
                 PriceListId = reader.GetIntWithNullHandling(COL_PriceListID),
                 SupplierId = reader.GetInt(COL_SupplierID),
@@ -356,7 +326,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             return new SupplierDefaultService
             {
-                SupplierZoneServiceId = reader.GetInt(COL_ID),
+                SupplierZoneServiceId = reader.GetLong(COL_ID),
                 SupplierId = reader.GetInt(COL_SupplierID),
                 PriceListId = reader.GetIntWithNullHandling(COL_PriceListID),
                 ReceivedServices = Serializer.Deserialize<List<ZoneService>>(reader.GetString(COL_ReceivedServicesFlag)),
