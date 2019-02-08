@@ -76,8 +76,6 @@
                 api.load = function (payload) {
                     var promises = [];
 
-                    var overriddenRSSNsInRSName;
-
                     if (payload != undefined) {
                         var overriddenRSSNsInRSName = payload.overriddenRSSNsInRSName;
                         if (overriddenRSSNsInRSName != undefined) {
@@ -86,21 +84,24 @@
                                     var overriddenRSSNsInRSNameItem = {
                                         exisitingRSSN: key,
                                         overriddenRSSN: overriddenRSSNsInRSName[key]
-                                    }
+                                    };
                                     $scope.scopeModel.overriddenRSSNsInRSName.push(overriddenRSSNsInRSNameItem);
                                 }
                             }
                         }
                         return UtilsService.waitMultiplePromises(promises);
-                    };
-                }
+                    }
+                };
+
                 api.getData = function () {
+
                     var overriddenRSSNsInRSName = {};
+
                     if ($scope.scopeModel.overriddenRSSNsInRSName != undefined && $scope.scopeModel.overriddenRSSNsInRSName.length > 0) {
                         for (var i = 0; i < $scope.scopeModel.overriddenRSSNsInRSName.length; i++) {
                             var dataItem = $scope.scopeModel.overriddenRSSNsInRSName[i];
                             overriddenRSSNsInRSName[dataItem.exisitingRSSN] = dataItem.overriddenRSSN;
-                        };
+                        }
                     }
 
                     return {
@@ -111,9 +112,9 @@
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
-
             }
         }
     }
+
     app.directive('whsRoutesyncHuaweiSettings', whsRoutesyncHuaweiSettings);
 })(app);
