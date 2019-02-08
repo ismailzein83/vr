@@ -89,7 +89,7 @@ namespace TOne.WhS.RouteSync.Huawei
                     continue;
 
                 RouteAnalysis routeAnalysis = this.GetRouteAnalysis(customerMapping.RSSN, route.Options);
-                string rsName = Helper.GetRSName(routeAnalysis, this.MinRNLength);
+                string rsName = Helper.GetRSName(routeAnalysis, this.MinRNLength, this.OverriddenRSSNsInRSName);
 
                 RouteCase routeCase;
                 if (rsName.CompareTo(HuaweiCommands.ROUTE_BLOCK) != 0 && (routeCasesByRSName == null || !routeCasesByRSName.TryGetValue(rsName, out routeCase)))

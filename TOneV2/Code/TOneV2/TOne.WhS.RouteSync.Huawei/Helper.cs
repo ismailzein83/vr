@@ -13,18 +13,24 @@ namespace TOne.WhS.RouteSync.Huawei
         const string RouteCaseOptionsSeparatorAsString = "|@|@|";
         const string RouteCaseOptionsFieldsSeparatorAsString = "~%~%~";
 
-        public static string GetRSName(RouteAnalysis routeAnalysis, int routeNameLength)
+        public static string GetRSName(RouteAnalysis routeAnalysis, int routeNameLength, Dictionary<string, string> overriddenRSSNsInRSName)
         {
             if (routeAnalysis == null || routeAnalysis.RouteCaseOptions == null || routeAnalysis.RouteCaseOptions.Count == 0)
                 return HuaweiCommands.ROUTE_BLOCK;
 
-            StringBuilder sb_RSName = new StringBuilder(routeAnalysis.RSSN);
+            StringBuilder sb_RSName = new StringBuilder();
+
+            string overriddenRSSNInRSName;
+            if (overriddenRSSNsInRSName == null || !overriddenRSSNsInRSName.TryGetValue(routeAnalysis.RSSN, out overriddenRSSNInRSName))
+                sb_RSName.Append(routeAnalysis.RSSN);
+            else
+                sb_RSName.Append(overriddenRSSNInRSName);
 
             foreach (var routeCaseOption in routeAnalysis.RouteCaseOptions)
             {
-                string percentageAsString = routeCaseOption.Percentage.HasValue ? routeCaseOption.Percentage.Value.ToString() : string.Empty;
                 string routeName = routeCaseOption.RouteName.Replace(" ", "");
                 string routeNameSymbole = routeName.Substring(0, routeNameLength);
+                string percentageAsString = routeCaseOption.Percentage.HasValue ? routeCaseOption.Percentage.Value.ToString() : string.Empty;
 
                 sb_RSName.AppendFormat("_{0}{1}", routeNameSymbole, percentageAsString);
             }
