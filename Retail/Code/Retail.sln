@@ -260,6 +260,16 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.InterconnectSMSEDR", "S
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.InterconnectSMSAnalytics", "SQL.InterconnectSMSAnalytics\SQL.InterconnectSMSAnalytics.sqlproj", "{1D070FE6-A930-4DE7-975A-8A5E2C5670E1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RecordAnalysis", "RecordAnalysis", "{904B9D18-2499-4130-B4E4-0DF22F025D68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecordAnalysis.Web", "RecordAnalysis.Web\RecordAnalysis.Web.csproj", "{96532272-276C-4E99-A9C9-FA2438BD85E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecordAnalysis.Entities", "RecordAnalysis.Entities\RecordAnalysis.Entities.csproj", "{1289411C-4F16-4003-8875-23B2C5A0AEC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecordAnalysis.Business", "RecordAnalysis.Business\RecordAnalysis.Business.csproj", "{90627A1F-5042-4080-9453-B39EE40E11F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecordAnalysis.MainExtensions", "RecordAnalysis.MainExtensions\RecordAnalysis.MainExtensions.csproj", "{D7273138-4B50-41A0-A0C3-93A747C8FE4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -724,6 +734,22 @@ Global
 		{1D070FE6-A930-4DE7-975A-8A5E2C5670E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D070FE6-A930-4DE7-975A-8A5E2C5670E1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1D070FE6-A930-4DE7-975A-8A5E2C5670E1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{96532272-276C-4E99-A9C9-FA2438BD85E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96532272-276C-4E99-A9C9-FA2438BD85E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96532272-276C-4E99-A9C9-FA2438BD85E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96532272-276C-4E99-A9C9-FA2438BD85E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1289411C-4F16-4003-8875-23B2C5A0AEC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1289411C-4F16-4003-8875-23B2C5A0AEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1289411C-4F16-4003-8875-23B2C5A0AEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1289411C-4F16-4003-8875-23B2C5A0AEC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90627A1F-5042-4080-9453-B39EE40E11F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90627A1F-5042-4080-9453-B39EE40E11F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90627A1F-5042-4080-9453-B39EE40E11F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90627A1F-5042-4080-9453-B39EE40E11F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7273138-4B50-41A0-A0C3-93A747C8FE4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7273138-4B50-41A0-A0C3-93A747C8FE4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7273138-4B50-41A0-A0C3-93A747C8FE4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7273138-4B50-41A0-A0C3-93A747C8FE4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -850,14 +876,19 @@ Global
 		{4838A917-C913-49BB-9D7C-DB4A81F0377D} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{047FA6AB-4F2C-41E3-8441-4F958DBFF6CF} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{1D070FE6-A930-4DE7-975A-8A5E2C5670E1} = {DBCF7D23-8951-4886-9024-282788E5D24F}
+		{904B9D18-2499-4130-B4E4-0DF22F025D68} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{96532272-276C-4E99-A9C9-FA2438BD85E5} = {904B9D18-2499-4130-B4E4-0DF22F025D68}
+		{1289411C-4F16-4003-8875-23B2C5A0AEC5} = {904B9D18-2499-4130-B4E4-0DF22F025D68}
+		{90627A1F-5042-4080-9453-B39EE40E11F3} = {904B9D18-2499-4130-B4E4-0DF22F025D68}
+		{D7273138-4B50-41A0-A0C3-93A747C8FE4E} = {904B9D18-2499-4130-B4E4-0DF22F025D68}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2DD752-D380-4660-B6F5-C351D96006DE}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 107
+		SccNumberOfProjects = 111
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://192.168.110.185:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\..\\Vanrise\\Code\\Vanrise.Web.Base\\Vanrise.Web.Base.csproj
 		SccProjectTopLevelParentUniqueName1 = Retail.sln
@@ -1283,5 +1314,21 @@ Global
 		SccProjectTopLevelParentUniqueName106 = Retail.sln
 		SccProjectName106 = SQL.InterconnectSMSAnalytics
 		SccLocalPath106 = SQL.InterconnectSMSAnalytics
+		SccProjectUniqueName107 = RecordAnalysis.Web\\RecordAnalysis.Web.csproj
+		SccProjectTopLevelParentUniqueName107 = Retail.sln
+		SccProjectName107 = RecordAnalysis.Web
+		SccLocalPath107 = RecordAnalysis.Web
+		SccProjectUniqueName108 = RecordAnalysis.Entities\\RecordAnalysis.Entities.csproj
+		SccProjectTopLevelParentUniqueName108 = Retail.sln
+		SccProjectName108 = RecordAnalysis.Entities
+		SccLocalPath108 = RecordAnalysis.Entities
+		SccProjectUniqueName109 = RecordAnalysis.Business\\RecordAnalysis.Business.csproj
+		SccProjectTopLevelParentUniqueName109 = Retail.sln
+		SccProjectName109 = RecordAnalysis.Business
+		SccLocalPath109 = RecordAnalysis.Business
+		SccProjectUniqueName110 = RecordAnalysis.MainExtensions\\RecordAnalysis.MainExtensions.csproj
+		SccProjectTopLevelParentUniqueName110 = Retail.sln
+		SccProjectName110 = RecordAnalysis.MainExtensions
+		SccLocalPath110 = RecordAnalysis.MainExtensions
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,15 @@
+﻿<vr-row removeline>
+    <vr-columns colnum="3">
+        <vr-select on-ready="onSelectorReady"
+                   datasource="c4SwitchTemplates"
+                   selectedvalues="selectedC4Switch"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Title"
+                   label="C4 Switch"
+                   isrequired>
+        </vr-select>
+    </vr-columns>
+    <span ng-if="selectedC4Switch!=undefined" vr-loader="isLoadingDirective">
+        <vr-directivewrapper directive="selectedC4Switch.Editor" on-ready="onDirectiveReady" normal-col-num="3"></vr-directivewrapper>
+    </span>
+</vr-row>

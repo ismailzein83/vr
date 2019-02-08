@@ -37,3 +37,4 @@ Retail_RA				C:\TFS\Retail\Code\Retail.RA.Web\Retail_RA
 ExcelConversion			C:\TFS\Vanrise\Code\Vanrise.ExcelConversion.Web\ExcelConversion
 VR_MobileNetwork        C:\TFS\Vanrise\Code\Vanrise.MobileNetwork.Web\VR_MobileNetwork
 TestCallAnalysis        C:\TFS\Retail\Code\TestCallAnalysis.Web\TestCallAnalysis
+RecordAnalysis			C:\TFS\Retail\Code\RecordAnalysis.Web\RecordAnalysis

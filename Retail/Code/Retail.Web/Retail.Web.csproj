@@ -835,6 +835,22 @@
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RecordAnalysis.Business\RecordAnalysis.Business.csproj">
+      <Project>{90627a1f-5042-4080-9453-b39ee40e11f3}</Project>
+      <Name>RecordAnalysis.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RecordAnalysis.Entities\RecordAnalysis.Entities.csproj">
+      <Project>{1289411c-4f16-4003-8875-23b2c5a0aec5}</Project>
+      <Name>RecordAnalysis.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RecordAnalysis.MainExtensions\RecordAnalysis.MainExtensions.csproj">
+      <Project>{d7273138-4b50-41a0-a0c3-93a747c8fe4e}</Project>
+      <Name>RecordAnalysis.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RecordAnalysis.Web\RecordAnalysis.Web.csproj">
+      <Project>{96532272-276c-4e99-a9c9-fa2438bd85e5}</Project>
+      <Name>RecordAnalysis.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.APIEntities\Retail.BusinessEntity.APIEntities.csproj">
       <Project>{bc95dcad-b0aa-4e3e-9ea0-3963f0d54d23}</Project>
       <Name>Retail.BusinessEntity.APIEntities</Name>
