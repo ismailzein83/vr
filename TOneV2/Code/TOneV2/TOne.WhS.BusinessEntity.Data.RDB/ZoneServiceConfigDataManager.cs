@@ -52,7 +52,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             return queryContext.GetItems(ZoneServiceConfigMapper);
         }
@@ -71,8 +71,8 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             if (zoneServiceFlag.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Serializer.Serialize(zoneServiceFlag.Settings));
-
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
+            else
+                updateQuery.Column(COL_Settings).Null();
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(zoneServiceFlag.ZoneServiceConfigId);
 
