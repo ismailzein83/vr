@@ -8,7 +8,7 @@ namespace Vanrise.MobileNetwork.Entities
 {
     public class MobileCountryInfo
     {
-        public int Id { get; set; }
+        public int MobileCountryId { get; set; }
 
         public string MobileCountryName { get; set; }
     }

@@ -1,14 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.MobileNetwork.Entities;
+using System.Linq;
 
 namespace Vanrise.MobileNetwork.Business
 {
     public class MobileCountryManager
     {
         static readonly Guid BeDefinitionId = new Guid("4f17b219-ae8c-4c39-ae0b-60bc53a10aac");
+
+        #region Public Methods
+        public IEnumerable<MobileCountryInfo> GetMobileCountriesInfo(MobileCountryInfoFilter mobileCountryInfoFilter)
+        {
+            List<MobileCountry> mobileCountries = GetCachedMobileCountries();
+
+            if (mobileCountries == null)
+                return null;
+
+            Func<MobileCountry, bool> filterFunc = (mobileCountry) =>
+            {
+                return true;
+            };
+
+            return mobileCountries.MapRecords(MobileCountryInfoMapper, filterFunc).OrderBy(item=> item.MobileCountryName);
+        }
 
         public int? GetMobileCountryEntityCountryID(string code)
         {
@@ -79,6 +97,28 @@ namespace Vanrise.MobileNetwork.Business
             var mobileCountry = cachedMobileCountriesByID.GetRecord(mobileCountryId);
 
             return mobileCountry;
+        }
+
+        public string GetMobileCountryName(int mobileCountryID)
+        {
+            MobileCountry mobileCountry = GetMobileCountryById(mobileCountryID);
+            if (mobileCountry == null)
+                return null;
+
+            return new CountryManager().GetCountryName(mobileCountry.CountryId);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private MobileCountryInfo MobileCountryInfoMapper(MobileCountry mobileCountry)
+        {
+            return new MobileCountryInfo()
+            {
+                MobileCountryId = mobileCountry.Id,
+                MobileCountryName = GetMobileCountryName(mobileCountry.Id)
+            };
         }
 
         private List<MobileCountry> GetCachedMobileCountries()
@@ -181,5 +221,7 @@ namespace Vanrise.MobileNetwork.Business
                 return mobileCountriesById;
             });
         }
+
+        #endregion
     }
 }

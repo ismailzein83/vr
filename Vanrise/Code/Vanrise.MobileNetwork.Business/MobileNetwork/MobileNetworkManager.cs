@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
 using Vanrise.MobileNetwork.Entities;
@@ -11,6 +12,29 @@ namespace Vanrise.MobileNetwork.Business
         static readonly Guid BeDefinitionId = new Guid("48a58d93-1620-48d7-9f78-2270a6f3f1d4");
 
         #region Public Methods
+
+        public Dictionary<string, List<Entities.MobileNetwork>> GetMobileNetworkByMobileCountryNames(char? startingCountryChar)
+        {
+            var allMobileNetworksByMobileCountryNames = GetCachedMobileNetworksByMobileCountryNames();
+
+            if (!startingCountryChar.HasValue)
+                return allMobileNetworksByMobileCountryNames;
+
+            string countryCharToString = startingCountryChar.Value.ToString();
+
+            Dictionary<string, List<Entities.MobileNetwork>> filteredMobileNetworks = new Dictionary<string, List<Entities.MobileNetwork>>();
+
+            foreach (var mobileNetworkKvp in allMobileNetworksByMobileCountryNames)
+            {
+                string mobileCountryName = mobileNetworkKvp.Key;
+                List<Entities.MobileNetwork> mobileNetworks = mobileNetworkKvp.Value;
+
+                if (mobileCountryName.StartsWith(countryCharToString, false, System.Globalization.CultureInfo.InvariantCulture))
+                    filteredMobileNetworks.Add(mobileCountryName, mobileNetworks);
+            }
+
+            return filteredMobileNetworks.Count > 0 ? filteredMobileNetworks : null;
+        }
 
         public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mnc, string mcc, string numberPrefix)
         {
@@ -64,6 +88,27 @@ namespace Vanrise.MobileNetwork.Business
             return mobileNetworks.FindRecord(item => item.Id == mobileNetworkId);
         }
 
+        public IEnumerable<MobileNetworkInfo> GetMobileNetworksInfo(MobileNetworkInfoFilter mobileNetworkInfoFilter)
+        {
+            List<Entities.MobileNetwork> mobileNetworks = GetCachedMobileNetworks();
+
+            if (mobileNetworks == null)
+                return null;
+
+            Func<Entities.MobileNetwork, bool> filterFunc = (mobileNetwork) =>
+            {
+                if (mobileNetworkInfoFilter != null)
+                {
+                    if (mobileNetworkInfoFilter.MobileCountryIds != null && !mobileNetworkInfoFilter.MobileCountryIds.Contains(mobileNetwork.MobileCountryId))
+                        return false;
+                }
+
+                return true;
+            };
+
+            return mobileNetworks.MapRecords(MobileNetworkInfoMapper, filterFunc);
+        }
+
         public bool IsMobileNetworkNational(int mobileNetworkId)
         {
             var mobileNetwork = GetMobileNetworkById(mobileNetworkId);
@@ -91,6 +136,23 @@ namespace Vanrise.MobileNetwork.Business
                 return null;
 
             return mobileNetwork.MobileCountryId;
+        }
+
+        public List<Char> GetDistinctMobileCountryLetters()
+        {
+            Dictionary<string, List<Entities.MobileNetwork>> cachedMobileNetworkByMobileCountryName = GetCachedMobileNetworksByMobileCountryNames();
+
+            if (cachedMobileNetworkByMobileCountryName == null)
+                return null;
+
+            HashSet<char> allLetters = new HashSet<char>();
+            foreach (var mobileCountryName in cachedMobileNetworkByMobileCountryName.Keys)
+            {
+                char letter = char.ToUpper(mobileCountryName[0]);
+                allLetters.Add(letter);
+            }
+
+            return allLetters.OrderBy(item => item).ToList();
         }
 
         public Vanrise.MobileNetwork.Entities.MobileNetwork GetMobileNetwork(string mobileNetworkCode, int mobileCountryId)
@@ -126,6 +188,15 @@ namespace Vanrise.MobileNetwork.Business
 
         #region Private Methods
 
+        private MobileNetworkInfo MobileNetworkInfoMapper(Entities.MobileNetwork mobileNetwork)
+        {
+            return new MobileNetworkInfo()
+            {
+                MobileNetworkId = mobileNetwork.Id,
+                NetworkName = mobileNetwork.NetworkName
+            };
+        }
+
         private List<Vanrise.MobileNetwork.Entities.MobileNetwork> GetCachedMobileNetworks()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
@@ -155,6 +226,38 @@ namespace Vanrise.MobileNetwork.Business
             });
         }
 
+        private Dictionary<string, List<Entities.MobileNetwork>> GetCachedMobileNetworksByMobileCountryNames()
+        {
+            IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
+
+            return genericBusinessEntityManager.GetCachedOrCreate("GetCachedMobileNetworksByMobileCountryNames", BeDefinitionId, () =>
+            {
+                List<Entities.MobileNetwork> cachedMobileNetworks = GetCachedMobileNetworks();
+                Dictionary<string, List<Entities.MobileNetwork>> mobileNetworksByMobileCountryName = new Dictionary<string, List<Entities.MobileNetwork>>();
+
+                if (cachedMobileNetworks != null)
+                {
+                    MobileCountryManager mobileCountryManager = new MobileCountryManager();
+                    foreach (Entities.MobileNetwork mobileNetwork in cachedMobileNetworks)
+                    {
+                        string mobileCountryName = mobileCountryManager.GetMobileCountryName(mobileNetwork.MobileCountryId);
+                        mobileCountryName.ThrowIfNull("mobileCountryName", mobileNetwork.MobileCountryId);
+
+                        var mobileNetworkList = mobileNetworksByMobileCountryName.GetOrCreateItem(mobileCountryName);
+
+                        mobileNetworkList.Add(new Entities.MobileNetwork
+                        {
+                            Id = mobileNetwork.Id,
+                            MobileNetworkSettings = mobileNetwork.MobileNetworkSettings,
+                            MobileCountryId = mobileNetwork.MobileCountryId,
+                            NetworkName = mobileNetwork.NetworkName
+                        });
+                    }
+                }
+                return mobileNetworksByMobileCountryName;
+            });
+        }
+
         private Dictionary<int, List<Vanrise.MobileNetwork.Entities.MobileNetwork>> GetCachedMobileNetowrksByMobileCountryId()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
@@ -167,8 +270,8 @@ namespace Vanrise.MobileNetwork.Business
                 {
                     foreach (Vanrise.MobileNetwork.Entities.MobileNetwork mobileNetwork in cachedMobileNetworks)
                     {
-                        var mobileNetworList = mobileNetworksByMobileCountry.GetOrCreateItem(mobileNetwork.MobileCountryId);
-                        mobileNetworList.Add(new Vanrise.MobileNetwork.Entities.MobileNetwork
+                        var mobileNetworkList = mobileNetworksByMobileCountry.GetOrCreateItem(mobileNetwork.MobileCountryId);
+                        mobileNetworkList.Add(new Vanrise.MobileNetwork.Entities.MobileNetwork
                         {
                             Id = mobileNetwork.Id,
                             MobileNetworkSettings = mobileNetwork.MobileNetworkSettings,
