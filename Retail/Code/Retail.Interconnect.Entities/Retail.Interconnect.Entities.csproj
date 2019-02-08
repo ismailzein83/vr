@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="InterconnectInvoiceDetails.cs" />
     <Compile Include="InterconnectInvoiceItemDetails.cs" />
+    <Compile Include="InterconnectSMSInvoiceItemDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
