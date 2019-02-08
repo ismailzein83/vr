@@ -54,7 +54,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             var insertQuery = queryContext.AddInsertQuery();
             insertQuery.IntoTable(TABLE_NAME);
 
-            insertQuery.Column(COL_ID).Value(carrierAccountId);
+            insertQuery.Column(COL_CarrierAccountID).Value(carrierAccountId);
             insertQuery.Column(COL_StatusID).Value((int)status);
             if (previousStatus.HasValue)
                 insertQuery.Column(COL_PreviousStatusID).Value((int)previousStatus.Value);
