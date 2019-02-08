@@ -715,6 +715,18 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RecordAnalysis.Business\RecordAnalysis.Business.csproj">
+      <Project>{90627a1f-5042-4080-9453-b39ee40e11f3}</Project>
+      <Name>RecordAnalysis.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RecordAnalysis.Entities\RecordAnalysis.Entities.csproj">
+      <Project>{1289411c-4f16-4003-8875-23b2c5a0aec5}</Project>
+      <Name>RecordAnalysis.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RecordAnalysis.MainExtensions\RecordAnalysis.MainExtensions.csproj">
+      <Project>{d7273138-4b50-41a0-a0c3-93a747c8fe4e}</Project>
+      <Name>RecordAnalysis.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.BP.Activities\Retail.BusinessEntity.BP.Activities.csproj">
       <Project>{5ecd4fc8-3080-43e8-ad80-581289f30509}</Project>
       <Name>Retail.BusinessEntity.BP.Activities</Name>
