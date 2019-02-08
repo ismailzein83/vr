@@ -1,5 +1,4 @@
-﻿using System;
-using Vanrise.Common;
+﻿using Vanrise.Common;
 using Vanrise.Data.RDB;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
@@ -29,18 +28,18 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         static SwitchConnectivityDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Name, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar, Size = 450});
-            columns.Add(COL_CarrierAccountID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_SwitchID, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_Settings, new RDBTableColumnDefinition {DataType = RDBDataType.NVarchar});
-            columns.Add(COL_BED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_EED, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
-            columns.Add(COL_SourceID, new RDBTableColumnDefinition {DataType = RDBDataType.Varchar, Size = 50});
-            columns.Add(COL_CreatedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition {DataType = RDBDataType.Int});
-            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition {DataType = RDBDataType.DateTime});
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Name, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar, Size = 450 });
+            columns.Add(COL_CarrierAccountID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_SwitchID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_Settings, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
+            columns.Add(COL_BED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_EED, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            columns.Add(COL_SourceID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            columns.Add(COL_CreatedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedBy, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_LastModifiedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
 
             RDBSchemaManager.Current.RegisterDefaultTableDefinition(TABLE_NAME, new RDBTableDefinition
             {
@@ -59,13 +58,13 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
         }
         #endregion
 
-        #region Members
+        #region ISwitchConnectivityDataManager Members
 
         public List<SwitchConnectivity> GetSwitchConnectivities()
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             return queryContext.GetItems(SwitchConnectivityMapper);
         }
@@ -130,14 +129,18 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
 
             if (switchConnectivity.EED.HasValue)
                 updateQuery.Column(COL_EED).Value(switchConnectivity.EED.Value);
+            else
+                updateQuery.Column(COL_EED).Null();
 
             if (switchConnectivity.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Serializer.Serialize(switchConnectivity.Settings));
+            else
+                updateQuery.Column(COL_Settings).Null();
 
             if (switchConnectivity.LastModifiedBy.HasValue)
                 updateQuery.Column(COL_LastModifiedBy).Value(switchConnectivity.LastModifiedBy.Value);
-
-            updateQuery.Column(COL_LastModifiedTime).DateNow();
+            else
+                updateQuery.Column(COL_LastModifiedBy).Null();
 
             updateQuery.Where().EqualsCondition(COL_ID).Value(switchConnectivity.SwitchConnectivityId);
 
