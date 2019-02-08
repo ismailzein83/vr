@@ -21,7 +21,7 @@ namespace TOne.WhS.RouteSync.Huawei
 
         public List<HuaweiSSHCommunication> SwitchCommunicationList { get; set; }
 
-        public Dictionary<string, string> OverriddenRSSNInRSName { get; set; }
+        public Dictionary<string, string> OverriddenRSSNsInRSName { get; set; }
 
         public List<SwitchLogger> SwitchLoggerList { get; set; }
 
@@ -883,7 +883,8 @@ namespace TOne.WhS.RouteSync.Huawei
                 }
 
                 string loginCommand = $"LGI:OP=\"{sshCommunication.SSLSettings.Username}\",PWD=\"{sshCommunication.SSLSettings.Password}\";";
-                bool isLoginSucceeded = this.ExecuteCommand(loginCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false,
+                string loginCommandToLog = $"LGI:OP=\"#USERNAME#\",PWD=\"#PASSWORD#\";";
+                bool isLoginSucceeded = this.ExecuteCommand(loginCommand, loginCommandToLog, sshCommunicator, commandResults, new List<string>() { "END" }, false, false,
                     HuaweiCommands.LoginSucceeded, switchCommandLogManager, switchId, processInstanceId);
                 if (!isLoginSucceeded)
                 {
@@ -897,7 +898,8 @@ namespace TOne.WhS.RouteSync.Huawei
                 if (!isRegistrationSucceeded)
                 {
                     string logoutCommand = $"LGO:OP=\"{sshCommunication.SSLSettings.Username}\";";
-                    this.ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded,
+                    string logoutCommandToLog = $"LGO:OP=\"#USERNAME#\";";
+                    this.ExecuteCommand(logoutCommand, logoutCommandToLog, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded,
                         switchCommandLogManager, switchId, processInstanceId);
 
                     sshCommunicator.Dispose();
@@ -924,7 +926,8 @@ namespace TOne.WhS.RouteSync.Huawei
                 if (isUnregistrationSucceeded)
                 {
                     string logoutCommand = $"LGO:OP=\"{sshCommunication.SSLSettings.Username}\";";
-                    this.ExecuteCommand(logoutCommand, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded,
+                    string logoutCommandToLog = $"LGO:OP=\"#USERNAME#\";";
+                    this.ExecuteCommand(logoutCommand, logoutCommandToLog, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded,
                         switchCommandLogManager, switchId, processInstanceId);
                 }
             }
@@ -937,12 +940,19 @@ namespace TOne.WhS.RouteSync.Huawei
         private bool ExecuteCommand(string command, SSHCommunicator sshCommunicator, List<CommandResult> commandResults, List<string> endOfResponseList, bool isEndOfResponseCaseSensitive,
             bool ignoreEmptySpacesInResponse, string responseSuccessKey, SwitchCommandLogManager switchCommandLogManager, string switchId, long processInstanceId)
         {
+            return this.ExecuteCommand(command, command, sshCommunicator, commandResults, endOfResponseList, isEndOfResponseCaseSensitive, ignoreEmptySpacesInResponse,
+                            responseSuccessKey, switchCommandLogManager, switchId, processInstanceId);
+        }
+
+        private bool ExecuteCommand(string command, string commandToLog, SSHCommunicator sshCommunicator, List<CommandResult> commandResults, List<string> endOfResponseList,
+            bool isEndOfResponseCaseSensitive, bool ignoreEmptySpacesInResponse, string responseSuccessKey, SwitchCommandLogManager switchCommandLogManager, string switchId, long processInstanceId)
+        {
             string response;
             sshCommunicator.ExecuteCommand(command, endOfResponseList, isEndOfResponseCaseSensitive, ignoreEmptySpacesInResponse, out response);
 
-            commandResults.Add(new CommandResult() { Command = command, Output = new List<string>() { response } });
+            commandResults.Add(new CommandResult() { Command = commandToLog, Output = new List<string>() { response } });
 
-            SwitchCommandLog switchCommandLog = new SwitchCommandLog() { ProcessInstanceId = processInstanceId, SwitchId = switchId, Command = command, Response = response, };
+            SwitchCommandLog switchCommandLog = new SwitchCommandLog() { ProcessInstanceId = processInstanceId, SwitchId = switchId, Command = commandToLog, Response = response, };
             switchCommandLogManager.Insert(switchCommandLog, out long intsertedId);
 
             return IsExecutedCommandSucceeded(response, responseSuccessKey);
