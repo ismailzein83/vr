@@ -77,7 +77,7 @@
                             $scope.scopeModel.numberOfOptions = huaweiSWSync.NumberOfOptions;
                             carrierMappings = huaweiSWSync.CarrierMappings;
                             sshCommunicationList = huaweiSWSync.SwitchCommunicationList;
-                            overriddenRSSNsInRSName = huaweiSWSync.OverriddenRSSNsInRSName
+                            overriddenRSSNsInRSName = huaweiSWSync.OverriddenRSSNsInRSName;
                             switchLoggerList = huaweiSWSync.SwitchLoggerList;
                             $scope.scopeModel.minRNLength = huaweiSWSync.MinRNLength;
                         }
@@ -86,8 +86,6 @@
                     //Loading Carrier Mapping
                     var carrierAccountMappingGridLoadPromise = getCarrierAccountMappingGridLoadPromise(payload);
                     promises.push(carrierAccountMappingGridLoadPromise);
-
-
 
                     //Loading Switch Communication
                     var switchCommunicationLoadPromise = getSwitchCommunicationLoadPromise();
