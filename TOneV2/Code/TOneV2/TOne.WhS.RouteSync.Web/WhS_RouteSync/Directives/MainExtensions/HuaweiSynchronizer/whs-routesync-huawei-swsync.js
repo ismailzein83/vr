@@ -31,12 +31,16 @@
             var sshCommunicationList;
             var switchLoggerList;
             var huaweiSWSync;
+            var overriddenRSSNsInRSName;
 
             var huaweiCarrierAccountMappingGridAPI;
             var huaweiCarrierAccountMappingGridReadyDeferred = UtilsService.createPromiseDeferred();
 
             var switchCommunicationAPI;
             var switchCommunicationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var switchSettingsAPI;
+            var switchSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -53,6 +57,11 @@
                     switchCommunicationReadyPromiseDeferred.resolve();
                 };
 
+                $scope.scopeModel.onHuaweiSwitchSettingsReady = function (api) {
+                    switchSettingsAPI = api;
+                    switchSettingsReadyPromiseDeferred.resolve();
+                };
+
                 defineAPI();
             }
             function defineAPI() {
@@ -61,8 +70,6 @@
                 api.load = function (payload) {
                     var promises = [];
 
-
-
                     if (payload != undefined) {
                         huaweiSWSync = payload.switchSynchronizerSettings;
 
@@ -70,6 +77,7 @@
                             $scope.scopeModel.numberOfOptions = huaweiSWSync.NumberOfOptions;
                             carrierMappings = huaweiSWSync.CarrierMappings;
                             sshCommunicationList = huaweiSWSync.SwitchCommunicationList;
+                            overriddenRSSNsInRSName = huaweiSWSync.OverriddenRSSNsInRSName
                             switchLoggerList = huaweiSWSync.SwitchLoggerList;
                             $scope.scopeModel.minRNLength = huaweiSWSync.MinRNLength;
                         }
@@ -85,11 +93,16 @@
                     var switchCommunicationLoadPromise = getSwitchCommunicationLoadPromise();
                     promises.push(switchCommunicationLoadPromise);
 
+                    //Loading Switch Settings
+                    var switchSettingsLoadPromise = getSwitchSettingsLoadPromise();
+                    promises.push(switchSettingsLoadPromise);
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     var switchCommunicationData = switchCommunicationAPI.getData();
+                    var settings = switchSettingsAPI.getData();
 
                     var data = {
                         $type: "TOne.WhS.RouteSync.Huawei.HuaweiSWSync, TOne.WhS.RouteSync.Huawei",
@@ -97,7 +110,8 @@
                         CarrierMappings: huaweiCarrierAccountMappingGridAPI.getData(),
                         SwitchCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.sshCommunicationList : undefined,
                         SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined,
-                        MinRNLength: $scope.scopeModel.minRNLength
+                        MinRNLength: $scope.scopeModel.minRNLength,
+                        OverriddenRSSNsInRSName: settings.OverriddenRSSNsInRSName
                     };
                     return data;
                 };
@@ -134,6 +148,20 @@
                 });
 
                 return switchCommunicationLoadPromiseDeferred.promise;
+            }
+
+            function getSwitchSettingsLoadPromise() {
+                var switchSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                switchSettingsReadyPromiseDeferred.promise.then(function () {
+                    var switchSettingsPayload;
+                    if (huaweiSWSync != undefined) {
+                        switchSettingsPayload = { overriddenRSSNsInRSName: overriddenRSSNsInRSName };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(switchSettingsAPI, switchSettingsPayload, switchSettingsLoadPromiseDeferred);
+                });
+
+                return switchSettingsLoadPromiseDeferred.promise;
             }
 
             function buildContext() {

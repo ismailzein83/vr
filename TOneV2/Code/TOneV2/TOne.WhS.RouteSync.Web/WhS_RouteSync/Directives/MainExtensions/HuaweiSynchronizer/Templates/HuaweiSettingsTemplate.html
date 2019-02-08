@@ -1,0 +1,23 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-section width="1/2row" level="1" header="Overriden RSSN">
+            <vr-columns width="1/3row">
+                <vr-button type="Add" data-onclick="scopeModel.addOverriddenRSSNInRSName" standalone></vr-button>
+            </vr-columns>
+            <vr-columns width="fullrow" haschildcolumns>
+                <vr-validator validate="scopeModel.isValid()">
+                    <vr-datagrid on-ready="scopeModel.onOverriddenRSSNsGridReady" datasource="scopeModel.OverriddenRSSNsInRSName"
+                                 ondeleterow="scopeModel.removeOverriddenRSSNInRSName" hidegridmenu norowhighlightonclick="'true'">
+                        <vr-datagridcolumn headertext="'Exisiting RSSN'" widthfactor="6" disablesorting="true">
+                            <vr-textbox value="dataItem.ExisitingRSSN" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Overridden RSSN'" widthfactor="6" disablesorting="true">
+                            <vr-textbox value="dataItem.OverriddenRSSN" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-section>
+    </vr-columns>
+</vr-row>
+
