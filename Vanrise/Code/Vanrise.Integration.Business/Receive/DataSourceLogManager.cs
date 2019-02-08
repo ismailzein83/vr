@@ -33,6 +33,7 @@ namespace Vanrise.Integration.Business
                     ID = entity.ID,
                     DataSourceId = entity.DataSourceId,
                     SeverityDescription = Utilities.GetEnumDescription<LogEntryType>(entity.Severity),
+                    Severity = entity.Severity,
                     Message = entity.Message,
                     LogEntryTime = entity.LogEntryTime
                 };

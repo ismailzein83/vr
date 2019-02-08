@@ -25,5 +25,7 @@ namespace Vanrise.Integration.Entities
         public string SeverityDescription { get; set; }
         public string Message { get; set; }
         public DateTime LogEntryTime { get; set; }
+        public LogEntryType Severity { get; set; }
+
     }
 }
