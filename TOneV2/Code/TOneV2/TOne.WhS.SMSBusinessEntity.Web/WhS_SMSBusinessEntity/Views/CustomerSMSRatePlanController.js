@@ -8,6 +8,13 @@
 
         var selectedCustomer;
         var processDraftID;
+        var hasMobileCountryValue = false;
+
+        var mobileNetworkSelectorAPI;
+        var mobileNetworkSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        
+        var mobileCountrySelectorAPI;
+        var mobileCountrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var customerSelectorAPI;
         var customerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -24,10 +31,11 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.isLoading = true;
+            $scope.scopeModel.isLoadingMobileNetworkSelector = false;
 
             $scope.scopeModel.loadCustomerSMSRates = function () {
                 var payload = {
-                    query: getCustomerSMSRateQuery(selectedCustomer.CarrierAccountId, $scope.scopeModel.effectiveDate)
+                    query: getCustomerSMSRateQuery()
                 };
 
                 gridAPI.load(payload);
@@ -93,6 +101,33 @@
                 }
             };
 
+            $scope.scopeModel.onMobileCountrySelectionChanged = function (selectedMobileCountry) {
+                if (!selectedMobileCountry && !hasMobileCountryValue)
+                    return;
+
+                hasMobileCountryValue = (selectedMobileCountry != undefined);
+
+                var payload = {
+                    filter: { MobileCountryIds: mobileCountrySelectorAPI.getSelectedIds() },
+                    selectedIds: mobileNetworkSelectorAPI.getSelectedIds()
+                };
+
+                var setLoader = function (value) {
+                    $scope.scopeModel.isLoadingMobileNetworkSelector = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, mobileNetworkSelectorAPI, payload, setLoader, undefined);
+            };
+
+            $scope.scopeModel.onMobileCountrySelectorReady = function (api) {
+                mobileCountrySelectorAPI = api;
+                mobileCountrySelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onMobileNetworkSelectorReady = function (api) {
+                mobileNetworkSelectorAPI = api;
+                mobileNetworkSelectorReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.onCustomerSelectorReady = function (api) {
                 customerSelectorAPI = api;
                 customerSelectorReadyDeferred.resolve();
@@ -107,7 +142,6 @@
                 gridAPI = api;
                 gridReadyDeferred.resolve();
             };
-
         }
 
         function load() {
@@ -126,7 +160,25 @@
                     return customerSelectorLoadDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCustomerSelector]).catch(function (error) {
+                function loadMobileCountrySelector() {
+                    var mobileCountryLoadDeferred = UtilsService.createPromiseDeferred();
+                    mobileCountrySelectorReadyDeferred.promise.then(function () {
+                        var payload;
+                        VRUIUtilsService.callDirectiveLoad(mobileCountrySelectorAPI, payload, mobileCountryLoadDeferred);
+                    });
+                    return mobileCountryLoadDeferred.promise;
+                }
+
+                function loadMobileNetworkSelector() {
+                    var mobileNetworkLoadDeferred = UtilsService.createPromiseDeferred();
+                    mobileNetworkSelectorReadyDeferred.promise.then(function () {
+                        var payload;
+                        VRUIUtilsService.callDirectiveLoad(mobileNetworkSelectorAPI, payload, mobileNetworkLoadDeferred);
+                    });
+                    return mobileNetworkLoadDeferred.promise;
+                }
+
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCustomerSelector, loadMobileCountrySelector, loadMobileNetworkSelector]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -136,19 +188,19 @@
             loadAllControls();
         }
 
-        function getCustomerSMSRateQuery(customerID, effectiveDate) {
+        function getCustomerSMSRateQuery() {
             return {
-                CustomerID: customerID,
-                EffectiveDate: effectiveDate
+                CustomerID: selectedCustomer.CarrierAccountId,
+                EffectiveDate: $scope.scopeModel.effectiveDate,
+                MobileCountryIds: mobileCountrySelectorAPI.getSelectedIds(),
+                MobileNetworkIds: mobileNetworkSelectorAPI.getSelectedIds()
             };
         }
 
         function getCustomerSMSRateStatusToUpdate(processDraftID, newStatus) {
             return {
-                Query: {
-                    ProcessDraftID: processDraftID,
-                    NewStatus: newStatus
-                }
+                ProcessDraftID: processDraftID,
+                NewStatus: newStatus
             };
         }
     }

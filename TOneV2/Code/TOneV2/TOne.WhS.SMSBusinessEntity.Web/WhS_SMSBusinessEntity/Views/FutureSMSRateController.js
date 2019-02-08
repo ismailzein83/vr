@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FutureSMSRateController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'WhS_SMSBE_SMSRateChangeTypeEnum'];
+    FutureSMSRateController.$inject = ['$scope', 'UtilsService', 'VRNavigationService'];
 
-    function FutureSMSRateController($scope, UtilsService, VRNavigationService, WhS_SMSBE_SMSRateChangeTypeEnum) {
+    function FutureSMSRateController($scope, UtilsService, VRNavigationService) {
         var mobileNetworkName;
         var futureSMSRate;
 
@@ -30,6 +30,7 @@
                 $scope.title = 'Future  Rate of Mobile Network ' + mobileNetworkName;
                 $scope.scopeModel.rate = futureSMSRate.Rate;
                 $scope.scopeModel.rateBED = UtilsService.getShortDate(new Date(futureSMSRate.BED));
+                $scope.scopeModel.rateEED = UtilsService.getShortDate(new Date(futureSMSRate.EED));
             }
 
             $scope.scopeModel.close = function () {

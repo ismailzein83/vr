@@ -607,6 +607,9 @@
     <Reference Include="Vanrise.MobileNetwork.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.MobileNetwork.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.MobileNetwork.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.MobileNetwork.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.BP">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.BP.dll</HintPath>
     </Reference>

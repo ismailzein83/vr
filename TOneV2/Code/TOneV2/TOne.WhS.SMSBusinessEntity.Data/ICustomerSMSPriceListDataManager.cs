@@ -8,8 +8,12 @@ using Vanrise.Data.RDB;
 
 namespace TOne.WhS.SMSBusinessEntity.Data
 {
-    public interface ICustomerSMSPriceListDataManager
+    public interface ICustomerSMSPriceListDataManager : IDataManager
     {
-        void Join(RDBSelectQuery selectQuery, string firstTableAlias, string firstTableColumn, int customerID);
+        void JoinRateTableWithPriceListTable(RDBJoinContext joinContext, string customerPriceListTableAlias, string otherTableAlias, string otherTableColumn);
+
+        bool InsertPriceList(int customerID, string currencyID, DateTime effectiveOn, long? processInstanceID, int userID, out int priceListID);
+
+        void AddInsertPriceListQueryContext(RDBQueryContext queryContext, CustomerSMSPriceList customerSMSPriceList);
     }
 }

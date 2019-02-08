@@ -1,14 +1,15 @@
 ﻿<vr-datagrid on-ready="scopeModel.onGridReady"
-             datasource="scopeModel.datastore"
+             datasource="scopeModel.datasource"
              pagingtype="'Pager'"
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              vr-loader="scopeModel.isLoading"
              enableautoexport="true" normalcell>
+    <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'ID'" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Country'" type="'Text'" field="'MobileCountryName'" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Mobile Network'" type="'Text'" field="'MobileNetworkName'" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Rate'" type="'number'" disablesorting>
         {{dataItem.Rate}}
-        <span ng-if="(dataItem.HasFutureRate == true)"
+        <span ng-if="(dataItem.FutureRate != undefined)"
               style="cursor: pointer; text-decoration: underline"
               ng-click="viewScope.scopeModel.onFutureRateClicked(dataItem)">*</span>
     </vr-datagridcolumn>

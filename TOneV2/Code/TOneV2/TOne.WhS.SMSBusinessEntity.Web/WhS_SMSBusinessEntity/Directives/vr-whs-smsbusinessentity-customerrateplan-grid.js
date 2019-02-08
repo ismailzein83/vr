@@ -25,7 +25,7 @@ app.directive("vrWhsSmsbusinessentityCustomerrateplanGrid", ["VRNotificationServ
             function initializeController() {
 
                 $scope.scopeModel = {};
-                $scope.scopeModel.datastore = [];
+                $scope.scopeModel.datasource = [];
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                 };
@@ -35,7 +35,7 @@ app.directive("vrWhsSmsbusinessentityCustomerrateplanGrid", ["VRNotificationServ
                     WhS_SMSBusinessEntity_CustomerSMSRateAPIService.GetFilteredCustomerSMSRate(dataRetrievalInput).then(function (response) {
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                $scope.scopeModel.datastore.push(response.Data[i]);
+                                $scope.scopeModel.datasource.push(response.Data[i]);
                             }
                         }
                         onResponseReady(response);

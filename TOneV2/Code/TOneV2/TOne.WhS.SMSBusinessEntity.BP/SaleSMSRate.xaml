@@ -1,0 +1,129 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.SMSBusinessEntity.BP.Activity1" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.SMSBusinessEntity.BP.Activity1_1"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twsba="clr-namespace:TOne.WhS.SMSBusinessEntity.BP.Arguments;assembly=TOne.WhS.SMSBusinessEntity.BP.Arguments"
+ xmlns:twsba1="clr-namespace:TOne.WhS.SMSBusinessEntity.BP.Activities;assembly=TOne.WhS.SMSBusinessEntity.BP.Activities"
+ xmlns:twse="clr-namespace:TOne.WhS.SMSBusinessEntity.Entities;assembly=TOne.WhS.SMSBusinessEntity.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.WhS.SMSBusinessEntity.BP.Arguments</x:String>
+      <x:String>TOne.WhS.SMSBusinessEntity.Entities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Net.Http</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SMSBusinessEntity.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SMSBusinessEntity.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SMSBusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SMSBusinessEntity.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="twsba:SMSSaleRateInput" Name="smsSaleRateInput" />
+      <Variable x:TypeArguments="s:DateTime" Name="effectiveDate" />
+      <Variable x:TypeArguments="scg:Dictionary(x:Int32, twse:CustomerSMSRateChange)" Name="customerSMSRatesByMobileNetworkID" />
+      <Variable x:TypeArguments="twse:CustomerSMSPriceList" Name="customerSMSPriceList" />
+      <Variable x:TypeArguments="x:Int32" Name="customerID">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="x:Int32">smsSaleRateInput.CustomerID</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="twsba:SMSSaleRateOutput" Name="smsSaleRateOutput" />
+    </Sequence.Variables>
+    <twsba1:GetCustomerSMSRateDraftData sap2010:WorkflowViewState.IdRef="GetCustomerSMSRateDraftData_1">
+      <twsba1:GetCustomerSMSRateDraftData.CustomerSMSRateChangesByMobileNetworkID>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:Int32, twse:CustomerSMSRateChange)">
+          <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:Int32, twse:CustomerSMSRateChange)">customerSMSRatesByMobileNetworkID</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:GetCustomerSMSRateDraftData.CustomerSMSRateChangesByMobileNetworkID>
+      <twsba1:GetCustomerSMSRateDraftData.EffectiveDate>
+        <OutArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpReference x:TypeArguments="s:DateTime">effectiveDate</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:GetCustomerSMSRateDraftData.EffectiveDate>
+      <twsba1:GetCustomerSMSRateDraftData.SMSSaleRateInput>
+        <InArgument x:TypeArguments="twsba:SMSSaleRateInput">
+          <mca:CSharpValue x:TypeArguments="twsba:SMSSaleRateInput">smsSaleRateInput</mca:CSharpValue>
+        </InArgument>
+      </twsba1:GetCustomerSMSRateDraftData.SMSSaleRateInput>
+    </twsba1:GetCustomerSMSRateDraftData>
+    <twsba1:PrepareCustomerSMSPriceListToInsert sap2010:WorkflowViewState.IdRef="PrepareCustomerSMSPriceListToInsert_1">
+      <twsba1:PrepareCustomerSMSPriceListToInsert.CustomerID>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">customerID</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareCustomerSMSPriceListToInsert.CustomerID>
+      <twsba1:PrepareCustomerSMSPriceListToInsert.CustomerSMSPriceList>
+        <OutArgument x:TypeArguments="twse:CustomerSMSPriceList">
+          <mca:CSharpReference x:TypeArguments="twse:CustomerSMSPriceList">customerSMSPriceList</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareCustomerSMSPriceListToInsert.CustomerSMSPriceList>
+      <twsba1:PrepareCustomerSMSPriceListToInsert.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">effectiveDate</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareCustomerSMSPriceListToInsert.EffectiveDate>
+    </twsba1:PrepareCustomerSMSPriceListToInsert>
+    <twsba1:ApplySMSSaleRates>
+      <twsba1:ApplySMSSaleRates.CustomerSMSPriceList>
+        <InArgument x:TypeArguments="twse:CustomerSMSPriceList">
+          <mca:CSharpValue x:TypeArguments="twse:CustomerSMSPriceList">customerSMSPriceList</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ApplySMSSaleRates.CustomerSMSPriceList>
+      <twsba1:ApplySMSSaleRates.CustomerSMSRateChangesByMobileNetworkID>
+        <InArgument x:TypeArguments="scg:Dictionary(x:Int32, twse:CustomerSMSRateChange)">
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int32, twse:CustomerSMSRateChange)">customerSMSRatesByMobileNetworkID</mca:CSharpValue>
+        </InArgument>
+      </twsba1:ApplySMSSaleRates.CustomerSMSRateChangesByMobileNetworkID>
+      <twsba1:ApplySMSSaleRates.SMSSaleRateOutput>
+        <OutArgument x:TypeArguments="twsba:SMSSaleRateOutput">
+          <mca:CSharpReference x:TypeArguments="twsba:SMSSaleRateOutput">smsSaleRateOutput</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:ApplySMSSaleRates.SMSSaleRateOutput>
+      <sap2010:WorkflowViewState.IdRef>ApplySMSSaleRates_2</sap2010:WorkflowViewState.IdRef>
+    </twsba1:ApplySMSSaleRates>
+    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlNNU0J1c2luZXNzRW50aXR5LkJQXFNhbGVTTVNSYXRlLnhhbWwOLwNxDgIBATcLN2MCAQI8BUwqAgE1TQVdMgIBH14FbyACAQlEC0RgAgFEPws/nQECAT1JC0lnAgE2VQtVdgIBLlALUFICASdaC1pYAgEgYQthbgIBGGsLa3ECARFmC2aVAQIBCg==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="GetCustomerSMSRateDraftData_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="PrepareCustomerSMSPriceListToInsert_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ApplySMSSaleRates_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,270">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.SMSBusinessEntity.BP.Activity1_1" sap:VirtualizedContainerService.HintSize="262,350" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

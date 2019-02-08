@@ -2,6 +2,7 @@
     <div ng-hide="filterSectionCollapsed">
         <vr-form name="formCustomerSMSRateController">
             <vr-row>
+
                 <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCustomerSelectorReady"
                                                    getcustomers selectedvalues="scopeModel.selectedCustomer"
                                                    onselectionchanged="scopeModel.onCustomerChanged"
@@ -9,11 +10,24 @@
                 </vr-whs-be-carrieraccount-selector>
 
                 <span ng-show="scopeModel.selectedCustomer != undefined">
-                    <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" selectedvalues="scopeModel.currencySymbol" normal-col-num="2" vr-disabled="true"></vr-common-currency-selector>
+                    <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" normal-col-num="2" vr-disabled="true"></vr-common-currency-selector>
                 </span>
+
+                <span ng-show="scopeModel.selectedCustomer != undefined">
+                    <vr-mobilenetwork-mobilecountry-selector on-ready="scopeModel.onMobileCountrySelectorReady"
+                                                             onselectionchanged="scopeModel.onMobileCountrySelectionChanged"
+                                                             ismultipleselection normal-col-num="2">
+                    </vr-mobilenetwork-mobilecountry-selector>
+                </span>
+
+                <span vr-loader="scopeModel.isLoadingMobileNetworkSelector" ng-show="scopeModel.selectedCustomer != undefined">
+                    <vr-mobilenetwork-selector on-ready="scopeModel.onMobileNetworkSelectorReady" ismultipleselection normal-col-num="2"></vr-mobilenetwork-selector>
+                </span>
+
                 <vr-columns colnum="2" ng-show="scopeModel.selectedCustomer != undefined">
                     <vr-datetimepicker type="date" value="scopeModel.effectiveDate" label="Effective Date" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
+
             </vr-row>
         </vr-form>
     </div>
@@ -29,6 +43,10 @@
     </vr-row>
 
     <div ng-show="scopeModel.selectedCustomer != undefined">
-        <vr-whs-smsbusinessentity-customerrateplan-grid on-ready="scopeModel.onGridReady"></vr-whs-smsbusinessentity-customerrateplan-grid>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-whs-smsbusinessentity-customerrateplan-grid on-ready="scopeModel.onGridReady"></vr-whs-smsbusinessentity-customerrateplan-grid>
+            </vr-columns>
+        </vr-row>
     </div>
 </vr-panel>

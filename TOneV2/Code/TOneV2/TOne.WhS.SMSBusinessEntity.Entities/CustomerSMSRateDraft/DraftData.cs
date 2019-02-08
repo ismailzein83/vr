@@ -10,6 +10,6 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
     {
         public List<char> CountryLetters { get; set; }
 
-        public DateTime EffectiveDate { get; set; }
+        public DateTime? DraftEffectiveDate { get; set; }
     }
 }

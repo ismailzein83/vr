@@ -2,25 +2,23 @@
 
     "use strict";
 
-    customerSMSRatePlanEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService', 'VRDateTimeService', 'WhS_SMSBE_SMSRateChangeTypeEnum', 'WhS_SMSBusinessEntity_CustomerRatePlanService'];
+    customerSMSRatePlanEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService', 'VRDateTimeService', 'WhS_SMSBusinessEntity_CustomerRatePlanService', 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum'];
 
-    function customerSMSRatePlanEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService, VRDateTimeService, WhS_SMSBE_SMSRateChangeTypeEnum, WhS_SMSBusinessEntity_CustomerRatePlanService) {
+    function customerSMSRatePlanEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService, VRDateTimeService, WhS_SMSBusinessEntity_CustomerRatePlanService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum) {
 
         var customerInfo;
         var allCountryLetters = "All";
-        var newSmsRateHistories = [];
+        var modifiedSmsRates = [];
 
         var isEffectiveDateChanged = false;
 
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var loadCountryItemsDeferred;
-        var loadDraftDataDeferred;
-
         defineScope();
         loadParameters();
         load();
+
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -31,59 +29,43 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.datastore = [];
+            $scope.scopeModel.allDataSource = [];
+            $scope.scopeModel.datasource = [];
             $scope.scopeModel.countryLetters = [];
 
-            $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            $scope.scopeModel.loadMoreData = function () {
                 $scope.scopeModel.isLoading = true;
-                WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService.GetFilteredChanges(dataRetrievalInput).then(function (response) {
-                    if (response && response.Data)
-                        for (var i = 0; i < response.Data.length; i++)
-                            setSMSRateChangeIcon(response.Data[i]);
-
-                    onResponseReady(response);
-
-                    if (loadCountryItemsDeferred != undefined)
-                        loadCountryItemsDeferred.resolve();
-
-                    if (loadDraftDataDeferred != undefined)
-                        loadDraftDataDeferred.resolve();
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    $scope.scopeModel.isLoading = false;
-                });
+                getDataGridDataPage();
+                $scope.scopeModel.isLoading = false;
             };
 
             $scope.scopeModel.onCountryLetterSelectionChanged = function () {
-                var promises = [];
                 $scope.scopeModel.isLoading = true;
+                var promises = [];
 
-                loadCountryItemsDeferred = UtilsService.createPromiseDeferred();
-                promises.push(loadCountryItemsDeferred.promise);
-
-                if (newSmsRateHistories.length > 0 || isEffectiveDateChanged) {
-                    saveChanges().then(function () {
-                        newSmsRateHistories = [];
-                        newSmsRateHistories.length = 0;
-                        loadCountryItems();
+                if (modifiedSmsRates.length > 0 || isEffectiveDateChanged) {
+                    var onSaveLoadedDeferred = saveChanges().then(function () {
+                        isEffectiveDateChanged = false;
+                        modifiedSmsRates.length = 0;
                     });
+                    promises.push(onSaveLoadedDeferred);
                 }
-                else {
-                    loadCountryItems();
-                }
+
+                var countryItemsLoadedDeferred = loadCountryItems();
+                promises.push(countryItemsLoadedDeferred);
 
                 function loadCountryItems() {
+                    gridAPI.clearDataAndContinuePaging();
+                    $scope.scopeModel.datasource.length = 0;
+                    $scope.scopeModel.allDataSource.length = 0;
                     var letter;
-                    if ($scope.scopeModel.selectedCountryLetterIndex != $scope.scopeModel.countryLetters.length - 1)// case when any letter != All is selected
+                    if ($scope.scopeModel.selectedCountryLetterIndex != $scope.scopeModel.countryLetters.length - 1) // case when any letter != All is selected
                         letter = $scope.scopeModel.countryLetters[$scope.scopeModel.selectedCountryLetterIndex];
 
-                    return gridAPI.retrieveData(getCustomerSMSChangesQuery(customerInfo.CarrierAccountId, letter));
+                    return loadAllDataGrid(letter);
                 }
 
-                return UtilsService.waitMultiplePromises(promises).finally(function () {
-                    loadCountryItemsDeferred = undefined;
-                    isEffectiveDateChanged = false;
+                UtilsService.waitMultiplePromises(promises).then(function () {
                     $scope.scopeModel.isLoading = false;
                 });
             };
@@ -98,14 +80,15 @@
                             NewRate: rate
                         };
 
-                        newSmsRateHistories.push(obj);
+                        modifiedSmsRates.push(obj);
                     }
                 }
 
                 function tryUpdateCustomerSMSRateChanges(currentSMSRateDetails) {
-                    for (var i = 0; i < newSmsRateHistories.length; i++) {
-                        if (currentSMSRateDetails.MobileNetworkID == newSmsRateHistories[i].MobileNetworkID) {
-                            newSmsRateHistories[i].NewRate = currentSMSRateDetails.NewRate;
+                    for (var i = 0; i < modifiedSmsRates.length; i++) {
+                        var modifiedSMSRate = modifiedSmsRates[i];
+                        if (currentSMSRateDetails.MobileNetworkID == modifiedSMSRate.MobileNetworkID) {
+                            modifiedSMSRate.NewRate = currentSMSRateDetails.NewRate;
 
                             return true;
                         }
@@ -123,14 +106,34 @@
             };
 
             $scope.scopeModel.saveChanges = function () {
-                if (newSmsRateHistories.length > 0 || isEffectiveDateChanged) {
-                    saveChanges().finally(function () {
+                if (modifiedSmsRates.length > 0 || isEffectiveDateChanged) {
+                    $scope.scopeModel.isLoading = true;
+                    saveChanges().then(function () {
                         $scope.modalContext.closeModal();
+                    }).finally(function () {
+                        $scope.scopeModel.isLoading = false;
                     });
                 }
                 else {
                     $scope.modalContext.closeModal();
                 }
+            };
+
+            $scope.scopeModel.applyChanges = function () {
+                var inputArguments = {
+                    $type: "TOne.WhS.SMSBusinessEntity.BP.Arguments.SMSSaleRateInput, TOne.WhS.SMSBusinessEntity.BP.Arguments",
+                    CustomerID: customerInfo.CarrierAccountId
+                };
+
+                var input = {
+                    InputArguments: inputArguments
+                };
+
+                return BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
+                    if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value)
+                        return BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
+
+                });
             };
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -148,11 +151,23 @@
 
             function loadAllControls() {
 
-                function loadDraftData() {
-                    loadDraftDataDeferred = UtilsService.createPromiseDeferred();
-                    WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService.GetDraftData(getDraftDataQuery()).then(function (response) {
-                        if (response != undefined) {
+                var loadDraftDataPromiseDeferred = loadDraftData();
 
+                var rootPromiseNode = {
+                    promises: [loadDraftDataPromiseDeferred, gridReadyDeferred.promise],
+                    getChildNode: function () {
+                        var letter = $scope.scopeModel.countryLetters.length > 0 ? $scope.scopeModel.countryLetters[0] : undefined;
+                        var loadDraftDataPromiseDeferred = loadAllDataGrid(letter);
+
+                        return {
+                            promises: [loadDraftDataPromiseDeferred]
+                        };
+                    }
+                };
+
+                function loadDraftData() {
+                    return WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService.GetDraftData(getDraftDataQuery()).then(function (response) {
+                        if (response != undefined) {
                             if (response.CountryLetters && response.CountryLetters.length > 0) {
                                 for (var i = 0; i < response.CountryLetters.length; i++) {
                                     $scope.scopeModel.countryLetters.push(response.CountryLetters[i]);
@@ -161,91 +176,65 @@
                                 $scope.scopeModel.countryLetters.push(allCountryLetters);
                                 $scope.scopeModel.selectedCountryLetterIndex = 0;
                             }
-
-                            $scope.scopeModel.effectiveDate = response.EffectiveDate != undefined ? response.EffectiveDate : VRDateTimeService.getTodayDate();
                         }
 
-                        gridReadyDeferred.promise.then(function () {
-                            var letter = $scope.scopeModel.countryLetters.length > 0 ? $scope.scopeModel.countryLetters[0] : undefined;
-                            gridAPI.retrieveData(getCustomerSMSChangesQuery(customerInfo.CarrierAccountId, letter));
-                            $scope.scopeModel.isLoading = true;
-                        });
+                        $scope.scopeModel.effectiveDate = response != undefined && response.DraftEffectiveDate != undefined ? response.DraftEffectiveDate : VRDateTimeService.getTodayDate();
                     });
-
-                    return loadDraftDataDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadDraftData]).finally(function () {
-                    loadDraftDataDeferred = undefined;
-                });
+                return UtilsService.waitPromiseNode(rootPromiseNode);
             }
 
             return loadAllControls().catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
-            })
-                .finally(function () {
-                    $scope.scopeModel.isLoading = false;
-                });
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+
+        function loadAllDataGrid(letter) {
+            return WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService.GetFilteredChanges(getCustomerSMSChangesQuery(customerInfo.CarrierAccountId, letter)).then(function (response) {
+                if (response && response.length > 0) {
+                    $scope.scopeModel.allDataSource = response;
+                    getDataGridDataPage();
+                }
+            });
+        }
+
+        function getDataGridDataPage() {
+
+            var pageInfo = gridAPI.getPageInfo();
+            var toRow = Math.min($scope.scopeModel.allDataSource.length, pageInfo.toRow);
+
+            var newDataSourceOnScrolling = $scope.scopeModel.allDataSource.slice(pageInfo.fromRow - 1, toRow);
+            $scope.scopeModel.datasource = $scope.scopeModel.datasource.concat(newDataSourceOnScrolling);
         }
 
         function getCustomerSMSChangesQuery(customerID, countryChar) {
             return {
                 CustomerID: customerID,
-                CountryChar: countryChar
+                Filter: {
+                    CountryChar: countryChar
+                }
             };
         }
 
         function getDraftDataQuery() {
             return {
-                Query: {
-                    CustomerID: customerInfo.CarrierAccountId
-                }
+                CustomerID: customerInfo.CarrierAccountId
             };
-        }
-
-        function setSMSRateChangeIcon(dataItem) {
-
-            dataItem.RateChangeTypeIcon = WhS_SMSBE_SMSRateChangeTypeEnum.NotChanged.iconUrl;
-            dataItem.RateChangeTypeIconDescription = WhS_SMSBE_SMSRateChangeTypeEnum.NotChanged.description;
-            dataItem.RateChangeTypeIcon = WhS_SMSBE_SMSRateChangeTypeEnum.NotChanged.iconType;
-
-            //switch (dataItem.RateChangeType) {
-            //    case WhS_SMSBE_SMSRateChangeTypeEnum.New.value:
-            //        dataItem.RateChangeTypeIcon = WhS_SMSBE_SMSRateChangeTypeEnum.New.iconUrl;
-            //        dataItem.RateChangeTypeIconDescription = WhS_SMSBE_SMSRateChangeTypeEnum.New.description;
-            //        dataItem.RateChangeTypeIcon = WhS_SMSBE_SMSRateChangeTypeEnum.New.iconType;
-            //        break;
-
-            //    case WhS_SMSBE_SMSRateChangeTypeEnum.Increase.value:
-            //        dataItem.RateChangeTypeIconUrl = WhS_SMSBE_SMSRateChangeTypeEnum.Increase.iconUrl;
-            //        dataItem.RateChangeTypeIconDescription = WhS_SMSBE_SMSRateChangeTypeEnum.Increase.description;
-            //        dataItem.RateChangeTypeIcon = WhS_SMSBE_SMSRateChangeTypeEnum.Increase.iconType;
-            //        break;
-
-            //    case WhS_SMSBE_SMSRateChangeTypeEnum.Decrease.value:
-            //        dataItem.RateChangeTypeIconUrl = WhS_SMSBE_SMSRateChangeTypeEnum.Decrease.iconUrl;
-            //        dataItem.RateChangeTypeIconDescription = WhS_SMSBE_SMSRateChangeTypeEnum.Decrease.description;
-            //        dataItem.RateChangeTypeIcon = WhS_SMSBE_SMSRateChangeTypeEnum.Decrease.iconType;
-            //        break;
-            //    case WhS_SMSBE_SMSRateChangeTypeEnum.NotChanged.value:
-            //        dataItem.RateChangeTypeIconUrl = WhS_SMSBE_SMSRateChangeTypeEnum.NotChanged.iconUrl;
-            //        dataItem.RateChangeTypeIconDescription = WhS_SMSBE_SMSRateChangeTypeEnum.NotChanged.description;
-            //        dataItem.RateChangeTypeIcon = WhS_SMSBE_SMSRateChangeTypeEnum.NotChanged.iconType;
-            //        break;
-            //}
         }
 
         function buildDraftFromScope() {
             return {
                 CustomerID: customerInfo.CarrierAccountId,
-                SMSRates: newSmsRateHistories,
+                SMSRates: modifiedSmsRates,
                 EffectiveDate: $scope.scopeModel.effectiveDate
             };
         }
 
         function saveChanges() {
 
-            $scope.scopeModel.isLoading = true;
             var customerDraftToUpdate = buildDraftFromScope();
 
             return WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService.InsertOrUpdateChanges(customerDraftToUpdate).then(function (response) {
@@ -259,8 +248,6 @@
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-                $scope.scopeModel.isLoading = false;
             });
         }
 

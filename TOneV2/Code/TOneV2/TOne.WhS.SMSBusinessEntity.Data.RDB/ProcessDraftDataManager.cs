@@ -27,7 +27,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
         static ProcessDraftDataManager()
         {
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
-            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
+            columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
             columns.Add(COL_ProcessType, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_EntityID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
             columns.Add(COL_Changes, new RDBTableColumnDefinition { DataType = RDBDataType.NVarchar });
@@ -58,8 +58,8 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Column(COL_ID);
-            selectQuery.SelectColumns().Column(COL_Changes);
+            selectQuery.SelectColumns().Columns(COL_ID, COL_ProcessType, COL_EntityID, COL_Changes, COL_Status);
+
             var where = selectQuery.Where();
             where.EqualsCondition(COL_ProcessType).Value((int)processType);
             where.EqualsCondition(COL_EntityID).Value(entityID);
@@ -94,15 +94,16 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
                 insertQuery.Column(COL_Changes).Value(serializedChanges);
                 insertQuery.Column(COL_Status).Value((int)ProcessStatus.Draft);
                 insertQuery.Column(COL_CreatedBy).Value(userID);
+                insertQuery.Column(COL_LastModifiedBy).Value(userID);
                 insertQuery.AddSelectGeneratedId();
 
-                processDraftID  = query2Context.ExecuteScalar().NullableIntValue;
+                processDraftID = query2Context.ExecuteScalar().NullableIntValue;
             }
 
             return processDraftID.HasValue;
         }
 
-        public bool UpdateProcessStatus(ProcessEntityType processType, int processID, ProcessStatus newStatus, int userID)
+        public bool UpdateProcessStatus(int processID, ProcessStatus newStatus, int userID)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
@@ -112,7 +113,6 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             updateQuery.Column(COL_LastModifiedBy).Value(userID);
 
             var where = updateQuery.Where();
-            where.EqualsCondition(COL_ProcessType).Value((int)processType);
             where.EqualsCondition(COL_ID).Value(processID);
 
             return queryContext.ExecuteNonQuery() > 0;
@@ -137,10 +137,12 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
         {
             return new ProcessDraft()
             {
-                ID = dataReader.GetInt(COL_ID),
-                Changes = dataReader.GetString(COL_Changes)
+                ID = dataReader.GetLong(COL_ID),
+                ProcessType = (ProcessEntityType)dataReader.GetInt(COL_ProcessType),
+                EntityID = dataReader.GetString(COL_EntityID),
+                Changes = dataReader.GetString(COL_Changes),
+                Status = (ProcessStatus)dataReader.GetInt(COL_Status)
             };
         }
-
     }
 }

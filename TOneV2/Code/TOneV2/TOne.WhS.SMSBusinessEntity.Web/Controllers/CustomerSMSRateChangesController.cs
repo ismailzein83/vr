@@ -19,7 +19,7 @@ namespace TOne.WhS.SMSBusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("GetFilteredChanges")]
-        public Vanrise.Entities.IDataRetrievalResult<CustomerSMSRateChangesDetail> GetFilteredChanges(DataRetrievalInput<CustomerSMSRateChangesQuery> input)
+        public List<CustomerSMSRateChangesDetail> GetFilteredChanges(CustomerSMSRateChangesQuery input)
         {
             return _customerSMSRateChangesManager.GetFilteredChanges(input);
         }
@@ -33,14 +33,14 @@ namespace TOne.WhS.SMSBusinessEntity.Web.Controllers
      
         [HttpPost]
         [Route("UpdateSMSRateChangesStatus")]
-        public bool UpdateSMSRateChangesStatus(DataRetrievalInput<UpdateCustomerSMSDraftStatusInput> input)
+        public bool UpdateSMSRateChangesStatus(UpdateCustomerSMSDraftStatusInput input)
         {
             return _customerSMSRateChangesManager.UpdateSMSRateChangesStatus(input);
         }
 
         [HttpPost]
         [Route("GetDraftData")]
-        public DraftData GetDraftData(DataRetrievalInput<CustomerDraftDataInput> input)
+        public DraftData GetDraftData(CustomerDraftDataInput input)
         {
             return _customerSMSRateChangesManager.GetDraftData(input);
         }

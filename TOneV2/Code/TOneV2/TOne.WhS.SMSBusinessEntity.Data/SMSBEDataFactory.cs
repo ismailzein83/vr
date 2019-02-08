@@ -8,10 +8,10 @@ using Vanrise.Common;
 
 namespace TOne.WhS.SMSBusinessEntity.Data
 {
-    public class CustomerSMSRateDataManagerFactory
+    public class SMSBEDataFactory
     {
         static ObjectFactory s_objectFactory;
-        static CustomerSMSRateDataManagerFactory()
+        static SMSBEDataFactory()
         {
             s_objectFactory = new ObjectFactory(Assembly.Load("TOne.WhS.SMSBusinessEntity.Data.RDB"));
         }

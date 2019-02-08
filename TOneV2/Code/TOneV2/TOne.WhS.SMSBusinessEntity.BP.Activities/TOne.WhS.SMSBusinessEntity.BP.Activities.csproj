@@ -38,6 +38,8 @@
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activities" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -48,10 +50,44 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\Vanrise\Code\Vanrise.Common\obj\Debug\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeActivity1.cs" />
+    <Compile Include="ApplySMSSaleRates.cs" />
+    <Compile Include="GetCustomerSMSRateDraftData.cs" />
+    <Compile Include="PrepareCustomerSMSPriceListToInsert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
+      <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
+      <Name>TOne.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
+      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
+      <Name>TOne.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.BP.Arguments\TOne.WhS.SMSBusinessEntity.BP.Arguments.csproj">
+      <Project>{6b78e318-2c5f-48e3-814b-b91820493918}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Business\TOne.WhS.SMSBusinessEntity.Business.csproj">
+      <Project>{6f1a165b-f322-41f7-82b5-170b83616fe9}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Data\TOne.WhS.SMSBusinessEntity.Data.csproj">
+      <Project>{ed5a6c59-dcdc-4197-bd67-95441c7bd6b7}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Entities\TOne.WhS.SMSBusinessEntity.Entities.csproj">
+      <Project>{0cb909be-06ad-43c1-8632-d58e334a324a}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

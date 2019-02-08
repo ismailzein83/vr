@@ -7,7 +7,7 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
     {
         public int CustomerID { get; set; }
 
-        public List<CustomerSMSRateChange> SMSRates { get; set; }
+        public Dictionary<int,CustomerSMSRateChange> SMSRates { get; set; }
 
         public DateTime EffectiveDate { get; set; }
 
@@ -18,13 +18,7 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
     {
         public int MobileNetworkID { get; set; }
 
-        public decimal? CurrentRate { get; set; }
-
         public decimal NewRate { get; set; }
-
-        public bool? HasFutureRate { get; set; }
-
-        public SMSFutureRate FutureRate { get; set; }
     }
 
     

@@ -11,7 +11,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data
     {
         ProcessDraft GetChanges(ProcessEntityType processType, string entityID);
         bool InsertOrUpdateChanges(ProcessEntityType processType, string changes, string entityID, int userID, out int? processDraftID);
-        bool UpdateProcessStatus(ProcessEntityType processType, int processID, ProcessStatus newStatus, int userID);
+        bool UpdateProcessStatus(int processID, ProcessStatus newStatus, int userID);
         DraftStateResult CheckIfDraftExist(ProcessEntityType processType, string entityID);
     }
 }

@@ -8,9 +8,9 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
 {
     public class SMSFutureRate
     {
-        public decimal? Rate { get; set; }
+        public decimal Rate { get; set; }
 
-        public DateTime? BED { get; set; }
+        public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
     }

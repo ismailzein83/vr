@@ -9,37 +9,37 @@
 
             <vr-row>
                 <vr-columns width="fullrow">
-
-                    <vr-choices ng-if="scopeModel.effectiveDate" selectedindex="scopeModel.selectedCountryLetterIndex" onselectionchanged="scopeModel.onCountryLetterSelectionChanged()" stopreadonly>
+                    <vr-choices ng-if="scopeModel.effectiveDate" selectedindex="scopeModel.selectedCountryLetterIndex" onselectionchanged="scopeModel.onCountryLetterSelectionChanged()">
                         <vr-choice ng-repeat="letter in scopeModel.countryLetters">{{ letter | uppercase }}</vr-choice>
                     </vr-choices>
+
                     <vr-choices ng-if="!scopeModel.effectiveDate" selectedindex="scopeModel.selectedCountryLetterIndex">
                         <vr-choice ng-repeat="letter in scopeModel.countryLetters" readonly>{{ letter | uppercase }}</vr-choice>
                     </vr-choices>
                 </vr-columns>
             </vr-row>
 
-            <vr-datagrid datasource="scopeModel.datastore"
+            <vr-datagrid datasource="scopeModel.datasource"
                          on-ready="scopeModel.onGridReady"
                          getrowstyle="scopeModel.getGridRowColor"
-                         dataretrievalfunction="scopeModel.dataRetrievalFunction"
+                         loadmoredata="scopeModel.loadMoreData"
                          pagingtype="'PagingOnScroll'">
                 <vr-datagridcolumn headertext="'Country'" type="'Text'" field="'MobileCountryName'" disablesorting></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Mobile Network'" type="'Text'" field="'MobileNetworkName'" disablesorting></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Current Rate'" type="'number'" disablesorting>
-                    {{dataItem.CurrentRate}}     <vr-span ng-if="(dataItem.HasFutureRate == true)"
-                                           style="cursor: pointer; text-decoration: underline" ng-click="viewScope.scopeModel.onFutureRateClicked(dataItem)">*</vr-span>
+                    {{dataItem.CurrentRate}}
+                    <vr-span ng-if="(dataItem.FutureRate != undefined)" style="cursor: pointer; text-decoration: underline" ng-click="viewScope.scopeModel.onFutureRateClicked(dataItem)">*</vr-span>
                 </vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'New Rate'" disablesorting>
                     <vr-textbox type="number" value="dataItem.NewRate" minvalue="0" onvaluechanged="viewScope.scopeModel.onRateValueChanged(dataItem)"></vr-textbox>
                 </vr-datagridcolumn>
             </vr-datagrid>
-
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
+                <vr-button type="Apply" formname="formCustomerSMSRateEditor" data-onclick="scopeModel.applyChanges"></vr-button>
                 <vr-button type="Save" formname="formCustomerSMSRateEditor" data-onclick="scopeModel.saveChanges"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>

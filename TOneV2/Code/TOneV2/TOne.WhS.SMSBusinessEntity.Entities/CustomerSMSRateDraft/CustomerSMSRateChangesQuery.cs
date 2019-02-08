@@ -10,6 +10,11 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
     {
         public int CustomerID { get; set; }
 
+        public CustomerSMSRateChangesFilter Filter { get; set; }
+    }
+
+    public class CustomerSMSRateChangesFilter
+    {
         public char? CountryChar { get; set; }
     }
 }

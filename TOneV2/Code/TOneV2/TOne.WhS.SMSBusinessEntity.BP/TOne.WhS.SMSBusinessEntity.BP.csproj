@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activities" />
     <Reference Include="System.Xaml" />
@@ -47,6 +48,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,6 +63,20 @@
       <Project>{2969D89F-17FA-41E6-B0B6-86D60B388123}</Project>
       <Name>TOne.WhS.SMSBusinessEntity.BP.Activities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.BP.Arguments\TOne.WhS.SMSBusinessEntity.BP.Arguments.csproj">
+      <Project>{6b78e318-2c5f-48e3-814b-b91820493918}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Entities\TOne.WhS.SMSBusinessEntity.Entities.csproj">
+      <Project>{0cb909be-06ad-43c1-8632-d58e334a324a}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="SaleSMSRate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

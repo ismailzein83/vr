@@ -10,10 +10,10 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
     {
         public int CustomerID { get; set; }
 
-        public string MobileCountryName { get; set; }
-
-        public string MobileNetworkName { get; set; }
-
         public DateTime EffectiveDate { get; set; }
+
+        public List<int> MobileCountryIds { get; set; }
+
+        public List<int> MobileNetworkIds{ get; set; }
     }
 }

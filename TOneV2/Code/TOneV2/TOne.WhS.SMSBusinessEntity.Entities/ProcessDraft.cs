@@ -20,7 +20,7 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
 
     public class ProcessDraft
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
 
         public string EntityID { get; set; }
         
