@@ -1,4 +1,4 @@
-CREATE TABLE [RA_INTL_CDR].[BillingCDR_Charged] (
+﻿CREATE TABLE [RA_INTL_CDR].[BillingCDR_Charged] (
     [CDRID]                 BIGINT           NOT NULL,
     [DataSourceID]          UNIQUEIDENTIFIER NULL,
     [ProbeID]               BIGINT           NULL,
@@ -28,8 +28,10 @@ CREATE TABLE [RA_INTL_CDR].[BillingCDR_Charged] (
     [QueueItemId]           BIGINT           NULL,
     [CurrencyID]            INT              NULL,
     [PDDInSeconds]          DECIMAL (20, 4)  NULL,
-    CONSTRAINT [IX_RA_INTL_BillingCDR_Main_CDRID] UNIQUE NONCLUSTERED ([CDRID] ASC)
+    CONSTRAINT [IX_RA_INTL_BillingCDR_Main_ID] PRIMARY KEY NONCLUSTERED ([CDRID] ASC)
 );
+
+
 
 
 

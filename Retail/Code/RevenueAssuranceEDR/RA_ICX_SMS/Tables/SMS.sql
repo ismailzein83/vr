@@ -1,5 +1,5 @@
-﻿CREATE TYPE [RA_INTL_SMS].[SMSType] AS TABLE (
-    [ID]                       BIGINT           NULL,
+﻿CREATE TABLE [RA_ICX_SMS].[SMS] (
+    [ID]                       BIGINT           NOT NULL,
     [OperatorID]               BIGINT           NULL,
     [TrafficDirection]         INT              NULL,
     [DataSourceID]             UNIQUEIDENTIFIER NULL,
@@ -29,7 +29,12 @@
     [DestinationMNC]           VARCHAR (20)     NULL,
     [DestinationMCC]           VARCHAR (20)     NULL,
     [InDeliveryStatus]         INT              NULL,
-    [OutDeliveryStatus]        INT              NULL);
+    [OutDeliveryStatus]        INT              NULL,
+    CONSTRAINT [IX_RA_ICX_SMS_SMS_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
+);
 
 
+GO
+CREATE CLUSTERED INDEX [IX_RA_ICX_SMS_SMS_SentDateTime]
+    ON [RA_ICX_SMS].[SMS]([SentDateTime] ASC);
 

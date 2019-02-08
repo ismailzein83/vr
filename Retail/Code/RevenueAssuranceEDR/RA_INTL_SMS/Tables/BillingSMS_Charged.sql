@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [RA_INTL_SMS].[BillingSMS_Charged] (
-    [ID]                       BIGINT           IDENTITY (1, 1) NOT NULL,
+    [ID]                       BIGINT           NOT NULL,
     [OperatorID]               BIGINT           NULL,
     [DataSourceID]             UNIQUEIDENTIFIER NULL,
     [ProbeID]                  BIGINT           NULL,
@@ -36,8 +36,12 @@
     [DestinationMobileNetwork] INT              NULL,
     [DestinationMobileCountry] INT              NULL,
     [MatchedNumberPrefixID]    BIGINT           NULL,
+    [InDeliveryStatus]         INT              NULL,
+    [OutDeliveryStatus]        INT              NULL,
     CONSTRAINT [IX_RA_INTL_SMS_BillingSMS_Charged_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 GO

@@ -1,11 +1,11 @@
-﻿CREATE TYPE [RA_INTL_SMS].[BillingSMS_InvalidType] AS TABLE (
-    [ID]                       BIGINT           NULL,
+﻿CREATE TABLE [RA_ICX_SMS].[BillingSMS_Invalid] (
+    [ID]                       BIGINT           NOT NULL,
     [OperatorID]               BIGINT           NULL,
     [DataSourceID]             UNIQUEIDENTIFIER NULL,
     [ProbeID]                  BIGINT           NULL,
     [IDOnSwitch]               VARCHAR (255)    NULL,
     [SentDateTime]             DATETIME         NULL,
-    [DeliveredDateTime]        DATETIME         NULL,
+    [DelivereDateTime]         DATETIME         NULL,
     [Sender]                   VARCHAR (40)     NULL,
     [Receiver]                 VARCHAR (40)     NULL,
     [TrafficDirection]         INT              NULL,
@@ -36,8 +36,14 @@
     [DestinationMobileNetwork] INT              NULL,
     [DestinationMobileCountry] INT              NULL,
     [MatchedNumberPrefixID]    BIGINT           NULL,
+    [InterconnectOperator]     BIGINT           NULL,
     [InDeliveryStatus]         INT              NULL,
-    [OutDeliveryStatus]        INT              NULL);
+    [OutDeliveryStatus]        INT              NULL,
+    CONSTRAINT [IX_RA_ICX_SMS_BillingSMS_Invalid_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
+);
 
 
+GO
+CREATE CLUSTERED INDEX [IX_RA_ICX_SMS_BillingSMS_Invalid_SentDateTime]
+    ON [RA_ICX_SMS].[BillingSMS_Invalid]([SentDateTime] ASC);
 

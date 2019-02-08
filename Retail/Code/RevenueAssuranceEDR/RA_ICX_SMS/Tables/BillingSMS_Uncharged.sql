@@ -1,5 +1,5 @@
-﻿CREATE TYPE [RA_INTL_SMS].[BillingSMS_InvalidType] AS TABLE (
-    [ID]                       BIGINT           NULL,
+﻿CREATE TABLE [RA_ICX_SMS].[BillingSMS_Uncharged] (
+    [ID]                       BIGINT           NOT NULL,
     [OperatorID]               BIGINT           NULL,
     [DataSourceID]             UNIQUEIDENTIFIER NULL,
     [ProbeID]                  BIGINT           NULL,
@@ -36,8 +36,14 @@
     [DestinationMobileNetwork] INT              NULL,
     [DestinationMobileCountry] INT              NULL,
     [MatchedNumberPrefixID]    BIGINT           NULL,
+    [InterconnectOperator]     BIGINT           NULL,
     [InDeliveryStatus]         INT              NULL,
-    [OutDeliveryStatus]        INT              NULL);
+    [OutDeliveryStatus]        INT              NULL,
+    CONSTRAINT [IX_RA_ICX_SMS_BillingSMS_Uncharged_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
+);
 
 
+GO
+CREATE CLUSTERED INDEX [IX_RA_ICX_SMS_BillingSMS_Uncharged_SentDateTime]
+    ON [RA_ICX_SMS].[BillingSMS_Uncharged]([SentDateTime] ASC);
 

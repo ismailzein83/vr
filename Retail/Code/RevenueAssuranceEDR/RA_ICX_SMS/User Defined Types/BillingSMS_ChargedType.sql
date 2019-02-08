@@ -1,4 +1,4 @@
-﻿CREATE TYPE [RA_INTL_SMS].[BillingSMS_InvalidType] AS TABLE (
+﻿CREATE TYPE [RA_ICX_SMS].[BillingSMS_ChargedType] AS TABLE (
     [ID]                       BIGINT           NULL,
     [OperatorID]               BIGINT           NULL,
     [DataSourceID]             UNIQUEIDENTIFIER NULL,
@@ -36,8 +36,7 @@
     [DestinationMobileNetwork] INT              NULL,
     [DestinationMobileCountry] INT              NULL,
     [MatchedNumberPrefixID]    BIGINT           NULL,
+    [InterconnectOperator]     BIGINT           NULL,
     [InDeliveryStatus]         INT              NULL,
     [OutDeliveryStatus]        INT              NULL);
-
-
 

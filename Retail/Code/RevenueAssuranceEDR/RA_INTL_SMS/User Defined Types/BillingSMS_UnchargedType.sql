@@ -11,6 +11,8 @@
     [TrafficDirection]         INT              NULL,
     [OutCarrier]               VARCHAR (40)     NULL,
     [InCarrier]                VARCHAR (40)     NULL,
+    [OriginationZoneID]        BIGINT           NULL,
+    [DestinationZoneID]        BIGINT           NULL,
     [OriginationCountryID]     INT              NULL,
     [DestinationCountryID]     INT              NULL,
     [Rate]                     DECIMAL (22, 8)  NULL,
@@ -21,6 +23,11 @@
     [TaxRuleID]                INT              NULL,
     [Income]                   DECIMAL (22, 8)  NULL,
     [CurrencyID]               INT              NULL,
+    [CallingMNCID]             INT              NULL,
+    [CallingMCCID]             INT              NULL,
+    [CalledMNCID]              INT              NULL,
+    [CalledMCCID]              INT              NULL,
+    [QueueItemId]              BIGINT           NULL,
     [CustomerDeliveryStatus]   INT              NULL,
     [VendorDeliveryStatus]     INT              NULL,
     [DeliveryDelayInSeconds]   DECIMAL (22, 8)  NULL,
@@ -29,5 +36,8 @@
     [DestinationMobileNetwork] INT              NULL,
     [DestinationMobileCountry] INT              NULL,
     [MatchedNumberPrefixID]    BIGINT           NULL,
-    [QueueItemId]              BIGINT           NULL);
+    [InDeliveryStatus]         INT              NULL,
+    [OutDeliveryStatus]        INT              NULL);
+
+
 

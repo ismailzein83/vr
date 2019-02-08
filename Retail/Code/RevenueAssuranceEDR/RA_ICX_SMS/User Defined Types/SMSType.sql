@@ -1,4 +1,4 @@
-﻿CREATE TYPE [RA_INTL_SMS].[SMSType] AS TABLE (
+﻿CREATE TYPE [RA_ICX_SMS].[SMSType] AS TABLE (
     [ID]                       BIGINT           NULL,
     [OperatorID]               BIGINT           NULL,
     [TrafficDirection]         INT              NULL,
@@ -30,6 +30,4 @@
     [DestinationMCC]           VARCHAR (20)     NULL,
     [InDeliveryStatus]         INT              NULL,
     [OutDeliveryStatus]        INT              NULL);
-
-
 

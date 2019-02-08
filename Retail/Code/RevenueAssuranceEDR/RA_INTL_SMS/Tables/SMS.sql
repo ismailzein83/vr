@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [RA_INTL_SMS].[SMS] (
-    [ID]                       BIGINT           IDENTITY (1, 1) NOT NULL,
+    [ID]                       BIGINT           NOT NULL,
     [OperatorID]               BIGINT           NULL,
     [TrafficDirection]         INT              NULL,
     [DataSourceID]             UNIQUEIDENTIFIER NULL,
@@ -28,8 +28,12 @@
     [OriginationMCC]           VARCHAR (20)     NULL,
     [DestinationMNC]           VARCHAR (20)     NULL,
     [DestinationMCC]           VARCHAR (20)     NULL,
+    [InDeliveryStatus]         INT              NULL,
+    [OutDeliveryStatus]        INT              NULL,
     CONSTRAINT [IX_RA_INTL_SMS_SMS_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 GO
