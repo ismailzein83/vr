@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
+
 namespace Vanrise.BusinessProcess.Data.RDB
 {
     public class BPInstanceDataManager : IBPInstanceDataManager
@@ -69,9 +68,11 @@ namespace Vanrise.BusinessProcess.Data.RDB
             #endregion
 
         }
+
         #endregion
 
         #region Public Methods
+
         public Dictionary<Guid, Type> InputArgumentTypeByDefinitionId { get; set; }
 
         public void ArchiveInstances(List<BPInstanceStatus> completedStatuses, DateTime completedBefore, int nbOfInstances)
@@ -230,8 +231,6 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             return queryContext.GetItems(BPInstanceMapper);
         }
-
-
 
         public List<BPInstance> GetFirstPage(out object lastUpdateHandle, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds, Guid? taskId)
         {
@@ -557,9 +556,11 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             queryContext.ExecuteNonQuery();
         }
+
         #endregion
 
         #region Private Methods
+
         BaseRDBDataProvider GetDataProvider()
         {
             return RDBDataProviderFactory.CreateProvider("BusinessProcess", "BusinessProcessDBConnStringKey", "BusinessProcessDBConnString");
@@ -606,7 +607,6 @@ namespace Vanrise.BusinessProcess.Data.RDB
             if (input.EntityIds != null && input.EntityIds.Count > 0)
                 whereContext.ListCondition(COL_EntityId, RDBListConditionOperator.IN, input.EntityIds);
         }
-
         private void BuildEntityIdsFilter(List<string> entityIds, RDBConditionContext whereContext)
         {
             if (entityIds != null && entityIds.Count > 0)
@@ -661,9 +661,11 @@ namespace Vanrise.BusinessProcess.Data.RDB
             columns.Add(COL_TaskId, new RDBTableColumnDefinition { DataType = RDBDataType.UniqueIdentifier });
             return columns;
         }
+
         #endregion
 
         #region Mappers
+
         private BPDefinitionSummary BPDefinitionSummaryMapper(IRDBDataReader reader)
         {
             return new BPDefinitionSummary()
@@ -711,6 +713,7 @@ namespace Vanrise.BusinessProcess.Data.RDB
 
             return instance;
         }
+
         #endregion
     }
 }
