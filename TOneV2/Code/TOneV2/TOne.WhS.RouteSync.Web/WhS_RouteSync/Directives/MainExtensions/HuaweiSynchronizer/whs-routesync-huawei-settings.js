@@ -29,7 +29,10 @@
             function initializeController() {
 
                 $scope.scopeModel = {};
-                $scope.scopeModel.OverriddenRSSNsInRSName = [];
+                $scope.scopeModel.header = "Overridden RSSN";
+                $scope.scopeModel.overriddenRSSNsInRSName = [];
+                $scope.scopeModel.hint = "Upon creating RSNames, any Existing RSSN will be replaced by the corresponding Overridden RSSN.";
+
 
                 $scope.scopeModel.onOverriddenRSSNsGridReady = function (api) {
                     overriddenRSSNAPI = api;
@@ -37,34 +40,28 @@
                 };
 
                 $scope.scopeModel.isValid = function () {
+
+                    if ($scope.scopeModel.overriddenRSSNsInRSName != undefined && $scope.scopeModel.overriddenRSSNsInRSName.length > 0) {
+                        var overriddenRSSNsInRSName = $scope.scopeModel.overriddenRSSNsInRSName;
+                        var length = overriddenRSSNsInRSName.length;
+                        for (var i = 0; i < length - 1; i++) {
+                            for (var j = i + 1; j < length; j++) {
+                                if (overriddenRSSNsInRSName[i].exisitingRSSN.split(' ').join('').toLowerCase() == overriddenRSSNsInRSName[j].exisitingRSSN.split(' ').join('').toLowerCase())
+                                    return 'Duplicate Existing RSSNs are not allowed';
+                            }
+                        }
+                    }
                     return;
-                    //if ($scope.scopeModel.switchLoggers == undefined || $scope.scopeModel.switchLoggers.length == 0)
-                    //    return 'At least one logger should be added';
-
-                    //var oneLoggerIsActive = false;
-
-                    //for (var x = 0; x < $scope.scopeModel.switchLoggers.length; x++) {
-                    //    var currentItem = $scope.scopeModel.switchLoggers[x];
-                    //    if (currentItem.isActive) {
-                    //        oneLoggerIsActive = true;
-                    //        break;
-                    //    }
-                    //}
-
-                    //if (!oneLoggerIsActive)
-                    //    return 'At least one logger should be activated';
-
-                    //return;
                 };
 
                 $scope.scopeModel.addOverriddenRSSNInRSName = function () {
                     var dataItem = {};
-                    $scope.scopeModel.OverriddenRSSNsInRSName.push(dataItem);
+                    $scope.scopeModel.overriddenRSSNsInRSName.push(dataItem);
                 };
 
                 $scope.scopeModel.removeOverriddenRSSNInRSName = function (dataItem) {
-                    var index = $scope.scopeModel.OverriddenRSSNsInRSName.indexOf(dataItem);
-                    $scope.scopeModel.OverriddenRSSNsInRSName.splice(index, 1);
+                    var index = $scope.scopeModel.overriddenRSSNsInRSName.indexOf(dataItem);
+                    $scope.scopeModel.overriddenRSSNsInRSName.splice(index, 1);
                 };
 
                 var promises = [overriddenRSSNGridReadyDeferred.promise];
@@ -82,16 +79,15 @@
                     var overriddenRSSNsInRSName;
 
                     if (payload != undefined) {
-                        console.log("herersa");
                         var overriddenRSSNsInRSName = payload.overriddenRSSNsInRSName;
                         if (overriddenRSSNsInRSName != undefined) {
                             for (var key in overriddenRSSNsInRSName) {
                                 if (key != "$type") {
                                     var overriddenRSSNsInRSNameItem = {
-                                        ExisitingRSSN: key,
-                                        OverriddenRSSN: overriddenRSSNsInRSName[key]
+                                        exisitingRSSN: key,
+                                        overriddenRSSN: overriddenRSSNsInRSName[key]
                                     }
-                                    $scope.scopeModel.OverriddenRSSNsInRSName.push(overriddenRSSNsInRSNameItem);
+                                    $scope.scopeModel.overriddenRSSNsInRSName.push(overriddenRSSNsInRSNameItem);
                                 }
                             }
                         }
@@ -100,10 +96,10 @@
                 }
                 api.getData = function () {
                     var overriddenRSSNsInRSName = {};
-                    if ($scope.scopeModel.OverriddenRSSNsInRSName != undefined && $scope.scopeModel.OverriddenRSSNsInRSName.length > 0) {
-                        for (var i = 0; i < $scope.scopeModel.OverriddenRSSNsInRSName.length; i++) {
-                            var dataItem = $scope.scopeModel.OverriddenRSSNsInRSName[i];
-                            overriddenRSSNsInRSName[dataItem.ExisitingRSSN] = dataItem.OverriddenRSSN;
+                    if ($scope.scopeModel.overriddenRSSNsInRSName != undefined && $scope.scopeModel.overriddenRSSNsInRSName.length > 0) {
+                        for (var i = 0; i < $scope.scopeModel.overriddenRSSNsInRSName.length; i++) {
+                            var dataItem = $scope.scopeModel.overriddenRSSNsInRSName[i];
+                            overriddenRSSNsInRSName[dataItem.exisitingRSSN] = dataItem.overriddenRSSN;
                         };
                     }
 
