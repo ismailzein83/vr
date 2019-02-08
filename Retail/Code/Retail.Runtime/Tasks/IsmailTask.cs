@@ -1311,11 +1311,62 @@ $@"when not matched by target then
             }
         };
 
+        RDBTableDefinition _ParentTableTable = new RDBTableDefinition
+        {
+            DBTableName = "ParentTable",
+            IdColumnName = "ID",
+            Columns = new Dictionary<string, RDBTableColumnDefinition>
+            {
+                  {"ID", new RDBTableColumnDefinition { DataType = RDBDataType.Int}},
+            }
+        };
+
+        RDBTableDefinition _ChildTableTable = new RDBTableDefinition
+        {
+            DBTableName = "ChildTable",
+            IdColumnName = "ID",
+            Columns = new Dictionary<string, RDBTableColumnDefinition>
+            {
+                  {"ID", new RDBTableColumnDefinition { DataType = RDBDataType.Int}},
+                  {"ParentID", new RDBTableColumnDefinition { DataType = RDBDataType.Int}}
+            }
+        };
+
         void TestRDBSelectQuery()
         {
+            
             //var dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider("Data Source=.;Initial Catalog=test;User ID=sa; Password=p@ssw0rd");
-            var dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MySQLRDBDataProvider("Server=192.168.110.185;Database=tonev2_dev_configuration;Uid=root;Pwd=password;persistsecurityinfo=True;");
+            var dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider("Data Source=.;Initial Catalog=test;User ID=sa; Password=p@ssw0rd;");
+
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition("ParentTable", _ParentTableTable);
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition("ChildTable", _ChildTableTable);
             var queryContext = new RDBQueryContext(dataProvider);
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable("ChildTable");
+            deleteQuery.Where().EqualsCondition("ID").Value(3);
+            queryContext.ExecuteNonQuery();
+
+            queryContext = new RDBQueryContext(dataProvider);
+            deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable("ChildTable", true);
+            deleteQuery.Where().EqualsCondition("ID").Value(4);
+            queryContext.ExecuteNonQuery();
+
+            queryContext = new RDBQueryContext(dataProvider);
+            deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable("ChildTable", true);
+            deleteQuery.Join("child").JoinOnEqualOtherTableColumn("ParentTable", "par", "ID", "child", "ParentID");
+            deleteQuery.Where().EqualsCondition("par", "ID").Value(3);
+            queryContext.ExecuteNonQuery();
+
+
+            queryContext = new RDBQueryContext(dataProvider);
+            deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable("ChildTable", false);
+            deleteQuery.Join("child").JoinOnEqualOtherTableColumn("ParentTable", "par", "ID", "child", "ParentID");
+            deleteQuery.Where().EqualsCondition("ID").Value(3);
+            queryContext.ExecuteNonQuery();
+
             var createTableQuery = queryContext.AddCreateTableQuery();
             createTableQuery.DBTableName("RDBTable1");
             createTableQuery.AddColumn("ID", "ID", RDBDataType.BigInt, null, null, true, true, true);
