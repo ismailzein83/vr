@@ -88,5 +88,13 @@
     <Build Include="Mediation_WHS\Tables\MobilisHuaweiBadCDR.sql" />
     <Build Include="Mediation_WHS\User Defined Types\MobilisHuaweiCDRType.sql" />
     <Build Include="Mediation_WHS\User Defined Types\MobilisHuaweiBadCDRType.sql" />
+    <Build Include="Mediation_WHS\Tables\MobilisEricssonSMS.sql" />
+    <Build Include="Mediation_WHS\Tables\MobilisEricssonCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\MobilisEricssonBadSMS.sql" />
+    <Build Include="Mediation_WHS\Tables\MobilisEricssonBadCDR.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonSMSType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonBadSMSType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\MobilisEricssonBadCDRType.sql" />
   </ItemGroup>
 </Project>

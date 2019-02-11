@@ -14427,8 +14427,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new NumberFieldParser
                 {
                     FieldName = "NetworkCallReference",
-                    NumberType = NumberType.BigInt,
-                    ConvertOutputToString = true
+                    NumberType = NumberType.BigInt
                 }
             });
 
