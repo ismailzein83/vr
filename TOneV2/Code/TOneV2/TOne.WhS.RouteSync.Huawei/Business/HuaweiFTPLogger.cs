@@ -27,7 +27,7 @@ namespace TOne.WhS.RouteSync.Huawei.Business
         public override void LogCommands(ILogCommandsContext context)
         {
             string errorMessage;
-            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "CommandExecution", this.FTPCommunicatorSettings, context.ExecutionDateTime, null, out errorMessage);
+            SwitchFTPLoggerHelper.TryLogCommnadResults(context.CommandResults, "CommandExecution_Log", this.FTPCommunicatorSettings, context.ExecutionDateTime, null, out errorMessage);
         }
     }
 }

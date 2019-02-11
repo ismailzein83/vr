@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using TOne.WhS.RouteSync.Business;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Huawei.Business;
@@ -885,7 +886,17 @@ namespace TOne.WhS.RouteSync.Huawei
                 string loginCommand = $"LGI:OP=\"{sshCommunication.SSLSettings.Username}\",PWD=\"{sshCommunication.SSLSettings.Password}\";";
                 string loginCommandToLog = $"LGI:OP=\"#USERNAME#\",PWD=\"#PASSWORD#\";";
                 bool isLoginSucceeded = this.ExecuteCommand(loginCommand, loginCommandToLog, sshCommunicator, commandResults, new List<string>() { "END" }, false, false,
-                    HuaweiCommands.LoginSucceeded, switchCommandLogManager, switchId, processInstanceId);
+                    HuaweiCommands.LoginSucceeded, switchCommandLogManager, switchId, processInstanceId, (response) =>
+                    {
+                        if (string.IsNullOrEmpty(response))
+                            return null;
+
+                        string modifiedResponse = Regex.Replace(response, sshCommunication.SSLSettings.Username, "#USERNAME#", RegexOptions.IgnoreCase);
+                        modifiedResponse = Regex.Replace(modifiedResponse, sshCommunication.SSLSettings.Password, "#PASSWORD#", RegexOptions.IgnoreCase);
+
+                        return modifiedResponse;
+                    });
+
                 if (!isLoginSucceeded)
                 {
                     sshCommunicator.Dispose();
@@ -900,7 +911,14 @@ namespace TOne.WhS.RouteSync.Huawei
                     string logoutCommand = $"LGO:OP=\"{sshCommunication.SSLSettings.Username}\";";
                     string logoutCommandToLog = $"LGO:OP=\"#USERNAME#\";";
                     this.ExecuteCommand(logoutCommand, logoutCommandToLog, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded,
-                        switchCommandLogManager, switchId, processInstanceId);
+                        switchCommandLogManager, switchId, processInstanceId, (response) =>
+                        {
+                            if (string.IsNullOrEmpty(response))
+                                return null;
+
+                            string modifiedResponse = Regex.Replace(response, sshCommunication.SSLSettings.Username, "#USERNAME#", RegexOptions.IgnoreCase);
+                            return modifiedResponse;
+                        });
 
                     sshCommunicator.Dispose();
                     return false;
@@ -928,7 +946,14 @@ namespace TOne.WhS.RouteSync.Huawei
                     string logoutCommand = $"LGO:OP=\"{sshCommunication.SSLSettings.Username}\";";
                     string logoutCommandToLog = $"LGO:OP=\"#USERNAME#\";";
                     this.ExecuteCommand(logoutCommand, logoutCommandToLog, sshCommunicator, commandResults, new List<string>() { "END" }, false, false, HuaweiCommands.LogoutSucceeded,
-                        switchCommandLogManager, switchId, processInstanceId);
+                        switchCommandLogManager, switchId, processInstanceId, (response) =>
+                        {
+                            if (string.IsNullOrEmpty(response))
+                                return null;
+
+                            string modifiedResponse = Regex.Replace(response, sshCommunication.SSLSettings.Username, "#USERNAME#", RegexOptions.IgnoreCase);
+                            return modifiedResponse;
+                        });
                 }
             }
             finally
@@ -945,10 +970,14 @@ namespace TOne.WhS.RouteSync.Huawei
         }
 
         private bool ExecuteCommand(string command, string commandToLog, SSHCommunicator sshCommunicator, List<CommandResult> commandResults, List<string> endOfResponseList,
-            bool isEndOfResponseCaseSensitive, bool ignoreEmptySpacesInResponse, string responseSuccessKey, SwitchCommandLogManager switchCommandLogManager, string switchId, long processInstanceId)
+            bool isEndOfResponseCaseSensitive, bool ignoreEmptySpacesInResponse, string responseSuccessKey, SwitchCommandLogManager switchCommandLogManager, string switchId, long processInstanceId,
+            Func<string, string> getFinalResponse = null)
         {
             string response;
             sshCommunicator.ExecuteCommand(command, endOfResponseList, isEndOfResponseCaseSensitive, ignoreEmptySpacesInResponse, out response);
+
+            if (getFinalResponse != null)
+                response = getFinalResponse(response);
 
             commandResults.Add(new CommandResult() { Command = commandToLog, Output = new List<string>() { response } });
 
