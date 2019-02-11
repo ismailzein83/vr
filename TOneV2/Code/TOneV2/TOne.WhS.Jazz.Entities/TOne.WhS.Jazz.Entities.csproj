@@ -56,7 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountCode\AccountCodeQuery.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="JazzReportDefinition.cs" />
     <Compile Include="ERPTransactionsReport.cs" />
     <Compile Include="JazzTransactionsReport.cs" />
