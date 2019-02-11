@@ -168,7 +168,6 @@
     <Compile Include="Controllers\SaleRateHistoryController.cs" />
     <Compile Include="Controllers\TechnicalSettingsController.cs" />
     <Compile Include="Controllers\SalePricelistController.cs" />
-    <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Controllers\CodeGroupController.cs" />
     <Compile Include="Controllers\CarrierAccountController.cs" />
     <Compile Include="Controllers\CarrierProfileController.cs" />
@@ -265,8 +264,6 @@
     <Content Include="WhS_BusinessEntity\Constant\VolumeCommitmentTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListTemplateSettingsCodeOnEachRowBEFieldEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ZoneRouteOptionsDisplayEnum.js" />
-    <Content Include="WhS_BusinessEntity\Directives\AccountManager\Templates\AssignedCarrierGrid.html" />
-    <Content Include="WhS_BusinessEntity\Directives\AccountManager\vr-whs-be-assignedcarrier-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridPanelTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileTickectContactGridTemplate.html" />
@@ -693,7 +690,6 @@
     <Content Include="WhS_BusinessEntity\Services\CustomerSellingProductService.js" />
     <Content Include="WhS_BusinessEntity\Services\SaleZoneService.js" />
     <Content Include="WhS_BusinessEntity\Services\SellingProductService.js" />
-    <Content Include="WhS_BusinessEntity\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CodeGroupAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneServiceConfigAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerZoneAPIService.js" />
@@ -707,16 +703,9 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SellingNumberPlanAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CodeGroupService.js" />
-    <Content Include="WhS_BusinessEntity\Services\AccountManagerService.js" />
     <Content Include="WhS_BusinessEntity\Services\SellingNumberPlanService.js" />
     <Content Include="WhS_BusinessEntity\Services\ZoneServiceConfigService.js" />
     <Content Include="WhS_BusinessEntity\Style\WhsBusinessEntity.css" />
-    <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagement.html" />
-    <Content Include="WhS_BusinessEntity\Views\AccountManager\AccountManagerManagementController.js" />
-    <Content Include="WhS_BusinessEntity\Views\AccountManager\CarrierAssignmentEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\AccountManager\CarrierAssignmentEditorController.js" />
-    <Content Include="WhS_BusinessEntity\Views\AccountManager\OrgChartAssignmentEditor.html" />
-    <Content Include="WhS_BusinessEntity\Views\AccountManager\OrgChartAssignmentEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CarrierAccount\CarrierAccountManagement.html" />

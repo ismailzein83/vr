@@ -62,7 +62,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountManagerCarrierDataManager.cs" />
     <Compile Include="BEDataUtility.cs" />
     <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="CarrierAccountStatusHistoryDataManager.cs" />

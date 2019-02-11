@@ -135,7 +135,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountManagerManager.cs" />
     <Compile Include="ANumber\ANumberGroupManager.cs" />
     <Compile Include="ANumber\ANumberSaleCodeManager.cs" />
     <Compile Include="ANumber\ANumberSupplierCodeManager.cs" />

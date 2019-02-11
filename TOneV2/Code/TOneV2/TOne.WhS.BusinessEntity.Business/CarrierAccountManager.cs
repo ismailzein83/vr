@@ -653,12 +653,12 @@ namespace TOne.WhS.BusinessEntity.Business
                     customerSellingProductsEffectiveInFuture = LoadCustomerSellingProductsEffectiveInFuture();
                 }
 
-                IEnumerable<AssignedCarrier> assignedCarriers = null;
-                if (filter.AssignableToUserId.HasValue)
-                {
-                    AccountManagerManager AccountManagerManager = new AccountManagerManager();
-                    assignedCarriers = AccountManagerManager.GetAssignedCarriers();
-                }
+                // IEnumerable < AssignedCarrier > assignedCarriers = null;
+                //if (filter.AssignableToUserId.HasValue)
+                //{
+                //    AccountManagerManager AccountManagerManager = new AccountManagerManager();
+                //    assignedCarriers = AccountManagerManager.GetAssignedCarriers();
+                //}
 
                 if (filter.Filters != null)
                 {
@@ -699,8 +699,8 @@ namespace TOne.WhS.BusinessEntity.Business
                                 return false;
                         }
                     }
-                    if (filter.AssignableToUserId.HasValue && !IsCarrierAccountAssignableToUser(carr, filter.GetCustomers, filter.GetSuppliers, assignedCarriers))
-                        return false;
+                    //if (filter.AssignableToUserId.HasValue && !IsCarrierAccountAssignableToUser(carr, filter.GetCustomers, filter.GetSuppliers, assignedCarriers))
+                    //    return false;
                     if (filter.Filters != null)
                     {
                         for (int i = 0; i < filter.Filters.Count(); i++)
@@ -716,10 +716,10 @@ namespace TOne.WhS.BusinessEntity.Business
             }
 
             //TODO: fix this when we reach working with Account Manager module
-            if (filter != null && filter.AssignableToUserId != null)
-                return GetCachedCarrierAccounts().MapRecords(AccountManagerCarrierMapper, filterPredicate).OrderBy(x => x.Name);
-            else
-                return GetCachedCarrierAccounts().MapRecords(CarrierAccountInfoMapper, filterPredicate).OrderBy(x => x.Name);
+            //if (filter != null && filter.AssignableToUserId != null)
+            //    return GetCachedCarrierAccounts().MapRecords(AccountManagerCarrierMapper, filterPredicate).OrderBy(x => x.Name);
+            //else
+            return GetCachedCarrierAccounts().MapRecords(CarrierAccountInfoMapper, filterPredicate).OrderBy(x => x.Name);
         }
         public IEnumerable<CarrierAccountInfo> GetCustomersBySellingNumberPlanId(int sellingNumberPlanId, bool onlyActive = false)
         {
@@ -1425,17 +1425,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccounts.FindAllRecords(filterExpression);
         }
 
-        private bool IsCarrierAccountAssignableToUser(CarrierAccount carrierAccount, bool getCustomers, bool getSuppliers, IEnumerable<AssignedCarrier> assignedCarriers)
-        {
-            if (carrierAccount.AccountType == CarrierAccountType.Exchange && assignedCarriers.Where(x => x.CarrierAccountId == carrierAccount.CarrierAccountId).Count() > 1)
-                return false;
-
-            if (carrierAccount.AccountType != CarrierAccountType.Exchange && assignedCarriers.Any(y => y.CarrierAccountId == carrierAccount.CarrierAccountId))
-                return false;
-
-            return true;
-        }
-
         private bool ShouldSelectCarrierAccount(CarrierAccount carrierAccount, bool getCustomers, bool getSuppliers)
         {
             return ShouldSelectCarrierAccount(carrierAccount, getCustomers, getSuppliers, null, null);
@@ -1702,20 +1691,20 @@ namespace TOne.WhS.BusinessEntity.Business
             return routingSupplierInfo;
         }
 
-        private AccountManagerCarrier AccountManagerCarrierMapper(CarrierAccount carrierAccount)
-        {
-            AccountManagerManager accountManagerManager = new AccountManagerManager();
-            IEnumerable<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers();
-            var assignedCarrierAccount = assignedCarriers.FindRecord(x => x.CarrierAccountId == carrierAccount.CarrierAccountId);
-            return new AccountManagerCarrier()
-            {
-                CarrierAccountId = carrierAccount.CarrierAccountId,
-                Name = GetCarrierAccountName(carrierAccount.CarrierAccountId),
-                CarrierType = carrierAccount.AccountType,
-                IsCustomerAvailable = (CarrierAccountManager.IsCustomer(carrierAccount.AccountType)) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Customer),
-                IsSupplierAvailable = (CarrierAccountManager.IsSupplier(carrierAccount.AccountType)) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Supplier)
-            };
-        }
+        //private AccountManagerCarrier AccountManagerCarrierMapper(CarrierAccount carrierAccount)
+        //{
+        //    AccountManagerManager accountManagerManager = new AccountManagerManager();
+        //    IEnumerable<AssignedCarrier> assignedCarriers = accountManagerManager.GetAssignedCarriers();
+        //    var assignedCarrierAccount = assignedCarriers.FindRecord(x => x.CarrierAccountId == carrierAccount.CarrierAccountId);
+        //    return new AccountManagerCarrier()
+        //    {
+        //        CarrierAccountId = carrierAccount.CarrierAccountId,
+        //        Name = GetCarrierAccountName(carrierAccount.CarrierAccountId),
+        //        CarrierType = carrierAccount.AccountType,
+        //        IsCustomerAvailable = (CarrierAccountManager.IsCustomer(carrierAccount.AccountType)) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Customer),
+        //        IsSupplierAvailable = (CarrierAccountManager.IsSupplier(carrierAccount.AccountType)) && (assignedCarrierAccount == null || assignedCarrierAccount.RelationType != CarrierAccountType.Supplier)
+        //    };
+        //}
 
         private CarrierAccountDetail CarrierAccountDetailMapper(CarrierAccount carrierAccount)
         {
