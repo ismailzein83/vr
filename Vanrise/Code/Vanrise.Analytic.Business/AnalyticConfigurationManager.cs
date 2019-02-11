@@ -77,5 +77,10 @@ namespace Vanrise.Analytic.Business
         {
             return _templateConfigManager.GetExtensionConfigurations<DAProfCalcAlertRuleFilterConfig>(DAProfCalcAlertRuleFilterConfig.EXTENSION_TYPE);
         }
+
+        public IEnumerable<AnalyticDataProviderTableConfig> GetAnalyticDataProviderTableConfigs()
+        {
+            return _templateConfigManager.GetExtensionConfigurations<AnalyticDataProviderTableConfig>(AnalyticDataProviderTableConfig.EXTENSION_TYPE);
+        }
     }
 }

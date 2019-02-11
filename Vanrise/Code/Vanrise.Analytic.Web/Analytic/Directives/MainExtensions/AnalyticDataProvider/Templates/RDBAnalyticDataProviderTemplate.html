@@ -1,1 +1,7 @@
-﻿
+﻿<vr-columns colnum="{{rdbCtrl.normalColNum}}">
+    <vr-textbox value="scopeModel.moduleName" label="Module Name"></vr-textbox>
+</vr-columns>
+
+<vr-column colnum="{{rdbCtrl.normalColNum}}">
+    <vr-dataprovider-table-selector on-ready="scopeModel.onDataProviderTableSelectorReady"> </vr-dataprovider-table-selector>    
+</vr-column>

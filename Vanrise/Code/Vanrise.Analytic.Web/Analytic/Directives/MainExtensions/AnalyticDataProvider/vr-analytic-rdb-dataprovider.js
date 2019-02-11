@@ -23,91 +23,67 @@
         };
         function RDBDataProvider($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var rdbAnalyticDataProviderTable;
 
-            var rdbTableSelectorAPI;
-            var rdbTableReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-            var rdbTableSelectorSelectionChangedDeferred;
+            var dataProviderTableSelectorAPI;
+            var dataProviderTableReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
 
-                //$scope.scopeModel.onRDBTableSelectorReady = function (api) {
-                //    rdbTableSelectorAPI = api;
-                //    rdbTableReadyPromiseDeferred.resolve();
-                //};
+                $scope.scopeModel.onDataProviderTableSelectorReady = function (api) {
+                    dataProviderTableSelectorAPI = api;
+                    dataProviderTableReadyPromiseDeferred.resolve();
+                };
 
-                //$scope.scopeModel.onRDBTableSelectionChanged = function (dataItem) {
-                //    if (dataItem != undefined) {
-                //        if (rdbTableSelectorSelectionChangedDeferred != undefined) {
-                //            rdbTableSelectorSelectionChangedDeferred.resolve();
-                //        }
-                //    }
-                //    else {
-                //        ///////
-                //    }
-                //};
                 defineAPI();
             }
             function defineAPI() {
                 var api = {};
+               
 
                 api.load = function (payload) {
                     var promises = [];
 
-                    //    var isEditMode;
-                    //    var rdbAnalyticDataProviderTable
-                    //    if (payload != undefined && payload.analyticDataProviderSettings != undefined) {
-                    //        $scope.scopeModel.moduleName = payload.analyticDataProviderSettings.ModuleName;
-                    //        rdbAnalyticDataProviderTable = payload.analyticDataProviderSettings.RDBAnalyticDataProviderTable;
+                    if (payload != undefined && payload.analyticDataProviderSettings != undefined) {
+                        $scope.scopeModel.moduleName = payload.analyticDataProviderSettings.ModuleName;
+                        rdbAnalyticDataProviderTable = payload.analyticDataProviderSettings.Table;
+                    }
 
-                    //        isEditMode = true;
-                    //        rdbTableSelectorSelectionChangedDeferred = UtilsService.createPromiseDeferred();
-                    //    }
+                    var dataProviderTableSelectorLoadPromise = getDataProviderTableSelectorLoadPromise();
+                    promises.push(dataProviderTableSelectorLoadPromise);
 
-                    //    //Loading RDB Table selector
-                    //    var rdbTableSelectorLoadPromise = getRdbTableSelectorLoadPromise();
-                    //    promises.push(rdbTableSelectorLoadPromise);
+                    function getDataProviderTableSelectorLoadPromise() {
+                        var dataProviderTableSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    //    if (isEditMode) {
-                    //       // var analyticTableSelectorLoadPromise = getAnalyticTableSelectorLoadPromise();
-                    //        //promises.push(analyticTableSelectorLoadPromise);
-                    //    }
+                        dataProviderTableReadyPromiseDeferred.promise.then(function () {
 
-                    //    function getRdbTableSelectorLoadPromise() {
-                    //        var rdbTableSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                            var dataProviderTableSelectorPayload = {
+                                analyticDataProviderTable: rdbAnalyticDataProviderTable
+                            };
+                            VRUIUtilsService.callDirectiveLoad(dataProviderTableSelectorAPI, dataProviderTableSelectorPayload, dataProviderTableSelectorLoadDeferred);
+                        });
 
-                    //        rdbTableReadyPromiseDeferred.promise.then(function () {
+                        return dataProviderTableSelectorLoadDeferred.promise;
+                    }
+                };
 
-                    //            var rdbTableSelectorPayload = {
-                    //                filter: {
-                    //                    Filters: [{
-                    //                        $type: "Vanrise.GenericData.RDBDataStorage.RDBDataRecordStorageFilter, Vanrise.GenericData.RDBDataStorage"
-                    //                    }]
-                    //                }
-                    //            };
-                    //            VRUIUtilsService.callDirectiveLoad(rdbTableSelectorAPI, rdbTableSelectorPayload, rdbTableSelectorLoadDeferred);
-                    //        });
+                api.getData = function () {
+                    var data = {
+                        $type: "Vanrise.Analytic.Data.RDB.RDBAnalyticDataProvider, Vanrise.Analytic.Data.RDB",
+                        ModuleName: $scope.scopeModel.moduleName,
+                        Table: dataProviderTableSelectorAPI.getData()
+                    };
+                    return data;
+                };
 
-                    //        return rdbTableSelectorLoadDeferred.promise;
-                    //    }
-                    //};
-
-                    //api.getData = function () {
-                    //    var data = {
-                    //        $type: "Vanrise.Analytic.Data.RDB.RDBAnalyticDataProvider, Vanrise.Analytic.Data.RDB",
-                    //        ModuleName: $scope.scopeModel.moduleName,
-                    //        //Table: 
-                    //    };
-                    //    return data;
-                    //};
-
-                    //if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                    //    ctrl.onReady(api);
-                    //}
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
                 }
             }
         }
     }
+
     app.directive('vrAnalyticRdbDataprovider', RDBDataProviderDirective);
 
 })(app);

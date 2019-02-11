@@ -60,6 +60,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDAProfCalcAlertRuleFilterConfigs"));
         }
 
+        function GetAnalyticDataProviderTableConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticDataProviderTableConfigs"));
+        }
+
         return {
             GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs,
             GetWidgetsTemplateConfigs: GetWidgetsTemplateConfigs,
@@ -73,7 +77,8 @@
             GetDimensionMappingRuleSettingConfigs: GetDimensionMappingRuleSettingConfigs,
             GetMeasureMappingRuleSettingConfigs: GetMeasureMappingRuleSettingConfigs,
             GetDAProfCalcAlertRuleFilterDefinitionConfigs: GetDAProfCalcAlertRuleFilterDefinitionConfigs,
-            GetDAProfCalcAlertRuleFilterConfigs: GetDAProfCalcAlertRuleFilterConfigs
+            GetDAProfCalcAlertRuleFilterConfigs: GetDAProfCalcAlertRuleFilterConfigs,
+            GetAnalyticDataProviderTableConfigs: GetAnalyticDataProviderTableConfigs
         };
     }
 
