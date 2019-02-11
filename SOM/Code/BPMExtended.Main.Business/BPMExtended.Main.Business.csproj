@@ -89,6 +89,8 @@
     <Compile Include="Billing\CRMCustomerManager.cs" />
     <Compile Include="Billing\CustomerRequestManager.cs" />
     <Compile Include="Billing\PabxManager.cs" />
+    <Compile Include="Request Flow Management\LeasedLineComplaintFlowManagement.cs" />
+    <Compile Include="TelephonyTechnicalComplaintManager.cs" />
     <Compile Include="CustomerRequestTypeManager.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Inventory\CPTManager.cs" />
