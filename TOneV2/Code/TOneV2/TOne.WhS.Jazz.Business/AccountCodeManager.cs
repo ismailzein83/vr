@@ -103,6 +103,37 @@ namespace TOne.WhS.Jazz.Business
             }, filterFunc);
         }
 
+        public bool ValidateAccountCode(GenericBusinessEntity genericBusinessEntity)
+        {
+            AccountCode accountCode = new AccountCode()
+            {
+                ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
+                Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
+                SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
+                TransactionTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("TransactionTypeId"),
+                Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
+                Carriers = (AccountCodeCarriers)genericBusinessEntity.FieldValues.GetRecord("Carriers"),
+                CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
+                CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
+                LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
+                LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
+            };
+
+            var accountCodes = GetCachedAccountCodes();
+
+            if(accountCodes!=null && accountCodes.Count > 0)
+            {
+                foreach(var item in accountCodes)
+                {
+                    if (item.Value.ID!=accountCode.ID &&
+                        item.Value.TransactionTypeId == accountCode.TransactionTypeId && 
+                        item.Value.SwitchId == accountCode.SwitchId &&
+                        item.Value.Carriers.Carriers.Any(x => accountCode.Carriers.Carriers.Any(y => y.CarrierAccountId == x.CarrierAccountId)))
+                        return false;
+                }
+            }
+            return true;
+        }
         public IEnumerable<AccountCode> GetAccountCodes(Guid transactionTypeId,int switchId)
         {
             var accountCodes = GetCachedAccountCodes();

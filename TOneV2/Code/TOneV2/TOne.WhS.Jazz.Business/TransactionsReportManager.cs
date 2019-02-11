@@ -37,23 +37,28 @@ namespace TOne.WhS.Jazz.Business
                 {
                     foreach (var transactionsReportData in transactionsReportsData)
                     {
-                        var excelSheet = excelFile.CreateSheet();
-                        excelSheet.SheetName = transactionsReportsDictionary.GetRecord(transactionsReportData.Key).SheetName;
-                        if (transactionsReportData.Value != null && transactionsReportData.Value.Count > 0)
+                        ERPDraftReport report = null;
+                        if (transactionsReportsDictionary.TryGetValue(transactionsReportData.Key, out report))
                         {
-                            var excelTable = excelSheet.CreateTable(0, 0);
-                            var headerRow = excelTable.CreateHeaderRow();
-                            CreateCell("Transaction Code", headerRow);
-                            CreateCell("Transaction Description", headerRow);
-                            CreateCell("Credit", headerRow);
-                            CreateCell("Debit", headerRow);
-                            foreach (var transactionReportData in transactionsReportData.Value)
+                            var excelSheet = excelFile.CreateSheet();
+
+                            excelSheet.SheetName = report.SheetName;
+                            if (transactionsReportData.Value != null && transactionsReportData.Value.Count > 0)
                             {
-                                var row = excelTable.CreateDataRow();
-                                CreateCell(transactionReportData.TransactionCode, row);
-                                CreateCell(transactionReportData.TransationDescription, row);
-                                CreateCell(transactionReportData.Credit.ToString(), row);
-                                CreateCell(transactionReportData.Debit.ToString(), row);
+                                var excelTable = excelSheet.CreateTable(0, 0);
+                                var headerRow = excelTable.CreateHeaderRow();
+                                CreateCell("Transaction Code", headerRow);
+                                CreateCell("Transaction Description", headerRow);
+                                CreateCell("Credit", headerRow);
+                                CreateCell("Debit", headerRow);
+                                foreach (var transactionReportData in transactionsReportData.Value)
+                                {
+                                    var row = excelTable.CreateDataRow();
+                                    CreateCell(transactionReportData.TransactionCode, row);
+                                    CreateCell(transactionReportData.TransationDescription, row);
+                                    CreateCell(transactionReportData.Credit.ToString(), row);
+                                    CreateCell(transactionReportData.Debit.ToString(), row);
+                                }
                             }
                         }
                     }

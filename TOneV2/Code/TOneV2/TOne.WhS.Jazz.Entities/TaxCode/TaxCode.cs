@@ -11,12 +11,11 @@ namespace TOne.WhS.Jazz.Entities
         public int SwitchId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
-        public TaxCodeTypeEnum Type { get; set; }
+        public ReportDefinitionDirectionEnum Type { get; set; }
         public DateTime CreatedTime { get; set; }
         public DateTime LastModifiedTime { get; set; }
         public int LastModifiedBy { get; set; }
         public int CreatedBy { get; set; }
     }
-    public enum TaxCodeTypeEnum { In = 1, Out = 2 }
 
 }

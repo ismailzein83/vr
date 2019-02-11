@@ -87,6 +87,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountCodeOnBeforeInsertHandler.cs" />
     <Compile Include="TransactionsReportManager.cs" />
     <Compile Include="ReportDefinitionManager.cs" />
     <Compile Include="MarketManager.cs" />

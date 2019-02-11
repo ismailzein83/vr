@@ -20,4 +20,6 @@ namespace TOne.WhS.Jazz.Entities
         public decimal? Credit { get; set; }
         public decimal? Debit { get; set; }
     }
+
+
 }

@@ -54,8 +54,11 @@ namespace TOne.WhS.Jazz.Business
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
                             Direction = (ReportDefinitionDirectionEnum)genericBusinessEntity.FieldValues.GetRecord("Direction"),
                             SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
+                            SplitRateValue = (decimal)genericBusinessEntity.FieldValues.GetRecord("SplitRateValue"),
+                            TaxOption = (TaxOptionEnum)genericBusinessEntity.FieldValues.GetRecord("TaxOption"),
                             IsEnabled = (bool)genericBusinessEntity.FieldValues.GetRecord("IsEnabled")
                         };
+
                         reportDefintion.Settings = new JazzReportDefinitionSettings();
                         reportDefintion.Settings = (JazzReportDefinitionSettings)genericBusinessEntity.FieldValues.GetRecord("Settings");
                         result.Add(reportDefintion.JazzReportDefinitionId, reportDefintion);

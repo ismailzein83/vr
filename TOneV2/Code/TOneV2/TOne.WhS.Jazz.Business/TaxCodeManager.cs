@@ -41,7 +41,7 @@ namespace TOne.WhS.Jazz.Business
                             SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
                             Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
                             Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
-                            Type = (TaxCodeTypeEnum)genericBusinessEntity.FieldValues.GetRecord("Type"),
+                            Type = (ReportDefinitionDirectionEnum)genericBusinessEntity.FieldValues.GetRecord("Type"),
                             CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
                             CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
                             LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
@@ -56,6 +56,11 @@ namespace TOne.WhS.Jazz.Business
             });
         }
 
+        public TaxCode GetTaxCode(int switchId, ReportDefinitionDirectionEnum taxCodeType )
+        {
+            var taxCodes = GetCachedTaxCodes();
+            return taxCodes.FindRecord(x => x.SwitchId == switchId && x.Type==taxCodeType);
+        }
         public IEnumerable<TaxCodeDetail> GetTaxCodesInfo(TaxCodeInfoFilter filter)
         {
             var taxCodes = GetCachedTaxCodes();

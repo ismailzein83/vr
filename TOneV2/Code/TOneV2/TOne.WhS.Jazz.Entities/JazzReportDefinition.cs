@@ -8,19 +8,21 @@ namespace TOne.WhS.Jazz.Entities
 {
     public enum ReportDefinitionDirectionEnum  { In = 0,Out = 1 }
     public enum RateCalculationTypeEnum { FullRate = 0,FixedRate = 1,PartialRate = 2 }
+    public enum TaxOptionEnum { TaxMeasure=1,ZeroTax=2}
     public class JazzReportDefinition
     {
         public Guid JazzReportDefinitionId { get; set; }
         public string Name  { get; set; }
         public ReportDefinitionDirectionEnum Direction { get; set; }
         public int SwitchId { get; set; }
+        public decimal? SplitRateValue { get; set; }
+        public TaxOptionEnum? TaxOption { get; set; }
         public JazzReportDefinitionSettings Settings { get; set; }
         public bool IsEnabled { get; set; }
 
     }
     public class JazzReportDefinitionSettings
     {
-        public AmountCalculation AmountCalculation { get; set; }
         public MarketSettings MarketSettings { get; set; }
         public RegionSettings RegionSettings { get; set; }
         public bool CreateTax { get; set; }
@@ -28,11 +30,11 @@ namespace TOne.WhS.Jazz.Entities
         public RecordFilter TaxFilter { get; set; }
         public RecordFilter ReportFilter { get; set; }
     }
-    public class AmountCalculation
-    {
-        public RateCalculationTypeEnum RateCalculationType { get; set; }
-        public decimal? FixedRateValue { get; set; }
-    }
+    //public class AmountCalculation
+    //{
+    //    public RateCalculationTypeEnum RateCalculationType { get; set; }
+    //    public decimal? FixedRateValue { get; set; }
+    //}
     public class MarketSettings
     {
         public List<MarketOption> MarketOptions { get; set; }
