@@ -432,13 +432,12 @@
             var dataStoreSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             dataStoreSelectorReadyDeferred.promise.then(function () {
-                var payload;
+                var payload = {
+                    showaddbutton: true
+                };
 
                 if (dataRecordStorageEntity != undefined) {
-                    payload = {
-                        selectedIds: dataRecordStorageEntity.DataStoreId,
-                        showaddbutton: true
-                    };
+                    payload.selectedIds = dataRecordStorageEntity.DataStoreId;
                 }
 
                 VRUIUtilsService.callDirectiveLoad(dataStoreSelectorAPI, payload, dataStoreSelectorLoadDeferred);

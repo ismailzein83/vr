@@ -659,7 +659,10 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 				var loadDataRecordStorageSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 				dataRecordStorageSelectorReadyPromiseDeferred.promise
 					.then(function () {
-						var directivePayload = { selectedIds: dataRecordStorageId };
+                        var directivePayload = {
+                            selectedIds: dataRecordStorageId,
+                            showaddbutton: true
+                        };
 						VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, directivePayload, loadDataRecordStorageSelectorPromiseDeferred);
 					});
 

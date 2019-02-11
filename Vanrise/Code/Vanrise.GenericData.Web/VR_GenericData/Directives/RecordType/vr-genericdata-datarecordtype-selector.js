@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', function (VR_GenericData_DataRecordTypeAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecordTypeAPIService', 'VR_GenericData_DataRecordTypeService', 'UtilsService', '$compile', 'VRUIUtilsService', function (VR_GenericData_DataRecordTypeAPIService, VR_GenericData_DataRecordTypeService, UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -24,6 +24,17 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
 
             ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
             ctrl.datasource = [];
+
+            $scope.addNewDataRecordType = function () {
+                var onDataRecordTypeAdded = function (dataRecordTypeObj) {
+                    ctrl.datasource.push(dataRecordTypeObj.Entity);
+                    if ($attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.push(dataRecordTypeObj.Entity);
+                    else
+                        ctrl.selectedvalues = dataRecordTypeObj.Entity;
+                };
+                VR_GenericData_DataRecordTypeService.addDataRecordType(onDataRecordTypeAdded);
+            };
 
             var ctor = new recordTypeCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
@@ -65,10 +76,14 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
         if (attrs.ismultipleselection != undefined)
             multipleselection = "ismultipleselection";
 
+        var addCliked = '';
+        if (attrs.showaddbutton != undefined)
+            addCliked = 'onaddclicked="addNewDataRecordType"';
+
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
         return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled +
-               ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"' +
+               ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" ' + addCliked +' datavaluefield="DataRecordTypeId"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"' +
                ' entityname="Type" ' + label + ' onbeforeselectionchanged="ctrl.onbeforeselectionchanged"></vr-select>';
 
     }
