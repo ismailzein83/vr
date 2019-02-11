@@ -304,6 +304,7 @@
     <Compile Include="VRTile\FiguresTileQuery.cs" />
     <Compile Include="VRTile\FiguresTileQueryDefinitionSettingsConfig.cs" />
     <Compile Include="VRTile\FiguresTileSchemaInfo.cs" />
+    <Compile Include="VRTile\TabTile.cs" />
     <Compile Include="VRTile\VRTile.cs" />
     <Compile Include="VRTile\VRTileExtendedSettingsConfig.cs" />
     <Compile Include="VRTile\VRTileReportSettings.cs" />

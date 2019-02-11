@@ -138,6 +138,10 @@
     <Content Include="Common\Directives\RDBDataType\vr-common-rdbdatatype-info.js" />
     <Content Include="Common\Directives\StatusDefinition\Templates\StatusDefinitionViewerTemplate.html" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-viewer.js" />
+    <Content Include="Common\Directives\TabTiles\Templates\TabTilesDefinitionTemplate.html" />
+    <Content Include="Common\Directives\TabTiles\Templates\TabTilesRuntimeTemplate.html" />
+    <Content Include="Common\Directives\TabTiles\vr-common-tabtiles-definition.js" />
+    <Content Include="Common\Directives\TabTiles\vr-common-tabtiles-runtime.js" />
     <Content Include="Common\Directives\VRDashboard\Templates\VRDashboardViewEditor.html" />
     <Content Include="Common\Directives\VRDashboard\vr-common-dashboard-definition.js" />
     <Content Include="Common\Directives\VRDashboard\vr-common-dashboard-vieweditor.js" />
