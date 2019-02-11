@@ -80,6 +80,7 @@
     <Compile Include="ErlangBCalculatorManager.cs" />
     <Compile Include="ExcelFileUploader\ExcelFileUploaderManager.cs" />
     <Compile Include="Filters\CommentBEDefinitionFilter.cs" />
+    <Compile Include="FigureIconManager.cs" />
     <Compile Include="LicenseManager.cs" />
     <Compile Include="CityManager.cs" />
     <Compile Include="CompanyDefinitionManager.cs" />
