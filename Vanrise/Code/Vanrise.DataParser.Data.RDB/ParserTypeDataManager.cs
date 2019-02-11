@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Vanrise.Common;
 using Vanrise.Data.RDB;
 using Vanrise.DataParser.Entities;
 using Vanrise.Entities;
+
 namespace Vanrise.DataParser.Data.RDB
 {
     public class ParserTypeDataManager : IParserTypeDataManager
@@ -41,15 +37,6 @@ namespace Vanrise.DataParser.Data.RDB
                 CreatedTimeColumnName = COL_CreatedTime,
                 ModifiedTimeColumnName = COL_LastModifiedTime
             });
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private BaseRDBDataProvider GetDataProvider()
-        {
-            return RDBDataProviderFactory.CreateProvider("DataParser", "DataParserDBConnStringKey", "DataParserDBConnString");
         }
 
         #endregion
@@ -113,6 +100,15 @@ namespace Vanrise.DataParser.Data.RDB
             where.EqualsCondition(COL_ID).Value(parserType.ParserTypeId);
 
             return queryContext.ExecuteNonQuery() > 0;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private BaseRDBDataProvider GetDataProvider()
+        {
+            return RDBDataProviderFactory.CreateProvider("DataParser", "DataParserDBConnStringKey", "DataParserDBConnString");
         }
 
         #endregion
