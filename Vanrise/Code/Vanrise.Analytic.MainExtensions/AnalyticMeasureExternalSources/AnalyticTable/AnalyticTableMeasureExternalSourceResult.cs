@@ -132,7 +132,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
         {
             List<string> _receivedDimensionNames;
 
-            public Queue<DimensionValue[]> _qPendingDimensionValues;
+            //public Queue<DimensionValue[]> _qPendingDimensionValues;
 
             List<string> _orderedDimensionKeys = new List<string>();
 
@@ -153,10 +153,12 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
                 }
 
                 AnalyticResultSubTable resultSubTable = resultSubTables[mappedSubTableIndex];
-                _qPendingDimensionValues = new Queue<DimensionValue[]>();
+                //_qPendingDimensionValues = new Queue<DimensionValue[]>();
+                _orderedDimensionKeys = new List<string>();
                 foreach (var dimValues in resultSubTable.DimensionValues)
                 {
-                    _qPendingDimensionValues.Enqueue(dimValues);
+                    _orderedDimensionKeys.Add(GetDimensionValuesGroupingKey(null, dimValues));
+                    //_qPendingDimensionValues.Enqueue(dimValues);
                 }
             }
 
@@ -165,20 +167,20 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
                 string recordToMatchDimensionGroupingKey = GetDimensionsGroupingKey(_receivedDimensionNames, receivedDBRecord);
 
                 int dimensionKeyIndex = _orderedDimensionKeys.IndexOf(recordToMatchDimensionGroupingKey);
-                if(dimensionKeyIndex < 0)
-                {
-                    while (_qPendingDimensionValues.Count > 0)
-                    {
-                        DimensionValue[] dimensionValues = _qPendingDimensionValues.Dequeue();
-                        string groupingKey = GetDimensionValuesGroupingKey(null, dimensionValues);
-                        _orderedDimensionKeys.Add(groupingKey);
-                        dimensionKeyIndex++;
-                        if (groupingKey == recordToMatchDimensionGroupingKey)
-                        {
-                            break;
-                        }
-                    }
-                }
+                //if(dimensionKeyIndex < 0)
+                //{
+                //    while (_qPendingDimensionValues.Count > 0)
+                //    {
+                //        DimensionValue[] dimensionValues = _qPendingDimensionValues.Dequeue();
+                //        string groupingKey = GetDimensionValuesGroupingKey(null, dimensionValues);
+                //        _orderedDimensionKeys.Add(groupingKey);
+                //        dimensionKeyIndex++;
+                //        if (groupingKey == recordToMatchDimensionGroupingKey)
+                //        {
+                //            break;
+                //        }
+                //    }
+                //}
 
                 record.SubTables.ThrowIfNull("record.SubTables");
                 if(record.SubTables.Count <= _mappedSubTableIndex)
