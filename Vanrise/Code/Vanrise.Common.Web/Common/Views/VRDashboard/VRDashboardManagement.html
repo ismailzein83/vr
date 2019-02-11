@@ -1,9 +1,14 @@
-﻿<!--<vr-panel ng-controller="VRCommon_VRDashBoardManagementController">
+﻿<vr-panel ng-controller="VRCommon_VRDashboardManagementController" vr-loader="scopeModel.isLoading">
+    <vr-row removeline>
+        <vr-columns  ng-repeat="vrDashboardDefinition in scopeModel.vrDashboardsDefinition" >
+            <a href="" class="link" ng-click="scopeModel.loadVRDashboardEntity(vrDashboardDefinition.VRDashboardId)">{{vrDashboardDefinition.Name}}</a>
+        </vr-columns>
+    </vr-row>
     <vr-form name="formFilter">
         <vr-row ng-if="scopeModel.vrTiles.length > 0">
             <vr-columns ng-repeat="vrTile in scopeModel.vrTiles" colnum="{{vrTile.columnWidth}}" tileitem>
-                <vr-directivewrapper directive="vrTile.runtimeEditor" title="vrTile.name" index="$index" on-ready="vrTile.onVRTileDirectiveReady"></vr-directivewrapper>
+                <vr-directivewrapper directive="vrTile.runtimeEditor" title="vrTile.name" index="$index" on-ready="vrTile.onVRTileDirectiveReady" vr-loader="scopeModel.isDirectiveLoading"></vr-directivewrapper>
             </vr-columns>
         </vr-row>
     </vr-form>
-</vr-panel>-->
+</vr-panel>

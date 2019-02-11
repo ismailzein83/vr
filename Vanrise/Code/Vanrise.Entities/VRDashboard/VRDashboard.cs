@@ -8,8 +8,10 @@ namespace Vanrise.Entities
 {
     public class VRDashboard
     {
-        public int VRDashboardId { get; set; }
+        public Guid VRDashboardId { get; set; }
+
         public string Name { get; set; }
-        public VRTileSettings Settings { get; set; }
+
+        public VRTileReportSettings Settings { get; set; }
     }
 }

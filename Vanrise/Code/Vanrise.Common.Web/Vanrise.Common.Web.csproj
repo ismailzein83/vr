@@ -139,6 +139,7 @@
     <Content Include="Common\Directives\StatusDefinition\Templates\StatusDefinitionViewerTemplate.html" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-viewer.js" />
     <Content Include="Common\Directives\VRDashboard\Templates\VRDashboardViewEditor.html" />
+    <Content Include="Common\Directives\VRDashboard\vr-common-dashboard-definition.js" />
     <Content Include="Common\Directives\VRDashboard\vr-common-dashboard-vieweditor.js" />
     <Content Include="Common\Directives\VRDynamicAPIModule\Templates\DynamicAPIModuleGridTemplate.html" />
     <Content Include="Common\Directives\VRDynamicAPIModule\vr-common-dynamicapi-module-grid.js" />

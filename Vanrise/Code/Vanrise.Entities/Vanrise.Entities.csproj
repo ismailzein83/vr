@@ -74,6 +74,7 @@
     <Compile Include="DBReplication\DBReplicationPreInsertConfig.cs" />
     <Compile Include="ErlangBCalculatorParameters.cs" />
     <Compile Include="File\VRRemoteFileInfo.cs" />
+    <Compile Include="VRDashboard\VRDashboardFilter.cs" />
     <Compile Include="VRFigureIcon.cs" />
     <Compile Include="ProcessState.cs" />
     <Compile Include="RDBDataType\RDBDataType.cs" />

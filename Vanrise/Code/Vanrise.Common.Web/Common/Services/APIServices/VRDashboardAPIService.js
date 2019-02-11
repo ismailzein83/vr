@@ -1,22 +1,30 @@
-﻿//(function (appControllers) {
+﻿(function (appControllers) {
 
-//    "use strict";
-//    VRDashboardAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
+    "use strict";
+    VRDashboardAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
 
-//    function VRDashboardAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
+    function VRDashboardAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
 
-//        var controllerName = 'VRDashboard';
+        var controllerName = 'VRDashboard';
 
-//        function GetTileExtendedSettingsConfigs() {
-//            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetTileExtendedSettingsConfigs"));
-//        }
+        return {
+            GetDashboardInfo: GetDashboardInfo,
+            GetDashboardEntity: GetDashboardEntity
+        };
 
-//        return ({
-//            GetTileExtendedSettingsConfigs: GetTileExtendedSettingsConfigs
+        function GetDashboardInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetDashboardInfo"), {
+                serializedFilter: serializedFilter
+            });
+        }
 
-//        });
-//    }
+        function GetDashboardEntity(dashboardId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetDashboardEntity"), {
+                dashboardId: dashboardId
+            });
+        }
+    }
 
-//    appControllers.service('VRCommon_VRDashboardAPIService', VRDashboardAPIService);
+    appControllers.service('VRCommon_VRDashboardAPIService', VRDashboardAPIService);
 
-//})(appControllers);
+})(appControllers);
