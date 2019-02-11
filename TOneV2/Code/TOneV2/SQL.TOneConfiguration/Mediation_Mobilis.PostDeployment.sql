@@ -255,3 +255,22 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
+
+--[genericdata].[DataRecordFieldChoice]-------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('D1AFF777-7AC4-4916-8076-009015826DEF','MobilisEricssonRecordType','{"$type":"Vanrise.GenericData.Entities.DataRecordFieldChoiceSettings, Vanrise.GenericData.Entities","Choices":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":0,"Text":"MSOriginating"},{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":1,"Text":"MSTerminating"},{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":6,"Text":"MSOriginatingSMSinMSC"},{"$type":"Vanrise.GenericData.Entities.Choice, Vanrise.GenericData.Entities","Value":7,"Text":"MSTerminatingSMSinMSC"}]}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[genericdata].[DataRecordFieldChoice] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
