@@ -650,9 +650,9 @@ namespace BPMExtended.Main.Common
                  },
                  new TelephonyContractInfo
                  {
-                      ContractId = CONTRACT_CUST3_TL2,
-                      CustomerId = CUSTOMER_ID_3,
-                      PhoneNumber= PHONE_NUMBER_7
+                      ContractId = CONTRACT_CUST2_TL1,
+                      CustomerId = CUSTOMER_ID_2,
+                      PhoneNumber= PHONE_NUMBER_8
                  }
 
             };
@@ -973,7 +973,7 @@ namespace BPMExtended.Main.Common
                      ContractId = CONTRACT_CUST2_ADSL1,
                      TelephonyContractId = CONTRACT_CUST2_TL1,
                      CustomerId = CUSTOMER_ID_2,
-                     PhoneNumber= PHONE_NUMBER_6,
+                     PhoneNumber= PHONE_NUMBER_8,
                      RatePlanId = RP_ADSL_RES_NORMAL,
                      RatePlanName = "Normal Plan",
                      UserName = "Test4",

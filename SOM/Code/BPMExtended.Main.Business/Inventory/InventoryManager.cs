@@ -759,16 +759,22 @@ namespace BPMExtended.Main.Business
 
         }
 
+        public bool AttachPhoneNumberToPathId(string phoneNumber , string pathId)
+        {
+
+            return true;
+        }
+
         public string ReserveTelephonyNumber(string phoneNumber, string pathType, string phoneNumberID, string deviceID, string mDFPortID, string dPPortID, string primaryPort, string secondaryPort)
         {
-            string objectlist = phoneNumberID + "," + deviceID + "," + mDFPortID + "," + primaryPort + "," + secondaryPort + "," + dPPortID;
-            string pathname = pathType + "_" + phoneNumber;
-            string connectors = deviceID + "," + mDFPortID + ",COPPER_LINK|" + primaryPort + "," + secondaryPort + ",COPPER_LINK";
+            //string objectlist = phoneNumberID + "," + deviceID + "," + mDFPortID + "," + primaryPort + "," + secondaryPort + "," + dPPortID;
+            //string pathname = pathType + "_" + phoneNumber;
+            //string connectors = deviceID + "," + mDFPortID + ",COPPER_LINK|" + primaryPort + "," + secondaryPort + ",COPPER_LINK";
 
             string  item = "";
             using (SOMClient client = new SOMClient())
             {
-                item = client.Get<string>(String.Format("api/SOM_Main/Inventory/ReserveTelephonyNumber?pathtype=" + pathType + "&Pathname=" + pathname + "&ObjectList=" + objectlist + "&connectors=" + connectors));
+                item = client.Get<string>(String.Format("api/SOM/Inventory/ReserveNumber?phoneNumber=" + phoneNumber + "&pathType=" + pathType + "&phoneNumberID=" + phoneNumberID + "&deviceID=" + deviceID + "&mDFPortID=" + mDFPortID + "&dPPortID=" + dPPortID + "&primaryPort=" + primaryPort + "&secondaryPort=" + secondaryPort));
             }
             return item;
         }
