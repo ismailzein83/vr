@@ -123,5 +123,12 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             return _manager.GetDAProfCalcAlertRuleFilterConfigs();
         }
+
+        [HttpGet]
+        [Route("GetAnalyticDataProviderTableConfigs")]
+        public IEnumerable<AnalyticDataProviderTableConfig> GetAnalyticDataProviderTableConfigs()
+        {
+            return _manager.GetAnalyticDataProviderTableConfigs();
+        }
     }
 }

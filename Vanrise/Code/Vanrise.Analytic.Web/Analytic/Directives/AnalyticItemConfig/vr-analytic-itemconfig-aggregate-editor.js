@@ -34,6 +34,8 @@
             this.initializeController = initializeController;
             var joinSelectorAPI;
             var joinReadyDeferred = UtilsService.createPromiseDeferred();
+            var fieldTypeAPI;
+            var fieldTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -42,10 +44,12 @@
                     joinSelectorAPI = api;
                     joinReadyDeferred.resolve();
                 };
+                $scope.scopeModel.onFieldTypeReady = function (api) {
+                    fieldTypeAPI = api;
+                    fieldTypeReadyDeferred.resolve();
+                };
 
                 defineAPI();
-
-                
             }
 
             function defineAPI() {
@@ -75,10 +79,16 @@
                         });
                         promises.push(loadJoinDirectivePromiseDeferred.promise);
 
+                        var loadFieldTypePromiseDeferred = UtilsService.createPromiseDeferred();
+                        fieldTypeReadyDeferred.promise.then(function () {
+                            var payloadFieldTypeDirective = configEntity != undefined ? configEntity.FieldType : undefined;
+
+                            VRUIUtilsService.callDirectiveLoad(fieldTypeAPI, payloadFieldTypeDirective, loadFieldTypePromiseDeferred);
+                        });
+                        promises.push(loadFieldTypePromiseDeferred.promise);
+
                         return UtilsService.waitMultiplePromises(promises);
                     }
-
-
                 };
 
                 api.getData = function () {
@@ -89,6 +99,7 @@
                         AggregateType: $scope.scopeModel.selectedAnalyticAggregateType.value,
                         JoinConfigNames: joinConfigNames,
                         CurrencySQLColumnName: $scope.scopeModel.currencySQLColumnName,
+                        FieldType: fieldTypeAPI != undefined ? fieldTypeAPI.getData() : undefined,
                     };
                     return dimension;
                 };

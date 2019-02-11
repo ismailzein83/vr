@@ -1,15 +1,17 @@
 ﻿<vr-tab header="'Settings'">
 
-    <vr-row >
+    <vr-row>
         <vr-columns width="1/3row">
             <vr-textbox value="scopeModel.sqlColumn" label="SQL Column" isrequired="true"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/3row">
             <vr-select datatextfield="description" datavaluefield="value" label="Aggregate Type" datasource="scopeModel.analyticAggregateTypes"
-                       selectedvalues="scopeModel.selectedAnalyticAggregateType" isrequired></vr-columns>
+                       selectedvalues="scopeModel.selectedAnalyticAggregateType" isrequired>
+        </vr-columns>
         <vr-columns width="1/3row">
             <vr-textbox value="scopeModel.currencySQLColumnName" label="Currency SQL Column Name"></vr-textbox>
         </vr-columns>
         <vr-analytic-join-selector on-ready="scopeModel.onJoinSelectorDirectiveReady" normal-col-num="4" ismultipleselection></vr-analytic-join-selector>
+        <vr-genericdata-fieldtype-selective on-ready="scopeModel.onFieldTypeReady" isnotrequired ></vr-genericdata-fieldtype-selective>
     </vr-row>
 </vr-tab>
