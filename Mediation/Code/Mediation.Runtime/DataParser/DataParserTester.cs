@@ -9977,6 +9977,7 @@ namespace Mediation.Runtime.DataParser
                     DayIndex = 2
                 }
             });
+
             parsers.Add("8A", new BinaryFieldParser
             {
                 Settings = new TimeParser
@@ -10018,6 +10019,7 @@ namespace Mediation.Runtime.DataParser
                     FieldName = "TimeFromRegisterSeizureToStartOfCharging"
                 }
             });
+
             parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
@@ -10053,7 +10055,6 @@ namespace Mediation.Runtime.DataParser
                     RemoveHexa = true
                 }
             });
-
 
             parsers.Add("9F7E", new BinaryFieldParser
             {
@@ -10107,7 +10108,6 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-
             parsers.Add("9F31", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
@@ -10116,7 +10116,6 @@ namespace Mediation.Runtime.DataParser
                     FieldName = "IntermediateRecordNumber"
                 }
             });
-
 
             parsers.Add("96", new BinaryFieldParser
             {
@@ -10152,6 +10151,7 @@ namespace Mediation.Runtime.DataParser
                     DayIndex = 2
                 }
             });
+
             parsers.Add("8A", new BinaryFieldParser
             {
                 Settings = new TimeParser
@@ -10167,6 +10167,7 @@ namespace Mediation.Runtime.DataParser
                     FieldName = "StopTime"
                 }
             });
+
             parsers.Add("8C", new BinaryFieldParser
             {
                 Settings = new TimeParser
@@ -10174,6 +10175,7 @@ namespace Mediation.Runtime.DataParser
                     FieldName = "CallDuration"
                 }
             });
+
             parsers.Add("8E", new BinaryFieldParser
             {
                 Settings = new TimeParser
@@ -10181,6 +10183,7 @@ namespace Mediation.Runtime.DataParser
                     FieldName = "TimeFromRegisterSeizureToStartOfCharging"
                 }
             });
+
             parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
@@ -10254,7 +10257,6 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-
             parsers.Add("9F28", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
@@ -10263,7 +10265,6 @@ namespace Mediation.Runtime.DataParser
                     FieldName = "IntermediateRecordNumber"
                 }
             });
-
 
             parsers.Add("95", new BinaryFieldParser
             {
@@ -10315,6 +10316,7 @@ namespace Mediation.Runtime.DataParser
                     FieldName = "StopTime"
                 }
             });
+
             parsers.Add("90", new BinaryFieldParser
             {
                 Settings = new TimeParser
@@ -10403,7 +10405,6 @@ namespace Mediation.Runtime.DataParser
                     FieldName = "IntermediateChargingIndicator"
                 }
             });
-
 
             parsers.Add("9F2A", new BinaryFieldParser
             {
@@ -10645,7 +10646,6 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-
             parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
@@ -10704,7 +10704,6 @@ namespace Mediation.Runtime.DataParser
                     SecondsIndex = 2
                 }
             });
-
 
             parsers.Add("84", new BinaryFieldParser
             {
@@ -10802,7 +10801,6 @@ namespace Mediation.Runtime.DataParser
                     NumberType = NumberType.Int
                 }
             });
-
 
             parsers.Add("83", new BinaryFieldParser
             {
@@ -10968,6 +10966,7 @@ namespace Mediation.Runtime.DataParser
                     NumberType = NumberType.Int
                 }
             });
+
             parsers.Add("9F2D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
@@ -11084,7 +11083,6 @@ namespace Mediation.Runtime.DataParser
                     }
                 }
             });
-
 
             return parsers;
         }
@@ -14280,21 +14278,21 @@ namespace Mediation.Runtime.DataParser
         private List<CompositeFieldsParser> GetCompositeFieldParsers_EricssonMobilis()
         {
             return new List<CompositeFieldsParser>
-                   {
-                     new FileNameCompositeParser { FieldName = "FileName" },
-                     new DataSourceCompositeParser { DataSourceFieldName = "DataSourceId" },
-                     new DateTimeCompositeParser{ DateFieldName = "DateForStartOfCharge",TimeFieldName = "TimeForStartOfCharge",FieldName = "ConnectDateTime" },
-                     new DateTimeCompositeParser{ DateFieldName = "DateForStartOfCharge",TimeFieldName = "TimeForStopOfCharge",FieldName = "DisconnectDateTime" },
-                     new DateTimeCompositeParser { FieldName = "SetupTime", DateFieldName = "ConnectDateTime", TimeFieldName = "TimeFromRegisterSeizureToStartOfCharging", SubtractTime = true },
-                  };
+            {
+                new FileNameCompositeParser { FieldName = "FileName" },
+                new DataSourceCompositeParser { DataSourceFieldName = "DataSourceId" },
+                new DateTimeCompositeParser { DateFieldName = "DateForStartOfCharge", TimeFieldName = "TimeForStartOfCharge",FieldName = "ConnectDateTime" },
+                new DateTimeCompositeParser { DateFieldName = "DateForStartOfCharge", TimeFieldName = "TimeForStopOfCharge",FieldName = "DisconnectDateTime" },
+                new DateTimeCompositeParser { FieldName = "SetupTime", DateFieldName = "ConnectDateTime", TimeFieldName = "TimeFromRegisterSeizureToStartOfCharging", SubtractTime = true },
+            };
         }
         private List<CompositeFieldsParser> GetCompositeFieldParsers_SMS_EricssonMobilis()
         {
             return new List<CompositeFieldsParser>
-                   {
-                        new FileNameCompositeParser { FieldName = "FileName" },
-                        new DataSourceCompositeParser { DataSourceFieldName = "DataSourceId" }
-                   };
+            {
+                 new FileNameCompositeParser { FieldName = "FileName" },
+                 new DataSourceCompositeParser { DataSourceFieldName = "DataSourceId" }
+            };
         }
 
         private Dictionary<string, BinaryFieldParser> Get_A1_MSOriginating_FieldParsers_EricssonMobilis()
@@ -14798,6 +14796,7 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
+
         #endregion
 
         #endregion

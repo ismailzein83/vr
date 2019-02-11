@@ -1116,31 +1116,6 @@ namespace Mediation.Runtime
 
         #region Mobilis
 
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_Mobilis(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
-        {
-            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
-            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("57E3E68E-9403-440D-A67D-CC5896D6BAD5"), (parsedBatch) =>
-            {
-                switch (parsedBatch.RecordType)
-                {
-                    case "Mobilis_Ericsson_CDR":
-                        Vanrise.Integration.Entities.MappedBatchItem cdrBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
-                        mappedBatches.Add("CDRTransformationStage", cdrBatch);
-                        break;
-
-                    case "Mobilis_Ericsson_SMS":
-                        Vanrise.Integration.Entities.MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
-                        mappedBatches.Add("SMSTransformationStage", batch);
-                        break;
-                }
-            });
-
-            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
-            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
-            LogVerbose("Finished");
-            return result;
-        }
-
         public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_111_Mobilis(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData importedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
@@ -1754,6 +1729,32 @@ namespace Mediation.Runtime
             LogVerbose("Finished");
             return result;
         }
+
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Ericsson_Mobilis(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, dataSourceId, new Guid("57E3E68E-9403-440D-A67D-CC5896D6BAD5"), (parsedBatch) =>
+            {
+                switch (parsedBatch.RecordType)
+                {
+                    case "Mobilis_Ericsson_CDR":
+                        Vanrise.Integration.Entities.MappedBatchItem cdrBatch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
+                        mappedBatches.Add("CDRTransformationStage", cdrBatch);
+                        break;
+
+                    case "Mobilis_Ericsson_SMS":
+                        Vanrise.Integration.Entities.MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Parsed CDRs", parsedBatch.RecordType);
+                        mappedBatches.Add("SMSTransformationStage", batch);
+                        break;
+                }
+            });
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
+
         #endregion
 
         #region Teles
