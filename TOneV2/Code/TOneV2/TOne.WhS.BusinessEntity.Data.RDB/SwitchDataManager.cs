@@ -66,6 +66,9 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             insertQuery.IntoTable(TABLE_NAME);
             insertQuery.AddSelectGeneratedId();
 
+            var notExistsCondition = insertQuery.IfNotExists(TABLE_ALIAS);
+            notExistsCondition.EqualsCondition(COL_Name).Value(whsSwitch.Name);
+
             insertQuery.Column(COL_Name).Value(whsSwitch.Name);
 
             if (whsSwitch.Settings != null)
@@ -97,6 +100,7 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             notExistsCondition.EqualsCondition(COL_Name).Value(whsSwitch.Name);
             notExistsCondition.NotEqualsCondition(COL_ID).Value(whsSwitch.SwitchId);
 
+            updateQuery.Column(COL_Name).Value(whsSwitch.Name);
             if (whsSwitch.Settings != null)
                 updateQuery.Column(COL_Settings).Value(Serializer.Serialize(whsSwitch.Settings));
             else
@@ -112,6 +116,15 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.ExecuteNonQuery() > 0;
         }
 
+        public bool AreSwitchesUpdated(ref object updateHandle)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
+        #endregion
+
+        #region Not Used Fucntions
+
         public bool Delete(int switchId)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
@@ -121,11 +134,6 @@ namespace TOne.WhS.BusinessEntity.Data.RDB
             return queryContext.ExecuteNonQuery() > 0;
         }
 
-        public bool AreSwitchesUpdated(ref object updateHandle)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
-        }
         #endregion
 
         #region Mappers
