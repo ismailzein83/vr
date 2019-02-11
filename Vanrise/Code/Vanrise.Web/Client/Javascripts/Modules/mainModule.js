@@ -153,8 +153,10 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 }, 200);
             };
             $scope.toogled = false;
+            $rootScope.lastToogled;
             $scope.toggledpanel = function () {
                 $scope.toogled = !$scope.toogled;
+                $rootScope.lastToogled = $scope.toogled;
             };
             $scope.getPageName = function () {
                 if ($scope.currentPage != null)
@@ -168,10 +170,12 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             };
             $rootScope.showToogled = function () {
                 $scope.toogled = true;
+                $rootScope.lastToogled = true;
                 $rootScope.$broadcast("menu-full");
             };
             $rootScope.hideToogled = function () {
                 $scope.toogled = false;
+                $rootScope.lastToogled = false;
                 $rootScope.$broadcast("menu-collapsed");
 
             };
@@ -497,7 +501,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             }
 
             function redirectToDefaultIfExist() {
-               
+
             }
 
             $rootScope.goToHomePage = function () {
@@ -528,7 +532,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 if ($rootScope.moduleFilter) {
                     $rootScope.hideToogleIcon = false;
                 }
-                $scope.toogled = UISettingsService.getMasterLayoutMenuToogledState();
+                $scope.toogled = $rootScope.lastToogled != undefined ? $rootScope.lastToogled : UISettingsService.getMasterLayoutMenuToogledState();
                 if (item.Childs && item.Childs.length > 0) {
                     $rootScope.selectedtile = item;
                     $rootScope.seledtedModuleId = item.Id;
@@ -579,6 +583,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 if (matchMenuItem != null) {
                     selectedMenuItem = matchMenuItem;
                     $rootScope.selectedMenu = matchMenuItem.parent;
+                    $rootScope.seledtedModuleId = matchMenuItem.parent.Id;
                     setMenuItemSelectedFlag(selectedMenuItem, true);
                     $rootScope.setSelectedMenuTile();
                     //$rootScope.hideToogleIcon = false;
