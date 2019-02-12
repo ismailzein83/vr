@@ -1,8 +1,12 @@
 ﻿CREATE TYPE [Mediation_WHS].[MobilisEricssonBadCDRType] AS TABLE (
     [Id]                          BIGINT           NULL,
     [RecordType]                  INT              NULL,
-    [RecordTypeName]              NVARCHAR (100)   NULL,
+    [RecordTypeName]              VARCHAR (50)     NULL,
     [CallIdentificationNumber]    INT              NULL,
+    [SetupTime]                   DATETIME         NULL,
+    [ConnectDateTime]             DATETIME         NULL,
+    [DisconnectDateTime]          DATETIME         NULL,
+    [ChargeableDurationInSeconds] INT              NULL,
     [CallingPartyNumber]          VARCHAR (50)     NULL,
     [CalledPartyNumber]           VARCHAR (50)     NULL,
     [CallingSubscriberIMSI]       VARCHAR (50)     NULL,
@@ -11,10 +15,6 @@
     [CalledSubscriberIMEI]        VARCHAR (50)     NULL,
     [CallingSubscriberIMEISV]     VARCHAR (50)     NULL,
     [DisconnectingParty]          INT              NULL,
-    [ConnectDateTime]             DATETIME         NULL,
-    [DisconnectDateTime]          DATETIME         NULL,
-    [ChargeableDurationInSeconds] INT              NULL,
-    [SetupTime]                   DATETIME         NULL,
     [IncomingRoute]               VARCHAR (20)     NULL,
     [OutgoingRoute]               VARCHAR (20)     NULL,
     [TimeForTCSeizureCalling]     INT              NULL,
@@ -24,4 +24,6 @@
     [MobileStationRoamingNumber]  VARCHAR (50)     NULL,
     [FileName]                    VARCHAR (255)    NULL,
     [DataSourceId]                UNIQUEIDENTIFIER NULL);
+
+
 
