@@ -317,7 +317,7 @@
                         var columns = getColumns();
                         var index = columns.findIndex(x => x.FieldName === selectedDataRecordTypeField.Name);
                         var col = columns[index];
-                        if (Object.values(col).filter(a => a != undefined && a != true).length <= 4) { //check if a field is entered if yes don't load the default values
+                        if (checkIfValuesAreDefault(col)) {
                             var dataRecordField = dataRecordTypeFields.find(function (element) {
                                 return element.FieldName == col.FieldName;
                             })
@@ -331,6 +331,18 @@
                         }
                     }
                 };
+
+                function checkIfValuesAreDefault(column) {
+                    if (column.ColumnName != undefined)
+                        return false;
+                    if (column.DataType != undefined)
+                        return false;
+                    if (column.IsIdentity == true)
+                        return false;
+                    if (column.IsUnique == true)
+                        return false;
+                    return true;
+                }
             }
         
             function loadDefaultRDBTypeList() {
