@@ -50,6 +50,11 @@ namespace Vanrise.Data.RDB
 
         public abstract RDBResolvedQuery ResolveTableCreationQuery(IRDBDataProviderResolveTableCreationQueryContext context);
 
+        public virtual RDBResolvedQuery ResolveRenameTableQuery(IRDBDataProviderResolveRenameTableQueryContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public abstract RDBResolvedQuery ResolveTableDropQuery(IRDBDataProviderResolveTableDropQueryContext context);
 
         public abstract RDBResolvedQuery ResolveCheckIfTableExistsQuery(IRDBDataProviderResolveCheckIfTableExistsQueryContext context);
@@ -59,6 +64,16 @@ namespace Vanrise.Data.RDB
         public abstract RDBResolvedQuery ResolveSwapTablesQuery(IRDBDataProviderResolveSwapTablesQueryContext context);
 
         public virtual RDBResolvedQuery ResolveIndexCreationQuery(IRDBDataProviderResolveIndexCreationQueryContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual RDBResolvedQuery ResolveAddColumnsQuery(IRDBDataProviderResolveAddColumnsQueryContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual RDBResolvedQuery ResolveAlterColumnsQuery(IRDBDataProviderResolveAlterColumnsQueryContext context)
         {
             throw new NotImplementedException();
         }
@@ -479,6 +494,38 @@ namespace Vanrise.Data.RDB
         public string DatabaseName { get; private set; }
     }
 
+    public interface IRDBDataProviderResolveRenameTableQueryContext : IBaseRDBResolveQueryContext
+    {
+        string ExistingSchemaName { get; }
+
+        string ExistingTableName { get; }
+
+        string NewSchemaName { get; }
+
+        string NewTableName { get; }
+    }
+
+    public class RDBDataProviderResolveRenameTableQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveRenameTableQueryContext
+    {
+        public RDBDataProviderResolveRenameTableQueryContext(string exitingSchemaName, string exitingTableName, string newSchemaName, string newTableName,
+            IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {
+            this.ExistingSchemaName = exitingSchemaName;
+            this.ExistingTableName = exitingTableName;
+            this.NewSchemaName = newSchemaName;
+            this.NewTableName = newTableName;
+        }
+
+        public string ExistingSchemaName { get; private set; }
+
+        public string ExistingTableName { get; private set; }
+
+        public string NewSchemaName { get; private set; }
+
+        public string NewTableName { get; private set; }
+    }
+
     public interface IRDBDataProviderResolveTableCreationQueryContext : IBaseRDBResolveQueryContext
     {
         string SchemaName { get; }
@@ -640,6 +687,60 @@ namespace Vanrise.Data.RDB
         public int? MaxDOP { get; private set; }
 
         public Dictionary<string, RDBCreateIndexDirection> ColumnNames { get; private set; }
+    }
+
+    public interface IRDBDataProviderResolveAddColumnsQueryContext : IBaseRDBResolveQueryContext
+    {
+        string SchemaName { get; }
+
+        string TableName { get; }
+
+        Dictionary<string, RDBAddColumnsColumnDefinition> Columns { get; }
+    }
+
+    public class RDBDataProviderResolveAddColumnsQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveAddColumnsQueryContext
+    {
+        public RDBDataProviderResolveAddColumnsQueryContext(string schemaName, string tableName, Dictionary<string, RDBAddColumnsColumnDefinition> columns,
+            IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {
+            this.SchemaName = schemaName;
+            this.TableName = tableName;
+            this.Columns = columns;
+        }
+
+        public string SchemaName { get; private set; }
+
+        public string TableName { get; private set; }
+
+        public Dictionary<string, RDBAddColumnsColumnDefinition> Columns { get; private set; }
+    }
+
+    public interface IRDBDataProviderResolveAlterColumnsQueryContext : IBaseRDBResolveQueryContext
+    {
+        string SchemaName { get; }
+
+        string TableName { get; }
+
+        Dictionary<string, RDBAlterColumnsColumnDefinition> Columns { get; }
+    }
+
+    public class RDBDataProviderResolveAlterColumnsQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveAlterColumnsQueryContext
+    {
+        public RDBDataProviderResolveAlterColumnsQueryContext(string schemaName, string tableName, Dictionary<string, RDBAlterColumnsColumnDefinition> columns,
+            IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {
+            this.SchemaName = schemaName;
+            this.TableName = tableName;
+            this.Columns = columns;
+        }
+
+        public string SchemaName { get; private set; }
+
+        public string TableName { get; private set; }
+
+        public Dictionary<string, RDBAlterColumnsColumnDefinition> Columns { get; private set; }
     }
 
     public interface IRDBDataProviderResolveTempTableCreationQueryContext : IBaseRDBResolveQueryContext

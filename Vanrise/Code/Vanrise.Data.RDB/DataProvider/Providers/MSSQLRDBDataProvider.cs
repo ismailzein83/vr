@@ -101,14 +101,15 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             return "SCOPE_IDENTITY()";
         }
 
-        public override void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName, RDBTableColumnDefinition columnDefinition, bool notNullable, bool isIdentityColumn)
+        public override void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName, RDBTableColumnDefinition columnDefinition, bool? notNullable, bool isIdentityColumn)
         {
             columnsQueryBuilder.Append(columnDBName);
             columnsQueryBuilder.Append(" ");
             columnsQueryBuilder.Append(GetColumnDBType(columnName, columnDefinition));
             if (isIdentityColumn)
                 columnsQueryBuilder.Append(" IDENTITY(1,1) ");
-            columnsQueryBuilder.Append(notNullable ? " NOT NULL " : " NULL ");
+            if (notNullable.HasValue)
+                columnsQueryBuilder.Append(notNullable.Value ? " NOT NULL " : " NULL ");
         }
 
         public override BaseRDBStreamForBulkInsert InitializeStreamForBulkInsert(IRDBDataProviderInitializeStreamForBulkInsertContext context)
@@ -307,6 +308,43 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             return resolvedQuery;
         }
 
+        public override RDBResolvedQuery ResolveTableCreationQuery(IRDBDataProviderResolveTableCreationQueryContext context)
+        {            
+            var resolvedQuery = base.ResolveTableCreationQuery(context);
+            if (resolvedQuery != null)
+            {
+                if (context.SchemaName != null && context.SchemaName != "dbo")
+                {
+                    string createSchemaQuery = $@"IF NOT EXISTS(SELECT * FROM sys.schemas s WHERE s.name = '{context.SchemaName}')
+                                            BEGIN
+                                                 EXEC('CREATE SCHEMA {context.SchemaName}')
+                                            END";
+                    resolvedQuery.Statements.Insert(0, new RDBResolvedQueryStatement { TextStatement = createSchemaQuery });
+                }
+            }
+            return resolvedQuery;
+        }
+
+        public override RDBResolvedQuery ResolveRenameTableQuery(IRDBDataProviderResolveRenameTableQueryContext context)
+        {
+            StringBuilder queryBuilder = new StringBuilder();
+            string existingSchemaName = context.ExistingSchemaName != null ? context.ExistingSchemaName : "dbo";
+            string newSchemaName = context.NewSchemaName != null ? context.NewSchemaName : "dbo";
+            if (context.NewSchemaName != context.ExistingSchemaName)
+            {
+                if (context.NewSchemaName != null)//not dbo
+                    queryBuilder.AppendLine($"IF NOT EXISTS (SELECT schema_name FROM information_schema.schemata WHERE schema_name = '{newSchemaName}') BEGIN EXEC sp_executesql N'CREATE SCHEMA {newSchemaName}' END;");
+
+                queryBuilder.Append($@"ALTER SCHEMA ""{newSchemaName}"" TRANSFER ""{existingSchemaName}"".""{context.ExistingTableName}"";");
+            }
+            if (context.NewTableName != context.ExistingTableName)
+                queryBuilder.AppendLine($@"BEGIN EXEC sp_executesql N'sp_rename ''{newSchemaName}.{context.ExistingTableName}'', ''{context.NewTableName}''' END;");
+
+            var resolvedQuery = new RDBResolvedQuery();
+            resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
+            return resolvedQuery;
+        }
+
         public override RDBResolvedQuery ResolveSwapTablesQuery(IRDBDataProviderResolveSwapTablesQueryContext context)
         {
             string existingTableDBNameWithSchema = GetTableDBName(context.SchemaName, context.ExistingTable);
@@ -325,6 +363,49 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             var resolvedQuery = new RDBResolvedQuery();
             resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = query });
             return resolvedQuery;
+        }
+
+        public override RDBResolvedQuery ResolveAddColumnsQuery(IRDBDataProviderResolveAddColumnsQueryContext context)
+        {
+            if (context.Columns != null && context.Columns.Count > 0)
+            {
+                StringBuilder queryBuilder = new StringBuilder();
+                queryBuilder.Append($" ALTER TABLE {GetTableDBName(context.SchemaName, context.TableName)} ADD ");
+                bool firstColumn = true;
+                foreach(var col in context.Columns)
+                {
+                    if (!firstColumn)
+                        queryBuilder.Append(", ");
+                    queryBuilder.Append($" {col.Value.ColumnDefinition.DBColumnName} {GetColumnDBType(col.Key, col.Value.ColumnDefinition)} {(col.Value.IsIdentity ? "IDENTITY(1,1)" : "")} {(col.Value.NotNullable.HasValue ? (col.Value.NotNullable.Value ? "NOT NULL " : "NULL ") : "")}");
+                    firstColumn = false;
+                }
+                var resolvedQuery = new RDBResolvedQuery();
+                resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
+                return resolvedQuery;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public override RDBResolvedQuery ResolveAlterColumnsQuery(IRDBDataProviderResolveAlterColumnsQueryContext context)
+        {
+            if (context.Columns != null && context.Columns.Count > 0)
+            {
+                StringBuilder queryBuilder = new StringBuilder();
+                foreach (var col in context.Columns)
+                {
+                    queryBuilder.AppendLine($" ALTER TABLE {GetTableDBName(context.SchemaName, context.TableName)} ALTER COLUMN { col.Value.ColumnDefinition.DBColumnName} {GetColumnDBType(col.Key, col.Value.ColumnDefinition)} {(col.Value.NotNullable.HasValue ? (col.Value.NotNullable.Value ? "NOT NULL " : "NULL ") : "")} ; ");
+                }
+                var resolvedQuery = new RDBResolvedQuery();
+                resolvedQuery.Statements.Add(new RDBResolvedQueryStatement { TextStatement = queryBuilder.ToString() });
+                return resolvedQuery;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         #region Private Classes

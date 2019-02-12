@@ -530,7 +530,7 @@ namespace Vanrise.Data.RDB.DataProvider
         }
 
         public abstract void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName,
-            RDBTableColumnDefinition columnDefinition, bool notNullable, bool isIdentityColumn);
+            RDBTableColumnDefinition columnDefinition, bool? notNullable, bool isIdentityColumn);
 
         public override RDBResolvedQuery ResolveTempTableCreationQuery(IRDBDataProviderResolveTempTableCreationQueryContext context)
         {

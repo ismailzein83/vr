@@ -97,7 +97,16 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         public override void UpdateRecordStorage(IUpdateRecordStorageContext context)
         {
-            
+            var rdbDataStoreSettings = context.DataStore.Settings.CastWithValidate<RDBDataStoreSettings>("context.DataStore.Settings", context.DataStore.DataStoreId);
+            var rdbDataRecordStorageSettings = context.RecordStorage.Settings.CastWithValidate<RDBDataRecordStorageSettings>("context.DataRecordStorage.Settings", context.RecordStorage.DataRecordStorageId);
+            var existingRecordStorageSettings = context.ExistingRecordSettings as RDBDataRecordStorageSettings;
+
+            var dataManager = new RDBRecordStorageDataManager(rdbDataStoreSettings, rdbDataRecordStorageSettings, context.RecordStorage, null);
+
+            if (existingRecordStorageSettings == null)
+                dataManager.CreateRDBRecordStorageTable();
+            else
+                dataManager.AlterRDBRecordStorageTable(existingRecordStorageSettings);
         }
     }
 }

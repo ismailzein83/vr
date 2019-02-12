@@ -425,27 +425,89 @@ namespace Vanrise.GenericData.RDBDataStorage
 
         #region Internal Methods
 
+        internal void CreateRDBRecordStorageTable()
+        {
+            CreateDBTable(_dataRecordStorageSettings.TableName);
+        }
+
         internal RDBTempStorageInformation CreateTempRDBRecordStorageTable(long processId)
         {
             string tableName = string.Format("{0}_Temp_{1}", _dataRecordStorageSettings.TableName, processId);
+            CreateDBTable(tableName);
+            return new RDBTempStorageInformation()
+            {
+                Schema = _dataRecordStorageSettings.TableSchema,
+                TableName = tableName
+            };
+        }
+
+        private void CreateDBTable(string tableName)
+        {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var createTableQuery = queryContext.AddCreateTableQuery();
             createTableQuery.DBTableName(_dataRecordStorageSettings.TableSchema, tableName);
+            string idFieldName = this.DataRecordType.Settings.IdField;
             foreach (var col in _dataRecordStorageSettings.Columns)
             {
-                createTableQuery.AddColumn(col.FieldName, col.ColumnName, col.DataType, col.Size, col.Precision, false, false, false);
+                createTableQuery.AddColumn(col.FieldName, col.ColumnName, col.DataType, col.Size, col.Precision, null, col.FieldName == idFieldName, col.IsIdentity);
             }
             if (_dataRecordStorageSettings.IncludeQueueItemId)
             {
                 createTableQuery.AddColumn("QueueItemId", RDBDataType.BigInt);
             }
             queryContext.ExecuteNonQuery();
+        }
 
-            return new RDBTempStorageInformation()
+        internal void AlterRDBRecordStorageTable(RDBDataRecordStorageSettings existingRecordStorageSettings)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            if(_dataRecordStorageSettings.TableSchema != existingRecordStorageSettings.TableSchema || _dataRecordStorageSettings.TableName != existingRecordStorageSettings.TableName)
             {
-                Schema = _dataRecordStorageSettings.TableSchema,
-                TableName = tableName
-            };
+                var renameTableQuery = queryContext.AddRenameTableQuery();
+                renameTableQuery.ExistingDBTableName(existingRecordStorageSettings.TableSchema, existingRecordStorageSettings.TableName);
+                renameTableQuery.NewDBTableName(_dataRecordStorageSettings.TableSchema, _dataRecordStorageSettings.TableName);
+            }
+
+            RDBAddColumnsQuery addColumnsQuery = null;
+            RDBAlterColumnsQuery alterColumnsQuery = null;
+
+            foreach (var column in _dataRecordStorageSettings.Columns)
+            {
+                var existingMatch = existingRecordStorageSettings.Columns.FirstOrDefault(itm => itm.ColumnName == column.ColumnName);
+                if (existingMatch == null)
+                {
+                    if (addColumnsQuery == null)
+                    {
+                        addColumnsQuery = queryContext.AddAddColumnsQuery();
+                        addColumnsQuery.DBTableName(_dataRecordStorageSettings.TableSchema, _dataRecordStorageSettings.TableName);
+                    }
+                    addColumnsQuery.AddColumn(column.FieldName, column.ColumnName, column.DataType, column.Size, column.Precision, null, column.IsIdentity);
+                }
+                else if (column.DataType != existingMatch.DataType 
+                    || column.Size != existingMatch.Size 
+                    || column.Precision != existingMatch.Precision)
+                {
+                    if(alterColumnsQuery == null)
+                    {
+                        alterColumnsQuery = queryContext.AddAlterColumnsQuery();
+                        alterColumnsQuery.DBTableName(_dataRecordStorageSettings.TableSchema, _dataRecordStorageSettings.TableName);
+                    }
+                    alterColumnsQuery.AddColumn(column.FieldName, column.ColumnName, column.DataType, column.Size, column.Precision, null);
+                }
+            }
+
+            if(_dataRecordStorageSettings.IncludeQueueItemId && !existingRecordStorageSettings.IncludeQueueItemId)
+            {
+                if (addColumnsQuery == null)
+                {
+                    addColumnsQuery = queryContext.AddAddColumnsQuery();
+                    addColumnsQuery.DBTableName(_dataRecordStorageSettings.TableSchema, _dataRecordStorageSettings.TableName);
+                }
+                addColumnsQuery.AddColumn("QueueItemId", RDBDataType.BigInt);
+            }
+
+            queryContext.ExecuteNonQuery(true);
         }
 
         internal void DropStorage()

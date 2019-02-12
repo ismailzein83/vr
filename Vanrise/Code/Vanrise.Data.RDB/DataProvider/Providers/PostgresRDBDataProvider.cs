@@ -299,7 +299,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             return new PostgresRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters, context.ExecuteTransactional));
         }
 
-        public override void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName, RDBTableColumnDefinition columnDefinition, bool notNullable, bool isIdentityColumn)
+        public override void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName, RDBTableColumnDefinition columnDefinition, bool? notNullable, bool isIdentityColumn)
         {
             columnsQueryBuilder.Append(columnDBName);
             columnsQueryBuilder.Append(" ");
@@ -316,7 +316,8 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             {
                 columnsQueryBuilder.Append(GetColumnDBType(columnName, columnDefinition));
             }
-            columnsQueryBuilder.Append(notNullable ? " NOT NULL " : " NULL ");
+            if (notNullable.HasValue)
+                columnsQueryBuilder.Append(notNullable.Value ? " NOT NULL " : " NULL ");
         }
 
         protected override string GetNVarcharDBType(int? size)

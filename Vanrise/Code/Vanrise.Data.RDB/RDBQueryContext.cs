@@ -127,6 +127,27 @@ namespace Vanrise.Data.RDB
             return query;
         }
 
+        public RDBRenameTableQuery AddRenameTableQuery()
+        {
+            var query = new RDBRenameTableQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
+        public RDBAddColumnsQuery AddAddColumnsQuery()
+        {
+            var query = new RDBAddColumnsQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
+        public RDBAlterColumnsQuery AddAlterColumnsQuery()
+        {
+            var query = new RDBAlterColumnsQuery(QueryBuilderContext.CreateChildContext());
+            Queries.Add(query);
+            return query;
+        }
+
         public RDBCreateSchemaIfNotExistsQuery AddCreateSchemaIfNotExistsQuery()
         {
             var query = new RDBCreateSchemaIfNotExistsQuery(QueryBuilderContext.CreateChildContext());
@@ -261,6 +282,8 @@ namespace Vanrise.Data.RDB
         {
             var resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
             var resolvedQuery = this.GetResolvedQuery(resolveQueryContext);
+            if (resolvedQuery.Statements.Count == 0)
+                return 0;
             var context = new RDBDataProviderExecuteNonQueryContext(resolveQueryContext, resolvedQuery, executeTransactional, resolveQueryContext.Parameters, commandTimeoutInSeconds);
             return this.DataProvider.ExecuteNonQuery(context);
         }
@@ -279,6 +302,8 @@ namespace Vanrise.Data.RDB
         {
             var resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
             var resolvedQuery = GetResolvedQuery(resolveQueryContext);
+            if (resolvedQuery.Statements.Count == 0)
+                return null;
             var context = new RDBDataProviderExecuteScalarContext(resolveQueryContext, resolvedQuery, executeTransactional, resolveQueryContext.Parameters, commandTimeoutInSeconds);
             return this.DataProvider.ExecuteScalar(context);
         }
@@ -328,6 +353,8 @@ namespace Vanrise.Data.RDB
         {
             var resolveQueryContext = new RDBQueryGetResolvedQueryContext(this.DataProvider);
             var resolvedQuery = GetResolvedQuery(resolveQueryContext);
+            if (resolvedQuery.Statements.Count == 0)
+                return;
             var context = new RDBDataProviderExecuteReaderContext(resolveQueryContext, resolvedQuery, executeTransactional, resolveQueryContext.Parameters, commandTimeoutInSeconds, onReaderReady);
             this.DataProvider.ExecuteReader(context);
         }

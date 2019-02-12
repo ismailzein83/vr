@@ -4,21 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
+
 namespace Vanrise.Data.RDB
 {
-    public class RDBCreateTableQuery : BaseRDBQuery
+    public class RDBAlterColumnsQuery : BaseRDBQuery
     {
-        DBTableInfo _dbTableInfo;
-
-        Dictionary<string, DBTableInfo> _dbTableInfosByProviderUniqueName = new Dictionary<string, DBTableInfo>();
-
-        Dictionary<string, RDBCreateTableColumnDefinition> _columns = new Dictionary<string, RDBCreateTableColumnDefinition>();
-
         RDBQueryBuilderContext _queryBuilderContext;
-        bool _identityColumnSpecified;
-        bool _primaryKeyIndexNonClustered;
+        DBTableInfo _dbTableInfo;
+        Dictionary<string, DBTableInfo> _dbTableInfosByProviderUniqueName = new Dictionary<string, DBTableInfo>();
+        Dictionary<string, RDBAlterColumnsColumnDefinition> _columns = new Dictionary<string, RDBAlterColumnsColumnDefinition>();
 
-        internal RDBCreateTableQuery(RDBQueryBuilderContext queryBuilderContext)
+        internal RDBAlterColumnsQuery(RDBQueryBuilderContext queryBuilderContext)
         {
             _queryBuilderContext = queryBuilderContext;
         }
@@ -54,23 +50,18 @@ namespace Vanrise.Data.RDB
 
         public void AddColumn(string columnName, RDBDataType dataType, bool? notNullable)
         {
-            AddColumn(columnName, columnName, dataType, null, null, notNullable, false, false);
+            AddColumn(columnName, dataType, null, null, notNullable);
         }
 
         public void AddColumn(string columnName, RDBDataType dataType, int? size, int? precision, bool? notNullable)
         {
-            AddColumn(columnName, columnName, dataType, size, precision, notNullable, false, false);
+            AddColumn(columnName, columnName, dataType, size, precision, notNullable);
         }
 
-        public void AddColumn(string columnName, string dbColumnName, RDBDataType dataType, int? size, int? precision, bool? notNullable, bool isPrimaryKey, bool isIdentity)
+        public void AddColumn(string columnName, string dbColumnName, RDBDataType dataType, int? size, int? precision, bool? notNullable)
         {
-            if(isIdentity)
-            {
-                if (_identityColumnSpecified)
-                    throw new Exception("Identity Column is already specified");
-                _identityColumnSpecified = true;
-            }
-            this._columns.Add(columnName, new RDBCreateTableColumnDefinition
+
+            this._columns.Add(columnName, new RDBAlterColumnsColumnDefinition
             {
                 ColumnDefinition = new RDBTableColumnDefinition
                 {
@@ -79,15 +70,8 @@ namespace Vanrise.Data.RDB
                     Size = size,
                     Precision = precision
                 },
-                NotNullable = isPrimaryKey ? true : notNullable,
-                IsPrimaryKey = isPrimaryKey,
-                IsIdentity = isIdentity
-            });            
-        }
-
-        public void PrimaryKeyIndexNonClustered()
-        {
-            _primaryKeyIndexNonClustered = true;
+                NotNullable = notNullable
+            });
         }
 
         public override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
@@ -95,8 +79,8 @@ namespace Vanrise.Data.RDB
             DBTableInfo dbTableInfo;
             if (!_dbTableInfosByProviderUniqueName.TryGetValue(context.DataProvider.UniqueName, out dbTableInfo))
                 dbTableInfo = _dbTableInfo;
-            var resolveQueryContext = new RDBDataProviderResolveTableCreationQueryContext(dbTableInfo.DBSchemaName, dbTableInfo.DBTableName, _columns, _primaryKeyIndexNonClustered, context);
-            return context.DataProvider.ResolveTableCreationQuery(resolveQueryContext);
+            var resolveQueryContext = new RDBDataProviderResolveAlterColumnsQueryContext(dbTableInfo.DBSchemaName, dbTableInfo.DBTableName, _columns, context);
+            return context.DataProvider.ResolveAlterColumnsQuery(resolveQueryContext);
         }
 
         #region Private Classes
@@ -111,14 +95,10 @@ namespace Vanrise.Data.RDB
         #endregion
     }
 
-    public class RDBCreateTableColumnDefinition
+    public class RDBAlterColumnsColumnDefinition
     {
         public RDBTableColumnDefinition ColumnDefinition { get; set; }
 
         public bool? NotNullable { get; set; }
-
-        public bool IsPrimaryKey { get; set; }
-
-        public bool IsIdentity { get; set; }
     }
 }

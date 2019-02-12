@@ -233,14 +233,15 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             return new MySQLRDBFieldValue(_dataManager.ExecuteScalar(context.Query, context.Parameters, context.ExecuteTransactional));
         }
 
-        public override void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName, RDBTableColumnDefinition columnDefinition, bool notNullable, bool isIdentityColumn)
+        public override void AppendTableColumnDefinition(StringBuilder columnsQueryBuilder, string columnName, string columnDBName, RDBTableColumnDefinition columnDefinition, bool? notNullable, bool isIdentityColumn)
         {
             columnsQueryBuilder.Append(columnDBName);
             columnsQueryBuilder.Append(" ");
             columnsQueryBuilder.Append(GetColumnDBType(columnName, columnDefinition));
             if (isIdentityColumn)
                 columnsQueryBuilder.Append(" AUTO_INCREMENT ");
-            columnsQueryBuilder.Append(notNullable ? " NOT NULL " : " NULL ");
+            if (notNullable.HasValue)
+                columnsQueryBuilder.Append(notNullable.Value ? " NOT NULL " : " NULL ");
         }
 
         public override RDBResolvedQuery ResolveIndexCreationQuery(IRDBDataProviderResolveIndexCreationQueryContext context)

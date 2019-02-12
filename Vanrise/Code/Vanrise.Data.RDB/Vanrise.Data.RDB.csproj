@@ -69,6 +69,8 @@
     <Compile Include="DataProvider\Providers\MySQLRDBDataProvider.cs" />
     <Compile Include="DataProvider\Providers\OracleRDBDataProvider.cs" />
     <Compile Include="DataProvider\Providers\PostgresRDBDataProvider.cs" />
+    <Compile Include="ExecuteNonQuery\RDBAddColumnsQuery.cs" />
+    <Compile Include="ExecuteNonQuery\RDBAlterColumnsQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBCreateIndexQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBCreateSchemaQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBCreateTableQuery.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="ExecuteNonQuery\RDBInsertMultipleRowsQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBInsertMultipleRowsQueryRowContext.cs" />
     <Compile Include="ExecuteNonQuery\RDBParameterDeclarationQuery.cs" />
+    <Compile Include="ExecuteNonQuery\RDBRenameTableQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBSetParameterValuesQuery.cs" />
     <Compile Include="ExecuteNonQuery\RDBSwapTableQuery.cs" />
     <Compile Include="Expressions\BaseRDBExpression.cs" />
