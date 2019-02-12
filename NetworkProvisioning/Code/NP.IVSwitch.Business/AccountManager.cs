@@ -37,8 +37,11 @@ namespace NP.IVSwitch.Business
                 BillingCycle = 1,
                 TaxGroupId = 1,
                 PaymentTerms = 3,
-                CreditLimit = -1
-            };
+                CreditLimit = null,
+				CreditThreshold=null,
+				CurrentBalance=-10000000
+
+			};
             return account;
         }
 

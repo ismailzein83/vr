@@ -37,8 +37,8 @@ namespace NP.IVSwitch.Data.Postgres
                 TaxGroupId = (Int16)reader["tax_group_id"],
                 PaymentTerms = (Int16)reader["pay_terms"],
                 CurrentState = (State)(Int16)reader["state_id"],
-                CreditLimit = (decimal)reader["credit_limit"],
-                CreditThreshold = (decimal)reader["threshold_credit"],
+                CreditLimit = (decimal?)reader["credit_limit"],
+                CreditThreshold = (decimal?)reader["threshold_credit"],
                 CurrentBalance = (decimal)reader["balance"],
                 LogAlias = reader["log_alias"] as string,
                 Address = reader["address"] as string,
@@ -68,9 +68,9 @@ namespace NP.IVSwitch.Data.Postgres
         public bool Insert(Account account, out int insertedId)
         {
             String cmdText = @"INSERT INTO accounts(type_id,first_name,last_name,company_name,contact_display,email,web_site,cycle_id,tax_group_id,
-	                               pay_terms,state_id,credit_limit,log_alias,address,channels_limit)
+	                               pay_terms,state_id,credit_limit,log_alias,address,channels_limit,threshold_credit,balance)
 	                             SELECT @type_id,@first_name,@last_name, @company_name,@contact_display, @email,@web_site,@cycle_id,@tax_group_id,
-	                                    @pay_terms, @state_id,@credit_limit,@log_alias,@address,@channels_limit
+	                                    @pay_terms, @state_id,@credit_limit,@log_alias,@address,@channels_limit,@threshold_credit,@balance
 	                             WHERE (NOT EXISTS(SELECT 1 FROM accounts WHERE  type_id = @type_id and email = @email))
 	                             returning  account_id;";
 
@@ -91,7 +91,7 @@ namespace NP.IVSwitch.Data.Postgres
                 cmd.Parameters.AddWithValue("@tax_group_id", account.TaxGroupId);
                 cmd.Parameters.AddWithValue("@pay_terms", account.PaymentTerms);
                 cmd.Parameters.AddWithValue("@state_id", (int)account.CurrentState);
-                cmd.Parameters.AddWithValue("@credit_limit", account.CreditLimit);
+                cmd.Parameters.AddWithValue("@credit_limit", (account.CreditLimit.HasValue)?account.CreditLimit.Value:(Object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@log_alias", account.LogAlias);
                 var prmAddress = new Npgsql.NpgsqlParameter("@address", DbType.String)
                 {
@@ -99,8 +99,10 @@ namespace NP.IVSwitch.Data.Postgres
                 };
                 cmd.Parameters.Add(prmAddress);
                 cmd.Parameters.AddWithValue("@channels_limit", account.ChannelsLimit);
-            }
-                );
+				cmd.Parameters.AddWithValue("@threshold_credit", (account.CreditThreshold.HasValue) ? account.CreditThreshold.Value : (Object)DBNull.Value);
+				cmd.Parameters.AddWithValue("@balance", account.CurrentBalance);
+			}
+				);
 
             insertedId = -1;
             if (accountId != null)

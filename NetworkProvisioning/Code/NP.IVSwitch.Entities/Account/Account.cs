@@ -24,8 +24,8 @@ namespace NP.IVSwitch.Entities
         public int TaxGroupId {get;set;}//tax_group_id
         public int PaymentTerms {get;set;}//pay_terms
         public State CurrentState { get; set; }//state_id   
-        public decimal CreditLimit{get;set;} //credit_limit
-        public decimal CreditThreshold{get;set;}//threshold_credit
+        public decimal? CreditLimit{get;set;} //credit_limit
+        public decimal? CreditThreshold{get;set;}//threshold_credit
         public decimal CurrentBalance {get;set;}//balance
         public String LogAlias{get;set;}//log_alias
         public String Address{get;set;}//address
