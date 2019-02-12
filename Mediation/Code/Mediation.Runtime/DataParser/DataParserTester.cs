@@ -9783,9 +9783,9 @@ namespace Mediation.Runtime.DataParser
             return new List<CompositeFieldsParser>
                    {
                        new FileNameCompositeParser { FieldName = "FileName" },
-                       new GuidCompositeParser { FieldName="UniqueIdentifier" },
-                       new DateTimeCompositeParser{ DateFieldName = "Date",TimeFieldName = "StartTime",FieldName = "ConnectDateTime" },
-                       new DateTimeCompositeParser{ DateFieldName = "Date",TimeFieldName = "StopTime",FieldName = "DisconnectDateTime" },
+                       new GuidCompositeParser { FieldName = "UniqueIdentifier" },
+                       new DateTimeCompositeParser { FieldName = "ConnectDateTime", DateFieldName = "Date", TimeFieldName = "StartTime" },
+                       new DateTimeCompositeParser { FieldName = "DisconnectDateTime", DateFieldName = "Date",TimeFieldName = "StopTime" },
                        new DateTimeCompositeParser { FieldName = "SetupTime", DateFieldName = "ConnectDateTime", TimeFieldName = "TimeFromRegisterSeizureToStartOfCharging", SubtractTime = true },
                        new TimestampDateTimeCompositeParser
                        {
@@ -14273,7 +14273,7 @@ namespace Mediation.Runtime.DataParser
 
         private HashSet<string> GetTempFieldsName_EricssonMobilis()
         {
-            return new HashSet<string> { "DateForStartOfCharge", "TimeForStartOfCharge", "TimeForStopOfCharge" };
+            return new HashSet<string> { "DateForStartOfCharge", "TimeForStartOfCharge", "TimeForStopOfCharge", "TimeFromRegisterSeizureToStartOfCharging" };
         }
         private List<CompositeFieldsParser> GetCompositeFieldParsers_EricssonMobilis()
         {
@@ -14281,8 +14281,8 @@ namespace Mediation.Runtime.DataParser
             {
                 new FileNameCompositeParser { FieldName = "FileName" },
                 new DataSourceCompositeParser { DataSourceFieldName = "DataSourceId" },
-                new DateTimeCompositeParser { DateFieldName = "DateForStartOfCharge", TimeFieldName = "TimeForStartOfCharge",FieldName = "ConnectDateTime" },
-                new DateTimeCompositeParser { DateFieldName = "DateForStartOfCharge", TimeFieldName = "TimeForStopOfCharge",FieldName = "DisconnectDateTime" },
+                new DateTimeCompositeParser { FieldName = "ConnectDateTime", DateFieldName = "DateForStartOfCharge", TimeFieldName = "TimeForStartOfCharge" },
+                new DateTimeCompositeParser { FieldName = "DisconnectDateTime", DateFieldName = "DateForStartOfCharge", TimeFieldName = "TimeForStopOfCharge"},
                 new DateTimeCompositeParser { FieldName = "SetupTime", DateFieldName = "ConnectDateTime", TimeFieldName = "TimeFromRegisterSeizureToStartOfCharging", SubtractTime = true },
             };
         }
@@ -14439,7 +14439,7 @@ namespace Mediation.Runtime.DataParser
                     RemoveHexa = true
                 }
             });
-            
+
             return parsers;
         }
         private Dictionary<string, BinaryFieldParser> Get_A4_MSTerminating_FieldParsers_EricssonMobilis()
