@@ -26,7 +26,7 @@
                                  maxheight="400px"
                                  hidegridmenu>
                         <vr-datagridcolumn headertext="'Field Name'" widthfactor="3" disablesorting>
-                            <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onDataRecordTypeFieldsSelectorReady" vr-loader="dataItem.isLoadingDataRecordTypeFieldsDirective" hidelabel isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+                            <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onDataRecordTypeFieldsSelectorReady"  onselectionchanged="dataItem.onDataRecordTypeFieldsChanged" vr-loader="dataItem.isLoadingDataRecordTypeFieldsDirective" hidelabel isrequired="true"></vr-genericdata-datarecordtypefields-selector>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Column Name'" widthfactor="3" disablesorting>
                             <vr-textbox value="dataItem.columnName" isrequired="true"></vr-textbox>

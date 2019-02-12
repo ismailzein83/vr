@@ -36,13 +36,14 @@
             function initializeController() {
                 connectionStringType = {
                     ConnectionString: { value: 0, description: "Connection String" },
-                    ConnectionStringName: { value: 1, description: "Connection String Name" },
-                    ConnectionStringAppSettingName: { value: 2, description: "Connection String App Setting Name" },
+                    ConnectionStringNameAppSettings: { value: 1, description: "Connection String Name/AppSettingName" },
                 };
 
                 $scope.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
                 $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
                 $scope.showConnectionString = true;
+                $scope.showConnectionStringNameAppSettings = false;
+
                 $scope.showConnectionStringName = false;
                 $scope.showConnectionStringAppSettingsName = false;
 
@@ -52,22 +53,60 @@
                         switch ($scope.selectedConnectionStringType.value) {
                             case connectionStringType.ConnectionString.value:
                                 $scope.showConnectionString = true;
+                                $scope.showConnectionStringNameAppSettings = false;
                                 $scope.showConnectionStringName = false;
                                 $scope.showConnectionStringAppSettingsName = false;
                                 break;
-                            case connectionStringType.ConnectionStringName.value:
-                                $scope.showConnectionStringName = true;
+                            case connectionStringType.ConnectionStringNameAppSettings.value:
+                                $scope.showConnectionStringNameAppSettings = true;
                                 $scope.showConnectionString = false;
-                                $scope.showConnectionStringAppSettingsName = false;
-                                break;
-                            case connectionStringType.ConnectionStringAppSettingName.value:
-                                $scope.showConnectionStringAppSettingsName = true;
-                                $scope.showConnectionString = false;
-                                $scope.showConnectionStringName = false;
+                                if ($scope.connectionStringAppSettingName == undefined) {
+                                    $scope.showConnectionStringName = true;
+                                }
+                                else {
+                                    $scope.showConnectionStringName = false;
+                                }
+                                if ($scope.connectionStringName == undefined) {
+                                    $scope.showConnectionStringAppSettingsName = true;
+                                }
+                                else {
+                                    $scope.showConnectionStringAppSettingsName = false;
+                                }
                                 break;
                         }
                     }
                 };
+
+                $scope.onConnectionStringNameValueChange = function (changedValue) {
+                    if (changedValue != undefined && $scope.connectionStringAppSettingName == undefined) {
+                        $scope.showConnectionStringAppSettingsName = false;
+                    }
+                    if (changedValue == undefined) {
+                        if ($scope.connectionStringAppSettingName != undefined) {
+                            $scope.showConnectionStringName = false;
+                        }
+                        else {
+                            $scope.showConnectionStringAppSettingsName = true;
+                            $scope.showConnectionStringName = true;
+                        }
+                    }
+                };
+
+                $scope.onConnectionStringAppSettingsValueChange = function (changedValue) {
+                    if (changedValue != undefined && $scope.connectionStringName == undefined) {
+                        $scope.showConnectionStringName = false;
+                    }
+                    if (changedValue == undefined) {
+                        if ($scope.connectionStringName != undefined) {
+                            $scope.showConnectionStringAppSettingsName = false;
+                        }
+                        else {
+                            $scope.showConnectionStringName = true;
+                            $scope.showConnectionStringAppSettingsName = true;
+                        }
+                    }
+                };
+
                 defineAPI();
             }
 
@@ -77,9 +116,9 @@
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage",
-                        ConnectionStringName: $scope.showConnectionStringName ? $scope.connectionStringName : undefined,
+                        ConnectionStringName: $scope.showConnectionStringNameAppSettings ? $scope.connectionStringName : undefined,
                         ConnectionString: $scope.showConnectionString ? $scope.connectionString : undefined,
-                        ConnectionStringAppSettingName: $scope.showConnectionStringAppSettingsName ? $scope.connectionStringAppSettingName : undefined
+                        ConnectionStringAppSettingName: $scope.showConnectionStringNameAppSettings ? $scope.connectionStringAppSettingName : undefined
                     };
                 };
 
@@ -91,11 +130,11 @@
                         $scope.connectionStringAppSettingName = payload.data.ConnectionStringAppSettingName;
 
                         if ($scope.connectionStringName != undefined) {
-                            $scope.selectedConnectionStringType = connectionStringType.ConnectionStringName;
+                            $scope.selectedConnectionStringType = connectionStringType.ConnectionStringNameAppSettings;
                         } else if ($scope.connectionString != undefined) {
                             $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
                         } else if ($scope.connectionStringAppSettingName != undefined) {
-                            $scope.selectedConnectionStringType = connectionStringType.ConnectionStringAppSettingName;
+                            $scope.selectedConnectionStringType = connectionStringType.ConnectionStringNameAppSettings;
                         }
                     }
                 };

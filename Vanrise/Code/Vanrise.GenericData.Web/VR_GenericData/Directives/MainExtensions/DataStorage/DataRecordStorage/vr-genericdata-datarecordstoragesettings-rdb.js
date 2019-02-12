@@ -151,11 +151,14 @@
                     fieldName: dataRecordField.FieldName,
                     rdbDataType: dataRecordField.RDBDataType,
                     size: dataRecordField.Size,
-                    precision: dataRecordField.Precision
+                    precision: dataRecordField.Precision,
+                    readyDataRecordTypeFieldPromiseDeferred: UtilsService.createPromiseDeferred(),
+                    readyRDBDataTypeFieldItemPromiseDeferred: UtilsService.createPromiseDeferred()
                 };
 
                 loadFieldNameItem(gridItem);
                 loadRDBDataTypeFieldItem(gridItem);
+
                 ctrl.columns.push(gridItem);
             }
 
@@ -268,7 +271,6 @@
             };
 
             function loadFieldNameItem(gridItem, promises) {
-                gridItem.readyDataRecordTypeFieldPromiseDeferred = UtilsService.createPromiseDeferred();
                 gridItem.loadDataRecordTypeFieldPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 gridItem.onDataRecordTypeFieldsSelectorReady = function (api) {
@@ -289,14 +291,13 @@
             }
 
             function loadRDBDataTypeFieldItem(gridItem, promises) {
-                gridItem.readyRDBDataTypeFieldItemPromiseDeferred = UtilsService.createPromiseDeferred();
                 gridItem.loadRDBDataTypeFieldItemPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 gridItem.onRDBDataTypeSelectorReady = function (api) {
                     gridItem.rdbDataTypeFieldSelectorAPI = api;
                     gridItem.readyRDBDataTypeFieldItemPromiseDeferred.resolve();
                 };
-
+            
                 gridItem.readyRDBDataTypeFieldItemPromiseDeferred.promise.then(function () {
                     var payload = {
                         selectedIds: gridItem.rdbDataType,
@@ -310,6 +311,28 @@
                     promises.push(gridItem.loadRDBDataTypeFieldItemPromiseDeferred.promise);
             }
 
+            function changedDataRecordTypeFields(gridItem, promises) {
+                gridItem.onDataRecordTypeFieldsChanged = function (selectedDataRecordTypeField) {
+                    if (selectedDataRecordTypeField != undefined) {
+                        var columns = getColumns();
+                        var index = columns.findIndex(x => x.FieldName === selectedDataRecordTypeField.Name);
+                        var col = columns[index];
+                        if (Object.values(col).filter(a => a != undefined && a != true).length <= 4) { //check if a field is entered if yes don't load the default values
+                            var dataRecordField = dataRecordTypeFields.find(function (element) {
+                                return element.FieldName == col.FieldName;
+                            })
+                            gridItem.columnName = dataRecordField.FieldName;
+                            gridItem.isUnique = dataRecordField.IsUnique;
+                            gridItem.rdbDataType = dataRecordField.RDBDataType;
+                            gridItem.size = dataRecordField.Size;
+                            gridItem.precision = dataRecordField.Precision;
+                            loadRDBDataTypeFieldItem(gridItem, promises);
+                            ctrl.columns[index] = gridItem;
+                        }
+                    }
+                };
+            }
+        
             function loadDefaultRDBTypeList() {
                 return VR_GenericData_DataRecordTypeAPIService.GetDataRecordFieldsTranslatedToRDB(dataRecordTypeId).then(function (response) {
                     dataRecordTypeFields = response;
@@ -320,6 +343,8 @@
 
                 var gridItem = {
                     id: ctrl.columns.length + 1,
+                    readyDataRecordTypeFieldPromiseDeferred: UtilsService.createPromiseDeferred(),
+                    readyRDBDataTypeFieldItemPromiseDeferred: UtilsService.createPromiseDeferred()
                 };
 
                 if (data != undefined) {
@@ -335,7 +360,7 @@
 
                 loadFieldNameItem(gridItem, promises);
                 loadRDBDataTypeFieldItem(gridItem, promises);
-               
+                changedDataRecordTypeFields(gridItem, promises);
                 ctrl.columns.push(gridItem);
             }
 
