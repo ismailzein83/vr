@@ -38,7 +38,7 @@
 
                     if (payload != undefined) {
                         if (payload.settings != undefined) {
-                            $scope.scopeModel.taxPerSMS = settings.TaxPerSMS;
+                            $scope.scopeModel.taxPerSMS = payload.settings.TaxPerSMS;
                         }
                     }
                     return UtilsService.waitMultiplePromises(promises);

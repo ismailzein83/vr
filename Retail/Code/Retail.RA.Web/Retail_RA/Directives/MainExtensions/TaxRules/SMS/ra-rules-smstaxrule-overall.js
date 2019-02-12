@@ -38,7 +38,7 @@
 
                     if (payload != undefined) {
                         if (payload.settings != undefined) {
-                            $scope.scopeModel.taxPercentage = settings.TaxPercentage;
+                            $scope.scopeModel.taxPercentage = payload.settings.TaxPercentage;
                         }
                     }
                     return UtilsService.waitMultiplePromises(promises);
