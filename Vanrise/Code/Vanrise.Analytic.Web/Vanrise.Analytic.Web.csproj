@@ -177,6 +177,8 @@
     <Content Include="Analytic\Directives\Definition\AnalyticReport\MeasureStyle\vr-analytic-measurestyle-grid-viewer.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\Templates\AnalyticLegendTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\vr-analytic-legend.js" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Gauge\Templates\GaugeWidgetDefinition.html" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\History\Widgets\Gauge\vr-analytic-widgets-gauge-definition.js" />
     <Content Include="Analytic\Directives\Definition\MostRelevantAnalytic\Templates\MostRelevantFiguresTileQueryTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MostRelevantAnalytic\vr-analytic-mostrelevant-figurestilequery.js" />
     <Content Include="Analytic\Directives\Definition\OverallAnalytic\Templates\OverallAnalyticFiguresTileQueryTemplate.html" />
@@ -370,6 +372,8 @@
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\Templates\PreviousPeriodFilterTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-lastperiodfilter.js" />
     <Content Include="Analytic\Directives\MainExtensions\TimeRangeFilters\vr-analytic-previousperiodfilter.js" />
+    <Content Include="Analytic\Directives\Runtime\Chart\Templates\AnalyticGauge.html" />
+    <Content Include="Analytic\Directives\Runtime\Chart\vr-analytic-gauge-runtime.js" />
     <Content Include="Analytic\Directives\Settings\Templates\KPISettingsTemplate.html" />
     <Content Include="Analytic\Directives\Settings\vr-analytic-kpi-settings-editor.js" />
     <Content Include="Analytic\Directives\VRReportGeneration\CustomCodeCompilationErrorsEditorController.js" />

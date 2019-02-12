@@ -90,6 +90,9 @@
     <Compile Include="DARecordAggregates\SumAggregate.cs" />
     <Compile Include="DataAnalysisAggregates\WhSFilters.cs" />
     <Compile Include="DRSearchPageSubviewDefinitions\DRSourceSubviewDefinitionSettings.cs" />
+    <Compile Include="FiguresTileQueries\MostRelevantAnalyticDimensionFiguresTileQuery.cs" />
+    <Compile Include="FiguresTileQueries\OverallAnalyticFiguresTileQuery.cs" />
+    <Compile Include="History\Widgets\AnalyticGaugeWidget.cs" />
     <Compile Include="StyleRuleConditions\CompareCondition.cs" />
     <Compile Include="StyleRuleConditions\RangeCondition.cs" />
     <Compile Include="History\Widgets\AnalyticPieChartWidget.cs" />
@@ -105,7 +108,7 @@
     <Compile Include="VRReportGeneration\DownloadFileAction.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationFilter\StandardReportGenerationFilter.cs" />
     <Compile Include="VRReportGeneration\VRReportGenerationFilter\StandardReportGenerationRuntimeFilter.cs" />
-    <Compile Include="Widget\WidgetSettings.cs" />
+    <Compile Include="VRTile\AnalyticWidgetTile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.BP.Arguments\Vanrise.Analytic.BP.Arguments.csproj">

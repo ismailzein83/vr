@@ -1,0 +1,27 @@
+﻿<vr-row>
+    <vr-columns width="1/3row">
+        <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" ondeselectitem="scopeModel.onTableDeselect" selectedvalues="scopeModel.selectedTables" onselectionchanged="scopeModel.onTableSelectionChanged"></vr-analytic-table-selector>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <span vr-loader="isLoadingMeasures">
+            <vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorReady" selectedvalues="scopeModel.selectedMeasures" ismultipleselection isrequired="true"></vr-analytic-measure-selector>
+        </span>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1\3row">
+        <vr-textbox value="scopeModel.maxValue" label="Maximum"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1\3row">
+        <vr-textbox value="scopeModel.minValue" label="Minimum"></vr-textbox>
+    </vr-columns>
+</vr-row>
+<vr-tab header="'Filter'">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <span vr-loader="isLoadingRecordFilter">
+                <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+            </span>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
