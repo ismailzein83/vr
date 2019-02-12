@@ -55,7 +55,7 @@ app.directive("vrCommonDashboardDefinition", ["UtilsService", "VRUIUtilsService"
                         var vrDashboardPayload;
                         vrDashboardPayload = {
                             businessEntityDefinitionId: '6243CA7F-A14C-41BE-BE48-86322D835CA6'
-                        }
+                        };
 
                         if (payload != undefined && payload.DashboardDefinitionItems != undefined) {
                             var selectedIds = [];

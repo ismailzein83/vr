@@ -21,8 +21,8 @@
             bindToController: true,
             template: function (element, attrs) {
                 var template = '<vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorReady" isrequired="true"' +
-                               'selectedvalues = "scopeModel.selectedDataRecordStorages">' +
-                               '</vr-genericdata-datarecordstorage-selector>'
+                    'selectedvalues = "scopeModel.selectedDataRecordStorages">' +
+                    '</vr-genericdata-datarecordstorage-selector>';
 
                 return template;
             }
