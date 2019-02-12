@@ -24,6 +24,8 @@ namespace Vanrise.Common
                         Description = attribute.Value.Description,
                         RequireSize = attribute.Value.RequireSize,
                         RequirePrecision = attribute.Value.RequirePrecision,
+                        HasSizeRequired=attribute.Value.HasSizeRequired,
+                        HasPrecisionRequired = attribute.Value.HasPrecisionRequired,
                         Value = attribute.Key
                     });
                 }
