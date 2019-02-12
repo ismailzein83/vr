@@ -32,26 +32,20 @@ namespace Vanrise.HelperTools
                     cmd.CommandText = " SELECT ID, Name FROM [genericdata].DataRecordStorage WITH(NOLOCK)" +
                                       " WHERE Settings like '%Vanrise.GenericData.SQLDataStorage.SQLDataRecordStorageSettings, Vanrise.GenericData.SQLDataStorage%'ORDER BY[Name]";
                     cmd.CommandType = CommandType.Text;
-                    try
+
+                    con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        con.Open();
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        DataRecordStorages = new Dictionary<Guid, string>();
+                        while (reader.Read())
                         {
-                            DataRecordStorages = new Dictionary<Guid, string>();
-                            while (reader.Read())
-                            {
-                                DataRecordStorage readedObject = DataRecordMapperName(reader);
-                                DataRecordStorages.Add(readedObject.DataRecordStorageId, readedObject.Name);
-                                dataRecordStorageComboBox.Items.Add(readedObject.Name);
-                            }
-                            reader.Close();
+                            DataRecordStorage readedObject = DataRecordMapperName(reader);
+                            DataRecordStorages.Add(readedObject.DataRecordStorageId, readedObject.Name);
+                            dataRecordStorageComboBox.Items.Add(readedObject.Name);
                         }
-                        con.Close();
+                        reader.Close();
                     }
-                    catch
-                    {
-                        throw;
-                    }
+                    con.Close();
                 }
                 dataRecordStorageComboBox.SelectedItem = dataRecordStorageComboBox.Items.Count > 0 ? dataRecordStorageComboBox.Items[0] : "--No Data--";
             }
@@ -71,26 +65,21 @@ namespace Vanrise.HelperTools
                     cmd.CommandText = "SELECT Settings FROM [genericdata].DataRecordStorage WITH(NOLOCK) WHERE ID = @ID";
                     cmd.CommandType = CommandType.Text;
 
-                    try
+
+                    con.Open();
+                    cmd.Parameters.AddWithValue("ID", dataRecordStorageID);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        con.Open();
-                        cmd.Parameters.AddWithValue("ID", dataRecordStorageID);
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        if (reader.Read())
                         {
-                            if (reader.Read())
-                            {
-                                SQLDataRecordStorageSettings sqlSettings = Vanrise.Common.Serializer.Deserialize<SQLDataRecordStorageSettings>(reader["Settings"] as string);
-                                RDBDataRecordStorageSettings rdbDataRecordStorageSettings = SettingsTransformToRDB(sqlSettings);
-                                generatedRDB.Text = Vanrise.Common.Serializer.Serialize(rdbDataRecordStorageSettings);
-                            }
-                            reader.Close();
+                            SQLDataRecordStorageSettings sqlSettings = Vanrise.Common.Serializer.Deserialize<SQLDataRecordStorageSettings>(reader["Settings"] as string);
+                            RDBDataRecordStorageSettings rdbDataRecordStorageSettings = SettingsTransformToRDB(sqlSettings);
+                            generatedRDB.Text = Vanrise.Common.Serializer.Serialize(rdbDataRecordStorageSettings);
                         }
-                        con.Close();
+                        reader.Close();
                     }
-                    catch
-                    {
-                        throw;
-                    }
+                    con.Close();
+
                 }
             }
         }
@@ -128,12 +117,12 @@ namespace Vanrise.HelperTools
                         rdbDataRecordStorageColumn.DataType = RDBDataType.Boolean;
                         break;
 
-                    case string a when a.Contains("int"):
-                        rdbDataRecordStorageColumn.DataType = RDBDataType.Int;
-                        break;
-
                     case string a when a.Contains("bigint"):
                         rdbDataRecordStorageColumn.DataType = RDBDataType.BigInt;
+                        break;
+
+                    case string a when a.Contains("int"):
+                        rdbDataRecordStorageColumn.DataType = RDBDataType.Int;
                         break;
 
                     case string a when a.Contains("datetime"):
@@ -148,13 +137,13 @@ namespace Vanrise.HelperTools
                         rdbDataRecordStorageColumn.DataType = RDBDataType.Cursor;
                         break;
 
-                    case string a when a.Contains("varchar"):
-                        rdbDataRecordStorageColumn.DataType = RDBDataType.Varchar;
+                    case string a when a.Contains("nvarchar"):
+                        rdbDataRecordStorageColumn.DataType = RDBDataType.NVarchar;
                         rdbDataRecordStorageColumn.Size = GetSize(sqlDataRecordStorageColumn.SQLDataType);
                         break;
 
-                    case string a when a.Contains("nvarchar"):
-                        rdbDataRecordStorageColumn.DataType = RDBDataType.NVarchar;
+                    case string a when a.Contains("varchar"):
+                        rdbDataRecordStorageColumn.DataType = RDBDataType.Varchar;
                         rdbDataRecordStorageColumn.Size = GetSize(sqlDataRecordStorageColumn.SQLDataType);
                         break;
 
@@ -182,11 +171,7 @@ namespace Vanrise.HelperTools
                 rdbDataRecordStorageSettings.DontReflectToDB = sqlDataRecordStorageSettings.DontReflectToDB;
                 rdbDataRecordStorageSettings.DenyAPICall = sqlDataRecordStorageSettings.DenyAPICall;
                 rdbDataRecordStorageSettings.RequiredPermission = sqlDataRecordStorageSettings.RequiredPermission;
-                rdbDataRecordStorageSettings.FieldsPermissions = new List<DataRecordStorageFieldsPermission>();
-                foreach (DataRecordStorageFieldsPermission dataRecordStorageFieldsPermission in sqlDataRecordStorageSettings.FieldsPermissions)
-                {
-                    rdbDataRecordStorageSettings.FieldsPermissions.Add(dataRecordStorageFieldsPermission);
-                }
+                rdbDataRecordStorageSettings.FieldsPermissions = sqlDataRecordStorageSettings.FieldsPermissions;
             }
             return rdbDataRecordStorageSettings;
         }
@@ -231,8 +216,8 @@ namespace Vanrise.HelperTools
                Name =  reader["Name"] as string
             };
         }
-
-        private void onConnectionStringChanged(object sender, EventArgs e)
+        
+        private void connectionString_Leave(object sender, EventArgs e)
         {
             dataRecordStorageComboBox.Items.Clear();
             LoadDataRecordTables(sender, e);

@@ -44,7 +44,7 @@
             this.connectionString.TabIndex = 0;
             this.connectionString.Text = "Server=192.168.110.185;Database=Retail_Dev_Configuration;User ID=Development;Pass" +
     "word=dev!123";
-            this.connectionString.TextChanged += new System.EventHandler(this.onConnectionStringChanged);
+            this.connectionString.Leave += new System.EventHandler(this.connectionString_Leave);
             // 
             // connectionStringLabel
             // 
