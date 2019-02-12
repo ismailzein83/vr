@@ -24,17 +24,17 @@ namespace Vanrise.Common.Business
         }
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(VRTileReportSettings);
+            return typeof(VRDashboardSettings);
         }
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            var castedOriginalValue = originalValue as VRTileReportSettings;
+            var castedOriginalValue = originalValue as VRDashboardSettings;
             if (castedOriginalValue != null)
             {
                 return castedOriginalValue;
             }
             else
-                return Serializer.Deserialize<VRTileReportSettings>(originalValue.ToString());
+                return Serializer.Deserialize<VRDashboardSettings>(originalValue.ToString());
         }
         public override string GetRuntimeTypeDescription()
         {

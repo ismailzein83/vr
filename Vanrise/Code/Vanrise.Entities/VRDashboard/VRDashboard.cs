@@ -12,6 +12,6 @@ namespace Vanrise.Entities
 
         public string Name { get; set; }
 
-        public VRTileReportSettings Settings { get; set; }
+        public VRDashboardSettings Settings { get; set; }
     }
 }

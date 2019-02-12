@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class VRTileReportSettings
+    public class VRDashboardSettings
     {
         public List<VRTile> VRTiles { get; set; }
     }

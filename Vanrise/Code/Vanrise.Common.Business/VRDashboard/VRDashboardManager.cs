@@ -54,14 +54,14 @@ namespace Vanrise.Common.Business
 
             if (entity != null && entity.FieldValues != null && entity.FieldValues.Count > 0)
             {
-                var vrDashboardsDefinition = (VRTileReportSettings)entity.FieldValues.GetRecord("Settings");
+                var vrDashboardsDefinition = (VRDashboardSettings)entity.FieldValues.GetRecord("Settings");
                 var vrTiles = vrDashboardsDefinition.VRTiles;
 
                 VRDashboard vRDashboard = new VRDashboard()
                 {
                     VRDashboardId = vrDashboardId,
                     Name = (string)entity.FieldValues.GetRecord("Name"),
-                    Settings = (VRTileReportSettings)entity.FieldValues.GetRecord("Settings")
+                    Settings = (VRDashboardSettings)entity.FieldValues.GetRecord("Settings")
                 };
                
                 return vRDashboard;
