@@ -67,12 +67,7 @@
       <Variable x:TypeArguments="viba:InvoiceGenerationProcessOutput" Name="InvoiceGenerationProcessOutput" />
       <Variable x:TypeArguments="vie:InvoiceGenerationDraftOutput" Name="InvoiceGenerationDraftOutput" />
     </Sequence.Variables>
-    <viba1:GenerateAutomaticInvoiceGenerationDrafts  sap2010:WorkflowViewState.IdRef="GenerateAutomaticInvoiceGenerationDrafts_1">
-      <viba1:GenerateAutomaticInvoiceGenerationDrafts.EffectiveDate>
-        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveDate</mca:CSharpValue>
-        </InArgument>
-      </viba1:GenerateAutomaticInvoiceGenerationDrafts.EffectiveDate>
+    <viba1:GenerateAutomaticInvoiceGenerationDrafts>
       <viba1:GenerateAutomaticInvoiceGenerationDrafts.InvoiceGenerationDraftOutput>
         <OutArgument x:TypeArguments="vie:InvoiceGenerationDraftOutput">
           <mca:CSharpReference x:TypeArguments="vie:InvoiceGenerationDraftOutput">InvoiceGenerationDraftOutput</mca:CSharpReference>
@@ -93,6 +88,11 @@
           <mca:CSharpValue x:TypeArguments="s:Nullable(x:Boolean)">Input.IsEffectiveInFuture</mca:CSharpValue>
         </InArgument>
       </viba1:GenerateAutomaticInvoiceGenerationDrafts.IsEffectiveInFuture>
+      <viba1:GenerateAutomaticInvoiceGenerationDrafts.IsEffectiveNow>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsEffectiveNow</mca:CSharpValue>
+        </InArgument>
+      </viba1:GenerateAutomaticInvoiceGenerationDrafts.IsEffectiveNow>
       <viba1:GenerateAutomaticInvoiceGenerationDrafts.IssueDate>
         <OutArgument x:TypeArguments="s:DateTime">
           <mca:CSharpReference x:TypeArguments="s:DateTime">IssueDate</mca:CSharpReference>
@@ -113,6 +113,7 @@
           <mca:CSharpValue x:TypeArguments="ve:VRAccountStatus">Input.Status</mca:CSharpValue>
         </InArgument>
       </viba1:GenerateAutomaticInvoiceGenerationDrafts.Status>
+      <sap2010:WorkflowViewState.IdRef>GenerateAutomaticInvoiceGenerationDrafts_2</sap2010:WorkflowViewState.IdRef>
     </viba1:GenerateAutomaticInvoiceGenerationDrafts>
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
@@ -198,11 +199,11 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sID4DygEOAgEBRgV0NgIBWXUFyAEKAgECWAtYWgMBkgFOC06FAQMBiwFnC2dmAwGEAVMLU2oCAX1iC2JcAgF2XQtdbwIBb0kLSWoCAWhxC3FfAgFhbAtsYwIBWngLeJcBAgEDfAm4ARQCARm7AQnGASQCAQp9C4gBJgIBSokBC58BHAIBOKABC6sBFAIBKawBC7cBJgIBGsMBD8MBhQECARK+AQ++AXECAQuFARGFAYsBAgFSgAERgAHGAQIBS4kBeYkBfwIBSYwBEZcBFAIBQokBkwGJAcYBAgFBnAERnAGEAQIBOokB3AGJAeIBAgE5qAERqAGwAQIBMaMBEaMBkAECASq0ARG0AYsBAgEirwERrwF1AgEb</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sID4DywEOAgEBRgV1NgIBWXYFyQEKAgECUwtTWgMBkgFJC0mFAQMBiwFnC2dmAwGEAU4LTmoCAX1iC2JcAgF2WAtYbwIBb10LXV4CAWhxC3FfAgFhbAtsYwIBWnkLeZcBAgEDfQm5ARQCARm8AQnHASQCAQp+C4kBJgIBSooBC6ABHAIBOKEBC6wBFAIBKa0BC7gBJgIBGsQBD8QBhQECARK/AQ+/AXECAQuGARGGAYsBAgFSgQERgQHGAQIBS4oBeYoBfwIBSY0BEZgBFAIBQooBkwGKAcYBAgFBnQERnQGEAQIBOooB3AGKAeIBAgE5qQERqQGwAQIBMaQBEaQBkAECASq1ARG1AYsBAgEisAERsAF1AgEb</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="GenerateAutomaticInvoiceGenerationDrafts_1" sap:VirtualizedContainerService.HintSize="489,22" />
+      <sap2010:ViewStateData Id="GenerateAutomaticInvoiceGenerationDrafts_2" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="242,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="242,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />

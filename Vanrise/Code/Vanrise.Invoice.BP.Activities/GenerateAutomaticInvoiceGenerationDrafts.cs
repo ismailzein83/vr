@@ -19,7 +19,7 @@ namespace Vanrise.Invoice.BP.Activities
         public InArgument<int> IssueDateOffsetFromToday { get; set; }
 
         [RequiredArgument]
-        public InArgument<DateTime?> EffectiveDate { get; set; }
+        public InArgument<bool> IsEffectiveNow { get; set; }
 
         [RequiredArgument]
         public InArgument<bool?> IsEffectiveInFuture { get; set; }
@@ -53,7 +53,7 @@ namespace Vanrise.Invoice.BP.Activities
             InvoiceGenerationDraftQuery query = new InvoiceGenerationDraftQuery()
             {
                 InvoiceTypeId = this.InvoiceTypeId.Get(context.ActivityContext),
-                EffectiveDate = this.EffectiveDate.Get(context.ActivityContext),
+                EffectiveDate = IsEffectiveNow.Get(context.ActivityContext) ? DateTime.Now : (DateTime?)null,
                 IsEffectiveInFuture = this.IsEffectiveInFuture.Get(context.ActivityContext),
                 Status = this.Status.Get(context.ActivityContext),
                 PartnerGroup = this.PartnerGroup.Get(context.ActivityContext),

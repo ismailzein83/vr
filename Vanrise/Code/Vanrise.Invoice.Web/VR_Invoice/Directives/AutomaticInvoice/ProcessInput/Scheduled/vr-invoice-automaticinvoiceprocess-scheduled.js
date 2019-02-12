@@ -200,7 +200,7 @@ app.directive("vrInvoiceAutomaticinvoiceprocessScheduled", ['UtilsService', 'VRU
                     InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds(),
                    // EndDateOffsetFromToday: $scope.endDateOffsetFromToday,
                     IssueDateOffsetFromToday: $scope.issueDateOffsetFromToday,
-                    EffectiveDate: accountStatusData.EffectiveDate,
+                    IsEffectiveNow: accountStatusData.IsEffectiveNow,       
                     IsEffectiveInFuture: accountStatusData.IsEffectiveInFuture,
                     Status: accountStatusData.Status,
                     AccountStatus: accountStatusData.selectedId,

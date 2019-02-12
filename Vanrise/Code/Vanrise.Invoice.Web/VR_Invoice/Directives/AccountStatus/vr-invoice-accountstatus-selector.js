@@ -94,6 +94,7 @@
                                 returnedObj.Status = selectedValue;
                                 returnedObj.IsEffectiveInFuture = true;
                                 returnedObj.EffectiveDate = VRDateTimeService.getNowDateTime();
+                                returnedObj.IsEffectiveNow = true;
                                 break;
                             case VR_Invoice_InvoiceAccountStatusEnum.All.value:
                                 returnedObj.Status = undefined;
