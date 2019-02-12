@@ -1,16 +1,16 @@
 ﻿<vr-datagrid datasource="scopeModel.accountPackages"
-			 dataretrievalfunction="scopeModel.dataRetrievalFunction"
-			 pagingtype="'PagingOnScroll'"
-			 on-ready="scopeModel.onGridReady"
-			 menuactions="scopeModel.menuActions"
-			 idfield="Entity.AccountPackageId" enableautoexport="true">
-	<vr-datagridcolumn headertext="'Package'" field="'PackageName'" ng-show="!scopeModel.isAssignedToPackageId"></vr-datagridcolumn>
-	<vr-datagridcolumn headertext="'Account'" field="'AccountName'" ng-show="!scopeModel.isAssignedToAccountId"></vr-datagridcolumn>
-	<vr-datagridcolumn headertext="'Package Type'" field="'PackageType'"></vr-datagridcolumn>
-	<vr-datagridcolumn headertext="'Status'" field="'StatusName'" ng-show="!scopeModel.isAssignedToAccountId"></vr-datagridcolumn>
-	<vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'"></vr-datagridcolumn>
-	<vr-datagridcolumn headertext="'Charge Value'" field="'ChargeValue'"></vr-datagridcolumn>
-	<vr-datagridcolumn headertext="'Period Type'" field="'PeriodType'"></vr-datagridcolumn>
-	<vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Datetime'"></vr-datagridcolumn>
-	<vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Datetime'"></vr-datagridcolumn>
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.AccountPackageId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'Package'" field="'PackageName'" ng-show="!scopeModel.isAssignedToPackageId"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Account'" field="'AccountName'" ng-show="!scopeModel.isAssignedToAccountId"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Package Type'" field="'PackageType'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'StatusName'" ng-show="!scopeModel.isAssignedToAccountId"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Charge Value'" field="'ChargeValue'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Period Type'" field="'PeriodType'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Datetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Datetime'"></vr-datagridcolumn>
 </vr-datagrid>
