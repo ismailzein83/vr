@@ -75,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dispute\DisputeSettings.cs" />
     <Compile Include="Extensions\INTLReconcilationObjectDataProviderSettings.cs" />
     <Compile Include="OperatorDeclarationServices\SMS.cs" />
     <Compile Include="OperatorDeclarationServices\Voice.cs" />
