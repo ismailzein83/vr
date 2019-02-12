@@ -12,16 +12,10 @@
 		var packageDefinitionSelectorAPI;
 		var packageDefinitionSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var accountSelectorAPI;
-		var accountSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
 		var currencySelectorAPI;
 		var currencySelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var statusDefinitionSelectorAPI;
-		var statusDefinitionSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
-		defineAPI();
+        defineAPI();
 		load();
 
 

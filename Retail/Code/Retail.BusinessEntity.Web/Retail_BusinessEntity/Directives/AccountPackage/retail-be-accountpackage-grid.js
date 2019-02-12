@@ -50,7 +50,7 @@ app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService
 						VRNotificationService.notifyExceptionWithClose(error, $scope);
 					});
 				};
-
+                defineMenuActions();
 			}
 
 			function defineAPI() {
@@ -71,7 +71,6 @@ app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService
 						packageId = payload.packageId;
 						$scope.scopeModel.isAssignedToPackageId = (packageId != undefined);
 					}
-					defineMenuActions();
 					return gridAPI.retrieveData(buildGridQuery());
 				};
 
@@ -80,7 +79,9 @@ app.directive('retailBeAccountpackageGrid', ['Retail_BE_AccountPackageAPIService
 				};
 
 				if (ctrl.onReady != null)
-					ctrl.onReady(api);
+                    ctrl.onReady(api);
+
+
 			}
 
 			function defineMenuActions() {
