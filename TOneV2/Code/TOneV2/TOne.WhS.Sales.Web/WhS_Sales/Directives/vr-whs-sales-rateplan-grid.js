@@ -185,11 +185,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         routingProductTab.setTabSelected(dataItem);
                 };
 
-                $scope.onRowClicked = function (evnt) {
-                    $('.vr-datagrid-row').removeClass('vr-datagrid-datacells-click');
-                    $(evnt.target).closest('.vr-datagrid-row').addClass('vr-datagrid-datacells-click');
-                };
-
                 $scope.getRowStyle = function (dataItem) {
                     var rowStyle;
                     var rate; // The rate to validate

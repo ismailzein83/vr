@@ -162,7 +162,9 @@
             background-color: #1be1ff !important;
         }
 
-
+        .rate-plan-grid[alternative-color] .vr-datagrid-row:focus .vr-datagrid-cell-container {
+            background-color: #1be1ff !important;
+        }
         .rate-plan-grid .vr-datagrid-datacells-click {
             background-color: #1be1ff !important;
         }
@@ -659,7 +661,7 @@
 
                                                     <div ng-if="dataItem.displayRow">
                                                         <div style="white-space:nowrap;display:flex;width: calc(100% + 2px);" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal'}">
-                                                            <div style="display:inline-flex;width:100%;" class="vr-datagrid-row" ng-click="onRowClicked($event);">
+                                                            <div style="display:inline-flex;width:100%;outline: none;" class="vr-datagrid-row" tabindex="0">
 
                                                                 <div ng-if="!ratePlanGridCtrl.isMobile" style=" margin: -2px; height :24px;display:inline-flex;width:20px" ng-class=" ratePlanGridCtrl.isMobile ? 'high-light-container' : '' ">
                                                                     <div class="row-toggle">
