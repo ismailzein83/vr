@@ -53,7 +53,7 @@ namespace Vanrise.Invoice.BP.Activities
             InvoiceGenerationDraftQuery query = new InvoiceGenerationDraftQuery()
             {
                 InvoiceTypeId = this.InvoiceTypeId.Get(context.ActivityContext),
-                EffectiveDate = IsEffectiveNow.Get(context.ActivityContext) ? DateTime.Now : (DateTime?)null,
+                EffectiveDate = IsEffectiveNow.Get(context.ActivityContext) ? DateTime.Now : default(DateTime?),
                 IsEffectiveInFuture = this.IsEffectiveInFuture.Get(context.ActivityContext),
                 Status = this.Status.Get(context.ActivityContext),
                 PartnerGroup = this.PartnerGroup.Get(context.ActivityContext),

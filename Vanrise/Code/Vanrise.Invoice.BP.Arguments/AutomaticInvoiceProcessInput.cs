@@ -14,7 +14,6 @@ namespace Vanrise.Invoice.BP.Arguments
         public Guid InvoiceTypeId { get; set; }
       // public int EndDateOffsetFromToday { get; set; }
         public int IssueDateOffsetFromToday { get; set; }
-        public DateTime? EffectiveDate { get; set; }
         public bool? IsEffectiveInFuture { get; set; }
         public bool IsEffectiveNow { get; set; }
         public VRAccountStatus Status { get; set; }
