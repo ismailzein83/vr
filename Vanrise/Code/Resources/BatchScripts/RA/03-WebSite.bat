@@ -14,6 +14,7 @@ xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-logoonheader.png" /S /R /y /v /i 
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-login.png" /S /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-iconheader.ico" /S /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Retail\Code\Retail.Web\Images\menu-icons" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\menu-icons\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\figure-icons" /S /E /R /y /v /i /z /Q									"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\figure-icons\"
 rename																												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Web.config.RA.exclude" "Web.config"
 rename																												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\RA-logoonheader.png" "logoonheader.png"
 rename																												"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\RA-login.png" "login.png"
