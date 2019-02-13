@@ -14587,6 +14587,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("9F74", new BinaryFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "CalledSubscriberIMEISV",
+                    RemoveHexa = true
+                }
+            });
+
             return parsers;
         }
         private Dictionary<string, BinaryFieldParser> Get_A5_MSOriginatingSMS_FieldParsers_EricssonMobilis()
