@@ -78,14 +78,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId, offsetValue);
 
                 Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = null;
-                if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() == 0)
+                if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() > 0)
                 {
                     itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails, offsetValue);
                 }
                 SupplierRecurringChargeManager supplierRecurringChargeManager = new SupplierRecurringChargeManager();
                 List<RecurringChargeItem> evaluatedSupplierRecurringCharges = supplierRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate, context.IssueDate);
 
-                if ((itemSetNamesDic != null || itemSetNamesDic.Count == 0) && (evaluatedSupplierRecurringCharges == null || evaluatedSupplierRecurringCharges.Count == 0))
+                if ((itemSetNamesDic == null || itemSetNamesDic.Count == 0) && (evaluatedSupplierRecurringCharges == null || evaluatedSupplierRecurringCharges.Count == 0))
                 {
                     context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
                     return;
@@ -114,7 +114,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails, supplierInvoiceBySaleCurrency, evaluatedSupplierRecurringCharges);
                 #region BuildSupplierInvoiceDetails
                 SupplierInvoiceDetails supplierInvoiceDetails = BuilSupplierInvoiceDetails(itemSetNamesDic, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, commission, commissionType);
-                if (supplierInvoiceDetails != null && supplierInvoiceDetails.CostAmount != 0)
+                if (supplierInvoiceDetails != null)
                 {
                     supplierInvoiceDetails.TimeZoneId = timeZoneId;
                     supplierInvoiceDetails.TotalAmount = supplierInvoiceDetails.CostAmount;
@@ -381,14 +381,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
             SupplierInvoiceDetails supplierInvoiceDetails = null;
             if (partnerType != null)
             {
-
+                supplierInvoiceDetails = new SupplierInvoiceDetails();
+                supplierInvoiceDetails.PartnerType = partnerType;
                 if (itemSetNamesDic != null)
                 {
                     List<InvoiceBillingRecord> invoiceBillingRecordList = null;
                     if (itemSetNamesDic.TryGetValue("GroupedByCostZone", out invoiceBillingRecordList))
                     {
-                        supplierInvoiceDetails = new SupplierInvoiceDetails();
-                        supplierInvoiceDetails.PartnerType = partnerType;
                         foreach (var invoiceBillingRecord in invoiceBillingRecordList)
                         {
 

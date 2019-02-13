@@ -79,7 +79,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId, offsetValue);
 
                 Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = null;
-                if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() == 0)
+                if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() > 0)
                 {
                     itemSetNamesDic = PrepareItemSetNames(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails, offsetValue);
                 }
@@ -87,7 +87,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 CustomerRecurringChargeManager customerRecurringChargeManager = new CustomerRecurringChargeManager();
                 List<RecurringChargeItem> evaluatedCustomerRecurringCharges = customerRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate, context.IssueDate);
 
-                if ((itemSetNamesDic != null || itemSetNamesDic.Count == 0) && (evaluatedCustomerRecurringCharges == null || evaluatedCustomerRecurringCharges.Count == 0))
+                if ((itemSetNamesDic == null || itemSetNamesDic.Count == 0) && (evaluatedCustomerRecurringCharges == null || evaluatedCustomerRecurringCharges.Count == 0))
                 {
                     context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
                     return;
