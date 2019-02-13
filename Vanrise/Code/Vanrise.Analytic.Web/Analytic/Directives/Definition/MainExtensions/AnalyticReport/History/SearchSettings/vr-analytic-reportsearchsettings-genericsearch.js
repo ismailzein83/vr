@@ -226,46 +226,40 @@
                                     }
                                 }
                             }
-
-
-
-
-
-
-
-
-                            var loadGroupingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                            groupingDimensionReadyDeferred.promise.then(function () {
-                                var payloadGroupingDirective = {
-                                    filter: { TableIds: tableIds, HideIsRequiredFromParent: true },
-                                    selectedIds: selectedGroupingIds
-                                };
-                                VRUIUtilsService.callDirectiveLoad(groupingDimensionSelectorAPI, payloadGroupingDirective, loadGroupingDirectivePromiseDeferred);
-                            });
-                            promises.push(loadGroupingDirectivePromiseDeferred.promise);
-
-                            var loadFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                            filterDimensionReadyDeferred.promise.then(function () {
-                                var payloadFilterDirective = {
-                                    filter: { TableIds: tableIds, HideIsRequiredFromParent: true },
-                                    selectedIds: selectedFilterIds
-                                };
-                                VRUIUtilsService.callDirectiveLoad(filterDimensionSelectorAPI, payloadFilterDirective, loadFilterDirectivePromiseDeferred);
-                            });
-                            promises.push(loadFilterDirectivePromiseDeferred.promise);
-
-                            var loadAdvancedFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                            advancedFilterDimensionReadyDeferred.promise.then(function () {
-                                var payloadAdvancedFilterDirective = {
-                                    filter: { TableIds: tableIds },
-                                    selectedIds: selectedAdvancedFilterFieldIds
-                                };
-                                VRUIUtilsService.callDirectiveLoad(advancedFilterDimensionSelectorAPI, payloadAdvancedFilterDirective, loadAdvancedFilterDirectivePromiseDeferred);
-                            });
-                            promises.push(loadAdvancedFilterDirectivePromiseDeferred.promise);
-
-
                         }
+
+                        var loadGroupingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        groupingDimensionReadyDeferred.promise.then(function () {
+                            var payloadGroupingDirective = {
+                                filter: { TableIds: tableIds, HideIsRequiredFromParent: true },
+                                selectedIds: selectedGroupingIds
+                            };
+                            VRUIUtilsService.callDirectiveLoad(groupingDimensionSelectorAPI, payloadGroupingDirective, loadGroupingDirectivePromiseDeferred);
+                        });
+                        promises.push(loadGroupingDirectivePromiseDeferred.promise);
+
+                        var loadFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        filterDimensionReadyDeferred.promise.then(function () {
+                            var payloadFilterDirective = {
+                                filter: { TableIds: tableIds, HideIsRequiredFromParent: true },
+                                selectedIds: selectedFilterIds
+                            };
+                            VRUIUtilsService.callDirectiveLoad(filterDimensionSelectorAPI, payloadFilterDirective, loadFilterDirectivePromiseDeferred);
+                        });
+                        promises.push(loadFilterDirectivePromiseDeferred.promise);
+
+                        var loadAdvancedFilterDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        advancedFilterDimensionReadyDeferred.promise.then(function () {
+                            var payloadAdvancedFilterDirective = {
+                                filter: { TableIds: tableIds },
+                                selectedIds: selectedAdvancedFilterFieldIds
+                            };
+                            VRUIUtilsService.callDirectiveLoad(advancedFilterDimensionSelectorAPI, payloadAdvancedFilterDirective, loadAdvancedFilterDirectivePromiseDeferred);
+                        });
+                        promises.push(loadAdvancedFilterDirectivePromiseDeferred.promise);
+
+
+
                         var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadTableSelectorPromiseDeferred.promise);
                         tableSelectorReadyDeferred.promise.then(function () {

@@ -2,7 +2,7 @@
 
     "use strict";
 
-    AnalyticReportViewEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'Analytic_AnalyticService','VRLocalizationService'];
+    AnalyticReportViewEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'Analytic_AnalyticService', 'VRLocalizationService'];
 
     function AnalyticReportViewEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, Analytic_AnalyticService, VRLocalizationService) {
 
@@ -12,12 +12,13 @@
         var viewId;
 
         var reportDirectiveAPI;
-        var reportReadyDeferred;
+        var reportReadyDeferred = UtilsService.createPromiseDeferred();;
 
         var menuItems;
 
         var reportTypeSelectorAPI;
         var reportTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var reportTypeSelectorSelectionChangePromise;
 
         var viewCommonPropertiesAPI;
         var viewCommonPropertiesReadyDeferred = UtilsService.createPromiseDeferred();
@@ -42,26 +43,36 @@
             $scope.scopeModel = {};
             $scope.scopeModel.onReportSelectorDirectiveReady = function (api) {
                 reportDirectiveAPI = api;
+                reportReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onReportTypeSelectorDirectiveReady = function (api) {
                 reportTypeSelectorAPI = api;
                 reportTypeSelectorReadyDeferred.resolve();
             };
-           
+
             $scope.scopeModel.onViewCommonPropertiesReady = function (api) {
-                viewCommonPropertiesAPI = api;                viewCommonPropertiesReadyDeferred.resolve();
+                viewCommonPropertiesAPI = api;
+                viewCommonPropertiesReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onReportTypeSelectionChanged = function () {
-                if (reportDirectiveAPI != undefined && reportTypeSelectorAPI != undefined) {
-                    var setLoader = function (value) { $scope.scopeModel.isLoadingReportDirective = value; };
-                    var payload = {
-                        filter: {
-                            TypeId: reportTypeSelectorAPI.getSelectedIds()
-                        }
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, reportDirectiveAPI, payload, setLoader, reportReadyDeferred);
+            $scope.scopeModel.onReportTypeSelectionChanged = function (selectedItem) {
+                if (selectedItem != undefined) {
+
+                    if (reportTypeSelectorSelectionChangePromise != undefined) {
+                        reportTypeSelectorSelectionChangePromise.resolve();
+                    }
+                    else {
+
+                        var setLoader = function (value) { $scope.scopeModel.isLoadingReportDirective = value; };
+                        reportReadyDeferred = undefined;
+                        var payLoad = {
+                            filter: {
+                                TypeId: reportTypeSelectorAPI.getSelectedIds()
+                            },
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, reportDirectiveAPI, payLoad, setLoader, reportReadyDeferred);
+                    }
                 }
             };
 
@@ -93,6 +104,7 @@
 
             if (isEditMode) {
                 getView().then(function () {
+                    reportTypeSelectorSelectionChangePromise = UtilsService.createPromiseDeferred();
                     loadAllControls();
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -108,6 +120,7 @@
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
+                    reportTypeSelectorSelectionChangePromise = undefined;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
@@ -117,7 +130,7 @@
             }
 
             function setTitle() {
-               
+
                 if (isEditMode && viewEntity != undefined)
                     $scope.title = UtilsService.buildTitleForUpdateEditor(viewEntity.Name, 'Analytic Report View Editor');
                 else
@@ -125,7 +138,7 @@
             }
 
             function loadStaticData() {
-              
+
                 if (viewEntity != undefined) {
                     $scope.scopeModel.reportName = viewEntity.Name;
                     $scope.scopeModel.reportTitle = viewEntity.Title;
@@ -139,7 +152,7 @@
             }
 
             function loadTree() {
-                
+
                 var treeLoadDeferred = UtilsService.createPromiseDeferred();
 
                 loadMenuItems().then(function () {
@@ -171,7 +184,7 @@
             }
 
             function loadReportTypeSelector() {
-               
+
                 var loadReportTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 reportTypeSelectorReadyDeferred.promise.then(function () {
                     var payLoad;
@@ -186,12 +199,10 @@
             }
 
             function loadReportSelector() {
-               
+
                 if (viewEntity != undefined && viewEntity.Settings != undefined) {
-                    reportReadyDeferred = UtilsService.createPromiseDeferred();
                     var loadReportPromiseDeferred = UtilsService.createPromiseDeferred();
                     reportReadyDeferred.promise.then(function () {
-                        reportReadyDeferred = undefined;
                         var payLoad;
                         if (viewEntity != undefined && viewEntity.Settings != undefined) {
                             payLoad = {
@@ -208,16 +219,16 @@
 
             }
             function loadViewCommonProperties() {
-                    var viewCommmonPropertiesLoadDeferred = UtilsService.createPromiseDeferred();
-                    viewCommonPropertiesReadyDeferred.promise.then(function () {
-                        var payload = {};
-                        if (viewEntity != undefined) {
-                            payload.viewEntity = viewEntity;
-                        }
-                        VRUIUtilsService.callDirectiveLoad(viewCommonPropertiesAPI, payload, viewCommmonPropertiesLoadDeferred);
-                    });
-                    return viewCommmonPropertiesLoadDeferred.promise;
-               
+                var viewCommmonPropertiesLoadDeferred = UtilsService.createPromiseDeferred();
+                viewCommonPropertiesReadyDeferred.promise.then(function () {
+                    var payload = {};
+                    if (viewEntity != undefined) {
+                        payload.viewEntity = viewEntity;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(viewCommonPropertiesAPI, payload, viewCommmonPropertiesLoadDeferred);
+                });
+                return viewCommmonPropertiesLoadDeferred.promise;
+
             }
 
             function getView() {
@@ -235,7 +246,7 @@
                 AnalyticReportId: reportDirectiveAPI != undefined ? reportDirectiveAPI.getSelectedIds() : undefined,
                 TypeId: reportTypeSelectorAPI != undefined ? reportTypeSelectorAPI.getSelectedIds() : undefined,
             };
-                viewCommonPropertiesAPI.setCommonProperties(viewSettings);
+            viewCommonPropertiesAPI.setCommonProperties(viewSettings);
             var view = {
                 ViewId: (viewEntity != undefined) ? viewEntity.ViewId : null,
                 Name: $scope.scopeModel.reportName,
@@ -252,7 +263,7 @@
         function insert() {
             $scope.scopeModel.isLoading = true;
             var viewEntityObj = buildViewObjectFromScope();
-            viewEntityObj.ViewTypeName = viewTypeName; 
+            viewEntityObj.ViewTypeName = viewTypeName;
             return VR_Sec_ViewAPIService.AddView(viewEntityObj).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Analytic Report View', response, 'Name')) {
                     if ($scope.onViewAdded != undefined) {

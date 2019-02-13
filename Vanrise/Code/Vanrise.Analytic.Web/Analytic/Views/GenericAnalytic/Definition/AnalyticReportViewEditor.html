@@ -18,7 +18,7 @@
                             <vr-row>
                                 <vr-analytic-analyticreport-config-selector on-ready="scopeModel.onReportTypeSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedReportType" onselectionchanged="scopeModel.onReportTypeSelectionChanged" normal-col-num="12"></vr-analytic-analyticreport-config-selector>
                             </vr-row>
-                            <vr-row ng-if="scopeModel.selectedReportType !=undefined">
+                            <vr-row ng-show="scopeModel.selectedReportType !=undefined">
                                 <vr-analytic-analyticreport-selector on-ready="scopeModel.onReportSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedReport" normal-col-num="12"></vr-analytic-analyticreport-selector>
                             </vr-row>
                             <vr-row>
