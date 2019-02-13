@@ -22,7 +22,7 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/C4Switch/Settings/Templates/EricssonC4SwitchSettingsTemplate.html"
+            templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/C4Switch/Settings/Ericsson/Templates/EricssonC4SwitchSettingsTemplate.html"
         };
 
         function EricssonSettings($scope, ctrl, $attrs) {

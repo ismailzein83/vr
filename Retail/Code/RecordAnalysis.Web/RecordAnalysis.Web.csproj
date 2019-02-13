@@ -82,10 +82,12 @@
     <Content Include="RecordAnalysis\Directives\C4Switch\rec-anal-c4switch-settings.js" />
     <Content Include="RecordAnalysis\Directives\C4Switch\Templates\C4SwitchSettingsTemplate.html" />
     <Content Include="RecordAnalysis\Directives\C4Switch\rec-anal-c4switch-customobjectsettings.js" />
-    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\rec-anal-c4switch-settings-ericsson.js" />
-    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\rec-anal-c4switch-settings-huawei.js" />
-    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Templates\EricssonC4SwitchSettingsTemplate.html" />
-    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Templates\HuaweiC4SwitchSettingsTemplate.html" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Ericsson\rec-anal-c4switch-settings-ericsson.js" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Huawei\rec-anal-c4switch-settings-huaweicommunication.js" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Huawei\rec-anal-c4switch-settings-huawei.js" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Ericsson\Templates\EricssonC4SwitchSettingsTemplate.html" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Huawei\Templates\HuaweiC4SwitchCommunicationTemplate.html" />
+    <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Huawei\Templates\HuaweiC4SwitchSettingsTemplate.html" />
     <Content Include="RecordAnalysis\Services\APIServices\C4SwitchAPIService.js" />
     <Content Include="Web.config" />
   </ItemGroup>
