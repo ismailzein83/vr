@@ -219,7 +219,8 @@ as (select * from (values
 ('A64D3211-45AD-4B1B-8C76-BCE2AF7D03DE','SMSTaxRuleStep','SMS Tax Rule Step','VR_GenericData_DataTransformationStepConfig','{"Editor":"ra-datatransformation-smstaxrulestep","StepPreviewUIControl":"ra-datatransformation-smstaxrulestep-preview"}'),
 
 ('6CF73654-686F-47C4-A93C-3EDDBEDC9676','LastPeriodTimePeriod','Last Period','VRCommon_VRTimePeriod','{"Editor":"ra-timeperiod-lastperiod"}'),
-('B0187271-297F-4544-B323-4469A13962AB','LastYearPeriodTimePeriod','Last Year Period','VRCommon_VRTimePeriod','{"Editor":"ra-timeperiod-lastyearperiod"}')
+('B0187271-297F-4544-B323-4469A13962AB','LastYearPeriodTimePeriod','Last Year Period','VRCommon_VRTimePeriod','{"Editor":"ra-timeperiod-lastyearperiod"}'),
+('DEDB89C0-370F-4DF8-BE63-EE60C73436F6','OperatorDeclarationServices','OperatorDeclarationServices','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"retail-ra-operatordeclarationservices-customobjectsettings"}')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
