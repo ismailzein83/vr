@@ -8,19 +8,19 @@
         var controllerName = 'VRDashboardDefinition';
 
         return {
-            GetDashboardInfo: GetDashboardInfo,
-            GetDashboardEntity: GetDashboardEntity
+            GetDashboardDefinitionInfo: GetDashboardDefinitionInfo,
+            GetDashboardDefinitionEntity: GetDashboardDefinitionEntity
         };
 
-        function GetDashboardInfo(serializedFilter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetDashboardInfo"), {
+        function GetDashboardDefinitionInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetDashboardDefinitionInfo"), {
                 serializedFilter: serializedFilter
             });
         }
 
-        function GetDashboardEntity(dashboardId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetDashboardEntity"), {
-                dashboardId: dashboardId
+        function GetDashboardDefinitionEntity(dashboardDefinitonId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetDashboardDefinitionEntity"), {
+                dashboardDefinitonId: dashboardDefinitonId
             });
         }
     }

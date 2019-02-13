@@ -10,7 +10,7 @@ namespace Vanrise.Common.Business
         static Guid _dashboardDefinitionBEId = new Guid("6243CA7F-A14C-41BE-BE48-86322D835CA6");
 
         #region Public Methods
-        public IEnumerable<VRDashboardDefinitionInfo> GetDashboardInfo(VRDashboardDefinitionFilter filter)
+        public IEnumerable<VRDashboardDefinitionInfo> GetDashboardDefinitionInfo(VRDashboardDefinitionFilter filter)
         {
             var dashboardDefinitions = GetCachedVRDashboardDefinitions();
             Func<VRDashboardDefinition, bool> filterExpression = (itm) =>
@@ -22,7 +22,7 @@ namespace Vanrise.Common.Business
                 };
             return dashboardDefinitions.MapRecords(DashboardInfoMapper, filterExpression);
         }
-        public VRDashboardDefinition GetDashboardEntity(Guid vrDashboardDefinitionId)
+        public VRDashboardDefinition GetDashboardDefinitionEntity(Guid vrDashboardDefinitionId)
         {
             return GetCachedVRDashboardDefinitions().GetRecord(vrDashboardDefinitionId);
         }

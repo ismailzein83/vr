@@ -15,18 +15,18 @@ namespace Vanrise.Common.Web.Controllers
         VRDashboardDefinitionManager _manager = new VRDashboardDefinitionManager();
 
         [HttpGet]
-        [Route("GetDashboardInfo")]
-        public IEnumerable<VRDashboardDefinitionInfo> GetDashboardInfo(string serializedFilter)
+        [Route("GetDashboardDefinitionInfo")]
+        public IEnumerable<VRDashboardDefinitionInfo> GetDashboardDefinitionInfo(string serializedFilter)
         {
             VRDashboardDefinitionFilter dashboardDefinitionFilter = !string.IsNullOrEmpty(serializedFilter) ? Vanrise.Common.Serializer.Deserialize<VRDashboardDefinitionFilter>(serializedFilter) : null;
-            return _manager.GetDashboardInfo(dashboardDefinitionFilter);
+            return _manager.GetDashboardDefinitionInfo(dashboardDefinitionFilter);
         }
        
         [HttpGet]
-        [Route("GetDashboardEntity")]
-        public VRDashboardDefinition GetDashboardEntity(Guid dashboardId)
+        [Route("GetDashboardDefinitionEntity")]
+        public VRDashboardDefinition GetDashboardDefinitionEntity(Guid dashboardDefinitonId)
         {
-            return _manager.GetDashboardEntity(dashboardId);
+            return _manager.GetDashboardDefinitionEntity(dashboardDefinitonId);
         }
     }
 }
