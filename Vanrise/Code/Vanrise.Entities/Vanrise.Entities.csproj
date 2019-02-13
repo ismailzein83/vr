@@ -307,7 +307,7 @@
     <Compile Include="VRTile\TabTile.cs" />
     <Compile Include="VRTile\VRTile.cs" />
     <Compile Include="VRTile\VRTileExtendedSettingsConfig.cs" />
-    <Compile Include="VRTile\VRTileReportSettings.cs" />
+    <Compile Include="VRTile\VRDashboardSettings.cs" />
     <Compile Include="VRTile\VRTileSettings.cs" />
     <Compile Include="VRTimePeriod\VRTimePeriod.cs" />
     <Compile Include="VRTimePeriod\VRTimePeriodConfig.cs" />

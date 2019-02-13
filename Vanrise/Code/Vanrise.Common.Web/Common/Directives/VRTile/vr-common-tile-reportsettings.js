@@ -66,7 +66,7 @@
 
                 api.setData = function (data) {
                     data.Settings = {
-                        $type: "Vanrise.Entities.VRTileReportSettings,Vanrise.Entities",
+                        $type: "Vanrise.Entities.VRDashboardSettings ,Vanrise.Entities",
                         VRTiles: tilesGridAPI.getData(),
                     };
                 };
