@@ -255,7 +255,7 @@
                     var selectedDimension = $scope.scopeModel.selectedDimension;
                     dimensionId = selectedDimension.AnalyticItemConfigId;
                     return {
-                        $type: "Vanrise.Analytic.Business.MostRelevantAnalyticDimensionFiguresTileQuery,Vanrise.Analytic.Business",
+                        $type: "Vanrise.Analytic.MainExtensions.FiguresTileQueries.MostRelevantAnalyticDimensionFiguresTileQuery,Vanrise.Analytic.MainExtensions",
                         AnalyticTableId: analyticTableSelectorAPI.getSelectedIds(),
                         Measures: measuresIds,
                         TimePeriod: periodSelectorAPI.getData(),

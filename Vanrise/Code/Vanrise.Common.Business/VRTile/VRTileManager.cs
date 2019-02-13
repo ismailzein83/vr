@@ -20,10 +20,10 @@ namespace Vanrise.Common.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<FiguresTileQueryDefinitionSettingsConfig>(FiguresTileQueryDefinitionSettingsConfig.EXTENSION_TYPE);
         }
-        public IEnumerable<FiguresTileSchemaInfo> GetFiguresTileItemsToDiplayInfo(FiguresTileQueriesInput queriesInput)
+        public IEnumerable<FiguresTileSchema> GetQuerySchemaItems(FiguresTileQueriesInput queriesInput)
         {
             FiguresTileQueryGetSchemaContext context = new FiguresTileQueryGetSchemaContext();
-            List<FiguresTileSchemaInfo> figuresTileSchemaInfos = new List<FiguresTileSchemaInfo>();
+            List<FiguresTileSchema> figuresTileSchemaInfos = new List<FiguresTileSchema>();
             queriesInput.ThrowIfNull("queriesInput");
             var queries = queriesInput.Queries;
             queries.ThrowIfNull("queries");
@@ -34,7 +34,7 @@ namespace Vanrise.Common.Business
                 figureItems.ThrowIfNull("figureItems");
                 foreach (var figureItem in figureItems)
                 {
-                    figuresTileSchemaInfos.Add(new FiguresTileSchemaInfo() {
+                    figuresTileSchemaInfos.Add(new FiguresTileSchema() {
                         QueryId = query.FiguresTileQueryId,
                         Name = figureItem.Name,
                         Title = figureItem.Title,
@@ -54,7 +54,7 @@ namespace Vanrise.Common.Business
                 var selectedItemsToDisplay = new List<FiguresTileDisplayItem>();
                 foreach(var item in itemsToDisplay)
                 {
-                    if (item.FiguresTileQueryId == query.FiguresTileQueryId)
+                    if (item.FiguresTileQueryId == query.FiguresTileQueryId && !item.HideAtRuntime)
                         selectedItemsToDisplay.Add(item);
                 }
                

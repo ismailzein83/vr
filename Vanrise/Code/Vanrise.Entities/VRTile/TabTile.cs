@@ -8,6 +8,8 @@ namespace Vanrise.Entities
 {
     public class TabTile
     {
-        List<VRTile> Tiles { get; set; }
+        public string Name { get; set; }
+        public List<VRTile> Tiles { get; set; }
+       
     }
 }

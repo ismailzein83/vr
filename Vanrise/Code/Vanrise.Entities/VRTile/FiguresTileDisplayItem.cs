@@ -12,5 +12,6 @@ namespace Vanrise.Entities
         public string Name { get; set; }
         public string Title { get; set; }
         public string QueryName { get; set; }
+        public bool HideAtRuntime { get; set; }
     }
 }

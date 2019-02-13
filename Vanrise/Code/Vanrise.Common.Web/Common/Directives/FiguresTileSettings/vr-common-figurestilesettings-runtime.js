@@ -41,6 +41,7 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                     var definitionSettings;
                     if (payload != undefined) {
                         definitionSettings = payload.definitionSettings;
+                        $scope.scopeModel.imgPath = definitionSettings.IconPath;
                     }
                     if (definitionSettings != undefined) {
                         figureStyleInput = {

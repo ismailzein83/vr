@@ -10,36 +10,38 @@
             addVRTile: addVRTile,
             editVRTile: editVRTile,
             editFiguresTileQuery: editFiguresTileQuery,
-            addFiguresTileQuery: addFiguresTileQuery
-
+            addFiguresTileQuery: addFiguresTileQuery,
         };
 
-        function addVRTile(onVRTileAdded) {
-            var modalParameters = {
 
+        function addVRTile(onVRTileAdded, disableColumnWidth) {
+            var modalParameters = {
+                disableColumnWidth: disableColumnWidth
             };
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onVRTileAdded = onVRTileAdded;
             };
-
+           
             VRModalService.showModal('/Client/Modules/Common/Directives/VRTile/Templates/VRTileEditor.html', modalParameters, modalSettings);
         }
 
-        function editVRTile(vrTileEntity, onVRTileUpdated) {
+        function editVRTile(vrTileEntity, onVRTileUpdated, disableColumnWidth) {
             var modalParameters = {
-                vrTileEntity: vrTileEntity
+                vrTileEntity: vrTileEntity,
+                disableColumnWidth: disableColumnWidth
             };
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onVRTileUpdated = onVRTileUpdated;
+
             };
 
             VRModalService.showModal('/Client/Modules/Common/Directives/VRTile/Templates/VRTileEditor.html', modalParameters, modalSettings);
         }
-
+     
         function editFiguresTileQuery(figuresTileQueryEntity, onFigureTileQueryUpdated, figureTileQueries,clearItemsToDisplayDataSource) {
             var modalParameters = {
                 figuresTileQueryEntity: figuresTileQueryEntity,

@@ -125,7 +125,7 @@
                         if (payload.tileExtendedSettings != undefined) {
 
                             settings = payload.tileExtendedSettings;
-
+                           
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
                             tableSelectedPromiseDeffered = UtilsService.createPromiseDeferred();
                             promises.push(tableSelectedPromiseDeffered.promise);
@@ -144,7 +144,10 @@
                                     RootDimensionsFromSearch: settings.Settings.RootDimensionsFromSearch,
                                     TopRecords: settings.Settings.TopRecords,
                                     Measure: settings.Settings.Measure,
-                                    SeriesDimensions: settings.Settings.SeriesDimensions
+                                    SeriesDimensions: settings.Settings.SeriesDimensions,
+                                    Maximum: settings.Settings.Maximum,
+                                    Minimum: settings.Settings.Minimum,
+                                    RecordFilter:settings.Settings.RecordFilter
                                 };
                                 directivePayload = {
                                     tableIds: $scope.scopeModel.selectedTable != undefined ? [$scope.scopeModel.selectedTable.AnalyticTableId] : undefined,
@@ -190,7 +193,7 @@
                     if (directiveSettings != undefined)
                         directiveSettings.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
                     return {
-                        $type:'Vanrise.Analytic.MainExtensions.Widget.WidgetSettings,Vanrise.Analytic.MainExtensions',
+                        $type:'Vanrise.Analytic.MainExtensions.VRTile.AnalyticWidgetTile,Vanrise.Analytic.MainExtensions',
                         ConfigId : $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId,
                         AnalyticTableId: $scope.scopeModel.selectedTable != undefined ? $scope.scopeModel.selectedTable.AnalyticTableId : undefined,
                         TimePeriod: periodSelectorAPI.getData(),

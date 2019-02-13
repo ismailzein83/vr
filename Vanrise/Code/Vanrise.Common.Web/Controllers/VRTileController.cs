@@ -30,10 +30,10 @@ namespace Vanrise.Common.Web.Controllers
             return _manager.GetFiguresTilesDefinitionSettingsConfigs();
         }
         [HttpPost]
-        [Route("GetFiguresTileItemsToDiplayInfo")]
-        public IEnumerable<FiguresTileSchemaInfo> GetFiguresTileItemsToDiplayInfo(FiguresTileQueriesInput queriesInput)
+        [Route("GetQuerySchemaItems")]
+        public IEnumerable<FiguresTileSchema> GetQuerySchemaItems(FiguresTileQueriesInput queriesInput)
         {
-            return _manager.GetFiguresTileItemsToDiplayInfo(queriesInput);
+            return _manager.GetQuerySchemaItems(queriesInput);
         }
         [HttpPost]
         [Route("GetFigureItemsValue")]

@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
+﻿<vr-columns width="fullrow">
+    <vr-button type="Add" data-onclick="ctrl.addTabTile" standalone></vr-button>
 
-</body>
-</html>
+    <vr-validator validate="ctrl.isValid()">
+        <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                     on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeTabTile" hidegridmenu>
+            <vr-datagridcolumn headertext="'Name'"  field="'Name'" widthfactor="10" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
+</vr-columns>

@@ -15,6 +15,7 @@ namespace Vanrise.Common.MainExtensions.VRTile
         public Guid? ViewId { get; set; }
         public List<FiguresTileQuery> Queries { get; set; }
         public List<FiguresTileDisplayItem> ItemsToDisplay { get; set; }
+        public string IconPath { get; set; }
     }
     //public class FiguresTileDisplayItem
     //{

@@ -180,7 +180,7 @@
                         measuresIds.push(measure.AnalyticItemConfigId);
                     }
                     return {
-                        $type: "Vanrise.Analytic.Business.OverallAnalyticFiguresTileQuery,Vanrise.Analytic.Business",
+                        $type: "Vanrise.Analytic.MainExtensions.FiguresTileQueries.OverallAnalyticFiguresTileQuery,Vanrise.Analytic.MainExtensions",
                         AnalyticTableId: analyticTableSelectorAPI.getSelectedIds(),
                         Measures: measuresIds,
                         TimePeriod: periodSelectorAPI.getData(),

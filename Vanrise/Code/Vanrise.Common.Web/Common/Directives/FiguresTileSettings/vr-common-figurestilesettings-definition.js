@@ -38,9 +38,13 @@
             var queryGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var viewId;
+            var settings;
 
             var queries;
             var itemsToDisplay;
+
+            var figureIconSelectorAPI;
+            var figureIconSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
 
@@ -55,6 +59,10 @@
                     queryGridAPI = api;
                     queryGridReadyPromiseDeferred.resolve();
                 };
+                $scope.scopeModel.onFigureIconSelectorReady = function (api) {
+                    figureIconSelectorAPI = api;
+                    figureIconSelectorReadyDeferred.resolve();
+                };
 
                 defineAPI();
             }
@@ -64,7 +72,7 @@
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        var settings = payload.tileExtendedSettings;
+                         settings = payload.tileExtendedSettings;
                         viewId = settings.ViewId;
                         queries = settings.Queries;
                         itemsToDisplay = settings.ItemsToDisplay;
@@ -77,6 +85,8 @@
                     var gridQueriesPromise = loadQueriesGrid();
                     promises.push(gridQueriesPromise);
 
+                    var figureIconPromise = loadFigureIconSelector();
+                    promises.push(figureIconPromise);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -87,8 +97,9 @@
                         $type: 'Vanrise.Common.MainExtensions.VRTile.FiguresTileSettings,Vanrise.Common.MainExtensions',
                         ViewId: viewSelectorAPI.getSelectedIds(),
                         Queries: data.queries,
-                        ItemsToDisplay : data.itemsToDisplay
-                    }
+                        ItemsToDisplay: data.itemsToDisplay,
+                        IconPath: figureIconSelectorAPI.getSelectedIds()
+                    };
                 };
 
                 if (ctrl.onReady != null)
@@ -107,6 +118,19 @@
                     });
 
                     return viewSelectorLoadDeferred.promise;
+                }
+                function loadFigureIconSelector() {
+                    var loadFigureIconSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                    figureIconSelectorReadyDeferred.promise.then(function () {
+                        var figureIconSelectorPayload;
+                        if (settings != undefined) {
+                            figureIconSelectorPayload = {
+                                selectedIds: settings.IconPath
+                            };
+                        };
+                        VRUIUtilsService.callDirectiveLoad(figureIconSelectorAPI, figureIconSelectorPayload, loadFigureIconSelectorPromiseDeferred);
+                    });
+                    return loadFigureIconSelectorPromiseDeferred.promise;
                 }
                 function loadQueriesGrid() {
                     var gridQueriesLoadDeferred = UtilsService.createPromiseDeferred();

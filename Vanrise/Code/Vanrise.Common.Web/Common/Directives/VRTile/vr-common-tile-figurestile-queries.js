@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VRTileService','VRCommon_VRTileAPIService',
-    function (UtilsService, VRUIUtilsService, VRCommon_VRTileService, VRCommon_VRTileAPIService) {
+app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VRTileService', 'VRCommon_VRTileAPIService','VRNotificationService',
+    function (UtilsService, VRUIUtilsService, VRCommon_VRTileService, VRCommon_VRTileAPIService, VRNotificationService) {
 
         return {
             restrict: 'E',
@@ -26,7 +26,7 @@ app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsServi
 
             var gridAPI;
 
-           
+
 
             function initializeController() {
 
@@ -35,7 +35,26 @@ app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsServi
 
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
-
+                    if (ctrl.datasource.length > 0)
+                        return null;
+                    else return "1 Item at least should be added";
+                };
+                ctrl.editFiguresTileQuery = function (obj) {
+                    var onFigureTileQueryUpdated = function (figureTileQuery) {
+                        var index = ctrl.datasource.indexOf(obj);
+                        ctrl.datasource[index] = figureTileQuery;
+                        var queryInput = {
+                            Queries: ctrl.datasource
+                        };
+                        ctrl.itemsToDisplayLoading = true;
+                        updateItemsToDisplayGridData().then(function () {
+                            ctrl.itemsToDisplayLoading = false;
+                        });
+                    };
+                    var clearItemsToDisplayDataSource = function () {
+                        ctrl.itemsToDisplayDatasource = [];
+                    };
+                    VRCommon_VRTileService.editFiguresTileQuery(obj, onFigureTileQueryUpdated, ctrl.datasource, clearItemsToDisplayDataSource);
                 };
                 ctrl.onSelectedItemChange = function (value) {
                     if (value != undefined) {
@@ -52,22 +71,38 @@ app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsServi
                 };
                 ctrl.addQuery = function () {
                     var onFigureTileQueryAdded = function (query) {
-                        ctrl.datasource.push(query);
-                        return loadItemsToDisplaySelector();
+                        if (query != undefined) {
+                            ctrl.datasource.push(query);
+                            var queryInput = {
+                                Queries: ctrl.datasource
+                            };
+                            ctrl.itemsToDisplayLoading = true;
+                            updateItemsToDisplayGridData().then(function () {
+                                ctrl.itemsToDisplayLoading = false;
+                            });
+                        }
                     };
-                    VRCommon_VRTileService.addFiguresTileQuery(onFigureTileQueryAdded,ctrl.datasource);
+                    VRCommon_VRTileService.addFiguresTileQuery(onFigureTileQueryAdded, ctrl.datasource);
                 };
 
                 ctrl.removeQuery = function (dataItem) {
-                    var index = ctrl.datasource.indexOf(dataItem);
-                    ctrl.datasource.splice(index, 1);
+                    VRNotificationService.showConfirmation().then(function (confirmed) {
+                        if (confirmed) {
+                            var index = ctrl.datasource.indexOf(dataItem);
+                            ctrl.datasource.splice(index, 1);
+                            ctrl.itemsToDisplayLoading = true;
+                            updateItemsToDisplayGridData().then(function () {
+                                ctrl.itemsToDisplayLoading = false;
+                            });
+                        }
+                    });
+
                 };
                 ctrl.removeItem = function (dataItem) {
                     var index = ctrl.itemsToDisplayDatasource.indexOf(dataItem);
                     ctrl.itemsToDisplayDatasource.splice(index, 1);
                 };
 
-                defineMenuActions();
                 defineAPI();
             }
             function defineAPI() {
@@ -88,7 +123,6 @@ app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsServi
                             ctrl.itemsToDisplayDatasource.push(item);
                         }
                     }
-                    promises.push(loadItemsToDisplaySelector());
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
@@ -109,13 +143,14 @@ app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsServi
                     if (ctrl.itemsToDisplayDatasource != undefined) {
                         for (var i = 0; i < ctrl.itemsToDisplayDatasource.length; i++) {
                             var dataItem = ctrl.itemsToDisplayDatasource[i];
-                            var item = {
-                                FiguresTileQueryId: ctrl.itemsToDisplayDatasource[i].FiguresTileQueryId,
-                                Name: ctrl.itemsToDisplayDatasource[i].Name,
-                                Title: dataItem.Title,
-                                QueryName: ctrl.itemsToDisplayDatasource[i].QueryName
-                            };
-                            itemsToDisplay.push(item);
+                                var item = {
+                                    FiguresTileQueryId: ctrl.itemsToDisplayDatasource[i].FiguresTileQueryId,
+                                    Name: ctrl.itemsToDisplayDatasource[i].Name,
+                                    Title: dataItem.Title,
+                                    QueryName: ctrl.itemsToDisplayDatasource[i].QueryName,
+                                    HideAtRuntime: dataItem.HideAtRuntime
+                                };
+                                itemsToDisplay.push(item);
                         }
                     }
                     return {
@@ -129,42 +164,60 @@ app.directive('vrCommonTileFigurestileQueries', ['UtilsService', 'VRUIUtilsServi
 
 
             }
-            function defineMenuActions() {
-                var defaultMenuActions = [{
-                    name: "Edit",
-                    clicked: editFigureTileQuery
-                }];
-                $scope.gridMenuActions = function (dataItem) {
-                    return defaultMenuActions;
-                };
-            }
 
-            function editFigureTileQuery(obj) {
-                var onFigureTileQueryUpdated = function (figureTileQuery) {
-                    var index = ctrl.datasource.indexOf(obj);
-                    ctrl.datasource[index] = figureTileQuery;
-                    return loadItemsToDisplaySelector();
-                };
-                var clearItemsToDisplayDataSource = function () {
-                    ctrl.itemsToDisplayDatasource = [];
-                };
-                VRCommon_VRTileService.editFiguresTileQuery(obj, onFigureTileQueryUpdated, ctrl.datasource, clearItemsToDisplayDataSource);
-            }
             function loadItemsToDisplaySelector() {
                 ctrl.itemsToDisplay = [];
+
+            }
+            function updateItemsToDisplayGridData() {
+                ctrl.itemsToDisplayLoading = true;
                 var queryInput = {
                     Queries: ctrl.datasource
                 };
-                return VRCommon_VRTileAPIService.GetFiguresTileItemsToDiplayInfo(queryInput).then(function (response) {
+                
+                return VRCommon_VRTileAPIService.GetQuerySchemaItems(queryInput).then(function (response) {
                     if (response != undefined) {
                         var figureItems = response;
-                        for (var i = 0; i < figureItems.length; i++) {
-                            var figureItem = figureItems[i];
-                            figureItem.displayName = figureItem.Name + " (" + figureItem.QueryName + ")";
-                            ctrl.itemsToDisplay.push(figureItem);
+                        if (figureItems != undefined && figureItems.length > 0) {
+                            for (var i = 0; i < figureItems.length; i++) {
+                                var figureItemExists = false;
+                                var figureItem = figureItems[i];
+
+                                var dataSourceItem = UtilsService.getItemByVal(ctrl.itemsToDisplayDatasource, figureItem.Name, 'Name');
+                                if (dataSourceItem != undefined) {
+                                    if (figureItem.QueryName == dataSourceItem.QueryName)
+                                        figureItemExists = true;
+                                }
+                                if (!figureItemExists) {
+                                    ctrl.itemsToDisplayDatasource.push({
+                                        Name: figureItem.Name,
+                                        Title: figureItem.Title,
+                                        FiguresTileQueryId: figureItem.QueryId,
+                                        QueryName: figureItem.QueryName
+                                    });
+                                }
+                            }
+                            if (ctrl.itemsToDisplayDatasource != undefined && ctrl.itemsToDisplayDatasource.length > 0) {
+                                var updatedItemsToDiplay = [];
+                                for (var j = 0; j < ctrl.itemsToDisplayDatasource.length; j++) {
+                                    var itemTodisplay = ctrl.itemsToDisplayDatasource[j];
+                                    if (itemTodisplay != undefined) {
+                                        var figureItemValue = UtilsService.getItemByVal(figureItems, itemTodisplay.Name, 'Name');
+                                        if (figureItemValue != null && figureItemValue.QueryName == itemTodisplay.QueryName ) {
+                                            updatedItemsToDiplay.push(itemTodisplay);
+                                        }
+                                    }
+                                }
+                                ctrl.itemsToDisplayDatasource = updatedItemsToDiplay;
+                            }
                         }
+                        else {
+                            ctrl.itemsToDisplayDatasource = [];
+                        }
+
                     }
                 });
+
             }
         }
     }]);

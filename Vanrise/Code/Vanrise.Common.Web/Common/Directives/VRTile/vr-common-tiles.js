@@ -37,7 +37,7 @@ app.directive('vrCommonTiles', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VR
                     var onVRTileAdded = function (vrTile) {
                         ctrl.datasource.push({ Entity: vrTile });
                     };
-                    VRCommon_VRTileService.addVRTile(onVRTileAdded, ctrl.datasource);
+                    VRCommon_VRTileService.addVRTile(onVRTileAdded);
                 };
                 ctrl.removeVRTile = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
@@ -98,7 +98,7 @@ app.directive('vrCommonTiles', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VR
                     var index = ctrl.datasource.indexOf(vrTileObj);
                     ctrl.datasource[index] = { Entity: vrTile };
                 };
-                VRCommon_VRTileService.editVRTile(vrTileObj.Entity, onVRTileUpdated, ctrl.datasource);
+                VRCommon_VRTileService.editVRTile(vrTileObj.Entity, onVRTileUpdated);
             }
         }
     }]);

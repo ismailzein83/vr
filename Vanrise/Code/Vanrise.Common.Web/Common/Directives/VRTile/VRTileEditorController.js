@@ -12,6 +12,8 @@
         var extendedSettingsDirectiveApi;
         var extendedSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var disableColumnWidth;
+
     
         loadParameters();
         defineScope();
@@ -21,6 +23,8 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 vrTileEntity = parameters.vrTileEntity;
+                disableColumnWidth = parameters.disableColumnWidth;
+                
             }
             isEditMode = (vrTileEntity != undefined);
         }
@@ -31,6 +35,7 @@
                 extendedSettingsDirectiveApi = api;
                 extendedSettingsReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModel.disableColumnWidth = disableColumnWidth != undefined ? disableColumnWidth : false;
             $scope.scopeModel.columnWidth = UtilsService.getArrayEnum(ColumnWidthEnum);
             $scope.scopeModel.selectedColumnWidth = ColumnWidthEnum.FullRow;
             $scope.scopeModel.saveVRTile = function () {

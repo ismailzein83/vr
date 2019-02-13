@@ -13,8 +13,8 @@
         function GetFiguresTilesDefinitionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFiguresTilesDefinitionSettingsConfigs"));
         }
-        function GetFiguresTileItemsToDiplayInfo(queriesInput) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFiguresTileItemsToDiplayInfo"), queriesInput);
+        function GetQuerySchemaItems(queriesInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetQuerySchemaItems"), queriesInput);
         }
         function GetFigureItemsValue(figureStyleInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFigureItemsValue"), figureStyleInput);
@@ -22,7 +22,7 @@
         return ({
             GetTileExtendedSettingsConfigs: GetTileExtendedSettingsConfigs,
             GetFiguresTilesDefinitionSettingsConfigs: GetFiguresTilesDefinitionSettingsConfigs,
-            GetFiguresTileItemsToDiplayInfo: GetFiguresTileItemsToDiplayInfo,
+            GetQuerySchemaItems: GetQuerySchemaItems,
             GetFigureItemsValue: GetFigureItemsValue
 
         });

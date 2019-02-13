@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class FiguresTileSchemaInfo
+    public class FiguresTileSchema
     {
         public Guid QueryId { get; set; }
         public string QueryName { get; set; }
