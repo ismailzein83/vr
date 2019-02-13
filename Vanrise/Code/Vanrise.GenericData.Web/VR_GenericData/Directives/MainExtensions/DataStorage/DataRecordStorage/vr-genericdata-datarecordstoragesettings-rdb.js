@@ -320,7 +320,7 @@
                         if (checkIfValuesAreDefault(col)) {
                             var dataRecordField = dataRecordTypeFields.find(function (element) {
                                 return element.FieldName == col.FieldName;
-                            })
+                            });
                             gridItem.columnName = dataRecordField.FieldName;
                             gridItem.isUnique = dataRecordField.IsUnique;
                             gridItem.rdbDataType = dataRecordField.RDBDataType;
