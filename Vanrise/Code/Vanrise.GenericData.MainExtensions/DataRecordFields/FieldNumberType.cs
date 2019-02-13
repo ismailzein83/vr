@@ -224,8 +224,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             switch (this.DataType)
             {
                 case FieldNumberDataType.Int:
+                    return Convert.ToInt32(value);
+
                 case FieldNumberDataType.BigInt:
-                    return value;
+                    return Convert.ToInt64(value);
 
                 case FieldNumberDataType.Decimal:
                     GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
