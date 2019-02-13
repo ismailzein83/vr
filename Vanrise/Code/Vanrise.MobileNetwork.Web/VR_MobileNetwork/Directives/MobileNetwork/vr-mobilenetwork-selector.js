@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrMobilenetworkSelector', ['VRUIUtilsService', 'VR_MobileNetwork_MobileNetworkAPIService', 'UtilsService', function (VRUIUtilsService, VR_MobileNetwork_MobileNetworkAPIService, UtilsService) {
+app.directive('vrMobilenetworkSelector', ['VRUIUtilsService', 'VR_MobileNetwork_MobileNetworkAPIService', 'UtilsService', '$filter', function (VRUIUtilsService, VR_MobileNetwork_MobileNetworkAPIService, UtilsService, $filter) {
     return {
         restrict: 'E',
         scope: {
@@ -68,8 +68,9 @@ app.directive('vrMobilenetworkSelector', ['VRUIUtilsService', 'VR_MobileNetwork_
                 return VR_MobileNetwork_MobileNetworkAPIService.GetMobileNetworksInfo(serializedFilter).then(function (response) {
                     ctrl.datasource.length = 0;
                     if (response) {
-                        for (var i = 0; i < response.length; i++) {
-                            ctrl.datasource.push(response[i]);
+                        var data = $filter('orderBy')(response, 'NetworkName');
+                        for (var i = 0; i < data.length; i++) {
+                            ctrl.datasource.push(data[i]);
                         }
                     }
 
