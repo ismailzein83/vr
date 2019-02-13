@@ -32,7 +32,7 @@ namespace Vanrise.Invoice.MainExtensions
 
                 } while (nextToDate < context.IssueDate);
                 
-               if (perviousBillingInterval.ToDate > context.IssueDate)
+               if (perviousBillingInterval.ToDate.Date >= context.IssueDate.Date)
                {
                     perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
                }
