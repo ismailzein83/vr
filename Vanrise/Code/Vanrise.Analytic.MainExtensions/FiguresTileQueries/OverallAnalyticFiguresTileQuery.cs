@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
-namespace Vanrise.Analytic.Business
+namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
 {
     public class OverallAnalyticFiguresTileQuery : FiguresTileQuerySettings
     {

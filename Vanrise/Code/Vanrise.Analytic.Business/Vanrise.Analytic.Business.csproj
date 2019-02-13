@@ -108,9 +108,6 @@
     <Compile Include="VRRestAPIDataProvider\RemoteAnalyticDataProvider.cs" />
     <Compile Include="VRRestAPIDataProvider\VRRestAPIAnalyticDataProvider.cs" />
     <Compile Include="VRRestAPIAnalyticQueryInterceptor\VRRestAPIAnalyticQueryInterceptorContext.cs" />
-    <Compile Include="VRTiles\AnalyticWidgetTile.cs" />
-    <Compile Include="VRTiles\OverallAnalyticFiguresTileQuery.cs" />
-    <Compile Include="VRTiles\MostRelevantAnalyticDimensionFiguresTileQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.BP.Arguments\Vanrise.Analytic.BP.Arguments.csproj">
@@ -177,6 +174,9 @@
       <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
       <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="VRTiles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

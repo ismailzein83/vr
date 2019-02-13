@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
-namespace Vanrise.Analytic.Business
+namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
 {
     public class MostRelevantAnalyticDimensionFiguresTileQuery : FiguresTileQuerySettings
     {
@@ -27,7 +28,7 @@ namespace Vanrise.Analytic.Business
             TimePeriod.GetTimePeriod(timePeriodContext);
             AnalyticManager analyticManager = new AnalyticManager();
             List<string> selectedItemsToDisplayNames = new List<string>();
-            var itemsToDisplay = context.ItemsToDisplay;
+            var itemsToDisplay = context.ItemsToDisplay; 
             foreach (var item in itemsToDisplay)
             {
                 selectedItemsToDisplayNames.Add(item.Name);
