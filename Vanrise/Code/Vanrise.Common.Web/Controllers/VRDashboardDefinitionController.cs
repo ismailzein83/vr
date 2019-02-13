@@ -7,12 +7,12 @@ using Vanrise.Web.Base;
 
 namespace Vanrise.Common.Web.Controllers
 {
-    [RoutePrefix(Constants.ROUTE_PREFIX + "VRDashboard")]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "VRDashboardDefinition")]
     [JSONWithTypeAttribute]
 
-    public class VRDashboardController : BaseAPIController
+    public class VRDashboardDefinitionController : BaseAPIController
     {
-        VRDashboardManager _manager = new VRDashboardManager();
+        VRDashboardDefinitionManager _manager = new VRDashboardDefinitionManager();
 
         [HttpGet]
         [Route("GetDashboardInfo")]

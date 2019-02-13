@@ -5,7 +5,7 @@
 
     function VRDashboardAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
 
-        var controllerName = 'VRDashboard';
+        var controllerName = 'VRDashboardDefinition';
 
         return {
             GetDashboardInfo: GetDashboardInfo,

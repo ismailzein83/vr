@@ -124,6 +124,8 @@
     <Content Include="Common\Constant\VRHttpMethodEnum.js" />
     <Content Include="Common\Directives\AdditionalErrors\AdditionalErrorsTemplate.html" />
     <Content Include="Common\Directives\AdditionalErrors\vr-common-additionalerrors.js" />
+    <Content Include="Common\Directives\ConnectionString\Templates\ConnectionStringTemplate.html" />
+    <Content Include="Common\Directives\ConnectionString\vr-common-connectionstring.js" />
     <Content Include="Common\Directives\Country\vr-common-country-remoteselector.js" />
     <Content Include="Common\Directives\Currency\vr-common-currency-remoteselector.js" />
     <Content Include="Common\Directives\FigureIcon\vr-common-figureicon-selective.js" />
@@ -253,7 +255,7 @@
     <Compile Include="Controllers\SMSMessageTemplateController.cs" />
     <Compile Include="Controllers\SMSMessageTypeController.cs" />
     <Compile Include="Controllers\RemoteFileController.cs" />
-    <Compile Include="Controllers\VRDashboardController.cs" />
+    <Compile Include="Controllers\VRDashboardDefinitionController.cs" />
     <Compile Include="Controllers\VRDynamicAPIController.cs" />
     <Compile Include="Controllers\VRDynamicAPIModuleController.cs" />
     <Compile Include="Controllers\VRExclusiveSessionController.cs" />
