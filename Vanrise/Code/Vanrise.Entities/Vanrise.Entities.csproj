@@ -74,7 +74,7 @@
     <Compile Include="DBReplication\DBReplicationPreInsertConfig.cs" />
     <Compile Include="ErlangBCalculatorParameters.cs" />
     <Compile Include="File\VRRemoteFileInfo.cs" />
-    <Compile Include="VRDashboard\VRDashboardFilter.cs" />
+    <Compile Include="VRDashboardDefinition\VRDashboardDefinitionFilter.cs" />
     <Compile Include="VRFigureIcon.cs" />
     <Compile Include="ProcessState.cs" />
     <Compile Include="RDBDataType\RDBDataType.cs" />
@@ -137,8 +137,8 @@
     <Compile Include="VRComment\VRComment.cs" />
     <Compile Include="VRComment\VRCommentQuery.cs" />
     <Compile Include="VRConnection\VRHttpConnection.cs" />
-    <Compile Include="VRDashboard\VRDashboard.cs" />
-    <Compile Include="VRDashboard\VRDashboardInfo.cs" />
+    <Compile Include="VRDashboardDefinition\VRDashboardDefinition.cs" />
+    <Compile Include="VRDashboardDefinition\VRDashboardDefinitionInfo.cs" />
     <Compile Include="VRDynamicAPIModule\VRDynamicAPIModuleDetails.cs" />
     <Compile Include="VRDynamicAPIModule\VRDynamicAPIModuleQuery.cs" />
     <Compile Include="VRDynamicAPIModule\VRDynamicAPIModule.cs" />

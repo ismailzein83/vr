@@ -10,44 +10,44 @@ namespace Vanrise.Common.Business
         static Guid _dashboardDefinitionBEId = new Guid("6243CA7F-A14C-41BE-BE48-86322D835CA6");
 
         #region Public Methods
-        public IEnumerable<VRDashboardInfo> GetDashboardInfo(VRDashboardFilter filter)
+        public IEnumerable<VRDashboardDefinitionInfo> GetDashboardInfo(VRDashboardDefinitionFilter filter)
         {
             var dashboardDefinitions = GetCachedVRDashboardDefinitions();
-            Func<VRDashboard, bool> filterExpression = (itm) =>
+            Func<VRDashboardDefinition, bool> filterExpression = (itm) =>
                 {
-                    if (filter != null && filter.DashboardDefinitionIds != null && !filter.DashboardDefinitionIds.Contains((Guid)itm.VRDashboardId))
+                    if (filter != null && filter.DashboardDefinitionIds != null && !filter.DashboardDefinitionIds.Contains((Guid)itm.VRDashboardDefinitionId))
                         return false;
 
                     return true;
                 };
             return dashboardDefinitions.MapRecords(DashboardInfoMapper, filterExpression);
         }
-        public VRDashboard GetDashboardEntity(Guid vrDashboardId)
+        public VRDashboardDefinition GetDashboardEntity(Guid vrDashboardDefinitionId)
         {
-            return GetCachedVRDashboardDefinitions().GetRecord(vrDashboardId);
+            return GetCachedVRDashboardDefinitions().GetRecord(vrDashboardDefinitionId);
         }
 
         #endregion
 
         #region Private Methods
-        private Dictionary<Guid, VRDashboard> GetCachedVRDashboardDefinitions()
+        private Dictionary<Guid, VRDashboardDefinition> GetCachedVRDashboardDefinitions()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
             return genericBusinessEntityManager.GetCachedOrCreate("GetCachedVRDashboardDefinitions", _dashboardDefinitionBEId, () =>
             {
-                Dictionary<Guid, VRDashboard> result = new Dictionary<Guid, VRDashboard>();
+                Dictionary<Guid, VRDashboardDefinition> result = new Dictionary<Guid, VRDashboardDefinition>();
                 IEnumerable<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(_dashboardDefinitionBEId, null);
                 if (genericBusinessEntities != null)
                 {
                     foreach (GenericBusinessEntity genericBusinessEntity in genericBusinessEntities)
                     {
-                        VRDashboard vRDashboardDefinition = new VRDashboard()
+                        VRDashboardDefinition vRDashboardDefinition = new VRDashboardDefinition()
                         {
-                            VRDashboardId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
+                            VRDashboardDefinitionId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = genericBusinessEntity.FieldValues.GetRecord("Name") as string,
                             Settings = genericBusinessEntity.FieldValues.GetRecord("Settings") as VRDashboardSettings
                         };
-                        result.Add(vRDashboardDefinition.VRDashboardId, vRDashboardDefinition);
+                        result.Add(vRDashboardDefinition.VRDashboardDefinitionId, vRDashboardDefinition);
                     }
                 }
                 return result;
@@ -56,11 +56,11 @@ namespace Vanrise.Common.Business
         #endregion
 
         #region Mappers
-        private VRDashboardInfo DashboardInfoMapper(VRDashboard dashboardDefinition)
+        private VRDashboardDefinitionInfo DashboardInfoMapper(VRDashboardDefinition dashboardDefinition)
         {
-            return new VRDashboardInfo()
+            return new VRDashboardDefinitionInfo()
             {
-                VRDashboardId = dashboardDefinition.VRDashboardId,
+                VRDashboardDefinitionId = dashboardDefinition.VRDashboardDefinitionId,
                 Name = dashboardDefinition.Name
             };
         }

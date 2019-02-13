@@ -16,15 +16,15 @@ namespace Vanrise.Common.Web.Controllers
 
         [HttpGet]
         [Route("GetDashboardInfo")]
-        public IEnumerable<VRDashboardInfo> GetDashboardInfo(string serializedFilter)
+        public IEnumerable<VRDashboardDefinitionInfo> GetDashboardInfo(string serializedFilter)
         {
-            VRDashboardFilter dashboardDefinitionFilter = !string.IsNullOrEmpty(serializedFilter) ? Vanrise.Common.Serializer.Deserialize<VRDashboardFilter>(serializedFilter) : null;
+            VRDashboardDefinitionFilter dashboardDefinitionFilter = !string.IsNullOrEmpty(serializedFilter) ? Vanrise.Common.Serializer.Deserialize<VRDashboardDefinitionFilter>(serializedFilter) : null;
             return _manager.GetDashboardInfo(dashboardDefinitionFilter);
         }
        
         [HttpGet]
         [Route("GetDashboardEntity")]
-        public VRDashboard GetDashboardEntity(Guid dashboardId)
+        public VRDashboardDefinition GetDashboardEntity(Guid dashboardId)
         {
             return _manager.GetDashboardEntity(dashboardId);
         }

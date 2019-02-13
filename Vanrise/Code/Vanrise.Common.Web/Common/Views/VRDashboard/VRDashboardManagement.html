@@ -1,7 +1,7 @@
 ﻿<vr-panel ng-controller="VRCommon_VRDashboardManagementController" vr-loader="scopeModel.isLoading">
     <vr-row removeline>
         <vr-columns  ng-repeat="vrDashboardDefinition in scopeModel.vrDashboardsDefinition" >
-            <a href="" class="link" ng-click="scopeModel.loadVRDashboardEntity(vrDashboardDefinition.VRDashboardId)">{{vrDashboardDefinition.Name}}</a>
+            <a href="" class="link" ng-click="scopeModel.loadVRDashboardEntity(vrDashboardDefinition.VRDashboardDefinitionId)">{{vrDashboardDefinition.Name}}</a>
         </vr-columns>
     </vr-row>
     <vr-form name="formFilter">

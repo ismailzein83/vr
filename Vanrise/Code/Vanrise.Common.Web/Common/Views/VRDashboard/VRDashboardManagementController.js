@@ -23,8 +23,8 @@ function VRDashboardManagementController($scope, VRUIUtilsService, VRNavigationS
         $scope.scopeModel.vrTiles = [];
         $scope.scopeModel.vrDashboardsDefinition = [];
 
-        $scope.scopeModel.loadVRDashboardEntity = function (vrDashboardId) {
-            getDashboardEntity(vrDashboardId);
+        $scope.scopeModel.loadVRDashboardEntity = function (vrDashboardDefinitionId) {
+            getDashboardEntity(vrDashboardDefinitionId);
         };
     }
 
@@ -53,7 +53,7 @@ function VRDashboardManagementController($scope, VRUIUtilsService, VRNavigationS
                         var dashboardDefinition = dashboardsDefinition[i];
                         $scope.scopeModel.vrDashboardsDefinition.push(dashboardDefinition);
                     }
-                    getDashboardEntity(dashboardsDefinition[0].VRDashboardId);
+                    getDashboardEntity(dashboardsDefinition[0].vrDashboardDefinitionId);
                 }
             });
         }
@@ -66,9 +66,9 @@ function VRDashboardManagementController($scope, VRUIUtilsService, VRNavigationS
         });
     }
 
-    function getDashboardEntity(vrDashboardId) {
+    function getDashboardEntity(vrDashboardDefinitionId) {
         $scope.scopeModel.isLoading = true;
-        return VRCommon_VRDashboardAPIService.GetDashboardEntity(vrDashboardId).then(function (response) {
+        return VRCommon_VRDashboardAPIService.GetDashboardEntity(vrDashboardDefinitionId).then(function (response) {
             if (response != null && response.Settings.VRTiles != null && response.Settings.VRTiles.length > 0) {
                 var tiles = response.Settings.VRTiles;
                 $scope.scopeModel.vrTiles = [];
