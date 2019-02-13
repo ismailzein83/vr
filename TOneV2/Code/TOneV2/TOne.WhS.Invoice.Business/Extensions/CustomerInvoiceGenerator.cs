@@ -21,35 +21,16 @@ namespace TOne.WhS.Invoice.Business.Extensions
 {
     public class CustomerInvoiceGenerator : InvoiceGenerator
     {
+        PartnerManager _partnerManager = new PartnerManager();
+        WHSFinancialAccountManager _financialAccountManager = new WHSFinancialAccountManager();
+        TOneModuleManager _tOneModuleManager = new TOneModuleManager();
+
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
+            var financialAccount = _financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
+            if (!CheckUnpricedCDRs(context, financialAccount))
+                return;
 
-            PartnerManager partnerManager = new PartnerManager();
-            List<string> listMeasures = new List<string> { "SaleNetNotNULL", "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
-            List<string> listDimensions = new List<string> { "SaleZone", "Customer", "SaleCurrency", "SaleRate", "SaleRateType", "Supplier", "Country", "SupplierZone", "SaleDealZoneGroupNb", "SaleDealTierNb", "SaleDeal", "SaleDealRateTierNb" };
-            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
-            var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
-
-            CheckUnpricedCDRsInvoiceSettingPart checkUnpricedCDRsInvoiceSettingPart = partnerManager.GetInvoicePartnerSettingPart<CheckUnpricedCDRsInvoiceSettingPart>(context.InvoiceTypeId, context.PartnerId);
-            if (checkUnpricedCDRsInvoiceSettingPart != null && checkUnpricedCDRsInvoiceSettingPart.IsEnabled)
-            {
-                if (CheckUnpricedCDRs(context, financialAccount))
-                {
-                    context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
-                    context.ErrorMessage = "There are unpriced CDRs during the selected period";
-                    return;
-                }
-            }
-
-
-            var definitionSettings = new WHSFinancialAccountDefinitionManager().GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
-            definitionSettings.ThrowIfNull("definitionSettings", financialAccount.FinancialAccountDefinitionId);
-            definitionSettings.FinancialAccountInvoiceTypes.ThrowIfNull("definitionSettings.FinancialAccountInvoiceTypes", financialAccount.FinancialAccountDefinitionId);
-            var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.InvoiceTypeId == context.InvoiceTypeId);
-            financialAccountInvoiceType.ThrowIfNull("financialAccountInvoiceType");
-
-
-            decimal? minAmount = partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
             var customerGenerationCustomSectionPayload = context.CustomSectionPayload as CustomerGenerationCustomSectionPayload;
             int? timeZoneId = null;
             decimal? commission = null;
@@ -66,8 +47,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             if (!timeZoneId.HasValue)
             {
-                timeZoneId = financialAccountManager.GetCustomerTimeZoneId(financialAccount.FinancialAccountId);
+                timeZoneId = _financialAccountManager.GetCustomerTimeZoneId(financialAccount.FinancialAccountId);
             }
+
             string offset = null;
             TimeSpan? offsetValue = null;
             DateTime fromDate = context.FromDate;
@@ -85,61 +67,42 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     toDateForBillingTransaction = toDateForBillingTransaction.Add(-timeZone.Settings.Offset);
                 }
             }
-            string partnerType = null;
-            string dimentionName = "SaleFinancialAccount";
-            int dimensionValue = financialAccount.FinancialAccountId;
-            int currencyId = financialAccountManager.GetFinancialAccountCurrencyId(financialAccount);
+            int currencyId = _financialAccountManager.GetFinancialAccountCurrencyId(financialAccount);
+            IEnumerable<VRTaxItemDetail> taxItemDetails = _financialAccountManager.GetFinancialAccountTaxItemDetails(financialAccount);
 
-            if (financialAccount.CarrierProfileId.HasValue)
+            if (_tOneModuleManager.IsVoiceModuleEnabled())
             {
-                partnerType = "Profile";
-            }
-            else
-            {
-                partnerType = "Account";
-            }
-            IEnumerable<VRTaxItemDetail> taxItemDetails = financialAccountManager.GetFinancialAccountTaxItemDetails(financialAccount);
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId, offsetValue);
-            if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
-            {
-                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
-                return;
-            }
-            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails, offsetValue);
-            if (itemSetNamesDic.Count == 0)
-            {
-                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                List<string> listMeasures = new List<string> { "SaleNetNotNULL", "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
+                List<string> listDimensions = new List<string> { "SaleZone", "Customer", "SaleCurrency", "SaleRate", "SaleRateType", "Supplier", "Country", "SupplierZone", "SaleDealZoneGroupNb", "SaleDealTierNb", "SaleDeal", "SaleDealRateTierNb" };
+                string dimentionName = "SaleFinancialAccount";
+                int dimensionValue = financialAccount.FinancialAccountId;
+                var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId, offsetValue);
 
-                return;
-            }
-            CustomerRecurringChargeManager customerRecurringChargeManager = new CustomerRecurringChargeManager();
-            List<RecurringChargeItem> evaluatedCustomerRecurringCharges = customerRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate, context.IssueDate);
-            var customerInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails, offsetValue);
-            AddRecurringChargeToCustomerCurrency(customerInvoiceBySaleCurrency, evaluatedCustomerRecurringCharges);
-            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails, customerInvoiceBySaleCurrency, evaluatedCustomerRecurringCharges);
-            #region BuildCustomerInvoiceDetails
-            CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate, commission, commissionType, minAmount);
+                Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = null;
+                if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() == 0)
+                {
+                    itemSetNamesDic = PrepareItemSetNames(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails, offsetValue);
+                }
 
+                CustomerRecurringChargeManager customerRecurringChargeManager = new CustomerRecurringChargeManager();
+                List<RecurringChargeItem> evaluatedCustomerRecurringCharges = customerRecurringChargeManager.GetEvaluatedRecurringCharges(financialAccount.FinancialAccountId, fromDate, toDate, context.IssueDate);
 
+                if ((itemSetNamesDic != null || itemSetNamesDic.Count == 0) && (evaluatedCustomerRecurringCharges == null || evaluatedCustomerRecurringCharges.Count == 0))
+                {
+                    context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                    return;
+                }
 
-            if (customerInvoiceDetails != null)
-            {
-                customerInvoiceDetails.TimeZoneId = timeZoneId;
-                customerInvoiceDetails.Commission = commission;
-                customerInvoiceDetails.TotalAmount = customerInvoiceDetails.SaleAmount;
-                customerInvoiceDetails.CommissionType = commissionType;
-                customerInvoiceDetails.Offset = offset;
+                decimal? minAmount = _partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
 
-                customerInvoiceDetails.TotalAmountAfterCommission = customerInvoiceDetails.AmountAfterCommission;
-                customerInvoiceDetails.TotalOriginalAmountAfterCommission = customerInvoiceDetails.OriginalAmountAfterCommission;
+                var customerInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails, offsetValue);
+                if (customerInvoiceBySaleCurrency == null)
+                    customerInvoiceBySaleCurrency = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
+
                 if (taxItemDetails != null)
                 {
                     foreach (var tax in taxItemDetails)
                     {
-                        customerInvoiceDetails.TotalAmountAfterCommission += ((customerInvoiceDetails.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
-                        customerInvoiceDetails.TotalOriginalAmountAfterCommission += ((customerInvoiceDetails.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
-                        customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
-
                         if (evaluatedCustomerRecurringCharges != null)
                         {
                             foreach (var item in evaluatedCustomerRecurringCharges)
@@ -149,124 +112,127 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             }
                         }
                     }
-                    context.ActionAfterGenerateInvoice = (invoice) =>
+
+                }
+
+                AddRecurringChargeToCustomerCurrency(customerInvoiceBySaleCurrency, evaluatedCustomerRecurringCharges);
+                List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails, customerInvoiceBySaleCurrency, evaluatedCustomerRecurringCharges);
+
+
+
+
+
+                #region BuildCustomerInvoiceDetails
+                CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, commission, commissionType, minAmount);
+
+                if (customerInvoiceDetails != null)
+                {
+                    customerInvoiceDetails.TimeZoneId = timeZoneId;
+                    customerInvoiceDetails.Commission = commission;
+                    customerInvoiceDetails.TotalAmount = customerInvoiceDetails.SaleAmount;
+                    customerInvoiceDetails.CommissionType = commissionType;
+                    customerInvoiceDetails.Offset = offset;
+
+                    customerInvoiceDetails.TotalAmountAfterCommission = customerInvoiceDetails.AmountAfterCommission;
+                    customerInvoiceDetails.TotalOriginalAmountAfterCommission = customerInvoiceDetails.OriginalAmountAfterCommission;
+                    if (taxItemDetails != null)
                     {
-                        CustomerBillingRecurringChargeManager customerBillingRecurringChargeManager = new CustomerBillingRecurringChargeManager();
-                        var userId = SecurityContext.Current.GetLoggedInUserId();
+                        foreach (var tax in taxItemDetails)
+                        {
+                            customerInvoiceDetails.TotalAmountAfterCommission += ((customerInvoiceDetails.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+                            customerInvoiceDetails.TotalOriginalAmountAfterCommission += ((customerInvoiceDetails.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+                            customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
+                        }
+                        context.ActionAfterGenerateInvoice = (invoice) =>
+                        {
+                            CustomerBillingRecurringChargeManager customerBillingRecurringChargeManager = new CustomerBillingRecurringChargeManager();
+                            var userId = SecurityContext.Current.GetLoggedInUserId();
+                            foreach (var item in evaluatedCustomerRecurringCharges)
+                            {
+                                customerBillingRecurringChargeManager.AddCustomerBillingRecurringCharge(new CustomerBillingRecurringCharge
+                                {
+                                    InvoiceId = invoice.InvoiceId,
+                                    Amount = item.AmountAfterTaxes,
+                                    RecurringChargeId = item.RecurringChargeId,
+                                    VAT = item.VAT,
+                                    From = item.From,
+                                    To = item.To,
+                                    CreatedBy = userId,
+                                    FinancialAccountId = financialAccount.FinancialAccountId,
+                                    CurrencyId = item.CurrencyId,
+                                });
+                            }
+                            return true;
+                        };
+                    }
+
+                    CurrencyManager currencyManager = new CurrencyManager();
+                    var systemCurrency = currencyManager.GetSystemCurrency();
+                    systemCurrency.ThrowIfNull("systemCurrency");
+                    CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+                    decimal totalAmountAfterCommissionInSystemCurrency = currencyExchangeRateManager.ConvertValueToCurrency(customerInvoiceDetails.TotalAmountAfterCommission, currencyId, systemCurrency.CurrencyId, context.IssueDate);
+
+                    decimal totalReccurringChargesInSystemCurrency = 0;
+                    foreach (var item in evaluatedCustomerRecurringCharges)
+                    {
+                        totalReccurringChargesInSystemCurrency += currencyExchangeRateManager.ConvertValueToCurrency(item.AmountAfterTaxes, item.CurrencyId, systemCurrency.CurrencyId, context.IssueDate);
+                    }
+                    var totalAmountInSystemCurrency = totalReccurringChargesInSystemCurrency + totalAmountAfterCommissionInSystemCurrency;
+
+                    if ((minAmount.HasValue && totalAmountInSystemCurrency >= minAmount.Value) || (!minAmount.HasValue && totalAmountInSystemCurrency != 0))
+                    {
+                        var definitionSettings = new WHSFinancialAccountDefinitionManager().GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
+                        definitionSettings.ThrowIfNull("definitionSettings", financialAccount.FinancialAccountDefinitionId);
+                        definitionSettings.FinancialAccountInvoiceTypes.ThrowIfNull("definitionSettings.FinancialAccountInvoiceTypes", financialAccount.FinancialAccountDefinitionId);
+                        var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.InvoiceTypeId == context.InvoiceTypeId);
+                        financialAccountInvoiceType.ThrowIfNull("financialAccountInvoiceType");
+                        if (!financialAccountInvoiceType.IgnoreFromBalance)
+                        {
+                            SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+                        }
+
+                        ConfigManager configManager = new ConfigManager();
+                        InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
+                        if (settings != null)
+                        {
+                            context.NeedApproval = settings.NeedApproval;
+                        }
+
+                        decimal totalReccurringChargesAfterTaxInAccountCurrency = 0;
+                        decimal totalReccurringChargesInAccountCurrency = 0;
+
                         foreach (var item in evaluatedCustomerRecurringCharges)
                         {
-                            customerBillingRecurringChargeManager.AddCustomerBillingRecurringCharge(new CustomerBillingRecurringCharge
-                            {
-                                InvoiceId = invoice.InvoiceId,
-                                Amount = item.AmountAfterTaxes,
-                                RecurringChargeId = item.RecurringChargeId,
-                                VAT = item.VAT,
-                                From = item.From,
-                                To = item.To,
-                                CreatedBy = userId,
-                                FinancialAccountId = financialAccount.FinancialAccountId,
-                                CurrencyId = item.CurrencyId,
-                            });
+                            totalReccurringChargesAfterTaxInAccountCurrency += currencyExchangeRateManager.ConvertValueToCurrency(item.AmountAfterTaxes, item.CurrencyId, currencyId, context.IssueDate);
+                            totalReccurringChargesInAccountCurrency += currencyExchangeRateManager.ConvertValueToCurrency(item.Amount, item.CurrencyId, currencyId, context.IssueDate);
+
                         }
-                        return true;
-                    };
-                }
+                        customerInvoiceDetails.TotalReccurringChargesAfterTax = totalReccurringChargesAfterTaxInAccountCurrency;
+                        customerInvoiceDetails.TotalReccurringCharges = totalReccurringChargesInAccountCurrency;
 
-                CurrencyManager currencyManager = new CurrencyManager();
-                var systemCurrency = currencyManager.GetSystemCurrency();
-                systemCurrency.ThrowIfNull("systemCurrency");
-                CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
-                decimal totalAmountAfterCommissionInSystemCurrency = currencyExchangeRateManager.ConvertValueToCurrency(customerInvoiceDetails.TotalAmountAfterCommission, currencyId, systemCurrency.CurrencyId, context.IssueDate);
-
-                decimal totalReccurringChargesInSystemCurrency = 0;
-                foreach (var item in evaluatedCustomerRecurringCharges)
-                {
-                    totalReccurringChargesInSystemCurrency += currencyExchangeRateManager.ConvertValueToCurrency(item.AmountAfterTaxes, item.CurrencyId, systemCurrency.CurrencyId, context.IssueDate);
-                }
-                var totalAmountInSystemCurrency = totalReccurringChargesInSystemCurrency + totalAmountAfterCommissionInSystemCurrency;
-
-                if ((minAmount.HasValue && totalAmountInSystemCurrency >= minAmount.Value) || (!minAmount.HasValue && totalAmountInSystemCurrency != 0))
-                {
-                    if (!financialAccountInvoiceType.IgnoreFromBalance)
+                        customerInvoiceDetails.TotalInvoiceAmount = customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalReccurringChargesAfterTax;
+                        context.Invoice = new GeneratedInvoice
+                        {
+                            InvoiceDetails = customerInvoiceDetails,
+                            InvoiceItemSets = generatedInvoiceItemSets,
+                        };
+                    }
+                    else
                     {
-                        SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+                        context.ErrorMessage = "Cannot generate invoice with amount less than threshold.";
+
+                        context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                        return;
                     }
 
-                    ConfigManager configManager = new ConfigManager();
-                    InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
-
-                    if (settings != null)
-                    {
-                        context.NeedApproval = settings.NeedApproval;
-                    }
-
-                    context.Invoice = new GeneratedInvoice
-                    {
-                        InvoiceDetails = customerInvoiceDetails,
-                        InvoiceItemSets = generatedInvoiceItemSets,
-                    };
                 }
-                else
-                {
-                    context.ErrorMessage = "Cannot generate invoice with amount less than threshold.";
-
-                    context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
-                    return;
-                }
-
+                #endregion
             }
-            #endregion
         }
 
-        private bool CheckUnpricedCDRs(IInvoiceGenerationContext context, WHSFinancialAccount financialAccount)
-        {
-            DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
-            CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
 
-            Guid invalidCDRTableID = new Guid("a6fa04a1-a683-4f79-8da8-b34a625af50f");
-            Guid partialPricedCDRTableID = new Guid("ed4b26d7-8e08-4113-b0b1-c365adfefb50");
 
-            List<object> values = new List<object>();
-            if (financialAccount.CarrierAccountId != null)
-            { values.Add(financialAccount.CarrierAccountId); }
-            else
-            {
-                var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, true, false);
-                values = carrierAccounts.Select(item => (object)item.CarrierAccountId).ToList();
-            }
 
-            var invalidCDRFilterGroup = new RecordFilterGroup()
-            {
-                LogicalOperator = RecordQueryLogicalOperator.And,
-                Filters = new List<RecordFilter>(){
-                    new ObjectListRecordFilter(){FieldName = "CustomerId", CompareOperator= ListRecordFilterOperator.In, Values = values }
-                }
-            };
-
-            List<DataRecord> invalidCDRs = _dataRecordStorageManager.GetDataRecords(context.FromDate, context.ToDate, invalidCDRFilterGroup, new List<string> { "CustomerId" }, 1, OrderDirection.Ascending, invalidCDRTableID);
-            if (invalidCDRs.Count > 0)
-            {
-                return true;
-            }
-
-            var partialCDRFilterGroup = new RecordFilterGroup()
-            {
-                LogicalOperator = RecordQueryLogicalOperator.And,
-                Filters = new List<RecordFilter>()
-                {
-                    new ObjectListRecordFilter(){FieldName = "CustomerId", CompareOperator= ListRecordFilterOperator.In, Values = values },
-                    new NonEmptyRecordFilter(){FieldName ="SaleNet"}
-                }
-            };
-            List<DataRecord> partialPricedCDRs = _dataRecordStorageManager.GetDataRecords(context.FromDate, context.ToDate, partialCDRFilterGroup, new List<string> { "CustomerId" }, 1, OrderDirection.Ascending, partialPricedCDRTableID);
-            if (partialPricedCDRs.Count > 0)
-            {
-                return true;
-            }
-
-            return false;
-
-        }
         private void AddRecurringChargeToCustomerCurrency(List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencyItemDetails, List<RecurringChargeItem> recurringChargeItems)
         {
             if (recurringChargeItems != null && recurringChargeItems.Count > 0)
@@ -281,7 +247,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     {
                         customerInvoiceBySaleCurrencyItemDetail.Amount += item.Amount;
                         customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommission += item.Amount;
-                        customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommissionWithTaxes += item.Amount;
+                        customerInvoiceBySaleCurrencyItemDetail.AmountAfterCommissionWithTaxes += item.AmountAfterTaxes;
                         customerInvoiceBySaleCurrencyItemDetail.TotalRecurringChargeAmount += item.AmountAfterTaxes;
                     }
                     else
@@ -291,7 +257,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             FromDate = item.From,
                             ToDate = item.To,
                             AmountAfterCommission = item.Amount,
-                            AmountAfterCommissionWithTaxes = item.Amount,
+                            AmountAfterCommissionWithTaxes = item.AmountAfterTaxes,
                             NumberOfCalls = 0,
                             Duration = 0,
                             CurrencyId = item.CurrencyId,
@@ -422,17 +388,16 @@ namespace TOne.WhS.Invoice.Business.Extensions
             CustomerInvoiceDetails customerInvoiceDetails = null;
             if (partnerType != null)
             {
+                customerInvoiceDetails = new CustomerInvoiceDetails();
+                customerInvoiceDetails.PartnerType = partnerType;
 
                 if (itemSetNamesDic != null)
                 {
                     List<InvoiceBillingRecord> invoiceBillingRecordList = null;
                     if (itemSetNamesDic.TryGetValue("GroupedBySaleZone", out invoiceBillingRecordList))
                     {
-                        customerInvoiceDetails = new CustomerInvoiceDetails();
-                        customerInvoiceDetails.PartnerType = partnerType;
                         foreach (var invoiceBillingRecord in invoiceBillingRecordList)
                         {
-
                             customerInvoiceDetails.Duration += invoiceBillingRecord.InvoiceMeasures.SaleDuration;
                             customerInvoiceDetails.SaleAmount += invoiceBillingRecord.InvoiceMeasures.SaleNet;
                             customerInvoiceDetails.OriginalSaleAmount += invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr;
@@ -445,20 +410,23 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             customerInvoiceDetails.AmountAfterCommission += invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
                             customerInvoiceDetails.OriginalAmountAfterCommission += invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
                         }
-                        if (commissionType.HasValue)
-                        {
-                            switch (commissionType.Value)
-                            {
-                                case CommissionType.Display:
-                                    customerInvoiceDetails.DisplayComission = true;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            customerInvoiceDetails.DisplayComission = false;
-                        }
+                        
                     };
+                }
+
+
+                if (commissionType.HasValue)
+                {
+                    switch (commissionType.Value)
+                    {
+                        case CommissionType.Display:
+                            customerInvoiceDetails.DisplayComission = true;
+                            break;
+                    }
+                }
+                else
+                {
+                    customerInvoiceDetails.DisplayComission = false;
                 }
             }
             if (customerInvoiceDetails != null && ((minAmount.HasValue && customerInvoiceDetails.SaleAmount >= minAmount.Value) || (!minAmount.HasValue && customerInvoiceDetails.SaleAmount != 0)))
@@ -581,6 +549,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, TimeSpan? offsetValue)
         {
+
             Dictionary<string, dynamic> queryParameters = null;
             if (offsetValue.HasValue)
             {
@@ -613,13 +582,18 @@ namespace TOne.WhS.Invoice.Business.Extensions
             analyticQuery.Query.Filters.Add(dimensionFilter);
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
+
+
+
+
+
         private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)
         {
             MeasureValue measureValue;
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
         }
-        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
+        private Dictionary<string, List<InvoiceBillingRecord>> PrepareItemSetNames(IEnumerable<AnalyticRecord> analyticRecords, int currencyId, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
         {
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
             if (analyticRecords != null)
@@ -737,7 +711,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return itemSetNamesDic;
         }
-
         private void AddItemToDictionary<T>(Dictionary<T, List<InvoiceBillingRecord>> itemSetNamesDic, T key, InvoiceBillingRecord invoiceBillingRecord)
         {
             if (itemSetNamesDic == null)
@@ -756,6 +729,67 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 itemSetNamesDic[key] = invoiceBillingRecordList;
             }
         }
+
+
+        #region CheckUnpricedCDRs
+        private bool CheckUnpricedCDRs(IInvoiceGenerationContext context, WHSFinancialAccount financialAccount)
+        {
+            CheckUnpricedCDRsInvoiceSettingPart checkUnpricedCDRsInvoiceSettingPart = _partnerManager.GetInvoicePartnerSettingPart<CheckUnpricedCDRsInvoiceSettingPart>(context.InvoiceTypeId, context.PartnerId);
+            if (checkUnpricedCDRsInvoiceSettingPart != null && checkUnpricedCDRsInvoiceSettingPart.IsEnabled)
+            {
+                DataRecordStorageManager _dataRecordStorageManager = new DataRecordStorageManager();
+                CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
+
+                Guid invalidCDRTableID = new Guid("a6fa04a1-a683-4f79-8da8-b34a625af50f");
+                Guid partialPricedCDRTableID = new Guid("ed4b26d7-8e08-4113-b0b1-c365adfefb50");
+
+                List<object> values = new List<object>();
+                if (financialAccount.CarrierAccountId != null)
+                { values.Add(financialAccount.CarrierAccountId); }
+                else
+                {
+                    var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, true, false);
+                    values = carrierAccounts.Select(item => (object)item.CarrierAccountId).ToList();
+                }
+
+                List<DataRecord> invalidCDRs = _dataRecordStorageManager.GetDataRecords(context.FromDate, context.ToDate, new RecordFilterGroup()
+                {
+                    LogicalOperator = RecordQueryLogicalOperator.And,
+                    Filters = new List<RecordFilter>(){
+                         new ObjectListRecordFilter(){FieldName = "CustomerId", CompareOperator= ListRecordFilterOperator.In, Values = values }
+                    }
+                }, new List<string> { "CustomerId" }, 1, OrderDirection.Ascending, invalidCDRTableID);
+
+                if (invalidCDRs != null && invalidCDRs.Count > 0)
+                {
+                    return true;
+                }
+
+                List<DataRecord> partialPricedCDRs = _dataRecordStorageManager.GetDataRecords(context.FromDate, context.ToDate, new RecordFilterGroup()
+                {
+                    LogicalOperator = RecordQueryLogicalOperator.And,
+                    Filters = new List<RecordFilter>() {
+                        new ObjectListRecordFilter(){FieldName = "CustomerId", CompareOperator= ListRecordFilterOperator.In, Values = values },
+                        new NonEmptyRecordFilter(){FieldName ="SaleNet"}
+                    }
+                }, new List<string> { "CustomerId" }, 1, OrderDirection.Ascending, partialPricedCDRTableID);
+                if (partialPricedCDRs.Count > 0)
+                {
+                    return true;
+                }
+                context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+                context.ErrorMessage = "There are unpriced CDRs during the selected period";
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        #endregion
+
+
+
         public class InvoiceMeasures
         {
             public decimal SaleNet { get; set; }

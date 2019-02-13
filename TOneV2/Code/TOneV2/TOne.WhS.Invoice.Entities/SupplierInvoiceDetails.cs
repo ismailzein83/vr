@@ -25,6 +25,9 @@ namespace TOne.WhS.Invoice.Entities
         public Dictionary<int, OriginalDataCurrrency> OriginalAmountByCurrency { get; set; }
         public string Reference { get; set; }
         public List<AttachementFile> AttachementFiles { get; set; }
+        public Decimal TotalReccurringChargesAfterTax { get; set; }
+        public Decimal TotalReccurringCharges { get; set; }
+        public Decimal TotalInvoiceAmount { get; set; }
 
     }
     public class SupplierInvoiceDetails: BaseInvoiceDetails
