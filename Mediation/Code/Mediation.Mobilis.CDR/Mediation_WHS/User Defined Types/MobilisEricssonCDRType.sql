@@ -14,6 +14,7 @@
     [CallingSubscriberIMEI]       VARCHAR (50)     NULL,
     [CalledSubscriberIMEI]        VARCHAR (50)     NULL,
     [CallingSubscriberIMEISV]     VARCHAR (50)     NULL,
+    [CalledSubscriberIMEISV]      VARCHAR (50)     NULL,
     [DisconnectingParty]          INT              NULL,
     [IncomingRoute]               VARCHAR (20)     NULL,
     [OutgoingRoute]               VARCHAR (20)     NULL,
@@ -24,6 +25,8 @@
     [MobileStationRoamingNumber]  VARCHAR (50)     NULL,
     [FileName]                    VARCHAR (255)    NULL,
     [DataSourceId]                UNIQUEIDENTIFIER NULL);
+
+
 
 
 

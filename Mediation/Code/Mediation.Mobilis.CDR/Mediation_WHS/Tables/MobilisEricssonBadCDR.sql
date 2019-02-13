@@ -14,6 +14,7 @@
     [CallingSubscriberIMEI]       VARCHAR (50)     NULL,
     [CalledSubscriberIMEI]        VARCHAR (50)     NULL,
     [CallingSubscriberIMEISV]     VARCHAR (50)     NULL,
+    [CalledSubscriberIMEISV]      VARCHAR (50)     NULL,
     [DisconnectingParty]          INT              NULL,
     [IncomingRoute]               VARCHAR (20)     NULL,
     [OutgoingRoute]               VARCHAR (20)     NULL,
@@ -26,6 +27,8 @@
     [DataSourceId]                UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_MobilisEricssonBadCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 
