@@ -12,8 +12,13 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_SMSBusinessEntity_ModuleConfig.moduleName, controllerName, "GetFilteredCustomerSMSRate"), input);
         }
 
+        //function HasApplyChangesPermission() {
+        //    return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_SMSBusinessEntity_ModuleConfig.moduleName, controllerName, ['ApplyChanges']));
+        //}
+
         return {
             GetFilteredCustomerSMSRate: GetFilteredCustomerSMSRate
+            //,HasApplyChangesPermission: HasApplyChangesPermission
         };
          
     }

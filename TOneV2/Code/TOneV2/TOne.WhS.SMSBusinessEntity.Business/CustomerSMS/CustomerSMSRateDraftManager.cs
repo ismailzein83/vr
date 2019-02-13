@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TOne.BusinessEntity.Business;
-using TOne.BusinessEntity.Entities;
 using TOne.WhS.SMSBusinessEntity.Data;
 using TOne.WhS.SMSBusinessEntity.Data.RDB;
 using TOne.WhS.SMSBusinessEntity.Entities;
@@ -30,7 +28,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             {
                 List<CustomerSMSRateChangesDetail> customerSMSRateChangesDetails = GetInitialCustomerSMSRateChangesDetails(mobileNetworksByMobileCountryNames);
 
-                CustomerSMSRateDraft customerSMSRateDraft = GetCustomerSMSRateDraft(input.CustomerID);
+                CustomerSMSRateDraft customerSMSRateDraft = GetCustomerSMSRateDraft(input.ProcessDraftID);
                 Dictionary<int, CustomerSMSRateChange> CustomerSMSRateChanges = new Dictionary<int, CustomerSMSRateChange>();
                 if (customerSMSRateDraft != null && customerSMSRateDraft.SMSRates != null)
                     CustomerSMSRateChanges = customerSMSRateDraft.SMSRates;
@@ -56,17 +54,17 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             return isInsertedOrUpdated ? new DraftStateResult() { ProcessDraftID = result.Value } : null;
         }
 
-        public bool UpdateSMSRateChangesStatus(UpdateCustomerSMSDraftStatusInput input)
+        public bool UpdateSMSRateChangesStatus(UpdateCustomerSMSDraftStatusInput input, int userID)
         {
             input.ThrowIfNull("input");
-            return _processDraftDataManager.UpdateProcessStatus(input.ProcessDraftID, input.NewStatus, SecurityContext.Current.GetLoggedInUserId());
+            return _processDraftDataManager.UpdateProcessStatus(input.ProcessDraftID, input.NewStatus, userID);
         }
 
         public DraftData GetDraftData(CustomerDraftDataInput input)
         {
             input.ThrowIfNull("input");
 
-            CustomerSMSRateDraft customerSMSRateChanges = GetCustomerSMSRateDraft(input.CustomerID);
+            CustomerSMSRateDraft customerSMSRateChanges = GetCustomerSMSRateDraft(input.ProcessDraftID);
 
             return new DraftData()
             {
@@ -80,9 +78,9 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             return _processDraftDataManager.CheckIfDraftExist(ProcessEntityType.Customer, customerID.ToString());
         }
 
-        public CustomerSMSRateDraft GetCustomerSMSRateDraft(int customerID)
+        public CustomerSMSRateDraft GetCustomerSMSRateDraft(long processDraftID)
         {
-            ProcessDraft processDraft = _processDraftDataManager.GetChanges(ProcessEntityType.Customer, customerID.ToString());
+            ProcessDraft processDraft = _processDraftDataManager.GetChangesByProcessDraftID(processDraftID);
             if (processDraft == null || processDraft.Changes == null)
                 return null;
 
@@ -151,7 +149,8 @@ namespace TOne.WhS.SMSBusinessEntity.Business
 
         private CustomerSMSRateDraft MergeImportedDraft(CustomerSMSRateDraftToUpdate customerDraftToUpdate)
         {
-            CustomerSMSRateDraft customerSMSRateChanges = GetCustomerSMSRateDraft(customerDraftToUpdate.CustomerID);
+            
+            CustomerSMSRateDraft customerSMSRateChanges = customerDraftToUpdate.ProcessDraftID.HasValue ? GetCustomerSMSRateDraft(customerDraftToUpdate.ProcessDraftID.Value): null;
 
             if (customerDraftToUpdate == null)
                 return customerSMSRateChanges;
@@ -161,6 +160,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 return new CustomerSMSRateDraft()
                 {
                     CustomerID = customerDraftToUpdate.CustomerID,
+                    CurrencyId = customerDraftToUpdate.CurrencyId,
                     EffectiveDate = customerDraftToUpdate.EffectiveDate,
                     SMSRates = BuildCustomerSMSRateChangesMapper(customerDraftToUpdate.SMSRates),
                     Status = ProcessStatus.Draft

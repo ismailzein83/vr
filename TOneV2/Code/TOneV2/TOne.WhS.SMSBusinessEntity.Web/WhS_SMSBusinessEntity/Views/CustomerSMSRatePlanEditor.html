@@ -39,7 +39,7 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Apply" formname="formCustomerSMSRateEditor" data-onclick="scopeModel.applyChanges"></vr-button>
+                <vr-button type="Apply" formname="formCustomerSMSRateEditor" ng-if="scopeModel.isCustomerSMSRateDraftExist" data-onclick="scopeModel.applyChanges"></vr-button>
                 <vr-button type="Save" formname="formCustomerSMSRateEditor" data-onclick="scopeModel.saveChanges"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>

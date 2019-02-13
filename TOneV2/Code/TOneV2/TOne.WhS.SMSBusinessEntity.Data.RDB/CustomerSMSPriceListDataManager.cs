@@ -27,7 +27,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             var columns = new Dictionary<string, RDBTableColumnDefinition>();
             columns.Add(COL_ID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
             columns.Add(COL_CustomerID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
-            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition { DataType = RDBDataType.Varchar });
+            columns.Add(COL_CurrencyID, new RDBTableColumnDefinition { DataType = RDBDataType.Int });
             columns.Add(COL_EffectiveOn, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
             columns.Add(COL_ProcessInstanceID, new RDBTableColumnDefinition { DataType = RDBDataType.BigInt });
             columns.Add(COL_CreatedTime, new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
@@ -55,24 +55,6 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             joinContext.JoinOnEqualOtherTableColumn(TABLE_NAME, salePriceListTableAlias, COL_ID, otherTableAlias, otherTableColumn);
         }
 
-        public bool InsertPriceList(int customerID, string currencyID, DateTime effectiveOn, long? processInstanceID, int userID, out int priceListID)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-
-            var insertQuery = queryContext.AddInsertQuery();
-            insertQuery.IntoTable(TABLE_NAME);
-            insertQuery.Column(COL_CustomerID).Value(customerID);
-            insertQuery.Column(COL_CurrencyID).Value(currencyID);
-            insertQuery.Column(COL_EffectiveOn).Value(effectiveOn);
-            insertQuery.Column(COL_ProcessInstanceID).ObjectValue(processInstanceID);
-            insertQuery.Column(COL_UserID).Value(userID);
-            insertQuery.AddSelectGeneratedId();
-
-            int? nullablePriceListID  = queryContext.ExecuteScalar().NullableIntValue;
-            priceListID = nullablePriceListID.HasValue ? nullablePriceListID.Value : -1;
-            return nullablePriceListID.HasValue;
-        }
-
         public void AddInsertPriceListQueryContext(RDBQueryContext queryContext, CustomerSMSPriceList customerSMSPriceList)
         {
             var insertQuery = queryContext.AddInsertQuery();
@@ -82,7 +64,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             insertQuery.Column(COL_CustomerID).Value(customerSMSPriceList.CustomerID);
             insertQuery.Column(COL_CurrencyID).Value(customerSMSPriceList.CurrencyID);
             insertQuery.Column(COL_EffectiveOn).Value(customerSMSPriceList.EffectiveOn);
-            insertQuery.Column(COL_ProcessInstanceID).ObjectValue(customerSMSPriceList.ProcessInstanceID);
+            insertQuery.Column(COL_ProcessInstanceID).Value(customerSMSPriceList.ProcessInstanceID);
             insertQuery.Column(COL_UserID).Value(customerSMSPriceList.UserID);
         }
     }

@@ -94,21 +94,25 @@
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerSMS\CustomerSMSPriceListManager.cs" />
-    <Compile Include="CustomerSMS\CustomerSMSRateManager.cs" />
-    <Compile Include="CustomerSMS\CustomerSMSRateDraftManager.cs" />
     <Compile Include="CustomerSMS\CustomerSMSRateBPDefinitionSettings.cs" />
+    <Compile Include="CustomerSMS\CustomerSMSRateDraftManager.cs" />
+    <Compile Include="CustomerSMS\CustomerSMSRateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplierSMS\SupplierSMSRateChangesManager.cs" />
     <Compile Include="Switch\SwitchManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
-      <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
-      <Name>TOne.BusinessEntity.Business</Name>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
-      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
-      <Name>TOne.BusinessEntity.Entities</Name>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.BP.Arguments\TOne.WhS.SMSBusinessEntity.BP.Arguments.csproj">
+      <Project>{6b78e318-2c5f-48e3-814b-b91820493918}</Project>
+      <Name>TOne.WhS.SMSBusinessEntity.BP.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.Data.RDB\TOne.WhS.SMSBusinessEntity.Data.RDB.csproj">
       <Project>{7742e981-964d-40f9-bca7-49e1fd424ab7}</Project>

@@ -1,6 +1,5 @@
 ﻿"use strict";
-app.directive("vrWhsSmsbusinessentityCustomerrateplanGrid", ["VRNotificationService", "WhS_SMSBusinessEntity_CustomerSMSRateAPIService", "WhS_SMSBusinessEntity_CustomerRatePlanService",
-    function ( VRNotificationService, WhS_SMSBusinessEntity_CustomerSMSRateAPIService, WhS_SMSBusinessEntity_CustomerRatePlanService) {
+app.directive("vrWhsSmsbusinessentityCustomerrateplanGrid", ["VRNotificationService", "WhS_SMSBusinessEntity_CustomerSMSRateAPIService", "WhS_SMSBusinessEntity_CustomerRatePlanService", "UtilsService", function (VRNotificationService, WhS_SMSBusinessEntity_CustomerSMSRateAPIService, WhS_SMSBusinessEntity_CustomerRatePlanService, UtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -63,7 +62,13 @@ app.directive("vrWhsSmsbusinessentityCustomerrateplanGrid", ["VRNotificationServ
                         gridQuery = payload.query;
                     }
 
-                    return gridAPI.retrieveData(gridQuery);
+                    var promise = gridAPI.retrieveData(gridQuery);
+                    if (promise == undefined || promise == null) {
+                        promise = UtilsService.createPromiseDeferred();
+                        promise.resolve();
+                    }
+
+                    return promise.promise;
                 };
 
                 api.cleanGrid = function () {

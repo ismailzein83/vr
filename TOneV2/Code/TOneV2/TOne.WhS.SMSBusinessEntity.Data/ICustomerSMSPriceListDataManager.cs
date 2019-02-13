@@ -12,8 +12,6 @@ namespace TOne.WhS.SMSBusinessEntity.Data
     {
         void JoinRateTableWithPriceListTable(RDBJoinContext joinContext, string customerPriceListTableAlias, string otherTableAlias, string otherTableColumn);
 
-        bool InsertPriceList(int customerID, string currencyID, DateTime effectiveOn, long? processInstanceID, int userID, out int priceListID);
-
         void AddInsertPriceListQueryContext(RDBQueryContext queryContext, CustomerSMSPriceList customerSMSPriceList);
     }
 }

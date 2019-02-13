@@ -5,6 +5,7 @@
 
                 <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCustomerSelectorReady"
                                                    getcustomers selectedvalues="scopeModel.selectedCustomer"
+                                                   customlabel="Customer"
                                                    onselectionchanged="scopeModel.onCustomerChanged"
                                                    normal-col-num="2" isrequired="true" hideremoveicon>
                 </vr-whs-be-carrieraccount-selector>
@@ -35,9 +36,11 @@
     <vr-row removeline>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
+                <!--<vr-button type="Apply" ng-if="scopeModel.isCustomerSMSRateDraftExist" haspermission="scopeModel.hasApplyChangesPermission" data-onclick="scopeModel.applyChanges"></vr-button>-->
+                <vr-button type="Apply" ng-if="scopeModel.isCustomerSMSRateDraftExist" data-onclick="scopeModel.applyChanges"></vr-button>
                 <vr-button type="Load" formname="formCustomerSMSRateController" data-onclick="scopeModel.loadCustomerSMSRates"></vr-button>
                 <vr-button type="CancelChanges" ng-if="scopeModel.isCustomerSMSRateDraftExist" data-onclick="scopeModel.cancelCustomerDraft"></vr-button>
-                <vr-button type="Add" formname="formCustomerSMSRateController" data-onclick="scopeModel.addCustomerRates"></vr-button>
+                <vr-button type="Add" ng-if="scopeModel.isCustomerSMSRateLoaded" formname="formCustomerSMSRateController" data-onclick="scopeModel.addCustomerRates"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>

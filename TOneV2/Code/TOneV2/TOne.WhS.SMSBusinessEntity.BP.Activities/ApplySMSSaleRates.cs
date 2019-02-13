@@ -17,7 +17,6 @@ namespace TOne.WhS.SMSBusinessEntity.BP.Activities
         [RequiredArgument]
         public InArgument<CustomerSMSPriceList> CustomerSMSPriceList { get; set; }
 
-        public OutArgument<SMSSaleRateOutput> SMSSaleRateOutput { get; set; }
         protected override void VRExecute(IBaseCodeActivityContext context)
         {
             CustomerSMSPriceList customerSMSPriceList = this.CustomerSMSPriceList.Get(context.ActivityContext);
@@ -26,8 +25,6 @@ namespace TOne.WhS.SMSBusinessEntity.BP.Activities
             ICustomerSMSRateDataManager customerSMSRateDataManager = SMSBEDataFactory.GetDataManager<ICustomerSMSRateDataManager>();
 
             bool isApplied = customerSMSRateDataManager.ApplySaleRates(customerSMSPriceList, customerSMSRateChangesByMobileNetworkID);
-
-            SMSSaleRateOutput.Set(context.ActivityContext, new SMSSaleRateOutput() { IsApplied = isApplied });
         }
     }
 }

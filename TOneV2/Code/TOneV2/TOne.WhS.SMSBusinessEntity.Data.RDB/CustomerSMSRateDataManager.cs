@@ -68,41 +68,12 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().Columns(COL_ID, COL_PriceListID, COL_MobileNetworkID, COL_Rate, COL_BED, COL_EED);
 
-            var where = selectQuery.Where().ChildConditionGroup();
-            where.EqualsCondition(otherTableAlias, customerIDCol).Value(customerID);
-            where.NotEqualsCondition(COL_BED).Column(COL_EED);
-            var conditionColNotNull = where.ConditionIfColumnNotNull(COL_EED);
-            conditionColNotNull.GreaterThanCondition(COL_EED).Value(effectiveDate);
-
-            var joinContext = selectQuery.Join();
-
-            new CustomerSMSPriceListDataManager().JoinRateTableWithPriceListTable(joinContext, otherTableAlias, TABLE_ALIAS, COL_PriceListID);
-
-            selectQuery.Sort().ByColumn(TABLE_ALIAS, COL_BED, RDBSortDirection.ASC);
-            return queryContext.GetItems(CustomerSMSRateMapper);
-        }
-
-        public List<CustomerSMSRate> GetOverlappedCustomerSMSRates(int customerID, DateTime effectiveDate, List<int> mobileNetworkIDs)
-        {
-            string otherTableAlias = "salePriceList";
-
-            CustomerSMSPriceListDataManager customerSMSPriceListDataManager = new CustomerSMSPriceListDataManager();
-            string customerIDCol = CustomerSMSPriceListDataManager.COL_CustomerID;
-
-            var queryContext = new RDBQueryContext(GetDataProvider());
-
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
-            selectQuery.SelectColumns().Columns(COL_ID, COL_PriceListID, COL_MobileNetworkID, COL_Rate, COL_BED, COL_EED);
-
             var where = selectQuery.Where();
             where.EqualsCondition(otherTableAlias, customerIDCol).Value(customerID);
-            where.NotEqualsCondition(TABLE_ALIAS, COL_BED).Column(TABLE_ALIAS, COL_EED);
-            where.ListCondition(TABLE_ALIAS, COL_MobileNetworkID, RDBListConditionOperator.IN, mobileNetworkIDs);
 
-            var childWhere = where.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            childWhere.GreaterThanCondition(TABLE_ALIAS, COL_EED).Value(effectiveDate);
-            childWhere.NullCondition(TABLE_ALIAS, COL_EED);
+            var childWhere = where.ChildConditionGroup().ConditionIfColumnNotNull(COL_EED);
+            childWhere.NotEqualsCondition(COL_BED).Column(COL_EED);
+            childWhere.GreaterThanCondition(COL_EED).Value(effectiveDate);
 
             var joinContext = selectQuery.Join();
 
@@ -111,8 +82,6 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             selectQuery.Sort().ByColumn(TABLE_ALIAS, COL_BED, RDBSortDirection.ASC);
             return queryContext.GetItems(CustomerSMSRateMapper);
         }
-
-
 
         public bool ApplySaleRates(CustomerSMSPriceList customerSMSPriceList, Dictionary<int, CustomerSMSRateChange> saleRateChangesByMobileNetworkId)
         {
@@ -124,9 +93,9 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
 
             new CustomerSMSPriceListDataManager().AddInsertPriceListQueryContext(queryContext, customerSMSPriceList);
 
-            AddInsertSaleRatesQuery(queryContext, customerSMSPriceList.ID, effectiveDate, saleRateChanges);
-
             AddUpdateSaleRatesQuery(queryContext, customerSMSPriceList.CustomerID, effectiveDate, mobileNetworkIDs);
+
+            AddInsertSaleRatesQuery(queryContext, customerSMSPriceList.ID, effectiveDate, saleRateChanges);
 
             return queryContext.ExecuteNonQuery(true) > 0;
         }
@@ -134,6 +103,37 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
         #endregion
 
         #region Private Methods
+
+        private void AddUpdateSaleRatesQuery(RDBQueryContext queryContext, int customerID, DateTime effectiveDate, List<int> mobileNetworkIDs)
+        {
+            string otherTableAlias = "salePriceList";
+
+            var updateQuery = queryContext.AddUpdateQuery();
+            updateQuery.FromTable(TABLE_NAME);
+
+            var caseExpression = updateQuery.Column(COL_EED).CaseExpression();
+            var newCodesCondition = caseExpression.AddCase();
+            newCodesCondition.When().GreaterThanCondition(COL_BED).Value(effectiveDate);
+            newCodesCondition.Then().Column(COL_BED);
+            caseExpression.Else().Value(effectiveDate);
+
+            var joinContext = updateQuery.Join(TABLE_ALIAS);
+            new CustomerSMSPriceListDataManager().JoinRateTableWithPriceListTable(joinContext, otherTableAlias, TABLE_ALIAS, COL_PriceListID);
+
+            var where = updateQuery.Where();
+            where.EqualsCondition(otherTableAlias, CustomerSMSPriceListDataManager.COL_CustomerID).Value(customerID);
+            where.ListCondition(TABLE_ALIAS, COL_MobileNetworkID, RDBListConditionOperator.IN, mobileNetworkIDs);
+
+            var childConditionGroupWhere = where.ChildConditionGroup();
+
+            var childWhere = childConditionGroupWhere.ChildConditionGroup(RDBConditionGroupOperator.OR);
+            childWhere.NullCondition(TABLE_ALIAS, COL_EED);
+
+            var childOfChildWhere = childWhere.ChildConditionGroup();
+
+            childOfChildWhere.NotEqualsCondition(TABLE_ALIAS, COL_BED).Column(TABLE_ALIAS, COL_EED);
+            childOfChildWhere.GreaterThanCondition(TABLE_ALIAS, COL_EED).Value(effectiveDate);
+        }
 
         private void AddInsertSaleRatesQuery(RDBQueryContext queryContext, long priceListID, DateTime effectiveDate, List<CustomerSMSRateChange> saleRateChanges)
         {
@@ -148,34 +148,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
                 rowContext.Column(COL_MobileNetworkID).Value(saleRate.MobileNetworkID);
                 rowContext.Column(COL_Rate).Value(saleRate.NewRate);
                 rowContext.Column(COL_BED).Value(effectiveDate);
-                rowContext.Column(COL_EED).Null();
             }
-        }
-
-        private void AddUpdateSaleRatesQuery(RDBQueryContext queryContext, int customerID, DateTime effectiveDate, List<int> mobileNetworkIDs)
-        {
-            string customerIDCol = CustomerSMSPriceListDataManager.COL_CustomerID;
-            string otherTableAlias = "salePriceList";
-
-            var updateQuery = queryContext.AddUpdateQuery();
-            updateQuery.FromTable(TABLE_NAME);
-            var caseExpression = updateQuery.Column(COL_EED).CaseExpression();
-            var newCodesCondition = caseExpression.AddCase();
-            newCodesCondition.When().GreaterThanCondition(COL_BED).Value(effectiveDate);
-            newCodesCondition.Then().Column(COL_BED);
-            caseExpression.Else().Value(effectiveDate);
-            var where = updateQuery.Where();
-            where.EqualsCondition(otherTableAlias, customerIDCol).Value(customerID);
-            where.NotEqualsCondition(TABLE_ALIAS, COL_BED).Column(TABLE_ALIAS, COL_EED);
-            where.ListCondition(TABLE_ALIAS, COL_MobileNetworkID, RDBListConditionOperator.IN, mobileNetworkIDs);
-
-            var childWhere = where.ChildConditionGroup(RDBConditionGroupOperator.OR);
-            childWhere.GreaterThanCondition(TABLE_ALIAS, COL_EED).Value(effectiveDate);
-            childWhere.NullCondition(TABLE_ALIAS, COL_EED);
-
-            var joinContext = updateQuery.Join(TABLE_ALIAS);
-
-            new CustomerSMSPriceListDataManager().JoinRateTableWithPriceListTable(joinContext, otherTableAlias, TABLE_ALIAS, COL_PriceListID);
         }
 
         private CustomerSMSRate CustomerSMSRateMapper(IRDBDataReader dataReader)

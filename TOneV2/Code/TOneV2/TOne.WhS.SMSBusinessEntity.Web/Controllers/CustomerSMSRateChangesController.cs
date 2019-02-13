@@ -6,6 +6,7 @@ using System.Web.Http;
 using TOne.WhS.SMSBusinessEntity.Business;
 using TOne.WhS.SMSBusinessEntity.Entities;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 using Vanrise.Web.Base;
 
 namespace TOne.WhS.SMSBusinessEntity.Web.Controllers
@@ -35,7 +36,7 @@ namespace TOne.WhS.SMSBusinessEntity.Web.Controllers
         [Route("UpdateSMSRateChangesStatus")]
         public bool UpdateSMSRateChangesStatus(UpdateCustomerSMSDraftStatusInput input)
         {
-            return _customerSMSRateChangesManager.UpdateSMSRateChangesStatus(input);
+            return _customerSMSRateChangesManager.UpdateSMSRateChangesStatus(input, SecurityContext.Current.GetLoggedInUserId());
         }
 
         [HttpPost]

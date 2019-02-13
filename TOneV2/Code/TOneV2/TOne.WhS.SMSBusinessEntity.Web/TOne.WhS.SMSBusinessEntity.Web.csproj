@@ -71,12 +71,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.config" />
     <Content Include="WhS_SMSBusinessEntity\Constants\ModuleConfig.js" />
     <Content Include="WhS_SMSBusinessEntity\Constants\ProcessEntityTypeEnum.js" />
     <Content Include="WhS_SMSBusinessEntity\Constants\SMSRatePlanStatusEnum.js" />
+    <Content Include="WhS_SMSBusinessEntity\Constants\SMSSaleRateDefinitionEnum.js" />
     <Content Include="WhS_SMSBusinessEntity\Constants\WhS_SMSBE_SMSRateChangeTypeEnum.js" />
     <Content Include="WhS_SMSBusinessEntity\Directives\Templates\CustomerSMSRatePlanGridTemplate.html" />
     <Content Include="WhS_SMSBusinessEntity\Directives\vr-whs-smsbusinessentity-customerrateplan-grid.js" />

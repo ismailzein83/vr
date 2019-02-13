@@ -24,13 +24,13 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.title = 'Future Rate of Mobile Network ' + mobileNetworkName;
+            $scope.title = "Future Rate of Mobile Network " + mobileNetworkName;
 
             if (futureSMSRate != undefined) {
-                $scope.title = 'Future  Rate of Mobile Network ' + mobileNetworkName;
+                $scope.title = "Future  Rate of Mobile Network '" + mobileNetworkName +"'";
                 $scope.scopeModel.rate = futureSMSRate.Rate;
                 $scope.scopeModel.rateBED = UtilsService.getShortDate(new Date(futureSMSRate.BED));
-                $scope.scopeModel.rateEED = UtilsService.getShortDate(new Date(futureSMSRate.EED));
+                $scope.scopeModel.rateEED = futureSMSRate.EED != null ? UtilsService.getShortDate(new Date(futureSMSRate.EED)) : undefined;
             }
 
             $scope.scopeModel.close = function () {

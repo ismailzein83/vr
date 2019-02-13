@@ -50,9 +50,18 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Vanrise.Common\obj\Debug\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
@@ -64,14 +73,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TOne.BusinessEntity.Business\TOne.BusinessEntity.Business.csproj">
-      <Project>{bdc9694f-88b7-492d-9865-304e774a5776}</Project>
-      <Name>TOne.BusinessEntity.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TOne.BusinessEntity.Entities\TOne.BusinessEntity.Entities.csproj">
-      <Project>{70ce755d-00ae-4e12-8f07-e4df91346293}</Project>
-      <Name>TOne.BusinessEntity.Entities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.BP.Arguments\TOne.WhS.SMSBusinessEntity.BP.Arguments.csproj">
       <Project>{6b78e318-2c5f-48e3-814b-b91820493918}</Project>
       <Name>TOne.WhS.SMSBusinessEntity.BP.Arguments</Name>

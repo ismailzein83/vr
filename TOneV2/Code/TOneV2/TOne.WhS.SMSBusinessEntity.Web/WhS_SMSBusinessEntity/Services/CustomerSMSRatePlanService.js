@@ -5,15 +5,18 @@
     CustomerSMSRatePlanService.$inject = ['VRModalService'];
     function CustomerSMSRatePlanService(VRModalService) {
 
-        function addSMSRates(selectedCustomer, onDraftSaved) {
+        function addSMSRates(selectedCustomer, processDraftID, isCustomerSMSRateDraftExist, onDraftSaved, onSaleSMSRatesApplied) {
             var parameters = {
-                customerInfo: selectedCustomer
+                customerInfo: selectedCustomer,
+                processDraftID: processDraftID,
+                isCustomerSMSRateDraftExist: isCustomerSMSRateDraftExist
             };
 
             var modalSettings = {
                 onScopeReady: function (modalScope) {
                     modalScope.title = "Add SMS Rates for Customer '" + selectedCustomer.Name + "'";
                     modalScope.onDraftSaved = onDraftSaved;
+                    modalScope.onSaleSMSRatesApplied = onSaleSMSRatesApplied;
                 }
             };
             VRModalService.showModal("/Client/Modules/WhS_SMSBusinessEntity/Views/CustomerSMSRatePlanEditor.html", parameters, modalSettings);

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    SMSRatePlanController.$inject = ["$scope", "WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService", "VRNotificationService", "UtilsService", "WhS_SMSBusinessEntity_CustomerRatePlanService", "WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum", "VRUIUtilsService", "VRDateTimeService"];
+    SMSRatePlanController.$inject = ["$scope", "WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService", "VRNotificationService", "UtilsService", "WhS_SMSBusinessEntity_CustomerRatePlanService", "WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum", "VRUIUtilsService", "VRDateTimeService", "BusinessProcess_BPInstanceService", "WhS_BP_SMSSaleRateDefinitionEnum", "BusinessProcess_BPInstanceAPIService", "WhS_BP_CreateProcessResultEnum"];
 
-    function SMSRatePlanController($scope, WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService, VRNotificationService, UtilsService, WhS_SMSBusinessEntity_CustomerRatePlanService, WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum, VRUIUtilsService, VRDateTimeService) {
+    function SMSRatePlanController($scope, WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService, VRNotificationService, UtilsService, WhS_SMSBusinessEntity_CustomerRatePlanService, WhS_SMSBuisenessProcess_SMSRatePlanStatusEnum, VRUIUtilsService, VRDateTimeService, BusinessProcess_BPInstanceService, WhS_BP_SMSSaleRateDefinitionEnum, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum) {
 
         var selectedCustomer;
         var processDraftID;
@@ -12,7 +12,7 @@
 
         var mobileNetworkSelectorAPI;
         var mobileNetworkSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-        
+
         var mobileCountrySelectorAPI;
         var mobileCountrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -33,31 +33,89 @@
             $scope.scopeModel.isLoading = true;
             $scope.scopeModel.isLoadingMobileNetworkSelector = false;
 
-            $scope.scopeModel.loadCustomerSMSRates = function () {
-                var payload = {
-                    query: getCustomerSMSRateQuery()
-                };
-
-                gridAPI.load(payload);
-
+            $scope.scopeModel.applyChanges = function () {
                 $scope.scopeModel.isLoading = true;
-                WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService.CheckIfDraftExist(selectedCustomer.CarrierAccountId).then(function (response) {
+                hasRunningProcessesForCustomer().then(function (response) {
+                    if (!response.hasRunningProcesses) {
+                        var inputArguments = {
+                            $type: "TOne.WhS.SMSBusinessEntity.BP.Arguments.SMSSaleRateInput, TOne.WhS.SMSBusinessEntity.BP.Arguments",
+                            CustomerID: selectedCustomer.CarrierAccountId,
+                            ProcessDraftID: processDraftID
+                        };
+
+                        var input = {
+                            InputArguments: inputArguments
+                        };
+
+                        BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
+                            if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
+                                var processTrackingContext = {
+                                    onClose: function (bpInstanceClosureContext) {
+                                        //if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) 
+                                        resetCustomerSMSRates();
+                                    }
+                                };
+
+                                BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, processTrackingContext);
+                            }
+
+                        }).finally(function () {
+                            $scope.scopeModel.isLoading = false;
+                        });
+                    }
+                    else {
+                        $scope.scopeModel.isLoading = false;
+                    }
+                });
+            };
+
+            //$scope.scopeModel.hasApplyChangesPermission = function () {
+            //    return WhS_SMSBusinessEntity_CustomerRatePlanService.HasApplyChangesPermission();
+            //};
+
+            $scope.scopeModel.loadCustomerSMSRates = function () {
+                $scope.scopeModel.isLoading = true;
+                var promises = [];
+
+                var payload = { query: getCustomerSMSRateQuery() };
+
+                var gridLoadedPromise = gridAPI.load(payload).then(function () {
+                    $scope.scopeModel.isCustomerSMSRateLoaded = true;
+                });
+                promises.push(gridLoadedPromise);
+
+                var checkedIfDraftExistPromise = WhS_SMSBusinessEntity_CustomerSMSRateChangesAPIService.CheckIfDraftExist(selectedCustomer.CarrierAccountId).then(function (response) {
                     if (response) {
                         processDraftID = response.ProcessDraftID;
-                        $scope.scopeModel.isCustomerSMSRateDraftExist = true;
+                        $scope.scopeModel.isCustomerSMSRateDraftExist = (processDraftID != 0);
                     }
+                });
+                promises.push(checkedIfDraftExistPromise);
+
+                return UtilsService.waitMultiplePromises(promises).catch(function () {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 });
             };
 
             $scope.scopeModel.addCustomerRates = function () {
-                var onDraftSaved = function (processID) {
-                    processDraftID = processID;
-                    $scope.scopeModel.isCustomerSMSRateDraftExist = true;
-                };
+                hasRunningProcessesForCustomer().then(function (response) {
+                    if (!response.hasRunningProcesses) {
+                        var onDraftSaved = function (processID) {
+                            processDraftID = processID;
+                            $scope.scopeModel.isCustomerSMSRateDraftExist = true;
+                        };
 
-                WhS_SMSBusinessEntity_CustomerRatePlanService.addSMSRates(selectedCustomer, onDraftSaved);
+                        var onSaleSMSRatesApplied = function () {
+                            resetCustomerSMSRates();
+                        };
+
+                        
+
+                        WhS_SMSBusinessEntity_CustomerRatePlanService.addSMSRates(selectedCustomer, processDraftID, $scope.scopeModel.isCustomerSMSRateDraftExist,  onDraftSaved, onSaleSMSRatesApplied);
+                    }
+                });
             };
 
             $scope.scopeModel.cancelCustomerDraft = function () {
@@ -96,8 +154,7 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, currencySelectorAPI, currencyPayload, setLoader, undefined);
 
-                    gridAPI.cleanGrid();
-                    $scope.scopeModel.isCustomerSMSRateDraftExist = false;
+                    resetCustomerSMSRates();
                 }
             };
 
@@ -202,6 +259,19 @@
                 ProcessDraftID: processDraftID,
                 NewStatus: newStatus
             };
+        }
+
+        function resetCustomerSMSRates() {
+            gridAPI.cleanGrid();
+            $scope.scopeModel.isCustomerSMSRateDraftExist = false;
+            $scope.scopeModel.isCustomerSMSRateLoaded = false;
+        }
+
+        function hasRunningProcessesForCustomer() {
+            var editorMessage = "Other SMS rate processes are still pending for customer '" + selectedCustomer.Name + "'";
+            var runningInstanceEditorSettings = { message: editorMessage };
+            var entityId = "CustomerId_" + selectedCustomer.CarrierAccountId;
+            return BusinessProcess_BPInstanceService.displayRunningInstancesIfExist(WhS_BP_SMSSaleRateDefinitionEnum.BPDefinitionId.value, [entityId], runningInstanceEditorSettings);
         }
     }
 

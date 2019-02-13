@@ -42,30 +42,6 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             return customerSMSRates;
         }
 
-        public Dictionary<int, CustomerSMSRate> GetOverlappedCustomerSMSRates(int customerID, DateTime dateTime, List<int> mobileNetworkIDs) // WF
-        {
-            var operlappedMobileNetworkRates = _customerSMSRateDataManager.GetOverlappedCustomerSMSRates(customerID, dateTime, mobileNetworkIDs);
-
-            if (operlappedMobileNetworkRates == null)
-                return null;
-
-            return operlappedMobileNetworkRates.ToDictionary(item => item.MobileNetworkID, item=> item);
-        }
-
-        public bool ApplySaleRates(int customerID)
-        {
-            CustomerSMSRateDraft customerSMSRateDraft = new CustomerSMSRateDraftManager().GetCustomerSMSRateDraft(customerID);
-            if (customerSMSRateDraft != null && customerSMSRateDraft.SMSRates != null && customerSMSRateDraft.SMSRates.Count != 0)
-            {
-                CustomerSMSPriceList customerSMSPriceList = new CustomerSMSPriceListManager().PrepareCustomerSMSPriceListData(customerID, customerSMSRateDraft.EffectiveDate);
-                Dictionary<int, CustomerSMSRateChange> customerSMSRateChanges = customerSMSRateDraft.SMSRates;
-
-                return _customerSMSRateDataManager.ApplySaleRates(customerSMSPriceList, customerSMSRateChanges);
-            }
-
-            return false;
-        }
-
         #endregion
 
         #region Private Methods 

@@ -53,7 +53,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             return RDBDataProviderFactory.CreateProvider("TOneWhS_SMSBuisenessEntity", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
 
-        public ProcessDraft GetChanges(ProcessEntityType processType, string entityID)
+        public ProcessDraft GetChangesByProcessDraftID(long processDraftID)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
@@ -61,9 +61,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             selectQuery.SelectColumns().Columns(COL_ID, COL_ProcessType, COL_EntityID, COL_Changes, COL_Status);
 
             var where = selectQuery.Where();
-            where.EqualsCondition(COL_ProcessType).Value((int)processType);
-            where.EqualsCondition(COL_EntityID).Value(entityID);
-            where.EqualsCondition(COL_Status).Value((int)ProcessStatus.Draft);
+            where.EqualsCondition(COL_ID).Value(processDraftID);
 
             return queryContext.GetItem(ChangesMapper);
         }
@@ -103,7 +101,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             return processDraftID.HasValue;
         }
 
-        public bool UpdateProcessStatus(int processID, ProcessStatus newStatus, int userID)
+        public bool UpdateProcessStatus(long processDraftID, ProcessStatus newStatus, int userID)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
@@ -113,7 +111,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             updateQuery.Column(COL_LastModifiedBy).Value(userID);
 
             var where = updateQuery.Where();
-            where.EqualsCondition(COL_ID).Value(processID);
+            where.EqualsCondition(COL_ID).Value(processDraftID);
 
             return queryContext.ExecuteNonQuery() > 0;
         }
