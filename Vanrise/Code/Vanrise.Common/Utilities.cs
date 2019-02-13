@@ -14,6 +14,7 @@ namespace Vanrise.Common
 {
     public static class Utilities
     {
+      
         public static Dictionary<T, Q> GetEnumAttributes<T, Q>()
             where T : struct
             where Q : Attribute
@@ -60,7 +61,21 @@ namespace Vanrise.Common
             System.ComponentModel.DescriptionAttribute descriptionAttribute = GetEnumAttribute<T, System.ComponentModel.DescriptionAttribute>(enumItem);
             return descriptionAttribute != null ? descriptionAttribute.Description : enumItem.ToString();
         }
+        public static string GetExcelColumnName(int columnNumber)
+        {
+            int dividend = columnNumber;
+            string columnName = String.Empty;
+            int modulo;
 
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % 26;
+                columnName = Convert.ToChar(65 + modulo).ToString() + columnName;
+                dividend = (int)((dividend - modulo) / 26);
+            }
+
+            return columnName;
+        }
         public static IEnumerable<Type> GetAllImplementations(Type baseType)
         {
             List<Type> lst = new List<Type>();
