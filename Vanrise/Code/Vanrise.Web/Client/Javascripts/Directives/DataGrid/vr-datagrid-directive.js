@@ -1255,7 +1255,15 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 	                    Query: query
 	                };
 	                return retrieveData(true, false, false, DataGridRetrieveDataEventType.ExternalTrigger);
-	            };
+				};
+				gridApi.exportData = function (query) {
+					//retrieveDataInput should be of type Vanrise.Entities.RetrieveDataInput<T>
+					//setMainItemsViewVisible();
+					retrieveDataInput = {
+						Query: query
+					};
+					return retrieveData(true, true, false, DataGridRetrieveDataEventType.ExternalTrigger);
+				};
 	            setTimeout(function () {
 
 	                isGridReady = true;
