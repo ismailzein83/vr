@@ -89,7 +89,9 @@
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Ericsson\Templates\EricssonC4SwitchSettingsTemplate.html" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Huawei\Templates\HuaweiC4SwitchCommunicationTemplate.html" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\Settings\Huawei\Templates\HuaweiC4SwitchSettingsTemplate.html" />
+    <Content Include="RecordAnalysis\Directives\SwitchInterconnection\rec-anal-switchinterconnection-settings.js" />
     <Content Include="RecordAnalysis\Directives\SwitchInterconnection\rec-anal-switchinterconnection-customobjectsettings.js" />
+    <Content Include="RecordAnalysis\Directives\SwitchInterconnection\Templates\SwitchInterconnectionSettingsTemplate.html" />
     <Content Include="RecordAnalysis\Directives\SwitchInterconnection\Templates\SwitchInterconnectionCustomObjectSettings.html" />
     <Content Include="RecordAnalysis\Services\APIServices\C4SwitchAPIService.js" />
     <Content Include="Web.config" />
