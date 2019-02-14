@@ -22,98 +22,90 @@ app.directive("vrCommonConnectionstring", ["UtilsService", "VRUIUtilsService",
         };
 
         function ConnectionStringCtor($scope, ctrl, $attrs) {
-        //    this.initializeController = initializeController;
+            this.initializeController = initializeController;
 
-        //    var connectionStringType;
+            var connectionStringType;
 
-        //    function initializeController() {
-        //        connectionStringType = {
-        //            ConnectionString: { value: 0, description: "Connection String" },
-        //            ConnectionStringNameAppSettingsName: { value: 1, description: "Connection String Name/AppSetting Name " }
-        //        };
+            function initializeController() {
+                connectionStringType = {
+                    ConnectionString: { value: 0, description: "Connection String" },
+                    ConnectionStringNameAppSettingsName: { value: 1, description: "Connection String Name/AppSetting Name " }
+                };
 
-        //        $scope.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
-        //        $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
-        //        $scope.showConnectionString = true;
-        //        $scope.showConnectionStringNameAppSettingsName = false;
-        //        $scope.showConnectionStringName = false;
-        //        $scope.showConnectionStringAppSettingsName = false;
+                $scope.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
+                $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
+                $scope.showConnectionString = true;
+                $scope.showConnectionStringNameAppSettingsName = false;
+                $scope.showConnectionStringNameAppSettings = false;
 
-        //        $scope.onConnectionStringTypeSelectionChanged = function () {
-        //            if ($scope.selectedConnectionStringType != undefined) {
+                $scope.onConnectionStringTypeSelectionChanged = function () {
+                    if ($scope.selectedConnectionStringType != undefined) {
 
-        //                switch ($scope.selectedConnectionStringType.value) {
-        //                    case connectionStringType.ConnectionString.value:
-        //                        $scope.showConnectionString = true;
-        //                        $scope.showConnectionStringNameAppSettingsName = false;
-        //                        break;
-        //                    case connectionStringType.ConnectionStringNameAppSettingsName.value:
-        //                        $scope.showConnectionString = false;
-        //                        $scope.showConnectionStringNameAppSettingsName = true;
-        //                        if ($scope.connectionStringAppSettingName == undefined && $scope.connectionStringName == undefined) {
-        //                            $scope.showConnectionStringName = true;
-        //                            $scope.showConnectionStringAppSettingsName = true;
-        //                        }
-        //                        else {
-        //                            $scope.showConnectionStringName = false;
-        //                            $scope.showConnectionStringAppSettingsName = false;
-        //                        }
-        //                        break;
-        //                }
-        //            }
-        //        };
+                        switch ($scope.selectedConnectionStringType.value) {
+                            case connectionStringType.ConnectionString.value:
+                                $scope.showConnectionString = true;
+                                $scope.showConnectionStringNameAppSettingsName = false;
+                                break;
+                            case connectionStringType.ConnectionStringNameAppSettingsName.value:
+                                $scope.showConnectionString = false;
+                                $scope.showConnectionStringNameAppSettingsName = true;
+                                if ($scope.connectionStringAppSettingName == undefined && $scope.connectionStringName == undefined) {
+                                    $scope.showConnectionStringNameAppSettings = true;
+                                }
+                                else {
+                                    $scope.showConnectionStringNameAppSettings = false;
+                                }
+                                break;
+                        }
+                    }
+                };
 
-        //        $scope.onConnectionStringNameOrAppSettingsValueChange = function (changedValue) {
-        //            if (changedValue != undefined) {
-        //                $scope.showConnectionStringAppSettingsName = false;
-        //                $scope.showConnectionStringName = false;
-        //            }
-        //            else {
-        //                if (($scope.connectionStringName == undefined || $scope.connectionStringName === "") && ($scope.connectionStringAppSettingName == undefined || $scope.connectionStringAppSettingName === "")) {
-        //                    $scope.showConnectionStringAppSettingsName = true;
-        //                    $scope.showConnectionStringName = true;
-        //                }
-        //                else {
-        //                    $scope.showConnectionStringAppSettingsName = false;
-        //                    $scope.showConnectionStringName = false;
-        //                }
-        //            }
-        //        };
+                $scope.onConnectionStringNameOrAppSettingsValueChange = function (changedValue) {
+                    if (changedValue != undefined) {
+                        $scope.showConnectionStringNameAppSettings = false;
+                    }
+                    else {
+                        if (($scope.connectionStringName == undefined || $scope.connectionStringName === "") && ($scope.connectionStringAppSettingName == undefined || $scope.connectionStringAppSettingName === "")) {
+                            $scope.showConnectionStringNameAppSettings = true;
+                        }
+                        else {
+                            $scope.showConnectionStringNameAppSettings = false;
+                        }
+                    }
+                };
 
-        //        defineAPI();
-        //    }
+                defineAPI();
+            }
 
-        //    function defineAPI() {
-        //        var api = {};
+            function defineAPI() {
+                var api = {};
 
-        //        api.load = function (payload) {
-        //            if (payload != undefined && payload.data != undefined) {
+                api.load = function (payload) {
+                    if (payload != undefined) {
+                       
+                        $scope.connectionString = payload.ConnectionString;
+                        $scope.connectionStringName = payload.ConnectionStringName;
+                        $scope.connectionStringAppSettingName = payload.ConnectionStringAppSettingName;
 
-        //                $scope.connectionString = payload.ConnectionString;
-        //                $scope.connectionStringName = payload.ConnectionStringName;
-        //                $scope.connectionStringAppSettingName = payload.ConnectionStringAppSettingName;
+                        if ($scope.connectionString != undefined) {
+                            $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
+                        } else if ($scope.connectionStringName != undefined || $scope.connectionStringAppSettingName != undefined) {
+                            $scope.selectedConnectionStringType = connectionStringType.ConnectionStringNameAppSettingsName;
+                        } 
+                    }
+                };
 
-        //                if ($scope.connectionString != undefined) {
-        //                    $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
-        //                } else if ($scope.connectionStringName != undefined) {
-        //                    $scope.selectedConnectionStringType = connectionStringType.ConnectionStringNameAppSettingsName;
-        //                } else if ($scope.connectionStringAppSettingName != undefined) {
-        //                    $scope.selectedConnectionStringType = connectionStringType.ConnectionStringNameAppSettingsName;
-        //                }
-        //            }
-        //        };
+                api.getData = function () {
+                    return {
+                        ConnectionString: $scope.showConnectionString ? $scope.connectionString : undefined,
+                        ConnectionStringName: $scope.showConnectionStringNameAppSettingsName ? $scope.connectionStringName : undefined,
+                        ConnectionStringAppSettingName: $scope.showConnectionStringNameAppSettingsName ? $scope.connectionStringAppSettingName : undefined
+                    };
+                };
 
-        //        api.getData = function () {
-        //            return {
-        //                ConnectionString: $scope.showConnectionString ? $scope.connectionString : undefined,
-        //                ConnectionStringName: $scope.showConnectionStringNameAppSettingsNameName ? $scope.connectionStringName : undefined,
-        //                ConnectionStringAppSettingName: $scope.showConnectionStringNameAppSettingsNameName ? $scope.connectionStringAppSettingName : undefined
-        //            };
-        //        };
-
-        //        if (ctrl.onReady != null)
-        //            ctrl.onReady(api);
-        //    }
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
+            }
         }
         return directiveDefinitionObject;
     }

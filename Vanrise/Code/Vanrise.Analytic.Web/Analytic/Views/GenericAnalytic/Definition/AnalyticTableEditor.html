@@ -18,21 +18,7 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.timeColumnName" label="Time Column Name" isrequired="true"></vr-textbox>
                         </vr-columns>
-                        <!--<vr-columns width="fullrow">
-                             <vr-textbox value="scopeModel.connectionString" label="Connection String" isrequired="true"></vr-textbox>
-                        </vr-columns>-->
-                        <vr-columns width="1/2row">
-                            <vr-select datasource="scopeModel.connectionStringType" selectedvalues="scopeModel.selectedConnectionStringType"
-                                       onselectionchanged="scopeModel.onConnectionStringTypeSelectionChanged" isrequired="true"
-                                       datavaluefield="value" datatextfield="description" label="Connection Type" hideremoveicon>
-                            </vr-select>
-                        </vr-columns>
-                        <vr-columns width="fullrow" ng-show="scopeModel.showConnectionStringName">
-                            <vr-textbox value="scopeModel.connectionStringName" label="Connection String Name" isrequired="scopeModel.showConnectionStringName"></vr-textbox>
-                        </vr-columns>
-                        <vr-columns width="fullrow" ng-show="scopeModel.showConnectionString">
-                            <vr-textarea value="scopeModel.connectionString" label="Connection String" isrequired="scopeModel.showConnectionString"></vr-textarea>
-                        </vr-columns>
+                        <vr-common-connectionstring on-ready="onConnectionStringReady"></vr-common-connectionstring>
                         <vr-columns width="1/2row">
                             <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
                                                                     selectedvalues="scopeModel.selectedDataRecordType"
@@ -40,7 +26,7 @@
                                                                     hideremoveicon ismultipleselection>
                             </vr-genericdata-datarecordtype-selector>
                         </vr-columns>
-                       
+
                     </vr-row>
                     <vr-section title="KPI Settings">
                         <vr-row>

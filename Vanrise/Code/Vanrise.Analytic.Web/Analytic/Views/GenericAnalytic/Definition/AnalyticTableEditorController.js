@@ -25,7 +25,9 @@
         var beDefinitionSelectorPromiseReadyDeferred = UtilsService.createPromiseDeferred();
         var beDefinitionSelectedPromiseDeferred;
 
-        var connectionStringType;
+        var connectionStringApi;
+        var connectionStringPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
 
@@ -41,10 +43,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            connectionStringType = {
-                ConnectionString: { value: 0, description: "Connection String" },
-                ConnectionStringName: { value: 1, description: "Connection String Name" }
-            };
+         
             $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                 beDefinitionSelectorApi = api;
                 beDefinitionSelectorPromiseReadyDeferred.resolve();
@@ -79,21 +78,10 @@
                 analyticDataProviderSettingsDirectiveAPI = api;
                 analyticDataProviderSettingsDirectiveReadyDeferred.resolve();
             };
-            $scope.scopeModel.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
-            $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionString;
-            $scope.scopeModel.showConnectionString = true;
-            $scope.scopeModel.showConnectionStringName = false;
-            $scope.scopeModel.onConnectionStringTypeSelectionChanged = function () {
-                if ($scope.scopeModel.selectedConnectionStringType != undefined) {
-
-                    switch ($scope.scopeModel.selectedConnectionStringType.value) {
-                        case connectionStringType.ConnectionString.value: $scope.scopeModel.showConnectionString = true; $scope.scopeModel.showConnectionStringName = false; break;
-                        case connectionStringType.ConnectionStringName.value: $scope.scopeModel.showConnectionStringName = true; $scope.scopeModel.showConnectionString = false; break;
-                    }
-
-                }
+            $scope.onConnectionStringReady = function (api) {
+                connectionStringApi = api;
+                connectionStringPromiseReadyDeferred.resolve();
             };
-
 
             $scope.scopeModel.saveTable = function () {
                 if (isEditMode) {
@@ -125,7 +113,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadRequiredPermission, loadAnalyticDataProviderSettingsDirective, loadBeDefinitionStatusDefinitionSection]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadRequiredPermission, loadAnalyticDataProviderSettingsDirective, loadBeDefinitionStatusDefinitionSection, loadConnectionStringDirective]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -144,16 +132,8 @@
                 function loadStaticData() {
                     if (tableEntity != undefined) {
                         $scope.scopeModel.name = tableEntity.Name;
-                        $scope.scopeModel.connectionString = tableEntity.Settings.ConnectionString;
                         $scope.scopeModel.tableName = tableEntity.Settings.TableName;
                         $scope.scopeModel.timeColumnName = tableEntity.Settings.TimeColumnName;
-                        $scope.scopeModel.connectionStringName = tableEntity.Settings.ConnectionStringName;
-                        $scope.scopeModel.connectionString = tableEntity.Settings.ConnectionString;
-                        if ($scope.scopeModel.connectionStringName != undefined) {
-                            $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionStringName;
-                        } else if ($scope.scopeModel.connectionString != undefined) {
-                            $scope.scopeModel.selectedConnectionStringType = connectionStringType.ConnectionString;
-                        }
                     }
                 }
 
@@ -194,6 +174,22 @@
             });
 
             return requiredPermissionLoadDeferred.promise;
+        }
+
+        function loadConnectionStringDirective() {
+            var connectionStringPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+            connectionStringPromiseReadyDeferred.promise.then(function () {
+                var payloadDirective;
+                if (tableEntity != undefined && tableEntity.Settings != undefined) {
+                     payloadDirective = {
+                        ConnectionString: tableEntity.Settings.ConnectionString,
+                        ConnectionStringName: tableEntity.Settings.ConnectionStringName,
+                        ConnectionStringAppSettingName: tableEntity.Settings.ConnectionStringAppSettingName
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(connectionStringApi, payloadDirective, connectionStringPromiseLoadDeferred);
+            });
+            return connectionStringPromiseLoadDeferred.promise;
         }
 
         function getTable() {
@@ -243,14 +239,16 @@
         }
 
         function buildTableObjectFromScope() {
+            var connectionString = connectionStringApi.getData();
             var table = {
                 AnalyticTableId: tableId,
                 Name: $scope.scopeModel.name,
                 Settings: {
                     TableName: $scope.scopeModel.tableName,
                     TimeColumnName: $scope.scopeModel.timeColumnName,
-                    ConnectionStringName: $scope.scopeModel.showConnectionStringName ? $scope.scopeModel.connectionStringName : undefined,
-                    ConnectionString: $scope.scopeModel.showConnectionString ? $scope.scopeModel.connectionString : undefined,
+                    ConnectionString: connectionString.ConnectionString,
+                    ConnectionStringName: connectionString.ConnectionStringName,
+                    ConnectionStringAppSettingName: connectionString.ConnectionStringAppSettingName,
                     DataRecordTypeIds: dataRecordTypeSelectorAPI.getSelectedIds(),
                     RequiredPermission: requiredPermissionAPI.getData(),
                     DataProvider: analyticDataProviderSettingsDirectiveAPI.getData(),

@@ -1,9 +1,9 @@
 ﻿(function (app) {
 
     'use strict';
-    DataStoreSettingRDBDirective.$inject = ['UtilsService'];
+    DataStoreSettingRDBDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
 
-    function DataStoreSettingRDBDirective(UtilsService) {
+    function DataStoreSettingRDBDirective(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -27,84 +27,19 @@
                 return "/Client/Modules/VR_GenericData/Directives/MainExtensions/DataStoreSetting/Templates/DataStoreSettingsRDBTemplate.html";
             }
         };
+
         function DirectiveConstructor($scope, ctrl) {
 
             this.initializeController = initializeController;
 
-            var connectionStringType;
+            var connectionStringApi;
+            var connectionStringPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                connectionStringType = {
-                    ConnectionString: { value: 0, description: "Connection String" },
-                    ConnectionStringNameAppSettings: { value: 1, description: "Connection String Name/AppSettingName" },
-                };
 
-                $scope.connectionStringType = UtilsService.getArrayEnum(connectionStringType);
-                $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
-                $scope.showConnectionString = true;
-                $scope.showConnectionStringNameAppSettings = false;
-
-                $scope.showConnectionStringName = false;
-                $scope.showConnectionStringAppSettingsName = false;
-
-                $scope.onConnectionStringTypeSelectionChanged = function () {
-                    if ($scope.selectedConnectionStringType != undefined) {
-
-                        switch ($scope.selectedConnectionStringType.value) {
-                            case connectionStringType.ConnectionString.value:
-                                $scope.showConnectionString = true;
-                                $scope.showConnectionStringNameAppSettings = false;
-                                $scope.showConnectionStringName = false;
-                                $scope.showConnectionStringAppSettingsName = false;
-                                break;
-                            case connectionStringType.ConnectionStringNameAppSettings.value:
-                                $scope.showConnectionStringNameAppSettings = true;
-                                $scope.showConnectionString = false;
-                                if ($scope.connectionStringAppSettingName == undefined) {
-                                    $scope.showConnectionStringName = true;
-                                }
-                                else {
-                                    $scope.showConnectionStringName = false;
-                                }
-                                if ($scope.connectionStringName == undefined) {
-                                    $scope.showConnectionStringAppSettingsName = true;
-                                }
-                                else {
-                                    $scope.showConnectionStringAppSettingsName = false;
-                                }
-                                break;
-                        }
-                    }
-                };
-
-                $scope.onConnectionStringNameValueChange = function (changedValue) {
-                    if (changedValue != undefined && $scope.connectionStringAppSettingName == undefined) {
-                        $scope.showConnectionStringAppSettingsName = false;
-                    }
-                    if (changedValue == undefined) {
-                        if ($scope.connectionStringAppSettingName != undefined) {
-                            $scope.showConnectionStringName = false;
-                        }
-                        else {
-                            $scope.showConnectionStringAppSettingsName = true;
-                            $scope.showConnectionStringName = true;
-                        }
-                    }
-                };
-
-                $scope.onConnectionStringAppSettingsValueChange = function (changedValue) {
-                    if (changedValue != undefined && $scope.connectionStringName == undefined) {
-                        $scope.showConnectionStringName = false;
-                    }
-                    if (changedValue == undefined) {
-                        if ($scope.connectionStringName != undefined) {
-                            $scope.showConnectionStringAppSettingsName = false;
-                        }
-                        else {
-                            $scope.showConnectionStringName = true;
-                            $scope.showConnectionStringAppSettingsName = true;
-                        }
-                    }
+                $scope.onConnectionStringReady = function (api) {
+                    connectionStringApi = api;
+                    connectionStringPromiseReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -114,28 +49,34 @@
                 var api = {};
 
                 api.getData = function () {
+                    var connectionString = connectionStringApi.getData();
                     return {
                         $type: "Vanrise.GenericData.RDBDataStorage.RDBDataStoreSettings, Vanrise.GenericData.RDBDataStorage",
-                        ConnectionStringName: $scope.showConnectionStringNameAppSettings ? $scope.connectionStringName : undefined,
-                        ConnectionString: $scope.showConnectionString ? $scope.connectionString : undefined,
-                        ConnectionStringAppSettingName: $scope.showConnectionStringNameAppSettings ? $scope.connectionStringAppSettingName : undefined
+                        ConnectionString: connectionString.ConnectionString,
+                        ConnectionStringName: connectionString.ConnectionStringName,
+                        ConnectionStringAppSettingName: connectionString.ConnectionStringAppSettingName
                     };
                 };
 
                 api.load = function (payload) {
-                    if (payload != undefined && payload.data != undefined) {
+                    var promises = [];
 
-                        $scope.connectionStringName = payload.data.ConnectionStringName;
-                        $scope.connectionString = payload.data.ConnectionString;
-                        $scope.connectionStringAppSettingName = payload.data.ConnectionStringAppSettingName;
+                    promises.push(loadConnectionStringDirective());
 
-                        if ($scope.connectionStringName != undefined) {
-                            $scope.selectedConnectionStringType = connectionStringType.ConnectionStringNameAppSettings;
-                        } else if ($scope.connectionString != undefined) {
-                            $scope.selectedConnectionStringType = connectionStringType.ConnectionString;
-                        } else if ($scope.connectionStringAppSettingName != undefined) {
-                            $scope.selectedConnectionStringType = connectionStringType.ConnectionStringNameAppSettings;
-                        }
+                    function loadConnectionStringDirective() {
+                        var connectionStringPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+                        connectionStringPromiseReadyDeferred.promise.then(function () {
+                            var payloadDirective;
+                            if (payload != undefined && payload.data != undefined) {
+                                payloadDirective = {
+                                    ConnectionString: payload.data.ConnectionString,
+                                    ConnectionStringName: payload.data.ConnectionStringName,
+                                    ConnectionStringAppSettingName: payload.data.ConnectionStringAppSettingName
+                                };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(connectionStringApi, payloadDirective, connectionStringPromiseLoadDeferred);
+                        });
+                        return connectionStringPromiseLoadDeferred.promise;
                     }
                 };
 

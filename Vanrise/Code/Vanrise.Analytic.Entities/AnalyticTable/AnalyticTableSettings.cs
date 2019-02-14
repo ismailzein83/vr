@@ -13,6 +13,8 @@ namespace Vanrise.Analytic.Entities
 
         public string ConnectionStringName { get; set; }
 
+        public string ConnectionStringAppSettingName { get; set; }
+
         public string TableName { get; set; }
 
         public string HourlyTableName { get; set; }
