@@ -50,6 +50,7 @@
     <Compile Include="BinaryParsers\Common\FieldParsers\BoolBitFieldParser.cs" />
     <Compile Include="BinaryParsers\Common\FieldParsers\NumberBitFieldParser.cs" />
     <Compile Include="BinaryParsers\Common\FieldParsers\PositionedBitsBinaryFieldParser.cs" />
+    <Compile Include="BinaryParsers\HuaweiParser\FieldParsers\DiagnosticsParser.cs" />
     <Compile Include="BinaryParsers\HuaweiParser\RecordParsers\HeaderRecordParser.cs" />
     <Compile Include="BinaryParsers\HuaweiParser\RecordParsers\HuaweiRecordParser.cs" />
     <Compile Include="BinaryParsers\NokiaSiemensParsers\FieldParsers\ConnectionIdentificationPackageParser.cs" />
