@@ -31,9 +31,22 @@ namespace Vanrise.Common.Excel
             Workbook excelTemplate = new Workbook();
             Vanrise.Common.Utilities.ActivateAspose();
             excelTemplate.Worksheets.Clear();
+
+            VRExcelFileGenerateContext context = new VRExcelFileGenerateContext(this.Sheets);
+
             foreach (var sheet in this.Sheets)
             {
-                Worksheet templateSheet = excelTemplate.Worksheets.Add(string.Format("{0}", sheet.SheetName));
+                Worksheet templateSheet = null;
+                switch (sheet.SheetType)
+                {
+                    case VRExcelSheetType.Chart:
+                        int chartIndex = excelTemplate.Worksheets.Add(SheetType.Chart);
+                        templateSheet = excelTemplate.Worksheets[chartIndex];
+                        templateSheet.Name = string.Format("{0}", sheet.SheetName);
+                        break;
+                    default:templateSheet = excelTemplate.Worksheets.Add(string.Format("{0}", sheet.SheetName));
+                        break;
+                }
 
                 BuildImagesConfigs(templateSheet, sheet.Images);
                 BuildSheetRowsConfig(sheet.RowConfigs, excelTemplate, templateSheet.Cells);
@@ -57,8 +70,30 @@ namespace Vanrise.Common.Excel
                         table.GenerateTable(templateSheet);
                     }
                 }
+
+                if (sheet.PivotTables != null && sheet.PivotTables.Count > 0)
+                {
+                    foreach (var pivotTables in sheet.PivotTables)
+                    {
+                        pivotTables.GeneratePivotTable(context, templateSheet);
+                    }
+                }
+                if (sheet.Charts != null && sheet.Charts.Count > 0)
+                {
+                    foreach (var chart in sheet.Charts)
+                    {
+                        chart.GenerateChart(context, templateSheet);
+                    }
+                }
+
             }
-            MemoryStream memoryStream = new MemoryStream();
+            for (var i = 0; i < this.Sheets.Count(); i++)
+            {
+                var sheet = this.Sheets[i];
+                excelTemplate.Worksheets[i].IsVisible = !sheet.HideSheet;
+            }
+
+                MemoryStream memoryStream = new MemoryStream();
             excelTemplate.Save(memoryStream, SaveFormat.Xlsx);
             return memoryStream.ToArray();
         }
@@ -103,7 +138,7 @@ namespace Vanrise.Common.Excel
             }
 
         }
-         Style BuildSheetContainerCommonConfigs(VRExcelContainerConfig config, Workbook excelTemplate)
+        Style BuildSheetContainerCommonConfigs(VRExcelContainerConfig config, Workbook excelTemplate)
         {
             Style style = excelTemplate.CreateStyle();
             if (config.SetBorder == true)
@@ -129,7 +164,7 @@ namespace Vanrise.Common.Excel
                         break;
                 }
             }
-            
+
             //if (config.SetBorder == true) 
             //{
             //    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.LightGray); //Border color matching original cell border color
@@ -157,6 +192,31 @@ namespace Vanrise.Common.Excel
             styleFlag.Font = true;
             styleFlag.Borders = true;
             return styleFlag;
+        }
+
+
+
+    }
+
+    public interface IVRExcelFileGenerateContext
+    {
+       string GetSheetName(int sheetIndex);
+    }
+    public class VRExcelFileGenerateContext: IVRExcelFileGenerateContext
+    {
+        List<VRExcelSheet> _sheets;
+        public VRExcelFileGenerateContext(List<VRExcelSheet> sheets)
+        {
+            _sheets = sheets;
+        }
+        public string GetSheetName(int sheetIndex)
+        {
+            if (_sheets != null && _sheets.Count() >= sheetIndex)
+            {
+                var sheet = _sheets[sheetIndex];
+                return sheet.SheetName;
+            }
+            return null;
         }
     }
 

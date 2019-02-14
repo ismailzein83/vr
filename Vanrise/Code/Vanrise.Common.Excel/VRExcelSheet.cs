@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Common.Excel
 {
+    public enum VRExcelSheetType
+    {
+        Worksheet = 1,
+        Chart = 2,
+    }
     public class VRExcelSheet
     {
         public VRExcelSheet()
@@ -17,13 +22,21 @@ namespace Vanrise.Common.Excel
             this.ColumnConfigs = new Dictionary<int, VRExcelColumnConfig>();
             this.Images = new List<VRExcelImageConfig>();
             this.Tables = new List<VRExcelTable>();
+
+            this.PivotTables = new List<VRExcelPivotTable>();
+            this.Charts = new List<VRExcelChart>();
         }
+         
         public string SheetName { get; set; }
+        public VRExcelSheetType SheetType { get; set; }
+        public bool HideSheet { get; set; }
         internal List<VRExcelCell> Cells { get; set; }
         internal Dictionary<int, VRExcelRowConfig> RowConfigs { get; set; }
         internal Dictionary<int, VRExcelColumnConfig> ColumnConfigs { get; set; }
         internal List<VRExcelImageConfig> Images { get; set; }
         internal List<VRExcelTable> Tables { get; set; }
+        internal List<VRExcelPivotTable> PivotTables { get; set; }
+        internal List<VRExcelChart> Charts { get; set; }
         public void SetRowConfig(VRExcelRowConfig rowConfig)
         {
             VRExcelRowConfig config;
@@ -49,6 +62,7 @@ namespace Vanrise.Common.Excel
             Cells.Add(cell);
             return cell;
         }
+        
         public VRExcelImageConfig CreateImage()
         {
             var image = new VRExcelImageConfig();
@@ -64,6 +78,18 @@ namespace Vanrise.Common.Excel
             var table = new VRExcelTable(startingRowIndex, startingColumnIndex);
             Tables.Add(table);
             return table;
+        }
+        public VRExcelChart CreateChart(VRExcelChartType chartType, int startingRow, int endingRow, int startingColumn, int endingColumn)
+        {
+            var chart = new VRExcelChart(chartType, startingRow, endingRow, startingColumn, endingColumn);
+            Charts.Add(chart);
+            return chart;
+        }
+        public VRExcelPivotTable CreatePivotTable(string tableName, int rowIndex, int columnindex)
+        {
+            var pivotTable = new VRExcelPivotTable(tableName,rowIndex, columnindex);
+            PivotTables.Add(pivotTable);
+            return pivotTable;
         }
     }
     public class VRExcelImageConfig
