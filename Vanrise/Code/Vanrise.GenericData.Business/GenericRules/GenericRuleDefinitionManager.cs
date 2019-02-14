@@ -402,8 +402,9 @@ namespace Vanrise.GenericData.Business
             genericRuleDefinitionCriteria.Fields.ThrowIfNull("genericRuleDefinition.CriteriaDefinition.Fields", genericRuleDefinitionId);
 
 
-            if (parsedExcel != null && parsedExcel.Count != 0)
+            if (parsedExcel != null && parsedExcel.Count > 0)
             {
+                List<GenericRule> genericRulesToAdd = new List<GenericRule>();
                 foreach (var parsedRow in parsedExcel)
                 {
                     bool isErrorOccured = false;
@@ -469,7 +470,7 @@ namespace Vanrise.GenericData.Business
                             settingFields.Add(col.Key, col.Value);
                         }
                     }
-                    if (settingFields != null && settingFields.Count != 0)
+                    if (settingFields != null && settingFields.Count > 0)
                     {
                         var settingsContext = new CreateGenericRuleFromExcelContext
                         {
@@ -521,7 +522,32 @@ namespace Vanrise.GenericData.Business
                             }
 
                             if (genericRule != null)
-                                rowToAdd.RuleToAdd = genericRule;
+                            {
+                                foreach (var rule in genericRulesToAdd)
+                                {
+                                    if (rule.Criteria != null && rule.Criteria.FieldsValues != null && rule.Criteria.FieldsValues.Count == genericRule.Criteria.FieldsValues.Count)
+                                    {
+                                        int count;
+
+                                        CompareCriteria(rule, genericRule, out count);
+
+                                        if (count == genericRule.Criteria.FieldsValues.Count)
+                                        {
+                                            isErrorOccured = true;
+                                            invalidGenericRows.Add(new GenericRuleInvalidRow
+                                            {
+                                                RowIndex = parsedRow.RowIndex,
+                                                ErrorMessage = "Duplicate Rule."
+                                            });
+                                        }
+                                    }
+                                }
+                                if (!isErrorOccured)
+                                {
+                                    rowToAdd.RuleToAdd = genericRule;
+                                    genericRulesToAdd.Add(genericRule);
+                                }
+                            }
                         }
                     }
 
@@ -531,6 +557,46 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+        private void CompareCriteria(GenericRule existingRule, GenericRule newRule, out int count)
+        {
+            count = 0;
+            foreach (var fieldValue in existingRule.Criteria.FieldsValues)
+            {
+                var commonCriteriaExists = newRule.Criteria.FieldsValues.ContainsKey(fieldValue.Key);
+                if (commonCriteriaExists != false)
+                {
+                    var existingRuleValues = existingRule.Criteria.FieldsValues[fieldValue.Key].GetValues();
+                    var newRuleValues = newRule.Criteria.FieldsValues[fieldValue.Key].GetValues();
+                    var isMatch = false;
+                    if (existingRuleValues != null && newRuleValues != null && newRuleValues.Count() == existingRuleValues.Count())
+                    {
+                        isMatch = true;
+                        foreach (var newRuleValue in newRuleValues)
+                        {
+                            if (!existingRuleValues.Any(x => x.ToString().Equals(newRuleValue.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+                            {
+                                isMatch = false;
+                                break;
+                            }
+                        }
+                        if (isMatch)
+                        {
+                            foreach (var existingRuleValue in existingRuleValues)
+                            {
+                                if (!newRuleValues.Any(x => x.ToString().Equals(existingRuleValue.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+                                {
+                                    isMatch = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (isMatch)
+                        count++;
+                }
+            }
+        }
         public void ReflectGenericRulesToDBAndExcel(List<GenericRuleRowToAdd> addedGenericRows, List<GenericRuleInvalidRow> invalidGenericRows, Guid genericRuleDefinitionId, DateTime effectiveDate, long uploadFileId, out List<GenericRule> addedGenericRules, out long outputFileId)
         {
             var genericRuleManager = GetManager(genericRuleDefinitionId);
@@ -572,54 +638,16 @@ namespace Vanrise.GenericData.Business
 
                 foreach (var rule in allGenericRules)
                 {
-                    if (rule.Criteria != null && rule.Criteria.FieldsValues != null)
+                    if (rule.Criteria != null && rule.Criteria.FieldsValues != null && rule.Criteria.FieldsValues.Count == genericRow.RuleToAdd.Criteria.FieldsValues.Count)
                     {
-                        if (rule.Criteria.FieldsValues.Count == genericRow.RuleToAdd.Criteria.FieldsValues.Count)
+                        int count;
+                        CompareCriteria(rule, genericRow.RuleToAdd, out count);
+                        if (count == genericRow.RuleToAdd.Criteria.FieldsValues.Count)
                         {
-                            int count = 0;
-                            foreach (var fieldValue in rule.Criteria.FieldsValues)
+                            if (rule.EndEffectiveTime.VRGreaterThan(effectiveDate))
                             {
-                                var commonCriteriaExists = genericRow.RuleToAdd.Criteria.FieldsValues.ContainsKey(fieldValue.Key);
-                                if (commonCriteriaExists != false)
-                                {
-                                    var existingRuleValues = rule.Criteria.FieldsValues[fieldValue.Key].GetValues();
-                                    var newRuleValues = genericRow.RuleToAdd.Criteria.FieldsValues[fieldValue.Key].GetValues();
-                                    var isMatch = false;
-                                    if (existingRuleValues != null && newRuleValues != null && newRuleValues.Count() == existingRuleValues.Count())
-                                    {
-                                        isMatch = true;
-                                        foreach (var newRuleValue in newRuleValues)
-                                        {
-                                            if (!existingRuleValues.Any(x => x.ToString().Equals(newRuleValue.ToString(), StringComparison.InvariantCultureIgnoreCase)))
-                                            {
-                                                isMatch = false;
-                                                break;
-                                            }
-                                        }
-                                        if (isMatch)
-                                        {
-                                            foreach (var existingRuleValue in existingRuleValues)
-                                            {
-                                                if (!newRuleValues.Any(x => x.ToString().Equals(existingRuleValue.ToString(), StringComparison.InvariantCultureIgnoreCase)))
-                                                {
-                                                    isMatch = false;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    if (isMatch)
-                                        count++;
-                                }
-                            }
-                            if (count == genericRow.RuleToAdd.Criteria.FieldsValues.Count)
-                            {
-                                if (rule.EndEffectiveTime.VRGreaterThan(effectiveDate))
-                                {
-                                    rule.EndEffectiveTime = Utilities.Max(rule.BeginEffectiveTime, effectiveDate);
-                                    genericRow.RulesToClose.Add(rule);
-                                }
+                                rule.EndEffectiveTime = Utilities.Max(rule.BeginEffectiveTime, effectiveDate);
+                                genericRow.RulesToClose.Add(rule);
                             }
                         }
                     }
@@ -645,7 +673,7 @@ namespace Vanrise.GenericData.Business
                     invalidGenericRows.Add(new GenericRuleInvalidRow
                     {
                         RowIndex = genericRow.RowIndex,
-                        ErrorMessage = string.Format("An error occured while adding rule to database: ", insertOperationOutput.Result.ToString())
+                        ErrorMessage = string.Format("An error occured while adding rule to database: {0}", insertOperationOutput.Result.ToString())
                     });
                 }
 
