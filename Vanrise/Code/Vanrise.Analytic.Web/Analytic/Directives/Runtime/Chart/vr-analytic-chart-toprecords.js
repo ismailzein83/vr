@@ -70,22 +70,20 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                                 if (response.SubTables != null && response.SubTables.length > 0) {
                                     dimensionNamesList = [];
                                     var subTable = response.SubTables[0];
-                                    for (var d = 0; d < subTable.DimensionValues.length; d++) {
-                                        var currentDimensionValues = subTable.DimensionValues[d];
+                                    for (var dimensionIndex = 0; dimensionIndex < subTable.DimensionValues.length; dimensionIndex++) {
+                                        var currentDimensionValues = subTable.DimensionValues[dimensionIndex];
 
-                                        var dimensionName = "";
-                                        for (var i = 0; i < currentDimensionValues.length; i++) {
-                                            var currentDimension = currentDimensionValues[i];
-                                            dimensionName += currentDimension.Name + ", ";
+                                        var subtableDimensionNames = "";
+                                        for (var dimensionValueIndex = 0; dimensionValueIndex < currentDimensionValues.length; dimensionValueIndex++) {
+                                            var currentDimension = currentDimensionValues[dimensionValueIndex];
+                                            subtableDimensionNames += currentDimension.Name + ", ";
                                         }
-                                        dimensionName = UtilsService.trim(dimensionName, ", ");
-                                        dimensionNamesList.push(dimensionName);
+                                        subtableDimensionNames = UtilsService.trim(subtableDimensionNames, ", ");
+                                        dimensionNamesList.push(subtableDimensionNames);
                                     }
                                 }
 
                                 for (var m = 0; m < ctrl.measures.length; m++) {
-                                    var measureObject = new Object();
-
                                     for (var i = 0; i < response.Data.length; i++) {
                                         var dimensionName = "";
                                         for (var d = 0; d < ctrl.groupingDimensions.length; d++) {
@@ -100,8 +98,12 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                                         }
 
                                         if (dimensionNamesList != undefined) {
+                                            //in this case m is always equal to zero because in case of subtables we have only one measure
+                                            chartRecord.MeasureValues = [];
                                             for (var y = 0; y < response.SubTables[0].DimensionValues.length; y++) {
-                                                chartRecord[dimensionNamesList[y].replace(/[^A-Z0-9]+/ig, "")] = response.Data[i].SubTables[0].MeasureValues[y][ctrl.measures[m].MeasureName].Value;
+                                                chartRecord.MeasureValues[y] = [];
+                                                chartRecord.MeasureValues[y][ctrl.measures[m].MeasureName] = {};
+                                                chartRecord.MeasureValues[y][ctrl.measures[m].MeasureName].Value = response.Data[i].SubTables[0].MeasureValues[y][ctrl.measures[m].MeasureName].Value;
                                             }
 
                                         }
@@ -120,11 +122,12 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
 
                                 var seriesDefinitions = [];
                                 if (dimensionNamesList != undefined) {
+                                     //in this case we have only one measure because we have subtables; that's why ctrl.measures contains only one item ( so we can use 'ctrl.measures[0].MeasureName' while pushing items in seriesDefinitions)
                                     for (var i = 0; i < dimensionNamesList.length; i++) {
                                         var dim = dimensionNamesList[i];
                                         seriesDefinitions.push({
                                             title: dim,
-                                            valuePath: dim.replace(/[^A-Z0-9]+/ig, "")
+                                            valuePath: 'MeasureValues[' + i + ']["' + ctrl.measures[0].MeasureName + '"].Value'
                                         });
                                     }
                                 }
