@@ -24,7 +24,9 @@ namespace Vanrise.Common
     {
         static VRWebAPIClient()
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11;
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            ServicePointManager.CheckCertificateRevocationList = false;
             ServicePointManager.CertificatePolicy = new MyPolicy();
         }
         public static Q Post<T, Q>(string url, string actionPath, T request, Dictionary<string, string> headers = null, bool serializeWithFullType = false)
