@@ -1,8 +1,8 @@
 ﻿(function (app) {
     'use strict';
-    c4switchcustomobjectsettingsDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    switchInterconnectioncustomobjectsettingsDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function c4switchcustomobjectsettingsDirective(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function switchInterconnectioncustomobjectsettingsDirective(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -10,14 +10,14 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new C4switchcustomobjectsettings($scope, ctrl, $attrs);
+                var ctor = new SwitchInterconnectioncustomobjectsettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/RecordAnalysis/Directives/C4Switch/Templates/C4SwitchCustomObjectSettings.html"
+            templateUrl: "/Client/Modules/RecordAnalysis/Directives/SwitchInterconnection/Templates/SwitchInterconnectionCustomObjectSettings.html"
         };
-        function C4switchcustomobjectsettings($scope, ctrl, $attrs) {
+        function SwitchInterconnectioncustomobjectsettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -34,7 +34,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "RecordAnalysis.MainExtensions.C4Switch.C4SwitchSettingsCustomObjectTypeSettings, RecordAnalysis.MainExtensions"
+                        $type: "RecordAnalysis.MainExtensions.SwitchInterconnection.SwitchInterconnectionSettingsCustomObjectTypeSettings, RecordAnalysis.MainExtensions"
                     };
                     return data;
                 };
@@ -46,6 +46,6 @@
         }
     }
     
-    app.directive('recAnalC4switchCustomobjectsettings', c4switchcustomobjectsettingsDirective);
+    app.directive('recAnalSwitchinterconnectionCustomobjectsettings', switchInterconnectioncustomobjectsettingsDirective);
 
 })(app);

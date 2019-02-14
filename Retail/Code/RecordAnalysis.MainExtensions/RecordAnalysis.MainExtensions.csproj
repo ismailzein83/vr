@@ -56,6 +56,7 @@
     <Compile Include="C4Switch\EricssonC4SwitchSettings.cs" />
     <Compile Include="C4Switch\HuaweiC4SwitchSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SwitchInterconnection\SwitchInterconnectionSettingsCustomObjectTypeSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RecordAnalysis.Entities\RecordAnalysis.Entities.csproj">
