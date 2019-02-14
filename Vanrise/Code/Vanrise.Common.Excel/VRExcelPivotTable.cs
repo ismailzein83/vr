@@ -122,16 +122,16 @@ namespace Vanrise.Common.Excel
             var sheetName = context.GetSheetName(_sourceSheetIndex);
             string sourceData = string.Format("{0}!${1}${2}:${3}${4}", sheetName, Utilities.GetExcelColumnName(_startSourceColumnIndex), _startSourceRowIndex, Utilities.GetExcelColumnName(_endSourceColumnIndex) , _endSourceRowIndex);
             int pt2Idx = worksheet.PivotTables.Add(sourceData, columnName, _tableName);
-            PivotTable pt2 = worksheet.PivotTables[pt2Idx];
+            PivotTable pivotTable = worksheet.PivotTables[pt2Idx];
             if(_rowsArea != null)
             {
                 foreach (var rowArea in _rowsArea)
                 {
                     if (rowArea.FieldIndex.HasValue)
 
-                        pt2.AddFieldToArea(PivotFieldType.Row, rowArea.FieldIndex.Value);
+                        pivotTable.AddFieldToArea(PivotFieldType.Row, rowArea.FieldIndex.Value);
                     else
-                        pt2.AddFieldToArea(PivotFieldType.Row, rowArea.FieldName);
+                        pivotTable.AddFieldToArea(PivotFieldType.Row, rowArea.FieldName);
 
                 }
             }
@@ -141,9 +141,9 @@ namespace Vanrise.Common.Excel
                 {
                     if (columnArea.FieldIndex.HasValue)
 
-                        pt2.AddFieldToArea(PivotFieldType.Column, columnArea.FieldIndex.Value);
+                        pivotTable.AddFieldToArea(PivotFieldType.Column, columnArea.FieldIndex.Value);
                     else
-                        pt2.AddFieldToArea(PivotFieldType.Column, columnArea.FieldName);
+                        pivotTable.AddFieldToArea(PivotFieldType.Column, columnArea.FieldName);
 
                 }
             }
@@ -153,9 +153,9 @@ namespace Vanrise.Common.Excel
                 {
                     if (pageArea.FieldIndex.HasValue)
 
-                        pt2.AddFieldToArea(PivotFieldType.Page, pageArea.FieldIndex.Value);
+                        pivotTable.AddFieldToArea(PivotFieldType.Page, pageArea.FieldIndex.Value);
                     else
-                        pt2.AddFieldToArea(PivotFieldType.Page, pageArea.FieldName);
+                        pivotTable.AddFieldToArea(PivotFieldType.Page, pageArea.FieldName);
 
                 }
             }
@@ -165,20 +165,24 @@ namespace Vanrise.Common.Excel
                 {
                     if (dataArea.FieldIndex.HasValue)
 
-                        pt2.AddFieldToArea(PivotFieldType.Data, dataArea.FieldIndex.Value);
+                        pivotTable.AddFieldToArea(PivotFieldType.Data, dataArea.FieldIndex.Value);
                     else
-                        pt2.AddFieldToArea(PivotFieldType.Data, dataArea.FieldName);
+                        pivotTable.AddFieldToArea(PivotFieldType.Data, dataArea.FieldName);
                 }
             }
-           
-            pt2.PivotTableStyleName = "PivotStyleLight16";
-           //  pt2.ColumnFields.Add(pt2.DataField);
-            //pt2.DataFields[0].Number = 7;
-            //pt2.RowFields[0].IsAscendSort = _isAscendSort;
-            //pt2.RowFields[0].IsAutoSort = _isAutoSort;
-            pt2.CalculateData();
-            pt2.RefreshData();
-            pt2.RefreshDataOnOpeningFile = true;
+            //pivotTable.RowGrand = true;
+            //pivotTable.ColumnGrand = true;
+            //pivotTable.IsAutoFormat = true;
+            //pivotTable.AutoFormatType = Aspose.Cells.Pivot.PivotTableAutoFormatType.Report6;
+
+            pivotTable.PivotTableStyleName = "PivotStyleLight16";
+           //  pivotTable.ColumnFields.Add(pivotTable.DataField);
+            //pivotTable.DataFields[0].Number = 7;
+            //pivotTable.RowFields[0].IsAscendSort = _isAscendSort;
+            //pivotTable.RowFields[0].IsAutoSort = _isAutoSort;
+            pivotTable.CalculateData();
+            pivotTable.RefreshData();
+            pivotTable.RefreshDataOnOpeningFile = true;
         }
     }
 }

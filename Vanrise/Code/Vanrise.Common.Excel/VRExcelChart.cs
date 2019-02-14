@@ -30,6 +30,8 @@ namespace Vanrise.Common.Excel
         int _startingColumn;
         int _endingColumn;
         string _title;
+        string _pivoteTableName;
+        int? _pivoteTableSheetIndex;
         public VRExcelChart(VRExcelChartType chartType,int startingRow,int endingRow, int startingColumn, int endingColumn)
         {
             _chartType = chartType;
@@ -44,6 +46,11 @@ namespace Vanrise.Common.Excel
         }
         public void AddSeries(string title)
         {
+        }
+        public void SetPivotSource(int pivoteTableSheetIndex,string pivoteTableName)
+        {
+            _pivoteTableName = pivoteTableName;
+            _pivoteTableSheetIndex = pivoteTableSheetIndex;
         }
 
 
@@ -107,11 +114,15 @@ namespace Vanrise.Common.Excel
             chart.ShowLegend = true;
             chart.Title.Text = _title;
 
-
-            chart.NSeries.Add("B2:B4", true);
-            chart.NSeries.CategoryData = "A2:A4";
-            Series series = chart.NSeries[0];
-            series.Name = "=B1";
+            if(_pivoteTableSheetIndex.HasValue && _pivoteTableName  != null)
+            {
+                chart.PivotSource = string.Format("{0}!{1}",context.GetSheetName(_pivoteTableSheetIndex.Value),_pivoteTableName);
+                chart.HidePivotFieldButtons = false;
+            }
+            //chart.NSeries.Add("B2:B4", true);
+            //chart.NSeries.CategoryData = "A2:A4";
+            //Series series = chart.NSeries[0];
+            //series.Name = "=B1";
         }
     }
 }
