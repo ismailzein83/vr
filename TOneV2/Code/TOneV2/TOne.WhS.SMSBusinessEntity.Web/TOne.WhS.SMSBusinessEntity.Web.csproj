@@ -82,7 +82,13 @@
     <Content Include="WhS_SMSBusinessEntity\Constants\ProcessEntityTypeEnum.js" />
     <Content Include="WhS_SMSBusinessEntity\Constants\SMSRatePlanStatusEnum.js" />
     <Content Include="WhS_SMSBusinessEntity\Constants\SMSSaleRateDefinitionEnum.js" />
+    <Content Include="WhS_SMSBusinessEntity\Constants\WhS_SMSBE_ReceiverIdentificationEnum.js" />
     <Content Include="WhS_SMSBusinessEntity\Constants\WhS_SMSBE_SMSRateChangeTypeEnum.js" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\SMSImportSettings\Templates\SMSImportSettingsTemplate.html" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\SMSImportSettings\Templates\SMSImportMappingConfigurationTemplate.html" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\SMSImportSettings\vr-whs-smsbusinessentity-receiver-selector.js" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\SMSImportSettings\vr-whs-smsbusinessentity-smsimport-settings-editor.js" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\SMSImportSettings\vr-whs-smsbusinessentity-smsimportmappingconfiguration.js" />
     <Content Include="WhS_SMSBusinessEntity\Directives\Templates\CustomerSMSRatePlanGridTemplate.html" />
     <Content Include="WhS_SMSBusinessEntity\Directives\vr-whs-smsbusinessentity-customerrateplan-grid.js" />
     <Content Include="WhS_SMSBusinessEntity\Services\APIServices\CustomerSMSRateAPIService.js" />
