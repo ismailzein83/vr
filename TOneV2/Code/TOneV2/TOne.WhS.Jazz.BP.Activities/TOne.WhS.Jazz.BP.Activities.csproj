@@ -64,6 +64,9 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
@@ -101,6 +104,10 @@
     <ProjectReference Include="..\TOne.WhS.Jazz.Business\TOne.WhS.Jazz.Business.csproj">
       <Project>{13b1e299-0735-4740-85f3-5ef085d4d206}</Project>
       <Name>TOne.WhS.Jazz.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Jazz.Data.RDB\TOne.WhS.Jazz.Data.RDB.csproj">
+      <Project>{A383886A-AF2E-48F8-B8FF-E14260A67640}</Project>
+      <Name>TOne.WhS.Jazz.Data.RDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Jazz.Data\TOne.WhS.Jazz.Data.csproj">
       <Project>{F2903613-8320-47DB-AA72-DB7BCF9AA7AE}</Project>

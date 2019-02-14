@@ -120,9 +120,7 @@
             if (attrs.customlabel != undefined) {
                 label = attrs.customlabel;
             }
-            //var addCliked = '';
-            //if (attrs.onaddclicked != undefined)
-            //    addCliked = ' ';
+            
             var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : null;
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;

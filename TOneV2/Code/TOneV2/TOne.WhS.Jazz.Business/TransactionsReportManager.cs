@@ -42,10 +42,13 @@ namespace TOne.WhS.Jazz.Business
                         {
                             var excelSheet = excelFile.CreateSheet();
 
-                            excelSheet.SheetName = report.SheetName;
+                            excelSheet.SheetName = (report.SheetName.Length > 31) ? string.Format("{0}...", report.SheetName.Substring(0, 28)) : report.SheetName;
+
                             if (transactionsReportData.Value != null && transactionsReportData.Value.Count > 0)
                             {
                                 var excelTable = excelSheet.CreateTable(0, 0);
+                                var title = excelTable.CreateHeaderRow();
+                                CreateCell(report.SheetName, title);
                                 var headerRow = excelTable.CreateHeaderRow();
                                 CreateCell("Transaction Code", headerRow);
                                 CreateCell("Transaction Description", headerRow);

@@ -10,7 +10,8 @@ namespace TOne.WhS.Jazz.Entities
     {
         public Guid ReportDefinitionId { get; set; }
         public string SheetName { get; set; }
-        public Guid TransactionTypeId { get; set; }
+        public Guid? TransactionTypeId { get; set; }
+        public bool IsTaxTransaction { get; set; }
         public List<JazzTransactionsReportData> ReportData { get; set; }
     }
     public class JazzTransactionsReportData

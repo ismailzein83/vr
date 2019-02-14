@@ -24,18 +24,12 @@
         function SettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var rateCalculationTypeSelectorAPI;
-            var rateCalculationTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            var taxFilterGroup;
-            var taxFilterDirectiveAPI;
-            var taxFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
             var dimensions;
             var reportDefintionFilterGroup;
             var reportDefintionFilterDirectiveAPI;
             var reportDefintionFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
             var context;
-            var analyticTableId = " 4c1aaa1b-675b-420f-8e60-26b0747ca79b";
+            var analyticTableId = "795440c9-69e4-442e-a067-896bc969c73f";
             function initializeController() {
 
                 $scope.scopeModel = {};
@@ -83,23 +77,6 @@
                     $scope.scopeModel.regions.splice(index, 1);
                 };
 
-                $scope.scopeModel.onRateCalculationTypeSelectorReady = function (api) {
-                    rateCalculationTypeSelectorAPI = api;
-                    rateCalculationTypeSelectorReadyPromiseDeferred.resolve();
-                };
-         
-                $scope.scopeModel.onCreateTaxChanged = function () {
-                    $scope.scopeModel.taxPercentage = undefined;
-                    taxFilterGroup = undefined;
-                        var setLoader = function (value) { $scope.scopeModel.isTaxFilterDirectiveloading = value; };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, taxFilterDirectiveAPI,undefined , setLoader);
-                };
-
-                $scope.scopeModel.onTaxFilterDirectiveReady = function (api) {
-                    taxFilterDirectiveAPI = api;
-                    taxFilterDirectiveReadyDeferred.resolve();
-                };
-
                 $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
                     reportDefintionFilterDirectiveAPI = api;
                     reportDefintionFilterDirectiveReadyDeferred.resolve();
@@ -132,26 +109,6 @@
                     return false;
                 return true;
             }
-            function loadTaxRecordFilterDirective() {
-                var taxRecordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                taxFilterDirectiveReadyDeferred.promise.then(function () {
-                    var taxFilterDirectivePayload = {
-                        context: buildContext(),
-                        FilterGroup: taxFilterGroup
-                    }; 
-                    VRUIUtilsService.callDirectiveLoad(taxFilterDirectiveAPI, taxFilterDirectivePayload, taxRecordFilterDirectiveLoadDeferred);
-                });
-
-                return taxRecordFilterDirectiveLoadDeferred.promise;
-            }
-
-            function loadRateCalculationTypeSelector(rateCalculationPayload) {
-                var rateCalculationTypeSelectorLoadromiseDeferred = UtilsService.createPromiseDeferred();
-                rateCalculationTypeSelectorReadyPromiseDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(rateCalculationTypeSelectorAPI, rateCalculationPayload, rateCalculationTypeSelectorLoadromiseDeferred);
-                });
-                return rateCalculationTypeSelectorLoadromiseDeferred.promise;
-            }
 
             function prepareRegionObject(regionObject) {
 
@@ -165,7 +122,7 @@
 
                 regionObject.regionReadyPromiseDeferred.promise.then(function () {
                     var payload = {
-                        selectedIds: regionObject.payload.RegionCodeId
+                        selectedIds: regionObject.payload.RegionId
                     };
                     VRUIUtilsService.callDirectiveLoad(entity.regionDirectiveAPI, payload, regionObject.regionLoadPromiseDeferred);
                 });
@@ -189,13 +146,13 @@
                 };
                 marketObject.marketReadyPromiseDeferred.promise.then(function () {
                     var payload = {
-                        selectedIds: marketObject.payload.MarketCodeId
+                        selectedIds: marketObject.payload.MarketId
                     };
                     VRUIUtilsService.callDirectiveLoad(entity.marketDirectiveAPI, payload, marketObject.marketLoadPromiseDeferred);
                 });
                 marketObject.customerTypeReadyPromiseDeferred.promise.then(function () {
                     var payload = {
-                        selectedIds: marketObject.payload.CustomerTypeCodeId
+                        selectedIds: marketObject.payload.CustomerTypeId
                     }; 
                     VRUIUtilsService.callDirectiveLoad(entity.customerTypeDirectiveAPI, payload, marketObject.customerTypeLoadPromiseDeferred);
                 });
@@ -219,17 +176,13 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var rateCalculationPayload;
                     var promises = [];
                     var loadPromiseDeferred = UtilsService.createPromiseDeferred();
                     loadDimensions().then(function () {
                         if (payload != undefined && payload.selectedValues != undefined && payload.selectedValues.Settings != undefined) {
                             var settings = payload.selectedValues.Settings;
-                            rateCalculationPayload = { AmountCalculation: settings.AmountCalculation }; 
-                            $scope.scopeModel.createTax = settings.CreateTax;
-                            $scope.scopeModel.taxPercentage = settings.TaxPercentage;
+                          
                             reportDefintionFilterGroup = settings.ReportFilter;
-                            taxFilterGroup = settings.TaxFilter;
                             if (settings.MarketSettings != undefined) {
                                 var marketOptions = settings.MarketSettings.MarketOptions;
                                 for (var j = 0; j < marketOptions.length; j++) {
@@ -260,9 +213,7 @@
                                 }
                             }
                         }
-                        
-                        promises.push(loadRateCalculationTypeSelector(rateCalculationPayload));
-                        promises.push(loadTaxRecordFilterDirective());
+                      
                         promises.push(loadReportDefinitionFilterDirective());
                         UtilsService.waitMultiplePromises(promises).then(function () {
                             loadPromiseDeferred.resolve();
@@ -278,7 +229,7 @@
                         for (var i = 0; i < $scope.scopeModel.regions.length; i++) {
                             var item = $scope.scopeModel.regions[i];
                             regionOptions.push({
-                                RegionCodeId: item.regionDirectiveAPI.getSelectedIds(),
+                                RegionId: item.regionDirectiveAPI.getSelectedIds(),
                                 Percentage: item.Percentage
                             });
                         }
@@ -289,16 +240,14 @@
                         for (var i = 0; i < $scope.scopeModel.markets.length; i++) {
                             var item = $scope.scopeModel.markets[i];
                             marketOptions.push({
-                                MarketCodeId: item.marketDirectiveAPI.getSelectedIds(),
-                                CustomerTypeCodeId: item.customerTypeDirectiveAPI.getSelectedIds(),
+                                MarketId: item.marketDirectiveAPI.getSelectedIds(),
+                                CustomerTypeId: item.customerTypeDirectiveAPI.getSelectedIds(),
                                 Percentage: item.Percentage
                             });
                         }
                     }
                     payload.Settings = {
                         $type: "TOne.WhS.Jazz.Entities.JazzReportDefinitionSettings,TOne.WhS.Jazz.Entities",
-                        AmountCalculation: rateCalculationTypeSelectorAPI.getSelectedIds(),
-                      
                         MarketSettings: {
                             MarketOptions: marketOptions
                         },
@@ -307,9 +256,7 @@
                             RegionOptions: regionOptions,
 
                         },
-                        CreateTax: $scope.scopeModel.createTax,
-                        TaxPercentage:$scope.scopeModel.taxPercentage,
-                        TaxFilter: taxFilterDirectiveAPI.getData() != undefined ? taxFilterDirectiveAPI.getData().filterObj :undefined,
+                      
                         ReportFilter: reportDefintionFilterDirectiveAPI.getData() != undefined ? reportDefintionFilterDirectiveAPI.getData().filterObj : undefined
                     };
        

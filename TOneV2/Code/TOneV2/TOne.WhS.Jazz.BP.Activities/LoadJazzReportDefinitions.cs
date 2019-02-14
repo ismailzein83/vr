@@ -17,6 +17,7 @@ namespace TOne.WhS.Jazz.BP.Activities
             JazzReportDefinitionManager _manager = new JazzReportDefinitionManager();
             var reportDefinitions= _manager.GetAllReportDefinitions();
             List<JazzReportDefinition> outReportDefintions = null;
+
             if(reportDefinitions!=null && reportDefinitions.Count > 0)
             {
                 outReportDefintions = new List<JazzReportDefinition>();
@@ -26,10 +27,8 @@ namespace TOne.WhS.Jazz.BP.Activities
                     if (reportDefintion.IsEnabled)
                         outReportDefintions.Add(reportDefintion);
                 }
-
             }
             RepportDefinitions.Set(context, outReportDefintions);
-            //load only enabled reports
         }
     }
 }

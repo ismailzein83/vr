@@ -25,16 +25,9 @@ namespace TOne.WhS.Jazz.Entities
     {
         public MarketSettings MarketSettings { get; set; }
         public RegionSettings RegionSettings { get; set; }
-        public bool CreateTax { get; set; }
-        public decimal TaxPercentage { get; set; }
-        public RecordFilter TaxFilter { get; set; }
         public RecordFilter ReportFilter { get; set; }
+
     }
-    //public class AmountCalculation
-    //{
-    //    public RateCalculationTypeEnum RateCalculationType { get; set; }
-    //    public decimal? FixedRateValue { get; set; }
-    //}
     public class MarketSettings
     {
         public List<MarketOption> MarketOptions { get; set; }
@@ -42,8 +35,8 @@ namespace TOne.WhS.Jazz.Entities
     }
     public class MarketOption
     {
-        public Guid MarketCodeId { get; set; }
-        public Guid CustomerTypeCodeId { get; set; }
+        public Guid MarketId { get; set; }
+        public Guid CustomerTypeId { get; set; }
         public decimal Percentage { get; set; }
     }
     public class RegionSettings
@@ -53,7 +46,7 @@ namespace TOne.WhS.Jazz.Entities
     }
     public class RegionOption
     {
-        public Guid RegionCodeId { get; set; }
+        public Guid RegionId { get; set; }
         public decimal Percentage { get; set; }
     }
 }

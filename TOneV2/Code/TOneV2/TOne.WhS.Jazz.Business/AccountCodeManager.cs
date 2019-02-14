@@ -103,22 +103,20 @@ namespace TOne.WhS.Jazz.Business
             }, filterFunc);
         }
 
-        public bool ValidateAccountCode(GenericBusinessEntity genericBusinessEntity)
+        public bool ValidateAccountCode(GenericBusinessEntity genericBusinessEntity, HandlerOperationType operationType)
         {
-            AccountCode accountCode = new AccountCode()
+            AccountCode accountCode = new AccountCode
             {
-                ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
-                Name = (string)genericBusinessEntity.FieldValues.GetRecord("Name"),
-                SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
-                TransactionTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("TransactionTypeId"),
-                Code = (string)genericBusinessEntity.FieldValues.GetRecord("Code"),
                 Carriers = (AccountCodeCarriers)genericBusinessEntity.FieldValues.GetRecord("Carriers"),
-                CreatedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("CreatedTime"),
-                CreatedBy = (int)genericBusinessEntity.FieldValues.GetRecord("CreatedBy"),
-                LastModifiedTime = (DateTime)genericBusinessEntity.FieldValues.GetRecord("LastModifiedTime"),
-                LastModifiedBy = (int)genericBusinessEntity.FieldValues.GetRecord("LastModifiedBy")
+                SwitchId = (int)genericBusinessEntity.FieldValues.GetRecord("SwitchId"),
+                TransactionTypeId = (Guid)genericBusinessEntity.FieldValues.GetRecord("TransactionTypeId")
             };
 
+            if (operationType == HandlerOperationType.Update)
+            {
+                accountCode.ID = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID");
+            }
+       
             var accountCodes = GetCachedAccountCodes();
 
             if(accountCodes!=null && accountCodes.Count > 0)

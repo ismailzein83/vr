@@ -64,7 +64,11 @@ namespace TOne.WhS.Jazz.Business
                 return result;
             });
         }
-
+        public ProductService GetProductServiceById(Guid productServiceId)
+        {
+            var products = GetCachedProductServices();
+            return products.GetRecord(productServiceId);
+        }
         public IEnumerable<ProductServiceDetail> GetProductServicesInfo(ProductServiceInfoFilter filter)
         {
             var productServices = GetCachedProductServices();

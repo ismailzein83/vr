@@ -1,11 +1,4 @@
 ﻿
-    <vr-tab header="'Amount Calculation'">
-        <vr-row>
-            <vr-columns width="fullrow">
-                <whs-jazz-rate-calculation-type-selector on-ready="scopeModel.onRateCalculationTypeSelectorReady" isrequired="true" normal-col-num="8"></whs-jazz-rate-calculation-type-selector>
-            </vr-columns>
-        </vr-row>
-    </vr-tab>
     <vr-tab header="'Markets'">
         <vr-row>
             <vr-columns width="fullrow">
@@ -61,25 +54,6 @@
                         </vr-validator>
                     </vr-columns>
             </vr-columns>
-        </vr-row>
-    </vr-tab>
-    <vr-tab header="'Tax'">
-        <vr-row>
-            <vr-columns width="1/3row">
-                <vr-switch value="scopeModel.createTax" label="Create Tax" onvaluechanged="scopeModel.onCreateTaxChanged"></vr-switch>
-            </vr-columns>
-            <vr-columns width="1/3row" ng-show="scopeModel.createTax">
-                <vr-textbox value="scopeModel.taxPercentage" label="Tax Percentage" type="number" isrequired="scopeModel.createTax"></vr-textbox>
-            </vr-columns>
-            <vr-row ng-show="scopeModel.createTax">
-                <vr-span vr-loader="scopeModel.isTaxFilterDirectiveloading">
-                    <vr-columns width="fullrow">
-                        <vr-section title="Tax Filter">
-                            <vr-genericdata-recordfilter on-ready="scopeModel.onTaxFilterDirectiveReady"></vr-genericdata-recordfilter>
-                        </vr-section>
-                    </vr-columns>
-                </vr-span>
-            </vr-row>
         </vr-row>
     </vr-tab>
     <vr-tab header="'Report Filter'">

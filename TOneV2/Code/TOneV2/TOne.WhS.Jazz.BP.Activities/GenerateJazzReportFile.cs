@@ -26,26 +26,50 @@ namespace TOne.WhS.Jazz.BP.Activities
                 foreach(var report in jazzReports)
                 {
                     var excelSheet = excelFile.CreateSheet();
-                    excelSheet.SheetName = report.ReportName;
+                    excelSheet.SheetName = (report.ReportName.Length > 31) ? string.Format("{0}...", report.ReportName.Substring(0, 27)) : report.ReportName;
                     var excelTable = excelSheet.CreateTable(0,0);
-                    var headerRow=  excelTable.CreateHeaderRow();
+
+                    var title = excelTable.CreateHeaderRow();
+                    CreateCell(report.ReportName, title);
+
+                    var headerRow = excelTable.CreateHeaderRow();
                     if (report.Direction.Equals(ReportDefinitionDirectionEnum.In))
                     {
                         CreateCell("Customer", headerRow);
-                        CreateCell("SaleDuration", headerRow);
-                        CreateCell("SaleNet", headerRow);
                     }
                     else
                     {
                         CreateCell("Supplier", headerRow);
-                        CreateCell("CostDuration", headerRow);
-                        CreateCell("CostNet", headerRow);
                     }
+                    CreateCell("Duration", headerRow);
+                    if (!report.SplitRateValue.HasValue)
+                    {
+                        CreateCell("Amount", headerRow);
+                    }
+                    else
+                    {
+                        CreateCell(string.Format("Amount Rate-{0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow);
+                        CreateCell(string.Format("Amount {0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow);
+                    }
+
+                    if (report.TaxOption.HasValue)
+                        CreateCell("STAX", headerRow);
+
                     CreateCell("Market", headerRow);
                     CreateCell("Region", headerRow);
-                    CreateCell("Market Value", headerRow);
-                    CreateCell("Region Value", headerRow);
-                    if(report.ReportData!=null && report.ReportData.Count > 0)
+
+                    if (!report.SplitRateValue.HasValue)
+                    {
+                        CreateCell("Region Value", headerRow);
+                    }
+
+                    else
+                    {
+                        CreateCell(string.Format("Region Value Rate-{0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow);
+                        CreateCell(string.Format("Region Value {0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow);
+                    }
+              
+                    if (report.ReportData!=null && report.ReportData.Count > 0)
                     {
                         foreach(var reportData in report.ReportData)
                         {
@@ -60,11 +84,22 @@ namespace TOne.WhS.Jazz.BP.Activities
                                             var row = excelTable.CreateDataRow();
                                             CreateCell(string.Format("{0}{1}",reportData.CarrierAccountId.ToString(), reportData.CarrierAccountName), row);
                                             CreateCell(reportData.Duration.ToString(), row);
-                                            CreateCell(reportData.Amount.ToString(), row);
+                                            CreateCell(reportData.Amount1.ToString(), row);
+
+                                            if (report.SplitRateValue.HasValue)
+                                                CreateCell(reportData.Amount2.ToString(), row);
+
+                                            if (report.TaxOption.HasValue)
+                                                CreateCell(reportData.Tax.ToString(), row);
+
                                             CreateCell(string.Format("{0} {1}%",market.MarketName, market.Percentage), row);
                                             CreateCell(string.Format("{0} {1}%", region.RegionName, region.Percentage), row);
-                                            CreateCell(market.MarketValue.ToString(), row);
-                                            CreateCell(region.RegionValue.ToString(), row);
+                                            CreateCell(region.RegionValue1.ToString(), row);
+
+                                            if (report.SplitRateValue.HasValue)
+                                                CreateCell(region.RegionValue2.ToString(), row);
+
+                                           
                                         }
                                     }
                                 }
@@ -73,16 +108,15 @@ namespace TOne.WhS.Jazz.BP.Activities
                     }
                 }
             }
+
             var file = excelFile.GenerateExcelFile();
             var fileManager = new VRFileManager();
-            var fileId = fileManager.AddFile(new VRFile {
-                Name="JazzReports.xlsx",
+            var fileId = fileManager.AddFile(new VRFile
+            {
+                Name = "JazzReports.xlsx",
                 Content = file
             });
-            FileStream fs = new FileStream(string.Format(@"C:\mohammad\{0}.xlsx",Guid.NewGuid()), FileMode.Create);
-            StreamWriter writer = new StreamWriter(fs);
-            writer.Write(file);
-            writer.Close();
+            
             FileId.Set(context, fileId);
 
         }

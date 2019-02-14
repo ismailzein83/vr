@@ -57,7 +57,7 @@ namespace TOne.WhS.Jazz.Data.RDB
             var selectQuery = queryContext.AddSelectQuery();
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
-            selectQuery.Where().ListCondition(RDBListConditionOperator.IN, reportsIds);
+            selectQuery.Where().ListCondition(COL_ERPDraftReportID, RDBListConditionOperator.IN, reportsIds);
 
             Dictionary<long, List<ERPDraftReportTranaction>> data = null;
             queryContext.ExecuteReader(
@@ -71,10 +71,10 @@ namespace TOne.WhS.Jazz.Data.RDB
                       long draftReportId = reader.GetLong(COL_ERPDraftReportID);
                       ERPDraftReportTranaction transactionsReportData = new ERPDraftReportTranaction
                       {
-                          TransactionCode = reader.GetString("TransactionCode"),
-                          TransationDescription = reader.GetString("TransactionDescription"),
-                          Credit = reader.GetDecimal("Credit"),
-                          Debit = reader.GetDecimal("Debit")
+                          TransactionCode = reader.GetString(COL_TransactionCode),
+                          TransationDescription = reader.GetString(COL_TransactionDescription),
+                          Credit = reader.GetNullableDecimal(COL_Credit),
+                          Debit = reader.GetNullableDecimal(COL_Debit)
                       };
                       List<ERPDraftReportTranaction> transactionsReportsData = data.GetOrCreateItem(draftReportId);
                       transactionsReportsData.Add(transactionsReportData);
@@ -88,22 +88,50 @@ namespace TOne.WhS.Jazz.Data.RDB
             var queryContext = new RDBQueryContext(GetDataProvider());
             if(transactionsReportsData !=null && transactionsReportsData.Count > 0)
             {
+                var insertMultipleRowsQuery = queryContext.AddInsertMultipleRowsQuery();
+                insertMultipleRowsQuery.IntoTable(TABLE_NAME);
                 foreach (var data in transactionsReportsData)
                 {
-                    var insertQuery = queryContext.AddInsertQuery();
-                    insertQuery.IntoTable(TABLE_NAME);
-                    insertQuery.AddSelectGeneratedId();
-                    insertQuery.Column(COL_ERPDraftReportID).Value(reportId);
-                    insertQuery.Column(COL_TransactionCode).Value(data.TransactionCode);
-                    insertQuery.Column(COL_TransactionDescription).Value(data.TransationDescription);
-                    insertQuery.Column(COL_Credit).Value(data.Credit.Value);
-                    insertQuery.Column(COL_Debit).Value(data.Debit.Value);
+                    var row = insertMultipleRowsQuery.AddRow();
+                    row.Column(COL_ERPDraftReportID).Value(reportId);
+                    row.Column(COL_TransactionCode).Value(data.TransactionCode);
+                    row.Column(COL_TransactionDescription).Value(data.TransationDescription);
+                    row.Column(COL_Credit).Value(data.Credit.Value);
+                    row.Column(COL_Debit).Value(data.Debit.Value);
                 }
             }
              queryContext.ExecuteNonQuery();
         }
 
+        public void Delete(long processInstanceId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var deleteQuery = queryContext.AddDeleteQuery();
+            deleteQuery.FromTable(TABLE_NAME);
+            var joinContext = deleteQuery.Join(TABLE_ALIAS);
+            var whereCondition = deleteQuery.Where();
+            DraftReportDataManager draftReportDataManager = new DraftReportDataManager();
+            draftReportDataManager.AddJoinToDraftReport(joinContext,TABLE_ALIAS, "draftReport", COL_ERPDraftReportID);
+            draftReportDataManager.AddProcessInstanceIdCondition(whereCondition, "draftReport", processInstanceId);
+            queryContext.ExecuteNonQuery();
+        }
 
+        internal void SetSelectQuery(RDBSelectQuery selectQuery,string tableAlias,long processInstanceId,string transactionCodeAlias,string transactionDescriptionAlias,string creditAlias,string debitAlias)
+        {
+            DraftReportDataManager draftReportDataManager = new DraftReportDataManager();
+
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.SelectColumns().Column(COL_TransactionCode, transactionCodeAlias);
+            selectQuery.SelectColumns().Column(COL_TransactionDescription, transactionDescriptionAlias);
+            selectQuery.SelectColumns().Column(COL_Credit, creditAlias);
+            selectQuery.SelectColumns().Column(COL_Debit, debitAlias);
+
+            var joinContext = selectQuery.Join();
+            draftReportDataManager.AddJoinToDraftReport(joinContext, TABLE_ALIAS, "draftReport", COL_ERPDraftReportID);
+
+            var whereCondition = selectQuery.Where();
+            draftReportDataManager.AddProcessInstanceIdCondition(whereCondition, "draftReport", processInstanceId);
+        }
         #endregion
 
         #region Private Methods
@@ -115,6 +143,8 @@ namespace TOne.WhS.Jazz.Data.RDB
         #endregion
 
         #region Mappers
+
+
         #endregion
     }
 }

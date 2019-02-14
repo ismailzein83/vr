@@ -59,7 +59,10 @@ namespace TOne.WhS.Jazz.Data.RDB
             insertQuery.Column(COL_ReportDefinitionID).Value(transactionsReport.ReportDefinitionId);
             insertQuery.Column(COL_SheetName).Value(transactionsReport.SheetName);
             insertQuery.Column(COL_ProcessInstanceID).Value(processInstanceId);
-            insertQuery.Column(COL_TransactionTypeID).Value(transactionsReport.TransactionTypeId);
+            if (transactionsReport.TransactionTypeId.HasValue)
+                insertQuery.Column(COL_TransactionTypeID).Value(transactionsReport.TransactionTypeId.Value);
+            insertQuery.Column(COL_IsTaxTransaction).Value(transactionsReport.IsTaxTransaction);
+
             var insertedID = queryContext.ExecuteScalar().NullableLongValue;
             if (insertedID.HasValue)
             {
@@ -74,36 +77,33 @@ namespace TOne.WhS.Jazz.Data.RDB
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
             var selectQuery = queryContext.AddSelectQuery();
+
             selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
             selectQuery.SelectColumns().AllTableColumns(TABLE_ALIAS);
             selectQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
-            List<long> ids = null;
-            List<ERPDraftReport> transactionsReports =null;
 
-            queryContext.ExecuteReader(
-               (reader) =>
-               {
-                   while (reader.Read())
-                   {
-                       if (ids == null)
-                           ids = new List<long>();
-                       if (transactionsReports == null)
-                           transactionsReports = new List<ERPDraftReport>();
-                       ids.Add(reader.GetLong(COL_ID));
-                       ERPDraftReport report = new ERPDraftReport
-                       {
-                           ReportDefinitionId = reader.GetGuid(COL_ReportDefinitionID),
-                           ReportId= reader.GetLong(COL_ID),
-                           SheetName = reader.GetString(COL_SheetName),
-                           TransactionTypeId = reader.GetGuid(COL_TransactionTypeID)
-                       };
-                       transactionsReports.Add(report);
-                   }
-               });
-
-            return transactionsReports;
+            return queryContext.GetItems(DraftReportMapper);
         }
 
+        public void Delete(long processInstanceId)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var deleteQuery = queryContext.AddDeleteQuery();
+
+            deleteQuery.FromTable(TABLE_NAME);
+            deleteQuery.Where().EqualsCondition(COL_ProcessInstanceID).Value(processInstanceId);
+
+            queryContext.ExecuteNonQuery();
+        }
+        internal void AddJoinToDraftReport(RDBJoinContext joinContext,string originalTableAlias,string draftReportTableAlias,string originalTableReportIdColumnName)
+        {
+            joinContext.JoinOnEqualOtherTableColumn(TABLE_NAME, draftReportTableAlias, COL_ID, originalTableAlias, originalTableReportIdColumnName);
+        }
+        internal void AddProcessInstanceIdCondition(RDBConditionContext conditionContext,string draftReportTableAlias, long processInstanceIdValue)
+        {
+            conditionContext.EqualsCondition(draftReportTableAlias, COL_ProcessInstanceID).Value(processInstanceIdValue);
+        }
+  
         #endregion
 
         #region Private Methods
@@ -115,7 +115,17 @@ namespace TOne.WhS.Jazz.Data.RDB
         #endregion
 
         #region Mappers
+        ERPDraftReport DraftReportMapper(IRDBDataReader reader)
+        {
 
+            return new ERPDraftReport()
+            {
+                ReportDefinitionId = reader.GetGuid(COL_ReportDefinitionID),
+                ReportId = reader.GetLong(COL_ID),
+                SheetName = reader.GetString(COL_SheetName),
+                TransactionTypeId = reader.GetNullableGuid(COL_TransactionTypeID)
+            };
+        }
 
         #endregion
     }

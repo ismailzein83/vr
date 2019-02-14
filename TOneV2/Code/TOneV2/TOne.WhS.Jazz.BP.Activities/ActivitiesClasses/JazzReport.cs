@@ -11,7 +11,8 @@ namespace TOne.WhS.Jazz.BP.Activities
     {
         public string ReportName { get; set; }
         public ReportDefinitionDirectionEnum Direction { get; set; }
-
+        public decimal? SplitRateValue { get; set; }
+        public TaxOptionEnum? TaxOption { get; set; }
         public List<JazzReportData> ReportData { get; set; }
     }
     public class JazzReportData
@@ -19,9 +20,9 @@ namespace TOne.WhS.Jazz.BP.Activities
         public int CarrierAccountId { get; set; }
         public string CarrierAccountName { get; set; }
         public decimal Duration { get; set; }
-        public decimal Amount { get; set; }
-
+        public decimal Amount1 { get; set; }
         public decimal Amount2 { get; set; }
+        public decimal Tax { get; set; }
         public List<JazzReportMarket> Markets { get; set; }
       
     }
@@ -31,7 +32,7 @@ namespace TOne.WhS.Jazz.BP.Activities
         public string MarketName { get; set; }
         public Guid CustomerTypeId { get; set; }
         public string CustomerTypeName { get; set; }
-        public decimal MarketValue { get; set; }
+        public decimal MarketValue1 { get; set; }
         public decimal MarketValue2 { get; set; }
         public decimal Percentage { get; set; }
         public List<JazzReportRegion> Regions { get; set; }
@@ -40,7 +41,7 @@ namespace TOne.WhS.Jazz.BP.Activities
     {
         public Guid RegionId { get; set; }
         public string RegionName { get; set; }
-        public decimal RegionValue { get; set; }
+        public decimal RegionValue1 { get; set; }
         public decimal RegionValue2 { get; set; }
         public decimal Percentage { get; set; }
 

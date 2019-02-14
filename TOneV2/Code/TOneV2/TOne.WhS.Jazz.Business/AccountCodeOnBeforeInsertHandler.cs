@@ -20,13 +20,16 @@ namespace TOne.WhS.Jazz.Business
 
         public override void Execute(IGenericBEOnBeforeInsertHandlerContext context)
         {
-                context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
 
-                AccountCodeManager accountCodeManager = new AccountCodeManager();
-                var result = accountCodeManager.ValidateAccountCode(context.GenericBusinessEntity);
+            context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
 
-                context.OutputResult.Result = result;
-                context.OutputResult.Messages.Add(result ? "Account Code inserted Successfully" : "Account Code Is Not Valid");
+            AccountCodeManager accountCodeManager = new AccountCodeManager();
+            var result = accountCodeManager.ValidateAccountCode(context.GenericBusinessEntity,context.OperationType);
+
+            context.OutputResult.Result = result;
+
+            if(!result)
+                context.OutputResult.Messages.Add("Duplicate Switch,Transaction Type, Carrier Were Found");
         }
 
     }

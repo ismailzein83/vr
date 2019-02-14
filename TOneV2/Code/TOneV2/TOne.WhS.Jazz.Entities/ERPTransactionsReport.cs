@@ -11,7 +11,7 @@ namespace TOne.WhS.Jazz.Entities
         public Guid ReportDefinitionId { get; set; }
         public long ReportId { get; set; }
         public string SheetName { get; set; }
-        public Guid TransactionTypeId { get; set; }
+        public Guid? TransactionTypeId { get; set; }
         public List<JazzTransactionsReportData> ReportData { get; set; }
     }
     public class ERPDraftReportTranaction

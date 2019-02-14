@@ -11,5 +11,6 @@ namespace TOne.WhS.Jazz.Data
     {
         List<ERPDraftReport> GetTransactionsReports(long processInstanceId);
         bool Insert(JazzTransactionsReport transactionReport,long processInstanceId, out long insertedId);
+        void Delete(long processInstanceId);
     }
 }
