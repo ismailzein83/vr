@@ -114,6 +114,9 @@ app.directive('partnerportalCustomeraccessRetailsubaccountsSelector', ['PartnerP
                 api.selectIfSingleItem = function () {
                     selectorAPI.selectIfSingleItem();
                 };
+                api.isDataSourceEmpty = function () {
+                    return ctrl.datasource.length == 0;
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

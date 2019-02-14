@@ -43,6 +43,7 @@ app.directive('partnerportalCustomeraccessRetailFaultticketStaticeditor', ['Util
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.descriptionSettings = [];
+                $scope.scopeModel.showAccountSelector = false;
 
                 $scope.onAttachmentGridReady = function (api) {
                     attachmentGridAPI = api;
@@ -144,7 +145,7 @@ app.directive('partnerportalCustomeraccessRetailFaultticketStaticeditor', ['Util
                     faultTicketObject.Notes = $scope.scopeModel.notes;
                     faultTicketObject.StatusId = statusSelectorAPI != undefined ? statusSelectorAPI.getSelectedIds() : undefined;
                     faultTicketObject.Attachments = attachmentGridAPI != undefined ? attachmentGridAPI.getData() : undefined;
-                    faultTicketObject.SubscriberId = retailSubAccountsSelectorAPI != undefined ? retailSubAccountsSelectorAPI.getSelectedIds() : undefined;
+                    faultTicketObject.SubscriberId = $scope.scopeModel.showAccountSelector && retailSubAccountsSelectorAPI != undefined ? retailSubAccountsSelectorAPI.getSelectedIds() : undefined;
                     faultTicketObject.SourceId = CP_MultiNet_FaultTicketSourceEnum.Portal.value;
                 };
 
@@ -217,6 +218,7 @@ app.directive('partnerportalCustomeraccessRetailFaultticketStaticeditor', ['Util
                 retailSubAccountsSelectorLoadDeferred.promise.then(function () {
                     retailSubAccountsSelectorAPI.selectIfSingleItem();
                     $scope.scopeModel.isSingleAccount = retailSubAccountsSelectorAPI.isSingleItem();
+                    $scope.scopeModel.showAccountSelector = !retailSubAccountsSelectorAPI.isDataSourceEmpty();
                 });
                 return retailSubAccountsSelectorLoadDeferred.promise;
             }
