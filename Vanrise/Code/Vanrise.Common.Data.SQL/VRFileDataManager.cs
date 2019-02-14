@@ -66,7 +66,10 @@ namespace Vanrise.Common.Data.SQL
             return GetItemSP("[common].[sp_File_GetByUniqueId]", FileMapper, fileUniqueId);
         }
 
-
+        public void DeleteFile(long fileId)
+        {
+            ExecuteNonQuerySP("[common].[sp_File_Delete]",fileId);
+        }
         public List<VRFileInfo> GetFilesInfo(IEnumerable<long> fileIds)
         {
             string fileIdsAsString = null;

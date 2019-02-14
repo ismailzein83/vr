@@ -101,6 +101,12 @@ namespace Vanrise.Common.Business
             return _datamanager.GetFileInfo(fileId);
         }
 
+        public void DeleteFile(long fileId)
+        {
+
+            _datamanager.DeleteFile(fileId);
+
+        }
         public VRRemoteFileInfo GetRemoteFileInfo(long fileId)
         {
             var fileInfo = GetFileInfo(fileId);

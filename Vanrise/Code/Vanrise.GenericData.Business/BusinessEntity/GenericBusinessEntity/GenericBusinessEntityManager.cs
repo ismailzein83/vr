@@ -553,6 +553,7 @@ namespace Vanrise.GenericData.Business
                 genericBusinessEntityToUpdate.GenericBusinessEntityId = idFieldType.Type.ParseValueToFieldType(new DataRecordFieldTypeParseValueToFieldTypeContext(genericBusinessEntityToUpdate.GenericBusinessEntityId));
 
                 genericBusinessEntityToUpdate.FieldValues = new DataRecordTypeManager().ParseDicValuesToFieldType(genericBEDefinitionSetting.DataRecordTypeId, genericBusinessEntityToUpdate.FieldValues);
+                newGenericBE.FieldValues = new DataRecordTypeManager().ParseDicValuesToFieldType(genericBEDefinitionSetting.DataRecordTypeId, newGenericBE.FieldValues);
 
                 var fieldTypes = _genericBEDefinitionManager.GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
                 OnBeforeSaveMethod(fieldTypes, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, newGenericBE, genericBusinessEntityToUpdate.GenericBusinessEntityId);

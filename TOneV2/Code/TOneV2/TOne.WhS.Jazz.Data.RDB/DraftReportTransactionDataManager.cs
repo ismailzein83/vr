@@ -73,8 +73,8 @@ namespace TOne.WhS.Jazz.Data.RDB
                       {
                           TransactionCode = reader.GetString(COL_TransactionCode),
                           TransationDescription = reader.GetString(COL_TransactionDescription),
-                          Credit = reader.GetNullableDecimal(COL_Credit),
-                          Debit = reader.GetNullableDecimal(COL_Debit)
+                          Credit = reader.GetDecimal(COL_Credit),
+                          Debit = reader.GetDecimal(COL_Debit)
                       };
                       List<ERPDraftReportTranaction> transactionsReportsData = data.GetOrCreateItem(draftReportId);
                       transactionsReportsData.Add(transactionsReportData);
