@@ -10,6 +10,7 @@ using Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers;
 using Vanrise.DataParser.MainExtensions.BinaryParsers.Common.RecordParsers;
 using Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.FieldParsers;
 using Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers;
+using Vanrise.DataParser.MainExtensions.BinaryParsers.HuaweiParser.FieldParsers;
 using Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers;
 using Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers.PackageFieldParser;
 using Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.RecordParsers;
@@ -353,7 +354,7 @@ namespace Mediation.Runtime.DataParser
                         {
                             {"80", new BinaryFieldParser
                                    {
-                                        Settings = new TBCDNumberParser
+                                        Settings = new DiagnosticsParser
                                         {
                                              FieldName = "Diagnostics"
                                         }
@@ -700,7 +701,7 @@ namespace Mediation.Runtime.DataParser
                         {
                             {"80", new BinaryFieldParser
                                    {
-                                        Settings = new TBCDNumberParser
+                                        Settings = new DiagnosticsParser
                                         {
                                              FieldName = "Diagnostics"
                                         }
