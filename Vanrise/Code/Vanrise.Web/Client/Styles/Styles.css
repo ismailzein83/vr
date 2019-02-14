@@ -4231,13 +4231,29 @@ vr-overall-widget .list-group-item {
     background-color: #0177b5;
     height: 120px;
     margin-top: 30px;
-    text-align: center;
     padding: 5px 0px;
     border-radius: 4px;
     cursor: pointer;
 }
-.menu-tile.module.page {
+.menu-tile.app-tile {
+    text-align: center;
+    height: 150px;
+}
+
+.menu-tile.app-tile h3 {
+    margin-left: unset;
     height: 60px;
+    color: #fff;
+    margin-top: 10px;
+    margin-left: 0px;
+    overflow: hidden;
+}
+.menu-tile.module h3 {
+    margin-left: 50px;
+    text-align: left;
+}
+.menu-tile.module.page {
+    text-align: center;
 }
 
 /* end vr-tile*/
