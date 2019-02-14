@@ -24,18 +24,13 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_SMSBusinessEntity_ModuleConfig.moduleName, controllerName, "GetDraftData"), input);
         }
 
-        function CheckIfDraftExist(customerID) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_SMSBusinessEntity_ModuleConfig.moduleName, controllerName, "CheckIfDraftExist"), {
-                customerID: customerID
-            });
-        }
+        
 
         return {
             GetFilteredChanges: GetFilteredChanges,
             InsertOrUpdateChanges: InsertOrUpdateChanges,
             UpdateSMSRateChangesStatus: UpdateSMSRateChangesStatus,
-            GetDraftData: GetDraftData,
-            CheckIfDraftExist: CheckIfDraftExist
+            GetDraftData: GetDraftData
         };
 
     }

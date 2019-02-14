@@ -45,13 +45,5 @@ namespace TOne.WhS.SMSBusinessEntity.Web.Controllers
         {
             return _customerSMSRateChangesManager.GetDraftData(input);
         }
-
-        [HttpGet]
-        [Route("CheckIfDraftExist")]
-        public DraftStateResult CheckIfDraftExist(int customerID)
-        {
-            return _customerSMSRateChangesManager.CheckIfDraftExist(customerID);
-        }
-
     }
 }

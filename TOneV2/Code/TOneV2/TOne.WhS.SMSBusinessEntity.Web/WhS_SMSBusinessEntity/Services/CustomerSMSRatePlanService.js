@@ -5,11 +5,9 @@
     CustomerSMSRatePlanService.$inject = ['VRModalService'];
     function CustomerSMSRatePlanService(VRModalService) {
 
-        function addSMSRates(selectedCustomer, processDraftID, isCustomerSMSRateDraftExist, onDraftSaved, onSaleSMSRatesApplied) {
+        function addSMSRates(selectedCustomer, onDraftSaved, onSaleSMSRatesApplied) {
             var parameters = {
-                customerInfo: selectedCustomer,
-                processDraftID: processDraftID,
-                isCustomerSMSRateDraftExist: isCustomerSMSRateDraftExist
+                customerInfo: selectedCustomer
             };
 
             var modalSettings = {

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using TOne.WhS.SMSBusinessEntity.Entities;
 using Vanrise.Data.RDB;
 using Vanrise.Entities;
-using TOne.WhS.SMSBusinessEntity.Data;
-using TOne.WhS.SMSBusinessEntity.Entities;
-using Vanrise.Common;
 
 
 namespace TOne.WhS.SMSBusinessEntity.Data.RDB
@@ -66,7 +63,22 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             return queryContext.GetItem(ChangesMapper);
         }
 
-        public bool InsertOrUpdateChanges(ProcessEntityType processType, string serializedChanges, string entityID, int userID, out int? processDraftID)
+        public ProcessDraft GetChangesByEntityID(ProcessEntityType processType, string entityID)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_ID, COL_ProcessType, COL_EntityID, COL_Changes, COL_Status);
+
+            var where = selectQuery.Where();
+            where.EqualsCondition(COL_ProcessType).Value((int)processType);
+            where.EqualsCondition(COL_EntityID).Value(entityID);
+            where.EqualsCondition(COL_Status).Value((int)ProcessStatus.Draft);
+
+            return queryContext.GetItem(ChangesMapper);
+        }
+
+        public bool InsertOrUpdateChanges(ProcessEntityType processType, string serializedChanges, string entityID, int userID, out long? processDraftID)
         {
             var queryContext = new RDBQueryContext(GetDataProvider());
 
@@ -114,21 +126,6 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             where.EqualsCondition(COL_ID).Value(processDraftID);
 
             return queryContext.ExecuteNonQuery() > 0;
-        }
-
-        public DraftStateResult CheckIfDraftExist(ProcessEntityType processType, string entityID)
-        {
-            var queryContext = new RDBQueryContext(GetDataProvider());
-            var selectQuery = queryContext.AddSelectQuery();
-            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
-            selectQuery.SelectColumns().Column(COL_ID);
-            var where = selectQuery.Where();
-            where.EqualsCondition(COL_ProcessType).Value((int)processType);
-            where.EqualsCondition(COL_EntityID).Value(entityID);
-            where.EqualsCondition(COL_Status).Value((int)ProcessStatus.Draft);
-
-            int? executeScalarValue = queryContext.ExecuteScalar().IntWithNullHandlingValue;
-            return executeScalarValue.HasValue ? new DraftStateResult() { ProcessDraftID = executeScalarValue.Value } : null;
         }
 
         private ProcessDraft ChangesMapper(IRDBDataReader dataReader)

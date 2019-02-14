@@ -14,18 +14,16 @@
                     <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" normal-col-num="2" vr-disabled="true"></vr-common-currency-selector>
                 </span>
 
-                <span ng-show="scopeModel.selectedCustomer != undefined">
-                    <vr-mobilenetwork-mobilecountry-selector on-ready="scopeModel.onMobileCountrySelectorReady"
-                                                             onselectionchanged="scopeModel.onMobileCountrySelectionChanged"
-                                                             ismultipleselection normal-col-num="2">
-                    </vr-mobilenetwork-mobilecountry-selector>
-                </span>
+                <vr-mobilenetwork-mobilecountry-selector on-ready="scopeModel.onMobileCountrySelectorReady"
+                                                         onselectionchanged="scopeModel.onMobileCountrySelectionChanged"
+                                                         ismultipleselection normal-col-num="2">
+                </vr-mobilenetwork-mobilecountry-selector>
 
-                <span vr-loader="scopeModel.isLoadingMobileNetworkSelector" ng-show="scopeModel.selectedCustomer != undefined">
+                <span vr-loader="scopeModel.isLoadingMobileNetworkSelector">
                     <vr-mobilenetwork-selector on-ready="scopeModel.onMobileNetworkSelectorReady" ismultipleselection normal-col-num="2"></vr-mobilenetwork-selector>
                 </span>
 
-                <vr-columns colnum="2" ng-show="scopeModel.selectedCustomer != undefined">
+                <vr-columns colnum="2">
                     <vr-datetimepicker type="date" value="scopeModel.effectiveDate" label="Effective Date" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
 
@@ -36,11 +34,8 @@
     <vr-row removeline>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
-                <!--<vr-button type="Apply" ng-if="scopeModel.isCustomerSMSRateDraftExist" haspermission="scopeModel.hasApplyChangesPermission" data-onclick="scopeModel.applyChanges"></vr-button>-->
-                <vr-button type="Apply" ng-if="scopeModel.isCustomerSMSRateDraftExist" data-onclick="scopeModel.applyChanges"></vr-button>
-                <vr-button type="Load" formname="formCustomerSMSRateController" data-onclick="scopeModel.loadCustomerSMSRates"></vr-button>
-                <vr-button type="CancelChanges" ng-if="scopeModel.isCustomerSMSRateDraftExist" data-onclick="scopeModel.cancelCustomerDraft"></vr-button>
-                <vr-button type="Add" ng-if="scopeModel.isCustomerSMSRateLoaded" formname="formCustomerSMSRateController" data-onclick="scopeModel.addCustomerRates"></vr-button>
+                <vr-button type="Search" formname="formCustomerSMSRateController" data-onclick="scopeModel.searchCustomerSMSRates"></vr-button>
+                <vr-button type="Add" formname="formCustomerSMSRateController" data-onclick="scopeModel.addCustomerRates"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>

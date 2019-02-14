@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.SMSBusinessEntity.Entities
 {
     public class DraftData
     {
+        public long? ProcessDraftID { get; set; }
         public List<char> CountryLetters { get; set; }
-
         public DateTime? DraftEffectiveDate { get; set; }
+        public int PendingChanges { get; set; }
     }
 }

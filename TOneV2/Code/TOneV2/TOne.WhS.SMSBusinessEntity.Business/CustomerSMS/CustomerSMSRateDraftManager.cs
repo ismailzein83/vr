@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.SMSBusinessEntity.Data;
-using TOne.WhS.SMSBusinessEntity.Data.RDB;
 using TOne.WhS.SMSBusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.MobileNetwork.Business;
@@ -48,10 +47,10 @@ namespace TOne.WhS.SMSBusinessEntity.Business
 
             string serializedChanges = customerSMSRateDraft != null ? Serializer.Serialize(customerSMSRateDraft) : null;
 
-            int? result;
+            long? result;
             bool isInsertedOrUpdated = _processDraftDataManager.InsertOrUpdateChanges(ProcessEntityType.Customer, serializedChanges, customerSMSRateDraft.CustomerID.ToString(), SecurityContext.Current.GetLoggedInUserId(), out result);
 
-            return isInsertedOrUpdated ? new DraftStateResult() { ProcessDraftID = result.Value } : null;
+            return isInsertedOrUpdated ? new DraftStateResult() { ProcessDraftID = result } : null;
         }
 
         public bool UpdateSMSRateChangesStatus(UpdateCustomerSMSDraftStatusInput input, int userID)
@@ -64,18 +63,17 @@ namespace TOne.WhS.SMSBusinessEntity.Business
         {
             input.ThrowIfNull("input");
 
-            CustomerSMSRateDraft customerSMSRateChanges = GetCustomerSMSRateDraft(input.ProcessDraftID);
+            ProcessDraft processDraft = _processDraftDataManager.GetChangesByEntityID(ProcessEntityType.Customer, input.CustomerID.ToString());
+
+            CustomerSMSRateDraft customerSMSRateDraft = processDraft != null && processDraft.Changes != null && !string.IsNullOrEmpty(processDraft.Changes) ? Serializer.Deserialize<CustomerSMSRateDraft>(processDraft.Changes) : null;
 
             return new DraftData()
             {
-                DraftEffectiveDate = customerSMSRateChanges != null ? customerSMSRateChanges.EffectiveDate : default(DateTime?),
-                CountryLetters = new MobileNetworkManager().GetDistinctMobileCountryLetters()
+                ProcessDraftID = processDraft != null && processDraft.Changes != null ? processDraft.ID : (long?)null,
+                DraftEffectiveDate = customerSMSRateDraft != null ? customerSMSRateDraft.EffectiveDate : default(DateTime?),
+                CountryLetters = new MobileNetworkManager().GetDistinctMobileCountryLetters(),
+                PendingChanges = customerSMSRateDraft != null && customerSMSRateDraft.SMSRates != null ? customerSMSRateDraft.SMSRates.Count : 0
             };
-        }
-
-        public DraftStateResult CheckIfDraftExist(int customerID)
-        {
-            return _processDraftDataManager.CheckIfDraftExist(ProcessEntityType.Customer, customerID.ToString());
         }
 
         public CustomerSMSRateDraft GetCustomerSMSRateDraft(long processDraftID)
@@ -140,7 +138,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                     if (customerEffectiveSMSRate != null)
                     {
                         var futureRate = customerEffectiveSMSRate.FutureRate;
-                        customerSMSRateChangesDetail.CurrentRate = customerEffectiveSMSRate.CurrentRate?.Rate;
+                        customerSMSRateChangesDetail.CurrentRate = customerEffectiveSMSRate.CurrentRate != null ? customerEffectiveSMSRate.CurrentRate.Rate : (decimal?) null;
                         customerSMSRateChangesDetail.FutureRate = futureRate != null ? new SMSFutureRate() { Rate = futureRate.Rate, BED = futureRate.BED, EED = futureRate.EED } : null;
                     }
                 }
@@ -149,8 +147,8 @@ namespace TOne.WhS.SMSBusinessEntity.Business
 
         private CustomerSMSRateDraft MergeImportedDraft(CustomerSMSRateDraftToUpdate customerDraftToUpdate)
         {
-            
-            CustomerSMSRateDraft customerSMSRateChanges = customerDraftToUpdate.ProcessDraftID.HasValue ? GetCustomerSMSRateDraft(customerDraftToUpdate.ProcessDraftID.Value): null;
+
+            CustomerSMSRateDraft customerSMSRateChanges = customerDraftToUpdate.ProcessDraftID.HasValue ? GetCustomerSMSRateDraft(customerDraftToUpdate.ProcessDraftID.Value) : null;
 
             if (customerDraftToUpdate == null)
                 return customerSMSRateChanges;

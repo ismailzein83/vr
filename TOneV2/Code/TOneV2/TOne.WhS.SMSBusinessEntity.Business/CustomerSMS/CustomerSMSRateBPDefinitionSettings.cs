@@ -1,7 +1,5 @@
-﻿using System;
-using TOne.WhS.BusinessEntity.Business;
+﻿using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.SMSBusinessEntity.BP.Arguments;
-using TOne.WhS.SMSBusinessEntity.Data;
 using TOne.WhS.SMSBusinessEntity.Entities;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;

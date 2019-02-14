@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.SMSBusinessEntity.Data;
-using TOne.WhS.SMSBusinessEntity.Data.RDB;
 using TOne.WhS.SMSBusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.MobileNetwork.Business;
 using Vanrise.MobileNetwork.Entities;
-using Vanrise.Security.Business;
 
 namespace TOne.WhS.SMSBusinessEntity.Business
 {

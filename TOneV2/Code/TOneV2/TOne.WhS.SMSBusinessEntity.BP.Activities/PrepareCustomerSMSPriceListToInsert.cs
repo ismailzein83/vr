@@ -1,10 +1,7 @@
-﻿using System;
-using System.Activities;
+﻿using System.Activities;
 using TOne.WhS.SMSBusinessEntity.Business;
 using TOne.WhS.SMSBusinessEntity.Entities;
 using Vanrise.BusinessProcess;
-using Vanrise.Common.Business;
-using Vanrise.Security.Business;
 
 namespace TOne.WhS.SMSBusinessEntity.BP.Activities
 {

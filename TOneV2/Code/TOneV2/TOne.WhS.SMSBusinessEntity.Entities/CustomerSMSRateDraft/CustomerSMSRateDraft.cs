@@ -9,7 +9,7 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
 
         public int CurrencyId { get; set; }
 
-        public Dictionary<int,CustomerSMSRateChange> SMSRates { get; set; }
+        public Dictionary<int, CustomerSMSRateChange> SMSRates { get; set; }
 
         public DateTime EffectiveDate { get; set; }
 
@@ -22,6 +22,4 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
 
         public decimal NewRate { get; set; }
     }
-
-    
 }
