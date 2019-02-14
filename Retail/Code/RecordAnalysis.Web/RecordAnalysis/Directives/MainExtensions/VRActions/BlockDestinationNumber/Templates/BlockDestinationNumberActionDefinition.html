@@ -1,0 +1,8 @@
+﻿<vr-row>
+    <vr-columns colnum="3">
+        <vr-genericdata-datarecordtype-selector label="Record Type" on-ready="scopeModel.onDataRecordTypeSelectorReady" isrequired="true" hideremoveicon="true" onselectionchanged="scopeModel.onDataRecordTypeChange"></vr-genericdata-datarecordtype-selector>
+    </vr-columns>
+    <vr-columns colnum="3">
+        <vr-genericdata-datarecordtypefields-selector label="Destination Number" vr-loader="scopeModel.destinationNumberSelectorLoader" on-ready="scopeModel.onDestinationNumberDataRecordTypeFieldsSelectorReady" isrequired="true" hideremoveicon="true"></vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+</vr-row>
