@@ -125,13 +125,13 @@
 
             var template =
                   ' <vr-row>'
-                    + ' <vr-columns width="1/2row">'
+                + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            //+ ' isrequired="true"'
+                            + ' isrequired="true"'
                             + ' label="Tile"'
                             + ' hideremoveicon>'
                         + '</vr-select>'
