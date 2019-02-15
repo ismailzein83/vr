@@ -127,7 +127,7 @@
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleFilterDefinition.cs" />
     <Compile Include="IAutomatedReportEvaluatorContext.cs" />
     <Compile Include="MeasureStyleRuleEditorRuntime.cs" />
-    <Compile Include="Range\AnalyticMeasureKPIRange.cs" />
+    <Compile Include="Range\VRVisualizationRange.cs" />
     <Compile Include="Settings\KPISettings.cs" />
     <Compile Include="ValidateQueryAndHandlerSettingsInput.cs" />
     <Compile Include="ValidateQueryAndHandlerSettingsResult.cs" />

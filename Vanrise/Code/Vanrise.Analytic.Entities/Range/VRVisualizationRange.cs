@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
-    public class AnalyticMeasureKPIRange
+    public class VRVisualizationRange
     {
         public decimal From { get; set; }
         public decimal To { get; set; }
         public string Name { get; set; }
-        public Guid StyleDefinitionId { get; set; }
+        public StyleFormatingSettings StyleFormatingSettings { get; set; }
     }
 }
