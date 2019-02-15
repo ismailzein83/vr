@@ -164,7 +164,21 @@ namespace Vanrise.Common.Excel
                         break;
                 }
             }
-
+            //if (config.VerticalAlignment.HasValue)
+            //{
+            //    switch (config.VerticalAlignment.Value)
+            //    {
+            //        case VRExcelContainerVerticalAlignment.Left:
+            //            style.VerticalAlignment = TextAlignmentType.Left;
+            //            break;
+            //        case VRExcelContainerVerticalAlignment.Center:
+            //            style.VerticalAlignment = TextAlignmentType.Center;
+            //            break;
+            //        case VRExcelContainerVerticalAlignment.Right:
+            //            style.VerticalAlignment = TextAlignmentType.Right;
+            //            break;
+            //    }
+            //}
             //if (config.SetBorder == true) 
             //{
             //    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.LightGray); //Border color matching original cell border color
