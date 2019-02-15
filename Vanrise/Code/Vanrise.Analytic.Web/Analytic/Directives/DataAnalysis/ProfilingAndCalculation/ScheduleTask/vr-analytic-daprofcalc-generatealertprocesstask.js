@@ -141,7 +141,7 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                     var promises = [];
                     if (chunkTime != undefined) {
 
-                        ruRuleTypeSelectorSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                        onalertRuleTypeSelectorSelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
                         $scope.showChunkTimeSelector = true;
                         var chunkTimeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
