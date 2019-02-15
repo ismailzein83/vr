@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Entities
+namespace Vanrise.Analytic.Entities
 {
-    public class Range
+    public class AnalyticMeasureKPIRange
     {
         public decimal From { get; set; }
         public decimal To { get; set; }
