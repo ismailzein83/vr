@@ -118,9 +118,9 @@ namespace Vanrise.Common.Excel
         }
         internal void GeneratePivotTable(IVRExcelFileGenerateContext context, Worksheet worksheet)
         {
-            string columnName = string.Format("{0}{1}", Utilities.GetExcelColumnName(_startColumnindex), _startRowIndex);
+            string columnName = string.Format("{0}{1}", ExcelUtilities.GetExcelColumnName(_startColumnindex), _startRowIndex);
             var sheetName = context.GetSheetName(_sourceSheetIndex);
-            string sourceData = string.Format("{0}!${1}${2}:${3}${4}", sheetName, Utilities.GetExcelColumnName(_startSourceColumnIndex), _startSourceRowIndex, Utilities.GetExcelColumnName(_endSourceColumnIndex) , _endSourceRowIndex);
+            string sourceData = string.Format("{0}!${1}${2}:${3}${4}", sheetName, ExcelUtilities.GetExcelColumnName(_startSourceColumnIndex), _startSourceRowIndex, ExcelUtilities.GetExcelColumnName(_endSourceColumnIndex) , _endSourceRowIndex);
             int pt2Idx = worksheet.PivotTables.Add(sourceData, columnName, _tableName);
             PivotTable pivotTable = worksheet.PivotTables[pt2Idx];
             if(_rowsArea != null)

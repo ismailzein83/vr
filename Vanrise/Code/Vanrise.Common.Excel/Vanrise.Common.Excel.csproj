@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utilities.cs" />
+    <Compile Include="ExcelUtilities.cs" />
     <Compile Include="VRExcelCell.cs" />
     <Compile Include="VRExcelChart.cs" />
     <Compile Include="VRExcelFile.cs" />

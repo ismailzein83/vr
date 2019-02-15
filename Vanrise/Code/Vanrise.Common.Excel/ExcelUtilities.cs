@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Common.Excel
 {
-    public static class Utilities
+    public static class ExcelUtilities
     {
         public static string GetExcelColumnName(int columnNumber)
         {
