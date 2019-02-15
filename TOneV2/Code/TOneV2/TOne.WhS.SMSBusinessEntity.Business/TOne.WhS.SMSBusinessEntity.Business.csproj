@@ -98,7 +98,10 @@
     <Compile Include="CustomerSMS\CustomerSMSRateDraftManager.cs" />
     <Compile Include="CustomerSMS\CustomerSMSRateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SupplierSMS\SupplierSMSRateChangesManager.cs" />
+    <Compile Include="SupplierSMS\SupplierSMSRateBPDefinitionSettings.cs" />
+    <Compile Include="SupplierSMS\SupplierSMSPriceListManager.cs" />
+    <Compile Include="SupplierSMS\SupplierSMSRateManager.cs" />
+    <Compile Include="SupplierSMS\SupplierSMSRateDraftManager.cs" />
     <Compile Include="Switch\SwitchManager.cs" />
   </ItemGroup>
   <ItemGroup>
