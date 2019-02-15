@@ -356,8 +356,8 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
             var xAxisDefinition = chartSource.xAxisDefinition;
             xAxisValues = [];
             var series = [];
-
             // define Series
+            var i = 0;
             angular.forEach( seriesDefinitions, function ( sDef )
             {
                 var serieSettings = $.grep( currentChartSettings.series, function ( s )
@@ -367,7 +367,9 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                 if ( serieSettings.selected )
                 {
                     var serie = {
-                        name: sDef.title,
+                        id: "ID_" + i++,
+                        name: getSeriesName(sDef.title, sDef.unit),
+                        title: sDef.title,
                         serieDefinition: sDef,
                         color: sDef.color,
                         data: [],
@@ -378,12 +380,21 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                                 onDataItemClicked( currentChartSource.chartData[e.point.index] );
                             }
                         },
-                        type: serieSettings.type ? serieSettings.type : ( sDef.type ? sDef.type : chartDefinition.type )
+                        type: serieSettings.type ? serieSettings.type : (sDef.type ? sDef.type : chartDefinition.type),
+                        unit: sDef.unit
                     };
-                    series.push( serie );
+
+                    
+                    series.push(serie);
+                  
                 }
             } );
-
+            function getSeriesName(title, unit) {
+                if (unit != undefined) {
+                    return title + " ( " + unit + " )";
+                }
+                return title;
+            }
             // define data and categories
             angular.forEach( chartData, function ( dataItem )
             {
@@ -506,8 +517,9 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                 lineWidth: xAxisDefinition.hideAxes != undefined ? 0 : 1,
                 showEmpty: xAxisDefinition.hideAxes == undefined ? true : false,
                 labels: {
-                    enabled: xAxisDefinition.hideAxes == undefined ? true : false
-                }
+                    enabled: xAxisDefinition.hideAxes == undefined ? true : false,
+                    //format: '{value} km'
+                },
             };
 
             var plotLines = [];
@@ -533,8 +545,10 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                 title: {
                     text: chartDefinition.yAxisTitle
                 },
-                plotLines: plotLines
-
+                plotLines: plotLines,
+                //labels: {
+                //    format: '{value} m'
+                //}
             };
             var seriesSettings = series;
 
@@ -545,13 +559,13 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                     var s = '<b>' + this.x + '</b>';
                     if ( xAxisDefinition.hideAxesTitle )
                         s = undefined;
-                    $.each( this.points, function ( i, point )
+                    $.each(this.points, function (i, point)
                     {
                         if ( s == undefined )
                             s = '';
                         else
                             s += '<br/>';
-                        s += '<span style="color:' + point.series.color + '">\u25CF</span> ' + point.series.name + ': ' + formatValue( point.y );
+                        s += '<span style="color:' + point.series.color + '">\u25CF</span> ' + getFormatter(point.series.userOptions.title, point.y, point.series.userOptions.unit);
                     } );
 
                     if ( this.point )
@@ -560,7 +574,7 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                             s = '';
                         else
                             s += '<br/>';
-                        s += '<span style="color:' + this.point.series.color + '">\u25CF</span> ' + this.point.series.name + ': ' + formatValue( this.point.y );
+                        s += '<span style="color:' + this.point.series.color + '">\u25CF</span> ' + getFormatter(this.point.series.userOptions.title,this.point.y, point.series.userOptions.unit);
                     }
 
                     return s;
@@ -568,6 +582,11 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                 shared: true
             };
 
+            function getFormatter(title, y, unit) {
+                if (unit != undefined)
+                    return title + ': ' + formatValue(y) + ' ' + unit;
+                return title + ': ' + formatValue(y);
+            }
             if ( chartDefinition.useAnimation )
             {
                 chartSettings.animation = {
@@ -594,7 +613,7 @@ app.directive( 'vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRM
                     tooltip: tooltipSettings,
                     exporting: {
                         enabled: ctrl.hideexporticon == undefined
-                    }
+                    },
                 } );
                 isChartAvailable = true;
                 $scope.$apply();
