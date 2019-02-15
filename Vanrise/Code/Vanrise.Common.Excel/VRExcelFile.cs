@@ -29,7 +29,7 @@ namespace Vanrise.Common.Excel
         public byte[] GenerateExcelFile()
         {
             Workbook excelTemplate = new Workbook();
-            Vanrise.Common.Utilities.ActivateAspose();
+            Utilities.ActivateAspose();
             excelTemplate.Worksheets.Clear();
 
             VRExcelFileGenerateContext context = new VRExcelFileGenerateContext(this.Sheets);

@@ -44,7 +44,7 @@ namespace Vanrise.Common.Excel
         {
             _title = title;
         }
-        public void AddSeries(string title)
+        public void AddSeries()
         {
         }
         public void SetPivotSource(int pivoteTableSheetIndex,string pivoteTableName)
