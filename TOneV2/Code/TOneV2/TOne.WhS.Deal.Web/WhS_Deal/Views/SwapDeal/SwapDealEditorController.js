@@ -286,7 +286,7 @@
         function loadOffset() {
             if (dealEntity == undefined || dealEntity.Settings == undefined)
                 return;
-            offset = dealEntity.Settings.Offset;
+            offset = dealEntity.Settings.OffSet;
         }
         function setTitle() {
             if (isEditMode) {

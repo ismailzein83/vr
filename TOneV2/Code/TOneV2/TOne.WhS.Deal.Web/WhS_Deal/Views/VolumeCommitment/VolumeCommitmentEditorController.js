@@ -229,7 +229,8 @@
         function loadOffset() {
             if (volumeCommitmentEntity == undefined || volumeCommitmentEntity.Settings == undefined)
                 return;
-            offset = volumeCommitmentEntity.Settings.Offset;
+            offset = volumeCommitmentEntity.Settings.OffSet;
+            console.log(offset);
         }
 
         function loadStaticData() {
