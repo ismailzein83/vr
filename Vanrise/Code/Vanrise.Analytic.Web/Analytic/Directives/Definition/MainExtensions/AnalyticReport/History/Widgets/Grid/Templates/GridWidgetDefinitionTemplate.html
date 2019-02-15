@@ -1,5 +1,5 @@
 ﻿<vr-row>
-  
+
     <vr-columns width="1/3row">
         <vr-switch label="Root Dimensions From Search" value="scopeModel.rootDimensionsFromSearch"></vr-switch>
     </vr-columns>
@@ -22,7 +22,7 @@
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="9" disablesorting="true">
-                            <vr-common-gridcolumnwidth-editor on-ready="dataItem.onDimensionGridWidthFactorEditorReady" hidelabel showhint ></vr-common-gridcolumnwidth-editor>
+                            <vr-common-gridcolumnwidth-editor on-ready="dataItem.onDimensionGridWidthFactorEditorReady" hidelabel showhint></vr-common-gridcolumnwidth-editor>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Column Style'" fixedwidth="'100'" disablesorting="true">
                             <vr-common-styledefinition-selector on-ready="dataItem.onDimensionGridStyleDefinitionReady" hidelabel usefullcolumn></vr-common-styledefinition-selector>
@@ -47,7 +47,7 @@
                             <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="9" disablesorting="true">
-                            <vr-common-gridcolumnwidth-editor on-ready="dataItem.onMeasureGridWidthFactorEditorReady" hidelabel showhint ></vr-common-gridcolumnwidth-editor>                        
+                            <vr-common-gridcolumnwidth-editor on-ready="dataItem.onMeasureGridWidthFactorEditorReady" hidelabel showhint></vr-common-gridcolumnwidth-editor>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Hidden'" fixedwidth="50" disablesorting="true">
                             <vr-switch value="dataItem.isHidden"></vr-switch>
@@ -56,13 +56,56 @@
                             <vr-switch value="dataItem.isHiddenInListView"></vr-switch>
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Column Style'" fixedwidth="'100'" disablesorting="true">
-                            <vr-common-styledefinition-selector on-ready="dataItem.onMeasureGridStyleDefinitionReady" hidelabel usefullcolumn ></vr-common-styledefinition-selector>
+                            <vr-common-styledefinition-selector on-ready="dataItem.onMeasureGridStyleDefinitionReady" hidelabel usefullcolumn></vr-common-styledefinition-selector>
                         </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-validator>
             </vr-columns>
         </vr-row>
+        <vr-section header="Sub Tables">
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-button type="Add" data-onclick="scopeModel.addSubTableDefinition" standalone></vr-button>
+                </vr-columns>
+                <vr-columns width="fullrow" haschildcolumns>
+                    <vr-datagrid datasource="scopeModel.subTables" norowhighlightonclick="true" enabledraggablerow="true"
+                                 on-ready="onGridReady" hidegridmenu ondeleterow="scopeModel.removeSubTableDefinition">
+                        <vr-datagridcolumn headertext="'Dimension'" widthfactor="12" disablesorting="true">
+                            <vr-analytic-dimension-selector hidelabel on-ready="dataItem.onDimensionSelectorDirectiveReady" ismultipleselection hideremoveicon normal-col-num="10" isrequired="true" hideselectedvaluessection usefullcolumn> </vr-analytic-dimension-selector>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Measure'" widthfactor="12" disablesorting="true">
+                            <vr-analytic-measure-selector hidelabel on-ready="dataItem.onMeasureSelectorDirectiveReady" hideremoveicon normal-col-num="10" isrequired="true" hideselectedvaluessection usefullcolumn> </vr-analytic-measure-selector>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Title'" widthfactor="10" disablesorting="true">
+                            <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Width'" widthfactor="12" disablesorting="true">
+                            <vr-common-gridcolumnwidth-editor on-ready="dataItem.onMeasureGridWidthFactorEditorReady" hidelabel showhint></vr-common-gridcolumnwidth-editor>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Column Style'" fixedwidth="'100'" disablesorting="true">
+                            <vr-common-styledefinition-selector on-ready="dataItem.onMeasureGridStyleDefinitionReady" hidelabel usefullcolumn></vr-common-styledefinition-selector>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Position'" widthfactor="24" disablesorting="true">
+                            <vr-columns colnum="6" haschildcolumns>
+                                <vr-analytic-gridsubtableposition-selector hidelabel on-ready="dataItem.onPositionSelectorReady" hideremoveicon normal-col-num="10" selectedvalues="dataItem.positionValueSelectedvalue" isrequired="true" onselectionchanged="dataItem.onPositionValueSelectionchanged" hideselectedvaluessection usefullcolumn> </vr-analytic-gridsubtableposition-selector>
+                            </vr-columns>
+                            <vr-columns colnum="6" ng-if="dataItem.positionValueSelectedvalue !=undefined && dataItem.positionValueSelectedvalue.showMeasure" haschildcolumns>
+                                <vr-columns colnum="10">
+                                    <vr-select datasource="viewScope.scopeModel.selectedMeasures"
+                                               datavaluefield="Name"
+                                               datatextfield="Name"
+                                               isrequired="true"
+                                               col-num="8"
+                                               on-ready="dataItem.onReferenceMeasureSelectorDirectiveReady" selectedvalues="dataItem.selectedReferenceMeasure" hideremoveicon ></vr-select>
+                                </vr-columns>
+                            </vr-columns>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </vr-section>
     </vr-tab>
+
     <vr-tab header="'Grid Action'">
         <vr-row>
             <vr-analytic-analyticitemaction-editor on-ready="scopeModel.onAnalyticItemActionDirectiveReady"></vr-analytic-analyticitemaction-editor>

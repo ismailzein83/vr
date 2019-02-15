@@ -39,11 +39,20 @@ namespace Vanrise.Analytic.Business
                     CurrencyManager currencyManager = new CurrencyManager();
                     input.Query.CurrencyId = currencyManager.GetSystemCurrency().CurrencyId;
                 }
-                if (input.SortByColumnName != null && input.SortByColumnName.Contains("MeasureValues"))
+                if (input.SortByColumnName != null)
                 {
-                    string[] measureProperty = input.SortByColumnName.Split('.');
-                    input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
+                    if (input.SortByColumnName.Contains("SubTables"))
+                    {
+                        string[] measureProperty = input.SortByColumnName.Split('.');
+                        input.SortByColumnName = $"{measureProperty[0]}.{measureProperty[1]}[\"{measureProperty[2]}\"].Value";
+                    }
+                    else if (input.SortByColumnName.Contains("MeasureValues"))
+                    {
+                        string[] measureProperty = input.SortByColumnName.Split('.');
+                        input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
+                    }
                 }
+
                 if (input.Query.AdvancedOrderOptions != null)
                 {
                     input.Query.MeasureFields.ThrowIfNull("input.Query.MeasureFields");

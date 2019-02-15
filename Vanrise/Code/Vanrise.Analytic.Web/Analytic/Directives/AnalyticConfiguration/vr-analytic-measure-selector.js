@@ -112,11 +112,19 @@
                 label = attrs.customlabel;
             }
 
+            var hidelabel = "";
+            if (attrs.hidelabel != undefined)
+                hidelabel = "hidelabel";
+
+            var haschildcolumns = "";
+            if (attrs.usefullcolumn != undefined)
+                haschildcolumns = "haschildcolumns";
+
             var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : null;
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">'
+            return '<vr-columns colnum="{{ctrl.normalColNum}} " ' + haschildcolumns + ' >'
                         + '<span vr-loader="ctrl.isloading">'
                             + '<vr-select on-ready="ctrl.onSelectorReady"'
                                 + ' datasource="ctrl.datasource"'
@@ -132,6 +140,7 @@
                                 + ' isrequired="ctrl.isrequired"'
                                 + ' ' + hideremoveicon
                                 + ' vr-disabled="ctrl.isdisabled"'
+                                + ' ' + hidelabel 
                                 + ' label="' + label + '"'
                                 + ' entityName="' + label + '"'
                             + '</vr-select>'

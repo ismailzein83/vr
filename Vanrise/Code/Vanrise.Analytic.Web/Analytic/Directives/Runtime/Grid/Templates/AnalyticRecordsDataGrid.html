@@ -8,10 +8,10 @@
                            widthfactor="dimension.Widthfactor" fixedwidth="dimension.ColumnSettings.FixedWidth" listviewwidth="dimension.ColumnSettings.ListViewWidth" numberprecision="dimension.NumberPrecision" columnindex="$index" cssclass="dimension.cssClass">
         </vr-datagridcolumn>
 
-        <vr-datagridcolumn ng-repeat="measure in analyticrecordsctrl.measures" headertext="measure.Title" type="measure.Type" numberprecision="measure.NumberPrecision"
-                           field="'MeasureValues.' + measure.MeasureName + '.Value'" tag="measure.MeasureName" summaryfield="'MeasureValues.' + measure.MeasureName + '.Value'"
-                           widthfactor="{{measure.Widthfactor}}" listviewwidth="measure.ColumnSettings.ListViewWidth" fixedwidth="measure.ColumnSettings
-.FixedWidth" getcolor="analyticrecordsctrl.getMeasureColor" cssclass="measure.cssClass" initiallyhidden="measure.IsHidden" ishiddeninlistview="measure.IsHiddenInListView">
+        <vr-datagridcolumn ng-repeat="column in analyticrecordsctrl.columns" headertext="column.Title" type="column.Type" numberprecision="column.NumberPrecision"
+                           field=column.fieldPath tag=column.fieldPath summaryfield=column.fieldPath
+                           widthfactor="{{column.Widthfactor}}" listviewwidth="column.ColumnSettings.ListViewWidth" fixedwidth="column.ColumnSettings.FixedWidth"
+                           getcolor="analyticrecordsctrl.getMeasureColor" cssclass="column.cssClass" initiallyhidden="column.IsHidden" ishiddeninlistview="column.IsHiddenInListView" columnindex="$index">
         </vr-datagridcolumn>
 
         <vr-datagridexpandablerow>

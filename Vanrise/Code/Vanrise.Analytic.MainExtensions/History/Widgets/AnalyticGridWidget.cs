@@ -10,7 +10,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
 {
     public class AnalyticGridWidget : AnalyticHistoryReportWidget
     {
-        public override Guid ConfigId { get { return  new Guid("7A2A35E2-543A-42C7-B97F-E05EE8D09A00"); } }
+        public override Guid ConfigId { get { return new Guid("7A2A35E2-543A-42C7-B97F-E05EE8D09A00"); } }
         public bool RootDimensionsFromSearchSection { get; set; }
 
         public List<AnalyticGridWidgetDimension> Dimensions { get; set; }
@@ -18,8 +18,13 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public List<AnalyticGridWidgetMeasure> Measures { get; set; }
 
         public List<Entities.AnalyticItemAction> ItemActions { get; set; }
+
+        public List<GridSubTablesDefinition> SubTables { get; set; }
+
         public AnalyticQueryOrderType OrderType { get; set; }
+
         public Object AdvancedOrderOptions { get; set; }
+
         public bool WithSummary { get; set; }
 
         public override List<string> GetMeasureNames()
@@ -40,12 +45,35 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
     public class AnalyticGridWidgetMeasure
     {
         public string MeasureName { get; set; }
-
         public string Title { get; set; }
         public GridColumnSettings ColumnSettings { get; set; }
         public Guid? ColumnStyleId { get; set; }
         public bool IsHidden { get; set; }
         public bool IsHiddenInListView { get; set; }
 
+    }
+
+    public enum SubTablePositionEnum { BeforeAllMeasures = 1, AfterAllMeasures = 2, BeforeSpecificMeasure = 3, AfterSpecificMeasure = 4 }
+
+    public class GridSubTablesDefinition
+    {
+        public List<string> Dimensions { get; set; }
+        public List<AnalyticGridSubtabletMeasure> Measures { get; set; }
+        public SubTablePosition SubTablePosition { get; set; }
+    }
+
+    public class AnalyticGridSubtabletMeasure
+    {
+        public string MeasureName { get; set; }
+        public string Title { get; set; }
+        public GridColumnSettings ColumnSettings { get; set; }
+        public Guid? ColumnStyleId { get; set; }
+
+    }
+
+    public class SubTablePosition
+    {
+        public SubTablePositionEnum PositionValue { get; set; }
+        public string ReferenceMeasure { get; set; }
     }
 }
