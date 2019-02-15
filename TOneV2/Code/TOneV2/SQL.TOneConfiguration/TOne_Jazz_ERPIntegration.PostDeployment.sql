@@ -155,7 +155,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('5B30BE0C-C84A-4B10-87F8-CB94D96655A7','JazzStoreDB','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionString":"Server=192.168.110.185;Database=TOneV2_Dev_JAZZDB;User ID=Development;Password=dev!123","IsRemoteDataStore":false}')
+('5B30BE0C-C84A-4B10-87F8-CB94D96655A7','JazzStoreDB','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"WhSJAZZDBConnString","IsRemoteDataStore":false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[genericdata].[DataStore] as t
@@ -208,4 +208,25 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[Settings]);
 
 
---[Jazz_ERP].[TransactionType]--------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[CarrierType],[IsCredit],[TransactionScope])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('BAC06B5E-A065-4154-B22D-32CDBBB0EC77','Revenue',95,95,'2019-02-15 10:29:44.360',1,1,1),('94D84DB1-50EC-4595-B5AB-8FD0D4506C15','Receivable',95,95,'2019-02-15 10:29:33.163',1,0,0),('09900482-0CA1-4004-801E-986D604C0902','Cost',95,95,'2019-02-15 10:30:50.680',2,0,1),('B8E84225-4F2F-402C-AAA6-B54EAF58654E','Payable',95,95,'2019-02-15 10:30:54.050',2,1,0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[CarrierType],[IsCredit],[TransactionScope]))merge	[Jazz_ERP].[TransactionType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[CreatedBy] = s.[CreatedBy],[LastModifiedBy] = s.[LastModifiedBy],[LastModifiedTime] = s.[LastModifiedTime],[CarrierType] = s.[CarrierType],[IsCredit] = s.[IsCredit],[TransactionScope] = s.[TransactionScope]when not matched by target then	insert([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[CarrierType],[IsCredit],[TransactionScope])	values(s.[ID],s.[Name],s.[CreatedBy],s.[LastModifiedBy],s.[LastModifiedTime],s.[CarrierType],s.[IsCredit],s.[TransactionScope]);
+
+--[Jazz_ERP].[TransactionType]----------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[CarrierType],[IsCredit],[TransactionScope])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('BAC06B5E-A065-4154-B22D-32CDBBB0EC77','Revenue',95,95,'2019-02-15 10:29:44.360',1,1,1),
+('94D84DB1-50EC-4595-B5AB-8FD0D4506C15','Receivable',95,95,'2019-02-15 10:29:33.163',1,0,0),
+('09900482-0CA1-4004-801E-986D604C0902','Cost',95,95,'2019-02-15 10:30:50.680',2,0,1),
+('B8E84225-4F2F-402C-AAA6-B54EAF58654E','Payable',95,95,'2019-02-15 10:30:54.050',2,1,0)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[CarrierType],[IsCredit],[TransactionScope]))
+merge	[Jazz_ERP].[TransactionType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[CreatedBy] = s.[CreatedBy],[LastModifiedBy] = s.[LastModifiedBy],[LastModifiedTime] = s.[LastModifiedTime],[CarrierType] = s.[CarrierType],[IsCredit] = s.[IsCredit],[TransactionScope] = s.[TransactionScope]
+when not matched by target then
+	insert([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[CarrierType],[IsCredit],[TransactionScope])
+	values(s.[ID],s.[Name],s.[CreatedBy],s.[LastModifiedBy],s.[LastModifiedTime],s.[CarrierType],s.[IsCredit],s.[TransactionScope]);
