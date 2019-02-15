@@ -54,6 +54,8 @@
   <ItemGroup>
     <Compile Include="ICustomerSMSPriceListDataManager.cs" />
     <Compile Include="ICustomerSMSRateDataManager.cs" />
+    <Compile Include="SupplierSMS\ISupplierSMSRateDataManager.cs" />
+    <Compile Include="SupplierSMS\ISupplierSMSPriceListDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IProcessDraftDataManager.cs" />
     <Compile Include="SMSBEDataFactory.cs" />
@@ -64,6 +66,9 @@
       <Project>{0cb909be-06ad-43c1-8632-d58e334a324a}</Project>
       <Name>TOne.WhS.SMSBusinessEntity.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CustomerSMS\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

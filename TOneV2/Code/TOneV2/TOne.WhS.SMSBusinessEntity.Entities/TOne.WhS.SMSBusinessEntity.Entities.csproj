@@ -49,8 +49,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomerSMSRateDraft\CustomerSMSRateChangeToUpdate.cs" />
+    <Compile Include="CustomerSMSRateDraft\DraftData.cs" />
     <Compile Include="CustomerSMSRateDraft\DraftStateResult.cs" />
+    <Compile Include="SupplierSMSRateDraft\SupplierDraftDataInput.cs" />
+    <Compile Include="SupplierSMSRateDraft\SupplierSMSRateChangesDetail.cs" />
+    <Compile Include="SupplierSMSRateDraft\SupplierSMSRateChangesQuery.cs" />
+    <Compile Include="SupplierSMSRateDraft\SupplierSMSRateChangeToUpdate.cs" />
+    <Compile Include="SupplierSMSRateDraft\SupplierSMSRateDraft.cs" />
+    <Compile Include="SupplierSMSRateDraft\UpdateSupplierSMSDraftStatusInput.cs" />
+    <Compile Include="SupplierSMSRate\SupplierSMSPriceList.cs" />
+    <Compile Include="SupplierSMSRate\SupplierSMSRate.cs" />
+    <Compile Include="SupplierSMSRate\SupplierSMSRateDetail.cs" />
+    <Compile Include="SupplierSMSRate\SupplierSMSRateItem.cs" />
+    <Compile Include="SupplierSMSRate\SupplierSMSRateQuery.cs" />
+    <Compile Include="CustomerSMSRateDraft\CustomerSMSRateChangeToUpdate.cs" />
     <Compile Include="CustomerSMSRate\CustomerSMSPriceList.cs" />
     <Compile Include="CustomerSMSRate\CustomerSMSRate.cs" />
     <Compile Include="CustomerSMSRateDraft\CustomerSMSRateDraft.cs" />
@@ -61,18 +73,13 @@
     <Compile Include="CustomerSMSRate\CustomerSMSRateDetail.cs" />
     <Compile Include="CustomerSMSRate\CustomerSMSRateItem.cs" />
     <Compile Include="CustomerSMSRate\CustomerSMSRateQuery.cs" />
-    <Compile Include="CustomerSMSRateDraft\DraftData.cs" />
     <Compile Include="ProcessDraft.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SMSFutureRate.cs" />
     <Compile Include="SMSImportSettings\SMSImportSettings.cs" />
-    <Compile Include="SupplierSMSRateChanges\SupplierSMSRateChanges.cs" />
-    <Compile Include="SupplierSMSRateChanges\SupplierSMSRateDetail.cs" />
     <Compile Include="Switch\SwitchReceiversForIdentification.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SupplierSMSRate\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

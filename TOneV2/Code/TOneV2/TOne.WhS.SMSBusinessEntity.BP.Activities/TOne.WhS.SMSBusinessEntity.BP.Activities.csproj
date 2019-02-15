@@ -62,17 +62,25 @@
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplySMSSaleRates.cs" />
-    <Compile Include="GetCustomerSMSRateDraftData.cs" />
-    <Compile Include="PrepareCustomerSMSPriceListToInsert.cs" />
+    <Compile Include="SupplierSMS\ApplySMSSupplierRates.cs" />
+    <Compile Include="CustomerSMS\ApplySMSSaleRates.cs" />
+    <Compile Include="SupplierSMS\GetSupplierSMSRateDraftData.cs" />
+    <Compile Include="CustomerSMS\GetCustomerSMSRateDraftData.cs" />
+    <Compile Include="SupplierSMS\PrepareSupplierSMSPriceListToInsert.cs" />
+    <Compile Include="CustomerSMS\PrepareCustomerSMSPriceListToInsert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.SMSBusinessEntity.BP.Arguments\TOne.WhS.SMSBusinessEntity.BP.Arguments.csproj">
       <Project>{6b78e318-2c5f-48e3-814b-b91820493918}</Project>
       <Name>TOne.WhS.SMSBusinessEntity.BP.Arguments</Name>
