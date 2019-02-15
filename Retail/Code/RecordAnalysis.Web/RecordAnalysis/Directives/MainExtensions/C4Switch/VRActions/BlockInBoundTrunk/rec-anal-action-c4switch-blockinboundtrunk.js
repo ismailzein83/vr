@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('recAnalActionBlockdestinationnumber', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('recAnalActionC4switchBlockinboundtrunk', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -11,16 +11,16 @@ app.directive('recAnalActionBlockdestinationnumber', ['UtilsService', 'VRUIUtils
 
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var blockDestinationNumberAction = new BlockDestinationNumber($scope, ctrl, $attrs);
-            blockDestinationNumberAction.initializeController();
+            var blockInboundTrunkAction = new BlockInboundTrunk($scope, ctrl, $attrs);
+            blockInboundTrunkAction.initializeController();
         },
 
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/VRActions/BlockDestinationNumber/Templates/BlockDestinationNumberAction.html"
+        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/C4Switch/VRActions/BlockInBoundTrunk/Templates/BlockInboundTrunkAction.html"
     };
 
-    function BlockDestinationNumber($scope, ctrl, $attrs) {
+    function BlockInboundTrunk($scope, ctrl, $attrs) {
 
         this.initializeController = initializeController;
 
@@ -42,8 +42,8 @@ app.directive('recAnalActionBlockdestinationnumber', ['UtilsService', 'VRUIUtils
 
             api.getData = function () {
                 return {
-                    $type: 'RecordAnalysis.MainExtensions.VRActions.BlockDestinationNumber.BlockDestinationNumberAction, RecordAnalysis.MainExtensions',
-                    ActionName: "Block Destination Number"
+                    $type: 'RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockInBoundTrunk.BlockInBoundTrunkAction, RecordAnalysis.MainExtensions',
+                    ActionName: "Block Inbound Trunk"
                 };
             };
 

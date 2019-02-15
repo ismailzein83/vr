@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('recAnalActiondefinitionBlockinboundtrunk', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('recAnalActiondefinitionC4switchBlockinboundtrunk', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -17,7 +17,7 @@ app.directive('recAnalActiondefinitionBlockinboundtrunk', ['UtilsService', 'VRUI
 
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/VRActions/BlockInBoundTrunk/Templates/BlockInBoundTrunkActionDefinition.html"
+        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/C4Switch/VRActions/BlockInBoundTrunk/Templates/BlockInBoundTrunkActionDefinition.html"
     };
 
     function BlockInTrunkActionDefinition($scope, ctrl, $attrs) {
@@ -147,7 +147,7 @@ app.directive('recAnalActiondefinitionBlockinboundtrunk', ['UtilsService', 'VRUI
 
             api.getData = function () {
                 return {
-                    $type: 'RecordAnalysis.MainExtensions.VRActions.BlockInBoundTrunk.BlockInBoundTrunkDefinitionSettings, RecordAnalysis.MainExtensions',
+                    $type: 'RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockInBoundTrunk.BlockInBoundTrunkDefinitionSettings, RecordAnalysis.MainExtensions',
                     DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                     SwitchFieldName: switchDataRecordTypeFieldsSelectorAPI.getSelectedIds(),
                     InTrunkFieldName: inTrunkDataRecordTypeFieldsSelectorAPI.getSelectedIds()

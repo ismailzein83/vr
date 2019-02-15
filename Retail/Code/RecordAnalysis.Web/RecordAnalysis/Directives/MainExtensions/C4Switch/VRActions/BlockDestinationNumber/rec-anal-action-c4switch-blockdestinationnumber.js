@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('recAnalActionBlockoriginationnumber', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('recAnalActionC4switchBlockdestinationnumber', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -11,16 +11,16 @@ app.directive('recAnalActionBlockoriginationnumber', ['UtilsService', 'VRUIUtils
 
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var blockOriginationNumberAction = new BlockOriginationNumber($scope, ctrl, $attrs);
-            blockOriginationNumberAction.initializeController();
+            var blockDestinationNumberAction = new BlockDestinationNumber($scope, ctrl, $attrs);
+            blockDestinationNumberAction.initializeController();
         },
 
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/VRActions/BlockOriginationNumber/Templates/BlockOriginationNumberAction.html"
+        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/C4Switch/VRActions/BlockDestinationNumber/Templates/BlockDestinationNumberAction.html"
     };
 
-    function BlockOriginationNumber($scope, ctrl, $attrs) {
+    function BlockDestinationNumber($scope, ctrl, $attrs) {
 
         this.initializeController = initializeController;
 
@@ -42,8 +42,8 @@ app.directive('recAnalActionBlockoriginationnumber', ['UtilsService', 'VRUIUtils
 
             api.getData = function () {
                 return {
-                    $type: 'RecordAnalysis.MainExtensions.VRActions.BlockOriginationNumber.BlockOriginationNumberAction, RecordAnalysis.MainExtensions',
-                    ActionName: "Block Origination Number"
+                    $type: 'RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockDestinationNumber.BlockDestinationNumberAction, RecordAnalysis.MainExtensions',
+                    ActionName: "Block Destination Number"
                 };
             };
 

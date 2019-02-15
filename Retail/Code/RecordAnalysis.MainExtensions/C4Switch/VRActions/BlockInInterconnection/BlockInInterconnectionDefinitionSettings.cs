@@ -2,17 +2,17 @@
 using Vanrise.GenericData.Notification;
 using Vanrise.Notification.Entities;
 
-namespace RecordAnalysis.MainExtensions.VRActions.BlockDestinationNumber
+namespace RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockInInterconnection
 {
-    public class BlockDestinationNumberDefinitionSettings : VRActionDefinitionExtendedSettings
+    public class BlockInInterconnectionDefinitionSettings : VRActionDefinitionExtendedSettings
     {
-        public override Guid ConfigId { get { return new Guid("C205294A-1B68-473D-8EC8-AF364E1A52A8"); } }
+        public override Guid ConfigId { get { return new Guid("3EBD6D0D-6018-4158-A7B0-79F3F8B79F7E"); } }
 
-        public override string RuntimeEditor { get { return "rec-anal-action-blockdestinationnumber"; } }
+        public override string RuntimeEditor { get { return "rec-anal-action-c4switch-blockininterconnection"; } }
 
         public Guid DataRecordTypeId { get; set; }
 
-        public string DestinationNumberFieldName { get; set; }
+        public string InInterconnectionFieldName { get; set; }
 
         public override bool IsApplicable(IVRActionDefinitionIsApplicableContext context)
         {
@@ -26,7 +26,7 @@ namespace RecordAnalysis.MainExtensions.VRActions.BlockDestinationNumber
             if (dataRecordActionTargetType.AvailableDataRecordFieldNames == null || dataRecordActionTargetType.AvailableDataRecordFieldNames.Count == 0)
                 return false;
 
-            if (!dataRecordActionTargetType.AvailableDataRecordFieldNames.Contains(DestinationNumberFieldName))
+            if (!dataRecordActionTargetType.AvailableDataRecordFieldNames.Contains(InInterconnectionFieldName))
                 return false;
 
             return true;

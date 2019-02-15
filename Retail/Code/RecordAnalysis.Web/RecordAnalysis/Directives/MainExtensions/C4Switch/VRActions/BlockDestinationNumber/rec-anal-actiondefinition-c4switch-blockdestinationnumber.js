@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('recAnalActiondefinitionBlockoriginationnumber', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('recAnalActiondefinitionC4switchBlockdestinationnumber', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -11,16 +11,16 @@ app.directive('recAnalActiondefinitionBlockoriginationnumber', ['UtilsService', 
 
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var blockOriginationNumberActionDefinition = new BlockOriginationNumberActionDefinition($scope, ctrl, $attrs);
-            blockOriginationNumberActionDefinition.initializeController();
+            var blockDestinationNumberActionDefinition = new BlockDestinationNumberActionDefinition($scope, ctrl, $attrs);
+            blockDestinationNumberActionDefinition.initializeController();
         },
 
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/VRActions/BlockOriginationNumber/Templates/BlockOriginationNumberActionDefinition.html"
+        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/C4Switch/VRActions/BlockDestinationNumber/Templates/BlockDestinationNumberActionDefinition.html"
     };
 
-    function BlockOriginationNumberActionDefinition($scope, ctrl, $attrs) {
+    function BlockDestinationNumberActionDefinition($scope, ctrl, $attrs) {
 
         this.initializeController = initializeController;
 
@@ -28,8 +28,8 @@ app.directive('recAnalActiondefinitionBlockoriginationnumber', ['UtilsService', 
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var selectedDataRecordTypePromiseDeferred;
 
-        var originationNumberDataRecordTypeFieldsSelectorAPI;
-        var originationNumberDataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var destinationNumberDataRecordTypeFieldsSelectorAPI;
+        var destinationNumberDataRecordTypeFieldsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
             $scope.scopeModel = {};
@@ -39,9 +39,9 @@ app.directive('recAnalActiondefinitionBlockoriginationnumber', ['UtilsService', 
                 dataRecordTypeSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onOriginationNumberDataRecordTypeFieldsSelectorReady = function (api) {
-                originationNumberDataRecordTypeFieldsSelectorAPI = api;
-                originationNumberDataRecordTypeFieldsSelectorReadyDeferred.resolve();
+            $scope.scopeModel.onDestinationNumberDataRecordTypeFieldsSelectorReady = function (api) {
+                destinationNumberDataRecordTypeFieldsSelectorAPI = api;
+                destinationNumberDataRecordTypeFieldsSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onDataRecordTypeChange = function (selectedDataRecordType) {
@@ -51,13 +51,13 @@ app.directive('recAnalActiondefinitionBlockoriginationnumber', ['UtilsService', 
                         selectedDataRecordTypePromiseDeferred.resolve();
                     }
                     else {
-                        var originationNumberSelectorPayload = {
+                        var destinationNumberSelectorPayload = {
                             dataRecordTypeId: selectedDataRecordType.DataRecordTypeId
                         };
-                        var setOriginationNumberSelectorLoader = function (value) {
-                            $scope.scopeModel.originationNumberSelectorLoader = value;
+                        var setDestinationNumberSelectorLoader = function (value) {
+                            $scope.scopeModel.destinationNumberSelectorLoader = value;
                         };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, originationNumberDataRecordTypeFieldsSelectorAPI, originationNumberSelectorPayload, setOriginationNumberSelectorLoader);
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, destinationNumberDataRecordTypeFieldsSelectorAPI, destinationNumberSelectorPayload, setDestinationNumberSelectorLoader);
                     }
                 }
 
@@ -93,19 +93,19 @@ app.directive('recAnalActiondefinitionBlockoriginationnumber', ['UtilsService', 
                 promises.push(loadDataRecordTypeSelector());
 
                 if (selectedDataRecordTypePromiseDeferred != undefined) {
-                    var originationNumberDataRecordTypeFieldsSelectorloadDeferred = UtilsService.createPromiseDeferred();
+                    var destinationNumberDataRecordTypeFieldsSelectorloadDeferred = UtilsService.createPromiseDeferred();
 
-                    UtilsService.waitMultiplePromises([originationNumberDataRecordTypeFieldsSelectorReadyDeferred.promise, selectedDataRecordTypePromiseDeferred.promise]).then(function () {
-                        var originationNumberDataRecordTypeFieldsSelectorPayload;
+                    UtilsService.waitMultiplePromises([destinationNumberDataRecordTypeFieldsSelectorReadyDeferred.promise, selectedDataRecordTypePromiseDeferred.promise]).then(function () {
+                        var destinationNumberDataRecordTypeFieldsSelectorPayload;
                         if (payload != undefined && payload.Settings != undefined && payload.Settings.ExtendedSettings != undefined) {
-                            originationNumberDataRecordTypeFieldsSelectorPayload = {
-                                selectedIds: payload.Settings.ExtendedSettings.OriginationNumberFieldName,
+                            destinationNumberDataRecordTypeFieldsSelectorPayload = {
+                                selectedIds: payload.Settings.ExtendedSettings.DestinationNumberFieldName,
                                 dataRecordTypeId: payload.Settings.ExtendedSettings.DataRecordTypeId
                             };
                         }
-                        VRUIUtilsService.callDirectiveLoad(originationNumberDataRecordTypeFieldsSelectorAPI, originationNumberDataRecordTypeFieldsSelectorPayload, originationNumberDataRecordTypeFieldsSelectorloadDeferred);
+                        VRUIUtilsService.callDirectiveLoad(destinationNumberDataRecordTypeFieldsSelectorAPI, destinationNumberDataRecordTypeFieldsSelectorPayload, destinationNumberDataRecordTypeFieldsSelectorloadDeferred);
                     });
-                    promises.push(originationNumberDataRecordTypeFieldsSelectorloadDeferred.promise);
+                    promises.push(destinationNumberDataRecordTypeFieldsSelectorloadDeferred.promise);
                 }
 
                 return UtilsService.waitMultiplePromises(promises).then(function () {
@@ -115,9 +115,9 @@ app.directive('recAnalActiondefinitionBlockoriginationnumber', ['UtilsService', 
 
             api.getData = function () {
                 return {
-                    $type: 'RecordAnalysis.MainExtensions.VRActions.BlockOriginationNumber.BlockOriginationNumberDefinitionSettings, RecordAnalysis.MainExtensions',
+                    $type: 'RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockDestinationNumber.BlockDestinationNumberDefinitionSettings, RecordAnalysis.MainExtensions',
                     DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
-                    OriginationNumberFieldName: originationNumberDataRecordTypeFieldsSelectorAPI.getSelectedIds()
+                    DestinationNumberFieldName: destinationNumberDataRecordTypeFieldsSelectorAPI.getSelectedIds()
                 };
             };
 

@@ -1,8 +1,8 @@
 ﻿using Vanrise.Notification.Entities;
 
-namespace RecordAnalysis.MainExtensions.VRActions.BlockInInterconnection
+namespace RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockInBoundTrunk
 {
-    public class BlockInInterconnectionAction : VRAction
+    public class BlockInBoundTrunkAction : VRAction
     {
         public override void Execute(IVRActionExecutionContext context)
         {

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('recAnalActionBlockininterconnection', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('recAnalActionC4switchBlockininterconnection', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -17,7 +17,7 @@ app.directive('recAnalActionBlockininterconnection', ['UtilsService', 'VRUIUtils
 
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/VRActions/BlockInInterconnection/Templates/BlockInInterconnectionAction.html"
+        templateUrl: "/Client/Modules/RecordAnalysis/Directives/MainExtensions/C4Switch/VRActions/BlockInInterconnection/Templates/BlockInInterconnectionAction.html"
     };
 
     function BlockInInterconnection($scope, ctrl, $attrs) {
@@ -42,7 +42,7 @@ app.directive('recAnalActionBlockininterconnection', ['UtilsService', 'VRUIUtils
 
             api.getData = function () {
                 return {
-                    $type: 'RecordAnalysis.MainExtensions.VRActions.BlockInInterconnection.BlockInInterconnectionAction, RecordAnalysis.MainExtensions',
+                    $type: 'RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockInInterconnection.BlockInInterconnectionAction, RecordAnalysis.MainExtensions',
                     ActionName: "Block In Interconnection"
                 };
             };

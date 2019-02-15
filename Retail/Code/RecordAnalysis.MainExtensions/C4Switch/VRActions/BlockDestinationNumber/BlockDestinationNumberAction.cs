@@ -1,6 +1,6 @@
 ﻿using Vanrise.Notification.Entities;
 
-namespace RecordAnalysis.MainExtensions.VRActions.BlockDestinationNumber
+namespace RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockDestinationNumber
 {
     public class BlockDestinationNumberAction : VRAction
     {

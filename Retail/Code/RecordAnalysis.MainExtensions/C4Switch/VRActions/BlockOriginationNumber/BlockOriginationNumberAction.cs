@@ -1,6 +1,6 @@
 ﻿using Vanrise.Notification.Entities;
 
-namespace RecordAnalysis.MainExtensions.VRActions.BlockOriginationNumber
+namespace RecordAnalysis.MainExtensions.C4Switch.VRActions.BlockOriginationNumber
 {
     public class BlockOriginationNumberAction : VRAction
     {
