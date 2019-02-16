@@ -80,7 +80,7 @@
                         $type: "Retail.RA.Business.SMS,Retail.RA.Business",
                         TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
                         NumberOfSMSs: $scope.scopeModel.numberOfSMSs,
-                        Revenue: $scope.scopeModel.Revenue
+                        Revenue: $scope.scopeModel.revenue
                     };
                 };
 
