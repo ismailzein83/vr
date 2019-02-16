@@ -10,7 +10,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
     public class AnalyticGaugeWidget : AnalyticHistoryReportWidget
     {
         public override Guid ConfigId { get { return new Guid("E9CC9A31-DD48-45F5-A849-5402CCE3B7AF"); } }
-        public List<AnalyticMeasure> Measures { get; set; }
+        public List<AnalyticChartWidgetMeasure> Measures { get; set; }
         public long Maximum { get; set; }
         public long Minimum { get; set; }
         public override List<string> GetMeasureNames()
