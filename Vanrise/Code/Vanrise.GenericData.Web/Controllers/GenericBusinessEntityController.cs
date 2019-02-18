@@ -142,6 +142,12 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.ExecuteGenericBEBulkActions(input);
         }
-
+        [HttpGet]
+        [Route("GetGenericBETitleFieldValue")]
+        public string GetGenericBETitleFieldValue(Guid businessEntityDefinitionId, [FromUri] Object genericBusinessEntityId)
+        {
+            genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
+            return _manager.GetGenericBETitleFieldValue(genericBusinessEntityId, businessEntityDefinitionId);
+        }
     }
 }

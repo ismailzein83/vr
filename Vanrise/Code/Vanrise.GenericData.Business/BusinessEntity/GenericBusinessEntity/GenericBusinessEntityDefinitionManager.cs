@@ -129,6 +129,12 @@ namespace Vanrise.GenericData.Business
             var genericBEDefinitionSettings = GetGenericBEDefinitionSettings(businessEntityDefinitionId);
             return GetDataRecordTypeFields(genericBEDefinitionSettings.DataRecordTypeId);
         }
+        public DataRecordField GetDataRecordTypeFieldByBEDefinitionId(Guid businessEntityDefinitionId, string fieldName)
+        {
+            var dataRecordTypeFields = GetDataRecordTypeFieldsByBEDefinitionId(businessEntityDefinitionId);
+            dataRecordTypeFields.ThrowIfNull("dataRecordTypeFields");
+            return dataRecordTypeFields.GetRecord(fieldName);
+        }
         public Dictionary<string, DataRecordField> GetDataRecordTypeFields(Guid dataRecordTypeId)
         {
             var dataRecordTypeFields = _dataRecordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);

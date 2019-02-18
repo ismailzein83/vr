@@ -127,8 +127,13 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
 
                 function setTitle() {
                     if (context != undefined) {
-                        var title = genericBusinessEntity != undefined && genericBusinessEntity.FieldValues != undefined ? UtilsService.buildTitleForUpdateEditor(genericBusinessEntity.FieldValues[titleFieldName], definitionTitle) : UtilsService.buildTitleForAddEditor(definitionTitle);
-                        context.setTitle(title);
+                        if (isEditMode) {
+                            return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBETitleFieldValue(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
+                                context.setTitle(UtilsService.buildTitleForUpdateEditor(response, definitionTitle));
+                            });
+                        } else {
+                            context.setTitle(UtilsService.buildTitleForAddEditor(definitionTitle));
+                        }
                     }
                 }
 

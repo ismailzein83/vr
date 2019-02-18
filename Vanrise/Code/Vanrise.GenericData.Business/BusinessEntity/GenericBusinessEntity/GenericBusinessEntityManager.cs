@@ -230,11 +230,15 @@ namespace Vanrise.GenericData.Business
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
             var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
             genericBEDefinitionSetting.TitleFieldName.ThrowIfNull("genericBEDefinitionSetting.TitleFieldName");
+            var titleFieldType = _genericBEDefinitionManager.GetDataRecordTypeFieldByBEDefinitionId(businessEntityDefinitionId, genericBEDefinitionSetting.TitleFieldName);
+            titleFieldType.ThrowIfNull("titleFieldType");
             if (genericBusinessEntity != null && genericBusinessEntity.FieldValues != null)
             {
                 var fieldValue = genericBusinessEntity.FieldValues.GetRecord(genericBEDefinitionSetting.TitleFieldName);
                 if (fieldValue != null)
-                    return fieldValue.ToString();
+                {
+                    return titleFieldType.Type.GetDescription(fieldValue);
+                }
             }
             return null;
         }
@@ -979,13 +983,16 @@ namespace Vanrise.GenericData.Business
 			}
 			return null;
 		}
+        public string GetGenericBETitleFieldValue(Object genericBusinessEntityId, Guid businessEntityDefinitionId)
+        {
+            return GetGenericBusinessEntityName(genericBusinessEntityId, businessEntityDefinitionId);
+        }
 
+        #endregion
 
-		#endregion
+        #region Private Methods
 
-		#region Private Methods
-
-		private bool UpdateStatusHistoryIfAvailable(Guid businessEntityDefinitionId, GenericBusinessEntity genericBusinessEntity, object genericBusinessEntityId)
+        private bool UpdateStatusHistoryIfAvailable(Guid businessEntityDefinitionId, GenericBusinessEntity genericBusinessEntity, object genericBusinessEntityId)
         {
             var statusFieldNames = _genericBEDefinitionManager.GetStatusFieldNames(businessEntityDefinitionId);
             BusinessEntityStatusHistoryManager businessEntityStatusHistoryManager = new BusinessEntityStatusHistoryManager();
@@ -1261,11 +1268,12 @@ namespace Vanrise.GenericData.Business
         {
             var idDataRecordField = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(businessEntityDefinitionId);
             var titleFieldName = _genericBEDefinitionManager.GetGenericBEDefinitionTitleFieldName(businessEntityDefinitionId);
-
+            var titleFieldType = _genericBEDefinitionManager.GetDataRecordTypeFieldByBEDefinitionId(businessEntityDefinitionId, titleFieldName);
+            titleFieldType.ThrowIfNull("titleFieldType");
             GenericBusinessEntityInfo entityInfo = new GenericBusinessEntityInfo();
             entityInfo.GenericBusinessEntityId = genericBusinessEntity.FieldValues[idDataRecordField.Name];
             var titleValue = genericBusinessEntity.FieldValues[titleFieldName];
-            entityInfo.Name = titleValue != null ? titleValue.ToString() : null;
+            entityInfo.Name = titleFieldType.Type.GetDescription(titleValue);
             return entityInfo;
         }
         #endregion

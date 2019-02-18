@@ -20,8 +20,17 @@
 			UploadGenericBusinessEntities: UploadGenericBusinessEntities,
 			DownloadGenericBusinessEntityTemplate: DownloadGenericBusinessEntityTemplate,
             DownloadBusinessEntityLog: DownloadBusinessEntityLog,
-            ExecuteGenericBEBulkActions: ExecuteGenericBEBulkActions
+            ExecuteGenericBEBulkActions: ExecuteGenericBEBulkActions,
+            GetGenericBETitleFieldValue: GetGenericBETitleFieldValue
         };
+
+
+        function GetGenericBETitleFieldValue(businessEntityDefinitionId, genericBusinessEntityId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericBETitleFieldValue'), {
+                businessEntityDefinitionId: businessEntityDefinitionId,
+                genericBusinessEntityId: genericBusinessEntityId
+            });
+        }
 
         function GetFilteredGenericBusinessEntities(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetFilteredGenericBusinessEntities'), input);
