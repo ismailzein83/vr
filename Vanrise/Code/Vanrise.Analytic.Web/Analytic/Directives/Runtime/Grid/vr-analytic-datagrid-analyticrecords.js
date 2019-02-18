@@ -80,7 +80,6 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         var directiveAPI = {};
 
                         directiveAPI.load = function (payLoad) {
-                            console.log(payLoad);
                             var promises = [];
 
                             var promiseReadyDeferred = UtilsService.createPromiseDeferred();
