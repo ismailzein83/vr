@@ -23,7 +23,7 @@ namespace BPMExtended.Main.Business
         string paymentStep = "6FD4F52A-310D-4E91-999D-F2D6FEC19AB0";
         string printContractStep = "1B93BB41-AA73-4430-9DB0-424243E1EE11";
 
-        string technicalStep = "8D4B0B19-5F6B-4B52-A479-38DC7C4802B4";
+        string technicalStep = "5AC289E9-1489-423E-B6E0-32479C2A127B";
 
         //string completedStep = "EBACDCBA-0DB9-4582-999B-6317DA0094A7";
 

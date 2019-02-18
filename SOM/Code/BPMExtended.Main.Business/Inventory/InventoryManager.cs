@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
 using BPMExtended.Main.SOMAPI;
 using SOM.Main.BP.Arguments;
 using SOM.Main.Entities;
+using Terrasoft.Core;
+using Terrasoft.Core.DB;
 
 namespace BPMExtended.Main.Business
 {
@@ -321,7 +324,7 @@ namespace BPMExtended.Main.Business
             }).ToList();
 
         }
-
+        
         public string GetDeviceID(string phoneNumberID)
         {
             string apiResult="";
@@ -654,11 +657,6 @@ namespace BPMExtended.Main.Business
         }
 
 
-
-    
-
-
-
         public List<PhoneNumberDetail> GetAvailablePhoneNumbers(string cabinetPort, string dpPort, bool isGold, bool isISDN, string startsWith)
         {
             List<PhoneNumberDetail> result = new List<PhoneNumberDetail>();
@@ -683,9 +681,6 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
-       
-
-      
 
         public ReserveLineRequestOutput ReservePhoneNumber(BPMCustomerType customerType, Guid accountOrContactId, ReserveLineRequestInput reserveLineInput)
         {
@@ -741,8 +736,6 @@ namespace BPMExtended.Main.Business
             return phoneitem.SwitchId == pilotPhoneItem.SwitchId ? true : false;
         }
 
-      
-
         public bool IsManualDSLAMForGSHDSL(string contractId)
         {
             Random gen = new Random();
@@ -779,7 +772,39 @@ namespace BPMExtended.Main.Business
             return item;
         }
         
-   
+        public bool changeLineSubscriptionMDFPort(string newPort, string switchId)
+        {
+            //TODO: change MDF port for telephony line subscription
+            return true;
+        }
+
+        public bool changeLineSubscriptionCabinetPort(string newPort, string switchId , string requestId)
+        {
+            //TODO: change cabinet port for telephony line subscription
+
+            //Update new cabinet port on request level
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StLineSubscriptionRequest").Set("StNewPrimaryPort", Column.Parameter(newPort))
+                .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
+            update.Execute();
+
+
+            return true;
+        }
+
+        public bool changeLineSubscriptionDPPort(string newPort, string switchId , string requestId)
+        {
+            //TODO: change DP port for telephony line subscription
+
+            //Update new dp port on request level
+            UserConnection connection = (UserConnection)HttpContext.Current.Session["UserConnection"];
+            var update = new Update(connection, "StLineSubscriptionRequest").Set("StNewDPPort", Column.Parameter(newPort))
+                .Where("Id").IsEqual(Column.Parameter(new Guid(requestId)));
+            update.Execute();
+
+            return true;
+        }
+
 
     }
 }
