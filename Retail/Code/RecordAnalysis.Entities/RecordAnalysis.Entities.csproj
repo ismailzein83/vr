@@ -51,7 +51,7 @@
     <Compile Include="C4Switch\C4SwitchSettings.cs" />
     <Compile Include="C4Switch\C4SwitchSettingsConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SwitchInterconnection\SwitchInterconnection.cs" />
+    <Compile Include="C4SwitchInterconnection\C4SwitchInterconnection.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

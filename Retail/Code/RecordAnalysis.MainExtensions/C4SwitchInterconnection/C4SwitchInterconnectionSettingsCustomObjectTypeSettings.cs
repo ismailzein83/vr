@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 
-namespace RecordAnalysis.MainExtensions.SwitchInterconnection
+namespace RecordAnalysis.MainExtensions.C4SwitchInterconnection
 {
-    public class SwitchInterconnectionSettingsCustomObjectTypeSettings : FieldCustomObjectTypeSettings
+    public class C4SwitchInterconnectionSettingsCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
         public override Guid ConfigId { get { return new Guid("42BCEF1E-AF75-4091-BD27-09984ABC8598"); } }
 
@@ -25,12 +25,12 @@ namespace RecordAnalysis.MainExtensions.SwitchInterconnection
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(Entities.SwitchInterconnection);
+            return typeof(Entities.C4SwitchInterconnection);
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            return originalValue as Entities.SwitchInterconnection;
+            return originalValue as Entities.C4SwitchInterconnection;
         }
 
         public override string GetRuntimeTypeDescription()
