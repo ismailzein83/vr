@@ -2,6 +2,7 @@
 \Web.config.CloudXPoint.exclude
 \WebBI.config.exclude
 \Web.config.CentralAuth.exclude
+\Web.config.JAZZ.exclude
 
 \appSettings.config
 \ConnectionStrings.config
