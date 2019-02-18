@@ -872,6 +872,10 @@
       <Project>{194f2715-17dc-49fa-b701-2386aaa9eddf}</Project>
       <Name>Retail.BusinessEntity.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Data.RDB\Retail.BusinessEntity.Data.RDB.csproj">
+      <Project>{9ea7faa5-d03b-49d5-a6b3-f700226f19fd}</Project>
+      <Name>Retail.BusinessEntity.Data.RDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.Data.SQL\Retail.BusinessEntity.Data.SQL.csproj">
       <Project>{25ab3f26-cc70-476e-888a-2a85377612d6}</Project>
       <Name>Retail.BusinessEntity.Data.SQL</Name>
