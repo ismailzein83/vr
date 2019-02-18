@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.SMSBusinessEntity.Data;
 using TOne.WhS.SMSBusinessEntity.Entities;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 
 namespace TOne.WhS.SMSBusinessEntity.Business
@@ -22,6 +23,12 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 UserID = userID,
                 ProcessInstanceID = processInstanceID
             };
+        }
+
+        public SupplierSMSPriceList GetSupplierSMSPriceListByID(long priceListID)
+        {
+            var customerSMSPriceLists = GetCachedSupplierSMSPriceLists();
+            return customerSMSPriceLists != null ? customerSMSPriceLists.GetRecord(priceListID) : null;
         }
 
         public Dictionary<long, SupplierSMSPriceList> GetCachedSupplierSMSPriceLists()
