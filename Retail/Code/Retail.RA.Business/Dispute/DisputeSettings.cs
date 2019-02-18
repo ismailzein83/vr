@@ -1,4 +1,6 @@
 ﻿using System;
+using Retail.BusinessEntity.Business;
+using Vanrise.Common;
 using Vanrise.GenericData.Business;
 
 namespace Retail.RA.Business
@@ -14,7 +16,21 @@ namespace Retail.RA.Business
 
             switch (context.InfoType)
             {
-                case "SerialNumberPattern": return null;
+                case "SerialNumberPattern": return new ConfigManager().GetDisputeSerialNumberPattern();
+
+                case "SerialNumberInitialSequence": return new ConfigManager().GetDisputeSerialNumberInitialSequence();
+
+                case "OpenDisputeMailTemplate": return new ConfigManager().GetDisputeOpenMailTemplateId();
+
+                case "PendingDisputeMailTemplate": return new ConfigManager().GetDisputePendingMailTemplateId();
+
+                case "ClosedDisputeMailTemplate": return new ConfigManager().GetDisputeClosedMailTemplateId();
+
+                case "RAOperator":
+                    var operatorId = Convert.ToInt32(context.GenericBusinessEntity.FieldValues.GetRecord("OperatorId"));
+                    Guid accountBedDefinitionId = new Guid("1A4A2877-D4C0-4B97-B4F0-2942BA342485");
+                    var account = new AccountBEManager().GetAccount(accountBedDefinitionId, operatorId);
+                    return account;
 
                 default: return null;
             }

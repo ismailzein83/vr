@@ -103,6 +103,8 @@
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\ra-genericruledefinitionsettings-voicetax.js" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\ra-rules-voicetaxrule-overall.js" />
     <Content Include="Retail_RA\Directives\MainExtensions\TaxRules\Voice\ra-rules-voicetaxrule-perminute.js" />
+    <Content Include="Retail_RA\Directives\Settings\retail-ra-dispute-settings-editor.js" />
+    <Content Include="Retail_RA\Directives\Settings\Templates\DisputeSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\TaxRules\ra-rules-taxrulesettings-voice.js" />
     <Content Include="Retail_RA\Directives\MappingSteps\SMSTaxRule\ra-datatransformation-smstaxrulestep-preview.js" />
     <Content Include="Retail_RA\Directives\MappingSteps\SMSTaxRule\ra-datatransformation-smstaxrulestep.js" />

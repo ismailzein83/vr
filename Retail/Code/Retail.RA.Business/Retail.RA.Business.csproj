@@ -75,6 +75,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigManager.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Dispute\DisputeSettings.cs" />
     <Compile Include="Extensions\INTLReconcilationObjectDataProviderSettings.cs" />
     <Compile Include="OperatorDeclarationServices\SMS.cs" />
@@ -119,6 +121,18 @@
     <Compile Include="TimePeriod\LastYeasrPeriodTimePeriod.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
+      <Project>{194f2715-17dc-49fa-b701-2386aaa9eddf}</Project>
+      <Name>Retail.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
+      <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
+      <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.MainExtensions\Retail.BusinessEntity.MainExtensions.csproj">
+      <Project>{e4c4ef32-adfb-48c3-a3d3-489a4fc53b89}</Project>
+      <Name>Retail.BusinessEntity.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.RA.Entities\Retail.RA.Entities.csproj">
       <Project>{35b73ae6-bbc8-408c-ab01-3bf3574b28e0}</Project>
       <Name>Retail.RA.Entities</Name>
