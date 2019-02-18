@@ -632,7 +632,7 @@
 
                 for (var i = 0; i < $scope.scopeModel.subTables.length; i++) {
                     var subTable = $scope.scopeModel.subTables[i];
-                    if (subTable.positionValueSelectedvalue.showMeasure && subTable.selectedReferenceMeasure != undefined && subTable.selectedReferenceMeasure.Name == measureName) {
+                    if (subTable.positionValueSelectedvalue != undefined && subTable.positionValueSelectedvalue.showMeasure && subTable.selectedReferenceMeasure != undefined && subTable.selectedReferenceMeasure.Name == measureName) {
                         subTable.selectedReferenceMeasure = undefined;
                     }
                 }
