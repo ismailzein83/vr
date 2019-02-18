@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisputeSetting\DisputeSettingsData.cs" />
+    <Compile Include="OnNetOperationDeclaration\OnNetOperatorDeclarationService.cs" />
     <Compile Include="OperatorDeclaration\Enums.cs" />
     <Compile Include="OperatorDeclaration\OperatorDeclaration.cs" />
     <Compile Include="OperatorDeclaration\OperatorDeclarationService.cs" />

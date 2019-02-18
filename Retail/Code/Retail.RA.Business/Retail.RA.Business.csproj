@@ -79,10 +79,12 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Dispute\DisputeSettings.cs" />
     <Compile Include="Extensions\INTLReconcilationObjectDataProviderSettings.cs" />
+    <Compile Include="OnNetOperationDeclaration\OnNetPostpaidTotalOperationDeclarationService.cs" />
     <Compile Include="OperatorDeclarationServices\SMS.cs" />
     <Compile Include="OperatorDeclarationServices\Voice.cs" />
     <Compile Include="OperatorDeclaration\IcxOperatorDeclarationManager.cs" />
     <Compile Include="OperatorDeclaration\IntlOperatorDeclarationManager.cs" />
+    <Compile Include="OnNetOperationDeclaration\OnNetOperatorDeclarationServicesCustomObjectTypeSettings.cs" />
     <Compile Include="OperatorDeclaration\OperatorDeclarationServicesCustomObjectTypeSettings.cs" />
     <Compile Include="OperatorDeclaration\OperatorDeclarationServicesManager.cs" />
     <Compile Include="OperatorDeclaration\RAInternationalOperatorDeclarationOnBeforeSaveHandler.cs" />
