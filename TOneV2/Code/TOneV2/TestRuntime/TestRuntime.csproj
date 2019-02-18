@@ -1449,6 +1449,7 @@
     <None Include="app.config.exclude">
       <SubType>Designer</SubType>
     </None>
+    <None Include="App.config.JAZZ.exclude" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

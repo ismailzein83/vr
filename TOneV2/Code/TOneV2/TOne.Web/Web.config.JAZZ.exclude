@@ -1,0 +1,10 @@
+﻿<?xml version="1.0"?>
+<configuration>
+  <connectionStrings>
+    <add name="WhSJAZZERPIntegTransactionDBConnString" connectionString="Server=localhost;Database=JAZZ_ERP;User ID=;Password="/>
+  </connectionStrings>
+  <appSettings>
+    <add key="WhSJAZZDBConnStringKey" value="ConfigurationDBConnString"/>
+    <add key="WhSJAZZERPIntegTransactionDBConnStringKey" value="WhSJAZZERPIntegTransactionDBConnString"/>
+  </appSettings>
+</configuration>
