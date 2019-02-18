@@ -41,6 +41,10 @@ namespace BPMExtended.Main.Business
         {
             return RatePlanMockDataGenerator.GetCustomerBalance(customerId);
         }
+        public bool ExcludeInvoiceFromCollection(string invoiceId)
+        {
+            return true;
+        }
 
         //old one
         public PaymentInfo SubmitToPOS(string customerId, string requestId, string ratePlanId, Guid contactId, BPMExtended.Main.Entities.OperationType operationType)
