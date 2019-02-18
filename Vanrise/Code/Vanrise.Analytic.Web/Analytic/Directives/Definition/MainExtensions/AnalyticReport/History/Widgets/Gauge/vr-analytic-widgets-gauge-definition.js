@@ -133,7 +133,7 @@
                             filter: {
                                 TableIds: tableIds
                             }
-                        }
+                        };
                         if (measureId != undefined) {
                             measureSelectorPayload.selectedIds = measureId;
                         }

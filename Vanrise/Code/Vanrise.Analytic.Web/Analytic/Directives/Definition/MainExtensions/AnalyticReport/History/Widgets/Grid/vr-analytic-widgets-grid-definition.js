@@ -389,7 +389,7 @@
                             var subTablePosition = {
                                 ReferenceMeasure: subTable.positionValueSelectedvalue.showMeasure ? subTable.selectedReferenceMeasure.Name : undefined,
                                 PositionValue: subTable.positionValueSelectorAPI != undefined ? subTable.positionValueSelectorAPI.getSelectedIds() : undefined
-                            }
+                            };
                             subTables.push({
                                 Dimensions: subTable.dimensionSelectorAPI != undefined ? subTable.dimensionSelectorAPI.getSelectedIds() : undefined,
                                 Measures: [measure],
