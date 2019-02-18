@@ -65,7 +65,10 @@ Post-Deployment Script Template
 ('482D20EB-78B0-4633-B6F3-4B93B2ED1190','Report Generation Custom Code File Generator','Custom Report','VR_Analytic_FileGenerator_AutomatedReport','{"Editor":"vr-analytic-reportgenerationcustomcode-filegenerator"}'),
 ('92B03E4E-37FB-48A1-ACEE-841135C30B5E','VR_Analytic_ReportGenerationCustomCode','Report Generation Custom Code','VR_Common_VRComponentType','{"Editor":"vr-analytic-reportgenerationcustomcode-settings"}'),
 ('1A67CEF6-7472-4151-8A74-8AF12D245E27','OverallAnalytic','Overall Analytic','VR_Analytic_FiguresTileQuerySettings','{"Editor":"vr-analytic-overallanalytic-figurestilequery"}'),
-('A0833F27-6718-40E1-BB69-344B0BD3CFAF','MostRelevantAnalytic','Most Relevant Analytic','VR_Analytic_FiguresTileQuerySettings','{"Editor":"vr-analytic-mostrelevant-figurestilequery"}')
+('A0833F27-6718-40E1-BB69-344B0BD3CFAF','MostRelevantAnalytic','Most Relevant Analytic','VR_Analytic_FiguresTileQuerySettings','{"Editor":"vr-analytic-mostrelevant-figurestilequery"}'),
+('E9CC9A31-DD48-45F5-A849-5402CCE3B7AF','VR_Analytic_WidgetSettings_Gauge','Gauge','Analytic_AnalyticWidgetsSettings','{"Editor":"vr-analytic-widgets-gauge-definition","RuntimeEditor":"vr-analytic-gauge-runtime"}'),
+('76285A3E-C385-49C3-8833-DEA21A40471E','WidgetSettings','Analytic Widget','VRCommon_VRTileExtendedSettings','{"Editor":"vr-common-widgetsettings-definition"}')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
 
 --[sec].[Module]------------------------------1501 to 1600------------------------------------------------------
