@@ -65,7 +65,7 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
                             definitionSettings = payload.Settings;
                             measures = definitionSettings.Measures;
                             analyticTableId = payload.TableId;
-
+                            console.log("sdsd");
                             var query = getQuery(payload);
                             var dataRetrievalInput = {
                                 DataRetrievalResultType: 0,
@@ -77,6 +77,7 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
                            
                             var filteredRecordsPromise = VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
                                 .then(function (response) {
+                                  if(response != undefined && response.Data != undefined && response.Data.length > 0) 
                                     measureValue = eval("response.Data[0].MeasureValues." + measures[0].MeasureName + ".ModifiedValue");
                                 });
                             promises.push(filteredRecordsPromise);
@@ -129,7 +130,7 @@ app.directive("vrAnalyticGaugeRuntime", ['UtilsService', 'VRNotificationService'
             }
 
             function getQuery(payload) {
-
+                console.log(payload);
                 var queryFinalized = {
                     MeasureFields: UtilsService.getPropValuesFromArray(measures, 'MeasureName'),
                     FromTime: payload.FromTime,
