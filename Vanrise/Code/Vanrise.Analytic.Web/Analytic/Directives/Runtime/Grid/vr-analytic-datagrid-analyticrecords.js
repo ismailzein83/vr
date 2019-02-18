@@ -345,7 +345,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                     FilterValues: [dataItem.DimensionValues[j].Value]
                                 });
                             }
-                            if (filters) {
+                            if (filters != undefined && filters.length >0 ) {
                                 for (var i = 0; i < filters.length; i++)
                                     newFilters.push(filters[i]);
                             }
