@@ -427,9 +427,10 @@ as (select * from (values
 ('BDD289DF-573C-44A1-9A95-D0DE2ED9DD71','Custom Code','Custom Code','VRCommon_DynamicCode','{"Editor":"vr-common-dynamiccode-customcode"}'),
 ('AAC62543-CF85-4F0D-BB42-121C7B699816','VRCommon_CallMethodDynamicAPI','Call Method','VRCommon_DynamicAPIMethod','{"Editor":"vr-common-dynamicapi-callmethod"}'),
 ('5F14D26D-7B43-41BE-9A3A-6BA0A7EB8316','VRCommon_HttpProxyDynamicCodeSettings','Http Service Proxy','VRCommon_DynamicCode','{"Editor":"vr-common-dynamiccode-httpproxy"}'),
-('BE0BBEC6-F506-4805-AF5C-068843EF7481','Figure Tile Settings','Figure Tile Settings','VRCommon_VRTileExtendedSettings','{"Editor":"vr-common-figurestilesettings-definition"}'),
-('76285A3E-C385-49C3-8833-DEA21A40471E','WidgetSettings','Widget Settings','VRCommon_VRTileExtendedSettings','{"Editor":"vr-common-widgetsettings-definition"}'),
+('BE0BBEC6-F506-4805-AF5C-068843EF7481','Figure Tile Settings','Figure','VRCommon_VRTileExtendedSettings','{"Editor":"vr-common-figurestilesettings-definition"}'),
+('A3F635B1-2C76-4419-A636-0A6625048DF9','TabTiles','Tab Tiles','VRCommon_VRTileExtendedSettings','{"Editor":"vr-common-tabtiles-definition"}'),
 ('F48249D1-C20D-4B36-BBEA-8AAF8A87B18E','LastMonthTimePeriod','Last Month','VRCommon_VRTimePeriod','{"Editor":"vr-common-timeperiod-lastmonth"}')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
