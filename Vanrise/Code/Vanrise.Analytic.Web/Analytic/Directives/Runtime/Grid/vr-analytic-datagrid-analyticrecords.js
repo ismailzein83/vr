@@ -80,6 +80,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         var directiveAPI = {};
 
                         directiveAPI.load = function (payLoad) {
+                            console.log(payLoad);
                             var promises = [];
 
                             var promiseReadyDeferred = UtilsService.createPromiseDeferred();
@@ -145,7 +146,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         dataRetrievalInput.Query.WithSummary = false;
                     else
                         dataRetrievalInput.Query.WithSummary = withSummary;
-
+                    console.log()
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput).then(function (response) {
                         setTimeout(function () {
                             ctrl.groupingDimensions = groupingDimensions;
@@ -204,26 +205,26 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                     }
 
                                     if (subTablesDefinitions[i].SubTablePosition != undefined)
-                                    switch (subTablesDefinitions[i].SubTablePosition.PositionValue) {
+                                        switch (subTablesDefinitions[i].SubTablePosition.PositionValue) {
 
-                                        case VR_Analytic_GridSubTablePositionEnum.BeforeAllMeasures.value:
-                                            insertToArrayAtIndex(ctrl.columns, 0, measuresList);
-                                            break;
+                                            case VR_Analytic_GridSubTablePositionEnum.BeforeAllMeasures.value:
+                                                insertToArrayAtIndex(ctrl.columns, 0, measuresList);
+                                                break;
 
-                                        case VR_Analytic_GridSubTablePositionEnum.AfterAllMeasures.value:
-                                            insertToArrayAtIndex(ctrl.columns, ctrl.columns.length, measuresList);
-                                            break;
+                                            case VR_Analytic_GridSubTablePositionEnum.AfterAllMeasures.value:
+                                                insertToArrayAtIndex(ctrl.columns, ctrl.columns.length, measuresList);
+                                                break;
 
-                                        case VR_Analytic_GridSubTablePositionEnum.BeforeSpecificMeasure.value:
-                                            var measureIndex = UtilsService.getItemIndexByVal(ctrl.columns, subTablesDefinitions[i].SubTablePosition.ReferenceMeasure, 'MeasureName');
-                                            insertToArrayAtIndex(ctrl.columns, measureIndex, measuresList);
-                                            break;
+                                            case VR_Analytic_GridSubTablePositionEnum.BeforeSpecificMeasure.value:
+                                                var measureIndex = UtilsService.getItemIndexByVal(ctrl.columns, subTablesDefinitions[i].SubTablePosition.ReferenceMeasure, 'MeasureName');
+                                                insertToArrayAtIndex(ctrl.columns, measureIndex, measuresList);
+                                                break;
 
-                                        case VR_Analytic_GridSubTablePositionEnum.AfterSpecificMeasure.value:
-                                            var measureIndex = UtilsService.getItemIndexByVal(ctrl.columns, subTablesDefinitions[i].SubTablePosition.ReferenceMeasure, 'MeasureName');
-                                            insertToArrayAtIndex(ctrl.columns, measureIndex + 1, measuresList);
-                                            break;
-                                    }
+                                            case VR_Analytic_GridSubTablePositionEnum.AfterSpecificMeasure.value:
+                                                var measureIndex = UtilsService.getItemIndexByVal(ctrl.columns, subTablesDefinitions[i].SubTablePosition.ReferenceMeasure, 'MeasureName');
+                                                insertToArrayAtIndex(ctrl.columns, measureIndex + 1, measuresList);
+                                                break;
+                                        }
                                 }
                             }
                         }
@@ -344,8 +345,10 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                     FilterValues: [dataItem.DimensionValues[j].Value]
                                 });
                             }
-                            for (var i = 0; i < filters.length; i++)
-                                newFilters.push(filters[i]);
+                            if (filters) {
+                                for (var i = 0; i < filters.length; i++)
+                                    newFilters.push(filters[i]);
+                            }
 
                             //Remove Current Dimension from DrillDownDimensions
 
