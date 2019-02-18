@@ -1,9 +1,10 @@
 ﻿using System;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 
 namespace TOne.WhS.SMSBusinessEntity.Entities
 {
-    public class SupplierSMSRate : IDateEffectiveSettings
+    public class SupplierSMSRate : IDateEffectiveSettings, IBusinessEntityInfo
     {
         public long ID { get; set; }
 

@@ -50,10 +50,28 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             return RDBDataProviderFactory.CreateProvider("TOneWhS_SMSBuisenessEntity", "TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString");
         }
 
+        public List<SupplierSMSPriceList> GetSupplierSMSPriceLists()
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS);
+            selectQuery.SelectColumns().Columns(COL_ID, COL_SupplierID, COL_CurrencyID, COL_EffectiveOn, COL_ProcessInstanceID, COL_UserID);
+
+            return queryContext.GetItems(SupplierSMSPriceListMapper);
+        }
+
         public void JoinRateTableWithPriceListTable(RDBJoinContext joinContext, string supplierPriceListTableAlias, string otherTableAlias, string otherTableColumn)
         {
             joinContext.JoinOnEqualOtherTableColumn(TABLE_NAME, supplierPriceListTableAlias, COL_ID, otherTableAlias, otherTableColumn);
         }
+
+        public bool AreSupplierSMSPriceListUpdated(ref object updateHandle)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
+
 
         public void AddInsertPriceListQueryContext(RDBQueryContext queryContext, SupplierSMSPriceList supplierSMSPriceList)
         {
@@ -66,6 +84,20 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             insertQuery.Column(COL_EffectiveOn).Value(supplierSMSPriceList.EffectiveOn);
             insertQuery.Column(COL_ProcessInstanceID).Value(supplierSMSPriceList.ProcessInstanceID);
             insertQuery.Column(COL_UserID).Value(supplierSMSPriceList.UserID);
+        }
+
+
+        private SupplierSMSPriceList SupplierSMSPriceListMapper(IRDBDataReader dataReader)
+        {
+            return new SupplierSMSPriceList()
+            {
+                ID = dataReader.GetLong(COL_ID),
+                SupplierID = dataReader.GetInt(COL_SupplierID),
+                CurrencyID = dataReader.GetInt(COL_CurrencyID),
+                EffectiveOn = dataReader.GetDateTime(COL_EffectiveOn),
+                ProcessInstanceID = dataReader.GetLong(COL_ProcessInstanceID),
+                UserID = dataReader.GetInt(COL_UserID)
+            };
         }
     }
 }

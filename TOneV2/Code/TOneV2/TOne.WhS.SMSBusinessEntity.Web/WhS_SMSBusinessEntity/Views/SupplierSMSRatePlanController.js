@@ -2,11 +2,12 @@
 
     "use strict";
 
-    SMSRatePlanController.$inject = ["$scope", "VRNotificationService", "UtilsService", "WhS_SMSBusinessEntity_CustomerRatePlanService", "VRUIUtilsService", "VRDateTimeService", "BusinessProcess_BPInstanceService", "WhS_BP_SMSSaleRateBPDefinition", "WhS_SMSBusinessEntity_CustomerSMSRateAPIService"];
+    SMSRatePlanController.$inject = ["$scope", "VRNotificationService", "UtilsService", "WhS_SMSBusinessEntity_SupplierRatePlanService", "VRUIUtilsService", "VRDateTimeService", "BusinessProcess_BPInstanceService", "WhS_BP_SMSSupplierRateBPDefinition"];
 
-    function SMSRatePlanController($scope, VRNotificationService, UtilsService, WhS_SMSBusinessEntity_CustomerRatePlanService, VRUIUtilsService, VRDateTimeService, BusinessProcess_BPInstanceService, WhS_BP_SMSSaleRateBPDefinition, WhS_SMSBusinessEntity_CustomerSMSRateAPIService) {
+    function SMSRatePlanController($scope, VRNotificationService, UtilsService, WhS_SMSBusinessEntity_SupplierRatePlanService, VRUIUtilsService, VRDateTimeService, BusinessProcess_BPInstanceService, WhS_BP_SMSSupplierRateBPDefinition) {
 
-        var selectedCustomer;
+        var selectedSupplier;
+        var processDraftID;
         var hasMobileCountryValue = false;
 
         var mobileNetworkSelectorAPI;
@@ -15,8 +16,8 @@
         var mobileCountrySelectorAPI;
         var mobileCountrySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var customerSelectorAPI;
-        var customerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var supplierSelectorAPI;
+        var supplierSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var currencySelectorAPI;
         var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -32,14 +33,14 @@
             $scope.scopeModel.isLoading = true;
             $scope.scopeModel.isLoadingMobileNetworkSelector = false;
 
-            $scope.scopeModel.searchCustomerSMSRates = function () {
+            $scope.scopeModel.searchSupplierSMSRates = function () {
                 $scope.scopeModel.isLoading = true;
                 var promises = [];
 
-                var payload = { query: getCustomerSMSRateQuery() };
+                var payload = { query: getSupplierSMSRateQuery() };
 
                 var gridLoadedPromise = gridAPI.load(payload).then(function () {
-                    $scope.scopeModel.isCustomerSMSRateLoaded = true;
+                    $scope.scopeModel.isSupplierSMSRateLoaded = true;
                 });
                 promises.push(gridLoadedPromise);
 
@@ -50,24 +51,25 @@
                 });
             };
 
-            $scope.scopeModel.addCustomerRates = function () {
-                return hasRunningProcessesForCustomer().then(function (response) {
+            $scope.scopeModel.addSupplierRates = function () {
+                return hasRunningProcessesForSupplier().then(function (response) {
                     if (!response.hasRunningProcesses) {
-                        var onSaleSMSRatesApplied = function () {
-                            resetCustomerSMSRates();
+
+                        var onSupplierSMSRatesApplied = function () {
+                            resetSupplierSMSRates();
                         };
 
-                        WhS_SMSBusinessEntity_CustomerRatePlanService.addSMSRates(selectedCustomer, onSaleSMSRatesApplied);
+                        WhS_SMSBusinessEntity_SupplierRatePlanService.addSMSRates(selectedSupplier, onSupplierSMSRatesApplied);
                     }
                 });
             };
 
-            $scope.scopeModel.onCustomerChanged = function (customer) {
-                if (customer != undefined) {
-                    selectedCustomer = customer;
+            $scope.scopeModel.onSupplierChanged = function (supplier) {
+                if (supplier != undefined) {
+                    selectedSupplier = supplier;
 
                     var currencyPayload = {
-                        selectedIds: selectedCustomer.CurrencyId
+                        selectedIds: selectedSupplier.CurrencyId
                     };
 
                     var setLoader = function (value) {
@@ -75,7 +77,7 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, currencySelectorAPI, currencyPayload, setLoader, undefined);
 
-                    resetCustomerSMSRates();
+                    resetSupplierSMSRates();
                 }
             };
 
@@ -106,22 +108,14 @@
                 mobileNetworkSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onCustomerSelectorReady = function (api) {
-                customerSelectorAPI = api;
-                customerSelectorReadyDeferred.resolve();
+            $scope.scopeModel.onSupplierSelectorReady = function (api) {
+                supplierSelectorAPI = api;
+                supplierSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
                 currencySelectorReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.hasSearchRatesPermission = function () {
-                return WhS_SMSBusinessEntity_CustomerSMSRateAPIService.HasSearchRatesPermission();
-            };
-
-            $scope.scopeModel.hasAddDraftPermission = function () {
-                return WhS_SMSBusinessEntity_CustomerSMSRateAPIService.HasAddDraftPermission();
             };
 
             $scope.scopeModel.onGridReady = function (api) {
@@ -138,12 +132,12 @@
                     $scope.scopeModel.effectiveDate = VRDateTimeService.getNowDateTime();
                 }
 
-                function loadCustomerSelector() {
-                    var customerSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    customerSelectorReadyDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(customerSelectorAPI, undefined, customerSelectorLoadDeferred);
+                function loadSupplierSelector() {
+                    var supplierSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    supplierSelectorReadyDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(supplierSelectorAPI, undefined, supplierSelectorLoadDeferred);
                     });
-                    return customerSelectorLoadDeferred.promise;
+                    return supplierSelectorLoadDeferred.promise;
                 }
 
                 function loadMobileCountrySelector() {
@@ -164,7 +158,7 @@
                     return mobileNetworkLoadDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCustomerSelector, loadMobileCountrySelector, loadMobileNetworkSelector]).catch(function (error) {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadSupplierSelector, loadMobileCountrySelector, loadMobileNetworkSelector]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -174,29 +168,29 @@
             loadAllControls();
         }
 
-        function getCustomerSMSRateQuery() {
+        function getSupplierSMSRateQuery() {
             return {
-                CustomerID: selectedCustomer.CarrierAccountId,
+                SupplierID: selectedSupplier.CarrierAccountId,
                 EffectiveDate: $scope.scopeModel.effectiveDate,
                 MobileCountryIds: mobileCountrySelectorAPI.getSelectedIds(),
                 MobileNetworkIds: mobileNetworkSelectorAPI.getSelectedIds()
             };
         }
 
-        function resetCustomerSMSRates() {
+        function resetSupplierSMSRates() {
             gridAPI.cleanGrid();
-            $scope.scopeModel.isCustomerSMSRateDraftExist = false;
-            $scope.scopeModel.isCustomerSMSRateLoaded = false;
+            $scope.scopeModel.isSupplierSMSRateDraftExist = false;
+            $scope.scopeModel.isSupplierSMSRateLoaded = false;
         }
 
-        function hasRunningProcessesForCustomer() {
-            var editorMessage = "Other SMS rate processes are still pending for customer '" + selectedCustomer.Name + "'";
+        function hasRunningProcessesForSupplier() {
+            var editorMessage = "Other SMS rate processes are still pending for supplier '" + selectedSupplier.Name + "'";
             var runningInstanceEditorSettings = { message: editorMessage };
-            var entityId = "CustomerId_" + selectedCustomer.CarrierAccountId;
-            return BusinessProcess_BPInstanceService.displayRunningInstancesIfExist(WhS_BP_SMSSaleRateBPDefinition.BPDefinitionId.value, [entityId], runningInstanceEditorSettings);
+            var entityId = "SupplierId_" + selectedSupplier.CarrierAccountId;
+            return BusinessProcess_BPInstanceService.displayRunningInstancesIfExist(WhS_BP_SMSSupplierRateBPDefinition.BPDefinitionId.value, [entityId], runningInstanceEditorSettings);
         }
     }
 
-    appControllers.controller("WhS_SMSBusinessEntity_CustomerSMSRatePlanController", SMSRatePlanController);
+    appControllers.controller("WhS_SMSBusinessEntity_SupplierSMSRatePlanController", SMSRatePlanController);
 
 })(appControllers);

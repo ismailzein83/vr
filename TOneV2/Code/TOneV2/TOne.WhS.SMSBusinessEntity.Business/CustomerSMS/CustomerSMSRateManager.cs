@@ -40,9 +40,46 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             return customerSMSRates;
         }
 
+        //used in data transformation
+        public CustomerSMSRate GetMobileNetworkCustomerRate(int customerID, int mobileNetworkID, DateTime attemptDateTime)
+        {
+            var customerSMSRatesByMobileNetworkIdsByCustomerIds = GetCachedCustomerRates(attemptDateTime);
+            var customerSMSRatesByMobileNetworkIds = customerSMSRatesByMobileNetworkIdsByCustomerIds.GetRecord(customerID);
+
+            if (customerSMSRatesByMobileNetworkIds == null)
+                return null;
+
+            return customerSMSRatesByMobileNetworkIds.GetRecord(mobileNetworkID);
+        }
+
         #endregion
 
         #region Private Methods 
+        private Dictionary<int, Dictionary<int, CustomerSMSRate>> GetCachedCustomerRates(DateTime effectiveDate)
+        {
+            var modifiedEffectiveDate = effectiveDate.Date;
+            var cacheName = new GetCachedCustomerSMSRatesCacheName { EffectiveOn = modifiedEffectiveDate };
+
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () =>
+            {
+
+                var priceLists = new CustomerSMSPriceListManager().GetCachedCustomerSMSPriceLists();
+
+                var customerSMSRates = _customerSMSRateDataManager.GetCustomerSMSRatesEffectiveOn(modifiedEffectiveDate);
+
+                Dictionary<int, Dictionary<int, CustomerSMSRate>> customerSMSRateByMobileNetworkIdByCustomerId = new Dictionary<int, Dictionary<int, CustomerSMSRate>>();
+                foreach (var customerSMSRate in customerSMSRates)
+                {
+                    var priceList = priceLists.GetRecord(customerSMSRate.PriceListID);
+                    priceList.ThrowIfNull("priceList", customerSMSRate.PriceListID);
+
+                    Dictionary<int, CustomerSMSRate> mobileNetworkRatesByMobileNetworkID = customerSMSRateByMobileNetworkIdByCustomerId.GetOrCreateItem(priceList.CustomerID);
+                    mobileNetworkRatesByMobileNetworkID.Add(customerSMSRate.MobileNetworkID, customerSMSRate);
+                }
+
+                return customerSMSRateByMobileNetworkIdByCustomerId;
+            });
+        }
 
         private Dictionary<int, List<CustomerSMSRate>> GetCustomerSMSRatesByMobileNetworkID(int customerID, DateTime effectiveDate)
         {
@@ -80,7 +117,11 @@ namespace TOne.WhS.SMSBusinessEntity.Business
 
         #endregion
 
-        #region Private Classes
+        #region Private/Internal Classes
+        private struct GetCachedCustomerSMSRatesCacheName
+        {
+            public DateTime EffectiveOn { get; set; }
+        }
 
         private class CustomerSMSRateRequestHandler : BigDataRequestHandler<CustomerSMSRateQuery, CustomerSMSRateItem, CustomerSMSRateDetail>
         {
@@ -203,6 +244,17 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 }
 
                 context.MainSheet = sheet;
+            }
+        }
+
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ICustomerSMSRateDataManager _customerSMSRateDataManager = SMSBEDataFactory.GetDataManager<ICustomerSMSRateDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _customerSMSRateDataManager.AreCustomerSMSRatesUpdated(ref _updateHandle);
             }
         }
     }

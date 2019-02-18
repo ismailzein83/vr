@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.SMSBusinessEntity.Data;
 using TOne.WhS.SMSBusinessEntity.Entities;
 using Vanrise.Common;
@@ -40,9 +41,54 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             return supplierSMSRates;
         }
 
+        //used in data transformation
+        public SupplierSMSRate GetMobileNetworkSupplierRate(int supplierID, int mobileNetworkID, DateTime attemptDateTime)
+        {
+            var supplierSMSRatesByMobileNetworkIdsBySupplierIds = GetCachedSupplierRates(attemptDateTime);
+
+            var supplierSMSRatesForSupplierId = supplierSMSRatesByMobileNetworkIdsBySupplierIds.GetRecord(supplierID);
+            if (supplierSMSRatesForSupplierId == null)
+                return null;
+
+            var supplierSMSRatesForMobileNetworkId = supplierSMSRatesForSupplierId.GetRecord(mobileNetworkID);
+            if (supplierSMSRatesForMobileNetworkId == null || supplierSMSRatesForMobileNetworkId.Count == 0)
+                return null;
+
+            return Helper.GetBusinessEntityInfo<SupplierSMSRate>(supplierSMSRatesForMobileNetworkId, attemptDateTime);
+        }
+
         #endregion
 
-        #region Private Methods 
+        #region Private Methods
+
+        private Dictionary<int, Dictionary<int, List<SupplierSMSRate>>> GetCachedSupplierRates(DateTime effectiveDate)
+        {
+            DateTimeRange dateTimeRange = Helper.GetDateTimeRangeWithOffset(effectiveDate);
+
+            var cacheName = new GetCachedSupplierSMSRatesCacheName() { EffectiveOn = dateTimeRange.From };
+
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName, () =>
+            {
+                var priceLists = new SupplierSMSPriceListManager().GetCachedSupplierSMSPriceLists();
+
+                var supplierSMSRates = _supplierSMSRateDataManager.GetSupplierSMSRatesEffectiveOn(dateTimeRange.From, dateTimeRange.To);
+
+                Dictionary<int, Dictionary<int, List<SupplierSMSRate>>> supplierSMSRatesByMobileNetworkIdBySupplierId = new Dictionary<int, Dictionary<int, List<SupplierSMSRate>>>();
+
+                foreach (var supplierSMSRate in supplierSMSRates)
+                {
+                    var priceList = priceLists.GetRecord(supplierSMSRate.PriceListID);
+                    priceList.ThrowIfNull("priceList", supplierSMSRate.PriceListID);
+
+                    Dictionary<int, List<SupplierSMSRate>> supplierSMSRatesByMobileNetworkId = supplierSMSRatesByMobileNetworkIdBySupplierId.GetOrCreateItem(priceList.SupplierID);
+
+                    List<SupplierSMSRate> mobileNetworkSMSRates = supplierSMSRatesByMobileNetworkId.GetOrCreateItem(supplierSMSRate.MobileNetworkID);
+                    mobileNetworkSMSRates.Add(supplierSMSRate);
+                }
+
+                return supplierSMSRatesByMobileNetworkIdBySupplierId;
+            });
+        }
 
         private Dictionary<int, List<SupplierSMSRate>> GetSupplierSMSRatesByMobileNetworkID(int supplierID, DateTime effectiveDate)
         {
@@ -80,7 +126,12 @@ namespace TOne.WhS.SMSBusinessEntity.Business
 
         #endregion
 
-        #region Private Classes
+        #region Private/Internal Classes
+
+        private struct GetCachedSupplierSMSRatesCacheName
+        {
+            public DateTime EffectiveOn { get; set; }
+        }
 
         private class SupplierSMSRateRequestHandler : BigDataRequestHandler<SupplierSMSRateQuery, SupplierSMSRateItem, SupplierSMSRateDetail>
         {
@@ -113,10 +164,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
 
                 int mobileNetworkID = 0;
                 if (currentRate != null)
-                {
-
                     mobileNetworkID = currentRate.MobileNetworkID;
-                }
                 else if (futureRate != null)
                     mobileNetworkID = futureRate.MobileNetworkID;
 
@@ -205,7 +253,18 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
-    }
 
-    #endregion
+        internal class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISupplierSMSRateDataManager _supplierSMSRateDataManager = SMSBEDataFactory.GetDataManager<ISupplierSMSRateDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _supplierSMSRateDataManager.AreSupplierSMSRatesUpdated(ref _updateHandle);
+            }
+        }
+
+        #endregion
+    }
 }

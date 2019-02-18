@@ -15,7 +15,7 @@ namespace TOne.WhS.SMSBusinessEntity.BP.Activities
     {
         [RequiredArgument]
         public InArgument<SupplierSMSRateDraft> SupplierSMSRateDraft { get; set; }
-        
+
         [RequiredArgument]
         public OutArgument<SupplierSMSPriceList> SupplierSMSPriceList { get; set; }
 
@@ -27,14 +27,13 @@ namespace TOne.WhS.SMSBusinessEntity.BP.Activities
             int supplierID = supplierSMSRateDraft.SupplierID;
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            VRTimeZoneManager timeZoneManager = new VRTimeZoneManager();
-            VRTimeZone supplierTimeZone = timeZoneManager.GetVRTimeZone(carrierAccountManager.GetSupplierTimeZoneId(supplierID));
+            VRTimeZone supplierTimeZone = new VRTimeZoneManager().GetVRTimeZone(carrierAccountManager.GetSupplierTimeZoneId(supplierID));
 
             supplierTimeZone.ThrowIfNull("SupplierTimeZone", supplierID);
             supplierTimeZone.Settings.ThrowIfNull("SupplierTimeZoneSettings", supplierID);
 
-                if (supplierSMSRateDraft.EffectiveDate == DateTime.MinValue)
-                    throw new VRBusinessException("Invalid Effective Date for this supplier");
+            if (supplierSMSRateDraft.EffectiveDate == DateTime.MinValue)
+                throw new VRBusinessException("Invalid Effective Date for this supplier");
 
             DateTime effectiveOn = supplierSMSRateDraft.EffectiveDate.Subtract(supplierTimeZone.Settings.Offset);
 

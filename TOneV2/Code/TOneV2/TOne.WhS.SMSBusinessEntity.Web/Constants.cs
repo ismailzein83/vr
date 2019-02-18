@@ -7,6 +7,6 @@ namespace TOne.WhS.SMSBusinessEntity.Web
 {
     public class Constants
     {
-        public const string ROUTE_PREFIX = "api/WhS_SMSBusinessEntity/";
+        public const string ROUTE_PREFIX = "api/WhS_SMSBE/";
     }
 }

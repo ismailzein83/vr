@@ -1,13 +1,13 @@
-﻿<div vr-modalcontent ng-controller="WhS_SMSBusinessEntity_CustomerSMSRatePlanEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="WhS_SMSBusinessEntity_SupplierSMSRatePlanEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody maxheight="'700px'">
-        <vr-form name="formCustomerSMSRateEditor">
+        <vr-form name="formSupplierSMSRateEditor">
             <vr-row>
                 <vr-columns width="1/3row">
                     <vr-datetimepicker type="date" value="scopeModel.effectiveDate" label="Effective Date" onvaluechanged="scopeModel.onEffectiveDateChanged()" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="2/3row">
                     <div style="position:absolute;right:15px;">
-                        <vr-label>
+                        <vr-label > 
                             <span ng-class="scopeModel.pendingChangesColor" style="font-size: 13px;">Pending Changes : {{scopeModel.nbPendingChanges}}</span>
                         </vr-label>
                     </div>
@@ -50,9 +50,9 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
 
             <div transclude-to="buttons">
-                <vr-button type="Apply" formname="formCustomerSMSRateEditor" ng-if="scopeModel.nbPendingChanges > 0" haspermission="scopeModel.hasApplyChangesPermission" data-onclick="scopeModel.applyChanges"></vr-button>
-                <vr-button type="CancelChanges" ng-if="scopeModel.isCustomerSMSRateDraftExist" haspermission="scopeModel.hasCancelDraftPermission" data-onclick="scopeModel.cancelCustomerDraft"></vr-button>
-                <vr-button type="Save" formname="formCustomerSMSRateEditor" haspermission="scopeModel.hasSaveChangesPermission" data-onclick="scopeModel.saveChanges"></vr-button>
+                <vr-button type="Apply" formname="formSupplierSMSRateEditor" ng-if="scopeModel.nbPendingChanges > 0" data-onclick="scopeModel.applyChanges"></vr-button>
+                <vr-button type="CancelChanges" ng-if="scopeModel.isSupplierSMSRateDraftExist" data-onclick="scopeModel.cancelSupplierDraft"></vr-button>
+                <vr-button type="Save" formname="formSupplierSMSRateEditor" data-onclick="scopeModel.saveChanges"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

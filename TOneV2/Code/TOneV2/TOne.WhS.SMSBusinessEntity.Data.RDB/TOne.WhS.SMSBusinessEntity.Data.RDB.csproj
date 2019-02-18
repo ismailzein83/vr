@@ -59,8 +59,8 @@
     <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomerSMSPriceListDataManager.cs" />
-    <Compile Include="CustomerSMSRateDataManager.cs" />
+    <Compile Include="CustomerSMS\CustomerSMSPriceListDataManager.cs" />
+    <Compile Include="CustomerSMS\CustomerSMSRateDataManager.cs" />
     <Compile Include="SupplierSMS\SupplierSMSRateDataManager.cs" />
     <Compile Include="SupplierSMS\SupplierSMSPriceListDataManager.cs" />
     <Compile Include="ProcessDraftDataManager.cs" />
@@ -76,9 +76,7 @@
       <Name>TOne.WhS.SMSBusinessEntity.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CustomerSMS\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

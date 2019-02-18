@@ -79,7 +79,12 @@
     <Compile Include="SMSImportSettings\SMSImportSettings.cs" />
     <Compile Include="Switch\SwitchReceiversForIdentification.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

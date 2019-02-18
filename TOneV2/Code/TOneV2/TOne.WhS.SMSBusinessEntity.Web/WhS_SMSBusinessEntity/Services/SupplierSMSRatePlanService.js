@@ -2,21 +2,21 @@
 
     'use strict';
 
-    CustomerSMSRatePlanService.$inject = ['VRModalService'];
-    function CustomerSMSRatePlanService(VRModalService) {
+    SupplierSMSRatePlanService.$inject = ['VRModalService'];
+    function SupplierSMSRatePlanService(VRModalService) {
 
-        function addSMSRates(selectedCustomer, onSaleSMSRatesApplied) {
+        function addSMSRates(selectedSupplier, onSupplierSMSRatesApplied) {
             var parameters = {
-                customerInfo: selectedCustomer
+                supplierInfo: selectedSupplier
             };
 
             var modalSettings = {
                 onScopeReady: function (modalScope) {
-                    modalScope.title = "Add SMS Rates for Customer '" + selectedCustomer.Name + "'";
-                    modalScope.onSaleSMSRatesApplied = onSaleSMSRatesApplied;
+                    modalScope.title = "Add SMS Rates for Supplier '" + selectedSupplier.Name + "'";
+                    modalScope.onSupplierSMSRatesApplied = onSupplierSMSRatesApplied;
                 }
             };
-            VRModalService.showModal("/Client/Modules/WhS_SMSBusinessEntity/Views/CustomerSMSRatePlanEditor.html", parameters, modalSettings);
+            VRModalService.showModal("/Client/Modules/WhS_SMSBusinessEntity/Views/SupplierSMSRatePlanEditor.html", parameters, modalSettings);
         }
 
         function viewFutureSMSRate(mobileNetworkName, futureSMSRate) {
@@ -36,6 +36,6 @@
         };
     }
 
-    appControllers.service('WhS_SMSBusinessEntity_CustomerRatePlanService', CustomerSMSRatePlanService);
+    appControllers.service('WhS_SMSBusinessEntity_SupplierRatePlanService', SupplierSMSRatePlanService);
 
 })(appControllers); 

@@ -54,6 +54,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
         }
         #endregion
 
+        List<int> _supplierIds = new List<int>();
         #region Public Methods
         public List<SupplierSMSRate> GetSupplierSMSRatesEffectiveAfter(int supplierID, DateTime effectiveDate)
         {
@@ -83,6 +84,24 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             return queryContext.GetItems(SupplierSMSRateMapper);
         }
 
+        public List<SupplierSMSRate> GetSupplierSMSRatesEffectiveOn(DateTime fromDate, DateTime toDate)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_ID, COL_PriceListID, COL_MobileNetworkID, COL_Rate, COL_BED, COL_EED);
+
+            var where = selectQuery.Where();
+            where.LessThanCondition(COL_BED).Value(toDate);
+
+            var childWhere = where.ChildConditionGroup().ConditionIfColumnNotNull(COL_EED);
+            childWhere.NotEqualsCondition(COL_BED).Column(COL_EED);
+            childWhere.GreaterThanCondition(COL_EED).Value(fromDate);
+
+            return queryContext.GetItems(SupplierSMSRateMapper);
+        }
+
         public bool ApplySupplierRates(SupplierSMSPriceList supplierSMSPriceList, Dictionary<int, SupplierSMSRateChange> supplierRateChangesByMobileNetworkId)
         {
             List<int> mobileNetworkIDs = supplierRateChangesByMobileNetworkId.Keys.ToList();
@@ -98,6 +117,12 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             AddInsertSupplierRatesQuery(queryContext, supplierSMSPriceList.ID, effectiveDate, supplierRateChanges);
 
             return queryContext.ExecuteNonQuery(true) > 0;
+        }
+
+        public bool AreSupplierSMSRatesUpdated(ref object updateHandle)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
         }
 
         #endregion

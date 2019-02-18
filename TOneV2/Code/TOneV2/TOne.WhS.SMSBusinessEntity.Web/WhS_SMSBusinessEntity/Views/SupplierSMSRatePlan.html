@@ -1,16 +1,16 @@
-﻿<vr-panel ng-controller="WhS_SMSBusinessEntity_CustomerSMSRatePlanController" vr-loader="scopeModel.isLoading">
+﻿<vr-panel ng-controller="WhS_SMSBusinessEntity_SupplierSMSRatePlanController" vr-loader="scopeModel.isLoading">
     <div ng-hide="filterSectionCollapsed">
-        <vr-form name="formCustomerSMSRateController">
+        <vr-form name="formSupplierSMSRateController">
             <vr-row>
 
-                <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCustomerSelectorReady"
-                                                   getcustomers selectedvalues="scopeModel.selectedCustomer"
-                                                   customlabel="Customer"
-                                                   onselectionchanged="scopeModel.onCustomerChanged"
+                <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onSupplierSelectorReady"
+                                                   getsuppliers selectedvalues="scopeModel.selectedSupplier"
+                                                   customlabel="Supplier"
+                                                   onselectionchanged="scopeModel.onSupplierChanged"
                                                    normal-col-num="2" isrequired="true" hideremoveicon>
                 </vr-whs-be-carrieraccount-selector>
 
-                <span ng-show="scopeModel.selectedCustomer != undefined">
+                <span ng-show="scopeModel.selectedSupplier != undefined">
                     <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" normal-col-num="2" vr-disabled="true"></vr-common-currency-selector>
                 </span>
 
@@ -24,7 +24,7 @@
                 </span>
 
                 <vr-columns colnum="2">
-                    <vr-datetimepicker type="date" value="scopeModel.effectiveDate" label="Effective Date" isrequired="true"></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" value="scopeModel.effectiveDate" label="Effective Date" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
 
             </vr-row>
@@ -34,16 +34,16 @@
     <vr-row removeline>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
-                <vr-button type="Search" formname="formCustomerSMSRateController" haspermission="scopeModel.hasSearchRatesPermission" data-onclick="scopeModel.searchCustomerSMSRates"></vr-button>
-                <vr-button type="Add" formname="formCustomerSMSRateController" haspermission="scopeModel.hasAddDraftPermission" data-onclick="scopeModel.addCustomerRates"></vr-button>
+                <vr-button type="Search" formname="formSupplierSMSRateController" data-onclick="scopeModel.searchSupplierSMSRates"></vr-button>
+                <vr-button type="Add" formname="formSupplierSMSRateController" data-onclick="scopeModel.addSupplierRates"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>
 
-    <div ng-show="scopeModel.selectedCustomer != undefined">
+    <div ng-show="scopeModel.selectedSupplier != undefined">
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-whs-smsbusinessentity-customerrateplan-grid on-ready="scopeModel.onGridReady"></vr-whs-smsbusinessentity-customerrateplan-grid>
+                <vr-whs-smsbusinessentity-supplierrateplan-grid on-ready="scopeModel.onGridReady"></vr-whs-smsbusinessentity-supplierrateplan-grid>
             </vr-columns>
         </vr-row>
     </div>

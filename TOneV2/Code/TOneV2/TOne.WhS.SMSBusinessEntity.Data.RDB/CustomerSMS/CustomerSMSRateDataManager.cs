@@ -54,6 +54,7 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
         }
         #endregion
 
+        List<int> _customerIds = new List<int>();
         #region Public Methods
         public List<CustomerSMSRate> GetCustomerSMSRatesEffectiveAfter(int customerID, DateTime effectiveDate)
         {
@@ -83,6 +84,24 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             return queryContext.GetItems(CustomerSMSRateMapper);
         }
 
+        public List<CustomerSMSRate> GetCustomerSMSRatesEffectiveOn(DateTime effectiveDate)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_ID,  COL_PriceListID, COL_MobileNetworkID, COL_Rate, COL_BED, COL_EED);
+
+            var where = selectQuery.Where();
+            where.LessOrEqualCondition(COL_BED).Value(effectiveDate);
+
+            var childWhere = where.ChildConditionGroup().ConditionIfColumnNotNull(COL_EED);
+            childWhere.NotEqualsCondition(COL_BED).Column(COL_EED);
+            childWhere.GreaterThanCondition(COL_EED).Value(effectiveDate);
+
+            return queryContext.GetItems(CustomerSMSRateMapper);
+        }
+
         public bool ApplySaleRates(CustomerSMSPriceList customerSMSPriceList, Dictionary<int, CustomerSMSRateChange> saleRateChangesByMobileNetworkId)
         {
             List<int> mobileNetworkIDs = saleRateChangesByMobileNetworkId.Keys.ToList();
@@ -100,6 +119,11 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             return queryContext.ExecuteNonQuery(true) > 0;
         }
 
+        public bool AreCustomerSMSRatesUpdated(ref object updateHandle)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+            return queryContext.IsDataUpdated(TABLE_NAME, ref updateHandle);
+        }
         #endregion
 
         #region Private Methods
@@ -153,6 +177,21 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
 
         private CustomerSMSRate CustomerSMSRateMapper(IRDBDataReader dataReader)
         {
+            return new CustomerSMSRate()
+            {
+                ID = dataReader.GetLong(COL_ID),
+                PriceListID = dataReader.GetInt(COL_PriceListID),
+                MobileNetworkID = dataReader.GetInt(COL_MobileNetworkID),
+                Rate = dataReader.GetDecimal(COL_Rate),
+                BED = dataReader.GetDateTime(COL_BED),
+                EED = dataReader.GetNullableDateTime(COL_EED)
+            };
+        }
+
+        private CustomerSMSRate CustomerSMSEffectiveRateMapper(IRDBDataReader dataReader)
+        {
+            _customerIds.Add(dataReader.GetInt(CustomerSMSPriceListDataManager.COL_CustomerID));
+
             return new CustomerSMSRate()
             {
                 ID = dataReader.GetLong(COL_ID),

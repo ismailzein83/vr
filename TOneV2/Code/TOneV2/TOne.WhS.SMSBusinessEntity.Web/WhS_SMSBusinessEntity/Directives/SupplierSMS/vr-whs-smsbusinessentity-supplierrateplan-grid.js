@@ -1,5 +1,5 @@
 ﻿"use strict";
-app.directive("vrWhsSmsbusinessentityCustomerrateplanGrid", ["VRNotificationService", "WhS_SMSBusinessEntity_CustomerSMSRateAPIService", "WhS_SMSBusinessEntity_CustomerRatePlanService", "UtilsService", function (VRNotificationService, WhS_SMSBusinessEntity_CustomerSMSRateAPIService, WhS_SMSBusinessEntity_CustomerRatePlanService, UtilsService) {
+app.directive("vrWhsSmsbusinessentitySupplierrateplanGrid", ["VRNotificationService", "WhS_SMSBusinessEntity_SupplierSMSRateAPIService", "WhS_SMSBusinessEntity_SupplierRatePlanService", "UtilsService", function (VRNotificationService, WhS_SMSBusinessEntity_SupplierSMSRateAPIService, WhS_SMSBusinessEntity_SupplierRatePlanService, UtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -13,7 +13,7 @@ app.directive("vrWhsSmsbusinessentityCustomerrateplanGrid", ["VRNotificationServ
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/WhS_SMSBusinessEntity/Directives/Templates/CustomerSMSRatePlanGridTemplate.html"
+            templateUrl: "/Client/Modules/WhS_SMSBusinessEntity/Directives/SupplierSMS/Templates/SupplierSMSRatePlanGridTemplate.html"
         };
 
         function SmsRatePlanGrid($scope, ctrl, attrs, $element) {
@@ -31,7 +31,7 @@ app.directive("vrWhsSmsbusinessentityCustomerrateplanGrid", ["VRNotificationServ
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     $scope.scopeModel.isLoading = true;
-                    WhS_SMSBusinessEntity_CustomerSMSRateAPIService.GetFilteredCustomerSMSRate(dataRetrievalInput).then(function (response) {
+                    WhS_SMSBusinessEntity_SupplierSMSRateAPIService.GetFilteredSupplierSMSRate(dataRetrievalInput).then(function (response) {
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 $scope.scopeModel.datasource.push(response.Data[i]);
@@ -46,7 +46,7 @@ app.directive("vrWhsSmsbusinessentityCustomerrateplanGrid", ["VRNotificationServ
                 };
 
                 $scope.scopeModel.onFutureRateClicked = function (dataItem) {
-                    WhS_SMSBusinessEntity_CustomerRatePlanService.viewFutureSMSRate(dataItem.MobileNetworkName, dataItem.FutureRate);
+                    WhS_SMSBusinessEntity_SupplierRatePlanService.viewFutureSMSRate(dataItem.MobileNetworkName, dataItem.FutureRate);
                 };
 
                 defineAPI();
