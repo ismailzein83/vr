@@ -16,6 +16,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
         ICustomerSMSRateDataManager _customerSMSRateDataManager = SMSBEDataFactory.GetDataManager<ICustomerSMSRateDataManager>();
 
         #region Public Methods
+
         public Vanrise.Entities.IDataRetrievalResult<CustomerSMSRateDetail> GetFilteredCustomerSMSRate(DataRetrievalInput<CustomerSMSRateQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new CustomerSMSRateRequestHandler());
@@ -55,6 +56,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
         #endregion
 
         #region Private Methods 
+
         private Dictionary<int, Dictionary<int, CustomerSMSRate>> GetCachedCustomerRates(DateTime effectiveDate)
         {
             var modifiedEffectiveDate = effectiveDate.Date;
@@ -118,6 +120,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
         #endregion
 
         #region Private/Internal Classes
+
         private struct GetCachedCustomerSMSRatesCacheName
         {
             public DateTime EffectiveOn { get; set; }
@@ -257,7 +260,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 return _customerSMSRateDataManager.AreCustomerSMSRatesUpdated(ref _updateHandle);
             }
         }
-    }
 
-    #endregion
+        #endregion
+    }
 }
