@@ -121,7 +121,9 @@ app.directive('vrTabHeaderLinks', ['UtilsService', function (UtilsService) {
         bindToController: true,
         compile: function (element, attrs) {
             var verticalflag = attrs.vertical != undefined ? "vertical" : " ";
-            element.html('<div class="btn-group btn-group-custom vr-tabs"  ' + verticalflag + ' >' + element.html() + '</div>');
+            var flatflag = attrs.flat != undefined ? "flat" : " ";
+
+            element.html('<div class="btn-group btn-group-custom vr-tabs"  ' + verticalflag + ' ' + flatflag + ' >' + element.html() + '</div>');
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
