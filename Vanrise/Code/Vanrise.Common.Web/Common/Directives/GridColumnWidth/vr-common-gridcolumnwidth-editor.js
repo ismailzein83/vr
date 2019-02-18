@@ -116,14 +116,16 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
             var fixedLabel = ' label ="Fixed Width"';
             var listViewLabel = ' label ="List View Width"';
             var withchild = "";
+            var usedingridcell = "";
             if (attrs.hidelabel != undefined || attrs.showhint != undefined) {
                 hidelabel = "hidelabel";
                 fixedLabel = " ";
                 listViewLabel = " ";
                 withchild = "haschildcolumns";
+                usedingridcell = "usedingridcell";
             }
 
-            return '<vr-common-gridwidthfactor-selector normal-col-num="{{selectorColNum}}" on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" '
+            return '<vr-common-gridwidthfactor-selector ' + usedingridcell + '  normal-col-num="{{selectorColNum}}" on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" '
                    + hidelabel
                    + ' ></vr-common-gridwidthfactor-selector>'
                    + '<vr-columns colnum="{{textboxColNum}}" ' + withchild + ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue" >'

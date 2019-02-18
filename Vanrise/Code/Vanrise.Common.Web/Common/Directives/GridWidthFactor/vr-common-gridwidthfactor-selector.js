@@ -99,12 +99,15 @@
             var fullLabel = ' label ="' + label + '"';
             if (attrs.hidelabel != undefined)
                 fullLabel = " ";
+            var colAttributes = "";
+            if (attrs.usedingridcell != undefined)
+                colAttributes = "haschildcolumns right-medium-spacing ";
             var hideremoveicon = (attrs.hideremoveicon != undefined && attrs.hideremoveicon != null) ? 'hideremoveicon' : null;
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">' 
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + colAttributes + ' >'
                 + '<span vr-disabled="ctrl.isdisabled"><vr-select on-ready="ctrl.onSelectorReady"'
                     + ' datasource="ctrl.datasource"'
-                 
+
                     + ' selectedvalues="ctrl.selectedvalues"'
                     + ' onselectionchanged="ctrl.onselectionchanged"'
                     + ' onselectitem="ctrl.onselectitem"'
@@ -115,10 +118,10 @@
                     + ' isrequired="ctrl.isrequired"'
                     + hideremoveicon
                     + ' entityName="' + label + '" '
-                     + fullLabel +'>'
-               
+                     + fullLabel + '>'
+
                 + '</vr-select></span>'
-            +'</vr-columns>';
+            + '</vr-columns>';
         }
 
         return directiveDefinitionObject;
