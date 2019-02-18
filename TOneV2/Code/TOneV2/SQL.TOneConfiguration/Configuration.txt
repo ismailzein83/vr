@@ -26,6 +26,7 @@ DataAnalysis.TOne.PostDeployment.sql
 
 TOneV2.Jazz
 TOne_Jazz.PostDeployment.sql
+TOne_Jazz_ERPIntegration.PostDeployment.sql
 
 BI
 BI.PostDeployemnt.sql
