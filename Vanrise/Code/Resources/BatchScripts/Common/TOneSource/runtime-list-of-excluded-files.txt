@@ -1,0 +1,6 @@
+\TOne.WhS.Runtime.exe.config
+.aspx\
+.cs\
+Version 13-07-2018\
+Old\
+\TOne.WhS.Jazz.
