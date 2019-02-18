@@ -15,10 +15,14 @@
         function GetRecordSearchFieldFilter(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetRecordSearchFieldFilter"), input);
         }
+        function GetMeasureStyleRulesRanges(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasureStyleRulesRanges"), input);
+        }
         return ({
             GetFilteredRecords: GetFilteredRecords,
             GetRecordSearchFilterGroup: GetRecordSearchFilterGroup,
-            GetRecordSearchFieldFilter: GetRecordSearchFieldFilter
+            GetRecordSearchFieldFilter: GetRecordSearchFieldFilter,
+            GetMeasureStyleRulesRanges: GetMeasureStyleRulesRanges
         });
     }
 

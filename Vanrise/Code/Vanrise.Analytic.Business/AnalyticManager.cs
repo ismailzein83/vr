@@ -66,6 +66,167 @@ namespace Vanrise.Analytic.Business
                 return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler());
             }
         }
+        public List<VRVisualizationRange> GetMeasureStyleRulesRanges(string measureName, Guid analyticTableId)
+        {
+            StyleDefinitionManager styleDefinitionManager = new StyleDefinitionManager();
+            StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
+            AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
+            List<VRVisualizationRange> visualizationRanges = new List<VRVisualizationRange>();
+            AnalyticTableManager analyticTableManager = new AnalyticTableManager();
+            var analyticTable = analyticTableManager.GetAnalyticTableById(analyticTableId);
+            analyticTable.ThrowIfNull("analyticTable");
+            var measureStyles = analyticTable.MeasureStyles;
+            measureStyles.ThrowIfNull("measureStyles");
+            var measureStyleRules = measureStyles.MeasureStyleRules;
+
+            if (measureStyleRules != null && measureStyleRules.Count > 0)
+            {
+                if (measureName != null)
+                {
+                    List<StyleRule> styleRules = new List<StyleRule>();
+                    var measureStyleRule = measureStyleRules.FindRecord(x => x.MeasureName == measureName);
+                    if (measureStyleRule != null)
+                    {
+                        var recommendedRules = measureStyleRule.RecommendedStyleRule;
+
+
+                        decimal? maximum = null;
+                        decimal? minimum = null;
+
+                        bool isMaxTaken = false;
+                        bool isMinTaken = false;
+
+                        if (recommendedRules != null && recommendedRules.RecordFilters != null && recommendedRules.RecordFilters.Count > 0)
+                        {
+                            foreach (var recordFilter in recommendedRules.RecordFilters)
+                            {
+                                styleRules.Add(new StyleRule()
+                                {
+                                    RecordFilter = recordFilter,
+                                    StatusDefinitionId = analyticTable.Settings.RecommendedStatusDefinitionId.Value
+                                });
+
+
+                            }
+                        }
+                        if (measureStyleRule.Rules != null && measureStyleRule.Rules.Count > 0)
+                        {
+                            styleRules.AddRange(measureStyleRule.Rules);
+                        }
+                        List<decimal> takenValues = new List<decimal>();
+                        foreach (var rule in styleRules)
+                        {
+                            rule.ThrowIfNull("rule");
+
+                            StyleDefinition styleDefinition = null;
+                            string styleDefinitionName = null;
+
+                            var numberRecordFilter = rule.RecordFilter as NumberRecordFilter;
+                            if (numberRecordFilter == null)
+                                throw new InvalidCastException("numberRecordFilter");
+                            var value = numberRecordFilter.Value;
+                            var logicalOperator = numberRecordFilter.CompareOperator;
+                            var styleDefinitionId = statusDefinitionManager.GetStyleDefinitionId(rule.StatusDefinitionId);
+
+                            if (styleDefinitionId != null)
+                            {
+                                styleDefinition = styleDefinitionManager.GetStyleDefinition(styleDefinitionId);
+                                styleDefinitionName = styleDefinition.Name;
+                                styleDefinition.StyleDefinitionSettings.ThrowIfNull("styleDefinition.StyleDefinitionSettings");
+
+                                switch (logicalOperator)
+                                {
+                                    case NumberRecordFilterOperator.Greater:
+                                        if (maximum.HasValue && value >= maximum)
+                                            break;
+
+                                        visualizationRanges.Add(new VRVisualizationRange()
+                                        {
+                                            From = minimum.HasValue ? Math.Max(value, minimum.Value) : value,
+                                            To = maximum,
+                                            Name = styleDefinitionName,
+                                            Color = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings
+                                        });
+                                        maximum = value;
+                                        // isMaxTaken = false;
+                                        break;
+
+                                    case NumberRecordFilterOperator.GreaterOrEquals:
+                                        if (maximum.HasValue && value > maximum)
+                                            break;
+
+                                        visualizationRanges.Add(new VRVisualizationRange()
+                                        {
+                                            From = minimum.HasValue ? Math.Max(value, minimum.Value) : value,
+                                            To = maximum,
+                                            Name = styleDefinitionName,
+                                            Color = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings
+                                        });
+                                        maximum = value;
+                                        takenValues.Add(value);
+                                        //isMaxTaken = true;
+                                        break;
+
+                                    case NumberRecordFilterOperator.Less:
+                                        if (minimum.HasValue && value <= minimum)
+                                            break;
+
+                                        visualizationRanges.Add(new VRVisualizationRange()
+                                        {
+                                            From = minimum,
+                                            To = maximum.HasValue ? Math.Min(value, maximum.Value) : value,
+                                            Name = styleDefinitionName,
+                                            Color = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings
+                                        });
+                                        minimum = value;
+                                        //isMinTaken = false;
+                                        break;
+
+                                    case NumberRecordFilterOperator.LessOrEquals:
+                                        if (minimum.HasValue && value < minimum)
+                                            break;
+
+                                        visualizationRanges.Add(new VRVisualizationRange()
+                                        {
+                                            From = minimum,
+                                            To = maximum.HasValue ? Math.Min(value, maximum.Value) : value,
+                                            Name = styleDefinitionName,
+                                            Color = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings
+                                        });
+                                        minimum = value;
+                                        takenValues.Add(value);
+                                        //isMinTaken = true;
+                                        break;
+
+                                    case NumberRecordFilterOperator.Equals:
+
+                                        if (takenValues.Contains(value))
+                                            break;
+
+                                        if ((value < maximum && value > minimum) || value == maximum || value == minimum)
+                                        {
+                                            visualizationRanges.Add(new VRVisualizationRange()
+                                            {
+                                                From = value,
+                                                To = value,
+                                                Name = styleDefinitionName,
+                                                Color = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings
+                                            });
+                                            takenValues.Add(value);
+                                            break;
+                                        }
+
+                                        // if ((value == maximum && isMaxTaken) || (value == minimum && isMinTaken))
+                                        //break;
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return visualizationRanges;
+        }
 
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query)
         {

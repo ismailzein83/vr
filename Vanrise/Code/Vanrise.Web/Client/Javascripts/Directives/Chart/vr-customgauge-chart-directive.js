@@ -140,7 +140,39 @@ app.directive('vrCustomgaugeChart', ['ChartDirService', 'VRModalService', 'Utils
                     });
                 }
             }
+            if (chartDefinition.rangesObject != undefined) {
+              for (var i = 0; i < chartDefinition.rangesObject.length; i++) {
+                  var rangeObject = chartDefinition.rangesObject[i];
+                  var obj = {
+                      from: rangeObject.From == null ? yAxisDefinition.min : rangeObject.From,
+                      to: rangeObject.To == null ? yAxisDefinition.max : rangeObject.To,
+                      innerRadius: '50%',
+                      outerRadius: '95%',
+                  };
 
+                  if (typeof rangeObject.Color === 'string' || rangeObject.Color instanceof String) {
+                      obj.color = rangeObject.Color;
+                  }
+                  else if (typeof rangeObject.Color === 'object' || rangeObject.Color instanceof Object) {
+                      switch (rangeObject.Color.UniqueName) {
+                          case "VR_AccountBalance_StyleFormating_CSSClass":
+                              switch (rangeObject.Color.ClassName) {
+                                  case "label label-success": obj.color = "#5cb85c"; break;
+                                  case "label label-warning": obj.color = "#f0ad4e"; break;
+                                  case "label label-warning-1": obj.color = "#FFD400"; break;
+                                  case "label label-warning-2": obj.color = "#FFAA00"; break;
+                                  case "label label-danger": obj.color = "#d9534f"; break;
+                                  case "label label-info": obj.color = "#5bc0de"; break;
+                                  case "label label-primary": obj.color = "#337ab7"; break;
+                                  case "label label-default": obj.color = "#777777"; break;
+                                  case "danger-font": obj.color = "#ff0000"; break;
+                              }
+                              break;
+                      }
+                  }
+                  plotBands.push(obj);
+                }
+            }
 
 
             //chartSettings

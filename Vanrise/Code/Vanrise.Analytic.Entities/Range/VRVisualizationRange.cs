@@ -9,9 +9,9 @@ namespace Vanrise.Analytic.Entities
 {
     public class VRVisualizationRange
     {
-        public decimal From { get; set; }
-        public decimal To { get; set; }
+        public decimal? From { get; set; }
+        public decimal? To { get; set; }
         public string Name { get; set; }
-        public StyleFormatingSettings StyleFormatingSettings { get; set; }
+        public StyleFormatingSettings Color { get; set; }
     }
 }

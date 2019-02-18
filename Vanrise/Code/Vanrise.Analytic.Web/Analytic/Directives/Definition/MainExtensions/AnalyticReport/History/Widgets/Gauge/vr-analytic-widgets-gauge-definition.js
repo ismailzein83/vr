@@ -39,11 +39,7 @@
             var measuresSelectorAPI;
             var measuresSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var recordFilterDirectiveAPI;
-            var recordFilterDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
             var analyticTableMeasureSelectedPromiseDeferred;
-            var analyticTableRecordFilterSelectedPromiseDeferred;
 
             var entity;
 
@@ -51,11 +47,11 @@
 
             var context = {};
 
-            var analyitcTableId;
+            var tableIds;
 
             var filterObject;
 
-            var measureNames;
+            var measureId;
 
             var configId;
 
@@ -63,64 +59,9 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.selectedMeasures = [];
-                $scope.scopeModel.onTableSelectorDirectiveReady = function (api) {
-                    analyticTableSelectorAPI = api;
-                    analyticTableReadyPromiseDeferred.resolve();
-                };
-
                 $scope.scopeModel.onMeasureSelectorReady = function (api) {
                     measuresSelectorAPI = api;
                     measuresSelectorReadyPromiseDeferred.resolve();
-                };
-
-                $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
-                    recordFilterDirectiveAPI = api;
-                    recordFilterDirectiveReadyPromiseDeferred.resolve();
-                };
-
-                $scope.scopeModel.onTableSelectionChanged = function () {
-                    var selectedAnalyticTable = analyticTableSelectorAPI.getSelectedIds();
-                    if (selectedAnalyticTable != undefined) {
-                        VR_Analytic_AnalyticItemConfigAPIService.GetDimensions(selectedAnalyticTable).then(function (response) {
-                            if (response != undefined)
-                                for (var i = 0; i < response.length; i++) {
-                                    var dimension = {
-                                        FieldName: response[i].Name,
-                                        FieldTitle: response[i].Title,
-                                        Type: response[i].Config.FieldType,
-                                    };
-                                    analyticTableDimensions.push(dimension);
-                                }
-                            context.getFields = function () {
-                                return analyticTableDimensions;
-                            };
-                            var setMeasuresLoader = function (value) { $scope.isLoadingMeasures = value; };
-                            var measuresSelectorPayload = {
-                                filter: {
-                                    TableIds: [analyticTableSelectorAPI.getSelectedIds()]
-                                }
-                            };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, measuresSelectorAPI, measuresSelectorPayload, setMeasuresLoader, analyticTableMeasureSelectedPromiseDeferred);
-
-                            var setRecordFilterLoader = function (value) { $scope.isLoadingRecordFilter = value; };
-                            var recordFilterPayload = {
-                                context: context
-                                //filterObj: filterObject
-                            };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, recordFilterDirectiveAPI, recordFilterPayload, setRecordFilterLoader, analyticTableRecordFilterSelectedPromiseDeferred);
-
-                        });
-
-                    }
-                    else {
-                        if (measuresSelectorAPI != undefined) {
-                            measuresSelectorAPI.clearDataSource();
-                            $scope.scopeModel.selectedMeasure = undefined;
-                        }
-                        if (recordFilterDirectiveAPI != undefined) {
-                            //should implement something like cleardatasoutrce;
-                        }
-                    }
                 };
 
                 defineAPI();
@@ -128,22 +69,44 @@
 
             function defineAPI() {
                 var api = {};
-
                 api.load = function (payload) {
                     var measures;
                     var promises = [];
                     var entity;
                     if (payload != undefined) {
+                        tableIds = payload.tableIds;
+                        if (tableIds != undefined && tableIds.length > 0) {
+                            var getDimensionsPromise = VR_Analytic_AnalyticItemConfigAPIService.GetDimensions(tableIds[0]).then(function (response) {
+                                if (response != undefined)
+                                    for (var i = 0; i < response.length; i++) {
+                                        var dimension = {
+                                            FieldName: response[i].Name,
+                                            FieldTitle: response[i].Title,
+                                            Type: response[i].Config.FieldType,
+                                        };
+                                        analyticTableDimensions.push(dimension);
+                                    }
+                                context.getFields = function () {
+                                    return analyticTableDimensions;
+                                };
+                                if (payload.widgetEntity != undefined) {
+                                    if (payload.widgetEntity.Measures != undefined && payload.widgetEntity.Measures.length > 0) {
+                                        measureId = payload.widgetEntity.Measures[0].MeasureName;
+                                    }
+                                    $scope.scopeModel.maxValue = payload.widgetEntity.Maximum;
+                                    $scope.scopeModel.minValue = payload.widgetEntity.Minimum;
+                                    configId = payload.configId;
+                                }
 
-                        analyitcTableId = payload.analyticTableId;
-                        filterObject = payload.filterObj;
-                        var measureIds = payload.measures;
-                        configId = payload.configId;
+                                var loadMeasureSelectorPromise = loadMeasureSelector();
+                                promises.push(loadMeasureSelectorPromise);
+
+                            });
+                            promises.push(getDimensionsPromise);
+                        }
+
                     }
-                    var loadAnalyitcTableSectionPromise = loadAnalyticTableSectionSection();
-                    promises.push(loadAnalyitcTableSectionPromise);
 
-                    var loadPeriodSelectorPromise = loadPeriodSelector();
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -151,9 +114,10 @@
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Analytic.MainExtensions.History.Widgets.AnalyticGaugeWidget,Vanrise.Analytic.MainExtensions",
-                        AnalyticTableId: analyticTableSelectorAPI.getSelectedIds(),
-                        Measures: [measuresSelectorAPI.getSelectedIds()],
-                        RecordFilter: recordFilterDirectiveAPI.getData().filterObj,
+                        AnalyticTableId: tableIds[0],
+                        Measures: [getMeasure($scope.scopeModel.selectedMeasure)],
+                        Maximum: $scope.scopeModel.maxValue,
+                        Minimum: $scope.scopeModel.minValue,
                         ConfigId: configId
                     };
                 };
@@ -162,64 +126,26 @@
                     ctrl.onReady(api);
                 }
 
-                function loadAnalyticTableSectionSection() {
-                    var loadAnalyticTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                    var promises = [];
-                    promises.push(loadAnalyticTableSelectorPromiseDeferred.promise);
-
-                    var analyticTableSelectorPayload = {
-
-                    };
-
-                    if (analyitcTableId != undefined) {
-                        analyticTableSelectorPayload.selectedIds = analyitcTableId;
-
-                        analyticTableMeasureSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-                        analyticTableRecordFilterSelectedPromiseDeferred = UtilsService.createPromiseDeferred();
-                    }
-
-                    analyticTableReadyPromiseDeferred.promise.then(function () {
-                        VRUIUtilsService.callDirectiveLoad(analyticTableSelectorAPI, analyticTableSelectorPayload, loadAnalyticTableSelectorPromiseDeferred);
+                function loadMeasureSelector() {
+                    var measureSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    measuresSelectorReadyPromiseDeferred.promise.then(function () {
+                        var measureSelectorPayload = {
+                            filter: {
+                                TableIds: tableIds
+                            }
+                        }
+                        if (measureId != undefined) {
+                            measureSelectorPayload.selectedIds = measureId;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(measuresSelectorAPI, measureSelectorPayload, measureSelectorLoadPromiseDeferred);
                     });
-
-
-
-                    if (analyitcTableId != undefined) {
-                        var loadMeasureSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadMeasureSelectorPromiseDeferred.promise);
-
-                        var loadRecordFilterPromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadRecordFilterPromiseDeferred.promise);
-
-                        UtilsService.waitMultiplePromises([measuresSelectorReadyPromiseDeferred.promise, recordFilterDirectiveReadyPromiseDeferred.promise, analyticTableMeasureSelectedPromiseDeferred.promise, analyticTableRecordFilterSelectedPromiseDeferred.promise]).then(function () {
-                            var measuresSelectorPayload = {
-                                filter: {
-                                    TableIds: [analyticTableSelectorAPI.getSelectedIds()]
-                                }
-                            };
-                            if (measureNames != undefined && measureNames.length > 0)
-                                measuresSelectorPayload.selectedIds = measureNames;
-
-                            VRUIUtilsService.callDirectiveLoad(measuresSelectorAPI, measuresSelectorPayload, loadMeasureSelectorPromiseDeferred);
-                            analyticTableMeasureSelectedPromiseDeferred = undefined;
-                            context.getFields = function () {
-                                return analyticTableDimensions;
-                            };
-                            var recordFilterSelectorPayload =
-                            {
-                                context: context
-                            };
-                            if (filterObject != undefined)
-                                recordFilterSelectorPayload.FilterGroup = filterObject;
-
-                            VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterSelectorPayload, loadRecordFilterPromiseDeferred);
-                            analyticTableRecordFilterSelectedPromiseDeferred = undefined;
-
-                        });
-                    }
-
-                    return UtilsService.waitMultiplePromises(promises);
+                    return measureSelectorLoadPromiseDeferred.promise;
+                }
+                function getMeasure(measure) {
+                    return {
+                        MeasureName: measure.Name,
+                        Title: measure.Title,
+                    };
                 }
 
             }

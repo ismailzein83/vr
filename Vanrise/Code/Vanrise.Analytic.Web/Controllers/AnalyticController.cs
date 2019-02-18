@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
+using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
 
@@ -41,5 +42,18 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticManager manager = new AnalyticManager();
             return manager.BuildRecordSearchFieldFilter(input);
         }
+
+        [HttpPost]
+        [Route("GetMeasureStyleRulesRanges")]
+        public List<VRVisualizationRange> GetMeasureStyleRulesRanges(MeasureStyleRangeInput input)
+        {
+            AnalyticManager manager = new AnalyticManager();
+            return manager.GetMeasureStyleRulesRanges(input.MeasureName, input.AnalyticTableId);
+        }
+    }
+    public class MeasureStyleRangeInput
+    {
+        public string MeasureName { get; set; }
+        public Guid AnalyticTableId { get; set; }
     }
 }

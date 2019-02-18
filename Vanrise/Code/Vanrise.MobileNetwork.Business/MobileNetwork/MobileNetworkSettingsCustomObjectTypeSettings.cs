@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vanrise.GenericData.Entities;
 using Vanrise.MobileNetwork.Entities;
 
@@ -10,7 +11,18 @@ namespace Vanrise.MobileNetwork.Business
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-            return null;
+            var valueObject = context.FieldValue as MobileNetworkSettings;
+            List<string> codes = new List<string>();
+            if (valueObject != null && valueObject.Codes!= null && valueObject.Codes.Count > 0 )
+            {
+                foreach(var code in valueObject.Codes)
+                {
+                    if (code != null)
+                        codes.Add(code.Code);
+                }
+                return string.Join(",", codes);
+            }
+                return null;
         }
 
         public override bool AreEqual(Object newValue, Object oldValue)

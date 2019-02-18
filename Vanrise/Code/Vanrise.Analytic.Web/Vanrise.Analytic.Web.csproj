@@ -101,6 +101,10 @@
       <Project>{bf85d7b4-84c2-441b-bca0-b42fe2619ae9}</Project>
       <Name>Vanrise.Analytic.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Analytic.MainExtensions\Vanrise.Analytic.MainExtensions.csproj">
+      <Project>{FF0E14A8-E630-41E0-864E-A084326E7612}</Project>
+      <Name>Vanrise.Analytic.MainExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
       <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
       <Name>Vanrise.Common.Business</Name>

@@ -28,7 +28,7 @@ namespace Vanrise.MobileNetwork.Business
 
             var allMobileNetworks = mobileNetworkManager.GetAllMobileNetworks();
 
-            if (allMobileNetworks.Any(itm => string.Compare(itm.NetworkName, networkName, true) == 0))
+            if (allMobileNetworks.Any(itm => string.Compare(itm.NetworkName, networkName, true) == 0) && context.OperationType == HandlerOperationType.Add)
             {
                 context.OutputResult.Result = false;
                 context.OutputResult.Messages.Add(string.Format("Network '{0}' already exist.", networkName));
@@ -43,7 +43,7 @@ namespace Vanrise.MobileNetwork.Business
                 foreach (var mobileCountryNetwork in mobileCountryNetworks)
                 {
                     var commonCodes = mobileCountryNetwork.MobileNetworkSettings.Codes.Select(item => item.Code).Intersect(settings.Codes.Select(item => item.Code));
-                    if (commonCodes != null && commonCodes.Any())
+                    if (commonCodes != null && commonCodes.Any() && context.OperationType == HandlerOperationType.Add)
                     {
                         context.OutputResult.Result = false;
                         context.OutputResult.Messages.Add(string.Format("Network codes '{0}' already exist under mobile country code '{1}'.", string.Join(", ", commonCodes), mobileCountryNetwork.NetworkName));

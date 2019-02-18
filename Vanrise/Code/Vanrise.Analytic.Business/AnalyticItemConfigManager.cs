@@ -187,6 +187,16 @@ namespace Vanrise.Analytic.Business
             }
             return names;
         }
+        public string GetMeasureName(Guid analyticTableId, Guid measureId)
+        {
+            var allMeasuresByMeasureName = GetMeasures(analyticTableId);
+            allMeasuresByMeasureName.ThrowIfNull("allMeasuresByMeasureName");
+            var measure = allMeasuresByMeasureName.First(x => x.Value.AnalyticMeasureConfigId == measureId);
+            if (measure.Value == null)
+                return null;
+            else
+                return measure.Key;
+        }
         public string GetDimensionName(Guid analyticTableId, Guid dimensionId)
         {
             List<string> names = new List<string>();
@@ -224,7 +234,7 @@ namespace Vanrise.Analytic.Business
                     measureConfigs.AddRange(measures.MapRecords(AnalyticMeasureConfigInfoMapper));
                 else
                 {
-                    foreach(var measure in measures)
+                    foreach (var measure in measures)
                     {
                         if (filter.MeasureIds.Any(x => x == measure.AnalyticItemConfigId))
                             measureConfigs.Add(AnalyticMeasureConfigInfoMapper(measure));
