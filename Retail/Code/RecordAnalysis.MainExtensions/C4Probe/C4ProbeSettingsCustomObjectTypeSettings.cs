@@ -7,11 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 
-namespace RecordAnalysis.MainExtensions.C4SwitchInterconnection
+namespace RecordAnalysis.MainExtensions.C4Probe
 {
-    public class C4SwitchInterconnectionSettingsCustomObjectTypeSettings : FieldCustomObjectTypeSettings
+    public class C4ProbeSettingsCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
-        public override Guid ConfigId { get { return new Guid("42BCEF1E-AF75-4091-BD27-09984ABC8598"); } }
+        public override Guid ConfigId { get { return new Guid("EC22C4F8-BF0C-4BD0-BE0A-34BF4210DE3C"); } }
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
@@ -25,17 +25,17 @@ namespace RecordAnalysis.MainExtensions.C4SwitchInterconnection
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(Entities.C4SwitchInterconnection);
+            return typeof(Entities.C4Probe);
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            return originalValue as Entities.C4SwitchInterconnection;
+            return originalValue as Entities.C4Probe;
         }
 
         public override string GetRuntimeTypeDescription()
         {
-            return "C4SwitchInterconnection";
+            return "C4Probe";
         }
     }
 }

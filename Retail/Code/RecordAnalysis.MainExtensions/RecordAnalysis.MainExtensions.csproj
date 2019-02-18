@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="C4Probe\C4ProbeSettingsCustomObjectTypeSettings.cs" />
     <Compile Include="C4Switch\C4SwitchSettingsCustomObjectTypeSettings.cs" />
     <Compile Include="C4Switch\EricssonC4SwitchSettings.cs" />
     <Compile Include="C4Switch\HuaweiC4SwitchSettings.cs" />
