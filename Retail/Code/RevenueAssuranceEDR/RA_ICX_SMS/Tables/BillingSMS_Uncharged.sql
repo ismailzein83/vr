@@ -11,8 +11,6 @@
     [TrafficDirection]         INT              NULL,
     [OutCarrier]               VARCHAR (40)     NULL,
     [InCarrier]                VARCHAR (40)     NULL,
-    [OriginationZoneID]        BIGINT           NULL,
-    [DestinationZoneID]        BIGINT           NULL,
     [OriginationCountryID]     INT              NULL,
     [DestinationCountryID]     INT              NULL,
     [Rate]                     DECIMAL (22, 8)  NULL,
@@ -23,13 +21,7 @@
     [TaxRuleID]                INT              NULL,
     [Income]                   DECIMAL (22, 8)  NULL,
     [CurrencyID]               INT              NULL,
-    [CallingMNCID]             INT              NULL,
-    [CallingMCCID]             INT              NULL,
-    [CalledMNCID]              INT              NULL,
-    [CalledMCCID]              INT              NULL,
     [QueueItemId]              BIGINT           NULL,
-    [CustomerDeliveryStatus]   INT              NULL,
-    [VendorDeliveryStatus]     INT              NULL,
     [DeliveryDelayInSeconds]   DECIMAL (22, 8)  NULL,
     [OriginationMobileNetwork] INT              NULL,
     [OriginationMobileCountry] INT              NULL,
@@ -41,6 +33,8 @@
     [OutDeliveryStatus]        INT              NULL,
     CONSTRAINT [IX_RA_ICX_SMS_BillingSMS_Uncharged_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 GO

@@ -2,24 +2,26 @@
     [ID]                       BIGINT           NOT NULL,
     [BatchStart]               DATETIME         NULL,
     [OperatorID]               BIGINT           NULL,
-    [NumberOfCDRs]             INT              NULL,
+    [InterconnectOperator]     BIGINT           NULL,
+    [DataSource]               UNIQUEIDENTIFIER NULL,
+    [TrafficDirection]         INT              NULL,
+    [Probe]                    BIGINT           NULL,
     [OriginationZoneID]        BIGINT           NULL,
     [DestinationZoneID]        BIGINT           NULL,
-    [TrafficDirection]         INT              NULL,
-    [SuccessfulAttempts]       BIGINT           NULL,
-    [SumOfPDDInSeconds]        DECIMAL (20, 4)  NULL,
-    [DataSource]               UNIQUEIDENTIFIER NULL,
-    [Probe]                    BIGINT           NULL,
-    [InterconnectOperator]     BIGINT           NULL,
     [OriginationCountryID]     INT              NULL,
     [DestinationCountryID]     INT              NULL,
-    [TotalDurationInSeconds]   DECIMAL (20, 4)  NULL,
+    [NumberOfCDRs]             INT              NULL,
+    [SuccessfulAttempts]       BIGINT           NULL,
+    [TotalDurationInSeconds]   DECIMAL (30, 4)  NULL,
+    [SumOfPDDInSeconds]        DECIMAL (20, 4)  NULL,
     [MaximumDurationInSeconds] DECIMAL (20, 4)  NULL,
     [MinimumDurationInSeconds] DECIMAL (20, 4)  NULL,
     [SumOfPGADInSeconds]       DECIMAL (20, 4)  NULL,
     [NumberOfClearCLIs]        BIGINT           NULL,
     CONSTRAINT [IX_RA_ICX_TrafficStats15Min_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

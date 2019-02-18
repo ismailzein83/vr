@@ -28,9 +28,10 @@
     [TaxRuleID]              INT              NULL,
     [QueueItemId]            BIGINT           NULL,
     [CurrencyID]             INT              NULL,
-    [PDDInSeconds]           DECIMAL (20, 4)  NULL,
-    CONSTRAINT [IX_RA_ICX_BillingCDR_Invalid_CDRID] PRIMARY KEY NONCLUSTERED ([CDRID] ASC)
+    [PDDInSeconds]           DECIMAL (20, 4)  NULL
 );
+
+
 
 
 

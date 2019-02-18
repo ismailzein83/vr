@@ -12,12 +12,14 @@
     [DestinationCountryID]     INT              NULL,
     [NumberOfCDRs]             INT              NULL,
     [SuccessfulAttempts]       BIGINT           NULL,
-    [TotalDurationInSeconds]   DECIMAL (20, 4)  NULL,
+    [TotalDurationInSeconds]   DECIMAL (30, 4)  NULL,
     [SumOfPDDInSeconds]        DECIMAL (20, 4)  NULL,
     [MaximumDurationInSeconds] DECIMAL (20, 4)  NULL,
     [MinimumDurationInSeconds] DECIMAL (20, 4)  NULL,
     [SumOfPGADInSeconds]       DECIMAL (20, 4)  NULL,
     [NumberOfClearCLIs]        BIGINT           NULL);
+
+
 
 
 
