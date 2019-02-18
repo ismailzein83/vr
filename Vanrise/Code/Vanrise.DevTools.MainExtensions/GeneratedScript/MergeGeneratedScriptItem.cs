@@ -45,12 +45,21 @@ namespace Vanrise.DevTools.MainExtensions
             }
 
         }
+
+        #region to be removed
+
         public List<GeneratedScriptItemTableColumn> InsertColumns { get; set; }
         public List<GeneratedScriptItemTableColumn> UpdateColumns { get; set; }
         public List<GeneratedScriptItemTableColumn> IdentifierColumns { get; set; }
+        public GeneratedScriptQueryType? QueryType { get; set; }
+
+        #endregion
+        public List<MergeGeneratedScriptItemColumn> Columns { get; set; }
         public List<GeneratedScriptItemTableRow> DataRows { get; set; }
         public List<GeneratedScriptVariable> Variables { get; set; }
-        public GeneratedScriptQueryType? QueryType { get; set; }
+       
+
+        public string LastWhereCondition { get; set; }
         public bool IsIdentity { get; set; }
         private string MapRecord(object value)
         {
@@ -192,5 +201,15 @@ namespace Vanrise.DevTools.MainExtensions
 
     }
     public enum GeneratedScriptQueryType { Insert = 1, Update = 2 }
-   
+
+    public class MergeGeneratedScriptItemColumn
+    {
+        public string ColumnName { get; set; }
+
+        public bool IsIdentifier { get; set; }
+
+        public bool IncludeInInsert { get; set; }
+
+        public bool IncludeInUpdate { get; set; }
+    }
 }
