@@ -48,6 +48,11 @@ namespace BPMExtended.Main.Business
             esq.AddColumn("StDSlam");
             esq.AddColumn("StDSlamOMC");
             esq.AddColumn("StDSlamPort");
+            esq.AddColumn("StIsCabinetFaulty");
+            esq.AddColumn("StIsDPFaulty");
+            esq.AddColumn("StIsMDFFaulty");
+            esq.AddColumn("StIsSwitchFaulty");
+
 
             var esqFirstFilter = esq.CreateFilterWithParameters(FilterComparisonType.Equal, "Id", idd);
             esq.Filters.Add(esqFirstFilter);
@@ -76,6 +81,10 @@ namespace BPMExtended.Main.Business
                 var DSlam = entities[0].GetColumnValue("StDSlam");
                 var DSlamOMC = entities[0].GetColumnValue("StDSlamOMC");
                 var DSlamPort = entities[0].GetColumnValue("StDSlamPort");
+                var IsCabinetFaulty= entities[0].GetColumnValue("StIsCabinetFaulty");
+                var IsDPFaulty = entities[0].GetColumnValue("StIsDPFaulty");
+                var IsMDFFaulty = entities[0].GetColumnValue("StIsMDFFaulty");
+                var IsSwitchFaulty = entities[0].GetColumnValue("StIsSwitchFaulty");
 
                 technicalDetails = new TechnicalDetails()
                 {
@@ -88,7 +97,7 @@ namespace BPMExtended.Main.Business
                     CabinetPrimaryPort= cabinetPrimaryPort.ToString(),
                     CabinetSecondaryPort= cabinetSecondaryPort.ToString(),
                     DP= dp.ToString(),
-                    DPPorts= (List<string>)dpPort,
+                   // DPPorts= (List<string>)dpPort,
                     DPId= dpId.ToString(),
                     MSAN_EID= MSANEId.ToString(),
                     MSAN_TID= MSANTId.ToString(),
@@ -100,6 +109,11 @@ namespace BPMExtended.Main.Business
                     DSlam= DSlam.ToString(),
                     DSlamOMC= DSlamOMC.ToString(),
                     DSlamPort= DSlamPort.ToString(),
+                    IsCabinetFaulty= IsCabinetFaulty.ToString(),
+                    IsDPFaulty = IsDPFaulty.ToString(),
+                    IsMDFFaulty= IsMDFFaulty.ToString(),
+                    IsSwitchFaulty= IsSwitchFaulty.ToString()
+
                 };
             }
             return technicalDetails;
