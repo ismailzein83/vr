@@ -63,12 +63,12 @@ namespace TOne.WhS.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.GetInvoiceDetails(invoiceId, invoiceCarrierType);
         }
-		[HttpGet]
-		[Route("DoesInvoiceReportExist")]
-		public bool DoesInvoiceReportExist(bool isCustomer) {
-			InvoiceManager manager = new InvoiceManager();
-			return manager.DoesInvoiceReportExist(isCustomer);
-		}
+		//[HttpGet]
+		//[Route("DoesInvoiceReportExist")]
+		//public bool DoesInvoiceReportExist(bool isCustomer) {
+		//	InvoiceManager manager = new InvoiceManager();
+		//	return manager.DoesInvoiceReportExist(isCustomer);
+		//}
 
 	}
 }
