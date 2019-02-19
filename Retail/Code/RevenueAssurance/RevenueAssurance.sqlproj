@@ -71,6 +71,9 @@
     <Folder Include="RA_ICX\Tables\" />
     <Folder Include="RA_INTL\User Defined Types\" />
     <Folder Include="RA_ICX\User Defined Types\" />
+    <Folder Include="RA_Dispute\" />
+    <Folder Include="RA_Dispute\Tables\" />
+    <Folder Include="RA_Dispute\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="RA\Tables\Probe.sql" />
@@ -92,5 +95,8 @@
     <Build Include="RA\User Defined Types\NumberPrefixType.sql" />
     <Build Include="RA\User Defined Types\MobileNetworkType.sql" />
     <Build Include="RA\User Defined Types\MobileCountryType.sql" />
+    <Build Include="RA_Dispute\Tables\Dispute.sql" />
+    <Build Include="RA_Dispute\User Defined Types\DisputeType.sql" />
+    <Build Include="Security\RA_Dispute.sql" />
   </ItemGroup>
 </Project>

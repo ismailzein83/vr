@@ -1,0 +1,27 @@
+﻿CREATE TABLE [RA_Dispute].[Dispute] (
+    [ID]                BIGINT           IDENTITY (1, 1) NOT NULL,
+    [OperatorId]        INT              NULL,
+    [periodId]          INT              NULL,
+    [StatusId]          UNIQUEIDENTIFIER NULL,
+    [Notes]             NVARCHAR (1000)  NULL,
+    [Attachments]       NVARCHAR (MAX)   NULL,
+    [TrafficType]       BIT              NULL,
+    [TrafficDirection]  BIT              NULL,
+    [Scope]             BIT              NULL,
+    [SendEmail]         BIT              NULL,
+    [CreatedBy]         INT              NULL,
+    [CreatedTime]       DATETIME         NULL,
+    [LastModifiedBy]    INT              NULL,
+    [LastModifiedTime]  DATETIME         NULL,
+    [ReferenceNumber]   NVARCHAR (255)   NULL,
+    [Revenue]           INT              NULL,
+    [RevenueTolerance]  INT              NULL,
+    [NumberOfSMS]       INT              NULL,
+    [NumberOfCalls]     INT              NULL,
+    [Duration]          DECIMAL (20, 8)  NULL,
+    [DurationTolerance] INT              NULL,
+    [CallsTolerance]    INT              NULL,
+    [SMSTolerance]      INT              NULL,
+    CONSTRAINT [PK_Dispute] PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
