@@ -389,11 +389,11 @@ namespace TOne.WhS.Jazz.BP.Activities
                         }
                     }
                 }
-                var rateTitlePart = reportDefinition.SplitRateValue.HasValue ? string.Concat( splitRate ? Decimal.Round(reportDefinition.SplitRateValue.Value, 4).ToString() : "Rate-" + Decimal.Round(reportDefinition.SplitRateValue.Value, 4)) : null;
+                var rateTitlePart = reportDefinition.SplitRateValue.HasValue ? string.Concat( splitRate ? Decimal.Round(reportDefinition.SplitRateValue.Value, 4).ToString() : "R-" + Decimal.Round(reportDefinition.SplitRateValue.Value, 4)) : null;
                 var jazzTransactionsReport = new JazzTransactionsReport
                 {
                     ReportDefinitionId = reportDefinition.JazzReportDefinitionId,
-                    SheetName = string.Concat(reportDefinition.Name, " ", applyTax ? "Tax" : transactionType.Name," ", rateTitlePart),
+                    SheetName = string.Concat(reportDefinition.Name.Length>15? reportDefinition.Name.Substring(0,15):reportDefinition.Name, " ", applyTax ? "Tax" : transactionType.Name.Substring(0,3)," ", rateTitlePart),
                     TransactionTypeId = transactionType.ID,
                     IsTaxTransaction = false
                 };
