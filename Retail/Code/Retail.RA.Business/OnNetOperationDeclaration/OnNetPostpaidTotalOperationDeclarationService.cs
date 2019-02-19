@@ -50,12 +50,13 @@ namespace Retail.RA.Business
         {
             get { return new Guid("3B02F297-DDF9-440C-A2DF-95D349F46DF4"); }
         }
-        public class OnNetPrepaidSMSOperationDeclarationService : OnNetOperatorDeclarationServiceSettings
+    }
+    public class OnNetPrepaidSMSOperationDeclarationService : OnNetOperatorDeclarationServiceSettings
+    {
+        public override Guid ConfigId
         {
-            public override Guid ConfigId
-            {
-                get { return new Guid("AC62ADF8-DFB8-4A72-B072-9CB12DC6E197"); }
-            }
+            get { return new Guid("AC62ADF8-DFB8-4A72-B072-9CB12DC6E197"); }
         }
     }
+
 }
