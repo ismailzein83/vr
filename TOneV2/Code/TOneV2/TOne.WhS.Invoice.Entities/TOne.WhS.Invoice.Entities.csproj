@@ -60,6 +60,7 @@
     <Compile Include="CompareInvoiceOperationOutput.cs" />
     <Compile Include="ComparisonInvoiceDetail.cs" />
     <Compile Include="CustomerInvoiceBySaleCurrencyItemDetails.cs" />
+    <Compile Include="CustomerSMSInvoiceItemDetails.cs" />
     <Compile Include="InvoiceBySaleCurrencyItemDetails.cs" />
     <Compile Include="ReportComparisonInvoiceDetail.cs" />
     <Compile Include="ReportInvoiceCamparisonCompanySettings.cs" />
@@ -75,6 +76,8 @@
     <Compile Include="OriginalInvoiceDataRuntime.cs" />
     <Compile Include="SattlementInvoiceItemDetails.cs" />
     <Compile Include="SettlementInvoiceDetailSummary.cs" />
+    <Compile Include="SMSInvoiceBillingRecord.cs" />
+    <Compile Include="SMSInvoiceMeasures.cs" />
     <Compile Include="SupplierGenerationCustomSectionPayload.cs" />
     <Compile Include="CustomerGenerationCustomSectionPayload.cs" />
     <Compile Include="CustomerInvoiceDetails.cs" />
