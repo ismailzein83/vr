@@ -16,6 +16,9 @@
         var recordFilterAPI;
         var recordFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var invoiceSubsectionFilterAPI;
+        var invoiceSubsectionFilterReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -40,6 +43,11 @@
                 recordFilterAPI = api;
                 recordFilterReadyPromiseDeferred.resolve();
             };
+
+            $scope.scopeModel.onInvoiceSubsectionFilterReady = function (api) {
+                invoiceSubsectionFilterAPI = api;
+                invoiceSubsectionFilterReadyDeferred.resolve();
+            };
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSubSection() : addeSubSection();
             };
@@ -54,8 +62,9 @@
                 return {
                     SectionTitle: $scope.scopeModel.sectionTitle,
                     SubSectionFilter: filterGroup != undefined ? filterGroup.filterObj : undefined,
-                    InvoiceSubSectionId: UtilsService.guid(),
-                    Settings: invoiceUISubsectionSettingsAPI.getData()
+                    InvoiceSubSectionId: subSectionEntity != undefined ? subSectionEntity.InvoiceSubSectionId : UtilsService.guid(),
+                    Settings: invoiceUISubsectionSettingsAPI.getData(),
+                    Filter: invoiceSubsectionFilterAPI != undefined ? invoiceSubsectionFilterAPI.getData() : undefined
                 };
             }
 
@@ -119,8 +128,19 @@
                     });
                     return recordFilterLoadPromiseDeferred.promise;
                 }
+                function loadInvoiceSubsectionFilterDirective() {
+                    var invoiceSubsectionFilterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    invoiceSubsectionFilterReadyDeferred.promise.then(function () {
+                        var invoiceSubsectionFilterPayload = { context: getContext() };
+                        if (subSectionEntity != undefined) {
+                            invoiceSubsectionFilterPayload.invoiceSubsectionFilterEntity = subSectionEntity.Filter;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(invoiceSubsectionFilterAPI, invoiceSubsectionFilterPayload, invoiceSubsectionFilterLoadPromiseDeferred);
+                    });
+                    return invoiceSubsectionFilterLoadPromiseDeferred.promise;
+                }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceUISubsectionSettingsDirective, loadRecordFilterDirective]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceUISubsectionSettingsDirective, loadRecordFilterDirective, loadInvoiceSubsectionFilterDirective]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
