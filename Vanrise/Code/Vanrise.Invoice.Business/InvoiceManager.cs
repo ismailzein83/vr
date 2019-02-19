@@ -903,9 +903,13 @@ namespace Vanrise.Invoice.Business
             DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(invoiceDetail.Entity.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
             RecordFilterManager recordFilterManager = new RecordFilterManager();
             var actionTypes = new InvoiceTypeManager().GetInvoiceActionsByActionId(invoiceType.InvoiceTypeId);
+            var invoiceSubSectionFilterContext = new InvoiceSubSectionFilterContext()
+            {
+                InvoiceType = invoiceType
+            };
             foreach (var section in invoiceType.Settings.SubSections)
             {
-                if (recordFilterManager.IsFilterGroupMatch(section.SubSectionFilter, context))
+                if ((section.Filter == null || section.Filter.IsFilterMatch(invoiceSubSectionFilterContext)) && recordFilterManager.IsFilterGroupMatch(section.SubSectionFilter, context))
                 {
                     if (invoiceDetail.SectionsTitle == null)
                         invoiceDetail.SectionsTitle = new List<string>();

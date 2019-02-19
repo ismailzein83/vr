@@ -90,8 +90,11 @@ namespace Vanrise.Invoice.Business
             var recordType = dataRecordTypeManager.GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
             if (recordType == null)
                 throw new NullReferenceException(String.Format("Record Type {0} Not Found.", invoiceType.Settings.InvoiceDetailsRecordTypeId));
+            var invoiceUIGridColumnFilterContext = new InvoiceUIGridColumnFilterContext() { InvoiceType = invoiceType };
             foreach (var gridColumn in invoiceType.Settings.InvoiceGridSettings.MainGridColumns)
             {
+                if (gridColumn.Filter != null && !gridColumn.Filter.IsFilterMatch(invoiceUIGridColumnFilterContext))
+                    continue;
                 GridColumnAttribute attribute = null;
                 if (gridColumn.CustomFieldName != null)
                 {
