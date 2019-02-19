@@ -10,6 +10,7 @@ namespace TOne.WhS.Invoice.Entities
     public class BaseInvoiceDetails
     {
         public int TotalNumberOfCalls { get; set; }
+        public int TotalNumberOfSMS { get; set; }
         public string Offset { get; set; }
         public decimal Duration { get; set; }
         public CommissionType? CommissionType { get; set; }
@@ -17,6 +18,7 @@ namespace TOne.WhS.Invoice.Entities
         public bool DisplayComission { get; set; }
         public string PartnerType { get; set; }
         public Decimal TotalAmount { get; set; }
+        public decimal TotalSMSAmount { get; set; }
         public int? TimeZoneId { get; set; }
         public decimal AmountAfterCommission { get; set; }
         public decimal OriginalAmountAfterCommission { get; set; }
