@@ -113,7 +113,6 @@ SOM.PostDeployment.sql
 SomST.PostDeployment.sql
 
 RA
-Retail_RA_Overridden.PostDeployment.sql
 Retail_RA.PostDeployment.sql
 VR_MobileNetwork.PostDeployment.sql
 
