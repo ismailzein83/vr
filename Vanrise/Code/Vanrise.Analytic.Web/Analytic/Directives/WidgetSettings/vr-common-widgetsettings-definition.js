@@ -134,7 +134,6 @@
                             promises.push(loadDirectivePromiseDeffered.promise);
 
                             UtilsService.waitMultiplePromises([directiveReadyDeferred.promise, tableSelectedPromiseDeffered.promise]).then(function () {
-                               
                                 directiveReadyDeferred = undefined;
                                 var widgetEntity = {
                                     ChartType: settings.Settings.ChartType,
@@ -147,7 +146,8 @@
                                     SeriesDimensions: settings.Settings.SeriesDimensions,
                                     Maximum: settings.Settings.Maximum,
                                     Minimum: settings.Settings.Minimum,
-                                    RecordFilter:settings.Settings.RecordFilter
+                                    RecordFilter: settings.Settings.RecordFilter,
+                                    SubTables: settings.Settings.SubTables
                                 };
                                 directivePayload = {
                                     tableIds: $scope.scopeModel.selectedTable != undefined ? [$scope.scopeModel.selectedTable.AnalyticTableId] : undefined,
