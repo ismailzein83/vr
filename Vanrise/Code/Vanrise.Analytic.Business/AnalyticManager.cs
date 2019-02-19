@@ -72,12 +72,12 @@ namespace Vanrise.Analytic.Business
             StatusDefinitionManager statusDefinitionManager = new StatusDefinitionManager();
             AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
             List<VRVisualizationRange> visualizationRanges = new List<VRVisualizationRange>();
+
             AnalyticTableManager analyticTableManager = new AnalyticTableManager();
             var analyticTable = analyticTableManager.GetAnalyticTableById(analyticTableId);
             analyticTable.ThrowIfNull("analyticTable");
-            var measureStyles = analyticTable.MeasureStyles;
-            measureStyles.ThrowIfNull("measureStyles");
-            var measureStyleRules = measureStyles.MeasureStyleRules;
+            var measureStyleRules = analyticTableManager.GetMergedMeasureStyles(analyticTableId);
+            measureStyleRules.ThrowIfNull("measureStyleRules");
 
             if (measureStyleRules != null && measureStyleRules.Count > 0)
             {
@@ -92,9 +92,6 @@ namespace Vanrise.Analytic.Business
 
                         decimal? maximum = null;
                         decimal? minimum = null;
-
-                        bool isMaxTaken = false;
-                        bool isMinTaken = false;
 
                         if (recommendedRules != null && recommendedRules.RecordFilters != null && recommendedRules.RecordFilters.Count > 0)
                         {

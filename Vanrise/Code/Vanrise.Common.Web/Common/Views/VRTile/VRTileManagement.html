@@ -2,7 +2,7 @@
     <vr-form name="formFilter">
         <vr-row ng-if="scopeModel.vrTiles.length > 0">
             <vr-columns ng-repeat="vrTile in scopeModel.vrTiles" colnum="{{vrTile.columnWidth}}" tileitem>
-                <vr-section title="{{vrTile.name}}" ng-if="vrTile.showTitle">
+                <vr-section title="{{vrTile.name}}" ng-if="vrTile.showTitle" light>
                     <vr-directivewrapper directive="vrTile.runtimeEditor" header="vrTile.name" index="$index" on-ready="vrTile.onVRTileDirectiveReady"></vr-directivewrapper>
                 </vr-section>
                 <span ng-if="!vrTile.showTitle">

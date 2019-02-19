@@ -43,12 +43,17 @@ namespace Vanrise.Analytic.Business
         public MeasureStyleRuleEditorRuntime GetAnalyticTableMergedMeasureStylesEditorRuntime(Guid analyticTbaleId)
         {
             MeasureStyleRuleManager measureStyleRuleManager = new MeasureStyleRuleManager();
-            List<MeasureStyleRule> mergedMeasureStyles = new List<MeasureStyleRule>();
+            var mergedMeasureStyles = GetMergedMeasureStyles(analyticTbaleId);
+            return measureStyleRuleManager.GetMeasureStyleRuleEditorRuntime(mergedMeasureStyles, analyticTbaleId);
+        }
+        public List<MeasureStyleRule> GetMergedMeasureStyles (Guid analyticTableId)
+        {
             ConfigManager configManager = new ConfigManager();
-            var analyticTable = GetAnalyticTableById(analyticTbaleId);
+            List<MeasureStyleRule> mergedMeasureStyles = new List<MeasureStyleRule>();
+            var analyticTable = GetAnalyticTableById(analyticTableId);
             analyticTable.ThrowIfNull("analyticTable");
             var analyticTableMeasureStyles = analyticTable.MeasureStyles;
-            var analyticTableKpiSettings = configManager.GetAnalytictableKPISettings(analyticTbaleId);
+            var analyticTableKpiSettings = configManager.GetAnalytictableKPISettings(analyticTableId);
             if (analyticTableKpiSettings != null)
             {
                 var analyticTableKPIMeasureStyles = analyticTableKpiSettings.MeasureStyleRules;
@@ -65,10 +70,8 @@ namespace Vanrise.Analytic.Business
                         mergedMeasureStyles.Add(measureStyleRule);
                 }
             }
-
-            return measureStyleRuleManager.GetMeasureStyleRuleEditorRuntime(mergedMeasureStyles, analyticTbaleId);
+            return mergedMeasureStyles;
         }
-
         public Vanrise.Entities.UpdateOperationOutput<AnalyticTableDetail> SaveAnalyticTableMeasureStyles(AnalyticTableMeasureStyles measureStyles, Guid analyticTableId)
         {
             IAnalyticTableDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticTableDataManager>();

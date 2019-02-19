@@ -1,5 +1,5 @@
-﻿<vr-tabs>
-    <vr-tab ng-repeat="tile in scopeModel.tiles" header="tile.name" dontload="true">
+﻿<vr-tabs flat>
+    <vr-tab ng-repeat="tile in scopeModel.tiles" header="tile.name" dontload="true" >
         <span vr-loader="tile.isDirectiveLoading">
             <vr-directivewrapper directive="tile.runtimeEditor" header="tile.name" index="$index" on-ready="tile.onVRTileDirectiveReady"></vr-directivewrapper>
             </span>
