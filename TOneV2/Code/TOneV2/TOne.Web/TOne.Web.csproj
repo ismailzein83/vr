@@ -807,7 +807,15 @@
     <Content Include="images\cloudXPoint-flat-iconheader.ico" />
     <Content Include="images\cloudXPoint-flat-login.png" />
     <Content Include="images\cloudXPoint-flat-logoonheader.png" />
+    <Content Include="images\menu-icons\CDR Compare Tool-tile.png" />
     <Content Include="images\menu-icons\CDR Compare Tool.png" />
+    <Content Include="images\menu-icons\Deals Module-tile.png" />
+    <Content Include="images\menu-icons\NOC-tile.png" />
+    <Content Include="images\menu-icons\plug-tile.png" />
+    <Content Include="images\menu-icons\Purchase Area-tile.png" />
+    <Content Include="images\menu-icons\Routing-tile.png" />
+    <Content Include="images\menu-icons\Sale Area-tile.png" />
+    <Content Include="images\menu-icons\switch-tile.png" />
     <Content Include="images\menu-icons\switch.png" />
     <Content Include="images\Ogero-iconheader.ico" />
     <Content Include="images\Ogero-login.png" />
