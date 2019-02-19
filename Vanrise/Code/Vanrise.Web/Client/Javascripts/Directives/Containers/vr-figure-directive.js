@@ -35,7 +35,7 @@
                                           + '<img ng-src="{{vrFigure.imgpath}}" style="padding-top: 5px;"  />'
                                         + '</div>'
                                          + '<div class="figure-data-content">'
-                                         + '<div style="width:100%;min-height: 166px;" >'
+                                         + '<div style="width:100%;min-height: 141px;" >'
                                               + '<div style="width:100% ; padding-top: 15px;"  ng-repeat="i in vrFigure.datasource">'
                                                    + ' <div class="figure-item" class="tilevalue">'
                                                     + '  <div class="item-value" ng-class="!i.name ? \'centered\':\'\'">{{i.value}}</div><div ng-if="i.name" class="item-label" title="{{i.name}}"><div>{{i.name}}</div></div>'
