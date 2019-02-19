@@ -137,7 +137,7 @@
                 + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                 + ' datavaluefield="ExtensionConfigurationId"'
                 + ' datatextfield="Title"'
-                + 'label="Module Type"'
+                + 'label="Condition"'
 
                 + ' isrequired="ctrl.isrequired"'
                 + 'hideremoveicon>'
