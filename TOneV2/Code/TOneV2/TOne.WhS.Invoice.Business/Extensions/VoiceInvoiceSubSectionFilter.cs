@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Invoice.Entities;
 
-namespace TOne.WhS.Invoice.Business
+namespace TOne.WhS.Invoice.Business.Extensions
 {
     public class VoiceInvoiceSubSectionFilter : InvoiceSubSectionFilter
     {
