@@ -833,6 +833,7 @@
     <Build Include="common\Tables\ProcessState.sql" />
     <Build Include="common\Stored Procedures\sp_ProcessState_InsertOrUpdate.sql" />
     <Build Include="common\Stored Procedures\sp_ProcessState_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_File_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

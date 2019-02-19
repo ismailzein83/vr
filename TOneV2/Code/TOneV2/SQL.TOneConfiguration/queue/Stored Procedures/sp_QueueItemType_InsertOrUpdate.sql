@@ -16,7 +16,8 @@ BEGIN
 	
 		UPDATE [queue].[QueueItemType] WITH (TABLOCK)
 		SET	   [Title] = @Title,
-			   [DefaultQueueSettings] = @DefaultQueueSettings
+			   [DefaultQueueSettings] = @DefaultQueueSettings, 
+			   LastModifiedTime = GETDATE()
 		WHERE ItemFQTN = @ItemFQTN
 	    
 	    IF @@rowcount <= 0

@@ -2,6 +2,7 @@
     [Id]               UNIQUEIDENTIFIER NOT NULL,
     [Name]             VARCHAR (50)     NOT NULL,
     [URL]              VARCHAR (50)     NOT NULL,
+    [IconPath]         VARCHAR (255)    NULL,
     [LastModifiedBy]   INT              NULL,
     [LastModifiedTime] DATETIME         NULL,
     [CreatedBy]        INT              NULL,
@@ -9,6 +10,8 @@
     [timestamp]        ROWVERSION       NOT NULL,
     CONSTRAINT [PK_RegisteredApplication] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

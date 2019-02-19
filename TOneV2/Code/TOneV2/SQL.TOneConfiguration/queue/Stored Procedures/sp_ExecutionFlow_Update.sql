@@ -3,10 +3,10 @@
 	@Name nvarchar(255)
 AS
 BEGIN
-	
-	        Update  [queue].[ExecutionFlow]
-			Set [Name]=@Name
-			Where [ID]=@ExecutionFlowId    
-       
-           
+IF NOT EXISTS(select 1 from [queue].[ExecutionFlow] where Name = @Name and ID <> @ExecutionFlowId)
+	BEGIN
+		Update  [queue].[ExecutionFlow]
+		Set [Name] = @Name, LastModifiedTime = GETDATE()
+		Where [ID] = @ExecutionFlowId    
+    END 
 END

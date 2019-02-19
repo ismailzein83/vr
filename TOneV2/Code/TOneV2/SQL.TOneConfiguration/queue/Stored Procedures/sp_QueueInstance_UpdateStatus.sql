@@ -5,7 +5,8 @@ AS
 BEGIN
 	
 	UPDATE [queue].[QueueInstance]
-	SET Status = @Status
+	SET Status = @Status,
+		LastModifiedTime = GETDATE()
 	WHERE [Name] = @QueueName
 	
 END

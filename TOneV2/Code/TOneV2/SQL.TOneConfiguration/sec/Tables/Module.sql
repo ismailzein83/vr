@@ -10,9 +10,12 @@
     [Settings]         NVARCHAR (MAX)   NULL,
     [timestamp]        ROWVERSION       NULL,
     [LastModifiedTime] DATETIME         CONSTRAINT [DF_Module_LastModifiedTime] DEFAULT (getdate()) NULL,
+    [RenderedAsView]   BIT              NULL,
     CONSTRAINT [PK_Module_1] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_Module_Module] FOREIGN KEY ([ID]) REFERENCES [sec].[Module] ([ID])
 );
+
+
 
 
 

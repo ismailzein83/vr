@@ -5,5 +5,8 @@
     [LastModifiedBy]   INT              NULL,
     [LastModifiedTime] DATETIME         NULL,
     [CreatedBy]        INT              NULL,
-    [CreatedTime]      DATETIME         NULL);
+    [CreatedTime]      DATETIME         NULL,
+    [IconPath]         VARCHAR (255)    NULL);
+
+
 

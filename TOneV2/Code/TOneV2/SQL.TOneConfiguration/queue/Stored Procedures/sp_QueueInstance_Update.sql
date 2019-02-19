@@ -10,6 +10,7 @@ BEGIN
 	SET 
 		StageName = @StageName,
 		Title = @Title,
-		[Settings] = @Settings
+		[Settings] = @Settings,
+		LastModifiedTime = GETDATE()
 	WHERE Name = @QueueName
 END

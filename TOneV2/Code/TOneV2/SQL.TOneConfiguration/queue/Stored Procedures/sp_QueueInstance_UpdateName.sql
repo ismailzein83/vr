@@ -11,7 +11,8 @@ AS
 BEGIN
 	
 	UPDATE queue.QueueInstance
-	SET Name = @NewQueueName
+	SET Name = @NewQueueName,
+		LastModifiedTime = GETDATE()
 	WHERE Name = @QueueName AND Status = @Status
 	
 END
