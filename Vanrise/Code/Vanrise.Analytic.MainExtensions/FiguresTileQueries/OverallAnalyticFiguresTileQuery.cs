@@ -16,7 +16,7 @@ namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
         public override List<FigureItemValue> Execute(IFiguresTileQueryExecuteContext context)
         {
             List<FigureItemValue> figureItemValues = new List<FigureItemValue>();
-            VRTimePeriodContext timePeriodContext = new VRTimePeriodContext() { EffectiveDate = DateTime.Today };
+            VRTimePeriodContext timePeriodContext = new VRTimePeriodContext() { EffectiveDate = DateTime.Now };
             TimePeriod.GetTimePeriod(timePeriodContext);
             AnalyticManager analyticManager = new AnalyticManager();
             List<string> selectedItemsToDisplayNames = new List<string>();
