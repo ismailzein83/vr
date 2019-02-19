@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_RA/Directives/OnNetOperatorDeclaration/Templates/OnNetOperatorDirectionServicesCustomObjectSettingsTemplate.html"
+            templateUrl: "/Client/Modules/Retail_RA/Directives/OnNetOperatorDeclaration/Templates/OnNetOperatorDirectionCustomObjectSettingsTemplate.html"
 
         };
         function OnNetOperatorDirectionServices($scope, ctrl, $attrs) {

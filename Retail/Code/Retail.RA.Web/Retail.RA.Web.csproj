@@ -84,8 +84,8 @@
     <Content Include="Retail_RA\Directives\DisputeManagement\Templates\DisputeSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\Extensions\INTL\retail-ra-intl-businessobject-dataprovidersettings.js" />
     <Content Include="Retail_RA\Directives\Extensions\INTL\Templates\INTLBusinessObjectDataProviderSettingsTemplate.html" />
-    <Content Include="Retail_RA\Directives\OnNetOperationDeclaration\retail-ra-onnetoperatordeclarationservices-customobjectsettings.js" />
-    <Content Include="Retail_RA\Directives\OnNetOperationDeclaration\Templates\OnNetOperatorDirectionServicesCustomObjectSettingsTemplate.html" />
+    <Content Include="Retail_RA\Directives\OnNetOperationDeclaration\retail-ra-onnetoperatordeclaration-customobjectsettings.js" />
+    <Content Include="Retail_RA\Directives\OnNetOperationDeclaration\Templates\OnNetOperatorDirectionCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\retail-ra-operatordeclarationservice-sms.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\retail-ra-operatordeclarationservice-voice.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\Templates\OperatorDeclarationServiceSMSTemplate.html" />
