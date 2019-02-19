@@ -74,6 +74,8 @@
     <Folder Include="RA_Dispute\" />
     <Folder Include="RA_Dispute\Tables\" />
     <Folder Include="RA_Dispute\User Defined Types\" />
+    <Folder Include="RA_Retail\" />
+    <Folder Include="RA_Retail\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="RA\Tables\Probe.sql" />
@@ -98,5 +100,8 @@
     <Build Include="RA_Dispute\Tables\Dispute.sql" />
     <Build Include="RA_Dispute\User Defined Types\DisputeType.sql" />
     <Build Include="Security\RA_Dispute.sql" />
+    <Build Include="RA_Retail\Tables\SubscriberPackage.sql" />
+    <Build Include="RA_Retail\Tables\Subscriber.sql" />
+    <Build Include="Security\RA_Retail.sql" />
   </ItemGroup>
 </Project>
