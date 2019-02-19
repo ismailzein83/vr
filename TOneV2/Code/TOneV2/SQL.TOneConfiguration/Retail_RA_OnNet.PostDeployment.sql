@@ -257,3 +257,28 @@ update set
 when not matched by target then
 insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
+
+--[common].[ExtensionConfiguration]-----------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('9C5DD4B4-827A-4541-A032-3BAF780557D4','RA_OperationDeclaration_OnNetPostpaidSMS','Postpaid SMS','Retail_BE_OnNetOperatorDeclarationServiceConfig','{"Editor":"retail-ra-onnetoperatordeclarationservice-postpaidsms"}'),
+('69D309FE-A74C-461C-9981-76D8A701F5BE','RA_OperationDeclaration_OnNetPostpaidTotal','Postpaid Total','Retail_BE_OnNetOperatorDeclarationServiceConfig','{"Editor":"retail-ra-onnetoperatordeclarationservice-postpaidtotal"}'),
+('DFEBE67A-633A-4736-8B95-873125B703C8','RA_OperationDeclaration_OnNetPrepaidTotal','Prepaid Total','Retail_BE_OnNetOperatorDeclarationServiceConfig','{"Editor":"retail-ra-onnetoperatordeclarationservice-prepaidtotal"}'),
+('3B02F297-DDF9-440C-A2DF-95D349F46DF4','RA_OperationDeclaration_OnNetPrepaidVoice','Prepaid Voice','Retail_BE_OnNetOperatorDeclarationServiceConfig','{"Editor":"retail-ra-onnetoperatordeclarationservice-prepaidvoice"}'),
+('AC62ADF8-DFB8-4A72-B072-9CB12DC6E197','RA_OperationDeclaration_OnNetPrepaidSMS','Prepaid SMS','Retail_BE_OnNetOperatorDeclarationServiceConfig','{"Editor":"retail-ra-onnetoperatordeclarationservice-prepaidsms"}'),
+('962EFE0D-0A2A-4CBB-BFD2-EC9D85BBD529','RA_OperationDeclaration_OnNetPostpaidVoice','Postpaid Voice','Retail_BE_OnNetOperatorDeclarationServiceConfig','{"Editor":"retail-ra-onnetoperatordeclarationservice-postpaidvoice"}'),
+('4E4C7EA3-943B-44CC-A635-D27BF5F088D6','OnNet Operation Declaration','OnNet Operation Declaration','VR_GenericData_FieldCustomObjectTypeSettings','{"Editor":"retail-ra-onnetoperatordeclaration-customobjectsettings"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[ConfigType],[Settings]))
+merge	[common].[ExtensionConfiguration] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[ConfigType],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
