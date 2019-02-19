@@ -70,7 +70,7 @@
                             }
                             var timePeriodInput = {
                                 TimePeriod: definitionSettings.TimePeriod,
-                                EffectiveDate: VRDateTimeService.getTodayDate()
+                                EffectiveDate: VRDateTimeService.getNowDateTime()
                             };
                             var getPeriodRangePromise = VRCommon_VRTimePeriodAPIService.GetTimePeriod(timePeriodInput).then(function (response) {
                                 if (response != undefined) {
