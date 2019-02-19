@@ -3424,7 +3424,7 @@ vr-columns[grouped] > div[class^="col"] {
 }
 
 vr-columns[tileitem] > div[class^="col"] {
-    padding: 0px 3px;
+    padding: 2px 3px;
     margin-bottom: -4px;
 }
 
