@@ -48,6 +48,13 @@
         function GetItemSetNameStorageRuleConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetItemSetNameStorageRuleConfigs"));
         }
+        function GetInvoiceUIGridColumnFilterConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceUIGridColumnFilterConfigs"));
+        }
+
+        function GetInvoiceSubSectionFilterConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceSubSectionFilterConfigs"));
+        }
         return ({
             GetInvoiceActionSettingsConfigs: GetInvoiceActionSettingsConfigs,
             GetRDLCDataSourceSettingsConfigs: GetRDLCDataSourceSettingsConfigs,
@@ -61,7 +68,9 @@
             GetStartDateCalculationMethodConfigs: GetStartDateCalculationMethodConfigs,
             GetInvoiceSettingPartsConfigs: GetInvoiceSettingPartsConfigs,
             GetInvoiceBulkActionSettingsConfigs: GetInvoiceBulkActionSettingsConfigs,
-            GetItemSetNameStorageRuleConfigs: GetItemSetNameStorageRuleConfigs
+            GetItemSetNameStorageRuleConfigs: GetItemSetNameStorageRuleConfigs,
+            GetInvoiceUIGridColumnFilterConfigs: GetInvoiceUIGridColumnFilterConfigs,
+            GetInvoiceSubSectionFilterConfigs: GetInvoiceSubSectionFilterConfigs
 
         });
     }

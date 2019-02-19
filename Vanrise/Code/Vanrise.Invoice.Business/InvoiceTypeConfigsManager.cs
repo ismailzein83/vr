@@ -78,5 +78,15 @@ namespace Vanrise.Invoice.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<ItemSetNameStorageRuleConfig>(ItemSetNameStorageRuleConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<InvoiceUIGridColumnFilterConfig> GetInvoiceUIGridColumnFilterConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<InvoiceUIGridColumnFilterConfig>(InvoiceUIGridColumnFilterConfig.EXTENSION_TYPE);
+        }
+        public IEnumerable<InvoiceSubSectionFilterConfig> GetInvoiceSubSectionFilterConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<InvoiceSubSectionFilterConfig>(InvoiceSubSectionFilterConfig.EXTENSION_TYPE);
+        }
     }
 }

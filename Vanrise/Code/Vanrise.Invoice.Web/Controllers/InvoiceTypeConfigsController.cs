@@ -93,6 +93,19 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetItemSetNameStorageRuleConfigs();
         }
-        
+        [HttpGet]
+        [Route("GetInvoiceUIGridColumnFilterConfigs")]
+        public IEnumerable<InvoiceUIGridColumnFilterConfig> GetInvoiceUIGridColumnFilterConfigs()
+        {
+            return _manager.GetInvoiceUIGridColumnFilterConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetInvoiceSubSectionFilterConfigs")]
+        public IEnumerable<InvoiceSubSectionFilterConfig> GetInvoiceSubSectionFilterConfigs()
+        {
+            return _manager.GetInvoiceSubSectionFilterConfigs();
+        }
+
     }
 }

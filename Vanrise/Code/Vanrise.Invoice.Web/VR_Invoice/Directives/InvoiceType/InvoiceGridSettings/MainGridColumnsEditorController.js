@@ -11,6 +11,9 @@
         var gridWidthFactorEditorAPI;
         var gridWidthFactorEditorPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var invoiceUIGridColumnFilterAPI;
+        var invoiceUIGridColumnFilterPromiseReadyDeferred = UtilsService.createPromiseDeferred();
+
         var isEditMode;
         loadParameters();
         defineScope();
@@ -42,6 +45,11 @@
                 return false;
             };
 
+            $scope.scopeModel.onInvoiceUIGridColumnFilterReady = function (api) {
+                invoiceUIGridColumnFilterAPI = api;
+                invoiceUIGridColumnFilterPromiseReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.save = function () {
                 return (isEditMode)?  updateGridColumn() : addGridColumn();
             };
@@ -56,7 +64,8 @@
                     Field: $scope.scopeModel.selectedInvoiceField.value,
                     CustomFieldName: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.selectedRecordField.FieldName : undefined,
                     GridColumnSettings: gridWidthFactorEditorAPI.getData(),
-                    UseDescription: $scope.scopeModel.isCustomFieldRequired() ?$scope.scopeModel.useDescription : undefined,
+                    UseDescription: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.useDescription : undefined,
+                    Filter: invoiceUIGridColumnFilterAPI.getData()
                 };
             }
 
@@ -116,7 +125,19 @@
                     return gridWidthFactorEditorLoadPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGridWidthFactorEditor]).then(function () {
+                function loadInvoiceUIGridColumnFilter() {
+                    var invoiceUIGridColumnFilterLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    invoiceUIGridColumnFilterPromiseReadyDeferred.promise.then(function () {
+                        var invoiceUIGridColumnFilterPayload = {};
+                     
+                        if (columnEntity != undefined)
+                            invoiceUIGridColumnFilterPayload.invoiceUIGridColumnFilterEntity = columnEntity.Filter;
+                        VRUIUtilsService.callDirectiveLoad(invoiceUIGridColumnFilterAPI, invoiceUIGridColumnFilterPayload, invoiceUIGridColumnFilterLoadPromiseDeferred);
+                    });
+                    return invoiceUIGridColumnFilterLoadPromiseDeferred.promise;
+                }
+
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadGridWidthFactorEditor, loadInvoiceUIGridColumnFilter]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;

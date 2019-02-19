@@ -141,8 +141,7 @@
                             + ' datatextfield="Title"'
                             + 'label="Condition Type"'
 
-                            + ' isrequired="ctrl.isrequired"'
-                            + 'hideremoveicon>'
+                            + ' isrequired="ctrl.isrequired">'
                         + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
