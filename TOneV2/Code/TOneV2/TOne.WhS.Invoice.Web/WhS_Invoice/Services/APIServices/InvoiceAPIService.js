@@ -24,12 +24,18 @@
                 invoiceId: invoiceId,
                 invoiceCarrierType:invoiceCarrierType
             });
-        }
+		}
+		function DoesInvoiceReportExist(isCustomer) {
+			return BaseAPIService.get(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, 'DoesInvoiceReportExist'), {
+				isCustomer: isCustomer
+			});
+		}
         return ({
             CompareInvoices: CompareInvoices,
             UpdateOriginalInvoiceData: UpdateOriginalInvoiceData,
             GetOriginalInvoiceDataRuntime: GetOriginalInvoiceDataRuntime,
-            GetInvoiceDetails: GetInvoiceDetails
+			GetInvoiceDetails: GetInvoiceDetails,
+			DoesInvoiceReportExist: DoesInvoiceReportExist
         });
     }
 

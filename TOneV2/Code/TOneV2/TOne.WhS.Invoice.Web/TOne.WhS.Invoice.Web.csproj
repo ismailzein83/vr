@@ -123,10 +123,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Vanrise.Invoice.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
     </Reference>
@@ -136,6 +138,10 @@
     </Reference>
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -151,7 +157,19 @@
     <Compile Include="Controllers\InvoiceCompareTemplateController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\InvoiceSettlementController.cs" />
+    <Compile Include="HassanProjectDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HassanProjectDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WhS_Invoice\Reports\CompareInvoiceReport.aspx.cs">
+      <DependentUpon>CompareInvoiceReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WhS_Invoice\Reports\CompareInvoiceReport.aspx.designer.cs">
+      <DependentUpon>CompareInvoiceReport.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WhS_Invoice\Reports\Reporting.aspx.cs">
       <DependentUpon>Reporting.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -164,6 +182,14 @@
     <ProjectReference Include="..\..\..\..\Vanrise\Code\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598E-8526-4BB4-9D1B-87A6B3B1CE72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
+      <Project>{0923754D-484C-48F7-9284-BE9B6B9D5449}</Project>
+      <Name>TOne.WhS.BusinessEntity.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Invoice.Business\TOne.WhS.Invoice.Business.csproj">
       <Project>{3751a44f-a40a-4e0e-a86e-5665664ce616}</Project>
@@ -214,6 +240,7 @@
     <Content Include="WhS_Invoice\Directives\MainExtensions\SupplierInvoice\whs-invoice-invoicetype-supplierinvoicegenerator.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceSettings\whs-invoice-invoicesettings.js" />
     <Content Include="WhS_Invoice\ModuleInitialization.js" />
+    <Content Include="WhS_Invoice\Reports\CompareInvoiceReport.aspx" />
     <Content Include="WhS_Invoice\Reports\Reporting.aspx" />
     <Content Include="WhS_Invoice\Services\APIServices\IncludedInvoicesInSettlementAPIService.js" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceAPIService.js" />
@@ -247,6 +274,12 @@
     <EmbeddedResource Include="Reports\Zajil\InvoiceReportByCurrency.rdlc" />
     <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\SupplierCompareInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Invoice\Reports\CustomerCompareInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Jazz\Old\CustomerJazzInvoiceItemsReport1.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -291,15 +324,21 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Old\SupplierRecurringChargeInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\DefaultSupplierInvoiceItemsByCurrencyReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\DefaultSupplierInvoiceItemsByCurrencyReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\DefaultSupplierInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\CustomerRecurringChargeInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\DefaultCustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\DefaultCustomerInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\DefaultCustomerInvoiceItemsByCurrencyReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerInvoiceItemsReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\CustomerRecurringChargeInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SettlementInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Ogero\Version 13-07-2018\SupplierInvoiceItemsReport.rdlc" />
@@ -323,7 +362,9 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\Sama\Old\SupplierInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Sama\DefaultSupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\Sama\DefaultSupplierInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceItemsReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -356,6 +397,17 @@
     <Content Include="JSLintNet.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="HassanProjectDataSet.xsc">
+      <DependentUpon>HassanProjectDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="HassanProjectDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>HassanProjectDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="HassanProjectDataSet.xss">
+      <DependentUpon>HassanProjectDataSet.xsd</DependentUpon>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

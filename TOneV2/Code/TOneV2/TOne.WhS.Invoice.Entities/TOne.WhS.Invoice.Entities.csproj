@@ -16,7 +16,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
-	<_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,6 +61,11 @@
     <Compile Include="ComparisonInvoiceDetail.cs" />
     <Compile Include="CustomerInvoiceBySaleCurrencyItemDetails.cs" />
     <Compile Include="InvoiceBySaleCurrencyItemDetails.cs" />
+    <Compile Include="ReportComparisonInvoiceDetail.cs" />
+    <Compile Include="ReportInvoiceCamparisonCompanySettings.cs" />
+    <Compile Include="ReportInvoiceComparisonCarrierProfile.cs" />
+    <Compile Include="ReportInvoiceComparisonInput.cs" />
+    <Compile Include="ReportInvoiceComparisonResult.cs" />
     <Compile Include="SettlementInvoiceItemSummaryDetail.cs" />
     <Compile Include="SettlementGenerationCustomSectionInvoices.cs" />
     <Compile Include="SettlementGenerationCustomSectionPayload.cs" />
