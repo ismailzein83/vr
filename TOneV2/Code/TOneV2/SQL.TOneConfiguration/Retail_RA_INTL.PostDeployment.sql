@@ -38,6 +38,10 @@ insert([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic]
 values(s.[ID],s.[Name],s.[Url],s.[DefaultViewId],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[Settings]);
 
 
+--delete useless views
+delete from [sec].[View] where [Id] in ('9F5B379C-1576-4078-9999-3218B329FEAC'--'Packages'
+										)
+
 --[sec].[View]-------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
