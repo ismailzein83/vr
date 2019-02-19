@@ -935,6 +935,8 @@
     <None Include="InterConnect.SMS.PostDeployment.sql" />
     <None Include="FMSV1.PostDeployment.sql" />
     <None Include="TOne_Jazz_ERPIntegration.PostDeployment.sql" />
+    <None Include="Retail_RA_INTL.PostDeployment.sql" />
+    <None Include="Retail_RA_ICX.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
