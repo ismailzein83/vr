@@ -29,6 +29,7 @@ xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VR_MobileNetwork.PostDepl
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" 						/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Retail_RA_ICX.PostDeployment.sql"		/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Retail_RA_INTL.PostDeployment.sql"		/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Retail_RA_OnNet.PostDeployment.sql"		/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneTransaction\BusinessProcess.PostDeployment.sql" 		/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Transaction\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneLogging\Script.PostDeployment.sql" 					/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Logging\"
 
