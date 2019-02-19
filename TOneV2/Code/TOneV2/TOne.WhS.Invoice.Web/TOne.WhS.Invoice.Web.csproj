@@ -157,11 +157,6 @@
     <Compile Include="Controllers\InvoiceCompareTemplateController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\InvoiceSettlementController.cs" />
-    <Compile Include="HassanProjectDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HassanProjectDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WhS_Invoice\Reports\CompareInvoiceReport.aspx.cs">
       <DependentUpon>CompareInvoiceReport.aspx</DependentUpon>
@@ -401,17 +396,6 @@
     <Content Include="JSLintNet.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="HassanProjectDataSet.xsc">
-      <DependentUpon>HassanProjectDataSet.xsd</DependentUpon>
-    </Content>
-    <None Include="HassanProjectDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>HassanProjectDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="HassanProjectDataSet.xss">
-      <DependentUpon>HassanProjectDataSet.xsd</DependentUpon>
-    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
