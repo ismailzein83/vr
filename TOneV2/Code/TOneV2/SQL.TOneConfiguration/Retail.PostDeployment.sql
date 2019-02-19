@@ -177,7 +177,10 @@ as (select * from (values
 ('E70468BE-4793-466B-9B83-BAF2535D64D2','Network Elements'		,null,'E73C4ABA-FD03-4137-B047-F3FB4F7EED03',null,4,0),
 
 ('AD9EEB65-70A3-4F57-B261-79F40D541E23','Business CRM'			,null,null,'/images/menu-icons/plug.png',20,1),
-('66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Pricing Management'	,null,null,'/images/menu-icons/Sale Area.png',30,1)
+('66F2DD29-5EAF-4AEE-97C7-A5FD9CCAD47B','Pricing Management'	,null,null,'/images/menu-icons/Sale Area.png',30,1),
+('7C025B42-ABCE-45A9-A429-0B197E3743DE','Revenue Audit',null,null,null,2,0),
+('C497B8A0-8608-4C3A-8CF3-0BE92263C8E0','Traffic Monitor',null,null,null,3,0),
+('F1474322-B883-4859-8439-70CD53ECD28B','Taxes Management',null,null,null,4,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

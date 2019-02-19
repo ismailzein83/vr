@@ -233,3 +233,27 @@ when matched then
 when not matched by target then
 	insert([ID],[UserID],[Name],[AccessType],[Settings])
 	values(s.[ID],s.[UserID],s.[Name],s.[AccessType],s.[Settings]);
+
+
+--[Sec].[View]--------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('0ECEF634-A524-44D7-B72D-95ABC3707DD5','Subscribers','Subscribers',null,'AD9EEB65-70A3-4F57-B261-79F40D541E23',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"5f8af839-22bb-4c1a-92a4-79817ec15126"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',null,null),
+('FCC3CBF3-4483-4C25-B2E7-A0A8CA87327D','Traffic Monitor Voice','RA Retail Traffic Monitor Voice',null,'C497B8A0-8608-4C3A-8CF3-0BE92263C8E0',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"12d7701c-8d12-41ea-89af-110c03a31952"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',2,null),
+('4B94ED9D-C2BB-481C-B6D8-D1C9924358B0','On-net Declarations','On-net Declarations',null,'6E5EAAA7-DE32-4422-BE38-DA6E9F30E8D8',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"b4a7a7f9-8912-40a5-a985-73a44bdf82bc"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',null,null),
+('050473A0-2D28-4DD2-A5A1-EFEF513F91A8','Reconsiliation','Reconsiliation',null,'7C025B42-ABCE-45A9-A429-0B197E3743DE',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"53d54b3a-3653-4142-bf53-2837a7c2560c"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',2,null),
+('D063FBA2-4ABC-4122-A43E-D37864087E1D','Taxation','Taxation',null,'F1474322-B883-4859-8439-70CD53ECD28B',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"f271e18c-f49d-4d19-8db0-e5970981d29f"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',2,null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
+merge	[Sec].[View] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+update set
+[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank],[IsDeleted] = s.[IsDeleted]
+when not matched by target then
+insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
+values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
