@@ -201,6 +201,7 @@
     <Content Include="WhS_Invoice\Constants\ComparisonResultEnum.js" />
     <Content Include="WhS_Invoice\Constants\InvoiceTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="WhS_Invoice\Constants\ModuleTypeEnum.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\IncludedInvoicesInSettlementEditorCotroller.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\IncludedInvoicesInSettlementEditor.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\SettlementGenerationCustomSectionTemplate.html" />
@@ -215,10 +216,16 @@
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\whs-invoicetype-gridactionsettings-compare.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\Templates\PartnerConditionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-partner.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGridActionFilterCondition\Templates\ModuleTypeConditionTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGridActionFilterCondition\whs-invoicetype-invoicefiltercondition-moduletype.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceSubSectionFilter\Templates\SMSInvoiceSubSectionFilterTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceSubSectionFilter\Templates\VoiceInvoiceSubSectionFilterTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceSubSectionFilter\whs-invoicetype-invoicesubsectionfilter-sms.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceSubSectionFilter\whs-invoicetype-invoicesubsectionfilter-voice.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceUIGridColumnFilter\Templates\SMSInvoiceUIGridColumnFilterTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceUIGridColumnFilter\Templates\VoiceInvoiceUIGridColumnFilterTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceUIGridColumnFilter\whs-invoicetype-invoiceuigridcolumnfilter-sms.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceUIGridColumnFilter\whs-invoicetype-invoiceuigridcolumnfilter-voice.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SettlementInvoice\Templates\SettlementInvoiceSettingsDefinitionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SettlementInvoice\whs-invoicetype-definition-settlementinvoicesettings.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SupplierInvoice\Templates\SupplierInvoiceSettingsDefinitionTemplate.html" />

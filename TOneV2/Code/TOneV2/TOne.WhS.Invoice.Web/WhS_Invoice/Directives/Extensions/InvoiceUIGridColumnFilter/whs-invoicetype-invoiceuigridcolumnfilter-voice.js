@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("whsInvoicetypeInvoicesubsectionfilterVoice", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("whsInvoicetypeInvoiceuigridcolumnfilterVoice", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("whsInvoicetypeInvoicesubsectionfilterVoice", ["UtilsService", "VR
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new VoiceInvoiceSubsectionFilter($scope, ctrl, $attrs);
+                var ctor = new VoiceInvoiceUIGridColumnFilter($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("whsInvoicetypeInvoicesubsectionfilterVoice", ["UtilsService", "VR
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/WhS_Invoice/Directives/Extensions/InvoiceSubSectionFilter/Templates/VoiceInvoiceSubSectionFilterTemplate.html"
+            templateUrl: "/Client/Modules/WhS_Invoice/Directives/Extensions/InvoiceUIGridColumnFilter/Templates/VoiceInvoiceUIGridColumnFilterTemplate.html"
 
         };
 
-        function VoiceInvoiceSubsectionFilter($scope, ctrl, $attrs) {
+        function VoiceInvoiceUIGridColumnFilter($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -45,7 +45,7 @@ app.directive("whsInvoicetypeInvoicesubsectionfilterVoice", ["UtilsService", "VR
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Invoice.Business.Extensions.VoiceInvoiceSubSectionFilter, TOne.WhS.Invoice.Business"
+                        $type: "TOne.WhS.Invoice.Business.Extensions.VoiceInvoiceUIGridColumnFilter, TOne.WhS.Invoice.Business"
                     };
                 };
 
