@@ -36,7 +36,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "Retail.RA.Business.OnNetOperatorDeclarationServicesCustomObjectTypeSettings, Retail.RA.Business"
+                        $type: "Retail.RA.Business.OnNetOperatorDeclarationCustomObjectTypeSettings, Retail.RA.Business"
                     };
                     return data;
                 };

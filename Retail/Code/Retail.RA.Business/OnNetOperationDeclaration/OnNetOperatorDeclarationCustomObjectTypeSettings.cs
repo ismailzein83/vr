@@ -9,7 +9,7 @@ namespace Retail.RA.Business
 {
     public class OnNetOperatorDeclarationCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
-        public override Guid ConfigId { get { return new Guid("F346DF80-B265-4D6B-9A75-687F32B5297B"); } }
+        public override Guid ConfigId { get { return new Guid("4e4c7ea3-943b-44cc-a635-d27bf5f088d6"); } }
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
