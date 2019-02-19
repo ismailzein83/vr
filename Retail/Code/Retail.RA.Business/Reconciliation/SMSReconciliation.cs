@@ -222,7 +222,7 @@ namespace Retail.RA.Business
             var analyticManager = new AnalyticManager();
             AnalyticQuery analyticQuery = new AnalyticQuery
             {
-                TableId = Guid.Parse("9ce5c4be-13f3-4830-948f-c7b18753b66d"),
+                TableId = Guid.Parse("193CB09A-1817-42FB-B0A1-9317F05391C0"),
                 MeasureFields = new List<string> { "Revenue", "NumberOfSMSs" },
                 DimensionFields = new List<string> { "Operator", "Period", "TrafficDirection" },
                 FromTime = Utilities.Min(minDate, query.FromTime),
