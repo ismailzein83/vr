@@ -7,7 +7,7 @@ using Vanrise.Common;
 
 namespace Retail.RA.Business
 {
-    public class OnNetOperatorDeclarationServicesCustomObjectTypeSettings : FieldCustomObjectTypeSettings
+    public class OnNetOperatorDeclarationCustomObjectTypeSettings : FieldCustomObjectTypeSettings
     {
         public override Guid ConfigId { get { return new Guid("F346DF80-B265-4D6B-9A75-687F32B5297B"); } }
 
