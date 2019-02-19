@@ -109,7 +109,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                                         foreach(var region in market.Regions)
                                         {
                                             var row = excelTable.CreateDataRow();
-                                            CreateCell(string.Format("{0}{1}",reportData.CarrierAccountId.ToString(), reportData.CarrierAccountName), row, cellStyle1);
+                                            CreateCell(string.Format("{0}", reportData.CarrierAccountName), row, cellStyle1);
                                             CreateCell(reportData.Duration.ToString(), row, cellStyle1);
                                             CreateCell(reportData.Amount1.ToString(), row, cellStyle1);
 
@@ -134,6 +134,10 @@ namespace TOne.WhS.Jazz.BP.Activities
                         }
                     }
                 }
+            }
+            else
+            {
+                excelFile.CreateSheet();
             }
 
             var file = excelFile.GenerateExcelFile();

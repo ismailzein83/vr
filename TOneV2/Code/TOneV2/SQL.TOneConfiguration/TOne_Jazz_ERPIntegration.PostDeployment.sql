@@ -102,7 +102,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('081A5738-6BFB-41B1-91E3-052EC02DEE4B','Jazz Config',null,null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,20,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}')
+('081A5738-6BFB-41B1-91E3-052EC02DEE4B','ERP Integration',null,null,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,20,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings]))
 merge  [sec].[Module] as t
