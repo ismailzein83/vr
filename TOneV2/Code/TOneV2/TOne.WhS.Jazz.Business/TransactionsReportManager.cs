@@ -46,21 +46,42 @@ namespace TOne.WhS.Jazz.Business
 
                             if (transactionsReportData.Value != null && transactionsReportData.Value.Count > 0)
                             {
-                                var excelTable = excelSheet.CreateTable(0, 0);
-                                var title = excelTable.CreateHeaderRow();
-                                CreateCell(report.SheetName, title);
+                                var excelTable = excelSheet.CreateTable(1, 0);
+
+                                VRExcelTableRowCellStyle cellStyle1 = new VRExcelTableRowCellStyle
+                                {
+                                    VerticalAlignment = VRExcelContainerVerticalAlignment.Center,
+                                    HorizontalAlignment = VRExcelContainerHorizontalAlignment.Center
+                                };
+                                VRExcelTableRowCellStyle cellStyle2 = new VRExcelTableRowCellStyle
+                                {
+                                    VerticalAlignment = VRExcelContainerVerticalAlignment.Center
+                                };
+                                VRExcelCell titleCell = new VRExcelCell
+                                {
+                                    Value = report.SheetName,
+                                    RowIndex = 0,
+                                    ColumnIndex = 0,
+                                    Style = new VRExcelCellStyle
+                                    {
+                                        HorizontalAlignment = VRExcelContainerHorizontalAlignment.Center
+                                    }
+                                };
+                                titleCell.MergeCells(4, 1);
+                                excelSheet.AddCell(titleCell);
+
                                 var headerRow = excelTable.CreateHeaderRow();
-                                CreateCell("Transaction Code", headerRow);
-                                CreateCell("Transaction Description", headerRow);
-                                CreateCell("Credit", headerRow);
-                                CreateCell("Debit", headerRow);
+                                CreateCell("Transaction Code", headerRow, cellStyle2);
+                                CreateCell("Transaction Description", headerRow, cellStyle2);
+                                CreateCell("Credit", headerRow, cellStyle2);
+                                CreateCell("Debit", headerRow, cellStyle2);
                                 foreach (var transactionReportData in transactionsReportData.Value)
                                 {
                                     var row = excelTable.CreateDataRow();
-                                    CreateCell(transactionReportData.TransactionCode, row);
-                                    CreateCell(transactionReportData.TransationDescription, row);
-                                    CreateCell(transactionReportData.Credit.ToString(), row);
-                                    CreateCell(transactionReportData.Debit.ToString(), row);
+                                    CreateCell(transactionReportData.TransactionCode, row, cellStyle2);
+                                    CreateCell(transactionReportData.TransationDescription, row, cellStyle2);
+                                    CreateCell(transactionReportData.Credit.ToString(), row, cellStyle2);
+                                    CreateCell(transactionReportData.Debit.ToString(), row, cellStyle2);
                                 }
                             }
                         }
@@ -79,10 +100,13 @@ namespace TOne.WhS.Jazz.Business
 
             return excelFile.GenerateExcelFile();
         }
-        private void CreateCell(string cellValue, VRExcelTableRow row)
+        private void CreateCell(string cellValue, VRExcelTableRow row, VRExcelTableRowCellStyle cellStyle)
         {
             var cell = row.CreateCell();
             cell.SetValue(cellValue);
+            var style = cell.CreateStyle();
+            style.VerticalAlignment = cellStyle.VerticalAlignment;
+            style.HorizontalAlignment = cellStyle.HorizontalAlignment;
         }
     }
 }

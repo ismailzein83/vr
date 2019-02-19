@@ -17,6 +17,7 @@ namespace Vanrise.Common.Excel
         List<VRExcelTableFooterRow> _tableFooterRows;
         bool _autoMergeHeader;
         bool _enableTableBorders;
+        bool _autoRowVerticalMerge;
 
         public VRExcelTable(int startingRowIndex, int startingColumnIndex)
         {
@@ -29,6 +30,10 @@ namespace Vanrise.Common.Excel
         public void EnableMergeHeaders()
         {
             _autoMergeHeader = true;
+        }
+        public void EnableRowVerticalMerge()
+        {
+            _autoRowVerticalMerge = true;
         }
         public void EnableTableBorders()
         {
@@ -73,6 +78,9 @@ namespace Vanrise.Common.Excel
                     tableDataRow.GenerateRow(worksheet, currentRowIndex, _startingColumnIndex, _autoMergeHeader, parentRowInfo, _enableTableBorders);
                     currentRowIndex++;
                 }
+                if (_autoRowVerticalMerge)
+                    ApplyColumnMerge(worksheet, _startingRowIndex + _tableHeaderRows.Count, _tableDataRows);
+
             }
             if (_tableFooterRows != null && _tableFooterRows.Count > 0)
             {
@@ -84,6 +92,88 @@ namespace Vanrise.Common.Excel
                 }
             }
         }
+
+        protected void ApplyColumnMerge<T>(Worksheet worksheet, int startRowIndex,List<T> tableRows) where T: VRExcelTableRow
+        {
+            VRExcelTableGeneratedColumnInfo parentColumnInfo = null;
+            var tableRowCellsCount = tableRows[0].GetTableRowCellsCount();
+
+            if (tableRowCellsCount > 0)
+            {
+                for (var i = 0; i < tableRowCellsCount; i++)
+                {
+                    if (parentColumnInfo != null)
+                    {
+                        if (parentColumnInfo.MergeInfo != null && parentColumnInfo.MergeInfo.Count > 0)
+                        {
+                            var mergeInfo = new List<VRExcelTableCellMergeRange>();
+                            foreach (var mergeItem in parentColumnInfo.MergeInfo)
+                            {
+                                mergeInfo.AddRange(MergeColumn(worksheet, i, startRowIndex, mergeItem.StartIndex, mergeItem.EndIndex, tableRows, tableRowCellsCount));
+                            }
+                            parentColumnInfo.MergeInfo = mergeInfo;
+                        }
+
+                    }
+                    else
+                    {
+                        parentColumnInfo = new VRExcelTableGeneratedColumnInfo();
+                        parentColumnInfo.MergeInfo = MergeColumn(worksheet, i, startRowIndex, 0, tableRows.Count - 1, tableRows, tableRowCellsCount);
+                    }
+
+                }
+            }
+        }
+        private List<VRExcelTableCellMergeRange> MergeColumn<T>(Worksheet worksheet, int columnIndex, int startRowIndex, int startIndex, int endIndex, List<T> tableRows,int tableRowCellsCount) where T: VRExcelTableRow
+        {
+            var mergeInfo = new List<VRExcelTableCellMergeRange>();
+            VRExcelTableCellMergeRange vrExcelTableCellMergeRange = null;
+            VRExcelTableRowCell preTableColumnCell = null;
+            for (var i = startIndex; i <= endIndex; i++)
+            {
+
+                    var tableRowCell = tableRows[i].GetTableRowCellValue(columnIndex);
+
+                    if (preTableColumnCell == null)
+                    {
+                        vrExcelTableCellMergeRange = new VRExcelTableCellMergeRange
+                        {
+                            StartIndex = i,
+                            EndIndex = i
+                        };
+                    }
+                    else
+                    {
+                        if (tableRowCell.ValueEquals(preTableColumnCell.GetValue()))
+                        {
+                            vrExcelTableCellMergeRange.EndIndex++;
+                        }
+                        else
+                        {
+                            if (vrExcelTableCellMergeRange.StartIndex != vrExcelTableCellMergeRange.EndIndex)
+                            {
+                                worksheet.Cells.Merge(vrExcelTableCellMergeRange.StartIndex + startRowIndex, columnIndex, (vrExcelTableCellMergeRange.EndIndex - vrExcelTableCellMergeRange.StartIndex + 1), 1);
+                                mergeInfo.Add(vrExcelTableCellMergeRange);
+                            }
+                            vrExcelTableCellMergeRange = new VRExcelTableCellMergeRange
+                            {
+                                StartIndex = i,
+                                EndIndex = i
+                            };
+                        }
+                    }
+                    preTableColumnCell = tableRowCell;
+            }
+            if (vrExcelTableCellMergeRange != null)
+            {
+                if (vrExcelTableCellMergeRange.StartIndex != vrExcelTableCellMergeRange.EndIndex)
+                {
+                    worksheet.Cells.Merge(vrExcelTableCellMergeRange.StartIndex + startRowIndex, columnIndex, (vrExcelTableCellMergeRange.EndIndex - vrExcelTableCellMergeRange.StartIndex + 1), 1);
+                    mergeInfo.Add(vrExcelTableCellMergeRange);
+                }
+            }
+            return mergeInfo;
+        }
     }
     public class VRExcelTableCellMergeRange
     {
@@ -91,6 +181,10 @@ namespace Vanrise.Common.Excel
         public int EndIndex { get; set; }
     }
     public class VRExcelTableGeneratedRowInfo
+    {
+        public List<VRExcelTableCellMergeRange> MergeInfo { get; set; }
+    }
+    public class VRExcelTableGeneratedColumnInfo
     {
         public List<VRExcelTableCellMergeRange> MergeInfo { get; set; }
     }
@@ -207,8 +301,22 @@ namespace Vanrise.Common.Excel
             }
             return mergeInfo;
         }
+        internal int GetTableRowCellsCount()
+        {
+            if (_tableRowCells!=null)
+                return this._tableRowCells.Count;
+            return 0;
+        }
+        internal VRExcelTableRowCell GetTableRowCellValue(int columnIndex)
+        {
+            if (this._tableRowCells != null)
+                return _tableRowCells[columnIndex];
+            return null;
+        }
 
     }
+
+
     public class VRExcelTableHeaderRow : VRExcelTableRow
     {
     }
@@ -299,6 +407,22 @@ namespace Vanrise.Common.Excel
                         break;
                 }
             }
+
+            if (styleSetting.VerticalAlignment.HasValue)
+            {
+                switch (styleSetting.VerticalAlignment.Value)
+                {
+                    case VRExcelContainerVerticalAlignment.Top:
+                        style.VerticalAlignment = TextAlignmentType.Top;
+                        break;
+                    case VRExcelContainerVerticalAlignment.Center:
+                        style.VerticalAlignment = TextAlignmentType.Center;
+                        break;
+                    case VRExcelContainerVerticalAlignment.Bottom:
+                        style.VerticalAlignment = TextAlignmentType.Bottom;
+                        break;
+                }
+            }
             if (!string.IsNullOrEmpty(styleSetting.BGColor))
                 style.ForegroundColor = ColorTranslator.FromHtml(styleSetting.BGColor);
             style.Pattern = BackgroundType.Solid;
@@ -317,6 +441,7 @@ namespace Vanrise.Common.Excel
             styleFlag.Font = true;
             styleFlag.Borders = true;
             styleFlag.HorizontalAlignment = true;
+            styleFlag.VerticalAlignment = _style.VerticalAlignment.HasValue;
             return styleFlag;
         }
 

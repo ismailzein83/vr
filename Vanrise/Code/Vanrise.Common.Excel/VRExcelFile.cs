@@ -56,10 +56,15 @@ namespace Vanrise.Common.Excel
                 {
                     Cell cell = templateSheet.Cells[sheetCell.RowIndex, sheetCell.ColumnIndex];
                     cell.PutValue(sheetCell.Value);
+                    
+                    if(sheetCell.EndRowIndex.HasValue && sheetCell.EndColumnIndex.HasValue)
+                    {
+                        templateSheet.Cells.Merge(sheetCell.RowIndex, sheetCell.ColumnIndex, sheetCell.EndRowIndex.Value - sheetCell.RowIndex, sheetCell.EndColumnIndex.Value - sheetCell.ColumnIndex);
+                    }
                     if (sheetCell.Style != null)
                     {
                         var style = BuildSheetContainerCommonConfigs(sheetCell.Style, excelTemplate);
-                        var styleFlag = BuildSheetContainerCommonConfigs();
+                        var styleFlag = BuildSheetContainerCommonConfigs(sheetCell.Style);
                         cell.SetStyle(style, styleFlag);
                     }
                 }
@@ -118,7 +123,7 @@ namespace Vanrise.Common.Excel
                 if (config.RowHeight.HasValue)
                     row.Height = config.RowHeight.Value;
                 var style = BuildSheetContainerCommonConfigs(config, excelTemplate);
-                var styleFlag = BuildSheetContainerCommonConfigs();
+                var styleFlag = BuildSheetContainerCommonConfigs(config);
                 row.ApplyStyle(style, styleFlag);
             }
 
@@ -133,7 +138,7 @@ namespace Vanrise.Common.Excel
                 if (config.ColumnWidth.HasValue)
                     Column.Width = config.ColumnWidth.Value;
                 var style = BuildSheetContainerCommonConfigs(config, excelTemplate);
-                var styleFlag = BuildSheetContainerCommonConfigs();
+                var styleFlag = BuildSheetContainerCommonConfigs(config);
                 Column.ApplyStyle(style, styleFlag);
             }
 
@@ -164,21 +169,21 @@ namespace Vanrise.Common.Excel
                         break;
                 }
             }
-            //if (config.VerticalAlignment.HasValue)
-            //{
-            //    switch (config.VerticalAlignment.Value)
-            //    {
-            //        case VRExcelContainerVerticalAlignment.Left:
-            //            style.VerticalAlignment = TextAlignmentType.Left;
-            //            break;
-            //        case VRExcelContainerVerticalAlignment.Center:
-            //            style.VerticalAlignment = TextAlignmentType.Center;
-            //            break;
-            //        case VRExcelContainerVerticalAlignment.Right:
-            //            style.VerticalAlignment = TextAlignmentType.Right;
-            //            break;
-            //    }
-            //}
+            if (config.VerticalAlignment.HasValue)
+            {
+                switch (config.VerticalAlignment.Value)
+                {
+                    case VRExcelContainerVerticalAlignment.Top:
+                        style.VerticalAlignment = TextAlignmentType.Top;
+                        break;
+                    case VRExcelContainerVerticalAlignment.Center:
+                        style.VerticalAlignment = TextAlignmentType.Center;
+                        break;
+                    case VRExcelContainerVerticalAlignment.Bottom:
+                        style.VerticalAlignment = TextAlignmentType.Bottom;
+                        break;
+                }
+            }
             //if (config.SetBorder == true) 
             //{
             //    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.LightGray); //Border color matching original cell border color
@@ -199,12 +204,14 @@ namespace Vanrise.Common.Excel
             return style;
         }
 
-        StyleFlag BuildSheetContainerCommonConfigs()
+        StyleFlag BuildSheetContainerCommonConfigs<T>(T config)where T: VRExcelContainerConfig
         {
             StyleFlag styleFlag = new StyleFlag();
             styleFlag.All = false;
             styleFlag.Font = true;
             styleFlag.Borders = true;
+            styleFlag.HorizontalAlignment = config.HorizontalAlignment.HasValue;
+            styleFlag.VerticalAlignment = config.VerticalAlignment.HasValue;
             return styleFlag;
         }
 

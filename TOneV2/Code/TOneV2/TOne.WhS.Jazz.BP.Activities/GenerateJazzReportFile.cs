@@ -27,46 +27,73 @@ namespace TOne.WhS.Jazz.BP.Activities
                 {
                     var excelSheet = excelFile.CreateSheet();
                     excelSheet.SheetName = (report.ReportName.Length > 31) ? string.Format("{0}...", report.ReportName.Substring(0, 27)) : report.ReportName;
-                    var excelTable = excelSheet.CreateTable(0,0);
+                    var excelTable = excelSheet.CreateTable(1,0);
 
-                    var title = excelTable.CreateHeaderRow();
-                    CreateCell(report.ReportName, title);
+                    excelTable.EnableRowVerticalMerge();
+                    excelTable.EnableMergeHeaders();
+
+                    VRExcelTableRowCellStyle cellStyle1 = new VRExcelTableRowCellStyle
+                    {
+                        VerticalAlignment=VRExcelContainerVerticalAlignment.Center,
+                        HorizontalAlignment=VRExcelContainerHorizontalAlignment.Center
+                    };
+                    VRExcelTableRowCellStyle cellStyle2 = new VRExcelTableRowCellStyle
+                    {
+                        VerticalAlignment = VRExcelContainerVerticalAlignment.Center
+                    };
+                    VRExcelCell titleCell = new VRExcelCell
+                    {
+                        Value = report.ReportName,
+                        RowIndex = 0,
+                        ColumnIndex = 0,
+                        Style = new VRExcelCellStyle
+                        {
+                            HorizontalAlignment = VRExcelContainerHorizontalAlignment.Center
+                        }
+                    };
+                    titleCell.MergeCells(6 + (report.TaxOption.HasValue ? 1 : 0) + (report.SplitRateValue.HasValue ? 2 : 0), 1);
+                    excelSheet.AddCell(titleCell);
 
                     var headerRow = excelTable.CreateHeaderRow();
+                    headerRow.CreateStyle();
                     if (report.Direction.Equals(ReportDefinitionDirectionEnum.In))
                     {
-                        CreateCell("Customer", headerRow);
+                        CreateCell("Customer", headerRow, cellStyle1);
                     }
                     else
                     {
-                        CreateCell("Supplier", headerRow);
+                        CreateCell("Supplier", headerRow, cellStyle1);
                     }
-                    CreateCell("Duration", headerRow);
+
+                    CreateCell("Duration", headerRow, cellStyle1);
                     if (!report.SplitRateValue.HasValue)
                     {
-                        CreateCell("Amount", headerRow);
+                        CreateCell("Amount", headerRow, cellStyle1);
                     }
                     else
                     {
-                        CreateCell(string.Format("Amount Rate-{0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow);
-                        CreateCell(string.Format("Amount {0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow);
+
+                        CreateCell(string.Format("Amount Rate-{0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
+                        CreateCell(string.Format("Amount {0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
                     }
 
                     if (report.TaxOption.HasValue)
-                        CreateCell("STAX", headerRow);
+                    {
+                        CreateCell("STAX", headerRow, cellStyle1);
+                    }
 
-                    CreateCell("Market", headerRow);
-                    CreateCell("Region", headerRow);
+                    CreateCell("Market", headerRow, cellStyle1);
+                    CreateCell("Region", headerRow, cellStyle1);
 
                     if (!report.SplitRateValue.HasValue)
                     {
-                        CreateCell("Region Value", headerRow);
+                        CreateCell("Region Value", headerRow, cellStyle1);
                     }
 
                     else
                     {
-                        CreateCell(string.Format("Region Value Rate-{0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow);
-                        CreateCell(string.Format("Region Value {0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow);
+                        CreateCell(string.Format("Region Value Rate-{0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
+                        CreateCell(string.Format("Region Value {0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
                     }
               
                     if (report.ReportData!=null && report.ReportData.Count > 0)
@@ -82,22 +109,22 @@ namespace TOne.WhS.Jazz.BP.Activities
                                         foreach(var region in market.Regions)
                                         {
                                             var row = excelTable.CreateDataRow();
-                                            CreateCell(string.Format("{0}{1}",reportData.CarrierAccountId.ToString(), reportData.CarrierAccountName), row);
-                                            CreateCell(reportData.Duration.ToString(), row);
-                                            CreateCell(reportData.Amount1.ToString(), row);
+                                            CreateCell(string.Format("{0}{1}",reportData.CarrierAccountId.ToString(), reportData.CarrierAccountName), row, cellStyle1);
+                                            CreateCell(reportData.Duration.ToString(), row, cellStyle1);
+                                            CreateCell(reportData.Amount1.ToString(), row, cellStyle1);
 
                                             if (report.SplitRateValue.HasValue)
-                                                CreateCell(reportData.Amount2.ToString(), row);
+                                                CreateCell(reportData.Amount2.ToString(), row, cellStyle1);
 
                                             if (report.TaxOption.HasValue)
-                                                CreateCell(reportData.Tax.ToString(), row);
+                                                CreateCell(reportData.Tax.ToString(), row, cellStyle1);
 
-                                            CreateCell(string.Format("{0} {1}%",market.MarketName, market.Percentage), row);
-                                            CreateCell(string.Format("{0} {1}%", region.RegionName, region.Percentage), row);
-                                            CreateCell(region.RegionValue1.ToString(), row);
+                                            CreateCell(string.Format("{0} {1}%",market.MarketName, market.Percentage), row, cellStyle1);
+                                            CreateCell(string.Format("{0} {1}%", region.RegionName, region.Percentage), row, cellStyle1);
+                                            CreateCell(region.RegionValue1.ToString(), row, cellStyle2);
 
                                             if (report.SplitRateValue.HasValue)
-                                                CreateCell(region.RegionValue2.ToString(), row);
+                                                CreateCell(region.RegionValue2.ToString(), row, cellStyle2);
 
                                            
                                         }
@@ -120,10 +147,13 @@ namespace TOne.WhS.Jazz.BP.Activities
             FileId.Set(context, fileId);
 
         }
-        private void CreateCell(string cellValue, VRExcelTableRow row)
+        private void CreateCell(string cellValue, VRExcelTableRow row, VRExcelTableRowCellStyle cellStyle)
         {
             var cell = row.CreateCell();
             cell.SetValue(cellValue);
+            var style = cell.CreateStyle();
+            style.VerticalAlignment = cellStyle.VerticalAlignment;
+            style.HorizontalAlignment = cellStyle.HorizontalAlignment;
         }
     }
 }

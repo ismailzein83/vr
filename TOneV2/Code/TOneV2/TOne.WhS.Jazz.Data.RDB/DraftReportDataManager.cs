@@ -110,7 +110,7 @@ namespace TOne.WhS.Jazz.Data.RDB
 
         private BaseRDBDataProvider GetDataProvider()
         {
-            return RDBDataProviderFactory.CreateProvider("WhS_Jazz", "WhSJAZZERPIntegTransactionDBConnString", "WhSJAZZERPIntegTransactionDBConnString");
+            return RDBDataProviderFactory.CreateProvider("WhS_Jazz", "WhSJAZZERPIntegTransactionDBConnStringKey", "WhSJAZZERPIntegTransactionDBConnString");
         }
         #endregion
 
