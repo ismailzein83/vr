@@ -123,12 +123,12 @@ namespace Retail.RA.Business
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(OnNetOperatorDeclarationServicesCollection);
+            return typeof(OnNetOperatorDeclarationServices);
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            return originalValue as OperatorDeclarationServices;
+            return originalValue as OnNetOperatorDeclarationServices;
         }
 
         public override string GetRuntimeTypeDescription()

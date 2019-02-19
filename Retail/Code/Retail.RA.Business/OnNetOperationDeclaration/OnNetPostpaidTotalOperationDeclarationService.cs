@@ -13,9 +13,9 @@ namespace Retail.RA.Business
         {
             get { return new Guid("69D309FE-A74C-461C-9981-76D8A701F5BE"); }
         }
-        public int TotalNumberOfSubscribers { get; set; }
-        public int TotalMonthlyCharges { get; set; }
-        public int TotalRevenue { get; set; }
+        public int NumberOfSubscribers { get; set; }
+        public decimal MonthlyCharges { get; set; }
+        public decimal Revenue { get; set; }
     }
     public class OnNetPostpaidVoiceOperationDeclarationService : OnNetOperatorDeclarationServiceSettings
     {
@@ -23,10 +23,9 @@ namespace Retail.RA.Business
         {
             get { return new Guid("962EFE0D-0A2A-4CBB-BFD2-EC9D85BBD529"); }
         }
-        public int TotalCalls { get; set; }
-        public int TotalRevenueExcludingBundle { get; set; }
-        public int TotalRevenue { get; set; }
-        public int Duration { get; set; }
+        public int Calls { get; set; }
+        public decimal Revenue { get; set; }
+        public decimal Duration { get; set; }
     }
     public class OnNetPostpaidSMSOperationDeclarationService : OnNetOperatorDeclarationServiceSettings
     {
@@ -34,8 +33,8 @@ namespace Retail.RA.Business
         {
             get { return new Guid("9C5DD4B4-827A-4541-A032-3BAF780557D4"); }
         }
-        public int TotalRevenue { get; set; }
-        public int TotalSMS { get; set; }
+        public decimal Revenue { get; set; }
+        public int SMS { get; set; }
     }
     public class OnNetPrepaidTotalOperationDeclarationService : OnNetOperatorDeclarationServiceSettings
     {
@@ -43,6 +42,9 @@ namespace Retail.RA.Business
         {
             get { return new Guid("DFEBE67A-633A-4736-8B95-873125B703C8"); }
         }
+        public int NumberOfSubscribers { get; set; }
+        public decimal AmountFromTopups { get; set; }
+        public decimal ResidualAmountFromTopups { get; set; }
     }
     public class OnNetPrepaidVoiceOperationDeclarationService : OnNetOperatorDeclarationServiceSettings
     {
@@ -50,6 +52,9 @@ namespace Retail.RA.Business
         {
             get { return new Guid("3B02F297-DDF9-440C-A2DF-95D349F46DF4"); }
         }
+        public int Calls { get; set; }
+        public decimal Revenue { get; set; }
+        public decimal Duration { get; set; }
     }
     public class OnNetPrepaidSMSOperationDeclarationService : OnNetOperatorDeclarationServiceSettings
     {
@@ -57,6 +62,8 @@ namespace Retail.RA.Business
         {
             get { return new Guid("AC62ADF8-DFB8-4A72-B072-9CB12DC6E197"); }
         }
+        public decimal Revenue { get; set; }
+        public int SMS { get; set; }
     }
 
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace Retail.RA.Entities.OnNetOperationDeclaration
+namespace Retail.RA.Entities
 {
     public class OnNetOperatorDirectionServicesMappedCellExtensionConfiguration : ExtensionConfiguration
     {

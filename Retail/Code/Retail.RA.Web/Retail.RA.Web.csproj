@@ -84,7 +84,21 @@
     <Content Include="Retail_RA\Directives\DisputeManagement\Templates\DisputeSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\Extensions\INTL\retail-ra-intl-businessobject-dataprovidersettings.js" />
     <Content Include="Retail_RA\Directives\Extensions\INTL\Templates\INTLBusinessObjectDataProviderSettingsTemplate.html" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\retail-ra-onnetoperatordeclarationservice-postpaidsms.js" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\retail-ra-onnetoperatordeclarationservice-postpaidtotal.js" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\retail-ra-onnetoperatordeclarationservice-postpaidvoice.js" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\retail-ra-onnetoperatordeclarationservice-prepaidsms.js" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\retail-ra-onnetoperatordeclarationservice-prepaidtotal.js" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\retail-ra-onnetoperatordeclarationservice-prepaidvoice.js" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\Templates\OnNetOperatorDeclarationServicePostpaidSMSTemplate.html" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\Templates\OnNetOperatorDeclarationServicePostpaidtotalTemplate.html" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\Templates\OnNetOperatorDeclarationServicePostpaidVoiceTemplate.html" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\Templates\OnNetOperatorDeclarationServicePrepaidSMSTemplate.html" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\Templates\OnNetOperatorDeclarationServicePrepaidTotalTemplate.html" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\MainExtensions\Templates\OnNetOperatorDeclarationServicePrepaidVoiceTemplate.html" />
     <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\retail-ra-onnetoperatordeclaration-customobjectsettings.js" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\retail-ra-onnetoperatordeclarationservice.js" />
+    <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\Templates\OnNetOperationDirectionServicesTemplate.html" />
     <Content Include="Retail_RA\Directives\OnNetOperatorDeclaration\Templates\OnNetOperatorDirectionCustomObjectSettingsTemplate.html" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\retail-ra-operatordeclarationservice-sms.js" />
     <Content Include="Retail_RA\Directives\OperatorDeclaration\MainExtensions\retail-ra-operatordeclarationservice-voice.js" />
@@ -136,12 +150,14 @@
     <Content Include="Retail_RA\Directives\TimePeriod\ra-timeperiod-lastyearperiod.js" />
     <Content Include="Retail_RA\Directives\TimePeriod\Templates\LastPeriodTemplate.html" />
     <Content Include="Retail_RA\Directives\TimePeriod\Templates\LastYearPeriodTemplate.html" />
+    <Content Include="Retail_RA\Services\APIServices\OnNetOperatorDirectionServicesAPIService.js" />
     <Content Include="Retail_RA\Services\APIServices\OperatorDirectionServicesAPIService.js" />
     <Content Include="Retail_RA\Services\APIServices\TaxRuleAPIService.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controller\RAOnNetOperatorDirectionServicesController.cs" />
     <Compile Include="Controller\RAOperatorDirectionServicesController.cs" />
     <Compile Include="Controller\RaRulesController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
