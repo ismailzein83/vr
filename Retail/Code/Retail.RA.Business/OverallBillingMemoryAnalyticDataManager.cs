@@ -602,7 +602,7 @@ namespace Retail.RA.Business
             rawMemoryRecord.FieldValues.Add("TrafficDirection", overallBillingRecord.TrafficDirection);
             rawMemoryRecord.FieldValues.Add("Income", overallBillingRecord.Income);
 
-            rawMemoryRecord.FieldValues.Add("CalculatedNumberOfSMS", overallBillingRecord.CalculatedDurationInMin);
+            rawMemoryRecord.FieldValues.Add("CalculatedDurationInMin", overallBillingRecord.CalculatedDurationInMin);
             rawMemoryRecord.FieldValues.Add("CalculatedNumberOfCDR", overallBillingRecord.CalculatedNumberOfCDR);
             rawMemoryRecord.FieldValues.Add("CalculatedNumberOfSMS", overallBillingRecord.CalculatedNumberOfSMS);
             rawMemoryRecord.FieldValues.Add("CalculatedRevenue", overallBillingRecord.CalculatedRevenue);
@@ -611,7 +611,7 @@ namespace Retail.RA.Business
             rawMemoryRecord.FieldValues.Add("DeclaredNumberOfCDR", overallBillingRecord.DeclaredNumberOfCDR);
             rawMemoryRecord.FieldValues.Add("DeclaredNumberOfSMS", overallBillingRecord.DeclaredNumberOfSMS);
             rawMemoryRecord.FieldValues.Add("DeclaredRevenue", overallBillingRecord.DeclaredRevenue);
-
+                       
             return rawMemoryRecord;
         }
 
