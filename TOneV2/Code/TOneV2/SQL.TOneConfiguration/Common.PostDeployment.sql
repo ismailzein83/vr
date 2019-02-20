@@ -254,9 +254,18 @@ as (select * from (values
 
 ('6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C','Billing Management'		,null,null,'/Client/Images/menu-icons/billing.png',70,0),
 
+('0AAA7D9E-EE0B-4AA6-8AA1-F03E2379D811','Voice'						,null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,5,0),
+('9ADD9AC2-D329-4834-BDEA-BA87C26C2A1D','SMS'						,null,'6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C',null,10,0),
+
 ('1C7569FA-43C9-4853-AE4C-1152746A34FD','Rules'						,null,null,'/Client/Images/menu-icons/rules.png',75,0),
 
-('EB303A61-929A-4D33-BF50-18F40308BC86','Reports & Dashboards'		,null,null,'/Client/Images/menu-icons/busines intel.png',95,1)
+('D2899D41-A6DB-4E5B-9C28-9FA69E74AAE2','Voice'						,null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,5,0),
+('75C29F78-49B1-4968-9C4A-6233461C6897','SMS'						,null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,10,0),
+
+('EB303A61-929A-4D33-BF50-18F40308BC86','Reports & Dashboards'		,null,null,'/Client/Images/menu-icons/busines intel.png',95,1),
+
+('C33B407D-476E-4779-83F8-5F88CA1A4DF3','Voice'						,null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,5,0),
+('3B6E324F-4F1F-417A-AB60-963D4856B4CC','SMS'						,null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,10,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t

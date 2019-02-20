@@ -948,6 +948,7 @@
     <None Include="TOne_SMS.PostDeployment.sql" />
     <None Include="ProbesAnalytics.PostDeployment.sql" />
     <None Include="Retail_RecordAnalysis.PostDeployment.sql" />
+    <None Include="TOne_VoiceSMSPostFix.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
