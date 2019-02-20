@@ -31,6 +31,11 @@ namespace Vanrise.Common.Business
             }
         }
 
+        public Decimal ConvertValueToSystemCurrency(decimal value, int fromCurrencyId, DateTime effectiveOn)
+        {
+            return ConvertValueToCurrency(value, fromCurrencyId, new ConfigManager().GetSystemCurrencyId(), effectiveOn);
+        }
+
         public Decimal ConvertValueToCurrency(decimal value, int fromCurrencyId, int toCurrencyId, DateTime effectiveOn)
         {
             if (fromCurrencyId == toCurrencyId)
