@@ -9,9 +9,11 @@
     [CreatedTime]      DATETIME       CONSTRAINT [DF_CarrierProfile_CreatedTime] DEFAULT (getdate()) NULL,
     [CreatedBy]        INT            NULL,
     [LastModifiedBy]   INT            NULL,
-    [LastModifiedTime] DATETIME       NULL,
+    [LastModifiedTime] DATETIME       CONSTRAINT [DF_CarrierProfile_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_CarrierProfile] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

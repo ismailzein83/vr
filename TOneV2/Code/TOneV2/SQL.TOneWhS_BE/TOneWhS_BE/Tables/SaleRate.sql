@@ -9,12 +9,15 @@
     [EED]              DATETIME        NULL,
     [timestamp]        ROWVERSION      NULL,
     [SourceID]         VARCHAR (50)    NULL,
-    [Change]           TINYINT         NULL,
-    [LastModifiedTime] DATETIME        NULL,
+    [Change]           INT             NULL,
+    [LastModifiedTime] DATETIME        CONSTRAINT [DF_SaleRate_LastModifiedTime] DEFAULT (getdate()) NULL,
+    [CreatedTime]      DATETIME        CONSTRAINT [DF_SaleRate_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_SaleRate] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SaleRate_SalePriceList] FOREIGN KEY ([PriceListID]) REFERENCES [TOneWhS_BE].[SalePriceList] ([ID]),
     CONSTRAINT [FK_SaleRate_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SaleZone] ([ID])
 );
+
+
 
 
 

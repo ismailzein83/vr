@@ -9,10 +9,13 @@
     [EED]                  DATETIME      NULL,
     [SourceID]             VARCHAR (50)  NULL,
     [timestamp]            ROWVERSION    NULL,
-    [LastModifiedTime]     DATETIME      NULL,
+    [LastModifiedTime]     DATETIME      CONSTRAINT [DF_SupplierZoneService_LastModifiedTime] DEFAULT (getdate()) NULL,
+    [CreatedTime]          DATETIME      CONSTRAINT [DF_SupplierZoneService_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_SupplierZoneService] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SupplierZoneService_SupplierZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SupplierZone] ([ID])
 );
+
+
 
 
 

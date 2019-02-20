@@ -8,13 +8,15 @@
     [CountryID]           INT             NOT NULL,
     [ZoneName]            NVARCHAR (150)  NOT NULL,
     [ZoneID]              BIGINT          NULL,
-    [Change]              TINYINT         NULL,
+    [Change]              INT             NULL,
     [ProcessInstanceID]   INT             NULL,
     [BED]                 DATETIME        NOT NULL,
     [EED]                 DATETIME        NULL,
     [RoutingProductID]    INT             NULL,
     [CurrencyID]          INT             NULL
 );
+
+
 
 
 

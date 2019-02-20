@@ -8,9 +8,12 @@
     [SourceID]         VARCHAR (50)   NULL,
     [timestamp]        ROWVERSION     NULL,
     [LastModifiedTime] DATETIME       CONSTRAINT [DF_SaleEntityService_LastModifiedTime] DEFAULT (getdate()) NULL,
+    [CreatedTime]      DATETIME       CONSTRAINT [DF_SaleEntityService_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_SaleZoneService] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SaleZoneService_SaleZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SaleZone] ([ID])
 );
+
+
 
 
 

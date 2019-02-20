@@ -10,9 +10,11 @@
     [timestamp]                    ROWVERSION       NULL,
     [CreatedBy]                    INT              NULL,
     [LastModifiedBy]               INT              NULL,
-    [LastModifiedTime]             DATETIME         NULL,
+    [LastModifiedTime]             DATETIME         CONSTRAINT [DF_FinancialAccount_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_FinancialAccount] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

@@ -1,9 +1,13 @@
 ﻿CREATE TABLE [TOneWhS_BE].[SalePricelistCustomerChange] (
-    [BatchID]     INT NULL,
-    [PricelistID] INT NULL,
-    [CountryID]   INT NULL,
-    [CustomerID]  INT NULL
+    [BatchID]          INT      NULL,
+    [PricelistID]      INT      NULL,
+    [CountryID]        INT      NULL,
+    [CustomerID]       INT      NULL,
+    [LastModifiedTime] DATETIME CONSTRAINT [DF_SalePricelistCustomerChange_LastModifiedTime] DEFAULT (getdate()) NULL,
+    [CreatedTime]      DATETIME CONSTRAINT [DF_SalePricelistCustomerChange_CreatedTime] DEFAULT (getdate()) NULL
 );
+
+
 
 
 

@@ -8,10 +8,13 @@
     [timestamp]           ROWVERSION     NULL,
     [SourceID]            VARCHAR (50)   NULL,
     [ProcessInstanceID]   BIGINT         NULL,
-    [LastModifiedTime]    DATETIME       NULL,
+    [LastModifiedTime]    DATETIME       CONSTRAINT [DF_SaleZone_LastModifiedTime] DEFAULT (getdate()) NULL,
+    [CreatedTime]         DATETIME       CONSTRAINT [DF_SaleZone_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_SaleZone] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SaleZone_SellingNumberPlan] FOREIGN KEY ([SellingNumberPlanID]) REFERENCES [TOneWhS_BE].[SellingNumberPlan] ([ID])
 );
+
+
 
 
 

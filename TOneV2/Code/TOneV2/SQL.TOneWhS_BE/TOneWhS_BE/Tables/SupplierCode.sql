@@ -7,11 +7,14 @@
     [EED]              DATETIME     NULL,
     [timestamp]        ROWVERSION   NULL,
     [SourceID]         VARCHAR (50) NULL,
-    [LastModifiedTime] DATETIME     NULL,
+    [LastModifiedTime] DATETIME     CONSTRAINT [DF_SupplierCode_LastModifiedTime] DEFAULT (getdate()) NULL,
+    [CreatedTime]      DATETIME     CONSTRAINT [DF_SupplierCode_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [FK_SupplierCode_CodeGroup] FOREIGN KEY ([CodeGroupID]) REFERENCES [TOneWhS_BE].[CodeGroup] ([ID]),
     CONSTRAINT [FK_SupplierCode_SupplierZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SupplierZone] ([ID]),
     CONSTRAINT [IX_SupplierCode_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

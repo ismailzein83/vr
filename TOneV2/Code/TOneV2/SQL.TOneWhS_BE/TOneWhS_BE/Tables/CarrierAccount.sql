@@ -15,12 +15,14 @@
     [CreatedTime]            DATETIME       CONSTRAINT [DF_CarrierAccount_CreatedTime] DEFAULT (getdate()) NULL,
     [CreatedBy]              INT            NULL,
     [LastModifiedBy]         INT            NULL,
-    [LastModifiedTime]       DATETIME       NULL,
+    [LastModifiedTime]       DATETIME       CONSTRAINT [DF_CarrierAccount_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_CarrierAccount_CarrierProfile] FOREIGN KEY ([CarrierProfileID]) REFERENCES [TOneWhS_BE].[CarrierProfile] ([ID]),
     CONSTRAINT [FK_CarrierAccount_SellingNumberPlan] FOREIGN KEY ([SellingNumberPlanID]) REFERENCES [TOneWhS_BE].[SellingNumberPlan] ([ID]),
     CONSTRAINT [FK_CarrierAccount_SellingProduct] FOREIGN KEY ([SellingProductID]) REFERENCES [TOneWhS_BE].[SellingProduct] ([ID])
 );
+
+
 
 
 

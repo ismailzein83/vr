@@ -4,7 +4,7 @@
     [OwnerID]                INT            NOT NULL,
     [CurrencyID]             INT            NOT NULL,
     [EffectiveOn]            DATETIME       NULL,
-    [PriceListType]          TINYINT        NULL,
+    [PriceListType]          INT            NULL,
     [timestamp]              ROWVERSION     NULL,
     [SourceID]               VARCHAR (50)   NULL,
     [ProcessInstanceID]      BIGINT         NULL,
@@ -14,10 +14,12 @@
     [UserID]                 INT            NULL,
     [Description]            NVARCHAR (MAX) NULL,
     [PricelistStateBackupID] BIGINT         NULL,
-    [PricelistSource]        TINYINT        NULL,
-    [LastModifiedTime]       DATETIME       NULL,
+    [PricelistSource]        INT            NULL,
+    [LastModifiedTime]       DATETIME       CONSTRAINT [DF_SalePriceList_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_SalePriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

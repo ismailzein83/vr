@@ -8,8 +8,12 @@
     [PriceListId]            BIGINT         NULL,
     [CountryId]              INT            NULL,
     [ProcessInstanceID]      INT            NULL,
-    [CustomerId]             INT            NOT NULL
+    [CustomerId]             INT            NOT NULL,
+    [LastModifiedTime]       DATETIME       CONSTRAINT [DF_SalePricelistRPChange_New_LastModifiedTime] DEFAULT (getdate()) NULL,
+    [CreatedTime]            DATETIME       CONSTRAINT [DF_SalePricelistRPChange_New_CreatedTime] DEFAULT (getdate()) NULL
 );
+
+
 
 
 

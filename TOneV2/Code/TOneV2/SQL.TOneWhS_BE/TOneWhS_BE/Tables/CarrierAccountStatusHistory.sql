@@ -4,6 +4,10 @@
     [StatusID]          INT      NOT NULL,
     [PreviousStatusID]  INT      NULL,
     [StatusChangedDate] DATETIME NOT NULL,
+    [LastModifiedTime]  DATETIME CONSTRAINT [DF_CarrierAccountStatusHistory_LastModifiedTime] DEFAULT (getdate()) NULL,
+    [CreatedTime]       DATETIME CONSTRAINT [DF_CarrierAccountStatusHistory_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_CarrierAccountStatusHistory] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

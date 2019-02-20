@@ -4,7 +4,7 @@
     [OwnerID]                INT            NOT NULL,
     [CurrencyID]             INT            NOT NULL,
     [EffectiveOn]            DATETIME       NULL,
-    [PriceListType]          TINYINT        NULL,
+    [PriceListType]          INT            NULL,
     [timestamp]              ROWVERSION     NULL,
     [SourceID]               VARCHAR (50)   NULL,
     [ProcessInstanceID]      BIGINT         NULL,
@@ -15,6 +15,8 @@
     [Description]            NVARCHAR (MAX) NULL,
     [PricelistStateBackupID] BIGINT         NULL
 );
+
+
 
 
 

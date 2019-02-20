@@ -8,10 +8,12 @@
     [timestamp]        ROWVERSION     NULL,
     [CreatedBy]        INT            NULL,
     [LastModifiedBy]   INT            NULL,
-    [LastModifiedTime] DATETIME       NULL,
+    [LastModifiedTime] DATETIME       CONSTRAINT [DF_SwitchReleaseCause_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_SwitchReleaseCause] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_SwitchReleaseCause_CodeSwitchId] UNIQUE NONCLUSTERED ([ReleaseCode] ASC, [SwitchID] ASC)
 );
+
+
 
 
 

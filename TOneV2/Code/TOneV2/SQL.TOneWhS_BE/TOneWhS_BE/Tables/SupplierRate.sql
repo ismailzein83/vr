@@ -5,16 +5,19 @@
     [CurrencyID]       INT             NULL,
     [Rate]             DECIMAL (20, 8) NOT NULL,
     [RateTypeID]       INT             NULL,
-    [Change]           TINYINT         NULL,
+    [Change]           INT             NULL,
     [BED]              DATETIME        NOT NULL,
     [EED]              DATETIME        NULL,
     [SourceID]         VARCHAR (50)    NULL,
     [timestamp]        ROWVERSION      NULL,
-    [LastModifiedTime] DATETIME        NULL,
+    [LastModifiedTime] DATETIME        CONSTRAINT [DF_SupplierRate_LastModifiedTime] DEFAULT (getdate()) NULL,
+    [CreatedTime]      DATETIME        CONSTRAINT [DF_SupplierRate_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_SupplierRate] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_SupplierRate_SupplierPriceList] FOREIGN KEY ([PriceListID]) REFERENCES [TOneWhS_BE].[SupplierPriceList] ([ID]),
     CONSTRAINT [FK_SupplierRate_SupplierZone] FOREIGN KEY ([ZoneID]) REFERENCES [TOneWhS_BE].[SupplierZone] ([ID])
 );
+
+
 
 
 

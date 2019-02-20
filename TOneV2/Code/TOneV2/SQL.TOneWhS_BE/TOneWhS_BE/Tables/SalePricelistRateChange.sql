@@ -6,12 +6,14 @@
     [CountryID]        INT             NOT NULL,
     [ZoneName]         NVARCHAR (150)  NOT NULL,
     [ZoneID]           BIGINT          NULL,
-    [Change]           TINYINT         NOT NULL,
+    [Change]           INT             NOT NULL,
     [BED]              DATETIME        NOT NULL,
     [EED]              DATETIME        NULL,
     [RoutingProductID] INT             NULL,
     [CurrencyID]       INT             NULL
 );
+
+
 
 
 

@@ -4,8 +4,11 @@
     [RelationType]     INT        NOT NULL,
     [timestamp]        ROWVERSION NULL,
     [CreatedTime]      DATETIME   CONSTRAINT [DF_AccountManager_CreatedTime] DEFAULT (getdate()) NULL,
+    [LastModifiedTime] DATETIME   CONSTRAINT [DF_AccountManager_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_AccountManager] PRIMARY KEY CLUSTERED ([CarrierAccountId] ASC, [RelationType] ASC)
 );
+
+
 
 
 

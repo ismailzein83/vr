@@ -5,9 +5,11 @@
     [SourceID]         VARCHAR (50)   NULL,
     [timestamp]        ROWVERSION     NULL,
     [CreatedTime]      DATETIME       CONSTRAINT [DF_ZoneServiceConfig_CreatedTime] DEFAULT (getdate()) NULL,
-    [LastModifiedTime] DATETIME       NULL,
+    [LastModifiedTime] DATETIME       CONSTRAINT [DF_ZoneServiceConfig_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_ZoneServiceConfig] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

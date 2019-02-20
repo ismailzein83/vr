@@ -7,9 +7,11 @@
     [CreatedTime]      DATETIME       CONSTRAINT [DF_Switch_CreatedTime] DEFAULT (getdate()) NULL,
     [CreatedBy]        INT            NULL,
     [LastModifiedBy]   INT            NULL,
-    [LastModifiedTime] DATETIME       NULL,
+    [LastModifiedTime] DATETIME       CONSTRAINT [DF_Switch_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_Switch] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

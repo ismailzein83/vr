@@ -1,6 +1,6 @@
 ﻿
 
-create PROCEDURE  [TOneWhS_BE].[sp_SupplierRate_GetSupplierRates]
+CREATE PROCEDURE  [TOneWhS_BE].[sp_SupplierRate_GetSupplierRates]
 (
 	@ZoneIds nvarchar(max),
 	@BeginDate DateTime,
@@ -27,7 +27,9 @@ create PROCEDURE  [TOneWhS_BE].[sp_SupplierRate_GetSupplierRates]
 				FROM	[TOneWhS_BE].[SupplierRate] SR  WITH(NOLOCK)
 
 		 WHERE	 SR.RateTypeID is null
-				 and  (@BeginDate is null or (SR.BED <=@EndDate and (SR.EED is null or SR.EED > @EndDate  )) )
+		--need to check this condition  
+				and ( (@EndDate is null or @EndDate>sr.BED) and (sr.EED is null or sr.EED>@BeginDate) )
+				-- and  (@BeginDate is null or (SR.BED <=@EndDate and (SR.EED is null or SR.EED > @EndDate  )) )
 				 AND SR.[ZoneID] in (SELECT ZoneId FROM @zoneIdsTable)
 		SET NOCOUNT OFF
 	END

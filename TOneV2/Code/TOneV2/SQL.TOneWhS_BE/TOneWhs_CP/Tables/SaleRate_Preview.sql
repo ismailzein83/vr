@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [TOneWhs_CP].[SaleRate_Preview] (
     [ProcessInstanceID] BIGINT          NOT NULL,
-    [OwnerType]         TINYINT         NOT NULL,
+    [OwnerType]         INT             NOT NULL,
     [OwnerID]           INT             NOT NULL,
     [Rate]              DECIMAL (20, 8) NOT NULL,
     [BED]               DATETIME        NOT NULL,
@@ -8,6 +8,8 @@
     [ZoneName]          NVARCHAR (255)  NOT NULL,
     [CurrencyID]        INT             NULL
 );
+
+
 
 
 

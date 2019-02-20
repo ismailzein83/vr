@@ -5,9 +5,11 @@
     [CreatedTime]      DATETIME       CONSTRAINT [DF_SellingNumberPlan_CreatedTime] DEFAULT (getdate()) NULL,
     [CreatedBy]        INT            NULL,
     [LastModifiedBy]   INT            NULL,
-    [LastModifiedTime] DATETIME       NULL,
+    [LastModifiedTime] DATETIME       CONSTRAINT [DF_SellingNumberPlan_LastModifiedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_SellingNumberPlan] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
