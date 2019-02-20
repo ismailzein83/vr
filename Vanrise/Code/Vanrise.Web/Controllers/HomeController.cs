@@ -38,6 +38,7 @@ namespace Vanrise.Web.Controllers
             if (loginUrl != null)
                 ViewBag.LoginURL = loginUrl;
             int? loggedInUserId;
+            ViewBag.HasRemoteApplications = false;
             if (SecurityContext.Current.TryGetLoggedInUserId(out loggedInUserId))
                 ViewBag.HasRemoteApplications = new Vanrise.Security.Business.RegisteredApplicationManager().HasRemoteApplications(loggedInUserId.Value).ToString().ToLower();
 
