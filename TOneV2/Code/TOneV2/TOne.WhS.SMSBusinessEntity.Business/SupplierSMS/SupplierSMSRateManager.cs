@@ -318,8 +318,6 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                     Dictionary<long, SupplierSMSPriceList> priceLists = new SupplierSMSPriceListManager().GetCachedSupplierSMSPriceLists();
                     CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
 
-                    int numberOfOptions = input.Query.NumberOfOptions.HasValue ? input.Query.NumberOfOptions.Value : int.MaxValue;
-
                     GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
                     int longPrecision = generalSettingsManager.GetLongPrecisionValue();
 
@@ -338,7 +336,7 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                     var smsCosts = smsCostByMobileNetworkID.Values;
                     foreach (var cost in smsCosts)
                     {
-                        cost.CostOptions = cost.CostOptions.OrderBy(item => item.SupplierRate).Take(numberOfOptions).ToList();
+                        cost.CostOptions = cost.CostOptions.OrderBy(item => item.SupplierRate).Take(input.Query.NumberOfOptions).ToList();
                     }
 
                     return smsCosts;

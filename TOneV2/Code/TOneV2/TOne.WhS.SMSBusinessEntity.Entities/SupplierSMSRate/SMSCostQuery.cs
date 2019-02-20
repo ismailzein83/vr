@@ -14,7 +14,7 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
 
         public List<int> MobileNetworkIds { get; set; }
 
-        public int? NumberOfOptions { get; set; }
+        public int NumberOfOptions { get; set; }
 
         //public int? LimitResult { get; set; }
     }
