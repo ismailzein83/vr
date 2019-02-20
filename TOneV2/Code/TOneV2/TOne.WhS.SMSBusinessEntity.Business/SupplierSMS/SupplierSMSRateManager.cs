@@ -333,14 +333,13 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                         smsCost.CostOptions.Add(new SMSCostOption() { SupplierId = priceList.SupplierID, SupplierRate = convertedRate });
                     }
 
-                    var smsCosts = smsCostByMobileNetworkID.Values;
+                    var smsCosts = smsCostByMobileNetworkID.Values.Take(input.Query.LimitResult);
                     foreach (var cost in smsCosts)
                     {
                         cost.CostOptions = cost.CostOptions.OrderBy(item => item.SupplierRate).Take(input.Query.NumberOfOptions).ToList();
                     }
 
                     return smsCosts;
-
                 }
 
                 return null;
@@ -364,6 +363,87 @@ namespace TOne.WhS.SMSBusinessEntity.Business
                 }
 
                 return true;
+            }
+
+            protected override ResultProcessingHandler<SMSCostDetail> GetResultProcessingHandler(DataRetrievalInput<SMSCostQuery> input, BigResult<SMSCostDetail> bigResult)
+            {
+                var resultProcessingHandler = new ResultProcessingHandler<SMSCostDetail>() { ExportExcelHandler = new SMSCostExcelExportHandler() };
+                return resultProcessingHandler;
+            }
+        }
+
+        private class SMSCostExcelExportHandler : ExcelExportHandler<SMSCostDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SMSCostDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "SMS Cost Analysis",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() },
+                    AutoFitColumns = true
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Mobile Country" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Mobile Network" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Option 1", Width = 50 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rate 1", Width = 25 });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null && context.BigResult.Data.Count() > 0)
+                {
+                    int maxNumberOfOptions = context.BigResult.Data.Max(itm => itm.CostOptions != null ? itm.CostOptions.Count() : 0);
+
+                    for (var optionNb = 2; optionNb <= maxNumberOfOptions; optionNb++)
+                    {
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = $"Option {optionNb}", Width = 50 });
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = $"Rate {optionNb}", Width = 25 });
+                    }
+
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        row.Cells.Add(new ExportExcelCell { Value = record.MobileCountryName });
+                        row.Cells.Add(new ExportExcelCell { Value = record.MobileNetworkName });
+
+                        if (record.CostOptions != null)
+                        {
+                            foreach (var costOption in record.CostOptions)
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = costOption.SupplierName });
+                                row.Cells.Add(new ExportExcelCell { Value = costOption.SupplierRate });
+                            }
+
+                            int remainingOptions = maxNumberOfOptions - record.CostOptions.Count();
+                            if (remainingOptions > 0)
+                            {
+                                for (int i = 1; i <= remainingOptions; i++)
+                                {
+                                    row.Cells.Add(new ExportExcelCell { Value = "" });
+                                    row.Cells.Add(new ExportExcelCell { Value = "" });
+                                }
+                            }
+                            sheet.Rows.Add(row);
+                            continue;
+                        }
+
+                        if (maxNumberOfOptions > 0)
+                        {
+                            for (var optionNb = 1; optionNb <= maxNumberOfOptions; optionNb++)
+                            {
+                                row.Cells.Add(new ExportExcelCell { Value = "" });
+                                row.Cells.Add(new ExportExcelCell { Value = "" });
+                            }
+                        }
+                        else
+                        {
+                            row.Cells.Add(new ExportExcelCell { Value = "" });
+                            row.Cells.Add(new ExportExcelCell { Value = "" });
+                        }
+
+                        sheet.Rows.Add(row);
+                    }
+                }
+                context.MainSheet = sheet;
             }
         }
 

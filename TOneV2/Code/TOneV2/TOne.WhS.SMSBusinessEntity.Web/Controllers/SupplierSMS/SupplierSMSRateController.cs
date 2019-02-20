@@ -27,9 +27,9 @@ namespace TOne.WhS.SMSBusinessEntity.Web.Controllers
         [HttpPost]
         [Route("GetFilteredSMSCostDetails")]
 
-        public Vanrise.Entities.IDataRetrievalResult<SMSCostDetail> GetFilteredSMSCostDetails(DataRetrievalInput<SMSCostQuery> input)
+        public object GetFilteredSMSCostDetails(DataRetrievalInput<SMSCostQuery> input)
         {
-            return _supplierSMSRateManager.GetFilteredSMSCostDetails(input);
+            return GetWebResponse(input, _supplierSMSRateManager.GetFilteredSMSCostDetails(input), "SMS Cost Analysis");
         }
     }
 }

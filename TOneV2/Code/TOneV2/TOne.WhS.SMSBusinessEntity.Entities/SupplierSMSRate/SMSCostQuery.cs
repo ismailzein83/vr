@@ -16,6 +16,6 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
 
         public int NumberOfOptions { get; set; }
 
-        //public int? LimitResult { get; set; }
+        public int LimitResult { get; set; }
     }
 }

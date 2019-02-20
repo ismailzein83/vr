@@ -84,6 +84,7 @@
 
                 $scope.scopeModel.effectiveDate = VRDateTimeService.getNowDateTime();
                 $scope.scopeModel.numberOfOptions = 3;
+                $scope.scopeModel.limitResult = 1000;
 
                 var rootPromiseNode = {
                     promises: [loadMobileCountrySelector(), loadMobileNetworkSelector()],
@@ -127,8 +128,8 @@
                 EffectiveDate: $scope.scopeModel.effectiveDate,
                 MobileCountryIds: mobileCountrySelectorAPI.getSelectedIds(),
                 MobileNetworkIds: mobileNetworkSelectorAPI.getSelectedIds(),
-                NumberOfOptions: $scope.scopeModel.numberOfOptions
-                //LimitResult: $scope.scopeModel.limitResult
+                NumberOfOptions: $scope.scopeModel.numberOfOptions,
+                LimitResult: $scope.scopeModel.limitResult
             };
         }
     }
