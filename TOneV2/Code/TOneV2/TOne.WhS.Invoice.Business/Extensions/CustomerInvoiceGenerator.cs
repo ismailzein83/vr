@@ -559,16 +559,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					{
 						foreach (var smsInvoiceBillingRecord in smsInvoiceBillingRecordList)
 						{
-							customerInvoiceDetails.SaleAmount += smsInvoiceBillingRecord.InvoiceMeasures.SaleNet;
-							customerInvoiceDetails.OriginalSaleAmount += smsInvoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr;
 							customerInvoiceDetails.TotalNumberOfSMS += smsInvoiceBillingRecord.InvoiceMeasures.NumberOfSMS;
 							customerInvoiceDetails.OriginalSaleCurrencyId = smsInvoiceBillingRecord.OriginalSaleCurrencyId;
 							customerInvoiceDetails.SaleCurrencyId = smsInvoiceBillingRecord.SaleCurrencyId;
 							customerInvoiceDetails.CountryId = smsInvoiceBillingRecord.CountryId;
 							customerInvoiceDetails.SupplierId = smsInvoiceBillingRecord.SupplierId;
 							//customerInvoiceDetails.SupplierZoneId = smsInvoiceBillingRecord.CustomerMobileNetworkId;
-							customerInvoiceDetails.AmountAfterCommission += smsInvoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
-							customerInvoiceDetails.OriginalAmountAfterCommission += smsInvoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
+							customerInvoiceDetails.SMSAmountAfterCommission += smsInvoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
+							customerInvoiceDetails.SMSOriginalAmountAfterCommission += smsInvoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
 						}
 
 					};
