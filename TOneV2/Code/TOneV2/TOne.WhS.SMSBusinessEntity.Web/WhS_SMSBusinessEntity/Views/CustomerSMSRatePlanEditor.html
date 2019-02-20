@@ -32,13 +32,13 @@
                                  getrowstyle="scopeModel.getGridRowColor"
                                  loadmoredata="scopeModel.loadMoreData"
                                  pagingtype="'PagingOnScroll'">
-                        <vr-datagridcolumn headertext="'Country'" type="'Text'" field="'MobileCountryName'" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Mobile Network'" type="'Text'" field="'MobileNetworkName'" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Current Rate'" type="'number'" disablesorting>
+                        <vr-datagridcolumn headertext="'Country'" type="'Text'" field="'MobileCountryName'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Mobile Network'" type="'Text'" field="'MobileNetworkName'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Current Rate'" type="'number'" widthfactor="5" disablesorting>
                             {{dataItem.CurrentRate}}
                             <vr-span ng-if="(dataItem.FutureRate != undefined)" style="cursor: pointer; text-decoration: underline" ng-click="viewScope.scopeModel.onFutureRateClicked(dataItem)">*</vr-span>
                         </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'New Rate'" disablesorting>
+                        <vr-datagridcolumn headertext="'New Rate'" widthfactor="4" disablesorting>
                             <vr-textbox type="number" value="dataItem.TempRate" minvalue="0" onblurtextbox="dataItem.onRateValueChanged(dataItem)"></vr-textbox>
                         </vr-datagridcolumn>
                     </vr-datagrid>

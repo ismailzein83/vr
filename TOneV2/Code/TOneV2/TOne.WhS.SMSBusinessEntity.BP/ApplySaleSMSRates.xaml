@@ -28,6 +28,7 @@
       <x:String>System.Text</x:String>
       <x:String>TOne.WhS.SMSBusinessEntity.BP.Arguments</x:String>
       <x:String>TOne.WhS.SMSBusinessEntity.Entities</x:String>
+      <x:String>TOne.WhS.BusinessEntity.Business</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -52,6 +53,9 @@
       <AssemblyReference>TOne.WhS.SMSBusinessEntity.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SMSBusinessEntity.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.SMSBusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Business</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.SMSBusinessEntity.BP</AssemblyReference>
     </sco:Collection>
@@ -110,7 +114,12 @@
       </If.Then>
       <If.Else>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
-          <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="This Customer Doesn't have a draft">
+          <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
+            <vbw:WriteTrackingMessage.Message>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">"No existing draft for customer " + new CarrierAccountManager().GetCarrierAccountName(Input.CustomerID) +"'"</mca:CSharpValue>
+              </InArgument>
+            </vbw:WriteTrackingMessage.Message>
             <vbw:WriteTrackingMessage.Severity>
               <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
                 <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Warning</mca:CSharpValue>
@@ -120,7 +129,7 @@
         </Sequence>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d05DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlNNU0J1c2luZXNzRW50aXR5LkJQXEFwcGx5U2FsZVNNU1JhdGVzLnhhbWwROwN8DgIBAUEFTCoCASdNBXoKAgECSQtJXAIBLUQLRHYCAShQC1DLAQIBA1QJbRQCARBwCXgUAgEIVQtgOAIBHGELbCYCARFxC3cmAgEJWBFYfAIBIl0RXXQCAR1kEWR0AgEXaRFplwECARJ0EXSHAQIBC3FmcYoBAgEK</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d05DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlNNU0J1c2luZXNzRW50aXR5LkJQXEFwcGx5U2FsZVNNU1JhdGVzLnhhbWwRPwOFAQ4CAQFFBVAqAgErUQWDAQoCAQJNC01cAgExSAtIdgIBLFQLVMsBAgEDWAlxFAIBFHQJgQEUAgEIWQtkOAIBIGULcCYCARV1C4ABJgIBCVwRXHwCASZhEWF0AgEhaBFodAIBG20RbZcBAgEWfRF9hwECAQ94EXi7AQIBCg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

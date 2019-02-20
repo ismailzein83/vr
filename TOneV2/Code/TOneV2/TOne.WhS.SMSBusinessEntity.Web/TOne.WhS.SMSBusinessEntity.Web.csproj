@@ -85,7 +85,13 @@
     <Content Include="WhS_SMSBusinessEntity\Constants\SMSSaleRateBPDefinition.js" />
     <Content Include="WhS_SMSBusinessEntity\Constants\WhS_SMSBE_ReceiverIdentificationEnum.js" />
     <Content Include="WhS_SMSBusinessEntity\Constants\WhS_SMSBE_SMSRateChangeTypeEnum.js" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\CustomerSMS\Templates\CustomerSMSPriceListGridTemplate.html" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\CustomerSMS\vr-whs-smsbusinessentity-customerpricelist-grid.js" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\SupplierSMS\Templates\SMSCostAnalysisGridTemplate.html" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\SupplierSMS\Templates\SupplierSMSPriceListGridTemplate.html" />
     <Content Include="WhS_SMSBusinessEntity\Directives\SupplierSMS\Templates\SupplierSMSRatePlanGridTemplate.html" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\SupplierSMS\vr-whs-smsbusinessentity-costanalysis-grid.js" />
+    <Content Include="WhS_SMSBusinessEntity\Directives\SupplierSMS\vr-whs-smsbusinessentity-supplierpricelist-grid.js" />
     <Content Include="WhS_SMSBusinessEntity\Directives\SupplierSMS\vr-whs-smsbusinessentity-supplierrateplan-grid.js" />
     <Content Include="WhS_SMSBusinessEntity\Directives\SMSImportSettings\Templates\SMSImportSettingsTemplate.html" />
     <Content Include="WhS_SMSBusinessEntity\Directives\SMSImportSettings\Templates\SMSImportMappingConfigurationTemplate.html" />
@@ -94,12 +100,20 @@
     <Content Include="WhS_SMSBusinessEntity\Directives\SMSImportSettings\vr-whs-smsbusinessentity-smsimportmappingconfiguration.js" />
     <Content Include="WhS_SMSBusinessEntity\Directives\CustomerSMS\Templates\CustomerSMSRatePlanGridTemplate.html" />
     <Content Include="WhS_SMSBusinessEntity\Directives\CustomerSMS\vr-whs-smsbusinessentity-customerrateplan-grid.js" />
+    <Content Include="WhS_SMSBusinessEntity\Services\APIServices\CustomerSMS\CustomerSMSPriceListAPIService.js" />
     <Content Include="WhS_SMSBusinessEntity\Services\APIServices\CustomerSMS\CustomerSMSRateAPIService.js" />
     <Content Include="WhS_SMSBusinessEntity\Services\APIServices\CustomerSMS\CustomerSMSRateChangesAPIService.js" />
+    <Content Include="WhS_SMSBusinessEntity\Services\APIServices\SupplierSMS\SupplierSMSPriceListAPIService.js" />
     <Content Include="WhS_SMSBusinessEntity\Services\APIServices\SupplierSMS\SupplierSMSRateAPIService.js" />
     <Content Include="WhS_SMSBusinessEntity\Services\APIServices\SupplierSMS\SupplierSMSRateChangesAPIService.js" />
     <Content Include="WhS_SMSBusinessEntity\Services\SupplierSMSRatePlanService.js" />
     <Content Include="WhS_SMSBusinessEntity\Services\CustomerSMSRatePlanService.js" />
+    <Content Include="WhS_SMSBusinessEntity\Views\SMSCostAnalysis.html" />
+    <Content Include="WhS_SMSBusinessEntity\Views\SMSCostAnalysisController.js" />
+    <Content Include="WhS_SMSBusinessEntity\Views\SupplierSMSPriceList.html" />
+    <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSPriceList.html" />
+    <Content Include="WhS_SMSBusinessEntity\Views\SupplierSMSPriceListController.js" />
+    <Content Include="WhS_SMSBusinessEntity\Views\CustomerSMSPriceListController.js" />
     <Content Include="WhS_SMSBusinessEntity\Views\SupplierSMSRatePlan.html" />
     <Content Include="WhS_SMSBusinessEntity\Views\SupplierSMSRatePlanController.js" />
     <Content Include="WhS_SMSBusinessEntity\Views\SupplierSMSRatePlanEditor.html" />
@@ -113,8 +127,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CustomerSMS\CustomerSMSPriceListController.cs" />
     <Compile Include="Controllers\CustomerSMS\CustomerSMSRateChangesController.cs" />
     <Compile Include="Controllers\CustomerSMS\CustomerSMSRateController.cs" />
+    <Compile Include="Controllers\SupplierSMS\SupplierSMSPriceListController.cs" />
     <Compile Include="Controllers\SupplierSMS\SupplierSMSRateController.cs" />
     <Compile Include="Controllers\SupplierSMS\SupplierSMSRateChangesController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -102,6 +102,24 @@ namespace TOne.WhS.SMSBusinessEntity.Data.RDB
             return queryContext.GetItems(SupplierSMSRateMapper);
         }
 
+        public List<SupplierSMSRate> GetSupplierSMSRatesEffectiveOn(DateTime effectiveOn)
+        {
+            var queryContext = new RDBQueryContext(GetDataProvider());
+
+            var selectQuery = queryContext.AddSelectQuery();
+            selectQuery.From(TABLE_NAME, TABLE_ALIAS, null, true);
+            selectQuery.SelectColumns().Columns(COL_ID, COL_PriceListID, COL_MobileNetworkID, COL_Rate, COL_BED, COL_EED);
+
+            var where = selectQuery.Where();
+            where.LessOrEqualCondition(COL_BED).Value(effectiveOn);
+
+            var childWhere = where.ChildConditionGroup().ConditionIfColumnNotNull(COL_EED);
+            childWhere.NotEqualsCondition(COL_BED).Column(COL_EED);
+            childWhere.GreaterThanCondition(COL_EED).Value(effectiveOn);
+
+            return queryContext.GetItems(SupplierSMSRateMapper);
+        }
+
         public bool ApplySupplierRates(SupplierSMSPriceList supplierSMSPriceList, Dictionary<int, SupplierSMSRateChange> supplierRateChangesByMobileNetworkId)
         {
             List<int> mobileNetworkIDs = supplierRateChangesByMobileNetworkId.Keys.ToList();

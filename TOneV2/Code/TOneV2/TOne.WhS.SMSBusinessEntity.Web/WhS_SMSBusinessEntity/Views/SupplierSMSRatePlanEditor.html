@@ -32,13 +32,13 @@
                                  getrowstyle="scopeModel.getGridRowColor"
                                  loadmoredata="scopeModel.loadMoreData"
                                  pagingtype="'PagingOnScroll'">
-                        <vr-datagridcolumn headertext="'Country'" type="'Text'" field="'MobileCountryName'" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Mobile Network'" type="'Text'" field="'MobileNetworkName'" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Current Rate'" type="'number'" disablesorting>
+                        <vr-datagridcolumn headertext="'Country'" type="'Text'" field="'MobileCountryName'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Mobile Network'" type="'Text'" field="'MobileNetworkName'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Current Rate'" type="'number'" widthfactor="5" disablesorting>
                             {{dataItem.CurrentRate}}
                             <vr-span ng-if="(dataItem.FutureRate != undefined)" style="cursor: pointer; text-decoration: underline" ng-click="viewScope.scopeModel.onFutureRateClicked(dataItem)">*</vr-span>
                         </vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'New Rate'" disablesorting>
+                        <vr-datagridcolumn headertext="'New Rate'" widthfactor="4" disablesorting>
                             <vr-textbox type="number" value="dataItem.TempRate" minvalue="0" onblurtextbox="dataItem.onRateValueChanged(dataItem)"></vr-textbox>
                         </vr-datagridcolumn>
                     </vr-datagrid>
@@ -50,9 +50,9 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
 
             <div transclude-to="buttons">
-                <vr-button type="Apply" formname="formSupplierSMSRateEditor" ng-if="scopeModel.nbPendingChanges > 0" data-onclick="scopeModel.applyChanges"></vr-button>
-                <vr-button type="CancelChanges" ng-if="scopeModel.isSupplierSMSRateDraftExist" data-onclick="scopeModel.cancelSupplierDraft"></vr-button>
-                <vr-button type="Save" formname="formSupplierSMSRateEditor" data-onclick="scopeModel.saveChanges"></vr-button>
+                <vr-button type="Apply" formname="formSupplierSMSRateEditor" ng-if="scopeModel.nbPendingChanges > 0" haspermission="scopeModel.hasApplyChangesPermission" data-onclick="scopeModel.applyChanges"></vr-button>
+                <vr-button type="CancelChanges" ng-if="scopeModel.isSupplierSMSRateDraftExist" haspermission="scopeModel.hasCancelDraftPermission" data-onclick="scopeModel.cancelSupplierDraft"></vr-button>
+                <vr-button type="Save" formname="formSupplierSMSRateEditor" haspermission="scopeModel.hasSaveChangesPermission" data-onclick="scopeModel.saveChanges"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

@@ -1,0 +1,12 @@
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.datasource"
+             pagingtype="'Pager'"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             vr-loader="scopeModel.isLoading"
+             enableautoexport="true" normalcell>
+    <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'ID'" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Supplier'" type="'Text'" field="'SupplierName'" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" type="'Text'" field="'CurrencyName'" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Effective Date'" type="'Datetime'" field="'EffectiveOn'" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Created By'" type="'Text'" field="'UserName'" disablesorting></vr-datagridcolumn>
+</vr-datagrid>

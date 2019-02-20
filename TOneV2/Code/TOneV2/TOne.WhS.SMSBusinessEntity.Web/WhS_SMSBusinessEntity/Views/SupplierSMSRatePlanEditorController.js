@@ -156,6 +156,18 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+
+            $scope.scopeModel.hasApplyChangesPermission = function () {
+                return WhS_SMSBusinessEntity_SupplierSMSRateChangesAPIService.HasApplyChangesPermission();
+            };
+
+            $scope.scopeModel.hasCancelDraftPermission = function () {
+                return WhS_SMSBusinessEntity_SupplierSMSRateChangesAPIService.HasCancelDraftPermission();
+            };
+
+            $scope.scopeModel.hasSaveChangesPermission = function () {
+                return WhS_SMSBusinessEntity_SupplierSMSRateChangesAPIService.HasSaveChangesPermission();
+            };
         }
 
         function load() {

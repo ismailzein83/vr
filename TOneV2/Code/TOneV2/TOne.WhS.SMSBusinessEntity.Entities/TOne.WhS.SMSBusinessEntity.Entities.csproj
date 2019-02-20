@@ -51,14 +51,21 @@
   <ItemGroup>
     <Compile Include="CustomerSMSRateDraft\DraftData.cs" />
     <Compile Include="CustomerSMSRateDraft\DraftStateResult.cs" />
+    <Compile Include="CustomerSMSRate\CustomerSMSPriceListDetail.cs" />
+    <Compile Include="CustomerSMSRate\CustomerSMSPriceListQuery.cs" />
     <Compile Include="SupplierSMSRateDraft\SupplierDraftDataInput.cs" />
     <Compile Include="SupplierSMSRateDraft\SupplierSMSRateChangesDetail.cs" />
     <Compile Include="SupplierSMSRateDraft\SupplierSMSRateChangesQuery.cs" />
     <Compile Include="SupplierSMSRateDraft\SupplierSMSRateChangeToUpdate.cs" />
     <Compile Include="SupplierSMSRateDraft\SupplierSMSRateDraft.cs" />
     <Compile Include="SupplierSMSRateDraft\UpdateSupplierSMSDraftStatusInput.cs" />
+    <Compile Include="SupplierSMSRate\SupplierSMSPriceListDetail.cs" />
+    <Compile Include="SupplierSMSRate\SupplierSMSPriceListQuery.cs" />
     <Compile Include="SupplierSMSRate\SupplierSMSPriceList.cs" />
+    <Compile Include="SupplierSMSRate\SMSCost.cs" />
     <Compile Include="SupplierSMSRate\SupplierSMSRate.cs" />
+    <Compile Include="SupplierSMSRate\SMSCostQuery.cs" />
+    <Compile Include="SupplierSMSRate\SMSCostDetail.cs" />
     <Compile Include="SupplierSMSRate\SupplierSMSRateDetail.cs" />
     <Compile Include="SupplierSMSRate\SupplierSMSRateItem.cs" />
     <Compile Include="SupplierSMSRate\SupplierSMSRateQuery.cs" />

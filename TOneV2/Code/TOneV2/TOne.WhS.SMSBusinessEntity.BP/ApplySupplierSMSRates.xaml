@@ -52,6 +52,9 @@
       <AssemblyReference>TOne.WhS.SMSBusinessEntity.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.SMSBusinessEntity.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.SMSBusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Business</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.SMSBusinessEntity.BP</AssemblyReference>
     </sco:Collection>
@@ -108,17 +111,21 @@
         </Sequence>
       </If.Then>
       <If.Else>
-        <vbw:WriteTrackingMessage Message="This Supplier Doesn't have a draft">
+        <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1">
+          <vbw:WriteTrackingMessage.Message>
+            <InArgument x:TypeArguments="x:String">
+              <mca:CSharpValue x:TypeArguments="x:String">"No existing draft for supplier '" + new BusinessEntity.Business.CarrierAccountManager().GetCarrierAccountName(Input.SupplierID) +"'"</mca:CSharpValue>
+            </InArgument>
+          </vbw:WriteTrackingMessage.Message>
           <vbw:WriteTrackingMessage.Severity>
             <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
               <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Warning</mca:CSharpValue>
             </InArgument>
           </vbw:WriteTrackingMessage.Severity>
-          <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_1</sap2010:WorkflowViewState.IdRef>
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlNNU0J1c2luZXNzRW50aXR5LkJQXEFwcGx5U3VwcGxpZXJTTVNSYXRlcy54YW1sEDsDeg4CAQFABUsqAgEgTAV4CgIBAkMLQ2ACASVIC0h2AgEhTwtPygECAQNTCWwUAgENbwl2JAIBB1QLXzgCARdgC2sqAgEOcg9yhQECAQlvK29PAgEIVxFXfAIBHFwRXHQCARhoEWiXAQIBE2MRY3QCAQ8=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlNNU0J1c2luZXNzRW50aXR5LkJQXEFwcGx5U3VwcGxpZXJTTVNSYXRlcy54YW1sED4DgQEOAgEBQwVOKgIBI08FfwoCAQJGC0ZgAgEoSwtLdgIBJFILUsoBAgEDVglvFAIBEHIJfSQCAQdXC2I4AgEaYwtuKgIBEXoPeoUBAgEMdQ910gECAQhaEVp8AgEfXxFfdAIBG2sRa5cBAgEWZhFmdAIBEg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

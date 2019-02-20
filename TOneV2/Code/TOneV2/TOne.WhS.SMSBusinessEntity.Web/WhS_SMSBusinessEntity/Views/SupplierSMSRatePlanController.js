@@ -2,9 +2,9 @@
 
     "use strict";
 
-    SMSRatePlanController.$inject = ["$scope", "VRNotificationService", "UtilsService", "WhS_SMSBusinessEntity_SupplierRatePlanService", "VRUIUtilsService", "VRDateTimeService", "BusinessProcess_BPInstanceService", "WhS_BP_SMSSupplierRateBPDefinition"];
+    SMSRatePlanController.$inject = ["$scope", "VRNotificationService", "UtilsService", "WhS_SMSBusinessEntity_SupplierRatePlanService", "VRUIUtilsService", "VRDateTimeService", "BusinessProcess_BPInstanceService", "WhS_BP_SMSSupplierRateBPDefinition", "WhS_SMSBusinessEntity_SupplierSMSRateAPIService"];
 
-    function SMSRatePlanController($scope, VRNotificationService, UtilsService, WhS_SMSBusinessEntity_SupplierRatePlanService, VRUIUtilsService, VRDateTimeService, BusinessProcess_BPInstanceService, WhS_BP_SMSSupplierRateBPDefinition) {
+    function SMSRatePlanController($scope, VRNotificationService, UtilsService, WhS_SMSBusinessEntity_SupplierRatePlanService, VRUIUtilsService, VRDateTimeService, BusinessProcess_BPInstanceService, WhS_BP_SMSSupplierRateBPDefinition, WhS_SMSBusinessEntity_SupplierSMSRateAPIService) {
 
         var selectedSupplier;
         var processDraftID;
@@ -121,6 +121,14 @@
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.hasSearchRatesPermission = function () {
+                return WhS_SMSBusinessEntity_SupplierSMSRateAPIService.HasSearchRatesPermission();
+            };
+
+            $scope.scopeModel.hasAddDraftPermission = function () {
+                return WhS_SMSBusinessEntity_SupplierSMSRateAPIService.HasAddDraftPermission();
             };
         }
 

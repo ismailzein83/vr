@@ -17,7 +17,7 @@
         }
 
         function HasAddDraftPermission() {
-            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_SMSBusinessEntity_ModuleConfig.moduleName, controllerName, ['AddCustomerSMSRateDraft']));
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_SMSBusinessEntity_ModuleConfig.moduleName, controllerName, ['GetFilteredCustomerPriceList']));
         }
 
         return {

@@ -1,0 +1,19 @@
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.datasource"
+             pagingtype="'Pager'"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             vr-loader="scopeModel.isLoading"
+              normalcell>
+    <vr-datagridcolumn headertext="'Mobile Country'" type="'Text'" field="'MobileCountryName'" fixedwidth="200" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Mobile Network'" type="'Text'" field="'MobileNetworkName'" fixedwidth="200" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Suppliers'" disablesorting>
+        <div class="responsive-container" style="white-space: normal;">
+            <a ng-repeat="costOption in dataItem.CostOptions" title="{{costOption.SupplierName}}({{::costOption.SupplierRate}})"
+               style="font-size: 11px; cursor: pointer; display: inline-block; padding: 0 10px 0 0;">
+                <span style="display: inline-block; width: 190px;">
+                    <span> {{costOption.titleToDisplay}}</span>
+                </span>
+            </a>
+        </div>
+    </vr-datagridcolumn>
+</vr-datagrid>

@@ -34,8 +34,8 @@
     <vr-row removeline>
         <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
             <div transclude-to="buttons">
-                <vr-button type="Search" formname="formSupplierSMSRateController" data-onclick="scopeModel.searchSupplierSMSRates"></vr-button>
-                <vr-button type="Add" formname="formSupplierSMSRateController" data-onclick="scopeModel.addSupplierRates"></vr-button>
+                <vr-button type="Search" formname="formSupplierSMSRateController" haspermission="scopeModel.hasSearchRatesPermission" data-onclick="scopeModel.searchSupplierSMSRates"></vr-button>
+                <vr-button type="Add" formname="formSupplierSMSRateController" haspermission="scopeModel.hasAddDraftPermission" data-onclick="scopeModel.addSupplierRates"></vr-button>
             </div>
         </vr-actionbar>
     </vr-row>

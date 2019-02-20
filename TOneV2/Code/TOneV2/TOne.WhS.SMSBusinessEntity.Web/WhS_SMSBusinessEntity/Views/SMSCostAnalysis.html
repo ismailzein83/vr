@@ -1,0 +1,41 @@
+﻿<vr-panel ng-controller="WhS_SMSBusinessEntity_SMSCostAnalysisController" vr-loader="scopeModel.isLoading">
+    <div ng-hide="filterSectionCollapsed">
+        <vr-form name="formSMSCostAnalysisController">
+            <vr-row>
+
+                <vr-mobilenetwork-mobilecountry-selector on-ready="scopeModel.onMobileCountrySelectorReady"
+                                                         onselectionchanged="scopeModel.onMobileCountrySelectionChanged"
+                                                         ismultipleselection normal-col-num="2">
+                </vr-mobilenetwork-mobilecountry-selector>
+
+                <span vr-loader="scopeModel.isLoadingMobileNetworkSelector">
+                    <vr-mobilenetwork-selector on-ready="scopeModel.onMobileNetworkSelectorReady" ismultipleselection normal-col-num="2"></vr-mobilenetwork-selector>
+                </span>
+
+                <vr-columns colnum="2">
+                    <vr-datetimepicker type="dateTime" value="scopeModel.effectiveDate" label="Effective Date" isrequired="true"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns colnum="2">
+                    <vr-textbox type="number" value="scopeModel.numberOfOptions" label="Number Of Options"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </div>
+
+    <vr-row removeline>
+        <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+            <div transclude-to="buttons">
+                <vr-button type="Search" formname="formSMSCostAnalysisController" haspermission="scopeModel.hasViewSMSCostAnalysisPermission" data-onclick="scopeModel.loadSMSCostAnalysisGrid"></vr-button>
+            </div>
+        </vr-actionbar>
+    </vr-row>
+
+    <div>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-whs-smsbusinessentity-costanalysis-grid on-ready="scopeModel.onGridReady"></vr-whs-smsbusinessentity-costanalysis-grid>
+            </vr-columns>
+        </vr-row>
+    </div>
+</vr-panel>

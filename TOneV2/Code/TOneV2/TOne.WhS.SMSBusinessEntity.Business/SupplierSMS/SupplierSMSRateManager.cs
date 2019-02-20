@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.SMSBusinessEntity.Data;
+using TOne.WhS.SMSBusinessEntity.Data.RDB;
 using TOne.WhS.SMSBusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -20,6 +21,11 @@ namespace TOne.WhS.SMSBusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<SupplierSMSRateDetail> GetFilteredSupplierSMSRate(DataRetrievalInput<SupplierSMSRateQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new SupplierSMSRateRequestHandler());
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<SMSCostDetail> GetFilteredSMSCostDetails(DataRetrievalInput<SMSCostQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new SMSCostRequestHandler());
         }
 
         public Dictionary<int, SupplierSMSRateItem> GetEffectiveMobileNetworkRates(int supplierID, DateTime dateTime)
@@ -262,6 +268,104 @@ namespace TOne.WhS.SMSBusinessEntity.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _supplierSMSRateDataManager.AreSupplierSMSRatesUpdated(ref _updateHandle);
+            }
+        }
+
+        private class SMSCostRequestHandler : BigDataRequestHandler<SMSCostQuery, SMSCost, SMSCostDetail>
+        {
+            SupplierSMSRateDataManager _manager = new SupplierSMSRateDataManager();
+            MobileNetworkManager _mobileNetworkManager = new MobileNetworkManager();
+            MobileCountryManager _mobileCountryManager = new MobileCountryManager();
+            CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
+
+            public override SMSCostDetail EntityDetailMapper(SMSCost entity)
+            {
+                int mobileNetworkID = entity.MobileNetworkID;
+
+                MobileNetwork mobileNetwork = _mobileNetworkManager.GetMobileNetworkById(mobileNetworkID);
+                mobileNetwork.ThrowIfNull("mobileNetwork", mobileNetworkID);
+
+                List<SMSCostOptionDetail> smsCostOptions = new List<SMSCostOptionDetail>();
+                foreach (var costOption in entity.CostOptions)
+                {
+                    string supplierName = _carrierAccountManager.GetCarrierAccountName(costOption.SupplierId);
+                    smsCostOptions.Add(new SMSCostOptionDetail() { SupplierName = supplierName, SupplierRate = costOption.SupplierRate });
+                }
+
+                return new SMSCostDetail()
+                {
+                    MobileCountryName = _mobileCountryManager.GetMobileCountryName(mobileNetwork.MobileCountryId),
+                    MobileNetworkName = mobileNetwork.NetworkName,
+                    CostOptions = smsCostOptions
+                };
+            }
+
+            public override IEnumerable<SMSCost> RetrieveAllData(DataRetrievalInput<SMSCostQuery> input)
+            {
+                if (input != null && input.Query != null)
+                {
+                    var supplierSMSRates = _manager.GetSupplierSMSRatesEffectiveOn(input.Query.EffectiveDate);
+                    if (supplierSMSRates == null || supplierSMSRates.Count == 0)
+                        return null;
+
+                    var filteredSupplierSMSRates = supplierSMSRates.Where(item => FilterSMSRates(item, input.Query)).ToList();
+
+                    if (filteredSupplierSMSRates == null)
+                        return null;
+
+                    Dictionary<int, SMSCost> smsCostByMobileNetworkID = new Dictionary<int, SMSCost>();
+
+                    Dictionary<long, SupplierSMSPriceList> priceLists = new SupplierSMSPriceListManager().GetCachedSupplierSMSPriceLists();
+                    CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+
+                    int numberOfOptions = input.Query.NumberOfOptions.HasValue ? input.Query.NumberOfOptions.Value : int.MaxValue;
+
+                    GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
+                    int longPrecision = generalSettingsManager.GetLongPrecisionValue();
+
+                    foreach (var supplierSMSRate in filteredSupplierSMSRates)
+                    {
+                        SupplierSMSPriceList priceList = priceLists.GetRecord(supplierSMSRate.PriceListID);
+                        priceList.ThrowIfNull("priceList", supplierSMSRate.PriceListID);
+
+                        decimal convertedRate = Math.Round(currencyExchangeRateManager.ConvertValueToSystemCurrency(supplierSMSRate.Rate, priceList.CurrencyID, input.Query.EffectiveDate), longPrecision);
+
+                        SMSCost smsCost = smsCostByMobileNetworkID.GetOrCreateItem(supplierSMSRate.MobileNetworkID, () => { return new SMSCost() { MobileNetworkID = supplierSMSRate.MobileNetworkID, CostOptions = new List<SMSCostOption>() }; });
+
+                        smsCost.CostOptions.Add(new SMSCostOption() { SupplierId = priceList.SupplierID, SupplierRate = convertedRate });
+                    }
+
+                    var smsCosts = smsCostByMobileNetworkID.Values;
+                    foreach (var cost in smsCosts)
+                    {
+                        cost.CostOptions = cost.CostOptions.OrderBy(item => item.SupplierRate).Take(numberOfOptions).ToList();
+                    }
+
+                    return smsCosts;
+
+                }
+
+                return null;
+            }
+
+            private bool FilterSMSRates(SupplierSMSRate supplierSMSRate, SMSCostQuery queryInput)
+            {
+                int mobileNetworkID = supplierSMSRate.MobileNetworkID;
+
+                if (queryInput.MobileNetworkIds != null && queryInput.MobileNetworkIds.Count != 0 && !queryInput.MobileNetworkIds.Contains(mobileNetworkID))
+                    return false;
+
+                if (queryInput.MobileCountryIds != null && queryInput.MobileCountryIds.Count != 0)
+                {
+                    MobileNetwork mobileNetwork = _mobileNetworkManager.GetMobileNetworkById(mobileNetworkID);
+                    mobileNetwork.ThrowIfNull("mobileNetwork", mobileNetworkID);
+                    int mobileCountryId = mobileNetwork.MobileCountryId;
+
+                    if (!queryInput.MobileCountryIds.Contains(mobileCountryId))
+                        return false;
+                }
+
+                return true;
             }
         }
 
