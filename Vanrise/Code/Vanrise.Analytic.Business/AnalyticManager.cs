@@ -918,6 +918,11 @@ namespace Vanrise.Analytic.Business
                         subTableSummaryRecordsByGroupingKey.Add(subTableSummaryAnalyticRecordInProcess.GroupingKey, subTableSummaryAnalyticRecordInProcess);
                         subTableSummaryRecords.Add(subTableSummaryAnalyticRecordInProcess);
                     }
+                    if (!querySubTable.OrderType.HasValue)
+                    {
+                        subTableSummaryRecords = GetOrderedAnalyticRecords(analyticTableQueryContext, AnalyticQueryOrderType.ByAllDimensions, querySubTable.Dimensions, querySubTable.Measures, querySubTable.AdvancedOrderOptions, subTableSummaryRecords, recordInProcexcc => recordInProcexcc.Record).ToList();
+                    }
+                    
                     if (querySubTable.OrderType.HasValue)
                     {
                         subTableSummaryRecords = GetOrderedAnalyticRecords(analyticTableQueryContext, querySubTable.OrderType.Value, querySubTable.Dimensions, querySubTable.Measures, querySubTable.AdvancedOrderOptions, subTableSummaryRecords, recordInProcexcc => recordInProcexcc.Record).ToList();
