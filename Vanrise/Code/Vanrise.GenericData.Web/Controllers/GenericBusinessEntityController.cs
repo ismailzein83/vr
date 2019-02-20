@@ -116,7 +116,7 @@ namespace Vanrise.GenericData.Web.Controllers
 			MemoryStream memoryStream = new System.IO.MemoryStream();
 			memoryStream.Write(templateWithDateFormatBytes, 0, templateWithDateFormatBytes.Length);
 			memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-			return GetExcelResponse(memoryStream, "Genric Business Entity Template.xlsx");
+			return GetExcelResponse(memoryStream, string.Format("{0} Template.xlsx", manager.GenericBusinessEntityDefinitionTitle(businessEntityDefinitionId)));
 
 		}
 
