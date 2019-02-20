@@ -558,10 +558,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             if (supplierVoiceInvoicesBySaleCurrency != null && supplierVoiceInvoicesBySaleCurrency.Count > 0)
             {
-                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                generatedInvoiceItemSet.SetName = "GroupingByCurrency";
-                generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
-
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
+                {
+                    SetName = "GroupingByCurrency",
+                    Items = new List<GeneratedInvoiceItem>()
+                };
                 foreach (var supplierInvoiceBySaleCurrency in supplierVoiceInvoicesBySaleCurrency)
                 {
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
@@ -577,10 +578,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             if(supplierSMSInvoicesBySaleCurrency!=null && supplierSMSInvoicesBySaleCurrency.Count > 0)
             {
-                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                generatedInvoiceItemSet.SetName = "SMSGroupingByCurrency";
-                generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
-
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
+                {
+                    SetName = "SMSGroupingByCurrency",
+                    Items = new List<GeneratedInvoiceItem>()
+                };
                 foreach (var supplierSMSInvoiceBySaleCurrency in supplierSMSInvoicesBySaleCurrency)
                 {
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
@@ -595,13 +597,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             if (voiceItemSetNames != null && voiceItemSetNames.Count > 0)
             {
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
+                {
+                    SetName = "GroupedByCostZone",
+                    Items = new List<GeneratedInvoiceItem>()
+                };
                 foreach (var item in voiceItemSetNames)
                 {
-                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
-                    {
-                        SetName = "GroupedByCostZone",
-                        Items = new List<GeneratedInvoiceItem>()
-                    };
                     SupplierInvoiceItemDetails supplierInvoiceItemDetails = new Entities.SupplierInvoiceItemDetails()
                     {
                         Duration = item.InvoiceMeasures.CostDuration,
@@ -632,22 +634,22 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         Details = supplierInvoiceItemDetails,
                         Name = " "
                     });
-                    if (generatedInvoiceItemSet.Items.Count > 0)
-                    {
-                        generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                    }
+                }
+                if (generatedInvoiceItemSet.Items.Count > 0)
+                {
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
                 }
             }
 
             if(smsItemSetNames!=null && smsItemSetNames.Count > 0)
             {
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
+                {
+                    SetName = "GroupedByCostMobileNetwork",
+                    Items = new List<GeneratedInvoiceItem>()
+                };
                 foreach (var item in smsItemSetNames)
                 {
-                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
-                    {
-                        SetName = "GroupedByCostMobileNetwork",
-                        Items = new List<GeneratedInvoiceItem>()
-                    };
                     SupplierSMSInvoiceItemDetails supplierInvoiceItemDetails = new Entities.SupplierSMSInvoiceItemDetails()
                     {
                         NumberOfSMS = item.InvoiceMeasures.NumberOfSMS,
@@ -672,19 +674,21 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         Details = supplierInvoiceItemDetails,
                         Name = " "
                     });
-                    if (generatedInvoiceItemSet.Items.Count > 0)
-                    {
-                        generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                    }
+                }
+                if (generatedInvoiceItemSet.Items.Count > 0)
+                {
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
                 }
             }
             if (generatedInvoiceItemSets.Count > 0)
             {
                 if (taxItemDetails != null && taxItemDetails.Count() > 0)
                 {
-                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                    generatedInvoiceItemSet.SetName = "Taxes";
-                    generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
+                    {
+                        SetName = "Taxes",
+                        Items = new List<GeneratedInvoiceItem>()
+                    };
                     foreach (var item in taxItemDetails)
                     {
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
@@ -698,10 +702,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             if (supplierRecurringCharges != null && supplierRecurringCharges.Count > 0)
             {
-                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                generatedInvoiceItemSet.SetName = "RecurringCharge";
-                generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
-
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
+                {
+                    SetName = "RecurringCharge",
+                    Items = new List<GeneratedInvoiceItem>()
+                };
                 foreach (var supplierRecurringCharge in supplierRecurringCharges)
                 {
                     generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
