@@ -387,7 +387,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                         }
                     }
                 }
-                var rateTitlePart = reportDefinition.SplitRateValue.HasValue ? string.Concat( splitRate ? Decimal.Round(reportDefinition.SplitRateValue.Value, 3).ToString() : "R-" + Decimal.Round(reportDefinition.SplitRateValue.Value,3)) : null;
+                var rateTitlePart = reportDefinition.SplitRateValue.HasValue ? string.Concat( splitRate ? Decimal.Round(reportDefinition.SplitRateValue.Value, 4).ToString() : "R-" + Decimal.Round(reportDefinition.SplitRateValue.Value,4)) : null;
                 var jazzTransactionsReport = new JazzTransactionsReport
                 {
                     ReportDefinitionId = reportDefinition.JazzReportDefinitionId,

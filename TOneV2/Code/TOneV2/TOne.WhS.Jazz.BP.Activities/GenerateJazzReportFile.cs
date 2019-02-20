@@ -73,8 +73,8 @@ namespace TOne.WhS.Jazz.BP.Activities
                     else
                     {
 
-                        CreateCell(string.Format("Amount Rate-{0}", Decimal.Round(report.SplitRateValue.Value,3)), headerRow, cellStyle1);
-                        CreateCell(string.Format("Amount {0}", Decimal.Round(report.SplitRateValue.Value,3)), headerRow, cellStyle1);
+                        CreateCell(string.Format("Amount Rate-{0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
+                        CreateCell(string.Format("Amount {0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
                     }
 
                     if (report.TaxOption.HasValue)
@@ -92,8 +92,8 @@ namespace TOne.WhS.Jazz.BP.Activities
 
                     else
                     {
-                        CreateCell(string.Format("Region Value Rate-{0}", Decimal.Round(report.SplitRateValue.Value,3)), headerRow, cellStyle1);
-                        CreateCell(string.Format("Region Value {0}", Decimal.Round(report.SplitRateValue.Value,3)), headerRow, cellStyle1);
+                        CreateCell(string.Format("Region Value Rate-{0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
+                        CreateCell(string.Format("Region Value {0}", Decimal.Round(report.SplitRateValue.Value,4)), headerRow, cellStyle1);
                     }
               
                     if (report.ReportData!=null && report.ReportData.Count > 0)

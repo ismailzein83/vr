@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountCodeOnBeforeInsertHandler.cs" />
+    <Compile Include="JazzReportBPDefinitionSettings.cs" />
     <Compile Include="TransactionsReportManager.cs" />
     <Compile Include="ReportDefinitionManager.cs" />
     <Compile Include="MarketManager.cs" />
@@ -103,6 +104,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.Jazz.BP.Arguments\TOne.WhS.Jazz.BP.Arguments.csproj">
+      <Project>{97FCD3FB-7C13-4C40-B150-BDCF81E4AB19}</Project>
+      <Name>TOne.WhS.Jazz.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Jazz.Data\TOne.WhS.Jazz.Data.csproj">
       <Project>{F2903613-8320-47DB-AA72-DB7BCF9AA7AE}</Project>
       <Name>TOne.WhS.Jazz.Data</Name>
