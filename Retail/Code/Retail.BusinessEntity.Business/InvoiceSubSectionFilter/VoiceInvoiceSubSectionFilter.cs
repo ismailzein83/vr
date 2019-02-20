@@ -13,7 +13,9 @@ namespace Retail.BusinessEntity.Business
 
         public override bool IsFilterMatch(IInvoiceSubSectionFilterContext context)
         {
-            throw new NotImplementedException();
+            RetailModuleManager retailModuleManager = new RetailModuleManager();
+            Guid voiceAnalyticTableId = new Guid("6cd535c0-ac49-46bb-aecf-0eae33823b20");
+            return retailModuleManager.IsVoiceModuleEnabled(voiceAnalyticTableId);
         }
     }
 }

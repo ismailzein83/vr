@@ -13,7 +13,9 @@ namespace Retail.BusinessEntity.Business
 
         public override bool IsFilterMatch(IInvoiceSubSectionFilterContext context)
         {
-            throw new NotImplementedException();
+            Guid smsAnalyticTableId = new Guid("c1bd3f2f-6213-44d1-9d58-99f81e169930");
+            RetailModuleManager retailModuleManager = new RetailModuleManager();
+            return retailModuleManager.IsSMSModuleEnabled(smsAnalyticTableId);
         }
     }
 }

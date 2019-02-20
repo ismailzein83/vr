@@ -18,21 +18,21 @@ namespace Retail.Interconnect.Business
     public class InterconnectInvoiceGenerator : InvoiceGenerator
     {
         #region Constructors
-         Guid _acountBEDefinitionId;
-         Guid _invoiceTransactionTypeId;
-         List<Guid> _usageTransactionTypeIds;
-         InterconnectInvoiceType _type;
+        Guid _acountBEDefinitionId;
+        Guid _invoiceTransactionTypeId;
+        List<Guid> _usageTransactionTypeIds;
+        InterconnectInvoiceType _type;
 
-         public InterconnectInvoiceGenerator(Guid acountBEDefinitionId, Guid invoiceTransactionTypeId, List<Guid> usageTransactionTypeIds ,InterconnectInvoiceType type)
-         {
-             this._acountBEDefinitionId = acountBEDefinitionId;
-             this._invoiceTransactionTypeId = invoiceTransactionTypeId;
-             this._usageTransactionTypeIds = usageTransactionTypeIds;
-             this._type = type;
-         }
+        public InterconnectInvoiceGenerator(Guid acountBEDefinitionId, Guid invoiceTransactionTypeId, List<Guid> usageTransactionTypeIds ,InterconnectInvoiceType type)
+        {
+            this._acountBEDefinitionId = acountBEDefinitionId;
+            this._invoiceTransactionTypeId = invoiceTransactionTypeId;
+            this._usageTransactionTypeIds = usageTransactionTypeIds;
+            this._type = type;
+        }
 
         #endregion
-       
+
         #region Fields
 
         private FinancialAccountManager _financialAccountManager = new FinancialAccountManager();
@@ -42,60 +42,77 @@ namespace Retail.Interconnect.Business
 
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
-            List<string> listMeasures = new List<string> { "TotalBillingDuration", "Amount", "CountCDRs", "BillingPeriodTo", "BillingPeriodFrom", "Amount_OrigCurr" };
-            List<string> listDimensions = new List<string> { "DestinationZone", "OriginationZone", "Operator", "Rate", "RateType", "BillingType", "Currency" };
+            Guid voiceAnalyticTableId = new Guid("6cd535c0-ac49-46bb-aecf-0eae33823b20");
+            Guid smsAnalyticTableId = new Guid("c1bd3f2f-6213-44d1-9d58-99f81e169930");
 
             FinancialAccountData financialAccountData = _financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
-
             if (context.FromDate < financialAccountData.FinancialAccount.BED || context.ToDate > financialAccountData.FinancialAccount.EED)
             {
                 context.ErrorMessage = "From date and To date should be within the effective date of financial account.";
                 context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
                 return;
-
             }
-                   
+
             DateTime fromDate = context.FromDate;
             DateTime toDate = context.ToDate;
             DateTime toDateForBillingTransaction = context.ToDate.Date.AddDays(1);
 
-            string dimentionName = "BillingAccountId";
+            string dimensionName = "BillingAccountId";
             string dimensionValue = financialAccountData.FinancialAccountId;
             int currencyId = _accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
-           
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId);
-            if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
+
+            RetailModuleManager retailModuleManager = new RetailModuleManager();
+            AnalyticSummaryBigResult<AnalyticRecord> voiceAnalyticResult = new AnalyticSummaryBigResult<AnalyticRecord>();
+            AnalyticSummaryBigResult<AnalyticRecord> smsAnalyticResult = new AnalyticSummaryBigResult<AnalyticRecord>();
+            if (retailModuleManager.IsVoiceModuleEnabled(voiceAnalyticTableId))
+            {
+                List<string> voiceListMeasures = new List<string> { "TotalBillingDuration", "Amount", "CountCDRs", "BillingPeriodTo", "BillingPeriodFrom", "Amount_OrigCurr" };
+                List<string> voiceListDimensions = new List<string> { "DestinationZone", "OriginationZone", "Operator", "Rate", "RateType", "BillingType", "Currency" };
+                voiceAnalyticResult = GetFilteredRecords(voiceListDimensions, voiceListMeasures, dimensionName, dimensionValue, fromDate, toDate, currencyId, voiceAnalyticTableId);
+            }
+            if (retailModuleManager.IsSMSModuleEnabled(smsAnalyticTableId))
+            {
+                List<string> smsListMeasures = new List<string> { "Amount", "DeliveredSMS", "BillingPeriodTo", "BillingPeriodFrom", "Amount_OriginalCurrency" };
+                List<string> smsListDimensions = new List<string> { "DestinationMobileNetwork", "OriginationMobileNetwork", "Operator", "Rate", "RateType", "BillingType", "Currency" };
+                smsAnalyticResult = GetFilteredRecords(smsListDimensions, smsListMeasures, dimensionName, dimensionValue, fromDate, toDate, currencyId, smsAnalyticTableId);
+            }
+            if ((voiceAnalyticResult.Data == null || voiceAnalyticResult.Data.Count() == 0) && (smsAnalyticResult.Data == null || smsAnalyticResult.Data.Count() == 0))
             {
                 context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
                 return;
             }
+            List<InvoiceBillingRecord> voiceItemSetNames = new List<InvoiceBillingRecord>();
+            List<InvoiceSMSBillingRecord> smsItemSetNames = new List<InvoiceSMSBillingRecord>();
 
-            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId);
-            if (itemSetNamesDic.Count == 0)
+            ConvertAnalyticDataToList(voiceAnalyticResult.Data, smsAnalyticResult.Data, currencyId, voiceItemSetNames, smsItemSetNames);
+
+            if (voiceItemSetNames.Count == 0 &&  smsItemSetNames.Count == 0)
             {
                 context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
                 return;
             }
             IEnumerable<VRTaxItemDetail> taxItemDetails = _financialAccountManager.GetFinancialAccountTaxItemDetails(context.InvoiceTypeId, _acountBEDefinitionId, context.PartnerId);
 
-            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails);
+            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(voiceItemSetNames, smsItemSetNames, taxItemDetails);
 
 
             #region BuildInterconnectInvoiceDetails
-            InterconnectInvoiceDetails interconnectInvoiceDetails = BuildInterconnectInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate);
+            InterconnectInvoiceDetails interconnectInvoiceDetails = BuildInterconnectInvoiceDetails(voiceItemSetNames, smsItemSetNames, context.FromDate, context.ToDate);
             if (interconnectInvoiceDetails != null)
             {
                 interconnectInvoiceDetails.AmountWithTaxes = interconnectInvoiceDetails.Amount;
+                interconnectInvoiceDetails.SMSAmountWithTaxes = interconnectInvoiceDetails.SMSAmount;
 
                 if (taxItemDetails != null)
                 {
                     foreach (var tax in taxItemDetails)
                     {
                         interconnectInvoiceDetails.AmountWithTaxes += ((interconnectInvoiceDetails.Amount * Convert.ToDecimal(tax.Value)) / 100);
+                        interconnectInvoiceDetails.SMSAmountWithTaxes += ((interconnectInvoiceDetails.SMSAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
                 }
 
-                if (interconnectInvoiceDetails.AmountWithTaxes != 0)
+                if (interconnectInvoiceDetails.AmountWithTaxes != 0 || interconnectInvoiceDetails.SMSAmountWithTaxes != 0)
                 {
                     context.Invoice = new GeneratedInvoice
                     {
@@ -110,7 +127,6 @@ namespace Retail.Interconnect.Business
                     context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
                     return;
                 }
-              
             }
             else
             {
@@ -118,9 +134,6 @@ namespace Retail.Interconnect.Business
                 context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
                 return;
             }
-
-
-
             #endregion
         }
 
@@ -141,7 +154,7 @@ namespace Retail.Interconnect.Business
                 Amount = invoiceDetails.Amount,
                 CurrencyId = invoiceDetails.InterconnectCurrencyId
             };
-        
+
             billingTransaction.Settings = new GeneratedInvoiceBillingTransactionSettings();
             billingTransaction.Settings.UsageOverrides = new List<GeneratedInvoiceBillingTransactionUsageOverride>();
             if (this._usageTransactionTypeIds != null)
@@ -156,84 +169,126 @@ namespace Retail.Interconnect.Business
             }
             context.BillingTransactions = new List<GeneratedInvoiceBillingTransaction>() { billingTransaction };
         }
-        private InterconnectInvoiceDetails BuildInterconnectInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, DateTime fromDate, DateTime toDate)
+        private InterconnectInvoiceDetails BuildInterconnectInvoiceDetails(List<InvoiceBillingRecord> voiceItemSetNames, List<InvoiceSMSBillingRecord> smsItemSetNames, DateTime fromDate, DateTime toDate)
         {
             CurrencyManager currencyManager = new CurrencyManager();
             InterconnectInvoiceDetails interconnectInvoiceDetails = null;
-            
-                if (itemSetNamesDic != null)
+
+            if (voiceItemSetNames != null && voiceItemSetNames.Count > 0)
+            {
+                interconnectInvoiceDetails = new InterconnectInvoiceDetails();
+                foreach (var invoiceBillingRecord in voiceItemSetNames)
                 {
-                    List<InvoiceBillingRecord> invoiceBillingRecordList = null;
-                    if (itemSetNamesDic.TryGetValue("GroupedByDestinationZone", out invoiceBillingRecordList))
-                    {
-                        interconnectInvoiceDetails = new InterconnectInvoiceDetails();
-                        foreach (var invoiceBillingRecord in invoiceBillingRecordList)
-                        {
-                            interconnectInvoiceDetails.Duration += invoiceBillingRecord.InvoiceMeasures.TotalBillingDuration;
-                            interconnectInvoiceDetails.Amount += invoiceBillingRecord.InvoiceMeasures.Amount;
-                            interconnectInvoiceDetails.InterconnectCurrencyId = invoiceBillingRecord.CurrencyId;
-                            interconnectInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
-                        }
-                    };
+                    interconnectInvoiceDetails.Duration += invoiceBillingRecord.InvoiceMeasures.TotalBillingDuration;
+                    interconnectInvoiceDetails.Amount += invoiceBillingRecord.InvoiceMeasures.Amount;
+                    interconnectInvoiceDetails.VoiceAmount += invoiceBillingRecord.InvoiceMeasures.Amount;
+                    interconnectInvoiceDetails.InterconnectCurrencyId = invoiceBillingRecord.CurrencyId;
+                    interconnectInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
                 }
-            
+            }
+            if (smsItemSetNames != null && smsItemSetNames.Count > 0)
+            {
+                if (interconnectInvoiceDetails == null)
+                    interconnectInvoiceDetails = new InterconnectInvoiceDetails();
+                foreach (var invoiceBillingRecord in smsItemSetNames)
+                {
+                    interconnectInvoiceDetails.Amount += invoiceBillingRecord.InvoiceMeasures.Amount;
+                    interconnectInvoiceDetails.SMSAmount += invoiceBillingRecord.InvoiceMeasures.Amount;
+                    interconnectInvoiceDetails.InterconnectCurrencyId = invoiceBillingRecord.CurrencyId;
+                    interconnectInvoiceDetails.TotalNumberOfSMS += invoiceBillingRecord.InvoiceMeasures.NumberOfSMS;
+                }
+            }
+
             if (interconnectInvoiceDetails != null)
             {
                 interconnectInvoiceDetails.InterconnectCurrency = currencyManager.GetCurrencySymbol(interconnectInvoiceDetails.InterconnectCurrencyId);
             }
             return interconnectInvoiceDetails;
         }
-        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(List<InvoiceBillingRecord> voiceItemSetNames, List<InvoiceSMSBillingRecord> smsItemSetNames, IEnumerable<VRTaxItemDetail> taxItemDetails)
         {
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
-            
-            if (itemSetNamesDic != null)
+            if (voiceItemSetNames != null && voiceItemSetNames.Count>0)
             {
-                foreach (var itemSet in itemSetNamesDic)
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
                 {
-                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                    generatedInvoiceItemSet.SetName = itemSet.Key;
-                    var itemSetValues = itemSet.Value;
-                    generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
-
-                    foreach (var item in itemSetValues)
+                    SetName = "GroupedByDestinationZone",
+                    Items = new List<GeneratedInvoiceItem>()
+                };
+                foreach (var item in voiceItemSetNames)
+                {
+                    InterconnectInvoiceItemDetails interconnectInvoiceItemDetails = new Entities.InterconnectInvoiceItemDetails()
                     {
-                        InterconnectInvoiceItemDetails interconnectInvoiceItemDetails = new Entities.InterconnectInvoiceItemDetails()
-                        {
-                            Duration = item.InvoiceMeasures.TotalBillingDuration,
-                            Amount = item.InvoiceMeasures.Amount,
-                            DestinationZoneId = item.DestinationZoneId,
-                            OriginationZoneId = item.OriginationZoneId,
-                            OperatorId = item.OperatorId,
-                            Rate = item.Rate,
-                            RateTypeId = item.RateTypeId,
-                            TrafficDirection = item.TrafficDirection,
-                            CurrencyId = item.CurrencyId,
-                            NumberOfCalls = item.InvoiceMeasures.NumberOfCalls,
-                            FromDate = item.InvoiceMeasures.FromDate,
-                            ToDate = item.InvoiceMeasures.ToDate,
-                            OriginalAmount = item.InvoiceMeasures.Amount_OrigCurr,
-                        };
-                        generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                        {
-                            Details = interconnectInvoiceItemDetails,
-                            Name = " "
-                        });
-                    }
-                    if (generatedInvoiceItemSet.Items.Count > 0)
+                        Duration = item.InvoiceMeasures.TotalBillingDuration,
+                        Amount = item.InvoiceMeasures.Amount,
+                        DestinationZoneId = item.DestinationZoneId,
+                        OriginationZoneId = item.OriginationZoneId,
+                        OperatorId = item.OperatorId,
+                        Rate = item.Rate,
+                        RateTypeId = item.RateTypeId,
+                        TrafficDirection = item.TrafficDirection,
+                        CurrencyId = item.CurrencyId,
+                        NumberOfCalls = item.InvoiceMeasures.NumberOfCalls,
+                        FromDate = item.InvoiceMeasures.FromDate,
+                        ToDate = item.InvoiceMeasures.ToDate,
+                        OriginalAmount = item.InvoiceMeasures.Amount_OrigCurr,
+                    };
+                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                     {
-                        generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-                    }
+                        Details = interconnectInvoiceItemDetails,
+                        Name = " "
+                    });
+                }
+                if (generatedInvoiceItemSet.Items.Count > 0)
+                {
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+                }
+            }
+            if (smsItemSetNames != null && smsItemSetNames.Count > 0)
+            {
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
+                {
+                    SetName = "GroupedByDestinationMobileNetwork",
+                    Items = new List<GeneratedInvoiceItem>()
+                };
+                foreach (var item in smsItemSetNames)
+                {
+                    InterconnectSMSInvoiceItemDetails interconnectInvoiceItemDetails = new Entities.InterconnectSMSInvoiceItemDetails()
+                    {
+                        Amount = item.InvoiceMeasures.Amount,
+                        DestinationMobileNetworkId = item.DestinationMobileNetworkId,
+                        OriginationMobileNetworkId = item.OriginationMobileNetworkId,
+                        OperatorId = item.OperatorId,
+                        Rate = item.Rate,
+                        RateTypeId = item.RateTypeId,
+                        BillingType = item.BillingType,
+                        CurrencyId = item.CurrencyId,
+                        NumberOfSMS = item.InvoiceMeasures.NumberOfSMS,
+                        FromDate = item.InvoiceMeasures.FromDate,
+                        ToDate = item.InvoiceMeasures.ToDate,
+                        OriginalAmount = item.InvoiceMeasures.Amount_OrigCurr,
+                    };
+                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                    {
+                        Details = interconnectInvoiceItemDetails,
+                        Name = " "
+                    });
+                }
+                if (generatedInvoiceItemSet.Items.Count > 0)
+                {
+                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
                 }
             }
 
             if (generatedInvoiceItemSets.Count > 0)
             {
-                if (taxItemDetails != null)
+                if (taxItemDetails != null && taxItemDetails.Count() > 0)
                 {
-                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                    generatedInvoiceItemSet.SetName = "Taxes";
-                    generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet()
+                    {
+                        SetName = "Taxes",
+                        Items = new List<GeneratedInvoiceItem>()
+                    };
                     foreach (var item in taxItemDetails)
                     {
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
@@ -247,7 +302,7 @@ namespace Retail.Interconnect.Business
             }
             return generatedInvoiceItemSets;
         }
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId)
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int? currencyId, Guid analyticTableId)
         {
             AnalyticManager analyticManager = new AnalyticManager();
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -256,7 +311,7 @@ namespace Retail.Interconnect.Business
                 {
                     DimensionFields = listDimensions,
                     MeasureFields = listMeasures,
-                    TableId = Guid.Parse("6cd535c0-ac49-46bb-aecf-0eae33823b20"),
+                    TableId = analyticTableId,
                     FromTime = fromDate,
                     ToTime = toDate,
                     ParentDimensions = new List<string>(),
@@ -292,12 +347,11 @@ namespace Retail.Interconnect.Business
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
         }
-        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId)
+        private void ConvertAnalyticDataToList(IEnumerable<AnalyticRecord> voiceAnalyticRecords, IEnumerable<AnalyticRecord> smsAnalyticRecords, int currencyId, List<InvoiceBillingRecord> voiceItemSetNames, List<InvoiceSMSBillingRecord> smsItemSetNames)
         {
-            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
-            if (analyticRecords != null)
+            if (voiceAnalyticRecords != null && voiceAnalyticRecords.Count()>0)
             {
-                foreach (var analyticRecord in analyticRecords)
+                foreach (var analyticRecord in voiceAnalyticRecords)
                 {
                     #region ReadDataFromAnalyticResult
                     DimensionValue destinationZoneId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
@@ -340,29 +394,55 @@ namespace Retail.Interconnect.Business
                                 NumberOfCalls = Convert.ToInt32(countCDRs.Value ?? 00),
                             }
                         };
-                        AddItemToDictionary(itemSetNamesDic, "GroupedByDestinationZone", invoiceBillingRecord);
+                        voiceItemSetNames.Add(invoiceBillingRecord);
                     }
-
                 }
             }
-            return itemSetNamesDic;
-        }
-        private void AddItemToDictionary<T>(Dictionary<T, List<InvoiceBillingRecord>> itemSetNamesDic, T key, InvoiceBillingRecord invoiceBillingRecord)
-        {
-            if (itemSetNamesDic == null)
-                itemSetNamesDic = new Dictionary<T, List<InvoiceBillingRecord>>();
-            List<InvoiceBillingRecord> invoiceBillingRecordList = null;
+            if (smsAnalyticRecords != null && smsAnalyticRecords.Count() > 0)
+            {
+                foreach (var analyticRecord in smsAnalyticRecords)
+                {
+                    #region ReadDataFromAnalyticResult
+                    DimensionValue destinationMobileNetworkId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
+                    DimensionValue originationMobileNetworkId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
+                    DimensionValue operatorId = analyticRecord.DimensionValues.ElementAtOrDefault(2);
+                    DimensionValue rate = analyticRecord.DimensionValues.ElementAtOrDefault(3);
+                    DimensionValue rateTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(4);
+                    DimensionValue billingType = analyticRecord.DimensionValues.ElementAtOrDefault(5);
+                    DimensionValue currency = analyticRecord.DimensionValues.ElementAtOrDefault(6);
 
-            if (!itemSetNamesDic.TryGetValue(key, out invoiceBillingRecordList))
-            {
-                invoiceBillingRecordList = new List<InvoiceBillingRecord>();
-                invoiceBillingRecordList.Add(invoiceBillingRecord);
-                itemSetNamesDic.Add(key, invoiceBillingRecordList);
-            }
-            else
-            {
-                invoiceBillingRecordList.Add(invoiceBillingRecord);
-                itemSetNamesDic[key] = invoiceBillingRecordList;
+                    MeasureValue amount = GetMeasureValue(analyticRecord, "Amount");
+                    MeasureValue deliveredSMS = GetMeasureValue(analyticRecord, "DeliveredSMS");
+                    MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
+                    MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
+                    MeasureValue amount_OrigCurr = GetMeasureValue(analyticRecord, "Amount_OriginalCurrency");
+
+                    #endregion
+
+                    var amountValue = Convert.ToDecimal(amount == null ? 0.0 : amount.Value ?? 0.0);
+                    if (amountValue != 0)
+                    {
+                        InvoiceSMSBillingRecord invoiceBillingRecord = new InvoiceSMSBillingRecord
+                        {
+                            DestinationMobileNetworkId = Convert.ToInt64(destinationMobileNetworkId.Value),
+                            OriginationMobileNetworkId = Convert.ToInt64(originationMobileNetworkId.Value),
+                            OperatorId = Convert.ToInt64(operatorId.Value),
+                            Rate = rate != null ? Convert.ToDecimal(rate.Value) : default(decimal),
+                            RateTypeId = rateTypeId != null && rateTypeId.Value != null ? Convert.ToInt32(rateTypeId.Value) : default(int),
+                            BillingType = Convert.ToInt32(billingType.Value),
+                            CurrencyId = Convert.ToInt32(currency.Value),
+                            InvoiceMeasures = new InvoiceSMSMeasures
+                            {
+                                FromDate = billingPeriodFrom != null ? Convert.ToDateTime(billingPeriodFrom.Value) : default(DateTime),
+                                ToDate = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
+                                Amount = amountValue,
+                                Amount_OrigCurr = Convert.ToDecimal(amount_OrigCurr == null ? 0.0 : amount_OrigCurr.Value ?? 0.0),
+                                NumberOfSMS = Convert.ToInt32(deliveredSMS.Value ?? 00),
+                            }
+                        };
+                        smsItemSetNames.Add(invoiceBillingRecord);
+                    }
+                }
             }
         }
         public class InvoiceMeasures
@@ -385,6 +465,25 @@ namespace Retail.Interconnect.Business
             public int TrafficDirection { get; set; }
             public int CurrencyId { get; set; }
 
+        }
+        public class InvoiceSMSMeasures
+        {
+            public DateTime FromDate { get; set; }
+            public DateTime ToDate { get; set; }
+            public decimal Amount { get; set; }
+            public decimal Amount_OrigCurr { get; set; }
+            public int NumberOfSMS { get; set; }
+        }
+        public class InvoiceSMSBillingRecord
+        {
+            public InvoiceSMSMeasures InvoiceMeasures { get; set; }
+            public long DestinationMobileNetworkId { get; set; }
+            public long OriginationMobileNetworkId { get; set; }
+            public long OperatorId { get; set; }
+            public decimal Rate { get; set; }
+            public int RateTypeId { get; set; }
+            public int BillingType { get; set; }
+            public int CurrencyId { get; set; }
         }
     }
 }
