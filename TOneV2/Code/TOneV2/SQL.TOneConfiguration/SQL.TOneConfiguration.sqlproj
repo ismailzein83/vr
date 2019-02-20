@@ -139,6 +139,8 @@
     <Folder Include="VR_AccountManager\Tables\" />
     <Folder Include="VR_AccountManager\Stored Procedures\" />
     <Folder Include="common\User Defined Types\" />
+    <Folder Include="VR_MobNet\" />
+    <Folder Include="VR_MobNet\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -834,6 +836,10 @@
     <Build Include="common\Stored Procedures\sp_ProcessState_InsertOrUpdate.sql" />
     <Build Include="common\Stored Procedures\sp_ProcessState_GetAll.sql" />
     <Build Include="common\Stored Procedures\sp_File_Delete.sql" />
+    <Build Include="VR_MobNet\Tables\NumberPrefix.sql" />
+    <Build Include="VR_MobNet\Tables\MobileNetwork.sql" />
+    <Build Include="VR_MobNet\Tables\MobileCountry.sql" />
+    <Build Include="Security\VR_MobNet.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

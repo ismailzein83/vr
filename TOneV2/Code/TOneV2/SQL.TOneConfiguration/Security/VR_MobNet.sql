@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [VR_MobNet]
+    AUTHORIZATION [dbo];
+
