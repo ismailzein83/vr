@@ -61,6 +61,10 @@
     font-weight: bold !important;
 }
 
+.bold-label-figure{
+    font-weight: bold !important;
+}
+
 .datepicker-custom button {
     border: 0px !important;
 }
@@ -4779,31 +4783,71 @@ span.option-marketprice {
 .green-column-grid {
     background-color: #D3F4DD;
 }
-
+.green-column-grid-figure {
+    color: #D3F4DD;
+}
 .red-column-grid {
     background-color: #FBE1DB;
 }
-
+.red-column-grid-figure {
+    color: #FBE1DB;
+}
 .blue-column-grid {
     background-color: #DBEAFB;
 }
-
+.blue-column-grid-figure {
+    color: #DBEAFB;
+}
 .yellow-column-grid {
     background-color: #fff3cd;
+}
+
+.yellow-column-grid-figure {
+   color: #fff3cd;
 }
 
 .green-font {
     color: green;
 }
-
+.green-font-figure {
+    color: green;
+}
 .red-font {
     color: red;
 }
-
+.red-font-figure {
+    color: red;
+}
 .warning-font {
     color: orange;
 }
-
+.warning-font-figure {
+    color: orange;
+}
+.label-default-figure {
+    color: #777777;
+}
+.label-primary-figure {
+    color: #337ab7;
+}
+.label-success-figure {
+    color: #5cb85c;
+}
+.label-info-figure {
+    color: #5bc0de;
+}
+.label-warning-figure {
+    background-color: #f0ad4e;
+}
+.label-warning-1-figure {
+    color: #FFD400;
+}
+.label-warning-2-figure {
+    color: #FFAA00;
+}
+.label-danger-figure {
+   color: #d9534f;
+}
 /* end custom style classes */
 
 
