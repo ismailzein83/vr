@@ -95,6 +95,7 @@
     <Compile Include="SupplierInvoiceDetails.cs" />
     <Compile Include="SupplierInvoiceItemDetails.cs" />
     <Compile Include="SupplierSMSInvoiceBySaleCurrencyItemDetails.cs" />
+    <Compile Include="SupplierSMSInvoiceItemDetails.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">

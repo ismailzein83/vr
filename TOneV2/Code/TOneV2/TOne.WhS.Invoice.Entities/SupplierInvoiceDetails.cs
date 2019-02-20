@@ -21,9 +21,14 @@ namespace TOne.WhS.Invoice.Entities
         public decimal TotalSMSAmount { get; set; }
         public int? TimeZoneId { get; set; }
         public decimal AmountAfterCommission { get; set; }
+        public decimal SMSAmountAfterCommission { get; set; }
         public decimal OriginalAmountAfterCommission { get; set; }
+        public decimal SMSOriginalAmountAfterCommission { get; set; }
         public Decimal TotalAmountAfterCommission { get; set; }
+        public Decimal TotalSMSAmountAfterCommission { get; set; }
+
         public Decimal TotalOriginalAmountAfterCommission { get; set; }
+        public Decimal TotalSMSOriginalAmountAfterCommission { get; set; }
         public Dictionary<int, OriginalDataCurrrency> OriginalAmountByCurrency { get; set; }
         public string Reference { get; set; }
         public List<AttachementFile> AttachementFiles { get; set; }
