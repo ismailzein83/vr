@@ -4,7 +4,7 @@
     [CurrencyID]        INT          NOT NULL,
     [FileID]            BIGINT       NULL,
     [EffectiveOn]       DATETIME     NULL,
-    [PricelistType]     TINYINT      NULL,
+    [PricelistType]     INT          NULL,
     [CreatedTime]       DATETIME     CONSTRAINT [DF_SupplierPriceList_CreatedDate] DEFAULT (getdate()) NULL,
     [SourceID]          VARCHAR (50) NULL,
     [ProcessInstanceID] BIGINT       NULL,
@@ -13,6 +13,8 @@
     [StateBackupID]     BIGINT       NULL,
     [LastModifiedTime]  DATETIME     NULL
 );
+
+
 
 
 

@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [TOneWhS_BE_Bkup].[SaleEntityRoutingProduct] (
     [ID]               BIGINT   NOT NULL,
-    [OwnerType]        TINYINT  NOT NULL,
+    [OwnerType]        INT      NOT NULL,
     [OwnerID]          INT      NOT NULL,
     [ZoneID]           BIGINT   NULL,
     [RoutingProductID] INT      NOT NULL,
@@ -9,6 +9,8 @@
     [StateBackupID]    BIGINT   NOT NULL,
     [LastModifiedTime] DATETIME NULL
 );
+
+
 
 
 

@@ -4,7 +4,7 @@
     [OwnerID]                INT            NOT NULL,
     [CurrencyID]             INT            NOT NULL,
     [EffectiveOn]            DATETIME       NULL,
-    [PriceListType]          TINYINT        NULL,
+    [PriceListType]          INT            NULL,
     [SourceID]               VARCHAR (50)   NULL,
     [FileID]                 BIGINT         NULL,
     [CreatedTime]            DATETIME       CONSTRAINT [DF_SalePriceList_CreatedTime_1] DEFAULT (getdate()) NULL,
@@ -14,9 +14,11 @@
     [UserID]                 INT            NULL,
     [Description]            NVARCHAR (MAX) NULL,
     [PricelistStateBackupID] BIGINT         NULL,
-    [PricelistSource]        TINYINT        NULL,
+    [PricelistSource]        INT            NULL,
     [LastModifiedTime]       DATETIME       NULL
 );
+
+
 
 
 

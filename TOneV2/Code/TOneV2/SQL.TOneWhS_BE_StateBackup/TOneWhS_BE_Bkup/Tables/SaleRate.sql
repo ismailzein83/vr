@@ -8,10 +8,12 @@
     [BED]              DATETIME        NOT NULL,
     [EED]              DATETIME        NULL,
     [SourceID]         VARCHAR (50)    NULL,
-    [Change]           TINYINT         NULL,
+    [Change]           INT             NULL,
     [StateBackupID]    BIGINT          NOT NULL,
     [LastModifiedTime] DATETIME        NULL
 );
+
+
 
 
 

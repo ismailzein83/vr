@@ -5,13 +5,15 @@
     [CurrencyID]       INT             NULL,
     [Rate]             DECIMAL (20, 8) NOT NULL,
     [RateTypeID]       INT             NULL,
-    [Change]           TINYINT         NULL,
+    [Change]           INT             NULL,
     [BED]              DATETIME        NOT NULL,
     [EED]              DATETIME        NULL,
     [SourceID]         VARCHAR (50)    NULL,
     [StateBackupID]    BIGINT          NOT NULL,
     [LastModifiedTime] DATETIME        NULL
 );
+
+
 
 
 
