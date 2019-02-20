@@ -6,10 +6,10 @@ namespace TOne.WhS.SMSBusinessEntity.Entities
 
     public class SMSImportSettings : SettingData
     {
-        public SwitchSMSMappingConfiguration SwitchSMSMappingConfiguration { get; set; }
+        public SMSImportMappingConfiguration SMSImportMappingConfiguration { get; set; }
     }
 
-    public class SwitchSMSMappingConfiguration
+    public class SMSImportMappingConfiguration
     {
         public ReceiverIdentification? GeneralIdentification { get; set; }
 

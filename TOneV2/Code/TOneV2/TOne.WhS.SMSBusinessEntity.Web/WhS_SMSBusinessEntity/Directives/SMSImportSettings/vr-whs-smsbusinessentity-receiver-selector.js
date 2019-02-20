@@ -30,7 +30,6 @@ app.directive('vrWhsSmsbusinessentityReceiverSelector', ['UtilsService', 'VRUIUt
             controllerAs: 'ctrl',
             bindToController: true,
             template: function (element, attrs) {
-
                 return getTemplate(attrs);
             }
         };
@@ -45,6 +44,7 @@ app.directive('vrWhsSmsbusinessentityReceiverSelector', ['UtilsService', 'VRUIUt
                 label = "Receivers";
                 multipleselection = "ismultipleselection";
             }
+
             if (attrs.label != undefined)
                 label = attrs.label;
 
@@ -57,6 +57,7 @@ app.directive('vrWhsSmsbusinessentityReceiverSelector', ['UtilsService', 'VRUIUt
         }
 
         function ReceiverSelectorCtor(ctrl, $scope, attrs) {
+            this.initializeController = initializeController;
 
             var selectorAPI;
 
@@ -103,7 +104,5 @@ app.directive('vrWhsSmsbusinessentityReceiverSelector', ['UtilsService', 'VRUIUt
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
     }]);

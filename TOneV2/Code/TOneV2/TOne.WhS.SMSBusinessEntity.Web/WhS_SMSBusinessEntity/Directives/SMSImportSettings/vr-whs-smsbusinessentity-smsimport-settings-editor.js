@@ -17,9 +17,6 @@ app.directive('vrWhsSmsbusinessentitySmsimportSettingsEditor', ['UtilsService', 
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
             templateUrl: "/Client/Modules/WhS_SMSBusinessEntity/Directives/SMSImportSettings/Templates/SMSImportSettingsTemplate.html"
         };
 

@@ -18,13 +18,11 @@ app.directive('vrWhsSmsbusinessentitySmsimportmappingconfiguration', ['UtilsServ
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
             templateUrl: "/Client/Modules/WhS_SMSBusinessEntity/Directives/SMSImportSettings/Templates/SMSImportMappingConfigurationTemplate.html"
         };
 
         function smsImportEditorCtor(ctrl, $scope, $attrs) {
+            this.initializeController = initializeController;
 
             var receiverSelectorAPI;
             var receiverReadyDeferred = UtilsService.createPromiseDeferred();
@@ -58,8 +56,7 @@ app.directive('vrWhsSmsbusinessentitySmsimportmappingconfiguration', ['UtilsServ
                     mobileNetworkReceiverReadyDeferred.resolve();
                 };
 
-                UtilsService.waitMultiplePromises([customerReceiverReadyDeferred.promise, supplierReceiverReadyDeferred.promise, mobileNetworkReceiverReadyDeferred.promise,
-                receiverReadyDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([customerReceiverReadyDeferred.promise, supplierReceiverReadyDeferred.promise, mobileNetworkReceiverReadyDeferred.promise, receiverReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
@@ -72,7 +69,7 @@ app.directive('vrWhsSmsbusinessentitySmsimportmappingconfiguration', ['UtilsServ
                     var customerIdentification;
                     var supplierIdentification;
                     var mobileNetworkIdentification;
-                    
+
                     if (payload != undefined && payload.smsImportMappingConfiguration != undefined) {
                         generalIdentification = payload.smsImportMappingConfiguration.GeneralIdentification;
                         customerIdentification = payload.smsImportMappingConfiguration.CustomerIdentification;
@@ -113,7 +110,7 @@ app.directive('vrWhsSmsbusinessentitySmsimportmappingconfiguration', ['UtilsServ
                     };
                     VRUIUtilsService.callDirectiveLoad(mobileNetworkReceiverSelectorAPI, mobileNetworkReceiverSelectorPayload, mobileNetworkReceiverSelectorLoadDeferred);
                     promises.push(mobileNetworkReceiverSelectorLoadDeferred.promise);
-                                       
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -129,8 +126,6 @@ app.directive('vrWhsSmsbusinessentitySmsimportmappingconfiguration', ['UtilsServ
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;

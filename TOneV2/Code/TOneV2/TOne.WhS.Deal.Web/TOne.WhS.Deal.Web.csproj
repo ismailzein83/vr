@@ -239,9 +239,7 @@
     <Content Include="WhS_Deal\Directives\ProcessInput\Templates\DealEvaluatorProcessTemplate.html" />
     <Content Include="WhS_Deal\Directives\ProcessInput\vr-whs-deal-dealevaluator-process.js" />
     <Content Include="WhS_Deal\Directives\QueueActivators\Templates\QueueActivatorEvaluateDealTemplate.html" />
-    <Content Include="WhS_Deal\Directives\QueueActivators\Templates\QueueActivatorEvaluateSMSDealTemplate.html" />
     <Content Include="WhS_Deal\Directives\QueueActivators\vr-whs-deal-queueactivator-evaluatedeal.js" />
-    <Content Include="WhS_Deal\Directives\QueueActivators\vr-whs-deal-queueactivator-evaluatesmsdeal.js" />
     <Content Include="WhS_Deal\Directives\RecurDeal\vr-whs-deal-recurringtype-selector.js" />
     <Content Include="WhS_Deal\Directives\SubstituteRateType\vr-whs-deal-substituteratetype-selector.js" />
     <Content Include="WhS_Deal\Directives\ScheduleTask\Templates\DealEvaluatorTaskTemplate.html" />
