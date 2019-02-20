@@ -16,6 +16,7 @@ namespace TOne.WhS.Invoice.Entities
 		public int SupplierZoneId { get; set; }
 		public int CustomerId { get; set; }
 		public long SaleZoneId { get; set; }
+		public long CustomerMobileNetworkId { get; set; }
 		public long OriginalSaleCurrencyId { get; set; }
 		public long SaleCurrencyId { get; set; }
 		public string SaleCurrency { get; set; }
@@ -29,7 +30,7 @@ namespace TOne.WhS.Invoice.Entities
 		public decimal OriginalSaleAmountWithTaxes { get; set; }
 		public decimal SaleAmountWithTaxes { get; set; }
 		public CustomerSMSInvoiceItemDetails() { }
-		public IEnumerable<CustomerInvoiceItemDetails> GetCustomerInvoiceItemDetailsRDLCSchema()
+		public IEnumerable<CustomerInvoiceItemDetails> GetCustomerSMSInvoiceItemDetailsRDLCSchema()
 		{
 			return null;
 		}

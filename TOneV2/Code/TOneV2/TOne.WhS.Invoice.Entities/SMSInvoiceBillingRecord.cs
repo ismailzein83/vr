@@ -10,12 +10,12 @@ namespace TOne.WhS.Invoice.Entities
 	{
 		public long SaleZoneId { get; set; }
 		public int CustomerId { get; set; }
+		public long CustomerMobileNetworkId { get; set; }
 		public int OriginalSaleCurrencyId { get; set; }
 		public Decimal SaleRate { get; set; }
 		public int SaleCurrencyId { get; set; }
 		public int CountryId { get; set; }
 		public int SupplierId { get; set; }
-		public int SupplierZoneId { get; set; }
 		public SMSInvoiceMeasures InvoiceMeasures { get; set; }
 	}
 }

@@ -15,9 +15,8 @@ namespace TOne.WhS.Invoice.Entities
         public int CountryId { get; set; }
         public int SupplierId { get; set; }
         public int SupplierZoneId { get; set; }
-
-        
-        public int CustomerId { get; set; }
+		public long CustomerMobileNetworkId { get; set; }
+		public int CustomerId { get; set; }
         public long SaleZoneId { get; set; }
         public long OriginalSaleCurrencyId { get; set; }
         public long SaleCurrencyId { get; set; }
