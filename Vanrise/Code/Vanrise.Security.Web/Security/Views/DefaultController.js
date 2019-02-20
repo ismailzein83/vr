@@ -5,10 +5,10 @@
     DefaultController.$inject = ['$rootScope', '$scope', 'VRNavigationService', 'UISettingsService'];
 
     function DefaultController($rootScope, $scope, VRNavigationService, UISettingsService) {
-        
+
         if ($rootScope.moduleFilter) {
             $rootScope.hideToogleIcon = true;
-            $rootScope.hideToogled();
+            $scope.toogled = false;
         }
         if (UISettingsService.getDefaultPageURl() && (!$rootScope.toTilesView || !$rootScope.showApplicationTiles)) {
             window.location.href = UISettingsService.getDefaultPageURl();

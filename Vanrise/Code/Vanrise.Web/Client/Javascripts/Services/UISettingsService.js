@@ -28,6 +28,16 @@
             }
             return url;
         }
+        function getDefaultPageTitle() {
+            var title;
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+                var param = UtilsService.getItemByVal(uiSettings.Parameters, "DefaultURLTitle", "Name");
+                if (param != null)
+                    title = param.Value;
+            }
+            return title;
+        }
+
         function getDefaultPath() {
             var path;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
@@ -68,7 +78,7 @@
         }
 
         function getMasterLayoutDefaultViewTileState() {
-            var tilesMode =  false;
+            var tilesMode = false;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
                 var param = UtilsService.getItemByVal(uiSettings.Parameters, "MasterLayoutSetting", "Name");
                 if (param != null && param.Value != null)
@@ -193,6 +203,7 @@
         return ({
             loadUISettings: loadUISettings,
             getDefaultPageURl: getDefaultPageURl,
+            getDefaultPageTitle:getDefaultPageTitle,
             getDefaultPath: getDefaultPath,
             getNormalPrecision: getNormalPrecision,
             getLongPrecision: getLongPrecision,

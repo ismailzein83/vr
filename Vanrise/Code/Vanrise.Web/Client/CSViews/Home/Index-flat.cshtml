@@ -148,7 +148,12 @@
                                                     <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href="{{::c.Location}}">{{::c.Name}} </a>
                                                 </li>
                                             </ul>
-                                            <div ng-if="c.Childs.length > 0" class="dll-parent-menu menu-item-list-ligth">
+                                            <ul class="nav" ng-if="c.RenderedAsView">
+                                                <li class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''">
+                                                    <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href="" ng-click="$root.goToFirstPageFromSubModule(c)">{{::c.Name}} </a>
+                                                </li>
+                                            </ul>
+                                            <div ng-if="c.Childs.length > 0  && !c.RenderedAsView" class="dll-parent-menu menu-item-list-ligth">
                                                 <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
                                                 <ul class="nav slideanimation inner-sub-menu" ng-if="menusubItemsCurrent.Id == c.Id">
                                                     <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
@@ -170,43 +175,112 @@
                 <!-- Page Content -->
                 <div id="page-content-wrapper">
                     <div class="container-fluid vr-container">
-                        <div class="vr-breadcrumb"  ng-if="$root.masterLayoutSettings.IsBreadcrumbVisible">
-                            <span>
-                                <a href="" ng-click="$root.goToHomePage()">@ViewBag.ProductName</a>
-                            </span>
-                            <span ng-if="$root.selectedMenu.parent">
-                                <span class="glyphicon glyphicon-menu-right"></span>
-                                <a href="" ng-click="$root.goToModulePage($root.selectedMenu.parent)">{{$root.selectedMenu.parent.Name}}</a>
-                            </span>
-                            <span ng-if="$root.selectedMenu">
-                                <span class="glyphicon glyphicon-menu-right"></span>
-                                <a ng-if="$root.selectedMenu" href="" ng-click="$root.goToModulePage($root.selectedMenu)">{{$root.selectedMenu.Name}}</a>
-                            </span>
-                            <span ng-if="currentPage">
-                                <span class="glyphicon glyphicon-menu-right"></span>
-                                <label>{{currentPage.Title}}</label>
-                            </span>
-                        </div>
-                        <div class="vr-view-switch-container" ng-show="$root.showApplicationViewToggle">
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default" ng-click="$root.switchDefaultView(false)" ng-disabled="!$root.toTilesView">
-                                    <span class="glyphicon glyphicon-dashboard"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" ng-click="$root.switchDefaultView(true)" ng-disabled="$root.toTilesView">
-                                    <span class="glyphicon glyphicon-th"></span>
-                                </button>
+                        <div class="vr-top-nav-container">
+                            <div class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-if="$root.moduleRenderedAsView && currentPage.parent.RenderedAsView ==  true && !$root.masterLayoutSettings.IsBreadcrumbVisible">
+                                <a ng-repeat="c in $root.moduleRenderedAsView.Childs | limitTo: 5 :  $root.startView " ng-href="{{::c.Location}}">
+                                    <label class="hand-cursor" ng-class="c.Id == currentPage.Id ? 'choiced-view' : ''"> {{c.Name}}</label>
+                                    <span style="cursor:default" ng-show="!$last">|</span>
+                                </a>
+                                <span style="position:relative" ng-if="$root.moduleRenderedAsView.Childs.length > 5 ">
+                                    <a id="dropdownTabs" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+                                        <span class="glyphicon glyphicon-option-horizontal hand-cursor list-view-icon" ng-class=" $root.moduleRenderedAsView.Childs.indexOf(currentPage) > 5 ? 'other-selected':''"></span>
+                                    </a>
+                                    <ul class="dropdown-menu " aria-labelledby="dropdownTabs">
+                                        <li ng-repeat="a in $root.moduleRenderedAsView.Childs | limitTo: $root.moduleRenderedAsView.Childs.length - 5 :  5 ">
+                                            <a ng-href="{{::a.Location}}" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
+                                                {{a.Name}}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </span>
+                            </div>
+                            <div class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-if="!$root.masterLayoutSettings.IsBreadcrumbVisible">
+                                <span class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-show="$root.showModuleViewToggle">
+                                    <a href="" ng-click="$root.switchModuleDefaultView(false)">
+                                        <label class="hand-cursor" ng-class=" getModuleSelectedViewClass() == false ? 'choiced-view' : ''"> {{$root.selectedMenu.Title}}</label>
+                                        <span style="cursor:default">|</span>
+                                    </a>
+                                    <a href="" ng-click="$root.switchModuleDefaultView(true)">
+                                        <label class="hand-cursor" ng-class="getModuleSelectedViewClass() == true ? 'choiced-view' : ''"> All Pages</label>
+                                    </a>
+                                </span>
+
+                                <span class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-show="$root.showApplicationViewToggle">
+                                    <span class="glyphicon glyphicon-menu-right"></span>
+                                    <a href="" ng-click="$root.switchDefaultView(false)">
+                                        <label class="hand-cursor" ng-class="getApplicationSelectedViewClass() == false ? 'choiced-view' : ''">{{defaultPageTitle}}</label>
+                                        <span style="cursor:default">|</span>
+                                    </a>
+                                    <a href="" ng-click="$root.switchDefaultView(true)">
+                                        <label class="hand-cursor" ng-class="getApplicationSelectedViewClass() == true ? 'choiced-view' : ''"> All Pages</label>
+                                    </a>
+                                </span>
+                            </div>
+                           
+
+                            <div class="vr-breadcrumb" ng-if="$root.masterLayoutSettings.IsBreadcrumbVisible">
+
+                                <span>
+                                    <a href="" ng-click="$root.goToHomePage()">@ViewBag.ProductName</a>
+                                </span>
+                                <span ng-if="$root.selectedMenu.parent">
+                                    <span class="glyphicon glyphicon-menu-right"></span>
+                                    <a href="" ng-click="$root.goToModulePage($root.selectedMenu.parent)">{{$root.selectedMenu.parent.Name}}</a>
+                                </span>
+                                <span ng-if="$root.selectedMenu">
+                                    <span class="glyphicon glyphicon-menu-right"></span>
+                                    <label ng-if="$root.selectedMenu.RenderedAsView== true ">{{$root.selectedMenu.Name}}</label>
+                                    <a ng-if="$root.selectedMenu.RenderedAsView == false" href="" ng-click="$root.goToModulePage($root.selectedMenu)">{{$root.selectedMenu.Name}}</a>
+                                </span>
+                                <span class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-show="$root.showModuleViewToggle">
+                                    <span class="glyphicon glyphicon-menu-right"></span>
+                                    <a href="" ng-click="$root.switchModuleDefaultView(false)">
+                                        <label class="hand-cursor" ng-class=" getModuleSelectedViewClass() == false ? 'choiced-view' : ''"> {{$root.selectedMenu.Title}}</label>
+                                        <span style="cursor:default">|</span>
+                                    </a>
+                                    <a href="" ng-click="$root.switchModuleDefaultView(true)">
+                                        <label class="hand-cursor" ng-class="getModuleSelectedViewClass() == true ? 'choiced-view' : ''"> All Pages</label>
+                                    </a>
+                                </span>
+
+                                <span class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-show="$root.showApplicationViewToggle">
+                                    <span class="glyphicon glyphicon-menu-right"></span>
+                                    <a href="" ng-click="$root.switchDefaultView(false)">
+                                        <label class="hand-cursor" ng-class="getApplicationSelectedViewClass() == false ? 'choiced-view' : ''">{{defaultPageTitle}}</label>
+                                        <span style="cursor:default">|</span>
+                                    </a>
+                                    <a href="" ng-click="$root.switchDefaultView(true)">
+                                        <label class="hand-cursor" ng-class="getApplicationSelectedViewClass() == true ? 'choiced-view' : ''"> All Pages</label>
+                                    </a>
+                                </span>
+                                <span ng-if="currentPage">
+                                    <span class="glyphicon glyphicon-menu-right" ng-show="!$root.showModuleViewToggle && !showApplicationViewToggle"></span>
+                                    <label ng-if="showCurrentPageTitle()">{{currentPage.Title}}</label>
+
+                                    <span class="btn-group btn-group-custom vr-tabs vr-choices-filter vr-module-tabs-view" ng-if="$root.moduleRenderedAsView && currentPage.parent.RenderedAsView ==  true">
+                                        <a ng-repeat="c in $root.moduleRenderedAsView.Childs | limitTo: 5 :  $root.startView " ng-href="{{::c.Location}}">
+                                            <label class="hand-cursor" ng-class="c.Id == currentPage.Id ? 'choiced-view' : ''"> {{c.Name}}</label>
+                                            <span style="cursor:default" ng-show="!$last">|</span>
+                                        </a>
+                                        <span style="position:relative" ng-if="$root.moduleRenderedAsView.Childs.length > 5 ">
+                                            <a id="dropdownTabs" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+                                                <label class="glyphicon glyphicon-option-horizontal hand-cursor list-view-icon" ng-class=" $root.moduleRenderedAsView.Childs.indexOf(currentPage) > 5 ? 'other-selected':''"></label>
+                                            </a>
+                                            <ul class="dropdown-menu " aria-labelledby="dropdownTabs">
+                                                <li ng-repeat="a in $root.moduleRenderedAsView.Childs | limitTo: $root.moduleRenderedAsView.Childs.length - 5 :  5 ">
+                                                    <a ng-href="{{::a.Location}}" ng-class="a.Id == currentPage.Id ? 'choiced-view' : ''">
+                                                        <label>
+                                                            {{a.Name}}
+                                                        </label>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                    </span>
+                                </span>
                             </div>
                         </div>
-                        <div class="vr-view-switch-container" ng-show="$root.showModuleViewToggle">
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default" ng-click="$root.switchModuleDefaultView(false)" ng-disabled="!$root.toModuleTilesView">
-                                    <span class="glyphicon glyphicon-dashboard"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" ng-click="$root.switchModuleDefaultView(true)" ng-disabled="$root.toModuleTilesView">
-                                    <span class="glyphicon glyphicon-th"></span>
-                                </button>
-                            </div>
-                        </div>
+
 
                         <div class="col-lg-12" ng-view id="mainNgView" ng-if="$root.mainViewReady"></div>
                         <div class="col-lg-12" ng-if="$root.mainViewError">
@@ -215,6 +289,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- /#page-content-wrapper -->
                 </div>
             </div>

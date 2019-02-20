@@ -129,7 +129,8 @@ namespace Vanrise.Security.Business
                         {
                             ApplicationId = (Guid)genericBusinessEntity.FieldValues.GetRecord("ID"),
                             Name = genericBusinessEntity.FieldValues.GetRecord("Name") as string,
-                            URL = genericBusinessEntity.FieldValues.GetRecord("URL") as string
+                            URL = genericBusinessEntity.FieldValues.GetRecord("URL") as string,
+                            IconPath = genericBusinessEntity.FieldValues.GetRecord("IconPath") as string,
                         };
                         result.Add(registeredApplication.ApplicationId, registeredApplication);
                     }

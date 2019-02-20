@@ -77,6 +77,11 @@ namespace Vanrise.Common.Business
                         Name = "DefaultURL",
                         Value = defaultURL
                     });
+                    uiSettings.Parameters.Add(new UIParameter()
+                    {
+                        Name = "DefaultURLTitle",
+                        Value = defaultView.Title
+                    });
                 }
 
                 if (generalSettingData.UIData.NormalPrecision.HasValue)

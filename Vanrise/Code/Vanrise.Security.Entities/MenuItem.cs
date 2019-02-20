@@ -25,5 +25,6 @@ namespace Vanrise.Security.Entities
         public int Rank { get; set; }
 
         public MenuType MenuType { get; set; }
+        public bool RenderedAsView { get; set; }
     }
 }

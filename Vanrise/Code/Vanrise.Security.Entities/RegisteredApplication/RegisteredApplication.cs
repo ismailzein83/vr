@@ -7,5 +7,6 @@ namespace Vanrise.Security.Entities
         public Guid ApplicationId { get; set; }
         public string Name { get; set; }
         public string URL { get; set; }
+        public string IconPath { get; set; }
     }
 }

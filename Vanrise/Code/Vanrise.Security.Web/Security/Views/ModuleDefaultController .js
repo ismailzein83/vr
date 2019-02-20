@@ -14,7 +14,13 @@
             $rootScope.seledtedModuleId = moduleId;            
         }        
         $rootScope.setSelectedMenuTile();
-      
+
+        $scope.moduleFilter = function (item) {
+            return item.MenuType == 0 && item.RenderedAsView == false;
+        };
+        $scope.pageFilter = function (item) {
+            return item.MenuType == 1 ||  item.RenderedAsView == true;
+        };
         if ($rootScope.selectedtile && $rootScope.selectedtile.DefaultURL && ($rootScope.toModuleTilesView==false || $rootScope.showModuleTiles ==  false)) {
             if ($rootScope.moduleFilter) {
                 $rootScope.hideToogleIcon = false;

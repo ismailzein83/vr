@@ -137,10 +137,88 @@
 
     .vr-container div[ng-view] {
         padding: 0px 5px;
+        padding-top:15px;
     }
 
 .flex-user-menu {
     display: flex !important;
+}
+.vr-top-nav-container {
+    position: fixed;
+    top: 60px;
+    z-index: 2;
+    width: calc(100% - 200px);
+    background-color: #fff;
+}
+span.vr-module-tabs-view {
+    display: inline;
+    margin-left: 0px !important;
+}
+
+div.vr-module-tabs-view {
+    display: inline-block;
+    margin-left: 30px !important;
+    width:calc(100% - 60px);
+}
+.vr-module-tabs-view .list-view-icon {
+    font-weight: normal;
+    top: 3px;
+    padding: 0px 2px 0px 1px !important;
+}
+.vr-tabs.vr-module-tabs-view {
+    border-bottom: none !important;
+}
+.vr-module-tabs-view a {
+    text-decoration: none;
+    font-weight: normal !important;
+}
+
+
+.vr-module-tabs-view label {
+    background-color: #fff !important;
+    font-size: 12px;
+    height: unset !important;
+    border: none !important;
+    padding: 0px 1px 0px 1px !important;
+    margin: unset !important;
+    font-weight: normal !important;
+}
+
+.vr-module-tabs-view label:hover {
+    text-decoration: underline !important;
+    text-shadow: 1px 0 0 #635F5F;
+}
+
+.vr-module-tabs-view label.choiced-view:hover {
+    background-color: #085c8b !important;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+.vr-module-tabs-view .choiced-view {
+    background-color: #085c8b !important;
+    color: #fff !important;
+}
+.vr-module-tabs-view .choiced-view label {
+    background-color: #085c8b !important;
+    color: #fff !important;
+}
+.vr-module-tabs-view .other-selected {
+    background-color: #085c8b !important;
+    color: #fff !important;
+}
+
+.vr-module-tabs-view  .dropdown-menu > li > a:hover{
+    color: inherit !important;
+    background-color: inherit !important;
+}
+.vr-module-tabs-view .dropdown-menu > li > a.choiced-view:hover {
+    background-color: #085c8b !important;
+    color: #fff !important;
+}
+.vr-module-tabs-view .dropdown-menu > li:hover > a > label {
+    text-decoration: underline !important;
+    text-shadow: 1px 0 0 #635F5F;
 }
 
 .vr-user-label {

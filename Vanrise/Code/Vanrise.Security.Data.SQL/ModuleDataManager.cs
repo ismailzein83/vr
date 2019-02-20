@@ -63,6 +63,7 @@ namespace Vanrise.Security.Data.SQL
                 AllowDynamic = true,// GetReaderValue<Boolean>(reader, "AllowDynamic"),
                 Rank = GetReaderValue<int>(reader, "Rank"),
                 Settings = Vanrise.Common.Serializer.Deserialize<ModuleSettings>(reader["Settings"] as string),
+                RenderedAsView = GetReaderValue<bool>(reader, "RenderedAsView")
             };
             return module;
         }

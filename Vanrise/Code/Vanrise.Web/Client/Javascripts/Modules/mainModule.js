@@ -331,6 +331,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 if (!UISettingsService.isUISettingsHasValue()) {
                     UISettingsService.loadUISettings().then(function () {
                         var masterLayoutSettings = UISettingsService.getMasterLayoutSettings();
+                        $scope.defaultPageTitle = UISettingsService.getDefaultPageTitle();
                         buildRootScopeMasterLayoutSettings(masterLayoutSettings);
                     });
                 }
@@ -386,8 +387,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
             $rootScope.evalModuleViewToggle = function () {
                 if (window.location.hash == "#/view/default")
-                    return;
-
+                    return;            
                 $rootScope.showModuleViewToggle = (
                     ($rootScope.showModuleTiles == true && $rootScope.selectedtile && $rootScope.selectedtile.DefaultURL != undefined && window.location.hash.indexOf("ModuleDefault") > -1)
                     ||
@@ -399,24 +399,39 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                 if ($rootScope.toTilesView != state) {
                     $rootScope.toTilesView = state;
                     if (UISettingsService.getDefaultPageURl() && (!$rootScope.toTilesView || !$rootScope.showApplicationTiles)) {
-                        window.location.href = UISettingsService.getDefaultPageURl();
+                        window.location.href = UISettingsService.getDefaultPageURl();                       
                     }
                     else
                         VRNavigationService.goto("/default");
                 }
             };
 
+            $scope.getModuleSelectedViewClass = function () {
+                return window.location.href.indexOf("ModuleDefault") > -1;
+            };
+            $scope.getApplicationSelectedViewClass = function () {
+                return window.location.href.indexOf("default") > -1;
+            };
+            $scope.showCurrentPageTitle= function () {
+                if ($scope.currentPage.parent.RenderedAsView == true)
+                    return false;
+                if ($rootScope.showModuleViewToggle == true)
+                    return false;
+                if ($rootScope.showApplicationViewToggle == true)
+                    return false;
+                return true;
+            };
             $rootScope.switchModuleDefaultView = function (state) {
-                if ($rootScope.toModuleTilesView != state) {
-                    $rootScope.toModuleTilesView = state;
-                    if ($rootScope.toModuleTilesView) {
-                        var parameters = {
-                            moduleId: $rootScope.selectedtile.Id
-                        };
-                        VRNavigationService.goto("/Security/Views/ModuleDefault", parameters);
-                    }
-                    else if ($rootScope.selectedtile.DefaultURL && (!$rootScope.toModuleTilesView || !$rootScope.showModuleTiles))
-                        window.location.href = $rootScope.selectedtile.DefaultURL;
+
+                $rootScope.toModuleTilesView = state;
+                if ($rootScope.toModuleTilesView) {
+                    var parameters = {
+                        moduleId: $rootScope.selectedtile.Id
+                    };
+                    VRNavigationService.goto("/Security/Views/ModuleDefault", parameters);
+                }
+                else if ($rootScope.selectedtile.DefaultURL && (!$rootScope.toModuleTilesView || !$rootScope.showModuleTiles)) {
+                    window.location.href = $rootScope.selectedtile.DefaultURL;
                 }
             };
 
@@ -505,6 +520,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             }
 
             $rootScope.goToHomePage = function () {
+                $rootScope.moduleRenderedAsView = undefined;
                 $scope.currentPage = null;
                 $scope.menuItemsCurrent = null;
                 $scope.menusubItemsCurrent = null;
@@ -525,6 +541,7 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
             };
 
             $rootScope.goToModulePage = function (item) {
+                $rootScope.moduleRenderedAsView = undefined;
                 $scope.currentPage = null;
                 $scope.menuItemsCurrent = null;
                 $scope.menusubItemsCurrent = null;
@@ -556,16 +573,31 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
                         if ($rootScope.moduleFilter) {
                             $rootScope.hideToogleIcon = false;
                         }
+                        var matchMenuItem = UtilsService.getItemByVal(allMenuItems, item.DefaultURL, "Location");
+                        if (matchMenuItem != null) {
+                            $scope.currentPage = matchMenuItem;
+                        }
                         window.location.href = item.DefaultURL;
                     }
                 }
                 else
                     window.location.href = item.Location;
             };
+
+            $rootScope.moduleRenderedAsView;
+            $rootScope.startView = 0;
+            $rootScope.goToFirstPageFromSubModule = function (c) {
+                $rootScope.moduleRenderedAsView = c;
+                var firstPage = c.Childs[0];
+                window.location.href = firstPage.Location;
+            };
+
+
             $rootScope.menuFilter = function (item) {
                 if ($rootScope.showAllMenuItems) return true;
                 return (($rootScope.selectedMenu && $rootScope.selectedMenu.Id === item.Id) || ($rootScope.selectedMenu && $rootScope.selectedMenu.parent != null && $rootScope.selectedMenu.parent.Id === item.Id));
             };
+
             function setSelectedMenuFromURL() {
                 if (currentURL == undefined || allMenuItems.length == 0)
                     return;
@@ -620,7 +652,9 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 
                 if (menuItem.isSelected == true && menuItem.Childs == null) {
                     $scope.currentPage = menuItem;
-
+                    if ($scope.currentPage.parent.RenderedAsView == true) {
+                        $rootScope.moduleRenderedAsView = $scope.currentPage.parent;
+                    }
                 }
 
                 if (menuItem.parent == null && isSelected == true) {
@@ -717,7 +751,9 @@ angular.module('mainModule')
             animation: 'am-flip-x',
             trigger: 'hover',
             autoClose: true,
-            delay: { show: 1, hide: 100000 }
+            delay: {
+                show: 1, hide: 100000
+            }
         });
     }]);
 app.run(function ($rootScope, $window, UISettingsService) {

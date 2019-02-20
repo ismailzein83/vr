@@ -9,6 +9,7 @@
 
         return ({
             GetRemoteRegisteredApplicationsInfo: GetRemoteRegisteredApplicationsInfo,
+            GetAllRegisteredApplications: GetAllRegisteredApplications
         });
 
         function GetRemoteRegisteredApplicationsInfo(securityProviderId, serializedFilter) {
@@ -16,6 +17,10 @@
                 securityProviderId: securityProviderId,
                 serializedFilter: serializedFilter
             });
+        }
+
+        function GetAllRegisteredApplications(securityProviderId, serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetAllRegisteredApplications'));
         }
     }
 

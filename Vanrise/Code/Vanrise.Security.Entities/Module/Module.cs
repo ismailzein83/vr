@@ -22,6 +22,7 @@ namespace Vanrise.Security.Entities
         public int Rank { get; set; }
 
         public ModuleSettings Settings { get; set; }
+        public bool RenderedAsView { get; set; }
     }
 
     public class ModuleSettings

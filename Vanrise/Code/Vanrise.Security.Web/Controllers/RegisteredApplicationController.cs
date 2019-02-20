@@ -18,6 +18,13 @@ namespace Vanrise.Security.Web.Controllers
         private RegisteredApplicationManager _manager = new RegisteredApplicationManager();
 
         [HttpGet]
+        [Route("GetAllRegisteredApplications")]
+        public IEnumerable<RegisteredApplication> GetAllRegisteredApplications(string filter = null)
+        {
+            return _manager.GetAllRegisteredApplications();
+        }
+
+        [HttpGet]
         [Route("GetRegisteredApplicationsInfo")]
         public IEnumerable<RegisteredApplicationInfo> GetRegisteredApplicationsInfo(string filter = null)
         {
