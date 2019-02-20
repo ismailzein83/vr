@@ -12,6 +12,7 @@ xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release" /y /v /z /i /Q /R					
 xcopy "C:\TFS\Retail\Code\Retail.Runtime\App.config.Interconnect.exclude" /y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\"
 xcopy "C:\TFS\Retail\Code\Retail.Interconnect.Web\Retail_Interconnect\Reports\*.rdlc"	/S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\Modules\Retail_Interconnect\Reports"
 xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release\Retail.Interconnect*" /S /E /R /y /v /i /z /Q			"\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\"
+xcopy "C:\TFS\Retail\Code\Retail.Runtime\bin\x64\Release\Vanrise.MobileNetwork*" /S /E /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\"
 rename																											"\\192.168.110.185\Fixes\WebSite\Interconnect\Runtime\%YYYYMMDD%\App.config.Interconnect.exclude" "Interconnect.Runtime.exe.config"

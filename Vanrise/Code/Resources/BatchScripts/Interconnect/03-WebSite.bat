@@ -43,5 +43,7 @@ xcopy "C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data" /S /E /R /y /v /i /z /Q		
 xcopy "C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Retail_Invoice\"
 xcopy "C:\TFS\Retail\Code\Retail.Interconnect.Web\Retail_Interconnect" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\Retail_Interconnect\"
 xcopy "C:\Publish\Retail\bin\Retail.Interconnect*" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Bin\"
+xcopy "C:\TFS\Vanrise\Code\Vanrise.MobileNetwork.Web\VR_MobileNetwork" /S /E /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Client\Modules\VR_MobileNetwork\"
+xcopy "C:\Publish\Retail\bin\Vanrise.MobileNetwork*" /S /E /R /y /v /i /z /Q										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Bin\"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Bin\*.pdb"
 del /s /q /f																										"\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\Bin\*.config"

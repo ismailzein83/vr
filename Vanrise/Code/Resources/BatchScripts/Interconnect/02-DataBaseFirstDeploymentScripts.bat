@@ -26,7 +26,8 @@ xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Invoice.PostDeployment.sq
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Retail.PostDeployment.sql" 				/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\InterConnect.PostDeployment.sql"			/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\InterConnect_Data.PostDeployment.sql"	/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
-
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\InterConnect.SMS.PostDeployment.sql"		/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\VR_MobileNetwork.PostDeployment.sql"		/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" 						/y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Interconnect\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 
 start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "Enumerations" "Interconnect"
