@@ -339,14 +339,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 		private List<CustomerInvoiceBySaleCurrencyItemDetails> loadVoiceCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue, bool areUnpricedVoiceCDRsChecked, bool isVoiceEnabled)
 		{
-			if (!isVoiceEnabled)
+			if (!isVoiceEnabled ||!areUnpricedVoiceCDRsChecked)
 				return null;
 			List<string> listMeasures = new List<string> { "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
 			List<string> listDimensions = new List<string> { "SaleCurrency", "MonthQueryTimeShift" };
 			var analyticResult = GetFilteredVoiceAnalyticRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, null, offsetValue);
 			if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() != 0)
 			{
-				return BuildCurrencyItemSetNameFromAnalytic(analyticResult.Data, commission, commissionType, taxItemDetails, areUnpricedVoiceCDRsChecked);
+				return BuildCurrencyItemSetNameFromAnalytic(analyticResult.Data, commission, commissionType, taxItemDetails);
 			}
 			return null;
 		}
@@ -364,11 +364,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			}
 			return null;
 		}
-		private List<CustomerInvoiceBySaleCurrencyItemDetails> BuildCurrencyItemSetNameFromAnalytic(IEnumerable<AnalyticRecord> analyticRecords, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, bool areUnpricedVoiceCDRsChecked)
+		private List<CustomerInvoiceBySaleCurrencyItemDetails> BuildCurrencyItemSetNameFromAnalytic(IEnumerable<AnalyticRecord> analyticRecords, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
 		{
 			List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencies = null;
 
-			if (analyticRecords != null && areUnpricedVoiceCDRsChecked)
+			if (analyticRecords != null )
 			{
 				customerInvoiceBySaleCurrencies = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
 				foreach (var analyticRecord in analyticRecords)
