@@ -236,7 +236,29 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Title],[Settings])
 	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
-	
+
+--[sec].[Module]----------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('AE7A5775-8AC9-416E-9A37-1CB5BE2B5149','SMS Sale Area',null,null,null,'/images/menu-icons/Sale Area.png',16,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',null),
+('C530DE20-3179-4FB8-8A6B-44612E3E4015','SMS Purchase Area',null,null,null,'/images/menu-icons/Purchase Area.png',17,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',null),
+('744A7B54-F03B-461A-8207-704C8180FCA9','SMS Traffic Analysis',null,null,null,'/images/menu-icons/NOC.png',21,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',null),
+('F696063C-E508-43D8-90F7-C1F7A96E4526','SMS Rules',null,null,null,'/client/images/menu-icons/other.png',11,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"SMSRules"}',null),
+('DB875576-3578-4071-B65D-C8B4D5182AC7','SMS Reports &amp; Dashboards',null,null,null,'/client/images/menu-icons/busines intel.png',13,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',null)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView]))
+merge	[sec].[Module] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Url] = s.[Url],[DefaultViewId] = s.[DefaultViewId],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic],[Settings] = s.[Settings],[RenderedAsView] = s.[RenderedAsView]
+when not matched by target then
+	insert([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView])
+	values(s.[ID],s.[Name],s.[Url],s.[DefaultViewId],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[Settings],s.[RenderedAsView]);
 	
 --[sec].[View]------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -366,32 +388,6 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[IsCredit],[Settings])
 	values(s.[ID],s.[Name],s.[IsCredit],s.[Settings]);
-	
-	
---[sec].[Module]----------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-set nocount on;
-;with cte_data([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('AE7A5775-8AC9-416E-9A37-1CB5BE2B5149','SMS Sale Area',null,null,null,'/images/menu-icons/Sale Area.png',16,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',null),
-('C530DE20-3179-4FB8-8A6B-44612E3E4015','SMS Purchase Area',null,null,null,'/images/menu-icons/Purchase Area.png',17,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',null),
-('744A7B54-F03B-461A-8207-704C8180FCA9','SMS Traffic Analysis',null,null,null,'/images/menu-icons/NOC.png',21,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',null),
-('F696063C-E508-43D8-90F7-C1F7A96E4526','SMS Rules',null,null,null,'/client/images/menu-icons/other.png',11,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities","LocalizedName":"SMSRules"}',null),
-('DB875576-3578-4071-B65D-C8B4D5182AC7','SMS Reports &amp; Dashboards',null,null,null,'/client/images/menu-icons/busines intel.png',13,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}',null)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView]))
-merge	[sec].[Module] as t
-using	cte_data as s
-on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Url] = s.[Url],[DefaultViewId] = s.[DefaultViewId],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic],[Settings] = s.[Settings],[RenderedAsView] = s.[RenderedAsView]
-when not matched by target then
-	insert([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings],[RenderedAsView])
-	values(s.[ID],s.[Name],s.[Url],s.[DefaultViewId],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic],s.[Settings],s.[RenderedAsView]);
-	
-	
 
 --[Analytic].[AnalyticTable]------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -550,7 +546,13 @@ insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 
 
---[sec].[SystemAction]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([Name],[RequiredPermissions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('WhS_SMSBE/CustomerSMSRate/GetFilteredCustomerSMSRate','WhS_SMSBE_SaleRate: View'),
+--[sec].[SystemAction]------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([Name],[RequiredPermissions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('WhS_SMSBE/CustomerSMSRate/GetFilteredCustomerSMSRate','WhS_SMSBE_SaleRate: View'),
 ('WhS_SMSBE/CustomerSMSRate/AddCustomerSMSRateDraft','WhS_SMSBE_SaleRate: Add'),
 ('WhS_SMSBE/CustomerSMSRateChanges/CancelCustomerSMSRateDraft','WhS_SMSBE_SaleRate: Cancel'),
 ('WhS_SMSBE/CustomerSMSRateChanges/ApplyCustomerSMSRateChanges','WhS_SMSBE_SaleRate: Apply'),
@@ -563,7 +565,23 @@ values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[Permission
 ('WhS_SMSBE/SupplierSMSRateChanges/ApplySupplierSMSRateChanges','WhS_SMSBE_SupplierRate: Apply'),
 ('WhS_SMSBE/SupplierSMSRateChanges/SaveSupplierSMSRateChanges','WhS_SMSBE_SupplierRate: Add'),
 ('WhS_SMSBE/SupplierSMSPriceList/GetFilteredSupplierPriceList','WhS_SMSBE_SupplierPriceList: View'),
-('WhS_SMSBE/SupplierSMSRate/GetFilteredSMSCostDetails','WhS_SMSBE_SupplierRate: View')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Name],[RequiredPermissions]))merge	[sec].[SystemAction] as tusing	cte_data as son		1=1 and t.[Name] = s.[Name]when matched then	update set	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]when not matched by target then	insert([Name],[RequiredPermissions])	values(s.[Name],s.[RequiredPermissions]);--[bp].[BPDefinition]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------begin
+('WhS_SMSBE/SupplierSMSRate/GetFilteredSMSCostDetails','WhS_SMSBE_SupplierRate: View')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Name],[RequiredPermissions]))
+merge	[sec].[SystemAction] as t
+using	cte_data as s
+on		1=1 and t.[Name] = s.[Name]
+when matched then
+	update set
+	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]
+when not matched by target then
+	insert([Name],[RequiredPermissions])
+	values(s.[Name],s.[RequiredPermissions]);
+
+
+--[bp].[BPDefinition]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+begin
 set nocount on;
 ;with cte_data([ID],[Name],[Title],[FQTN],[Config])
 as (select * from (values
