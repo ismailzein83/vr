@@ -194,7 +194,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[FQTN],[VRWorkflowId],[Config])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('184793A0-1BB8-4B4F-90AB-30D75FF82324','TOne.WhS.Jazz.BP.Arguments.JazzReportProcessInput','Jazz Report Process','TOne.WhS.Jazz.BP.JazzReportProcess, TOne.WhS.Jazz.BP',null,'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"ManualExecEditor":"whs-jazz-reports-process","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":true,"NotVisibleInManagementScreen":false,"BusinessRuleSetSupported":true}')
+('184793A0-1BB8-4B4F-90AB-30D75FF82324','TOne.WhS.Jazz.BP.Arguments.JazzReportProcessInput','Jazz ERP Integration Process','TOne.WhS.Jazz.BP.JazzReportProcess, TOne.WhS.Jazz.BP',null,'{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"ManualExecEditor":"whs-jazz-reports-process","IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":true,"NotVisibleInManagementScreen":false,"BusinessRuleSetSupported":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[FQTN],[VRWorkflowId],[Config]))
 merge	[bp].[BPDefinition] as t
@@ -250,4 +250,3 @@ when not matched by target then
 	insert([ID],[Name],[CreatedBy],[LastModifiedBy],[LastModifiedTime],[CarrierType],[IsCredit],[TransactionScope])
 	values(s.[ID],s.[Name],s.[CreatedBy],s.[LastModifiedBy],s.[LastModifiedTime],s.[CarrierType],s.[IsCredit],s.[TransactionScope]);
 
-	

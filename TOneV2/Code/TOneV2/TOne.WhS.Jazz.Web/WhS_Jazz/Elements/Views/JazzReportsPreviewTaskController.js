@@ -77,7 +77,7 @@
                     fileId: taskData.FileId
                 };
                 $scope.scopeModal.downloadFile = {
-                    fileName: "Jazz Transaction Report",
+                    fileName: "ERP Integration Transactions",
                     downloadFileCallBackAPI: function () {
                         return WhS_Jazz_TransactionsReportAPIService.DownloadTransactionsReports(processInstanceId);
                     }

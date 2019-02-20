@@ -86,10 +86,8 @@ namespace TOne.WhS.Jazz.BP.Activities
         {
             
             AnalyticManager analyticManager = new AnalyticManager();
-            var regulatedFromDate = fromDate.AddDays(1);
-            regulatedFromDate.AddMilliseconds(-3);
             var regulatedToDate = toDate.AddDays(1);
-            regulatedToDate.AddMilliseconds(-3);
+            regulatedToDate=regulatedToDate.AddMilliseconds(-3);
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
             {
                 
@@ -98,7 +96,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                     DimensionFields = listDimensions,
                     MeasureFields = listMeasures,
                     TableId = Guid.Parse("795440c9-69e4-442e-a067-896bc969c73f "),
-                    FromTime = regulatedFromDate,
+                    FromTime = fromDate,
                     ToTime = regulatedToDate,
 
                 },

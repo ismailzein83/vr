@@ -67,7 +67,7 @@ namespace TOne.WhS.Jazz.Business
                                         HorizontalAlignment = VRExcelContainerHorizontalAlignment.Center
                                     }
                                 };
-                                titleCell.MergeCells(4, 1);
+                                titleCell.MergeCells(1, 4);
                                 excelSheet.AddCell(titleCell);
 
                                 var headerRow = excelTable.CreateHeaderRow();

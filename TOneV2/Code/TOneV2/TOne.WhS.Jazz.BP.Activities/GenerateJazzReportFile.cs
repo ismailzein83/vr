@@ -51,7 +51,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                             HorizontalAlignment = VRExcelContainerHorizontalAlignment.Center
                         }
                     };
-                    titleCell.MergeCells(6 + (report.TaxOption.HasValue ? 1 : 0) + (report.SplitRateValue.HasValue ? 2 : 0), 1);
+                    titleCell.MergeCells(1, 6 + (report.TaxOption.HasValue ? 1 : 0) + (report.SplitRateValue.HasValue ? 2 : 0));
                     excelSheet.AddCell(titleCell);
 
                     var headerRow = excelTable.CreateHeaderRow();
@@ -144,7 +144,7 @@ namespace TOne.WhS.Jazz.BP.Activities
             var fileManager = new VRFileManager();
             var fileId = fileManager.AddFile(new VRFile
             {
-                Name = "JazzReports.xlsx",
+                Name = "ERPIntegrationReport.xlsx",
                 Content = file
             });
             
