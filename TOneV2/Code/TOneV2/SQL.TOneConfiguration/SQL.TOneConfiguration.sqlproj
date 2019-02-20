@@ -940,6 +940,7 @@
     <None Include="Retail_RA_ICX.PostDeployment.sql" />
     <None Include="Retail_RA_OnNet.PostDeployment.sql" />
     <None Include="TOne_SMS.PostDeployment.sql" />
+    <None Include="ProbesAnalytics.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
