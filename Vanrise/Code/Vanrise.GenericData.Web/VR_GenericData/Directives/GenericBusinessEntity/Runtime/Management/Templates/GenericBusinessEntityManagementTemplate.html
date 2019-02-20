@@ -1,12 +1,11 @@
-﻿<vr-row>
+﻿<vr-row removeline>
     <vr-directivewrapper ng-if="scopeModel.filterDirective != undefined" directive="scopeModel.filterDirective" on-ready="scopeModel.onFilterDirectiveReady"></vr-directivewrapper>
-    <vr-columns withemptyline>
-        <vr-button type="Search" formname="formFilter" data-onclick="search" standalone></vr-button>
+    <vr-columns withemptyline="{{scopeModel.filterDirective != undefined}}"  >
+        <vr-button type="Search" ng-if="scopeModel.filterDirective != undefined" formname="formFilter" data-onclick="search" standalone></vr-button>
         <vr-button type="Add" data-onclick="addBusinessEntity" ng-if="scopeModel.showAddButton" standalone></vr-button>
         <vr-button type="Upload" data-onclick="scopeModel.uploadBusinessEntity" ng-if="scopeModel.showUploadButton" standalone></vr-button>
     </vr-columns>
-</vr-row>
-<vr-row>
+
     <vr-columns width="fullrow" simplecol>
         <vr-genericdata-genericbusinessentity-grid on-ready="scopeModel.onGridDirectiveReady"></vr-genericdata-genericbusinessentity-grid>
     </vr-columns>
