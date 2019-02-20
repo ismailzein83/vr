@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RecordAnalysis.Entities
 {
@@ -22,6 +19,5 @@ namespace RecordAnalysis.Entities
     {
         public string Name { get; set; }
         public List<C4SwitchInterconnectionTrunk> Trunks { get; set; }
-
     }
 }

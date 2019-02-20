@@ -1,22 +1,27 @@
 ﻿<vr-row>
     <vr-columns colnum="12" haschildcolumns>
-        <vr-columns colnum="12" haschildcolumns>
-            <vr-common-communicatorsettings-ssh on-ready="scopeModel.onSSHCommunicatorSettingsReady" normal-col-num="2"></vr-common-communicatorsettings-ssh>
-        </vr-columns>
-        <vr-columns colnum="2">
-            <vr-textbox value="scopeModel.sslHost" type="ip" label="SSL Host" isrequired="true"></vr-textbox>
-        </vr-columns>
-        <vr-columns colnum="2">
-            <vr-textbox value="scopeModel.sslPort" type="number" label="SSL Port" isrequired="true" decimalprecision="0" mivalue="0"></vr-textbox>
-        </vr-columns>
-        <vr-columns colnum="2">
-            <vr-textbox value="scopeModel.sslUsername" type="text" label="SSL Username" isrequired="true"></vr-textbox>
-        </vr-columns>
-        <vr-columns colnum="2">
-            <vr-textbox value="scopeModel.sslPassword" type="password" label="SSL Password" isrequired="true"></vr-textbox>
-        </vr-columns>
-        <vr-columns colnum="2">
-            <vr-textbox value="scopeModel.sslInterfaceIP" type="ip" label="SSL Interface IP" isrequired="true"></vr-textbox>
-        </vr-columns>
+
+        <vr-section header="SSH">
+            <vr-columns colnum="12" haschildcolumns>
+                <vr-common-communicatorsettings-ssh on-ready="scopeModel.onSSHCommunicatorSettingsReady" normal-col-num="2"></vr-common-communicatorsettings-ssh>
+            </vr-columns>
+        </vr-section>
+        <vr-section header="SSL">
+            <vr-columns colnum="2">
+                <vr-textbox value="scopeModel.sslHost" type="ip" label="Host" isrequired="true"></vr-textbox>
+            </vr-columns>
+            <vr-columns colnum="2">
+                <vr-textbox value="scopeModel.sslPort" type="number" label="Port" isrequired="true" decimalprecision="0" mivalue="0"></vr-textbox>
+            </vr-columns>
+            <vr-columns colnum="2">
+                <vr-textbox value="scopeModel.sslUsername" type="text" label="Username" isrequired="true"></vr-textbox>
+            </vr-columns>
+            <vr-columns colnum="2">
+                <vr-textbox value="scopeModel.sslPassword" type="password" label="Password" isrequired="true"></vr-textbox>
+            </vr-columns>
+            <vr-columns colnum="2">
+                <vr-textbox value="scopeModel.sslInterfaceIP" type="ip" label="Interface IP" isrequired="true"></vr-textbox>
+            </vr-columns>
+        </vr-section>
     </vr-columns>
 </vr-row>

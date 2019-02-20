@@ -79,6 +79,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="RecordAnalysis\Constant\ModuleConfig.js" />
+    <Content Include="RecordAnalysis\Directives\C4Probe\rec-anal-c4probe-customobjectsettings.js" />
+    <Content Include="RecordAnalysis\Directives\C4Probe\rec-anal-c4probe-settings.js" />
+    <Content Include="RecordAnalysis\Directives\C4Probe\Templates\C4ProbeCustomObjectSettings.html" />
+    <Content Include="RecordAnalysis\Directives\C4Probe\Templates\C4ProbeSettingsTemplate.html" />
     <Content Include="RecordAnalysis\Directives\C4Switch\rec-anal-c4switch-settings.js" />
     <Content Include="RecordAnalysis\Directives\C4Switch\Templates\C4SwitchCustomObjectSettings.html" />
     <Content Include="RecordAnalysis\Directives\C4Switch\Templates\C4SwitchSettingsTemplate.html" />
@@ -105,10 +109,10 @@
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInInterconnection\rec-anal-action-c4switch-blockininterconnection.js" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInInterconnection\Templates\BlockInInterconnectionAction.html" />
     <Content Include="RecordAnalysis\Directives\MainExtensions\C4Switch\VRActions\BlockInInterconnection\Templates\BlockInInterconnectionActionDefinition.html" />
-    <Content Include="RecordAnalysis\Directives\SwitchInterconnection\rec-anal-switchinterconnection-settings.js" />
-    <Content Include="RecordAnalysis\Directives\SwitchInterconnection\rec-anal-switchinterconnection-customobjectsettings.js" />
-    <Content Include="RecordAnalysis\Directives\SwitchInterconnection\Templates\SwitchInterconnectionSettingsTemplate.html" />
-    <Content Include="RecordAnalysis\Directives\SwitchInterconnection\Templates\SwitchInterconnectionCustomObjectSettings.html" />
+    <Content Include="RecordAnalysis\Directives\C4SwitchInterconnection\rec-anal-c4switchinterconnection-settings.js" />
+    <Content Include="RecordAnalysis\Directives\C4SwitchInterconnection\rec-anal-c4switchinterconnection-customobjectsettings.js" />
+    <Content Include="RecordAnalysis\Directives\C4SwitchInterconnection\Templates\C4SwitchInterconnectionSettingsTemplate.html" />
+    <Content Include="RecordAnalysis\Directives\C4SwitchInterconnection\Templates\C4SwitchInterconnectionCustomObjectSettings.html" />
     <Content Include="RecordAnalysis\Services\APIServices\C4SwitchAPIService.js" />
     <Content Include="Web.config" />
   </ItemGroup>

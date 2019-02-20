@@ -48,7 +48,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="C4Probe\C4Probe.cs" />
+    <Compile Include="C4Probe\C4ProbeSettings.cs" />
     <Compile Include="C4Switch\C4SwitchSettings.cs" />
     <Compile Include="C4Switch\C4SwitchSettingsConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

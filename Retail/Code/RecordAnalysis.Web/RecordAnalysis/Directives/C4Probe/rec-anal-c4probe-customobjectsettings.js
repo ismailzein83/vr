@@ -1,8 +1,8 @@
 ﻿(function (app) {
     'use strict';
-    switchInterconnectioncustomobjectsettingsDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    probecustomobjectsettingsDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function switchInterconnectioncustomobjectsettingsDirective(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function probecustomobjectsettingsDirective(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -10,14 +10,14 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new SwitchInterconnectioncustomobjectsettings($scope, ctrl, $attrs);
+                var ctor = new Probecustomobjectsettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/RecordAnalysis/Directives/SwitchInterconnection/Templates/SwitchInterconnectionCustomObjectSettings.html"
+            templateUrl: "/Client/Modules/RecordAnalysis/Directives/C4Probe/Templates/C4ProbeCustomObjectSettings.html"
         };
-        function SwitchInterconnectioncustomobjectsettings($scope, ctrl, $attrs) {
+        function Probecustomobjectsettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -34,7 +34,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "RecordAnalysis.MainExtensions.SwitchInterconnection.SwitchInterconnectionSettingsCustomObjectTypeSettings, RecordAnalysis.MainExtensions"
+                        $type: "RecordAnalysis.MainExtensions.C4Probe.C4ProbeSettingsCustomObjectTypeSettings, RecordAnalysis.MainExtensions"
                     };
                     return data;
                 };
@@ -46,6 +46,6 @@
         }
     }
     
-    app.directive('recAnalSwitchinterconnectionCustomobjectsettings', switchInterconnectioncustomobjectsettingsDirective);
+    app.directive('recAnalC4probeCustomobjectsettings', probecustomobjectsettingsDirective);
 
 })(app);

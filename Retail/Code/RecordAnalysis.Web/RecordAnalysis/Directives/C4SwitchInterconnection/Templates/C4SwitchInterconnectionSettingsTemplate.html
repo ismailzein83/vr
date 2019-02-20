@@ -1,0 +1,69 @@
+﻿<vr-form name="validationContext">
+    <vr-section title="Trunks">
+        <vr-validator validate="scopeModel.isTrunksValid()">
+            <vr-row removeline>
+                <vr-columns width="fullrow" simplecol>
+                    <vr-button type="Add" data-onclick="scopeModel.onTrunkAdded" standalone></vr-button>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-datagrid on-ready="scopeModel.onTrunkGridReady"
+                                 datasource="scopeModel.trunks"
+                                 onbeforedeleterowclicked="scopeModel.onBeforeTrunkDeleted"
+                                 ondeleterow="scopeModel.onTrunkDeleted"
+                                 pagingtype="'PagingOnScroll'" hidegridmenu>
+
+                        <vr-datagridcolumn headertext="'Trunk Name'" widthfactor="3" disablesorting>
+                            <vr-validator validate="viewScope.scopeModel.validateTrunkName(dataItem.TrunkName)">
+                                <vr-columns width="1/3row" haschildcolumns>
+                                    <vr-textbox value="dataItem.TrunkName" type="text"
+                                                onvaluechanged="viewScope.scopeModel.onTrunkNameValueChanged"
+                                                onblurtextbox="viewScope.scopeModel.onTrunkNameValueBlur"
+                                                isrequired="true" tonextinput>
+                                    </vr-textbox>
+                                </vr-columns>
+                            </vr-validator>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </vr-validator>
+    </vr-section>
+    <vr-section title="Trunk Groups">
+        <vr-validator validate="scopeModel.isTrunkGroupsValid()">
+            <vr-row removeline>
+                <vr-columns colnum="6" simplecol>
+                    <vr-button type="Add" data-onclick="scopeModel.onTrunkGroupAdded" standalone></vr-button>
+                </vr-columns>
+            </vr-row>
+            <vr-row vr-loader="scopeModel.isTrunkGroupGridLoading">
+                <vr-columns width="fullrow">
+                    <vr-datagrid on-ready="scopeModel.onTrunkGroupGridReady"
+                                 datasource="scopeModel.trunkGroups"
+                                 ondeleterow="scopeModel.onTrunkGroupDeleted"
+                                 pagingtype="'PagingOnScroll'" hidegridmenu>
+
+                        <vr-datagridcolumn headertext="'Trunk Name'" widthfactor="2" disablesorting>
+                            <vr-textbox value="dataItem.Name" type="text"
+                                        isrequired="true" tonextinput>
+                            </vr-textbox>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Trunks'" widthfactor="10" disablesorting>
+                            <vr-columns width="1/3row" haschildcolumns>
+                                <vr-select datasource="dataItem.trunksInfo"
+                                           selectedvalues="dataItem.selectedTrunksInfo"
+                                           datavaluefield="value"
+                                           datatextfield="description"
+                                           onselectitem="viewScope.scopeModel.onSelectTrunk"
+                                           ondeselectitem="viewScope.scopeModel.onDeselectTrunk"
+                                           isrequired="true" ismultipleselection hideselectedvaluessection>
+                                </vr-select>
+                            </vr-columns>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-columns>
+            </vr-row>
+        </vr-validator>
+    </vr-section>
+</vr-form>

@@ -1,10 +1,4 @@
-﻿using RecordAnalysis.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using Vanrise.GenericData.Entities;
 
 namespace RecordAnalysis.MainExtensions.C4Probe
@@ -25,17 +19,17 @@ namespace RecordAnalysis.MainExtensions.C4Probe
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(Entities.C4Probe);
+            return typeof(Entities.C4ProbeSettings);
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            return originalValue as Entities.C4Probe;
+            return originalValue as Entities.C4ProbeSettings;
         }
 
         public override string GetRuntimeTypeDescription()
         {
-            return "C4Probe";
+            return "C4ProbeSettings";
         }
     }
 }
