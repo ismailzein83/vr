@@ -116,5 +116,6 @@
     <Build Include="RA_Retail_Analytics\Tables\TrafficStats15Min.sql" />
     <Build Include="RA_Retail_Analytics\Tables\Reconciliation.sql" />
     <Build Include="Security\RA_Retail_Analytics.sql" />
+    <Build Include="RA_Retail_Analytics\Tables\SMSTrafficStats15Min.sql" />
   </ItemGroup>
 </Project>
