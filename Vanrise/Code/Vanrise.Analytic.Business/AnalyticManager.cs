@@ -249,7 +249,7 @@ namespace Vanrise.Analytic.Business
 
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery inputQuery, bool dontApplyOrdering, out AnalyticRecord summaryRecord, out List<AnalyticResultSubTable> resultSubTables)
         {
-
+            AnalyticTableManager analyticTableManager = new AnalyticTableManager();
             var query = inputQuery.VRDeepCopy();
             if (query.AdvancedOrderOptions != null)
             {
@@ -323,7 +323,7 @@ namespace Vanrise.Analytic.Business
             HashSet<string> allDimensionNames = new HashSet<string>(allDimensionNamesList);
             if (dbRecords != null)
             {
-                Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = BuildMeasureStyleRulesDictionary(query.MeasureStyleRules);
+                Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = query.MeasureStyleRules != null ? BuildMeasureStyleRulesDictionary(query.MeasureStyleRules): BuildMeasureStyleRulesDictionary(analyticTableManager.GetMergedMeasureStyles(query.TableId));
                 FillCalculatedDimensions(queryContext, queryForDataManager.DimensionFields, dbRecords, allDBDimensions, query.Filters, query.FilterGroup);
                 var records = ApplyFinalGroupingAndFiltering(queryContext, dbRecords, query.DimensionFields, allDimensionNames,
                     query.MeasureFields, measureStyleRulesDictionary, query.Filters, query.SubTables, query.FilterGroup, query.WithSummary, out summaryRecord, out resultSubTables);

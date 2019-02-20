@@ -42,6 +42,7 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                     if (payload != undefined) {
                         definitionSettings = payload.definitionSettings;
                         $scope.scopeModel.imgPath = definitionSettings.IconPath;
+                        $scope.scopeModel.maxItemPerRow = definitionSettings.MaximumItemsPerRow;
                     }
                     if (definitionSettings != undefined) {
                         figureStyleInput = {
@@ -58,7 +59,8 @@ app.directive("vrCommonFigurestilesettingsRuntime", ["UtilsService", "VRUIUtilsS
                                         var figureStyle = response[i];
                                         $scope.scopeModel.fields.push({
                                             name: figureStyle.Name,
-                                            value: figureStyle.Value
+                                            value: figureStyle.Value,
+                                            className: figureStyle.StyleFormatingSettings
                                         });
                                     }
                                 $scope.scopeModel.url = response.ViewURL;
