@@ -359,13 +359,13 @@ set nocount on;
 ;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('4B990D17-0D4A-4961-97B8-14C861F264E1','Traffic Monitor','Traffic Monitor',null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"b2643f73-470d-4508-9ed0-b11df3f4a7ec"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',5,null),
-('1194FB70-9904-4FFA-A4E1-1CF5A1DB0BAB','SMS Logs','Logs',null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"82aa89f6-4d19-4168-a499-cdd2875f1702","AnalyticReportId":"648eb615-8ffb-41a2-8b10-5beae39c0c32"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',4,null),
-('3557079A-E7C9-444A-B4F1-24DB1920F2B0','Purchase','Purchase',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["ca526e62-e629-4834-a24c-de4d36288d97","b08c05cb-932f-486d-9e51-5460eae69864"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',2,null),
-('8B8D9E52-3189-43C7-9962-6DBFF9073504','Sale','Sale',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["b3c4c67a-825f-4129-85a0-602175c499d2","7009e78e-e7ad-4ef4-acec-bbe1360d0524"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',3,null),
-('4B291713-389F-41EA-992B-77BBC459D29A','SMS','SMS',null,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["33733a3c-384f-4ba2-be34-e13ddeed008b","d2e8ef7e-df86-43f8-a16b-1553f231cabc"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',4,null),
-('33E8DA7E-3BC5-4B05-B3D2-BC1C14EDAF13','Billing Summary','Billing Summary',null,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"3918bdb9-1ad5-4ccf-a69d-934c1b63fece"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',2,null),
-('14F6168F-860C-46BE-8157-5190BE876EF5','Gateway','Gateway',null,'E70468BE-4793-466B-9B83-BAF2535D64D2',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"60045447-9f7a-467e-bba0-8f03931d6d27"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',null,null)
+('4B990D17-0D4A-4961-97B8-14C861F264E1','Traffic Monitor','Traffic Monitor',null,'3B6E324F-4F1F-417A-AB60-963D4856B4CC',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"b2643f73-470d-4508-9ed0-b11df3f4a7ec"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',5,null),
+('1194FB70-9904-4FFA-A4E1-1CF5A1DB0BAB','SMS Logs','Logs',null,'3B6E324F-4F1F-417A-AB60-963D4856B4CC',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"82aa89f6-4d19-4168-a499-cdd2875f1702","AnalyticReportId":"648eb615-8ffb-41a2-8b10-5beae39c0c32"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',4,null),
+('3557079A-E7C9-444A-B4F1-24DB1920F2B0','Purchase','Purchase',null,'75C29F78-49B1-4968-9C4A-6233461C6897',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["ca526e62-e629-4834-a24c-de4d36288d97","b08c05cb-932f-486d-9e51-5460eae69864"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',2,null),
+('8B8D9E52-3189-43C7-9962-6DBFF9073504','Sale','Sale',null,'75C29F78-49B1-4968-9C4A-6233461C6897',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["b3c4c67a-825f-4129-85a0-602175c499d2","7009e78e-e7ad-4ef4-acec-bbe1360d0524"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',3,null),
+('4B291713-389F-41EA-992B-77BBC459D29A','SMS','SMS',null,'75C29F78-49B1-4968-9C4A-6233461C6897',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["33733a3c-384f-4ba2-be34-e13ddeed008b","d2e8ef7e-df86-43f8-a16b-1553f231cabc"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',4,null),
+('33E8DA7E-3BC5-4B05-B3D2-BC1C14EDAF13','Billing Summary','Billing Summary',null,'3B6E324F-4F1F-417A-AB60-963D4856B4CC',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"3918bdb9-1ad5-4ccf-a69d-934c1b63fece"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',2,null),
+('14F6168F-860C-46BE-8157-5190BE876EF5','Gateway','Gateway',null,'3B6E324F-4F1F-417A-AB60-963D4856B4CC',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"60045447-9f7a-467e-bba0-8f03931d6d27"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',null,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
 merge	[sec].[View] as t
@@ -419,3 +419,27 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Title],[Settings])
 	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
+
+
+
+
+
+------Set Voice Module under Reports & Dashboards
+UPDATE [sec].[View]
+SET [Module] = 'C33B407D-476E-4779-83F8-5F88CA1A4DF3'
+WHERE ID IN ('82B479B1-B7F8-4E4B-B1D1-AED48B399443',
+			 'DD82A313-321C-45A1-BDD0-AD65ECD932F6',
+			 '42922D3F-2353-40DA-9980-66966C2751EE')
+
+
+
+
+------Set Voice Module under Rules
+UPDATE [sec].[View]
+SET [Module] = 'D2899D41-A6DB-4E5B-9C28-9FA69E74AAE2'
+WHERE ID IN ('43CB8DF7-5B2D-4F27-AED9-9352D61829EE',
+			 '74145936-AF6A-4857-A0BF-B777E990FB33',
+			 '8992E9BB-4BDF-43E7-878F-D687D3F887E7')
+
+
+
