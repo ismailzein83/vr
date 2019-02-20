@@ -50,9 +50,12 @@
                             return color+ "-figure";
                         }
                         else if (typeof color === 'object' || color instanceof Object) {
-                            switch (color.UniqueName) {
-                                case "VR_AccountBalance_StyleFormating_CSSClass": return color.ClassName + "-figure";
-                            }
+                            if (color!=null) {
+                                switch (color.UniqueName) {
+                                    case "VR_AccountBalance_StyleFormating_CSSClass": return color.ClassName + "-figure";
+                                    }
+                        }
+                        else return "";
                         }
                     }
                 };
