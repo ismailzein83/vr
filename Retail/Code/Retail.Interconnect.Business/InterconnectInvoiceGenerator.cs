@@ -111,8 +111,9 @@ namespace Retail.Interconnect.Business
                         interconnectInvoiceDetails.SMSAmountWithTaxes += ((interconnectInvoiceDetails.SMSAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
                 }
+                interconnectInvoiceDetails.TotalAmountWithTaxes = interconnectInvoiceDetails.AmountWithTaxes + interconnectInvoiceDetails.SMSAmountWithTaxes;
 
-                if (interconnectInvoiceDetails.AmountWithTaxes != 0 || interconnectInvoiceDetails.SMSAmountWithTaxes != 0)
+                if (interconnectInvoiceDetails.TotalAmountWithTaxes != 0)
                 {
                     context.Invoice = new GeneratedInvoice
                     {
