@@ -68,6 +68,9 @@
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString" />    
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
     
+    <add key="RARetailDBConnStringKey"                          value="ConfigurationDBConnString"/>
+    <add key="RARetailAnalyticsDBConnStringKey"                 value="RAAnalyticsDBConnString"/>
+    
     <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,RACDRDBConnString,RAAnalyticsDBConnString,LogDBConnString"/>
   </appSettings>
   <runtime>

@@ -74,7 +74,9 @@
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
 
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
-
+    <add key="RARetailDBConnStringKey"                          value="ConfigurationDBConnString"/>
+    <add key="RARetailAnalyticsDBConnStringKey"                 value="RAAnalyticsDBConnString"/>
+    
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preparation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
