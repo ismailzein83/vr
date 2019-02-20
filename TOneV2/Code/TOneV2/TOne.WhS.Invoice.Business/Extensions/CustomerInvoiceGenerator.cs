@@ -145,10 +145,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					}
 				}
 			}
-			List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(voiceItemSetNamesDic, smsItemSetNamesDic, taxItemDetails, customerVoiceInvoiceBySaleCurrency, customerSMSInvoiceBySaleCurrency, evaluatedCustomerRecurringCharges);
+			List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(voiceItemSetNamesDic, smsItemSetNamesDic, taxItemDetails, customerVoiceInvoiceBySaleCurrency, customerSMSInvoiceBySaleCurrency, evaluatedCustomerRecurringCharges, areUnpricedVoiceCDRsChecked);
 
 			#region BuildCustomerInvoiceDetails
-			CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(voiceItemSetNamesDic, smsItemSetNamesDic, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, commission, commissionType, minAmount);
+			CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(voiceItemSetNamesDic, smsItemSetNamesDic, financialAccount.CarrierProfileId.HasValue ? "Profile" : "Account", context.FromDate, context.ToDate, commission, commissionType, minAmount, areUnpricedVoiceCDRsChecked);
 
 			if (customerInvoiceDetails != null)
 			{
@@ -258,9 +258,15 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					return;
 				}
 			}
-			#endregion
+            else
+            {
+                context.ErrorMessage = "No billing data available.";
+                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                return;
+            }
+            #endregion
 
-		}
+        }
 		#endregion
 
 		#region Private Methods
@@ -519,18 +525,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			}
 
 		}
-		private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> voiceItemSetNamesDic, Dictionary<string, List<SMSInvoiceBillingRecord>> smsItemSetNamesDic, string partnerType, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, decimal? minAmount)
+		private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> voiceItemSetNamesDic, Dictionary<string, List<SMSInvoiceBillingRecord>> smsItemSetNamesDic, string partnerType, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, decimal? minAmount, bool areUnpricedVoiceCDRsChecked)
 		{
 			CurrencyManager currencyManager = new CurrencyManager();
 			CustomerInvoiceDetails customerInvoiceDetails = null;
 			if (partnerType != null)
 			{
-				customerInvoiceDetails = new CustomerInvoiceDetails();
-				customerInvoiceDetails.PartnerType = partnerType;
-
-				if (voiceItemSetNamesDic != null)
+				if (voiceItemSetNamesDic != null && areUnpricedVoiceCDRsChecked)
 				{
-					List<InvoiceBillingRecord> invoiceBillingRecordList = null;
+                    customerInvoiceDetails = new CustomerInvoiceDetails()
+                    {
+                        PartnerType = partnerType
+                    };
+                    List<InvoiceBillingRecord> invoiceBillingRecordList = null;
 					if (voiceItemSetNamesDic.TryGetValue("GroupedBySaleZone", out invoiceBillingRecordList))
 					{
 						foreach (var invoiceBillingRecord in invoiceBillingRecordList)
@@ -554,7 +561,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 				if (smsItemSetNamesDic != null)
 				{
-					List<SMSInvoiceBillingRecord> smsInvoiceBillingRecordList = null;
+                    if (customerInvoiceDetails == null)
+                    {
+                        customerInvoiceDetails = new CustomerInvoiceDetails()
+                        {
+                            PartnerType = partnerType
+                        };
+                    }
+                    List<SMSInvoiceBillingRecord> smsInvoiceBillingRecordList = null;
 					if (smsItemSetNamesDic.TryGetValue("GroupedByOriginationMobileNetwork", out smsInvoiceBillingRecordList))
 					{
 						foreach (var smsInvoiceBillingRecord in smsInvoiceBillingRecordList)
@@ -564,7 +578,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
 							customerInvoiceDetails.SaleCurrencyId = smsInvoiceBillingRecord.SaleCurrencyId;
 							customerInvoiceDetails.CountryId = smsInvoiceBillingRecord.CountryId;
 							customerInvoiceDetails.SupplierId = smsInvoiceBillingRecord.SupplierId;
-							//customerInvoiceDetails.SupplierZoneId = smsInvoiceBillingRecord.CustomerMobileNetworkId;
 							customerInvoiceDetails.SMSAmountAfterCommission += smsInvoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
 							customerInvoiceDetails.SMSOriginalAmountAfterCommission += smsInvoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
 						}
@@ -572,21 +585,22 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					};
 				}
 
-
-
-				if (commissionType.HasValue)
-				{
-					switch (commissionType.Value)
-					{
-						case CommissionType.Display:
-							customerInvoiceDetails.DisplayComission = true;
-							break;
-					}
-				}
-				else
-				{
-					customerInvoiceDetails.DisplayComission = false;
-				}
+                if(customerInvoiceDetails != null)
+                {
+                    if (commissionType.HasValue)
+                    {
+                        switch (commissionType.Value)
+                        {
+                            case CommissionType.Display:
+                                customerInvoiceDetails.DisplayComission = true;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        customerInvoiceDetails.DisplayComission = false;
+                    }
+                }
 			}
 			if (customerInvoiceDetails != null && ((minAmount.HasValue && customerInvoiceDetails.SaleAmount >= minAmount.Value) || (!minAmount.HasValue && customerInvoiceDetails.SaleAmount != 0)))
 			{
@@ -595,10 +609,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			}
 			return customerInvoiceDetails;
 		}
-		private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> voiceItemSetNamesDic, Dictionary<string, List<SMSInvoiceBillingRecord>> smsItemSetNamesDic, IEnumerable<VRTaxItemDetail> taxItemDetails, List<CustomerInvoiceBySaleCurrencyItemDetails> customerVoiceInvoicesBySaleCurrency, List<CustomerSMSInvoiceBySaleCurrencyItemDetails> customerSMSInvoicesBySaleCurrency, List<RecurringChargeItem> customerRecurringCharges)
+		private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> voiceItemSetNamesDic, Dictionary<string, List<SMSInvoiceBillingRecord>> smsItemSetNamesDic, IEnumerable<VRTaxItemDetail> taxItemDetails, List<CustomerInvoiceBySaleCurrencyItemDetails> customerVoiceInvoicesBySaleCurrency, List<CustomerSMSInvoiceBySaleCurrencyItemDetails> customerSMSInvoicesBySaleCurrency, List<RecurringChargeItem> customerRecurringCharges, bool areUnpricedVoiceCDRsChecked)
 		{
 			List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
-			if (customerVoiceInvoicesBySaleCurrency != null && customerVoiceInvoicesBySaleCurrency.Count > 0)
+			if (customerVoiceInvoicesBySaleCurrency != null && customerVoiceInvoicesBySaleCurrency.Count > 0 && areUnpricedVoiceCDRsChecked)
 			{
 				GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
 				generatedInvoiceItemSet.SetName = "VoiceGroupingByCurrency";
@@ -632,7 +646,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 				generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
 			}
 
-			if (voiceItemSetNamesDic != null)
+			if (voiceItemSetNamesDic != null && voiceItemSetNamesDic.Count>0 && areUnpricedVoiceCDRsChecked)
 			{
 				foreach (var itemSet in voiceItemSetNamesDic)
 				{
@@ -704,7 +718,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 				}
 			}
 
-			if (smsItemSetNamesDic != null)
+			if (smsItemSetNamesDic != null && smsItemSetNamesDic.Count>0)
 			{
 				foreach (var itemSet in smsItemSetNamesDic)
 				{
