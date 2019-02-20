@@ -31,5 +31,9 @@
     [Scope]                          INT              NULL,
     [FinancialAccountID]             BIGINT           NULL,
     [BillingAccountID]               VARCHAR (50)     NULL,
+    [RecordType]                     INT              NULL,
+    [GatewayID]                      INT              NULL,
     [QueueItemId]                    BIGINT           NULL);
+
+
 

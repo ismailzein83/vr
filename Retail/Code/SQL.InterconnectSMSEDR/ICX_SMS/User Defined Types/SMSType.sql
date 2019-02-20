@@ -14,5 +14,9 @@
     [DestinationMCC]    VARCHAR (20)     NULL,
     [InDeliveryStatus]  INT              NULL,
     [OutDeliveryStatus] INT              NULL,
+    [Trunk]             NVARCHAR (MAX)   NULL,
+    [GatewayID]         INT              NULL,
     [QueueItemId]       BIGINT           NULL);
+
+
 

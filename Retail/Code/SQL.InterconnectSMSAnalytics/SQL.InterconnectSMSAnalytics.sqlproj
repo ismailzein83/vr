@@ -65,6 +65,10 @@
     <Folder Include="ICX_SMS_Analytics\Tables\" />
     <Folder Include="ICX_SMS_Analytics\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="COMMON\" />
+    <Folder Include="COMMON\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ICX_SMS_Analytics\Tables\BillingStatsDaily.sql" />
@@ -72,5 +76,14 @@
     <Build Include="ICX_SMS_Analytics\User Defined Types\TrafficStats15MinType.sql" />
     <Build Include="ICX_SMS_Analytics\User Defined Types\BillingStatsDailyType.sql" />
     <Build Include="Security\ICX_SMS_Analytics.sql" />
+    <Build Include="dbo\Tables\CurrencyExchangeRate_1.sql" />
+    <Build Include="Security\VANRISE_wissam_1.ajamy.sql" />
+    <Build Include="Security\VANRISE_development_1.sql" />
+    <Build Include="Security\RoleMemberships_1.sql" />
+    <Build Include="Security\RoleMemberships_2.sql" />
+    <Build Include="Security\RoleMemberships_3.sql" />
+    <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency_1.sql" />
+    <Build Include="COMMON\Functions\getExchangeRates_1.sql" />
+    <Build Include="Security\COMMON_1.sql" />
   </ItemGroup>
 </Project>

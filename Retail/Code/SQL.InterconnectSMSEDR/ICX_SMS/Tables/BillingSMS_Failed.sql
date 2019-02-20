@@ -31,6 +31,16 @@
     [ReceiverOperatorID]             BIGINT           NULL,
     [Scope]                          INT              NULL,
     [FinancialAccountID]             BIGINT           NULL,
-    [BillingAccountID]               VARCHAR (50)     NULL
+    [BillingAccountID]               VARCHAR (50)     NULL,
+    [RecordType]                     INT              NULL,
+    [GatewayID]                      INT              NULL,
+    CONSTRAINT [IX_BillingSMS_Failed_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_BillingSMS_Failed_Sent_Operator]
+    ON [ICX_SMS].[BillingSMS_Failed]([SentDateTime] ASC, [OperatorID] ASC);
 

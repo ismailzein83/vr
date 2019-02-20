@@ -29,5 +29,9 @@
     [SenderOperatorID]               BIGINT           NULL,
     [ReceiverOperatorID]             BIGINT           NULL,
     [Scope]                          INT              NULL,
+    [RecordType]                     INT              NULL,
+    [GatewayID]                      INT              NULL,
     [QueueItemId]                    BIGINT           NULL);
+
+
 

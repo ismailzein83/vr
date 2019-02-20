@@ -11,12 +11,12 @@
     [TrafficDirection]           INT              NULL,
     [RecordType]                 INT              NULL,
     [Scope]                      INT              NULL,
-    [SuccessfulAttempts]         INT              NULL,
-    [FirstSMSAttempt]            DATETIME         NULL,
-    [LastSMSAttempt]             DATETIME         NULL,
     [FinancialAccountID]         BIGINT           NULL,
     [BillingAccountID]           VARCHAR (50)     NULL,
-    [DataSource]                 UNIQUEIDENTIFIER NULL,
-    [DeliveredAttempts]          INT              NULL,
-    [DeliveryDelayInSeconds]     DECIMAL (22, 8)  NULL);
+    [DeliveredSMS]               INT              NULL,
+    [FailedSMS]                  INT              NULL,
+    [DeliveryDelayInSeconds]     BIGINT           NULL,
+    [GatewayID]                  INT              NULL);
+
+
 

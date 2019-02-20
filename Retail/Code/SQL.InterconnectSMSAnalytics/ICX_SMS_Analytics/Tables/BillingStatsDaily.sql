@@ -1,4 +1,4 @@
-﻿CREATE TABLE [ICX_SMS_Analytics].[BillingStatsDaily] (
+CREATE TABLE [ICX_SMS_Analytics].[BillingStatsDaily] (
     [ID]                         BIGINT           NOT NULL,
     [BatchStart]                 DATETIME         NULL,
     [OperatorTypeID]             UNIQUEIDENTIFIER NULL,
@@ -18,11 +18,14 @@
     [TotalAmount]                DECIMAL (26, 10) NULL,
     [FinancialAccountID]         BIGINT           NULL,
     [BillingAccountID]           VARCHAR (50)     NULL,
-    CONSTRAINT [IX_ICX_SMS_Analytics_BillingStatsDaily_ID] PRIMARY KEY NONCLUSTERED ([ID] ASC)
+    [GatewayID]                  INT              NULL,
+    CONSTRAINT [IX_BillingStatsDaily_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
 
 
+
+
 GO
-CREATE CLUSTERED INDEX [IX_ICX_SMS_Analytics_BillingStatsDaily_BatchStart]
+CREATE CLUSTERED INDEX [IX_BillingStatsDaily_BatchStart]
     ON [ICX_SMS_Analytics].[BillingStatsDaily]([BatchStart] ASC);
 

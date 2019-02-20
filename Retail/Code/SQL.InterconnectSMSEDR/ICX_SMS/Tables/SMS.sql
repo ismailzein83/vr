@@ -14,6 +14,16 @@
     [DestinationMCC]    VARCHAR (20)     NULL,
     [QueueItemId]       BIGINT           NULL,
     [InDeliveryStatus]  INT              NULL,
-    [OutDeliveryStatus] INT              NULL
+    [OutDeliveryStatus] INT              NULL,
+    [Trunk]             NVARCHAR (MAX)   NULL,
+    [GatewayID]         INT              NULL,
+    CONSTRAINT [IX_SMS_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SMS_SentDateTime]
+    ON [ICX_SMS].[SMS]([SentDateTime] ASC);
 

@@ -29,6 +29,16 @@
     [DestinationMatchedNumberPrefix] BIGINT           NULL,
     [SenderOperatorID]               BIGINT           NULL,
     [ReceiverOperatorID]             BIGINT           NULL,
-    [Scope]                          INT              NULL
+    [Scope]                          INT              NULL,
+    [RecordType]                     INT              NULL,
+    [GatewayID]                      INT              NULL,
+    CONSTRAINT [IX_BillingSMS_Interconnect_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_BillingSMS_Interconnect_Sent_Operator]
+    ON [ICX_SMS].[BillingSMS_Interconnect]([SentDateTime] ASC, [OperatorID] ASC);
 

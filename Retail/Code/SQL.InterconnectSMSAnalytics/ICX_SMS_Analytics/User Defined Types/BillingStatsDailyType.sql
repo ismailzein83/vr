@@ -17,5 +17,8 @@
     [Scope]                      INT              NULL,
     [TotalAmount]                DECIMAL (26, 10) NULL,
     [FinancialAccountID]         BIGINT           NULL,
-    [BillingAccountID]           VARCHAR (50)     NULL);
+    [BillingAccountID]           VARCHAR (50)     NULL,
+    [GatewayID]                  INT              NULL);
+
+
 

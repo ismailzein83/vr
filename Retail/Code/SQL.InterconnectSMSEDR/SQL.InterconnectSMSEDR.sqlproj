@@ -80,5 +80,10 @@
     <Build Include="ICX_SMS\User Defined Types\BillingSMS_InvalidType.sql" />
     <Build Include="ICX_SMS\User Defined Types\SMSType.sql" />
     <Build Include="Security\ICX_SMS.sql" />
+    <Build Include="Security\VANRISE_wissam_1.ajamy.sql" />
+    <Build Include="Security\VANRISE_development_1.sql" />
+    <Build Include="Security\RoleMemberships_1.sql" />
+    <Build Include="Security\RoleMemberships_2.sql" />
+    <Build Include="Security\RoleMemberships_3.sql" />
   </ItemGroup>
 </Project>

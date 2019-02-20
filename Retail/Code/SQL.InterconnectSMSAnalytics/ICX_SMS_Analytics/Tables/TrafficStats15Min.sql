@@ -11,13 +11,19 @@
     [TrafficDirection]           INT              NULL,
     [RecordType]                 INT              NULL,
     [Scope]                      INT              NULL,
-    [SuccessfulAttempts]         INT              NULL,
-    [FirstSMSAttempt]            DATETIME         NULL,
-    [LastSMSAttempt]             DATETIME         NULL,
     [FinancialAccountID]         BIGINT           NULL,
     [BillingAccountID]           VARCHAR (50)     NULL,
-    [DataSource]                 UNIQUEIDENTIFIER NULL,
-    [DeliveredAttempts]          INT              NULL,
-    [DeliveryDelayInSeconds]     DECIMAL (22, 8)  NULL
+    [DeliveredSMS]               INT              NULL,
+    [FailedSMS]                  INT              NULL,
+    [DeliveryDelayInSeconds]     BIGINT           NULL,
+    [GatewayID]                  INT              NULL,
+    CONSTRAINT [IX_TrafficStats15Min_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_TrafficStats15Min_BatchStart]
+    ON [ICX_SMS_Analytics].[TrafficStats15Min]([BatchStart] ASC);
 
