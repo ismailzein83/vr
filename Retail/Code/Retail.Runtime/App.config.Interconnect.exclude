@@ -28,6 +28,9 @@
     
     <add name="ICXCDRDBConnString" connectionString="Server=localhost;Database=Retail_EDR;User ID=sa;Password="/>
     <add name="ICXAnalyticsDBConnString" connectionString="Server=localhost;Database=Retail_Analytics;User ID=sa;Password="/>
+
+    <add name="ICXSMSDBConnString" connectionString="Server=localhost;Database=Interconnect_SMS;User ID=sa;Password="/>
+    <add name="ICXSMSAnalyticsDBConnString" connectionString="Server=localhost;Database=Interconnect_Analytics_SMS;User ID=sa;Password="/>
     
     <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Queueing;User ID=sa; Password=" />
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Transaction;User ID=sa; Password=" />
@@ -71,7 +74,7 @@
     <add key="RetailCDRDBConnStringKey"                         value="RetailCDRDBConnString"/>
     <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>
     
-    <add key="ExposedConnectionStringNames" value="ICXCDRDBConnString,ICXAnalyticsDBConnString,ConfigurationDBConnString,LogDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="ICXCDRDBConnString,ICXAnalyticsDBConnString,ConfigurationDBConnString,LogDBConnString,ICXSMSAnalyticsDBConnString"/>
   </appSettings>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
