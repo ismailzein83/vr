@@ -72,10 +72,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 
 
-			string dimensionName = "CostFinancialAccount";
+			string dimensionName = "SaleFinancialAccount";
 			int dimensionValue = financialAccount.FinancialAccountId;
 			bool isVoiceEnabled = _tOneModuleManager.IsVoiceModuleEnabled();
 			bool isSMSEnabled = _tOneModuleManager.IsSMSModuleEnabled();
+			bool areUnpricedVoiceCDRsChecked = CheckUnpricedCDRs(context, financialAccount);
 
 			//common
 			Dictionary<string, List<SMSInvoiceBillingRecord>> smsItemSetNamesDic = null;
@@ -85,18 +86,16 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 			decimal? minAmount = _partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
 
-			var customerVoiceInvoiceBySaleCurrency = loadVoiceCurrencyItemSet(dimensionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails, offsetValue);
+			var customerVoiceInvoiceBySaleCurrency = loadVoiceCurrencyItemSet(dimensionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails, offsetValue, areUnpricedVoiceCDRsChecked);
 			if (customerVoiceInvoiceBySaleCurrency == null)
 				customerVoiceInvoiceBySaleCurrency = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
 
-			var customerSMSInvoiceBySaleCurrency = loadSMSCurrencyItemSet(dimensionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails, offsetValue);
+			var customerSMSInvoiceBySaleCurrency = loadSMSCurrencyItemSet(dimensionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails, offsetValue, areUnpricedVoiceCDRsChecked);
 			if (customerSMSInvoiceBySaleCurrency == null)
 				customerSMSInvoiceBySaleCurrency = new List<CustomerSMSInvoiceBySaleCurrencyItemDetails>();
 
-			if (isVoiceEnabled)
+			if (isVoiceEnabled && areUnpricedVoiceCDRsChecked)
 			{
-				if (!CheckUnpricedCDRs(context, financialAccount))
-					return;
 				List<string> listMeasures = new List<string> { "SaleNetNotNULL", "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
 				List<string> listDimensions = new List<string> { "SaleZone", "Customer", "SaleCurrency", "SaleRate", "SaleRateType", "Supplier", "Country", "SupplierZone", "SaleDealZoneGroupNb", "SaleDealTierNb", "SaleDeal", "SaleDealRateTierNb" };
 
@@ -244,7 +243,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 					customerInvoiceDetails.TotalReccurringChargesAfterTax = totalReccurringChargesAfterTaxInAccountCurrency;
 					customerInvoiceDetails.TotalReccurringCharges = totalReccurringChargesInAccountCurrency;
 
-					customerInvoiceDetails.TotalInvoiceAmount = customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalReccurringChargesAfterTax;
+					customerInvoiceDetails.TotalInvoiceAmount = customerInvoiceDetails.TotalAmountAfterCommission + customerInvoiceDetails.TotalReccurringChargesAfterTax + customerInvoiceDetails.TotalSMSAmountAfterCommission;
 					context.Invoice = new GeneratedInvoice
 					{
 						InvoiceDetails = customerInvoiceDetails,
@@ -337,34 +336,34 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			}
 		}
 
-		private List<CustomerInvoiceBySaleCurrencyItemDetails> loadVoiceCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
+		private List<CustomerInvoiceBySaleCurrencyItemDetails> loadVoiceCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue,bool  areUnpricedVoiceCDRsChecked)
 		{
 			List<string> listMeasures = new List<string> { "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
 			List<string> listDimensions = new List<string> { "SaleCurrency", "MonthQueryTimeShift" };
 			var analyticResult = GetFilteredVoiceAnalyticRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, null, offsetValue);
 			if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() != 0)
 			{
-				return BuildCurrencyItemSetNameFromAnalytic(analyticResult.Data, commission, commissionType, taxItemDetails);
+				return BuildCurrencyItemSetNameFromAnalytic(analyticResult.Data, commission, commissionType, taxItemDetails, areUnpricedVoiceCDRsChecked);
 			}
 			return null;
 		}
 
-		private List<CustomerSMSInvoiceBySaleCurrencyItemDetails> loadSMSCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue)
+		private List<CustomerSMSInvoiceBySaleCurrencyItemDetails> loadSMSCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails, TimeSpan? offsetValue,bool areUnpricedVoiceCDRsChecked)
 		{
 			List<string> listMeasures = new List<string> { "NumberOfSMS", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
 			List<string> listDimensions = new List<string> { "SaleCurrency", "MonthQueryTimeShift" };
 			var analyticResult = GetFilteredSMSAnalyticRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, null, offsetValue);
 			if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() != 0)
 			{
-				return BuildSMSCurrencyItemSetNameFromAnalytic(analyticResult.Data, commission, commissionType, taxItemDetails);
+				return BuildSMSCurrencyItemSetNameFromAnalytic(analyticResult.Data, commission, commissionType, taxItemDetails, areUnpricedVoiceCDRsChecked);
 			}
 			return null;
 		}
-		private List<CustomerInvoiceBySaleCurrencyItemDetails> BuildCurrencyItemSetNameFromAnalytic(IEnumerable<AnalyticRecord> analyticRecords, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
+		private List<CustomerInvoiceBySaleCurrencyItemDetails> BuildCurrencyItemSetNameFromAnalytic(IEnumerable<AnalyticRecord> analyticRecords, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails,bool areUnpricedVoiceCDRsChecked)
 		{
 			List<CustomerInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencies = null;
 
-			if (analyticRecords != null)
+			if (analyticRecords != null && areUnpricedVoiceCDRsChecked)
 			{
 				customerInvoiceBySaleCurrencies = new List<CustomerInvoiceBySaleCurrencyItemDetails>();
 				foreach (var analyticRecord in analyticRecords)
@@ -422,11 +421,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
 			return customerInvoiceBySaleCurrencies;
 		}
 
-		private List<CustomerSMSInvoiceBySaleCurrencyItemDetails> BuildSMSCurrencyItemSetNameFromAnalytic(IEnumerable<AnalyticRecord> analyticRecords, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
+		private List<CustomerSMSInvoiceBySaleCurrencyItemDetails> BuildSMSCurrencyItemSetNameFromAnalytic(IEnumerable<AnalyticRecord> analyticRecords, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails,bool areUnpricedVoiceCDRsChecked)
 		{
 			List<CustomerSMSInvoiceBySaleCurrencyItemDetails> customerInvoiceBySaleCurrencies = null;
 
-			if (analyticRecords != null)
+			if (analyticRecords != null && areUnpricedVoiceCDRsChecked)
 			{
 				customerInvoiceBySaleCurrencies = new List<CustomerSMSInvoiceBySaleCurrencyItemDetails>();
 				foreach (var analyticRecord in analyticRecords)
