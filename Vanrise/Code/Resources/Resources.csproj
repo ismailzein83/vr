@@ -116,6 +116,9 @@
     <Content Include="BatchScripts\TOne.SMS\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOne.SMS\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOne.SMS\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\TOneV2.SMS\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\TOneV2.SMS\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\TOneV2.SMS\runtime-list-of-excluded-files.txt" />
     <Content Include="DLLs\Microsoft.CodeAnalysis.CSharp.dll" />
     <Content Include="DLLs\Microsoft.CodeAnalysis.dll" />
     <Content Include="DLLs\Microsoft.reportviewer.common.dll" />
@@ -489,6 +492,15 @@
     <None Include="BatchScripts\TOne.SMS\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\TOne.SMS\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\TOne.SMS\All.bat" />
+    <None Include="BatchScripts\TOneV2.SMS\01-Runtime.bat" />
+    <None Include="BatchScripts\TOneV2.SMS\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\TOneV2.SMS\03-WebSite.bat" />
+    <None Include="BatchScripts\TOneV2.SMS\05-CompressFiles.bat" />
+    <None Include="BatchScripts\TOneV2.SMS\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\TOneV2.SMS\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\TOneV2.SMS\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\TOneV2.SMS\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\TOneV2.SMS\All.bat" />
     <None Include="BatchScripts\ZebraV2\All.bat" />
     <None Include="BatchScripts\ZebraV2\DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\ZebraV2\WebSiteThemes.bat" />

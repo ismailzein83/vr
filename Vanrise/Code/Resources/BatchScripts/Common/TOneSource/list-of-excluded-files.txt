@@ -3,7 +3,7 @@
 \WebBI.config.exclude
 \Web.config.CentralAuth.exclude
 \Web.config.JAZZ.exclude
-
+\Web.config.JAZZ.exclude
 \appSettings.config
 \ConnectionStrings.config
 
@@ -48,3 +48,4 @@ Version 13-07-2018\
 Old\
 
 \bin\TOne.WhS.Jazz.
+\bin\TOne.WhS.SMSBusinessEntity.
