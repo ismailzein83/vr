@@ -249,7 +249,7 @@ as (select * from (values
 ('2D6ABFCC-B771-40E1-8EBF-012BBDE453B8','SMS Traffic Summary','SMS Traffic Summary',null,'DB875576-3578-4071-B65D-C8B4D5182AC7',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"a95f9ecf-b564-4dec-9848-c91ef29a6ddd"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',2,null),
 ('7BAF4C26-E684-4104-8D59-0D76F362A5F0','SMS Traffic Monitor','SMS Traffic Monitor',null,'744A7B54-F03B-461A-8207-704C8180FCA9',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"6e58b5b8-e8a4-4096-9b94-8bfb76188c8c"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',2,null),
 ('73D4060B-8C67-41A7-88E4-9B53B794EE90','SMS Billing Summary','SMS Billing Summary',null,'DB875576-3578-4071-B65D-C8B4D5182AC7',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"0918a1e3-7b81-4f6e-b477-ecdc7ae74b97"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',null,null),
-('8D25B9BF-3972-4E9C-8F0A-3CB57C65E0E1','SMS Cost Analysis','SMS Cost Analysis','#/view/WhS_SMSBusinessEntity/Views/SMSCostAnalysis','C530DE20-3179-4FB8-8A6B-44612E3E4015',null,null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4,null),
+('8D25B9BF-3972-4E9C-8F0A-3CB57C65E0E1','SMS Cost Analysis','SMS Cost Analysis','#/view/WhS_SMSBusinessEntity/Views/SMSCostAnalysis','C530DE20-3179-4FB8-8A6B-44612E3E4015','WhS_SMSBE/SupplierSMSRate/GetFilteredSMSCostDetails',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4,null),
 ('898A6F3D-BB14-4014-B13E-689C75AB6218','Sale SMS Rates','Sale SMS Rates','#/view/WhS_SMSBusinessEntity/Views/CustomerSMSRatePlan','AE7A5775-8AC9-416E-9A37-1CB5BE2B5149','WhS_SMSBE/CustomerSMSRate/GetFilteredCustomerSMSRate',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',7,null),
 ('48F0F23E-D27C-4D08-91C7-5114CEC5C1B6','Sale SMS Price Lists','Sale SMS Price Lists','#/view/WhS_SMSBusinessEntity/Views/CustomerSMSPriceList','AE7A5775-8AC9-416E-9A37-1CB5BE2B5149','WhS_SMSBE/CustomerSMSPriceList/GetFilteredCustomerPriceList',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8,null),
 ('54C62DFA-0261-4E15-AB8A-02E66BBC470E','Supplier SMS Rates','Supplier SMS Rates','#/view/WhS_SMSBusinessEntity/Views/SupplierSMSRatePlan','C530DE20-3179-4FB8-8A6B-44612E3E4015','WhS_SMSBE/SupplierSMSRate/GetFilteredSupplierSMSRate',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3,null),
@@ -547,3 +547,18 @@ update set
 when not matched by target then
 insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+
+--[sec].[SystemAction]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([Name],[RequiredPermissions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('WhS_SMSBE/CustomerSMSRate/GetFilteredCustomerSMSRate','WhS_SMSBE_SaleRate: View'),
+('WhS_SMSBE/CustomerSMSRate/AddCustomerSMSRateDraft','WhS_SMSBE_SaleRate: Add'),
+('WhS_SMSBE/CustomerSMSRateChanges/CancelCustomerSMSRateDraft','WhS_SMSBE_SaleRate: Cancel'),
+('WhS_SMSBE/CustomerSMSRateChanges/ApplyCustomerSMSRateChanges','WhS_SMSBE_SaleRate: Apply'),
+('WhS_SMSBE/CustomerSMSRateChanges/SaveCustomerSMSRateChanges','WhS_SMSBE_SaleRate: Add'),
+('WhS_SMSBE/CustomerSMSPriceList/GetFilteredCustomerPriceList','WhS_SMSBE_SalePriceList: View'),
+
+('WhS_SMSBE/SupplierSMSRate/GetFilteredSupplierSMSRate','WhS_SMSBE_SupplierRate: View'),
+('WhS_SMSBE/SupplierSMSRate/AddSupplierSMSRateDraft','WhS_SMSBE_SupplierRate: Add'),
+('WhS_SMSBE/SupplierSMSRate/CancelSupplierSMSRateDraft','WhS_SMSBE_SupplierRate: Cancel'),
+('WhS_SMSBE/SupplierSMSRateChanges/ApplySupplierSMSRateChanges','WhS_SMSBE_SupplierRate: Apply'),
+('WhS_SMSBE/SupplierSMSRateChanges/SaveSupplierSMSRateChanges','WhS_SMSBE_SupplierRate: Add'),
+('WhS_SMSBE/SupplierSMSPriceList/GetFilteredSupplierPriceList','WhS_SMSBE_SupplierPriceList: View'),
+('WhS_SMSBE/SupplierSMSRate/GetFilteredSMSCostDetails','WhS_SMSBE_SupplierRate: View')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Name],[RequiredPermissions]))merge	[sec].[SystemAction] as tusing	cte_data as son		1=1 and t.[Name] = s.[Name]when matched then	update set	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]when not matched by target then	insert([Name],[RequiredPermissions])	values(s.[Name],s.[RequiredPermissions]);
