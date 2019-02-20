@@ -854,6 +854,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.config.JAZZ.exclude" />
+    <Content Include="Web.config.SMS.exclude" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

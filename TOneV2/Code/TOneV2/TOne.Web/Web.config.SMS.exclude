@@ -1,0 +1,7 @@
+﻿<?xml version="1.0"?>
+<configuration>
+  <connectionStrings>    
+    <add name="TOneSMSDBConnString" connectionString="Server=localhost;Database=TOneV2_SMS;User ID=sa;Password="/>
+    <add name="TOneSMSAnalyticsDBConnString"  connectionString="localhost;Database=TOneV2_Analytics_SMS;User ID=sa;Password="/>
+  </connectionStrings>
+</configuration>
