@@ -666,6 +666,5 @@
     <Build Include="TOneWhS_SMSBE\Tables\SaleRate.sql" />
     <Build Include="TOneWhS_SMSBE\Tables\SalePriceList.sql" />
     <Build Include="Security\TOneWhS_SMSBE.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
   </ItemGroup>
 </Project>
