@@ -10,7 +10,7 @@ namespace Retail.Interconnect.Entities
     public class InterconnectInvoiceDetails
     {
         public decimal Amount { get; set; }
-        public decimal VoiceAmount { get; set; }
+        public decimal TotalAmount { get; set; }
         public decimal SMSAmount { get; set; }
         public decimal AmountWithTaxes { get; set; }
         public decimal SMSAmountWithTaxes { get; set; }

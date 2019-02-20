@@ -181,7 +181,7 @@ namespace Retail.Interconnect.Business
                 {
                     interconnectInvoiceDetails.Duration += invoiceBillingRecord.InvoiceMeasures.TotalBillingDuration;
                     interconnectInvoiceDetails.Amount += invoiceBillingRecord.InvoiceMeasures.Amount;
-                    interconnectInvoiceDetails.VoiceAmount += invoiceBillingRecord.InvoiceMeasures.Amount;
+                    interconnectInvoiceDetails.TotalAmount += invoiceBillingRecord.InvoiceMeasures.Amount;
                     interconnectInvoiceDetails.InterconnectCurrencyId = invoiceBillingRecord.CurrencyId;
                     interconnectInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
                 }
@@ -192,7 +192,7 @@ namespace Retail.Interconnect.Business
                     interconnectInvoiceDetails = new InterconnectInvoiceDetails();
                 foreach (var invoiceBillingRecord in smsItemSetNames)
                 {
-                    interconnectInvoiceDetails.Amount += invoiceBillingRecord.InvoiceMeasures.Amount;
+                    interconnectInvoiceDetails.TotalAmount += invoiceBillingRecord.InvoiceMeasures.Amount;
                     interconnectInvoiceDetails.SMSAmount += invoiceBillingRecord.InvoiceMeasures.Amount;
                     interconnectInvoiceDetails.InterconnectCurrencyId = invoiceBillingRecord.CurrencyId;
                     interconnectInvoiceDetails.TotalNumberOfSMS += invoiceBillingRecord.InvoiceMeasures.NumberOfSMS;
