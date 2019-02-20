@@ -153,10 +153,10 @@ namespace TOne.WhS.Jazz.BP.Activities
                     {
                         CarrierAccountId = Convert.ToInt32(carrierAccount.Value),
                         CarrierAccountName = carrierAccount.Name,
-                        Duration = Convert.ToDecimal(durationValue.Value ?? 0.0),
-                        Amount1 = !reportDefinition.SplitRateValue.HasValue ? amount : (amount - duration * reportDefinition.SplitRateValue.Value),
-                        Amount2 = reportDefinition.SplitRateValue.HasValue ? duration * reportDefinition.SplitRateValue.Value : 0,
-                        Tax = taxValue != null ? Convert.ToDecimal(taxValue.Value ?? 0.0) : 0
+                        Duration = Decimal.Round(Convert.ToDecimal(durationValue.Value ?? 0.0),2),
+                        Amount1 = Decimal.Round(!reportDefinition.SplitRateValue.HasValue ? amount : (amount - duration * reportDefinition.SplitRateValue.Value),3),
+                        Amount2 = Decimal.Round(reportDefinition.SplitRateValue.HasValue ? duration * reportDefinition.SplitRateValue.Value : 0,3),
+                        Tax = taxValue != null ? Decimal.Round(Convert.ToDecimal(taxValue.Value ?? 0.0),3) : 0
                     };
 
                     if (reportDefinition.Settings != null && reportDefinition.Settings.MarketSettings != null && reportDefinition.Settings.MarketSettings.MarketOptions != null && reportDefinition.Settings.MarketSettings.MarketOptions.Count > 0)
@@ -186,8 +186,8 @@ namespace TOne.WhS.Jazz.BP.Activities
                                     {
                                         RegionId = region.RegionId,
                                         RegionName = _regionManager.GetRegionById(region.RegionId).Name,
-                                        RegionValue1 = region.Percentage * reportMarket.MarketValue1 / 100,
-                                        RegionValue2 = region.Percentage * reportMarket.MarketValue2 / 100,
+                                        RegionValue1 =Decimal.Round(region.Percentage * reportMarket.MarketValue1 / 100,3),
+                                        RegionValue2 = Decimal.Round(region.Percentage * reportMarket.MarketValue2 / 100,3),
                                         Percentage = region.Percentage,
                                     });
                                 }
@@ -387,7 +387,7 @@ namespace TOne.WhS.Jazz.BP.Activities
                         }
                     }
                 }
-                var rateTitlePart = reportDefinition.SplitRateValue.HasValue ? string.Concat( splitRate ? Decimal.Round(reportDefinition.SplitRateValue.Value, 4).ToString() : "R-" + Decimal.Round(reportDefinition.SplitRateValue.Value, 4)) : null;
+                var rateTitlePart = reportDefinition.SplitRateValue.HasValue ? string.Concat( splitRate ? Decimal.Round(reportDefinition.SplitRateValue.Value, 3).ToString() : "R-" + Decimal.Round(reportDefinition.SplitRateValue.Value,3)) : null;
                 var jazzTransactionsReport = new JazzTransactionsReport
                 {
                     ReportDefinitionId = reportDefinition.JazzReportDefinitionId,
