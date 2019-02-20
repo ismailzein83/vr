@@ -2,9 +2,9 @@
 
     'use strict';
 
-    FigurestilesettingsDefinition.$inject = ['UtilsService', 'VRUIUtilsService'];
+    FigurestilesettingsDefinition.$inject = ['UtilsService', 'VRUIUtilsService','VRCommon_FiguresTileMaxItemsPerRowEnum'];
 
-    function FigurestilesettingsDefinition(UtilsService, VRUIUtilsService) {
+    function FigurestilesettingsDefinition(UtilsService, VRUIUtilsService, VRCommon_FiguresTileMaxItemsPerRowEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -49,7 +49,8 @@
             function initializeController() {
 
                 $scope.scopeModel = {};
-             
+                $scope.scopeModel.maximumItemsDataSource = UtilsService.getArrayEnum(VRCommon_FiguresTileMaxItemsPerRowEnum);
+                $scope.scopeModel.selectedMaxItem = VRCommon_FiguresTileMaxItemsPerRowEnum.One;
                 $scope.scopeModel.onViewsSelectorReady = function (api) {
                     viewSelectorAPI = api;
                     viewSelectorReadyPromiseDeferred.resolve();
@@ -76,6 +77,8 @@
                         viewId = settings.ViewId;
                         queries = settings.Queries;
                         itemsToDisplay = settings.ItemsToDisplay;
+                        var selectedMaxItem = UtilsService.getItemByVal($scope.scopeModel.maximumItemsDataSource, settings.MaximumItemsPerRow, "value");
+                        $scope.scopeModel.selectedMaxItem = selectedMaxItem;
                     }
                     var promises = [];
 
@@ -98,7 +101,8 @@
                         ViewId: viewSelectorAPI.getSelectedIds(),
                         Queries: data.queries,
                         ItemsToDisplay: data.itemsToDisplay,
-                        IconPath: figureIconSelectorAPI.getSelectedIds()
+                        IconPath: figureIconSelectorAPI.getSelectedIds(),
+                        MaximumItemsPerRow: $scope.scopeModel.selectedMaxItem.value
                     };
                 };
 

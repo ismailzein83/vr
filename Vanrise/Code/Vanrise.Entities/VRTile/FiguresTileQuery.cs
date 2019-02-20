@@ -40,6 +40,7 @@ namespace Vanrise.Entities
     {
         public string Name { get; set; }
         public Object Value { get; set; }
+        public StyleFormatingSettings StyleFormatingSettings { get; set; }
     }
     public class FigureItemSchema
     {

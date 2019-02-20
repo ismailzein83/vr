@@ -4,6 +4,7 @@ using System.Linq;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 
@@ -15,6 +16,7 @@ namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
 
         public override List<FigureItemValue> Execute(IFiguresTileQueryExecuteContext context)
         {
+            StyleDefinitionManager styleDefinitionManager = new StyleDefinitionManager();
             List<FigureItemValue> figureItemValues = new List<FigureItemValue>();
             VRTimePeriodContext timePeriodContext = new VRTimePeriodContext() { EffectiveDate = DateTime.Now };
             TimePeriod.GetTimePeriod(timePeriodContext);
@@ -26,7 +28,7 @@ namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
                 selectedItemsToDisplayNames.Add(item.Name);
                 figureItemValues.Add(new FigureItemValue()
                 {
-                    Name = item.Title
+                    Name = item.Title ,
                 });
             }
             var Query = new AnalyticQuery()
@@ -51,6 +53,10 @@ namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
                 var measures = record.MeasureValues;
                 foreach (var measure in measures)
                 {
+                    StyleDefinition styleDefinition = null;
+                    if(measure.Value.StyleDefinitionId.HasValue)
+                     styleDefinition = styleDefinitionManager.GetStyleDefinition(measure.Value.StyleDefinitionId.Value);
+
                     var item = itemsToDisplay.FindRecord(x => x.Name == measure.Key);
                     if (item != null)
                     {
@@ -58,6 +64,7 @@ namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
                         if (figureItemValue != null)
                         {
                             figureItemValue.Value = measure.Value.ModifiedValue;
+                            figureItemValue.StyleFormatingSettings =styleDefinition != null && styleDefinition.StyleDefinitionSettings != null ? styleDefinition.StyleDefinitionSettings.StyleFormatingSettings : null;
                         }
                     }
                 }

@@ -8,4 +8,8 @@
     <vr-columns width="1/3row">
         <vr-common-figureicon-selective on-ready="scopeModel.onFigureIconSelectorReady" selectedvalues="scopeModel.selectedIconValue"></vr-common-figureicon-selective>
     </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select label="Maximum Items Per Row" datasource="scopeModel.maximumItemsDataSource" selectedvalues="scopeModel.selectedMaxItem"
+                   datavaluefield="value" datatextfield="description" isrequired="true"  hideremoveicon>
+    </vr-columns>
 </vr-row>
