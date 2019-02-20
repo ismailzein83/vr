@@ -18,6 +18,8 @@ namespace SOM.Main.Entities
 
         GSHDSL = 3,
 
+        Administrative = 4
+
     }
 
     public class LineOfBusinessAttribute : Attribute

@@ -81,7 +81,10 @@ namespace BPMExtended.Main.Entities
         TelephonyComplaint = 22,
 
         [LineOfBusiness(LineOfBusiness.LeasedLine)]
-        LeasedLineComplaint = 23
+        LeasedLineComplaint = 23,
+
+        [LineOfBusiness(LineOfBusiness.Administrative)]
+        AdministrativeComplaint = 24
 
     }
 }
