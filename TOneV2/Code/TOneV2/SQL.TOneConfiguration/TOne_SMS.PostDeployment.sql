@@ -549,6 +549,7 @@ when not matched by target then
 insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 
+
 --[sec].[SystemAction]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([Name],[RequiredPermissions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('WhS_SMSBE/CustomerSMSRate/GetFilteredCustomerSMSRate','WhS_SMSBE_SaleRate: View'),
 ('WhS_SMSBE/CustomerSMSRate/AddCustomerSMSRateDraft','WhS_SMSBE_SaleRate: Add'),
 ('WhS_SMSBE/CustomerSMSRateChanges/CancelCustomerSMSRateDraft','WhS_SMSBE_SaleRate: Cancel'),
@@ -562,4 +563,23 @@ values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[Permission
 ('WhS_SMSBE/SupplierSMSRateChanges/ApplySupplierSMSRateChanges','WhS_SMSBE_SupplierRate: Apply'),
 ('WhS_SMSBE/SupplierSMSRateChanges/SaveSupplierSMSRateChanges','WhS_SMSBE_SupplierRate: Add'),
 ('WhS_SMSBE/SupplierSMSPriceList/GetFilteredSupplierPriceList','WhS_SMSBE_SupplierPriceList: View'),
-('WhS_SMSBE/SupplierSMSRate/GetFilteredSMSCostDetails','WhS_SMSBE_SupplierRate: View')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Name],[RequiredPermissions]))merge	[sec].[SystemAction] as tusing	cte_data as son		1=1 and t.[Name] = s.[Name]when matched then	update set	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]when not matched by target then	insert([Name],[RequiredPermissions])	values(s.[Name],s.[RequiredPermissions]);
+('WhS_SMSBE/SupplierSMSRate/GetFilteredSMSCostDetails','WhS_SMSBE_SupplierRate: View')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Name],[RequiredPermissions]))merge	[sec].[SystemAction] as tusing	cte_data as son		1=1 and t.[Name] = s.[Name]when matched then	update set	[Name] = s.[Name],[RequiredPermissions] = s.[RequiredPermissions]when not matched by target then	insert([Name],[RequiredPermissions])	values(s.[Name],s.[RequiredPermissions]);--[bp].[BPDefinition]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------begin
+set nocount on;
+;with cte_data([ID],[Name],[Title],[FQTN],[Config])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('F4A661D0-FA78-4F6E-A3DD-47A9C4B53E27','TOne.WhS.SMSBusinessEntity.BP.Arguments.SMSSupplierRateInput','Apply SMS Supplier Rates','TOne.WhS.SMSBusinessEntity.BP.ApplySupplierSMSRates, TOne.WhS.SMSBusinessEntity.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"ExtendedSettings":{"$type":"TOne.WhS.SMSBusinessEntity.Business.SupplierSMSRateBPDefinitionSettings, TOne.WhS.SMSBusinessEntity.Business"}}'),
+('AD1D0E72-8334-4531-8296-945C25F95C77','TOne.WhS.SMSBusinessEntity.BP.Arguments.SMSSaleRateInput','Apply SMS Sale Rates','TOne.WhS.SMSBusinessEntity.BP.ApplySaleSMSRates, TOne.WhS.SMSBusinessEntity.BP','{"$type":"Vanrise.BusinessProcess.Entities.BPConfiguration, Vanrise.BusinessProcess.Entities","MaxConcurrentWorkflows":1,"IsPersistable":false,"HasChildProcesses":false,"HasBusinessRules":false,"NotVisibleInManagementScreen":false,"ExtendedSettings":{"$type":"TOne.WhS.SMSBusinessEntity.Business.CustomerSMSRateBPDefinitionSettings, TOne.WhS.SMSBusinessEntity.Business"}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[FQTN],[Config]))
+merge	[bp].[BPDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[FQTN] = s.[FQTN],[Config] = s.[Config]
+when not matched by target then
+	insert([ID],[Name],[Title],[FQTN],[Config])
+	values(s.[ID],s.[Name],s.[Title],s.[FQTN],s.[Config]);
+----------------------------------------------------------------------------------------------------
+end
