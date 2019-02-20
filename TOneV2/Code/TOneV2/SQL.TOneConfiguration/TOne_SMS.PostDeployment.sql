@@ -203,7 +203,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('3F6E588B-4F58-4660-9CF7-5C8D445B2197',' SMS Import','WhS_SMSBE_SMSImport_Settings','SMS Business Entities','{"Editor":"vr-whs-smsbusinessentity-smsimport-settings-editor"}','{"$type":"TOne.WhS.SMSBusinessEntity.Entities.SMSImportSettings, TOne.WhS.SMSBusinessEntity.Entities","SMSImportMappingConfiguration":{"$type":"TOne.WhS.SMSBusinessEntity.Entities.SMSImportMappingConfiguration, TOne.WhS.SMSBusinessEntity.Entities","GeneralIdentification":0,"CustomerIdentification":0,"SupplierIdentification":0,"MobileNetworkIdentification":3}}',0)
+('3F6E588B-4F58-4660-9CF7-5C8D445B2197',' SMS Import','WhS_SMSBE_SMSImport_Settings','Business Entities','{"Editor":"vr-whs-smsbusinessentity-smsimport-settings-editor"}','{"$type":"TOne.WhS.SMSBusinessEntity.Entities.SMSImportSettings, TOne.WhS.SMSBusinessEntity.Entities","SMSImportMappingConfiguration":{"$type":"TOne.WhS.SMSBusinessEntity.Entities.SMSImportMappingConfiguration, TOne.WhS.SMSBusinessEntity.Entities","GeneralIdentification":0,"CustomerIdentification":0,"SupplierIdentification":0,"MobileNetworkIdentification":3}}',0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
@@ -215,7 +215,6 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
-	
 	
 	
 --[genericdata].[BusinessEntityDefinition]--------------------------------------
@@ -267,15 +266,15 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('75E1BC4A-E984-4ACE-8924-3D3E973A537B','SMS Gateways','SMS Gateways',null																				,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,null,null,'{"$type":"Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business","Settings":{"$type":"System.Collections.Generic.List`1[[Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business]], mscorlib","$values":[{"$type":"Vanrise.GenericData.Business.GenericBEViewSettingItem, Vanrise.GenericData.Business","BusinessEntityDefinitionId":"596c4348-abf1-4a6a-b388-8dc371355d0d"}]}}','B99B2B0A-9A80-49FC-B68F-C946E1628595',2,null),
-('8BB4CBB4-49E9-4063-98C1-C3C1BE1DD12D','SMS','SMS Rules',null																							,'F696063C-E508-43D8-90F7-C1F7A96E4526',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["cece5dda-a790-44cc-a1be-4486ccfa48c1","daf1f294-ee4a-42ae-95a7-858e4cd4bcbd"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',2,null),
-('73D4060B-8C67-41A7-88E4-9B53B794EE90','SMS Billing Summary','SMS Billing Summary',null																,'DB875576-3578-4071-B65D-C8B4D5182AC7',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"0918a1e3-7b81-4f6e-b477-ecdc7ae74b97"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',5,null),
-('2D6ABFCC-B771-40E1-8EBF-012BBDE453B8','SMS Traffic Summary','SMS Traffic Summary',null																,'DB875576-3578-4071-B65D-C8B4D5182AC7',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"a95f9ecf-b564-4dec-9848-c91ef29a6ddd"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',10,null),
-('7BAF4C26-E684-4104-8D59-0D76F362A5F0','SMS Traffic Monitor','SMS Traffic Monitor',null																,'744A7B54-F03B-461A-8207-704C8180FCA9',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"6e58b5b8-e8a4-4096-9b94-8bfb76188c8c"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',10,null),
-('8D25B9BF-3972-4E9C-8F0A-3CB57C65E0E1','SMS Cost Analysis','SMS Cost Analysis','#/view/WhS_SMSBusinessEntity/Views/SMSCostAnalysis'					,'C530DE20-3179-4FB8-8A6B-44612E3E4015','WhS_SMSBE/SupplierSMSRate/GetFilteredSMSCostDetails',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4,null),
-('898A6F3D-BB14-4014-B13E-689C75AB6218','Sale SMS Rates','Sale SMS Rates','#/view/WhS_SMSBusinessEntity/Views/CustomerSMSRatePlan'						,'AE7A5775-8AC9-416E-9A37-1CB5BE2B5149','WhS_SMSBE/CustomerSMSRate/GetFilteredCustomerSMSRate',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',7,null),
-('48F0F23E-D27C-4D08-91C7-5114CEC5C1B6','Sale SMS Price Lists','Sale SMS Price Lists','#/view/WhS_SMSBusinessEntity/Views/CustomerSMSPriceList'			,'AE7A5775-8AC9-416E-9A37-1CB5BE2B5149','WhS_SMSBE/CustomerSMSPriceList/GetFilteredCustomerPriceList',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8,null),
-('54C62DFA-0261-4E15-AB8A-02E66BBC470E','Supplier SMS Rates','Supplier SMS Rates','#/view/WhS_SMSBusinessEntity/Views/SupplierSMSRatePlan'				,'C530DE20-3179-4FB8-8A6B-44612E3E4015','WhS_SMSBE/SupplierSMSRate/GetFilteredSupplierSMSRate',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3,null),
-('1CAC2CB0-F015-4E6A-A6F5-BA12055E2B76','Supplier SMS Price Lists','Supplier SMS Price Lists','#/view/WhS_SMSBusinessEntity/Views/SupplierSMSPriceList'	,'C530DE20-3179-4FB8-8A6B-44612E3E4015','WhS_SMSBE/SupplierSMSPriceList/GetFilteredSupplierPriceList',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8,null)
+('8BB4CBB4-49E9-4063-98C1-C3C1BE1DD12D','Rules','Rules',null																							,'1C7569FA-43C9-4853-AE4C-1152746A34FD',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities","RuleDefinitionIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["cece5dda-a790-44cc-a1be-4486ccfa48c1","daf1f294-ee4a-42ae-95a7-858e4cd4bcbd"]}}','729BE766-F3D7-4BCC-9678-CCCF57BD4AAD',2,null),
+('73D4060B-8C67-41A7-88E4-9B53B794EE90','Billing Summary','Billing Summary',null																		,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"0918a1e3-7b81-4f6e-b477-ecdc7ae74b97"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',5,null),
+('2D6ABFCC-B771-40E1-8EBF-012BBDE453B8','Traffic Summary','Traffic Summary',null																		,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"a95f9ecf-b564-4dec-9848-c91ef29a6ddd"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',10,null),
+('7BAF4C26-E684-4104-8D59-0D76F362A5F0','Traffic Monitor','Traffic Monitor',null																		,'3246CCB2-88D4-473E-A229-DC1C7DE22F8C',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","TypeId":"e5fb0790-5428-44b4-bb1f-4f79b69cd6ef","AnalyticReportId":"6e58b5b8-e8a4-4096-9b94-8bfb76188c8c"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',10,null),
+('8D25B9BF-3972-4E9C-8F0A-3CB57C65E0E1','Cost Analysis','Cost Analysis','#/view/WhS_SMSBusinessEntity/Views/SMSCostAnalysis'							,'B8A1B5F8-BA13-4232-AF84-7DD255FCED20','WhS_SMSBE/SupplierSMSRate/GetFilteredSMSCostDetails',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4,null),
+('898A6F3D-BB14-4014-B13E-689C75AB6218','Sale Rates','Sale Rates','#/view/WhS_SMSBusinessEntity/Views/CustomerSMSRatePlan'								,'80E0E78C-F7DA-481C-B8D3-1FF61188263B','WhS_SMSBE/CustomerSMSRate/GetFilteredCustomerSMSRate',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',7,null),
+('48F0F23E-D27C-4D08-91C7-5114CEC5C1B6','Sale Price Lists','Sale Price Lists','#/view/WhS_SMSBusinessEntity/Views/CustomerSMSPriceList'					,'80E0E78C-F7DA-481C-B8D3-1FF61188263B','WhS_SMSBE/CustomerSMSPriceList/GetFilteredCustomerPriceList',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8,null),
+('54C62DFA-0261-4E15-AB8A-02E66BBC470E','Supplier Rates','Supplier Rates','#/view/WhS_SMSBusinessEntity/Views/SupplierSMSRatePlan'						,'D66F9910-48EC-4FFD-8A09-C7960A6EE434','WhS_SMSBE/SupplierSMSRate/GetFilteredSupplierSMSRate',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3,null),
+('1CAC2CB0-F015-4E6A-A6F5-BA12055E2B76','Supplier Price Lists','Supplier Price Lists','#/view/WhS_SMSBusinessEntity/Views/SupplierSMSPriceList'			,'D66F9910-48EC-4FFD-8A09-C7960A6EE434','WhS_SMSBE/SupplierSMSPriceList/GetFilteredSupplierPriceList',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8,null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))
 merge	[sec].[View] as t
@@ -561,7 +560,7 @@ as (select * from (values
 
 ('WhS_SMSBE/SupplierSMSRate/GetFilteredSupplierSMSRate','WhS_SMSBE_SupplierRate: View'),
 ('WhS_SMSBE/SupplierSMSRate/AddSupplierSMSRateDraft','WhS_SMSBE_SupplierRate: Add'),
-('WhS_SMSBE/SupplierSMSRate/CancelSupplierSMSRateDraft','WhS_SMSBE_SupplierRate: Cancel'),
+('WhS_SMSBE/SupplierSMSRateChanges/CancelSupplierSMSRateDraft','WhS_SMSBE_SupplierRate: Cancel'),
 ('WhS_SMSBE/SupplierSMSRateChanges/ApplySupplierSMSRateChanges','WhS_SMSBE_SupplierRate: Apply'),
 ('WhS_SMSBE/SupplierSMSRateChanges/SaveSupplierSMSRateChanges','WhS_SMSBE_SupplierRate: Add'),
 ('WhS_SMSBE/SupplierSMSPriceList/GetFilteredSupplierPriceList','WhS_SMSBE_SupplierPriceList: View'),
