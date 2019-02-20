@@ -797,6 +797,9 @@
     <Content Include="Images\flat-integra-sms-iconheader.ico" />
     <Content Include="Images\flat-integra-sms-login.png" />
     <Content Include="Images\flat-integra-sms-logoonheader.png" />
+    <Content Include="Images\flat-tone-ra-iconheader.ico" />
+    <Content Include="Images\flat-tone-ra-login.png" />
+    <Content Include="Images\flat-tone-ra-logoonheader.png" />
     <Content Include="Images\iconheader.ico" />
     <Content Include="Images\ICX-iconheader.ico" />
     <Content Include="Images\ICX-login.png" />
@@ -814,6 +817,8 @@
     <Content Include="Images\menu-icons\billing.png" />
     <Content Include="Images\menu-icons\busines intel.png" />
     <Content Include="Images\menu-icons\Business Entities.png" />
+    <Content Include="Images\menu-icons\dispute-tile.png" />
+    <Content Include="Images\menu-icons\dispute.png" />
     <Content Include="Images\menu-icons\NOC.png" />
     <Content Include="Images\menu-icons\operator declaration-tile.png" />
     <Content Include="Images\menu-icons\operator declaration.png" />
