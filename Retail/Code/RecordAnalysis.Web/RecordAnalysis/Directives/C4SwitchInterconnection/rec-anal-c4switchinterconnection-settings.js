@@ -69,7 +69,7 @@
                 $scope.scopeModel.onTrunkDeleted = function (deletedItem) {
                     var trunkIndex = UtilsService.getItemIndexByVal($scope.scopeModel.trunks, deletedItem.TrunkId, "TrunkId");
                     if (trunkIndex >= 0)
-                    $scope.scopeModel.trunks.splice(trunkIndex, 1);
+                        $scope.scopeModel.trunks.splice(trunkIndex, 1);
 
                     deleteTrunkFromNotselected(deletedItem);
 
@@ -93,7 +93,7 @@
                         for (var j = 0; j < $scope.scopeModel.trunkGroups.length; j++) {
                             var currentTrunkGroup = $scope.scopeModel.trunkGroups[j];
 
-                            var trunksInfo = currentTrunkGroup.trunksInfo
+                            var trunksInfo = currentTrunkGroup.trunksInfo;
                             if (trunksInfo == undefined)
                                 continue;
 
@@ -118,7 +118,7 @@
                 $scope.scopeModel.isTrunksValid = function () {
                     var trunks = $scope.scopeModel.trunks;
                     if (trunks.length == 0) {
-                        return 'You should have at Least 1 Trunk.'
+                        return 'You should have at Least 1 Trunk.';
                     }
                     else {
                         var trunkNames = [];
@@ -138,7 +138,7 @@
 
                     var notSelectedTrunkIndex = UtilsService.getItemIndexByVal(notSelectedTrunks, trunk.value, "TrunkId");
                     if (notSelectedTrunkIndex >= 0)
-                    notSelectedTrunks.splice(notSelectedTrunkIndex, 1);
+                        notSelectedTrunks.splice(notSelectedTrunkIndex, 1);
 
                     for (var index = 0; index < $scope.scopeModel.trunkGroups.length; index++) {
                         var currentTrunkGroup = $scope.scopeModel.trunkGroups[index];
@@ -152,11 +152,11 @@
                                 trunksInfo.splice(currentTrunkIndex, 1);
                         }
                     }
-                }
+                };
 
                 $scope.scopeModel.onDeselectTrunk = function (item) {
                     addTrunksToNotSelected([item]);
-                }
+                };
 
                 $scope.scopeModel.onTrunkGroupGridReady = function (api) {
                     trunkGroupGridAPI = api;
@@ -188,7 +188,7 @@
 
                     var trunkGroupsIndex = UtilsService.getItemIndexByVal($scope.scopeModel.trunkGroups, deletedItem.TrunkGroupNb, "TrunkGroupNb");
                     if (trunkGroupsIndex >= 0)
-                    $scope.scopeModel.trunkGroups.splice(trunkGroupsIndex, 1);
+                        $scope.scopeModel.trunkGroups.splice(trunkGroupsIndex, 1);
                 };
 
                 $scope.scopeModel.isTrunkGroupsValid = function () {
@@ -357,7 +357,7 @@
                         var currentTrunk = trunks[index];
                         var notSelectedTrunkIndex = UtilsService.getItemIndexByVal(notSelectedTrunks, currentTrunk.TrunkId, "TrunkId");
                         if (notSelectedTrunkIndex >= 0)
-                        notSelectedTrunks.splice(notSelectedTrunkIndex, 1);
+                            notSelectedTrunks.splice(notSelectedTrunkIndex, 1);
                     }
                 }
             }
@@ -366,13 +366,13 @@
                 for (var index = 0; index < $scope.scopeModel.trunkGroups.length; index++) {
                     var currentTrunkGroup = $scope.scopeModel.trunkGroups[index];
 
-                    var trunksInfo = currentTrunkGroup.trunksInfo
+                    var trunksInfo = currentTrunkGroup.trunksInfo;
                     if (trunksInfo == undefined)
                         continue;
 
                     var currentTrunkIndex = UtilsService.getItemIndexByVal(trunksInfo, trunk.TrunkId, "value");
                     if (currentTrunkIndex >= 0)
-                    trunksInfo.splice(currentTrunkIndex, 1);
+                        trunksInfo.splice(currentTrunkIndex, 1);
 
                     var selectedTrunkInfoIndex = UtilsService.getItemIndexByVal(currentTrunkGroup.selectedTrunksInfo, trunk.TrunkId, "value");
                     if (selectedTrunkInfoIndex >= 0) {
@@ -384,7 +384,7 @@
             function deleteTrunkFromNotselected(trunk) {
                 var notSelectedTrunkIndex = UtilsService.getItemIndexByVal(notSelectedTrunks, trunk.TrunkId, "TrunkId");
                 if (notSelectedTrunkIndex >= 0)
-                notSelectedTrunks.splice(notSelectedTrunkIndex, 1);
+                    notSelectedTrunks.splice(notSelectedTrunkIndex, 1);
             }
 
 
@@ -409,7 +409,7 @@
                                         id: currentTrunkGroup.TrunkGroupNb,
                                         value: currentTrunk.value,
                                         description: currentTrunk.description
-                                    })
+                                    });
                             }
                         }
                     }
