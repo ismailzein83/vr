@@ -84,7 +84,10 @@ namespace BPMExtended.Main.Entities
         LeasedLineComplaint = 23,
 
         [LineOfBusiness(LineOfBusiness.Administrative)]
-        AdministrativeComplaint = 24
+        AdministrativeComplaint = 24,
+
+        [LineOfBusiness(LineOfBusiness.ADSL)]
+        ADSLPrintConfiguration = 25,
 
     }
 }
