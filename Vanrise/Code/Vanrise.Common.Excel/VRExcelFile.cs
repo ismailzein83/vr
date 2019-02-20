@@ -210,8 +210,8 @@ namespace Vanrise.Common.Excel
             styleFlag.All = false;
             styleFlag.Font = true;
             styleFlag.Borders = true;
-            styleFlag.HorizontalAlignment = config.HorizontalAlignment.HasValue;
-            styleFlag.VerticalAlignment = config.VerticalAlignment.HasValue;
+            //styleFlag.HorizontalAlignment = config.HorizontalAlignment.HasValue;
+            //styleFlag.VerticalAlignment = config.VerticalAlignment.HasValue;
             return styleFlag;
         }
 

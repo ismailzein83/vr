@@ -19,7 +19,7 @@ namespace Vanrise.Common.Excel
         internal int? EndColumnIndex { get; set; }
         public void MergeCells(int endRowIndex,int endColumnIndex)
         {
-            EndRowIndex = endColumnIndex;
+            EndRowIndex = endRowIndex;
             EndColumnIndex = endColumnIndex;
         }
         public VRExcelCellStyle Style { get; set; }
