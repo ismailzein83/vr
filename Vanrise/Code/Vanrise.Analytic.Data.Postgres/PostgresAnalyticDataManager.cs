@@ -716,7 +716,13 @@ namespace Vanrise.Analytic.Data.Postgres
         protected override string GetConnectionString()
         {
             var tableSettings = GetTable().Settings;
-            return !String.IsNullOrEmpty(tableSettings.ConnectionString) ? tableSettings.ConnectionString : Common.Utilities.GetConnectionStringByName(tableSettings.ConnectionStringName);
+            if (!String.IsNullOrEmpty(tableSettings.ConnectionString))
+                return tableSettings.ConnectionString;
+
+            if (!String.IsNullOrEmpty(tableSettings.ConnectionStringAppSettingName))
+                return Common.Utilities.GetConnectionStringByAppSettingName(tableSettings.ConnectionStringAppSettingName);
+
+            return Common.Utilities.GetConnectionStringByName(tableSettings.ConnectionStringName);
         }
 
         #endregion

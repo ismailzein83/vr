@@ -208,7 +208,7 @@ namespace Vanrise.Analytic.Data.RDB
             if (!String.IsNullOrWhiteSpace(analyticTable.Settings.ConnectionString))
                 return RDBDataProviderFactory.CreateProviderFromConnString(_moduleName, analyticTable.Settings.ConnectionString);
             else
-                return RDBDataProviderFactory.CreateProvider(_moduleName, analyticTable.Settings.ConnectionStringName);
+                return RDBDataProviderFactory.CreateProvider(_moduleName, analyticTable.Settings.ConnectionStringAppSettingName,analyticTable.Settings.ConnectionStringName);
         }
 
         AnalyticTable GetTableWithValidate()
