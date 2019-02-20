@@ -63,8 +63,6 @@
     <Folder Include="Properties" />
     <Folder Include="TOneWhS_SMS\" />
     <Folder Include="TOneWhS_SMS\Tables\" />
-    <Folder Include="dbo\" />
-    <Folder Include="dbo\User Defined Types\" />
     <Folder Include="TOneWhS_SMS\User Defined Types\" />
     <Folder Include="Security\" />
   </ItemGroup>
@@ -75,7 +73,6 @@
     <Build Include="TOneWhS_SMS\Tables\BillingSMS_Interconnect.sql" />
     <Build Include="TOneWhS_SMS\Tables\BillingSMS_Failed.sql" />
     <Build Include="TOneWhS_SMS\Tables\SMS.sql" />
-    <Build Include="dbo\User Defined Types\BillingSMS_FailedType.sql" />
     <Build Include="TOneWhS_SMS\User Defined Types\BillingSMS_FailedType.sql" />
     <Build Include="TOneWhS_SMS\User Defined Types\SMSType.sql" />
     <Build Include="TOneWhS_SMS\User Defined Types\BillingSMS_PartialPricedType.sql" />

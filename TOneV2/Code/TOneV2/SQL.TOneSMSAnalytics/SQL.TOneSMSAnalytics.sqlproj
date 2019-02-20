@@ -78,7 +78,6 @@
     <Build Include="TOneWhS_SMSAnalytics\Tables\SMSBillingStats30Min.sql" />
     <Build Include="COMMON\Functions\getExchangeRates.sql" />
     <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
-    <Build Include="TOneWhS_SMSAnalytics\User Defined Types\SMSTrafficStatsXMinType.sql" />
     <Build Include="TOneWhS_SMSAnalytics\User Defined Types\SMSTrafficStatsDailyType.sql" />
     <Build Include="TOneWhS_SMSAnalytics\User Defined Types\SMSTrafficStats15MinType.sql" />
     <Build Include="TOneWhS_SMSAnalytics\User Defined Types\SMSBillingStatsDailyType.sql" />
