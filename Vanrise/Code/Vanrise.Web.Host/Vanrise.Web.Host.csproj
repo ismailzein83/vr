@@ -118,61 +118,6 @@
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Vanrise.Analytic.BP.Arguments">
-      <HintPath>..\Output\Vanrise.Analytic.BP.Arguments.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Analytic.Business">
-      <HintPath>..\Output\Vanrise.Analytic.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Analytic.Data">
-      <HintPath>..\Output\Vanrise.Analytic.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Analytic.Data.Postgres">
-      <HintPath>..\Output\Vanrise.Analytic.Data.Postgres.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Analytic.Data.RDB">
-      <HintPath>..\Output\Vanrise.Analytic.Data.RDB.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Analytic.Data.SQL">
-      <HintPath>..\Output\Vanrise.Analytic.Data.SQL.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Analytic.Entities">
-      <HintPath>..\Output\Vanrise.Analytic.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Analytic.MainExtensions">
-      <HintPath>..\Output\Vanrise.Analytic.MainExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Analytic.Web">
-      <HintPath>..\Output\Vanrise.Analytic.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Notification.BP.Arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Notification.BP.Arguments.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Notification.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Notification.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Notification.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Notification.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Notification.Data.RDB">
-      <HintPath>..\Output\Vanrise.Notification.Data.RDB.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Notification.Data.SQL">
-      <HintPath>..\Output\Vanrise.Notification.Data.SQL.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Notification.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.Notification.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Notification.MainExtensions">
-      <HintPath>..\Output\Vanrise.Notification.MainExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Notification.Web">
-      <HintPath>..\Output\Vanrise.Notification.Web.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
     </Reference>
@@ -196,6 +141,42 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Analytic.BP.Arguments\Vanrise.Analytic.BP.Arguments.csproj">
+      <Project>{74bcfdd5-6f60-4976-a31c-712beccc2787}</Project>
+      <Name>Vanrise.Analytic.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Analytic.Business\Vanrise.Analytic.Business.csproj">
+      <Project>{374e7ef0-2080-4b79-bcd9-b5563694197c}</Project>
+      <Name>Vanrise.Analytic.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Analytic.Data.Postgres\Vanrise.Analytic.Data.Postgres.csproj">
+      <Project>{8b01a0f5-ab58-4a48-a3a4-f8bd7185eca2}</Project>
+      <Name>Vanrise.Analytic.Data.Postgres</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Analytic.Data.RDB\Vanrise.Analytic.Data.RDB.csproj">
+      <Project>{cbd3d9c6-7fb8-40c2-b895-389a1b97ca78}</Project>
+      <Name>Vanrise.Analytic.Data.RDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Analytic.Data.SQL\Vanrise.Analytic.Data.SQL.csproj">
+      <Project>{f3d472dd-b0cb-4264-9154-cd3819680ba3}</Project>
+      <Name>Vanrise.Analytic.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Analytic.Data\Vanrise.Analytic.Data.csproj">
+      <Project>{78984a30-50a0-435a-9eb9-31d0273ef0bf}</Project>
+      <Name>Vanrise.Analytic.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Analytic.Entities\Vanrise.Analytic.Entities.csproj">
+      <Project>{bf85d7b4-84c2-441b-bca0-b42fe2619ae9}</Project>
+      <Name>Vanrise.Analytic.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Analytic.MainExtensions\Vanrise.Analytic.MainExtensions.csproj">
+      <Project>{ff0e14a8-e630-41e0-864e-a084326e7612}</Project>
+      <Name>Vanrise.Analytic.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Analytic.Web\Vanrise.Analytic.Web.csproj">
+      <Project>{8d7e5ebc-9416-46a1-82b2-3a7dee0e2621}</Project>
+      <Name>Vanrise.Analytic.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Caching.Runtime\Vanrise.Caching.Runtime.csproj">
       <Project>{c6b2d722-14ce-4ed4-8b2b-52588494e449}</Project>
       <Name>Vanrise.Caching.Runtime</Name>
@@ -204,9 +185,17 @@
       <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
       <Name>Vanrise.Caching</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.BP.Arguments\Vanrise.Common.BP.Arguments.csproj">
+      <Project>{841b50ab-e1a4-46ba-9358-f6519c92a2e3}</Project>
+      <Name>Vanrise.Common.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
       <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
       <Name>Vanrise.Common.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common.Data.RDB\Vanrise.Common.Data.RDB.csproj">
+      <Project>{ec2bedc2-b4e7-4739-b703-c0008aca1795}</Project>
+      <Name>Vanrise.Common.Data.RDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common.Data.SQL\Vanrise.Common.Data.SQL.csproj">
       <Project>{b3a5a0ce-6294-44b5-a4d6-521f45b35295}</Project>
@@ -256,9 +245,17 @@
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.BP.Arguments\Vanrise.GenericData.BP.Arguments.csproj">
+      <Project>{2eaeb708-b10d-4bed-b056-2688514e8bc8}</Project>
+      <Name>Vanrise.GenericData.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
       <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
       <Name>Vanrise.GenericData.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data.RDB\Vanrise.GenericData.Data.RDB.csproj">
+      <Project>{93106d20-6446-4278-bfb0-889bbff760d5}</Project>
+      <Name>Vanrise.GenericData.Data.RDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Data.SQL\Vanrise.GenericData.Data.SQL.csproj">
       <Project>{00bce586-bffb-4679-92b7-9b65988fe346}</Project>
@@ -272,6 +269,10 @@
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.FileDataStorage\Vanrise.GenericData.FileDataStorage.csproj">
+      <Project>{dddcb6b4-414d-4815-833f-75601061fc7f}</Project>
+      <Name>Vanrise.GenericData.FileDataStorage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.MainExtensions\Vanrise.GenericData.MainExtensions.csproj">
       <Project>{9fba4641-edd5-4a59-a053-ce879f31ad14}</Project>
       <Name>Vanrise.GenericData.MainExtensions</Name>
@@ -279,6 +280,10 @@
     <ProjectReference Include="..\Vanrise.GenericData.Normalization\Vanrise.GenericData.Normalization.csproj">
       <Project>{a01f59d7-0c2d-4cb8-83d2-ed6e4aa9c2d2}</Project>
       <Name>Vanrise.GenericData.Normalization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Notification.Arguments\Vanrise.GenericData.Notification.Arguments.csproj">
+      <Project>{afa97aff-52f4-4c41-955c-0f43db9b05b7}</Project>
+      <Name>Vanrise.GenericData.Notification.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Notification\Vanrise.GenericData.Notification.csproj">
       <Project>{bddd1fac-ea45-4291-9f64-d749d47a97ba}</Project>
@@ -292,9 +297,17 @@
       <Project>{8fc8aa0b-5ae5-4745-be9c-0e37f8a07ff9}</Project>
       <Name>Vanrise.GenericData.QueueActivators</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.RDBDataStorage\Vanrise.GenericData.RDBDataStorage.csproj">
+      <Project>{5c0e46fd-e38f-4062-9a05-dd716424a15f}</Project>
+      <Name>Vanrise.GenericData.RDBDataStorage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.SQLDataStorage\Vanrise.GenericData.SQLDataStorage.csproj">
       <Project>{fd370b6a-aad0-447c-b784-32e5da4e5424}</Project>
       <Name>Vanrise.GenericData.SQLDataStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Transformation.Data.RDB\Vanrise.GenericData.Transformation.Data.RDB.csproj">
+      <Project>{5dd70e32-b69a-4100-af77-a979f055a748}</Project>
+      <Name>Vanrise.GenericData.Transformation.Data.RDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Transformation.Data.SQL\Vanrise.GenericData.Transformation.Data.SQL.csproj">
       <Project>{47feab28-e8cf-4f2e-9ee4-04e79d28717a}</Project>
@@ -320,9 +333,45 @@
       <Project>{d34d2d0a-6aa6-40c2-bbc9-1d1a6b482773}</Project>
       <Name>Vanrise.GenericData.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.BP.Arguments\Vanrise.Notification.BP.Arguments.csproj">
+      <Project>{b9576176-3f9c-4f82-b782-8f5f81b0450c}</Project>
+      <Name>Vanrise.Notification.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.Business\Vanrise.Notification.Business.csproj">
+      <Project>{918ce99a-576c-49f0-897e-07817959e79c}</Project>
+      <Name>Vanrise.Notification.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.Data.RDB\Vanrise.Notification.Data.RDB.csproj">
+      <Project>{59c0582b-6850-4a20-b1f6-c795dbd2012b}</Project>
+      <Name>Vanrise.Notification.Data.RDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.Data.SQL\Vanrise.Notification.Data.SQL.csproj">
+      <Project>{76aeea8b-7164-4046-b241-04bf6f19db25}</Project>
+      <Name>Vanrise.Notification.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.Data\Vanrise.Notification.Data.csproj">
+      <Project>{c425f563-5869-495c-b4fb-e39b6ab48b82}</Project>
+      <Name>Vanrise.Notification.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.Entities\Vanrise.Notification.Entities.csproj">
+      <Project>{f58cc66a-3bc4-49ed-9143-d1abb031c242}</Project>
+      <Name>Vanrise.Notification.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.MainExtensions\Vanrise.Notification.MainExtensions.csproj">
+      <Project>{c753bb2c-98e9-4144-b26d-264428874795}</Project>
+      <Name>Vanrise.Notification.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Notification.Web\Vanrise.Notification.Web.csproj">
+      <Project>{e4ad1c02-947a-4b46-bc5b-b825d7d4374a}</Project>
+      <Name>Vanrise.Notification.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Security.Business\Vanrise.Security.Business.csproj">
       <Project>{98e54996-fad2-40e7-b236-be5a23fa64b1}</Project>
       <Name>Vanrise.Security.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Security.Data.RDB\Vanrise.Security.Data.RDB.csproj">
+      <Project>{adff1331-0ad7-4c84-90de-ec17af5b1427}</Project>
+      <Name>Vanrise.Security.Data.RDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Security.Data.SQL\Vanrise.Security.Data.SQL.csproj">
       <Project>{452c1ba6-47e3-4072-be53-4b6fa39d0a74}</Project>
