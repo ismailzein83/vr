@@ -103,12 +103,12 @@ app.directive("vrAnalyticChartToprecords", ['UtilsService', 'VRNotificationServi
                                             for (var y = 0; y < response.SubTables[0].DimensionValues.length; y++) {
                                                 chartRecord.MeasureValues[y] = [];
                                                 chartRecord.MeasureValues[y][ctrl.measures[m].MeasureName] = {};
-                                                chartRecord.MeasureValues[y][ctrl.measures[m].MeasureName].Value = response.Data[i].SubTables[0].MeasureValues[y][ctrl.measures[m].MeasureName].Value;
+                                                chartRecord.MeasureValues[y][ctrl.measures[m].MeasureName].Value = response.Data[i].SubTables[0].MeasureValues[y][ctrl.measures[m].MeasureName].ModifiedValue;
                                             }
 
                                         }
                                         else {
-                                            chartRecord[ctrl.measures[m].MeasureName] = response.Data[i].MeasureValues[ctrl.measures[m].MeasureName].Value;
+                                            chartRecord[ctrl.measures[m].MeasureName] = response.Data[i].MeasureValues[ctrl.measures[m].MeasureName].ModifiedValue;
                                         }
                                     }
                                 }
