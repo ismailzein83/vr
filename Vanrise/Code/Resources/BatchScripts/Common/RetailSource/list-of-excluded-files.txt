@@ -14,3 +14,4 @@
 \bin\Vanrise.Voucher.
 \bin\TestCallAnalysis.
 \bin\Vanrise.MobileNetwork.
+\bin\RecordAnalysis.

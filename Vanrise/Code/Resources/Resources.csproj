@@ -113,6 +113,9 @@
     <Content Include="BatchScripts\FMSV1\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\FMSV1\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\FMSV1\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Inspkt\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Inspkt\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\Inspkt\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOne.SMS\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOne.SMS\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOne.SMS\runtime-list-of-excluded-files.txt" />
@@ -483,6 +486,15 @@
     <None Include="BatchScripts\FMSV1\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\FMSV1\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\FMSV1\All.bat" />
+    <None Include="BatchScripts\Inspkt\01-Runtime.bat" />
+    <None Include="BatchScripts\Inspkt\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\Inspkt\03-WebSite.bat" />
+    <None Include="BatchScripts\Inspkt\05-CompressFiles.bat" />
+    <None Include="BatchScripts\Inspkt\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\Inspkt\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\Inspkt\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\Inspkt\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\Inspkt\All.bat" />
     <None Include="BatchScripts\TOne.SMS\01-Runtime.bat" />
     <None Include="BatchScripts\TOne.SMS\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\TOne.SMS\03-WebSite.bat" />
