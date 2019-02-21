@@ -4,11 +4,11 @@
         <div class="row">
             <div ng-repeat="item in registredApplications" class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                 <div class="menu-tile" ng-click="openApplication(item)" style="height:200px;width:100%;position:relative">
-                    <div style="position:absolute;top: 50%;transform: translate(0%,-50%);width:100%;margin-left:15px">
-                        <div style="display:inline-block;width:200px">
+                    <div style="position:absolute;top: 50%;transform: translate(0%,-50%);width:100%;margin-left:15px;display: flex;flex-wrap: wrap;">
+                        <div style="flex-grow: 1;text-align: center;">
                             <img ng-src="{{::item.IconPath}}" />
                         </div>
-                        <div style="display:inline-block;width:calc(100% - 225px );color:#fff">
+                        <div style="color:#fff;flex-grow: 1;text-align: center;">
                             <h1 style="font-size: 45px;">{{::item.Name}}</h1>
                         </div>
                     </div>
