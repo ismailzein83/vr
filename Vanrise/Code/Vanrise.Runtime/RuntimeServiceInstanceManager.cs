@@ -18,7 +18,7 @@ namespace Vanrise.Runtime
         static Object s_lockObj = new object();
 
         static bool s_areServicesChanged = true;
-        internal static void SetServicesChanged()
+        public static void SetServicesChanged()
         {
             lock (s_lockObj)
             {
