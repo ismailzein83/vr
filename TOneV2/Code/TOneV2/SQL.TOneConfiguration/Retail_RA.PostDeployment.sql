@@ -21,7 +21,7 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('6E5EAAA7-DE32-4422-BE38-DA6E9F30E8D8','Operator Declaration',null,null,null,													'/images/menu-icons/operator declaration.png',25,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}'),
-('D406BECD-5E9E-405A-B311-D985211FAF56','Dispute Management',null,null,null,													null,160,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}')
+('D406BECD-5E9E-405A-B311-D985211FAF56','Dispute Management',null,null,null,													'/Images/menu-icons/dispute.png',160,0,'{"$type":"Vanrise.Security.Entities.ModuleSettings, Vanrise.Security.Entities"}')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[Rank],[AllowDynamic],[Settings]))
