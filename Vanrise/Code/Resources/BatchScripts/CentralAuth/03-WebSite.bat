@@ -24,3 +24,5 @@ rename																								"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYY
 rename																								"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\images\CentralAuth-login.png" "login.png"
 rename																								"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\images\CentralAuth-iconheader.ico" "iconheader.ico"
 rename																								"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Web.config.CentralAuth.exclude" "Web.config"
+del /s /q /f																						"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Bin\*.pdb"
+del /s /q /f																						"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Bin\*.config"
