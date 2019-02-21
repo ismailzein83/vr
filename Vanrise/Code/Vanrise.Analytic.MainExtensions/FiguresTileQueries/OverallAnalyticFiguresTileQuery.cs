@@ -16,6 +16,7 @@ namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
 
         public override List<FigureItemValue> Execute(IFiguresTileQueryExecuteContext context)
         {
+            AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
             StyleDefinitionManager styleDefinitionManager = new StyleDefinitionManager();
             List<FigureItemValue> figureItemValues = new List<FigureItemValue>();
             VRTimePeriodContext timePeriodContext = new VRTimePeriodContext() { EffectiveDate = DateTime.Now };
@@ -23,12 +24,13 @@ namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
             AnalyticManager analyticManager = new AnalyticManager();
             List<string> selectedItemsToDisplayNames = new List<string>();
             var itemsToDisplay = context.ItemsToDisplay;
+            var allMeasures = analyticItemConfigManager.GetMeasures(AnalyticTableId);
             foreach (var item in itemsToDisplay)
             {
                 selectedItemsToDisplayNames.Add(item.Name);
                 figureItemValues.Add(new FigureItemValue()
                 {
-                    Name = item.Title ,
+                    Name = item.Title,
                 });
             }
             var Query = new AnalyticQuery()
@@ -53,9 +55,11 @@ namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
                 var measures = record.MeasureValues;
                 foreach (var measure in measures)
                 {
+                    var analyticMeasure = allMeasures.GetRecord(measure.Key);
+                    analyticMeasure.ThrowIfNull("analyticMeasure");
                     StyleDefinition styleDefinition = null;
-                    if(measure.Value.StyleDefinitionId.HasValue)
-                     styleDefinition = styleDefinitionManager.GetStyleDefinition(measure.Value.StyleDefinitionId.Value);
+                    if (measure.Value.StyleDefinitionId.HasValue)
+                        styleDefinition = styleDefinitionManager.GetStyleDefinition(measure.Value.StyleDefinitionId.Value);
 
                     var item = itemsToDisplay.FindRecord(x => x.Name == measure.Key);
                     if (item != null)
@@ -63,8 +67,14 @@ namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
                         var figureItemValue = figureItemValues.FindRecord(x => x.Name == item.Title);
                         if (figureItemValue != null)
                         {
-                            figureItemValue.Value = measure.Value.ModifiedValue;
-                            figureItemValue.StyleFormatingSettings =styleDefinition != null && styleDefinition.StyleDefinitionSettings != null ? styleDefinition.StyleDefinitionSettings.StyleFormatingSettings : null;
+                           // figureItemValue.Value = measure.Value.ModifiedValue;
+                            figureItemValue.StyleFormatingSettings = styleDefinition != null && styleDefinition.StyleDefinitionSettings != null ? styleDefinition.StyleDefinitionSettings.StyleFormatingSettings : null;
+                            if (analyticMeasure.Config != null)
+                            {
+                                var measureType = analyticMeasure.Config.FieldType;
+                                if (measureType != null)
+                                    figureItemValue.Value = measureType.GetDescription(measure.Value.Value);
+                            }
                         }
                     }
                 }
