@@ -105,12 +105,13 @@ namespace Vanrise.Runtime.Web.Controllers
 
         [HttpGet]
         [Route("RunSchedulerTask")]
-        public void RunSchedulerTask(Guid taskId)
+        public object RunSchedulerTask(Guid taskId)
         {
             if (!_taskActionTypeManager.DoesUserHaveRunSpecificTaskAccess(taskId))
-                GetUnauthorizedResponse();
+              return GetUnauthorizedResponse();
             SchedulerTaskStateManager manager = new SchedulerTaskStateManager();
             manager.RunSchedulerTask(taskId);
+            return true;
         }
 
         [HttpGet]

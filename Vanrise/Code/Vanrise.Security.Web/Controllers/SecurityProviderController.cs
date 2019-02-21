@@ -53,22 +53,22 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpGet]
         [Route("ChangeSecurityProviderStatus")]
-        public UpdateOperationOutput<GenericBusinessEntityDetail> ChangeSecurityProviderStatus(Guid securityProviderId, bool isEnabled, Guid securitActionId)
+        public object ChangeSecurityProviderStatus(Guid securityProviderId, bool isEnabled, Guid securitActionId)
         {
 			if (!_manager.DoesUserHaveActionAccess("SecurityProviderStatusAction", securitActionId))
 			{
-				GetUnauthorizedResponse();
+				return GetUnauthorizedResponse();
 			}
 			return _manager.ChangeSecurityProviderStatus(securityProviderId, isEnabled);
         }
 
         [HttpGet]
         [Route("SetDefaultSecurityProvider")]
-        public UpdateOperationOutput<GenericBusinessEntityDetail> SetDefaultSecurityProvider(Guid securityProviderId,Guid securitActionId)
+        public object SetDefaultSecurityProvider(Guid securityProviderId,Guid securitActionId)
         {
 			if (!_manager.DoesUserHaveActionAccess("SetDefaultSecurityProvider",securitActionId))
 			{
-				 GetUnauthorizedResponse();
+                return base.GetUnauthorizedResponse();
 			}
             return _manager.SetDefaultSecurityProvider(securityProviderId);
         }

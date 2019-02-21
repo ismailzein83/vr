@@ -130,8 +130,8 @@ namespace Vanrise.Security.Business
 
         public SecurityProvider GetDefaultSecurityProvider()
         {
-            ISecurityProviderDataManager dataManager = SecurityDataManagerFactory.GetDataManager<ISecurityProviderDataManager>();
-            return dataManager.GetDefaultSecurityProvider();
+            var defaultSecurityProviderId = GetDefaultSecurityProviderId();
+            return GetSecurityProviderbyId(defaultSecurityProviderId);
         }
 
         public Guid GetDefaultSecurityProviderId()

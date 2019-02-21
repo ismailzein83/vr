@@ -112,7 +112,7 @@ namespace Vanrise.Security.Business
             return GetSecuritySettings().SessionExpirationInMinutes;
         }
 
-        public Guid GetDefaultSecurityProviderId()
+        public Guid GetDefaultSecurityProviderId() // Removed from UI but it will remains here for backward compatibility
         {
             return GetSecurityProviderSettings().DefaultSecurityProviderId;
         }
