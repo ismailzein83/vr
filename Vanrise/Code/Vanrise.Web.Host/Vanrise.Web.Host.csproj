@@ -130,6 +130,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="product-icons\cdr comparison.png" />
+    <Content Include="product-icons\interconnect ra.png" />
+    <Content Include="product-icons\international ra.png" />
+    <Content Include="product-icons\mediation.png" />
+    <Content Include="product-icons\subcriber ra.png" />
+    <Content Include="product-icons\subcriber.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
