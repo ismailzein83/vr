@@ -118,6 +118,61 @@
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vanrise.Analytic.BP.Arguments">
+      <HintPath>..\Output\Vanrise.Analytic.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Business">
+      <HintPath>..\Output\Vanrise.Analytic.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data">
+      <HintPath>..\Output\Vanrise.Analytic.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.Postgres">
+      <HintPath>..\Output\Vanrise.Analytic.Data.Postgres.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.RDB">
+      <HintPath>..\Output\Vanrise.Analytic.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Data.SQL">
+      <HintPath>..\Output\Vanrise.Analytic.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Entities">
+      <HintPath>..\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.MainExtensions">
+      <HintPath>..\Output\Vanrise.Analytic.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Analytic.Web">
+      <HintPath>..\Output\Vanrise.Analytic.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.BP.Arguments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Notification.BP.Arguments.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Notification.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Notification.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data.RDB">
+      <HintPath>..\Output\Vanrise.Notification.Data.RDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Data.SQL">
+      <HintPath>..\Output\Vanrise.Notification.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Notification.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.MainExtensions">
+      <HintPath>..\Output\Vanrise.Notification.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Notification.Web">
+      <HintPath>..\Output\Vanrise.Notification.Web.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
     </Reference>
@@ -299,6 +354,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\Vanrise.Web.Host.pubxml" />
+    <Content Include="Web.config.CentralAuth.exclude" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -330,7 +386,8 @@
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>    </PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
