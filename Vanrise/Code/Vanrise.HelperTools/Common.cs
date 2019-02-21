@@ -486,6 +486,11 @@ when not matched by target then
                 sb = sb.Replace(mainItem, "StandardRAStructure");
             }
 
+            if (projectName == "Inspkt")
+            {
+                sb = sb.Replace(mainItem, "StandardInspktStructure");
+            }
+
             if (projectName == "Interconnect")
             {
                 sb = sb.Replace(mainItem, "StandardInterconnectStructure");
