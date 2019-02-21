@@ -53,27 +53,27 @@ namespace Vanrise.Analytic.MainExtensions.FiguresTileQueries
                 var record = analyticRecords.FirstOrDefault();
                 record.ThrowIfNull("record");
                 var measures = record.MeasureValues;
-                foreach (var measure in measures)
+                foreach (var measureKvp in measures)
                 {
-                    var analyticMeasure = allMeasures.GetRecord(measure.Key);
+                    var analyticMeasure = allMeasures.GetRecord(measureKvp.Key);
                     analyticMeasure.ThrowIfNull("analyticMeasure");
                     StyleDefinition styleDefinition = null;
-                    if (measure.Value.StyleDefinitionId.HasValue)
-                        styleDefinition = styleDefinitionManager.GetStyleDefinition(measure.Value.StyleDefinitionId.Value);
+                    if (measureKvp.Value.StyleDefinitionId.HasValue)
+                        styleDefinition = styleDefinitionManager.GetStyleDefinition(measureKvp.Value.StyleDefinitionId.Value);
 
-                    var item = itemsToDisplay.FindRecord(x => x.Name == measure.Key);
+                    var item = itemsToDisplay.FindRecord(x => x.Name == measureKvp.Key);
                     if (item != null)
                     {
                         var figureItemValue = figureItemValues.FindRecord(x => x.Name == item.Title);
                         if (figureItemValue != null)
                         {
-                           // figureItemValue.Value = measure.Value.ModifiedValue;
+                            // figureItemValue.Value = measure.Value.ModifiedValue;
                             figureItemValue.StyleFormatingSettings = styleDefinition != null && styleDefinition.StyleDefinitionSettings != null ? styleDefinition.StyleDefinitionSettings.StyleFormatingSettings : null;
                             if (analyticMeasure.Config != null)
                             {
                                 var measureType = analyticMeasure.Config.FieldType;
                                 if (measureType != null)
-                                    figureItemValue.Value = measureType.GetDescription(measure.Value.Value);
+                                    figureItemValue.Value = measureType.GetDescription(measureKvp.Value.ModifiedValue);
                             }
                         }
                     }
