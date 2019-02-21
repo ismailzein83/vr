@@ -43,6 +43,7 @@ namespace Vanrise.Queueing
             {
                 if (!_executionControlManager.IsExecutionPaused())
                 {
+                    RuntimeServiceInstanceManager.SetServicesChanged();
                     List<Runtime.Entities.RuntimeServiceInstance> queueRuntimeServiceInstances = _serviceInstanceManager.GetServices(QueueActivationRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
                     AssignQueueItemsToServices(queueRuntimeServiceInstances);
                     List<Runtime.Entities.RuntimeServiceInstance> summaryQueueRuntimeServiceInstances = _serviceInstanceManager.GetServices(SummaryQueueActivationRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
