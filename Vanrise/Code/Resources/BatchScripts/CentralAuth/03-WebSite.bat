@@ -8,7 +8,10 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO CentralAuth WebSite
 
 xcopy "C:\Publish\Vanrise.Web.Host" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\CentralAuth\list-of-excluded-files.txt
-xcopy "C:\TFS\Vanrise\Code\Vanrise.Web.Host\Web.config.CentralAuth.exclude" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\Web.config.CentralAuth.exclude" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\images\CentralAuth-logoonheader.png" /S /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\images\CentralAuth-login.png" /S /R /y /v /i /z /Q		"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TOne.Web\images\CentralAuth-iconheader.ico" /S /R /y /v /i /z /Q	"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Images\"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R						"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Bin\"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\ICSharpCode.SharpZipLib.dll" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Bin\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Web\Client" /S /E /R /y /v /i /z /Q								"\\192.168.110.185\Fixes\WebSite\CentralAuth\%YYYYMMDD%\Client\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\Common\Client-list-of-excluded-files.txt
