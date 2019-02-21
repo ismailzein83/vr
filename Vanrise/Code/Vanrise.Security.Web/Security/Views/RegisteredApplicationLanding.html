@@ -3,10 +3,16 @@
     <div style="padding-left:15px">
         <div class="row">
             <div ng-repeat="item in registredApplications" class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                <div class="menu-tile" ng-click="openApplication(item)" style="height:200px">                   
-                    <img ng-src="{{::item.IconPath}}"  class="img-responsive" style="height: 150px;width: 100%;" />
+                <div class="menu-tile" ng-click="openApplication(item)" style="height:200px;width:100%;position:relative">
+                    <div style="position:absolute;top: 50%;transform: translate(0%,-50%);margin-left:15px">
+                        <div style="display:inline-block;width:200px">
+                            <img ng-src="{{::item.IconPath}}" />
+                        </div>
+                        <div style="display:inline-block;width:calc(100% - 225px );color:#fff">
+                            <h1 style="font-size: 45px;">{{::item.Name}}</h1>
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
