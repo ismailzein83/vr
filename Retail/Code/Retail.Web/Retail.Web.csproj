@@ -826,6 +826,7 @@
     <Content Include="Images\menu-icons\plug.png" />
     <Content Include="Images\menu-icons\Revenue Auditing.png" />
     <Content Include="Images\menu-icons\Revenue Auditing-tile.png" />
+    <Content Include="Images\menu-icons\Sale Area-tile.png" />
     <Content Include="Images\menu-icons\Sale Area.png" />
     <Content Include="Images\menu-icons\Taxes Management.png" />
     <Content Include="Images\menu-icons\Taxes Management-tile.png" />
