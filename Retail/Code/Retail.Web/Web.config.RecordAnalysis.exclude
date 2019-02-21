@@ -23,13 +23,13 @@
     </exceptionLoggers>
   </vanriseLogging>
   <connectionStrings>
-    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=RecordAnalysis_Configuration;User ID=sa;Password="/>
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=Inspkt_Configuration;User ID=sa;Password="/>
 
-    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=RecordAnalysis_Queueing;User ID=sa;Password=" />
-    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=RecordAnalysis_Transaction;User ID=sa;Password=" />
-    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=RecordAnalysis_Logging;User ID=sa;Password=" />
+    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_Queueing;User ID=sa;Password=" />
+    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_Transaction;User ID=sa;Password=" />
+    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_Logging;User ID=sa;Password=" />
 
-    <add name="RecordAnalysisCDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=RecordAnalysis_CDR;User ID=development;Password=dev!123;" />
+    <add name="RecordAnalysisCDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=Inspkt_CDR;User ID=sa;Password=" />
     
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
@@ -37,7 +37,7 @@
     <add key="Web_ExtendedModulesNames" value=""/>
     <!-- , separated module names to include in web bundle (e.g. Common,VR_Notification,VRInvoice) -->
     <add key="Vanrise License" value="28-22-92-DB-92-8B-8A-DE-78-FD-95-85-7B-E3-E8-19::==wMwkDM5EDMyMDM5ATNxAjM:kVGdwlncj5WR09mT" />
-    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3tR@" />
+    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3tR@In$pkt" />
     <add key="TempPasswordValidity" value="24:00:00"/>
 
     <add key="webpages:Version" value="2.0.0.0" />
