@@ -671,7 +671,7 @@
                                                                 </div>
 
                                                                 <div ng-if="!ratePlanGridCtrl.isMobile" style="display:inline-flex;vertical-align:top;" ng-style="{'width': columnsConfig.zone.width }" class="vr-datagrid-cell-container rpcolumn_zone">
-                                                                    <div style="display:flex">
+                                                                    <div style="display:flex;width:100%">
                                                                         <div class="vr-datagrid-cell">
                                                                             <div class="vr-datagrid-celltext ">
                                                                                 <vr-label isvalue="true">
@@ -692,7 +692,7 @@
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <vr-label isvalue="true">
-                                                                                <a href="" ng-click="::onZoneNameClicked(dataItem)" style="white-space: pre;" title="{{::dataItem.ZoneName}}">{{::(dataItem.ZoneName + (dataItem.IsFutureZone ? "*" : ""))}}</a>
+                                                                                <a href="" ng-click="::onZoneNameClicked(dataItem)" style="white-space: pre;display: inline-block;width: 100%;text-overflow: ellipsis;overflow: hidden;" title="{{::dataItem.ZoneName}}">{{::(dataItem.ZoneName + (dataItem.IsFutureZone ? "*" : ""))}}</a>
                                                                             </vr-label>
                                                                         </div>
                                                                     </div>
