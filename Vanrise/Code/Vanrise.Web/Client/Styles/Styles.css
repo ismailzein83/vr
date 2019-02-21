@@ -4423,6 +4423,7 @@ vr-overall-widget .list-group-item {
     display:block;
     text-align:center;
     overflow: hidden;
+    color:#ddd;
 }
 .vr-figure .figure-data-content .figure-item .item-label div {
     width: 100%;
@@ -4435,7 +4436,7 @@ vr-overall-widget .list-group-item {
     text-align: center;
     margin-left: auto;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 35px;
 }
 
 .vr-figure .figure-data-content .figure-item .item-value.centered {
@@ -4846,7 +4847,7 @@ span.option-marketprice {
     color: #FFAA00;
 }
 .label-danger-figure {
-   color: #d9534f;
+    color: #ff9595;
 }
 /* end custom style classes */
 
