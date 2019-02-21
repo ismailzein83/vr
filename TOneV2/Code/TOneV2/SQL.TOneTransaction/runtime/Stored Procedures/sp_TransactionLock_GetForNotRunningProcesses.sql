@@ -3,14 +3,15 @@
 AS
 BEGIN
 
-	DECLARE @RunningProcessIDsTable TABLE (ID int)
-	INSERT INTO @RunningProcessIDsTable (ID)
-	SELECT Convert(int, ParsedString) FROM runtime.[ParseStringList](@RunningProcessIDs)
+	--DECLARE @RunningProcessIDsTable TABLE (ID int)
+	--INSERT INTO @RunningProcessIDsTable (ID)
+	--SELECT Convert(int, ParsedString) FROM runtime.[ParseStringList](@RunningProcessIDs)
 
-	SELECT [ID]
+	SELECT tl.[ID]
       ,[TransactionUniqueName]
       ,[ProcessID]
       ,[CreatedTime]
-	FROM [runtime].[TransactionLock]
-	WHERE [ProcessID] NOT IN (SELECT ID FROM @RunningProcessIDsTable)
+	FROM [runtime].[TransactionLock] tl
+	LEFT JOIN [runtime].[RunningProcess]  p ON tl.ProcessID = p.ID
+	WHERE p.ID IS NULL --[ProcessID] NOT IN (SELECT ID FROM @RunningProcessIDsTable)
 END
