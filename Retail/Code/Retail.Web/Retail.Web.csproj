@@ -819,6 +819,7 @@
     <Content Include="Images\menu-icons\Business Entities.png" />
     <Content Include="Images\menu-icons\dispute-tile.png" />
     <Content Include="Images\menu-icons\dispute.png" />
+    <Content Include="Images\menu-icons\NOC-tile.png" />
     <Content Include="Images\menu-icons\NOC.png" />
     <Content Include="Images\menu-icons\operator declaration-tile.png" />
     <Content Include="Images\menu-icons\operator declaration.png" />
