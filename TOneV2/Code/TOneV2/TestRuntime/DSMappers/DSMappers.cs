@@ -471,6 +471,87 @@ namespace TestRuntime
             return result;
         }
 
+        public static Vanrise.Integration.Entities.MappingOutput MapSMS_SQL(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches, List<Object> failedRecordIdentifiers)
+        {
+            LogVerbose("Started");
+
+            var smsList = new List<dynamic>();
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type smsRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("SMS");
+
+            int maximumBatchSize = 50000;
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("SMS");
+
+            var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
+
+            IDataReader reader = importedData.Reader;
+
+            int rowCount = 0;
+            while (reader.Read())
+            {
+                dynamic sms = Activator.CreateInstance(smsRuntimeType) as dynamic;
+                sms.SwitchId = 1;
+                sms.IDonSwitch = Utils.GetReaderValue<long>(reader, "ID");
+                sms.Tag = reader["Tag"] as string;
+                sms.SentDateTime = (DateTime)reader["ClientRequestDate"];
+                sms.DeliveredDateTime = Utils.GetReaderValue<DateTime?>(reader, "DeliveryDate");
+
+                sms.InTrunk = reader["IN_TRUNK"] as string;
+                sms.InCircuit = reader["IN_CIRCUIT"] != DBNull.Value ? Convert.ToInt64(reader["IN_CIRCUIT"]) : default(Int64);
+                sms.InCarrier = reader["Customer"] as string;
+                sms.InIP = reader["CustomerConnHost"] as string;
+
+                sms.OutTrunk = reader["OUT_TRUNK"] as string;
+                sms.OutCircuit = reader["OUT_CIRCUIT"] != DBNull.Value ? Convert.ToInt64(reader["OUT_CIRCUIT"]) : default(Int64);
+                sms.OutCarrier = reader["Vendor"] as string;
+                sms.OutIP = reader["VendorConnHost"] as string;
+
+                sms.Sender = reader["SRCAddressIN"] as string;
+                sms.Receiver = reader["DSTAddressIN"] as string;
+                sms.ReceiverIn = reader["DSTAddressIN"] as string;
+                sms.ReceiverOut = reader["DSTAddressOUT"] as string;
+
+                sms.OriginationMCC = reader["OriginationMCC"] as string;
+                sms.OriginationMNC = reader["OriginationMNC"] as string;
+                sms.DestinationMCC = reader["DestinationMCC"] as string;
+                sms.DestinationMNC = reader["DestinationMNC"] as string;
+
+                sms.CustomerDeliveryStatus = Utils.GetReaderValue<int>(reader, "Delivered");
+                sms.SupplierDeliveryStatus = Utils.GetReaderValue<int>(reader, "SupplierDeliveryStatus");
+
+                smsList.Add(sms);
+                importedData.LastImportedId = reader["ID"];
+
+                rowCount++;
+                if (rowCount == maximumBatchSize)
+                    break;
+            }
+
+            if (smsList.Count > 0)
+            {
+                long startingId;
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, rowCount, out startingId);
+                long currentSMSId = startingId;
+
+                foreach (var sms in smsList)
+                {
+                    sms.Id = currentSMSId;
+                    currentSMSId++;
+                }
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(smsList, "#RECORDSCOUNT# of CDRs", "SMS");
+                mappedBatches.Add("Distribute Raw SMSList Stage", batch);
+            }
+            else
+            {
+                importedData.IsEmpty = true;
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
+
         private static void LogVerbose(string Message)
         {
             Console.WriteLine(Message);
