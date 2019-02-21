@@ -159,13 +159,21 @@ namespace Vanrise.Security.Business
 
             Func<SecurityProvider, bool> filterPredicate = (securityProvider) =>
             {
-                if (filter != null && filter.Filters != null)
+
+                if (filter != null)
                 {
-                    foreach (var securityProviderFilter in filter.Filters)
+                    if (!securityProvider.IsEnabled.HasValue || !securityProvider.IsEnabled.Value)
                     {
-                        SecurityProviderFilterContext context = new SecurityProviderFilterContext() { SecurityProvider = securityProvider };
-                        if (securityProviderFilter.IsExcluded(context))
-                            return false;
+                        return false;
+                    }
+                    if (filter.Filters != null)
+                    {
+                        foreach (var securityProviderFilter in filter.Filters)
+                        {
+                            SecurityProviderFilterContext context = new SecurityProviderFilterContext() { SecurityProvider = securityProvider };
+                            if (securityProviderFilter.IsExcluded(context))
+                                return false;
+                        }
                     }
                 }
 
@@ -189,10 +197,10 @@ namespace Vanrise.Security.Business
             return extensionConfigurationManager.GetExtensionConfigurations<SecurityProviderConfigs>(SecurityProviderConfigs.EXTENSION_TYPE);
         }
 
-		public bool DoesUserHaveActionAccess(string actionKind, Guid businessEntityDefinitionId, Guid businessEntityActionTypeId)
+		public bool DoesUserHaveActionAccess(string actionKind, Guid businessEntityActionTypeId)
 		{
 			IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
-			return genericBusinessEntityManager.DoesUserHaveActionAccess( actionKind, businessEntityDefinitionId, businessEntityActionTypeId);
+			return genericBusinessEntityManager.DoesUserHaveActionAccess( actionKind, beDefinitionId, businessEntityActionTypeId);
 		}
 		private SecurityProviderInfo SecurityProviderInfoMapper(SecurityProvider securityProvider)
         {
