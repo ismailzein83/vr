@@ -823,6 +823,7 @@
     <Content Include="Images\menu-icons\operator declaration-tile.png" />
     <Content Include="Images\menu-icons\operator declaration.png" />
     <Content Include="Images\menu-icons\other.png" />
+    <Content Include="Images\menu-icons\plug-tile.png" />
     <Content Include="Images\menu-icons\plug.png" />
     <Content Include="Images\menu-icons\Revenue Auditing.png" />
     <Content Include="Images\menu-icons\Revenue Auditing-tile.png" />
