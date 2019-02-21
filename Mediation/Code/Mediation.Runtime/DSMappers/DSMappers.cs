@@ -927,24 +927,24 @@ namespace Mediation.Runtime
                             if (extraFields_01.Count > 0)
                                 cdr_01.ExtraFields = extraFields_01;
 
-                            if (cdr_01.BNumber != null && cdr_01.BNumber.StartsWith("990"))
+                            //if (cdr_01.BNumber != null && cdr_01.BNumber.StartsWith("990"))
+                            //{ 
+                            string serializedCdr_01 = Serializer.Serialize(cdr_01);
+
+                            Tuple<object, List<int>> duplicatedISDN_01;
+
+                            if (!duplicatedISDNs.TryGetValue(serializedCdr_01, out duplicatedISDN_01))
                             {
-                                string serializedCdr = Serializer.Serialize(cdr_01);
-
-                                Tuple<object, List<int>> duplicatedISDN;
-
-                                if (!duplicatedISDNs.TryGetValue(serializedCdr, out duplicatedISDN))
-                                {
-                                    duplicatedISDN = Tuple.Create(cdr_01 as object, new List<int>() { 0 });
-                                    duplicatedISDNs.Add(serializedCdr, duplicatedISDN);
-                                }
-                                duplicatedISDN.Item2[0]++;
-
-                                break;
+                                duplicatedISDN_01 = Tuple.Create(cdr_01 as object, new List<int>() { 0 });
+                                duplicatedISDNs.Add(serializedCdr_01, duplicatedISDN_01);
                             }
+                            duplicatedISDN_01.Item2[0]++;
 
-                            cdrs.Add(cdr_01);
                             break;
+                        //}
+
+                        //cdrs.Add(cdr_01);
+                        //break;
 
                         default:
                             string cdrAsString = currentLine.Substring(0, lengthToRead);
@@ -1061,24 +1061,24 @@ namespace Mediation.Runtime
                             if (!string.IsNullOrWhiteSpace(routeId))
                                 cdr.RouteId = routeId.Trim();
 
-                            if (cdr.BNumber != null && cdr.BNumber.StartsWith("990"))
+                            //if (cdr.BNumber != null && cdr.BNumber.StartsWith("990"))
+                            //{ 
+                            string serializedCdr = Serializer.Serialize(cdr);
+
+                            Tuple<object, List<int>> duplicatedISDN;
+
+                            if (!duplicatedISDNs.TryGetValue(serializedCdr, out duplicatedISDN))
                             {
-                                string serializedCdr = Serializer.Serialize(cdr);
-
-                                Tuple<object, List<int>> duplicatedISDN;
-
-                                if (!duplicatedISDNs.TryGetValue(serializedCdr, out duplicatedISDN))
-                                {
-                                    duplicatedISDN = Tuple.Create(cdr as object, new List<int>() { 0 });
-                                    duplicatedISDNs.Add(serializedCdr, duplicatedISDN);
-                                }
-                                duplicatedISDN.Item2[0]++;
-
-                                break;
+                                duplicatedISDN = Tuple.Create(cdr as object, new List<int>() { 0 });
+                                duplicatedISDNs.Add(serializedCdr, duplicatedISDN);
                             }
+                            duplicatedISDN.Item2[0]++;
 
-                            cdrs.Add(cdr);
                             break;
+                            //}
+
+                            //cdrs.Add(cdr);
+                            //break;
                     }
 
                     currentLine = currentLine.Remove(0, lengthToRead);
