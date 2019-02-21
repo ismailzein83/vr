@@ -30,7 +30,6 @@
     <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=RecordAnalysis_Transaction;User ID=sa;Password=" />
     <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=RecordAnalysis_Logging;User ID=sa;Password=" />
 
-    <add name="RecordAnalysisDBConnString" connectionString="Data Source=localhost;Initial Catalog=RecordAnalysis;User ID=development;Password=dev!123;" />
     <add name="RecordAnalysisCDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=RecordAnalysis_CDR;User ID=development;Password=dev!123;" />
 
     <add name="MainDBConnString" connectionString=""/>
@@ -67,6 +66,7 @@
 
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString" />    
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    <add key="RecordAnalysisDBConnStringKey"                    value="ConfigurationDBConnString"/>
   </appSettings>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
