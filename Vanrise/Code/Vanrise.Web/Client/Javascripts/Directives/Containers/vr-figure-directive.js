@@ -26,19 +26,18 @@
                 };
 
                 var maxItemsPerRow = ctrl.maxitemsperrow != undefined ? parseInt(ctrl.maxitemsperrow) : 1;
-                var colNumber,mdColnumber;
+                var colNumber, mdColnumber;
                 switch (maxItemsPerRow) {
-                    case 1: colNumber = 12;mdColnumber = 12; break;
-                    case 2: colNumber = 6;mdColnumber = 12; break;
-                    case 3: colNumber = 4;mdColnumber = 6; break;
-                    case 4: colNumber = 3;mdColnumber = 4; break;
-                    case 5: colNumber = 3; mdColnumber =4; break;
+                    case 1: colNumber = 12; mdColnumber = 12; break;
+                    case 2: colNumber = 6; mdColnumber = 12; break;
+                    case 3: colNumber = 4; mdColnumber = 6; break;
+                    case 4: colNumber = 3; mdColnumber = 4; break;
+                    case 5: colNumber = 3; mdColnumber = 4; break;
                     case 6: colNumber = 2; mdColnumber = 3; break;
                 }
-                if (colNumber == undefined) {
-                    if (maxItemsPerRow < 12)
-                        colNumber = 2;
-                    else colNumber = 1;
+                if (colNumber == undefined) {                 
+                    colNumber = 12;
+                    mdColnumber = 12;
                 }
                 ctrl.colNumber = colNumber;
                 ctrl.mdColNumber = mdColnumber;
@@ -47,15 +46,15 @@
                     if (typeof item["className"]) {
                         var color = item["className"];
                         if (typeof color === 'string' || typeof color instanceof String) {
-                            return color+ "-figure";
+                            return color + "-figure";
                         }
                         else if (typeof color === 'object' || color instanceof Object) {
-                            if (color!=null) {
+                            if (color != null) {
                                 switch (color.UniqueName) {
                                     case "VR_AccountBalance_StyleFormating_CSSClass": return color.ClassName + "-figure";
-                                    }
-                        }
-                        else return "";
+                                }
+                            }
+                            else return "";
                         }
                     }
                 };
