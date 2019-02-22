@@ -576,14 +576,12 @@ namespace Mediation.Runtime
 
             if (cdrs.Count > 0)
             {
-                long startingId;
-                var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("WHS_Ericsson_CDR");
-                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);
+                //long startingId;
+                //var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("WHS_Ericsson_CDR");
+                //Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);
 
-                foreach (var item in cdrs)
-                {
-                    item.Id = startingId++;
-                }
+                //foreach (var item in cdrs)
+                //    item.Id = startingId++;
 
                 var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "WHS_Ericsson_CDR");
                 mappedBatches.Add("CDRTransformationStage", batch);
@@ -1094,14 +1092,12 @@ namespace Mediation.Runtime
 
             if (cdrs.Count > 0)
             {
-                long startingId;
-                var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("WHS_Ericsson_CDR");
-                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);
+                //long startingId;
+                //var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("WHS_Ericsson_CDR");
+                //Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);
 
-                foreach (var item in cdrs)
-                {
-                    item.Id = startingId++;
-                }
+                //foreach (var item in cdrs)
+                //    item.Id = startingId++;
 
                 var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "WHS_Ericsson_CDR");
                 mappedBatches.Add("CDRTransformationStage", batch);
