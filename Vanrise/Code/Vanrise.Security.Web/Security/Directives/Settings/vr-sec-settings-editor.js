@@ -27,8 +27,7 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
             var mailMessageTemplateSettingsAPI;
             var mailMessageTemplateSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var securityProviderSettingsAPI;
-            var securityProviderSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var securityProviderSettings;
 
             //var passwordSettingsAPI;
             //var passwordSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -62,10 +61,6 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 apiSettingsReadyPromiseDeferred.resolve();
             };
 
-            $scope.scopeModel.onSecurityProviderSettingsReady = function (api) {
-                securityProviderSettingsAPI = api;
-                securityProviderSettingsReadyPromiseDeferred.resolve();
-            };
 
             $scope.scopeModel.passwordValueCustomValidation = function () {
                 if (parseInt($scope.scopeModel.passwordLength) >= parseInt($scope.scopeModel.maxPasswordLength))
@@ -103,12 +98,12 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     var promises = [];
                     var mailMessageTemplateSettingsPayload;
                     var passwordSettingsPayload;
-                    var securityProviderSettingsPayload;
                     var apiSettingsPayload;
                     if (payload != undefined && payload.data != undefined) {
                         mailMessageTemplateSettingsPayload = payload.data.MailMessageTemplateSettings;
                         passwordSettingsPayload = payload.data.PasswordSettings;
-                        securityProviderSettingsPayload = payload.data.SecurityProviderSettings;
+                        securityProviderSettings = payload.data.SecurityProviderSettings;
+                        var securityProviderId = payload.data.SecurityProviderSettings.
                         apiSettingsPayload = payload.data.APISettings;
                         mailMessageTemplateSettingsPayload.SendEmailNewUser = payload.data.SendEmailNewUser;
                         mailMessageTemplateSettingsPayload.SendEmailOnResetPasswordByAdmin = payload.data.SendEmailOnResetPasswordByAdmin;
@@ -137,14 +132,6 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
 
                     promises.push(mailMessageTemplateSettingsLoadPromiseDeferred.promise);
 
-                    //Loading Security Provider Settings
-                    var securityProviderSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    securityProviderSettingsReadyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(securityProviderSettingsAPI, securityProviderSettingsPayload, securityProviderSettingsLoadPromiseDeferred);
-                        });
-
-                    promises.push(securityProviderSettingsLoadPromiseDeferred.promise);
 
                     var apiSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     apiSettingsReadyPromiseDeferred.promise
@@ -185,7 +172,7 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     return {
                         $type: "Vanrise.Security.Entities.SecuritySettings, Vanrise.Security.Entities",
                         MailMessageTemplateSettings: mailMessageTemplateSettingsAPI.getData(),
-                        SecurityProviderSettings: securityProviderSettingsAPI.getData(),
+                        SecurityProviderSettings: securityProviderSettings, //securityProviderSettings remained due to backward compatibility
                         PasswordSettings: {
                             PasswordLength: $scope.scopeModel.passwordLength,
                             MaxPasswordLength: $scope.scopeModel.maxPasswordLength,
