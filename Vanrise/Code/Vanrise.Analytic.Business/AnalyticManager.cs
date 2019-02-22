@@ -323,7 +323,7 @@ namespace Vanrise.Analytic.Business
             HashSet<string> allDimensionNames = new HashSet<string>(allDimensionNamesList);
             if (dbRecords != null)
             {
-                Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = query.MeasureStyleRules != null ? BuildMeasureStyleRulesDictionary(query.MeasureStyleRules): BuildMeasureStyleRulesDictionary(analyticTableManager.GetMergedMeasureStyles(query.TableId));
+                Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary = query.MeasureStyleRules != null && query.MeasureStyleRules.Count > 0? BuildMeasureStyleRulesDictionary(query.MeasureStyleRules): BuildMeasureStyleRulesDictionary(analyticTableManager.GetMergedMeasureStyles(query.TableId));
                 FillCalculatedDimensions(queryContext, queryForDataManager.DimensionFields, dbRecords, allDBDimensions, query.Filters, query.FilterGroup);
                 var records = ApplyFinalGroupingAndFiltering(queryContext, dbRecords, query.DimensionFields, allDimensionNames,
                     query.MeasureFields, measureStyleRulesDictionary, query.Filters, query.SubTables, query.FilterGroup, query.WithSummary, out summaryRecord, out resultSubTables);
