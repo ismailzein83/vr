@@ -251,6 +251,22 @@
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.ExcelConversion.Business\Vanrise.ExcelConversion.Business.csproj">
+      <Project>{70f50f72-75d6-462e-b5c1-07bcb4afeac2}</Project>
+      <Name>Vanrise.ExcelConversion.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.ExcelConversion.Entities\Vanrise.ExcelConversion.Entities.csproj">
+      <Project>{ea4a61bc-3231-4c64-b8ba-960604a71a54}</Project>
+      <Name>Vanrise.ExcelConversion.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.ExcelConversion.MainExtensions\Vanrise.ExcelConversion.MainExtensions.csproj">
+      <Project>{72101ad4-7870-4fda-90a5-9da6b414c48c}</Project>
+      <Name>Vanrise.ExcelConversion.MainExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.ExcelConversion.Web\Vanrise.ExcelConversion.Web.csproj">
+      <Project>{594622c2-c62b-4b7c-9fda-6e3f8a503c85}</Project>
+      <Name>Vanrise.ExcelConversion.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.BP.Arguments\Vanrise.GenericData.BP.Arguments.csproj">
       <Project>{2eaeb708-b10d-4bed-b056-2688514e8bc8}</Project>
       <Name>Vanrise.GenericData.BP.Arguments</Name>
