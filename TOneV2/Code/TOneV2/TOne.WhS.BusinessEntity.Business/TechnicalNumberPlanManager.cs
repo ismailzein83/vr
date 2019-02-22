@@ -10,13 +10,13 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         static readonly Guid BeDefinitionId = new Guid("660bf005-68c2-4d17-8f0a-8c2015e4d8be");
 
-        public List<TechnicalNumberPlan> GetTechnicalNumberPlans()
+        public List<TechnicalNumberPlanSettings> GetTechnicalNumberPlans()
         {
             IGenericBusinessEntityManager genericBusinessEntityManager = Vanrise.GenericData.Entities.BusinessManagerFactory.GetManager<IGenericBusinessEntityManager>();
             return genericBusinessEntityManager.GetCachedOrCreate("GetTechnicalNumberPlans", BeDefinitionId, () =>
             {
                 List<GenericBusinessEntity> genericBusinessEntities = genericBusinessEntityManager.GetAllGenericBusinessEntities(BeDefinitionId);
-                List<TechnicalNumberPlan> technicalNumberPlans= new List<TechnicalNumberPlan>();
+                List<TechnicalNumberPlanSettings> technicalNumberPlans= new List<TechnicalNumberPlanSettings>();
 
                 if (genericBusinessEntities != null)
                 {
@@ -25,7 +25,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (genericBusinessEntity.FieldValues == null)
                             continue;
 
-                        TechnicalNumberPlan technicalNumberPlan = new TechnicalNumberPlan
+                        TechnicalNumberPlanSettings technicalNumberPlan = new TechnicalNumberPlanSettings
                         {
                              Codes =(List<ZoneCode>) genericBusinessEntity.FieldValues.GetRecord("Codes")
                         };

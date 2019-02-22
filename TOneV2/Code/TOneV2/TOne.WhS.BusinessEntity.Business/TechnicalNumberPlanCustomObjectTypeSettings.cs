@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-            var valueObject = context.FieldValue as TechnicalNumberPlan;
+            var valueObject = context.FieldValue as TechnicalNumberPlanSettings;
             List<string> codes = new List<string>();
             if (valueObject != null && valueObject.Codes != null && valueObject.Codes.Count > 0)
             {
@@ -32,7 +32,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(TechnicalNumberPlan);
+            return typeof(TechnicalNumberPlanSettings);
         }
 
         public override string GetRuntimeTypeDescription()
@@ -42,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            return originalValue as TechnicalNumberPlan;
+            return originalValue as TechnicalNumberPlanSettings;
         }
     }
 }

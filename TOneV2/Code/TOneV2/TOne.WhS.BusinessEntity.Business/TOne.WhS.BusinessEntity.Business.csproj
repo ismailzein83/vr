@@ -212,6 +212,7 @@
     <Compile Include="Switch\SyncWithinRouteBuildSwitchFilter.cs" />
     <Compile Include="TechnicalNumberPlanCustomObjectTypeSettings.cs" />
     <Compile Include="TechnicalNumberPlanManager.cs" />
+    <Compile Include="TechnicalNumberPlanOnBeforeSaveHandler.cs" />
     <Compile Include="TOneModuleManager.cs" />
     <Compile Include="ZoneCodeGroupManager.cs" />
     <Compile Include="ZoneRoutingProduct\History\CustomerZoneRoutingProductHistoryLocator.cs" />

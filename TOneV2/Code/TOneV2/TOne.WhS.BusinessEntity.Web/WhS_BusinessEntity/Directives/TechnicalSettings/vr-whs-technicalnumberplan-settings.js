@@ -62,13 +62,13 @@
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.selectedValues != undefined && payload.selectedValues.Settings != undefined && payload.selectedValues.Settings.Codes != undefined) {
-                        $scope.scopeModel.codeList = payload.selectedValues.Settings.Codes;
+                        $scope.scopeModel.codeList = payload.selectedValues.Codes.Codes;
                     }
                 };
 
                 api.setData = function (data) {
                     data.Settings = {
-                        $type: "TOne.WhS.BusinessEntity.Business.TechnicalNumberPlan, TOne.WhS.BusinessEntity.Business",
+                        $type: "TOne.WhS.BusinessEntity.Entities.TechnicalNumberPlanSettings, TOne.WhS.BusinessEntity.Entities",
                         Codes: $scope.scopeModel.codeList
                     };
                 };
