@@ -206,7 +206,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     var titleValue = eval('dataItem.' + sDef.titlePath);
                     var yValue = eval('dataItem.' + sDef.valuePath);
 
-                    if (!UtilsService.isIntegerValue(yValue)) 
+                    if (!UtilsService.isIntegerValue(yValue))
                         allValuesAreIntegers = false;
 
                     series[i].data.push({
@@ -274,7 +274,7 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                                 if (allValuesAreIntegers)
                                     htmlText += this.y.toFixed(0);
                                 else
-                                    this.y.toFixed(2);
+                                    htmlText += this.y.toFixed(2);
                             }
                             else
                                 htmlText += this.y;
